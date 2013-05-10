@@ -7,8 +7,10 @@
 #include "Image.h"
 #include "Ref.h"
 #include "Texture.h"
+#include "lua_TextureCubeFace.h"
 #include "lua_TextureFilter.h"
 #include "lua_TextureFormat.h"
+#include "lua_TextureType.h"
 #include "lua_TextureWrap.h"
 
 namespace gameplay
@@ -20,11 +22,14 @@ void luaRegister_Texture()
     {
         {"addRef", lua_Texture_addRef},
         {"generateMipmaps", lua_Texture_generateMipmaps},
+        {"getCubeFace", lua_Texture_getCubeFace},
+        {"getFace", lua_Texture_getFace},
         {"getFormat", lua_Texture_getFormat},
         {"getHandle", lua_Texture_getHandle},
         {"getHeight", lua_Texture_getHeight},
         {"getPath", lua_Texture_getPath},
         {"getRefCount", lua_Texture_getRefCount},
+        {"getType", lua_Texture_getType},
         {"getWidth", lua_Texture_getWidth},
         {"isCompressed", lua_Texture_isCompressed},
         {"isMipmapped", lua_Texture_isMipmapped},
@@ -137,6 +142,89 @@ int lua_Texture_generateMipmaps(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Texture_generateMipmaps - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Texture_getCubeFace(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Texture::CubeFace param1 = (Texture::CubeFace)lua_enumFromString_TextureCubeFace(luaL_checkstring(state, 2));
+
+                Texture* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getCubeFace(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Texture");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Texture_getCubeFace - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Texture_getFace(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Texture* instance = getInstance(state);
+                Texture::CubeFace result = instance->getFace();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, lua_stringFromEnum_TextureCubeFace(result));
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Texture_getFace - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -321,6 +409,41 @@ int lua_Texture_getRefCount(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Texture_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Texture_getType(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Texture* instance = getInstance(state);
+                Texture::Type result = instance->getType();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, lua_stringFromEnum_TextureType(result));
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Texture_getType - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

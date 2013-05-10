@@ -41,6 +41,8 @@ RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned 
 
 RenderTarget* RenderTarget::create(const char* id, Texture* texture)
 {
+	GP_ASSERT( texture->getType() == Texture::TEX_2D );
+
     RenderTarget* renderTarget = new RenderTarget(id);
     renderTarget->_texture = texture;
     renderTarget->_texture->addRef();

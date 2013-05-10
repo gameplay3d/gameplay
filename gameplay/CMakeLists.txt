@@ -525,12 +525,16 @@ set(GAMEPLAY_LUA
     src/lua/lua_TextBox.h
     src/lua/lua_Texture.cpp
     src/lua/lua_Texture.h
+    src/lua/lua_TextureCubeFace.cpp
+    src/lua/lua_TextureCubeFace.h
     src/lua/lua_TextureFilter.cpp
     src/lua/lua_TextureFilter.h
     src/lua/lua_TextureFormat.cpp
     src/lua/lua_TextureFormat.h
     src/lua/lua_TextureSampler.cpp
     src/lua/lua_TextureSampler.h
+    src/lua/lua_TextureType.cpp
+    src/lua/lua_TextureType.h
     src/lua/lua_TextureWrap.cpp
     src/lua/lua_TextureWrap.h
     src/lua/lua_Theme.cpp
