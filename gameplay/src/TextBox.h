@@ -30,6 +30,7 @@ namespace gameplay
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          text        = <string>
+         inputMode   = <TextBox::InputMode constant>
     }
  @endverbatim
  */
