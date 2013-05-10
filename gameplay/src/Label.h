@@ -117,7 +117,7 @@ protected:
      *
      * @param clip The clipping rectangle of this label's parent container.
      */
-    void drawText(const Rectangle& clip);
+    virtual void drawText(const Rectangle& clip);
 
     /**
      * The text displayed by this label.
