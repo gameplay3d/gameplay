@@ -245,6 +245,7 @@
     <ClCompile Include="src\lua\lua_TerrainFlags.cpp" />
     <ClCompile Include="src\lua\lua_TerrainListener.cpp" />
     <ClCompile Include="src\lua\lua_TextBox.cpp" />
+    <ClCompile Include="src\lua\lua_TextBoxInputMode.cpp" />
     <ClCompile Include="src\lua\lua_Texture.cpp" />
     <ClCompile Include="src\lua\lua_TextureFilter.cpp" />
     <ClCompile Include="src\lua\lua_TextureFormat.cpp" />
@@ -526,6 +527,7 @@
     <ClInclude Include="src\lua\lua_TerrainFlags.h" />
     <ClInclude Include="src\lua\lua_TerrainListener.h" />
     <ClInclude Include="src\lua\lua_TextBox.h" />
+    <ClInclude Include="src\lua\lua_TextBoxInputMode.h" />
     <ClInclude Include="src\lua\lua_Texture.h" />
     <ClInclude Include="src\lua\lua_TextureFilter.h" />
     <ClInclude Include="src\lua\lua_TextureFormat.h" />
