@@ -558,11 +558,8 @@ bool createWindow(WindowCreationParams* params, HWND* hwnd, HDC* hdc)
     }
     style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
-    if( params )
-    {
-        // Adjust the window rectangle so the client size is the requested size.
-        AdjustWindowRectEx(&rect, style, FALSE, styleEx);
-    }
+    // Adjust the window rectangle so the client size is the requested size.
+    AdjustWindowRectEx(&rect, style, FALSE, styleEx);
 
     // Create the native Windows window.
     *hwnd = CreateWindowEx(styleEx, L"gameplay", windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
@@ -599,7 +596,7 @@ bool initializeGL(WindowCreationParams* params)
 
     if (params)
     {
-        if (!createWindow(NULL, &hwnd, &hdc))
+        if (!createWindow(params, &hwnd, &hdc))
             return false;
     }
     else
