@@ -40,6 +40,7 @@
 #include "lua_RenderStateDepthFunction.h"
 #include "lua_SceneDebugFlags.h"
 #include "lua_TerrainFlags.h"
+#include "lua_TextBoxInputMode.h"
 #include "lua_TextureFilter.h"
 #include "lua_TextureFormat.h"
 #include "lua_TextureWrap.h"
