@@ -197,6 +197,14 @@ protected:
 	virtual void drawText(const Rectangle& clip);
 
 	/**
+	 * Gets an InputMode by string.
+	 *
+	 * @param inputMode The string representation of the InputMode type.
+	 * @return The InputMode enum value corresponding to the given string.
+	 */
+	static InputMode getInputMode(const char* inputMode);
+
+	/**
 	 * Get the text which should be displayed, depending on
 	 * _inputMode.
 	 *

@@ -37,26 +37,7 @@ void TextBox::initialize(Theme::Style* style, Properties* properties)
     GP_ASSERT(properties);
 
     Label::initialize(style, properties);
-    const char* inputMode = properties->getString("inputMode");
-    if (inputMode)
-    {
-		if (strcasecmp(inputMode, "text") == 0)
-		{
-			_inputMode = TEXT;
-		}
-		else if (strcasecmp(inputMode, "password") == 0)
-		{
-			_inputMode = PASSWORD;
-		}
-		else
-		{
-			_inputMode = TEXT;
-		}
-    }
-	else
-	{
-		_inputMode = TEXT;
-	}
+	_inputMode = getInputMode(properties->getString("inputMode"));
 }
 
 int TextBox::getLastKeypress()
@@ -478,6 +459,30 @@ void TextBox::drawText(const Rectangle& clip)
         _font->drawText(displayedText.c_str(), _textBounds, _textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_viewportClipBounds);
         _font->finish();
     }
+}
+
+TextBox::InputMode TextBox::getInputMode(const char* inputMode)
+{
+    if (!inputMode)
+    {
+        return TextBox::TEXT;
+    }
+
+    if (strcmp(inputMode, "TEXT") == 0)
+    {
+        return TextBox::TEXT;
+    }
+    else if (strcmp(inputMode, "PASSWORD") == 0)
+    {
+        return TextBox::PASSWORD;
+    }
+    else
+    {
+        GP_ERROR("Failed to get corresponding textbox inputmode for unsupported value '%s'.", inputMode);
+    }
+
+    // Default.
+    return TextBox::TEXT;
 }
 
 std::string TextBox::getDisplayedText() const
