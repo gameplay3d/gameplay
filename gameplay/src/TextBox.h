@@ -47,12 +47,12 @@ public:
 		/**
 		 * Text: Text is displayed directly.
 		 */
-		TEXT,
+		TEXT = 0x01,
 
 		/**
 		 * Password: Text is replaced by _passwordChar, which is '*' by default.
 		 */
-		PASSWORD
+		PASSWORD = 0x02
 	};
 
     /**
