@@ -40,20 +40,20 @@ class TextBox : public Label
 
 public:
 
-	/**
-	 * Input modes. Default is Text.
-	 */
-	enum InputMode {
-		/**
-		 * Text: Text is displayed directly.
-		 */
-		TEXT = 0x01,
+    /**
+     * Input modes. Default is Text.
+     */
+    enum InputMode {
+        /**
+         * Text: Text is displayed directly.
+         */
+        TEXT = 0x01,
 
-		/**
-		 * Password: Text is replaced by _passwordChar, which is '*' by default.
-		 */
-		PASSWORD = 0x02
-	};
+        /**
+         * Password: Text is replaced by _passwordChar, which is '*' by default.
+         */
+        PASSWORD = 0x02
+    };
 
     /**
      * Create a new text box control.
@@ -69,7 +69,7 @@ public:
     /**
      * Initialize this textbox.
      */
-	virtual void initialize(Theme::Style* style, Properties* properties);
+    virtual void initialize(Theme::Style* style, Properties* properties);
 
     /**
      * Add a listener to be notified of specific events affecting
@@ -95,33 +95,33 @@ public:
      */
     const char* getType() const;
 
-	/**
-	 * Set the character displayed in password mode.
-	 *
-	 * @param character Character to display in password mode.
-	 */
-	void setPasswordChar(char character);
+    /**
+     * Set the character displayed in password mode.
+     *
+     * @param character Character to display in password mode.
+     */
+    void setPasswordChar(char character);
 
-	/**
-	 * Get the character displayed in password mode.
-	 *
-	 * @return The character displayed in password mode.
-	 */
-	char getPasswordChar() const;
+    /**
+     * Get the character displayed in password mode.
+     *
+     * @return The character displayed in password mode.
+     */
+    char getPasswordChar() const;
 
-	/**
-	 * Set the input mode.
-	 *
-	 * @param inputMode Input mode to set.
-	 */
-	void setInputMode(InputMode inputMode);
+    /**
+     * Set the input mode.
+     *
+     * @param inputMode Input mode to set.
+     */
+    void setInputMode(InputMode inputMode);
 
-	/**
-	 * Get the input mode.
-	 *
-	 * @return The input mode.
-	 */
-	InputMode getInputMode() const;
+    /**
+     * Get the input mode.
+     *
+     * @return The input mode.
+     */
+    InputMode getInputMode() const;
 
 protected:
 
@@ -185,32 +185,32 @@ protected:
      *
      * @param spriteBatch The sprite batch containing this control's icons.
      * @param clip The clipping rectangle of this control's parent container.
-	 */
-	void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+     */
+    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
-	/**
-	 * Draw this textbox's text.
-	 *
-	 * @param clip The clipping rectangle of this textbox's
-	 * parent container.
-	 **/
-	virtual void drawText(const Rectangle& clip);
+    /**
+     * Draw this textbox's text.
+     *
+     * @param clip The clipping rectangle of this textbox's
+     * parent container.
+     */
+    virtual void drawText(const Rectangle& clip);
 
-	/**
-	 * Gets an InputMode by string.
-	 *
-	 * @param inputMode The string representation of the InputMode type.
-	 * @return The InputMode enum value corresponding to the given string.
-	 */
-	static InputMode getInputMode(const char* inputMode);
+    /**
+     * Gets an InputMode by string.
+     *
+     * @param inputMode The string representation of the InputMode type.
+     * @return The InputMode enum value corresponding to the given string.
+     */
+    static InputMode getInputMode(const char* inputMode);
 
-	/**
-	 * Get the text which should be displayed, depending on
-	 * _inputMode.
-	 *
-	 * @return The text to be displayed.
-	 */
-	std::string getDisplayedText() const;
+    /**
+     * Get the text which should be displayed, depending on
+     * _inputMode.
+     *
+     * @return The text to be displayed.
+     */
+    std::string getDisplayedText() const;
 
     /**
      * The current position of the TextBox's caret.
@@ -237,15 +237,15 @@ protected:
      */
     Theme::ThemeImage* _caretImage;
 
-	/**
-	 * The character displayed in password mode.
-	 */
-	char _passwordChar;
+    /**
+     * The character displayed in password mode.
+     */
+    char _passwordChar;
 
-	/**
-	 * The mode used to display the typed text.
-	 */
-	InputMode _inputMode;
+    /**
+     * The mode used to display the typed text.
+     */
+    InputMode _inputMode;
 
 private:
 

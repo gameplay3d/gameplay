@@ -37,7 +37,7 @@ void TextBox::initialize(Theme::Style* style, Properties* properties)
     GP_ASSERT(properties);
 
     Label::initialize(style, properties);
-	_inputMode = getInputMode(properties->getString("inputMode"));
+    _inputMode = getInputMode(properties->getString("inputMode"));
 }
 
 int TextBox::getLastKeypress()
@@ -159,7 +159,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                 }
                 case Keyboard::KEY_LEFT_ARROW:
                 {
-					const std::string displayedText = getDisplayedText();
+                    const std::string displayedText = getDisplayedText();
                     Font* font = getFont(_state);
                     GP_ASSERT(font);
                     unsigned int fontSize = getFontSize(_state);
@@ -175,7 +175,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                 }
                 case Keyboard::KEY_RIGHT_ARROW:
                 {
-					const std::string displayedText = getDisplayedText();
+                    const std::string displayedText = getDisplayedText();
                     Font* font = getFont(_state);
                     GP_ASSERT(font);
                     unsigned int fontSize = getFontSize(_state);
@@ -370,7 +370,7 @@ void TextBox::setCaretLocation(int x, int y)
     unsigned int fontSize = getFontSize(_state);
     Font::Justify textAlignment = getTextAlignment(_state);
     bool rightToLeft = getTextRightToLeft(_state);
-	const std::string displayedText = getDisplayedText();
+    const std::string displayedText = getDisplayedText();
 
     int index = font->getIndexAtLocation(displayedText.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
             textAlignment, true, rightToLeft);
@@ -428,22 +428,22 @@ const char* TextBox::getType() const
 
 void TextBox::setPasswordChar(char character)
 {
-	_passwordChar = character;
+    _passwordChar = character;
 }
 
 char TextBox::getPasswordChar() const
 {
-	return _passwordChar;
+    return _passwordChar;
 }
 
 void TextBox::setInputMode(InputMode inputMode)
 {
-	_inputMode = inputMode;
+    _inputMode = inputMode;
 }
 
 TextBox::InputMode TextBox::getInputMode() const
 {
-	return _inputMode;
+    return _inputMode;
 }
 
 void TextBox::drawText(const Rectangle& clip)
@@ -454,7 +454,7 @@ void TextBox::drawText(const Rectangle& clip)
     // Draw the text.
     if (_font)
     {
-		const std::string displayedText = getDisplayedText();
+        const std::string displayedText = getDisplayedText();
         _font->start();
         _font->drawText(displayedText.c_str(), _textBounds, _textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_viewportClipBounds);
         _font->finish();
@@ -487,19 +487,19 @@ TextBox::InputMode TextBox::getInputMode(const char* inputMode)
 
 std::string TextBox::getDisplayedText() const
 {
-	std::string displayedText;
-	switch (_inputMode) {
-		case PASSWORD:
-			displayedText.insert(0, _text.length(), _passwordChar);
-			break;
+    std::string displayedText;
+    switch (_inputMode) {
+        case PASSWORD:
+            displayedText.insert(0, _text.length(), _passwordChar);
+            break;
 
-		case TEXT:
-		default:
-			displayedText = _text;
-			break;
-	}
+        case TEXT:
+        default:
+            displayedText = _text;
+            break;
+    }
 
-	return displayedText;
+    return displayedText;
 }
 
 }
