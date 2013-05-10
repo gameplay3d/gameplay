@@ -253,6 +253,7 @@ LOCAL_SRC_FILES := \
     lua/lua_TerrainFlags.cpp \
     lua/lua_TerrainListener.cpp \
     lua/lua_TextBox.cpp \
+    lua/lua_TextBoxInputMode.cpp \
     lua/lua_Texture.cpp \
     lua/lua_TextureFilter.cpp \
     lua/lua_TextureFormat.cpp \

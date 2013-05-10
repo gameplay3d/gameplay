@@ -67,7 +67,7 @@ form basicControls
         style = topLeftAlignedEntry
         position = 20, 540
         size = 250, 40
-        text = password
+        text = PASSWORD
         consumeInputEvents = true
         inputMode = PASSWORD
     }
