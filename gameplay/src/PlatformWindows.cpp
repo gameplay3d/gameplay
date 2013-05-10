@@ -558,11 +558,11 @@ bool createWindow(WindowCreationParams* params, HWND* hwnd, HDC* hdc)
     }
     style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
-	if( params )
-	{
-		// Adjust the window rectangle so the client size is the requested size.
-		AdjustWindowRectEx(&rect, style, FALSE, styleEx);
-	}
+    if( params )
+    {
+        // Adjust the window rectangle so the client size is the requested size.
+        AdjustWindowRectEx(&rect, style, FALSE, styleEx);
+    }
 
     // Create the native Windows window.
     *hwnd = CreateWindowEx(styleEx, L"gameplay", windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
@@ -751,41 +751,41 @@ bool initializeGL(WindowCreationParams* params)
         return false;
     }
     } else    // fallback to OpenGL 2.0 if wglChoosePixelFormatARB or wglCreateContextAttribsARB is NULL.
-	{
+    {
         // Context is already here, just use it.
         __hrc = tempContext;
-		__hwnd = hwnd;
-		__hdc = hdc;
-	}
+        __hwnd = hwnd;
+        __hdc = hdc;
+    }
 
     // Vertical sync.
     wglSwapIntervalEXT(__vsync ? 1 : 0);
 
     // Some old graphics cards support EXT_framebuffer_object instead of ARB_framebuffer_object.
     // Patch ARB_framebuffer_object functions to EXT_framebuffer_object ones since semantic is same.
-	if( !GLEW_ARB_framebuffer_object && GLEW_EXT_framebuffer_object )
-	{
-		glBindFramebuffer = glBindFramebufferEXT;
-		glBindRenderbuffer = glBindRenderbufferEXT;
-		glBlitFramebuffer = glBlitFramebufferEXT;
-		glCheckFramebufferStatus = glCheckFramebufferStatusEXT;
-		glDeleteFramebuffers = glDeleteFramebuffersEXT;
-		glDeleteRenderbuffers = glDeleteRenderbuffersEXT;
-		glFramebufferRenderbuffer = glFramebufferRenderbufferEXT;
-		glFramebufferTexture1D = glFramebufferTexture1DEXT;
-		glFramebufferTexture2D = glFramebufferTexture2DEXT;
-		glFramebufferTexture3D = glFramebufferTexture3DEXT;
-		glFramebufferTextureLayer = glFramebufferTextureLayerEXT;
-		glGenFramebuffers = glGenFramebuffersEXT;
-		glGenRenderbuffers = glGenRenderbuffersEXT;
-		glGenerateMipmap = glGenerateMipmapEXT;
-		glGetFramebufferAttachmentParameteriv = glGetFramebufferAttachmentParameterivEXT;
-		glGetRenderbufferParameteriv = glGetRenderbufferParameterivEXT;
-		glIsFramebuffer = glIsFramebufferEXT;
-		glIsRenderbuffer = glIsRenderbufferEXT;
-		glRenderbufferStorage = glRenderbufferStorageEXT;
-		glRenderbufferStorageMultisample = glRenderbufferStorageMultisampleEXT;
-	}
+    if( !GLEW_ARB_framebuffer_object && GLEW_EXT_framebuffer_object )
+    {
+        glBindFramebuffer = glBindFramebufferEXT;
+        glBindRenderbuffer = glBindRenderbufferEXT;
+        glBlitFramebuffer = glBlitFramebufferEXT;
+        glCheckFramebufferStatus = glCheckFramebufferStatusEXT;
+        glDeleteFramebuffers = glDeleteFramebuffersEXT;
+        glDeleteRenderbuffers = glDeleteRenderbuffersEXT;
+        glFramebufferRenderbuffer = glFramebufferRenderbufferEXT;
+        glFramebufferTexture1D = glFramebufferTexture1DEXT;
+        glFramebufferTexture2D = glFramebufferTexture2DEXT;
+        glFramebufferTexture3D = glFramebufferTexture3DEXT;
+        glFramebufferTextureLayer = glFramebufferTextureLayerEXT;
+        glGenFramebuffers = glGenFramebuffersEXT;
+        glGenRenderbuffers = glGenRenderbuffersEXT;
+        glGenerateMipmap = glGenerateMipmapEXT;
+        glGetFramebufferAttachmentParameteriv = glGetFramebufferAttachmentParameterivEXT;
+        glGetRenderbufferParameteriv = glGetRenderbufferParameterivEXT;
+        glIsFramebuffer = glIsFramebufferEXT;
+        glIsRenderbuffer = glIsRenderbufferEXT;
+        glRenderbufferStorage = glRenderbufferStorageEXT;
+        glRenderbufferStorageMultisample = glRenderbufferStorageMultisampleEXT;
+    }
 
     return true;
 }
