@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-TextBox::TextBox() : _lastKeypress(0), _fontSize(0), _caretImage(NULL)
+TextBox::TextBox() : _lastKeypress(0), _fontSize(0), _caretImage(NULL), _passwordChar('*'), _inputMode(TEXT)
 {
 }
 
@@ -30,6 +30,14 @@ TextBox* TextBox::create(Theme::Style* style, Properties* properties)
     textBox->initialize(style, properties);
 
     return textBox;
+}
+
+void TextBox::initialize(Theme::Style* style, Properties* properties)
+{
+    GP_ASSERT(properties);
+
+    Label::initialize(style, properties);
+    _inputMode = getInputMode(properties->getString("inputMode"));
 }
 
 int TextBox::getLastKeypress()
@@ -133,11 +141,11 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     Font::Justify textAlignment = getTextAlignment(_state);
                     bool rightToLeft = getTextRightToLeft(_state);
 
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+                    int textIndex = font->getIndexAtLocation(getDisplayedText().c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
                         textAlignment, true, rightToLeft);
                         
                     _text.erase(textIndex, 1);
-                    font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
+                    font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
                         textAlignment, true, rightToLeft);
                     _dirty = true;
                     notifyListeners(Control::Listener::TEXT_CHANGED);
@@ -151,30 +159,32 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                 }
                 case Keyboard::KEY_LEFT_ARROW:
                 {
+                    const std::string displayedText = getDisplayedText();
                     Font* font = getFont(_state);
                     GP_ASSERT(font);
                     unsigned int fontSize = getFontSize(_state);
                     Font::Justify textAlignment = getTextAlignment(_state);
                     bool rightToLeft = getTextRightToLeft(_state);
 
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+                    int textIndex = font->getIndexAtLocation(displayedText.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
                         textAlignment, true, rightToLeft);
-                    font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex - 1,
+                    font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, textIndex - 1,
                         textAlignment, true, rightToLeft);
                     _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_RIGHT_ARROW:
                 {
+                    const std::string displayedText = getDisplayedText();
                     Font* font = getFont(_state);
                     GP_ASSERT(font);
                     unsigned int fontSize = getFontSize(_state);
                     Font::Justify textAlignment = getTextAlignment(_state);
                     bool rightToLeft = getTextRightToLeft(_state);
 
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+                    int textIndex = font->getIndexAtLocation(displayedText.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
                         textAlignment, true, rightToLeft);
-                    font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex + 1,
+                    font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, textIndex + 1,
                         textAlignment, true, rightToLeft);
                     _dirty = true;
                     break;
@@ -188,7 +198,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     bool rightToLeft = getTextRightToLeft(_state);
                     _prevCaretLocation.set(_caretLocation);
                     _caretLocation.y -= fontSize;
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+                    int textIndex = font->getIndexAtLocation(getDisplayedText().c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
                         textAlignment, true, rightToLeft);
                     if (textIndex == -1)
                     {
@@ -207,7 +217,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     bool rightToLeft = getTextRightToLeft(_state);
                     _prevCaretLocation.set(_caretLocation);
                     _caretLocation.y += fontSize;
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+                    int textIndex = font->getIndexAtLocation(getDisplayedText().c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
                         textAlignment, true, rightToLeft);
                     if (textIndex == -1)
                     {
@@ -229,12 +239,12 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
             Font::Justify textAlignment = getTextAlignment(_state);
             bool rightToLeft = getTextRightToLeft(_state);
 
-            int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+            int textIndex = font->getIndexAtLocation(getDisplayedText().c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
                 textAlignment, true, rightToLeft);
             if (textIndex == -1)
             {
                 textIndex = 0;
-                font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, 0,
+                font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &_caretLocation, 0,
                     textAlignment, true, rightToLeft);
             }
 
@@ -246,7 +256,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     {
                         --textIndex;
                         _text.erase(textIndex, 1);
-                        font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
+                        font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
                             textAlignment, true, rightToLeft);
 
                         _dirty = true;
@@ -268,7 +278,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     _text.insert(textIndex, 1, (char)key);
 
                     // Get new location of caret.
-                    font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex + 1,
+                    font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &_caretLocation, textIndex + 1,
                         textAlignment, true, rightToLeft);
 
                     if (key == ' ')
@@ -279,7 +289,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         {
                             // If not, undo the character insertion.
                             _text.erase(textIndex, 1);
-                            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
+                            font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
                                 textAlignment, true, rightToLeft);
 
                             // No need to check again.
@@ -289,13 +299,13 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
 
                     // Always check that the text still fits within the clip region.
                     Rectangle textBounds;
-                    font->measureText(_text.c_str(), _textBounds, fontSize, &textBounds, textAlignment, true, true);
+                    font->measureText(getDisplayedText().c_str(), _textBounds, fontSize, &textBounds, textAlignment, true, true);
                     if (textBounds.x < _textBounds.x || textBounds.y < _textBounds.y ||
                         textBounds.width >= _textBounds.width || textBounds.height >= _textBounds.height)
                     {
                         // If not, undo the character insertion.
                         _text.erase(textIndex, 1);
-                        font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
+                        font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
                             textAlignment, true, rightToLeft);
 
                         // TextBox is not dirty.
@@ -360,20 +370,21 @@ void TextBox::setCaretLocation(int x, int y)
     unsigned int fontSize = getFontSize(_state);
     Font::Justify textAlignment = getTextAlignment(_state);
     bool rightToLeft = getTextRightToLeft(_state);
+    const std::string displayedText = getDisplayedText();
 
-    int index = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+    int index = font->getIndexAtLocation(displayedText.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
             textAlignment, true, rightToLeft);
 
     if (index == -1)
     {
         // Attempt to find the nearest valid caret location.
         Rectangle textBounds;
-        font->measureText(_text.c_str(), _textBounds, fontSize, &textBounds, textAlignment, true, true);
+        font->measureText(displayedText.c_str(), _textBounds, fontSize, &textBounds, textAlignment, true, true);
 
         if (_caretLocation.x > textBounds.x + textBounds.width &&
             _caretLocation.y > textBounds.y + textBounds.height)
         {
-            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, (unsigned int)_text.length(),
+            font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, (unsigned int)_text.length(),
                 textAlignment, true, rightToLeft);
             return;
         }
@@ -399,7 +410,7 @@ void TextBox::setCaretLocation(int x, int y)
             _caretLocation.y = textBounds.y + textBounds.height - fontSize;
         }
 
-        index = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+        index = font->getIndexAtLocation(displayedText.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
             textAlignment, true, rightToLeft);
 
         if (index == -1)
@@ -413,6 +424,82 @@ void TextBox::setCaretLocation(int x, int y)
 const char* TextBox::getType() const
 {
     return "textBox";
+}
+
+void TextBox::setPasswordChar(char character)
+{
+    _passwordChar = character;
+}
+
+char TextBox::getPasswordChar() const
+{
+    return _passwordChar;
+}
+
+void TextBox::setInputMode(InputMode inputMode)
+{
+    _inputMode = inputMode;
+}
+
+TextBox::InputMode TextBox::getInputMode() const
+{
+    return _inputMode;
+}
+
+void TextBox::drawText(const Rectangle& clip)
+{
+    if (_text.size() <= 0)
+        return;
+
+    // Draw the text.
+    if (_font)
+    {
+        const std::string displayedText = getDisplayedText();
+        _font->start();
+        _font->drawText(displayedText.c_str(), _textBounds, _textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_viewportClipBounds);
+        _font->finish();
+    }
+}
+
+TextBox::InputMode TextBox::getInputMode(const char* inputMode)
+{
+    if (!inputMode)
+    {
+        return TextBox::TEXT;
+    }
+
+    if (strcmp(inputMode, "TEXT") == 0)
+    {
+        return TextBox::TEXT;
+    }
+    else if (strcmp(inputMode, "PASSWORD") == 0)
+    {
+        return TextBox::PASSWORD;
+    }
+    else
+    {
+        GP_ERROR("Failed to get corresponding textbox inputmode for unsupported value '%s'.", inputMode);
+    }
+
+    // Default.
+    return TextBox::TEXT;
+}
+
+std::string TextBox::getDisplayedText() const
+{
+    std::string displayedText;
+    switch (_inputMode) {
+        case PASSWORD:
+            displayedText.insert(0, _text.length(), _passwordChar);
+            break;
+
+        case TEXT:
+        default:
+            displayedText = _text;
+            break;
+    }
+
+    return displayedText;
 }
 
 }

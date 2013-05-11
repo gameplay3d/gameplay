@@ -794,6 +794,14 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("LEVEL_OF_DETAIL", "LEVEL_OF_DETAIL", scopePath);
     }
 
+    // Register enumeration TextBox::InputMode.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("TextBox");
+        gameplay::ScriptUtil::registerConstantString("TEXT", "TEXT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("PASSWORD", "PASSWORD", scopePath);
+    }
+
     // Register enumeration Texture::CubeFace.
     {
         std::vector<std::string> scopePath;
@@ -959,6 +967,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_SceneDebugFlags((Scene::DebugFlags)value);
     if (enumname == "Terrain::Flags")
         return lua_stringFromEnum_TerrainFlags((Terrain::Flags)value);
+    if (enumname == "TextBox::InputMode")
+        return lua_stringFromEnum_TextBoxInputMode((TextBox::InputMode)value);
     if (enumname == "Texture::CubeFace")
         return lua_stringFromEnum_TextureCubeFace((Texture::CubeFace)value);
     if (enumname == "Texture::Filter")

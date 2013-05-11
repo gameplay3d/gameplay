@@ -523,6 +523,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_TerrainListener.h
     src/lua/lua_TextBox.cpp
     src/lua/lua_TextBox.h
+    src/lua/lua_TextBoxInputMode.cpp
+    src/lua/lua_TextBoxInputMode.h
     src/lua/lua_Texture.cpp
     src/lua/lua_Texture.h
     src/lua/lua_TextureCubeFace.cpp
