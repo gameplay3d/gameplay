@@ -55,7 +55,8 @@ Texture::~Texture()
 {
     if (_handle)
     {
-        GL_ASSERT( glDeleteTextures(1, &_handle) );
+		if (_cubeFace == NOT_A_FACE)
+			GL_ASSERT( glDeleteTextures(1, &_handle) );
         _handle = 0;
     }
 
@@ -63,6 +64,7 @@ Texture::~Texture()
 	{
 		for(unsigned int i = 0; i < 6; i++)
 		{
+			GP_ASSERT(_cubeFaces[i]->getRefCount() == 1);
 			SAFE_RELEASE(_cubeFaces[i]);
 		}
 		SAFE_DELETE_ARRAY(_cubeFaces);
@@ -223,7 +225,7 @@ Texture* Texture::createCube(Format format, unsigned int width, unsigned int hei
 
 	// Load the texture
 	bool dataNotSet = data == NULL;
-	if (!dataNotSet)
+	if (dataNotSet)
 	{
 		data = new unsigned char*[6];
 		memset(data, 0, sizeof(unsigned char*) * 6);
@@ -232,7 +234,7 @@ Texture* Texture::createCube(Format format, unsigned int width, unsigned int hei
 	{
 		GL_ASSERT( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data[i]) );
 	}
-	if (!dataNotSet)
+	if (dataNotSet)
 	{
 		SAFE_DELETE_ARRAY(data);
 	}
@@ -906,7 +908,7 @@ TextureHandle Texture::getHandle() const
     return _handle;
 }
 
-Texture* Texture::getCubeFace(Texture::CubeFace face)
+Texture* Texture::getFaceTexture(Texture::CubeFace face)
 {
 	GP_ASSERT( _type == Texture::TEX_CUBE );
 	GP_ASSERT( face >= Texture::POS_X && face <= Texture::NEG_Z );
@@ -931,6 +933,7 @@ Texture* Texture::getCubeFace(Texture::CubeFace face)
 		tFace->_minFilter = _minFilter;
 		tFace->_cubeFace = face;
 	}
+	_cubeFaces[face]->addRef();
 	return _cubeFaces[face];
 }
 

@@ -315,7 +315,7 @@ public:
      *
      * @return The texture cube's face.
      */
-	Texture* getCubeFace(CubeFace face);
+	Texture* getFaceTexture(CubeFace face);
 
 private:
 

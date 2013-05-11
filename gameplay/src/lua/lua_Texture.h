@@ -8,8 +8,8 @@ namespace gameplay
 int lua_Texture__gc(lua_State* state);
 int lua_Texture_addRef(lua_State* state);
 int lua_Texture_generateMipmaps(lua_State* state);
-int lua_Texture_getCubeFace(lua_State* state);
 int lua_Texture_getFace(lua_State* state);
+int lua_Texture_getFaceTexture(lua_State* state);
 int lua_Texture_getFormat(lua_State* state);
 int lua_Texture_getHandle(lua_State* state);
 int lua_Texture_getHeight(lua_State* state);
