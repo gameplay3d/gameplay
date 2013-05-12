@@ -560,6 +560,8 @@ void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
     GP_ASSERT(uniform);
 	GP_ASSERT(uniform->_type == GL_SAMPLER_2D || uniform->_type == GL_SAMPLER_CUBE);
     GP_ASSERT(sampler);
+	GP_ASSERT((sampler->getTexture()->getType() == Texture::TEX_2D && uniform->_type == GL_SAMPLER_2D) || 
+		(sampler->getTexture()->getType() == Texture::TEX_CUBE && uniform->_type == GL_SAMPLER_CUBE));
 
     GL_ASSERT( glActiveTexture(GL_TEXTURE0 + uniform->_index) );
 
@@ -579,6 +581,8 @@ void Effect::setValue(Uniform* uniform, const Texture::Sampler** values, unsigne
     GLint units[32];
     for (unsigned int i = 0; i < count; ++i)
     {
+		GP_ASSERT((const_cast<Texture::Sampler*>(values[i])->getTexture()->getType() == Texture::TEX_2D && uniform->_type == GL_SAMPLER_2D) || 
+			(const_cast<Texture::Sampler*>(values[i])->getTexture()->getType() == Texture::TEX_CUBE && uniform->_type == GL_SAMPLER_CUBE));
         GL_ASSERT( glActiveTexture(GL_TEXTURE0 + uniform->_index + i) );
 
         // Bind the sampler - this binds the texture and applies sampler state
