@@ -202,7 +202,16 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
 
                     int textIndex = font->getIndexAtLocation(displayedText.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
                         textAlignment, true, rightToLeft);
-                    font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, textIndex + 1,
+                    if (_ctrlPressed)
+                    {
+                        std::string::const_iterator it = std::find_if(displayedText.begin() + (textIndex + 1), displayedText.end(), space);
+                        textIndex = std::distance(displayedText.begin(), it);
+                    }
+                    else
+                    {
+                        ++textIndex;
+                    }
+                    font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
                         textAlignment, true, rightToLeft);
                     _dirty = true;
                     break;
