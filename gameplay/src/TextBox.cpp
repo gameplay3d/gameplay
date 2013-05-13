@@ -4,7 +4,11 @@
 namespace gameplay
 {
 
-TextBox::TextBox() : _lastKeypress(0), _fontSize(0), _caretImage(NULL), _passwordChar('*'), _inputMode(TEXT)
+bool space(char c) {
+    return isspace(c);
+}
+
+TextBox::TextBox() : _lastKeypress(0), _fontSize(0), _caretImage(NULL), _passwordChar('*'), _inputMode(TEXT), _ctrlPressed(false)
 {
 }
 
@@ -119,6 +123,11 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
         {
             switch (key)
             {
+                case Keyboard::KEY_CTRL:
+                {
+                    _ctrlPressed = true;
+                    break;
+                }
                 case Keyboard::KEY_HOME:
                 {
                     // TODO: Move cursor to beginning of line.
@@ -168,7 +177,16 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
 
                     int textIndex = font->getIndexAtLocation(displayedText.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
                         textAlignment, true, rightToLeft);
-                    font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, textIndex - 1,
+                    if (_ctrlPressed)
+                    {
+                        std::string::const_reverse_iterator it = std::find_if(displayedText.rend() - (textIndex - 1), displayedText.rend(), space);
+                        textIndex = std::distance(displayedText.begin(), it.base());
+                    }
+                    else
+                    {
+                        --textIndex;
+                    }
+                    font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
                         textAlignment, true, rightToLeft);
                     _dirty = true;
                     break;
@@ -323,7 +341,14 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         }
         case Keyboard::KEY_RELEASE:
-            return false;
+            switch (key)
+            {
+                case Keyboard::KEY_CTRL:
+                {
+                    _ctrlPressed = false;
+                    break;
+                }
+            }
     }
 
     _lastKeypress = key;
