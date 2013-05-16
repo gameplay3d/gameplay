@@ -62,6 +62,7 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
+    	<delete dir="assets/res"/>
         <copy todir="assets/res">
             <fileset dir="../res" />
         </copy>
