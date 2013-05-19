@@ -196,8 +196,10 @@ private:
      * @param node Scene node that represents the character.
      * @param shape Physics collision shape definition.
      * @param mass The mass of the character.
+     * @param group Group identifier
+     * @param mask Bitmask field for filtering collisions with this object.
      */
-    PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass);
+    PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Destructor.

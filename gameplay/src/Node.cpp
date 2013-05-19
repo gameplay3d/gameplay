@@ -1105,7 +1105,7 @@ PhysicsCollisionObject* Node::getCollisionObject() const
     return _collisionObject;
 }
 
-PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters)
+PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters, int group, int mask)
 {
     SAFE_DELETE(_collisionObject);
 
@@ -1113,13 +1113,13 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
     {
     case PhysicsCollisionObject::RIGID_BODY:
         {
-            _collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+            _collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters(), group, mask);
         }
         break;
 
     case PhysicsCollisionObject::GHOST_OBJECT:
         {
-            _collisionObject = new PhysicsGhostObject(this, shape);
+            _collisionObject = new PhysicsGhostObject(this, shape, group, mask);
         }
         break;
 
