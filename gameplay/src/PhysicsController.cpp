@@ -629,20 +629,22 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
     // Assign user pointer for the bullet collision object to allow efficient
     // lookups of bullet objects -> gameplay objects.
     object->getCollisionObject()->setUserPointer(object);
+    short group = (short)object->_group;
+    short mask = (short)object->_mask;
 
     // Add the object to the physics world.
     switch (object->getType())
     {
     case PhysicsCollisionObject::RIGID_BODY:
-        _world->addRigidBody(static_cast<btRigidBody*>(object->getCollisionObject()), btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
+        _world->addRigidBody(static_cast<btRigidBody*>(object->getCollisionObject()), group, mask);
         break;
 
     case PhysicsCollisionObject::CHARACTER:
-        _world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
+        _world->addCollisionObject(object->getCollisionObject(), group, mask);
         break;
 
     case PhysicsCollisionObject::GHOST_OBJECT:
-        _world->addCollisionObject(object->getCollisionObject(), btBroadphaseProxy::DefaultFilter, btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::AllFilter);
+        _world->addCollisionObject(object->getCollisionObject(), group, mask);
         break;
 
     default:

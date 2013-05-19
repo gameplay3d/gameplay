@@ -49,8 +49,8 @@ protected:
     btScalar _minSlopeDot;
 };
 
-PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass)
-    : PhysicsGhostObject(node, shape), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
+PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass, int group, int mask)
+    : PhysicsGhostObject(node, shape, group, mask), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
     _verticalVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
     _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0), _stepHeight(0.1f),
     _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true), _mass(mass), _actionInterface(NULL)
