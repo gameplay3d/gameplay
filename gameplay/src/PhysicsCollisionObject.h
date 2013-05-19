@@ -14,6 +14,9 @@ class PhysicsGhostObject;
 class PhysicsVehicle;
 class PhysicsVehicleWheel;
 
+#define PHYSICS_COLLISION_GROUP_DEFAULT btBroadphaseProxy::DefaultFilter
+#define PHYSICS_COLLISION_MASK_DEFAULT btBroadphaseProxy::AllFilter
+
 /**
  * Base class for all gameplay physics objects that support collision events.
  */
@@ -327,7 +330,7 @@ protected:
     /**
      * Constructor.
      */
-    PhysicsCollisionObject(Node* node);
+    PhysicsCollisionObject(Node* node, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Returns the Bullet Physics collision object.
@@ -415,6 +418,12 @@ private:
      * The PhysicsCollisionObject's motion state.
      */
     PhysicsMotionState* _motionState;
+
+    /**
+     * Group identifier and the bitmask for collision filtering.
+     */
+    int _group;
+    int _mask;
 };
 
 }

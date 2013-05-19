@@ -42,8 +42,10 @@ protected:
      * 
      * @param node The node to attach the ghost object to.
      * @param shape The collision shape definition for the ghost object.
+     * @param group Group identifier
+     * @param mask Bitmask field for filtering collisions with this object.
      */
-    PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape);
+    PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Destructor.
