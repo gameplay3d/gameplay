@@ -10,7 +10,7 @@
 namespace gameplay
 {
 
-PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters, short group, short mask)
+PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters, int group, int mask)
         : PhysicsCollisionObject(node, group, mask), _body(NULL), _mass(parameters.mass), _constraints(NULL), _inDestructor(false)
 {
     GP_ASSERT(Game::getInstance()->getPhysicsController());

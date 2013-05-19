@@ -6,7 +6,7 @@
 namespace gameplay
 {
 
-PhysicsGhostObject::PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape, short group, short mask)
+PhysicsGhostObject::PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape, int group, int mask)
     : PhysicsCollisionObject(node, group, mask), _ghostObject(NULL)
 {
     Vector3 centerOfMassOffset;

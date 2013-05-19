@@ -1105,7 +1105,7 @@ PhysicsCollisionObject* Node::getCollisionObject() const
     return _collisionObject;
 }
 
-PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters, short group, short mask)
+PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters, int group, int mask)
 {
     SAFE_DELETE(_collisionObject);
 

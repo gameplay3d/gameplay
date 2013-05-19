@@ -330,7 +330,7 @@ protected:
     /**
      * Constructor.
      */
-    PhysicsCollisionObject(Node* node, short group = PHYSICS_COLLISION_GROUP_DEFAULT, short mask = PHYSICS_COLLISION_MASK_DEFAULT);
+    PhysicsCollisionObject(Node* node, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Returns the Bullet Physics collision object.
@@ -422,8 +422,8 @@ private:
     /**
      * Group identifier and the bitmask for collision filtering.
      */
-    short _group;
-    short _mask;
+    int _group;
+    int _mask;
 };
 
 }

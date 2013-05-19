@@ -45,7 +45,7 @@ protected:
      * @param group Group identifier
      * @param mask Bitmask field for filtering collisions with this object.
      */
-    PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape, short group = PHYSICS_COLLISION_GROUP_DEFAULT, short mask = PHYSICS_COLLISION_MASK_DEFAULT);
+    PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Destructor.

@@ -399,7 +399,7 @@ private:
      * @param group Group identifier
      * @param mask Bitmask field for filtering collisions with this object.
      */
-    PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters, short group = PHYSICS_COLLISION_GROUP_DEFAULT, short mask = PHYSICS_COLLISION_MASK_DEFAULT);
+    PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Destructor.

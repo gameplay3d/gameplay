@@ -629,8 +629,8 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
     // Assign user pointer for the bullet collision object to allow efficient
     // lookups of bullet objects -> gameplay objects.
     object->getCollisionObject()->setUserPointer(object);
-    short group = object->_group;
-    short mask = object->_mask;
+    short group = (short)object->_group;
+    short mask = (short)object->_mask;
 
     // Add the object to the physics world.
     switch (object->getType())
