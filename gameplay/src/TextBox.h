@@ -247,6 +247,11 @@ protected:
      */
     InputMode _inputMode;
 
+    /**
+     * Indicate if the CTRL key is currently pressed.
+     */
+    bool _ctrlPressed;
+
 private:
 
     /**

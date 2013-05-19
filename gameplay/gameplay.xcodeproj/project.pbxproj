@@ -1159,6 +1159,10 @@
 		C054CBE6172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */; };
 		C054CBE7172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */ = {isa = PBXBuildFile; fileRef = C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */; };
 		C054CBE8172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */ = {isa = PBXBuildFile; fileRef = C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */; };
+		C07A67491742988E00D65C04 /* lua_TextBoxInputMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C07A67471742988E00D65C04 /* lua_TextBoxInputMode.cpp */; };
+		C07A674A1742988E00D65C04 /* lua_TextBoxInputMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C07A67471742988E00D65C04 /* lua_TextBoxInputMode.cpp */; };
+		C07A674B1742988E00D65C04 /* lua_TextBoxInputMode.h in Headers */ = {isa = PBXBuildFile; fileRef = C07A67481742988E00D65C04 /* lua_TextBoxInputMode.h */; };
+		C07A674C1742988E00D65C04 /* lua_TextBoxInputMode.h in Headers */ = {isa = PBXBuildFile; fileRef = C07A67481742988E00D65C04 /* lua_TextBoxInputMode.h */; };
 		DD1FF47216DBD8F9000B42EF /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD1FF47116DBD8F9000B42EF /* Platform.cpp */; };
 		DD1FF47316DBD8F9000B42EF /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD1FF47116DBD8F9000B42EF /* Platform.cpp */; };
 		F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
@@ -1772,6 +1776,8 @@
 		BD2636E416CF5B7400CFE15F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_RenderStateCullFaceSide.cpp; sourceTree = "<group>"; };
 		C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_RenderStateCullFaceSide.h; sourceTree = "<group>"; };
+		C07A67471742988E00D65C04 /* lua_TextBoxInputMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_TextBoxInputMode.cpp; sourceTree = "<group>"; };
+		C07A67481742988E00D65C04 /* lua_TextBoxInputMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_TextBoxInputMode.h; sourceTree = "<group>"; };
 		DD1FF47116DBD8F9000B42EF /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Platform.cpp; path = src/Platform.cpp; sourceTree = SOURCE_ROOT; };
 		F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MathUtil.cpp; path = src/MathUtil.cpp; sourceTree = SOURCE_ROOT; };
 		F18024A31627000D001BFF87 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
@@ -2379,6 +2385,8 @@
 				42A5031C16E8F0B800F0246C /* lua_TerrainListener.h */,
 				42BCD42915EFD0F300C0E076 /* lua_TextBox.cpp */,
 				42BCD42A15EFD0F300C0E076 /* lua_TextBox.h */,
+				C07A67471742988E00D65C04 /* lua_TextBoxInputMode.cpp */,
+				C07A67481742988E00D65C04 /* lua_TextBoxInputMode.h */,
 				42BCD42B15EFD0F300C0E076 /* lua_Texture.cpp */,
 				42BCD42C15EFD0F300C0E076 /* lua_Texture.h */,
 				42BCD42D15EFD0F300C0E076 /* lua_TextureFilter.cpp */,
@@ -2801,6 +2809,7 @@
 				42A5031916E8F08900F0246C /* lua_ImageControl.h in Headers */,
 				42A5031F16E8F0B800F0246C /* lua_TerrainListener.h in Headers */,
 				C054CBE7172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */,
+				C07A674B1742988E00D65C04 /* lua_TextBoxInputMode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3108,6 +3117,7 @@
 				42A5031A16E8F08900F0246C /* lua_ImageControl.h in Headers */,
 				42A5032016E8F0B800F0246C /* lua_TerrainListener.h in Headers */,
 				C054CBE8172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */,
+				C07A674C1742988E00D65C04 /* lua_TextBoxInputMode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3484,6 +3494,7 @@
 				42A5031716E8F08900F0246C /* lua_ImageControl.cpp in Sources */,
 				42A5031D16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */,
 				C054CBE5172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */,
+				C07A67491742988E00D65C04 /* lua_TextBoxInputMode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3765,6 +3776,7 @@
 				42A5031816E8F08900F0246C /* lua_ImageControl.cpp in Sources */,
 				42A5031E16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */,
 				C054CBE6172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */,
+				C07A674A1742988E00D65C04 /* lua_TextBoxInputMode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
