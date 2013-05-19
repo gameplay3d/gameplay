@@ -524,7 +524,7 @@ std::string TextBox::getDisplayedText() const
     std::string displayedText;
     switch (_inputMode) {
         case PASSWORD:
-            displayedText.insert(0, _text.length(), _passwordChar);
+            displayedText.insert((size_t)0, _text.length(), _passwordChar);
             break;
 
         case TEXT:
