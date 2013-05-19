@@ -173,7 +173,7 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
     if (target)
     {
         GP_ASSERT( _renderTargets[index]->getTexture() );
-		GP_ASSERT( _renderTargets[index]->getTexture()->getType() != Texture::TEX_CUBE );
+		GP_ASSERT( _renderTargets[index]->getTexture()->getType() == Texture::TEX_2D );
 
         ++_renderTargetCount;
 

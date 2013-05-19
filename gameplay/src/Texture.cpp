@@ -1050,7 +1050,7 @@ void Texture::Sampler::bind()
 {
     GP_ASSERT(_texture);
 
-	GLenum target = _texture->_type == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP;
+	GLenum target = _texture->_type == Texture::TEX_2D && _texture->_cubeFace == Texture::NOT_A_FACE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP;
 	GL_ASSERT( glBindTexture(target, _texture->_handle) );
 
     if (_texture->_minFilter != _minFilter)
