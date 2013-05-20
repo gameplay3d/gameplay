@@ -254,7 +254,7 @@ void Animation::createClips(Properties* animationProperties, unsigned int frameC
         int begin = pClip->getInt("begin");
         int end = pClip->getInt("end");
 
-        AnimationClip* clip = createClip(pClip->getId(), ((float)begin / (frameCount-1)) * _duration, ((float)end / (frameCount-1)) * _duration);
+        AnimationClip* clip = createClip(pClip->getId(), ((float)begin / frameCount) * _duration, ((float)end / frameCount) * _duration);
 
         const char* repeat = pClip->getString("repeatCount");
         if (repeat)
