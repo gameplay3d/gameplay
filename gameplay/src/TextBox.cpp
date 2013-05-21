@@ -142,7 +142,15 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                 }
                 case Keyboard::KEY_END:
                 {
-                    // TODO: Move cursor to end of line.
+                    Font* font = getFont(_state);
+                    GP_ASSERT(font);
+                    unsigned int fontSize = getFontSize(_state);
+                    Font::Justify textAlignment = getTextAlignment(_state);
+                    bool rightToLeft = getTextRightToLeft(_state);
+                    const std::string displayedText = getDisplayedText();
+                    font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, displayedText.size(),
+                        textAlignment, true, rightToLeft);
+                    _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_DELETE:
