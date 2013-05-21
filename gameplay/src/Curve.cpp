@@ -1229,7 +1229,7 @@ int Curve::determineIndex(float time, unsigned int min, unsigned int max) const
     {
         mid = (min + max) >> 1;
 
-        if (time >= _points[mid].time && time <= _points[mid + 1].time)
+        if (time >= _points[mid].time && time < _points[mid + 1].time)
             return mid;
         else if (time < _points[mid].time)
             max = mid - 1;
@@ -1237,8 +1237,7 @@ int Curve::determineIndex(float time, unsigned int min, unsigned int max) const
             min = mid + 1;
     } while (min <= max);
     
-    // We should never hit this!
-    return -1;
+    return max;
 }
 
 int Curve::getInterpolationType(const char* curveId)
