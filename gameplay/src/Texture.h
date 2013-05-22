@@ -196,15 +196,18 @@ public:
      * The data in the texture is expected to be tightly packed (no padding at the end of rows).
      *
      * @param format Format of the texture data.
-     * @param width Width of the texture data.
-     * @param height Height of the texture data.
-     * @param data Raw texture data (expected to be tightly packed).
+     * @param width Width of the texture data. If type is TEX_CUBE, then this is the cube face width.
+     * @param height Height of the texture data. If type is TEX_CUBE, then this is the cube face height.
+     * @param data Raw texture data (expected to be tightly packed). If the type parameter is set 
+	 *   to TEX_CUBE, then data is expected to be each face stored back contiguously within the
+	 *   array.
      * @param generateMipmaps True to generate a full mipmap chain, false otherwise.
+	 * @param type What type of Texture should be created.
      *
      * @return The new texture.
      * @script{create}
      */
-    static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false);
+    static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false, Type type = TEX_2D);
 
     /**
      * Creates a texture object to wrap the specified pre-created native texture handle.
@@ -225,22 +228,6 @@ public:
      * @script{create}
      */
     static Texture* create(TextureHandle handle, int width, int height, Format format = UNKNOWN);
-
-	/**
-     * Creates a texture cube from the given texture data.
-     *
-     * The data in the texture is expected to be tightly packed (no padding at the end of rows).
-     *
-     * @param format Format of the texture data.
-     * @param width Width of the texture data. This defines the width of a cube face.
-     * @param height Height of the texture data. This defines the height of a cube face.
-     * @param data Six arrays, one for each face, of raw texture data (expected to be tightly packed).
-     * @param generateMipmaps True to generate a full mipmap chain, false otherwise.
-     *
-     * @return The new texture cube.
-     * @script{ignore}
-     */
-	static Texture* createCube(Format format, unsigned int width, unsigned int height, unsigned char* data[], bool generateMipmaps = false);
 
     /**
      * Returns the path that the texture was originally loaded from (if applicable).

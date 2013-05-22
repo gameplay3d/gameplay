@@ -640,6 +640,7 @@
     <ClCompile Include="src\LightSample.cpp" />
     <ClCompile Include="src\PostProcessSample.cpp" />
     <ClCompile Include="src\TerrainSample.cpp" />
+    <ClCompile Include="src\TextureCubeSample.cpp" />
     <ClCompile Include="src\TriangleSample.cpp" />
     <ClCompile Include="src\FirstPersonCamera.cpp" />
     <ClCompile Include="src\Grid.cpp" />
@@ -664,6 +665,7 @@
     <ClInclude Include="src\LightSample.h" />
     <ClInclude Include="src\PostProcessSample.h" />
     <ClInclude Include="src\TerrainSample.h" />
+    <ClInclude Include="src\TextureCubeSample.h" />
     <ClInclude Include="src\TriangleSample.h" />
     <ClInclude Include="src\FirstPersonCamera.h" />
     <ClInclude Include="src\Grid.h" />

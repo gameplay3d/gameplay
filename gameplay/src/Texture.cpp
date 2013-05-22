@@ -167,29 +167,73 @@ Texture* Texture::create(Image* image, bool generateMipmaps)
     }
 }
 
-Texture* Texture::create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps)
+Texture* Texture::create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps, Texture::Type type)
 {
-    // Create and load the texture.
+	GP_ASSERT( type == Texture::TEX_2D || type == Texture::TEX_CUBE );
+
+	GLenum target = type == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP;
+
+    // Create the texture.
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
-    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
+    GL_ASSERT( glBindTexture(target, textureId) );
     GL_ASSERT( glPixelStorei(GL_UNPACK_ALIGNMENT, 1) );
 #ifndef OPENGL_ES
     // glGenerateMipmap is new in OpenGL 3.0. For OpenGL 2.0 we must fallback to use glTexParameteri 
     // with GL_GENERATE_MIPMAP prior to actual texture creation (glTexImage2D)
-    if ( generateMipmaps && glGenerateMipmap == NULL )
-        GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE) );
+    if (generateMipmaps && glGenerateMipmap == NULL)
+        GL_ASSERT( glTexParameteri(target, GL_GENERATE_MIPMAP, GL_TRUE) );
 #endif
-    GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
+
+	// Load the texture
+	if (type == Texture::TEX_2D)
+	{
+		// Texture 2D
+		GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
+	}
+	else
+	{
+		// Texture Cube
+		unsigned char** cubeData = new unsigned char*[6];
+		memset(cubeData, 0, sizeof(unsigned char*) * 6);
+		if(data)
+		{
+			// Get texture pointers
+			unsigned int textureSize = width * height;
+			switch (format)
+			{
+				case Texture::RGB:
+					textureSize *= 3;
+					break;
+				case Texture::RGBA:
+					textureSize *= 4;
+					break;
+				case Texture::ALPHA:
+					break;
+				case Texture::UNKNOWN:
+					GP_ERROR("Failed to determine texture size because format is UNKNOWN.");
+					break;
+			}
+			for (unsigned int i = 0; i < 6; i++)
+			{
+				cubeData[i] = &data[i * textureSize];
+			}
+		}
+		for (unsigned int i = 0; i < 6; i++)
+		{
+			GL_ASSERT( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, cubeData[i]) );
+		}
+		SAFE_DELETE_ARRAY(cubeData);
+	}
 
     // Set initial minification filter based on whether or not mipmaping was enabled.
     Filter minFilter = generateMipmaps ? NEAREST_MIPMAP_LINEAR : LINEAR;
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter) );
+    GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter) );
 
     Texture* texture = new Texture();
     texture->_handle = textureId;
     texture->_format = format;
-	texture->_type = TEX_2D;
+	texture->_type = type;
     texture->_width = width;
     texture->_height = height;
     texture->_minFilter = minFilter;
@@ -217,58 +261,6 @@ Texture* Texture::create(TextureHandle handle, int width, int height, Format for
 	}
     texture->_width = width;
     texture->_height = height;
-
-    return texture;
-}
-
-Texture* Texture::createCube(Format format, unsigned int width, unsigned int height, unsigned char* data[], bool generateMipmaps)
-{
-	// Create the texture.
-    GLuint textureId;
-    GL_ASSERT( glGenTextures(1, &textureId) );
-    GL_ASSERT( glBindTexture(GL_TEXTURE_CUBE_MAP, textureId) );
-    GL_ASSERT( glPixelStorei(GL_UNPACK_ALIGNMENT, 1) );
-#ifndef OPENGL_ES
-    // glGenerateMipmap is new in OpenGL 3.0. For OpenGL 2.0 we must fallback to use glTexParameteri 
-    // with GL_GENERATE_MIPMAP prior to actual texture creation (glTexImage2D)
-    if ( generateMipmaps && glGenerateMipmap == NULL )
-        GL_ASSERT( glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_GENERATE_MIPMAP, GL_TRUE ) );
-#endif
-
-	// Load the texture
-	bool dataNotSet = data == NULL;
-	if (dataNotSet)
-	{
-		data = new unsigned char*[6];
-		memset(data, 0, sizeof(unsigned char*) * 6);
-	}
-	for(unsigned int i = 0; i < 6; i++)
-	{
-		GL_ASSERT( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data[i]) );
-	}
-	if (dataNotSet)
-	{
-		SAFE_DELETE_ARRAY(data);
-	}
-
-    // Set initial minification filter based on whether or not mipmaping was enabled.
-    Filter minFilter = generateMipmaps ? NEAREST_MIPMAP_LINEAR : LINEAR;
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, minFilter) );
-
-    Texture* texture = new Texture();
-    texture->_handle = textureId;
-    texture->_format = format;
-	texture->_type = TEX_CUBE;
-    texture->_width = width;
-    texture->_height = height;
-    texture->_minFilter = minFilter;
-    if (generateMipmaps)
-    {
-        texture->generateMipmaps();
-    }
-
-    // Restore the texture id
-    GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
 
     return texture;
 }
