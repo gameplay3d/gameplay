@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-bool space(char c) {
+static bool space(char c) {
     return isspace(c);
 }
 
