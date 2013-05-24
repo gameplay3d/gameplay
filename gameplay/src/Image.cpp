@@ -107,6 +107,34 @@ Image* Image::create(const char* path)
     return image;
 }
 
+Image* Image::create(unsigned int width, unsigned int height, Image::Format format, unsigned char* data)
+{
+	GP_ASSERT(data);
+	GP_ASSERT(width > 0 && height > 0);
+	GP_ASSERT(format >= RGB && format <= RGBA);
+
+	unsigned int pixelSize = 0;
+	switch(format)
+	{
+	case Image::RGB:
+		pixelSize = 3;
+		break;
+	case Image::RGBA:
+		pixelSize = 4;
+		break;
+	}
+
+	Image* image = new Image();
+
+	image->_width = width;
+	image->_height = height;
+	image->_format = format;
+	image->_data = new unsigned char[width * height * pixelSize];
+	memcpy(image->_data, data, width * height * pixelSize);
+
+	return image;
+}
+
 Image::Image()
 {
     // Unused
