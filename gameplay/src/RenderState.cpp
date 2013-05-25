@@ -400,7 +400,13 @@ const Vector3& RenderState::autoBindingGetLightDirection() const
 {
     static Vector3 down(0, -1, 0);
     Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
-    return scene ? scene->getLightDirection() : down;
+    if (scene) {
+        static Vector3 lightDirection;
+        lightDirection.set(scene->getLightDirection());
+        _nodeBinding->getViewMatrix().transformVector(&lightDirection);
+        return lightDirection;
+    }
+    return down;
 }
 
 void RenderState::bind(Pass* pass)
