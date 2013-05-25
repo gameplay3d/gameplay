@@ -130,16 +130,27 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                 }
                 case Keyboard::KEY_HOME:
                 {
-                    // TODO: Move cursor to beginning of line.
-                    // This only works for left alignment...
-                        
-                    //_caretLocation.x = _viewportClipBounds.x;
-                    //_dirty = true;
+                    Font* font = getFont(_state);
+                    GP_ASSERT(font);
+                    unsigned int fontSize = getFontSize(_state);
+                    Font::Justify textAlignment = getTextAlignment(_state);
+                    bool rightToLeft = getTextRightToLeft(_state);
+                    font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &_caretLocation, 0,
+                        textAlignment, true, rightToLeft);
+                    _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_END:
                 {
-                    // TODO: Move cursor to end of line.
+                    Font* font = getFont(_state);
+                    GP_ASSERT(font);
+                    unsigned int fontSize = getFontSize(_state);
+                    Font::Justify textAlignment = getTextAlignment(_state);
+                    bool rightToLeft = getTextRightToLeft(_state);
+                    const std::string displayedText = getDisplayedText();
+                    font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, displayedText.size(),
+                        textAlignment, true, rightToLeft);
+                    _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_DELETE:
