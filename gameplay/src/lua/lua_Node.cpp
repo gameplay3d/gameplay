@@ -5079,9 +5079,115 @@ int lua_Node_setCollisionObject(lua_State* state)
             lua_error(state);
             break;
         }
+        case 5:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
+                    lua_type(state, 5) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
+
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    gameplay::ScriptUtil::LuaArray<PhysicsCollisionShape::Definition> param2 = gameplay::ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody::Parameters> param3 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody::Parameters>(4, "PhysicsRigidBodyParameters", false, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    int param4 = (int)luaL_checkint(state, 5);
+
+                    Node* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->setCollisionObject(param1, *param2, param3, param4);
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsCollisionObject");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Node_setCollisionObject - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        case 6:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    lua_type(state, 6) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
+
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    gameplay::ScriptUtil::LuaArray<PhysicsCollisionShape::Definition> param2 = gameplay::ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody::Parameters> param3 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody::Parameters>(4, "PhysicsRigidBodyParameters", false, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    int param4 = (int)luaL_checkint(state, 5);
+
+                    // Get parameter 5 off the stack.
+                    int param5 = (int)luaL_checkint(state, 6);
+
+                    Node* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->setCollisionObject(param1, *param2, param3, param4, param5);
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsCollisionObject");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Node_setCollisionObject - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2, 3 or 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2, 3, 4, 5 or 6).");
             lua_error(state);
             break;
         }
