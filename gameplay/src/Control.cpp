@@ -1132,7 +1132,10 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
     }
 
     if (!_visible)
+    {
+        _dirty = false;
         return;
+    }
 
     spriteBatch->start();
     drawBorder(spriteBatch, clip);
