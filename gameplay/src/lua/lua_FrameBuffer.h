@@ -22,6 +22,7 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state);
 int lua_FrameBuffer_static_bindDefault(lua_State* state);
 int lua_FrameBuffer_static_create(lua_State* state);
 int lua_FrameBuffer_static_getCurrent(lua_State* state);
+int lua_FrameBuffer_static_getCurrentScreenshot(lua_State* state);
 int lua_FrameBuffer_static_getFrameBuffer(lua_State* state);
 int lua_FrameBuffer_static_getMaxRenderTargets(lua_State* state);
 

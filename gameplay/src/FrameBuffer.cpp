@@ -269,6 +269,24 @@ FrameBuffer* FrameBuffer::bind()
     return previousFrameBuffer;
 }
 
+Image* FrameBuffer::getCurrentScreenshot()
+{
+	//While possible to have a non-static getScreenshot function, it would require the expensive operation 
+	//of binding the FrameBuffer, reading the pixels, then rebinding the original FrameBuffer. This is faster.
+
+	unsigned int width = _currentFrameBuffer->getWidth();
+	unsigned int height = _currentFrameBuffer->getHeight();
+	unsigned char* data = new unsigned char[width * height * 4];
+
+	GL_ASSERT( glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data) );
+
+	Image* screenshot = Image::create(width, height, Image::RGBA, data);
+
+	SAFE_DELETE_ARRAY(data);
+
+	return screenshot;
+}
+
 FrameBuffer* FrameBuffer::bindDefault()
 {
     GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _defaultFrameBuffer->_handle) );

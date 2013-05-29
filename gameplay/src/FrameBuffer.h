@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "RenderTarget.h"
 #include "DepthStencilTarget.h"
+#include "Image.h"
 
 namespace gameplay
 {
@@ -150,6 +151,13 @@ public:
      * @ return The currently bound framebuffer.
      */
     FrameBuffer* bind();
+
+	/**
+	 * Records a screenshot of what is stored on the current FrameBuffer.
+	 * 
+	 * @return A screenshot of the current framebuffer's content.
+	 */
+	static Image* getCurrentScreenshot();
 
     /**
      * Binds the default FrameBuffer for rendering to the display.
