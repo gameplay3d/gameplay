@@ -494,7 +494,10 @@ void Slider::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCle
     }
 
     if (!_visible)
+    {
+        _dirty = false;
         return;
+    }
 
     spriteBatch->start();
     drawBorder(spriteBatch, clip);
