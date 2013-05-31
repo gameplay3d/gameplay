@@ -37,11 +37,11 @@ public:
      * @param width The width of the image data.
 	 * @param height The height of the image data.
 	 * @param format The format of the image data.
-	 * @param data The image data.
+	 * @param data The image data. If NULL, the data will be allocated.
      * @return The newly created image.
      * @script{create}
      */
-	static Image* create(unsigned int width, unsigned int height, Format format, unsigned char* data);
+	static Image* create(unsigned int width, unsigned int height, Format format, unsigned char* data = NULL);
 
     /**
      * Gets the image's raw pixel data.
