@@ -21,9 +21,11 @@ int lua_FrameBuffer_setDepthStencilTarget(lua_State* state);
 int lua_FrameBuffer_setRenderTarget(lua_State* state);
 int lua_FrameBuffer_static_bindDefault(lua_State* state);
 int lua_FrameBuffer_static_create(lua_State* state);
+int lua_FrameBuffer_static_createScreenshot(lua_State* state);
 int lua_FrameBuffer_static_getCurrent(lua_State* state);
 int lua_FrameBuffer_static_getFrameBuffer(lua_State* state);
 int lua_FrameBuffer_static_getMaxRenderTargets(lua_State* state);
+int lua_FrameBuffer_static_getScreenshot(lua_State* state);
 
 void luaRegister_FrameBuffer();
 
