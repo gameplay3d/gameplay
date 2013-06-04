@@ -32,9 +32,11 @@ void luaRegister_FrameBuffer()
     {
         {"bindDefault", lua_FrameBuffer_static_bindDefault},
         {"create", lua_FrameBuffer_static_create},
+        {"createScreenshot", lua_FrameBuffer_static_createScreenshot},
         {"getCurrent", lua_FrameBuffer_static_getCurrent},
         {"getFrameBuffer", lua_FrameBuffer_static_getFrameBuffer},
         {"getMaxRenderTargets", lua_FrameBuffer_static_getMaxRenderTargets},
+        {"getScreenshot", lua_FrameBuffer_static_getScreenshot},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -760,6 +762,43 @@ int lua_FrameBuffer_static_create(lua_State* state)
     return 0;
 }
 
+int lua_FrameBuffer_static_createScreenshot(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            void* returnPtr = (void*)FrameBuffer::createScreenshot();
+            if (returnPtr)
+            {
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Image");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_FrameBuffer_static_getCurrent(lua_State* state)
 {
     // Get the number of parameters.
@@ -864,6 +903,46 @@ int lua_FrameBuffer_static_getMaxRenderTargets(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_FrameBuffer_static_getScreenshot(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Image> param1 = gameplay::ScriptUtil::getObjectPointer<Image>(1, "Image", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Image'.");
+                    lua_error(state);
+                }
+
+                FrameBuffer::getScreenshot(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_FrameBuffer_static_getScreenshot - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
