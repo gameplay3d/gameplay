@@ -12,7 +12,7 @@ prefix=http://www.gameplay3d.org
 
 branchname=$1
 if [[ "$branchname" == "" ]]; then
-  branchname="next"
+  branchname="master"
 fi
 
 filename=gameplay-deps-$branchname
