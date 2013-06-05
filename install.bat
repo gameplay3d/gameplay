@@ -13,7 +13,7 @@ set prefix=http://www.gameplay3d.org
 
 set branchname=%1
 if "%branchname%" == "" (
-  set branchname=next
+  set branchname=master
 )
 
 set filename=gameplay-deps-%branchname%
