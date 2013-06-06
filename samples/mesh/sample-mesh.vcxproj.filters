@@ -29,13 +29,11 @@
     <None Include="res\duck-diffuse.png">
       <Filter>res</Filter>
     </None>
-    <None Include="..\..\..\gameplay\res\logo_powered_white.png">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\grid.material">
       <Filter>res</Filter>
     </None>
     <None Include="game.config" />
+    <None Include="../../gameplay\res\logo_powered_white.png" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp">

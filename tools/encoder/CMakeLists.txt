@@ -14,20 +14,20 @@ link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
-    /usr/lib/gcc4/${ARCH_DIR}
+    /usr/lib/gcc4/${ARCH_DIR}/release
     /usr/lib
 )
 
 set(APP_LIBRARIES
     dl
-    fbxsdk-2013.3-static
+    fbxsdk
     png
     z   
     freetype
     pthread
 ) 
 
-add_definitions(-lstdc++ -ldl -lfbxsdk-2013.3-static -lpng -lz -lfreetype -lpthread)
+add_definitions(-lstdc++ -ldl -lfbxsdk -lpng -lz -lfreetype -lpthread)
 
 set( APP_NAME gameplay-encoder )
 
