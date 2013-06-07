@@ -85,8 +85,7 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
                 x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
             {
-                _checked = !_checked;
-                notifyListeners(Control::Listener::VALUE_CHANGED);
+                setChecked( !_checked );
             }
         }
         break;
@@ -104,8 +103,7 @@ bool CheckBox::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigne
             if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
                 !gamepad->isButtonDown(Gamepad::BUTTON_X))
             {
-                _checked = !_checked;
-                notifyListeners(Control::Listener::VALUE_CHANGED);   
+                setChecked( !_checked );
             }
         }
         break;
@@ -118,8 +116,7 @@ bool CheckBox::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (_state == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN)
     {
-        _checked = !_checked;
-        notifyListeners(Control::Listener::VALUE_CHANGED);
+        setChecked( !_checked );
     }
 
     return Button::keyEvent(evt, key);
