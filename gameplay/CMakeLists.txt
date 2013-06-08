@@ -497,6 +497,10 @@ set(GAMEPLAY_LUA
     src/lua/lua_RenderStateDepthFunction.h
     src/lua/lua_RenderStateStateBlock.cpp
     src/lua/lua_RenderStateStateBlock.h
+    src/lua/lua_RenderStateStencilFunction.cpp
+    src/lua/lua_RenderStateStencilFunction.h
+    src/lua/lua_RenderStateStencilOperation.cpp
+    src/lua/lua_RenderStateStencilOperation.h
     src/lua/lua_RenderTarget.cpp
     src/lua/lua_RenderTarget.h
     src/lua/lua_Scene.cpp

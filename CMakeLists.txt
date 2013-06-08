@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(GamePlay)
 
-set(GAMEPLAY_VERSION 1.6.0)
+set(GAMEPLAY_VERSION 1.7.0)
 set(CMAKE_C_COMPILER_INIT g++)
 
 # debug

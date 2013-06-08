@@ -695,7 +695,7 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
     {
 		GL_ASSERT( glStencilMask(RS_ALL_ONES) );
         _defaultState->_bits &= ~RS_STENCIL_WRITE;
-        _defaultState->_stencilTestEnabled = RS_ALL_ONES;
+		_defaultState->_stencilWrite = RS_ALL_ONES;
     }
 	if (!(stateOverrideBits & RS_STENCIL_FUNC) && (_defaultState->_bits & RS_STENCIL_FUNC))
     {
