@@ -777,6 +777,34 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("DEPTH_ALWAYS", "DEPTH_ALWAYS", scopePath);
     }
 
+    // Register enumeration RenderState::StencilFunction.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("RenderState");
+        gameplay::ScriptUtil::registerConstantString("STENCIL_NEVER", "STENCIL_NEVER", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_ALWAYS", "STENCIL_ALWAYS", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_LESS", "STENCIL_LESS", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_LEQUAL", "STENCIL_LEQUAL", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_EQUAL", "STENCIL_EQUAL", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_GREATER", "STENCIL_GREATER", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_GEQUAL", "STENCIL_GEQUAL", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_NOTEQUAL", "STENCIL_NOTEQUAL", scopePath);
+    }
+
+    // Register enumeration RenderState::StencilOperation.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("RenderState");
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_KEEP", "STENCIL_OP_KEEP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_ZERO", "STENCIL_OP_ZERO", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_REPLACE", "STENCIL_OP_REPLACE", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_INCR", "STENCIL_OP_INCR", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_DECR", "STENCIL_OP_DECR", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_INVERT", "STENCIL_OP_INVERT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_INCR_WRAP", "STENCIL_OP_INCR_WRAP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_DECR_WRAP", "STENCIL_OP_DECR_WRAP", scopePath);
+    }
+
     // Register enumeration Scene::DebugFlags.
     {
         std::vector<std::string> scopePath;
@@ -941,6 +969,10 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_RenderStateCullFaceSide((RenderState::CullFaceSide)value);
     if (enumname == "RenderState::DepthFunction")
         return lua_stringFromEnum_RenderStateDepthFunction((RenderState::DepthFunction)value);
+    if (enumname == "RenderState::StencilFunction")
+        return lua_stringFromEnum_RenderStateStencilFunction((RenderState::StencilFunction)value);
+    if (enumname == "RenderState::StencilOperation")
+        return lua_stringFromEnum_RenderStateStencilOperation((RenderState::StencilOperation)value);
     if (enumname == "Scene::DebugFlags")
         return lua_stringFromEnum_SceneDebugFlags((Scene::DebugFlags)value);
     if (enumname == "Terrain::Flags")
