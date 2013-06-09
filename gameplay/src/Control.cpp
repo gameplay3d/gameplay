@@ -90,6 +90,11 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     if (id)
         _id = id;
 
+    if (properties->exists("enabled"))
+    {
+        setEnabled(properties->getBool("enabled"));
+    }
+
     // Potentially override themed properties for all states.
     overrideThemedProperties(properties, STATE_ALL);
 
