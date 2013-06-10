@@ -1155,6 +1155,14 @@
 		BD26373616CF865B00CFE15F /* Vector2.inl in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E39147D8FF50000361E /* Vector2.inl */; settings = {ATTRIBUTES = (Public, ); }; };
 		BD26373716CF865B00CFE15F /* Vector3.inl in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E3C147D8FF50000361E /* Vector3.inl */; settings = {ATTRIBUTES = (Public, ); }; };
 		BD26373816CF865B00CFE15F /* Vector4.inl in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E3F147D8FF50000361E /* Vector4.inl */; settings = {ATTRIBUTES = (Public, ); }; };
+		C01405151765345800B9FFB1 /* lua_RenderStateStencilFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C01405111765345800B9FFB1 /* lua_RenderStateStencilFunction.cpp */; };
+		C01405161765345800B9FFB1 /* lua_RenderStateStencilFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C01405111765345800B9FFB1 /* lua_RenderStateStencilFunction.cpp */; };
+		C01405171765345800B9FFB1 /* lua_RenderStateStencilFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = C01405121765345800B9FFB1 /* lua_RenderStateStencilFunction.h */; };
+		C01405181765345800B9FFB1 /* lua_RenderStateStencilFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = C01405121765345800B9FFB1 /* lua_RenderStateStencilFunction.h */; };
+		C01405191765345800B9FFB1 /* lua_RenderStateStencilOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C01405131765345800B9FFB1 /* lua_RenderStateStencilOperation.cpp */; };
+		C014051A1765345800B9FFB1 /* lua_RenderStateStencilOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C01405131765345800B9FFB1 /* lua_RenderStateStencilOperation.cpp */; };
+		C014051B1765345800B9FFB1 /* lua_RenderStateStencilOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = C01405141765345800B9FFB1 /* lua_RenderStateStencilOperation.h */; };
+		C014051C1765345800B9FFB1 /* lua_RenderStateStencilOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = C01405141765345800B9FFB1 /* lua_RenderStateStencilOperation.h */; };
 		C054CBE5172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */; };
 		C054CBE6172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */; };
 		C054CBE7172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */ = {isa = PBXBuildFile; fileRef = C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */; };
@@ -1774,6 +1782,10 @@
 		BD2636E216CF5B7400CFE15F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E316CF5B7400CFE15F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E416CF5B7400CFE15F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		C01405111765345800B9FFB1 /* lua_RenderStateStencilFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_RenderStateStencilFunction.cpp; sourceTree = "<group>"; };
+		C01405121765345800B9FFB1 /* lua_RenderStateStencilFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_RenderStateStencilFunction.h; sourceTree = "<group>"; };
+		C01405131765345800B9FFB1 /* lua_RenderStateStencilOperation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_RenderStateStencilOperation.cpp; sourceTree = "<group>"; };
+		C01405141765345800B9FFB1 /* lua_RenderStateStencilOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_RenderStateStencilOperation.h; sourceTree = "<group>"; };
 		C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_RenderStateCullFaceSide.cpp; sourceTree = "<group>"; };
 		C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_RenderStateCullFaceSide.h; sourceTree = "<group>"; };
 		C07A67471742988E00D65C04 /* lua_TextBoxInputMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_TextBoxInputMode.cpp; sourceTree = "<group>"; };
@@ -2359,6 +2371,10 @@
 				B661732E16A61A4B0083A307 /* lua_RenderStateDepthFunction.h */,
 				42BCD41515EFD0F300C0E076 /* lua_RenderStateStateBlock.cpp */,
 				42BCD41615EFD0F300C0E076 /* lua_RenderStateStateBlock.h */,
+				C01405111765345800B9FFB1 /* lua_RenderStateStencilFunction.cpp */,
+				C01405121765345800B9FFB1 /* lua_RenderStateStencilFunction.h */,
+				C01405131765345800B9FFB1 /* lua_RenderStateStencilOperation.cpp */,
+				C01405141765345800B9FFB1 /* lua_RenderStateStencilOperation.h */,
 				42BCD41715EFD0F300C0E076 /* lua_RenderTarget.cpp */,
 				42BCD41815EFD0F300C0E076 /* lua_RenderTarget.h */,
 				42BCD41915EFD0F300C0E076 /* lua_Scene.cpp */,
@@ -2810,6 +2826,8 @@
 				42A5031F16E8F0B800F0246C /* lua_TerrainListener.h in Headers */,
 				C054CBE7172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */,
 				C07A674B1742988E00D65C04 /* lua_TextBoxInputMode.h in Headers */,
+				C01405171765345800B9FFB1 /* lua_RenderStateStencilFunction.h in Headers */,
+				C014051B1765345800B9FFB1 /* lua_RenderStateStencilOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3118,6 +3136,8 @@
 				42A5032016E8F0B800F0246C /* lua_TerrainListener.h in Headers */,
 				C054CBE8172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */,
 				C07A674C1742988E00D65C04 /* lua_TextBoxInputMode.h in Headers */,
+				C01405181765345800B9FFB1 /* lua_RenderStateStencilFunction.h in Headers */,
+				C014051C1765345800B9FFB1 /* lua_RenderStateStencilOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3495,6 +3515,8 @@
 				42A5031D16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */,
 				C054CBE5172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */,
 				C07A67491742988E00D65C04 /* lua_TextBoxInputMode.cpp in Sources */,
+				C01405151765345800B9FFB1 /* lua_RenderStateStencilFunction.cpp in Sources */,
+				C01405191765345800B9FFB1 /* lua_RenderStateStencilOperation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3777,6 +3799,8 @@
 				42A5031E16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */,
 				C054CBE6172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */,
 				C07A674A1742988E00D65C04 /* lua_TextBoxInputMode.cpp in Sources */,
+				C01405161765345800B9FFB1 /* lua_RenderStateStencilFunction.cpp in Sources */,
+				C014051A1765345800B9FFB1 /* lua_RenderStateStencilOperation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
