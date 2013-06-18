@@ -177,7 +177,7 @@ public:
      * @return The new texture.
      * @script{create}
      */
-    static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false);
+    static Texture* create(Format format, unsigned int width, unsigned int height, const unsigned char* data, bool generateMipmaps = false);
 
     /**
      * Creates a texture object to wrap the specified pre-created native texture handle.
