@@ -406,17 +406,19 @@ bool SpriteBatch::clipSprite(const Rectangle& clip, float& x, float& y, float& w
         return false;
     }
 
-    const float uvWidth = u2 - u1;
-    const float uvHeight = v2 - v1;
+    float uvWidth = u2 - u1;
+    float uvHeight = v2 - v1;
 
     // Moving x to the right.
     if (x < clip.x)
     {
         const float percent = (clip.x - x) / width;
         const float dx = clip.x - x;
+        const float du = uvWidth * percent;
         x = clip.x;
         width -= dx;
-        u1 += uvWidth * percent;
+        u1 += du;
+        uvWidth -= du;
     }
 
     // Moving y down.
@@ -424,9 +426,11 @@ bool SpriteBatch::clipSprite(const Rectangle& clip, float& x, float& y, float& w
     {
         const float percent = (clip.y - y) / height;
         const float dy = clip.y - y;
+        const float dv = uvHeight * percent;
         y = clip.y;
         height -= dy;
-        v1 += uvHeight * percent;
+        v1 += dv;
+        uvHeight -= dv;
     }
 
     // Moving width to the left.
