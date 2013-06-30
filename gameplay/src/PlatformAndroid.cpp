@@ -882,6 +882,10 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                 break;
                     
             case AKEY_EVENT_ACTION_UP:
+                if (getKey(keycode, metastate) == Keyboard::KEY_MENU)
+                {
+                    Game::getInstance()->menuEvent();
+                }
                 gameplay::Platform::keyEventInternal(Keyboard::KEY_RELEASE, getKey(keycode, metastate));
                 break;
         }
