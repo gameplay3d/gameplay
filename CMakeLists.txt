@@ -5,24 +5,37 @@ project(GamePlay)
 set(GAMEPLAY_VERSION 1.7.0)
 set(CMAKE_C_COMPILER_INIT g++)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+
 # debug
 message( "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
 if ( "${CMAKE_BUILD_TYPE}" STREQUAL "DEBUG" )
     add_definitions(-D_DEBUG)
 endif()
 
-# architecture
-if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-set(ARCH_DIR "x64")
-else()
-set(ARCH_DIR "x86")
+# Check if this is a raspberry pi.
+# If it is then it has BCMHOST
+find_path(BCMHOST_INCLUDE_DIR bcm_host.h HINTS /opt/vc/include)
+if ( BCMHOST_INCLUDE_DIR )
+  set(RPI 1)
+  add_definitions(-D_RPI)
+  message("Detected Raspberry pi")
 endif()
+
+find_package(Bullet)
+find_package(Vorbis)
+
+INCLUDE_DIRECTORIES(
+  ${Bullet_INCLUDE_DIR}
+  ${VORBIS_INCLUDE_DIR}
+)
 
 # gameplay library
 add_subdirectory(gameplay)
 
 # gameplay samples
-add_subdirectory(samples)
+# just for now...
+#add_subdirectory(samples)
 
 # gameplay encoder
 # A pre-compiled executable can be found in 'gameplay/bin'
