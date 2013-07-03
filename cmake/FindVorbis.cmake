@@ -42,13 +42,13 @@ find_path(VORBIS_INCLUDE_DIR NAMES vorbisenc.h
 
 # Find the libraries
 
-_FIND_VORBIS_LIBRARY(VORBIS_LIBRARY        libvorbis)
-_FIND_VORBIS_LIBRARY(VORBIS_LIBRARY_DEBUG  libvorbis_Debug libvorbis_d)
+_FIND_VORBIS_LIBRARY(VORBIS_LIBRARY        vorbis)
+_FIND_VORBIS_LIBRARY(VORBIS_LIBRARY_DEBUG  vorbis_Debug vorbis_d)
 
 
 # handle the QUIETLY and REQUIRED arguments and set VORBIS_FOUND to TRUE if 
 # all listed variables are TRUE
-include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Vorbis DEFAULT_MSG
     VORBIS_LIBRARY 
     VORBIS_INCLUDE_DIR)
