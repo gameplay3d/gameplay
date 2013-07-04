@@ -24,10 +24,14 @@ endif()
 
 find_package(Bullet)
 find_package(Vorbis)
+find_package(PNG)
+find_package(Lua51)
 
 INCLUDE_DIRECTORIES(
   ${Bullet_INCLUDE_DIR}
   ${VORBIS_INCLUDE_DIR}
+  ${PNG_INCLUDE_DIR}
+  ${LUA_INCLUDE_DIR}
 )
 
 # gameplay library
