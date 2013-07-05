@@ -18,7 +18,7 @@ endif()
 find_path(BCMHOST_INCLUDE_DIR bcm_host.h HINTS /opt/vc/include)
 if ( BCMHOST_INCLUDE_DIR )
   set(RPI 1)
-  add_definitions(-D_RPI)
+  add_definitions(-D__RPI__)
   message("Detected Raspberry pi")
 endif()
 
@@ -26,12 +26,14 @@ find_package(Bullet)
 find_package(Vorbis)
 find_package(PNG)
 find_package(Lua51)
+find_package(OpenGLES2)
 
 INCLUDE_DIRECTORIES(
   ${Bullet_INCLUDE_DIR}
   ${VORBIS_INCLUDE_DIR}
   ${PNG_INCLUDE_DIR}
   ${LUA_INCLUDE_DIR}
+  ${OPENGLES2_INCLUDE_DIR}
 )
 
 # gameplay library
