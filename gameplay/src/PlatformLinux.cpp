@@ -1,4 +1,5 @@
 #ifdef __linux__
+#ifnef __RPI__
 
 #include "Base.h"
 #include "Platform.h"
@@ -1663,4 +1664,5 @@ namespace gameplay
 
 }
 
+#endif
 #endif

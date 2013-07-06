@@ -20,12 +20,13 @@ if ( BCMHOST_INCLUDE_DIR )
   set(RPI 1)
   add_definitions(-D__RPI__)
   message("Detected Raspberry pi")
+  set(RPI_INCLUDE_DIR /opt/vc/include /opt/vc/include/interface/vcos/pthreads)
 endif()
 
 find_package(Bullet)
 find_package(Vorbis)
 find_package(PNG)
-find_package(Lua51)
+find_package(Lua52)
 find_package(OpenGLES2)
 
 INCLUDE_DIRECTORIES(
@@ -34,6 +35,7 @@ INCLUDE_DIRECTORIES(
   ${PNG_INCLUDE_DIR}
   ${LUA_INCLUDE_DIR}
   ${OPENGLES2_INCLUDE_DIR}
+  ${RPI_INCLUDE_DIR}
 )
 
 # gameplay library
