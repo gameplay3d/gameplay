@@ -1,5 +1,5 @@
 #ifdef __linux__
-#ifnef __RPI__
+#ifndef __RPI__
 
 #include "Base.h"
 #include "Platform.h"
