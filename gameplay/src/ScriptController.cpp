@@ -22,6 +22,7 @@
     /* Get the size of the array. */ \
     lua_len(sc->_lua, index); \
     int size = luaL_checkint(sc->_lua, -1); \
+    lua_pop(sc->_lua, 1); \
     if (size <= 0) \
         return LuaArray<type>((type*)NULL); \
     \

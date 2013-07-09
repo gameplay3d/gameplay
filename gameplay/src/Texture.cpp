@@ -167,7 +167,7 @@ Texture* Texture::create(Image* image, bool generateMipmaps)
     }
 }
 
-Texture* Texture::create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps, Texture::Type type)
+Texture* Texture::create(Format format, unsigned int width, unsigned int height, const unsigned char* data, bool generateMipmaps, Texture::Type type)
 {
 	GP_ASSERT( type == Texture::TEX_2D || type == Texture::TEX_CUBE );
 

@@ -207,7 +207,7 @@ public:
      * @return The new texture.
      * @script{create}
      */
-    static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false, Type type = TEX_2D);
+    static Texture* create(Format format, unsigned int width, unsigned int height, const unsigned char* data, bool generateMipmaps = false, Type type = TEX_2D);
 
     /**
      * Creates a texture object to wrap the specified pre-created native texture handle.
