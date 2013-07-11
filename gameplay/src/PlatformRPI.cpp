@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <fstream>
+#include <bcm_host.h>
 
 #define MAX_GAMEPADS 4
 
@@ -79,13 +80,14 @@ static float __mouseCapturePointX = 0;
 static float __mouseCapturePointY = 0;
 static bool __multiSampling = false;
 static bool __cursorVisible = true;
-static Display* __display;
-static Window   __window;
-static int __windowSize[2];
-static GLXContext __context;
-static Window __attachToWindow;
-static Atom __atomWmDeleteWindow;
 static list<ConnectedGamepadDevInfo> __connectedGamepads;
+
+static EGLDisplay __eglDisplay = EGL_NO_DISPLAY;
+static EGLContext __eglContext = EGL_NO_CONTEXT;
+static EGLSurface __eglSurface = EGL_NO_SURFACE;
+static EGLConfig __eglConfig = 0;
+static int __width;
+static int __height;
 
 #include <linux/joystick.h> //included here so i avoid the naming conflict between KEY_* defined in input.h and the ones defined in gameplay/Keyboard.h 
 namespace gameplay
@@ -99,6 +101,12 @@ namespace gameplay
         va_end(argptr);
     }
 	
+    double timespec2millis(struct timespec *a)
+    {
+        GP_ASSERT(a);
+        return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
+    }
+
 static EGLenum checkErrorEGL(const char* msg)
 {
     GP_ASSERT(msg);
@@ -128,33 +136,10 @@ static EGLenum checkErrorEGL(const char* msg)
 // Initialized EGL resources.
 static bool initEGL()
 {
-    int samples = 0;
-    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
-    if (config)
-    {
-        samples = std::max(config->getInt("samples"), 0);
-    }
+    static EGL_DISPMANX_WINDOW_T nativeWindow;
+    VC_RECT_T destRect, srcRect;
 
-    // Hard-coded to 32-bit/OpenGL ES 2.0.
-    // NOTE: EGL_SAMPLE_BUFFERS, EGL_SAMPLES and EGL_DEPTH_SIZE MUST remain at the beginning of the attribute list
-    // since they are expected to be at indices 0-5 in config fallback code later.
-    // EGL_DEPTH_SIZE is also expected to
-    EGLint eglConfigAttrs[] =
-    {
-        EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
-        EGL_SAMPLES,            samples,
-        EGL_DEPTH_SIZE,         24,
-        EGL_RED_SIZE,           8,
-        EGL_GREEN_SIZE,         8,
-        EGL_BLUE_SIZE,          8,
-        EGL_ALPHA_SIZE,         8,
-        EGL_STENCIL_SIZE,       8,
-        EGL_SURFACE_TYPE,       EGL_WINDOW_BIT,
-        EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
-        EGL_NONE
-    };
-    __multiSampling = samples > 0;
-    
+
     EGLint eglConfigCount;
     const EGLint eglContextAttrs[] =
     {
@@ -184,7 +169,7 @@ static bool initEGL()
             goto error;
         }
 
-        // Try both 24 and 16-bit depth sizes since some hardware (i.e. Tegra) does not support 24-bit depth
+        // Try both 24 and 16-bit depths
         bool validConfig = false;
         EGLint depthSizes[] = { 24, 16 };
         for (unsigned int i = 0; i < 2; ++i)
@@ -233,6 +218,7 @@ static bool initEGL()
             goto error;
         }
 
+	eglBindAPI(EGL_OPENGL_ES_API);
         __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
         if (__eglContext == EGL_NO_CONTEXT)
         {
@@ -240,16 +226,26 @@ static bool initEGL()
             goto error;
         }
     }
+
+    int w,h;
+    graphics_get_display_size(0 , &w, &h);
     
-    // EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
-    // guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
-    // As soon as we picked a EGLConfig, we can safely reconfigure the
-    // ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID.
-    EGLint format;
-    eglGetConfigAttrib(__eglDisplay, __eglConfig, EGL_NATIVE_VISUAL_ID, &format);
-    ANativeWindow_setBuffersGeometry(__state->window, 0, 0, format);
+    destRect.x=0; destRect.y=0;
+    destRect.width = w; destRect.height = h;
+
+    srcRect.x = 0; srcRect.y=0;
+    srcRect.width = w << 16; srcRect.height = h << 16;
     
-    __eglSurface = eglCreateWindowSurface(__eglDisplay, __eglConfig, __state->window, eglSurfaceAttrs);
+    DISPMANX_DISPLAY_HANDLE_T dispmanDisplay = vc_dispmanx_display_open(0);
+    DISPMANX_UPDATE_HANDLE_T dispmanUpdate = vc_dispmanx_update_start(0);
+    DISPMANX_ELEMENT_HANDLE_T dispmanElement = vc_dispmanx_element_add ( dispmanUpdate, dispmanDisplay,
+		0, &dstRect, 0,&srcRect, DISPMANX_PROTECTION_NONE, 0 ,0,DISPMANX_NO_ROTATE);
+    nativeWindow.element = dispmanElement;
+    nativeWindow.width =_w;
+    nativeWindow.height =_h;
+    vc_dispmanx_update_submit_sync( dispmanUpdate );
+
+    __eglSurface = eglCreateWindowSurface(__eglDisplay, __eglConfig, &nativeWindow, eglSurfaceAttrs);
     if (__eglSurface == EGL_NO_SURFACE)
     {
         checkErrorEGL("eglCreateWindowSurface");
@@ -265,22 +261,11 @@ static bool initEGL()
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_WIDTH, &__width);
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_HEIGHT, &__height);
 
-    __orientationAngle = getRotation() * 90;
+    //__orientationAngle = getRotation() * 90;
     
     // Set vsync.
     eglSwapInterval(__eglDisplay, WINDOW_VSYNC ? 1 : 0);
     
-    // Initialize OpenGL ES extensions.
-    __glExtensions = (const char*)glGetString(GL_EXTENSIONS);
-    
-    if (strstr(__glExtensions, "GL_OES_vertex_array_object") || strstr(__glExtensions, "GL_ARB_vertex_array_object"))
-    {
-        // Disable VAO extension for now.
-        glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
-        glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArrays");
-        glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
-        glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress("glIsVertexArrayOES");
-    }
     
     return true;
     
@@ -321,10 +306,12 @@ static void destroyEGLMain()
 
     Platform::Platform(Game* game) : _game(game)
     {
+        bcm_host_init();
     }
 
     Platform::~Platform()
     {
+        bcm_host_deinit();
     }
 	
 Platform* Platform::create(Game* game, void* attachToWindow)

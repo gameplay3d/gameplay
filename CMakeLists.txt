@@ -20,7 +20,7 @@ if ( BCMHOST_INCLUDE_DIR )
   set(RPI 1)
   add_definitions(-D__RPI__)
   message("Detected Raspberry pi")
-  set(RPI_INCLUDE_DIR /opt/vc/include /opt/vc/include/interface/vcos/pthreads)
+  set(RPI_INCLUDE_DIR /opt/vc/include /opt/vc/include/interface/vcos/pthreads /opt/vc/include/interface/vmcs_host/linux)
 endif()
 
 find_package(Bullet)
