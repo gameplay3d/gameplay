@@ -1501,7 +1501,7 @@ namespace gameplay
     {
         if (visible != __cursorVisible)
         {
-            if (visible)
+            if (!visible)
             {
                 Cursor invisibleCursor;
                 Pixmap bitmapNoData;
