@@ -138,7 +138,26 @@ static bool initEGL()
 {
     static EGL_DISPMANX_WINDOW_T nativeWindow;
     VC_RECT_T destRect, srcRect;
+    int samples=0;
 
+    // Hard-coded to 32-bit/OpenGL ES 2.0.
+    // NOTE: EGL_SAMPLE_BUFFERS, EGL_SAMPLES and EGL_DEPTH_SIZE MUST remain at the beginning of the attribute list
+    // since they are expected to be at indices 0-5 in config fallback code later.
+    // EGL_DEPTH_SIZE is also expected to
+    EGLint eglConfigAttrs[] =
+    {
+        EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
+        EGL_SAMPLES,            samples,
+        EGL_DEPTH_SIZE,         24,
+        EGL_RED_SIZE,           8,
+        EGL_GREEN_SIZE,         8,
+        EGL_BLUE_SIZE,          8,
+        EGL_ALPHA_SIZE,         8,
+        EGL_STENCIL_SIZE,       8,
+        EGL_SURFACE_TYPE,       EGL_WINDOW_BIT,
+        EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
+        EGL_NONE
+    };
 
     EGLint eglConfigCount;
     const EGLint eglContextAttrs[] =
@@ -227,7 +246,7 @@ static bool initEGL()
         }
     }
 
-    int w,h;
+    unsigned int w,h;
     graphics_get_display_size(0 , &w, &h);
     
     destRect.x=0; destRect.y=0;
@@ -235,16 +254,16 @@ static bool initEGL()
 
     srcRect.x = 0; srcRect.y=0;
     srcRect.width = w << 16; srcRect.height = h << 16;
-    
+   { 
     DISPMANX_DISPLAY_HANDLE_T dispmanDisplay = vc_dispmanx_display_open(0);
     DISPMANX_UPDATE_HANDLE_T dispmanUpdate = vc_dispmanx_update_start(0);
     DISPMANX_ELEMENT_HANDLE_T dispmanElement = vc_dispmanx_element_add ( dispmanUpdate, dispmanDisplay,
-		0, &dstRect, 0,&srcRect, DISPMANX_PROTECTION_NONE, 0 ,0,DISPMANX_NO_ROTATE);
+		0, &destRect, 0,&srcRect, DISPMANX_PROTECTION_NONE, 0 ,0,DISPMANX_NO_ROTATE);
     nativeWindow.element = dispmanElement;
-    nativeWindow.width =_w;
-    nativeWindow.height =_h;
+    nativeWindow.width =w;
+    nativeWindow.height =h;
     vc_dispmanx_update_submit_sync( dispmanUpdate );
-
+}
     __eglSurface = eglCreateWindowSurface(__eglDisplay, __eglConfig, &nativeWindow, eglSurfaceAttrs);
     if (__eglSurface == EGL_NO_SURFACE)
     {
@@ -261,7 +280,6 @@ static bool initEGL()
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_WIDTH, &__width);
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_HEIGHT, &__height);
 
-    //__orientationAngle = getRotation() * 90;
     
     // Set vsync.
     eglSwapInterval(__eglDisplay, WINDOW_VSYNC ? 1 : 0);
