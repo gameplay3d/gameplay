@@ -21,6 +21,7 @@ if ( BCMHOST_INCLUDE_DIR )
   add_definitions(-D__RPI__)
   message("Detected Raspberry pi")
   set(RPI_INCLUDE_DIR /opt/vc/include /opt/vc/include/interface/vcos/pthreads /opt/vc/include/interface/vmcs_host/linux)
+  set(RPI_LIBRARIES /opt/vc/lib/libbcm_host.so)
 endif()
 
 find_package(Bullet)
@@ -42,8 +43,7 @@ INCLUDE_DIRECTORIES(
 add_subdirectory(gameplay)
 
 # gameplay samples
-# just for now...
-#add_subdirectory(samples)
+add_subdirectory(samples)
 
 # gameplay encoder
 # A pre-compiled executable can be found in 'gameplay/bin'

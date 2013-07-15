@@ -82,6 +82,13 @@ static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static list<ConnectedGamepadDevInfo> __connectedGamepads;
 
+// OpenGL VAO functions.
+PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
+PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
+PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
+PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
+
+
 static EGLDisplay __eglDisplay = EGL_NO_DISPLAY;
 static EGLContext __eglContext = EGL_NO_CONTEXT;
 static EGLSurface __eglSurface = EGL_NO_SURFACE;
