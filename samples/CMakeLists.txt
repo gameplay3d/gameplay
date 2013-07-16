@@ -24,13 +24,12 @@ set(GAMEPLAY_LIBRARIES
     gameplay
     m
     ${LUA_LIBRARIES}
-    png
+    ${PNG_LIBRARIES}
     z
     ${VORBIS_LIBRARIES}
     ${BULLET_LIBRARIES}
     ${OPENGLES2_LIBRARIES}
     ${EGL_LIBRARIES}
-    LinearMath
     openal
     rt
     dl
