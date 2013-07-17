@@ -30,6 +30,7 @@ find_package(PNG)
 find_package(Lua52)
 find_package(OpenGLES2)
 find_package(OpenGL)
+find_package(GLEW)
 
 # prefer gles over gl. Maybe need to think about this more.
 if (OPENGLES2_FOUND)
@@ -37,6 +38,7 @@ if (OPENGLES2_FOUND)
 else()
   if (OPENGL_FOUND)
     INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+    INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR})
   endif(OPENGL_FOUND)
 endif()
 
