@@ -2,12 +2,6 @@ include(BuildHelpers.CMakeLists.txt)
 
 include_directories( 
     ${CMAKE_SOURCE_DIR}/gameplay/src
-  ${BULLET_INCLUDE_DIRS}
-  ${VORBIS_INCLUDE_DIR}
-  ${PNG_INCLUDE_DIR}
-  ${LUA_INCLUDE_DIR}
-  ${OPENGLES2_INCLUDE_DIR}
-  ${RPI_INCLUDE_DIR}
 )
 
 

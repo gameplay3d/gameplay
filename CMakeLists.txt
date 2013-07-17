@@ -29,14 +29,26 @@ find_package(Vorbis)
 find_package(PNG)
 find_package(Lua52)
 find_package(OpenGLES2)
+find_package(OpenGL)
+
+# prefer gles over gl. Maybe need to think about this more.
+if (OPENGLES2_FOUND)
+  INCLUDE_DIRECTORIES(${OPENGLES2_INCLUDE_DIR})
+else()
+  if (OPENGL_FOUND)
+    INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+  endif(OPENGL_FOUND)
+endif()
+
+if (RPI)
+  INCLUDE_DIRECTORIES(${RPI_INCLUDE_DIR})
+endif()
 
 INCLUDE_DIRECTORIES(
-  ${Bullet_INCLUDE_DIR}
+  ${BULLET_INCLUDE_DIR}
   ${VORBIS_INCLUDE_DIR}
   ${PNG_INCLUDE_DIR}
   ${LUA_INCLUDE_DIR}
-  ${OPENGLES2_INCLUDE_DIR}
-  ${RPI_INCLUDE_DIR}
 )
 
 # gameplay library
