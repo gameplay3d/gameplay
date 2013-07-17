@@ -38,13 +38,13 @@ set(GAMEPLAY_LIBRARIES
 )
 
 
-#add_subdirectory(browser)
-#add_subdirectory(character)
-#add_subdirectory(longboard)
-#add_subdirectory(lua)
+add_subdirectory(browser)
+add_subdirectory(character)
+add_subdirectory(longboard)
+add_subdirectory(lua)
 add_subdirectory(mesh)
-#add_subdirectory(particles)
-#add_subdirectory(racer)
-#add_subdirectory(spaceship)
+add_subdirectory(particles)
+add_subdirectory(racer)
+add_subdirectory(spaceship)
 
 
