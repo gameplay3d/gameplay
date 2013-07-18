@@ -221,6 +221,28 @@ public:
                      Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool ignoreClip = false);
 
     /**
+     * Returns current character spacing for this font in percentage of fonts size.
+     *
+     * @see setCharacterSpacing(float)
+     */
+    float getCharacterSpacing() const;
+
+    /**
+     * Sets the fixed character spacing for this font.
+     *
+     * Character spacing is the fixed amount of space that is inserted between characters. This is a simplified
+     * type of kerning and does not take adjacent characters into consideration. Character spacing is defined
+     * as a floating point value that is interpreted as a percentage of size used to draw the font. For example,
+     * a value of 0.1 would cause a spacing of 10% of the font size to be inserted between adjacent characters.
+     * For a font size of 20, this would equate to 2 pixels of extra space between characters.
+     *
+     * The default character spacing for fonts is 0.125.
+     *
+     * @param spacing New fixed character spacing, expressed as a percentage of font size.
+     */
+    void setCharacterSpacing(float spacing);
+
+    /**
      * Get an character index into a string corresponding to the character nearest the given location within the clip region.
      */
     int getIndexAtLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
@@ -332,6 +354,7 @@ private:
     std::string _family;
     Style _style;
     unsigned int _size;
+    float _spacing;
     Glyph* _glyphs;
     unsigned int _glyphCount;
     Texture* _texture;

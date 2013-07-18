@@ -4,6 +4,9 @@
 namespace gameplay
 {
 
+/**
+ * @script{ignore}
+ */
 bool space(char c) {
     return isspace(c);
 }

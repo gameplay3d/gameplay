@@ -20,6 +20,7 @@ void luaRegister_Font()
         {"createText", lua_Font_createText},
         {"drawText", lua_Font_drawText},
         {"finish", lua_Font_finish},
+        {"getCharacterSpacing", lua_Font_getCharacterSpacing},
         {"getIndexAtLocation", lua_Font_getIndexAtLocation},
         {"getLocationAtIndex", lua_Font_getLocationAtIndex},
         {"getRefCount", lua_Font_getRefCount},
@@ -27,6 +28,7 @@ void luaRegister_Font()
         {"getSpriteBatch", lua_Font_getSpriteBatch},
         {"measureText", lua_Font_measureText},
         {"release", lua_Font_release},
+        {"setCharacterSpacing", lua_Font_setCharacterSpacing},
         {"start", lua_Font_start},
         {NULL, NULL}
     };
@@ -1086,6 +1088,41 @@ int lua_Font_finish(lua_State* state)
     return 0;
 }
 
+int lua_Font_getCharacterSpacing(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Font* instance = getInstance(state);
+                float result = instance->getCharacterSpacing();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Font_getCharacterSpacing - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Font_getIndexAtLocation(lua_State* state)
 {
     // Get the number of parameters.
@@ -1938,6 +1975,42 @@ int lua_Font_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Font_setCharacterSpacing(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Font* instance = getInstance(state);
+                instance->setCharacterSpacing(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Font_setCharacterSpacing - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
