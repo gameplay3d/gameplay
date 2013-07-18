@@ -4,10 +4,7 @@
 namespace gameplay
 {
 
-/**
- * @script{ignore}
- */
-bool space(char c) {
+static bool space(char c) {
     return isspace(c);
 }
 
@@ -133,16 +130,27 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                 }
                 case Keyboard::KEY_HOME:
                 {
-                    // TODO: Move cursor to beginning of line.
-                    // This only works for left alignment...
-                        
-                    //_caretLocation.x = _viewportClipBounds.x;
-                    //_dirty = true;
+                    Font* font = getFont(_state);
+                    GP_ASSERT(font);
+                    unsigned int fontSize = getFontSize(_state);
+                    Font::Justify textAlignment = getTextAlignment(_state);
+                    bool rightToLeft = getTextRightToLeft(_state);
+                    font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &_caretLocation, 0,
+                        textAlignment, true, rightToLeft);
+                    _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_END:
                 {
-                    // TODO: Move cursor to end of line.
+                    Font* font = getFont(_state);
+                    GP_ASSERT(font);
+                    unsigned int fontSize = getFontSize(_state);
+                    Font::Justify textAlignment = getTextAlignment(_state);
+                    bool rightToLeft = getTextRightToLeft(_state);
+                    const std::string displayedText = getDisplayedText();
+                    font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &_caretLocation, displayedText.size(),
+                        textAlignment, true, rightToLeft);
+                    _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_DELETE:
@@ -389,7 +397,8 @@ void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             Vector4 color = _caretImage->getColor();
             color.w *= _opacity;
 
-            spriteBatch->draw(_caretLocation.x - (region.width / 2.0f), _caretLocation.y, region.width, _fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+            float caretWidth = region.width * _fontSize / region.height;
+            spriteBatch->draw(_caretLocation.x - caretWidth * 0.5f, _caretLocation.y, caretWidth, _fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
         }
     }
 

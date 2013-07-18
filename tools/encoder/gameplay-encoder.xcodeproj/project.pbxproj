@@ -56,9 +56,12 @@
 		42D277591472EFA700D867A4 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277571472EFA700D867A4 /* libpcre.a */; };
 		42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277581472EFA700D867A4 /* libpcrecpp.a */; };
 		5BCD0643152CFC3C0071FAB5 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCD0642152CFC3C0071FAB5 /* libpng.a */; };
-		9F92DB1016CB0F29003B2974 /* libfbxsdk-2013.3-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F92DB0F16CB0F29003B2974 /* libfbxsdk-2013.3-static.a */; };
 		B661733F16A61CE40083A307 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661733D16A61CE40083A307 /* Image.cpp */; };
 		B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */; };
+		C076C905174F6D2E00645678 /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C8FF174F6D2E00645678 /* Constants.cpp */; };
+		C076C906174F6D2E00645678 /* FBXUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C901174F6D2E00645678 /* FBXUtil.cpp */; };
+		C076C907174F6D2E00645678 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C903174F6D2E00645678 /* Sampler.cpp */; };
+		C076C90B174F71DF00645678 /* libfbxsdk-2014.1-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C076C90A174F71DF00645678 /* libfbxsdk-2014.1-static.a */; };
 		F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F18DCD0315D554B800DB35DB /* Heightmap.cpp */; };
 /* End PBXBuildFile section */
 
@@ -169,11 +172,17 @@
 		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
 		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
 		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
-		9F92DB0F16CB0F29003B2974 /* libfbxsdk-2013.3-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk-2013.3-static.a"; path = "../../../../../Applications/Autodesk/FBX SDK/2013.3/lib/gcc4/ub/libfbxsdk-2013.3-static.a"; sourceTree = "<group>"; };
 		B661733D16A61CE40083A307 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = src/Image.cpp; sourceTree = SOURCE_ROOT; };
 		B661733E16A61CE40083A307 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = src/Image.h; sourceTree = SOURCE_ROOT; };
 		B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalMapGenerator.cpp; path = src/NormalMapGenerator.cpp; sourceTree = SOURCE_ROOT; };
 		B661734216A61CFA0083A307 /* NormalMapGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NormalMapGenerator.h; path = src/NormalMapGenerator.h; sourceTree = SOURCE_ROOT; };
+		C076C8FF174F6D2E00645678 /* Constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Constants.cpp; path = src/Constants.cpp; sourceTree = SOURCE_ROOT; };
+		C076C900174F6D2E00645678 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = src/Constants.h; sourceTree = SOURCE_ROOT; };
+		C076C901174F6D2E00645678 /* FBXUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FBXUtil.cpp; path = src/FBXUtil.cpp; sourceTree = SOURCE_ROOT; };
+		C076C902174F6D2E00645678 /* FBXUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBXUtil.h; path = src/FBXUtil.h; sourceTree = SOURCE_ROOT; };
+		C076C903174F6D2E00645678 /* Sampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sampler.cpp; path = src/Sampler.cpp; sourceTree = SOURCE_ROOT; };
+		C076C904174F6D2E00645678 /* Sampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sampler.h; path = src/Sampler.h; sourceTree = SOURCE_ROOT; };
+		C076C90A174F71DF00645678 /* libfbxsdk-2014.1-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk-2014.1-static.a"; path = "../../../../../../Applications/Autodesk/FBX SDK/2014.1/lib/gcc4/ub/debug/libfbxsdk-2014.1-static.a"; sourceTree = "<group>"; };
 		F18DCD0315D554B800DB35DB /* Heightmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Heightmap.cpp; path = src/Heightmap.cpp; sourceTree = SOURCE_ROOT; };
 		F18DCD0415D554B800DB35DB /* Heightmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Heightmap.h; path = src/Heightmap.h; sourceTree = SOURCE_ROOT; };
 		F18DCD0515D554B800DB35DB /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thread.h; path = src/Thread.h; sourceTree = SOURCE_ROOT; };
@@ -184,7 +193,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F92DB1016CB0F29003B2974 /* libfbxsdk-2013.3-static.a in Frameworks */,
+				C076C90B174F71DF00645678 /* libfbxsdk-2014.1-static.a in Frameworks */,
 				42D277591472EFA700D867A4 /* libpcre.a in Frameworks */,
 				42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */,
 				42C8EE351472B60100E43619 /* libfreetype.a in Frameworks */,
@@ -213,7 +222,7 @@
 		42475CDB147208A000610A6A = {
 			isa = PBXGroup;
 			children = (
-				9F92DB0F16CB0F29003B2974 /* libfbxsdk-2013.3-static.a */,
+				C076C90A174F71DF00645678 /* libfbxsdk-2014.1-static.a */,
 				42475CE9147208A000610A6A /* src */,
 				427D4F44147DC9080076760E /* Libraries */,
 				4228A3FD1620A58000955433 /* Frameworks */,
@@ -247,6 +256,8 @@
 				4283905814896E6C00E2B2F5 /* BoundingVolume.h */,
 				42C8EDBF14724CD700E43619 /* Camera.cpp */,
 				42C8EDC014724CD700E43619 /* Camera.h */,
+				C076C8FF174F6D2E00645678 /* Constants.cpp */,
+				C076C900174F6D2E00645678 /* Constants.h */,
 				4251B128152D044B002F6199 /* Curve.cpp */,
 				4251B129152D044B002F6199 /* Curve.h */,
 				4251B12A152D044B002F6199 /* Curve.inl */,
@@ -256,6 +267,8 @@
 				42C8EDCE14724CD700E43619 /* EncoderArguments.h */,
 				4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */,
 				4278341F148D6F7500A6E27F /* FBXSceneEncoder.h */,
+				C076C901174F6D2E00645678 /* FBXUtil.cpp */,
+				C076C902174F6D2E00645678 /* FBXUtil.h */,
 				42C8EDCF14724CD700E43619 /* FileIO.cpp */,
 				42C8EDD014724CD700E43619 /* FileIO.h */,
 				42C8EDD114724CD700E43619 /* Font.cpp */,
@@ -300,6 +313,8 @@
 				42C8EDF514724CD700E43619 /* Reference.h */,
 				42C8EDF614724CD700E43619 /* ReferenceTable.cpp */,
 				42C8EDF714724CD700E43619 /* ReferenceTable.h */,
+				C076C903174F6D2E00645678 /* Sampler.cpp */,
+				C076C904174F6D2E00645678 /* Sampler.h */,
 				42C8EDF814724CD700E43619 /* Scene.cpp */,
 				42C8EDF914724CD700E43619 /* Scene.h */,
 				42C8EDFA14724CD700E43619 /* StringUtil.cpp */,
@@ -434,6 +449,9 @@
 				F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */,
 				B661733F16A61CE40083A307 /* Image.cpp in Sources */,
 				B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */,
+				C076C905174F6D2E00645678 /* Constants.cpp in Sources */,
+				C076C906174F6D2E00645678 /* FBXUtil.cpp in Sources */,
+				C076C907174F6D2E00645678 /* Sampler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,8 +482,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"../external-deps/freetype/include",
-					"../external-deps/libpng/include",
+					"\"$(SRCROOT)/../../external-deps/freetype2/include\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/include\"",
+					"\"/Applications/Autodesk/FBX SDK/2014.1/include\"",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -499,8 +518,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"../external-deps/freetype/include",
-					"../external-deps/libpng/include",
+					"\"$(SRCROOT)/../../external-deps/freetype2/include\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/include\"",
+					"\"/Applications/Autodesk/FBX SDK/2014.1/include\"",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -524,18 +544,14 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = (
-					"../external-deps/freetype2/include",
-					"../external-deps/libpng/include",
-					"\"/Applications/Autodesk/FBX SDK/2013.3/include\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/freetype2/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/pcre/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)\"",
-					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2013.3/lib/gcc4/ub\"",
+					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2014.1/lib/gcc4/ub/debug\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -555,18 +571,15 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = (
-					"../external-deps/freetype2/include",
-					"../external-deps/libpng/include",
-					"\"/Applications/Autodesk/FBX SDK/2013.3/include\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/freetype2/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/pcre/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)\"",
-					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2013.3/lib/gcc4/ub\"",
+					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2014.1/lib/gcc4/ub/release\"",
+					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2014.1/lib/gcc4/ub/debug\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";

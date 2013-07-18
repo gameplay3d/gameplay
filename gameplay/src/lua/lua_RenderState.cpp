@@ -13,6 +13,8 @@
 #include "lua_RenderStateBlend.h"
 #include "lua_RenderStateCullFaceSide.h"
 #include "lua_RenderStateDepthFunction.h"
+#include "lua_RenderStateStencilFunction.h"
+#include "lua_RenderStateStencilOperation.h"
 
 namespace gameplay
 {

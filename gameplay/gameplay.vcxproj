@@ -232,6 +232,8 @@
     <ClCompile Include="src\lua\lua_RenderStateCullFaceSide.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateDepthFunction.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateStateBlock.cpp" />
+    <ClCompile Include="src\lua\lua_RenderStateStencilFunction.cpp" />
+    <ClCompile Include="src\lua\lua_RenderStateStencilOperation.cpp" />
     <ClCompile Include="src\lua\lua_RenderTarget.cpp" />
     <ClCompile Include="src\lua\lua_Scene.cpp" />
     <ClCompile Include="src\lua\lua_SceneDebugFlags.cpp" />
@@ -514,6 +516,8 @@
     <ClInclude Include="src\lua\lua_RenderStateCullFaceSide.h" />
     <ClInclude Include="src\lua\lua_RenderStateDepthFunction.h" />
     <ClInclude Include="src\lua\lua_RenderStateStateBlock.h" />
+    <ClInclude Include="src\lua\lua_RenderStateStencilFunction.h" />
+    <ClInclude Include="src\lua\lua_RenderStateStencilOperation.h" />
     <ClInclude Include="src\lua\lua_RenderTarget.h" />
     <ClInclude Include="src\lua\lua_Scene.h" />
     <ClInclude Include="src\lua\lua_SceneDebugFlags.h" />
@@ -680,11 +684,13 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerry'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -700,11 +706,13 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerry'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -721,12 +729,14 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerry'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
