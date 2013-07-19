@@ -254,7 +254,7 @@ void Scene::addNode(Node* node)
         node->getParent()->removeChild(node);
     }
 
-    // Link the new node into our list.
+    // Link the new node into the end of our list.
     if (_lastNode)
     {
         _lastNode->_nextSibling = node;
