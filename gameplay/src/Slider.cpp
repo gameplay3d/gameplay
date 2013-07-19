@@ -59,6 +59,10 @@ Slider* Slider::create(Theme::Style* style, Properties* properties)
 
 void Slider::setMin(float min)
 {
+    if (_min != _min)
+    {
+        _dirty = true;
+    }
     _min = min;
 }
 
@@ -69,6 +73,10 @@ float Slider::getMin() const
 
 void Slider::setMax(float max)
 {
+    if (max != _max)
+    {
+        _dirty = true;
+    }
     _max = max;
 }
 
@@ -94,11 +102,20 @@ float Slider::getValue() const
 
 void Slider::setValue(float value)
 {
+    float oldValue = _value;
     _value = MATH_CLAMP(value, _min, _max);
+    if (_value != value)
+    {
+        _dirty = true;
+    }
 }
 
 void Slider::setValueTextVisible(bool valueTextVisible)
 {
+    if (valueTextVisible != _valueTextVisible)
+    {
+        _dirty = true;
+    }
     _valueTextVisible = valueTextVisible;
 }
 
@@ -109,6 +126,10 @@ bool Slider::isValueTextVisible() const
 
 void Slider::setValueTextAlignment(Font::Justify alignment)
 {
+    if (alignment != _alignment)
+    {
+        _dirty = true;
+    }
     _valueTextAlignment = alignment;
 }
 
@@ -119,6 +140,10 @@ Font::Justify Slider::getValueTextAlignment() const
 
 void Slider::setValueTextPrecision(unsigned int precision)
 {
+    if (precision != _valueTextPrecision)
+    {
+        _dirty = true;
+    }
     _valueTextPrecision = precision;
 }
 
