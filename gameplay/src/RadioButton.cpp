@@ -66,12 +66,17 @@ bool RadioButton::isSelected() const
 
 void RadioButton::setSelected(bool selected)
 {
+    if (selected != _selected)
+    {
+        _dirty = true;
+    }
     _selected = selected;
 }
 
 void RadioButton::setImageSize(float width, float height)
 {
     _imageSize.set(width, height);
+    _dirty = true;
 }
 
 const Vector2& RadioButton::getImageSize() const
