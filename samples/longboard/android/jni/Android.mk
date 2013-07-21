@@ -9,7 +9,7 @@ VORBIS_PATH := $(call my-dir)/../../../../external-deps/oggvorbis/lib/android/ar
 OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
 
 # gameplay
-LOCAL_PATH := $(call my-dir)/../../../../gameplay/android/obj/local/armeabi
+LOCAL_PATH := $(call my-dir)/../../../../gameplay/android/obj/local/armeabi-v7a
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libgameplay
 LOCAL_SRC_FILES := libgameplay.a

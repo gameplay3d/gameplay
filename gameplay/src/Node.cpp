@@ -110,12 +110,18 @@ void Node::addChild(Node* child)
         child->_scene->removeNode(child);
     }
 
-    // Order is irrelevant, so add to the beginning of the list.
+    // Add child to the end of the list.
+    // NOTE: This is different than the original behavior which inserted nodes
+    // into the beginning of the list. Although slightly slower to add to the
+    // end of the list, it makes scene traversal and drawing order more
+    // predictable, so I've changed it.
     if (_firstChild)
     {
-        _firstChild->_prevSibling = child;
-        child->_nextSibling = _firstChild;
-        _firstChild = child;
+        Node* n = _firstChild;
+        while (n->_nextSibling)
+            n = n->_nextSibling;
+        n->_nextSibling = child;
+        child->_prevSibling = n;
     }
     else
     {
@@ -988,15 +994,8 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
     Node* copy = cloneSingleNode(context);
     GP_ASSERT(copy);
 
-    // Find our current last child
-    Node* lastChild = NULL;
+    // Add child nodes
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
-    {
-        lastChild = child;
-    }
-
-    // Loop through the nodes backwards because addChild adds the node to the front.
-    for (Node* child = lastChild; child != NULL; child = child->getPreviousSibling())
     {
         Node* childCopy = child->cloneRecursive(context);
         GP_ASSERT(childCopy);
