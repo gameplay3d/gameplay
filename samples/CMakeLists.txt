@@ -2,49 +2,37 @@ include(BuildHelpers.CMakeLists.txt)
 
 include_directories( 
     ${CMAKE_SOURCE_DIR}/gameplay/src
-    ${CMAKE_SOURCE_DIR}/external-deps/lua/include
-    ${CMAKE_SOURCE_DIR}/external-deps/bullet/include
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/include
-    ${CMAKE_SOURCE_DIR}/external-deps/oggvorbis/include
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/include
-    ${CMAKE_SOURCE_DIR}/external-deps/openal/include
-    ${CMAKE_SOURCE_DIR}/external-deps/glew/include
 )
 
-add_definitions(-D__linux__)
 
 link_directories(
-    ${CMAKE_SOURCE_DIR}/external-deps/lua/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/bullet/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/oggvorbis/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/openal/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/glew/lib/linux/${ARCH_DIR}
+  ${Bullet_LIB_DIR}
+  ${VORBIS_LIB_DIR}
+  ${PNG_LIB_DIR}
+  ${LUA_LIB_DIR}
+  ${OPENGLES2_LIB_DIR}
+  ${RPI_LIB_DIR}
 )
-
 
 set(GAMEPLAY_LIBRARIES
     gameplay
     m
-    lua
-    png
+    ${LUA_LIBRARIES}
+    ${PNG_LIBRARIES}
     z
-    vorbis
-    ogg
-    BulletDynamics
-    BulletCollision
-    LinearMath
+    ${VORBIS_LIBRARIES}
+    ${BULLET_LIBRARIES}
+    ${OPENGLES2_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${EGL_LIBRARIES}
     openal
-    GLEW
-    GL
     rt
     dl
-    X11
     pthread
-) 
+    ${RPI_LIBRARIES}
+)
 
-add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletCollision -lBulletDynamics -lLinearMath -lopenal -LGLEW -lGL -lrt -ldl -lX11 -lpthread)
 
 add_subdirectory(browser)
 add_subdirectory(character)

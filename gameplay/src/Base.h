@@ -215,8 +215,19 @@ using std::va_list;
     #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
-#elif WIN32
+#elif __RPI__
+    #include <EGL/egl.h>
+    #include <GLES2/gl2.h>
+    #include <GLES2/gl2ext.h>
+    extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
+    extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
+    extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
+    extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
+    #define glClearDepth glClearDepthf
+    #define OPENGL_ES
     #define WIN32_LEAN_AND_MEAN
+#elif WIN32
     #define GLEW_STATIC
     #include <GL/glew.h>
     #define USE_VAO
