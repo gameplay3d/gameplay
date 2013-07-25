@@ -1,0 +1,38 @@
+
+
+
+Install Packages:
+================
+
+Rasbian & Debian Wheezy:
+sudo apt-get install git subversion build-essential cmake libvorbis-dev libopenal-dev curl libpng-dev liblua5.2-dev
+
+Debian Wheezy (Additionally):
+sudo apt-get install mesa-common-dev freeglut3-dev libglew-dev
+
+Install Bullet Physics:
+======================
+
+svn checkout http://bullet.googlecode.com/svn/tags/bullet-2.81 bullet-2.81
+cd bullet-2.81
+cmake . -G "Unix Makefiles"
+make
+sudo make install
+
+Get Sources:
+===========
+
+cd ~
+git clone https://github.com/bigianb/GamePlay.git
+cd GamePlay
+git checkout rpi
+
+Build GamePlay:
+==============
+
+cd ~/GamePlay
+mkdir build
+cd build
+cmake ..
+
+

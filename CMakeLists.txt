@@ -5,18 +5,53 @@ project(GamePlay)
 set(GAMEPLAY_VERSION 1.7.0)
 set(CMAKE_C_COMPILER_INIT g++)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+
 # debug
 message( "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
 if ( "${CMAKE_BUILD_TYPE}" STREQUAL "DEBUG" )
     add_definitions(-D_DEBUG)
 endif()
 
-# architecture
-if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-set(ARCH_DIR "x64")
-else()
-set(ARCH_DIR "x86")
+# Check if this is a raspberry pi.
+# If it is then it has BCMHOST
+find_path(BCMHOST_INCLUDE_DIR bcm_host.h HINTS /opt/vc/include)
+if ( BCMHOST_INCLUDE_DIR )
+  set(RPI 1)
+  add_definitions(-D__RPI__)
+  message("Detected Raspberry pi")
+  set(RPI_INCLUDE_DIR /opt/vc/include /opt/vc/include/interface/vcos/pthreads /opt/vc/include/interface/vmcs_host/linux)
+  set(RPI_LIBRARIES /opt/vc/lib/libbcm_host.so)
 endif()
+
+find_package(Bullet)
+find_package(Vorbis)
+find_package(PNG)
+find_package(Lua52)
+find_package(OpenGLES2)
+find_package(OpenGL)
+find_package(GLEW)
+
+# prefer gles over gl. Maybe need to think about this more.
+if (OPENGLES2_FOUND)
+  INCLUDE_DIRECTORIES(${OPENGLES2_INCLUDE_DIR})
+else()
+  if (OPENGL_FOUND)
+    INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+    INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR})
+  endif(OPENGL_FOUND)
+endif()
+
+if (RPI)
+  INCLUDE_DIRECTORIES(${RPI_INCLUDE_DIR})
+endif()
+
+INCLUDE_DIRECTORIES(
+  ${BULLET_INCLUDE_DIR}
+  ${VORBIS_INCLUDE_DIR}
+  ${PNG_INCLUDE_DIR}
+  ${LUA_INCLUDE_DIR}
+)
 
 # gameplay library
 add_subdirectory(gameplay)
