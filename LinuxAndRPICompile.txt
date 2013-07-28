@@ -5,7 +5,7 @@ Install Packages:
 ================
 
 Rasbian & Debian Wheezy:
-sudo apt-get install git subversion build-essential cmake libvorbis-dev libopenal-dev curl libpng-dev liblua5.2-dev
+sudo apt-get install git subversion build-essential cmake libvorbis-dev libopenal-dev curl libpng-dev liblua5.2-dev libfreetype6-dev
 
 Debian Wheezy (Additionally):
 sudo apt-get install mesa-common-dev freeglut3-dev libglew-dev
@@ -18,6 +18,17 @@ cd bullet-2.81
 cmake . -G "Unix Makefiles"
 make
 sudo make install
+
+(optional) Install FBX SDK to build the encoder:
+===============================================
+
+Download the sdk from the autodesk site or directly with:
+
+cd ~
+wget http://images.autodesk.com/adsk/files/fbx20141_fbxsdk_linux.tar.gz
+tar xzf fbx20141_fbxsdk_linux.tar.gz
+sudo ./fbx20141_fbxsdk_linux /usr/local
+
 
 Get Sources:
 ===========

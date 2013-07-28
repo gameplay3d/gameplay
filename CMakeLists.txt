@@ -31,6 +31,9 @@ find_package(Lua52)
 find_package(OpenGLES2)
 find_package(OpenGL)
 find_package(GLEW)
+find_package(Freetype)
+find_package(ZLIB)
+find_package(FBX)
 
 # prefer gles over gl. Maybe need to think about this more.
 if (OPENGLES2_FOUND)
@@ -60,6 +63,6 @@ add_subdirectory(gameplay)
 add_subdirectory(samples)
 
 # gameplay encoder
-# A pre-compiled executable can be found in 'gameplay/bin'
-# Uncomment out this line if you want to build the encoder instead of using the pre-compiled gameplay-encoder.
-#add_subdirectory(tools/encoder)
+if (FBX_FOUND)
+add_subdirectory(tools/encoder)
+endif()

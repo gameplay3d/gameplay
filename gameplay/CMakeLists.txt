@@ -162,7 +162,6 @@ set(GAMEPLAY_SRC
     src/PlatformAndroid.cpp
     src/PlatformBlackBerry.cpp
     src/PlatformLinux.cpp
-    src/PlatformRPI.cpp
     src/PlatformWindows.cpp
     src/Properties.cpp
     src/Properties.h
