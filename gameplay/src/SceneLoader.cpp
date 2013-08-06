@@ -94,15 +94,10 @@ Scene* SceneLoader::loadInternal(const char* url)
         SceneNodeProperty::TRANSLATE);
     applyNodeProperties(sceneProperties, SceneNodeProperty::COLLISION_OBJECT);
 
-    // Apply node tags (TODO : update for child nodes)
+    // Apply node tags
     for (size_t i = 0, sncount = _sceneNodes.size(); i < sncount; ++i)
     {
-        SceneNode& sceneNode = _sceneNodes[i];
-        for (std::map<std::string, std::string>::const_iterator itr = sceneNode._tags.begin(); itr != sceneNode._tags.end(); ++itr)
-        {
-            for (size_t n = 0, ncount = sceneNode._nodes.size(); n < ncount; ++n)
-                sceneNode._nodes[n]->setTag(itr->first.c_str(), itr->second.c_str());
-        }
+        applyTags(_sceneNodes[i]);
     }
 
     // Set active camera
@@ -154,6 +149,22 @@ Scene* SceneLoader::loadInternal(const char* url)
     SAFE_DELETE(properties);
 
     return _scene;
+}
+
+void SceneLoader::applyTags(SceneNode& sceneNode)
+{
+    // Apply tags for this scene node
+    for (std::map<std::string, std::string>::const_iterator itr = sceneNode._tags.begin(); itr != sceneNode._tags.end(); ++itr)
+    {
+        for (size_t n = 0, ncount = sceneNode._nodes.size(); n < ncount; ++n)
+            sceneNode._nodes[n]->setTag(itr->first.c_str(), itr->second.c_str());
+    }
+
+    // Process children
+    for (size_t i = 0, count = sceneNode._children.size(); i < count; ++i)
+    {
+        applyTags(sceneNode._children[i]);
+    }
 }
 
 void SceneLoader::addSceneAnimation(const char* animationID, const char* targetID, const char* url)
