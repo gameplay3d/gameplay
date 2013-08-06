@@ -14,7 +14,7 @@ PhysicsGhostObject::PhysicsGhostObject(Node* node, const PhysicsCollisionShape::
     GP_ASSERT(physicsController);
 
     // Create and set the collision shape for the ghost object.
-    _collisionShape = physicsController->createShape(node, shape, &centerOfMassOffset);
+    _collisionShape = physicsController->createShape(node, shape, &centerOfMassOffset, false);
     GP_ASSERT(_collisionShape);
 
     // Create the ghost object.
