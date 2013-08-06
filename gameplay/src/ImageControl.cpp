@@ -76,6 +76,7 @@ void ImageControl::setImage(const char* path)
     _tw = 1.0f / texture->getWidth();
     _th = 1.0f / texture->getHeight();
     texture->release();
+    _dirty = true;
 }
 
 void ImageControl::setRegionSrc(float x, float y, float width, float height)
@@ -86,11 +87,13 @@ void ImageControl::setRegionSrc(float x, float y, float width, float height)
     _uvs.u2 = (x + width) * _tw;
     _uvs.v1 = 1.0f - (y * _th);
     _uvs.v2 = 1.0f - ((y + height) * _th);
+    _dirty = true;
 }
 
 void ImageControl::setRegionSrc(const Rectangle& region)
 {
     setRegionSrc(region.x, region.y, region.width, region.height);
+    _dirty = true;
 }
 
 const Rectangle& ImageControl::getRegionSrc() const
@@ -101,11 +104,13 @@ const Rectangle& ImageControl::getRegionSrc() const
 void ImageControl::setRegionDst(float x, float y, float width, float height)
 {
     _dstRegion.set(x, y, width, height);
+    _dirty = true;
 }
 
 void ImageControl::setRegionDst(const Rectangle& region)
 {
     setRegionDst(region.x, region.y, region.width, region.height);
+    _dirty = true;
 }
 
 const Rectangle& ImageControl::getRegionDst() const

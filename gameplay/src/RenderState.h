@@ -180,6 +180,17 @@ public:
         CULL_FACE_SIDE_FRONT_AND_BACK = GL_FRONT_AND_BACK
     };
 
+    /**
+     * Defines the winding of vertices in faces that are considered front facing.
+     *
+     * The initial front face mode is set to FRONT_FACE_CCW.
+     */
+    enum FrontFace
+    {
+        FRONT_FACE_CW,
+        FRONT_FACE_CCW
+    };
+
 	/**
      * Defines the supported stencil compare functions.
 	 * 
@@ -280,9 +291,19 @@ public:
          * Sets the side of the facets to cull.
          *
          * When not explicitly set, the default is to cull back-facing facets.
+         *
          * @param side The side to cull.
          */
         void setCullFaceSide(CullFaceSide side);
+
+        /**
+         * Sets the winding for front facing polygons.
+         *
+         * By default, counter-clockwise wound polygons are considered front facing.
+         *
+         * @param winding The winding for front facing polygons.
+         */
+        void setFrontFace(FrontFace winding);
 
         /**
          * Toggles depth testing.
@@ -396,6 +417,7 @@ public:
         Blend _blendSrc;
         Blend _blendDst;
         CullFaceSide _cullFaceSide;
+        FrontFace _frontFace;
 		bool _stencilTestEnabled;
 		unsigned int _stencilWrite;
 		StencilFunction _stencilFunction;
