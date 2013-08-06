@@ -39,6 +39,11 @@
 #define ATC_RGBA_INTERPOLATED_ALPHA_AMD 0x87EE
 #endif
 
+// ETC1 (OES_compressed_ETC1_RGB8_texture) : All OpenGL ES chipsets
+#ifndef ETC1_RGB8
+#define ETC1_RGB8 0x8D64
+#endif
+
 namespace gameplay
 {
 
@@ -623,6 +628,10 @@ Texture* Texture::createCompressedDDS(const char* path)
         case ('A'|('T'<<8)|('C'<<16)|('I'<<24)):
             format = internalFormat = ATC_RGBA_INTERPOLATED_ALPHA_AMD;
             bytesPerBlock = 16;
+            break;
+        case ('E'|('T'<<8)|('C'<<16)|('1'<<24)):
+            format = internalFormat = ETC1_RGB8;
+            bytesPerBlock = 8;
             break;
         default:
             GP_ERROR("Unsupported compressed texture format (%d) for DDS file '%s'.", header.ddspf.dwFourCC, path);

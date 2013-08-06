@@ -18,6 +18,7 @@
 #define RS_STENCIL_WRITE 256
 #define RS_STENCIL_FUNC 512
 #define RS_STENCIL_OP 1024
+#define RS_FRONT_FACE 2048
 
 #define RS_ALL_ONES 0xFFFFFFFF
 
@@ -513,7 +514,7 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 RenderState::StateBlock::StateBlock()
     : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(true), _depthFunction(RenderState::DEPTH_LESS),
       _blendEnabled(false), _blendSrc(RenderState::BLEND_ONE), _blendDst(RenderState::BLEND_ZERO),
-	  _stencilTestEnabled(false), _stencilWrite(RS_ALL_ONES), 
+      _cullFaceSide(CULL_FACE_SIDE_BACK), _frontFace(FRONT_FACE_CCW), _stencilTestEnabled(false), _stencilWrite(RS_ALL_ONES), 
 	  _stencilFunction(RenderState::STENCIL_ALWAYS), _stencilFunctionRef(0), _stencilFunctionMask(RS_ALL_ONES), 
 	  _stencilOpSfail(RenderState::STENCIL_OP_KEEP), _stencilOpDpfail(RenderState::STENCIL_OP_KEEP), _stencilOpDppass(RenderState::STENCIL_OP_KEEP),
       _bits(0L)
@@ -577,6 +578,11 @@ void RenderState::StateBlock::bindNoRestore()
     {
         GL_ASSERT( glCullFace((GLenum)_cullFaceSide) );
         _defaultState->_cullFaceSide = _cullFaceSide;
+    }
+    if ((_bits & RS_FRONT_FACE) && (_frontFace != _defaultState->_frontFace))
+    {
+        GL_ASSERT( glFrontFace((GLenum)_frontFace) );
+        _defaultState->_frontFace = _frontFace;
     }
     if ((_bits & RS_DEPTH_TEST) && (_depthTestEnabled != _defaultState->_depthTestEnabled))
     {
@@ -667,6 +673,12 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
         _defaultState->_bits &= ~RS_CULL_FACE_SIDE;
         _defaultState->_cullFaceSide = RenderState::CULL_FACE_SIDE_BACK;
     }
+    if (!(stateOverrideBits & RS_FRONT_FACE) && (_defaultState->_bits & RS_FRONT_FACE))
+    {
+        GL_ASSERT( glFrontFace((GLenum)GL_CCW) );
+        _defaultState->_bits &= ~RS_FRONT_FACE;
+        _defaultState->_frontFace = RenderState::FRONT_FACE_CCW;
+    }
     if (!(stateOverrideBits & RS_DEPTH_TEST) && (_defaultState->_bits & RS_DEPTH_TEST))
     {
         GL_ASSERT( glDisable(GL_DEPTH_TEST) );
@@ -742,6 +754,7 @@ void RenderState::StateBlock::cloneInto(StateBlock* state)
     state->_blendSrc = _blendSrc;
     state->_blendDst = _blendDst;
     state->_cullFaceSide = _cullFaceSide;
+    state->_frontFace = _frontFace;
 	state->_stencilTestEnabled = _stencilTestEnabled;
 	state->_stencilWrite = _stencilWrite;
 	state->_stencilFunction = _stencilFunction;
@@ -882,8 +895,26 @@ static RenderState::CullFaceSide parseCullFaceSide(const char* value)
         return RenderState::CULL_FACE_SIDE_FRONT_AND_BACK;
     else
     {
-        GP_ERROR("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings)", value);
+        GP_ERROR("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings.", value);
         return RenderState::CULL_FACE_SIDE_BACK;
+    }
+}
+
+static RenderState::FrontFace parseFrontFace(const char* value)
+{
+    GP_ASSERT(value);
+
+    // Convert string to uppercase for comparison
+    std::string upper(value);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    if (upper == "CCW")
+        return RenderState::FRONT_FACE_CCW;
+    else if (upper == "CW")
+        return RenderState::FRONT_FACE_CW;
+    else
+    {
+        GP_ERROR("Unsupported front face side value (%s). Will default to CCW if errors are treated as warnings.", value);
+        return RenderState::FRONT_FACE_CCW;
     }
 }
 
@@ -970,6 +1001,10 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     else if (strcmp(name, "cullFaceSide") == 0)
     {
         setCullFaceSide(parseCullFaceSide(value));
+    }
+    else if (strcmp(name, "frontFace") == 0)
+    {
+        setFrontFace(parseFrontFace(value));
     }
     else if (strcmp(name, "depthTest") == 0)
     {
@@ -1086,6 +1121,20 @@ void RenderState::StateBlock::setCullFaceSide(CullFaceSide side)
     else
     {
         _bits |= RS_CULL_FACE_SIDE;
+    }
+}
+
+void RenderState::StateBlock::setFrontFace(FrontFace winding)
+{
+    _frontFace = winding;
+    if (_frontFace == FRONT_FACE_CCW)
+    {
+        // Default front face
+        _bits &= ~RS_FRONT_FACE;
+    }
+    else
+    {
+        _bits |= RS_FRONT_FACE;
     }
 }
 
