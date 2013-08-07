@@ -268,6 +268,7 @@ const Matrix& Camera::getProjectionMatrix() const
         }
         else
         {
+            // Create an ortho projection with the origin at the bottom left of the viewport, +X to the right and +Y up.
             Matrix::createOrthographic(_zoom[0], _zoom[1], _nearPlane, _farPlane, &_projection);
         }
 

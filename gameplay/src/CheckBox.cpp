@@ -56,6 +56,7 @@ void CheckBox::setChecked(bool checked)
 void CheckBox::setImageSize(float width, float height)
 {
     _imageSize.set(width, height);
+    _dirty = true;
 }
 
 const Vector2& CheckBox::getImageSize() const

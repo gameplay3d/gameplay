@@ -555,6 +555,8 @@ static Keyboard::Key getKey(int keycode, int metastate)
             return Keyboard::KEY_MENU;
         case AKEYCODE_SEARCH:
             return Keyboard::KEY_SEARCH;
+        case AKEYCODE_BACK:
+            return Keyboard::KEY_ESCAPE;
         default:
             return Keyboard::KEY_NONE;
     }
@@ -872,7 +874,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
         int32_t action = AKeyEvent_getAction(event);
         int32_t keycode = AKeyEvent_getKeyCode(event);
         int32_t metastate = AKeyEvent_getMetaState(event); 
-        
+
         switch(action)
         {
             case AKEY_EVENT_ACTION_DOWN:
@@ -885,6 +887,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                 gameplay::Platform::keyEventInternal(Keyboard::KEY_RELEASE, getKey(keycode, metastate));
                 break;
         }
+
+        return 1;
     }
     return 0;
 }

@@ -16,7 +16,7 @@ static std::vector<Font*> __fontCache;
 static Effect* __fontEffect = NULL;
 
 Font::Font() :
-    _style(PLAIN), _size(0), _glyphs(NULL), _glyphCount(0), _texture(NULL), _batch(NULL)
+    _style(PLAIN), _size(0), _spacing(0.125f), _glyphs(NULL), _glyphCount(0), _texture(NULL), _batch(NULL)
 {
 }
 
@@ -168,6 +168,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         size = _size;
     GP_ASSERT(_size);
     float scale = (float)size / _size;
+    int spacing = (int)(size * _spacing);
     int yPos = area.y;
     const float areaHeight = area.height - size;
     std::vector<int> xPositions;
@@ -317,7 +318,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
 
                     }
                 }
-                xPos += (int)(g.width)*scale + (size >> 3);
+                xPos += (int)(g.width)*scale + spacing;
             }
         }
 
@@ -402,6 +403,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
     GP_ASSERT(_size);
     GP_ASSERT(text);
     float scale = (float)size / _size;
+    int spacing = (int)(size * _spacing);
     const char* cursor = NULL;
 
     if (rightToLeft)
@@ -497,7 +499,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 {
                     Glyph& g = _glyphs[index];
                     _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
-                    xPos += floor(g.width * scale + (float)(size >> 3));
+                    xPos += floor(g.width * scale + spacing);
                     break;
                 }
                 break;
@@ -528,6 +530,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         size = _size;
     GP_ASSERT(_size);
     float scale = (float)size / _size;
+    int spacing = (int)(size * _spacing);
     int yPos = area.y;
     const float areaHeight = area.height - size;
     std::vector<int> xPositions;
@@ -647,7 +650,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                         }
                     }
                 }
-                xPos += (int)(g.width)*scale + (size >> 3);
+                xPos += (int)(g.width)*scale + spacing;
             }
         }
 
@@ -1277,6 +1280,16 @@ void Font::getMeasurementInfo(const char* text, const Rectangle& area, unsigned 
     }
 }
 
+float Font::getCharacterSpacing() const
+{
+    return _spacing;
+}
+
+void Font::setCharacterSpacing(float spacing)
+{
+    _spacing = spacing;
+}
+
 int Font::getIndexAtLocation(const char* text, const Rectangle& area, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
                                       Justify justify, bool wrap, bool rightToLeft)
 {
@@ -1299,7 +1312,10 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
     unsigned int charIndex = 0;
 
     // Essentially need to measure text until we reach inLocation.
+    if (size == 0)
+        size = _size;
     float scale = (float)size / _size;
+    int spacing = (int)(size * _spacing);
     int yPos = area.y;
     const float areaHeight = area.height - size;
     std::vector<int> xPositions;
@@ -1354,7 +1370,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
 
         if (destIndex == (int)charIndex ||
             (destIndex == -1 &&
-             inLocation.x >= xPos && inLocation.x < floor(xPos + (float)(size >> 3)) &&
+             inLocation.x >= xPos && inLocation.x < xPos + spacing &&
              inLocation.y >= yPos && inLocation.y < yPos + size))
         {
             outLocation->x = xPos;
@@ -1426,7 +1442,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
                 // Check against inLocation.
                 if (destIndex == (int)charIndex ||
                     (destIndex == -1 &&
-                    inLocation.x >= xPos && inLocation.x < floor(xPos + g.width*scale + (float)(size >> 3)) &&
+                    inLocation.x >= xPos && inLocation.x < floor(xPos + g.width*scale + spacing) &&
                     inLocation.y >= yPos && inLocation.y < yPos + size))
                 {
                     outLocation->x = xPos;
@@ -1434,7 +1450,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
                     return charIndex;
                 }
 
-                xPos += floor(g.width*scale + (float)(size >> 3));
+                xPos += floor(g.width*scale + spacing);
                 charIndex++;
             }
         }
@@ -1508,7 +1524,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
 
     if (destIndex == (int)charIndex ||
         (destIndex == -1 &&
-         inLocation.x >= xPos && inLocation.x < floor(xPos + (float)(size >> 3)) &&
+         inLocation.x >= xPos && inLocation.x < xPos + spacing &&
          inLocation.y >= yPos && inLocation.y < yPos + size))
     {
         outLocation->x = xPos;
@@ -1523,6 +1539,10 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigne
 {
     GP_ASSERT(token);
     GP_ASSERT(_glyphs);
+
+    if (size == 0)
+        size = _size;
+    int spacing = (int)(size * _spacing);
 
     // Calculate width of word or line.
     unsigned int tokenWidth = 0;
@@ -1542,7 +1562,7 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigne
             if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
-                tokenWidth += floor(g.width * scale + (float)(size >> 3));
+                tokenWidth += floor(g.width * scale + spacing);
             }
             break;
         }

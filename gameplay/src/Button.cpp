@@ -50,8 +50,8 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
             {
                 _contactIndex = (int) contactIndex;
-                notifyListeners(Control::Listener::PRESS);
                 setState(Control::ACTIVE);
+                notifyListeners(Control::Listener::PRESS);
                 return _consumeInputEvents;
             }
             else
@@ -70,8 +70,8 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
                 x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
             {
-                notifyListeners(Control::Listener::CLICK);
                 setState(Control::FOCUS);
+                notifyListeners(Control::Listener::CLICK);
             }
             else
             {
