@@ -88,7 +88,7 @@
 #include "AIState.h"
 #include "AIStateMachine.h"
 
-// UI
+// Forms UI
 #include "Theme.h"
 #include "Control.h"
 #include "Container.h"
@@ -105,3 +105,11 @@
 #include "AbsoluteLayout.h"
 #include "VerticalLayout.h"
 #include "FlowLayout.h"
+
+// Social
+#include "SocialController.h"
+#include "SocialSession.h"
+#include "SocialSessionListener.h"
+#include "SocialPlayer.h"
+#include "SocialAchievement.h"
+#include "SocialScore.h"

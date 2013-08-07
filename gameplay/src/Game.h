@@ -264,11 +264,6 @@ public:
      * @return The audio listener for this game.
      */
     AudioListener* getAudioListener();
-
-    /**
-     * Menu callback on menu events for platforms with special menu keys or special platform gestures.
-     */
-    virtual void menuEvent();
     
     /**
      * Shows or hides the virtual keyboard (if supported).
@@ -528,7 +523,7 @@ public:
     inline void getAccelerometerValues(float* pitch, float* roll);
 
     /**
-     * Gets raw sensor values, if equipped, allowing a distinction between device acceleration
+     * Gets sensor values (raw), if equipped, allowing a distinction between device acceleration
      * and rotation rate. Returns zeros on platforms with no corresponding support. See also
      * hasAccelerometer() and getAccelerometerValues().
      *
@@ -539,7 +534,7 @@ public:
      * @param gyroY The y-coordinate of the raw gyroscope data.
      * @param gyroZ The z-coordinate of the raw gyroscope data.
      */
-    inline void getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
+    inline void getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
 
     /**
      * Gets the command line arguments.

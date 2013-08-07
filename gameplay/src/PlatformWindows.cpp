@@ -10,7 +10,7 @@
 #include <GL/wglew.h>
 #include <windowsx.h>
 #include <shellapi.h>
-#ifdef USE_XINPUT
+#ifdef GP_USE_GAMEPAD
 #include <XInput.h>
 #endif
 
@@ -38,7 +38,7 @@ static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static unsigned int __gamepadsConnected = 0;
 
-#ifdef USE_XINPUT
+#ifdef GP_USE_GAMEPAD
 static const unsigned int XINPUT_BUTTON_COUNT = 14;
 static const unsigned int XINPUT_JOYSTICK_COUNT = 2;
 static const unsigned int XINPUT_TRIGGER_COUNT = 2;
@@ -950,7 +950,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             goto error;
     }
 
-#ifdef USE_XINPUT
+#ifdef GP_USE_GAMEPAD
     // Initialize XInputGamepads.
     for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
     {
@@ -1012,7 +1012,7 @@ int Platform::enterMessagePump()
         }
         else
         {
-#ifdef USE_XINPUT
+#ifdef GP_USE_GAMEPAD
             // Check for connected XInput gamepads.
             for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
             {
@@ -1150,7 +1150,7 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     *roll = 0;
 }
 
-void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
     if (accelX)
     {
@@ -1262,7 +1262,7 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
     return false;
 }
 
-#ifdef USE_XINPUT
+#ifdef GP_USE_GAMEPAD
 void Platform::pollGamepadState(Gamepad* gamepad)
 {
     GP_ASSERT(gamepad->_handle < XUSER_MAX_COUNT);

@@ -13,6 +13,9 @@
     <Filter Include="src\lua">
       <UniqueIdentifier>{21cf31c6-9c10-44cb-a864-d46a0e7bfe5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\social">
+      <UniqueIdentifier>{7bd5ee6c-c0cc-4ae3-b7a9-443fb391b944}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp">
@@ -861,6 +864,24 @@
     <ClCompile Include="src\lua\lua_RenderStateStencilOperation.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\SocialController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\social\ScoreloopSocialAchievement.cpp">
+      <Filter>src\social</Filter>
+    </ClCompile>
+    <ClCompile Include="src\social\ScoreloopSocialLeaderboard.cpp">
+      <Filter>src\social</Filter>
+    </ClCompile>
+    <ClCompile Include="src\social\ScoreloopSocialPlayer.cpp">
+      <Filter>src\social</Filter>
+    </ClCompile>
+    <ClCompile Include="src\social\ScoreloopSocialScore.cpp">
+      <Filter>src\social</Filter>
+    </ClCompile>
+    <ClCompile Include="src\social\ScoreloopSocialSession.cpp">
+      <Filter>src\social</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1708,6 +1729,42 @@
     </ClInclude>
     <ClInclude Include="src\lua\lua_RenderStateStencilOperation.h">
       <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SocialController.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SocialSession.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SocialAchievement.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SocialLeaderboard.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SocialPlayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SocialSessionListener.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SocialScore.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\social\ScoreloopSocialAchievement.h">
+      <Filter>src\social</Filter>
+    </ClInclude>
+    <ClInclude Include="src\social\ScoreloopSocialLeaderboard.h">
+      <Filter>src\social</Filter>
+    </ClInclude>
+    <ClInclude Include="src\social\ScoreloopSocialPlayer.h">
+      <Filter>src\social</Filter>
+    </ClInclude>
+    <ClInclude Include="src\social\ScoreloopSocialScore.h">
+      <Filter>src\social</Filter>
+    </ClInclude>
+    <ClInclude Include="src\social\ScoreloopSocialSession.h">
+      <Filter>src\social</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

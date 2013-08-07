@@ -1189,8 +1189,7 @@ void Platform::setMultiSampling(bool enabled)
         return;
     }
 
-    //todo
-
+    // TODO
     __multiSampling = enabled;
 }
 
@@ -1254,7 +1253,7 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     }
 }
 
-void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
     if (accelX)
     {

@@ -1422,7 +1422,7 @@ namespace gameplay
         *roll = 0;
     }
 
-    void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+    void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
     {
         if (accelX)
         {

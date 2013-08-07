@@ -7,11 +7,11 @@
 #include "Bundle.h"
 #include "Terrain.h"
 
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
 #endif
 #include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #define new DEBUG_NEW
 #endif
 
