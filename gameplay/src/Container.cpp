@@ -295,8 +295,8 @@ void Container::removeControl(unsigned int index)
     GP_ASSERT(index < _controls.size());
 
     std::vector<Control*>::iterator it = _controls.begin() + index;
-    _controls.erase(it);
     Control* control = *it;
+    _controls.erase(it);
     control->_parent = NULL;
     SAFE_RELEASE(control);
 }
