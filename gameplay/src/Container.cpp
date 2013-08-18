@@ -916,7 +916,8 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
         for (itt = _controls.begin(); itt < _controls.end(); itt++)
         {
             Control* nextControl = *itt;
-            if (nextControl->getFocusIndex() == focusIndex)
+            if (nextControl->getFocusIndex() == focusIndex &&
+                nextControl->isEnabled() && nextControl->isVisible())
             {
                 next = nextControl;
                 break;
