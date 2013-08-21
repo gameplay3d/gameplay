@@ -34,8 +34,8 @@ collisionObject capsule
 collisionObject duck
 {
     type = RIGID_BODY
-    shape = BOX
-    mass = 1.0
+    shape = MESH
+    mass = 5.0
     friction = 1.0
     restitution = 0.0
     linearDamping = 0.5

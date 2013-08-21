@@ -83,6 +83,8 @@ private:
 
     Scene* loadInternal(const char* url);
 
+    void applyTags(SceneNode& sceneNode);
+
     void addSceneAnimation(const char* animationID, const char* targetID, const char* url);
 
     void addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* url = NULL, int index = 0);
