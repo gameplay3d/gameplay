@@ -124,9 +124,11 @@ void Properties::readProperties(Stream* stream)
     char* rc;
     char* rcc;
     char* rccc;
+    bool comment = false;
 
     while (true)
     {
+        // Skip whitespace at the start of lines
         skipWhiteSpace(stream);
 
         // Stop when we have reached the end of the file.
@@ -141,8 +143,26 @@ void Properties::readProperties(Stream* stream)
             return;
         }
 
-        // Ignore comment, skip line.
-        if (strncmp(line, "//", 2) != 0)
+        // Ignore comments
+        if (comment)
+        {
+            // Check for end of multi-line comment at either start or end of line
+            if (strncmp(line, "*/", 2) == 0)
+                comment = false;
+            else
+            {
+                trimWhiteSpace(line);
+                const int len = strlen(line);
+                if (len >= 2 && strncmp(line + (len - 2), "*/", 2) == 0)
+                    comment = false;
+            }
+        }
+        else if (strncmp(line, "/*", 2) == 0)
+        {
+            // Start of multi-line comment (must be at start of line)
+            comment = true;
+        }
+        else if (strncmp(line, "//", 2) != 0)
         {
             // If an '=' appears on this line, parse it as a name/value pair.
             // Note: strchr() has to be called before strtok(), or a backup of line has to be kept.
