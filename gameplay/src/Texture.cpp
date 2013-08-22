@@ -199,8 +199,8 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
 	else
 	{
 		// Texture Cube
-		unsigned char** cubeData = new unsigned char*[6];
-		memset(cubeData, 0, sizeof(unsigned char*) * 6);
+		const unsigned char** cubeData = new const unsigned char*[6];
+		memset(cubeData, 0, sizeof(const unsigned char*) * 6);
 		if(data)
 		{
 			// Get texture pointers
