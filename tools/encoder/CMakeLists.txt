@@ -1,33 +1,24 @@
 
-include_directories( 
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/include
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/include
-    ${CMAKE_SOURCE_DIR}/external-deps/freetype2/include
-    /usr/include/fbxsdk
-    /usr/include
-)
 
 add_definitions(-D_DEBUG)
 add_definitions(-D__linux__ -DNO_BOOST -DNO_ZAE -DUSE_FBX)
 
 link_directories(
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
-    /usr/lib/gcc4/${ARCH_DIR}/release
-    /usr/lib
+  ${PNG_LIB_DIR}
+  ${FREETYPE_LIB_DIR}
+  ${FBX_LIB_DIR}
 )
 
 set(APP_LIBRARIES
     dl
-    fbxsdk
-    png
+    ${FBX_LIBRARIES} 
+    ${PNG_LIBRARIES}
     z   
-    freetype
+    ${FREETYPE_LIBRARIES}
     pthread
 ) 
-
-add_definitions(-lstdc++ -ldl -lfbxsdk -lpng -lz -lfreetype -lpthread)
+include_directories(${FREETYPE_INCLUDE_DIRS})
+add_definitions(-lstdc++)
 
 set( APP_NAME gameplay-encoder )
 

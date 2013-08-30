@@ -19,6 +19,10 @@
 #include <map>
 #include <algorithm>
 #include <sys/stat.h>
+#ifdef __linux__
+#include <limits.h>
+#include <linux/limits.h>
+#endif
 
 using std::memcpy;
 using std::size_t;

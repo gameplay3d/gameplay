@@ -613,15 +613,17 @@ set(GAMEPLAY_RES_SHADERS_LIB
 
 include_directories( 
     src
-    ../external-deps/lua/include
-    ../external-deps/bullet/include
-    ../external-deps/libpng/include
-    ../external-deps/zlib/include
-    ../external-deps/oggvorbis/include
-    ../external-deps/openal/include
-    ../external-deps/glew/include
+    ${BULLET_INCLUDE_DIRS}
 )
 
+
+#    ../external-deps/lua/include
+#    ../external-deps/bullet/include
+#    ../external-deps/libpng/include
+#    ../external-deps/zlib/include
+#    ../external-deps/oggvorbis/include
+#    ../external-deps/openal/include
+#    ../external-deps/glew/include
 add_definitions(-D__linux__)
 add_definitions(-lstdc++)
 
