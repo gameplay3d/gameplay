@@ -166,6 +166,16 @@ protected:
      */
     virtual ~AnimationTarget();
 
+	/**
+     * Gets the TargetType's property ID value for the specified property ID string.
+     *
+     * @param type The TargetType of the AnimationTarget.
+     * @param propertyIdStr The property ID string.
+     * @return The property ID value for the property ID string; -1 if the propertyIdStr does not exist
+     *    for the TargetType.
+     */
+    virtual int getPropertyId(TargetType type, const char* propertyIdStr);
+
     /**
      * Adds the given animation channel to this animation target.
      *
@@ -209,16 +219,6 @@ private:
      * Constructor.
      */
     AnimationTarget(const AnimationTarget& copy);
-
-    /**
-     * Gets the TargetType's property ID value for the specified property ID string.
-     *
-     * @param type The TargetType of the AnimationTarget.
-     * @param propertyIdStr The property ID string.
-     * @return The property ID value for the property ID string; -1 if the propertyIdStr does not exist
-     *    for the TargetType.
-     */
-    static int getPropertyId(TargetType type, const char* propertyIdStr);
 
     /**
      * Converts by-value animations to to-value animations.

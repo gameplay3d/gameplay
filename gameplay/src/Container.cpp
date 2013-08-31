@@ -295,8 +295,8 @@ void Container::removeControl(unsigned int index)
     GP_ASSERT(index < _controls.size());
 
     std::vector<Control*>::iterator it = _controls.begin() + index;
-    _controls.erase(it);
     Control* control = *it;
+    _controls.erase(it);
     control->_parent = NULL;
     SAFE_RELEASE(control);
 }
@@ -916,7 +916,8 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
         for (itt = _controls.begin(); itt < _controls.end(); itt++)
         {
             Control* nextControl = *itt;
-            if (nextControl->getFocusIndex() == focusIndex)
+            if (nextControl->getFocusIndex() == focusIndex &&
+                nextControl->isEnabled() && nextControl->isVisible())
             {
                 next = nextControl;
                 break;
