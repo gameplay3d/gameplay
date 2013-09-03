@@ -407,6 +407,16 @@ bool Container::isScrolling() const
              abs(_scrollingLastY - _scrollingVeryFirstY) > SCROLL_THRESHOLD));
 }
 
+const Vector2& Container::getScrollPosition() const
+{
+    return _scrollPosition;
+}
+
+void Container::setScrollPosition(const Vector2& scrollPosition)
+{
+    _scrollPosition = scrollPosition;
+}
+
 Animation* Container::getAnimation(const char* id) const
 {
     std::vector<Control*>::const_iterator itr = _controls.begin();
