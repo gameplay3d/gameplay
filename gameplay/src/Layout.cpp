@@ -47,31 +47,37 @@ void Layout::align(Control* control, const Container* container)
         }
 
         // Vertical alignment
-        if ((control->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
+        if(control->_isAlignmentSet || control->_autoHeight)
         {
-            controlBounds.y = clipHeight - controlBounds.height - controlMargin.bottom;
-        }
-        else if ((control->_alignment & Control::ALIGN_VCENTER) == Control::ALIGN_VCENTER)
-        {
-            controlBounds.y = clipHeight * 0.5f - controlBounds.height * 0.5f;
-        }
-        else if ((control->_alignment & Control::ALIGN_TOP) == Control::ALIGN_TOP)
-        {
-            controlBounds.y = controlMargin.top;
+            if ((control->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
+            {
+                controlBounds.y = clipHeight - controlBounds.height - controlMargin.bottom;
+            }
+            else if ((control->_alignment & Control::ALIGN_VCENTER) == Control::ALIGN_VCENTER)
+            {
+                controlBounds.y = clipHeight * 0.5f - controlBounds.height * 0.5f;
+            }
+            else if ((control->_alignment & Control::ALIGN_TOP) == Control::ALIGN_TOP)
+            {
+                controlBounds.y = controlMargin.top;
+            }
         }
 
         // Horizontal alignment
-        if ((control->_alignment & Control::ALIGN_RIGHT) == Control::ALIGN_RIGHT)
+        if(control->_isAlignmentSet || control->_autoWidth)
         {
-            controlBounds.x = clipWidth - controlBounds.width - controlMargin.right;
-        }
-        else if ((control->_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
-        {
-            controlBounds.x = clipWidth * 0.5f - controlBounds.width * 0.5f;
-        }
-        else if ((control->_alignment & Control::ALIGN_LEFT) == Control::ALIGN_LEFT)
-        {
-            controlBounds.x = controlMargin.left;
+            if ((control->_alignment & Control::ALIGN_RIGHT) == Control::ALIGN_RIGHT)
+            {
+                controlBounds.x = clipWidth - controlBounds.width - controlMargin.right;
+            }
+            else if ((control->_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
+            {
+                controlBounds.x = clipWidth * 0.5f - controlBounds.width * 0.5f;
+            }
+            else if ((control->_alignment & Control::ALIGN_LEFT) == Control::ALIGN_LEFT)
+            {
+                controlBounds.x = controlMargin.left;
+            }
         }
 
         control->setBounds(controlBounds);

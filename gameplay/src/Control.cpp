@@ -37,7 +37,10 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     _style = style;
 
     // Properties not defined by the style.
-    _alignment = getAlignment(properties->getString("alignment"));
+    const char * alignmentString = properties->getString("alignment");
+
+    _isAlignmentSet = alignmentString != NULL;
+    _alignment = getAlignment(alignmentString);
     _autoWidth = properties->getBool("autoWidth");
     _autoHeight = properties->getBool("autoHeight");
 
