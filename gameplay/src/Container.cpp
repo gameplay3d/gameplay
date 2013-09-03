@@ -1312,13 +1312,13 @@ void Container::updateScroll()
         const Rectangle& bounds = control->getBounds();
         const Theme::Margin& margin = control->getMargin();
 
-        float newWidth = bounds.x + bounds.width;
+        float newWidth = bounds.x + bounds.width + margin.right;
         if (newWidth > _totalWidth)
         {
             _totalWidth = newWidth;
         }
 
-        float newHeight = bounds.y + bounds.height;
+        float newHeight = bounds.y + bounds.height + margin.bottom;
         if (newHeight > _totalHeight)
         {
             _totalHeight = newHeight;
