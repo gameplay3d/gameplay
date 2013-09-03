@@ -1303,6 +1303,7 @@ void Container::updateScroll()
     const Theme::Padding& containerPadding = getPadding();
 
     // Calculate total width and height.
+    _totalWidth = _totalHeight = 0.0f;
     std::vector<Control*> controls = getControls();
     for (size_t i = 0, controlsCount = controls.size(); i < controlsCount; i++)
     {
