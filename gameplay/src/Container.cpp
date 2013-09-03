@@ -407,6 +407,16 @@ bool Container::isScrolling() const
              abs(_scrollingLastY - _scrollingVeryFirstY) > SCROLL_THRESHOLD));
 }
 
+const Vector2& Container::getScrollPosition() const
+{
+    return _scrollPosition;
+}
+
+void Container::setScrollPosition(const Vector2& scrollPosition)
+{
+    _scrollPosition = scrollPosition;
+}
+
 Animation* Container::getAnimation(const char* id) const
 {
     std::vector<Control*>::const_iterator itr = _controls.begin();
@@ -1303,6 +1313,7 @@ void Container::updateScroll()
     const Theme::Padding& containerPadding = getPadding();
 
     // Calculate total width and height.
+    _totalWidth = _totalHeight = 0.0f;
     std::vector<Control*> controls = getControls();
     for (size_t i = 0, controlsCount = controls.size(); i < controlsCount; i++)
     {
@@ -1311,13 +1322,13 @@ void Container::updateScroll()
         const Rectangle& bounds = control->getBounds();
         const Theme::Margin& margin = control->getMargin();
 
-        float newWidth = bounds.x + bounds.width;
+        float newWidth = bounds.x + bounds.width + margin.right;
         if (newWidth > _totalWidth)
         {
             _totalWidth = newWidth;
         }
 
-        float newHeight = bounds.y + bounds.height;
+        float newHeight = bounds.y + bounds.height + margin.bottom;
         if (newHeight > _totalHeight)
         {
             _totalHeight = newHeight;
