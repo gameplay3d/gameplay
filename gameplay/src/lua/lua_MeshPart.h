@@ -12,6 +12,7 @@ int lua_MeshPart_getIndexFormat(lua_State* state);
 int lua_MeshPart_getMeshIndex(lua_State* state);
 int lua_MeshPart_getPrimitiveType(lua_State* state);
 int lua_MeshPart_isDynamic(lua_State* state);
+int lua_MeshPart_setIndexData(lua_State* state);
 
 void luaRegister_MeshPart();
 
