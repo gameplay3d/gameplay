@@ -18,6 +18,7 @@ void luaRegister_MeshPart()
         {"getIndexFormat", lua_MeshPart_getIndexFormat},
         {"getMeshIndex", lua_MeshPart_getMeshIndex},
         {"getPrimitiveType", lua_MeshPart_getPrimitiveType},
+		{"setIndexData", lua_MeshPart_setIndexData},
         {"isDynamic", lua_MeshPart_isDynamic},
         {NULL, NULL}
     };
@@ -71,6 +72,62 @@ int lua_MeshPart__gc(lua_State* state)
     }
     return 0;
 }
+
+int lua_MeshPart_setIndexData(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
+			{
+                MeshPart* instance = getInstance(state);
+
+				Mesh::IndexFormat fmt = instance->getIndexFormat();
+
+				switch ( fmt ) {
+					case Mesh::INDEX8: {
+						gameplay::ScriptUtil::LuaArray<unsigned char> param1 = gameplay::ScriptUtil::getUnsignedCharPointer(2);
+						instance->setIndexData( param1, 0, instance->getIndexCount() );
+		    			return 0;
+					}
+					case Mesh::INDEX16: {
+						gameplay::ScriptUtil::LuaArray<unsigned short> param1 = gameplay::ScriptUtil::getUnsignedShortPointer(2);
+						instance->setIndexData( param1, 0, instance->getIndexCount() );
+		    			return 0;
+					}
+					case Mesh::INDEX32: {
+						gameplay::ScriptUtil::LuaArray<unsigned long> param1 = gameplay::ScriptUtil::getUnsignedLongPointer(2);
+						instance->setIndexData( param1, 0, instance->getIndexCount() );
+		    			return 0;
+					}
+					default: {
+						lua_pushstring(state, "lua_MeshPart_setIndexData - Unknown index format.");
+						lua_error(state);
+						break;
+					 }
+				}
+            }
+
+            lua_pushstring(state, "lua_MeshPart_setIndexData - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 
 int lua_MeshPart_getIndexBuffer(lua_State* state)
 {
