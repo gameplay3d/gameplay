@@ -70,9 +70,39 @@ public:
      * @param indexData The index data to be set.
      * @param indexStart The index to start from.
      * @param indexCount The number of indices to be set.
-     * @script{ignore}
+	 * @script{ignore}
      */
     void setIndexData(const void* indexData, unsigned int indexStart, unsigned int indexCount);
+
+    /**
+     * Sets the specified index data into the mapped index buffer. Using 8 bit index
+	 * NOTE: the underlying mesh part must be the specified bit width
+     *
+     * @param indexData The index data to be set.
+     * @param indexStart The index to start from.
+     * @param indexCount The number of indices to be set.
+     */
+	void setIndexData8(const unsigned char* indexData, unsigned int indexStart, unsigned int indexCount);
+
+    /**
+     * Sets the specified index data into the mapped index buffer. Using 16 bit index
+	 * NOTE: the underlying mesh part must be the specified bit width
+     *
+     * @param indexData The index data to be set.
+     * @param indexStart The index to start from.
+     * @param indexCount The number of indices to be set.
+     */
+	void setIndexData16(const unsigned short* indexData, unsigned int indexStart, unsigned int indexCount);
+
+    /**
+     * Sets the specified index data into the mapped index buffer. Using 32 bit index
+	 * NOTE: the underlying mesh part must be the specified bit width
+     *
+     * @param indexData The index data to be set.
+     * @param indexStart The index to start from.
+     * @param indexCount The number of indices to be set.
+     */
+	void setIndexData32(const unsigned long* indexData, unsigned int indexStart, unsigned int indexCount);
 
 private:
 
