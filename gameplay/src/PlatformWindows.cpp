@@ -740,7 +740,7 @@ bool initializeGL(WindowCreationParams* params)
     wglDeleteContext(tempContext);
 
     // Make the new context current
-    if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
+    if (!__hrc || !wglMakeCurrent(__hdc, __hrc) )
     {
         GP_ERROR("Failed to make the window current.");
         return false;
