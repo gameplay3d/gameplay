@@ -66,11 +66,15 @@ bool RadioButton::isSelected() const
 
 void RadioButton::setSelected(bool selected)
 {
+    if (selected)
+        RadioButton::clearSelected(_groupId);
+
     if (selected != _selected)
     {
+        _selected = selected;
         _dirty = true;
+        notifyListeners(Control::Listener::VALUE_CHANGED);
     }
-    _selected = selected;
 }
 
 void RadioButton::setImageSize(float width, float height)
