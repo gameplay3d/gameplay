@@ -813,7 +813,7 @@ bool initializeGL(WindowCreationParams* params)
         wglDeleteContext(tempContext);
 
         // Make the new context current
-        if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
+    if (!__hrc || !wglMakeCurrent(__hdc, __hrc) )
         {
             GP_ERROR("Failed to make the window current. Trying to fallback to OpenGL 2", (int)GetLastError());
             return fallbackToOpenGL2(params, hwnd, hdc, pfd, tempContext, pixelFormat);
