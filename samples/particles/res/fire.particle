@@ -2,7 +2,7 @@ particle fire
 {
     sprite
     {
-		path = res/fire.png
+		path = fire.png
         width = 256
         height = 256
 	    blending = ADDITIVE
@@ -16,6 +16,9 @@ particle fire
     particleCountMax = 5000
     emissionRate = 300
     ellipsoid = true
+    orbitPosition = true
+    orbitVelocity = true
+    orbitAcceleration = false
     sizeStartMin = 1.5
     sizeStartMax = 2
     sizeEndMin = 0.5
@@ -33,7 +36,4 @@ particle fire
     accelerationVar = 3, 0.5, 3
     rotationPerParticleSpeedMin = -1.5
     rotationPerParticleSpeedMax = 1.5
-    orbitPosition = true
-    orbitVelocity = true
-    orbitAcceleration = false
 }
