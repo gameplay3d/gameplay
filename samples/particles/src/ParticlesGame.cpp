@@ -262,6 +262,20 @@ std::string toString(bool b)
     return b ? "true" : "false";
 }
 
+std::string toString(int i)
+{
+    char buf[1024];
+    sprintf(buf, "%d", i);
+    return buf;
+}
+
+std::string toString(unsigned int i)
+{
+    char buf[1024];
+    sprintf(buf, "%d", i);
+    return buf;
+}
+
 void ParticlesGame::saveFile()
 {
     std::string filename;
@@ -705,15 +719,11 @@ void ParticlesGame::updateFrames()
     {
         if (w > _particleEmitter->getTexture()->getWidth())
         {
-            w = texture->getWidth();
-            char buf[1024];
-            wBox->setText(itoa(w, buf, 10));
+            wBox->setText(toString(texture->getWidth()).c_str());
         }
         if (h > texture->getHeight())
         {
-            h = texture->getHeight();
-            char buf[1024];
-            hBox->setText(itoa(h, buf, 10));
+            hBox->setText(toString(texture->getHeight()).c_str());
         }
 
         _particleEmitter->setSpriteFrameCoords(fc, w, h);
@@ -1086,10 +1096,9 @@ void ParticlesGame::updateImageControl()
     ((ImageControl*)_form->getControl("sprite"))->setSize(w, h);
     _form->getControl("image")->setHeight(h + _form->getControl("imageSettings")->getHeight() + 50);
 
-    char buf[1024];
-    ((TextBox*)_form->getControl("frameCount"))->setText(itoa((int)_particleEmitter->getSpriteFrameCount(), buf, 10));
-    ((TextBox*)_form->getControl("frameWidth"))->setText(itoa((int)_particleEmitter->getSpriteWidth(), buf, 10));
-    ((TextBox*)_form->getControl("frameHeight"))->setText(itoa((int)_particleEmitter->getSpriteHeight(), buf, 10));
+    ((TextBox*)_form->getControl("frameCount"))->setText(toString(_particleEmitter->getSpriteFrameCount()).c_str());
+    ((TextBox*)_form->getControl("frameWidth"))->setText(toString(_particleEmitter->getSpriteWidth()).c_str());
+    ((TextBox*)_form->getControl("frameHeight"))->setText(toString(_particleEmitter->getSpriteHeight()).c_str());
 
     switch (_particleEmitter->getTextureBlending())
     {
