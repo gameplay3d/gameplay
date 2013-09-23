@@ -1,29 +1,29 @@
 #include "ParticlesGame.h"
+#ifdef WIN32
+#include <Windows.h>
+#include <Commdlg.h>
+#endif
 
 // Declare our game instance.
 ParticlesGame game;
 
-static const std::string _particleFiles[] = 
-{
-    "res/fire.particle",
-    "res/smoke.particle",
-    "res/explosion.particle",
-};
+#define DEFAULT_PARTICLE_EMITTER "res/fire.particle"
 
-const static unsigned int _particleFilesCount = 3;
-const static float PARTICLE_SIZE_MAX[] = { 5.0f, 30.0f, 30.0f };
-const static float EMIT_RATE_MAX[] = { 500, 100, 100 };
+const static float PARTICLE_SIZE_MAX = 30.0f; //5.0f, 30.0f, 30.0f;
+const static float EMIT_RATE_MAX = 500.0f; //500, 100, 100;;
 const float INPUT_SENSITIVITY = 0.05f;
+const float PANNING_SENSITIVITY = 0.05f;
+const float ROTATE_SENSITIVITY = 0.25f;
 const Vector4 BACKGROUND_COLOR = Vector4::zero();
 
-ParticlesGame::ParticlesGame() : _scene(NULL)
+ParticlesGame::ParticlesGame() : _scene(NULL), _panning(false), _rotating(false), _zooming(false)
 {
 }
 
 void ParticlesGame::initialize()
 {
-    // Display the gameplay splash screen for at least 1 second.
-    displayScreen(this, &ParticlesGame::drawSplash, NULL, 1000L);
+    // Display the gameplay splash screen
+    displayScreen(this, &ParticlesGame::drawSplash, NULL, 250L);
 
     setMultiTouch(true);
 
@@ -77,11 +77,10 @@ void ParticlesGame::initialize()
     _started = (CheckBox*)_form->getControl("started");
     _reset = (Button*)_form->getControl("reset");
     _emit = (Button*)_form->getControl("emit");
-    _spiralFlame = (RadioButton*)_form->getControl("spiralFlame");
-    _smoke = (RadioButton*)_form->getControl("smoke");
-    _explosion = (RadioButton*)_form->getControl("explosion");
     _zoomIn = (Button*)_form->getControl("zoomIn");
     _zoomOut = (Button*)_form->getControl("zoomOut");
+    _save = (Button*)_form->getControl("save");
+    _load = (Button*)_form->getControl("load");
     _burstSize = (Slider*)_form->getControl("burstSize");
     _posVarX = (Slider*)_form->getControl("posVarX");
     _posVarY = (Slider*)_form->getControl("posVarY");
@@ -108,6 +107,7 @@ void ParticlesGame::initialize()
     _axisVarZ = (Slider*)_form->getControl("axisVarZ");
     _rotationSpeedMin = (Slider*)_form->getControl("rotationSpeedMin");
     _rotationSpeedMax = (Slider*)_form->getControl("rotationSpeedMax");
+    _vsync = (CheckBox*)_form->getControl("vsync");
 
     // Listen for UI events.
     _startRed->addListener(this, Listener::VALUE_CHANGED);
@@ -128,13 +128,12 @@ void ParticlesGame::initialize()
     _started->addListener(this, Listener::VALUE_CHANGED);
     _reset->addListener(this, Listener::CLICK);
     _emit->addListener(this, Listener::CLICK);
-    _spiralFlame->addListener(this, Listener::VALUE_CHANGED);
-    _smoke->addListener(this, Listener::VALUE_CHANGED);
-    _explosion->addListener(this, Listener::VALUE_CHANGED);
     _zoomIn->addListener(this, Listener::PRESS);
     _zoomIn->addListener(this, Listener::RELEASE);
     _zoomOut->addListener(this, Listener::PRESS);
     _zoomOut->addListener(this, Listener::RELEASE);
+    _save->addListener(this, Listener::RELEASE);
+    _load->addListener(this, Listener::RELEASE);
     _burstSize->addListener(this, Listener::VALUE_CHANGED);
     _posVarX->addListener(this, Listener::VALUE_CHANGED);
     _posVarY->addListener(this, Listener::VALUE_CHANGED);
@@ -161,9 +160,205 @@ void ParticlesGame::initialize()
     _axisVarZ->addListener(this, Listener::VALUE_CHANGED);
     _rotationSpeedMin->addListener(this, Listener::VALUE_CHANGED);
     _rotationSpeedMax->addListener(this, Listener::VALUE_CHANGED);
+    _vsync->addListener(this, Listener::VALUE_CHANGED);
+    _form->getControl("sprite")->addListener(this, Listener::CLICK);
+    _form->getControl("additive")->addListener(this, Listener::VALUE_CHANGED);
+    _form->getControl("transparent")->addListener(this, Listener::VALUE_CHANGED);
+    _form->getControl("multiply")->addListener(this, Listener::VALUE_CHANGED);
+    _form->getControl("opaque")->addListener(this, Listener::VALUE_CHANGED);
+    _form->getControl("updateFrames")->addListener(this, Listener::CLICK);
     
+    // Hide save/load buttons for non-windows platforms until we implement picking dialogs for others
+#ifndef WIN32
+    _form->getControl("save")->setVisible(false);
+    _form->getControl("load")->setVisible(false);
+    _form->getControl("image")->setVisible(false);
+#endif
+
     // Apply default emitter values to the UI.
     emitterChanged();
+
+    updateImageControl();
+}
+
+std::string ParticlesGame::openFile(const char* title, const char* filterDescription, const char* filterExtension)
+{
+#ifdef WIN32
+    OPENFILENAMEA ofn;
+    memset(&ofn, 0, sizeof(ofn));
+
+    std::string desc = filterDescription;
+    desc += " (*.";
+    desc += filterExtension;
+    desc += ")";
+    std::string ext = "*.";
+    ext += filterExtension;
+    char filter[1024];
+    memset(filter, 0, 1024);
+    strcpy(filter, desc.c_str());
+    strcpy(filter + desc.length() + 1, ext.c_str());
+
+    char szCurrentDir[256];
+    GetCurrentDirectoryA(256, szCurrentDir);
+    std::string initialDir = szCurrentDir;
+    initialDir += "\\res";
+
+    char szFileName[256] = "";
+
+    ofn.lStructSize = sizeof(ofn); // SEE NOTE BELOW
+    ofn.hwndOwner = GetForegroundWindow();
+    ofn.lpstrTitle = title;
+    ofn.lpstrFilter = filter;//"Particle Files (*.particle)\0*.particle\0";
+    ofn.lpstrFile = szFileName;
+    ofn.lpstrInitialDir = initialDir.c_str();
+    ofn.nMaxFile = 256;
+    ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+    ofn.lpstrDefExt = "filterExtension";
+
+    GetOpenFileNameA(&ofn);
+
+    // Restore current dir
+    SetCurrentDirectoryA(szCurrentDir);
+
+    return szFileName;
+#endif
+
+    return "";
+}
+
+std::string toString(ParticleEmitter::TextureBlending blending)
+{
+    switch (blending)
+    {
+    case ParticleEmitter::BLEND_OPAQUE:
+        return "OPAQUE";
+    case ParticleEmitter::BLEND_TRANSPARENT:
+        return "TRANSPARENT";
+    case ParticleEmitter::BLEND_ADDITIVE:
+        return "ADDITIVE";
+    case ParticleEmitter::BLEND_MULTIPLIED:
+        return "MULTIPLIED";
+    default:
+        return "TRANSPARENT";
+    }
+}
+
+std::string toString(const Vector4& v)
+{
+    std::ostringstream s;
+    s << v.x << ", " << v.y << ", " << v.z << ", " << v.w;
+    return s.str();
+}
+
+std::string toString(const Vector3& v)
+{
+    std::ostringstream s;
+    s << v.x << ", " << v.y << ", " << v.z;
+    return s.str();
+}
+
+std::string toString(bool b)
+{
+    return b ? "true" : "false";
+}
+
+void ParticlesGame::saveFile()
+{
+    std::string filename;
+
+#ifdef WIN32
+    OPENFILENAMEA ofn;
+    memset(&ofn, 0, sizeof(ofn));
+
+    char szCurrentDir[256];
+    GetCurrentDirectoryA(256, szCurrentDir);
+    std::string initialDir = szCurrentDir;
+    initialDir += "\\res";
+
+    char szFileName[256] = "";
+
+    ofn.lStructSize = sizeof(ofn); // SEE NOTE BELOW
+    ofn.hwndOwner = GetForegroundWindow();
+    ofn.lpstrFilter = "Particle Files (*.particle)\0*.particle\0";
+    ofn.lpstrFile = szFileName;
+    ofn.lpstrInitialDir = initialDir.c_str();
+    ofn.nMaxFile = 256;
+    ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+    ofn.lpstrDefExt = "particle";
+
+    GetSaveFileNameA(&ofn);
+
+    filename = szFileName;
+
+    // Restore current dir
+    SetCurrentDirectoryA(szCurrentDir);
+
+#endif
+
+    if (filename.length() == 0)
+        return;
+
+    ParticleEmitter* e = _particleEmitter;
+
+    // Extract just the particle name from the filename
+    std::string dir = FileSystem::getDirectoryName(filename.c_str());
+    std::string ext = FileSystem::getExtension(filename.c_str());
+    std::string name = filename.substr(dir.length(), filename.length() - dir.length() - ext.length());
+
+    Texture* texture = e->getTexture();
+    std::string texturePath = texture->getPath();
+    std::string textureDir = FileSystem::getDirectoryName(texturePath.c_str());
+    texturePath = texturePath.substr(textureDir.length());
+
+    // Write out a properties file
+    std::ostringstream s;
+    s << 
+        "particle " << name << "\n" <<
+        "{\n" <<
+        "    sprite\n" <<
+        "    {\n" <<
+        "        path = " << texturePath << "\n" <<
+        "        width = " << e->getSpriteWidth() << "\n" <<
+        "        height = " << e->getSpriteHeight() << "\n" <<
+        "        blending = " << toString(e->getTextureBlending()) << "\n" <<
+        "        animated = " << toString(e->isSpriteAnimated()) << "\n" <<
+        "        looped = " << toString(e->isSpriteLooped()) << "\n" <<
+        "        frameCount = " << e->getSpriteFrameCount() << "\n" <<
+        "        frameRandomOffset = " << e->getSpriteFrameRandomOffset() << "\n" <<
+        "        frameDuration = " << e->getSpriteFrameDuration() << "\n" <<
+        "    }\n" <<
+        "\n" <<
+        "    particleCountMax = " << e->getParticleCountMax() << "\n" <<
+        "    emissionRate = " << e->getEmissionRate() << "\n" <<
+        "    ellipsoid = " << toString(e->isEllipsoid()) << "\n" <<
+        "    orbitPosition = " << toString(e->getOrbitPosition()) << "\n" <<
+        "    orbitVelocity = " << toString(e->getOrbitVelocity()) << "\n" <<
+        "    orbitAcceleration = " << toString(e->getOrbitAcceleration()) << "\n" <<
+        "    sizeStartMin = " << e->getSizeStartMin() << "\n" <<
+        "    sizeStartMax = " << e->getSizeStartMax() << "\n" <<
+        "    sizeEndMin = " << e->getSizeEndMin() << "\n" <<
+        "    sizeEndMax = " << e->getSizeEndMax() << "\n" <<
+        "    energyMin = " << e->getEnergyMin() << "\n" <<
+        "    energyMax = " << e->getEnergyMax() << "\n" <<
+        "    colorStart = " << toString(e->getColorStart()) << "\n" <<
+        "    colorStartVar = " << toString(e->getColorStartVariance()) << "\n" <<
+        "    colorEnd = " << toString(e->getColorEnd()) << "\n" <<
+        "    colorEndVar = " << toString(e->getColorEndVariance()) << "\n" <<
+        "    position = " << toString(e->getPosition()) << "\n" <<
+        "    positionVar = " << toString(e->getPositionVariance()) << "\n" <<
+        "    velocity = " << toString(e->getVelocity()) << "\n" <<
+        "    velocityVar = " << toString(e->getVelocityVariance()) << "\n" <<
+        "    acceleration = " << toString(e->getAcceleration()) << "\n" <<
+        "    accelerationVar = " << toString(e->getAccelerationVariance()) << "\n" <<
+        "    rotationPerParticleSpeedMin = " << e->getRotationPerParticleSpeedMin() << "\n" <<
+        "    rotationPerParticleSpeedMax = " << e->getRotationPerParticleSpeedMax() << "\n" <<
+        "}\n";
+
+    std::string text = s.str();
+    Stream* stream = FileSystem::open(filename.c_str(), FileSystem::WRITE);
+    stream->write(text.c_str(), 1, text.length());
+    stream->close();
+    SAFE_DELETE(stream);
 }
 
 void ParticlesGame::controlEvent(Control* control, EventType evt)
@@ -408,20 +603,29 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
                 emitter->stop();
             }
         }
-        else if (control == _spiralFlame && _spiralFlame->isSelected())
+        else if (control == _vsync)
         {
-            _particleEmitterIndex = 0;
-            emitterChanged();
+            Game::getInstance()->setVsync(_vsync->isChecked());
         }
-        else if (control == _smoke && _smoke->isSelected())
+        else if (strcmp(control->getId(), "additive") == 0)
         {
-            _particleEmitterIndex = 1;
-            emitterChanged();
+            if (((RadioButton*)control)->isSelected())
+                emitter->setTextureBlending(ParticleEmitter::BLEND_ADDITIVE);
         }
-        else if (control == _explosion && _explosion->isSelected())
+        else if (strcmp(control->getId(), "transparent") == 0)
         {
-            _particleEmitterIndex = 2;
-            emitterChanged();
+            if (((RadioButton*)control)->isSelected())
+                emitter->setTextureBlending(ParticleEmitter::BLEND_TRANSPARENT);
+        }
+        else if (strcmp(control->getId(), "multiply") == 0)
+        {
+            if (((RadioButton*)control)->isSelected())
+                emitter->setTextureBlending(ParticleEmitter::BLEND_MULTIPLIED);
+        }
+        else if (strcmp(control->getId(), "opaque") == 0)
+        {
+            if (((RadioButton*)control)->isSelected())
+                emitter->setTextureBlending(ParticleEmitter::BLEND_OPAQUE);
         }
         break;
     case Listener::CLICK:
@@ -429,8 +633,7 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         {
             // Re-load the current emitter.
             _particleEmitterNode->setParticleEmitter(NULL);
-            SAFE_RELEASE(emitter);
-            emitter = _particleEmitters[_particleEmitterIndex] = ParticleEmitter::create(_particleFiles[_particleEmitterIndex].c_str());
+            emitter = _particleEmitter = ParticleEmitter::create(_url.c_str());
             emitterChanged();
         }
         else if (control == _emit)
@@ -438,6 +641,14 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
             // Emit a burst of particles.
             unsigned int burstSize = (unsigned int)_burstSize->getValue();
             emitter->emitOnce(burstSize);
+        }
+        else if (strcmp(control->getId(), "sprite") == 0)
+        {
+            updateTexture();
+        }
+        else if (strcmp(control->getId(), "updateFrames") == 0)
+        {
+            updateFrames();
         }
         break;
     case Listener::PRESS:
@@ -459,7 +670,53 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         {
             _sDown = false;
         }
+        else if (control == _save)
+        {
+            Game::getInstance()->pause();
+            saveFile();
+            Game::getInstance()->resume();
+        }
+        else if (control == _load)
+        {
+            Game::getInstance()->pause();
+            std::string filename = openFile("Select Particle File", "Particle Files", "particle");
+            if (filename.length() > 0)
+            {
+                _particleEmitter = ParticleEmitter::create(filename.c_str());
+                _url = filename;
+                emitterChanged();
+            }
+            Game::getInstance()->resume();
+        }
         break;
+    }
+}
+
+void ParticlesGame::updateFrames()
+{
+    Texture* texture = _particleEmitter->getTexture();
+    TextBox* cBox = (TextBox*)_form->getControl("frameCount");
+    TextBox* wBox = (TextBox*)_form->getControl("frameWidth");
+    TextBox* hBox = (TextBox*)_form->getControl("frameHeight");
+    unsigned int fc = (unsigned int)atoi(cBox->getText());
+    unsigned int w = (unsigned int)atoi(wBox->getText());
+    unsigned int h = (unsigned int)atoi(hBox->getText());
+    if (fc > 0 && fc < 256 && fc < 1000 && w > 0 && h > 0 && w < 4096 && h < 4096)
+    {
+        if (w > _particleEmitter->getTexture()->getWidth())
+        {
+            w = texture->getWidth();
+            char buf[1024];
+            wBox->setText(itoa(w, buf, 10));
+        }
+        if (h > texture->getHeight())
+        {
+            h = texture->getHeight();
+            char buf[1024];
+            hBox->setText(itoa(h, buf, 10));
+        }
+
+        _particleEmitter->setSpriteFrameCoords(fc, w, h);
     }
 }
 
@@ -468,11 +725,7 @@ void ParticlesGame::finalize()
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_form);
     SAFE_RELEASE(_font);
-
-    for (unsigned int i = 0; i < _particleEmitters.size(); i++)
-    {
-        SAFE_RELEASE(_particleEmitters[i]);
-    }    
+    SAFE_RELEASE(_particleEmitter);
 }
 
 void ParticlesGame::update(float elapsedTime)
@@ -516,14 +769,14 @@ void ParticlesGame::render(float elapsedTime)
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, BACKGROUND_COLOR, 1.0f, 0);
 
-    // Draw the UI.
-    _form->draw();
-
     // Visit all the nodes in the scene for drawing.
     _scene->visit(this, &ParticlesGame::drawScene, (void*)0);
 
+    // Draw the UI.
+    _form->draw();
+
     // Draw the framerate and number of live particles.
-    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 170, 10, getFrameRate());
+    drawFrameRate(_font, Vector4(1, 1, 1, 1), 170, 40, getFrameRate());
 }
 
 bool ParticlesGame::drawScene(Node* node, void* cookie)
@@ -533,6 +786,62 @@ bool ParticlesGame::drawScene(Node* node, void* cookie)
     {
         emitter->draw();
     }
+    return true;
+}
+
+bool ParticlesGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    switch (evt)
+    {
+    case Mouse::MOUSE_PRESS_MIDDLE_BUTTON:
+        Game::getInstance()->setMouseCaptured(true);
+        _panning = true;
+        return true;
+    case Mouse::MOUSE_RELEASE_MIDDLE_BUTTON:
+        Game::getInstance()->setMouseCaptured(false);
+        _panning = false;
+        return true;
+    case Mouse::MOUSE_PRESS_LEFT_BUTTON:
+        Game::getInstance()->setMouseCaptured(true);
+        _rotating = true;
+        return true;
+    case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
+        Game::getInstance()->setMouseCaptured(false);
+        _rotating = false;
+        return true;
+    case Mouse::MOUSE_PRESS_RIGHT_BUTTON:
+        Game::getInstance()->setMouseCaptured(true);
+        _zooming = true;
+        return true;
+    case Mouse::MOUSE_RELEASE_RIGHT_BUTTON:
+        Game::getInstance()->setMouseCaptured(false);
+        _zooming = false;
+        return true;
+    case Mouse::MOUSE_MOVE:
+        if (_panning)
+        {
+            Vector3 n(-(float)x * PANNING_SENSITIVITY, (float)y * PANNING_SENSITIVITY, 0);
+            _cameraParent->getMatrix().transformVector(&n);
+            _cameraParent->translate(n);
+            return true;
+        }
+        else if (_rotating)
+        {
+            _cameraParent->rotateY(-MATH_DEG_TO_RAD((float)x * ROTATE_SENSITIVITY));
+            _cameraParent->rotateX(-MATH_DEG_TO_RAD((float)y * ROTATE_SENSITIVITY));
+            return true;
+        }
+        else if (_zooming)
+        {
+            Vector3 v = _scene->getActiveCamera()->getNode()->getForwardVector();
+            v.normalize();
+            v.scale((float)(x-y) * INPUT_SENSITIVITY);
+            _scene->getActiveCamera()->getNode()->translate(v);
+            return true;
+        }
+        break;
+    }
+
     return true;
 }
 
@@ -597,14 +906,6 @@ void ParticlesGame::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_D:
             _dDown = true;
             break;
-        case Keyboard::KEY_P:
-            _particleEmitterIndex++;
-            if (_particleEmitterIndex >= _particleFilesCount)
-            {
-                _particleEmitterIndex = 0;
-            }
-            emitterChanged();
-            break;
         }
         break;
 
@@ -630,12 +931,9 @@ void ParticlesGame::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void ParticlesGame::loadEmitters()
 {
-    for (unsigned int i = 0; i < _particleFilesCount; i++)
-    {
-        ParticleEmitter* emitter = ParticleEmitter::create(_particleFiles[i].c_str());
-        _particleEmitters.push_back(emitter);
-    }
-    _particleEmitterIndex = 0;
+    // Load the default particle emitter
+    _url = DEFAULT_PARTICLE_EMITTER;
+    _particleEmitter = ParticleEmitter::create(_url.c_str());
 
     _particleEmitterNode = _scene->addNode("Particle Emitter");
     _particleEmitterNode->setTranslation(0.0f, 0.0f, 0.0f);
@@ -643,32 +941,16 @@ void ParticlesGame::loadEmitters()
 
 void ParticlesGame::emitterChanged()
 {
-    // Stop the current emitter.
-    ParticleEmitter* prevEmitter = _particleEmitterNode->getParticleEmitter();
-    if (prevEmitter)
-    {
-        prevEmitter->stop();
-    }
+    ParticleEmitter* emitter = _particleEmitter;
 
     // Set the new emitter on the node.
-    ParticleEmitter* emitter = _particleEmitters[_particleEmitterIndex];
-    _particleEmitterNode->setParticleEmitter(emitter);
-
-    // The 'explosion' emitter is meant to emit in bursts.
-    if (_particleEmitterIndex == 2)
-    {
-        _started->setChecked(false);
-        emitter->emitOnce(20);
-    }
-    else
-    {
-        _started->setChecked(true);
-        emitter->start();
-    }
+    _particleEmitterNode->setParticleEmitter(_particleEmitter);
+    _particleEmitter->release();
 
     // Reset camera view and zoom.
     _scene->getActiveCamera()->getNode()->setTranslation(0.0f, 0.0f, 40.0f);
     _cameraParent->setIdentity();
+    _particleEmitterNode->setIdentity();
 
     // Set the values of UI controls to display the new emitter's settings.
     _startRed->setValue(emitter->getColorStart().x);
@@ -681,21 +963,21 @@ void ParticlesGame::emitterChanged()
     _endBlue->setValue(emitter->getColorEnd().z);
     _endAlpha->setValue(emitter->getColorEnd().w);
 
-    _startMin->setMax(PARTICLE_SIZE_MAX[_particleEmitterIndex]);
+    _startMin->setMax(PARTICLE_SIZE_MAX);
     _startMin->setValue(emitter->getSizeStartMin());
 
-    _startMax->setMax(PARTICLE_SIZE_MAX[_particleEmitterIndex]);
+    _startMax->setMax(PARTICLE_SIZE_MAX);
     _startMax->setValue(emitter->getSizeStartMax());
     
-    _endMin->setMax(PARTICLE_SIZE_MAX[_particleEmitterIndex]);
+    _endMin->setMax(PARTICLE_SIZE_MAX);
     _endMin->setValue(emitter->getSizeEndMin());
-    _endMax->setMax(PARTICLE_SIZE_MAX[_particleEmitterIndex]);
+    _endMax->setMax(PARTICLE_SIZE_MAX);
     _endMax->setValue(emitter->getSizeEndMax());
 
     _energyMin->setValue(emitter->getEnergyMin());
     _energyMax->setValue(emitter->getEnergyMax());
 
-    _emissionRate->setMax(EMIT_RATE_MAX[_particleEmitterIndex]);
+    _emissionRate->setMax(EMIT_RATE_MAX);
     _emissionRate->setValue(emitter->getEmissionRate());
 
     char txt[25];
@@ -743,6 +1025,10 @@ void ParticlesGame::emitterChanged()
 
     _rotationSpeedMin->setValue(emitter->getRotationSpeedMin());
     _rotationSpeedMax->setValue(emitter->getRotationSpeedMax());
+
+    emitter->start();
+
+    updateImageControl();
 }
 
 void ParticlesGame::drawSplash(void* param)
@@ -760,6 +1046,64 @@ void ParticlesGame::drawFrameRate(Font* font, const Vector4& color, unsigned int
     char buffer[30];
     sprintf(buffer, "FPS: %u\nParticles: %u", fps, _particleEmitterNode->getParticleEmitter()->getParticlesCount());
     font->start();
-    font->drawText(buffer, x, y, color, 28);
+    font->drawText(buffer, x, y, color, 22);
     font->finish();
+}
+
+void ParticlesGame::resizeEvent(unsigned int width, unsigned int height)
+{
+    setViewport(gameplay::Rectangle(width, height));
+    _form->setSize(width, height);
+}
+
+void ParticlesGame::updateTexture()
+{
+    std::string file = openFile("Select Texture", "PNG Files", "png");
+    if (file.length() > 0)
+    {
+        // Set new sprite on our emitter
+        _particleEmitter->setTexture(file.c_str(), _particleEmitter->getTextureBlending());
+
+        // Update the UI to display the new sprite
+        updateImageControl();
+    }
+}
+
+void ParticlesGame::updateImageControl()
+{
+    ((ImageControl*)_form->getControl("sprite"))->setImage(_particleEmitter->getTexture()->getPath());
+
+    // Resize the image control so keep it to scale
+    int w = _particleEmitter->getTexture()->getWidth();
+    int h = _particleEmitter->getTexture()->getHeight();
+    int max = w > h ? w : h;
+    if (max > 140)
+    {
+        float ratio = 140.0f / max;
+        w *= ratio;
+        h *= ratio;
+    }
+    ((ImageControl*)_form->getControl("sprite"))->setSize(w, h);
+    _form->getControl("image")->setHeight(h + _form->getControl("imageSettings")->getHeight() + 50);
+
+    char buf[1024];
+    ((TextBox*)_form->getControl("frameCount"))->setText(itoa((int)_particleEmitter->getSpriteFrameCount(), buf, 10));
+    ((TextBox*)_form->getControl("frameWidth"))->setText(itoa((int)_particleEmitter->getSpriteWidth(), buf, 10));
+    ((TextBox*)_form->getControl("frameHeight"))->setText(itoa((int)_particleEmitter->getSpriteHeight(), buf, 10));
+
+    switch (_particleEmitter->getTextureBlending())
+    {
+    case ParticleEmitter::BLEND_ADDITIVE:
+        ((RadioButton*)_form->getControl("additive"))->setSelected(true);
+        break;
+    case ParticleEmitter::BLEND_MULTIPLIED:
+        ((RadioButton*)_form->getControl("multiply"))->setSelected(true);
+        break;
+    case ParticleEmitter::BLEND_OPAQUE:
+        ((RadioButton*)_form->getControl("opaque"))->setSelected(true);
+        break;
+    case ParticleEmitter::BLEND_TRANSPARENT:
+        ((RadioButton*)_form->getControl("transparent"))->setSelected(true);
+        break;
+    }
 }
