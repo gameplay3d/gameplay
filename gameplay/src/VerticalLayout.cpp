@@ -63,17 +63,20 @@ void VerticalLayout::update(const Container* container, const Vector2& offset)
         Control* control = controls.at(i);
         GP_ASSERT(control);
 
-        align(control, container);
+        if (control->isVisible())
+        {
+            align(control, container);
 
-        const Rectangle& bounds = control->getBounds();
-        const Theme::Margin& margin = control->getMargin();
+            const Rectangle& bounds = control->getBounds();
+            const Theme::Margin& margin = control->getMargin();
 
-        yPosition += margin.top;
+            yPosition += margin.top;
 
-        control->setPosition(margin.left, yPosition);
-        control->update(container, offset);
+            control->setPosition(margin.left, yPosition);
+            control->update(container, offset);
 
-        yPosition += bounds.height + margin.bottom;
+            yPosition += bounds.height + margin.bottom;
+        }
 
         i += iter;
     }

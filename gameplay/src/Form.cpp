@@ -685,6 +685,10 @@ static bool shouldPropagateMouseEvent(Control::State state, Mouse::MouseEvent ev
 
 bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
+    // Do not process mouse input when mouse is captured
+    if (Game::getInstance()->isMouseCaptured())
+        return false;
+
     for (size_t i = 0; i < __forms.size(); ++i)
     {
         Form* form = __forms[i];

@@ -57,6 +57,9 @@ void FlowLayout::update(const Container* container, const Vector2& offset)
         Control* control = controls.at(i);
         GP_ASSERT(control);
 
+        if (!control->isVisible())
+            continue;
+
         //align(control, container);
 
         const Rectangle& bounds = control->getBounds();

@@ -488,16 +488,6 @@ void Theme::setProjectionMatrix(const Matrix& matrix)
 {
     GP_ASSERT(_spriteBatch);
     _spriteBatch->setProjectionMatrix(matrix);
-
-    // Set the matrix on each Font used by the style.
-    std::set<Font*>::const_iterator it;
-    for (it = _fonts.begin(); it != _fonts.end(); ++it)
-    {
-        Font* font = *it;
-        GP_ASSERT(font);
-        GP_ASSERT(font->getSpriteBatch());
-        font->getSpriteBatch()->setProjectionMatrix(matrix);
-    }
 }
 
 SpriteBatch* Theme::getSpriteBatch() const
