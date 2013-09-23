@@ -23,9 +23,19 @@ public:
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
+     * @see Game::mouseEvent
+     */
+    bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    /**
      * @see Game::keyEvent
      */
     void keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * @see Game::resizeEvent
+     */
+    void resizeEvent(unsigned int width, unsigned int height);
 
     /**
      * @see Control::controlEvent
@@ -66,6 +76,16 @@ private:
 
     void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
+    std::string openFile(const char* title, const char* filterDescription, const char* filterExtension);
+
+    void saveFile();
+
+    void updateTexture();
+
+    void updateImageControl();
+
+    void updateFrames();
+
     Scene* _scene;
     Node* _particleEmitterNode;
     Node* _cameraParent;
@@ -73,8 +93,8 @@ private:
     bool _wDown, _sDown, _aDown, _dDown;
     bool _touched;
     int _prevX, _prevY;
-    std::vector<ParticleEmitter*> _particleEmitters;
-    unsigned int _particleEmitterIndex;
+    ParticleEmitter* _particleEmitter;
+    std::string _url;
     Font* _font;
     
     Slider* _startRed;
@@ -122,12 +142,15 @@ private:
     Button* _emit;
     Button* _zoomIn;
     Button* _zoomOut;
-    RadioButton* _spiralFlame;
-    RadioButton* _smoke;
-    RadioButton* _explosion;
+    Button* _save;
+    Button* _load;
     Slider* _burstSize;
     Container* _position;
     Container* _particleProperties;
+    CheckBox* _vsync;
+    bool _panning;
+    bool _rotating;
+    bool _zooming;
 };
 
 #endif

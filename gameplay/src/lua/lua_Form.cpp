@@ -80,6 +80,7 @@ void luaRegister_Form()
         {"getPadding", lua_Form_getPadding},
         {"getRefCount", lua_Form_getRefCount},
         {"getScroll", lua_Form_getScroll},
+        {"getScrollPosition", lua_Form_getScrollPosition},
         {"getScrollWheelRequiresFocus", lua_Form_getScrollWheelRequiresFocus},
         {"getScrollWheelSpeed", lua_Form_getScrollWheelSpeed},
         {"getScrollingFriction", lua_Form_getScrollingFriction},
@@ -129,6 +130,7 @@ void luaRegister_Form()
         {"setPosition", lua_Form_setPosition},
         {"setScroll", lua_Form_setScroll},
         {"setScrollBarsAutoHide", lua_Form_setScrollBarsAutoHide},
+        {"setScrollPosition", lua_Form_setScrollPosition},
         {"setScrollWheelRequiresFocus", lua_Form_setScrollWheelRequiresFocus},
         {"setScrollWheelSpeed", lua_Form_setScrollWheelSpeed},
         {"setScrollingFriction", lua_Form_setScrollingFriction},
@@ -2201,6 +2203,50 @@ int lua_Form_getScroll(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Form_getScroll - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_getScrollPosition(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getScrollPosition());
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector2");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_getScrollPosition - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4483,6 +4529,48 @@ int lua_Form_setScrollBarsAutoHide(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Form_setScrollBarsAutoHide - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setScrollPosition(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector2> param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector2'.");
+                    lua_error(state);
+                }
+
+                Form* instance = getInstance(state);
+                instance->setScrollPosition(*param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setScrollPosition - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

@@ -2,7 +2,7 @@ particle chimney-smoke
 {
     sprite 
     {
-		path = res/smoke.png
+		path = smoke.png
         width = 64
         height = 64
         blending = ADDITIVE

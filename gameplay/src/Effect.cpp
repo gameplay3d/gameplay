@@ -1,8 +1,9 @@
 #include "Base.h"
 #include "Effect.h"
 #include "FileSystem.h"
+#include "Game.h"
 
-#define OPENGL_ES_DEFINE  "#define OPENGL_ES\n"
+#define OPENGL_ES_DEFINE  "OPENGL_ES"
 
 namespace gameplay
 {
@@ -104,9 +105,31 @@ Effect* Effect::createFromSource(const char* vshSource, const char* fshSource, c
 
 static void replaceDefines(const char* defines, std::string& out)
 {
-    if (defines && strlen(defines) != 0)
+    Properties* graphicsConfig = Game::getInstance()->getConfig()->getNamespace("graphics", true);
+    const char* globalDefines = graphicsConfig ? graphicsConfig->getString("shaderDefines") : NULL;
+
+    // Build full semicolon delimited list of defines
+#ifdef OPENGL_ES
+    out = OPENGL_ES_DEFINE;
+#else
+    out = "";
+#endif
+    if (globalDefines && strlen(globalDefines) > 0)
     {
-        out = defines;
+        if (out.length() > 0)
+            out += ';';
+        out += globalDefines;
+    }
+    if (defines && strlen(defines) > 0)
+    {
+        if (out.length() > 0)
+            out += ';';
+        out += defines;
+    }
+
+    // Replace semicolons
+    if (out.length() > 0)
+    {
         size_t pos;
         out.insert(0, "#define ");
         while ((pos = out.find(';')) != std::string::npos)
@@ -115,9 +138,6 @@ static void replaceDefines(const char* defines, std::string& out)
         }
         out += "\n";
     }
-#ifdef OPENGL_ES
-    out.insert(0, OPENGL_ES_DEFINE);
-#endif
 }
 
 static void replaceIncludes(const char* filepath, const char* source, std::string& out)

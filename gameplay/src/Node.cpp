@@ -1037,6 +1037,12 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
         node->setModel(modelClone);
         modelClone->release();
     }
+    if (ParticleEmitter* emitter = getParticleEmitter())
+    {
+        ParticleEmitter* emitterClone = emitter->clone();
+        node->setParticleEmitter(emitterClone);
+        emitterClone->release();
+    }
     node->_world = _world;
     node->_bounds = _bounds;
 

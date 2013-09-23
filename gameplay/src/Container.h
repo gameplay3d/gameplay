@@ -208,6 +208,16 @@ public:
     void setScrollWheelSpeed(float speed);
 
     /**
+     * Get an offset of how far this layout has been scrolled in each direction.
+     */
+    const Vector2& getScrollPosition() const;
+
+    /**
+     * Set an offset of how far this layout has been scrolled in each direction.
+     */
+    void setScrollPosition(const Vector2& scrollPosition);
+
+    /**
      * @see AnimationTarget::getAnimation
      */
     Animation* getAnimation(const char* id = NULL) const;
