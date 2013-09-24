@@ -3,6 +3,7 @@ form particleEditor
     theme = res/editor.theme
     autoWidth = true
     autoHeight = true
+    consumeInputEvents = false
 
 	// Vsync checkbox
 	checkBox vsync
@@ -15,108 +16,46 @@ form particleEditor
 		checked = true
 		consumeInputEvents = true
 	}
-
-	// Saving/loading
-	container buttons
-	{
-		style = noBorder
-		size = 200, 50
-        position = 163, 100
-		consumeInputEvents = false
-        alignment = ALIGN_TOP_HCENTER
-
-		button save
-		{
-            consumeInputEvents = true
-			style = buttonStyle
-            width = 100
-			height = 50
-			text = Save
-		}
-
-        button load : save
-		{
-            x = 100
-			text = Load
-		}
-	}
-
-	container leftSide
-	{
+ 
+    container leftSide
+    {
         style = noBorder
-		width = 160
-		autoHeight = true
-		layout = LAYOUT_VERTICAL
+        layout = LAYOUT_VERTICAL
+        width = 160
+        autoHeight = true
+        consumeInputEvents = true
 
-		button reset
-		{
+        container saveLoad
+        {
+            style = basic
+            size = 160, 100
             consumeInputEvents = true
-			style = buttonStyle
-            width = 160
-			height = 50
-			text = Reset
-		}
+            layout = LAYOUT_VERTICAL
 
-		// Emission settings
-		container emission
-		{
-			style = basic
-			layout = LAYOUT_VERTICAL
-			size = 160, 210
-			consumeInputEvents = true
+	        button save
+	        {
+                consumeInputEvents = true
+		        style = buttonStyle
+                width = 140
+		        height = 40
+                x = 100
+		        text = Save
+	        }
 
-			// Burst emission
-			button emit
-			{
-				style = buttonStyle
-				position = 0, 50
-				size = 140, 50
-				text = Emit
-			}
+            button load : save
+	        {
+                x = 200
+		        text = Load
+	        }
+        }
 
-			// Emission rate
-			slider emissionRate
-			{
-				style = noBorder
-				size = 140, 50
-				orientation = HORIZONTAL
-				min = 1
-				max = 500
-				value = 100
-				step = 0
-				text = Emission Rate
-				textAlignment = ALIGN_TOP_HCENTER
-				valueTextVisible = true
-				valueTextAlignment = ALIGN_BOTTOM_HCENTER
-				valueTextPrecision = 2            
-			}
-
-			slider burstSize : emissionRate
-			{
-				text = Burst Size
-				value = 20
-				max = 50
-				step = 1
-			}
-
-			// Start / Stop Emitter
-			checkBox started
-			{
-				style = iconNoBorder
-				size = 140, 40
-				imageSize = 35, 35
-				text = Running
-				checked = true
-			}
-		}
-        
         // Image settings
-		container image
-		{
-			style = basic
-			size = 160, 200
-			consumeInputEvents = true
-			layout = LAYOUT_VERTICAL
+        container image
+        {
+	        style = basic
+	        size = 160, 200
+	        consumeInputEvents = true
+	        layout = LAYOUT_VERTICAL
 
             label
             {
@@ -125,19 +64,19 @@ form particleEditor
                 text = Image
             }
 
-			image sprite
-			{
-				style = image
-				path = res/fire.png
-				size = 140, 140
-			}
+	        image sprite
+	        {
+		        style = image
+		        path = res/fire.png
+		        size = 140, 140
+	        }
 
             container imageSettings
             {
                 style = noBorder
-                size = 160, 220
+                size = 160, 230
                 consumeInputEvents = true
-			    layout = LAYOUT_VERTICAL
+		        layout = LAYOUT_VERTICAL
 
                 radioButton additive
                 {
@@ -238,36 +177,76 @@ form particleEditor
 
                 button updateFrames
                 {
-				    style = buttonStyle
-				    width = 140
-				    height = 30
-                    fontSize = 16
-				    text = Update
+			        style = buttonStyle
+			        width = 140
+			        height = 40
+			        text = Update
                 }
             }
-		}
+        }
 
-		// Camera Zoom
-		container zoom
-		{
-			style = noBorder
-			size = 160, 50
-			consumeInputEvents = true
+        // Emission settings
+        container emission
+        {
+	        style = basic
+	        layout = LAYOUT_VERTICAL
+	        size = 160, 200
+	        consumeInputEvents = true
 
-			button zoomIn
-			{
-				style = buttonStyle
-				size = 80, 50
-				text = Zoom  In
-			}
+	        // Burst emission
+	        button emit
+	        {
+		        style = buttonStyle
+		        position = 0, 50
+		        size = 140, 40
+		        text = Emit
+	        }
 
-			button zoomOut : zoomIn
-			{
-				position = 80, 0
-				text = Zoom Out
-			}
-		}
-	}
+	        // Emission rate
+	        slider emissionRate
+	        {
+		        style = noBorder
+		        size = 140, 50
+		        orientation = HORIZONTAL
+		        min = 1
+		        max = 500
+		        value = 100
+		        step = 1
+		        text = Emission Rate
+		        textAlignment = ALIGN_TOP_HCENTER
+		        valueTextVisible = true
+		        valueTextAlignment = ALIGN_BOTTOM_HCENTER
+		        valueTextPrecision = 2            
+	        }
+
+	        slider burstSize : emissionRate
+	        {
+		        text = Burst Size
+		        value = 20
+		        max = 50
+		        step = 1
+	        }
+
+	        // Start / Stop Emitter
+	        checkBox started
+	        {
+		        style = iconNoBorder
+		        size = 140, 40
+		        imageSize = 35, 35
+		        text = Running
+		        checked = true
+	        }
+        }
+
+        button reset
+	    {
+            consumeInputEvents = true
+		    style = buttonStyle
+            width = 160
+		    height = 40
+		    text = Reset
+	    }
+    }
 
     container particleProperties
     {
@@ -285,7 +264,7 @@ form particleEditor
         {
             style = title
             size = 150, 30
-            text = Size
+            text = Particle Size
         }
 
         slider startMin
@@ -294,9 +273,9 @@ form particleEditor
             size = 150, 50
             orientation = HORIZONTAL
             min = 0
-            max = 5
-            value = 1.5
-            step = 0
+            max = 10
+            value = 1
+            step = 0.1
             text = Min Begin
             textAlignment = ALIGN_TOP_HCENTER
             valueTextVisible = true
@@ -401,6 +380,30 @@ form particleEditor
 
         slider endAlpha : startAlpha
         {
+        }
+
+        // Position
+        label titlePosition : titleSize
+        {
+            text = Position
+        }
+
+        slider posX : startRed
+        {
+            min = -2
+            max = 2
+            step = 0.1
+            text = X
+        }
+
+        slider posY : posX
+        {
+            text = Y
+        }
+
+        slider posZ : posX
+        {
+            text = Z
         }
 
         // Position variance
@@ -583,4 +586,26 @@ form particleEditor
             text = Max
         }
     }
+
+	// Camera Zoom
+	container zoom
+	{
+		style = noBorder
+		size = 160, 50
+		consumeInputEvents = true
+        alignment = ALIGN_BOTTOM_HCENTER
+
+		button zoomIn
+		{
+			style = buttonStyle
+			size = 80, 50
+			text = Zoom  In
+		}
+
+		button zoomOut : zoomIn
+		{
+			position = 80, 0
+			text = Zoom Out
+		}
+	}
 }

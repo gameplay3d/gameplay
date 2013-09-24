@@ -1,23 +1,105 @@
 #include "ParticlesGame.h"
-#ifdef WIN32
-#include <Windows.h>
-#include <Commdlg.h>
-#endif
 
 // Declare our game instance.
 ParticlesGame game;
 
 #define DEFAULT_PARTICLE_EMITTER "res/fire.particle"
 
-const static float PARTICLE_SIZE_MAX = 30.0f; //5.0f, 30.0f, 30.0f;
-const static float EMIT_RATE_MAX = 500.0f; //500, 100, 100;;
 const float INPUT_SENSITIVITY = 0.05f;
-const float PANNING_SENSITIVITY = 0.05f;
+const float PANNING_SENSITIVITY = 0.01f;
 const float ROTATE_SENSITIVITY = 0.25f;
 const Vector4 BACKGROUND_COLOR = Vector4::zero();
+const float INITIAL_ZOOM = 6.0f;
 
 ParticlesGame::ParticlesGame() : _scene(NULL), _panning(false), _rotating(false), _zooming(false)
 {
+}
+
+void addGrid(unsigned int lineCount)
+{
+    float z = -1;
+
+    // There needs to be an odd number of lines
+    lineCount |= 1;
+    const unsigned int pointCount = lineCount * 4;
+    const unsigned int verticesSize = pointCount * (3 + 3);  // (3 (position(xyz) + 3 color(rgb))
+
+    std::vector<float> vertices;
+    vertices.resize(verticesSize);
+
+    const float gridLength = (float)(lineCount / 2);
+    float value = -gridLength;
+    for (unsigned int i = 0; i < verticesSize; ++i)
+    {
+        // Default line color is dark grey
+        Vector4 color(0.3f, 0.3f, 0.3f, 1.0f);
+
+        // Every 10th line is brighter grey
+        if (((int)value) % 10 == 0)
+        {
+            color.set(0.45f, 0.45f, 0.45f, 1.0f);
+        }
+
+        // The Z axis is blue
+        if (value == 0.0f)
+        {
+            color.set(0.15f, 0.15f, 0.7f, 1.0f);
+        }
+
+        // Build the lines
+        vertices[i] = value;
+        vertices[++i] = -gridLength;
+        vertices[++i] = z;
+        vertices[++i] = color.x;
+        vertices[++i] = color.y;
+        vertices[++i] = color.z;
+
+        vertices[++i] = value;
+        vertices[++i] = gridLength;
+        vertices[++i] = z;
+        vertices[++i] = color.x;
+        vertices[++i] = color.y;
+        vertices[++i] = color.z;
+
+        // The X axis is red
+        if (value == 0.0f)
+        {
+            color.set(0.7f, 0.15f, 0.15f, 1.0f);
+        }
+        vertices[++i] = -gridLength;
+        vertices[++i] = value;
+        vertices[++i] = z;
+        vertices[++i] = color.x;
+        vertices[++i] = color.y;
+        vertices[++i] = color.z;
+
+        vertices[++i] = gridLength;
+        vertices[++i] = value;
+        vertices[++i] = z;
+        vertices[++i] = color.x;
+        vertices[++i] = color.y;
+        vertices[++i] = color.z;
+
+        value += 1.0f;
+    }
+    VertexFormat::Element elements[] =
+    {
+        VertexFormat::Element(VertexFormat::POSITION, 3),
+        VertexFormat::Element(VertexFormat::COLOR, 3)
+    };
+    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 2), pointCount, false);
+    if (mesh == NULL)
+        return;
+
+    mesh->setPrimitiveType(Mesh::LINES);
+    mesh->setVertexData(&vertices[0], 0, pointCount);
+
+    Model* model = Model::create(mesh);
+    model->setMaterial("res/grid.material");
+    SAFE_RELEASE(mesh);
+
+    Scene::getScene()->addNode("grid")->setModel(model);
+    model->release();
 }
 
 void ParticlesGame::initialize()
@@ -42,15 +124,14 @@ void ParticlesGame::initialize()
     _cameraParent->addChild(cameraNode);
     Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 1000.0f);
     cameraNode->setCamera(camera);
-    cameraNode->setTranslation(0.0f, 0.0f, 40.0f);
+    cameraNode->setTranslation(0.0f, 0.0f, INITIAL_ZOOM);
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
 
+    addGrid(61);
+
     // Create a font for drawing the framerate.
     _font = Font::create("res/arial.gpb");
-
-    // Load preset emitters.
-    loadEmitters();
 
     // Load the form for editing ParticleEmitters.
     _form = Form::create("res/editor.form");
@@ -135,6 +216,9 @@ void ParticlesGame::initialize()
     _save->addListener(this, Listener::RELEASE);
     _load->addListener(this, Listener::RELEASE);
     _burstSize->addListener(this, Listener::VALUE_CHANGED);
+    _form->getControl("posX")->addListener(this, Listener::VALUE_CHANGED);
+    _form->getControl("posY")->addListener(this, Listener::VALUE_CHANGED);
+    _form->getControl("posZ")->addListener(this, Listener::VALUE_CHANGED);
     _posVarX->addListener(this, Listener::VALUE_CHANGED);
     _posVarY->addListener(this, Listener::VALUE_CHANGED);
     _posVarZ->addListener(this, Listener::VALUE_CHANGED);
@@ -169,17 +253,24 @@ void ParticlesGame::initialize()
     _form->getControl("updateFrames")->addListener(this, Listener::CLICK);
     
     // Hide save/load buttons for non-windows platforms until we implement picking dialogs for others
-#ifndef WIN32
-    _form->getControl("save")->setVisible(false);
-    _form->getControl("load")->setVisible(false);
+#ifdef WIN32
+    _form->getControl("zoomIn")->setVisible(false);
+    _form->getControl("zoomOut")->setVisible(false);
+#else
+    _form->getControl("saveLoad")->setVisible(false);
     _form->getControl("image")->setVisible(false);
 #endif
 
-    // Apply default emitter values to the UI.
-    emitterChanged();
+    // Load preset emitters.
+    loadEmitters();
 
     updateImageControl();
 }
+
+#ifdef WIN32
+#include <Windows.h>
+#include <Commdlg.h>
+#endif
 
 std::string ParticlesGame::openFile(const char* title, const char* filterDescription, const char* filterExtension)
 {
@@ -257,6 +348,13 @@ std::string toString(const Vector3& v)
     return s.str();
 }
 
+std::string toString(const Quaternion& q)
+{
+    std::ostringstream s;
+    s << q.x << ", " << q.y << ", " << q.z << ", " << q.w;
+    return s.str();
+}
+
 std::string toString(bool b)
 {
     return b ? "true" : "false";
@@ -324,6 +422,10 @@ void ParticlesGame::saveFile()
     std::string textureDir = FileSystem::getDirectoryName(texturePath.c_str());
     texturePath = texturePath.substr(textureDir.length());
 
+    // Get camera rotation as axis-angle
+    Vector3 cameraAxis;
+    float cameraAngle = MATH_RAD_TO_DEG(_cameraParent->getRotation().toAxisAngle(&cameraAxis));
+
     // Write out a properties file
     std::ostringstream s;
     s << 
@@ -366,6 +468,15 @@ void ParticlesGame::saveFile()
         "    accelerationVar = " << toString(e->getAccelerationVariance()) << "\n" <<
         "    rotationPerParticleSpeedMin = " << e->getRotationPerParticleSpeedMin() << "\n" <<
         "    rotationPerParticleSpeedMax = " << e->getRotationPerParticleSpeedMax() << "\n" <<
+        "\n" <<
+        "    editor\n" <<
+        "    {\n" <<
+        "        cameraTranslation = " << toString(_cameraParent->getTranslation()) << "\n" <<
+        "        cameraZoom = " << toString(_scene->getActiveCamera()->getNode()->getTranslation()) << "\n" <<
+        "        cameraRotation = " << toString(cameraAxis) << ", " << cameraAngle << "\n" <<
+        "        sizeMax = " << _startMax->getMax() << "\n" <<
+        "        energyMax = " << _energyMax->getMax() << "\n" <<
+        "    }\n"
         "}\n";
 
     std::string text = s.str();
@@ -377,6 +488,8 @@ void ParticlesGame::saveFile()
 
 void ParticlesGame::controlEvent(Control* control, EventType evt)
 {
+    std::string id = control->getId();
+
     // Handle UI events.
     ParticleEmitter* emitter = _particleEmitterNode->getParticleEmitter();
     switch(evt)
@@ -457,6 +570,24 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         else if (control == _emissionRate)
         {
             emitter->setEmissionRate(_emissionRate->getValue());
+        }
+        else if (id == "posX")
+        {
+            Vector3 pos(emitter->getPosition());
+            pos.x = ((Slider*)control)->getValue();
+            emitter->setPosition(pos, emitter->getPositionVariance());
+        }
+        else if (id == "posY")
+        {
+            Vector3 pos(emitter->getPosition());
+            pos.y = ((Slider*)control)->getValue();
+            emitter->setPosition(pos, emitter->getPositionVariance());
+        }
+        else if (id == "posZ")
+        {
+            Vector3 pos(emitter->getPosition());
+            pos.z = ((Slider*)control)->getValue();
+            emitter->setPosition(pos, emitter->getPositionVariance());
         }
         else if (control == _posVarX)
         {
@@ -621,22 +752,22 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         {
             Game::getInstance()->setVsync(_vsync->isChecked());
         }
-        else if (strcmp(control->getId(), "additive") == 0)
+        else if (id == "additive")
         {
             if (((RadioButton*)control)->isSelected())
                 emitter->setTextureBlending(ParticleEmitter::BLEND_ADDITIVE);
         }
-        else if (strcmp(control->getId(), "transparent") == 0)
+        else if (id == "transparent")
         {
             if (((RadioButton*)control)->isSelected())
                 emitter->setTextureBlending(ParticleEmitter::BLEND_TRANSPARENT);
         }
-        else if (strcmp(control->getId(), "multiply") == 0)
+        else if (id == "multiply")
         {
             if (((RadioButton*)control)->isSelected())
                 emitter->setTextureBlending(ParticleEmitter::BLEND_MULTIPLIED);
         }
-        else if (strcmp(control->getId(), "opaque") == 0)
+        else if (id == "opaque")
         {
             if (((RadioButton*)control)->isSelected())
                 emitter->setTextureBlending(ParticleEmitter::BLEND_OPAQUE);
@@ -645,9 +776,8 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
     case Listener::CLICK:
         if (control == _reset)
         {
-            // Re-load the current emitter.
-            _particleEmitterNode->setParticleEmitter(NULL);
-            emitter = _particleEmitter = ParticleEmitter::create(_url.c_str());
+            // Re-load the current emitter and reset the view
+            _particleEmitter = ParticleEmitter::create(_url.c_str());
             emitterChanged();
         }
         else if (control == _emit)
@@ -656,11 +786,11 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
             unsigned int burstSize = (unsigned int)_burstSize->getValue();
             emitter->emitOnce(burstSize);
         }
-        else if (strcmp(control->getId(), "sprite") == 0)
+        else if (id == "sprite")
         {
             updateTexture();
         }
-        else if (strcmp(control->getId(), "updateFrames") == 0)
+        else if (id == "updateFrames")
         {
             updateFrames();
         }
@@ -696,8 +826,8 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
             std::string filename = openFile("Select Particle File", "Particle Files", "particle");
             if (filename.length() > 0)
             {
-                _particleEmitter = ParticleEmitter::create(filename.c_str());
                 _url = filename;
+                _particleEmitter = ParticleEmitter::create(_url.c_str());
                 emitterChanged();
             }
             Game::getInstance()->resume();
@@ -791,11 +921,10 @@ void ParticlesGame::render(float elapsedTime)
 
 bool ParticlesGame::drawScene(Node* node, void* cookie)
 {
-    ParticleEmitter* emitter = node->getParticleEmitter();
-    if (emitter)
-    {
-        emitter->draw();
-    }
+    if (node->getModel())
+        node->getModel()->draw();
+    if (node->getParticleEmitter())
+        node->getParticleEmitter()->draw();
     return true;
 }
 
@@ -947,6 +1076,8 @@ void ParticlesGame::loadEmitters()
 
     _particleEmitterNode = _scene->addNode("Particle Emitter");
     _particleEmitterNode->setTranslation(0.0f, 0.0f, 0.0f);
+
+    emitterChanged();
 }
 
 void ParticlesGame::emitterChanged()
@@ -973,21 +1104,14 @@ void ParticlesGame::emitterChanged()
     _endBlue->setValue(emitter->getColorEnd().z);
     _endAlpha->setValue(emitter->getColorEnd().w);
 
-    _startMin->setMax(PARTICLE_SIZE_MAX);
     _startMin->setValue(emitter->getSizeStartMin());
-
-    _startMax->setMax(PARTICLE_SIZE_MAX);
     _startMax->setValue(emitter->getSizeStartMax());
-    
-    _endMin->setMax(PARTICLE_SIZE_MAX);
     _endMin->setValue(emitter->getSizeEndMin());
-    _endMax->setMax(PARTICLE_SIZE_MAX);
     _endMax->setValue(emitter->getSizeEndMax());
 
     _energyMin->setValue(emitter->getEnergyMin());
     _energyMax->setValue(emitter->getEnergyMax());
 
-    _emissionRate->setMax(EMIT_RATE_MAX);
     _emissionRate->setValue(emitter->getEmissionRate());
 
     char txt[25];
@@ -1036,9 +1160,46 @@ void ParticlesGame::emitterChanged()
     _rotationSpeedMin->setValue(emitter->getRotationSpeedMin());
     _rotationSpeedMax->setValue(emitter->getRotationSpeedMax());
 
-    emitter->start();
-
+    // Update our image control
     updateImageControl();
+
+    // Parse editor section of particle properties
+    Properties* p = Properties::create(_url.c_str());
+    Properties* ns = p->getNamespace("editor", true);
+    if (ns)
+    {
+        Vector3 v3;
+        if (ns->getVector3("cameraTranslation", &v3))
+        {
+            _cameraParent->setTranslation(v3);
+        }
+        if (ns->getVector3("cameraZoom", &v3))
+        {
+            _scene->getActiveCamera()->getNode()->setTranslation(v3);
+        }
+        Quaternion q;
+        if (ns->getQuaternionFromAxisAngle("cameraRotation", &q))
+        {
+            _cameraParent->setRotation(q);
+        }
+        float f;
+        if ((f = ns->getFloat("sizeMax")) != 0.0f)
+        {
+            _startMin->setMax(f);
+            _startMax->setMax(f);
+            _endMin->setMax(f);
+            _endMax->setMax(f);
+        }
+        if ((f = ns->getFloat("energyMax")) != 0.0f)
+        {
+            _energyMin->setMax(f);
+            _energyMax->setMax(f);
+        }
+    }
+    SAFE_DELETE(p);
+
+    // Start the emitter
+    emitter->start();
 }
 
 void ParticlesGame::drawSplash(void* param)
@@ -1064,6 +1225,7 @@ void ParticlesGame::resizeEvent(unsigned int width, unsigned int height)
 {
     setViewport(gameplay::Rectangle(width, height));
     _form->setSize(width, height);
+    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
 }
 
 void ParticlesGame::updateTexture()
