@@ -867,18 +867,6 @@
     <ClCompile Include="src\SocialController.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\social\ScoreloopSocialAchievement.cpp">
-      <Filter>src\social</Filter>
-    </ClCompile>
-    <ClCompile Include="src\social\ScoreloopSocialLeaderboard.cpp">
-      <Filter>src\social</Filter>
-    </ClCompile>
-    <ClCompile Include="src\social\ScoreloopSocialPlayer.cpp">
-      <Filter>src\social</Filter>
-    </ClCompile>
-    <ClCompile Include="src\social\ScoreloopSocialScore.cpp">
-      <Filter>src\social</Filter>
-    </ClCompile>
     <ClCompile Include="src\social\ScoreloopSocialSession.cpp">
       <Filter>src\social</Filter>
     </ClCompile>
@@ -1750,18 +1738,6 @@
     </ClInclude>
     <ClInclude Include="src\SocialScore.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\social\ScoreloopSocialAchievement.h">
-      <Filter>src\social</Filter>
-    </ClInclude>
-    <ClInclude Include="src\social\ScoreloopSocialLeaderboard.h">
-      <Filter>src\social</Filter>
-    </ClInclude>
-    <ClInclude Include="src\social\ScoreloopSocialPlayer.h">
-      <Filter>src\social</Filter>
-    </ClInclude>
-    <ClInclude Include="src\social\ScoreloopSocialScore.h">
-      <Filter>src\social</Filter>
     </ClInclude>
     <ClInclude Include="src\social\ScoreloopSocialSession.h">
       <Filter>src\social</Filter>

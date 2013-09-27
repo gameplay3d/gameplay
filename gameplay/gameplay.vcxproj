@@ -319,10 +319,6 @@
     <ClCompile Include="src\ScriptTarget.cpp" />
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\SocialController.cpp" />
-    <ClCompile Include="src\social\ScoreloopSocialAchievement.cpp" />
-    <ClCompile Include="src\social\ScoreloopSocialLeaderboard.cpp" />
-    <ClCompile Include="src\social\ScoreloopSocialPlayer.cpp" />
-    <ClCompile Include="src\social\ScoreloopSocialScore.cpp" />
     <ClCompile Include="src\social\ScoreloopSocialSession.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
@@ -612,10 +608,6 @@
     <ClInclude Include="src\SocialScore.h" />
     <ClInclude Include="src\SocialSession.h" />
     <ClInclude Include="src\SocialSessionListener.h" />
-    <ClInclude Include="src\social\ScoreloopSocialAchievement.h" />
-    <ClInclude Include="src\social\ScoreloopSocialLeaderboard.h" />
-    <ClInclude Include="src\social\ScoreloopSocialPlayer.h" />
-    <ClInclude Include="src\social\ScoreloopSocialScore.h" />
     <ClInclude Include="src\social\ScoreloopSocialSession.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Stream.h" />

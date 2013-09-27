@@ -61,7 +61,7 @@ public:
     bool isMultiTouch() const;
     bool hasAccelerometer() const;
     void getAccelerometerValues(float* pitch, float* roll);
-    void getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
+    void getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
     void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
 	void enableScriptCamera(bool enable);
     void setScriptCameraSpeed(float normal, float fast);
