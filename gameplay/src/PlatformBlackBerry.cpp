@@ -500,7 +500,7 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
     }
 }
 
-#ifdef USE_BLACKBERRY_GAMEPAD
+#ifdef GP_USE_GAMEPAD
 
 static const char* __vendorStrings[] =
 {
@@ -990,7 +990,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress("glIsVertexArrayOES");
     }
 
- #ifdef USE_BLACKBERRY_GAMEPAD
+ #ifdef GP_USE_GAMEPAD
 
     screen_device_t* screenDevs;
 
@@ -1241,7 +1241,7 @@ int Platform::enterMessagePump()
                         }
                         break;
                     }
-#ifdef USE_BLACKBERRY_GAMEPAD
+#ifdef GP_USE_GAMEPAD
                     case SCREEN_EVENT_DEVICE:
                     {
                         // A device was attached or removed.
@@ -1283,9 +1283,6 @@ int Platform::enterMessagePump()
             {
                 switch (bps_event_get_code(event))
                 {
-                case NAVIGATOR_SWIPE_DOWN:
-                    _game->menuEvent();
-                    break;
                 case NAVIGATOR_WINDOW_STATE:
                 {
                     navigator_window_state_t state = navigator_event_get_window_state(event);
@@ -1435,8 +1432,7 @@ void Platform::setMultiSampling(bool enabled)
         return;
     }
 
-    //todo
-
+    // TODO:
     __multiSampling = enabled;
 }
 
@@ -1501,7 +1497,7 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     }
 }
 
-void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
 	if (accelX)
 	{

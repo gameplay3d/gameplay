@@ -4,9 +4,9 @@
 /**
  * Global overrides of the new and delete operators for memory tracking.
  * This file is only included when memory leak detection is explicitly
- * request via the pre-processor definition GAMEPLAY_MEM_LEAK_DETECTION.
+ * request via the pre-processor definition GP_USE_MEM_LEAK_DETECTION.
  */
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 
 #include <new>
 #include <exception>
@@ -42,7 +42,7 @@ void operator delete[] (void* p, const char* file, int line) throw();
 // 'new' before allocation and redefine it to our custom version afterwards (we support 0-2, 9 parameter constructors).
 template<typename T> T* bullet_new()
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T();
 #define new DEBUG_NEW
@@ -54,7 +54,7 @@ template<typename T> T* bullet_new()
 
 template<typename T, typename T1> T* bullet_new(const T1& t1)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION 
+#ifdef GP_USE_MEM_LEAK_DETECTION 
 #undef new 
     T* t = new T(t1);
 #define new DEBUG_NEW
@@ -66,7 +66,7 @@ template<typename T, typename T1> T* bullet_new(const T1& t1)
 
 template<typename T, typename T1, typename T2> T* bullet_new(const T1& t1, const T2& t2)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2);
 #define new DEBUG_NEW
@@ -78,7 +78,7 @@ template<typename T, typename T1, typename T2> T* bullet_new(const T1& t1, const
 
 template<typename T, typename T1, typename T2> T* bullet_new(T1& t1, const T2& t2)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2);
 #define new DEBUG_NEW
@@ -91,7 +91,7 @@ template<typename T, typename T1, typename T2> T* bullet_new(T1& t1, const T2& t
 template<typename T, typename T1, typename T2, typename T3> 
 T* bullet_new(const T1& t1, const T2& t2, const T3& t3)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2, t3);
 #define new DEBUG_NEW
@@ -104,7 +104,7 @@ T* bullet_new(const T1& t1, const T2& t2, const T3& t3)
 template<typename T, typename T1, typename T2, typename T3> 
 T* bullet_new(T1& t1, const T2& t2, const T3& t3)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2, t3);
 #define new DEBUG_NEW
@@ -117,7 +117,7 @@ T* bullet_new(T1& t1, const T2& t2, const T3& t3)
 template<typename T, typename T1, typename T2, typename T3, typename T4> 
 T* bullet_new(const T1& t1, const T2& t2, const T3& t3, const T4& t4)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2, t3, t4);
 #define new DEBUG_NEW
@@ -130,7 +130,7 @@ T* bullet_new(const T1& t1, const T2& t2, const T3& t3, const T4& t4)
 template<typename T, typename T1, typename T2, typename T3, typename T4> 
 T* bullet_new(T1& t1, const T2& t2, const T3& t3, const T4& t4)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2, t3, t4);
 #define new DEBUG_NEW
@@ -143,7 +143,7 @@ T* bullet_new(T1& t1, const T2& t2, const T3& t3, const T4& t4)
 template<typename T, typename T1, typename T2, typename T3, typename T4> 
 T* bullet_new(T1& t1, T2& t2, const T3& t3, const T4& t4)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2, t3, t4);
 #define new DEBUG_NEW
@@ -156,7 +156,7 @@ T* bullet_new(T1& t1, T2& t2, const T3& t3, const T4& t4)
 template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5> 
 T* bullet_new(const T1& t1, const T2& t2, const T3& t3, const T4& t4, const T5& t5)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2, t3, t4, t5);
 #define new DEBUG_NEW
@@ -169,7 +169,7 @@ T* bullet_new(const T1& t1, const T2& t2, const T3& t3, const T4& t4, const T5& 
 template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5> 
 T* bullet_new(T1& t1, T2& t2, const T3& t3, const T4& t4, const T5& t5)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2, t3, t4, t5);
 #define new DEBUG_NEW
@@ -182,7 +182,7 @@ T* bullet_new(T1& t1, T2& t2, const T3& t3, const T4& t4, const T5& t5)
 template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9> 
 T* bullet_new(const T1& t1, const T2& t2, const T3& t3, const T4& t4, const T5& t5, const T6& t6, const T7& t7, const T8& t8, const T9& t9)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 #undef new
     T* t = new T(t1, t2, t3, t4, t5, t6, t7, t8, t9);
 #define new DEBUG_NEW
