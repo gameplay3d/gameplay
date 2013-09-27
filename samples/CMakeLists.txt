@@ -48,7 +48,6 @@ add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletC
 
 add_subdirectory(browser)
 add_subdirectory(character)
-add_subdirectory(longboard)
 add_subdirectory(lua)
 add_subdirectory(mesh)
 add_subdirectory(particles)
