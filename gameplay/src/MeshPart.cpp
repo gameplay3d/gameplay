@@ -87,6 +87,21 @@ bool MeshPart::isDynamic() const
     return _dynamic;
 }
 
+void MeshPart::setIndexData8(const unsigned char* indexData, unsigned int indexStart, unsigned int indexCount)
+{
+	setIndexData(indexData,indexStart,indexCount);
+}
+
+void MeshPart::setIndexData16(const unsigned short* indexData, unsigned int indexStart, unsigned int indexCount)
+{
+	setIndexData(indexData,indexStart,indexCount);
+}
+
+void MeshPart::setIndexData32(const unsigned long* indexData, unsigned int indexStart, unsigned int indexCount)
+{
+	setIndexData(indexData,indexStart,indexCount);
+}
+
 void MeshPart::setIndexData(const void* indexData, unsigned int indexStart, unsigned int indexCount)
 {
     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer) );

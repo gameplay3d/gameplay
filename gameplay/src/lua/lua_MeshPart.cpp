@@ -19,6 +19,9 @@ void luaRegister_MeshPart()
         {"getMeshIndex", lua_MeshPart_getMeshIndex},
         {"getPrimitiveType", lua_MeshPart_getPrimitiveType},
         {"isDynamic", lua_MeshPart_isDynamic},
+        {"setIndexData16", lua_MeshPart_setIndexData16},
+        {"setIndexData32", lua_MeshPart_setIndexData32},
+        {"setIndexData8", lua_MeshPart_setIndexData8},
         {NULL, NULL}
     };
     const luaL_Reg* lua_statics = NULL;
@@ -284,6 +287,138 @@ int lua_MeshPart_isDynamic(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_MeshPart_setIndexData16(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                gameplay::ScriptUtil::LuaArray<unsigned short> param1 = gameplay::ScriptUtil::getUnsignedShortPointer(2);
+
+                // Get parameter 2 off the stack.
+                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                // Get parameter 3 off the stack.
+                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                MeshPart* instance = getInstance(state);
+                instance->setIndexData16(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_MeshPart_setIndexData16 - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_MeshPart_setIndexData32(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                gameplay::ScriptUtil::LuaArray<unsigned long> param1 = gameplay::ScriptUtil::getUnsignedLongPointer(2);
+
+                // Get parameter 2 off the stack.
+                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                // Get parameter 3 off the stack.
+                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                MeshPart* instance = getInstance(state);
+                instance->setIndexData32(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_MeshPart_setIndexData32 - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_MeshPart_setIndexData8(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                gameplay::ScriptUtil::LuaArray<unsigned char> param1 = gameplay::ScriptUtil::getUnsignedCharPointer(2);
+
+                // Get parameter 2 off the stack.
+                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                // Get parameter 3 off the stack.
+                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                MeshPart* instance = getInstance(state);
+                instance->setIndexData8(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_MeshPart_setIndexData8 - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
             lua_error(state);
             break;
         }
