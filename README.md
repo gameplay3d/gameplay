@@ -2,7 +2,7 @@
 
 GamePlay3D is an open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
 
-<img align="right" src="https://raw.github.com/wiki/blackberry/GamePlay/img/logo.png" alt="gameplay" />
+<img align="right" src="https://raw.github.com/wiki/blackberry/GamePlay/img/logo.png" alt="gameplay3d" />
 
 - [Website](http://www.gameplay3d.org/)
 - [Forums](http://www.gameplay3d.org/forums/)
@@ -10,15 +10,13 @@ GamePlay3D is an open-source, cross-platform 3D native C++ game framework making
 - [API Reference](http://www.gameplay3d.org/api.php)
 - [Development Guide](https://github.com/blackberry/GamePlay/wiki#wiki-Development_Guide)
 
-## Supported Mobile Platforms
-- [BlackBerry 10 and PlayBook](https://github.com/blackberry/GamePlay/wiki/BlackBerry-Setup) (using BlackBerry Native SDK)
-- [Apple iOS 5+](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode 4)
-- [Google Android 2.3+](https://github.com/blackberry/GamePlay/wiki/Android-NDK-Setup) (using Google Android NDK)
-
-## Supported Desktop Platforms
-- [Microsoft Windows 7](https://github.com/blackberry/GamePlay/wiki/Visual-Studio-Setup) (using Microsoft Visual Studio 2012)
-- [Apple MacOS X](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode 4)
+## Supported Platforms
+- [Microsoft Windows](https://github.com/blackberry/GamePlay/wiki/Visual-Studio-Setup) (using Microsoft Visual Studio)
+- [Apple MacOS X](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode)
 - [Linux](https://github.com/blackberry/GamePlay/wiki/Linux-Setup) (using CMake)
+- [BlackBerry](https://github.com/blackberry/GamePlay/wiki/BlackBerry-Setup) (using BlackBerry Native SDK)
+- [Apple iOS](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode)
+- [Google Android](https://github.com/blackberry/GamePlay/wiki/Android-NDK-Setup) (using Google Android NDK)
 
 ## Roadmap for 'next' branch
 - [backlog](https://github.com/blackberry/GamePlay/issues?milestone=7)
