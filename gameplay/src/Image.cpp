@@ -137,9 +137,8 @@ Image* Image::create(unsigned int width, unsigned int height, Image::Format form
 	return image;
 }
 
-Image::Image()
+Image::Image() : _data(NULL), _format(RGB), _width(0), _height(0)
 {
-    // Unused
 }
 
 Image::~Image()

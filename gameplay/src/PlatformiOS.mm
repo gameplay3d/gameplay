@@ -1417,7 +1417,7 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     [__appDelegate getAccelerometerPitch:pitch roll:roll];
 }
 
-void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
     float x, y, z;
     [__appDelegate getRawAccelX:&x Y:&y Z:&z];

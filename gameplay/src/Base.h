@@ -281,13 +281,28 @@ typedef GLuint FrameBufferHandle;
 typedef GLuint RenderBufferHandle;
 
 /** Gamepad handle definitions vary by platform. */
-#if defined(__QNX__) && defined(USE_BLACKBERRY_GAMEPAD)
+#if defined(__QNX__) && defined(GP_USE_GAMEPAD)
     typedef screen_device_t GamepadHandle;
-#elif defined(USE_XINPUT)
+#elif defined(WIN32)
     typedef unsigned long GamepadHandle;
 #else
     typedef unsigned int GamepadHandle;
 #endif
+
+#if defined(__QNX__) && defined(GP_USE_SOCIAL)
+    typedef void* SocialPlayerHandle;
+    typedef void* SocialAchievementHandle;
+    typedef void* SocialScoreHandle;
+#elif defined(WIN32)
+    typedef unsigned long SocialPlayerHandle;
+    typedef unsigned long SocialAchievementHandle;
+    typedef unsigned long SocialScoreHandle;
+#else
+    typedef unsigned int SocialPlayerHandle;
+    typedef unsigned int SocialAchievementHandle;
+    typedef unsigned int SocialScoreHandle;
+#endif
+
 }
 
 /**
