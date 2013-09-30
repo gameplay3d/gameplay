@@ -70,7 +70,7 @@ void VerticalLayout::update(const Container* container, const Vector2& offset)
 
         yPosition += margin.top;
 
-        control->setPosition(margin.left, yPosition);
+        control->setPosition(bounds.left() + margin.left, yPosition);
         control->update(container, offset);
 
         yPosition += bounds.height + margin.bottom;
