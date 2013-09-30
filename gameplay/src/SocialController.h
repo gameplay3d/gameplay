@@ -21,9 +21,9 @@ namespace gameplay
          provider = Scoreloop
          id  = d346c484-12aa-49a2-a0a0-de2f87492d72
          secret = aAa+DehBfyGO/CYaE3nWomgu7SIbWFczUih+Qwf3/n7u0y3nyq5Hag==
-         version = "1.0"
-         language = "en"
-         currency = "ASC"
+         version = 1.0
+         language = en
+         currency = ASC
          leaderboard_mappings
          {
              // Format: leaderboardId = provider value
@@ -47,6 +47,11 @@ public:
      */
     void authenticate(SocialSessionListener* listener);
 
+    /**
+     * Handle the event from the event loop if needed.
+     */
+    bool handleEvent(void *event);
+
 private:
 
     /**
@@ -68,6 +73,16 @@ private:
      * Callback for when the controller is finalized.
      */
     void finalize();
+
+    /**
+     * Pauses the controller.
+     */
+    void pause();
+
+    /**
+     * Resumes the controller.
+     */
+    void resume();
 
     /**
      * Callback for when the controller receives a frame update event.

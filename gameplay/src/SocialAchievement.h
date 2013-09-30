@@ -13,9 +13,14 @@ class SocialAchievement
 public:
 
     /**
-     * The name/title of the achievement.
+     * The name of the achievement.
      */
     std::string name;
+
+    /**
+     * The title of the achievement.
+     */
+    std::string title;
 
     /**
      * The value of progress (0 to getTotal) representing the current unit value of completion.
