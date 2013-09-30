@@ -2,6 +2,7 @@
 #include "SocialController.h"
 #include "Game.h"
 #include "social/ScoreloopSocialSession.h"
+#include "social/GoogleGamesSocialSession.h"
 
 namespace gameplay
 {
@@ -21,25 +22,70 @@ void SocialController::initialize()
 
 void SocialController::finalize()
 {
+	if (_session)
+		_session->synchronizeAchievements();
+}
+
+void SocialController::pause()
+{
+	if (_session)
+		_session->synchronizeAchievements();
+}
+
+void SocialController::resume()
+{
 }
 
 void SocialController::update(float elapsedTime)
 {
 }
 
+bool SocialController::handleEvent(void *event)
+{
+	if (_session)
+		return _session->handleEvent(event);
+
+	return false;
+}
+
 void SocialController::authenticate(SocialSessionListener* listener)
 {
-#if defined(__QNX__) && defined(GP_USE_SOCIAL)
-    Properties* socialProperties = Game::getInstance()->getConfig()->getNamespace("social");
-    const char* providerStr = socialProperties->getString("provider");
-    if(strcmp(providerStr, "Scoreloop") == 0)
+#ifdef GP_USE_SOCIAL
+#if defined(__QNX__)
+    Properties* socialProperties = Game::getInstance()->getConfig()->getNamespace("social", true);
+    const char* providerStr = "";
+
+    if (socialProperties)
     {
-        ScoreloopSocialSession::authenticate(listener, socialProperties);
+    	providerStr = socialProperties->getString("provider");
+    }
+
+    if (strcmp(providerStr, "Scoreloop") == 0)
+    {
+        _session = ScoreloopSocialSession::authenticate(listener, socialProperties);
     }
     else
     {
         listener->authenticateEvent(SocialSessionListener::ERROR_INITIALIZATION, NULL);
     }
+#elif defined(__ANDROID__)
+    Properties* socialProperties = Game::getInstance()->getConfig()->getNamespace("social", true);
+    const char* providerStr = "";
+
+    if (socialProperties)
+    {
+    	providerStr = socialProperties->getString("provider");
+    }
+
+    if (strcmp(providerStr, "GoogleGames") == 0)
+    {
+        _session = GoogleGamesSocialSession::authenticate(listener, socialProperties);
+    }
+    else
+    {
+        listener->authenticateEvent(SocialSessionListener::ERROR_INITIALIZATION, NULL);
+    }
+#endif
 #endif
 }
 

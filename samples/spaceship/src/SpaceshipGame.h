@@ -8,7 +8,7 @@ using namespace gameplay;
 /**
  * Spaceship game.
  */
-class SpaceshipGame : public Game
+class SpaceshipGame : public Game, public SocialSessionListener, public Control::Listener
 {
 public:
 
@@ -43,7 +43,7 @@ protected:
      * @see Game::finalize
      */
     void finalize();
-    
+
     /**
      * @see Game::update
      */
@@ -53,6 +53,82 @@ protected:
      * @see Game::render
      */
     void render(float elapsedTime);
+
+
+    /**
+     * @see SocialSessionListener::authenticateEvent
+     */
+    void authenticateEvent(ResponseCode code, SocialSession* session);
+
+    /**
+     * @see SocialSessionListener::loadFriendsEvent
+     */
+    void loadFriendsEvent(ResponseCode code, std::vector<SocialPlayer> friends);
+
+    /**
+     * @see SocialSessionListener::loadAchievementsEvent
+     */
+    void loadAchievementsEvent(ResponseCode code, std::vector<SocialAchievement> achievements);
+
+    /**
+     * @see SocialSessionListener::submitAchievementEvent
+     */
+    void synchronizeAchievementEvent(ResponseCode code);
+
+    /**
+     * @see SocialSessionListener::sumbitAchievementEvent
+     */
+    void submitAchievementEvent(ResponseCode code);
+
+    /**
+     * @see SocialSessionListener::awardAchievedEvent
+     */
+    void awardAchievedEvent(ResponseCode code, const SocialAchievement &achievement);
+
+    /**
+     * @see SocialSessionListener::loadScoresEvent
+     */
+    void loadScoresEvent(ResponseCode code, std::vector<SocialScore> scores);
+
+    /**
+     * @see SocialSessionListener::submitScoreEvent
+     */
+    void submitScoreEvent(ResponseCode code);
+
+    /**
+     * @see SocialSessionListener::submitChallengeEvent
+     */
+    void submitChallengeEvent(ResponseCode code, const SocialChallenge &challenge);
+
+    /**
+     * @see SocialSessionListener::startChallengeEvent
+     */
+    void startChallengeEvent(ResponseCode code, const SocialChallenge &challenge);
+
+    /**
+      * @see SocialSessionListener::replyToChallengeEvent
+      */
+    void replyToChallengeEvent(ResponseCode code);
+
+    /**
+     * @see SocialSessionListener::loadChallengesEvent
+     */
+    void loadChallengesEvent(ResponseCode code);
+
+    /**
+     * @see SocialSessionListener::loadChallengesEvent
+     */
+    void loadChallengesEvent(ResponseCode code, std::vector<SocialChallenge> challenges);
+
+    /**
+     * @see SocialSessionListener::loadSavedDataEvent
+     */
+    void loadSavedDataEvent(ResponseCode code, std::string data);
+
+    /**
+     * @see SocialSessionListener::submitSavedDataEvent
+     */
+    void submitSavedDataEvent(ResponseCode code);
 
 private:
 
@@ -104,6 +180,29 @@ private:
      */
     void drawText();
 
+    /**
+     * Posts score.
+     */
+    void postScore(double result);
+
+    /**
+     * Update the achievements.
+     */
+    void updateAchievements(double time);
+
+    /**
+     * @see ControlListener::controlEvent
+     */
+    void controlEvent(Control* control, EventType evt);
+
+    const SocialPlayer *getPlayer(const char *name) const;
+
+    const SocialChallenge *getChallenge(const char *date) const;
+
+    void buildFriendsChooser();
+
+    void buildChallengeChooser();
+
     // Scene variables
     Scene* _scene;
     Node* _cameraNode;
@@ -131,7 +230,7 @@ private:
     double _finishedTime;
     bool _pushing;
     Vector2 _pushPoint;
-    
+
     // Game time in seconds
     float _time;
 
@@ -142,6 +241,22 @@ private:
     // Sounds
     AudioSource* _backgroundSound;
     AudioSource* _spaceshipSound;
+
+    // Social
+    SocialSession* _socialSession;
+    const SocialChallenge* _currentChallenge;
+    const SocialPlayer* _challengedPlayer;
+    std::vector<SocialPlayer> _friends;
+    std::vector<SocialChallenge> _challenges;
+    bool _hitSomething;
+    bool _creatingChallenge;
+    bool _hasAcceptedChallenge;
+
+    // End-game Menu
+    Form* _menu;
+    Form* _challengeForm;
+    Container* _friendsContainer;
+    Container* _challengeContainer;
 
 };
 
