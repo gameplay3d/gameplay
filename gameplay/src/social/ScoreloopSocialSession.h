@@ -57,7 +57,7 @@ public:
      * @param listener The listener for responses for this session
      * @param properties The properties to initialize this session with for this game.
      */
-    static void authenicate(SocialSessionListener* listener, Properties* properties);
+    static void authenticate(SocialSessionListener* listener, Properties* properties);
 
     /**
      * @see SocialSession::getUser

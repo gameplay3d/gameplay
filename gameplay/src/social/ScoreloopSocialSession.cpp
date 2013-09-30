@@ -59,7 +59,7 @@ void* ScoreloopSocialSession::platformEventCallback(void* data)
     return 0;
 }
 
-void ScoreloopSocialSession::authenicate(SocialSessionListener* listener, Properties* properties)
+void ScoreloopSocialSession::authenticate(SocialSessionListener* listener, Properties* properties)
 {
     if (_session)
         return;

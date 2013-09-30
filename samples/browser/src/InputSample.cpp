@@ -93,7 +93,7 @@ void InputSample::update(float elapsedTime)
     if (hasAccelerometer())
     {
         Vector3 accelRaw, gyroRaw;
-        getRawSensorValues(&accelRaw.x, &accelRaw.y, &accelRaw.z, &gyroRaw.x, &gyroRaw.y, &gyroRaw.z);
+        getSensorValues(&accelRaw.x, &accelRaw.y, &accelRaw.z, &gyroRaw.x, &gyroRaw.y, &gyroRaw.z);
 
         // Adjust for landscape mode
         float temp = accelRaw.x;

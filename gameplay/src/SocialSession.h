@@ -50,7 +50,7 @@ public:
     /**
      * Asynchronously request the scores for the count where the player is in the middle.
      *
-     * @param leaderboardId The leaderboard to get populated witth the scores.
+     * @param leaderboardId The leaderboard to get populated with the scores.
      * @param community The community scope to filter the search list.
      * @param time The time scope to filter teh search list.
      * @param player The player to narrow the search around.
@@ -61,7 +61,7 @@ public:
     /**
      * Asynchronously request the scores for a specified leaderboard for this game.
      *
-     * @param leaderboardId The leaderboard to get populated witth the scores.
+     * @param leaderboardId The leaderboard to get populated with the scores.
      */
     virtual void loadScores(const char* leaderboardId, CommunityScope community, TimeScope time, unsigned int start, unsigned int count) = 0;
 
