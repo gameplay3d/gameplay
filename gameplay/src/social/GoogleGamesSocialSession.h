@@ -1,27 +1,23 @@
-#if defined(__QNX__) && defined(GP_USE_SOCIAL)
+#if defined(__ANDROID__) && defined(GP_USE_SOCIAL)
 
-#ifndef SCORELOOPSOCIALSESSION_H_
-#define SCORELOOPSOCIALSESSION_H_
+#ifndef GOOGLEGAMESSOCIALSESSION_H_
+#define GOOGLEGAMESSOCIALSESSION_H_
 
 #include "SocialSession.h"
-#include <scoreloop/sc_client.h>
-#include <scoreloop/scui_client.h>
-#include <scoreloop/sc_init.h>
-#include <pthread.h>
 
 namespace gameplay
 {
 
 /**
- * Scoreloop implementation of SocialSession
+ * Google Games implementation of SocialSession
  *
  * Note: ensure game.config has the following properties
  *
   @verbatim
     social
     {
-         provider = Scoreloop
-         id  = d346c484-12aa-49a2-a0a0-de2f87492d72
+         provider = GoogleGames
+         id = d346c484-12aa-49a2-a0a0-de2f87492d72
          secret = aAa+DehBfyGO/CYaE3nWomgu7SIbWFczUih+Qwf3/n7u0y3nyq5Hag==
          version = 1.0
          language = en
@@ -41,7 +37,7 @@ namespace gameplay
  *
  * @script{ignore}
  */
-class ScoreloopSocialSession : public SocialSession
+class GoogleGamesSocialSession : public SocialSession
 {
     friend class SocialController;
 
@@ -138,23 +134,21 @@ public:
 
     void displayChallengeSubmit(const SocialChallenge *challenge, float score);
 
-protected:
 
-    bool handleEvent(void *event);
+protected:
 
 private:
 
     /**
      * Contructor
      */
-    ScoreloopSocialSession();
+    GoogleGamesSocialSession();
 
     /**
      * Destructor
      */
-    virtual ~ScoreloopSocialSession();
-
-    static void* platformEventCallback(void* data);
+    virtual ~GoogleGamesSocialSession();
+#if 0
 
     static void userCallback(void* cookie, unsigned int result);
 
@@ -166,14 +160,6 @@ private:
 
     static void submitAchievementCallback(void* cookie, SC_Error_t result);
 
-    static void submitChallengeCallback(void *cookie, SC_Error_t result);
-
-    static void replyToChallengeCallback(void *cookie, SC_Error_t result);
-
-    static void submittedChallengeScoreCallback(void *cookie, SC_Error_t result);
-
-    static void loadChallengesCallback(void *cookie, SC_Error_t result);
-
     static void loadScoresCallback(void* cookie, SC_Error_t result);
 
     static void submitScoreCallback(void* cookie, SC_Error_t result);
@@ -181,8 +167,8 @@ private:
     const SocialAchievement* getAchievement(const char* achievementId) const;
 
     SocialChallenge &addChallenge(SC_Challenge_h challenge);
-
-    static ScoreloopSocialSession* _session;
+#endif
+    static GoogleGamesSocialSession* _session;
 
     enum UserOp
     {
@@ -198,30 +184,14 @@ private:
     bool _pendingScoresResponse;
     bool _pendingSubmitScoreResponse;
     bool _pendingAchievementResponse;
-    bool _pendingChallengeResponse;
-    bool _pendingChallengesResponse;
     bool _pendingDataResponse;
-    SC_InitData_t _initData;
-    SC_Client_h _client;
-    SCUI_Client_h _uiClient;
-    SC_UserController_h _userController;
-    SC_UsersController_h _usersController;
-    SC_LocalAchievementsController_h _localAchievementsController;
-    SC_ScoresController_h _scoresController;
-    SC_ScoreController_h _scoreController;
-    SC_ChallengeController_h _challengeController;
-    SC_ChallengesController_h _challengesController;
-    pthread_cond_t _channelCond;
-    pthread_mutex_t _channelMutex;
     const char* _key;
     std::string _data;
     SocialPlayer _user;
-    const SocialChallenge* _acceptedChallenge;
     UserOp _userOp;
     std::vector<SocialPlayer> _friends;
     std::vector<SocialAchievement> _achievements;
     std::vector<SocialScore> _scores;
-    std::vector<SocialChallenge> _challenges;
 };
 
 }
