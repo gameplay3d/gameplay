@@ -11,7 +11,7 @@ namespace gameplay
 /**
  * Defines a class for controlling various back-end support for social capabilities.
  *
- * Back-end social providers include Friends, Leaderboards, Acheivements and Multiplayer.
+ * Back-end social providers include Friends, Leaderboards, Achievements and Multiplayer.
  * Social back-ends supported are Scoreloop, GameCenter and Google Play Game Services and Facebook.
  * Configuration for these are specified in game.config:
 
@@ -41,7 +41,7 @@ class SocialController
 public:
 
     /**
-     * Asyncrhonously authenicates a new user session.
+     * Asyncrhonously authenticates a new user session.
      *
      * @param listener The listener
      */
