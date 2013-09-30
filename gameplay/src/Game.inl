@@ -63,6 +63,11 @@ inline AIController* Game::getAIController() const
     return _aiController;
 }
 
+inline SocialController* Game::getSocialController() const
+{
+    return _socialController;
+}
+
 template <class T>
 void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
 {
