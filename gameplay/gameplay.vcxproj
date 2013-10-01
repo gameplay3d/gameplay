@@ -323,6 +323,7 @@
     <ClCompile Include="src\SocialController.cpp" />
     <ClCompile Include="src\SocialPlayer.cpp" />
     <ClCompile Include="src\SocialScore.cpp" />
+    <ClCompile Include="src\SocialSessionListener.cpp" />
     <ClCompile Include="src\social\GoogleGamesSocialSession.cpp" />
     <ClCompile Include="src\social\ScoreloopSocialSession.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
