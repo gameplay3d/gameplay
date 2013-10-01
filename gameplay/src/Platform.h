@@ -36,12 +36,11 @@ public:
      * Creates a platform for the specified game which it will interact with.
      *
      * @param game The game to create a platform for.
-     * @param attachToWindow The native window handle to optionally attach to.
      * 
      * @return The created platform interface.
      * @script{ignore}
      */
-    static Platform* create(Game* game, void* attachToWindow = NULL);
+    static Platform* create(Game* game);
 
     /**
      * Begins processing the platform messages.

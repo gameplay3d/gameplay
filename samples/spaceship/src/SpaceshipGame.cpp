@@ -726,7 +726,7 @@ void SpaceshipGame::updateAchievements(double time)
 
 const SocialPlayer *SpaceshipGame::getPlayer(const char *name) const
 {
-	for (uint i = 0; i < _friends.size(); i++)
+	for (unsigned int i = 0; i < _friends.size(); i++)
 	{
 		if (strcmp(_friends[i].name.data(), name) == 0)
 			return &_friends[i];
@@ -737,7 +737,7 @@ const SocialPlayer *SpaceshipGame::getPlayer(const char *name) const
 
 const SocialChallenge *SpaceshipGame::getChallenge(const char *date) const
 {
-	for (uint i = 0; i < _challenges.size(); i++)
+	for (unsigned int i = 0; i < _challenges.size(); i++)
 	{
 		if (strcmp(_challenges[i].dateTimeIssued.data(), date) == 0)
 			return &_challenges[i];
@@ -768,7 +768,7 @@ void SpaceshipGame::loadFriendsEvent(ResponseCode code, std::vector<SocialPlayer
 
 		buildFriendsChooser();
 
-		for (uint i = 0 ; i < _friends.size(); i++)
+		for (unsigned int i = 0 ; i < _friends.size(); i++)
 		{
 			fprintf(stderr, "Friend %d is %s\n", i, _friends[i].name.data());
 		}
@@ -785,7 +785,7 @@ void SpaceshipGame::loadAchievementsEvent(ResponseCode code, std::vector<SocialA
 {
 	if (code == SUCCESS)
 	{
-		for (uint i = 0 ; i < achievements.size(); i++)
+		for (unsigned int i = 0 ; i < achievements.size(); i++)
 		{
 			fprintf(stderr, "Achievement %d is %s\n", i, achievements[i].name.data());
 		}
@@ -882,9 +882,9 @@ void SpaceshipGame::loadChallengesEvent(ResponseCode code, std::vector<SocialCha
 
 		buildChallengeChooser();
 
-		for (uint i = 0 ; i < challenges.size(); i++)
+		for (unsigned int i = 0 ; i < challenges.size(); i++)
 		{
-			fprintf(stderr, "Challenge score %lf issued on %s by %s for %s\n", challenges[i].score, challenges[i].dateTimeIssued.data(), challenges[i].issuedPlayerName.data(), challenges[i].challengedPlayerName.data());
+			fprintf(stderr, "Challenge score %lf issued on %s by %s for %s\n", challenges[i].score, challenges[i].dateTimeIssued.c_str(), challenges[i].issuedPlayerName.c_str(), challenges[i].challengedPlayerName.c_str());
 		}
 	}
 	else
