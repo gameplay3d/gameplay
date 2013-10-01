@@ -194,6 +194,8 @@ set(GAMEPLAY_SRC
     src/ScriptTarget.h
     src/Slider.cpp
     src/Slider.h
+    src/SocialAchievement.cpp
+    src/SocialAchievement.h
     src/SocialChallenge.cpp
     src/SocialChallenge.h
     src/SocialController.cpp
