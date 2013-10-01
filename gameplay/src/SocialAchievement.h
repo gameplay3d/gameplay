@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 /**
- * Defines a class for typical social game activities running with an authenticated session.
+ * Defines a social achievement in a game.
  */
 class SocialAchievement
 {
