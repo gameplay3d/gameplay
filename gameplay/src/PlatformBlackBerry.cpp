@@ -690,7 +690,7 @@ Platform::~Platform()
     }
 }
 
-Platform* Platform::create(Game* game, void* attachToWindow)
+Platform* Platform::create(Game* game)
 {
     FileSystem::setResourcePath("./app/native/");
     Platform* platform = new Platform(game);
