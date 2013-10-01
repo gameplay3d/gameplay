@@ -11,9 +11,6 @@
       location = "group:samples/character/sample-character.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:samples/longboard/sample-longboard.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:samples/lua/sample-lua.xcodeproj">
    </FileRef>  
    <FileRef

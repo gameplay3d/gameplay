@@ -318,7 +318,12 @@
     <ClCompile Include="src\ScriptController.cpp" />
     <ClCompile Include="src\ScriptTarget.cpp" />
     <ClCompile Include="src\Slider.cpp" />
+    <ClCompile Include="src\SocialAchievement.cpp" />
+    <ClCompile Include="src\SocialChallenge.cpp" />
     <ClCompile Include="src\SocialController.cpp" />
+    <ClCompile Include="src\SocialPlayer.cpp" />
+    <ClCompile Include="src\SocialScore.cpp" />
+    <ClCompile Include="src\social\GoogleGamesSocialSession.cpp" />
     <ClCompile Include="src\social\ScoreloopSocialSession.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
@@ -602,12 +607,13 @@
     <ClInclude Include="src\ScriptTarget.h" />
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SocialAchievement.h" />
+    <ClInclude Include="src\SocialChallenge.h" />
     <ClInclude Include="src\SocialController.h" />
-    <ClInclude Include="src\SocialLeaderboard.h" />
     <ClInclude Include="src\SocialPlayer.h" />
     <ClInclude Include="src\SocialScore.h" />
     <ClInclude Include="src\SocialSession.h" />
     <ClInclude Include="src\SocialSessionListener.h" />
+    <ClInclude Include="src\social\GoogleGamesSocialSession.h" />
     <ClInclude Include="src\social\ScoreloopSocialSession.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Stream.h" />
