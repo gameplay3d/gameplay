@@ -1,4 +1,4 @@
-## gameplay v1.8.0
+## GamePlay3D  v2.0.0
 
 GamePlay3D is an open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
 
