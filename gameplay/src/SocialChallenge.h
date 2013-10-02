@@ -12,6 +12,9 @@ class SocialChallenge
 
 public:
 
+	/**
+	 * The challenge state.
+	 */
     enum State
     {
         PENDING,
@@ -21,12 +24,12 @@ public:
     };
 
     /**
-     * The name of the achievement.
+     * The name of the challenge.
      */
     std::string name;
 
     /**
-     * The title of the achievement.
+     * The title of the challenge.
      */
     std::string title;
 
@@ -40,8 +43,14 @@ public:
      */
     std::string challengedPlayerName;
 
+    /**
+     * The state of the challenge.
+     */
     State state;
 
+    /**
+     * The score for the challenge.
+     */
     float score;
 
     /**
@@ -50,12 +59,12 @@ public:
     std::string dateTimeIssued;
 
     /**
-     * The date/time the achievement was achieved. (UTC string format "2013-06-27T07:40::05")
+     * The date/time the challenge was completed. (UTC string format "2013-06-27T07:40::05")
      */
-    std::string dateTimeAchieved;
+    std::string dateTimeCompleted;
 
     /**
-     * The provider handle for an achievement.
+     * The provider handle for an challenge.
      */
     SocialChallengeHandle handle;
 
