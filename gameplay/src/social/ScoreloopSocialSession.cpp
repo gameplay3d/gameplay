@@ -417,15 +417,7 @@ void ScoreloopSocialSession::loadAchievementsCallback(void* cookie, SC_Error_t r
 					achievement.dateTimeAchieved = (dateTime) ? SC_String_GetData(dateTime) : "";
 					achievement.total = SC_Award_GetAchievingValue(award);
 					achievement.percentCompleted = achievement.value == 0 ? 0.0f : ((float)achievement.value / (float)achievement.total) * 100.f;
-#if 0
-					fprintf(stderr, "achievement %s\n", achievement.name.data());
-					fprintf(stderr, "isachieved %d\n", SC_Achievement_IsAchieved((SC_Achievement_h)achievement.handle));
-						fprintf(stderr, "value %d\n", SC_Achievement_GetValue((SC_Achievement_h)achievement.handle));
-						fprintf(stderr, "title %s\n", SC_String_GetData(SC_Award_GetLocalizedTitle(award)));
-						fprintf(stderr, "desc %s\n", SC_String_GetData(SC_Award_GetLocalizedDescription(award)));
-						fprintf(stderr, "money %d\n", SC_Money_GetAmount(SC_Award_GetRewardedMoney(award)));
-						fprintf(stderr, "image name %s\n", SC_String_GetData(SC_Achievement_GetImageName((SC_Achievement_h)achievement.handle)));
-#endif
+
 					session->_achievements.push_back(achievement);
 				}
 				session->getListener()->loadAchievementsEvent(SocialSessionListener::SUCCESS, _session->_achievements);
@@ -559,8 +551,6 @@ void ScoreloopSocialSession::submitAchievementCallback(void* cookie, SC_Error_t 
 {
     ScoreloopSocialSession* session = (ScoreloopSocialSession*)cookie;
 
-    fprintf(stderr, "submitAchievementCallback is called here\n");
-
     switch (result)
     {
 		case SC_OK:
@@ -601,7 +591,7 @@ void ScoreloopSocialSession::loadScores(const char* leaderboardId, CommunityScop
         }
     }
 
-    // Lookup the mode to be mapped for the specified leaderboard id
+    // Lookup the mode to be mapped for the specified leader board id
     if (leaderboardId != NULL)
     {
         Properties* leaderboardMappings = _properties->getNamespace("leaderboard_mappings", false);
@@ -1164,8 +1154,6 @@ SocialChallenge &ScoreloopSocialSession::addChallenge(SC_Challenge_h scoreloopCh
 
 	challenge.handle = scoreloopChallenge;
 
-fprintf(stderr, "challenge handle is %x\n", challenge.handle);
-
 	SC_User_h user = SC_Challenge_GetContestant((SC_Challenge_h)challenge.handle);
 	SC_String_h playerStr = (user) ? SC_User_GetLogin(user) : NULL;
 	challenge.challengedPlayerName = (playerStr) ? SC_String_GetData(playerStr) : "";
@@ -1189,9 +1177,6 @@ fprintf(stderr, "challenge handle is %x\n", challenge.handle);
 		challenge.state = SocialChallenge::PENDING;
 	else
 		challenge.state = SocialChallenge::INVALID;
-
-	fprintf(stderr, "%s challenged player %s on %s\n", challenge.issuedPlayerName.data(), challenge.challengedPlayerName.data(), challenge.dateTimeIssued.data());
-	fprintf(stderr, "score to beat is %lf current state is %d\n", challenge.score, challenge.state);
 
     _challenges.push_back(challenge);
 
@@ -1385,7 +1370,7 @@ void ScoreloopSocialSession::displayChallengeSubmit(const SocialChallenge *chall
     	fprintf(stderr, "Can't set money format\n");
         return;
     }
-fprintf(stderr, "just before setting the score\n");
+    fprintf(stderr, "just before setting the score\n");
 	SC_Score_h sc_score;
 	rc = SC_Client_CreateScore(_client, &sc_score);
 	if (rc != SC_OK)
@@ -1397,7 +1382,6 @@ fprintf(stderr, "just before setting the score\n");
 	int mode = 0;
 	SC_Score_SetMode(sc_score, (unsigned int)mode);
 	SC_Score_SetResult(sc_score, score);
-fprintf(stderr, "challenge is %x handle is %x challenge1 is %x\n", challenge, (SC_Challenge_h)challenge->handle, challenge1);
     rc = SCUI_Client_ShowChallengeSubmitView(_uiClient, (SC_Challenge_h)challenge->handle, sc_score);
     if (rc != SC_OK)
     {
