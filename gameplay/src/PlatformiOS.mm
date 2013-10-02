@@ -863,6 +863,11 @@ int getUnicode(int key);
     return YES;
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 - (void)getAccelerometerPitch:(float*)pitch roll:(float*)roll 
 {
     float p = 0.0f;
@@ -1336,7 +1341,7 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game, void* attachToWindow)
+Platform* Platform::create(Game* game)
 {
     Platform* platform = new Platform(game);
     return platform;

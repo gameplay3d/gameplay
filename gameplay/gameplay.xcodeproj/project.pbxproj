@@ -54,6 +54,32 @@
 		42554EA2152BC35C000ED910 /* PhysicsCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */; };
 		42554EA3152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42554EA4152BC35C000ED910 /* PhysicsCollisionShape.h in Headers */ = {isa = PBXBuildFile; fileRef = 42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		425EDA5D17FB260500AABF95 /* SocialAchievement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5017FB260500AABF95 /* SocialAchievement.cpp */; };
+		425EDA5E17FB260500AABF95 /* SocialAchievement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5017FB260500AABF95 /* SocialAchievement.cpp */; };
+		425EDA5F17FB260500AABF95 /* SocialAchievement.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5117FB260500AABF95 /* SocialAchievement.h */; };
+		425EDA6017FB260500AABF95 /* SocialAchievement.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5117FB260500AABF95 /* SocialAchievement.h */; };
+		425EDA6117FB260500AABF95 /* SocialChallenge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5217FB260500AABF95 /* SocialChallenge.cpp */; };
+		425EDA6217FB260500AABF95 /* SocialChallenge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5217FB260500AABF95 /* SocialChallenge.cpp */; };
+		425EDA6317FB260500AABF95 /* SocialChallenge.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5317FB260500AABF95 /* SocialChallenge.h */; };
+		425EDA6417FB260500AABF95 /* SocialChallenge.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5317FB260500AABF95 /* SocialChallenge.h */; };
+		425EDA6517FB260500AABF95 /* SocialController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5417FB260500AABF95 /* SocialController.cpp */; };
+		425EDA6617FB260500AABF95 /* SocialController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5417FB260500AABF95 /* SocialController.cpp */; };
+		425EDA6717FB260500AABF95 /* SocialController.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5517FB260500AABF95 /* SocialController.h */; };
+		425EDA6817FB260500AABF95 /* SocialController.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5517FB260500AABF95 /* SocialController.h */; };
+		425EDA6917FB260500AABF95 /* SocialPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5617FB260500AABF95 /* SocialPlayer.cpp */; };
+		425EDA6A17FB260500AABF95 /* SocialPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5617FB260500AABF95 /* SocialPlayer.cpp */; };
+		425EDA6B17FB260500AABF95 /* SocialPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5717FB260500AABF95 /* SocialPlayer.h */; };
+		425EDA6C17FB260500AABF95 /* SocialPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5717FB260500AABF95 /* SocialPlayer.h */; };
+		425EDA6D17FB260500AABF95 /* SocialScore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5817FB260500AABF95 /* SocialScore.cpp */; };
+		425EDA6E17FB260500AABF95 /* SocialScore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5817FB260500AABF95 /* SocialScore.cpp */; };
+		425EDA6F17FB260500AABF95 /* SocialScore.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5917FB260500AABF95 /* SocialScore.h */; };
+		425EDA7017FB260500AABF95 /* SocialScore.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5917FB260500AABF95 /* SocialScore.h */; };
+		425EDA7117FB260500AABF95 /* SocialSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5A17FB260500AABF95 /* SocialSession.h */; };
+		425EDA7217FB260500AABF95 /* SocialSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5A17FB260500AABF95 /* SocialSession.h */; };
+		425EDA7317FB260500AABF95 /* SocialSessionListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5B17FB260500AABF95 /* SocialSessionListener.cpp */; };
+		425EDA7417FB260500AABF95 /* SocialSessionListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425EDA5B17FB260500AABF95 /* SocialSessionListener.cpp */; };
+		425EDA7517FB260500AABF95 /* SocialSessionListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5C17FB260500AABF95 /* SocialSessionListener.h */; };
+		425EDA7617FB260500AABF95 /* SocialSessionListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 425EDA5C17FB260500AABF95 /* SocialSessionListener.h */; };
 		426878AC153F4BB300844500 /* FlowLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426878AA153F4BB300844500 /* FlowLayout.cpp */; };
 		426878AD153F4BB300844500 /* FlowLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426878AA153F4BB300844500 /* FlowLayout.cpp */; };
 		426878AE153F4BB300844500 /* FlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 426878AB153F4BB300844500 /* FlowLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1215,6 +1241,19 @@
 		4251B130152D049B002F6199 /* ThemeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThemeStyle.h; path = src/ThemeStyle.h; sourceTree = SOURCE_ROOT; };
 		42554E9F152BC35C000ED910 /* PhysicsCollisionShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCollisionShape.cpp; path = src/PhysicsCollisionShape.cpp; sourceTree = SOURCE_ROOT; };
 		42554EA0152BC35C000ED910 /* PhysicsCollisionShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCollisionShape.h; path = src/PhysicsCollisionShape.h; sourceTree = SOURCE_ROOT; };
+		425EDA5017FB260500AABF95 /* SocialAchievement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocialAchievement.cpp; path = src/SocialAchievement.cpp; sourceTree = SOURCE_ROOT; };
+		425EDA5117FB260500AABF95 /* SocialAchievement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocialAchievement.h; path = src/SocialAchievement.h; sourceTree = SOURCE_ROOT; };
+		425EDA5217FB260500AABF95 /* SocialChallenge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocialChallenge.cpp; path = src/SocialChallenge.cpp; sourceTree = SOURCE_ROOT; };
+		425EDA5317FB260500AABF95 /* SocialChallenge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocialChallenge.h; path = src/SocialChallenge.h; sourceTree = SOURCE_ROOT; };
+		425EDA5417FB260500AABF95 /* SocialController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocialController.cpp; path = src/SocialController.cpp; sourceTree = SOURCE_ROOT; };
+		425EDA5517FB260500AABF95 /* SocialController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocialController.h; path = src/SocialController.h; sourceTree = SOURCE_ROOT; };
+		425EDA5617FB260500AABF95 /* SocialPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocialPlayer.cpp; path = src/SocialPlayer.cpp; sourceTree = SOURCE_ROOT; };
+		425EDA5717FB260500AABF95 /* SocialPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocialPlayer.h; path = src/SocialPlayer.h; sourceTree = SOURCE_ROOT; };
+		425EDA5817FB260500AABF95 /* SocialScore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocialScore.cpp; path = src/SocialScore.cpp; sourceTree = SOURCE_ROOT; };
+		425EDA5917FB260500AABF95 /* SocialScore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocialScore.h; path = src/SocialScore.h; sourceTree = SOURCE_ROOT; };
+		425EDA5A17FB260500AABF95 /* SocialSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocialSession.h; path = src/SocialSession.h; sourceTree = SOURCE_ROOT; };
+		425EDA5B17FB260500AABF95 /* SocialSessionListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocialSessionListener.cpp; path = src/SocialSessionListener.cpp; sourceTree = SOURCE_ROOT; };
+		425EDA5C17FB260500AABF95 /* SocialSessionListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocialSessionListener.h; path = src/SocialSessionListener.h; sourceTree = SOURCE_ROOT; };
 		426878AA153F4BB300844500 /* FlowLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlowLayout.cpp; path = src/FlowLayout.cpp; sourceTree = SOURCE_ROOT; };
 		426878AB153F4BB300844500 /* FlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowLayout.h; path = src/FlowLayout.h; sourceTree = SOURCE_ROOT; };
 		4271C08D15337C8200B89DA7 /* Layout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Layout.cpp; path = src/Layout.cpp; sourceTree = SOURCE_ROOT; };
@@ -1237,7 +1276,7 @@
 		42A5031B16E8F0B800F0246C /* lua_TerrainListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_TerrainListener.cpp; sourceTree = "<group>"; };
 		42A5031C16E8F0B800F0246C /* lua_TerrainListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_TerrainListener.h; sourceTree = "<group>"; };
 		42B701F615B08177002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
-		42B701F815B081B6002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/ios/armv7/liblua.a"; sourceTree = "<group>"; };
+		42B701F815B081B6002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/ios/armv7s/liblua.a"; sourceTree = "<group>"; };
 		42B7FADD15B08049002BB8C3 /* ScreenDisplayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScreenDisplayer.cpp; path = src/ScreenDisplayer.cpp; sourceTree = SOURCE_ROOT; };
 		42B7FADE15B08049002BB8C3 /* ScriptController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScriptController.cpp; path = src/ScriptController.cpp; sourceTree = SOURCE_ROOT; };
 		42B7FADF15B08049002BB8C3 /* ScriptController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScriptController.h; path = src/ScriptController.h; sourceTree = SOURCE_ROOT; };
@@ -1708,12 +1747,12 @@
 		5B2BC75E1512514500D176CD /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B2BC7611512514D00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5B2BC7631512516B00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		5B5DB92D14C25B7B007755DB /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/ios/i386/libbullet.a"; sourceTree = "<group>"; };
-		5B5DB92F14C25B94007755DB /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/ios/armv7/libpng.a"; sourceTree = "<group>"; };
-		5B5DB93114C25BA5007755DB /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libogg.a"; sourceTree = "<group>"; };
-		5B5DB93214C25BA5007755DB /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbis.a"; sourceTree = "<group>"; };
-		5B5DB93314C25BA5007755DB /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisenc.a"; sourceTree = "<group>"; };
-		5B5DB93414C25BA5007755DB /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisfile.a"; sourceTree = "<group>"; };
+		5B5DB92D14C25B7B007755DB /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/ios/armv7s/libbullet.a"; sourceTree = "<group>"; };
+		5B5DB92F14C25B94007755DB /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/ios/armv7s/libpng.a"; sourceTree = "<group>"; };
+		5B5DB93114C25BA5007755DB /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/oggvorbis/lib/ios/armv7s/libogg.a"; sourceTree = "<group>"; };
+		5B5DB93214C25BA5007755DB /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/ios/armv7s/libvorbis.a"; sourceTree = "<group>"; };
+		5B5DB93314C25BA5007755DB /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../external-deps/oggvorbis/lib/ios/armv7s/libvorbisenc.a"; sourceTree = "<group>"; };
+		5B5DB93414C25BA5007755DB /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../external-deps/oggvorbis/lib/ios/armv7s/libvorbisfile.a"; sourceTree = "<group>"; };
 		5BB0823C14C6FEC40019975F /* Mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mouse.h; path = src/Mouse.h; sourceTree = SOURCE_ROOT; };
 		5BBAD0EF15F5251D004C9639 /* lua_Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Gesture.cpp; sourceTree = "<group>"; };
 		5BBAD0F015F5251D004C9639 /* lua_Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Gesture.h; sourceTree = "<group>"; };
@@ -2051,6 +2090,19 @@
 				421A233315B600E8004F97C3 /* ScriptTarget.h */,
 				5BD52646150F822A004C9099 /* Slider.cpp */,
 				5BD52647150F822A004C9099 /* Slider.h */,
+				425EDA5017FB260500AABF95 /* SocialAchievement.cpp */,
+				425EDA5117FB260500AABF95 /* SocialAchievement.h */,
+				425EDA5217FB260500AABF95 /* SocialChallenge.cpp */,
+				425EDA5317FB260500AABF95 /* SocialChallenge.h */,
+				425EDA5417FB260500AABF95 /* SocialController.cpp */,
+				425EDA5517FB260500AABF95 /* SocialController.h */,
+				425EDA5617FB260500AABF95 /* SocialPlayer.cpp */,
+				425EDA5717FB260500AABF95 /* SocialPlayer.h */,
+				425EDA5817FB260500AABF95 /* SocialScore.cpp */,
+				425EDA5917FB260500AABF95 /* SocialScore.h */,
+				425EDA5A17FB260500AABF95 /* SocialSession.h */,
+				425EDA5B17FB260500AABF95 /* SocialSessionListener.cpp */,
+				425EDA5C17FB260500AABF95 /* SocialSessionListener.h */,
 				42CD0E2F147D8FF50000361E /* SpriteBatch.cpp */,
 				42CD0E30147D8FF50000361E /* SpriteBatch.h */,
 				9FC6EE721665304F00F39955 /* Stream.h */,
@@ -2546,6 +2598,8 @@
 				42CD0E5A147D8FF60000361E /* BoundingBox.h in Headers */,
 				42CD0E5C147D8FF60000361E /* BoundingSphere.h in Headers */,
 				42CD0E5E147D8FF60000361E /* Camera.h in Headers */,
+				425EDA5F17FB260500AABF95 /* SocialAchievement.h in Headers */,
+				425EDA6F17FB260500AABF95 /* SocialScore.h in Headers */,
 				42CD0E60147D8FF60000361E /* Curve.h in Headers */,
 				42CD0E62147D8FF60000361E /* DebugNew.h in Headers */,
 				42CD0E64147D8FF60000361E /* DepthStencilTarget.h in Headers */,
@@ -2627,6 +2681,7 @@
 				4239DDF4157545C1005EA3F6 /* MathUtil.h in Headers */,
 				42F4B7D915994CED00B5A78D /* Gamepad.h in Headers */,
 				42B7FAE715B08049002BB8C3 /* ScriptController.h in Headers */,
+				425EDA6717FB260500AABF95 /* SocialController.h in Headers */,
 				42789FCE15B0E83700866F5B /* AIAgent.h in Headers */,
 				42789FD215B0E83700866F5B /* AIController.h in Headers */,
 				42789FD615B0E83700866F5B /* AIMessage.h in Headers */,
@@ -2639,6 +2694,7 @@
 				42BCD46615EFD0F300C0E076 /* lua_AIAgentListener.h in Headers */,
 				42BCD46A15EFD0F300C0E076 /* lua_AIController.h in Headers */,
 				42BCD46E15EFD0F300C0E076 /* lua_AIMessage.h in Headers */,
+				425EDA6B17FB260500AABF95 /* SocialPlayer.h in Headers */,
 				42BCD47215EFD0F300C0E076 /* lua_AIMessageParameterType.h in Headers */,
 				42BCD47615EFD0F300C0E076 /* lua_AIState.h in Headers */,
 				42BCD47A15EFD0F300C0E076 /* lua_AIStateListener.h in Headers */,
@@ -2657,7 +2713,9 @@
 				42BCD4AE15EFD0F300C0E076 /* lua_AudioSource.h in Headers */,
 				42BCD4B215EFD0F300C0E076 /* lua_AudioSourceState.h in Headers */,
 				42BCD4B615EFD0F300C0E076 /* lua_BoundingBox.h in Headers */,
+				425EDA7117FB260500AABF95 /* SocialSession.h in Headers */,
 				42BCD4BA15EFD0F300C0E076 /* lua_BoundingSphere.h in Headers */,
+				425EDA6317FB260500AABF95 /* SocialChallenge.h in Headers */,
 				42BCD4BE15EFD0F300C0E076 /* lua_Bundle.h in Headers */,
 				42BCD4C215EFD0F300C0E076 /* lua_Button.h in Headers */,
 				42BCD4C615EFD0F300C0E076 /* lua_Camera.h in Headers */,
@@ -2677,6 +2735,7 @@
 				42BCD4FE15EFD0F300C0E076 /* lua_Effect.h in Headers */,
 				42BCD50215EFD0F300C0E076 /* lua_FileSystem.h in Headers */,
 				42BCD50615EFD0F300C0E076 /* lua_FlowLayout.h in Headers */,
+				425EDA7517FB260500AABF95 /* SocialSessionListener.h in Headers */,
 				42BCD50A15EFD0F300C0E076 /* lua_Font.h in Headers */,
 				42BCD50E15EFD0F300C0E076 /* lua_FontJustify.h in Headers */,
 				42BCD51215EFD0F300C0E076 /* lua_FontStyle.h in Headers */,
@@ -2856,6 +2915,8 @@
 				5B04C58B14BFCFE100EB0071 /* BoundingBox.h in Headers */,
 				5B04C58C14BFCFE100EB0071 /* BoundingSphere.h in Headers */,
 				5B04C58D14BFCFE100EB0071 /* Camera.h in Headers */,
+				425EDA6017FB260500AABF95 /* SocialAchievement.h in Headers */,
+				425EDA7017FB260500AABF95 /* SocialScore.h in Headers */,
 				5B04C58E14BFCFE100EB0071 /* Curve.h in Headers */,
 				5B04C58F14BFCFE100EB0071 /* DebugNew.h in Headers */,
 				5B04C59014BFCFE100EB0071 /* DepthStencilTarget.h in Headers */,
@@ -2937,6 +2998,7 @@
 				42F4B7DA15994CED00B5A78D /* Gamepad.h in Headers */,
 				42B7FAE815B08049002BB8C3 /* ScriptController.h in Headers */,
 				42789FCF15B0E83700866F5B /* AIAgent.h in Headers */,
+				425EDA6817FB260500AABF95 /* SocialController.h in Headers */,
 				42789FD315B0E83700866F5B /* AIController.h in Headers */,
 				42789FD715B0E83700866F5B /* AIMessage.h in Headers */,
 				42789FDB15B0E83700866F5B /* AIState.h in Headers */,
@@ -2949,6 +3011,7 @@
 				42BCD46B15EFD0F300C0E076 /* lua_AIController.h in Headers */,
 				42BCD46F15EFD0F300C0E076 /* lua_AIMessage.h in Headers */,
 				42BCD47315EFD0F300C0E076 /* lua_AIMessageParameterType.h in Headers */,
+				425EDA6C17FB260500AABF95 /* SocialPlayer.h in Headers */,
 				42BCD47715EFD0F300C0E076 /* lua_AIState.h in Headers */,
 				42BCD47B15EFD0F300C0E076 /* lua_AIStateListener.h in Headers */,
 				42BCD47F15EFD0F300C0E076 /* lua_AIStateMachine.h in Headers */,
@@ -2967,7 +3030,9 @@
 				42BCD4B315EFD0F300C0E076 /* lua_AudioSourceState.h in Headers */,
 				42BCD4B715EFD0F300C0E076 /* lua_BoundingBox.h in Headers */,
 				42BCD4BB15EFD0F300C0E076 /* lua_BoundingSphere.h in Headers */,
+				425EDA7217FB260500AABF95 /* SocialSession.h in Headers */,
 				42BCD4BF15EFD0F300C0E076 /* lua_Bundle.h in Headers */,
+				425EDA6417FB260500AABF95 /* SocialChallenge.h in Headers */,
 				42BCD4C315EFD0F300C0E076 /* lua_Button.h in Headers */,
 				42BCD4C715EFD0F300C0E076 /* lua_Camera.h in Headers */,
 				42BCD4CB15EFD0F300C0E076 /* lua_CameraType.h in Headers */,
@@ -2987,6 +3052,7 @@
 				42BCD50315EFD0F300C0E076 /* lua_FileSystem.h in Headers */,
 				42BCD50715EFD0F300C0E076 /* lua_FlowLayout.h in Headers */,
 				42BCD50B15EFD0F300C0E076 /* lua_Font.h in Headers */,
+				425EDA7617FB260500AABF95 /* SocialSessionListener.h in Headers */,
 				42BCD50F15EFD0F300C0E076 /* lua_FontJustify.h in Headers */,
 				42BCD51315EFD0F300C0E076 /* lua_FontStyle.h in Headers */,
 				42BCD51715EFD0F300C0E076 /* lua_FontText.h in Headers */,
@@ -3284,6 +3350,7 @@
 				42CD0E91147D8FF60000361E /* PhysicsConstraint.cpp in Sources */,
 				42CD0E93147D8FF60000361E /* PhysicsController.cpp in Sources */,
 				42CD0E95147D8FF60000361E /* PhysicsFixedConstraint.cpp in Sources */,
+				425EDA5D17FB260500AABF95 /* SocialAchievement.cpp in Sources */,
 				42CD0E97147D8FF60000361E /* PhysicsGenericConstraint.cpp in Sources */,
 				42CD0E99147D8FF60000361E /* PhysicsHingeConstraint.cpp in Sources */,
 				42CD0E9D147D8FF60000361E /* PhysicsRigidBody.cpp in Sources */,
@@ -3311,6 +3378,7 @@
 				428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */,
 				4208DEE914A4079F00D3C511 /* Image.cpp in Sources */,
 				4201819014A41B18008C3F56 /* MeshBatch.cpp in Sources */,
+				425EDA6917FB260500AABF95 /* SocialPlayer.cpp in Sources */,
 				5BD5264F150F822A004C9099 /* AbsoluteLayout.cpp in Sources */,
 				5BD52651150F822A004C9099 /* Button.cpp in Sources */,
 				5BD52653150F822A004C9099 /* CheckBox.cpp in Sources */,
@@ -3365,6 +3433,7 @@
 				42BCD4B015EFD0F300C0E076 /* lua_AudioSourceState.cpp in Sources */,
 				42BCD4B415EFD0F300C0E076 /* lua_BoundingBox.cpp in Sources */,
 				42BCD4B815EFD0F300C0E076 /* lua_BoundingSphere.cpp in Sources */,
+				425EDA6D17FB260500AABF95 /* SocialScore.cpp in Sources */,
 				42BCD4BC15EFD0F300C0E076 /* lua_Bundle.cpp in Sources */,
 				42BCD4C015EFD0F300C0E076 /* lua_Button.cpp in Sources */,
 				42BCD4C415EFD0F300C0E076 /* lua_Camera.cpp in Sources */,
@@ -3395,6 +3464,7 @@
 				42BCD52815EFD0F300C0E076 /* lua_GameClearFlags.cpp in Sources */,
 				42BCD52C15EFD0F300C0E076 /* lua_Gamepad.cpp in Sources */,
 				42BCD53415EFD0F300C0E076 /* lua_GamepadGamepadEvent.cpp in Sources */,
+				425EDA6517FB260500AABF95 /* SocialController.cpp in Sources */,
 				42BCD53815EFD0F300C0E076 /* lua_GameState.cpp in Sources */,
 				42BCD53C15EFD0F300C0E076 /* lua_Global.cpp in Sources */,
 				42BCD54015EFD0F300C0E076 /* lua_Image.cpp in Sources */,
@@ -3491,6 +3561,7 @@
 				42BCD6AC15EFD0F300C0E076 /* lua_Uniform.cpp in Sources */,
 				42BCD6B015EFD0F300C0E076 /* lua_Vector2.cpp in Sources */,
 				42BCD6B415EFD0F300C0E076 /* lua_Vector3.cpp in Sources */,
+				425EDA6117FB260500AABF95 /* SocialChallenge.cpp in Sources */,
 				42BCD6B815EFD0F300C0E076 /* lua_Vector4.cpp in Sources */,
 				42BCD6BC15EFD0F300C0E076 /* lua_VertexAttributeBinding.cpp in Sources */,
 				42BCD6C015EFD0F300C0E076 /* lua_VertexFormat.cpp in Sources */,
@@ -3514,6 +3585,7 @@
 				B661731716A619D30083A307 /* lua_TerrainFlags.cpp in Sources */,
 				B661731F16A619FB0083A307 /* Terrain.cpp in Sources */,
 				B661732316A619FB0083A307 /* TerrainPatch.cpp in Sources */,
+				425EDA7317FB260500AABF95 /* SocialSessionListener.cpp in Sources */,
 				B661732916A61A140083A307 /* HeightField.cpp in Sources */,
 				B661732F16A61A4B0083A307 /* lua_RenderStateDepthFunction.cpp in Sources */,
 				B661733516A61B430083A307 /* lua_GamepadButtonMapping.cpp in Sources */,
@@ -3568,6 +3640,7 @@
 				5B04C55214BFCFE100EB0071 /* PhysicsConstraint.cpp in Sources */,
 				5B04C55314BFCFE100EB0071 /* PhysicsController.cpp in Sources */,
 				5B04C55414BFCFE100EB0071 /* PhysicsFixedConstraint.cpp in Sources */,
+				425EDA5E17FB260500AABF95 /* SocialAchievement.cpp in Sources */,
 				5B04C55514BFCFE100EB0071 /* PhysicsGenericConstraint.cpp in Sources */,
 				5B04C55614BFCFE100EB0071 /* PhysicsHingeConstraint.cpp in Sources */,
 				5B04C55814BFCFE100EB0071 /* PhysicsRigidBody.cpp in Sources */,
@@ -3595,6 +3668,7 @@
 				5B04C57214BFCFE100EB0071 /* Image.cpp in Sources */,
 				5B04C57314BFCFE100EB0071 /* MeshBatch.cpp in Sources */,
 				5B04C5CE14BFD48500EB0071 /* PlatformiOS.mm in Sources */,
+				425EDA6A17FB260500AABF95 /* SocialPlayer.cpp in Sources */,
 				5BD52670150F8258004C9099 /* PhysicsCharacter.cpp in Sources */,
 				5BD52674150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */,
 				5BC4E73F150F843D00CBE1C0 /* AbsoluteLayout.cpp in Sources */,
@@ -3649,6 +3723,7 @@
 				42BCD4B115EFD0F300C0E076 /* lua_AudioSourceState.cpp in Sources */,
 				42BCD4B515EFD0F300C0E076 /* lua_BoundingBox.cpp in Sources */,
 				42BCD4B915EFD0F300C0E076 /* lua_BoundingSphere.cpp in Sources */,
+				425EDA6E17FB260500AABF95 /* SocialScore.cpp in Sources */,
 				42BCD4BD15EFD0F300C0E076 /* lua_Bundle.cpp in Sources */,
 				42BCD4C115EFD0F300C0E076 /* lua_Button.cpp in Sources */,
 				42BCD4C515EFD0F300C0E076 /* lua_Camera.cpp in Sources */,
@@ -3679,6 +3754,7 @@
 				42BCD52915EFD0F300C0E076 /* lua_GameClearFlags.cpp in Sources */,
 				42BCD52D15EFD0F300C0E076 /* lua_Gamepad.cpp in Sources */,
 				42BCD53515EFD0F300C0E076 /* lua_GamepadGamepadEvent.cpp in Sources */,
+				425EDA6617FB260500AABF95 /* SocialController.cpp in Sources */,
 				42BCD53915EFD0F300C0E076 /* lua_GameState.cpp in Sources */,
 				42BCD53D15EFD0F300C0E076 /* lua_Global.cpp in Sources */,
 				42BCD54115EFD0F300C0E076 /* lua_Image.cpp in Sources */,
@@ -3775,6 +3851,7 @@
 				42BCD6AD15EFD0F300C0E076 /* lua_Uniform.cpp in Sources */,
 				42BCD6B115EFD0F300C0E076 /* lua_Vector2.cpp in Sources */,
 				42BCD6B515EFD0F300C0E076 /* lua_Vector3.cpp in Sources */,
+				425EDA6217FB260500AABF95 /* SocialChallenge.cpp in Sources */,
 				42BCD6B915EFD0F300C0E076 /* lua_Vector4.cpp in Sources */,
 				42BCD6BD15EFD0F300C0E076 /* lua_VertexAttributeBinding.cpp in Sources */,
 				42BCD6C115EFD0F300C0E076 /* lua_VertexFormat.cpp in Sources */,
@@ -3798,6 +3875,7 @@
 				B661731816A619D30083A307 /* lua_TerrainFlags.cpp in Sources */,
 				B661732016A619FB0083A307 /* Terrain.cpp in Sources */,
 				B661732416A619FB0083A307 /* TerrainPatch.cpp in Sources */,
+				425EDA7417FB260500AABF95 /* SocialSessionListener.cpp in Sources */,
 				B661732A16A61A140083A307 /* HeightField.cpp in Sources */,
 				B661733016A61A4B0083A307 /* lua_RenderStateDepthFunction.cpp in Sources */,
 				B661733616A61B430083A307 /* lua_GamepadButtonMapping.cpp in Sources */,
@@ -3821,7 +3899,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
-				VALID_ARCHS = "armv7 armv7s i386 x86_64";
+				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -3830,7 +3908,7 @@
 			buildSettings = {
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
-				VALID_ARCHS = "armv7 armv7s i386 x86_64";
+				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
 			name = Release;
 		};
@@ -3865,7 +3943,6 @@
 					"../external-deps/lua/include",
 					"../external-deps/libpng/include",
 					"../external-deps/oggvorbis/include",
-					./gameplay,
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
@@ -3905,7 +3982,6 @@
 					"../external-deps/lua/include",
 					"../external-deps/libpng/include",
 					"../external-deps/oggvorbis/include",
-					./gameplay,
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
@@ -3923,6 +3999,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_LOCATION = NO;
@@ -3961,7 +4039,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "armv7 armv7s i386";
+				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -3969,6 +4047,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -4004,7 +4084,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "armv7 armv7s i386";
+				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
 			};
 			name = Release;
 		};
