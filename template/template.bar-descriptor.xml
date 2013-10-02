@@ -62,7 +62,7 @@
         <image>icon.png</image>
     </icon>
 
-    <!-- The splash screen that will appear when your application is launching. Should be 1280x768. -->
+    <!-- The splash screen that will appear when your application is launching. Should be 1280x720. -->
     <!-- <splashscreen></splashscreen> -->
 
     <!-- The permissions requested by your application. -->
