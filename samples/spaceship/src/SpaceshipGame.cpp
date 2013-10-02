@@ -666,8 +666,9 @@ void SpaceshipGame::controlEvent(Control* control, EventType evt)
 					resetGame();
 				}
 			}
-
 			break;
+        default:
+            break;
     }
 }
 

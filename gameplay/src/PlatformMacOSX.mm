@@ -48,7 +48,6 @@ static bool __shiftDown = false;
 static char* __title = NULL;
 static bool __fullscreen = false;
 static bool __resizable = false;
-static void* __attachToWindow = NULL;
 static bool __mouseCaptured = false;
 static bool __mouseCapturedFirstPass = false;
 static CGPoint __mouseCapturePoint;
@@ -1623,9 +1622,8 @@ Platform::~Platform()
 }
 
     
-Platform* Platform::create(Game* game, void* attachToWindow)
+Platform* Platform::create(Game* game)
 {
-    __attachToWindow = attachToWindow;
     Platform* platform = new Platform(game);
     
     return platform;
