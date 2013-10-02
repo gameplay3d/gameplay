@@ -315,7 +315,7 @@ void RenderState::applyAutoBinding(const char* uniformName, const char* autoBind
         else
         {
             bound = false;
-            GP_WARN("Unsupported auto binding type (%d).", autoBinding);
+            GP_WARN("Unsupported auto binding type (%s).", autoBinding);
         }
     }
 
@@ -471,7 +471,7 @@ RenderState* RenderState::getTopmost(RenderState* below)
         }
         rs = rs->_parent;
     }
-    
+
     return NULL;
 }
 
@@ -514,8 +514,8 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 RenderState::StateBlock::StateBlock()
     : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(true), _depthFunction(RenderState::DEPTH_LESS),
       _blendEnabled(false), _blendSrc(RenderState::BLEND_ONE), _blendDst(RenderState::BLEND_ZERO),
-      _cullFaceSide(CULL_FACE_SIDE_BACK), _frontFace(FRONT_FACE_CCW), _stencilTestEnabled(false), _stencilWrite(RS_ALL_ONES), 
-	  _stencilFunction(RenderState::STENCIL_ALWAYS), _stencilFunctionRef(0), _stencilFunctionMask(RS_ALL_ONES), 
+      _cullFaceSide(CULL_FACE_SIDE_BACK), _frontFace(FRONT_FACE_CCW), _stencilTestEnabled(false), _stencilWrite(RS_ALL_ONES),
+	  _stencilFunction(RenderState::STENCIL_ALWAYS), _stencilFunctionRef(0), _stencilFunctionMask(RS_ALL_ONES),
 	  _stencilOpSfail(RenderState::STENCIL_OP_KEEP), _stencilOpDpfail(RenderState::STENCIL_OP_KEEP), _stencilOpDppass(RenderState::STENCIL_OP_KEEP),
       _bits(0L)
 {
@@ -586,9 +586,9 @@ void RenderState::StateBlock::bindNoRestore()
     }
     if ((_bits & RS_DEPTH_TEST) && (_depthTestEnabled != _defaultState->_depthTestEnabled))
     {
-        if (_depthTestEnabled) 
+        if (_depthTestEnabled)
             GL_ASSERT( glEnable(GL_DEPTH_TEST) );
-        else 
+        else
             GL_ASSERT( glDisable(GL_DEPTH_TEST) );
         _defaultState->_depthTestEnabled = _depthTestEnabled;
     }
@@ -604,9 +604,9 @@ void RenderState::StateBlock::bindNoRestore()
     }
 	if ((_bits & RS_STENCIL_TEST) && (_stencilTestEnabled != _defaultState->_stencilTestEnabled))
     {
-        if (_stencilTestEnabled) 
+        if (_stencilTestEnabled)
 			GL_ASSERT( glEnable(GL_STENCIL_TEST) );
-        else 
+        else
             GL_ASSERT( glDisable(GL_STENCIL_TEST) );
         _defaultState->_stencilTestEnabled = _stencilTestEnabled;
     }
@@ -615,7 +615,7 @@ void RenderState::StateBlock::bindNoRestore()
 		GL_ASSERT( glStencilMask(_stencilWrite) );
         _defaultState->_stencilWrite = _stencilWrite;
     }
-	if ((_bits & RS_STENCIL_FUNC) && (_stencilFunction != _defaultState->_stencilFunction || 
+	if ((_bits & RS_STENCIL_FUNC) && (_stencilFunction != _defaultState->_stencilFunction ||
 										_stencilFunctionRef != _defaultState->_stencilFunctionRef ||
 										_stencilFunctionMask != _defaultState->_stencilFunctionMask))
     {
@@ -624,7 +624,7 @@ void RenderState::StateBlock::bindNoRestore()
 		_defaultState->_stencilFunctionRef = _stencilFunctionRef;
 		_defaultState->_stencilFunctionMask = _stencilFunctionMask;
     }
-	if ((_bits & RS_STENCIL_OP) && (_stencilOpSfail != _defaultState->_stencilOpSfail || 
+	if ((_bits & RS_STENCIL_OP) && (_stencilOpSfail != _defaultState->_stencilOpSfail ||
 									_stencilOpDpfail != _defaultState->_stencilOpDpfail ||
 									_stencilOpDppass != _defaultState->_stencilOpDppass))
     {
