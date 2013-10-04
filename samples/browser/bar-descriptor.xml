@@ -65,7 +65,7 @@
         <image>icon.png</image>
     </icon>
 
-    <!-- The splash screen that will appear when your application is launching, which should be 1280x768 -->
+    <!-- The splash screen that will appear when your application is launching, which should be 1280x720. -->
     <!-- <splashscreen></splashscreen> -->
 
     <!-- Ensure that shared libraries in the package are found at run-time. -->

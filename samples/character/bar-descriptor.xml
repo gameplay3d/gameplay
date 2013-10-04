@@ -92,21 +92,13 @@
        <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
     </configuration>
-    <configuration name="Device-Debug-QC">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Debug-QC/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
-    </configuration>
-    <configuration name="Device-Release-QC">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Release-QC/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
-    </configuration>
   
     <!-- The icon for the application, which should be 114x114. -->
     <icon>
         <image>icon.png</image>
     </icon>
     
-    <!-- The splash screen that will appear when your application is launching. Should be 1280x768. -->
+    <!-- The splash screen that will appear when your application is launching. Should be 1280x720. -->
     <!-- <splashscreen></splashscreen> -->
     
     <!-- The permissions requested by your application. -->
