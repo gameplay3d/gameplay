@@ -97,6 +97,17 @@ extern void print(const char* format, ...);
         gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, "\n"); \
     } while (0)
 
+#if defined(WIN32)
+    #pragma warning( disable : 4005 )
+    #pragma warning( disable : 4172 )
+    #pragma warning( disable : 4244 )
+    #pragma warning( disable : 4267 )
+    #pragma warning( disable : 4311 )
+    #pragma warning( disable : 4390 )
+    #pragma warning( disable : 4800 )
+    #pragma warning( disable : 4996 )
+#endif
+
 // Bullet Physics
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
@@ -357,15 +368,5 @@ extern ALenum __al_error_code;
  * Accesses the most recently set global AL error.
  */
 #define AL_LAST_ERROR() __al_error_code
-
-
-#if defined(WIN32)
-    #pragma warning( disable : 4172 )
-    #pragma warning( disable : 4244 )
-    #pragma warning( disable : 4311 )
-    #pragma warning( disable : 4390 )
-    #pragma warning( disable : 4800 )
-    #pragma warning( disable : 4996 )
-#endif
 
 #endif
