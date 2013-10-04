@@ -90,7 +90,7 @@ include_directories(
     ${GAMEPLAY_SRC_PATH}/gameplay/src
     ${GAMEPLAY_SRC_PATH}/external-deps/lua/include
     ${GAMEPLAY_SRC_PATH}/external-deps/bullet/include
-    ${GAMEPLAY_SRC_PATH}/external-deps/libpng/include
+    ${GAMEPLAY_SRC_PATH}/external-deps/png/include
     ${GAMEPLAY_SRC_PATH}/external-deps/oggvorbis/include
     ${GAMEPLAY_SRC_PATH}/external-deps/zlib/include
     ${GAMEPLAY_SRC_PATH}/external-deps/openal/include
@@ -101,7 +101,7 @@ include_directories(
 append_gameplay_lib(GAMEPLAY_LIBRARIES)
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "GLEW" "glew" "glew32")
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "lua" "lua")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "png" "libpng" "libpng14")
+append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "png" "libpng" "libpng16")
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "BulletDynamics" "bullet")
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "BulletCollision" "bullet")
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "LinearMath" "bullet")
