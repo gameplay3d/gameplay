@@ -625,7 +625,7 @@ include_directories(
     src
     ../external-deps/lua/include
     ../external-deps/bullet/include
-    ../external-deps/libpng/include
+    ../external-deps/png/include
     ../external-deps/zlib/include
     ../external-deps/oggvorbis/include
     ../external-deps/openal/include
