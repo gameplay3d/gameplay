@@ -44,10 +44,8 @@ void Font::writeText(FILE* file)
     fprintfElement(file, "style", style);
     fprintfElement(file, "size", size);
     fprintfElement(file, "alphabet", charset);
-    //fprintfElement(file, "glyphs", glyphs);
     fprintfElement(file, "texMapWidth", texMapWidth);
     fprintfElement(file, "texMapHeight", texMapHeight);
-    //fprintfElement(file, "texMap", texMap);
     fprintElementEnd(file);
 }
 
