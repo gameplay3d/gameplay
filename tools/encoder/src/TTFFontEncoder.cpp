@@ -70,15 +70,6 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         return -1;
     }
 
-    /* 
-    error = FT_Set_Pixel_Sizes(face, FONT_SIZE, 0);
-    if (error)
-    {
-        LOG(1, "FT_Set_Pixel_Sizes error : %d \n", error);
-        exit(1);
-    }
-    */
-
     // Save glyph information (slot contains the actual glyph bitmap).
     FT_GlyphSlot slot = face->glyph;
     
