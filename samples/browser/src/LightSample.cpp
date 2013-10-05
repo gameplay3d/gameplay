@@ -306,7 +306,7 @@ void LightSample::controlEvent(Control* control, EventType evt)
 		break;
 	}
 
-	if (changeTechnique)
+	if (_lighting && changeTechnique)
 	{
 		if (_noLight->isSelected())
 		{
