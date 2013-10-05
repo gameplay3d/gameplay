@@ -171,7 +171,7 @@
 		42C8EE3A1472DAAE00E43619 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
 		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
-		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/png/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		B661733D16A61CE40083A307 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = src/Image.cpp; sourceTree = SOURCE_ROOT; };
 		B661733E16A61CE40083A307 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = src/Image.h; sourceTree = SOURCE_ROOT; };
 		B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalMapGenerator.cpp; path = src/NormalMapGenerator.cpp; sourceTree = SOURCE_ROOT; };
@@ -483,7 +483,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../external-deps/freetype2/include\"",
-					"\"$(SRCROOT)/../../external-deps/libpng/include\"",
+					"\"$(SRCROOT)/../../external-deps/png/include\"",
 					"\"/Applications/Autodesk/FBX SDK/2014.1/include\"",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
@@ -492,7 +492,7 @@
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ./external-deps/libpng/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ./external-deps/png/include";
 				WARNING_CFLAGS = "";
 			};
 			name = Debug;
@@ -519,7 +519,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../external-deps/freetype2/include\"",
-					"\"$(SRCROOT)/../../external-deps/libpng/include\"",
+					"\"$(SRCROOT)/../../external-deps/png/include\"",
 					"\"/Applications/Autodesk/FBX SDK/2014.1/include\"",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
@@ -527,7 +527,7 @@
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ./external-deps/libpng/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ./external-deps/png/include";
 				WARNING_CFLAGS = "";
 			};
 			name = Release;
@@ -549,13 +549,13 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../../external-deps/freetype2/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/pcre/lib/macosx\"",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/png/lib/macosx\"",
 					"\"$(SRCROOT)\"",
 					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2014.1/lib/gcc4/ub/debug\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/libpng/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/png/include";
 			};
 			name = Debug;
 		};
@@ -576,14 +576,14 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../../external-deps/freetype2/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/pcre/lib/macosx\"",
-					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/png/lib/macosx\"",
 					"\"$(SRCROOT)\"",
 					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2014.1/lib/gcc4/ub/release\"",
 					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2014.1/lib/gcc4/ub/debug\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/libpng/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/png/include";
 			};
 			name = Release;
 		};
