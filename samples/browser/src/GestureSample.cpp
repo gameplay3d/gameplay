@@ -20,7 +20,7 @@ void GestureSample::initialize()
     setMultiTouch(true);
 
     // Load font
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/common/arial.gpb");
     assert(_font);
 
     bool anySupported = false;
