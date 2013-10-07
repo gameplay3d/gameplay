@@ -14,7 +14,7 @@ LoadSceneSample::LoadSceneSample()
 void LoadSceneSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/common/arial.gpb");
 
     _scene = Scene::load("res/common/sample.scene");
 

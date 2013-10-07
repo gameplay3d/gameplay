@@ -1,6 +1,7 @@
 #include "Material.h"
 #include "FileIO.h"
 #include "StringUtil.h"
+#include "edtaa3func.h"
 
 namespace gameplay
 {

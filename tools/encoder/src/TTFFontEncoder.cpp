@@ -34,6 +34,79 @@ static void writeString(FILE* fp, const char* str)
     }
 }
 
+unsigned char* createDistanceFieldMap(unsigned char* img, unsigned int width, unsigned int height)
+{
+    short* xDistance = (short*)malloc(width * height * sizeof(short));
+    short* yDistance = (short*)malloc(width * height * sizeof(short));
+    double* gx = (double*)calloc(width * height, sizeof(double));
+    double* gy = (double*)calloc(width * height, sizeof(double));
+    double* data = (double*)calloc(width * height, sizeof(double));
+    double* outside = (double*)calloc(width * height, sizeof(double));
+    double* inside = (double*)calloc(width * height, sizeof(double));
+    unsigned int i;
+
+    // Convert img into double (data)
+    double imgMin = 255;
+    double imgMax = -255;
+    for (i = 0; i < width * height; ++i)
+    {
+        double v = img[i];
+        data[i] = v;
+        if (v > imgMax) 
+            imgMax = v;
+        if (v < imgMin) 
+            imgMin = v;
+    }
+    // Rescale image levels between 0 and 1
+    for (i = 0; i < width * height; ++i)
+    {
+        data[i] = (img[i] - imgMin) / imgMax;
+    }
+    // Compute outside = edtaa3(bitmap); % Transform background (0's)
+    computegradient(data, width, height, gx, gy);
+    edtaa3(data, gx, gy, height, width, xDistance, yDistance, outside);
+    for (i = 0; i < width * height; ++i)
+    {
+        if (outside[i] < 0 )
+            outside[i] = 0.0;
+    }
+    // Compute inside = edtaa3(1-bitmap); % Transform foreground (1's)
+    memset(gx, 0, sizeof(double) * width * height);
+    memset(gy, 0, sizeof(double) * width * height);
+    for (i = 0; i < width * height; ++i)
+    {
+        data[i] = 1 - data[i];
+    }
+    computegradient(data, width, height, gx, gy);
+    edtaa3(data, gx, gy, height, width, xDistance, yDistance, inside);
+    for (i = 0; i < width * height; ++i)
+    {
+        if( inside[i] < 0 )
+            inside[i] = 0.0;
+    }
+    // distmap = outside - inside; % Bipolar distance field
+    unsigned char* out = (unsigned char*)malloc(sizeof(unsigned char) * width * height);
+    for (i = 0; i < width * height; ++i)
+    {
+        outside[i] -= inside[i];
+        outside[i] = 128 + outside[i] * 16;
+        if (outside[i] < 0) 
+            outside[i] = 0;
+        if (outside[i] > 255) 
+            outside[i] = 255;
+        out[i] = 255 - (unsigned char) outside[i];
+    }
+    free(xDistance);
+    free(yDistance);
+    free(gx);
+    free(gy);
+    free(data);
+    free(outside);
+    free(inside);
+
+    return out;
+}
+
 int writeFont(const char* inFilePath, const char* outFilePath, unsigned int fontSize, const char* id, bool fontpreview = false)
 {
     Glyph glyphArray[END_INDEX - START_INDEX];
@@ -56,13 +129,8 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         return -1;
     }
     
-    // Set the pixel size.
-    error = FT_Set_Char_Size(
-            face,           // handle to face object.
-            0,              // char_width in 1/64th of points.
-            fontSize * 64,   // char_height in 1/64th of points.
-            0,              // horizontal device resolution (defaults to 72 dpi if resolution (0, 0)).
-            0 );            // vertical device resolution.
+    // Set the pixel size.  char_width in 1/64th of points.
+    error = FT_Set_Char_Size(  face,  0, fontSize * 64, 0, 0 ); 
     
     if (error)
     {
@@ -72,9 +140,9 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
 
     // Save glyph information (slot contains the actual glyph bitmap).
     FT_GlyphSlot slot = face->glyph;
-    
     int actualfontHeight = 0;
-    int rowSize = 0; // Stores the total number of rows required to all glyphs.
+    // Stores the total number of rows required to all glyphs.
+    int rowSize = 0;
     
     // Find the width of the image.
     for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
@@ -103,7 +171,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     int penX = 0;
     int penY = 0;
     int row = 0;
-    
+
     double powerOf2 = 2;
     unsigned int imageWidth = 0;
     unsigned int imageHeight = 0;
@@ -135,7 +203,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
             int glyphWidth = slot->bitmap.pitch;
             int glyphHeight = slot->bitmap.rows;
 
-            advance = glyphWidth + GLYPH_PADDING; //((int)slot->advance.x >> 6) + GLYPH_PADDING;
+            advance = glyphWidth + GLYPH_PADDING; 
 
             // If we reach the end of the image wrap aroud to the next row.
             if ((penX + advance) > (int)imageWidth)
@@ -158,11 +226,10 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
             // Move Y back to the top of the row.
             penY = row * rowSize;
 
-            if (ascii == (END_INDEX-1))
+            if (ascii == (END_INDEX - 1))
             {
                 textureSizeFound = true;
             }
-
             i++;
         }
     }
@@ -183,7 +250,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     }
     
     // Allocate temporary image buffer to draw the glyphs into.
-    unsigned char* imageBuffer = (unsigned char *)malloc(imageWidth * imageHeight);
+    unsigned char* imageBuffer = (unsigned char*)malloc(imageWidth * imageHeight);
     memset(imageBuffer, 0, imageWidth * imageHeight);
     penX = 0;
     penY = 0;
@@ -203,7 +270,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         int glyphWidth = slot->bitmap.pitch;
         int glyphHeight = slot->bitmap.rows;
 
-        advance = glyphWidth + GLYPH_PADDING;//((int)slot->advance.x >> 6) + GLYPH_PADDING;
+        advance = glyphWidth + GLYPH_PADDING;
 
         // If we reach the end of the image wrap aroud to the next row.
         if ((penX + advance) > (int)imageWidth)
@@ -238,14 +305,12 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         glyphArray[i].uvCoords[3] = (float)(penY + rowSize) / (float)imageHeight;
 
         // Set the pen position for the next glyph
-        penX += advance; // Move X to next glyph position
+        penX += advance;
         i++;
     }
-
-
-    FILE *gpbFp = fopen(outFilePath, "wb");
     
     // File header and version.
+    FILE *gpbFp = fopen(outFilePath, "wb");
     char fileHeader[9]     = {'«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n'};
     fwrite(fileHeader, sizeof(char), 9, gpbFp);
     fwrite(gameplay::GPB_VERSION, sizeof(char), 2, gpbFp);
@@ -255,23 +320,18 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     writeString(gpbFp, id);             // Ref id
     writeUint(gpbFp, 128);              // Ref type
     writeUint(gpbFp, ftell(gpbFp) + 4); // Ref offset (current pos + 4 bytes)
-    
-    // Write Font object.
-    
+
     // Family name.
     writeString(gpbFp, face->family_name);
 
     // Style.
-    // TODO: Switch based on TTF style name and write appropriate font style unsigned int
-    // For now just hardcoding to 0.
-    //char* style = face->style_name;
-    writeUint(gpbFp, 0); // 0 == PLAIN
+    // TODO: Switch based on TTF style name and write appropriate font style unsigned int for now just hardcoding to 0 = PLAIN.
+    writeUint(gpbFp, 0);
 
     // Font size.
     writeUint(gpbFp, rowSize);
 
-    // Character set.
-    // TODO: Empty for now
+    // Character set. TODO: Empty for now
     writeString(gpbFp, "");
     
     // Glyphs.
@@ -279,32 +339,48 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     writeUint(gpbFp, glyphSetSize);
     fwrite(&glyphArray, sizeof(Glyph), glyphSetSize, gpbFp);
     
-    // Texture.
-    unsigned int textureSize = imageWidth * imageHeight;
+    // Image dimensions
+    unsigned int imageSize = imageWidth * imageHeight;
     writeUint(gpbFp, imageWidth);
     writeUint(gpbFp, imageHeight);
-    writeUint(gpbFp, textureSize);
-    fwrite(imageBuffer, sizeof(unsigned char), textureSize, gpbFp);
+    writeUint(gpbFp, imageSize);
     
+    // Flip height and width since the distance field map generator is column-wise.
+    unsigned char* distanceFieldBuffer = createDistanceFieldMap(imageBuffer, imageHeight, imageWidth);
+    
+    // Write out the buffer
+    fwrite(distanceFieldBuffer, sizeof(unsigned char), imageSize, gpbFp);
+
+    //fwrite(imageBuffer, sizeof(unsigned char), imageSize, gpbFp);
+
     // Close file.
     fclose(gpbFp);
 
     LOG(1, "%s.gpb created successfully. \n", getBaseName(outFilePath).c_str());
 
+    // Save out a pgm monochome image file for preview
     if (fontpreview)
     {
         // Write out font map to an image.
         std::string pgmFilePath = getFilenameNoExt(outFilePath);
         pgmFilePath.append(".pgm");
-        FILE *imageFp = fopen(pgmFilePath.c_str(), "wb");
-        fprintf(imageFp, "P5 %u %u 255\n", imageWidth, imageHeight);
-        fwrite((const char *)imageBuffer, sizeof(unsigned char), imageWidth * imageHeight, imageFp);
-        fclose(imageFp);
+        FILE* previewFp = fopen(pgmFilePath.c_str(), "wb");
+        fprintf(previewFp, "P5 %u %u 255\n", imageWidth, imageHeight);
+        
+        // Write out the preview buffer
+        fwrite((const char*)distanceFieldBuffer, sizeof(unsigned char), imageSize, previewFp);
+
+        //fwrite((const char*)imageBuffer, sizeof(unsigned char), imageWidth * imageHeight, previewFp);
+        
+        fclose(previewFp);
+
+        LOG(1, "%s.pgm preview image created successfully. \n", getBaseName(pgmFilePath).c_str());
     }
 
     // Cleanup resources.
     free(imageBuffer);
-    
+    free(distanceFieldBuffer);
+
     FT_Done_Face(face);
     FT_Done_FreeType(library);
     return 0;
