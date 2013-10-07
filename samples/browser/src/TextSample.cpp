@@ -9,11 +9,11 @@
 
 std::string _fontNames[] =
 {
-    "arial18",
-    "dynamic",
-    "pirulen",
-    "squarehead",
+    "arial",
     "baroque",
+    "badaboom",
+    "fishfingers",
+    "neuropol",
     "custom",
 };
 
@@ -95,14 +95,14 @@ void TextSample::render(float elapsedTime)
     char fps[5];
     sprintf(fps, "%u", getFrameRate());
 
-    _fonts[1]->start();
+    _fonts[0]->start();
 
-    _fonts[1]->drawText(fps, 245, 5, Vector4(0, 0.5f, 1, 1), _fonts[0]->getSize());
+    _fonts[0]->drawText(fps, 245, 5, Vector4(0, 0.5f, 1, 1), _fonts[0]->getSize());
     
     _form->draw();
 
     unsigned int size = (float)_font->getSize() * _scale;
-    if (_font != _fonts[1])
+    if (_font != _fonts[0])
         _font->start();
 
     if (_simple)
@@ -135,11 +135,11 @@ void TextSample::render(float elapsedTime)
         _font->drawText(".", area.x + area.width, area.y + area.height, Vector4::fromColor(0x0000ffff), size);
     }
 
-    if (_font != _fonts[1])
+    if (_font != _fonts[0])
     {
         _font->finish();
     }
-    _fonts[1]->finish();
+    _fonts[0]->finish();
 }
 
 void TextSample::touchEvent(Touch::TouchEvent event, int x, int y, unsigned int contactIndex)

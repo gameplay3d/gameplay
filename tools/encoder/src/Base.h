@@ -25,8 +25,20 @@ using std::size_t;
 using std::min;
 using std::max;
 
+#if defined(WIN32)
+    #pragma warning( disable : 4005 )
+    #pragma warning( disable : 4172 )
+    #pragma warning( disable : 4244 )
+    #pragma warning( disable : 4267 )
+    #pragma warning( disable : 4311 )
+    #pragma warning( disable : 4390 )
+    #pragma warning( disable : 4800 )
+    #pragma warning( disable : 4996 )
+#endif
+
 // PNG
 #include <png.h>
+#include "edtaa3func.h"
 
 // Defines
 #ifndef M_1_PI        

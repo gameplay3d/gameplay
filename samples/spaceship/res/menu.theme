@@ -147,7 +147,7 @@ theme menuTheme
             skin = mainNormal
             imageList = normalImages
 
-            font = res/airstrip28.gpb
+            font = res/airstrip.gpb
             textColor = #ffffffff
             fontSize = 15
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -169,7 +169,7 @@ theme menuTheme
 
         stateNormal
         {
-            font = res/airstrip28.gpb
+            font = res/airstrip.gpb
             fontSize = 30
         }
 
@@ -184,7 +184,7 @@ theme menuTheme
         stateNormal
         {
             imageList = normalImages
-            font = res/airstrip28.gpb
+            font = res/airstrip.gpb
             textColor = #ffffffff
             fontSize = 15
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -224,7 +224,7 @@ theme menuTheme
         {
             skin = empty
             textColor = #ffffffff
-            font = res/airstrip28.gpb
+            font = res/airstrip.gpb
             fontSize = 25
             textAlignment = ALIGN_TOP_HCENTER
         }

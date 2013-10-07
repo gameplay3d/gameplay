@@ -213,8 +213,8 @@ theme mainMenu
         {
             skin = underliner
             textColor = #ffffffff
-            font = res/common/arial18.gpb
-            fontSize = 25
+            font = res/common/arial.gpb
+            fontSize = 24
             textAlignment = ALIGN_BOTTOM_HCENTER
         }
     }
@@ -234,7 +234,7 @@ theme mainMenu
             skin = mainNormal
             imageList = normalImages
 
-            font = res/common/arial18.gpb
+            font = res/common/arial.gpb
             textColor = #ffffffff
             fontSize = 18
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -289,7 +289,7 @@ theme mainMenu
 
         stateNormal
         {
-            font = res/common/arial18.gpb
+            font = res/common/arial.gpb
             fontSize = 20
         }
 
@@ -312,7 +312,7 @@ theme mainMenu
         stateNormal
         {
             imageList = normalImages
-            font = res/common/arial18.gpb
+            font = res/common/arial.gpb
             textColor = #ffffffff
             fontSize = 14
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -334,14 +334,14 @@ theme mainMenu
     {
         stateNormal
         {
-            font = res/common/arial18.gpb
+            font = res/common/arial.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
-            font = res/common/arial18.gpb
+            font = res/common/arial.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
@@ -365,7 +365,7 @@ theme mainMenu
         stateNormal
         {
             textColor = #ffffffff
-            font = res/common/arial18.gpb
+            font = res/common/arial.gpb
             fontSize = 26
             textAlignment = ALIGN_BOTTOM_HCENTER
         }
