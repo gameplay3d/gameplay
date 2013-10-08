@@ -50,6 +50,15 @@ public:
     };
 
     /**
+     * Defines the format of the font.
+     */
+    enum Format
+    {
+        BITMAP = 0,
+        DISTANCE_FIELD = 1
+    };
+
+    /**
      * Vertex coordinates, UVs and indices can be computed and stored in a Text object.
      * For static text labels that do not change frequently, this means these computations
      * need not be performed every frame.
@@ -111,9 +120,14 @@ public:
     static Font* create(const char* path, const char* id = NULL);
 
     /**
-     * Returns the font size (max height of glyphs) in pixels.
+     * Gets the font size (max height of glyphs) in pixels.
      */
     unsigned int getSize();
+
+    /**
+     * Gets the font format. BITMAP or DISTANCEMAP.
+     */
+    Format getFormat();
 
     /**
      * Starts text drawing for this font.
@@ -327,10 +341,11 @@ private:
      * @param glyphs An array of font glyphs, defining each character in the font within the texture map.
      * @param glyphCount The number of items in the glyph array.
      * @param texture A texture map containing rendered glyphs.
+     * @param format The format of the font (bitmap or distance fields)
      * 
      * @return The new Font.
      */
-    static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture);
+    static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture, Font::Format format);
 
     void getMeasurementInfo(const char* text, const Rectangle& area, unsigned int size, Justify justify, bool wrap, bool rightToLeft,
                             std::vector<int>* xPositions, int* yPosition, std::vector<unsigned int>* lineLengths);
@@ -349,6 +364,7 @@ private:
     void addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Justify hAlign,
                      std::vector<int>* xPositions, std::vector<unsigned int>* lineLengths, bool rightToLeft);
 
+    Format _format;
     std::string _path;
     std::string _id;
     std::string _family;
@@ -360,6 +376,7 @@ private:
     Texture* _texture;
     SpriteBatch* _batch;
     Rectangle _viewport;
+    MaterialParameter* _cutoffParam;
 };
 
 }

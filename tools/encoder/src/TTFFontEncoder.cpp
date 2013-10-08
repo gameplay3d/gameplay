@@ -34,7 +34,7 @@ static void writeString(FILE* fp, const char* str)
     }
 }
 
-unsigned char* createDistanceFieldMap(unsigned char* img, unsigned int width, unsigned int height)
+unsigned char* createDistanceFields(unsigned char* img, unsigned int width, unsigned int height)
 {
     short* xDistance = (short*)malloc(width * height * sizeof(short));
     short* yDistance = (short*)malloc(width * height * sizeof(short));
@@ -107,9 +107,9 @@ unsigned char* createDistanceFieldMap(unsigned char* img, unsigned int width, un
     return out;
 }
 
-int writeFont(const char* inFilePath, const char* outFilePath, unsigned int fontSize, const char* id, bool fontpreview = false)
+int writeFont(const char* inFilePath, const char* outFilePath, unsigned int fontSize, const char* id, bool fontpreview = false, Font::FontFormat fontFormat = Font::BITMAP)
 {
-    Glyph glyphArray[END_INDEX - START_INDEX];
+    TTFGlyph glyphArray[END_INDEX - START_INDEX];
     
     // Initialize freetype library.
     FT_Library library;
@@ -148,7 +148,8 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
     {
         // Load glyph image into the slot (erase previous one)
-        error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
+        FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
+        error = FT_Load_Char(face, ascii, loadFlags);
         if (error)
         {
             LOG(1, "FT_Load_Char error : %d \n", error);
@@ -198,7 +199,6 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
             {
                 LOG(1, "FT_Load_Char error : %d \n", error);
             }
-
             // Glyph image.
             int glyphWidth = slot->bitmap.pitch;
             int glyphHeight = slot->bitmap.rows;
@@ -337,7 +337,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     // Glyphs.
     unsigned int glyphSetSize = END_INDEX - START_INDEX;
     writeUint(gpbFp, glyphSetSize);
-    fwrite(&glyphArray, sizeof(Glyph), glyphSetSize, gpbFp);
+    fwrite(&glyphArray, sizeof(TTFGlyph), glyphSetSize, gpbFp);
     
     // Image dimensions
     unsigned int imageSize = imageWidth * imageHeight;
@@ -345,13 +345,19 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     writeUint(gpbFp, imageHeight);
     writeUint(gpbFp, imageSize);
     
-    // Flip height and width since the distance field map generator is column-wise.
-    unsigned char* distanceFieldBuffer = createDistanceFieldMap(imageBuffer, imageHeight, imageWidth);
-    
-    // Write out the buffer
-    fwrite(distanceFieldBuffer, sizeof(unsigned char), imageSize, gpbFp);
-
-    //fwrite(imageBuffer, sizeof(unsigned char), imageSize, gpbFp);
+    unsigned char* distanceFieldBuffer = NULL;
+    if (fontFormat == Font::DISTANCE_FIELD)
+    {
+        // Flip height and width since the distance field map generator is column-wise.
+        distanceFieldBuffer = createDistanceFields(imageBuffer, imageHeight, imageWidth);
+        fwrite(distanceFieldBuffer, sizeof(unsigned char), imageSize, gpbFp);
+        writeUint(gpbFp, Font::DISTANCE_FIELD);
+    }
+    else
+    {
+        fwrite(imageBuffer, sizeof(unsigned char), imageSize, gpbFp);
+        writeUint(gpbFp, Font::BITMAP);
+    }
 
     // Close file.
     fclose(gpbFp);
@@ -367,11 +373,15 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         FILE* previewFp = fopen(pgmFilePath.c_str(), "wb");
         fprintf(previewFp, "P5 %u %u 255\n", imageWidth, imageHeight);
         
-        // Write out the preview buffer
-        fwrite((const char*)distanceFieldBuffer, sizeof(unsigned char), imageSize, previewFp);
-
-        //fwrite((const char*)imageBuffer, sizeof(unsigned char), imageWidth * imageHeight, previewFp);
-        
+        if (fontFormat == Font::DISTANCE_FIELD)
+        {
+            // Write out the preview buffer
+            fwrite((const char*)distanceFieldBuffer, sizeof(unsigned char), imageSize, previewFp);
+        }
+        else
+        {
+            fwrite((const char*)imageBuffer, sizeof(unsigned char), imageWidth * imageHeight, previewFp);
+        }
         fclose(previewFp);
 
         LOG(1, "%s.pgm preview image created successfully. \n", getBaseName(pgmFilePath).c_str());
@@ -379,7 +389,8 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
 
     // Cleanup resources.
     free(imageBuffer);
-    free(distanceFieldBuffer);
+    if (fontFormat == Font::DISTANCE_FIELD)
+        free(distanceFieldBuffer);
 
     FT_Done_Face(face);
     FT_Done_FreeType(library);
