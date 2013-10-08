@@ -18,7 +18,7 @@ using namespace gameplay;
 static unsigned int promptUserFontSize()
 {
     static const int lowerBound = 12;
-    static const int upperBound = 72;
+    static const int upperBound = 96;
     unsigned int fontSize = 0;
     char buffer[80];
     do
