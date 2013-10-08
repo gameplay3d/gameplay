@@ -552,8 +552,7 @@ void Form::draw()
         // that have changed is disabled.  Currently, repositioning controls can result in areas of the screen being cleared
         // after another control has been drawn there.  This should probably be done in two passes -- one to clear areas where
         // dirty controls were last frame, and another to draw them where they are now.
-        Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height),
-                        /*_skin != NULL*/ true, false, _bounds.height);
+        Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height), true, false, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
 
         // Restore the previous game viewport.
@@ -577,6 +576,8 @@ void Form::draw()
             GP_ASSERT(_spriteBatch);
         }
 
+        _spriteBatch->getSampler()->setFilterMode(Texture::LINEAR, Texture::LINEAR);
+        _spriteBatch->getSampler()->setWrapMode(Texture::CLAMP, Texture::CLAMP);
         _spriteBatch->start();
         _spriteBatch->draw(_bounds.x, _bounds.y, 0, _bounds.width, _bounds.height, 0, _v1, _u2, 0, Vector4::one());
         _spriteBatch->finish();
