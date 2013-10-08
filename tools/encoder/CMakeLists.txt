@@ -49,6 +49,8 @@ set(APP_SRC
     src/Curve.cpp
     src/Curve.h
     src/Curve.inl
+    src/edtaa3func.c
+    src/edtaa3func.h
     src/Effect.cpp
     src/Effect.h
     src/EncoderArguments.cpp
