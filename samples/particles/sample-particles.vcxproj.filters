@@ -51,8 +51,5 @@
     <None Include="res\arial.gpb">
       <Filter>res</Filter>
     </None>
-    <None Include="res\arial.ttf">
-      <Filter>res</Filter>
-    </None>
   </ItemGroup>
 </Project>

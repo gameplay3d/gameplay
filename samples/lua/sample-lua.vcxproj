@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DebugMem|BlackBerry">
@@ -634,8 +634,8 @@
     <None Include="game.config" />
     <None Include="icon.png" />
     <None Include="res\ai.lua" />
+    <None Include="res\arial.gpb" />
     <None Include="res\arial.ttf" />
-    <None Include="res\arial40.gpb" />
     <None Include="res\box-diffuse.png" />
     <None Include="res\box.dae" />
     <None Include="res\box.gpb" />

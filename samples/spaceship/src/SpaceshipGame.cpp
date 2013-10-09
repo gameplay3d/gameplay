@@ -108,7 +108,7 @@ void SpaceshipGame::initialize()
         _backgroundSound->setLooped(true);
 
     // Create font
-    _font = Font::create("res/airstrip28.gpb");
+    _font = Font::create("res/airstrip.gpb");
 
     // Create menu.
     _menu = Form::create("res/menu.form");
