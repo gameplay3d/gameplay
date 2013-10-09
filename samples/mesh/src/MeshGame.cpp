@@ -18,7 +18,7 @@ void MeshGame::initialize()
     displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
 
     // Load font
-    _font = Font::create("res/arial40.gpb");
+    _font = Font::create("res/arial.gpb");
 
     // Load mesh/scene from file
     _scene = Scene::load("res/duck.gpb");
