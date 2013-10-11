@@ -264,6 +264,8 @@ public:
      * associated with the game.
      *
      * @return The script controller for this game.
+     *
+     * @script{ignore}
      */
     inline SocialController* getSocialController() const;
 

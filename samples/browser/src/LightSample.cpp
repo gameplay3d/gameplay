@@ -91,6 +91,10 @@ void LightSample::initialize()
 	_pointLightNode->setTranslation(0.0f, 0.0f, 8.0f);
 	_scene->addNode(_pointLightNode);
 
+    // Create and initialize lights and materials for lights
+	_lighting = Material::create("res/common/light.material");
+	_model->setMaterial(_lighting);
+
     // Create and initialize ui form
 	_form = Form::create("res/common/light.form");
     _properties = static_cast<Container*>(_form->getControl("lightProperties"));
@@ -115,13 +119,6 @@ void LightSample::initialize()
 	_addBumped = static_cast<CheckBox*>(_form->getControl("bumpedCheckBox"));
 	_addBumped->addListener(this, Control::Listener::VALUE_CHANGED);
 
-    _properties->setEnabled(false);
-    _noLight->setSelected(true);
-	_form->setConsumeInputEvents(false);
-	
-    // Create and initialize lights and materials for lights
-	_lighting = Material::create("res/common/light.material");
-	_model->setMaterial(_lighting);
 	initializeDirectionalTechnique("directional");
 	initializeDirectionalTechnique("directionalSpecular");
 	initializeDirectionalTechnique("directionalBumped");
@@ -134,6 +131,10 @@ void LightSample::initialize()
 	initializePointTechnique("pointSpecular");
 	initializePointTechnique("pointBumped");
 	initializePointTechnique("pointSpecularBumped");
+
+    _properties->setEnabled(false);
+    _noLight->setSelected(true);
+	_form->setConsumeInputEvents(false);
 
 	setSpecularValue(_specularSlider->getValue());
 }

@@ -631,6 +631,7 @@ private:
     bool _contactIndices[MAX_CONTACT_INDICES];
     bool _initializedWithScroll;
     bool _scrollWheelRequiresFocus;
+    bool _allowRelayout;
 };
 
 }

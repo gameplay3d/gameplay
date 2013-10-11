@@ -5,7 +5,9 @@ namespace gameplay
 {
 
 /**
- * Defines an abstract class for a score that resides in a leaderboard
+ * Defines an abstract class for a score that resides in a leaderboard.
+ *
+ * @script{ignore}
  */
 class SocialScore
 {

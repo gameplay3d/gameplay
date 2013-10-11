@@ -131,6 +131,7 @@
     <ClCompile Include="src\lua\lua_ContainerScroll.cpp" />
     <ClCompile Include="src\lua\lua_Control.cpp" />
     <ClCompile Include="src\lua\lua_ControlAlignment.cpp" />
+    <ClCompile Include="src\lua\lua_ControlAutoSize.cpp" />
     <ClCompile Include="src\lua\lua_ControlListener.cpp" />
     <ClCompile Include="src\lua\lua_ControlListenerEventType.cpp" />
     <ClCompile Include="src\lua\lua_ControlState.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="src\lua\lua_FileSystem.cpp" />
     <ClCompile Include="src\lua\lua_FlowLayout.cpp" />
     <ClCompile Include="src\lua\lua_Font.cpp" />
+    <ClCompile Include="src\lua\lua_FontFormat.cpp" />
     <ClCompile Include="src\lua\lua_FontJustify.cpp" />
     <ClCompile Include="src\lua\lua_FontStyle.cpp" />
     <ClCompile Include="src\lua\lua_FontText.cpp" />
@@ -231,6 +233,7 @@
     <ClCompile Include="src\lua\lua_RenderStateBlend.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateCullFaceSide.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateDepthFunction.cpp" />
+    <ClCompile Include="src\lua\lua_RenderStateFrontFace.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateStateBlock.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateStencilFunction.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateStencilOperation.cpp" />
@@ -423,6 +426,7 @@
     <ClInclude Include="src\lua\lua_ContainerScroll.h" />
     <ClInclude Include="src\lua\lua_Control.h" />
     <ClInclude Include="src\lua\lua_ControlAlignment.h" />
+    <ClInclude Include="src\lua\lua_ControlAutoSize.h" />
     <ClInclude Include="src\lua\lua_ControlListener.h" />
     <ClInclude Include="src\lua\lua_ControlListenerEventType.h" />
     <ClInclude Include="src\lua\lua_ControlState.h" />
@@ -434,6 +438,7 @@
     <ClInclude Include="src\lua\lua_FileSystem.h" />
     <ClInclude Include="src\lua\lua_FlowLayout.h" />
     <ClInclude Include="src\lua\lua_Font.h" />
+    <ClInclude Include="src\lua\lua_FontFormat.h" />
     <ClInclude Include="src\lua\lua_FontJustify.h" />
     <ClInclude Include="src\lua\lua_FontStyle.h" />
     <ClInclude Include="src\lua\lua_FontText.h" />
@@ -523,6 +528,7 @@
     <ClInclude Include="src\lua\lua_RenderStateBlend.h" />
     <ClInclude Include="src\lua\lua_RenderStateCullFaceSide.h" />
     <ClInclude Include="src\lua\lua_RenderStateDepthFunction.h" />
+    <ClInclude Include="src\lua\lua_RenderStateFrontFace.h" />
     <ClInclude Include="src\lua\lua_RenderStateStateBlock.h" />
     <ClInclude Include="src\lua\lua_RenderStateStencilFunction.h" />
     <ClInclude Include="src\lua\lua_RenderStateStencilOperation.h" />
