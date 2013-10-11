@@ -306,6 +306,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_Control.h
     src/lua/lua_ControlAlignment.cpp
     src/lua/lua_ControlAlignment.h
+    src/lua/lua_ControlAutoSize.cpp
+    src/lua/lua_ControlAutoSize.h
     src/lua/lua_ControlListener.cpp
     src/lua/lua_ControlListener.h
     src/lua/lua_ControlListenerEventType.cpp
@@ -328,6 +330,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_FlowLayout.h
     src/lua/lua_Font.cpp
     src/lua/lua_Font.h
+    src/lua/lua_FontFormat.cpp
+    src/lua/lua_FontFormat.h
     src/lua/lua_FontJustify.cpp
     src/lua/lua_FontJustify.h
     src/lua/lua_FontStyle.cpp
@@ -505,6 +509,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_RenderStateCullFaceSide.cpp
     src/lua/lua_RenderStateDepthFunction.cpp
     src/lua/lua_RenderStateDepthFunction.h
+    src/lua/lua_RenderStateFrontFace.cpp
+    src/lua/lua_RenderStateFrontFace.h
     src/lua/lua_RenderStateStateBlock.cpp
     src/lua/lua_RenderStateStateBlock.h
     src/lua/lua_RenderStateStencilFunction.cpp
