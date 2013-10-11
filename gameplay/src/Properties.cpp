@@ -704,7 +704,7 @@ Properties::Type Properties::getType(const char* name) const
     }
 }
 
-const char* Properties::getString(const char* name) const
+const char* Properties::getString(const char* name, const char* defaultValue) const
 {
     if (name)
     {
@@ -722,7 +722,7 @@ const char* Properties::getString(const char* name) const
         }
     }
 
-    return NULL;
+    return defaultValue;
 }
 
 bool Properties::getBool(const char* name, bool defaultValue) const

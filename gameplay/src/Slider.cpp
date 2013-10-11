@@ -495,7 +495,7 @@ void Slider::update(const Control* container, const Vector2& offset)
         {
             _value += (total * GAMEPAD_FRACTION) * _delta;
         }
-            
+
         if (_value > _max)
             _value = _max;
         else if (_value < _min)
@@ -505,6 +505,18 @@ void Slider::update(const Control* container, const Vector2& offset)
         {
             notifyListeners(Control::Listener::VALUE_CHANGED);
         }
+    }
+
+    if (_autoHeight == Control::AUTO_SIZE_FIT)
+    {
+        float height = _minImage->getRegion().height;
+        height = std::max(height, _maxImage->getRegion().height);
+        height = std::max(height, _markerImage->getRegion().height);
+        height = std::max(height, _trackImage->getRegion().height);
+        height += _bounds.height;
+        if (_valueTextVisible && _font)
+            height += getFontSize(_state);
+        setHeight(height);
     }
 }
 

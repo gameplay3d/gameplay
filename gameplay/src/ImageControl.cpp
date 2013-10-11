@@ -150,4 +150,22 @@ void ImageControl::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     spriteBatch->start();
 }
 
+void ImageControl::update(const Control* container, const Vector2& offset)
+{
+    Button::update(container, offset);
+
+    if (_batch)
+    {
+        if (_autoWidth == Control::AUTO_SIZE_FIT)
+        {
+            setWidth(_batch->getSampler()->getTexture()->getWidth());
+        }
+
+        if (_autoHeight == Control::AUTO_SIZE_FIT)
+        {
+            setHeight(_batch->getSampler()->getTexture()->getWidth());
+        }
+    }
+}
+
 }
