@@ -43,7 +43,7 @@ LightSample::LightSample()
 void LightSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/common/arial.gpb");
 
 	// Load the scene
 	_scene = Scene::load("res/common/lightBrickWall.gpb");
@@ -307,7 +307,7 @@ void LightSample::controlEvent(Control* control, EventType evt)
 		break;
 	}
 
-	if (changeTechnique)
+	if (_lighting && changeTechnique)
 	{
 		if (_noLight->isSelected())
 		{

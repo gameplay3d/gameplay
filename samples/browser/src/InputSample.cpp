@@ -21,7 +21,7 @@ void InputSample::initialize()
     setMultiTouch(true);
 
     // Load font
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/common/arial.gpb");
     assert(_font);
 
     // Reuse part of the gamepad texture as the crosshair in this sample.
@@ -93,7 +93,7 @@ void InputSample::update(float elapsedTime)
     if (hasAccelerometer())
     {
         Vector3 accelRaw, gyroRaw;
-        getRawSensorValues(&accelRaw.x, &accelRaw.y, &accelRaw.z, &gyroRaw.x, &gyroRaw.y, &gyroRaw.z);
+        getSensorValues(&accelRaw.x, &accelRaw.y, &accelRaw.z, &gyroRaw.x, &gyroRaw.y, &gyroRaw.z);
 
         // Adjust for landscape mode
         float temp = accelRaw.x;

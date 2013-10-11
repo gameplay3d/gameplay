@@ -10,7 +10,7 @@
 #include <GL/wglew.h>
 #include <windowsx.h>
 #include <shellapi.h>
-#ifdef USE_XINPUT
+#ifdef GP_USE_GAMEPAD
 #include <XInput.h>
 #endif
 
@@ -28,7 +28,6 @@ static double __timeStart;
 static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static HINSTANCE __hinstance = 0;
-static HWND __attachToWindow = 0;
 static HWND __hwnd = 0;
 static HDC __hdc = 0;
 static HGLRC __hrc = 0;
@@ -38,7 +37,7 @@ static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static unsigned int __gamepadsConnected = 0;
 
-#ifdef USE_XINPUT
+#ifdef GP_USE_GAMEPAD
 static const unsigned int XINPUT_BUTTON_COUNT = 14;
 static const unsigned int XINPUT_JOYSTICK_COUNT = 2;
 static const unsigned int XINPUT_TRIGGER_COUNT = 2;
@@ -787,7 +786,7 @@ bool initializeGL(WindowCreationParams* params)
     return true;
 }
 
-Platform* Platform::create(Game* game, void* attachToWindow)
+Platform* Platform::create(Game* game)
 {
     GP_ASSERT(game);
 
@@ -796,8 +795,6 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
     // Get the application module handle.
     __hinstance = ::GetModuleHandle(NULL);
-
-    __attachToWindow = (HWND)attachToWindow;
 
     // Read window settings from config.
     WindowCreationParams params;
@@ -890,67 +887,54 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         }
     }
 
-    if (!__attachToWindow)
+
+    // Register our window class.
+    WNDCLASSEX wc;
+    wc.cbSize = sizeof(WNDCLASSEX);
+    wc.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    wc.lpfnWndProc    = (WNDPROC)__WndProc;
+    wc.cbClsExtra     = 0;
+    wc.cbWndExtra     = 0;
+    wc.hInstance      = __hinstance;
+    wc.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hIconSm        = NULL;
+    wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground  = NULL;  // No brush - we are going to paint our own background
+    wc.lpszMenuName   = NULL;  // No default menu
+    wc.lpszClassName  = L"gameplay";
+
+    if (!::RegisterClassEx(&wc))
     {
-        // Register our window class.
-        WNDCLASSEX wc;
-        wc.cbSize = sizeof(WNDCLASSEX);
-        wc.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-        wc.lpfnWndProc    = (WNDPROC)__WndProc;
-        wc.cbClsExtra     = 0;
-        wc.cbWndExtra     = 0;
-        wc.hInstance      = __hinstance;
-        wc.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
-        wc.hIconSm        = NULL;
-        wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
-        wc.hbrBackground  = NULL;  // No brush - we are going to paint our own background
-        wc.lpszMenuName   = NULL;  // No default menu
-        wc.lpszClassName  = L"gameplay";
-
-        if (!::RegisterClassEx(&wc))
-        {
-            GP_ERROR("Failed to register window class.");
-            goto error;
-        }
-
-        if (params.fullscreen)
-        {
-            DEVMODE dm;
-            memset(&dm, 0, sizeof(dm));
-            dm.dmSize= sizeof(dm);
-            dm.dmPelsWidth  = width;
-            dm.dmPelsHeight = height;
-            dm.dmBitsPerPel = DEFAULT_COLOR_BUFFER_SIZE;
-            dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-
-            // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
-            if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
-            {
-                params.fullscreen = false;
-                GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", width, height);
-                goto error;
-            }
-        }
-
-        if (!initializeGL(&params))
-            goto error;
-
-        // Show the window.
-        ShowWindow(__hwnd, SW_SHOW);
-    }
-    else
-    {
-        // Attach to a previous windows
-        __hwnd = (HWND)__attachToWindow;
-        __hdc = GetDC(__hwnd);
-
-        SetWindowLongPtr(__hwnd, GWLP_WNDPROC, (LONG)(WNDPROC)__WndProc);
-
-        if (!initializeGL(NULL))
-            goto error;
+        GP_ERROR("Failed to register window class.");
+        goto error;
     }
 
-#ifdef USE_XINPUT
+    if (params.fullscreen)
+    {
+        DEVMODE dm;
+        memset(&dm, 0, sizeof(dm));
+        dm.dmSize= sizeof(dm);
+        dm.dmPelsWidth  = width;
+        dm.dmPelsHeight = height;
+        dm.dmBitsPerPel = DEFAULT_COLOR_BUFFER_SIZE;
+        dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+        // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
+        if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+        {
+            params.fullscreen = false;
+            GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", width, height);
+            goto error;
+        }
+    }
+
+    if (!initializeGL(&params))
+        goto error;
+
+    // Show the window.
+    ShowWindow(__hwnd, SW_SHOW);
+
+#ifdef GP_USE_GAMEPAD
     // Initialize XInputGamepads.
     for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
     {
@@ -992,9 +976,6 @@ int Platform::enterMessagePump()
     if (_game->getState() != Game::RUNNING)
         _game->run();
 
-    if (__attachToWindow)
-        return 0;
-
     // Enter event dispatch loop.
     MSG msg;
     while (true)
@@ -1012,7 +993,7 @@ int Platform::enterMessagePump()
         }
         else
         {
-#ifdef USE_XINPUT
+#ifdef GP_USE_GAMEPAD
             // Check for connected XInput gamepads.
             for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
             {
@@ -1150,7 +1131,7 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     *roll = 0;
 }
 
-void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
     if (accelX)
     {
@@ -1262,7 +1243,7 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
     return false;
 }
 
-#ifdef USE_XINPUT
+#ifdef GP_USE_GAMEPAD
 void Platform::pollGamepadState(Gamepad* gamepad)
 {
     GP_ASSERT(gamepad->_handle < XUSER_MAX_COUNT);

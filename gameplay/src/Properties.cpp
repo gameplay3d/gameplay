@@ -184,7 +184,7 @@ void Properties::readProperties(Stream* stream)
                 name = trimWhiteSpace(name);
 
                 // Scan for next token, the property's value.
-                value = strtok(NULL, "=");
+                value = strtok(NULL, "");
                 if (value == NULL)
                 {
                     GP_ERROR("Error parsing properties file: attribute with name ('%s') but no value.", name);

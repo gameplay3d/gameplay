@@ -91,6 +91,12 @@ LOCAL_SRC_FILES := \
     ScriptController.cpp \
     ScriptTarget.cpp \
     Slider.cpp \
+	SocialAchievement.cpp \
+	SocialChallenge.cpp \
+	SocialController.cpp \
+	SocialPlayer.cpp \
+	SocialScore.cpp \
+	SocialSessionListener.cpp \
     SpriteBatch.cpp \
     Technique.cpp \
     Terrain.cpp \
@@ -106,6 +112,7 @@ LOCAL_SRC_FILES := \
     VertexAttributeBinding.cpp \
     VertexFormat.cpp \
     VerticalLayout.cpp \
+	social/GoogleGamesSocialSession.cpp \
     lua/lua_AbsoluteLayout.cpp \
     lua/lua_AIAgent.cpp \
     lua/lua_AIAgentListener.cpp \
@@ -281,7 +288,7 @@ LOCAL_SRC_FILES := \
     lua/lua_VerticalLayout.cpp
 
     
-LOCAL_CFLAGS := -D__ANDROID__ -I"../../external-deps/lua/include" -I"../../external-deps/bullet/include" -I"../../external-deps/libpng/include" -I"../../external-deps/oggvorbis/include" -I"../../external-deps/openal/include"
+LOCAL_CFLAGS := -D__ANDROID__ -DGP_USE_SOCIAL -I"../../external-deps/lua/include" -I"../../external-deps/bullet/include" -I"../../external-deps/png/include" -I"../../external-deps/oggvorbis/include" -I"../../external-deps/openal/include"
 LOCAL_STATIC_LIBRARIES := android_native_app_glue
 
 include $(BUILD_STATIC_LIBRARY)

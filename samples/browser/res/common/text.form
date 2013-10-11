@@ -26,7 +26,7 @@ form textTest
         autoWidth = true
         height = 50
         consumeInputEvents = false
-        text = Font (arial18)
+        text = Font (arial)
     }
 
     button wrapButton : fontButton
@@ -54,12 +54,12 @@ form textTest
         text = Font API (Advanced)
     }
 
-    label scaleLabel : topLabel
+    label sizeLabel : topLabel
     {
-        text = Scale (1.0)
+        text = Size (18)
     }
 
-    container scaling
+    container size
     {
         style = noBorder
         autoWidth = true

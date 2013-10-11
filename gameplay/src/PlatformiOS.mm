@@ -863,6 +863,11 @@ int getUnicode(int key);
     return YES;
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 - (void)getAccelerometerPitch:(float*)pitch roll:(float*)roll 
 {
     float p = 0.0f;
@@ -1336,7 +1341,7 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game, void* attachToWindow)
+Platform* Platform::create(Game* game)
 {
     Platform* platform = new Platform(game);
     return platform;
@@ -1417,7 +1422,7 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     [__appDelegate getAccelerometerPitch:pitch roll:roll];
 }
 
-void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
     float x, y, z;
     [__appDelegate getRawAccelX:&x Y:&y Z:&z];

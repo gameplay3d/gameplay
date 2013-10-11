@@ -1,3 +1,13 @@
+## v2.0.0
+
+- Adds support for Visual Studio 2012
+- Adds support for iOS 7, MacOS 10.8 and XCode 5.
+- Adds support for BlackBerry NDK 10.2.
+- Adds support for social achievements, leaderboard and challenges.
+- Adds password mode on textbox controls.
+- Adds collision object group mask filtering.
+- Fixes Mesh Collision shapes.
+
 ## v1.7.0
 
 - Adds -m parameter to encoder to support exporting Material from FBX scenes.

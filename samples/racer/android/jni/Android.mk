@@ -1,7 +1,7 @@
 SAMPLE_PATH := $(call my-dir)/../../src
 
 # external-deps
-LIBPNG_PATH := $(call my-dir)/../../../../external-deps/libpng/lib/android/arm
+PNG_PATH := $(call my-dir)/../../../../external-deps/png/lib/android/arm
 ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
 LUA_PATH := $(call my-dir)/../../../../external-deps/lua/lib/android/arm
 BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
@@ -16,7 +16,7 @@ LOCAL_SRC_FILES := libgameplay.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 # libpng
-LOCAL_PATH := $(LIBPNG_PATH)
+LOCAL_PATH := $(PNG_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libpng 
 LOCAL_SRC_FILES := libpng.a
@@ -65,7 +65,7 @@ LOCAL_MODULE    := sample-racer
 LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp RacerGame.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
-LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../external-deps/lua/include" -I"../../../external-deps/bullet/include" -I"../../../external-deps/libpng/include" -I"../../../external-deps/oggvorbis/include" -I"../../../external-deps/openal/include" -I"../../../gameplay/src"
+LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../external-deps/lua/include" -I"../../../external-deps/bullet/include" -I"../../../external-deps/png/include" -I"../../../external-deps/oggvorbis/include" -I"../../../external-deps/openal/include" -I"../../../gameplay/src"
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib liblua libbullet libvorbis libOpenAL
 
 include $(BUILD_SHARED_LIBRARY)

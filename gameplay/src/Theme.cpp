@@ -95,6 +95,7 @@ Theme* Theme::create(const char* url)
     theme->_spriteBatch = SpriteBatch::create(theme->_texture);
     GP_ASSERT(theme->_spriteBatch);
     theme->_spriteBatch->getSampler()->setFilterMode(Texture::LINEAR, Texture::LINEAR);
+    theme->_spriteBatch->getSampler()->setWrapMode(Texture::CLAMP, Texture::CLAMP);
 
     float tw = 1.0f / theme->_texture->getWidth();
     float th = 1.0f / theme->_texture->getHeight();

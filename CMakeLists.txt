@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(GamePlay)
 
-set(GAMEPLAY_VERSION 1.7.0)
+set(GAMEPLAY_VERSION 2.0.0)
 set(CMAKE_C_COMPILER_INIT g++)
 
 # debug
@@ -27,4 +27,5 @@ add_subdirectory(samples)
 # gameplay encoder
 # A pre-compiled executable can be found in 'gameplay/bin'
 # Uncomment out this line if you want to build the encoder instead of using the pre-compiled gameplay-encoder.
+
 #add_subdirectory(tools/encoder)

@@ -126,7 +126,7 @@ bool Slider::isValueTextVisible() const
 
 void Slider::setValueTextAlignment(Font::Justify alignment)
 {
-    if (alignment != _alignment)
+    if (alignment != _valueTextAlignment)
     {
         _dirty = true;
     }
