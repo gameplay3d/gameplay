@@ -5,8 +5,9 @@
 #include "Scene.h"
 #include "Joint.h"
 
-#define BUNDLE_VERSION_MAJOR            1
-#define BUNDLE_VERSION_MINOR            2
+// Minimum version numbers supported
+#define BUNDLE_VERSION_MAJOR_REQUIRED   1 
+#define BUNDLE_VERSION_MINOR_REQUIRED   2
 
 #define BUNDLE_TYPE_SCENE               1
 #define BUNDLE_TYPE_NODE                2
@@ -25,6 +26,9 @@
 
 // For sanity checking string reads
 #define BUNDLE_MAX_STRING_LENGTH        5000
+
+#define BUNDLE_VERSION_MAJOR_FONT_FORMAT  1
+#define BUNDLE_VERSION_MINOR_FONT_FORMAT  3
 
 namespace gameplay
 {
@@ -53,6 +57,16 @@ Bundle::~Bundle()
     {
         SAFE_DELETE(_stream);
     }
+}
+
+unsigned int Bundle::getVersionMajor() const
+{
+    return (unsigned int)_version[0];
+}
+
+unsigned int Bundle::getVersionMinor() const
+{
+    return (unsigned int)_version[1];
 }
 
 template <class T>
@@ -189,17 +203,18 @@ Bundle* Bundle::create(const char* path)
     }
 
     // Read version.
-    unsigned char ver[2];
-    if (stream->read(ver, 1, 2) != 2)
+    unsigned char version[2];
+    if (stream->read(version, 1, 2) != 2)
     {
         SAFE_DELETE(stream);
         GP_ERROR("Failed to read GPB version for bundle '%s'.", path);
         return NULL;
     }
-    if (ver[0] != BUNDLE_VERSION_MAJOR || ver[1] != BUNDLE_VERSION_MINOR)
+    // Check for the minimal 
+    if (version[0] != BUNDLE_VERSION_MAJOR_REQUIRED || version[1] < BUNDLE_VERSION_MINOR_REQUIRED)
     {
         SAFE_DELETE(stream);
-        GP_ERROR("Unsupported version (%d.%d) for bundle '%s' (expected %d.%d).", (int)ver[0], (int)ver[1], path, BUNDLE_VERSION_MAJOR, BUNDLE_VERSION_MINOR);
+        GP_ERROR("Unsupported version (%d.%d) for bundle '%s' (expected %d.%d).", (int)version[0], (int)version[1], path, BUNDLE_VERSION_MAJOR_REQUIRED, BUNDLE_VERSION_MINOR_REQUIRED);
         return NULL;
     }
 
@@ -229,6 +244,8 @@ Bundle* Bundle::create(const char* path)
 
     // Keep file open for faster reading later.
     Bundle* bundle = new Bundle(path);
+    bundle->_version[0] = version[0];
+    bundle->_version[1] = version[1];
     bundle->_referenceCount = refCount;
     bundle->_references = refs;
     bundle->_stream = stream;
@@ -1704,6 +1721,20 @@ Font* Bundle::loadFont(const char* id)
         return NULL;
     }
 
+    unsigned int format = Font::BITMAP;
+    // After bundle version we add enum FontFormat to bundle format
+    if (getVersionMajor() >= BUNDLE_VERSION_MAJOR_FONT_FORMAT &&
+        getVersionMinor() >= BUNDLE_VERSION_MINOR_FONT_FORMAT)
+    {
+        if (_stream->read(&format, 4, 1) != 1)
+        {
+            GP_ERROR("Failed to font format'%u'.", format);
+            SAFE_DELETE_ARRAY(glyphs);
+            SAFE_DELETE_ARRAY(textureData);
+            return NULL;
+        }
+    }
+
     // Create the texture for the font.
     Texture* texture = Texture::create(Texture::ALPHA, width, height, textureData, true);
 
@@ -1718,7 +1749,7 @@ Font* Bundle::loadFont(const char* id)
     }
 
     // Create the font.
-    Font* font = Font::create(family.c_str(), Font::PLAIN, size, glyphs, glyphCount, texture);
+    Font* font = Font::create(family.c_str(), Font::PLAIN, size, glyphs, glyphCount, texture, (Font::Format)format);
 
     // Free the glyph array.
     SAFE_DELETE_ARRAY(glyphs);

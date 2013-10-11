@@ -42,7 +42,7 @@
     <category>core.games</category>
     
     <asset path="icon.png">icon.png</asset>
-    <asset path="res/arial40.gpb">res/arial40.gpb</asset>
+    <asset path="res/arial.gpb">res/arial.gpb</asset>
     <asset path="res/duck-diffuse.png">res/duck-diffuse.png</asset>
     <asset path="res/duck.gpb">res/duck.gpb</asset>
     <asset path="res/duck.material">res/duck.material</asset>

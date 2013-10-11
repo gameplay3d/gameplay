@@ -4,8 +4,11 @@
 #include "GPBDecoder.h"
 #include "EncoderArguments.h"
 #include "NormalMapGenerator.h"
+#include "Font.h"
 
 using namespace gameplay;
+
+#define FONT_SIZE_DISTANCEFIELD 48
 
 /**
  * Prompts the user for a font size until a valid font size is entered.
@@ -14,13 +17,13 @@ using namespace gameplay;
  */
 static unsigned int promptUserFontSize()
 {
-    static const int lowerBound = 8;
-    static const int upperBound = 500;
+    static const int lowerBound = 12;
+    static const int upperBound = 96;
     unsigned int fontSize = 0;
     char buffer[80];
     do
     {
-        printf("Enter font size (between %d and %d):\n", lowerBound, upperBound);
+        printf("Enter font size (pixels) (between %d and %d):\n", lowerBound, upperBound);
         std::cin.getline(buffer, 80);
         int i = atoi(buffer);
         if (i >= lowerBound && i <= upperBound)
@@ -30,6 +33,7 @@ static unsigned int promptUserFontSize()
     } while (fontSize == 0);
     return fontSize;
 }
+
 
 /**
  * Main application entry point.
@@ -80,12 +84,25 @@ int main(int argc, const char** argv)
     case EncoderArguments::FILEFORMAT_TTF:
         {
             unsigned int fontSize = arguments.getFontSize();
-            if (fontSize == 0)
+            
+            Font::FontFormat fontFormat = arguments.getFontFormat();
+            if (fontFormat == Font::BITMAP)
             {
-                fontSize = promptUserFontSize();
+                if (fontSize == 0)
+                {
+                    fontSize = promptUserFontSize();
+                }
+            }
+            else
+            {
+                // Distance fields use size
+                if (fontSize == 0)
+                {
+                    fontSize = FONT_SIZE_DISTANCEFIELD;
+                }
             }
             std::string id = getBaseName(arguments.getFilePath());
-            writeFont(arguments.getFilePath().c_str(), arguments.getOutputFilePath().c_str(), fontSize, id.c_str(), arguments.fontPreviewEnabled());
+            writeFont(arguments.getFilePath().c_str(), arguments.getOutputFilePath().c_str(), fontSize, id.c_str(), arguments.fontPreviewEnabled(), fontFormat);
             break;
         }
     case EncoderArguments::FILEFORMAT_GPB:

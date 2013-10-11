@@ -133,7 +133,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int
 
 	// Bind an ortho projection to the material by default (user can override with setProjectionMatrix)
 	Game* game = Game::getInstance();
-	Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &batch->_projectionMatrix);
+    Matrix::createOrthographicOffCenter(0, game->getViewport().width, game->getViewport().height, 0, 0, 1, &batch->_projectionMatrix);
 	material->getParameter("u_projectionMatrix")->bindValue(batch, &SpriteBatch::getProjectionMatrix);
 	
     return batch;

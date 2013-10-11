@@ -89,13 +89,27 @@ public:
     unsigned int getObjectCount() const;
 
     /**
-     * Returns the unique identifier of the top-level object at the specified index in this bundle.
+     * Gets the unique identifier of the top-level object at the specified index in this bundle.
      *
      * @param index The index of the object.
      * 
      * @return The ID of the object at the given index, or NULL if index is invalid.
      */
     const char* getObjectId(unsigned int index) const;
+
+    /**
+     * Gets the major version of the loaded bundle.
+     *
+     * @return The major version of the loaded bundle.
+     */
+    unsigned int getVersionMajor() const;
+
+    /**
+     * Gets the minor version of the loaded bundle.
+     *
+     * @return The minor version of the loaded bundle.
+     */
+    unsigned int getVersionMinor() const;
 
 private:
 
@@ -433,6 +447,7 @@ private:
      */
     bool skipNode();
 
+    unsigned char _version[2];
     std::string _path;
     std::string _materialPath;
     unsigned int _referenceCount;

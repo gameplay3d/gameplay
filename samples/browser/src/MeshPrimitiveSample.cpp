@@ -190,7 +190,7 @@ MeshPrimitiveSample::MeshPrimitiveSample()
 void MeshPrimitiveSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/common/arial.gpb");
 
     // Create an orthographic projection matrix.
     float width = getWidth() / (float)getHeight();

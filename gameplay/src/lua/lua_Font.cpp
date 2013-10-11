@@ -7,6 +7,7 @@
 #include "Font.h"
 #include "Game.h"
 #include "Ref.h"
+#include "lua_FontFormat.h"
 #include "lua_FontJustify.h"
 
 namespace gameplay
@@ -21,6 +22,7 @@ void luaRegister_Font()
         {"drawText", lua_Font_drawText},
         {"finish", lua_Font_finish},
         {"getCharacterSpacing", lua_Font_getCharacterSpacing},
+        {"getFormat", lua_Font_getFormat},
         {"getIndexAtLocation", lua_Font_getIndexAtLocation},
         {"getLocationAtIndex", lua_Font_getLocationAtIndex},
         {"getRefCount", lua_Font_getRefCount},
@@ -1110,6 +1112,41 @@ int lua_Font_getCharacterSpacing(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Font_getCharacterSpacing - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Font_getFormat(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Font* instance = getInstance(state);
+                Font::Format result = instance->getFormat();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, lua_stringFromEnum_FontFormat(result));
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Font_getFormat - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

@@ -14,7 +14,7 @@ form formSelect
 		text = Basic Controls
 		group = formSelection
 		size = 180, 60
-		textAlignment = ALIGN_VCENTER_HCENTER
+		textAlignment = ALIGN_VCENTER_LEFT
 		selected = true
 	}
 

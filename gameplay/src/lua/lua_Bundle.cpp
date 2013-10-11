@@ -22,6 +22,8 @@ void luaRegister_Bundle()
         {"getObjectCount", lua_Bundle_getObjectCount},
         {"getObjectId", lua_Bundle_getObjectId},
         {"getRefCount", lua_Bundle_getRefCount},
+        {"getVersionMajor", lua_Bundle_getVersionMajor},
+        {"getVersionMinor", lua_Bundle_getVersionMinor},
         {"loadFont", lua_Bundle_loadFont},
         {"loadMesh", lua_Bundle_loadMesh},
         {"loadNode", lua_Bundle_loadNode},
@@ -251,6 +253,76 @@ int lua_Bundle_getRefCount(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Bundle_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Bundle_getVersionMajor(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Bundle* instance = getInstance(state);
+                unsigned int result = instance->getVersionMajor();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Bundle_getVersionMajor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Bundle_getVersionMinor(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Bundle* instance = getInstance(state);
+                unsigned int result = instance->getVersionMinor();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Bundle_getVersionMinor - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

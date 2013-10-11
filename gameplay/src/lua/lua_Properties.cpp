@@ -781,9 +781,34 @@ int lua_Properties_getString(lua_State* state)
             lua_error(state);
             break;
         }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
+
+                Properties* instance = getInstance(state);
+                const char* result = instance->getString(param1, param2);
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Properties_getString - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1, 2 or 3).");
             lua_error(state);
             break;
         }

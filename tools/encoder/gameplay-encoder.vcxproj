@@ -18,6 +18,7 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Constants.cpp" />
     <ClCompile Include="src\Curve.cpp" />
+    <ClCompile Include="src\edtaa3func.c" />
     <ClCompile Include="src\EncoderArguments.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FBXSceneEncoder.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Constants.h" />
     <ClInclude Include="src\Curve.h" />
+    <ClInclude Include="src\edtaa3func.h" />
     <ClInclude Include="src\EncoderArguments.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FBXSceneEncoder.h" />

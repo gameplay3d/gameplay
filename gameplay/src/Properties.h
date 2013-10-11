@@ -233,10 +233,11 @@ public:
      * whatever the intended type of the property.
      *
      * @param name The name of the property to interpret, or NULL to return the current property's value.
+     * @param defaultValue The default value to return if the specified property does not exist.
      * 
      * @return The value of the given property as a string, or the empty string if no property with that name exists.
      */
-    const char* getString(const char* name = NULL) const;
+    const char* getString(const char* name = NULL, const char* defaultValue = NULL) const;
 
     /**
      * Interpret the value of the given property as a boolean.
