@@ -13,6 +13,7 @@
 #include "ScriptTarget.h"
 #include "TextBox.h"
 #include "lua_ControlAlignment.h"
+#include "lua_ControlAutoSize.h"
 #include "lua_ControlListenerEventType.h"
 #include "lua_ControlState.h"
 #include "lua_CurveInterpolationType.h"
@@ -79,7 +80,11 @@ void luaRegister_TextBox()
         {"initialize", lua_TextBox_initialize},
         {"isContainer", lua_TextBox_isContainer},
         {"isEnabled", lua_TextBox_isEnabled},
+        {"isHeightPercentage", lua_TextBox_isHeightPercentage},
         {"isVisible", lua_TextBox_isVisible},
+        {"isWidthPercentage", lua_TextBox_isWidthPercentage},
+        {"isXPercentage", lua_TextBox_isXPercentage},
+        {"isYPercentage", lua_TextBox_isYPercentage},
         {"release", lua_TextBox_release},
         {"removeListener", lua_TextBox_removeListener},
         {"removeScriptCallback", lua_TextBox_removeScriptCallback},
@@ -116,6 +121,8 @@ void luaRegister_TextBox()
         {"setTextRightToLeft", lua_TextBox_setTextRightToLeft},
         {"setVisible", lua_TextBox_setVisible},
         {"setWidth", lua_TextBox_setWidth},
+        {"setX", lua_TextBox_setX},
+        {"setY", lua_TextBox_setY},
         {"setZIndex", lua_TextBox_setZIndex},
         {NULL, NULL}
     };
@@ -939,10 +946,10 @@ int lua_TextBox_getAutoHeight(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 TextBox* instance = getInstance(state);
-                bool result = instance->getAutoHeight();
+                Control::AutoSize result = instance->getAutoHeight();
 
                 // Push the return value onto the stack.
-                lua_pushboolean(state, result);
+                lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
 
                 return 1;
             }
@@ -974,10 +981,10 @@ int lua_TextBox_getAutoWidth(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 TextBox* instance = getInstance(state);
-                bool result = instance->getAutoWidth();
+                Control::AutoSize result = instance->getAutoWidth();
 
                 // Push the return value onto the stack.
-                lua_pushboolean(state, result);
+                lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
 
                 return 1;
             }
@@ -2801,6 +2808,41 @@ int lua_TextBox_isEnabled(lua_State* state)
     return 0;
 }
 
+int lua_TextBox_isHeightPercentage(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->isHeightPercentage();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_isHeightPercentage - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_TextBox_isVisible(lua_State* state)
 {
     // Get the number of parameters.
@@ -2823,6 +2865,111 @@ int lua_TextBox_isVisible(lua_State* state)
             }
 
             lua_pushstring(state, "lua_TextBox_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_isWidthPercentage(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->isWidthPercentage();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_isWidthPercentage - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_isXPercentage(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->isXPercentage();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_isXPercentage - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_isYPercentage(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->isYPercentage();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_isYPercentage - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3074,17 +3221,35 @@ int lua_TextBox_setAutoHeight(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
-                TextBox* instance = getInstance(state);
-                instance->setAutoHeight(param1);
-                
-                return 0;
-            }
+                    TextBox* instance = getInstance(state);
+                    instance->setAutoHeight(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
+
+                    TextBox* instance = getInstance(state);
+                    instance->setAutoHeight(param1);
+                    
+                    return 0;
+                }
+            } while (0);
 
             lua_pushstring(state, "lua_TextBox_setAutoHeight - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
@@ -3110,17 +3275,35 @@ int lua_TextBox_setAutoWidth(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
-                TextBox* instance = getInstance(state);
-                instance->setAutoWidth(param1);
-                
-                return 0;
-            }
+                    TextBox* instance = getInstance(state);
+                    instance->setAutoWidth(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
+
+                    TextBox* instance = getInstance(state);
+                    instance->setAutoWidth(param1);
+                    
+                    return 0;
+                }
+            } while (0);
 
             lua_pushstring(state, "lua_TextBox_setAutoWidth - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
@@ -3614,9 +3797,31 @@ int lua_TextBox_setHeight(lua_State* state)
             lua_error(state);
             break;
         }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
+
+                TextBox* instance = getInstance(state);
+                instance->setHeight(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
             lua_error(state);
             break;
         }
@@ -4588,9 +4793,147 @@ int lua_TextBox_setWidth(lua_State* state)
             lua_error(state);
             break;
         }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
+
+                TextBox* instance = getInstance(state);
+                instance->setWidth(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_setX(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                TextBox* instance = getInstance(state);
+                instance->setX(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
+
+                TextBox* instance = getInstance(state);
+                instance->setX(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_setY(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                TextBox* instance = getInstance(state);
+                instance->setY(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
+
+                TextBox* instance = getInstance(state);
+                instance->setY(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
             lua_error(state);
             break;
         }

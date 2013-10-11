@@ -6,6 +6,8 @@ namespace gameplay
 
 /**
  * Defines a social achievement in a game.
+ *
+ * @script{ignore}
  */
 class SocialAchievement
 {

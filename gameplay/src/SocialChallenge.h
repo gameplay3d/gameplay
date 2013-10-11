@@ -6,6 +6,8 @@ namespace gameplay
 
 /**
  * Defines a social challenge between social players.
+ *
+ * @script{ignore}
  */
 class SocialChallenge
 {

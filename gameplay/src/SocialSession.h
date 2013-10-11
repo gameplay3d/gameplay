@@ -13,6 +13,8 @@ namespace gameplay
 
 /**
  * Defines an abstract class for typical social game activities running with an authenticated session.
+ *
+ * @script{ignore}
  */
 class SocialSession
 {

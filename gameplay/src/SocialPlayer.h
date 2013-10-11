@@ -8,6 +8,8 @@ namespace gameplay
  * Defines a social player.
  *
  * This can either be the authenticated user, friend or community user (not friend yet...).
+ *
+ * @script{ignore}
  */
 class SocialPlayer
 {

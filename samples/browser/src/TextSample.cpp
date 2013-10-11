@@ -99,8 +99,6 @@ void TextSample::render(float elapsedTime)
 
     _fonts[0]->drawText(fps, 245, 5, Vector4(0, 0.5f, 1, 1), _size);
     
-    _form->draw();
-
     if (_font != _fonts[0])
         _font->start();
 
@@ -139,6 +137,8 @@ void TextSample::render(float elapsedTime)
         _font->finish();
     }
     _fonts[0]->finish();
+
+    _form->draw();
 }
 
 void TextSample::touchEvent(Touch::TouchEvent event, int x, int y, unsigned int contactIndex)

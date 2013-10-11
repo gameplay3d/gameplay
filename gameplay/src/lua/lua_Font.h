@@ -11,6 +11,7 @@ int lua_Font_createText(lua_State* state);
 int lua_Font_drawText(lua_State* state);
 int lua_Font_finish(lua_State* state);
 int lua_Font_getCharacterSpacing(lua_State* state);
+int lua_Font_getFormat(lua_State* state);
 int lua_Font_getIndexAtLocation(lua_State* state);
 int lua_Font_getLocationAtIndex(lua_State* state);
 int lua_Font_getRefCount(lua_State* state);
