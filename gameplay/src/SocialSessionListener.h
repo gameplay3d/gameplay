@@ -13,6 +13,8 @@ class SocialSession;
 
 /**
  * Defines a class for handling session responses to various session request.
+ *
+ * @script{ignore}
  */
 class SocialSessionListener
 {
