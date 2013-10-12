@@ -112,7 +112,7 @@ public:
     /**
      * Draws this form.
      */
-    void draw();
+    unsigned int draw();
 
     /**
      * @see Control::getType

@@ -870,9 +870,6 @@
     <ClCompile Include="src\social\ScoreloopSocialSession.cpp">
       <Filter>src\social</Filter>
     </ClCompile>
-    <ClCompile Include="src\social\GoogleGamesSocialSession.cpp">
-      <Filter>src\social</Filter>
-    </ClCompile>
     <ClCompile Include="src\SocialAchievement.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -895,6 +892,30 @@
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_RenderStateFrontFace.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneRendererForward.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VisibleSetDefault.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\social\GooglePlaySocialSession.cpp">
+      <Filter>src\social</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_SceneRenderer.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_SceneRendererForward.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_VisibleSet.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_VisibleSetDefault.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1766,9 +1787,6 @@
     <ClInclude Include="src\social\ScoreloopSocialSession.h">
       <Filter>src\social</Filter>
     </ClInclude>
-    <ClInclude Include="src\social\GoogleGamesSocialSession.h">
-      <Filter>src\social</Filter>
-    </ClInclude>
     <ClInclude Include="src\SocialChallenge.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1779,6 +1797,33 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_RenderStateFrontFace.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneRenderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneRendererForward.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VisibleSet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VisibleSetDefault.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\social\GooglePlaySocialSession.h">
+      <Filter>src\social</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_SceneRenderer.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_SceneRendererForward.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_VisibleSet.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_VisibleSetDefault.h">
       <Filter>src\lua</Filter>
     </ClInclude>
   </ItemGroup>

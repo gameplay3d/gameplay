@@ -4,13 +4,8 @@
     ADD_SAMPLE("Input", "Gamepads", GamepadSample, 3);
 #endif
 
-GamepadSample::GamepadSample() : _gamepad(NULL)
+GamepadSample::GamepadSample() : _font(NULL), _gamepad(NULL)
 {
-}
-
-void GamepadSample::finalize()
-{
-    SAFE_RELEASE(_font);
 }
 
 void GamepadSample::initialize()
@@ -25,6 +20,11 @@ void GamepadSample::initialize()
 
     _font = Font::create("res/common/arial.gpb");
     _status = "Looking for gamepads...";
+}
+
+void GamepadSample::finalize()
+{
+    SAFE_RELEASE(_font);
 }
 
 void GamepadSample::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned int player)
