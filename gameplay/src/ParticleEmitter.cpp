@@ -9,7 +9,7 @@
 #define PARTICLE_COUNT_MAX                       100
 #define PARTICLE_EMISSION_RATE                   10
 #define PARTICLE_EMISSION_RATE_TIME_INTERVAL     1000.0f / (float)PARTICLE_EMISSION_RATE
-#define PARTICLE_UPDATE_RATE_MAX                 16
+#define PARTICLE_UPDATE_RATE_MAX                 8
 
 namespace gameplay
 {

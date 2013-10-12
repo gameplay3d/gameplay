@@ -11,6 +11,7 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "lua_ControlAlignment.h"
+#include "lua_ControlAutoSize.h"
 #include "lua_ControlListenerEventType.h"
 #include "lua_ControlState.h"
 #include "lua_CurveInterpolationType.h"

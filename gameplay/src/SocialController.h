@@ -32,7 +32,8 @@ namespace gameplay
              hard = 2
          }
     }
-
+ *
+ * @script{ignore}
  */
 class SocialController
 {

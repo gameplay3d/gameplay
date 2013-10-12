@@ -13,6 +13,7 @@
 #include "lua_RenderStateBlend.h"
 #include "lua_RenderStateCullFaceSide.h"
 #include "lua_RenderStateDepthFunction.h"
+#include "lua_RenderStateFrontFace.h"
 #include "lua_RenderStateStencilFunction.h"
 #include "lua_RenderStateStencilOperation.h"
 
@@ -35,6 +36,7 @@ void luaRegister_RenderStateStateBlock()
         {"setDepthFunction", lua_RenderStateStateBlock_setDepthFunction},
         {"setDepthTest", lua_RenderStateStateBlock_setDepthTest},
         {"setDepthWrite", lua_RenderStateStateBlock_setDepthWrite},
+        {"setFrontFace", lua_RenderStateStateBlock_setFrontFace},
         {"setState", lua_RenderStateStateBlock_setState},
         {"setStencilFunction", lua_RenderStateStateBlock_setStencilFunction},
         {"setStencilOperation", lua_RenderStateStateBlock_setStencilOperation},
@@ -504,6 +506,42 @@ int lua_RenderStateStateBlock_setDepthWrite(lua_State* state)
             }
 
             lua_pushstring(state, "lua_RenderStateStateBlock_setDepthWrite - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderStateStateBlock_setFrontFace(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                RenderState::FrontFace param1 = (RenderState::FrontFace)lua_enumFromString_RenderStateFrontFace(luaL_checkstring(state, 2));
+
+                RenderState::StateBlock* instance = getInstance(state);
+                instance->setFrontFace(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setFrontFace - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

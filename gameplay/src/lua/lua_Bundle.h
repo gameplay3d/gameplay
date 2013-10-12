@@ -11,6 +11,8 @@ int lua_Bundle_contains(lua_State* state);
 int lua_Bundle_getObjectCount(lua_State* state);
 int lua_Bundle_getObjectId(lua_State* state);
 int lua_Bundle_getRefCount(lua_State* state);
+int lua_Bundle_getVersionMajor(lua_State* state);
+int lua_Bundle_getVersionMinor(lua_State* state);
 int lua_Bundle_loadFont(lua_State* state);
 int lua_Bundle_loadMesh(lua_State* state);
 int lua_Bundle_loadNode(lua_State* state);

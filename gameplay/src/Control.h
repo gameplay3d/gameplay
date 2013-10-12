@@ -92,6 +92,29 @@ public:
     };
 
     /**
+     * Defines supported auto sizing modes for controls.
+     */
+    enum AutoSize
+    {
+        /**
+         * No auto sizing is applied.
+         */
+        AUTO_SIZE_NONE = 0x00,
+
+        /**
+         * The control's size is stretched to fill the content area of its parent container.
+         */
+        AUTO_SIZE_STRETCH = 0x01,
+
+        /**
+         * The control's size is set to tightly fit its contents.
+         *
+         * Not all controls support this auto sizing mode.
+         */
+        AUTO_SIZE_FIT = 0x02
+    };
+
+    /**
      * Implement Control::Listener and call Control::addListener()
      * in order to listen for events on controls.
      */
@@ -215,7 +238,111 @@ public:
     const char* getId() const;
 
     /**
+     * Get the x coordinate of this control.
+     *
+     * @return The x coordinate of this control.
+     */
+    float getX() const;
+
+    /**
+     * Sets the X coordinate for the control.
+     *
+     * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
+     * between 0-1, where 1 equals the full size of it's parent.
+     *
+     * @param x The new X coordinate.
+     * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
+     */
+    void setX(float x, bool percentage = false);
+
+    /**
+     * Determines if the X coordinate of this control computed as a percentage of its parent container.
+     *
+     * @return True if the X value is computed as a percentage of its parent container.
+     */
+    bool isXPercentage() const;
+
+    /**
+     * Get the y coordinate of this control.
+     *
+     * @return The y coordinate of this control.
+     */
+    float getY() const;
+
+    /**
+     * Sets the Y coordinate for the control.
+     *
+     * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
+     * between 0-1, where 1 equals the full size of it's parent.
+     *
+     * @param y The new Y coordinate.
+     * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
+     */
+    void setY(float y, bool percentage = false);
+
+    /**
+     * Determines if the Y coordinate of this control is computed as a percentage of its parent container.
+     *
+     * @return True if the Y value is computed as a percentage of its parent container.
+     */
+    bool isYPercentage() const;
+
+    /**
+     * Get the width of this control.
+     *
+     * @return The width of this control.
+     */
+    float getWidth() const;
+
+    /**
+     * Set the desired width of the control, including it's border and padding, before clipping.
+     *
+     * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
+     * between 0-1, where 1 equals the full size of it's parent.
+     *
+     * @param width The width.
+     * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
+     */
+    void setWidth(float width, bool percentage = false);
+
+    /**
+     * Determines if the width of this control is computed as a percentage of its parent container.
+     *
+     * @return True if the width is computed as a percentage of its parent container.
+     */
+    bool isWidthPercentage() const;
+
+    /**
+     * Get the height of this control.
+     *
+     * @return The height of this control.
+     */
+    float getHeight() const;
+
+    /**
+     * Set the desired height of the control, including it's border and padding, before clipping.
+     *
+     * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
+     * between 0-1, where 1 equals the full size of it's parent.
+     *
+     * @param height The height.
+     * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
+     */
+    void setHeight(float height, bool percentage = false);
+
+    /**
+     * Determines if the height of this control is computed as a percentage of its parent container.
+     *
+     * @return True if the height is computed as a percentage of its parent container.
+     */
+    bool isHeightPercentage() const;
+
+    /**
      * Set the position of this control relative to its parent container.
+     *
+     * This method sets the local position of the control, relative to its container.
+     * Setting percetage values is not supported with this method, use setX
+     * and setY instead.
      *
      * @param x The x coordinate.
      * @param y The y coordinate.
@@ -225,32 +352,14 @@ public:
     /**
      * Set the desired size of this control, including its border and padding, before clipping.
      *
+     * This method sets the size of the control, relative to its container.
+     * Setting percetage values is not supported with this method, use setWidth
+     * and setHeight instead.
+     *
      * @param width The width.
      * @param height The height.
      */
-    virtual void setSize(float width, float height);
-
-    /** 
-     * Set the desired width of the control, including it's border and padding, before clipping.
-     *
-     * @param width The width.
-     */
-    virtual void setWidth(float width);
-
-    /** 
-     * Set the desired height of the control, including it's border and padding, before clipping.
-     *
-     * @param height The height.
-     */
-    virtual void setHeight(float height);
-
-    /**
-     * Set the bounds of this control, relative to its parent container and including its
-     * border and padding, before clipping.
-     *
-     * @param bounds The new bounds to set.
-     */
-    virtual void setBounds(const Rectangle& bounds);
+    void setSize(float width, float height);
 
     /**
      * Get the bounds of this control, relative to its parent container and including its
@@ -261,40 +370,91 @@ public:
     const Rectangle& getBounds() const;
 
     /**
+     * Set the bounds of this control, relative to its parent container and including its
+     * border and padding, before clipping.
+     *
+     * This method sets the local bounds of the control, relative to its container.
+     * Setting percetage values is not supported with this method, use setX,
+     * setY, setWidth and setHeight instead.
+     *
+     * @param bounds The new bounds to set.
+     */
+    void setBounds(const Rectangle& bounds);
+
+    /**
      * Get the absolute bounds of this control, in pixels, including border and padding,
      * before clipping.
+     *
+     * The absolute bounds of a control represents its final computed bounds after all 
+     * alignment, auto sizing, relative position and sizing has been computed. The
+     * returned bounds is in absolute coordinates, relative to the control's top-most
+     * parent container (usually its form).
      *
      * @return The absolute bounds of this control.
      */
     const Rectangle& getAbsoluteBounds() const;
 
     /**
-     * Get the x coordinate of this control's bounds.
+     * Get the bounds of this control, relative to its parent container, after clipping.
      *
-     * @return The x coordinate of this control's bounds.
+     * @return The bounds of this control.
      */
-    float getX() const;
-    
-    /**
-     * Get the y coordinate of this control's bounds.
-     *
-     * @return The y coordinate of this control's bounds.
-     */
-    float getY() const;
+    const Rectangle& getClipBounds() const;
 
     /**
-     * Get the width of this control's bounds.
+     * Get the content area of this control, in screen coordinates, after clipping.
      *
-     * @return The width of this control's bounds.
+     * @return The clipping area of this control.
      */
-    float getWidth() const;
+    const Rectangle& getClip() const;
 
     /**
-     * Get the height of this control's bounds.
+     * Returns the auto sizing mode for this control's width.
      *
-     * @return The height of this control's bounds.
+     * @return The auto size mode for this control's width.
      */
-    float getHeight() const;
+    AutoSize getAutoWidth() const;
+
+    /**
+     * Enables or disables auto sizing for this control's width.
+     *
+     * This method is a simplified version of setAutoWidth(AutoSize) left intact for legacy reasons.
+     * It enables or disables the AUTO_SIZE_STRETCH mode for the control's width.
+     *
+     * @param autoWidth True to enable AUTO_SIZE_STRETCH for this control's width.
+     */
+    void setAutoWidth(bool autoWidth);
+
+    /**
+     * Sets the auto size mode for this control's width.
+     *
+     * @param mode The new auto size mode for this control's width.
+     */
+    void setAutoWidth(AutoSize mode);
+
+    /**
+     * Returns the auto sizing mode for this control's height.
+     *
+     * @return The auto size mode for this control's height.
+     */
+    AutoSize getAutoHeight() const;
+
+    /**
+     * Enables or disables auto sizing for this control's height.
+     *
+     * This method is a simplified version of setAutoHeight(AutoSize) left intact for legacy reasons.
+     * It enables or disables the AUTO_SIZE_STRETCH mode for the control's height.
+     *
+     * @param autoWidth True to enable AUTO_SIZE_STRETCH for this control's height.
+     */
+    void setAutoHeight(bool autoHeight);
+
+    /**
+     * Sets the auto size mode for this control's height.
+     *
+     * @param mode The new auto size mode for this control's height.
+     */
+    void setAutoHeight(AutoSize mode);
 
     /**
      * Set the alignment of this control within its parent container.
@@ -309,36 +469,6 @@ public:
      * @return The alignment of this control within its parent container.
      */
     Alignment getAlignment() const;
-
-    /**
-     * Set this control to fit horizontally within its parent container.
-     *
-     * @param autoWidth Whether to size this control to fit horizontally within its parent container.
-     */
-    virtual void setAutoWidth(bool autoWidth);
-
-    /**
-     * Get whether this control's width is set to automatically adjust to
-     * fit horizontally within its parent container.
-     *
-     * @return Whether this control's width is set to automatically adjust.
-     */
-    bool getAutoWidth() const;
-
-    /**
-     * Set this control to fit vertically within its parent container.
-     *
-     * @param autoHeight Whether to size this control to fit vertically within its parent container.
-     */
-    virtual void setAutoHeight(bool autoHeight);
-
-    /**
-     * Get whether this control's height is set to automatically adjust to
-     * fit vertically within its parent container.
-     *
-     * @return Whether this control's height is set to automatically adjust.
-     */
-    bool getAutoHeight() const;
 
     /**
      * Set the size of this control's border.
@@ -662,20 +792,6 @@ public:
     bool isEnabled() const;
 
     /**
-     * Get the bounds of this control, relative to its parent container, after clipping.
-     *
-     * @return The bounds of this control.
-     */
-    const Rectangle& getClipBounds() const;
-
-    /**
-     * Get the content area of this control, in screen coordinates, after clipping.
-     *
-     * @return The clipping area of this control.
-     */
-    const Rectangle& getClip() const;
-
-    /**
      * Change this control's state.
      *
      * @param state The state to switch this control to.
@@ -985,12 +1101,22 @@ protected:
     State _state;
 
     /**
-     * Position, relative to parent container's clipping window, and desired size.
+     * Bits indicating whether bounds values are absolute values or percentages.
+     */
+    int _boundsBits;
+
+    /**
+     * Local bounds, relative to parent container's clipping window, possibly stored as percentages (see _boundsBits).
+     */
+    Rectangle _relativeBounds;
+
+    /**
+     * Local bounds, relative to parent container's clipping window, and desired size.
      */
     Rectangle _bounds;
 
     /**
-     * Position, relative to parent container's clipping window, including border and padding, after clipping.
+     * Local bounds, relative to parent container's clipping window, including border and padding, after clipping.
      */
     Rectangle _clipBounds;
 
@@ -1042,12 +1168,12 @@ protected:
     /**
      * Whether the Control's width is auto-sized.
      */
-    bool _autoWidth;
+    AutoSize _autoWidth;
     
     /**
      * Whether the Control's height is auto-sized.
      */
-    bool _autoHeight;
+    AutoSize _autoHeight;
     
     /**
      * Listeners map of EventType's to a list of Listeners.

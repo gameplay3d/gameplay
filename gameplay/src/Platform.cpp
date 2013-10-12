@@ -74,6 +74,8 @@ void Platform::resizeEventInternal(unsigned int width, unsigned int height)
         game->resizeEvent(width, height);
         game->getScriptController()->resizeEvent(width, height);
     }
+
+    Form::resizeEventInternal(width, height);
 }
 
 void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)

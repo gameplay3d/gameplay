@@ -18,6 +18,7 @@ int lua_RenderStateStateBlock_setCullFaceSide(lua_State* state);
 int lua_RenderStateStateBlock_setDepthFunction(lua_State* state);
 int lua_RenderStateStateBlock_setDepthTest(lua_State* state);
 int lua_RenderStateStateBlock_setDepthWrite(lua_State* state);
+int lua_RenderStateStateBlock_setFrontFace(lua_State* state);
 int lua_RenderStateStateBlock_setState(lua_State* state);
 int lua_RenderStateStateBlock_setStencilFunction(lua_State* state);
 int lua_RenderStateStateBlock_setStencilOperation(lua_State* state);

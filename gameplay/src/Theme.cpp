@@ -88,8 +88,9 @@ Theme* Theme::create(const char* url)
     theme->_url = url;
         
     // Parse the Properties object and set up the theme.
-    const char* textureFile = themeProperties->getString("texture");
-    theme->_texture = Texture::create(textureFile, false);
+    std::string textureFile;
+    themeProperties->getPath("texture", &textureFile);
+    theme->_texture = Texture::create(textureFile.c_str(), false);
     GP_ASSERT(theme->_texture);
     theme->_spriteBatch = SpriteBatch::create(theme->_texture);
     GP_ASSERT(theme->_spriteBatch);
@@ -177,11 +178,11 @@ Theme* Theme::create(const char* url)
                         innerSpace->getColor("textColor", &textColor);
                     }
 
-                    const char* fontPath = innerSpace->getString("font");
                     Font* font = NULL;
-                    if (fontPath)
+                    std::string fontPath;
+                    if (innerSpace->getPath("font", &fontPath))
                     {
-                        font = Font::create(fontPath);
+                        font = Font::create(fontPath.c_str());
                     }
                     unsigned int fontSize = innerSpace->getInt("fontSize");
                     const char* textAlignmentString = innerSpace->getString("textAlignment");
@@ -261,11 +262,11 @@ Theme* Theme::create(const char* url)
                         textColor.set(normal->getTextColor());
                     }
 
-                    const char* fontPath = innerSpace->getString("font");
                     Font* font = NULL;
-                    if (fontPath)
+                    std::string fontPath;
+                    if (innerSpace->getPath("font", &fontPath))
                     {
-                        font = Font::create(fontPath);
+                        font = Font::create(fontPath.c_str());
                     }
                     if (!font)
                     {
