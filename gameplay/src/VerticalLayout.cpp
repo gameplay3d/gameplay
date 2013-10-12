@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-VerticalLayout::VerticalLayout() : _bottomToTop(false)
+VerticalLayout::VerticalLayout() : _bottomToTop(false), _spacing(0)
 {
 }
 
@@ -30,6 +30,16 @@ bool VerticalLayout::getBottomToTop()
 Layout::Type VerticalLayout::getType()
 {
     return Layout::LAYOUT_VERTICAL;
+}
+
+int VerticalLayout::getSpacing() const
+{
+    return _spacing;
+}
+
+void VerticalLayout::setSpacing(int spacing)
+{
+    _spacing = spacing;
 }
 
 void VerticalLayout::update(const Container* container, const Vector2& offset)
@@ -75,7 +85,7 @@ void VerticalLayout::update(const Container* container, const Vector2& offset)
             control->setPosition(margin.left, yPosition);
             control->update(container, offset);
 
-            yPosition += bounds.height + margin.bottom;
+            yPosition += bounds.height + margin.bottom + _spacing;
         }
 
         i += iter;
