@@ -27,5 +27,4 @@ add_subdirectory(samples)
 # gameplay encoder
 # A pre-compiled executable can be found in 'gameplay/bin'
 # Uncomment out this line if you want to build the encoder instead of using the pre-compiled gameplay-encoder.
-
 #add_subdirectory(tools/encoder)
