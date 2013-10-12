@@ -79,7 +79,7 @@ void SocialController::authenticate(SocialSessionListener* listener)
 
     if (strcmp(providerStr, "GooglePlay") == 0)
     {
-        _session = GoogleGamesSocialSession::authenticate(listener, socialProperties);
+        _session = GooglePlaySocialSession::authenticate(listener, socialProperties);
     }
     else
     {
