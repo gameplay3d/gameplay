@@ -119,7 +119,7 @@ private:
     /**
      * Draws the terrain patch.
      */
-    void draw(bool wireframe);
+    unsigned int draw(bool wireframe);
 
     /**
      * Updates the material for the patch.

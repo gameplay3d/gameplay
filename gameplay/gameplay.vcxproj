@@ -314,6 +314,8 @@
     <ClCompile Include="src\RenderTarget.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneLoader.cpp" />
+    <ClCompile Include="src\SceneRenderer.cpp" />
+    <ClCompile Include="src\SceneRendererForward.cpp" />
     <ClCompile Include="src\ScreenDisplayer.cpp" />
     <ClCompile Include="src\ScriptController.cpp" />
     <ClCompile Include="src\ScriptTarget.cpp" />
@@ -341,6 +343,7 @@
     <ClCompile Include="src\VertexAttributeBinding.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\VerticalLayout.cpp" />
+    <ClCompile Include="src\VisibleSetDefault.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AbsoluteLayout.h" />
@@ -603,6 +606,8 @@
     <ClInclude Include="src\RenderTarget.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
+    <ClInclude Include="src\SceneRenderer.h" />
+    <ClInclude Include="src\SceneRendererForward.h" />
     <ClInclude Include="src\ScreenDisplayer.h" />
     <ClInclude Include="src\ScriptController.h" />
     <ClInclude Include="src\ScriptTarget.h" />
@@ -634,6 +639,8 @@
     <ClInclude Include="src\VertexAttributeBinding.h" />
     <ClInclude Include="src\VertexFormat.h" />
     <ClInclude Include="src\VerticalLayout.h" />
+    <ClInclude Include="src\VisibleSet.h" />
+    <ClInclude Include="src\VisibleSetDefault.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\logo_black.png" />

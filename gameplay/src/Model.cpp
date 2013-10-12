@@ -10,7 +10,7 @@ namespace gameplay
 {
 
 Model::Model(Mesh* mesh) :
-    _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _node(NULL), _skin(NULL)
+    _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _node(NULL), _skin(NULL), _shadowCaster(true), _shadowReceiver(true)
 {
     GP_ASSERT(mesh);
     _partCount = mesh->getPartCount();
@@ -256,6 +256,26 @@ void Model::setNode(Node* node)
     }
 }
 
+void Model::setShadowCaster(bool casts)
+{
+    _shadowCaster = casts;
+}
+
+bool Model::isShadowCaster() const
+{
+    return _shadowCaster;
+}
+
+void Model::setShadowReceiver(bool receives)
+{
+    _shadowReceiver = receives;
+}
+
+bool Model::isShadowReceiver() const
+{
+    return _shadowReceiver;
+}
+
 static bool drawWireframe(Mesh* mesh)
 {
     switch (mesh->getPrimitiveType())
@@ -332,7 +352,7 @@ static bool drawWireframe(MeshPart* part)
     }
 }
 
-void Model::draw(bool wireframe)
+unsigned int Model::draw(bool wireframe)
 {
     GP_ASSERT(_mesh);
 
@@ -388,33 +408,34 @@ void Model::draw(bool wireframe)
             }
         }
     }
+    return partCount;
 }
 
-void Model::validatePartCount()
+void Model::setMaterialNodeBinding(Material *material)
 {
-    GP_ASSERT(_mesh);
-    unsigned int partCount = _mesh->getPartCount();
+    GP_ASSERT(material);
 
-    if (_partCount != partCount)
+    if (_node)
     {
-        // Allocate new arrays and copy old items to them.
-        if (_partMaterials)
-        {
-            Material** oldArray = _partMaterials;
-            _partMaterials = new Material*[partCount];
-            memset(_partMaterials, 0, sizeof(Material*) * partCount);
-            if (oldArray)
-            {
-                for (unsigned int i = 0; i < _partCount; ++i)
-                {
-                    _partMaterials[i] = oldArray[i];
-                }
-            }
-            SAFE_DELETE_ARRAY(oldArray);
-        }
+        material->setNodeBinding(_node);
 
-        // Update local part count.
-        _partCount = _mesh->getPartCount();
+        unsigned int techniqueCount = material->getTechniqueCount();
+        for (unsigned int i = 0; i < techniqueCount; ++i)
+        {
+            Technique* technique = material->getTechniqueByIndex(i);
+            GP_ASSERT(technique);
+            
+            technique->setNodeBinding(_node);
+
+            unsigned int passCount = technique->getPassCount();
+            for (unsigned int j = 0; j < passCount; ++j)
+            {
+                Pass* pass = technique->getPassByIndex(j);
+                GP_ASSERT(pass);
+
+                pass->setNodeBinding(_node);
+            }
+        }
     }
 }
 
@@ -458,31 +479,30 @@ Model* Model::clone(NodeCloneContext &context)
     return model;
 }
 
-void Model::setMaterialNodeBinding(Material *material)
+void Model::validatePartCount()
 {
-    GP_ASSERT(material);
+    GP_ASSERT(_mesh);
+    unsigned int partCount = _mesh->getPartCount();
 
-    if (_node)
+    if (_partCount != partCount)
     {
-        material->setNodeBinding(_node);
-
-        unsigned int techniqueCount = material->getTechniqueCount();
-        for (unsigned int i = 0; i < techniqueCount; ++i)
+        // Allocate new arrays and copy old items to them.
+        if (_partMaterials)
         {
-            Technique* technique = material->getTechniqueByIndex(i);
-            GP_ASSERT(technique);
-            
-            technique->setNodeBinding(_node);
-
-            unsigned int passCount = technique->getPassCount();
-            for (unsigned int j = 0; j < passCount; ++j)
+            Material** oldArray = _partMaterials;
+            _partMaterials = new Material*[partCount];
+            memset(_partMaterials, 0, sizeof(Material*) * partCount);
+            if (oldArray)
             {
-                Pass* pass = technique->getPassByIndex(j);
-                GP_ASSERT(pass);
-
-                pass->setNodeBinding(_node);
+                for (unsigned int i = 0; i < _partCount; ++i)
+                {
+                    _partMaterials[i] = oldArray[i];
+                }
             }
+            SAFE_DELETE_ARRAY(oldArray);
         }
+        // Update local part count.
+        _partCount = _mesh->getPartCount();
     }
 }
 

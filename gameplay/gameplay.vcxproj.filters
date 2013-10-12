@@ -18,76 +18,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Animation.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AnimationClip.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AnimationController.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AnimationValue.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BoundingBox.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BoundingSphere.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Curve.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Effect.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FileSystem.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Font.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Frustum.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Light.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Matrix.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Mesh.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MeshPart.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MeshSkin.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Model.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Node.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Plane.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\gameplay-main-blackberry.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\PlatformBlackBerry.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gameplay-main-windows.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PlatformWindows.cpp">
@@ -132,34 +66,10 @@
     <ClCompile Include="src\VertexFormat.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\AudioController.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AudioListener.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AudioSource.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AudioBuffer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AnimationTarget.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MaterialParameter.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Joint.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\ParticleEmitter.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Properties.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Material.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Technique.cpp">
@@ -169,9 +79,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\RenderState.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DebugNew.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PhysicsController.cpp">
@@ -201,43 +108,13 @@
     <ClCompile Include="src\SceneLoader.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Image.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\RenderTarget.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FrameBuffer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DepthStencilTarget.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MeshBatch.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gameplay-main-android.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PlatformAndroid.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\AbsoluteLayout.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Button.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CheckBox.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Container.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Control.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Label.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\RadioButton.cpp">
@@ -247,9 +124,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\VerticalLayout.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Form.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Theme.cpp">
@@ -271,18 +145,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\ThemeStyle.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Layout.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Bundle.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FlowLayout.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Joystick.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\ScriptController.cpp">
@@ -618,9 +480,6 @@
     <ClCompile Include="src\lua\lua_Gamepad.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\Gamepad.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\ScreenDisplayer.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -744,12 +603,6 @@
     <ClCompile Include="src\AIMessage.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\AIState.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AIStateMachine.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_AIAgent.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
@@ -780,9 +633,6 @@
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\gameplay-main-linux.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\PlatformLinux.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -803,12 +653,6 @@
     </ClCompile>
     <ClCompile Include="src\lua\lua_PhysicsVehicleWheel.cpp">
       <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MathUtil.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Logger.cpp">
-      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_LoggerLevel.cpp">
       <Filter>src\lua</Filter>
@@ -834,16 +678,10 @@
     <ClCompile Include="src\lua\lua_RenderStateDepthFunction.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\HeightField.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_HeightField.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ImageControl.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_ImageControl.cpp">
@@ -888,74 +726,179 @@
     <ClCompile Include="src\SocialSessionListener.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\AIState.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIStateMachine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AnimationClip.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AnimationController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AnimationTarget.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AnimationValue.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioListener.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioSource.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BoundingBox.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BoundingSphere.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Bundle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Button.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CheckBox.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Container.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Control.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Curve.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DebugNew.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DepthStencilTarget.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Effect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileSystem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FlowLayout.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Font.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Form.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FrameBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Frustum.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gamepad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameplay-main-android.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameplay-main-blackberry.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameplay-main-linux.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameplay-main-windows.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HeightField.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Image.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImageControl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Joint.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Joystick.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Label.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layout.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Logger.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MaterialParameter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MathUtil.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Matrix.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshBatch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshPart.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshSkin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Node.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneRendererForward.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VisibleSetDefault.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Animation.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AnimationClip.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AnimationController.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AnimationTarget.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AnimationValue.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Base.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BoundingBox.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BoundingSphere.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Camera.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Curve.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Effect.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FileSystem.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Font.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Frustum.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameplay.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Light.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Matrix.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mesh.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MeshPart.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MeshSkin.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Model.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Node.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1004,31 +947,10 @@
     <ClInclude Include="src\VertexFormat.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\AudioController.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AudioListener.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AudioSource.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AudioBuffer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MaterialParameter.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Joint.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\ParticleEmitter.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Properties.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Material.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Technique.h">
@@ -1038,9 +960,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\RenderState.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DebugNew.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicsController.h">
@@ -1070,49 +989,13 @@
     <ClInclude Include="src\SceneLoader.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Image.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\RenderTarget.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FrameBuffer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DepthStencilTarget.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Keyboard.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Touch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\MeshBatch.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mouse.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\AbsoluteLayout.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Button.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CheckBox.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Container.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Control.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Label.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Layout.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\RadioButton.h">
@@ -1122,9 +1005,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\VerticalLayout.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Form.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Theme.h">
@@ -1152,18 +1032,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ThemeStyle.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Bundle.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FlowLayout.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Joystick.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MathUtil.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ScriptController.h">
@@ -1499,9 +1367,6 @@
     <ClInclude Include="src\lua\lua_Gamepad.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\Gamepad.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_AnimationClipListenerEventType.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1613,19 +1478,10 @@
     <ClInclude Include="src\lua\lua_VertexFormatUsage.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\AIStateMachine.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\AIAgent.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\AIController.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AIMessage.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AIState.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_AIAgent.h">
@@ -1658,9 +1514,6 @@
     <ClInclude Include="src\lua\lua_ScriptTarget.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\Gesture.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Gesture.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1678,9 +1531,6 @@
     </ClInclude>
     <ClInclude Include="src\lua\lua_PhysicsVehicleWheel.h">
       <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Logger.h">
-      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Logger.h">
       <Filter>src\lua</Filter>
@@ -1709,14 +1559,8 @@
     <ClInclude Include="src\lua\lua_RenderStateDepthFunction.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\HeightField.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_HeightField.h">
       <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ImageControl.h">
-      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_ImageControl.h">
       <Filter>src\lua</Filter>
@@ -1763,17 +1607,185 @@
     <ClInclude Include="src\SocialChallenge.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\SceneRenderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIMessage.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIState.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIStateMachine.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AnimationClip.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AnimationController.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AnimationTarget.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AnimationValue.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AudioBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AudioController.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AudioListener.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AudioSource.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Base.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BoundingBox.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BoundingSphere.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Bundle.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Button.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CheckBox.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Container.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Control.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Curve.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DebugNew.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DepthStencilTarget.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Effect.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FileSystem.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FlowLayout.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Font.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Form.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FrameBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Frustum.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gamepad.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameplay.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gesture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HeightField.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Image.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImageControl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Joint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Joystick.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Keyboard.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Label.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layout.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Light.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Logger.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Material.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MaterialParameter.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MathUtil.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Matrix.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshBatch.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshPart.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshSkin.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mouse.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneRendererForward.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VisibleSet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VisibleSetDefault.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Game.inl">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\Image.inl">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\MeshBatch.inl">
-      <Filter>src</Filter>
-    </None>
     <None Include="res\logo_black.png">
       <Filter>res</Filter>
     </None>
@@ -1785,15 +1797,6 @@
     </None>
     <None Include="res\logo_white.png">
       <Filter>res</Filter>
-    </None>
-    <None Include="src\MathUtil.inl">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\MathUtilNeon.inl">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\Joystick.inl">
-      <Filter>src</Filter>
     </None>
     <None Include="src\ScriptController.inl">
       <Filter>src</Filter>
@@ -1879,24 +1882,42 @@
     <None Include="res\shaders\textured-unlit.vert">
       <Filter>res\shaders</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\PhysicsFixedConstraint.inl">
-      <Filter>src</Filter>
-    </None>
     <None Include="src\BoundingBox.inl">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\PhysicsGenericConstraint.inl">
       <Filter>src</Filter>
     </None>
     <None Include="src\BoundingSphere.inl">
       <Filter>src</Filter>
     </None>
-    <None Include="src\PhysicsSpringConstraint.inl">
+    <None Include="src\Game.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Image.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\Joystick.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\MathUtil.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\MathUtilNeon.inl">
       <Filter>src</Filter>
     </None>
     <None Include="src\Matrix.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\MeshBatch.inl">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\PhysicsFixedConstraint.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsGenericConstraint.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\PhysicsSpringConstraint.inl">
       <Filter>src</Filter>
     </None>
     <None Include="src\PhysicsRigidBody.inl">

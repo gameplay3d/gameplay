@@ -981,12 +981,10 @@ void ParticleEmitter::update(float elapsedTime)
     }
 }
 
-void ParticleEmitter::draw()
+unsigned int ParticleEmitter::draw()
 {
     if (!isActive())
-    {
-        return;
-    }
+        return 0;
 
     if (_particleCount > 0)
     {
@@ -1027,6 +1025,7 @@ void ParticleEmitter::draw()
         // Render.
         _spriteBatch->finish();
     }
+    return 1;
 }
 
 ParticleEmitter* ParticleEmitter::clone()

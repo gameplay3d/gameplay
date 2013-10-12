@@ -40,9 +40,11 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Light.h"
-#include "Scene.h"
 #include "Node.h"
 #include "Joint.h"
+#include "Scene.h"
+#include "SceneRenderer.h"
+#include "SceneRendererForward.h"
 #include "Font.h"
 #include "SpriteBatch.h"
 #include "ParticleEmitter.h"
@@ -52,6 +54,8 @@
 #include "ScreenDisplayer.h"
 #include "HeightField.h"
 #include "Terrain.h"
+#include "VisibleSet.h"
+#include "VisibleSetDefault.h"
 
 // Audio
 #include "AudioController.h"

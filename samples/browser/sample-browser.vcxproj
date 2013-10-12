@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DebugMem|BlackBerry">
@@ -649,6 +649,7 @@
     <ClCompile Include="src\GestureSample.cpp" />
     <ClCompile Include="src\LightSample.cpp" />
     <ClCompile Include="src\PostProcessSample.cpp" />
+    <ClCompile Include="src\SceneRendererSample.cpp" />
     <ClCompile Include="src\TerrainSample.cpp" />
     <ClCompile Include="src\TriangleSample.cpp" />
     <ClCompile Include="src\FirstPersonCamera.cpp" />
@@ -673,6 +674,7 @@
     <ClInclude Include="src\GestureSample.h" />
     <ClInclude Include="src\LightSample.h" />
     <ClInclude Include="src\PostProcessSample.h" />
+    <ClInclude Include="src\SceneRendererSample.h" />
     <ClInclude Include="src\TerrainSample.h" />
     <ClInclude Include="src\TriangleSample.h" />
     <ClInclude Include="src\FirstPersonCamera.h" />

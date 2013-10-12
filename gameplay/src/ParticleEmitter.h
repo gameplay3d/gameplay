@@ -700,7 +700,7 @@ public:
     /**
      * Draws the particles currently being emitted.
      */
-    void draw();
+    unsigned int draw();
 
     /**
      * Gets a TextureBlending enum from a corresponding string.
