@@ -385,10 +385,10 @@ void Form::update(const Control* container, const Vector2& offset)
     }
 }
 
-void Form::draw()
+unsigned int Form::draw()
 {
     if (!_visible || !_frameBuffer)
-        return;
+        return 0;
 
     // The first time a form is drawn, its contents are rendered into a framebuffer.
     // The framebuffer will only be drawn into again when the contents of the form change.
@@ -435,6 +435,7 @@ void Form::draw()
         _spriteBatch->draw(_bounds.x, _bounds.y, 0, _bounds.width, _bounds.height, 0, _v1, _u2, 0, Vector4::one());
         _spriteBatch->finish();
     }
+    return 2;
 }
 
 const char* Form::getType() const

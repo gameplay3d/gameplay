@@ -103,6 +103,8 @@ void lua_RegisterAllBindings()
     luaRegister_RenderStateStateBlock();
     luaRegister_RenderTarget();
     luaRegister_Scene();
+    luaRegister_SceneRenderer();
+    luaRegister_SceneRendererForward();
     luaRegister_ScreenDisplayer();
     luaRegister_ScriptController();
     luaRegister_ScriptTarget();
@@ -130,6 +132,8 @@ void lua_RegisterAllBindings()
     luaRegister_VertexFormat();
     luaRegister_VertexFormatElement();
     luaRegister_VerticalLayout();
+    luaRegister_VisibleSet();
+    luaRegister_VisibleSetDefault();
     luaRegister_lua_Global();
 }
 

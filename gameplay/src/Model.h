@@ -14,8 +14,7 @@ class Node;
 class NodeCloneContext;
 
 /**
- * Defines a Model which is an instance of a Mesh that can be drawn
- * with the specified Materials.
+ * Defines a Model (MeshRenderer) which is an instance of a Mesh that can be drawn with the specified Materials.
  */
 class Model : public Ref
 {
@@ -146,6 +145,43 @@ public:
     void setNode(Node* node);
 
     /**
+     * Sets if this model cast shadows.
+     *
+     * Note: This is only applied to a SceneRenderer.
+     * 
+     * @param casts if this model casts shadows
+     * @see SceneRenderer
+     */
+    void setShadowCaster(bool casts);
+
+    /**
+     * Returns whether this model cast shadows.
+     *
+     * Note: This is only applied to a SceneRenderer.
+     *
+     * @return if this model casts shadows
+     * @see SceneRenderer
+     */
+    bool isShadowCaster() const;
+
+    /**
+     * Sets if this object receives shadows.
+     *
+     * @param bool if this object receives shadows
+     */
+    void setShadowReceiver(bool receives);
+
+    /**
+     * Returns whether this objects recieves shadows.
+     *
+     * Note: This is only applied to a SceneRenderer.
+     *
+     * @return if this object receives shadows
+     * @see SceneRenderer
+     */
+    bool isShadowReceiver() const;
+
+    /**
      * Draws this mesh instance.
      *
      * This method binds the vertex buffer and index buffers for the Mesh and
@@ -154,8 +190,9 @@ public:
      * and so on, should be set up before calling this method.
      *
      * @param wireframe If true, draw the model in wireframe mode.
+     * @return The number of draw calls (mesh parts).
      */
-    void draw(bool wireframe = false);
+    unsigned int draw(bool wireframe = false);
 
 private:
 
@@ -186,8 +223,6 @@ private:
      */
     void setMaterialNodeBinding(Material *m);
 
-    void validatePartCount();
-
     /**
      * Clones the model and returns a new model.
      * 
@@ -196,12 +231,16 @@ private:
      */
     Model* clone(NodeCloneContext &context);
 
+    void validatePartCount();
+
     Mesh* _mesh;
     Material* _material;
     unsigned int _partCount;
     Material** _partMaterials;
     Node* _node;
     MeshSkin* _skin;
+    bool _shadowCaster;
+    bool _shadowReceiver;
 };
 
 }

@@ -117,13 +117,19 @@ public:
     Node* getParent() const;
 
     /**
-     * Determines if a custom tag with the specified name is set.
+     * Sets a custom tag on this Node.
      *
-     * @param name Name of the tag to query.
+     * Custom tags can be used for a variety of purposes within a game. For example,
+     * a tag called "transparent" can be added to nodes, to indicate which nodes in
+     * a scene are transparent. This tag can then be read during rendering to sort
+     * transparent and opaque objects for correct drawing order. 
      *
-     * @return true if the tag is set, false otherwise.
+     * Setting a tag to NULL removes the tag from the Node.
+     *
+     * @param name Name of the tag to set.
+     * @param value Optional value of the tag (empty string by default).
      */
-    bool hasTag(const char* name) const;
+    void setTag(const char* name, const char* value = "");
 
     /**
      * Returns the value of the custom tag with the given name.
@@ -135,21 +141,13 @@ public:
     const char* getTag(const char* name) const;
 
     /**
-     * Sets a custom tag on this Node.
+     * Determines if a custom tag with the specified name is set.
      *
-     * Custom tags can be used for a variety of purposes within a game. For example,
-     * a tag called "transparent" can be added to nodes, to indicate which nodes in
-     * a scene are transparent. This tag can then be read during rendering to sort
-     * transparent and opaque objects for correct drawing order. Another example
-     * is using a "visible" tag to mark nodes as invisible to be skipped during
-     * rendering.
+     * @param name Name of the tag to query.
      *
-     * Setting a tag to NULL removes the tag from the Node.
-     *
-     * @param name Name of the tag to set.
-     * @param value Optional value of the tag (empty string by default).
+     * @return true if the tag is set, false otherwise.
      */
-    void setTag(const char* name, const char* value = "");
+    bool hasTag(const char* name) const;
 
     /**
      * Returns the user pointer for this node.
@@ -181,6 +179,28 @@ public:
      * @script{ignore}
      */
     void setUserPointer(void* pointer, void (*cleanupCallback)(void*) = NULL);
+
+    /**
+     * Sets if visual components themselves set as visible.
+     *
+     * @param visible if visual components themselves set as visible.
+     */
+    void setVisible(bool visible);
+
+    /**
+     * Gets if visual components themselves set as visible.
+     *
+     * @return if visual components themselves set as visible.
+     */
+    bool isVisible() const;
+
+    /**
+     * Gets if visual components are either inherited visible or they are themselves.
+     *
+     * @param inherit true if visible is based on inherited behaviour or false is its self is visible.
+     * @return if visual components attached on this node should be drawn.
+     */
+    bool isVisibleInHierarchy() const;
 
     /**
      * Returns the number of direct children of this item.
@@ -230,7 +250,7 @@ public:
      * Gets the top level node in this node's parent hierarchy.
      */
     Node* getRootNode() const;
-    
+
     /**
      * Returns whether the transformation of this node is static.
      *
@@ -779,6 +799,11 @@ protected:
      * The number of children belonging to the Node.
      */
     unsigned int _childCount;
+
+    /**
+     * If this node is visible. This may not be visiblein hierarchy if its parents are hidden
+     */
+    bool _visible;
 
     /**
      * List of custom tags for a node.

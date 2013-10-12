@@ -98,6 +98,8 @@
 #include "lua_RenderStateStateBlock.h"
 #include "lua_RenderTarget.h"
 #include "lua_Scene.h"
+#include "lua_SceneRenderer.h"
+#include "lua_SceneRendererForward.h"
 #include "lua_ScreenDisplayer.h"
 #include "lua_ScriptController.h"
 #include "lua_ScriptTarget.h"
@@ -125,6 +127,8 @@
 #include "lua_VertexFormat.h"
 #include "lua_VertexFormatElement.h"
 #include "lua_VerticalLayout.h"
+#include "lua_VisibleSet.h"
+#include "lua_VisibleSetDefault.h"
 #include "lua_Global.h"
 
 namespace gameplay

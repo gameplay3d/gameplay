@@ -1,7 +1,7 @@
 #if defined(__ANDROID__) && defined(GP_USE_SOCIAL)
 
-#ifndef GOOGLEGAMESSOCIALSESSION_H_
-#define GOOGLEGAMESSOCIALSESSION_H_
+#ifndef GOOGLEPLAYSOCIALSESSION_H_
+#define GOOGLEPLAYSOCIALSESSION_H_
 
 #include "SocialSession.h"
 
@@ -9,14 +9,14 @@ namespace gameplay
 {
 
 /**
- * Google Games implementation of SocialSession
+ * Google Play (game services) implementation of SocialSession
  *
  * Note: ensure game.config has the following properties
  *
   @verbatim
     social
     {
-         provider = GoogleGames
+         provider = GooglePlay
          id = d346c484-12aa-49a2-a0a0-de2f87492d72
          secret = aAa+DehBfyGO/CYaE3nWomgu7SIbWFczUih+Qwf3/n7u0y3nyq5Hag==
          version = 1.0
@@ -37,7 +37,7 @@ namespace gameplay
  *
  * @script{ignore}
  */
-class GoogleGamesSocialSession : public SocialSession
+class GooglePlaySocialSession : public SocialSession
 {
     friend class SocialController;
 
@@ -142,12 +142,12 @@ private:
     /**
      * Contructor
      */
-    GoogleGamesSocialSession();
+    GooglePlaySocialSession();
 
     /**
      * Destructor
      */
-    virtual ~GoogleGamesSocialSession();
+    virtual ~GooglePlaySocialSession();
 #if 0
 
     static void userCallback(void* cookie, unsigned int result);
@@ -168,7 +168,7 @@ private:
 
     SocialChallenge &addChallenge(SC_Challenge_h challenge);
 #endif
-    static GoogleGamesSocialSession* _session;
+    static GooglePlaySocialSession* _session;
 
     enum UserOp
     {

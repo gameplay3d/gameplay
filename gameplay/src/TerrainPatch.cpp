@@ -513,28 +513,28 @@ bool TerrainPatch::updateMaterial()
     return true;
 }
 
-void TerrainPatch::draw(bool wireframe)
+unsigned int TerrainPatch::draw(bool wireframe)
 {
     Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
     Camera* camera = scene ? scene->getActiveCamera() : NULL;
     if (!camera)
-        return;
+        return 0;
 
     // Get our world-space bounding box
     BoundingBox bounds = getBoundingBox(true);
 
     // If the box does not intersect the view frustum, cull it
     if (_terrain->isFlagSet(Terrain::FRUSTUM_CULLING) && !camera->getFrustum().intersects(bounds))
-        return;
+        return 0;
 
     if (!updateMaterial())
-        return;
+        return 0;
 
     // Compute the LOD level from the camera's perspective
     size_t lod = computeLOD(camera, bounds);
 
     // Draw the model for the current LOD
-    _levels[lod]->model->draw(wireframe);
+    return _levels[lod]->model->draw(wireframe);
 }
 
 bool TerrainPatch::isVisible() const
