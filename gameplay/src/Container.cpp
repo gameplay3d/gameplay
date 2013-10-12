@@ -100,6 +100,9 @@ Container* Container::create(Layout::Type type)
     case Layout::LAYOUT_VERTICAL:
         layout = VerticalLayout::create();
         break;
+    default:
+        layout = AbsoluteLayout::create();
+        break;
     }
 
     Container* container = new Container();
@@ -112,8 +115,28 @@ Container* Container::create(Theme::Style* style, Properties* properties, Theme*
 {
     GP_ASSERT(properties);
 
-    const char* layoutString = properties->getString("layout");
-    Container* container = Container::create(getLayoutType(layoutString));
+    // Parse layout
+    Container* container;
+    Properties* layoutNS = properties->getNamespace("layout", true, false);
+    if (layoutNS)
+    {
+        Layout::Type layoutType = getLayoutType(layoutNS->getString("type"));
+        container = Container::create(layoutType);
+        switch (layoutType)
+        {
+        case Layout::LAYOUT_FLOW:
+            static_cast<FlowLayout*>(container->getLayout())->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
+            break;
+        case Layout::LAYOUT_VERTICAL:
+            static_cast<VerticalLayout*>(container->getLayout())->setSpacing(layoutNS->getInt("spacing"));
+            break;
+        }
+    }
+    else
+    {
+        container = Container::create(getLayoutType(properties->getString("layout")));
+    }
+
     container->initialize(style, properties);
     container->_scroll = getScroll(properties->getString("scroll"));
     container->_scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
