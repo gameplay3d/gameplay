@@ -14,6 +14,11 @@ namespace gameplay
 class VisibleSet
 {
 public:
+    
+    /**
+     * Destructor.
+     */
+    virtual ~VisibleSet() { }
 
     /**
      * Sets the scene to determine the visible set from.
