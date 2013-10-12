@@ -23,7 +23,7 @@ Button* Button::create(const char* id, Theme::Style* style)
     return button;
 }
 
-Button* Button::create(Theme::Style* style, Properties* properties)
+Control* Button::create(Theme::Style* style, Properties* properties, Theme *theme)
 {
     Button* button = new Button();
     button->initialize(style, properties);

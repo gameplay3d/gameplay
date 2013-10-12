@@ -35,6 +35,7 @@ class Button : public Label
 {
     friend class Container;
     friend class Gamepad;
+	friend class ControlFactory;
 
 public:
 
@@ -66,10 +67,11 @@ protected:
      *
      * @param style The style to apply to this button.
      * @param properties The properties to set on this button.
-     *
+     * @param theme The theme to set on this control if needed.
+	 *
      * @return The new button.
      */
-    static Button* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.

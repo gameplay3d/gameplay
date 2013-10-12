@@ -30,7 +30,7 @@ ImageControl* ImageControl::create(const char* id, Theme::Style* style)
     return imageControl;
 }
 
-ImageControl* ImageControl::create(Theme::Style* style, Properties* properties)
+Control* ImageControl::create(Theme::Style* style, Properties* properties, Theme *theme)
 {
     ImageControl* imageControl = new ImageControl();
     imageControl->initialize(style, properties);
