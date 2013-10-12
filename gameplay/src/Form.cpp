@@ -107,23 +107,46 @@ Form* Form::create(const char* url)
     // Create new form with given ID, theme and layout.
     std::string themeFile;
     formProperties->getPath("theme", &themeFile);
-    const char* layoutString = formProperties->getString("layout");
-        
-    Layout* layout;
-    switch (getLayoutType(layoutString))
+
+    // Parse layout
+    Layout* layout = NULL;
+    Properties* layoutNS = formProperties->getNamespace("layout", true, false);
+    if (layoutNS)
     {
-    case Layout::LAYOUT_ABSOLUTE:
-        layout = AbsoluteLayout::create();
-        break;
-    case Layout::LAYOUT_FLOW:
-        layout = FlowLayout::create();
-        break;
-    case Layout::LAYOUT_VERTICAL:
-        layout = VerticalLayout::create();
-        break;
-    default:
-        GP_ERROR("Unsupported layout type '%d'.", getLayoutType(layoutString));
-        break;
+        Layout::Type layoutType = getLayoutType(layoutNS->getString("type"));
+        switch (layoutType)
+        {
+        case Layout::LAYOUT_ABSOLUTE:
+            layout = AbsoluteLayout::create();
+            break;
+        case Layout::LAYOUT_FLOW:
+            layout = FlowLayout::create();
+            static_cast<FlowLayout*>(layout)->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
+            break;
+        case Layout::LAYOUT_VERTICAL:
+            layout = VerticalLayout::create();
+            static_cast<VerticalLayout*>(layout)->setSpacing(layoutNS->getInt("spacing"));
+            break;
+        }
+    }
+    else
+    {
+        switch (getLayoutType(formProperties->getString("layout")))
+        {
+        case Layout::LAYOUT_ABSOLUTE:
+            layout = AbsoluteLayout::create();
+            break;
+        case Layout::LAYOUT_FLOW:
+            layout = FlowLayout::create();
+            break;
+        case Layout::LAYOUT_VERTICAL:
+            layout = VerticalLayout::create();
+            break;
+        }
+    }
+    if (layout == NULL)
+    {
+        GP_ERROR("Unsupported layout type for form: %s", url);
     }
 
     Theme* theme = Theme::create(themeFile.c_str());

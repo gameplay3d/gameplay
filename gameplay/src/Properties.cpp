@@ -594,30 +594,26 @@ void Properties::rewind()
     _namespacesItr = _namespaces.end();
 }
 
-Properties* Properties::getNamespace(const char* id, bool searchNames) const
+Properties* Properties::getNamespace(const char* id, bool searchNames, bool recurse) const
 {
     GP_ASSERT(id);
 
-    Properties* ret = NULL;
-    std::vector<Properties*>::const_iterator it;
-    
-    for (it = _namespaces.begin(); it < _namespaces.end(); ++it)
+    for (std::vector<Properties*>::const_iterator it = _namespaces.begin(); it < _namespaces.end(); ++it)
     {
-        ret = *it;
-        if (strcmp(searchNames ? ret->_namespace.c_str() : ret->_id.c_str(), id) == 0)
-        {
-            return ret;
-        }
+        Properties* p = *it;
+        if (strcmp(searchNames ? p->_namespace.c_str() : p->_id.c_str(), id) == 0)
+            return p;
         
-        // Search recursively.
-        ret = ret->getNamespace(id, searchNames);
-        if (ret != NULL)
+        if (recurse)
         {
-            return ret;
+            // Search recursively.
+            p = p->getNamespace(id, searchNames, true);
+            if (p)
+                return p;
         }
     }
 
-    return ret;
+    return NULL;
 }
 
 const char* Properties::getNamespace() const

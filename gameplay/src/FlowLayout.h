@@ -23,6 +23,28 @@ public:
      */
     Layout::Type getType();
 
+    /**
+     * Returns the horizontal spacing between controls in the layout.
+     *
+     * @return The horizontal spacing between controls.
+     */
+    int getHorizontalSpacing() const;
+
+    /**
+     * Returns the vertical spacing between controls in the layout.
+     *
+     * @return The vertical spacing between controls.
+     */
+    int getVerticalSpacing() const;
+
+    /**
+     * Sets the spacing to add between controls in the layout.
+     *
+     * @param horizontalSpacing The horizontal spacing between controls.
+     * @param verticalSpacing The vertical spacing between controls.
+     */
+    void setSpacing(int horizontalSpacing, int verticalSpacing);
+
 protected:
 
     /**
@@ -32,6 +54,16 @@ protected:
      * @param offset The offset position.
      */
     void update(const Container* container, const Vector2& offset);
+
+    /**
+     * Horizontal spacing between controls.
+     */
+    int _horizontalSpacing;
+
+    /**
+     * Vertical spacing between controls.
+     */
+    int _verticalSpacing;
 
 private:
 

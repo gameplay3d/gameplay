@@ -182,18 +182,20 @@ public:
     void rewind();
 
     /**
-     * Get a specific namespace by ID or name. This method will perform
-     * a depth-first search on all namespaces and inner namespaces within
-     * this Property.
+     * Get a specific namespace by ID or name. This method will optionally
+     * perform a depth-first search on all namespaces and inner namespaces
+     * within this Property.
      *
      * @param id The ID or name of the namespace to find.
      * @param searchNames If true, namespace names are used in the search,
      *      instead of namespace IDs. By default this parameter is false
      *      and namespace IDs are searched.
+     * @param recurse If true, perform a depth-first search, otherwise search
+     *      only the immediate child namespaces.
      * 
      * @return A properties object with the given ID or name.
      */
-    Properties* getNamespace(const char* id, bool searchNames = false) const;
+    Properties* getNamespace(const char* id, bool searchNames = false, bool recurse = true) const;
 
     /**
      * Get the name of this Property's namespace.
