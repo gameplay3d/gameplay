@@ -31,6 +31,7 @@ namespace gameplay
 class Label : public Control
 {
     friend class Container;
+	friend class ControlFactory;
 
 public:
 
@@ -93,10 +94,11 @@ protected:
      *
      * @param style The style to apply to this label.
      * @param properties The properties to set on this label.
-     *
+     * @param theme The theme to set on this control if needed
+	 * 
      * @return The new label.
      */
-    static Label* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
 
     /**
      * Initialize this label.

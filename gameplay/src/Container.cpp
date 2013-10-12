@@ -13,6 +13,7 @@
 #include "Joystick.h"
 #include "ImageControl.h"
 #include "Game.h"
+#include "ControlFactory.h"
 
 namespace gameplay
 {
@@ -108,7 +109,7 @@ Container* Container::create(Layout::Type type)
     return container;
 }
 
-Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
 {
     GP_ASSERT(properties);
 
@@ -158,48 +159,7 @@ void Container::addControls(Theme* theme, Properties* properties)
 
         std::string controlName(controlSpace->getNamespace());
         std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
-        if (controlName == "LABEL")
-        {
-            control = Label::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "BUTTON")
-        {
-            control = Button::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CHECKBOX")
-        {
-            control = CheckBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "RADIOBUTTON")
-        {
-            control = RadioButton::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CONTAINER")
-        {
-            control = Container::create(controlStyle, controlSpace, theme);
-        }
-        else if (controlName == "SLIDER")
-        {
-            control = Slider::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "TEXTBOX")
-        {
-            control = TextBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "JOYSTICK")
-        {
-            control = Joystick::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "IMAGE")
-        {
-            control = ImageControl::create(controlStyle, controlSpace);
-        }
-        else
-        {
-            // Ignore - not a valid control name.
-            // This used to fail, but I see no reason to hard fail here (this also fixes not being able
-            // to set padding on containers).
-        }
+		control = ControlFactory::getInstance().createControl(controlName, controlStyle, controlSpace, theme);
 
         // Add the new control to the form.
         if (control)

@@ -37,6 +37,7 @@ namespace gameplay
 class RadioButton : public Button
 {
     friend class Container;
+	friend class ControlFactory;
 
 public:
 
@@ -125,10 +126,11 @@ protected:
      *
      * @param style The style to apply to this radio button.
      * @param properties The properties to set on this radio button.
-     *
+     * @param theme The theme to set on this control if needed
+	 *
      * @return The new radio button.
      */
-    static RadioButton* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.

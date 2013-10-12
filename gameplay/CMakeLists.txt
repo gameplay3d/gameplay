@@ -227,6 +227,9 @@ set(GAMEPLAY_SRC
     src/VertexFormat.h
     src/VerticalLayout.cpp
     src/VerticalLayout.h
+
+	src/ControlFactory.h
+	src/ControlFactory.cpp
 )
 
 set(GAMEPLAY_LUA
