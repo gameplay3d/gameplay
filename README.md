@@ -1,4 +1,4 @@
-## gameplay v1.8.0
+## GamePlay v2.0.0
 
 GamePlay3D is an open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
 
@@ -7,7 +7,7 @@ GamePlay3D is an open-source, cross-platform 3D native C++ game framework making
 - [Website](http://www.gameplay3d.org/)
 - [Forums](http://www.gameplay3d.org/forums/)
 - [Wiki](https://github.com/blackberry/GamePlay/wiki)
-- [API Reference](http://www.gameplay3d.org/api.php)
+- [API Reference](http://blackberry.github.io/GamePlay/api/index.html)
 - [Development Guide](https://github.com/blackberry/GamePlay/wiki#wiki-Development_Guide)
 
 ## Supported Platforms
@@ -19,7 +19,8 @@ GamePlay3D is an open-source, cross-platform 3D native C++ game framework making
 - [Google Android](https://github.com/blackberry/GamePlay/wiki/Android-NDK-Setup) (using Google Android NDK)
 
 ## Roadmap for 'next' branch
-- [backlog](https://github.com/blackberry/GamePlay/issues?milestone=7)
+- [2.0.0](https://github.com/blackberry/GamePlay/issues?milestone=6&page=1&state=open)
+- [backlog](https://github.com/blackberry/GamePlay/issues?milestone=5&page=1&state=open)
 
 ## License
 The project is open sourced under the [Apache 2.0 license](http://www.tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29).

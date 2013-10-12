@@ -18,11 +18,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-lua", "samples\lua\s
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-longboard", "samples\longboard\sample-longboard.vcxproj", "{9A515C8B-3320-4C5C-9754-211E91206C9D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-spaceship", "samples\spaceship\sample-spaceship.vcxproj", "{CC37B8E9-6402-4841-8D6A-5D908A5909B3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
@@ -131,24 +126,6 @@ Global
 		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|Win32.Build.0 = Release|Win32
 		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|x64.ActiveCfg = Release|x64
 		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|x64.Build.0 = Release|x64
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|BlackBerry.ActiveCfg = Debug|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|BlackBerrySimulator.ActiveCfg = Debug|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|Win32.Build.0 = Debug|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|x64.ActiveCfg = Debug|x64
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|x64.Build.0 = Debug|x64
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.DebugMem|BlackBerry.ActiveCfg = DebugMem|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.DebugMem|BlackBerrySimulator.ActiveCfg = DebugMem|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.DebugMem|Win32.Build.0 = DebugMem|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.DebugMem|x64.ActiveCfg = DebugMem|x64
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.DebugMem|x64.Build.0 = DebugMem|x64
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Release|BlackBerry.ActiveCfg = Release|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Release|BlackBerrySimulator.ActiveCfg = Release|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Release|Win32.ActiveCfg = Release|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Release|Win32.Build.0 = Release|Win32
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Release|x64.ActiveCfg = Release|x64
-		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Release|x64.Build.0 = Release|x64
 		{CC37B8E9-6402-4841-8D6A-5D908A5909B3}.Debug|BlackBerry.ActiveCfg = Debug|Win32
 		{CC37B8E9-6402-4841-8D6A-5D908A5909B3}.Debug|BlackBerrySimulator.ActiveCfg = Debug|Win32
 		{CC37B8E9-6402-4841-8D6A-5D908A5909B3}.Debug|Win32.ActiveCfg = Debug|Win32

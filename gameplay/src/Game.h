@@ -9,6 +9,7 @@
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
+#include "SocialController.h"
 #include "AIController.h"
 #include "AudioListener.h"
 #include "Rectangle.h"
@@ -257,6 +258,16 @@ public:
      * @return The script controller for this game.
      */
     inline ScriptController* getScriptController() const;
+
+    /**
+     * Gets the social controller for managing control of social apis
+     * associated with the game.
+     *
+     * @return The script controller for this game.
+     *
+     * @script{ignore}
+     */
+    inline SocialController* getSocialController() const;
 
     /**
      * Gets the audio listener for 3D audio.
@@ -735,6 +746,7 @@ private:
     AudioListener* _audioListener;              // The audio listener in 3D space.
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
     ScriptController* _scriptController;            // Controls the scripting engine.
+    SocialController* _socialController;		// Controls social aspect of the game.
     std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.

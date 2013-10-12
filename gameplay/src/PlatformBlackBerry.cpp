@@ -3,6 +3,7 @@
 #include "Base.h"
 #include "Platform.h"
 #include "FileSystem.h"
+#include "SocialController.h"
 #include "Game.h"
 #include "Form.h"
 #include "ScriptController.h"
@@ -689,7 +690,7 @@ Platform::~Platform()
     }
 }
 
-Platform* Platform::create(Game* game, void* attachToWindow)
+Platform* Platform::create(Game* game)
 {
     FileSystem::setResourcePath("./app/native/");
     Platform* platform = new Platform(game);
@@ -791,6 +792,14 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         perror("screen_create_window");
         goto error;
     }
+
+    // Window group
+	rc = screen_create_window_group(__screenWindow, "windowgroup");
+	if (rc)
+	{
+		perror("screen_create_window_group failed");
+		goto error;
+	}
 
     // Set/get any window properties.
     rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_FORMAT, &screenFormat);
@@ -1085,6 +1094,10 @@ int Platform::enterMessagePump()
 
             if (event == NULL)
                 break;
+
+            // if the social controller needs to deal with the event do that here
+            if (Game::getInstance()->getSocialController()->handleEvent(event))
+            	break;
 
             domain = bps_event_get_domain(event);
 

@@ -40,7 +40,7 @@ void RacerGame::initialize()
 {
     setMultiTouch(true);
 
-    _font = Font::create("res/common/arial40.gpb");
+    _font = Font::create("res/common/arial.gpb");
 
     // Display the gameplay splash screen during loading, for at least 1 second.
     displayScreen(this, &RacerGame::drawSplash, NULL, 1000L);

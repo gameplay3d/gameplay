@@ -5,6 +5,7 @@
 
 #include "SocialSession.h"
 #include <scoreloop/sc_client.h>
+#include <scoreloop/scui_client.h>
 #include <scoreloop/sc_init.h>
 #include <pthread.h>
 
@@ -22,9 +23,9 @@ namespace gameplay
          provider = Scoreloop
          id  = d346c484-12aa-49a2-a0a0-de2f87492d72
          secret = aAa+DehBfyGO/CYaE3nWomgu7SIbWFczUih+Qwf3/n7u0y3nyq5Hag==
-         version = "1.0"
-         language = "en"
-         currency = "ASC"
+         version = 1.0
+         language = en
+         currency = ASC
          leaderboard_mappings
          {
              // Format: leaderboardId =  mode <unsigned int>
@@ -57,12 +58,12 @@ public:
      * @param listener The listener for responses for this session
      * @param properties The properties to initialize this session with for this game.
      */
-    static void authenticate(SocialSessionListener* listener, Properties* properties);
+    static SocialSession *authenticate(SocialSessionListener* listener, Properties* properties);
 
     /**
      * @see SocialSession::getUser
      */
-    SocialPlayer* getUser();
+    const SocialPlayer& getUser() const;
 
     /**
      * @see SocialSession::loadFriends
@@ -77,7 +78,17 @@ public:
     /**
      * @see SocialSession::submitAchievement
      */
-    void submitAchievement(const char* achievementId, unsigned int value);
+    void submitAchievement(const char* achievementId, unsigned int value, bool achieved=false);
+
+    /**
+     * @see SocialSession::incrementAchievement
+     */
+    void incrementAchievement(const char* achievementId, unsigned int increment=1);
+
+    /**
+      * @see SocialSession::syncAchievements
+      */
+    void synchronizeAchievements();
 
     /**
      * @see SocialSession::loadScores
@@ -95,6 +106,21 @@ public:
     void submitScore(const char* leaderboardId, float score);
 
     /**
+      * @see SocialSession::submitChallenge
+      */
+    void submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId=0);
+
+    /**
+      * @see SocialSession::loadChallenges
+      */
+    void loadChallenges(bool showOpenChallengesOnly=true);
+
+    /**
+      * @see SocialSession::acceptChallenge
+      */
+    void replyToChallenge(const SocialChallenge *challenge, bool accept);
+
+    /**
      * @see SocialSession::requestSavedData
      */
     void loadSavedData(const char* key);
@@ -104,6 +130,17 @@ public:
      */
     void submitSavedData(const char* key, std::string data);
 
+    void displayLeaderboard(const char* leaderboardId);
+
+    void displayAchievements();
+
+    void displayChallenges();
+
+    void displayChallengeSubmit(const SocialChallenge *challenge, float score);
+
+protected:
+
+    bool handleEvent(void *event);
 
 private:
 
@@ -117,11 +154,11 @@ private:
      */
     virtual ~ScoreloopSocialSession();
 
-    static void authenticate(SocialSessionListener* listener, Properties* properties);
-
     static void* platformEventCallback(void* data);
 
     static void userCallback(void* cookie, unsigned int result);
+
+    static void uiCallback(void *cookie, SCUI_Result_t result, const void *data);
 
     static void loadFriendsCallback(void* cookie, SC_Error_t result);
 
@@ -129,9 +166,21 @@ private:
 
     static void submitAchievementCallback(void* cookie, SC_Error_t result);
 
+    static void submitChallengeCallback(void *cookie, SC_Error_t result);
+
+    static void replyToChallengeCallback(void *cookie, SC_Error_t result);
+
+    static void submittedChallengeScoreCallback(void *cookie, SC_Error_t result);
+
+    static void loadChallengesCallback(void *cookie, SC_Error_t result);
+
     static void loadScoresCallback(void* cookie, SC_Error_t result);
 
     static void submitScoreCallback(void* cookie, SC_Error_t result);
+
+    const SocialAchievement* getAchievement(const char* achievementId) const;
+
+    SocialChallenge &addChallenge(SC_Challenge_h challenge);
 
     static ScoreloopSocialSession* _session;
 
@@ -144,23 +193,35 @@ private:
 
     SocialSessionListener* _listener;
     Properties* _properties;
-    bool _pendingResponse;
+    bool _pendingUserResponse;
+    bool _pendingFriendsResponse;
+    bool _pendingScoresResponse;
+    bool _pendingSubmitScoreResponse;
+    bool _pendingAchievementResponse;
+    bool _pendingChallengeResponse;
+    bool _pendingChallengesResponse;
+    bool _pendingDataResponse;
     SC_InitData_t _initData;
     SC_Client_h _client;
+    SCUI_Client_h _uiClient;
     SC_UserController_h _userController;
     SC_UsersController_h _usersController;
     SC_LocalAchievementsController_h _localAchievementsController;
     SC_ScoresController_h _scoresController;
     SC_ScoreController_h _scoreController;
+    SC_ChallengeController_h _challengeController;
+    SC_ChallengesController_h _challengesController;
     pthread_cond_t _channelCond;
     pthread_mutex_t _channelMutex;
     const char* _key;
     std::string _data;
     SocialPlayer _user;
+    const SocialChallenge* _acceptedChallenge;
     UserOp _userOp;
     std::vector<SocialPlayer> _friends;
     std::vector<SocialAchievement> _achievements;
     std::vector<SocialScore> _scores;
+    std::vector<SocialChallenge> _challenges;
 };
 
 }

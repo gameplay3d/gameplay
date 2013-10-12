@@ -11,12 +11,6 @@
   <ItemGroup>
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
-    <None Include="res\arial.ttf">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\arial40.gpb">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\duck.dae">
       <Filter>res</Filter>
     </None>
@@ -34,6 +28,9 @@
     </None>
     <None Include="game.config" />
     <None Include="../../gameplay\res\logo_powered_white.png" />
+    <None Include="res\arial.gpb">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp">

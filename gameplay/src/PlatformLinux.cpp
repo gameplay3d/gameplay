@@ -89,7 +89,6 @@ static Display* __display;
 static Window   __window;
 static int __windowSize[2];
 static GLXContext __context;
-static Window __attachToWindow;
 static Atom __atomWmDeleteWindow;
 static list<ConnectedGamepadDevInfo> __connectedGamepads;
 
@@ -551,12 +550,11 @@ namespace gameplay
     {
     }
 
-    Platform* Platform::create(Game* game, void* attachToWindow)
+    Platform* Platform::create(Game* game)
     {
 
         GP_ASSERT(game);
 
-        __attachToWindow = (Window)attachToWindow;
         FileSystem::setResourcePath("./");
         Platform* platform = new Platform(game);
 

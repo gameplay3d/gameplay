@@ -870,6 +870,33 @@
     <ClCompile Include="src\social\ScoreloopSocialSession.cpp">
       <Filter>src\social</Filter>
     </ClCompile>
+    <ClCompile Include="src\social\GoogleGamesSocialSession.cpp">
+      <Filter>src\social</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SocialAchievement.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SocialPlayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SocialScore.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SocialChallenge.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SocialSessionListener.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_ControlAutoSize.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_FontFormat.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_RenderStateFrontFace.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1727,9 +1754,6 @@
     <ClInclude Include="src\SocialAchievement.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\SocialLeaderboard.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\SocialPlayer.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1741,6 +1765,21 @@
     </ClInclude>
     <ClInclude Include="src\social\ScoreloopSocialSession.h">
       <Filter>src\social</Filter>
+    </ClInclude>
+    <ClInclude Include="src\social\GoogleGamesSocialSession.h">
+      <Filter>src\social</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SocialChallenge.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ControlAutoSize.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_FontFormat.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_RenderStateFrontFace.h">
+      <Filter>src\lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

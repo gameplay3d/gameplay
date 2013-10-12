@@ -34,11 +34,12 @@ cd %~dp0
 >> temp.cs ECHO         try
 >> temp.cs ECHO         {
 >> temp.cs ECHO             WebClient client = new WebClient();
+>> temp.cs ECHO             client.Proxy = null;
 >> temp.cs ECHO             client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
 >> temp.cs ECHO             client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
 >> temp.cs ECHO             Console.Write("Downloading " + url + ": 0%%    ");
 >> temp.cs ECHO             client.DownloadFileAsync(new Uri(url), file);
->> temp.cs ECHO             while (!done) System.Threading.Thread.Sleep(1000);
+>> temp.cs ECHO             while (!done) System.Threading.Thread.Sleep(500);
 >> temp.cs ECHO         }
 >> temp.cs ECHO         catch (Exception x)
 >> temp.cs ECHO         {

@@ -124,6 +124,11 @@ protected:
 
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
+    /**
+     * @see Control#update(const Control*, const Vector2&)
+     */
+    void update(const Control* container, const Vector2& offset);
+
     // Source region.
     Rectangle _srcRegion;
     // Destination region.

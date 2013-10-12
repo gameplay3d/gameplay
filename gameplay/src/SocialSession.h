@@ -5,6 +5,7 @@
 #include "SocialPlayer.h"
 #include "SocialAchievement.h"
 #include "SocialScore.h"
+#include "SocialChallenge.h"
 #include "Properties.h"
 
 namespace gameplay
@@ -12,6 +13,8 @@ namespace gameplay
 
 /**
  * Defines an abstract class for typical social game activities running with an authenticated session.
+ *
+ * @script{ignore}
  */
 class SocialSession
 {
@@ -22,7 +25,7 @@ public:
     enum CommunityScope
     {
         COMMUNITY_SCOPE_FRIENDS,
-        COMMUNITY_SCOPE_ALL,
+        COMMUNITY_SCOPE_ALL
     };
 
     enum TimeScope
@@ -39,13 +42,17 @@ public:
      */
     virtual SocialSessionListener* getListener() = 0;
 
-    virtual SocialPlayer* getUser() = 0;
+    virtual const SocialPlayer& getUser() const = 0;
 
     virtual void loadFriends() = 0;
 
     virtual void loadAchievements() = 0;
 
-    virtual void submitAchievement(const char* achievementId, unsigned int value) = 0;
+    virtual void submitAchievement(const char* achievementId, unsigned int value, bool achieved=false) = 0;
+
+    virtual void incrementAchievement(const char* achievementId, unsigned int increment=1) = 0;
+
+    virtual void synchronizeAchievements() = 0;
 
     /**
      * Asynchronously request the scores for the count where the player is in the middle.
@@ -67,9 +74,25 @@ public:
 
     virtual void submitScore(const char* leaderboardId, float value) = 0;
 
+    virtual void submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId=0) = 0;
+
+    virtual void loadChallenges(bool showOpenChallengesOnly=true) = 0;
+
+    virtual void replyToChallenge(const SocialChallenge *challenge, bool accept) = 0;
+
     virtual void loadSavedData(const char* key) = 0;
 
     virtual void submitSavedData(const char* key, std::string data) = 0;
+
+    virtual void displayLeaderboard(const char* leaderboardId) = 0;
+
+    virtual void displayAchievements() = 0;
+
+    virtual void displayChallenges() = 0;
+
+    virtual void displayChallengeSubmit(const SocialChallenge *challenge, float score) = 0;
+
+    virtual bool handleEvent(void *event) { return true; }
 
 protected:
 

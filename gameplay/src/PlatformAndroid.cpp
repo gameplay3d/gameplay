@@ -974,7 +974,7 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game, void* attachToWindow)
+Platform* Platform::create(Game* game)
 {
     Platform* platform = new Platform(game);
     return platform;
