@@ -105,6 +105,8 @@ void luaRegister_Joint()
         {"getWorldViewProjectionMatrix", lua_Joint_getWorldViewProjectionMatrix},
         {"hasTag", lua_Joint_hasTag},
         {"isStatic", lua_Joint_isStatic},
+        {"isVisible", lua_Joint_isVisible},
+        {"isVisibleInHierarchy", lua_Joint_isVisibleInHierarchy},
         {"release", lua_Joint_release},
         {"removeAllChildren", lua_Joint_removeAllChildren},
         {"removeChild", lua_Joint_removeChild},
@@ -141,6 +143,7 @@ void luaRegister_Joint()
         {"setTranslationX", lua_Joint_setTranslationX},
         {"setTranslationY", lua_Joint_setTranslationY},
         {"setTranslationZ", lua_Joint_setTranslationZ},
+        {"setVisible", lua_Joint_setVisible},
         {"transformPoint", lua_Joint_transformPoint},
         {"transformVector", lua_Joint_transformVector},
         {"translate", lua_Joint_translate},
@@ -3970,6 +3973,76 @@ int lua_Joint_isStatic(lua_State* state)
     return 0;
 }
 
+int lua_Joint_isVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joint* instance = getInstance(state);
+                bool result = instance->isVisible();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Joint_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_isVisibleInHierarchy(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joint* instance = getInstance(state);
+                bool result = instance->isVisibleInHierarchy();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Joint_isVisibleInHierarchy - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joint_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -6057,6 +6130,42 @@ int lua_Joint_setTranslationZ(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Joint_setTranslationZ - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_setVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                Joint* instance = getInstance(state);
+                instance->setVisible(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Joint_setVisible - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

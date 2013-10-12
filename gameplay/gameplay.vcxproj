@@ -240,6 +240,8 @@
     <ClCompile Include="src\lua\lua_RenderTarget.cpp" />
     <ClCompile Include="src\lua\lua_Scene.cpp" />
     <ClCompile Include="src\lua\lua_SceneDebugFlags.cpp" />
+    <ClCompile Include="src\lua\lua_SceneRenderer.cpp" />
+    <ClCompile Include="src\lua\lua_SceneRendererForward.cpp" />
     <ClCompile Include="src\lua\lua_ScreenDisplayer.cpp" />
     <ClCompile Include="src\lua\lua_ScriptController.cpp" />
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp" />
@@ -274,6 +276,8 @@
     <ClCompile Include="src\lua\lua_VertexFormatElement.cpp" />
     <ClCompile Include="src\lua\lua_VertexFormatUsage.cpp" />
     <ClCompile Include="src\lua\lua_VerticalLayout.cpp" />
+    <ClCompile Include="src\lua\lua_VisibleSet.cpp" />
+    <ClCompile Include="src\lua\lua_VisibleSetDefault.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MathUtil.cpp" />
     <ClCompile Include="src\MeshBatch.cpp" />
@@ -538,6 +542,8 @@
     <ClInclude Include="src\lua\lua_RenderTarget.h" />
     <ClInclude Include="src\lua\lua_Scene.h" />
     <ClInclude Include="src\lua\lua_SceneDebugFlags.h" />
+    <ClInclude Include="src\lua\lua_SceneRenderer.h" />
+    <ClInclude Include="src\lua\lua_SceneRendererForward.h" />
     <ClInclude Include="src\lua\lua_ScreenDisplayer.h" />
     <ClInclude Include="src\lua\lua_ScriptController.h" />
     <ClInclude Include="src\lua\lua_ScriptTarget.h" />
@@ -572,6 +578,8 @@
     <ClInclude Include="src\lua\lua_VertexFormatElement.h" />
     <ClInclude Include="src\lua\lua_VertexFormatUsage.h" />
     <ClInclude Include="src\lua\lua_VerticalLayout.h" />
+    <ClInclude Include="src\lua\lua_VisibleSet.h" />
+    <ClInclude Include="src\lua\lua_VisibleSetDefault.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MathUtil.h" />
     <ClInclude Include="src\MeshBatch.h" />

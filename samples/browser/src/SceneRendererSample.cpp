@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Scene", "Scene Renderer", SceneRendererSample, 3);
+    ADD_SAMPLE("Scene", "SceneRenderer", SceneRendererSample, 3);
 #endif
 
 SceneRendererSample::SceneRendererSample() : _font(NULL), _scene(NULL), _visibleSet(NULL), _lightNode(NULL)

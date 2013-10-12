@@ -906,6 +906,18 @@
     <ClCompile Include="src\social\GooglePlaySocialSession.cpp">
       <Filter>src\social</Filter>
     </ClCompile>
+    <ClCompile Include="src\lua\lua_SceneRenderer.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_SceneRendererForward.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_VisibleSet.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_VisibleSetDefault.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1801,6 +1813,18 @@
     </ClInclude>
     <ClInclude Include="src\social\GooglePlaySocialSession.h">
       <Filter>src\social</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_SceneRenderer.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_SceneRendererForward.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_VisibleSet.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_VisibleSetDefault.h">
+      <Filter>src\lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
