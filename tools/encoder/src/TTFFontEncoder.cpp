@@ -311,7 +311,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     
     // File header and version.
     FILE *gpbFp = fopen(outFilePath, "wb");
-    char fileHeader[9]     = {'«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n'};
+    char fileHeader[9]     = {'\xAB', 'G', 'P', 'B', '\xBB', '\r', '\n', '\x1A', '\n'};
     fwrite(fileHeader, sizeof(char), 9, gpbFp);
     fwrite(gameplay::GPB_VERSION, sizeof(char), 2, gpbFp);
 
