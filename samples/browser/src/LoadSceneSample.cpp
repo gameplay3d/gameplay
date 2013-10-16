@@ -6,7 +6,7 @@
 #endif
 
 LoadSceneSample::LoadSceneSample()
-    : _font(NULL), _scene(NULL), _lightNode(NULL), _wireFrame(false)
+    : _font(NULL), _scene(NULL), _wireFrame(false)
 {
     
 }
@@ -18,13 +18,8 @@ void LoadSceneSample::initialize()
 
     _scene = Scene::load("res/common/sample.scene");
 
-    // Find the light node
-    _lightNode = _scene->findNode("directionalLight");
-
     // Update the aspect ratio for our scene's camera to match the current device resolution
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
-
-    _scene->visit(this, &LoadSceneSample::bindLights);
 }
 
 void LoadSceneSample::finalize()
@@ -90,6 +85,7 @@ bool LoadSceneSample::drawScene(Node* node)
     return true;
 }
 
+/*
 bool LoadSceneSample::bindLights(Node* node)
 {
     Model* model = node->getModel();
@@ -120,3 +116,4 @@ bool LoadSceneSample::bindLights(Node* node)
     }
     return true;
 }
+*/
