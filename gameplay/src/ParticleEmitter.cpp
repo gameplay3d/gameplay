@@ -889,7 +889,7 @@ void ParticleEmitter::update(float elapsedTime)
         {
             if ((int)_timePerEmission > 0)
             {
-                _emitTime = fmod(_emitTime, (double)_timePerEmission);
+                _emitTime = fmod((double)_emitTime, (double)_timePerEmission);
             }
             emitOnce(emitCount);
         }
