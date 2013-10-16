@@ -43,8 +43,6 @@ scene terrainSampleScene
 
 	// Basic scene lighting properties
 	ambientColor = 0.2, 0.2, 0.2
-	lightColor = 1, 1, 1
-	lightDirection = -1, -0.75, -0.75
 
 	// Set active camera
 	activeCamera = camera

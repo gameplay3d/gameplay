@@ -25,11 +25,8 @@ protected:
 
 private:
 
-    bool bindLights(Node* node);
-
     Font* _font;
     Scene* _scene;
-    Node* _lightNode;
     VisibleSet* _visibleSet;
     SceneRenderer* _renderer;
 };

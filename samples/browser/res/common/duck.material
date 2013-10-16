@@ -13,8 +13,9 @@ material duck
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_cameraPosition = CAMERA_WORLD_POSITION
-            u_ambientColor = 0.2, 0.2, 0.2
-            u_lightColor = 0.75, 0.75, 0.75
+            u_ambientColor = SCENE_AMBIENT_COLOR
+            u_lightColor = 1, 1, 1
+            u_lightDirection = 0, -1, 0
             u_specularExponent = 50
             
             // samplers
