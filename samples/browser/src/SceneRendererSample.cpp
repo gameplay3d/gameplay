@@ -5,7 +5,7 @@
     ADD_SAMPLE("Scene", "SceneRenderer", SceneRendererSample, 3);
 #endif
 
-SceneRendererSample::SceneRendererSample() : _font(NULL), _scene(NULL), _visibleSet(NULL), _lightNode(NULL)
+SceneRendererSample::SceneRendererSample() : _font(NULL), _scene(NULL), _visibleSet(NULL)
 {
 }
 
@@ -18,12 +18,7 @@ void SceneRendererSample::initialize()
     _visibleSet = VisibleSetDefault::create(_scene);
     _renderer = SceneRendererForward::create();
 
-    // Find the light node
-    _lightNode = _scene->findNode("directionalLight");
-
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
-
-    _scene->visit(this, &SceneRendererSample::bindLights);
 }
 
 void SceneRendererSample::finalize()
@@ -65,35 +60,4 @@ void SceneRendererSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsign
 
 void SceneRendererSample::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-}
-
-bool SceneRendererSample::bindLights(Node* node)
-{
-    Model* model = node->getModel();
-    if (model)
-    {
-        Material* material = model->getMaterial();
-        if (material)
-        {
-            MaterialParameter* ambientColorParam = material->getParameter("u_ambientColor");
-            if (ambientColorParam)
-            {
-                ambientColorParam->setValue(_scene->getAmbientColor());
-            }
-            if (_lightNode && _lightNode->getLight())
-            {
-                MaterialParameter* lightDirectionParam = material->getParameter("u_lightDirection");
-                MaterialParameter* lightColorParam = material->getParameter("u_lightColor");
-                if (lightDirectionParam)
-                {
-                    lightDirectionParam->bindValue(_lightNode, &Node::getForwardVectorView);
-                }
-                if (lightColorParam)
-                {
-                    lightColorParam->setValue(_lightNode->getLight()->getColor());
-                }
-            }
-        }
-    }
-    return true;
 }

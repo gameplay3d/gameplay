@@ -148,6 +148,7 @@ LOCAL_SRC_FILES := \
     lua/lua_ContainerScroll.cpp \
     lua/lua_Control.cpp \
     lua/lua_ControlAlignment.cpp \
+    lua/lua_ControlAutoSize.cpp \
     lua/lua_ControlListener.cpp \
     lua/lua_ControlListenerEventType.cpp \
     lua/lua_ControlState.cpp \
@@ -159,6 +160,7 @@ LOCAL_SRC_FILES := \
     lua/lua_FileSystem.cpp \
     lua/lua_FlowLayout.cpp \
     lua/lua_Font.cpp \
+    lua/lua_FontFormat.cpp \
     lua/lua_FontJustify.cpp \
     lua/lua_FontStyle.cpp \
     lua/lua_FontText.cpp \
@@ -248,6 +250,7 @@ LOCAL_SRC_FILES := \
     lua/lua_RenderStateBlend.cpp \
     lua/lua_RenderStateCullFaceSide.cpp \
     lua/lua_RenderStateDepthFunction.cpp \
+    lua/lua_RenderStateFrontFace.cpp  \
     lua/lua_RenderStateStateBlock.cpp \
     lua/lua_RenderStateStencilFunction.cpp \
     lua/lua_RenderStateStencilOperation.cpp \

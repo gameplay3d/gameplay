@@ -33,11 +33,8 @@ private:
 
     bool drawScene(Node* node);
 
-    bool bindLights(Node* node);
-
     Font* _font;
     Scene* _scene;
-    Node* _lightNode;
     bool _wireFrame;
 };
 

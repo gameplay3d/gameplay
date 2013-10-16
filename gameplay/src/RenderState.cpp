@@ -143,12 +143,6 @@ const char* autoBindingToString(RenderState::AutoBinding autoBinding)
     case RenderState::SCENE_AMBIENT_COLOR:
         return "SCENE_AMBIENT_COLOR";
 
-    case RenderState::SCENE_LIGHT_COLOR:
-        return "SCENE_LIGHT_COLOR";
-
-    case RenderState::SCENE_LIGHT_DIRECTION:
-        return "SCENE_LIGHT_DIRECTION";
-
     default:
         return "";
     }
@@ -304,14 +298,6 @@ void RenderState::applyAutoBinding(const char* uniformName, const char* autoBind
         {
             param->bindValue(this, &RenderState::autoBindingGetAmbientColor);
         }
-        else if (strcmp(autoBinding, "SCENE_LIGHT_COLOR") == 0)
-        {
-            param->bindValue(this, &RenderState::autoBindingGetLightColor);
-        }
-        else if (strcmp(autoBinding, "SCENE_LIGHT_DIRECTION") == 0)
-        {
-            param->bindValue(this, &RenderState::autoBindingGetLightDirection);
-        }
         else
         {
             bound = false;
@@ -395,25 +381,6 @@ const Vector3& RenderState::autoBindingGetAmbientColor() const
 {
     Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
     return scene ? scene->getAmbientColor() : Vector3::zero();
-}
-
-const Vector3& RenderState::autoBindingGetLightColor() const
-{
-    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
-    return scene ? scene->getLightColor() : Vector3::one();
-}
-
-const Vector3& RenderState::autoBindingGetLightDirection() const
-{
-    static Vector3 down(0, -1, 0);
-    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
-    if (scene) {
-        static Vector3 lightDirection;
-        lightDirection.set(scene->getLightDirection());
-        _nodeBinding->getViewMatrix().transformVector(&lightDirection);
-        return lightDirection;
-    }
-    return down;
 }
 
 void RenderState::bind(Pass* pass)
