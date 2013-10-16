@@ -8,6 +8,9 @@
     #define realpath(A,B)    _fullpath(B,A,PATH_MAX)
 #endif
 
+// The encoder version number should be incremented when a feature is added to the encoder.
+// The encoder version is not the same as the GPB version.
+#define ENCODER_VERSION "2.0.0"
 #define HEIGHTMAP_SIZE_MAX 2049
 
 namespace gameplay
@@ -288,6 +291,8 @@ void EncoderArguments::printUsage() const
     "  -s <size>\tSize of the bitmap font. (in pixels).\n" \
     "  -p\t\tOutput font preview.\n" \
     "  -f Format of font. -f:b (BITMAP), -f:d (DISTANCE_FIELD).\n" \
+    "\n" \
+    "Encoder version: " ENCODER_VERSION "\n" \
     "\n");
     exit(8);
 }
