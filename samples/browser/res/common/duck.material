@@ -7,16 +7,16 @@ material duck
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-            defines = SPECULAR
+            defines = DIRECTIONAL_LIGHT_COUNT 1;SPECULAR
             
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_cameraPosition = CAMERA_WORLD_POSITION
             u_ambientColor = SCENE_AMBIENT_COLOR
-            u_lightColor = 1, 1, 1
-            u_lightDirection = 0, -1, 0
             u_specularExponent = 50
+            //u_directionalLightColor[0] = 1, 1, 1
+            //u_directionalLightDirection[0] = 0, -1, 0
             
             // samplers
             sampler u_diffuseTexture

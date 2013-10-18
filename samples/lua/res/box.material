@@ -14,8 +14,8 @@ material box
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_cameraPosition = CAMERA_WORLD_POSITION
             u_ambientColor = 0.2, 0.2, 0.2
-            u_lightColor = 0.75, 0.75, 0.75
             u_specularExponent = 50
+            // u_directionalLightColor[0] = 0.75, 0.75, 0.75
             
             // samplers
             sampler u_diffuseTexture

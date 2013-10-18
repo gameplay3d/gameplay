@@ -92,8 +92,9 @@ void PostProcessSample::initialize()
     _modelNode = _scene->findNode("duck");
     Model* model = _modelNode->getModel();
     Material* material = model->setMaterial("res/common/duck.material");
-    material->getParameter("u_lightColor")->setValue(light->getColor());
-    material->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
+    
+    //material->getParameter("u_directionalLightColor[0]")->setValue(light->getColor());
+    //material->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());
 
     // Create one frame buffer for the full screen compositerss.
     _frameBuffer = FrameBuffer::create("PostProcessSample", FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
