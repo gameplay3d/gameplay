@@ -28,6 +28,7 @@ material textured
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
+            defines = DIRECTIONAL_LIGHT_COUNT 1
         }
     }
 }
@@ -59,8 +60,8 @@ material texturedUnlit
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/textured-unlit.vert
-            fragmentShader = res/shaders/textured-unlit.frag
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
         }
     }
 }
@@ -96,6 +97,7 @@ material colored
             // shaders
             vertexShader = res/shaders/colored.vert
             fragmentShader = res/shaders/colored.frag
+            defines = DIRECTIONAL_LIGHT_COUNT 1
         }
     }
 }
@@ -117,8 +119,8 @@ material coloredUnlit
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/colored-unlit.vert
-            fragmentShader = res/shaders/colored-unlit.frag
+            vertexShader = res/shaders/colored.vert
+            fragmentShader = res/shaders/colored.frag
         }
     }
 }
@@ -284,7 +286,7 @@ material track : texturedUnlit
     {
         pass 0
         {
-            defines = TEXTURE_LIGHTMAP;TEXCOORD1
+            defines = LIGHTMAP;TEXCOORD1
         }
     }
 }

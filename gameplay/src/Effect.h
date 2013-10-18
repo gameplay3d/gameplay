@@ -244,7 +244,7 @@ private:
     GLuint _program;
     std::string _id;
     std::map<std::string, VertexAttribute> _vertexAttributes;
-    std::map<std::string, Uniform*> _uniforms;
+    mutable std::map<std::string, Uniform*> _uniforms;
     static Uniform _emptyUniform;
 };
 

@@ -133,10 +133,12 @@ bool PhysicsCollisionObjectSample::bindLights(Node* node)
             {
                 ambientColorParam->setValue(_scene->getAmbientColor());
             }
+
+            /* TODO
             if (_lightNode && _lightNode->getLight())
             {
-                MaterialParameter* lightDirectionParam = material->getParameter("u_lightDirection");
-                MaterialParameter* lightColorParam = material->getParameter("u_lightColor");
+                MaterialParameter* lightDirectionParam = material->getParameter("u_directionalLightDirection");
+                MaterialParameter* lightColorParam = material->getParameter("u_directionalLightColor");
                 if (lightDirectionParam)
                 {
                     lightDirectionParam->bindValue(_lightNode, &Node::getForwardVectorView);
@@ -146,6 +148,7 @@ bool PhysicsCollisionObjectSample::bindLights(Node* node)
                     lightColorParam->setValue(_lightNode->getLight()->getColor());
                 }
             }
+            */
         }
     }
     return true;

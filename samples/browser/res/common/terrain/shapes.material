@@ -3,8 +3,8 @@ material textured
     u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
     u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
     u_ambientColor = SCENE_AMBIENT_COLOR
-    u_lightColor = SCENE_LIGHT_COLOR
-    u_lightDirection = SCENE_LIGHT_DIRECTION
+    u_directionalLightColor[0] = 0.75, 0.75, 0.75
+    u_directionalLightDirection[0] = 0, -1, 0
 
     sampler u_diffuseTexture
     {
@@ -27,6 +27,7 @@ material textured
         {
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
+            defines = DIRECTIONAL_LIGHT_COUNT 1
         }
     }
 }

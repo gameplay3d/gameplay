@@ -102,19 +102,18 @@ void CreateSceneSample::initialize()
     SAFE_RELEASE(cubeMesh);
 
     // Create the material for the cube model and assign it to the first mesh part.
-    Material* material = cubeModel->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", 0);
+    Material* material = cubeModel->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "DIRECTIONAL_LIGHT_COUNT 1");
 
     // These parameters are normally set in a .material file but this example sets them programmatically.
     // Bind the uniform "u_worldViewProjectionMatrix" to use the WORLD_VIEW_PROJECTION_MATRIX from the scene's active camera and the node that the model belongs to.
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
     material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
-
-    // Bind the light's direction to the material.
-    material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
-    // Bind the light's color to the material.
-    material->getParameter("u_lightColor")->setValue(lightNode->getLight()->getColor());
     // Set the ambient color of the material.
     material->getParameter("u_ambientColor")->setValue(Vector3(1, 1, 1));
+
+    // Bind the light's color and direction to the material.
+    material->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
+    material->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorView);
 
     // Load the texture from file.
     Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/png/box-diffuse.png", true);

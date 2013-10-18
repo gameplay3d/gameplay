@@ -84,36 +84,3 @@ bool LoadSceneSample::drawScene(Node* node)
         model->draw(_wireFrame);
     return true;
 }
-
-/*
-bool LoadSceneSample::bindLights(Node* node)
-{
-    Model* model = node->getModel();
-    if (model)
-    {
-        Material* material = model->getMaterial();
-        if (material)
-        {
-            MaterialParameter* ambientColorParam = material->getParameter("u_ambientColor");
-            if (ambientColorParam)
-            {
-                ambientColorParam->setValue(_scene->getAmbientColor());
-            }
-            if (_lightNode && _lightNode->getLight())
-            {
-                MaterialParameter* lightDirectionParam = material->getParameter("u_lightDirection");
-                MaterialParameter* lightColorParam = material->getParameter("u_lightColor");
-                if (lightDirectionParam)
-                {
-                    lightDirectionParam->bindValue(_lightNode, &Node::getForwardVectorView);
-                }
-                if (lightColorParam)
-                {
-                    lightColorParam->setValue(_lightNode->getLight()->getColor());
-                }
-            }
-        }
-    }
-    return true;
-}
-*/

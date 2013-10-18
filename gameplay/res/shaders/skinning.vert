@@ -1,7 +1,5 @@
+
 vec4 _skinnedPosition;
-#if defined(LIGHTING)
-vec3 _skinnedNormal;
-#endif
 
 void skinPosition(float blendWeight, int matrixIndex)
 {
@@ -16,28 +14,24 @@ void skinPosition(float blendWeight, int matrixIndex)
 vec4 getPosition()
 {
     _skinnedPosition = vec4(0.0);
-
-    // Transform position to view space using matrix palette with four matrices used to transform a vertex.
     float blendWeight = a_blendWeights[0];
     int matrixIndex = int (a_blendIndices[0]) * 3;
     skinPosition(blendWeight, matrixIndex);
-
     blendWeight = a_blendWeights[1];
     matrixIndex = int(a_blendIndices[1]) * 3;
     skinPosition(blendWeight, matrixIndex);
-
     blendWeight = a_blendWeights[2];
     matrixIndex = int(a_blendIndices[2]) * 3;
     skinPosition(blendWeight, matrixIndex);
-
     blendWeight = a_blendWeights[3];
     matrixIndex = int(a_blendIndices[3]) * 3;
     skinPosition(blendWeight, matrixIndex);
-
     return _skinnedPosition;    
 }
 
 #if defined(LIGHTING)
+
+vec3 _skinnedNormal;
 
 void skinTangentSpaceVector(vec3 vector, float blendWeight, int matrixIndex)
 {
@@ -51,24 +45,19 @@ void skinTangentSpaceVector(vec3 vector, float blendWeight, int matrixIndex)
 vec3 getTangentSpaceVector(vec3 vector)
 {
     _skinnedNormal = vec3(0.0);
-
     // Transform normal to view space using matrix palette with four matrices used to transform a vertex.
     float blendWeight = a_blendWeights[0];
     int matrixIndex = int (a_blendIndices[0]) * 3;
     skinTangentSpaceVector(vector, blendWeight, matrixIndex);
-
     blendWeight = a_blendWeights[1];
     matrixIndex = int(a_blendIndices[1]) * 3;
     skinTangentSpaceVector(vector, blendWeight, matrixIndex);
-
     blendWeight = a_blendWeights[2];
     matrixIndex = int(a_blendIndices[2]) * 3;
     skinTangentSpaceVector(vector, blendWeight, matrixIndex);
-
     blendWeight = a_blendWeights[3];
     matrixIndex = int(a_blendIndices[3]) * 3;
     skinTangentSpaceVector(vector, blendWeight, matrixIndex);
-
     return _skinnedNormal;
 }
 
@@ -90,4 +79,33 @@ vec3 getBinormal()
 }
 
 #endif
+
+#endif
+
+#else
+
+vec4 getPosition()
+{
+    return a_position;    
+}
+
+#if defined(LIGHTING)
+
+vec3 getNormal()
+{
+    return a_normal;
+}
+
+#if defined(BUMPED)
+vec3 getTangent()
+{
+    return a_tangent;
+}
+
+vec3 getBinormal()
+{
+    return a_binormal;
+}
+#endif
+
 #endif
