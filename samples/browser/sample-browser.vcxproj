@@ -639,6 +639,62 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="icon.png" />
+    <None Include="res\common\arial-distance.gpb" />
+    <None Include="res\common\arial.gpb" />
+    <None Include="res\common\badaboom.gpb" />
+    <None Include="res\common\box.gpb" />
+    <None Include="res\common\box.material" />
+    <None Include="res\common\camera.lua" />
+    <None Include="res\common\constraints.gpb" />
+    <None Include="res\common\constraints.physics" />
+    <None Include="res\common\constraints.scene" />
+    <None Include="res\common\custom.gpb" />
+    <None Include="res\common\default.theme" />
+    <None Include="res\common\duck.gpb" />
+    <None Include="res\common\duck.material" />
+    <None Include="res\common\fishfingers.gpb" />
+    <None Include="res\common\forms\formBasicControls.form" />
+    <None Include="res\common\forms\formFlowLayout.form" />
+    <None Include="res\common\forms\formScrolling.form" />
+    <None Include="res\common\forms\formSelect.form" />
+    <None Include="res\common\forms\formVerticalLayout.form" />
+    <None Include="res\common\forms\formZOrder.form" />
+    <None Include="res\common\gamepad.form" />
+    <None Include="res\common\gamepad.theme" />
+    <None Include="res\common\grid.material" />
+    <None Include="res\common\inputs.form" />
+    <None Include="res\common\light.form" />
+    <None Include="res\common\light.material" />
+    <None Include="res\common\lightBrickWall.gpb" />
+    <None Include="res\common\neuropol.gpb" />
+    <None Include="res\common\physics.form" />
+    <None Include="res\common\physics.gpb" />
+    <None Include="res\common\physics.material" />
+    <None Include="res\common\physics.physics" />
+    <None Include="res\common\physics.scene" />
+    <None Include="res\common\postprocess\postprocess.material" />
+    <None Include="res\common\postprocess\postprocess.vert" />
+    <None Include="res\common\postprocess\postprocess_gaussianblur.frag" />
+    <None Include="res\common\postprocess\postprocess_grayscale.frag" />
+    <None Include="res\common\postprocess\postprocess_oldfilm.frag" />
+    <None Include="res\common\postprocess\postprocess_passthrough.frag" />
+    <None Include="res\common\postprocess\postprocess_pixelate.frag" />
+    <None Include="res\common\postprocess\postprocess_sepia.frag" />
+    <None Include="res\common\postprocess\postprocess_sobeledge.frag" />
+    <None Include="res\common\sample.gpb" />
+    <None Include="res\common\sample.material" />
+    <None Include="res\common\sample.scene" />
+    <None Include="res\common\sphere.gpb" />
+    <None Include="res\common\terrain\encode.bat" />
+    <None Include="res\common\terrain\heightmap.r16" />
+    <None Include="res\common\terrain\sample.scene" />
+    <None Include="res\common\terrain\sample.terrain" />
+    <None Include="res\common\terrain\shapes.material" />
+    <None Include="res\common\terrain\sky.fbx" />
+    <None Include="res\common\terrain\sky.gpb" />
+    <None Include="res\common\terrain\sky.material" />
+    <None Include="res\common\terrain\terrain.form" />
+    <None Include="res\common\text.form" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio3DSample.cpp" />
@@ -689,6 +745,29 @@
     <ClInclude Include="src\TextSample.h" />
     <ClInclude Include="src\TextureSample.h" />
     <ClInclude Include="src\MeshBatchSample.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\common\terrain\dirt.dds" />
+    <Image Include="res\common\terrain\grass.dds" />
+    <Image Include="res\common\terrain\normalmap.dds" />
+    <Image Include="res\common\terrain\rock.dds" />
+    <Image Include="res\common\terrain\sky.dds" />
+    <Image Include="res\png\box-diffuse.png" />
+    <Image Include="res\png\brick.png" />
+    <Image Include="res\png\brickn.png" />
+    <Image Include="res\png\color-wheel.png" />
+    <Image Include="res\png\crate.png" />
+    <Image Include="res\png\default-theme.png" />
+    <Image Include="res\png\dirt.png" />
+    <Image Include="res\png\duck-diffuse.png" />
+    <Image Include="res\png\gamepad.png" />
+    <Image Include="res\png\grass.png" />
+    <Image Include="res\png\light-directional.png" />
+    <Image Include="res\png\light-point.png" />
+    <Image Include="res\png\light-spot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\common\footsteps.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

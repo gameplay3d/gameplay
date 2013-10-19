@@ -20,9 +20,6 @@
     <None Include="res\propulsion_glow.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\spaceship.dae">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\spaceship.gpb">
       <Filter>res</Filter>
     </None>

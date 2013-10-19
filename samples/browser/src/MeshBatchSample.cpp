@@ -7,7 +7,7 @@
 
 static Material* createMaterial()
 {
-    Material* material = Material::create("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    Material* material = Material::create("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
     GP_ASSERT(material && material->getStateBlock());
     return material;
 }

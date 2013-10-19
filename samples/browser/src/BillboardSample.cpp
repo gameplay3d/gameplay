@@ -284,7 +284,7 @@ void BillboardSample::loadGround()
 	node->setModel(_ground);
     _scene->addNode(node);
 	node->rotateX(MATH_DEG_TO_RAD(90));
-	Effect* effect = Effect::createFromFile("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "TEXTURE_REPEAT");    
+	Effect* effect = Effect::createFromFile("res/shaders/textured.vert", "res/shaders/textured.frag", "TEXTURE_REPEAT");    
 	Material* material = Material::create(effect); 
 	material->getStateBlock()->setDepthTest(true);
 	material->getStateBlock()->setBlend(false);
@@ -303,7 +303,7 @@ void BillboardSample::loadBillboards()
 	Mesh* mesh = Mesh::createQuad(-(BILLBOARD_WIDTH / 2.0f), -(BILLBOARD_HEIGHT / 2.0f), BILLBOARD_WIDTH, BILLBOARD_HEIGHT);
 	mesh->setBoundingSphere(BoundingSphere(Vector3::zero(), BILLBOARD_HEIGHT));
 
-    Effect* effect = Effect::createFromFile("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "TEXTURE_DISCARD_ALPHA");
+    Effect* effect = Effect::createFromFile("res/shaders/textured.vert", "res/shaders/textured.frag", "TEXTURE_DISCARD_ALPHA");
 
 	// Create the model and node and bind the material
     for ( unsigned int i = 0; i < BILLBOARD_COUNT; i++ ) 

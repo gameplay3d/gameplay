@@ -6,11 +6,197 @@
     <Filter Include="src\common">
       <UniqueIdentifier>{c35d9ec0-a966-49e8-af48-14cbcb2d6818}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{b0da65f8-9ff6-4813-9af3-3bb222d54acf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\common">
+      <UniqueIdentifier>{6cb7d9bf-0b2d-44df-a48d-d8150c67f38c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\png">
+      <UniqueIdentifier>{6a436bab-00f5-4c87-9e53-b360dba474c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\common\forms">
+      <UniqueIdentifier>{a3201c29-9b57-40a3-839e-e5b8ad1fe53d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\common\terrain">
+      <UniqueIdentifier>{7486d723-ca70-4cf7-a8fb-034679fad89f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\common\postprocess">
+      <UniqueIdentifier>{97b23ce2-184f-46f4-a2fc-11aca4473fb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
+    <None Include="res\common\forms\formBasicControls.form">
+      <Filter>res\common\forms</Filter>
+    </None>
+    <None Include="res\common\forms\formFlowLayout.form">
+      <Filter>res\common\forms</Filter>
+    </None>
+    <None Include="res\common\forms\formScrolling.form">
+      <Filter>res\common\forms</Filter>
+    </None>
+    <None Include="res\common\forms\formSelect.form">
+      <Filter>res\common\forms</Filter>
+    </None>
+    <None Include="res\common\forms\formVerticalLayout.form">
+      <Filter>res\common\forms</Filter>
+    </None>
+    <None Include="res\common\forms\formZOrder.form">
+      <Filter>res\common\forms</Filter>
+    </None>
+    <None Include="res\common\postprocess\postprocess.material">
+      <Filter>res\common\postprocess</Filter>
+    </None>
+    <None Include="res\common\postprocess\postprocess.vert">
+      <Filter>res\common\postprocess</Filter>
+    </None>
+    <None Include="res\common\postprocess\postprocess_gaussianblur.frag">
+      <Filter>res\common\postprocess</Filter>
+    </None>
+    <None Include="res\common\postprocess\postprocess_grayscale.frag">
+      <Filter>res\common\postprocess</Filter>
+    </None>
+    <None Include="res\common\postprocess\postprocess_oldfilm.frag">
+      <Filter>res\common\postprocess</Filter>
+    </None>
+    <None Include="res\common\postprocess\postprocess_passthrough.frag">
+      <Filter>res\common\postprocess</Filter>
+    </None>
+    <None Include="res\common\postprocess\postprocess_pixelate.frag">
+      <Filter>res\common\postprocess</Filter>
+    </None>
+    <None Include="res\common\postprocess\postprocess_sepia.frag">
+      <Filter>res\common\postprocess</Filter>
+    </None>
+    <None Include="res\common\postprocess\postprocess_sobeledge.frag">
+      <Filter>res\common\postprocess</Filter>
+    </None>
+    <None Include="res\common\terrain\encode.bat">
+      <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\terrain\heightmap.r16">
+      <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\terrain\sample.scene">
+      <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\terrain\sample.terrain">
+      <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\terrain\shapes.material">
+      <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\terrain\sky.fbx">
+      <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\terrain\sky.gpb">
+      <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\terrain\sky.material">
+      <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\terrain\terrain.form">
+      <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\arial.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\arial-distance.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\badaboom.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\box.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\box.material">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\camera.lua">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\constraints.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\constraints.physics">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\constraints.scene">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\custom.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\default.theme">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\duck.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\duck.material">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\fishfingers.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\gamepad.form">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\gamepad.theme">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\grid.material">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\inputs.form">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\light.form">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\light.material">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\lightBrickWall.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\neuropol.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\physics.form">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\physics.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\physics.material">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\physics.physics">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\physics.scene">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\sample.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\sample.material">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\sample.scene">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\sphere.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\text.form">
+      <Filter>res\common</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MeshPrimitiveSample.h">
@@ -153,5 +339,66 @@
     <ClCompile Include="src\SceneRendererSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\common\terrain\dirt.dds">
+      <Filter>res\common\terrain</Filter>
+    </Image>
+    <Image Include="res\common\terrain\grass.dds">
+      <Filter>res\common\terrain</Filter>
+    </Image>
+    <Image Include="res\common\terrain\normalmap.dds">
+      <Filter>res\common\terrain</Filter>
+    </Image>
+    <Image Include="res\common\terrain\rock.dds">
+      <Filter>res\common\terrain</Filter>
+    </Image>
+    <Image Include="res\common\terrain\sky.dds">
+      <Filter>res\common\terrain</Filter>
+    </Image>
+    <Image Include="res\png\box-diffuse.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\brick.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\brickn.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\color-wheel.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\crate.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\default-theme.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\dirt.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\duck-diffuse.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\gamepad.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\grass.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\light-directional.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\light-point.png">
+      <Filter>res\png</Filter>
+    </Image>
+    <Image Include="res\png\light-spot.png">
+      <Filter>res\png</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\common\footsteps.wav">
+      <Filter>res\common</Filter>
+    </Media>
   </ItemGroup>
 </Project>

@@ -366,33 +366,33 @@ void LightSample::controlEvent(Control* control, EventType evt)
 
 void LightSample::initializeDirectionalTechnique(const char* technique)
 {
-    _lighting->getTechnique(technique)->getParameter("u_lightDirection")->bindValue(_directionalLightNode, &Node::getForwardVectorWorld); 
-	_lighting->getTechnique(technique)->getParameter("u_lightColor")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
 	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
-}
+    _lighting->getTechnique(technique)->getParameter("u_directionalLightColor[0]")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
+    _lighting->getTechnique(technique)->getParameter("u_directionalLightDirection[0]")->bindValue(_directionalLightNode, &Node::getForwardVectorWorld); 
+}	
 
 void LightSample::initializeSpotTechnique(const char* technique)
 {
-	_lighting->getTechnique(technique)->getParameter("u_spotLightInnerAngleCos")->setValue(_spotLightNode->getLight()->getInnerAngleCos());
-	_lighting->getTechnique(technique)->getParameter("u_spotLightOuterAngleCos")->setValue(_spotLightNode->getLight()->getOuterAngleCos());
-	_lighting->getTechnique(technique)->getParameter("u_spotLightRangeInverse")->setValue(_spotLightNode->getLight()->getRangeInverse());
-	_lighting->getTechnique(technique)->getParameter("u_spotLightDirection")->bindValue(_spotLightNode, &Node::getForwardVectorView);
-	_lighting->getTechnique(technique)->getParameter("u_spotLightPosition")->bindValue(_spotLightNode, &Node::getTranslationView);
-	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
-	_lighting->getTechnique(technique)->getParameter("u_lightColor")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
+    _lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
+    _lighting->getTechnique(technique)->getParameter("u_spotLightColor[0]")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
+    _lighting->getTechnique(technique)->getParameter("u_spotLightInnerAngleCos[0]")->setValue(_spotLightNode->getLight()->getInnerAngleCos());
+	_lighting->getTechnique(technique)->getParameter("u_spotLightOuterAngleCos[0]")->setValue(_spotLightNode->getLight()->getOuterAngleCos());
+	_lighting->getTechnique(technique)->getParameter("u_spotLightRangeInverse[0]")->setValue(_spotLightNode->getLight()->getRangeInverse());
+	_lighting->getTechnique(technique)->getParameter("u_spotLightDirection[0]")->bindValue(_spotLightNode, &Node::getForwardVectorView);
+	_lighting->getTechnique(technique)->getParameter("u_spotLightPosition[0]")->bindValue(_spotLightNode, &Node::getTranslationView);
 }
 
 void LightSample::initializePointTechnique(const char* technique)
 {
-	_lighting->getTechnique(technique)->getParameter("u_pointLightPosition")->bindValue(_pointLightNode, &Node::getTranslationView);
-	_lighting->getTechnique(technique)->getParameter("u_pointLightRangeInverse")->setValue(_pointLightNode->getLight()->getRangeInverse());
-	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
-	_lighting->getTechnique(technique)->getParameter("u_lightColor")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
+    _lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
+    _lighting->getTechnique(technique)->getParameter("u_pointLightColor[0]")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
+	_lighting->getTechnique(technique)->getParameter("u_pointLightPosition[0]")->bindValue(_pointLightNode, &Node::getTranslationView);
+	_lighting->getTechnique(technique)->getParameter("u_pointLightRangeInverse[0]")->setValue(_pointLightNode->getLight()->getRangeInverse());
 }
 
 void LightSample::setUnlitMaterialTexture(Model* model, const char* texturePath, bool mipmap)
 {
-    Material* material = model->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag");
+    Material* material = model->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "DIRECTIONAL_LIGHT_COUNT 1");
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
 
     // Load the texture from file.
@@ -416,20 +416,20 @@ void LightSample::setUnlitMaterialTexture(Model* model, const char* texturePath,
 
 void LightSample::setColorValue(const Vector3& value)
 {
-	_lighting->getTechnique(("directional"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("directionalSpecular"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("directionalBumped"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("directionalSpecularBumped"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("directional"))->getParameter("u_directionalLightColor[0]")->setValue(value);
+	_lighting->getTechnique(("directionalSpecular"))->getParameter("u_directionalLightColor[0]")->setValue(value);
+	_lighting->getTechnique(("directionalBumped"))->getParameter("u_directionalLightColor[0]")->setValue(value);
+	_lighting->getTechnique(("directionalSpecularBumped"))->getParameter("u_directionalLightColor[0]")->setValue(value);
 
-	_lighting->getTechnique(("spot"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("spotSpecular"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("spotBumped"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("spotSpecularBumped"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("spot"))->getParameter("u_spotLightColor[0]")->setValue(value);
+	_lighting->getTechnique(("spotSpecular"))->getParameter("u_spotLightColor[0]")->setValue(value);
+	_lighting->getTechnique(("spotBumped"))->getParameter("u_spotLightColor[0]")->setValue(value);
+	_lighting->getTechnique(("spotSpecularBumped"))->getParameter("u_spotLightColor[0]")->setValue(value);
 
-	_lighting->getTechnique(("point"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("pointSpecular"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("pointBumped"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("pointSpecularBumped"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("point"))->getParameter("u_pointLightColor[0]")->setValue(value);
+	_lighting->getTechnique(("pointSpecular"))->getParameter("u_pointLightColor[0]")->setValue(value);
+	_lighting->getTechnique(("pointBumped"))->getParameter("u_pointLightColor[0]")->setValue(value);
+	_lighting->getTechnique(("pointSpecularBumped"))->getParameter("u_pointLightColor[0]")->setValue(value);
 }
 
 void LightSample::setSpecularValue(float value)

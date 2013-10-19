@@ -36,8 +36,9 @@ void Audio3DSample::initialize()
     Node* boxNode = _scene->findNode("box");
     Model* boxModel = boxNode->getModel();
     Material* boxMaterial = boxModel->setMaterial("res/common/box.material");
-    boxMaterial->getParameter("u_lightColor")->setValue(light->getColor());
-    boxMaterial->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
+
+    boxMaterial->getParameter("u_directionalLightColor[0]")->setValue(light->getColor());
+    boxMaterial->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());
 
     // Remove the cube from the scene but keep a reference to it.
     _cubeNode = boxNode;
@@ -315,13 +316,13 @@ void Audio3DSample::drawDebugText(int x, int y)
     static const int V_SPACE = 16;
     AudioListener* audioListener = AudioListener::getInstance();
     drawVector3("Position", audioListener->getPosition(), x, y);
-    drawVector3("Forward", audioListener->getOrientationForward(), x, y+=V_SPACE);
-    drawVector3("Orientation", audioListener->getOrientationUp(), x, y+=V_SPACE);
-    drawVector3("Velocity", audioListener->getVelocity(), x, y+=V_SPACE);
+    drawVector3("Forward", audioListener->getOrientationForward(), x, y+=_font->getSize());
+    drawVector3("Orientation", audioListener->getOrientationUp(), x, y+=_font->getSize());
+    drawVector3("Velocity", audioListener->getVelocity(), x, y+=_font->getSize());
     _font->finish();
 }
 
-void Audio3DSample::drawVector3(const char* str, const Vector3 vector, int x, int y)
+void Audio3DSample::drawVector3(const char* str, const Vector3& vector, int x, int y)
 {
     char buffer[255];
     sprintf(buffer, "%s: (%f, %f, %f)", str, vector.x, vector.y, vector.z);

@@ -41,7 +41,7 @@ private:
 
     void drawDebugText(int x = 0, int y = 0);
 
-    void drawVector3(const char* str, const Vector3 vector, int x, int y);
+    void drawVector3(const char* str, const Vector3& vector, int x, int y);
 
     void loadGrid(Scene* scene);
 

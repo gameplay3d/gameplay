@@ -80,10 +80,13 @@ void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* mater
     // Bind light shader parameters to dynamic objects only
     if (node->hasTag("dynamic"))
     {
-        Node* lightNode = scene->findNode("sun");
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
-        material->getParameter("u_lightColor")->bindValue(lightNode->getLight(), &Light::getColor);
-        material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
+        Node* lightNode = scene->findNode("sun");
+        if (lightNode)
+        {
+            material->getParameter("u_directionalLightColor[0]")->bindValue(lightNode->getLight(), &Light::getColor);
+            material->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorView);
+        }
     }
 }
 
@@ -114,8 +117,10 @@ void CharacterGame::initializeCharacter()
     _jumpClip = _animation->getClip("jump");
     _jumpClip->addListener(this, _jumpClip->getDuration() - 250);
     _kickClip = _animation->getClip("kick");
-    _kickClip->addListener(this, _kickClip->getDuration() - 250); // when to cross fade
-    _kickClip->addListener(this, 416);  // when to turn on _isKicking.
+    // when to cross fade
+    _kickClip->addListener(this, _kickClip->getDuration() - 250); 
+    // when to turn on _isKicking.
+    _kickClip->addListener(this, 416);  
 
     // Start playing the idle animation when we load.
     play("idle", true);
@@ -204,8 +209,10 @@ void CharacterGame::update(float elapsedTime)
         // apply impulse from kick.
         Vector3 impulse(-_characterNode->getForwardVectorWorld());
         impulse.normalize();
-        impulse.y = 1.0f; // add some lift to kick
-        impulse.scale(16.6f); //scale the impulse.
+        // add some lift to kick
+        impulse.y = 1.0f; 
+        //scale the impulse.
+        impulse.scale(16.6f);
         ((PhysicsRigidBody*)_basketballNode->getCollisionObject())->applyImpulse(impulse);
         _hasBall = false;
         _applyKick = false;
@@ -326,7 +333,9 @@ void CharacterGame::update(float elapsedTime)
     PhysicsController::HitResult hitResult;
     Vector3 v = _character->getNode()->getTranslationWorld();
     if (getPhysicsController()->rayTest(Ray(Vector3(v.x, v.y + 1.0f, v.z), Vector3(0, -1, 0)), 100.0f, &hitResult, NULL))
+    {
         _characterShadowNode->setTranslation(Vector3(hitResult.point.x, hitResult.point.y + 0.1f, hitResult.point.z));
+    }
 
     if (_hasBall)
     {
@@ -335,7 +344,9 @@ void CharacterGame::update(float elapsedTime)
         // This will ensure the boy cannot walk through walls/objects with the basketball.
         PhysicsRigidBody* basketball = (PhysicsRigidBody*)_basketballNode->getCollisionObject();
         if (basketball->isEnabled())
+        {
             grabBall();
+        }
 
         // Capture the basketball's old position, and then calculate the basketball's new position in front of the character
         _oldBallPosition = _basketballNode->getTranslationWorld();
@@ -356,7 +367,6 @@ void CharacterGame::update(float elapsedTime)
             rotNorm.normalize();
             _basketballNode->rotate(rotNorm, rotationVector.length());
         }
-        
         _basketballNode->setTranslation(translation.x, _floorLevel, translation.z);
     }
 }

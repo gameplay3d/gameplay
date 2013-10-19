@@ -1,7 +1,9 @@
 @echo off
 
-REM Make collada file.
 
-"..\..\..\bin\windows\gameplay-encoder.exe" scene.dae ../common/scene.gpb
+REM Make FBX file.
+
+"..\..\..\bin\windows\gameplay-encoder.exe" scene.fbx ../common/scene.gpb
+
 
 pause

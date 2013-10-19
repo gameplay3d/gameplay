@@ -6,7 +6,7 @@ material colored
         {
             vertexShader = res/shaders/colored.vert
             fragmentShader = res/shaders/colored.frag
-
+            defines = DIRECTIONAL_LIGHT_COUNT 1
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             

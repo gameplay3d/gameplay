@@ -637,7 +637,6 @@
     <None Include="res\arial.gpb" />
     <None Include="res\arial.ttf" />
     <None Include="res\box-diffuse.png" />
-    <None Include="res\box.dae" />
     <None Include="res\box.gpb" />
     <None Include="res\box.material" />
     <None Include="res\game.lua" />
