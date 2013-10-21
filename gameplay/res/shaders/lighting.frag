@@ -6,11 +6,12 @@ vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, fl
 
     #if defined(SPECULAR)
 
-    vec3 vertexToEye = normalize(v_cameraDirection);
-    vec3 reflect = normalize(normalVector * diffuse * 2.0 - lightDirection);  
-    float specular = pow(clamp(dot(reflect, vertexToEye), 0.0, 1.0), u_specularExponent);
-    vec3 specularColor = vec3(specular, specular, specular); 
-    
+	// Blinn-Phong shading
+    vec3 vertexToEye = normalize(v_cameraDirection); 
+    vec3 halfDirection = normalize(lightDirection + v_cameraDirection);
+    float specularAngle = max(dot(halfDirection, normalVector), 0.0);
+    vec3 specularColor = pow(specularAngle, u_specularExponent);
+
     return (diffuseColor + specularColor) * attenuation;
 
     #else
