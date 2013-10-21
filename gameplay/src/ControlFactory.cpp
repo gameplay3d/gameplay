@@ -26,14 +26,15 @@ namespace gameplay {
 		return instance;
 	}
 
-	bool ControlFactory::registerCustomControl(const std::string &name, ControlCreator controlCreator) {
+	bool ControlFactory::registerCustomControl(const std::string &name, ControlActivator controlCreator) {
 		if (_registeredControls.find(name) != _registeredControls.end())
 			return false;
 		_registeredControls[name] = controlCreator;
+		return true;
 	}
 
 	void ControlFactory::unregisterCustomControl(const std::string &name) {
-		std::map<std::string, ControlCreator>::iterator it;
+		std::map<std::string, ControlActivator>::iterator it;
 
 		if ((it = _registeredControls.find(name)) != _registeredControls.end())
 			_registeredControls.erase(it);

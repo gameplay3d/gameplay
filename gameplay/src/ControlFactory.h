@@ -14,16 +14,16 @@ namespace gameplay {
 	class ControlFactory {
 		
 		public :
-			typedef Control *(*ControlCreator)(Theme::Style *, Properties *, Theme *);
+			typedef Control *(*ControlActivator)(Theme::Style *, Properties *, Theme *);
 
 			static ControlFactory	&getInstance();
 
-			bool					registerCustomControl(const std::string &controlName, ControlCreator controlCreator);
+			bool					registerCustomControl(const std::string &controlName, ControlActivator controlCreator);
 			void					unregisterCustomControl(const std::string &controlName);
 			Control					*createControl(const std::string &controlName, Theme::Style *style, Properties *properties, Theme *theme = NULL);
 
 		private :
-			std::map<std::string, ControlCreator>	_registeredControls;
+			std::map<std::string, ControlActivator>	_registeredControls;
 			
 			ControlFactory();
 			ControlFactory(const ControlFactory &);
