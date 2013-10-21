@@ -31,7 +31,6 @@ void luaRegister_Joint()
 {
     const luaL_Reg lua_members[] = 
     {
-        {"addAdvertisedDescendant", lua_Joint_addAdvertisedDescendant},
         {"addChild", lua_Joint_addChild},
         {"addListener", lua_Joint_addListener},
         {"addRef", lua_Joint_addRef},
@@ -44,7 +43,6 @@ void luaRegister_Joint()
         {"findNode", lua_Joint_findNode},
         {"getActiveCameraTranslationView", lua_Joint_getActiveCameraTranslationView},
         {"getActiveCameraTranslationWorld", lua_Joint_getActiveCameraTranslationWorld},
-        {"getAdvertisedDescendant", lua_Joint_getAdvertisedDescendant},
         {"getAgent", lua_Joint_getAgent},
         {"getAnimation", lua_Joint_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Joint_getAnimationPropertyComponentCount},
@@ -72,7 +70,6 @@ void luaRegister_Joint()
         {"getMatrix", lua_Joint_getMatrix},
         {"getModel", lua_Joint_getModel},
         {"getNextSibling", lua_Joint_getNextSibling},
-        {"getNumAdvertisedDescendants", lua_Joint_getNumAdvertisedDescendants},
         {"getParent", lua_Joint_getParent},
         {"getParticleEmitter", lua_Joint_getParticleEmitter},
         {"getPreviousSibling", lua_Joint_getPreviousSibling},
@@ -220,48 +217,6 @@ int lua_Joint__gc(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joint_addAdvertisedDescendant(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                gameplay::ScriptUtil::LuaArray<Node> param1 = gameplay::ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
-                if (!param1Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
-                    lua_error(state);
-                }
-
-                Joint* instance = getInstance(state);
-                instance->addAdvertisedDescendant(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Joint_addAdvertisedDescendant - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -1087,54 +1042,6 @@ int lua_Joint_getActiveCameraTranslationWorld(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joint_getAdvertisedDescendant(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
-
-                Joint* instance = getInstance(state);
-                void* returnPtr = (void*)instance->getAdvertisedDescendant(param1);
-                if (returnPtr)
-                {
-                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Node");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Joint_getAdvertisedDescendant - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -2434,41 +2341,6 @@ int lua_Joint_getNextSibling(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Joint_getNextSibling - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joint_getNumAdvertisedDescendants(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Joint* instance = getInstance(state);
-                unsigned int result = instance->getNumAdvertisedDescendants();
-
-                // Push the return value onto the stack.
-                lua_pushunsigned(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Joint_getNumAdvertisedDescendants - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
