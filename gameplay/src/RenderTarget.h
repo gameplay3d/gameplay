@@ -16,6 +16,20 @@ class RenderTarget : public Ref
     friend class FrameBuffer;
 
 public:
+    /**
+     * Create a RenderTarget and add it to the list of available RenderTargets.
+     *
+     * The created RenderTarget contains 32-bit or 24-bit texture with a single/base mipmap level only.
+     *
+     * @param id The ID of the new RenderTarget.
+     * @param width The width of the new RenderTarget.
+     * @param height The height of the new RenderTarget.
+     * @param fmt The Texture::Format of the new RenderTarget.
+     *
+     * @return A newly created RenderTarget.
+     * @script{create}
+     */
+    static RenderTarget* create(const char* id, unsigned int width, unsigned int height, Texture::Format fmt);
  
     /**
      * Create a RenderTarget and add it to the list of available RenderTargets.
@@ -25,6 +39,7 @@ public:
      * @param id The ID of the new RenderTarget.
      * @param width The width of the new RenderTarget.
      * @param height The height of the new RenderTarget.
+     * @param fmt The texture format of the new RenderTarget.
      *
      * @return A newly created RenderTarget.
      * @script{create}

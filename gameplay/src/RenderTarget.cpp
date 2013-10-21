@@ -23,10 +23,10 @@ RenderTarget::~RenderTarget()
     }
 }
 
-RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned int height)
+RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned int height, Texture::Format fmt)
 {
     // Create a new texture with the given width.
-    Texture* texture = Texture::create(Texture::RGBA, width, height, NULL, false);
+    Texture* texture = Texture::create(fmt, width, height, NULL, false);
     if (texture == NULL)
     {
         GP_ERROR("Failed to create texture for render target.");
@@ -37,6 +37,12 @@ RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned 
     texture->release();
 
     return rt;
+}
+
+RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned int height)
+{
+   // Delegate with the default 32-bit texture format
+   return RenderTarget::create(id, width, height, Texture::RGBA);
 }
 
 RenderTarget* RenderTarget::create(const char* id, Texture* texture)
