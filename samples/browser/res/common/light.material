@@ -250,7 +250,7 @@ material lighting
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-			defines = TEXTURE_REPEAT;SPOT_LIGHT_COUNT 1
+			defines = TEXTURE_REPEAT;BUMPED;SPOT_LIGHT_COUNT 1
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX

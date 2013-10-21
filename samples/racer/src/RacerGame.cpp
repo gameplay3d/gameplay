@@ -114,14 +114,12 @@ bool RacerGame::initializeScene(Node* node)
     if (model)
     {
         Material* material = model->getMaterial();
-        /*
-        if (material && material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_directionalLightDirection"))
+        if (material && material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_directionalLightDirection[0]"))
         {
             material->getParameter("u_ambientColor")->setValue(_scene->getAmbientColor());
             material->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
             material->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());
         }
-        */
     }
 
     return true;
