@@ -6,7 +6,6 @@ namespace gameplay
 
 // Lua bindings for Joint.
 int lua_Joint__gc(lua_State* state);
-int lua_Joint_addAdvertisedDescendant(lua_State* state);
 int lua_Joint_addChild(lua_State* state);
 int lua_Joint_addListener(lua_State* state);
 int lua_Joint_addRef(lua_State* state);
@@ -19,7 +18,6 @@ int lua_Joint_destroyAnimation(lua_State* state);
 int lua_Joint_findNode(lua_State* state);
 int lua_Joint_getActiveCameraTranslationView(lua_State* state);
 int lua_Joint_getActiveCameraTranslationWorld(lua_State* state);
-int lua_Joint_getAdvertisedDescendant(lua_State* state);
 int lua_Joint_getAgent(lua_State* state);
 int lua_Joint_getAnimation(lua_State* state);
 int lua_Joint_getAnimationPropertyComponentCount(lua_State* state);
@@ -47,7 +45,6 @@ int lua_Joint_getLight(lua_State* state);
 int lua_Joint_getMatrix(lua_State* state);
 int lua_Joint_getModel(lua_State* state);
 int lua_Joint_getNextSibling(lua_State* state);
-int lua_Joint_getNumAdvertisedDescendants(lua_State* state);
 int lua_Joint_getParent(lua_State* state);
 int lua_Joint_getParticleEmitter(lua_State* state);
 int lua_Joint_getPreviousSibling(lua_State* state);

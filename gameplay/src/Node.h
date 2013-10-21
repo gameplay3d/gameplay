@@ -595,41 +595,6 @@ public:
     PhysicsCollisionObject* setCollisionObject(Properties* properties);
 
     /**
-     * Returns the number of advertised descendants held in this node.
-     *
-     * Descendant nodes can advertise themselves to others using this
-     * mechanism, such as how the wheels are bound to a physics vehicle
-     * via their common ancestor.
-     *
-     * @return the number of advertised descendants held in this node.
-     */
-    unsigned int getNumAdvertisedDescendants() const;
-
-    /**
-     * Returns the advertised descendant at the specified index.
-     *
-     * Descendant nodes can advertise themselves to others using this
-     * mechanism, such as how the wheels are bound to a physics vehicle
-     * via their common ancestor.
-     *
-     * @param i the index to look-up.
-     *
-     * @return the advertised descendant at the specified index.
-     */
-    Node* getAdvertisedDescendant(unsigned int i) const;
-
-    /**
-     * Adds the specified node to the list of advertised descendants.
-     *
-     * Descendant nodes can advertise themselves to others using this
-     * mechanism, such as how the wheels are bound to a physics vehicle
-     * via their common ancestor.
-     *
-     * @param node the node reference to add.
-     */
-    void addAdvertisedDescendant(Node* node);
-
-    /**
      * Returns the AI agent assigned to this node.
      *
      * @return The AI agent for this node.
@@ -879,14 +844,6 @@ protected:
      * Pointer to custom UserData and cleanup call back that can be stored in a Node.
      */
     UserData* _userData;
-
-    /**
-     * A linear collection of descendants who wish to advertise themselves, typically
-     * to other descendants. This allows nodes of common ancestry to bond. One example
-     * of this is a physics vehicle and its wheels, which are associated via their
-     * lowest common ancestor.
-     */
-    std::vector<Node*> _advertisedDescendants;
 };
 
 /**
