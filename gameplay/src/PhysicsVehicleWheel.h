@@ -332,7 +332,7 @@ private:
     void findAncestorAndBind();
 
     /**
-     * Breadth-first search for the first vehicle starting from the specified node.
+     * Depth-first search for the first vehicle starting from the specified node.
      *
      * @param node the starting node for the recursive search.
      */
