@@ -1,10 +1,8 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_RenderTarget.h"
-#include "Base.h"
-#include "Game.h"
-#include "Ref.h"
 #include "RenderTarget.h"
+#include "lua_TextureFormat.h"
 
 namespace gameplay
 {
@@ -411,9 +409,52 @@ int lua_RenderTarget_static_create(lua_State* state)
             lua_error(state);
             break;
         }
+        case 4:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    (lua_type(state, 4) == LUA_TSTRING || lua_type(state, 4) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                    // Get parameter 2 off the stack.
+                    unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                    // Get parameter 4 off the stack.
+                    Texture::Format param4 = (Texture::Format)lua_enumFromString_TextureFormat(luaL_checkstring(state, 4));
+
+                    void* returnPtr = (void*)RenderTarget::create(param1, param2, param3, param4);
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "RenderTarget");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_RenderTarget_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2, 3 or 4).");
             lua_error(state);
             break;
         }

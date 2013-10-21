@@ -663,7 +663,7 @@ Material* FBXSceneEncoder::createBaseMaterial(const string& baseMaterialName, Ma
     if (childMaterial->isLit())
     {
         baseMaterial->setLit(true);
-        baseMaterial->setUniform("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");s
+        baseMaterial->setUniform("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
 
         if (childMaterial->isSpecular())
         {

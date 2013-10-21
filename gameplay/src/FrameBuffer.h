@@ -62,6 +62,27 @@ public:
     static FrameBuffer* create(const char* id, unsigned int width, unsigned int height);
 
     /**
+     * Creates a new FrameBuffer with a single RenderTarget of the specified width and height,
+     * using the specified Texture::Format, and adds the FrameBuffer to the list of available 
+     * FrameBuffers.
+     *
+     * If width and height are non-zero a default RenderTarget will be created
+     * and added to the FrameBuffer, with the same ID. The ID of the render target can be
+     * changed later via RenderTarget::setId(const char*).
+     *
+     * You can additionally add a DepthStencilTarget using FrameBuffer::setDepthStencilTarget.
+     *
+     * @param id The ID of the new FrameBuffer. Uniqueness is recommended but not enforced.
+     * @param width The width of the RenderTarget to be created and attached.
+     * @param height The height of the RenderTarget to be created and attached.
+     * @param fmt The Texture::Format of the RenderTarget to be created and attached.
+     *
+     * @return A newly created FrameBuffer.
+     * @script{create}
+     */
+    static FrameBuffer* create(const char* id, unsigned int width, unsigned int height, Texture::Format fmt);
+
+    /**
      * Get a named FrameBuffer from its ID.
      *
      * @param id The ID of the FrameBuffer to search for.
