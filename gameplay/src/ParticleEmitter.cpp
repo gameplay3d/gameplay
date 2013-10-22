@@ -889,7 +889,7 @@ void ParticleEmitter::update(float elapsedTime)
         {
             if ((int)_timePerEmission > 0)
             {
-                _emitTime = fmod(_emitTime, (double)_timePerEmission);
+                _emitTime = fmod((double)_emitTime, (double)_timePerEmission);
             }
             emitOnce(emitCount);
         }
@@ -981,12 +981,10 @@ void ParticleEmitter::update(float elapsedTime)
     }
 }
 
-void ParticleEmitter::draw()
+unsigned int ParticleEmitter::draw()
 {
     if (!isActive())
-    {
-        return;
-    }
+        return 0;
 
     if (_particleCount > 0)
     {
@@ -1027,6 +1025,7 @@ void ParticleEmitter::draw()
         // Render.
         _spriteBatch->finish();
     }
+    return 1;
 }
 
 ParticleEmitter* ParticleEmitter::clone()

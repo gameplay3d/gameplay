@@ -235,9 +235,12 @@ int lua_ParticleEmitter_draw(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
-                instance->draw();
-                
-                return 0;
+                unsigned int result = instance->draw();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
             }
 
             lua_pushstring(state, "lua_ParticleEmitter_draw - Failed to match the given parameters to a valid function signature.");

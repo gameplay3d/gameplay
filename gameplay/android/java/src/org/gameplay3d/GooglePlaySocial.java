@@ -1,17 +1,16 @@
     
-package org.gameplay3d.lib;
+package org.gameplay3d;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.android.gms.games.Player;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
-public class GoogleGamesSocial extends BaseGameActivity {
-	
+public class GooglePlaySocial extends BaseGameActivity 
+{	
 	private static List<Player> mFriends = new ArrayList<Player>();
     private static final int FRIENDS_PER_PAGE = 10;
 	

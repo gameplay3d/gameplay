@@ -332,6 +332,13 @@ private:
     void findAncestorAndBind();
 
     /**
+     * Depth-first search for the first vehicle starting from the specified node.
+     *
+     * @param node the starting node for the recursive search.
+     */
+    PhysicsVehicle* findVehicle(Node* node);
+
+    /**
      * Sets the host vehicle for this wheel.
      *
      * @param host the host vehicle.

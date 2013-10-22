@@ -112,6 +112,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("RenderState", "Material");
     gameplay::ScriptUtil::setGlobalHierarchyPair("RenderState", "Pass");
     gameplay::ScriptUtil::setGlobalHierarchyPair("RenderState", "Technique");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("SceneRenderer", "SceneRendererForward");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "AIAgent");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "AIState");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Button");
@@ -139,6 +140,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsGhostObject");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsRigidBody");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "Terrain");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("VisibleSet", "VisibleSetDefault");
     gameplay::ScriptUtil::addStringFromEnumConversionFunction(&gameplay::lua_stringFromEnumGlobal);
 
     // Register enumeration AIMessage::ParameterType.
@@ -748,8 +750,6 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("CAMERA_VIEW_POSITION", "CAMERA_VIEW_POSITION", scopePath);
         gameplay::ScriptUtil::registerConstantString("MATRIX_PALETTE", "MATRIX_PALETTE", scopePath);
         gameplay::ScriptUtil::registerConstantString("SCENE_AMBIENT_COLOR", "SCENE_AMBIENT_COLOR", scopePath);
-        gameplay::ScriptUtil::registerConstantString("SCENE_LIGHT_COLOR", "SCENE_LIGHT_COLOR", scopePath);
-        gameplay::ScriptUtil::registerConstantString("SCENE_LIGHT_DIRECTION", "SCENE_LIGHT_DIRECTION", scopePath);
     }
 
     // Register enumeration RenderState::Blend.

@@ -20,7 +20,7 @@ namespace gameplay
 {
 
 Node::Node(const char* id)
-    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
+    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _visible(true),
     _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
@@ -290,6 +290,32 @@ void Node::setUserPointer(void* pointer, void (*cleanupCallback)(void*))
         // Clear user pointer
         SAFE_DELETE(_userData);
     }
+}
+
+void Node::setVisible(bool visible)
+{
+    if (_visible != visible)
+    {
+        _visible = visible;
+    }
+}
+
+bool Node::isVisible() const
+{
+    return _visible;
+}
+
+bool Node::isVisibleInHierarchy() const
+{
+   if (!_visible)
+       return false;
+   Node* node = _parent;
+   while (node)
+   {
+       if (!node->_visible)
+           return false;
+   }
+   return true;
 }
 
 unsigned int Node::getChildCount() const
@@ -1233,21 +1259,6 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     }
 
     return _collisionObject;
-}
-
-unsigned int Node::getNumAdvertisedDescendants() const
-{
-    return (unsigned int)_advertisedDescendants.size();
-}
-
-Node* Node::getAdvertisedDescendant(unsigned int i) const
-{
-    return _advertisedDescendants.at(i);
-}
-
-void Node::addAdvertisedDescendant(Node* node)
-{
-    _advertisedDescendants.push_back(node);
 }
 
 AIAgent* Node::getAgent() const

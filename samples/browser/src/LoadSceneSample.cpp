@@ -6,7 +6,7 @@
 #endif
 
 LoadSceneSample::LoadSceneSample()
-    : _font(NULL), _scene(NULL), _lightNode(NULL), _wireFrame(false)
+    : _font(NULL), _scene(NULL), _wireFrame(false)
 {
     
 }
@@ -18,13 +18,8 @@ void LoadSceneSample::initialize()
 
     _scene = Scene::load("res/common/sample.scene");
 
-    // Find the light node
-    _lightNode = _scene->findNode("directionalLight");
-
     // Update the aspect ratio for our scene's camera to match the current device resolution
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
-
-    _scene->visit(this, &LoadSceneSample::bindLights);
 }
 
 void LoadSceneSample::finalize()
@@ -87,36 +82,5 @@ bool LoadSceneSample::drawScene(Node* node)
     Model* model = node->getModel();
     if (model)
         model->draw(_wireFrame);
-    return true;
-}
-
-bool LoadSceneSample::bindLights(Node* node)
-{
-    Model* model = node->getModel();
-    if (model)
-    {
-        Material* material = model->getMaterial();
-        if (material)
-        {
-            MaterialParameter* ambientColorParam = material->getParameter("u_ambientColor");
-            if (ambientColorParam)
-            {
-                ambientColorParam->setValue(_scene->getAmbientColor());
-            }
-            if (_lightNode && _lightNode->getLight())
-            {
-                MaterialParameter* lightDirectionParam = material->getParameter("u_lightDirection");
-                MaterialParameter* lightColorParam = material->getParameter("u_lightColor");
-                if (lightDirectionParam)
-                {
-                    lightDirectionParam->bindValue(_lightNode, &Node::getForwardVectorView);
-                }
-                if (lightColorParam)
-                {
-                    lightColorParam->setValue(_lightNode->getLight()->getColor());
-                }
-            }
-        }
-    }
     return true;
 }

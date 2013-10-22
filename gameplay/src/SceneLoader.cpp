@@ -113,10 +113,6 @@ Scene* SceneLoader::loadInternal(const char* url)
     Vector3 vec3;
     if (sceneProperties->getVector3("ambientColor", &vec3))
         _scene->setAmbientColor(vec3.x, vec3.y, vec3.z);
-    if (sceneProperties->getVector3("lightColor", &vec3))
-        _scene->setLightColor(vec3.x, vec3.y, vec3.z);
-    if (sceneProperties->getVector3("lightDirection", &vec3))
-        _scene->setLightDirection(vec3);
 
     // Create animations for scene
     createAnimations();

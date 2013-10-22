@@ -48,6 +48,8 @@ set(GAMEPLAY_SRC
     src/Container.h
     src/Control.cpp
     src/Control.h
+	src/ControlFactory.h
+	src/ControlFactory.cpp
     src/Curve.cpp
     src/Curve.h
     src/DebugNew.cpp
@@ -185,6 +187,10 @@ set(GAMEPLAY_SRC
     src/Scene.h
     src/SceneLoader.cpp
     src/SceneLoader.h
+    src/SceneRenderer.cpp
+    src/SceneRenderer.h
+    src/SceneRendererForward.cpp
+    src/SceneRendererForward.h
     src/ScreenDisplayer.cpp
     src/ScreenDisplayer.h
     src/ScriptController.cpp
@@ -202,6 +208,9 @@ set(GAMEPLAY_SRC
     src/SocialController.h
     src/SocialPlayer.cpp
     src/SocialPlayer.h
+    src/SocialScore.cpp
+    src/SocialScore.h
+    src/SocialSession.h
     src/SocialSessionListener.cpp
     src/SocialSessionListener.h
     src/SpriteBatch.cpp
@@ -237,9 +246,9 @@ set(GAMEPLAY_SRC
     src/VertexFormat.h
     src/VerticalLayout.cpp
     src/VerticalLayout.h
-
-	src/ControlFactory.h
-	src/ControlFactory.cpp
+    src/VisibleSet.h
+    src/VisibleSetDefault.cpp
+    src/VisibleSetDefault.h
 )
 
 set(GAMEPLAY_LUA
@@ -526,6 +535,10 @@ set(GAMEPLAY_LUA
     src/lua/lua_Scene.h
     src/lua/lua_SceneDebugFlags.cpp
     src/lua/lua_SceneDebugFlags.h
+    src/lua/lua_SceneRenderer.cpp
+    src/lua/lua_SceneRenderer.h
+    src/lua/lua_SceneRendererForward.cpp
+    src/lua/lua_SceneRendererForward.h
     src/lua/lua_ScreenDisplayer.cpp
     src/lua/lua_ScreenDisplayer.h
     src/lua/lua_ScriptController.cpp
@@ -594,6 +607,10 @@ set(GAMEPLAY_LUA
     src/lua/lua_VertexFormatUsage.h
     src/lua/lua_VerticalLayout.cpp
     src/lua/lua_VerticalLayout.h
+    src/lua/lua_VisibleSet.cpp
+    src/lua/lua_VisibleSet.h
+    src/lua/lua_VisibleSetDefault.cpp
+    src/lua/lua_VisibleSetDefault.h
 )
 
 set(GAMEPLAY_RES

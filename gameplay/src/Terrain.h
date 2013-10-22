@@ -311,8 +311,9 @@ public:
      * Draws the terrain.
      *
      * @param wireframe True to draw the terrain as wireframe, false to draw it solid (default).
+     * @return The number of draw call taken to drawn the terrain
      */
-    void draw(bool wireframe = false);
+    unsigned int draw(bool wireframe = false);
 
     /**
      * @see Transform::Listener::transformChanged.

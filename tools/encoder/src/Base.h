@@ -20,10 +20,14 @@
 #include <algorithm>
 #include <sys/stat.h>
 
+
 using std::memcpy;
 using std::size_t;
 using std::min;
 using std::max;
+using std::ostream;
+using std::basic_ostream;
+using std::endl;
 
 #if defined(WIN32)
     #pragma warning( disable : 4005 )

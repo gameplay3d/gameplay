@@ -124,28 +124,31 @@ void PhysicsVehicleWheel::findAncestorAndBind()
 {
     GP_ASSERT(getNode());
 
-    // This is not an efficient algorithm if the number of advertised
-    // descendants gets large. In fact, this search is O(n*m) in the
-    // worst case with n nodes and m advertised descendants per node.
-    // But (1) we are only visiting ancestor nodes, and (2) the number
-    // of advertised descendants is expected to be small since this
-    // mechanism is currently only used for binding wheels onto a vehicle.
+    // Search for the first PhysicsVehicle that shares a common ancestor, and
+    // bind with it. The following code performs a naive search; nothing more
+    // sophisticated is deemed necessary because:
+    // (a) The root of the scene is NOT a node
+    // (b) Scene graphs tend to be relatively flat.
     //
-    // TODO: revisit if the advertised descendants mechanism becomes popular.
+    // The search ends when a vehicle is found or n is null:
+    // 1: Let n = this node
+    // 2: Visit each sibling of n and perform a breadth-first search of its descendants
+    // 3: Let n = the parent of n
+    // 4: Go to 2.
     PhysicsVehicle* host = NULL;
-    PhysicsCollisionObject* collisionObject;
     Node* m;
-    for (Node* n = getNode()->getParent(); n && !host; n = n->getParent())
+    for (Node* n = getNode(); n && !host; n = n->getParent())
     {
-        for (unsigned int i = 0; i < n->getNumAdvertisedDescendants() && !host; i++)
+        // Visit siblings before n
+        for (m = n->getPreviousSibling(); m && !host; m = m->getPreviousSibling())
         {
-            m = n->getAdvertisedDescendant(i);
+            host = findVehicle(m);
+        }
 
-            collisionObject = m->getCollisionObject();
-            if (collisionObject && collisionObject->getType() == PhysicsCollisionObject::VEHICLE)
-            {
-                host = static_cast<PhysicsVehicle*>(collisionObject);
-            }
+        // Visit siblings after n
+        for (m = n->getNextSibling(); m && !host; m = m->getNextSibling())
+        {
+            host = findVehicle(m);
         }
     }
 
@@ -155,6 +158,22 @@ void PhysicsVehicleWheel::findAncestorAndBind()
         host->addWheel(this);
         _initialOffset = _node->getTranslation() - host->_node->getTranslation();
     }
+}
+
+PhysicsVehicle* PhysicsVehicleWheel::findVehicle(Node* node)
+{
+    PhysicsCollisionObject* collisionObject = node->getCollisionObject();
+    if (collisionObject && collisionObject->getType() == PhysicsCollisionObject::VEHICLE)
+    {
+        return static_cast<PhysicsVehicle*>(collisionObject);
+    }
+
+    PhysicsVehicle* result = NULL;
+    for (Node* p = node->getFirstChild(); p && !result; p = p->getNextSibling())
+    {
+        result = findVehicle(p);
+    }
+    return result;
 }
 
 void PhysicsVehicleWheel::setHost(PhysicsVehicle* host, unsigned int indexInHost)

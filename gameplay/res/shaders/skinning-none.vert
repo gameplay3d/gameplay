@@ -11,7 +11,6 @@ vec3 getNormal()
 }
 
 #if defined(BUMPED)
-
 vec3 getTangent()
 {
     return a_tangent;
@@ -21,7 +20,6 @@ vec3 getBinormal()
 {
     return a_binormal;
 }
-
 #endif
 
 #endif

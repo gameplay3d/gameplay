@@ -188,13 +188,6 @@ void PhysicsVehicle::initialize()
     body->setActivationState(DISABLE_DEACTIVATION);
     dynamicsWorld->addVehicle(_vehicle);
     _vehicle->setCoordinateSystem(0, 1, 2);
-
-    // Advertise self among ancestor nodes so that wheels can bind to self.
-    // See PhysicsVehicleWheel and Node for more details.
-    for (Node* n = getNode()->getParent(); n; n = n->getParent())
-    {
-        n->addAdvertisedDescendant(getNode());
-    }
 }
 
 PhysicsVehicle::~PhysicsVehicle()

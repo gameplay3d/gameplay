@@ -7,8 +7,8 @@ material lighting
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/textured-unlit.vert
-            fragmentShader = res/shaders/textured-unlit.frag
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
 			defines = TEXTURE_REPEAT
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
  
@@ -39,7 +39,7 @@ material lighting
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-			defines = TEXTURE_REPEAT
+			defines = TEXTURE_REPEAT;DIRECTIONAL_LIGHT_COUNT 1
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             
@@ -70,7 +70,7 @@ material lighting
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-			defines = TEXTURE_REPEAT; SPECULAR
+			defines = TEXTURE_REPEAT;SPECULAR;DIRECTIONAL_LIGHT_COUNT 1
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
  			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
@@ -100,9 +100,9 @@ material lighting
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/textured-bumped.vert
-            fragmentShader = res/shaders/textured-bumped.frag
-			defines = TEXTURE_REPEAT
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+			defines = TEXTURE_REPEAT;BUMPED;DIRECTIONAL_LIGHT_COUNT 1
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
 
@@ -141,9 +141,9 @@ material lighting
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/textured-bumped.vert
-            fragmentShader = res/shaders/textured-bumped.frag
-			defines = TEXTURE_REPEAT; SPECULAR
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+			defines = TEXTURE_REPEAT;SPECULAR;BUMPED;DIRECTIONAL_LIGHT_COUNT 1
 			u_cameraPosition = CAMERA_VIEW_POSITION 
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
@@ -186,7 +186,7 @@ material lighting
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-			defines = TEXTURE_REPEAT; SPOT_LIGHT
+			defines = TEXTURE_REPEAT;SPOT_LIGHT_COUNT 1
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
@@ -218,7 +218,7 @@ material lighting
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-			defines = TEXTURE_REPEAT; SPOT_LIGHT; SPECULAR
+			defines = TEXTURE_REPEAT;SPECULAR;SPOT_LIGHT_COUNT 1
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
@@ -248,9 +248,9 @@ material lighting
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/textured-bumped.vert
-            fragmentShader = res/shaders/textured-bumped.frag
-			defines = TEXTURE_REPEAT; SPOT_LIGHT
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+			defines = TEXTURE_REPEAT;BUMPED;SPOT_LIGHT_COUNT 1
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
@@ -290,9 +290,9 @@ material lighting
 	    pass 0
         {
             // shaders
-            vertexShader = res/shaders/textured-bumped.vert
-            fragmentShader = res/shaders/textured-bumped.frag
-			defines = TEXTURE_REPEAT; SPOT_LIGHT; SPECULAR
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+			defines = TEXTURE_REPEAT;SPECULAR;BUMPED;SPOT_LIGHT_COUNT 1
 			u_cameraPosition = CAMERA_VIEW_POSITION 
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
@@ -335,7 +335,7 @@ material lighting
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-			defines = TEXTURE_REPEAT; POINT_LIGHT
+			defines = TEXTURE_REPEAT;POINT_LIGHT_COUNT 1
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
@@ -367,7 +367,7 @@ material lighting
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-			defines = TEXTURE_REPEAT; POINT_LIGHT; SPECULAR
+			defines = TEXTURE_REPEAT;SPECULAR;POINT_LIGHT_COUNT 1
 			u_cameraPosition = CAMERA_VIEW_POSITION 
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
@@ -398,9 +398,9 @@ material lighting
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/textured-bumped.vert
-            fragmentShader = res/shaders/textured-bumped.frag
-			defines = TEXTURE_REPEAT; POINT_LIGHT
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+			defines = TEXTURE_REPEAT;BUMPED;POINT_LIGHT_COUNT 1
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
@@ -440,9 +440,9 @@ material lighting
         pass 0
         {
             // shaders
-            vertexShader = res/shaders/textured-bumped.vert
-            fragmentShader = res/shaders/textured-bumped.frag
-			defines = TEXTURE_REPEAT; POINT_LIGHT; SPECULAR
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+			defines = TEXTURE_REPEAT;SPECULAR;BUMPED;POINT_LIGHT_COUNT 1
 			u_cameraPosition = CAMERA_VIEW_POSITION 
 			u_worldViewMatrix = WORLD_VIEW_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX

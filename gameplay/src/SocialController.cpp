@@ -2,7 +2,7 @@
 #include "SocialController.h"
 #include "Game.h"
 #include "social/ScoreloopSocialSession.h"
-#include "social/GoogleGamesSocialSession.h"
+#include "social/GooglePlaySocialSession.h"
 
 namespace gameplay
 {
@@ -77,9 +77,9 @@ void SocialController::authenticate(SocialSessionListener* listener)
     	providerStr = socialProperties->getString("provider");
     }
 
-    if (strcmp(providerStr, "GoogleGames") == 0)
+    if (strcmp(providerStr, "GooglePlay") == 0)
     {
-        _session = GoogleGamesSocialSession::authenticate(listener, socialProperties);
+        _session = GooglePlaySocialSession::authenticate(listener, socialProperties);
     }
     else
     {

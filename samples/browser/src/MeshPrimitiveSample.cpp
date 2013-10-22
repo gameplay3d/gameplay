@@ -11,7 +11,7 @@
 static Mesh* createTriangleMesh()
 {
     // Calculate the vertices of the equilateral triangle.
-    float a = 0.25f;        // Length of side
+    float a = 0.25f;      // Length of side
     Vector2 p1(0.0f,       a / sqrtf(3.0f));
     Vector2 p2(-a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
     Vector2 p3( a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
@@ -205,24 +205,24 @@ void MeshPrimitiveSample::initialize()
     // Create a material from the built-in "colored-unlit" vertex and fragment shaders.
     // This sample doesn't use lighting so the unlit shader is used.
     // This sample uses vertex color so VERTEX_COLOR is defined. Look at the shader source files to see the supported defines.
-    _triangles->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    _triangles->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
     
     Mesh* triangleStripMesh = createTriangleStripMesh();
     _triangleStrip = Model::create(triangleStripMesh);
     SAFE_RELEASE(triangleStripMesh);
-    Material* material = _triangleStrip->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    Material* material = _triangleStrip->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
     material->getStateBlock()->setDepthTest(true);
     material->getStateBlock()->setDepthWrite(true);
 
     Mesh* lineStripMesh = createLineStripMesh();
     _lineStrip = Model::create(lineStripMesh);
     SAFE_RELEASE(lineStripMesh);
-    _lineStrip->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    _lineStrip->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
     
     Mesh* lineMesh = createLinesMesh();
     _lines = Model::create(lineMesh);
     SAFE_RELEASE(lineMesh);
-    _lines->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    _lines->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
 }
 
 void MeshPrimitiveSample::finalize()
