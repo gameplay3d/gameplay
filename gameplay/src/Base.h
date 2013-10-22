@@ -103,6 +103,7 @@ extern void print(const char* format, ...);
     #pragma warning( disable : 4244 )
     #pragma warning( disable : 4267 )
     #pragma warning( disable : 4311 )
+	#pragma warning( disable : 4316 )
     #pragma warning( disable : 4390 )
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )
@@ -157,13 +158,6 @@ extern void print(const char* format, ...);
 #define MATH_CLAMP(x, lo, hi)       ((x < lo) ? lo : ((x > hi) ? hi : x))
 #ifndef M_1_PI
 #define M_1_PI                      0.31830988618379067154
-#endif
-
-#ifdef WIN32
-    inline float round(float r)
-    {
-        return (r > 0.0f) ? floor(r + 0.5f) : ceil(r - 0.5f);
-    }
 #endif
 
 // NOMINMAX makes sure that windef.h doesn't add macros min and max
