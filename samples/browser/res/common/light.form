@@ -116,9 +116,9 @@ form formLightSelect
 			size = 210, 60
 			orientation = HORIZONTAL
             textAlignment = ALIGN_LEFT
-			min = 1
-			max = 500
-			value = 1
+			min = 4
+			max = 128
+			value = 4
 			text = Specular
 		}
 		checkbox specularCheckBox
