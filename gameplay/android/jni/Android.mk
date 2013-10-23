@@ -27,6 +27,7 @@ LOCAL_SRC_FILES := \
     CheckBox.cpp \
     Container.cpp \
     Control.cpp \
+    ControlFactory.cpp \
     Curve.cpp \
     DebugNew.cpp \
     DepthStencilTarget.cpp \
