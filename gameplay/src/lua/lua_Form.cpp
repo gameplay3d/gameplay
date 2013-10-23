@@ -9,6 +9,7 @@
 #include "CheckBox.h"
 #include "Container.h"
 #include "Control.h"
+#include "ControlFactory.h"
 #include "FlowLayout.h"
 #include "Form.h"
 #include "Game.h"

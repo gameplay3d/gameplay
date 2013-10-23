@@ -182,7 +182,9 @@ void Container::addControls(Theme* theme, Properties* properties)
 
         std::string controlName(controlSpace->getNamespace());
         std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
-		control = ControlFactory::getInstance().createControl(controlName, controlStyle, controlSpace, theme);
+
+		// Create our control from the factory of registered controls.
+		control = ControlFactory::getInstance()->createControl(controlName.c_str(), controlStyle, controlSpace, theme);
 
         // Add the new control to the form.
         if (control)

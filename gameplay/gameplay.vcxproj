@@ -49,6 +49,7 @@
     <ClCompile Include="src\CheckBox.cpp" />
     <ClCompile Include="src\Container.cpp" />
     <ClCompile Include="src\Control.cpp" />
+    <ClCompile Include="src\ControlFactory.cpp" />
     <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\DebugNew.cpp" />
     <ClCompile Include="src\DepthStencilTarget.cpp" />
@@ -352,6 +353,7 @@
     <ClInclude Include="src\CheckBox.h" />
     <ClInclude Include="src\Container.h" />
     <ClInclude Include="src\Control.h" />
+    <ClInclude Include="src\ControlFactory.h" />
     <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\DebugNew.h" />
     <ClInclude Include="src\DepthStencilTarget.h" />
