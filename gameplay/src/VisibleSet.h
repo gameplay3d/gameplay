@@ -30,7 +30,7 @@ public:
     /**
      * Gets the scene to determine the visible set from.
      *
-     * @param scene The scene to determine the visible set from.
+     * @return The scene to determine the visible set from.
      */
     virtual Scene* getScene() = 0;
 

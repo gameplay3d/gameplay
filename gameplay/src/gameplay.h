@@ -95,6 +95,7 @@
 // Forms UI
 #include "Theme.h"
 #include "Control.h"
+#include "ControlFactory.h"
 #include "Container.h"
 #include "Form.h"
 #include "Label.h"
