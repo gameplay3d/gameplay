@@ -253,8 +253,6 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
         replaceIncludes(vshPath, vshSource, vshSourceStr);
         if (vshSource && strlen(vshSource) != 0)
             vshSourceStr += "\n";
-            
-        //writeShaderToErrorFile(vshPath, vshSourceStr.c_str());   // Debugging
     }
     shaderSource[2] = vshPath ? vshSourceStr.c_str() :  vshSource;
     GL_ASSERT( vertexShader = glCreateShader(GL_VERTEX_SHADER) );
