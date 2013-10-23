@@ -10,7 +10,7 @@ vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, fl
     vec3 vertexToEye = normalize(v_cameraDirection); 
     vec3 halfDirection = normalize(lightDirection + v_cameraDirection);
     float specularAngle = max(dot(halfDirection, normalVector), 0.0);
-    vec3 specularColor = pow(specularAngle, u_specularExponent);
+    vec3 specularColor = vec3(pow(specularAngle, u_specularExponent));
 
     return (diffuseColor + specularColor) * attenuation;
 
