@@ -99,7 +99,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
     // Create the effect for the font's sprite batch.
     if (__fontEffect == NULL)
     {
-        char* defines = NULL;
+        const char* defines = NULL;
         if (format == DISTANCE_FIELD)
             defines = "DISTANCE_FIELD";
         __fontEffect = Effect::createFromFile(FONT_VSH, FONT_FSH, defines);
