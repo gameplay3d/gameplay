@@ -35,7 +35,7 @@ Slider* Slider::create(const char* id, Theme::Style* style)
     return slider;
 }
 
-Slider* Slider::create(Theme::Style* style, Properties* properties)
+Control* Slider::create(Theme::Style* style, Properties* properties, Theme *theme)
 {
     GP_ASSERT(properties);
 

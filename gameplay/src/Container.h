@@ -50,6 +50,7 @@ namespace gameplay
  */
 class Container : public Control, TimeListener
 {
+	friend class ControlFactory;
 
 public:
 
@@ -299,7 +300,7 @@ protected:
      *
      * @return The new container.
      */
-    static Container* create(Theme::Style* style, Properties* properties, Theme* theme);
+    static Control* create(Theme::Style* style, Properties* properties, Theme* theme);
 
     /**
      * Updates each control within this container,

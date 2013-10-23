@@ -48,6 +48,8 @@ set(GAMEPLAY_SRC
     src/Container.h
     src/Control.cpp
     src/Control.h
+	src/ControlFactory.h
+	src/ControlFactory.cpp
     src/Curve.cpp
     src/Curve.h
     src/DebugNew.cpp

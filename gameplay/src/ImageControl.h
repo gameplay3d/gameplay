@@ -36,6 +36,7 @@ namespace gameplay
 class ImageControl : public Button
 {
     friend class Container;
+	friend class ControlFactory;
 
 public:
 
@@ -117,7 +118,7 @@ protected:
     
     virtual ~ImageControl();
 
-    static ImageControl* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
 
     virtual void initialize(Theme::Style* style, Properties* properties);
 
