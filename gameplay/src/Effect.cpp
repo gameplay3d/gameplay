@@ -296,8 +296,6 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
         replaceIncludes(fshPath, fshSource, fshSourceStr);
         if (fshSource && strlen(fshSource) != 0)
             fshSourceStr += "\n";
-
-        //writeShaderToErrorFile(fshPath, fshSourceStr.c_str()); // Debugging
     }
     shaderSource[2] = fshPath ? fshSourceStr.c_str() : fshSource;
     GL_ASSERT( fragmentShader = glCreateShader(GL_FRAGMENT_SHADER) );
