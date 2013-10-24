@@ -31,6 +31,7 @@ Thumbs.db
 /gameplay-docs
 /api/html
 /gameplay-tests
+gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 
 /gameplay/Debug
 /gameplay/DebugMem
@@ -114,31 +115,6 @@ Thumbs.db
 /samples/character/android/NUL
 /samples/character/res/gamepad.xcf
 /samples/character/sample-character.xcodeproj/xcuserdata
-
-/samples/longboard/Debug
-/samples/longboard/DebugMem
-/samples/longboard/Release
-/samples/longboard/Simulator
-/samples/longboard/Simulator-Coverage
-/samples/longboard/Simulator-Profile
-/samples/longboard/Device-Debug
-/samples/longboard/Device-Coverage
-/samples/longboard/Device-Profile
-/samples/longboard/Device-Release
-/samples/longboard/res/shaders
-/samples/longboard/res/logo_powered_white.png
-/samples/longboard/NUL
-/samples/longboard/android/NUL
-/samples/longboard/android/src
-/samples/longboard/android/assets
-/samples/longboard/android/bin
-/samples/longboard/android/gen
-/samples/longboard/android/libs
-/samples/longboard/android/obj
-/samples/longboard/android/proguard.cfg
-/samples/longboard/android/project.properties
-/samples/longboard/android/local.properties
-/samples/longboard/sample-longboard.xcodeproj/xcuserdata
 
 /samples/lua/Debug
 /samples/lua/DebugMem

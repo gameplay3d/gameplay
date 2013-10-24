@@ -112,6 +112,24 @@ theme particleEditor
         color = #C3D9BFff
     }
 
+    skin formEntry
+    {
+        border
+        {
+            left = 6
+            right = 6
+            top = 2
+            bottom = 2
+        }
+        region = 20, 20, 10, 10
+        color = #4A8799ff
+    }
+
+	skin formFocus : formEntry
+	{
+        color = #C3D9BFff
+	}
+
     style basic
     {
         stateNormal
@@ -201,6 +219,49 @@ theme particleEditor
             font = res/arial.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
+        }
+    }
+
+    style image : noBorder
+    {
+        padding
+        {
+            bottom = 4
+        }
+    }
+
+    style radio : noBorder
+    {
+        stateNormal
+        {
+            font = res/arial.gpb
+            fontSize = 20
+            textAlignment = ALIGN_VCENTER_LEFT
+        }
+
+        stateActive
+        {
+            font = res/arial.gpb
+            fontSize = 20
+            textAlignment = ALIGN_VCENTER_LEFT
+        }
+    }
+
+    style textBox : basic
+    {
+        stateNormal
+        {
+            skin = formEntry
+            font = res/arial.gpb
+            fontSize = 16
+            textAlignment = ALIGN_TOP_LEFT
+        }
+
+        stateFocus
+        {
+            skin = formFocus
+            font = res/arial.gpb
+            fontSize = 16
         }
     }
 

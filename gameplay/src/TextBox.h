@@ -37,7 +37,8 @@ namespace gameplay
 class TextBox : public Label
 {
     friend class Container;
-
+	friend class ControlFactory;
+	
 public:
 
     /**
@@ -140,10 +141,11 @@ protected:
      *
      * @param style The style to apply to this text box.
      * @param properties The properties to set on this text box.
-     *
+     * @param theme The theme to set on this control if needed
+	 *
      * @return The new text box.
      */
-    static TextBox* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.

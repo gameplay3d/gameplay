@@ -512,12 +512,13 @@ float Terrain::getHeight(float x, float z) const
     return height;
 }
 
-void Terrain::draw(bool wireframe)
+unsigned int Terrain::draw(bool wireframe)
 {
     for (size_t i = 0, count = _patches.size(); i < count; ++i)
     {
         _patches[i]->draw(wireframe);
     }
+    return getVisiblePatchCount();
 }
 
 void Terrain::transformChanged(Transform* transform, long cookie)

@@ -1,7 +1,7 @@
 
 include_directories( 
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/include
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/include
+    ${CMAKE_SOURCE_DIR}/external-deps/png/include
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/include
     /usr/include/fbxsdk
     /usr/include
@@ -12,7 +12,7 @@ add_definitions(-D__linux__ -DNO_BOOST -DNO_ZAE -DUSE_FBX)
 
 link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/png/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
     /usr/lib/gcc4/${ARCH_DIR}/release
     /usr/lib
@@ -49,6 +49,8 @@ set(APP_SRC
     src/Curve.cpp
     src/Curve.h
     src/Curve.inl
+    src/edtaa3func.c
+    src/edtaa3func.h
     src/Effect.cpp
     src/Effect.h
     src/EncoderArguments.cpp

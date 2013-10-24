@@ -19,6 +19,7 @@ void luaRegister_ParticleEmitter()
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_ParticleEmitter_addRef},
+        {"clone", lua_ParticleEmitter_clone},
         {"draw", lua_ParticleEmitter_draw},
         {"emitOnce", lua_ParticleEmitter_emitOnce},
         {"getAcceleration", lua_ParticleEmitter_getAcceleration},
@@ -31,6 +32,10 @@ void luaRegister_ParticleEmitter()
         {"getEnergyMax", lua_ParticleEmitter_getEnergyMax},
         {"getEnergyMin", lua_ParticleEmitter_getEnergyMin},
         {"getNode", lua_ParticleEmitter_getNode},
+        {"getOrbitAcceleration", lua_ParticleEmitter_getOrbitAcceleration},
+        {"getOrbitPosition", lua_ParticleEmitter_getOrbitPosition},
+        {"getOrbitVelocity", lua_ParticleEmitter_getOrbitVelocity},
+        {"getParticleCountMax", lua_ParticleEmitter_getParticleCountMax},
         {"getParticlesCount", lua_ParticleEmitter_getParticlesCount},
         {"getPosition", lua_ParticleEmitter_getPosition},
         {"getPositionVariance", lua_ParticleEmitter_getPositionVariance},
@@ -45,8 +50,13 @@ void luaRegister_ParticleEmitter()
         {"getSizeEndMin", lua_ParticleEmitter_getSizeEndMin},
         {"getSizeStartMax", lua_ParticleEmitter_getSizeStartMax},
         {"getSizeStartMin", lua_ParticleEmitter_getSizeStartMin},
+        {"getSpriteFrameCount", lua_ParticleEmitter_getSpriteFrameCount},
         {"getSpriteFrameDuration", lua_ParticleEmitter_getSpriteFrameDuration},
         {"getSpriteFrameRandomOffset", lua_ParticleEmitter_getSpriteFrameRandomOffset},
+        {"getSpriteHeight", lua_ParticleEmitter_getSpriteHeight},
+        {"getSpriteWidth", lua_ParticleEmitter_getSpriteWidth},
+        {"getTexture", lua_ParticleEmitter_getTexture},
+        {"getTextureBlending", lua_ParticleEmitter_getTextureBlending},
         {"getVelocity", lua_ParticleEmitter_getVelocity},
         {"getVelocityVariance", lua_ParticleEmitter_getVelocityVariance},
         {"isActive", lua_ParticleEmitter_isActive},
@@ -61,6 +71,7 @@ void luaRegister_ParticleEmitter()
         {"setEmissionRate", lua_ParticleEmitter_setEmissionRate},
         {"setEnergy", lua_ParticleEmitter_setEnergy},
         {"setOrbit", lua_ParticleEmitter_setOrbit},
+        {"setParticleCountMax", lua_ParticleEmitter_setParticleCountMax},
         {"setPosition", lua_ParticleEmitter_setPosition},
         {"setRotation", lua_ParticleEmitter_setRotation},
         {"setRotationPerParticle", lua_ParticleEmitter_setRotationPerParticle},
@@ -71,6 +82,7 @@ void luaRegister_ParticleEmitter()
         {"setSpriteFrameRandomOffset", lua_ParticleEmitter_setSpriteFrameRandomOffset},
         {"setSpriteLooped", lua_ParticleEmitter_setSpriteLooped},
         {"setSpriteTexCoords", lua_ParticleEmitter_setSpriteTexCoords},
+        {"setTexture", lua_ParticleEmitter_setTexture},
         {"setTextureBlending", lua_ParticleEmitter_setTextureBlending},
         {"setVelocity", lua_ParticleEmitter_setVelocity},
         {"start", lua_ParticleEmitter_start},
@@ -166,6 +178,50 @@ int lua_ParticleEmitter_addRef(lua_State* state)
     return 0;
 }
 
+int lua_ParticleEmitter_clone(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                void* returnPtr = (void*)instance->clone();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ParticleEmitter");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_clone - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_ParticleEmitter_draw(lua_State* state)
 {
     // Get the number of parameters.
@@ -179,9 +235,12 @@ int lua_ParticleEmitter_draw(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
-                instance->draw();
-                
-                return 0;
+                unsigned int result = instance->draw();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
             }
 
             lua_pushstring(state, "lua_ParticleEmitter_draw - Failed to match the given parameters to a valid function signature.");
@@ -634,6 +693,146 @@ int lua_ParticleEmitter_getNode(lua_State* state)
             }
 
             lua_pushstring(state, "lua_ParticleEmitter_getNode - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ParticleEmitter_getOrbitAcceleration(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                bool result = instance->getOrbitAcceleration();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_getOrbitAcceleration - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ParticleEmitter_getOrbitPosition(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                bool result = instance->getOrbitPosition();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_getOrbitPosition - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ParticleEmitter_getOrbitVelocity(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                bool result = instance->getOrbitVelocity();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_getOrbitVelocity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ParticleEmitter_getParticleCountMax(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                unsigned int result = instance->getParticleCountMax();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_getParticleCountMax - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1173,6 +1372,41 @@ int lua_ParticleEmitter_getSizeStartMin(lua_State* state)
     return 0;
 }
 
+int lua_ParticleEmitter_getSpriteFrameCount(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                unsigned int result = instance->getSpriteFrameCount();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_getSpriteFrameCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_ParticleEmitter_getSpriteFrameDuration(lua_State* state)
 {
     // Get the number of parameters.
@@ -1230,6 +1464,155 @@ int lua_ParticleEmitter_getSpriteFrameRandomOffset(lua_State* state)
             }
 
             lua_pushstring(state, "lua_ParticleEmitter_getSpriteFrameRandomOffset - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ParticleEmitter_getSpriteHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                unsigned int result = instance->getSpriteHeight();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_getSpriteHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ParticleEmitter_getSpriteWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                unsigned int result = instance->getSpriteWidth();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_getSpriteWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ParticleEmitter_getTexture(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTexture();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Texture");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_getTexture - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ParticleEmitter_getTextureBlending(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ParticleEmitter* instance = getInstance(state);
+                ParticleEmitter::TextureBlending result = instance->getTextureBlending();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, lua_stringFromEnum_ParticleEmitterTextureBlending(result));
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_getTextureBlending - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1818,6 +2201,42 @@ int lua_ParticleEmitter_setOrbit(lua_State* state)
     return 0;
 }
 
+int lua_ParticleEmitter_setParticleCountMax(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                ParticleEmitter* instance = getInstance(state);
+                instance->setParticleCountMax(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_setParticleCountMax - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_ParticleEmitter_setPosition(lua_State* state)
 {
     // Get the number of parameters.
@@ -2264,6 +2683,71 @@ int lua_ParticleEmitter_setSpriteTexCoords(lua_State* state)
             }
 
             lua_pushstring(state, "lua_ParticleEmitter_setSpriteTexCoords - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ParticleEmitter_setTexture(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    // Get parameter 2 off the stack.
+                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 3));
+
+                    ParticleEmitter* instance = getInstance(state);
+                    instance->setTexture(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<Texture> param1 = gameplay::ScriptUtil::getObjectPointer<Texture>(2, "Texture", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 3));
+
+                    ParticleEmitter* instance = getInstance(state);
+                    instance->setTexture(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_ParticleEmitter_setTexture - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

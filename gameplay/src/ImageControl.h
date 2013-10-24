@@ -36,6 +36,7 @@ namespace gameplay
 class ImageControl : public Button
 {
     friend class Container;
+	friend class ControlFactory;
 
 public:
 
@@ -117,11 +118,16 @@ protected:
     
     virtual ~ImageControl();
 
-    static ImageControl* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
 
     virtual void initialize(Theme::Style* style, Properties* properties);
 
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+
+    /**
+     * @see Control#update(const Control*, const Vector2&)
+     */
+    void update(const Control* container, const Vector2& offset);
 
     // Source region.
     Rectangle _srcRegion;

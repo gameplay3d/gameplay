@@ -35,6 +35,7 @@ namespace gameplay
 class CheckBox : public Button
 {
     friend class Container;
+	friend class ControlFactory;
 
 public:
 
@@ -112,10 +113,11 @@ protected:
      *
      * @param style The style to apply to this checkbox.
      * @param properties The properties to set on this checkbox.
-     *
+     * @param theme The theme to set on this control if needed
+	 *
      * @return The new checkbox.
      */
-    static CheckBox* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.

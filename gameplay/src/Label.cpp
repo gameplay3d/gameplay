@@ -30,12 +30,12 @@ Label* Label::create(const char* id, Theme::Style* style)
     return label;
 }
 
-Label* Label::create(Theme::Style* style, Properties* properties)
+Control* Label::create(Theme::Style* style, Properties* properties, Theme *theme)
 {
     Label* label = new Label();
     label->initialize(style, properties);
 
-    label->_consumeInputEvents = false;
+	label->_consumeInputEvents = false;
     label->_focusIndex = -2;
 
     return label;
@@ -87,11 +87,22 @@ void Label::update(const Control* container, const Vector2& offset)
 {
     Control::update(container, offset);
 
-    _textBounds.set(_viewportBounds);
+    _textBounds.set((int)_viewportBounds.x, (int)_viewportBounds.y, _viewportBounds.width, _viewportBounds.height);
 
     _font = getFont(_state);
     _textColor = getTextColor(_state);
     _textColor.w *= _opacity;
+
+    Font* font = getFont(_state);
+    if ((_autoWidth == Control::AUTO_SIZE_FIT || _autoHeight == Control::AUTO_SIZE_FIT) && font)
+    {
+        unsigned int w, h;
+        font->measureText(_text.c_str(), getFontSize(_state), &w, &h);
+        if (_autoWidth == Control::AUTO_SIZE_FIT)
+            setWidth(w + getBorder(_state).left + getBorder(_state).right + getPadding().left + getPadding().right);
+        if (_autoHeight == Control::AUTO_SIZE_FIT)
+            setHeight(h + getBorder(_state).top + getBorder(_state).bottom + getPadding().top + getPadding().bottom);
+    }
 }
 
 void Label::drawText(const Rectangle& clip)

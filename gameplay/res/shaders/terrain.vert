@@ -1,20 +1,21 @@
+///////////////////////////////////////////////////////////
 // Attributes
-attribute vec4 a_position;									// Vertex Position							(x, y, z, w)
+attribute vec4 a_position;
 #ifndef NORMAL_MAP
-attribute vec3 a_normal;									// Vertex Normal							(x, y, z)
+attribute vec3 a_normal;
 #endif
 attribute vec2 a_texCoord0;
 
 // Uniforms
-uniform mat4 u_worldViewProjectionMatrix;					// World view projection matrix
+uniform mat4 u_worldViewProjectionMatrix;
 #ifndef NORMAL_MAP
-uniform mat4 u_normalMatrix;					            // Matrix used for normal vector transformation
+uniform mat4 u_normalMatrix;
 #endif
-uniform vec3 u_lightDirection;								// Direction of light
+uniform vec3 u_lightDirection;
 
 // Varyings
 #ifndef NORMAL_MAP
-varying vec3 v_normalVector;								// Normal vector out
+varying vec3 v_normalVector;
 #endif
 varying vec2 v_texCoord0;
 #if LAYER_COUNT > 0

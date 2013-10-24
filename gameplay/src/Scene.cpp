@@ -60,8 +60,7 @@ static bool endsWith(const char* str, const char* suffix, bool ignoreCase)
 
 
 Scene::Scene(const char* id)
-    : _id(id ? id : ""), _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCount(0), 
-    _lightColor(1,1,1), _lightDirection(0,-1,0), _bindAudioListenerToCamera(true), _debugBatch(NULL)
+    : _id(id ? id : ""), _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCount(0), _bindAudioListenerToCamera(true), _debugBatch(NULL)
 {
     __sceneList.push_back(this);
 }
@@ -381,26 +380,6 @@ const Vector3& Scene::getAmbientColor() const
 void Scene::setAmbientColor(float red, float green, float blue)
 {
     _ambientColor.set(red, green, blue);
-}
-
-const Vector3& Scene::getLightColor() const
-{
-    return _lightColor;
-}
-
-void Scene::setLightColor(float red, float green, float blue)
-{
-    _lightColor.set(red, green, blue);
-}
-
-const Vector3& Scene::getLightDirection() const
-{
-    return _lightDirection;
-}
-
-void Scene::setLightDirection(const Vector3& direction)
-{
-    _lightDirection = direction;
 }
 
 static Material* createDebugMaterial()

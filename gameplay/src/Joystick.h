@@ -25,6 +25,7 @@ class Joystick : public Control
 {
     friend class Container;
     friend class Gamepad;
+	friend class ControlFactory;
 
 public:
 
@@ -137,10 +138,11 @@ protected:
      *
      * @param style The style to apply to this joystick.
      * @param properties The properties to set on this joystick.
-     *
+     * @param theme The theme to set on this control if needed.
+	 *
      * @return The new joystick.
      */
-    static Joystick* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
 
     /**
      * Initialize this joystick.

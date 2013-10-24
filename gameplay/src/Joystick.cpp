@@ -28,7 +28,7 @@ Joystick* Joystick::create(const char* id, Theme::Style* style)
     return joystick;
 }
 
-Joystick* Joystick::create(Theme::Style* style, Properties* properties)
+Control* Joystick::create(Theme::Style* style, Properties* properties, Theme *theme)
 {
     Joystick* joystick = new Joystick();
     joystick->initialize(style, properties);

@@ -1,5 +1,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include "Font.h"
 
 #define START_INDEX     32
 #define END_INDEX       127
@@ -8,8 +9,8 @@
 namespace gameplay
 {
 
-// Structure of Glyph.
-class Glyph
+// Structure of TTF Glyph.
+class TTFGlyph
 {
 public:
     unsigned int index;
@@ -28,6 +29,6 @@ public:
  * 
  * @return 0 if successful, -1 if error.
  */
-int writeFont(const char* inFilePath, const char* outFilePath, unsigned int fontSize, const char* id, bool fontpreview);
+int writeFont(const char* inFilePath, const char* outFilePath, unsigned int fontSize, const char* id, bool fontpreview, Font::FontFormat fontFormat);
 
 }

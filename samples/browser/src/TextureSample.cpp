@@ -25,7 +25,7 @@ Node* addQuadModelAndNode(Scene* scene, float x, float y, float width, float hei
 
 Material* setTextureUnlitMaterial(Model* model, const char* texturePath, bool mipmap = true)
 {
-    Material* material = model->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag");
+    Material* material = model->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag");
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
 
     // Load the texture from file.
@@ -49,7 +49,7 @@ TextureSample::TextureSample()
 void TextureSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/common/arial.gpb");
 
     // Create an empty scene.
     _scene = Scene::create();

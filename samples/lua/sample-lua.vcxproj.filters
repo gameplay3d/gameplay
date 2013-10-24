@@ -9,9 +9,6 @@
   <ItemGroup>
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
-    <None Include="res\box.dae">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\box.gpb">
       <Filter>res</Filter>
     </None>
@@ -19,9 +16,6 @@
       <Filter>res</Filter>
     </None>
     <None Include="game.config" />
-    <None Include="res\arial40.gpb">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\box-diffuse.png">
       <Filter>res</Filter>
     </None>
@@ -35,6 +29,9 @@
       <Filter>res</Filter>
     </None>
     <None Include="res\game.lua">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\arial.gpb">
       <Filter>res</Filter>
     </None>
   </ItemGroup>

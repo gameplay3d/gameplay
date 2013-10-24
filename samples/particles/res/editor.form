@@ -3,127 +3,249 @@ form particleEditor
     theme = res/editor.theme
     autoWidth = true
     autoHeight = true
+    consumeInputEvents = false
 
-    container presets
+	// Vsync checkbox
+	checkBox vsync
+	{
+		style = iconNoBorder
+		size = 100, 35
+		position = 165, 5
+		imageSize = 30, 30
+		text = VSYNC
+		checked = true
+		consumeInputEvents = true
+	}
+ 
+    container leftSide
     {
-        style = basic
+        style = noBorder
         layout = LAYOUT_VERTICAL
-        position = 0, 0
-        size = 160, 220
+        width = 160
+        autoHeight = true
         consumeInputEvents = true
 
-        label title
+        container saveLoad
         {
-            style = title
-            size = 160, 30
-            text = Presets
+            style = basic
+            size = 160, 100
+            consumeInputEvents = true
+            layout = LAYOUT_VERTICAL
+
+	        button save
+	        {
+                consumeInputEvents = true
+		        style = buttonStyle
+                width = 140
+		        height = 40
+                x = 100
+		        text = Save
+	        }
+
+            button load : save
+	        {
+                x = 200
+		        text = Load
+	        }
         }
 
-        radioButton spiralFlame
+        // Image settings
+        container image
         {
-           style = iconNoBorder
-           text = Fire
-           group = presets
-           size = 160, 40
-           imageSize = 35, 35
-           selected = true
+	        style = basic
+	        size = 160, 200
+	        consumeInputEvents = true
+	        layout = LAYOUT_VERTICAL
+
+            label
+            {
+                style = title
+                size = 150, 30
+                text = Image
+            }
+
+	        image sprite
+	        {
+		        style = image
+		        path = res/fire.png
+		        size = 140, 140
+	        }
+
+            container imageSettings
+            {
+                style = noBorder
+                size = 160, 230
+                consumeInputEvents = true
+		        layout = LAYOUT_VERTICAL
+
+                radioButton additive
+                {
+                    style = radio
+                    text = Additive
+                    group = blendMode
+                    size = 140, 25
+                    imageSize = 25, 25
+                    selected = true
+                }
+
+                radioButton transparent : additive
+                {
+                    text = Transparent
+                    selected = false
+                }
+
+                radioButton multiply : transparent
+                {
+                    text = Multiply
+                    selected = false
+                }
+
+                radioButton opaque : transparent
+                {
+                    text = Opaque
+                    selected = false
+                }
+
+                container
+                {
+                    style = noBorder
+                    autoWidth = true
+                    height = 30
+
+                    label
+                    {
+                        style = noBorder
+                        text = Frame Count:
+                        size = 100, 25
+                    }
+
+                    textBox frameCount
+                    {
+                        consumeInputEvents = true
+                        style = textBox
+                        text = 1
+                        size = 45, 22
+                        position = 100, 0
+                    }
+                }
+
+                container
+                {
+                    style = noBorder
+                    autoWidth = true
+                    height = 30
+
+                    label
+                    {
+                        style = noBorder
+                        text = Frame Width:
+                        size = 100, 25
+                    }
+
+                    textBox frameWidth
+                    {
+                        consumeInputEvents = true
+                        style = textBox
+                        text = 1
+                        size = 45, 22
+                        position = 100, 0
+                    }
+                }
+
+                container
+                {
+                    style = noBorder
+                    autoWidth = true
+                    height = 30
+
+                    label
+                    {
+                        style = noBorder
+                        text = Frame Height:
+                        size = 100, 25
+                    }
+
+                    textBox frameHeight
+                    {
+                        consumeInputEvents = true
+                        style = textBox
+                        text = 1
+                        size = 45, 22
+                        position = 100, 0
+                    }
+                }
+
+                button updateFrames
+                {
+			        style = buttonStyle
+			        width = 140
+			        height = 40
+			        text = Update
+                }
+            }
         }
 
-        radioButton smoke : spiralFlame
+        // Emission settings
+        container emission
         {
-            text = Smoke
-            selected = false
-        }
+	        style = basic
+	        layout = LAYOUT_VERTICAL
+	        size = 160, 200
+	        consumeInputEvents = true
 
-        radioButton explosion : smoke
-        {
-            text = Explosion
+	        // Burst emission
+	        button emit
+	        {
+		        style = buttonStyle
+		        position = 0, 50
+		        size = 140, 40
+		        text = Emit
+	        }
+
+	        // Emission rate
+	        slider emissionRate
+	        {
+		        style = noBorder
+		        size = 140, 50
+		        orientation = HORIZONTAL
+		        min = 1
+		        max = 500
+		        value = 100
+		        step = 1
+		        text = Emission Rate
+		        textAlignment = ALIGN_TOP_HCENTER
+		        valueTextVisible = true
+		        valueTextAlignment = ALIGN_BOTTOM_HCENTER
+		        valueTextPrecision = 2            
+	        }
+
+	        slider burstSize : emissionRate
+	        {
+		        text = Burst Size
+		        value = 20
+		        max = 50
+		        step = 1
+	        }
+
+	        // Start / Stop Emitter
+	        checkBox started
+	        {
+		        style = iconNoBorder
+		        size = 140, 40
+		        imageSize = 35, 35
+		        text = Running
+		        checked = true
+	        }
         }
 
         button reset
-        {
-            style = buttonStyle
-            alignment = ALIGN_BOTTOM
-            autoWidth = true
-            height = 50
-            text = Reset
-        }
-    }
-
-    // Emission settings
-    container emission
-    {
-        style = basic
-        position = 0, 220
-        layout = LAYOUT_VERTICAL
-        size = 160, 210
-        consumeInputEvents = true
-
-        // Burst emission
-        button emit
-        {
-            style = buttonStyle
-            position = 0, 50
-            size = 140, 50
-            text = Emit
-        }
-
-        // Emission rate
-        slider emissionRate
-        {
-            style = noBorder
-            size = 140, 50
-            orientation = HORIZONTAL
-            min = 1
-            max = 500
-            value = 100
-            step = 0
-            text = Emission Rate
-            textAlignment = ALIGN_TOP_HCENTER
-            valueTextVisible = true
-            valueTextAlignment = ALIGN_BOTTOM_HCENTER
-            valueTextPrecision = 2            
-        }
-
-        slider burstSize : emissionRate
-        {
-            text = Burst Size
-            value = 20
-            max = 50
-            step = 1
-        }
-
-        // Start / Stop Emitter
-        checkBox started
-        {
-            style = iconNoBorder
-            size = 140, 40
-            imageSize = 35, 35
-            text = Running
-            checked = true
-        }
-    }
-
-    // Camera Zoom
-    container zoom
-    {
-        style = noBorder
-        size = 160, 50
-        position = 0, 430
-        consumeInputEvents = true
-
-        button zoomIn
-        {
-            style = buttonStyle
-            size = 80, 50
-            text = Zoom  In
-        }
-
-        button zoomOut : zoomIn
-        {
-            position = 80, 0
-            text = Zoom Out
-        }
+	    {
+            consumeInputEvents = true
+		    style = buttonStyle
+            width = 160
+		    height = 40
+		    text = Reset
+	    }
     }
 
     container particleProperties
@@ -142,7 +264,7 @@ form particleEditor
         {
             style = title
             size = 150, 30
-            text = Size
+            text = Particle Size
         }
 
         slider startMin
@@ -151,9 +273,9 @@ form particleEditor
             size = 150, 50
             orientation = HORIZONTAL
             min = 0
-            max = 5
-            value = 1.5
-            step = 0
+            max = 10
+            value = 1
+            step = 0.1
             text = Min Begin
             textAlignment = ALIGN_TOP_HCENTER
             valueTextVisible = true
@@ -258,6 +380,30 @@ form particleEditor
 
         slider endAlpha : startAlpha
         {
+        }
+
+        // Position
+        label titlePosition : titleSize
+        {
+            text = Position
+        }
+
+        slider posX : startRed
+        {
+            min = -2
+            max = 2
+            step = 0.1
+            text = X
+        }
+
+        slider posY : posX
+        {
+            text = Y
+        }
+
+        slider posZ : posX
+        {
+            text = Z
         }
 
         // Position variance
@@ -440,4 +586,26 @@ form particleEditor
             text = Max
         }
     }
+
+	// Camera Zoom
+	container zoom
+	{
+		style = noBorder
+		size = 160, 50
+		consumeInputEvents = true
+        alignment = ALIGN_BOTTOM_HCENTER
+
+		button zoomIn
+		{
+			style = buttonStyle
+			size = 80, 50
+			text = Zoom  In
+		}
+
+		button zoomOut : zoomIn
+		{
+			position = 80, 0
+			text = Zoom Out
+		}
+	}
 }

@@ -8,7 +8,10 @@
     #define realpath(A,B)    _fullpath(B,A,PATH_MAX)
 #endif
 
-#define MAX_HEIGHTMAP_SIZE 2049
+// The encoder version number should be incremented when a feature is added to the encoder.
+// The encoder version is not the same as the GPB version.
+#define ENCODER_VERSION "2.0.0"
+#define HEIGHTMAP_SIZE_MAX 2049
 
 namespace gameplay
 {
@@ -18,10 +21,11 @@ static EncoderArguments* __instance;
 extern int __logVerbosity = 1;
 
 EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
-    _fontSize(0),
     _normalMap(false),
     _parseError(false),
+    _fontSize(0),
     _fontPreview(false),
+    _fontFormat(Font::BITMAP),
     _textOutput(false),
     _optimizeAnimations(false),
     _animationGrouping(ANIMATIONGROUP_PROMPT),
@@ -284,8 +288,11 @@ void EncoderArguments::printUsage() const
         "  terrain generation tools.\n" \
     "\n" \
     "TTF file options:\n" \
-    "  -s <size>\tSize of the font.\n" \
+    "  -s <size>\tSize of the bitmap font. (in pixels).\n" \
     "  -p\t\tOutput font preview.\n" \
+    "  -f Format of font. -f:b (BITMAP), -f:d (DISTANCE_FIELD).\n" \
+    "\n" \
+    "Encoder version: " ENCODER_VERSION "\n" \
     "\n");
     exit(8);
 }
@@ -293,6 +300,11 @@ void EncoderArguments::printUsage() const
 bool EncoderArguments::fontPreviewEnabled() const
 {
     return _fontPreview;
+}
+
+Font::FontFormat EncoderArguments::getFontFormat() const
+{
+    return _fontFormat;
 }
 
 bool EncoderArguments::textOutputEnabled() const
@@ -378,6 +390,16 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     }
     switch (str[1])
     {
+    case 'f':
+        if (str.compare("-f:b") == 0)
+        {
+            _fontFormat = Font::BITMAP;
+        }
+       else  if (str.compare("-f:d") == 0)
+        {
+            _fontFormat = Font::DISTANCE_FIELD;
+        }
+        break;
     case 'g':
         if (str.compare("-groupAnimations:auto") == 0 || str.compare("-g:auto") == 0)
         {
@@ -450,9 +472,9 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
                     heightmap.height = atoi(parts[1].c_str());
 
                     // Put some artificial bounds on heightmap dimensions
-                    if (heightmap.width <= 0 || heightmap.height <= 0 || heightmap.width > MAX_HEIGHTMAP_SIZE || heightmap.height > MAX_HEIGHTMAP_SIZE)
+                    if (heightmap.width <= 0 || heightmap.height <= 0 || heightmap.width > HEIGHTMAP_SIZE_MAX || heightmap.height > HEIGHTMAP_SIZE_MAX)
                     {
-                        LOG(1, "Error: size argument for -h|-heightmap must be between (1,1) and (%d,%d).\n", (int)MAX_HEIGHTMAP_SIZE, (int)MAX_HEIGHTMAP_SIZE);
+                        LOG(1, "Error: size argument for -h|-heightmap must be between (1,1) and (%d,%d).\n", (int)HEIGHTMAP_SIZE_MAX, (int)HEIGHTMAP_SIZE_MAX);
                         _parseError = true;
                         return;
                     }
@@ -557,7 +579,6 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         else
         {
             // Font Size
-
             // old format was -s##
             if (str.length() > 2)
             {
@@ -684,7 +705,6 @@ std::string concat(const std::string& a, const char* b)
     str.append(b);
     return str;
 }
-
 
 void unittestsEncoderArguments()
 {

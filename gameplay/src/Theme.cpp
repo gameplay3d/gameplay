@@ -88,12 +88,14 @@ Theme* Theme::create(const char* url)
     theme->_url = url;
         
     // Parse the Properties object and set up the theme.
-    const char* textureFile = themeProperties->getString("texture");
-    theme->_texture = Texture::create(textureFile, false);
+    std::string textureFile;
+    themeProperties->getPath("texture", &textureFile);
+    theme->_texture = Texture::create(textureFile.c_str(), false);
     GP_ASSERT(theme->_texture);
     theme->_spriteBatch = SpriteBatch::create(theme->_texture);
     GP_ASSERT(theme->_spriteBatch);
-    theme->_spriteBatch->getSampler()->setFilterMode(Texture::NEAREST, Texture::NEAREST);
+    theme->_spriteBatch->getSampler()->setFilterMode(Texture::LINEAR, Texture::LINEAR);
+    theme->_spriteBatch->getSampler()->setWrapMode(Texture::CLAMP, Texture::CLAMP);
 
     float tw = 1.0f / theme->_texture->getWidth();
     float th = 1.0f / theme->_texture->getHeight();
@@ -176,11 +178,11 @@ Theme* Theme::create(const char* url)
                         innerSpace->getColor("textColor", &textColor);
                     }
 
-                    const char* fontPath = innerSpace->getString("font");
                     Font* font = NULL;
-                    if (fontPath)
+                    std::string fontPath;
+                    if (innerSpace->getPath("font", &fontPath))
                     {
-                        font = Font::create(fontPath);
+                        font = Font::create(fontPath.c_str());
                     }
                     unsigned int fontSize = innerSpace->getInt("fontSize");
                     const char* textAlignmentString = innerSpace->getString("textAlignment");
@@ -260,11 +262,11 @@ Theme* Theme::create(const char* url)
                         textColor.set(normal->getTextColor());
                     }
 
-                    const char* fontPath = innerSpace->getString("font");
                     Font* font = NULL;
-                    if (fontPath)
+                    std::string fontPath;
+                    if (innerSpace->getPath("font", &fontPath))
                     {
-                        font = Font::create(fontPath);
+                        font = Font::create(fontPath.c_str());
                     }
                     if (!font)
                     {
@@ -488,16 +490,6 @@ void Theme::setProjectionMatrix(const Matrix& matrix)
 {
     GP_ASSERT(_spriteBatch);
     _spriteBatch->setProjectionMatrix(matrix);
-
-    // Set the matrix on each Font used by the style.
-    std::set<Font*>::const_iterator it;
-    for (it = _fonts.begin(); it != _fonts.end(); ++it)
-    {
-        Font* font = *it;
-        GP_ASSERT(font);
-        GP_ASSERT(font->getSpriteBatch());
-        font->getSpriteBatch()->setProjectionMatrix(matrix);
-    }
 }
 
 SpriteBatch* Theme::getSpriteBatch() const

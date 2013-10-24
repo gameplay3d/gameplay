@@ -45,6 +45,7 @@ using std::size_t;
 using std::min;
 using std::max;
 using std::modf;
+using std::atoi;
 
 // Common
 #ifndef NULL
@@ -96,6 +97,18 @@ extern void print(const char* format, ...);
         gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, "\n"); \
     } while (0)
 
+#if defined(WIN32)
+    #pragma warning( disable : 4005 )
+    #pragma warning( disable : 4172 )
+    #pragma warning( disable : 4244 )
+    #pragma warning( disable : 4267 )
+    #pragma warning( disable : 4311 )
+	#pragma warning( disable : 4316 )
+    #pragma warning( disable : 4390 )
+    #pragma warning( disable : 4800 )
+    #pragma warning( disable : 4996 )
+#endif
+
 // Bullet Physics
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
@@ -145,13 +158,6 @@ extern void print(const char* format, ...);
 #define MATH_CLAMP(x, lo, hi)       ((x < lo) ? lo : ((x > hi) ? hi : x))
 #ifndef M_1_PI
 #define M_1_PI                      0.31830988618379067154
-#endif
-
-#ifdef WIN32
-    inline float round(float r)
-    {
-        return (r > 0.0f) ? floor(r + 0.5f) : ceil(r - 0.5f);
-    }
 #endif
 
 // NOMINMAX makes sure that windef.h doesn't add macros min and max
@@ -280,13 +286,31 @@ typedef GLuint FrameBufferHandle;
 typedef GLuint RenderBufferHandle;
 
 /** Gamepad handle definitions vary by platform. */
-#if defined(__QNX__) && defined(USE_BLACKBERRY_GAMEPAD)
+#if defined(__QNX__) && defined(GP_USE_GAMEPAD)
     typedef screen_device_t GamepadHandle;
-#elif defined(USE_XINPUT)
+#elif defined(WIN32)
     typedef unsigned long GamepadHandle;
 #else
     typedef unsigned int GamepadHandle;
 #endif
+
+#if defined(__QNX__) && defined(GP_USE_SOCIAL)
+    typedef void* SocialPlayerHandle;
+    typedef void* SocialAchievementHandle;
+    typedef void* SocialScoreHandle;
+    typedef void* SocialChallengeHandle;
+#elif defined(WIN32)
+    typedef unsigned long SocialPlayerHandle;
+    typedef unsigned long SocialAchievementHandle;
+    typedef unsigned long SocialScoreHandle;
+    typedef unsigned long SocialChallengeHandle;
+#else
+    typedef unsigned int SocialPlayerHandle;
+    typedef unsigned int SocialAchievementHandle;
+    typedef unsigned int SocialScoreHandle;
+    typedef unsigned int SocialChallengeHandle;
+#endif
+
 }
 
 /**
@@ -338,15 +362,5 @@ extern ALenum __al_error_code;
  * Accesses the most recently set global AL error.
  */
 #define AL_LAST_ERROR() __al_error_code
-
-
-#if defined(WIN32)
-    #pragma warning( disable : 4172 )
-    #pragma warning( disable : 4244 )
-    #pragma warning( disable : 4311 )
-    #pragma warning( disable : 4390 )
-    #pragma warning( disable : 4800 )
-    #pragma warning( disable : 4996 )
-#endif
 
 #endif

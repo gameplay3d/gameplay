@@ -93,49 +93,6 @@ public:
     Theme* getTheme() const;
 
     /**
-     * Set the desired size of this form.
-     *
-     * @param width The width.
-     * @param height The height.
-     */
-    virtual void setSize(float width, float height);
-
-    /**
-     * Set the bounds of this form.
-     *
-     * @param bounds The new bounds to set.
-     */
-    virtual void setBounds(const Rectangle& bounds);
-
-    /** 
-     * Set the desired width of the form.
-     *
-     * @param width The width.
-     */
-    virtual void setWidth(float width);
-
-    /** 
-     * Set the desired height of the form.
-     *
-     * @param height The height.
-     */
-    virtual void setHeight(float height);
-
-    /**
-     * Set this form's width to that of the display.
-     *
-     * @param autoWidth Whether to set this form's width to that of the display.
-     */
-    virtual void setAutoWidth(bool autoWidth);
-
-    /**
-     * Set this form's height to that of the display.
-     *
-     * @param autoHeight Whether to set this form's height to that of the display.
-     */
-    virtual void setAutoHeight(bool autoHeight);
-
-    /**
      * Attach this form to a node.
      *
      * A form can be drawn as part of the 3-dimensional world if it is attached to a node.
@@ -155,12 +112,19 @@ public:
     /**
      * Draws this form.
      */
-    void draw();
+    unsigned int draw();
 
     /**
      * @see Control::getType
      */
     const char* getType() const;
+
+protected:
+
+    /**
+     * @see Control::update
+     */
+    void update(const Control* container, const Vector2& offset);
 
 private:
     
@@ -185,11 +149,6 @@ private:
      * @param mesh The mesh to create a model from.
      */
     void initializeQuad(Mesh* mesh);
-
-    /**
-     * Update this form's bounds.
-     */
-    void updateBounds();
 
     /**
      * Updates all visible, enabled forms.
@@ -227,6 +186,14 @@ private:
     static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
+     * Fired by the platform when the game window resizes.
+     *
+     * @param width The new window width.
+     * @param height The new window height.
+     */
+    static void resizeEventInternal(unsigned int width, unsigned int height);
+
+    /**
      * Get the next highest power of two of an integer.  Used when creating framebuffers.
      *
      * @param x The number to start with.
@@ -246,6 +213,11 @@ private:
      */
     bool projectPoint(int x, int y, Vector3* point);
 
+    /**
+     * Called when the form is resized to update its internal frame buffer.
+     */
+    void updateFrameBuffer();
+
     Theme* _theme;                      // The Theme applied to this Form.
     FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad. 
     SpriteBatch* _spriteBatch;
@@ -255,7 +227,6 @@ private:
     float _u2;
     float _v1;
     Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
-    Matrix _defaultProjectionMatrix;
     bool _isGamepad;
 };
 

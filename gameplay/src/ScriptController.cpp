@@ -431,11 +431,19 @@ void ScriptController::loadScript(const char* path, bool forceReload)
     std::set<std::string>::iterator iter = _loadedScripts.find(path);
     if (iter == _loadedScripts.end() || forceReload)
     {
+        bool success = false;
+        if (iter == _loadedScripts.end())
+            _loadedScripts.insert(path); // insert before loading script to prevent load recursion
+
 #ifdef __ANDROID__
         const char* scriptContents = FileSystem::readAll(path);
         if (luaL_dostring(_lua, scriptContents))
         {
             GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
+        }
+        else
+        {
+            success = true;
         }
         SAFE_DELETE_ARRAY(scriptContents);
 #else
@@ -449,10 +457,15 @@ void ScriptController::loadScript(const char* path, bool forceReload)
         {
             GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
         }
-#endif
-        if (iter == _loadedScripts.end())
+        else
         {
-            _loadedScripts.insert(path);
+            success = true;
+        }
+#endif
+        if (!success && (iter == _loadedScripts.end()))
+        {
+            iter = _loadedScripts.find(path);
+            _loadedScripts.erase(iter);
         }
     }
 }
@@ -463,11 +476,10 @@ std::string ScriptController::loadUrl(const char* url)
     std::string id;
     splitURL(url, &file, &id);
 
-    // Make sure the function isn't empty.
     if (id.size() <= 0)
     {
-        GP_ERROR("Got an empty function name when parsing function url '%s'.", url);
-        return std::string();
+        // The url does not reference a script - only a function
+        return file;
     }
 
     // Ensure the script is loaded.

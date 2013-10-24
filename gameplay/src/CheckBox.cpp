@@ -26,7 +26,7 @@ CheckBox* CheckBox::create(const char* id, Theme::Style* style)
     return checkBox;
 }
 
-CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
+Control* CheckBox::create(Theme::Style* style, Properties* properties, Theme *theme)
 {
     GP_ASSERT(properties);
 
@@ -145,11 +145,21 @@ void CheckBox::update(const Control* container, const Vector2& offset)
     {
         size.set(_imageSize);
     }
-    float iconWidth = size.x;
+    
+    if (_autoWidth == Control::AUTO_SIZE_FIT)
+    {
+        // Text-only width was already measured in Label::update - append image
+        setWidth(size.x + _bounds.width + 5);
+    }
 
-    _textBounds.x += iconWidth + 5;
-    _textBounds.width -= iconWidth + 5;
+    if (_autoHeight == Control::AUTO_SIZE_FIT)
+    {
+        // Text-only width was already measured in Label::update - append image
+        setHeight(std::max(getHeight(), size.y));
+    }
 
+    _textBounds.x += size.x + 5;
+    
     if (_checked)
     {
         _image = getImage("checked", _state);

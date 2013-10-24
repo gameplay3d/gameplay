@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Scene", "Terrain", TerrainSample, 3);
+    ADD_SAMPLE("Scene", "Terrain", TerrainSample, 4);
 #endif
 
 struct TerrainHitFilter : public PhysicsController::HitFilter
@@ -55,7 +55,7 @@ void TerrainSample::initialize()
     SAFE_RELEASE(bundle);
 
     // Load font
-	_font = Font::create("res/common/arial18.gpb");
+	_font = Font::create("res/common/arial.gpb");
 
     // Setup form
     _form = Form::create("res/common/terrain/terrain.form");

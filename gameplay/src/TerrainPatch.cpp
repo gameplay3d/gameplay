@@ -494,8 +494,8 @@ bool TerrainPatch::updateMaterial()
         else
             material->getParameter("u_normalMatrix")->bindValue(_terrain, &Terrain::getNormalMatrix);
         material->getParameter("u_ambientColor")->bindValue(this, &TerrainPatch::getAmbientColor);
-        material->getParameter("u_lightColor")->bindValue(this, &TerrainPatch::getLightColor);
-        material->getParameter("u_lightDirection")->bindValue(this, &TerrainPatch::getLightDirection);
+        material->getParameter("u_lightColor")->setValue(Vector3::one());
+        material->getParameter("u_lightDirection")->setValue(Vector3(0, -1, 0));
         if (_layers.size() > 0)
             material->getParameter("u_samplers")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
 
@@ -520,28 +520,28 @@ bool TerrainPatch::updateMaterial()
     return true;
 }
 
-void TerrainPatch::draw(bool wireframe)
+unsigned int TerrainPatch::draw(bool wireframe)
 {
     Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
     Camera* camera = scene ? scene->getActiveCamera() : NULL;
     if (!camera)
-        return;
+        return 0;
 
     // Get our world-space bounding box
     BoundingBox bounds = getBoundingBox(true);
 
     // If the box does not intersect the view frustum, cull it
     if (_terrain->isFlagSet(Terrain::FRUSTUM_CULLING) && !camera->getFrustum().intersects(bounds))
-        return;
+        return 0;
 
     if (!updateMaterial())
-        return;
+        return 0;
 
     // Compute the LOD level from the camera's perspective
     size_t lod = computeLOD(camera, bounds);
 
     // Draw the model for the current LOD
-    _levels[lod]->model->draw(wireframe);
+    return _levels[lod]->model->draw(wireframe);
 }
 
 bool TerrainPatch::isVisible() const
@@ -607,24 +607,6 @@ const Vector3& TerrainPatch::getAmbientColor() const
 {
     Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
     return scene ? scene->getAmbientColor() : Vector3::zero();
-}
-
-const Vector3& TerrainPatch::getLightColor() const
-{
-    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
-    return scene ? scene->getLightColor() : Vector3::one();
-}
-
-const Vector3& TerrainPatch::getLightDirection() const
-{
-    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
-    if (!scene)
-    {
-        static Vector3 down(0, -1, 0);
-        return down;
-    }
-
-    return scene->getLightDirection();
 }
 
 size_t TerrainPatch::computeLOD(Camera* camera, const BoundingBox& worldBounds) const

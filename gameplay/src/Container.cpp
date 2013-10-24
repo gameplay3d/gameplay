@@ -13,6 +13,7 @@
 #include "Joystick.h"
 #include "ImageControl.h"
 #include "Game.h"
+#include "ControlFactory.h"
 
 namespace gameplay
 {
@@ -60,7 +61,7 @@ Container::Container()
       _lastFrameTime(0), _focusChangeRepeat(false),
       _focusChangeStartTime(0), _focusChangeRepeatDelay(FOCUS_CHANGE_REPEAT_DELAY), _focusChangeCount(0),
       _totalWidth(0), _totalHeight(0),
-      _initializedWithScroll(false), _scrollWheelRequiresFocus(false)
+      _initializedWithScroll(false), _scrollWheelRequiresFocus(false), _allowRelayout(true)
 {
 	clearContacts();
 }
@@ -100,6 +101,9 @@ Container* Container::create(Layout::Type type)
     case Layout::LAYOUT_VERTICAL:
         layout = VerticalLayout::create();
         break;
+    default:
+        layout = AbsoluteLayout::create();
+        break;
     }
 
     Container* container = new Container();
@@ -108,12 +112,32 @@ Container* Container::create(Layout::Type type)
     return container;
 }
 
-Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
 {
     GP_ASSERT(properties);
 
-    const char* layoutString = properties->getString("layout");
-    Container* container = Container::create(getLayoutType(layoutString));
+    // Parse layout
+    Container* container;
+    Properties* layoutNS = properties->getNamespace("layout", true, false);
+    if (layoutNS)
+    {
+        Layout::Type layoutType = getLayoutType(layoutNS->getString("type"));
+        container = Container::create(layoutType);
+        switch (layoutType)
+        {
+        case Layout::LAYOUT_FLOW:
+            static_cast<FlowLayout*>(container->getLayout())->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
+            break;
+        case Layout::LAYOUT_VERTICAL:
+            static_cast<VerticalLayout*>(container->getLayout())->setSpacing(layoutNS->getInt("spacing"));
+            break;
+        }
+    }
+    else
+    {
+        container = Container::create(getLayoutType(properties->getString("layout")));
+    }
+
     container->initialize(style, properties);
     container->_scroll = getScroll(properties->getString("scroll"));
     container->_scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
@@ -158,48 +182,9 @@ void Container::addControls(Theme* theme, Properties* properties)
 
         std::string controlName(controlSpace->getNamespace());
         std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
-        if (controlName == "LABEL")
-        {
-            control = Label::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "BUTTON")
-        {
-            control = Button::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CHECKBOX")
-        {
-            control = CheckBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "RADIOBUTTON")
-        {
-            control = RadioButton::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CONTAINER")
-        {
-            control = Container::create(controlStyle, controlSpace, theme);
-        }
-        else if (controlName == "SLIDER")
-        {
-            control = Slider::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "TEXTBOX")
-        {
-            control = TextBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "JOYSTICK")
-        {
-            control = Joystick::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "IMAGE")
-        {
-            control = ImageControl::create(controlStyle, controlSpace);
-        }
-        else
-        {
-            // Ignore - not a valid control name.
-            // This used to fail, but I see no reason to hard fail here (this also fixes not being able
-            // to set padding on containers).
-        }
+
+		// Create our control from the factory of registered controls.
+		control = ControlFactory::getInstance()->createControl(controlName.c_str(), controlStyle, controlSpace, theme);
 
         // Add the new control to the form.
         if (control)
@@ -469,6 +454,7 @@ void Container::update(const Control* container, const Vector2& offset)
 
         GP_ASSERT(_scrollBarLeftCap && _scrollBarHorizontal && _scrollBarRightCap);
 
+        _viewportBounds.height -= _scrollBarHorizontal->getRegion().height;
         _viewportClipBounds.height -= _scrollBarHorizontal->getRegion().height;
     }
 
@@ -479,7 +465,8 @@ void Container::update(const Control* container, const Vector2& offset)
         _scrollBarBottomCap = getImage("scrollBarBottomCap", _state);
 
         GP_ASSERT(_scrollBarTopCap && _scrollBarVertical && _scrollBarBottomCap);
-        
+
+        _viewportBounds.width -= _scrollBarVertical->getRegion().width;
         _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
     }
 
@@ -491,6 +478,81 @@ void Container::update(const Control* container, const Vector2& offset)
     else
     {
         _layout->update(this, Vector2::zero());
+    }
+
+    // Handle automatically sizing based on our children
+    if (_autoWidth == Control::AUTO_SIZE_FIT || _autoHeight == Control::AUTO_SIZE_FIT)
+    {
+        Vector2 oldSize(_bounds.width, _bounds.height);
+        bool sizeChanged = false;
+        bool relayout = false;
+
+        if (_autoWidth == Control::AUTO_SIZE_FIT)
+        {
+            // Size ourself to tightly fit the width of our children
+            float width = 0;
+            for (std::vector<Control*>::const_iterator it = _controls.begin(); it < _controls.end(); ++it)
+            {
+                Control* ctrl = *it;
+                if (ctrl->isXPercentage() || ctrl->isWidthPercentage())
+                {
+                    // We (this control's parent) are resizing and our child's layout
+                    // depends on our size, so we need to dirty it
+                    ctrl->_dirty = true;
+                    relayout = _allowRelayout;
+                }
+                else
+                {
+                    float w = ctrl->getX() + ctrl->getWidth();
+                    if (width < w)
+                        width = w;
+                }
+            }
+            width += getBorder(_state).left + getBorder(_state).right + getPadding().left + getPadding().right;
+            if (width != oldSize.x)
+            {
+                setWidth(width);
+                sizeChanged = true;
+            }
+        }
+
+        if (_autoHeight == Control::AUTO_SIZE_FIT)
+        {
+            // Size ourself to tightly fit the height of our children
+            float height = 0;
+            for (std::vector<Control*>::const_iterator it = _controls.begin(); it < _controls.end(); ++it)
+            {
+                Control* ctrl = *it;
+                if (ctrl->isYPercentage() || ctrl->isHeightPercentage())
+                {
+                    // We (this control's parent) are resizing and our child's layout
+                    // depends on our size, so we need to dirty it
+                    ctrl->_dirty = true;
+                    relayout = _allowRelayout;
+                }
+                else
+                {
+                    float h = ctrl->getY() + ctrl->getHeight();
+                    if (height < h)
+                        height = h;
+                }
+            }
+            height += getBorder(_state).top + getBorder(_state).bottom + getPadding().top + getPadding().bottom;
+            if (height != oldSize.y)
+            {
+                setHeight(height);
+                sizeChanged = true;
+            }
+        }
+
+        if (sizeChanged && relayout)
+        {
+            // Our size changed and as a result we need to force another layout.
+            // Prevent infinitely recursive layouts by disabling relayout for the next call.
+            _allowRelayout = false;
+            update(container, offset);
+            _allowRelayout = true;
+        }
     }
 }
 
@@ -560,7 +622,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
             clipRegion.width += verticalRegion.width;
 
-            Rectangle bounds(_viewportBounds.x + _viewportBounds.width - verticalRegion.width, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
+            Rectangle bounds(_viewportBounds.x + _viewportBounds.width, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
 
             bounds.y += topRegion.height;
@@ -591,7 +653,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
             clipRegion.height += horizontalRegion.height;
         
-            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.y + _viewportBounds.height - horizontalRegion.height, leftRegion.width, leftRegion.height);
+            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.y + _viewportBounds.height, leftRegion.width, leftRegion.height);
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
 
             bounds.x += leftRegion.width;
@@ -1337,8 +1399,8 @@ void Container::updateScroll()
 
     float vWidth = getImageRegion("verticalScrollBar", _state).width;
     float hHeight = getImageRegion("horizontalScrollBar", _state).height;
-    float clipWidth = _bounds.width - containerBorder.left - containerBorder.right - containerPadding.left - containerPadding.right - vWidth;
-    float clipHeight = _bounds.height - containerBorder.top - containerBorder.bottom - containerPadding.top - containerPadding.bottom - hHeight;
+    float clipWidth = _absoluteBounds.width - containerBorder.left - containerBorder.right - containerPadding.left - containerPadding.right - vWidth;
+    float clipHeight = _absoluteBounds.height - containerBorder.top - containerBorder.bottom - containerPadding.top - containerPadding.bottom - hHeight;
 
     // Apply and dampen inertia.
     if (!_scrollingVelocity.isZero())
@@ -1577,7 +1639,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             if (_scrollBarVertical)
             {
                 float vWidth = _scrollBarVertical->getRegion().width;
-                Rectangle vBounds(_viewportBounds.x + _viewportBounds.width - vWidth,
+                Rectangle vBounds(_viewportBounds.x + _viewportBounds.width,
                                  _scrollBarBounds.y,
                                  vWidth, _scrollBarBounds.height);
 
@@ -1605,7 +1667,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             {
                 float hHeight = _scrollBarHorizontal->getRegion().height;
                 Rectangle hBounds(_scrollBarBounds.x,
-                                  _viewportBounds.y + _viewportBounds.height - hHeight,
+                                  _viewportBounds.y + _viewportBounds.height,
                                   _scrollBarBounds.width, hHeight);
             
                 if (y + _viewportBounds.y >= hBounds.y &&

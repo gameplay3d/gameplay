@@ -16,7 +16,7 @@ static std::vector<Font*> __fontCache;
 static Effect* __fontEffect = NULL;
 
 Font::Font() :
-    _style(PLAIN), _size(0), _spacing(0.125f), _glyphs(NULL), _glyphCount(0), _texture(NULL), _batch(NULL)
+    _format(BITMAP), _style(PLAIN), _size(0), _spacing(0.125f), _glyphs(NULL), _glyphCount(0), _texture(NULL), _batch(NULL), _cutoffParam(NULL)
 {
 }
 
@@ -90,7 +90,7 @@ Font* Font::create(const char* path, const char* id)
     return font;
 }
 
-Font* Font::create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture)
+Font* Font::create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture, Font::Format format)
 {
     GP_ASSERT(family);
     GP_ASSERT(glyphs);
@@ -99,7 +99,10 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
     // Create the effect for the font's sprite batch.
     if (__fontEffect == NULL)
     {
-        __fontEffect = Effect::createFromFile(FONT_VSH, FONT_FSH);
+        const char* defines = NULL;
+        if (format == DISTANCE_FIELD)
+            defines = "DISTANCE_FIELD";
+        __fontEffect = Effect::createFromFile(FONT_VSH, FONT_FSH, defines);
         if (__fontEffect == NULL)
         {
             GP_ERROR("Failed to create effect for font.");
@@ -126,12 +129,14 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
 
     // Add linear filtering for better font quality.
     Texture::Sampler* sampler = batch->getSampler();
-    sampler->setFilterMode(Texture::LINEAR, Texture::LINEAR);
+    sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
+    sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
 
     // Increase the ref count of the texture to retain it.
     texture->addRef();
 
     Font* font = new Font();
+    font->_format = format;
     font->_family = family;
     font->_style = style;
     font->_size = size;
@@ -151,9 +156,25 @@ unsigned int Font::getSize()
     return _size;
 }
 
+Font::Format Font::getFormat()
+{
+    return _format;
+}
+
 void Font::start()
 {
     GP_ASSERT(_batch);
+
+    // Update the projection matrix for our batch to match the current viewport
+    const Rectangle& vp = Game::getInstance()->getViewport();
+    if (!vp.isEmpty())
+    {
+        Game* game = Game::getInstance();
+        Matrix projectionMatrix;
+        Matrix::createOrthographicOffCenter(vp.x, vp.width, vp.height, vp.y, 0, 1, &projectionMatrix);
+        _batch->setProjectionMatrix(projectionMatrix);
+    }
+
     _batch->start();
 }
 
@@ -498,6 +519,14 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 if (index >= 0 && index < (int)_glyphCount)
                 {
                     Glyph& g = _glyphs[index];
+
+                    if (getFormat() == DISTANCE_FIELD )
+                    {
+                        if (_cutoffParam == NULL)
+                            _cutoffParam = getSpriteBatch()->getMaterial()->getParameter("u_cutoff");    
+                        // TODO: Fix me so that smaller font are much smoother
+                        _cutoffParam->setVector2(Vector2(1.0, 1.0));
+                    }
                     _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
                     xPos += floor(g.width * scale + spacing);
                     break;

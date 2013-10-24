@@ -181,55 +181,7 @@ public:
      * @see getAmbientColor()
      */
     void setAmbientColor(float red, float green, float blue);
-
-    /**
-     * Returns the light color of the scene.
-     *
-     * The default light color is white (1,1,1).
-     *
-     * This color is typically used to represent the color of the main directional light (i.e. the Sun) in a scene.
-     * The corresponding direction can be queried using Scene::getLightDirection().
-     *
-     * This value can be bound to materials using the SCENE_LIGHT_COLOR auto binding.
-     *
-     * @return The scene's light color.
-     */
-    const Vector3& getLightColor() const;
-
-    /**
-     * Sets the scene's light color.
-     *
-     * @param red The red channel between 0.0 and 1.0.
-     * @param green The green channel between 0.0 and 1.0.
-     * @param blue The blue channel between 0.0 and 1.0.
-     *
-     * @see getLightColor()
-     */
-    void setLightColor(float red, float green, float blue);
-
-    /**
-     * Returns the current light direction for the scene.
-     *
-     * The default value is (0,-1,0), which is a pointing directly down the Y-axis.
-     *
-     * This value is typically used to represent the the main directional lihgt (i.e. the Sun) in a scene.
-     * The corresponding light color can be queried using Scene::getLightColor().
-     *
-     * This value can be bound to materials using the SCENE_LIGHT_DIRECTION auto binding.
-     *
-     * @return The scene's light direction.
-     */
-    const Vector3& getLightDirection() const;
-
-    /**
-     * Sets the scene's light direction.
-     *
-     * @param direction The new light direction.
-     *
-     * @see getLightDirection()
-     */
-    void setLightDirection(const Vector3& direction);
-
+    
     /**
      * Visits each node in the scene and calls the specified method pointer.
      *

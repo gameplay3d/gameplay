@@ -8,7 +8,7 @@ namespace gameplay
 
 static FlowLayout* __instance;
 
-FlowLayout::FlowLayout()
+FlowLayout::FlowLayout() : _horizontalSpacing(0), _verticalSpacing(0)
 {
 }
 
@@ -36,6 +36,22 @@ Layout::Type FlowLayout::getType()
     return Layout::LAYOUT_FLOW;
 }
 
+int FlowLayout::getHorizontalSpacing() const
+{
+    return _horizontalSpacing;
+}
+
+int FlowLayout::getVerticalSpacing() const
+{
+    return _verticalSpacing;
+}
+
+void FlowLayout::setSpacing(int horizontalSpacing, int verticalSpacing)
+{
+    _horizontalSpacing = horizontalSpacing;
+    _verticalSpacing = verticalSpacing;
+}
+
 void FlowLayout::update(const Container* container, const Vector2& offset)
 {
     GP_ASSERT(container);
@@ -57,6 +73,9 @@ void FlowLayout::update(const Container* container, const Vector2& offset)
         Control* control = controls.at(i);
         GP_ASSERT(control);
 
+        if (!control->isVisible())
+            continue;
+
         //align(control, container);
 
         const Rectangle& bounds = control->getBounds();
@@ -68,7 +87,8 @@ void FlowLayout::update(const Container* container, const Vector2& offset)
         if (xPosition + bounds.width >= clipWidth)
         {
             xPosition = margin.left;
-            rowY += tallestHeight;
+            rowY += tallestHeight + _verticalSpacing;
+            tallestHeight = 0;
         }
 
         yPosition = rowY + margin.top;
@@ -76,7 +96,7 @@ void FlowLayout::update(const Container* container, const Vector2& offset)
         control->setPosition(xPosition, yPosition);
         control->update(container, offset);
 
-        xPosition += bounds.width + margin.right;
+        xPosition += bounds.width + margin.right + _horizontalSpacing;
 
         float height = bounds.height + margin.top + margin.bottom;
         if (height > tallestHeight)

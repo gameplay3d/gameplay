@@ -664,9 +664,6 @@ Material* FBXSceneEncoder::createBaseMaterial(const string& baseMaterialName, Ma
     {
         baseMaterial->setLit(true);
         baseMaterial->setUniform("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
-        // Always use directional light
-        baseMaterial->setUniform("u_lightDirection", "SCENE_LIGHT_DIRECTION");
-        baseMaterial->setUniform("u_lightColor", "SCENE_LIGHT_COLOR");
 
         if (childMaterial->isSpecular())
         {

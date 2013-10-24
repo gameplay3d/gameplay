@@ -40,7 +40,7 @@ void RacerGame::initialize()
 {
     setMultiTouch(true);
 
-    _font = Font::create("res/common/arial40.gpb");
+    _font = Font::create("res/common/arial.gpb");
 
     // Display the gameplay splash screen during loading, for at least 1 second.
     displayScreen(this, &RacerGame::drawSplash, NULL, 1000L);
@@ -114,11 +114,11 @@ bool RacerGame::initializeScene(Node* node)
     if (model)
     {
         Material* material = model->getMaterial();
-        if (material && material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_lightDirection"))
+        if (material && material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_directionalLightDirection[0]"))
         {
             material->getParameter("u_ambientColor")->setValue(_scene->getAmbientColor());
-            material->getParameter("u_lightColor")->setValue(lightNode->getLight()->getColor());
-            material->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
+            material->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
+            material->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());
         }
     }
 

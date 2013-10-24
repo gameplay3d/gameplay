@@ -19,8 +19,6 @@ static const char* luaEnumString_RenderStateAutoBinding_CAMERA_WORLD_POSITION = 
 static const char* luaEnumString_RenderStateAutoBinding_CAMERA_VIEW_POSITION = "CAMERA_VIEW_POSITION";
 static const char* luaEnumString_RenderStateAutoBinding_MATRIX_PALETTE = "MATRIX_PALETTE";
 static const char* luaEnumString_RenderStateAutoBinding_SCENE_AMBIENT_COLOR = "SCENE_AMBIENT_COLOR";
-static const char* luaEnumString_RenderStateAutoBinding_SCENE_LIGHT_COLOR = "SCENE_LIGHT_COLOR";
-static const char* luaEnumString_RenderStateAutoBinding_SCENE_LIGHT_DIRECTION = "SCENE_LIGHT_DIRECTION";
 
 RenderState::AutoBinding lua_enumFromString_RenderStateAutoBinding(const char* s)
 {
@@ -50,10 +48,6 @@ RenderState::AutoBinding lua_enumFromString_RenderStateAutoBinding(const char* s
         return RenderState::MATRIX_PALETTE;
     if (strcmp(s, luaEnumString_RenderStateAutoBinding_SCENE_AMBIENT_COLOR) == 0)
         return RenderState::SCENE_AMBIENT_COLOR;
-    if (strcmp(s, luaEnumString_RenderStateAutoBinding_SCENE_LIGHT_COLOR) == 0)
-        return RenderState::SCENE_LIGHT_COLOR;
-    if (strcmp(s, luaEnumString_RenderStateAutoBinding_SCENE_LIGHT_DIRECTION) == 0)
-        return RenderState::SCENE_LIGHT_DIRECTION;
     return RenderState::NONE;
 }
 
@@ -85,10 +79,6 @@ const char* lua_stringFromEnum_RenderStateAutoBinding(RenderState::AutoBinding e
         return luaEnumString_RenderStateAutoBinding_MATRIX_PALETTE;
     if (e == RenderState::SCENE_AMBIENT_COLOR)
         return luaEnumString_RenderStateAutoBinding_SCENE_AMBIENT_COLOR;
-    if (e == RenderState::SCENE_LIGHT_COLOR)
-        return luaEnumString_RenderStateAutoBinding_SCENE_LIGHT_COLOR;
-    if (e == RenderState::SCENE_LIGHT_DIRECTION)
-        return luaEnumString_RenderStateAutoBinding_SCENE_LIGHT_DIRECTION;
     return enumStringEmpty;
 }
 
