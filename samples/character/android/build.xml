@@ -61,7 +61,7 @@
        -->
     <target name="-post-compile">
         <copy file="../game.png.config" tofile="assets/game.config"/>
-        <copy file="../res/common/arial40.gpb" tofile="assets/res/common/arial40.gpb"/>
+        <copy file="../res/common/arial.gpb" tofile="assets/res/common/arial.gpb"/>
         <copy file="../res/design/backboard.png" tofile="assets/res/png/backboard.png"/>
         <copy file="../res/design/basketball.png" tofile="assets/res/png/basketball.png"/>
         <copy file="../res/design/basketballnet.png" tofile="assets/res/png/basketballnet.png"/>

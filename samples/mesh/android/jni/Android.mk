@@ -16,7 +16,7 @@ LOCAL_SRC_FILES := libgameplay.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 # libpng
-LOCAL_PATH := $(LIBPNG_PATH)
+LOCAL_PATH := $(PNG_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libpng 
 LOCAL_SRC_FILES := libpng.a
