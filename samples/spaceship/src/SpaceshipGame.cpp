@@ -134,7 +134,8 @@ void SpaceshipGame::initialize()
     _initialShipRot = _shipGroupNode->getRotation();
     _initialCameraPos = _cameraNode->getTranslation();
 
-    getSocialController()->authenticate(this);
+    if (getSocialController())
+    	getSocialController()->authenticate(this);
 }
 
 void SpaceshipGame::initializeSpaceship()

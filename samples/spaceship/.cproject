@@ -25,7 +25,6 @@
 								<option id="com.qnx.qcc.option.compiler.security.2012394098" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="false" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1031425461" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
-									<listOptionValue builtIn="false" value="GP_USE_SOCIAL"/>
 									<listOptionValue builtIn="false" value="GP_USE_GAMEPAD"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1786077513" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
@@ -299,8 +298,19 @@
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.qnx.tools.ide.qde.managedbuilder.core.qccScannerInfo"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Device-Debug">
+			<resource resourceType="PROJECT" workspacePath="/sample-spaceship"/>
+		</configuration>
+		<configuration configurationName="Device-Release">
+			<resource resourceType="PROJECT" workspacePath="/sample-spaceship"/>
+		</configuration>
+		<configuration configurationName="Simulator">
+			<resource resourceType="PROJECT" workspacePath="/sample-spaceship"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="com.qnx.tools.ide.qde.core.QNXProjectProperties"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
