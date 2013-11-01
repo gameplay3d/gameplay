@@ -97,14 +97,14 @@ void GooglePlaySocialSession::loadAchievements()
 /**
  * @see SocialSession::submitAchievement
  */
-void GooglePlaySocialSession::submitAchievement(const char* achievementId, unsigned int value, bool achieved=false)
+void GooglePlaySocialSession::submitAchievement(const char* achievementId, unsigned int value, bool achieved)
 {
 }
 
 /**
  * @see SocialSession::incrementAchievement
  */
-void GooglePlaySocialSession::incrementAchievement(const char* achievementId, unsigned int increment=1)
+void GooglePlaySocialSession::incrementAchievement(const char* achievementId, unsigned int increment)
 {
 }
 
@@ -139,14 +139,14 @@ void GooglePlaySocialSession::submitScore(const char* leaderboardId, float score
 /**
   * @see SocialSession::submitChallenge
   */
-void GooglePlaySocialSession::submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId=0)
+void GooglePlaySocialSession::submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId)
 {
 }
 
 /**
   * @see SocialSession::loadChallenges
   */
-void GooglePlaySocialSession::loadChallenges(bool showOpenChallengesOnly=true)
+void GooglePlaySocialSession::loadChallenges(bool showOpenChallengesOnly)
 {
 }
 
