@@ -837,9 +837,6 @@
     <ClCompile Include="src\lua\lua_TerrainFlags.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_TerrainListener.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_TextBox.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
@@ -919,6 +916,12 @@
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_VisibleSetDefault.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_TerrainPatch.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_CameraListener.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1748,9 +1751,6 @@
     <ClInclude Include="src\lua\lua_TerrainFlags.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_TerrainListener.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_TextBox.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1830,6 +1830,12 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_VisibleSetDefault.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_TerrainPatch.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_CameraListener.h">
       <Filter>src\lua</Filter>
     </ClInclude>
   </ItemGroup>

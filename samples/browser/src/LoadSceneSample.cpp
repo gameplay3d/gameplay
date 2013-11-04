@@ -20,6 +20,26 @@ void LoadSceneSample::initialize()
 
     // Update the aspect ratio for our scene's camera to match the current device resolution
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
+
+    // Visit all the nodes in the scene, drawing the models/mesh.
+    _scene->visit(this, &LoadSceneSample::initializeMaterials);
+
+}
+
+
+bool LoadSceneSample::initializeMaterials(Node* node)
+{
+    Model* model = node->getModel();
+    if (model)
+    {
+        Material* material = model->getMaterial();
+        // For this sample we will only bind a single light to each object in the scene.
+        MaterialParameter* colorParam = material->getParameter("u_directionalLightColor[0]");
+        colorParam->setValue(Vector3(0.75f, 0.75f, 0.75f));
+        MaterialParameter* directionParam = material->getParameter("u_directionalLightDirection[0]");
+        directionParam->setValue(Vector3(0, -1, 0));
+    }
+    return true;
 }
 
 void LoadSceneSample::finalize()

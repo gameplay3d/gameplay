@@ -102,6 +102,7 @@
     <ClCompile Include="src\lua\lua_Bundle.cpp" />
     <ClCompile Include="src\lua\lua_Button.cpp" />
     <ClCompile Include="src\lua\lua_Camera.cpp" />
+    <ClCompile Include="src\lua\lua_CameraListener.cpp" />
     <ClCompile Include="src\lua\lua_CameraType.cpp" />
     <ClCompile Include="src\lua\lua_CheckBox.cpp" />
     <ClCompile Include="src\lua\lua_Container.cpp" />
@@ -227,7 +228,7 @@
     <ClCompile Include="src\lua\lua_Technique.cpp" />
     <ClCompile Include="src\lua\lua_Terrain.cpp" />
     <ClCompile Include="src\lua\lua_TerrainFlags.cpp" />
-    <ClCompile Include="src\lua\lua_TerrainListener.cpp" />
+    <ClCompile Include="src\lua\lua_TerrainPatch.cpp" />
     <ClCompile Include="src\lua\lua_TextBox.cpp" />
     <ClCompile Include="src\lua\lua_TextBoxInputMode.cpp" />
     <ClCompile Include="src\lua\lua_Texture.cpp" />
@@ -405,6 +406,7 @@
     <ClInclude Include="src\lua\lua_Bundle.h" />
     <ClInclude Include="src\lua\lua_Button.h" />
     <ClInclude Include="src\lua\lua_Camera.h" />
+    <ClInclude Include="src\lua\lua_CameraListener.h" />
     <ClInclude Include="src\lua\lua_CameraType.h" />
     <ClInclude Include="src\lua\lua_CheckBox.h" />
     <ClInclude Include="src\lua\lua_Container.h" />
@@ -530,7 +532,7 @@
     <ClInclude Include="src\lua\lua_Technique.h" />
     <ClInclude Include="src\lua\lua_Terrain.h" />
     <ClInclude Include="src\lua\lua_TerrainFlags.h" />
-    <ClInclude Include="src\lua\lua_TerrainListener.h" />
+    <ClInclude Include="src\lua\lua_TerrainPatch.h" />
     <ClInclude Include="src\lua\lua_TextBox.h" />
     <ClInclude Include="src\lua\lua_TextBoxInputMode.h" />
     <ClInclude Include="src\lua\lua_Texture.h" />

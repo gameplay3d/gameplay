@@ -22,7 +22,7 @@ namespace gameplay
 
 Camera::Camera(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
     : _type(PERSPECTIVE), _fieldOfView(fieldOfView), _aspectRatio(aspectRatio), _nearPlane(nearPlane), _farPlane(farPlane),
-      _bits(CAMERA_DIRTY_ALL), _node(NULL)
+    _bits(CAMERA_DIRTY_ALL), _node(NULL), _listeners(NULL)
 {
 }
 
@@ -135,6 +135,7 @@ void Camera::setFieldOfView(float fieldOfView)
 
     _fieldOfView = fieldOfView;
     _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    cameraChanged();
 }
 
 float Camera::getZoomX() const
@@ -150,6 +151,7 @@ void Camera::setZoomX(float zoomX)
 
     _zoom[0] = zoomX;
     _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    cameraChanged();
 }
 
 float Camera::getZoomY() const
@@ -165,6 +167,7 @@ void Camera::setZoomY(float zoomY)
 
     _zoom[1] = zoomY;
     _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    cameraChanged();
 }
 
 float Camera::getAspectRatio() const
@@ -176,6 +179,7 @@ void Camera::setAspectRatio(float aspectRatio)
 {
     _aspectRatio = aspectRatio;
     _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    cameraChanged();
 }
 
 float Camera::getNearPlane() const
@@ -187,6 +191,7 @@ void Camera::setNearPlane(float nearPlane)
 {
     _nearPlane = nearPlane;
     _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    cameraChanged();
 }
 
 float Camera::getFarPlane() const
@@ -198,6 +203,7 @@ void Camera::setFarPlane(float farPlane)
 {
     _farPlane = farPlane;
     _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    cameraChanged();
 }
 
 Node* Camera::getNode() const
@@ -223,6 +229,7 @@ void Camera::setNode(Node* node)
         }
 
         _bits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+        cameraChanged();
     }
 }
 
@@ -283,6 +290,8 @@ void Camera::setProjectionMatrix(const Matrix& matrix)
     _projection = matrix;
     _bits |= CAMERA_CUSTOM_PROJECTION;
     _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+
+    cameraChanged();
 }
 
 void Camera::resetProjectionMatrix()
@@ -291,6 +300,8 @@ void Camera::resetProjectionMatrix()
     {
         _bits &= ~CAMERA_CUSTOM_PROJECTION;
         _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+
+        cameraChanged();
     }
 }
 
@@ -441,6 +452,47 @@ Camera* Camera::clone(NodeCloneContext &context) const
 void Camera::transformChanged(Transform* transform, long cookie)
 {
     _bits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+
+    cameraChanged();
+}
+
+void Camera::cameraChanged()
+{
+    if (_listeners == NULL)
+        return;
+
+    for (std::list<Camera::Listener*>::iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
+    {
+        Camera::Listener* listener = (*itr);
+        listener->cameraChanged(this);
+    }
+}
+
+void Camera::addListener(Camera::Listener* listener)
+{
+    GP_ASSERT(listener);
+
+    if (_listeners == NULL)
+        _listeners = new std::list<Camera::Listener*>();
+
+    _listeners->push_back(listener);
+}
+
+void Camera::removeListener(Camera::Listener* listener)
+{
+    GP_ASSERT(listener);
+
+    if (_listeners)
+    {
+        for (std::list<Camera::Listener*>::iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
+        {
+            if ((*itr) == listener)
+            {
+                _listeners->erase(itr);
+                break;
+            }
+        }
+    }
 }
 
 }

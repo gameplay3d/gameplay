@@ -228,21 +228,21 @@ void SpaceshipGame::initializeMaterial(Material* material, bool lighting, bool s
         material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", RenderState::INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX);
         material->getParameter("u_ambientColor")->setValue(AMBIENT_LIGHT_COLOR);
 
+        Node* lightNode = _scene->findNode("directionalLight1");
+        Vector3 lightDirection = lightNode->getForwardVector();
+        lightDirection.normalize();
+        if (lightNode)
+        {
+            material->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
+            material->getParameter("u_directionalLightDirection[0]")->setValue(lightDirection);
+        }
+
         if (specular)
         {
             // Apply specular lighting parameters
             material->getParameter("u_specularExponent")->setValue(SPECULAR);
             material->setParameterAutoBinding("u_worldViewMatrix", RenderState::WORLD_VIEW_MATRIX);
             material->setParameterAutoBinding("u_cameraPosition", RenderState::CAMERA_WORLD_POSITION);
-        }
-
-        Node* lightNode = _scene->findNode("directionalLight1");
-        Vector3 lightDirection = lightNode->getForwardVector();
-        lightDirection.normalize();
-        if (lightNode)
-        {
-            material->getParameter("u_directionalLightDirection[0]")->setValue(lightDirection);
-            material->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
         }
     }
 }

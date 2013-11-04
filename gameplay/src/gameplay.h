@@ -54,6 +54,7 @@
 #include "ScreenDisplayer.h"
 #include "HeightField.h"
 #include "Terrain.h"
+#include "TerrainPatch.h"
 #include "VisibleSet.h"
 #include "VisibleSetDefault.h"
 

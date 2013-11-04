@@ -143,6 +143,7 @@ LOCAL_SRC_FILES := \
     lua/lua_Bundle.cpp \
     lua/lua_Button.cpp \
     lua/lua_Camera.cpp \
+    lua/lua_CameraListener.cpp \
     lua/lua_CameraType.cpp \
     lua/lua_CheckBox.cpp \
     lua/lua_Container.cpp \
@@ -268,7 +269,7 @@ LOCAL_SRC_FILES := \
     lua/lua_Technique.cpp \
     lua/lua_Terrain.cpp \
     lua/lua_TerrainFlags.cpp \
-    lua/lua_TerrainListener.cpp \
+    lua/lua_TerrainPatch.cpp \
     lua/lua_TextBox.cpp \
     lua/lua_TextBoxInputMode.cpp \
     lua/lua_Texture.cpp \

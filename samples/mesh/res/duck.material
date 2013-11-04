@@ -15,7 +15,6 @@ material duck
             u_cameraPosition = CAMERA_WORLD_POSITION
             u_ambientColor = 0.2, 0.2, 0.2
             u_specularExponent = 50
-            u_directionalLightColor[0] = 1.0, 1.0, 1.0
             
             // samplers
             sampler u_diffuseTexture
