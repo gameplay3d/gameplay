@@ -873,6 +873,18 @@ void ScriptController::gestureTapEvent(int x, int y)
         executeFunction<void>(list[i].c_str(), "ii", x, y);
 }
 
+void ScriptController::gestureLongTapEvent(int x, int y, float duration)
+{
+}
+
+void ScriptController::gestureDragEvent(int x, int y)
+{
+}
+
+void ScriptController::gestureDropEvent(int x, int y)
+{
+}
+
 void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     std::vector<std::string>& list = _callbacks[GAMEPAD_EVENT];

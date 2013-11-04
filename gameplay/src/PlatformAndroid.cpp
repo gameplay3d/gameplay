@@ -51,11 +51,15 @@ PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
 PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
 
-#define GESTURE_TAP_DURATION_MAX    200
-#define GESTURE_SWIPE_DURATION_MAX  400
-#define GESTURE_SWIPE_DISTANCE_MIN  50
+#define GESTURE_TAP_DURATION_MAX        200
+#define GESTURE_LONG_TAP_DURATION_MIN    GESTURE_TAP_DURATION_MAX
+#define    GESTURE_DRAG_START_DURATION_MIN    GESTURE_LONG_TAP_DURATION_MIN
+#define GESTURE_DRAG_DISTANCE_MIN    10
+#define GESTURE_SWIPE_DURATION_MAX      400
+#define GESTURE_SWIPE_DISTANCE_MIN      50
 
-static std::bitset<3> __gestureEventsProcessed;
+static bool    __gestureDraging = false;
+static std::bitset<6> __gestureEventsProcessed;
 
 struct TouchPointerData
 {
@@ -71,6 +75,7 @@ TouchPointerData __pointer1;
 
 namespace gameplay
 {
+
 
 static double timespec2millis(struct timespec *a)
 {
@@ -555,6 +560,7 @@ static Keyboard::Key getKey(int keycode, int metastate)
             return Keyboard::KEY_MENU;
         case AKEYCODE_SEARCH:
             return Keyboard::KEY_SEARCH;
+    
         case AKEYCODE_BACK:
             return Keyboard::KEY_ESCAPE;
         default:
@@ -732,9 +738,19 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                     {
                         int deltaX = x - __pointer0.x;
                         int deltaY = y - __pointer0.y;
-
+                        // Test for drop
+                        if (__gestureDraging)
+                        {
+                            if (__gestureEventsProcessed.test(Gesture::GESTURE_DROP))
+                            {
+                                gameplay::Platform::gestureDropEventInternal(x, y);
+                                __pointer0.pressed = false;
+                                gestureDetected = true;
+                            }
+                            __gestureDraging = false;
+                        }
                         // Test for swipe
-                        if (__gestureEventsProcessed.test(Gesture::GESTURE_SWIPE) &&
+                        else if (__gestureEventsProcessed.test(Gesture::GESTURE_SWIPE) &&
                             gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time < GESTURE_SWIPE_DURATION_MAX && 
                             (abs(deltaX) > GESTURE_SWIPE_DISTANCE_MIN || abs(deltaY) > GESTURE_SWIPE_DISTANCE_MIN) )
                         {
@@ -757,6 +773,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                             __pointer0.pressed = false;
                             gestureDetected = true;
                         }
+                        // Test for tap
                         else if(__gestureEventsProcessed.test(Gesture::GESTURE_TAP) &&
                                gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time < GESTURE_TAP_DURATION_MAX)
                         {
@@ -764,6 +781,14 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                             __pointer0.pressed = false;
                             gestureDetected = true;
                         }
+                        // Test for long tap
+                        else if(__gestureEventsProcessed.test(Gesture::GESTURE_LONG_TAP) &&
+                               gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time >= GESTURE_LONG_TAP_DURATION_MIN)
+                        {
+                            gameplay::Platform::gestureLongTapEventInternal(x, y, gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time);
+                            __pointer0.pressed = false;
+                            gestureDetected = true;
+                        }    
                     }
 
                     if (!gestureDetected && (__multiTouch || __primaryTouchId == pointerId) )
@@ -841,6 +866,13 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                             __pointer1.pressed = false;
                             gestureDetected = true;
                         }
+                        else if(__gestureEventsProcessed.test(Gesture::GESTURE_LONG_TAP) &&
+                               gameplay::Game::getInstance()->getAbsoluteTime() - __pointer1.time >= GESTURE_LONG_TAP_DURATION_MIN)
+                        {
+                            gameplay::Platform::gestureLongTapEventInternal(x, y, gameplay::Game::getInstance()->getAbsoluteTime() - __pointer1.time);
+                            __pointer1.pressed = false;
+                            gestureDetected = true;
+                        }    
                     }
 
                     if (!gestureDetected && (__multiTouch || __primaryTouchId == pointerId) )
@@ -859,7 +891,25 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                     for (size_t i = 0; i < pointerCount; ++i)
                     {
                         pointerId = AMotionEvent_getPointerId(event, i);
-                        if (__multiTouch || __primaryTouchId == pointerId)
+                        x = AMotionEvent_getX(event, i);
+                        y = AMotionEvent_getY(event, i);
+                        
+                        bool gestureDetected = false;
+                        if (__pointer0.pressed && __pointer0.pointerId == pointerId)
+                        {
+                            int deltaX = x - __pointer0.x;
+                            int deltaY = y - __pointer0.y;
+                            
+                            if (__gestureDraging == true || __gestureEventsProcessed.test(Gesture::GESTURE_DRAG) && 
+                                 gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time >= GESTURE_DRAG_START_DURATION_MIN &&
+                                abs(deltaX) >= GESTURE_DRAG_DISTANCE_MIN && abs(deltaY) >= GESTURE_DRAG_DISTANCE_MIN)
+                            {
+                                gameplay::Platform::gestureDragEventInternal(x, y);
+                                __gestureDraging = true;
+                                gestureDetected = true;
+                            }
+                        }
+                        if (!gestureDetected && (__multiTouch || __primaryTouchId == pointerId))
                         {
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, AMotionEvent_getX(event, i), AMotionEvent_getY(event, i), pointerId);
                         }
@@ -1342,7 +1392,8 @@ void Platform::shutdownInternal()
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
     // Pinch currently not implemented
-    return evt == gameplay::Gesture::GESTURE_SWIPE || evt == gameplay::Gesture::GESTURE_TAP;
+    return evt == gameplay::Gesture::GESTURE_SWIPE || evt == gameplay::Gesture::GESTURE_TAP || evt == gameplay::Gesture::GESTURE_LONG_TAP ||
+        evt == gameplay::Gesture::GESTURE_DRAG || evt == gameplay::Gesture::GESTURE_DROP;
 }
 
 void Platform::registerGesture(Gesture::GestureEvent evt)
@@ -1355,6 +1406,9 @@ void Platform::registerGesture(Gesture::GestureEvent evt)
 
     case Gesture::GESTURE_TAP:
     case Gesture::GESTURE_SWIPE:
+    case Gesture::GESTURE_LONG_TAP:
+    case Gesture::GESTURE_DRAG:
+    case Gesture::GESTURE_DROP:
         __gestureEventsProcessed.set(evt);
         break;
 
@@ -1373,6 +1427,9 @@ void Platform::unregisterGesture(Gesture::GestureEvent evt)
 
     case Gesture::GESTURE_TAP:
     case Gesture::GESTURE_SWIPE:
+    case Gesture::GESTURE_LONG_TAP:
+    case Gesture::GESTURE_DRAG:
+    case Gesture::GESTURE_DROP:
         __gestureEventsProcessed.set(evt, 0);
         break;
 
