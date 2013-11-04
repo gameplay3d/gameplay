@@ -27,7 +27,7 @@ material texturedUnlit
     }
 }
 
-material texturedSpecular
+material textured
 {
     technique
     {
@@ -35,12 +35,13 @@ material texturedSpecular
         {
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-			defines = DIRECTIONAL_LIGHT_COUNT 1;SPECULAR
+			defines = DIRECTIONAL_LIGHT_COUNT 1
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_worldViewMatrix = WORLD_VIEW_MATRIX
             u_cameraPosition = CAMERA_VIEW_POSITION
+            u_ambientColor = SCENE_AMBIENT_COLOR
             u_specularExponent = 50
 
             sampler u_diffuseTexture
@@ -283,7 +284,7 @@ material lightblue : colored
     }
 }
 
-material basketball : texturedSpecular
+material basketball : textured
 {
     technique
     {

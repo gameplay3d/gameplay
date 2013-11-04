@@ -33,6 +33,7 @@ void MeshGame::initialize()
     Node* lightNode = _scene->findNode("directionalLight1");
 
     // Bind the light node's direction into duck's material.
+    _modelNode->getModel()->getMaterial()->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
     _modelNode->getModel()->getMaterial()->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorView);
 
     // Update the aspect ratio for our scene's camera to match the current device resolution

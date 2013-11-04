@@ -32,6 +32,24 @@ public:
     };
 
     /**
+     * Listener interface for camera events.
+     */
+    class Listener
+    {
+    public:
+
+        virtual ~Listener() { }
+
+        /**
+         * Handles when an camera settings change or the transform changed for the node its attached to.
+         *
+         * @param transform The Transform object that was changed.
+         * @param cookie Cookie value that was specified when the listener was registered.
+         */
+        virtual void cameraChanged(Camera* camera) = 0;
+    };
+
+    /**
      * Creates a perspective camera.
      *
      * @param fieldOfView The field of view for the perspective camera (normally in the range of 40-60 degrees).
@@ -287,6 +305,20 @@ public:
      */
     void pickRay(const Rectangle& viewport, float x, float y, Ray* dst) const;
 
+    /**
+    * Adds a camera listener.
+    *
+    * @param listener The listener to add.
+    */
+    void addListener(Camera::Listener* listener);
+
+    /**
+     * Removes a camera listener.
+     *
+     * @param listener The listener to remove.
+     */
+    void removeListener(Camera::Listener* listener);
+
 private:
 
     /**
@@ -318,14 +350,19 @@ private:
     Camera* clone(NodeCloneContext &context) const;
 
     /**
+     * Sets the node associated with this camera.
+     */
+    void setNode(Node* node);
+
+    /**
      * @see Transform::Listener::transformChanged
      */
     void transformChanged(Transform* transform, long cookie);
 
     /**
-     * Sets the node associated with this camera.
+     *
      */
-    void setNode(Node* node);
+    void cameraChanged();
 
     Camera::Type _type;
     float _fieldOfView;
@@ -341,6 +378,7 @@ private:
     mutable Frustum _bounds;
     mutable int _bits;
     Node* _node;
+    std::list<Camera::Listener*>* _listeners;
 };
 
 }

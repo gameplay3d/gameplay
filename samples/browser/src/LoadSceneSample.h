@@ -31,6 +31,8 @@ protected:
 
 private:
 
+    bool initializeMaterials(Node* node);
+
     bool drawScene(Node* node);
 
     Font* _font;
