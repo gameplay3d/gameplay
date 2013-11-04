@@ -115,28 +115,6 @@ public:
     };
 
     /**
-     * Interface for various terrain-specific events that can be handled.
-     */
-    class Listener
-    {
-    public:
-
-        virtual ~Listener() { }
-
-        /**
-         * Fired when a material is updated for the terrain or a patch within it.
-         *
-         * This method can be handled to override material parameters for the terrain.
-         * Note that this method will usually be fired several times since there are
-         * normally separate materials defined per patch.
-         *
-         * @param terrain The terrain firing the event.
-         * @param material The new material.
-         */
-        virtual void materialUpdated(Terrain* terrain, Material* material) = 0;
-    };
-
-    /**
      * Loads a Terrain from the given properties file.
      *
      * The specified properties file can contain a full terrain definition, including a 
@@ -190,47 +168,6 @@ public:
                            unsigned int detailLevels = 1, float skirtScale = 0.0f, const char* normalMapPath = NULL);
 
     /**
-     * Sets the detail textures information for a terrain layer.
-     *
-     * A detail layer includes a color texture, a repeat count across the terrain for the texture and
-     * a region of the texture to use.
-     *
-     * Optionally, a layer can also include a blend texture, which is used to instruct the terrain how
-     * to blend the new layer with the layer underneath it. Blend maps use only a single channel of a 
-     * texture and are best supplied by packing the blend map for a layer into the alpha channel of
-     * the color texture. Blend maps are always stretched over the entire terrain 
-     *
-     * The lowest/base layer of the terrain should not include a blend map, since there is no lower
-     * level to blend with. All other layers should normally include a blend map. However, since no
-     * blend map will result in the texture completely masking the layer underneath it.
-     *
-     * Detail layers can be applied globally (to the entire terrain), or to one or more specific
-     * patches in the terrain. Patches are specified by row and column number, which is dependent
-     * on the patch size configuration of your terrain. For layers that span the entire terrain, 
-     * the repeat count is relative to the entire terrain. For layers that span only specific
-     * patches, the repeat count is relative to those patches only.
-     *
-     * @param index Layer index number. Layer indexes do not neccessarily need to be sequential and
-     *      are used simply to uinquely identify layers, where higher numbers specificy higher-level
-     *      layers.
-     * @param texturePath Path to the color texture for this layer.
-     * @param textureRepeat Repeat count for the color texture across the terrain or patches.
-     * @param blendPath Path to the blend texture for this layer (optional).
-     * @param blendChannel Channel of the blend texture to sample for the blend map (0 == R, 1 == G, 2 == B, 3 == A).
-     * @param row Specifies the row index of patches to use this layer (optional, -1 means all rows).
-     * @param column Specifies the column index of patches to use this layer (optional, -1 means all columns).
-     *
-     * @return True if the layer was successfully set, false otherwise. The most common reason for failure is an
-     *      invalid texture path.
-     *
-     * @script{ignore}
-     */
-    bool setLayer(int index,
-                  const char* texturePath, const Vector2& textureRepeat = Vector2::one(),
-                  const char* blendPath = NULL, int blendChannel = 0, 
-                  int row = -1, int column = -1);
-
-    /**
      * Returns the node that this terrain is bound to.
      *
      * @return The node this terrain is bound to, or NULL if the terrain is not bound to a node.
@@ -251,50 +188,26 @@ public:
     void setFlag(Flags flag, bool on);
 
     /**
-     * Returns the total number of terrain patches.
+     * Gets the total number of terrain patches.
      *
      * @return The number of terrain patches.
      */
     unsigned int getPatchCount() const;
 
     /**
-     * Returns the number of patches that are currently visible from the scene camera's point of view.
-     *
-     * If the terrain is not attached to a scene, or if there is no active scene camera, this method
-     * returns zero.
-     *
-     * This method is not exact - it may return false positives since it only determines if the
-     * bounding box of terrain patches intersect the view frustum. Should be used for debug 
-     * purposes only.
-     *
-     * @return The number of currently visible patches.
+     * Gets a terrain patch
      */
-    unsigned int getVisiblePatchCount() const;
+    TerrainPatch* getPatch(unsigned int index) const;
 
     /**
-     * Returns the total number of triangles for this terrain at the base LOD.
-     *
-     * @return The total triangle count for the terrain at the base LOD.
-     */
-    unsigned int getTriangleCount() const;
-
-    /**
-     * Returns the number of currently visible triangles, taking LOD and view frustum
-     * (if enabled) into consideration.
-     *
-     * @return The current visible triangle count.
-     */
-    unsigned int getVisibleTriangleCount() const;
-
-    /**
-     * Returns the local bounding box for this terrain.
+     * Gets the local bounding box for this terrain.
      *
      * @return The local bounding box for the terrain.
      */
     const BoundingBox& getBoundingBox() const;
 
     /**
-     * Returns the world-space height of the terrain at the specified position on the X,Z plane.
+     * Gets the world-space height of the terrain at the specified position on the X,Z plane.
      *
      * The specified X and Z coordinates should be in world units and may fall between height values.
      * In this case, an interpolated value will be returned between neighboring heightfield heights.
@@ -311,67 +224,50 @@ public:
      * Draws the terrain.
      *
      * @param wireframe True to draw the terrain as wireframe, false to draw it solid (default).
-     * @return The number of draw call taken to drawn the terrain
+     * @return The number of draw calls taken to drawn the terrain
      */
     unsigned int draw(bool wireframe = false);
 
     /**
-     * @see Transform::Listener::transformChanged.
-     *
-     * Internal use only.
-     *
-     * @script{ignore}
-     */
-    void transformChanged(Transform* transform, long cookie);
-
-    /**
-     * Adds a listener to this terrain.
-     *
-     * @param listener Listener to start receiving terrain events.
-     */
-    void addListener(Terrain::Listener* listener);
-
-    /**
-     * Removes a listener from this terrain.
-     *
-     * @param listener Listener to stop receiving terrain events.
-     */
-    void removeListener(Terrain::Listener* listener);
-
-    /**
-     * Returns the world matrix of the terrain, factoring in terrain local scaling.
-     *
-     * @return The world matrix for the terrain.
-     */
-    const Matrix& getWorldMatrix() const;
-
-    /**
-     * Returns the terrain's inverse world matrix.
-     *
-     * @return The inverse world matrix for the terrain.
-     */
-    const Matrix& getInverseWorldMatrix() const;
-
-    /**
-     * Returns a matrix to be used for transforming normal vectors for the terrain.
-     *
-     * @return The matrix used for normal vector transformation for the terrain.
-     */
-    const Matrix& getNormalMatrix() const;
-
-    /**
-     * Returns the world view matrix for the terrain, factoring in terrain local scaling.
-     *
-     * @return The world-view matrix for the terrain.
-     */
-    const Matrix& getWorldViewMatrix() const;
-
-    /**
-     * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
-     *
-     * @return The world-view-projection matrix for the terrain.
-     */
-    const Matrix& getWorldViewProjectionMatrix() const;
+    * Sets the detail textures information for a terrain layer.
+    *
+    * A detail layer includes a color texture, a repeat count across the terrain for the texture and
+    * a region of the texture to use.
+    *
+    * Optionally, a layer can also include a blend texture, which is used to instruct the terrain how
+    * to blend the new layer with the layer underneath it. Blend maps use only a single channel of a
+    * texture and are best supplied by packing the blend map for a layer into the alpha channel of
+    * the color texture. Blend maps are always stretched over the entire terrain
+    *
+    * The lowest/base layer of the terrain should not include a blend map, since there is no lower
+    * level to blend with. All other layers should normally include a blend map. However, since no
+    * blend map will result in the texture completely masking the layer underneath it.
+    *
+    * Detail layers can be applied globally (to the entire terrain), or to one or more specific
+    * patches in the terrain. Patches are specified by row and column number, which is dependent
+    * on the patch size configuration of your terrain. For layers that span the entire terrain,
+    * the repeat count is relative to the entire terrain. For layers that span only specific
+    * patches, the repeat count is relative to those patches only.
+    *
+    * @param index Layer index number. Layer indexes do not neccessarily need to be sequential and
+    *      are used simply to uinquely identify layers, where higher numbers specificy higher-level
+    *      layers.
+    * @param texturePath Path to the color texture for this layer.
+    * @param textureRepeat Repeat count for the color texture across the terrain or patches.
+    * @param blendPath Path to the blend texture for this layer (optional).
+    * @param blendChannel Channel of the blend texture to sample for the blend map (0 == R, 1 == G, 2 == B, 3 == A).
+    * @param row Specifies the row index of patches to use this layer (optional, -1 means all rows).
+    * @param column Specifies the column index of patches to use this layer (optional, -1 means all columns).
+    *
+    * @return True if the layer was successfully set, false otherwise. The most common reason for failure is an
+    *      invalid texture path.
+    *
+    * @script{ignore}
+    */
+    bool setLayer(int index,
+        const char* texturePath, const Vector2& textureRepeat = Vector2::one(),
+        const char* blendPath = NULL, int blendChannel = 0,
+        int row = -1, int column = -1);
 
 private:
 
@@ -410,6 +306,55 @@ private:
      */
     void setNode(Node* node);
 
+    /**
+    * @see Transform::Listener::transformChanged.
+    *
+    * Internal use only.
+    *
+    * @script{ignore}
+    */
+    void transformChanged(Transform* transform, long cookie);
+
+    /**
+    * Returns the world matrix of the terrain, factoring in terrain local scaling.
+    *
+    * @return The world matrix for the terrain.
+    */
+    const Matrix& getWorldMatrix() const;
+
+    /**
+    * Returns the terrain's inverse world matrix.
+    *
+    * @return The inverse world matrix for the terrain.
+    */
+    const Matrix& getInverseWorldMatrix() const;
+
+    /**
+    * Returns a matrix to be used for transforming normal vectors for the terrain.
+    *
+    * @return The matrix used for normal vector transformation for the terrain.
+    */
+    const Matrix& getNormalMatrix() const;
+
+    /**
+    * Returns the world view matrix for the terrain, factoring in terrain local scaling.
+    *
+    * @return The world-view matrix for the terrain.
+    */
+    const Matrix& getWorldViewMatrix() const;
+
+    /**
+    * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
+    *
+    * @return The world-view-projection matrix for the terrain.
+    */
+    const Matrix& getWorldViewProjectionMatrix() const;
+
+    /**
+     * Returns the local bounding box for this patch, at the base LOD level.
+     */
+    BoundingBox getBoundingBox(bool worldSpace) const;
+
     HeightField* _heightfield;
     Node* _node;
     std::vector<TerrainPatch*> _patches;
@@ -421,7 +366,9 @@ private:
     mutable Matrix _normalMatrix;
     mutable unsigned int _dirtyFlags;
     BoundingBox _boundingBox;
-    std::vector<Terrain::Listener*> _listeners;
+    unsigned int _directionalLightCount;
+    unsigned int _pointLightCount;
+    unsigned int _spotLightCount;
 };
 
 }

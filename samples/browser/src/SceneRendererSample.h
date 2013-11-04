@@ -25,6 +25,8 @@ protected:
 
 private:
 
+    bool initializeMaterials(Node* node);
+
     Font* _font;
     Scene* _scene;
     VisibleSet* _visibleSet;

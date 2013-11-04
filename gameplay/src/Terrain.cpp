@@ -32,22 +32,17 @@ float getDefaultHeight(unsigned int width, unsigned int height);
 
 Terrain::Terrain() :
     _heightfield(NULL), _node(NULL), _normalMap(NULL), _flags(FRUSTUM_CULLING | LEVEL_OF_DETAIL),
-    _dirtyFlags(TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX)
+    _dirtyFlags(TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX),
+    _directionalLightCount(0), _pointLightCount(0), _spotLightCount(0)
 {
 }
 
 Terrain::~Terrain()
 {
-    _listeners.clear();
-
     for (size_t i = 0, count = _patches.size(); i < count; ++i)
     {
         SAFE_DELETE(_patches[i]);
     }
-
-    if (_node)
-        _node->removeListener(this);
-
     SAFE_RELEASE(_normalMap);
     SAFE_RELEASE(_heightfield);
 }
@@ -74,6 +69,9 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     int detailLevels = 1;
     float skirtScale = 0;
     const char* normalMap = NULL;
+    unsigned int directionalLightCount = 0;
+    unsigned int pointLightCount = 0;
+    unsigned int spotLightCount = 0;
 
     if (!p && path)
     {
@@ -230,6 +228,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     // Create terrain
     Terrain* terrain = create(heightfield, scale, (unsigned int)patchSize, (unsigned int)detailLevels, skirtScale, normalMap, pTerrain);
 
+
     if (!externalProperties)
         SAFE_DELETE(p);
 
@@ -262,6 +261,14 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
     float halfWidth = (width - 1) * 0.5f;
     float halfHeight = (height - 1) * 0.5f;
     unsigned int maxStep = (unsigned int)std::pow(2.0, (double)(detailLevels-1));
+
+    Properties* lightingProps = properties->getNamespace("lighting", true);
+    if (lightingProps)
+    {
+        terrain->_directionalLightCount = lightingProps->getInt("directionalLights");
+        terrain->_pointLightCount = lightingProps->getInt("pointLights");
+        terrain->_spotLightCount = lightingProps->getInt("spotLights");
+    }
 
     // Create terrain patches
     unsigned int x1, x2, z1, z2;
@@ -437,7 +444,7 @@ void Terrain::setFlag(Flags flag, bool on)
     {
         // Dirty all materials since they need to be updated to support debug drawing
         for (size_t i = 0, count = _patches.size(); i < count; ++i)
-            _patches[i]->_materialDirty = true;
+            _patches[i]->setMaterialDirty();
     }
 }
 
@@ -446,35 +453,9 @@ unsigned int Terrain::getPatchCount() const
     return _patches.size();
 }
 
-unsigned int Terrain::getVisiblePatchCount() const
+TerrainPatch* Terrain::getPatch(unsigned int index) const
 {
-    unsigned int visibleCount = 0;
-    for (size_t i = 0, count = _patches.size(); i < count; ++i)
-    {
-        if (_patches[i]->isVisible())
-            ++visibleCount;
-    }
-    return visibleCount;
-}
-
-unsigned int Terrain::getTriangleCount() const
-{
-    unsigned int triangleCount = 0;
-    for (size_t i = 0, count = _patches.size(); i < count; ++i)
-    {
-        triangleCount += _patches[i]->getTriangleCount();
-    }
-    return triangleCount;
-}
-
-unsigned int Terrain::getVisibleTriangleCount() const
-{
-    unsigned int triangleCount = 0;
-    for (size_t i = 0, count = _patches.size(); i < count; ++i)
-    {
-        triangleCount += _patches[i]->getVisibleTriangleCount();
-    }
-    return triangleCount;
+    return _patches[index];
 }
 
 const BoundingBox& Terrain::getBoundingBox() const
@@ -511,47 +492,17 @@ float Terrain::getHeight(float x, float z) const
 
 unsigned int Terrain::draw(bool wireframe)
 {
+    size_t visibleCount = 0;
     for (size_t i = 0, count = _patches.size(); i < count; ++i)
     {
-        _patches[i]->draw(wireframe);
+        visibleCount += _patches[i]->draw(wireframe);
     }
-    return getVisiblePatchCount();
+    return visibleCount;
 }
 
 void Terrain::transformChanged(Transform* transform, long cookie)
 {
     _dirtyFlags |= TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX;
-}
-
-void Terrain::addListener(Terrain::Listener* listener)
-{
-    _listeners.push_back(listener);
-
-    // Fire initial events in case this listener may have missed them
-    for (size_t i = 0, patchCount = _patches.size(); i < patchCount; ++i)
-    {
-        TerrainPatch* patch = _patches[i];
-        for (size_t j = 0, levelCount = patch->_levels.size(); j < levelCount; ++j)
-        {
-            TerrainPatch::Level* level = patch->_levels[j];
-            Material* material = level->model ? level->model->getMaterial() : NULL;
-            if (material)
-            {
-                // Fire materialUpdated event for materials that are already active
-                for (size_t k = 0, lcount = _listeners.size(); k < lcount; ++k)
-                {
-                    _listeners[k]->materialUpdated(this, material);
-                }
-            }
-        }
-    }
-}
-
-void Terrain::removeListener(Terrain::Listener* listener)
-{
-    std::vector<Terrain::Listener*>::iterator itr = std::find(_listeners.begin(), _listeners.end(), listener);
-    if (itr != _listeners.end())
-        _listeners.erase(itr);
 }
 
 const Matrix& Terrain::getWorldMatrix() const

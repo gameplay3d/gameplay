@@ -19,6 +19,25 @@ void SceneRendererSample::initialize()
     _renderer = SceneRendererForward::create();
 
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
+
+    // TODO: Remove this automatically Do this in the forward renderer
+    _scene->visit(this, &SceneRendererSample::initializeMaterials);
+}
+
+bool SceneRendererSample::initializeMaterials(Node* node)
+{
+    // TODO: Remove this automatically Do this in the forward renderer
+    Model* model = node->getModel();
+    if (model)
+    {
+        Material* material = model->getMaterial();
+        // For this sample we will only bind a single light to each object in the scene.
+        MaterialParameter* colorParam = material->getParameter("u_directionalLightColor[0]");
+        colorParam->setValue(Vector3(0.75f, 0.75f, 0.75f));
+        MaterialParameter* directionParam = material->getParameter("u_directionalLightDirection[0]");
+        directionParam->setValue(Vector3(0, -1, 0));
+    }
+    return true;
 }
 
 void SceneRendererSample::finalize()

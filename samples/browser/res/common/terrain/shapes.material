@@ -3,8 +3,6 @@ material textured
     u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
     u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
     u_ambientColor = SCENE_AMBIENT_COLOR
-    u_directionalLightColor[0] = 0.75, 0.75, 0.75
-    u_directionalLightDirection[0] = 0, -1, 0
 
     sampler u_diffuseTexture
     {
