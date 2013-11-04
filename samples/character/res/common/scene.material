@@ -41,6 +41,7 @@ material textured
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_worldViewMatrix = WORLD_VIEW_MATRIX
             u_cameraPosition = CAMERA_VIEW_POSITION
+            u_ambientColor = SCENE_AMBIENT_COLOR
             u_specularExponent = 50
 
             sampler u_diffuseTexture
