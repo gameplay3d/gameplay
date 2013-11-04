@@ -127,33 +127,60 @@ public:
       */
      void replyToChallenge(const SocialChallenge *challenge, bool accept);
 
-     /**
-      * @see SocialSession::requestSavedData
-      */
-     void loadSavedData(const char* key);
-
-     /**
-      * @see SocialSession::submitSavedData
-      */
-     void submitSavedData(const char* key, std::string data);
-
-     void displayLeaderboard(const char* leaderboardId) const;
-
-     void displayAchievements() const;
-
-     void displayChallenges() const;
-
-     void displayChallengeSubmit(const SocialChallenge *challenge, float score) const;
-
-     void displayPopup(const char *string) const;
-
-     bool supportsChallenges() const { return true; }
-
-     bool supportsAchievementChallenges() const { return true; }
-
-     bool supportsMultiplayer() const { return false; }
-
-     bool supportsTurns() const { return false; }
+    /**
+     * @see SocialSession::requestSavedData
+     */
+    void loadSavedData(const char* key);
+    
+    /**
+     * @see SocialSession::submitSavedData
+     */
+    void submitSavedData(const char* key, std::string data);
+    
+    /**
+     * @see SocialSession::displayLeaderboard
+     */
+    void displayLeaderboard(const char* leaderboardId) const;
+    
+    /**
+     * @see SocialSession::displayAchievements
+     */
+    void displayAchievements() const;
+    
+    /**
+     * @see SocialSession::displayChallenges
+     */
+    void displayChallenges() const;
+    
+    /**
+     * @see SocialSession::displayChallengeSubmit
+     */
+    void displayChallengeSubmit(const SocialChallenge *challenge, float score) const;
+    
+    /**
+     * @see SocialSession::displayPopup
+     */
+    void displayPopup(const char *string, const char *title) const;
+    
+    /**
+     * @see SocialSession::supportsChallenges
+     */
+    bool supportsChallenges() const { return true; }
+    
+    /**
+     * @see SocialSession::supportsAchievementChallenges
+     */
+    bool supportsAchievementChallenges() const { return false; }
+    
+    /**
+     * @see SocialSession::supportsMultiplayer
+     */
+    bool supportsMultiplayer() const { return false; }
+    
+    /**
+     * @see SocialSession::supportsTurns
+     */
+    bool supportsTurns() const { return false; }
 
 
 protected:

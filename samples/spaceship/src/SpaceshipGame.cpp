@@ -615,7 +615,7 @@ void SpaceshipGame::controlEvent(Control* control, EventType evt)
 			else if (_socialSession && strcmp(control->getId(), "leaderboard") == 0)
 			{
 				// Display the leaderboard.
-				_socialSession->displayLeaderboard("leaderboard");
+				_socialSession->displayLeaderboard(leaderboardName);
 			}
 			else if (_socialSession && strcmp(control->getId(), "achievements") == 0)
 			{
@@ -700,29 +700,29 @@ void SpaceshipGame::updateAchievements(double time)
 	if (_socialSession)
 	{
 		// increase the game count awards
-		_socialSession->incrementAchievement("rim.spaceship.firsttime", 1);
-		_socialSession->incrementAchievement("rim.spaceship.tentimes", 10);
-		_socialSession->incrementAchievement("rim.spaceship.fiftytimes", 50);
-		_socialSession->incrementAchievement("rim.spaceship.hundredtimes", 100);
+		_socialSession->incrementAchievement("gameplay.spaceship.firsttime", 1);
+		_socialSession->incrementAchievement("gameplay.spaceship.tentimes", 10);
+		_socialSession->incrementAchievement("gameplay.spaceship.fiftytimes", 50);
+		_socialSession->incrementAchievement("gameplay.spaceship.hundredtimes", 100);
 
 		// clean run award
 		if (!_hitSomething)
-			_socialSession->submitAchievement("rim.spaceship.cleanrun", 100, true);
+			_socialSession->submitAchievement("gameplay.spaceship.cleanrun", 100, true);
 
 		if (time < 16)
-			_socialSession->submitAchievement("rim.spaceship.under16", 100, true);
+			_socialSession->submitAchievement("gameplay.spaceship.under16", 100, true);
 
 		if (time < 17)
-			_socialSession->submitAchievement("rim.spaceship.under17", 100, true);
+			_socialSession->submitAchievement("gameplay.spaceship.under17", 100, true);
 
 		if (time < 20)
-			_socialSession->submitAchievement("rim.spaceship.under20", 100, true);
+			_socialSession->submitAchievement("gameplay.spaceship.under20", 100, true);
 
         if (_createdChallenge)
-            _socialSession->submitAchievement("rim.spaceship.challenge", 100, true);
+            _socialSession->submitAchievement("gameplay.spaceship.challenge", 100, true);
 
         if (_wonChallenge)
-            _socialSession->submitAchievement("rim.spaceship.winchallenge", 100, true);
+            _socialSession->submitAchievement("gameplay.spaceship.winchallenge", 100, true);
 
 		_socialSession->synchronizeAchievements();
 	}
@@ -793,7 +793,7 @@ void SpaceshipGame::loadAchievementsEvent(ResponseCode code, std::vector<SocialA
 	{
 		for (unsigned int i = 0 ; i < achievements.size(); i++)
 		{
-			fprintf(stderr, "Achievement %d is %s\n", i, achievements[i].name.data());
+			fprintf(stderr, "Achievement %d is %s complete %lf\n", i, achievements[i].name.data(), achievements[i].percentCompleted);
 		}
 	}
 	else
@@ -827,7 +827,7 @@ void SpaceshipGame::loadScoresEvent(ResponseCode code, std::vector<SocialScore> 
 
 	if (code == SUCCESS)
 	{
-        for (uint i = 0 ; i < scores.size(); i++)
+        for (int i = 0 ; i < scores.size(); i++)
 		{
 			fprintf(stderr, "Score %d for %s is %lf\n", i, scores[i].playerName.data(), scores[i].value);
 		}
@@ -840,7 +840,7 @@ void SpaceshipGame::loadScoresEvent(ResponseCode code, std::vector<SocialScore> 
 
 void SpaceshipGame::submitScoreEvent(ResponseCode code)
 {
-	_socialSession->loadScores("leaderboard", SocialSession::COMMUNITY_SCOPE_ALL, SocialSession::TIME_SCOPE_ALL, 1, 20);
+	_socialSession->loadScores(leaderboardName, SocialSession::COMMUNITY_SCOPE_ALL, SocialSession::TIME_SCOPE_ALL, 1, 20);
 
 //    _socialSession->submitChallenge(getPlayer("Player1"), _time, "leaderboard");
 

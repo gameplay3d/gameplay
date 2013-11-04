@@ -158,7 +158,7 @@ public:
     /**
      * @see SocialSession::displayPopup
      */
-    void displayPopup(const char *string) const;
+    void displayPopup(const char *string, const char *title) const;
 
     /**
      * @see SocialSession::supportsChallenges
