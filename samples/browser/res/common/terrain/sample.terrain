@@ -13,6 +13,13 @@ terrain
 
     normalMap = res/common/terrain/normalmap.dds
 
+    lighting
+    {
+        directionalLights = 1
+        pointLights = 0
+        spotLights = 0
+    }
+
 	layer rock
 	{
 		texture

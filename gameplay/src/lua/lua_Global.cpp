@@ -24,6 +24,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "CheckBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "RadioButton");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Camera::Listener", "TerrainPatch");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Container", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "CheckBox");

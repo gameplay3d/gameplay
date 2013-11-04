@@ -22,8 +22,13 @@ float calculateHeight(float* heights, unsigned int width, unsigned int height, u
  */
 template <class T> T clamp(T value, T min, T max) { return value < min ? min : (value > max ? max : value); }
 
+#define TERRAINPATCH_DIRTY_MATERIAL 1
+#define TERRAINPATCH_DIRTY_BOUNDS 2
+#define TERRAINPATCH_DIRTY_LEVEL 4
+#define TERRAINPATCH_DIRTY_ALL (TERRAINPATCH_DIRTY_MATERIAL | TERRAINPATCH_DIRTY_BOUNDS | TERRAINPATCH_DIRTY_LEVEL)
+
 TerrainPatch::TerrainPatch() :
-    _terrain(NULL), _row(0), _column(0), _materialDirty(true)
+_terrain(NULL), _row(0), _column(0), _camera(NULL), _level(0), _bits(TERRAINPATCH_DIRTY_ALL)
 {
 }
 
@@ -44,11 +49,11 @@ TerrainPatch::~TerrainPatch()
 }
 
 TerrainPatch* TerrainPatch::create(Terrain* terrain,
-    unsigned int row, unsigned int column,
-    float* heights, unsigned int width, unsigned int height,
-    unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
-    float xOffset, float zOffset,
-    unsigned int maxStep, float verticalSkirtSize)
+                                   unsigned int row, unsigned int column,
+                                   float* heights, unsigned int width, unsigned int height,
+                                   unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
+                                   float xOffset, float zOffset,
+                                   unsigned int maxStep, float verticalSkirtSize)
 {
     // Create patch
     TerrainPatch* patch = new TerrainPatch();
@@ -73,14 +78,37 @@ TerrainPatch* TerrainPatch::create(Terrain* terrain,
         bounds.min.set(bounds.min.x * localScale.x, bounds.min.y * localScale.y, bounds.min.z * localScale.z);
         bounds.max.set(bounds.max.x * localScale.x, bounds.max.y * localScale.y, bounds.max.z * localScale.z);
     }
-
     return patch;
 }
 
+unsigned int TerrainPatch::getMaterialCount() const
+{
+    return _levels.size();
+}
+
+Material* TerrainPatch::getMaterial(int index) const
+{
+    if (index == -1)
+    {
+        Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
+        Camera* camera = scene ? scene->getActiveCamera() : NULL;
+        if (!camera)
+        {
+            _level = const_cast<TerrainPatch*>(this)->computeLOD(camera, getBoundingBox(true));
+        }
+        else
+        {
+            _level = 0;
+        }
+        return _levels[_level]->model->getMaterial();
+    }
+    return _levels[index]->model->getMaterial();
+}
+
 void TerrainPatch::addLOD(float* heights, unsigned int width, unsigned int height,
-    unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
-    float xOffset, float zOffset,
-    unsigned int step, float verticalSkirtSize)
+                          unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
+                          float xOffset, float zOffset,
+                          unsigned int step, float verticalSkirtSize)
 {
     // Allocate vertex data for this patch
     unsigned int patchWidth;
@@ -426,17 +454,17 @@ bool TerrainPatch::setLayer(int index, const char* texturePath, const Vector2& t
 
     _layers.insert(layer);
 
-    _materialDirty = true;
+    _bits |= TERRAINPATCH_DIRTY_MATERIAL;
 
     return true;
 }
 
 bool TerrainPatch::updateMaterial()
 {
-    if (!_materialDirty)
+    if (!(_bits & TERRAINPATCH_DIRTY_MATERIAL))
         return true;
 
-    _materialDirty = false;
+    _bits &= ~TERRAINPATCH_DIRTY_MATERIAL;
 
     for (size_t i = 0, count = _levels.size(); i < count; ++i)
     {
@@ -447,6 +475,7 @@ bool TerrainPatch::updateMaterial()
         std::ostringstream defines;
         defines << "LAYER_COUNT " << _layers.size();
         defines << ";SAMPLER_COUNT " << _samplers.size();
+        
         if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
             defines << ";DEBUG_PATCHES";
         if (_terrain->_normalMap)
@@ -474,23 +503,25 @@ bool TerrainPatch::updateMaterial()
             }
         }
 
+        if (_terrain->_directionalLightCount > 0)
+            defines << ";DIRECTIONAL_LIGHT_COUNT " << _terrain->_directionalLightCount;
+        if (_terrain->_pointLightCount > 0)
+            defines << ";POINT_LIGHT_COUNT " << _terrain->_pointLightCount;
+        if (_terrain->_spotLightCount > 0)
+            defines << ";SPOT_LIGHT_COUNT " << _terrain->_spotLightCount;
+
         Material* material = Material::create(TERRAIN_VSH, TERRAIN_FSH, defines.str().c_str());
         if (!material)
             return false;
+
         material->getStateBlock()->setCullFace(true);
         material->getStateBlock()->setDepthTest(true);
 
         // Set material parameter bindings
         material->getParameter("u_worldViewProjectionMatrix")->bindValue(_terrain, &Terrain::getWorldViewProjectionMatrix);
-        if (_terrain->_normalMap)
-            material->getParameter("u_normalMap")->setValue(_terrain->_normalMap);
-        else
-            material->getParameter("u_normalMatrix")->bindValue(_terrain, &Terrain::getNormalMatrix);
-        material->getParameter("u_ambientColor")->bindValue(this, &TerrainPatch::getAmbientColor);
-        material->getParameter("u_lightColor")->setValue(Vector3::one());
-        material->getParameter("u_lightDirection")->setValue(Vector3(0, -1, 0));
+
         if (_layers.size() > 0)
-            material->getParameter("u_samplers")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
+            material->getParameter("u_surfaceLayerMaps")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
 
         if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
         {
@@ -498,10 +529,13 @@ bool TerrainPatch::updateMaterial()
             material->getParameter("u_column")->setValue((float)_column);
         }
 
-        // Fire terrain listeners
-        for (size_t j = 0, lcount = _terrain->_listeners.size(); j < lcount; ++j)
+        if (_terrain->_directionalLightCount > 0 || _terrain->_pointLightCount > 0 || _terrain->_spotLightCount > 0)
         {
-            _terrain->_listeners[j]->materialUpdated(_terrain, material);
+            material->getParameter("u_ambientColor")->bindValue(this, &TerrainPatch::getAmbientColor);
+            if (_terrain->_normalMap)
+                material->getParameter("u_normalMap")->setValue(_terrain->_normalMap);
+            else
+                material->getParameter("u_normalMatrix")->bindValue(_terrain, &Terrain::getNormalMatrix);
         }
 
         // Set material on this lod level
@@ -531,84 +565,65 @@ unsigned int TerrainPatch::draw(bool wireframe)
         return 0;
 
     // Compute the LOD level from the camera's perspective
-    size_t lod = computeLOD(camera, bounds);
+    _level = computeLOD(camera, bounds);
 
     // Draw the model for the current LOD
-    return _levels[lod]->model->draw(wireframe);
+    return _levels[_level]->model->draw(wireframe);
 }
 
-bool TerrainPatch::isVisible() const
-{
-    // If frustum culling is disabled, assume the patch is always visible
-    if ((_terrain->_flags & Terrain::FRUSTUM_CULLING) == 0)
-        return true;
-
-    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
-    Camera* camera = scene ? scene->getActiveCamera() : NULL;
-    if (!camera)
-        return false;
-
-    // Does the current camera view frustum intersect our world bounds?
-    return camera->getFrustum().intersects(getBoundingBox(true));
-}
-
-unsigned int TerrainPatch::getTriangleCount() const
-{
-    // Patches are made up of a single mesh part using triangle strips
-    return _levels[0]->model->getMesh()->getPart(0)->getIndexCount() - 2;
-}
-
-unsigned int TerrainPatch::getVisibleTriangleCount() const
-{
-    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
-    Camera* camera = scene ? scene->getActiveCamera() : NULL;
-    if (!camera)
-        return 0;
-
-    // Does the current camera intersect this patch at all?
-    BoundingBox bounds = getBoundingBox(true);
-    if (_terrain->_flags & Terrain::FRUSTUM_CULLING)
-    {
-        if (!camera->getFrustum().intersects(bounds))
-            return 0;
-    }
-
-    // Return the triangle count of the LOD level depending on the camera
-    size_t lod = computeLOD(camera, bounds);
-    return _levels[lod]->model->getMesh()->getPart(0)->getIndexCount() - 2;
-}
-
-BoundingBox TerrainPatch::getBoundingBox(bool worldSpace) const
+const BoundingBox& TerrainPatch::getBoundingBox(bool worldSpace) const
 {
     if (!worldSpace)
         return _boundingBox;
 
+    if (!(_bits & TERRAINPATCH_DIRTY_BOUNDS))
+        return _boundingBoxWorld;
+
+    _bits &= ~TERRAINPATCH_DIRTY_BOUNDS;
+
     // Apply a world-space transformation to our bounding box
-    BoundingBox bounds(_boundingBox);
+    _boundingBoxWorld.set(_boundingBox);
 
     // Transform the bounding box by the terrain node's world transform.
     // We don't use Terrain::getWorldMatrix because that returns a matrix
     // that has terrain->_localScale factored in - and our patche's bounding
     // box already has local scale factored in.
     if (_terrain->_node)
-        bounds.transform(_terrain->_node->getWorldMatrix());
+        _boundingBoxWorld.transform(_terrain->_node->getWorldMatrix());
 
-    return bounds;
+    return _boundingBoxWorld;
 }
 
-const Vector3& TerrainPatch::getAmbientColor() const
+void TerrainPatch::cameraChanged(Camera* camera)
 {
-    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
-    return scene ? scene->getAmbientColor() : Vector3::zero();
+    _bits |= TERRAINPATCH_DIRTY_LEVEL;
 }
 
-size_t TerrainPatch::computeLOD(Camera* camera, const BoundingBox& worldBounds) const
+unsigned int TerrainPatch::computeLOD(Camera* camera, const BoundingBox& worldBounds) 
 {
+    if (camera != _camera)
+    {
+        if (_camera != NULL)
+        {
+            _camera->removeListener(this);
+            _camera->release();
+        }
+        _camera = camera;
+        _camera->addRef();
+        _camera->addListener(this);
+        _bits |= TERRAINPATCH_DIRTY_LEVEL;
+    }
+
+    // base level
     if (!_terrain->isFlagSet(Terrain::LEVEL_OF_DETAIL) || _levels.size() == 0)
-        return 0; // base level
+        return 0;
 
-    // Compute LOD to use based on very simple distance metric.
-    // TODO: Optimize this.
+    if (!(_bits & TERRAINPATCH_DIRTY_LEVEL))
+        return _level;
+
+    _bits &= ~TERRAINPATCH_DIRTY_LEVEL;
+
+    // Compute LOD to use based on very simple distance metric. TODO: Optimize me.
     Game* game = Game::getInstance();
     Rectangle vp(0, 0, game->getWidth(), game->getHeight());
     Vector3 corners[8];
@@ -638,7 +653,20 @@ size_t TerrainPatch::computeLOD(Camera* camera, const BoundingBox& worldBounds) 
     size_t lod = (size_t)error;
     lod = std::max(lod, (size_t)0);
     lod = std::min(lod, maxLod);
-    return lod;
+    _level = lod;
+
+    return _level;
+}
+
+const Vector3& TerrainPatch::getAmbientColor() const
+{
+    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
+    return scene ? scene->getAmbientColor() : Vector3::zero();
+}
+
+void TerrainPatch::setMaterialDirty()
+{
+    _bits |= TERRAINPATCH_DIRTY_MATERIAL;
 }
 
 float calculateHeight(float* heights, unsigned int width, unsigned int height, unsigned int x, unsigned int z)
