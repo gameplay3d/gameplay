@@ -1225,6 +1225,12 @@
 		5B2BC7601512514500D176CD /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75E1512514500D176CD /* OpenGL.framework */; };
 		5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7611512514D00D176CD /* QuartzCore.framework */; };
 		5B2BC7641512516B00D176CD /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7631512516B00D176CD /* libz.dylib */; };
+		6290E04518223C4A00A28FB9 /* GameCenterSocialSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 6290E04318223C4A00A28FB9 /* GameCenterSocialSession.h */; };
+		6290E04618223C4A00A28FB9 /* GameCenterSocialSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 6290E04318223C4A00A28FB9 /* GameCenterSocialSession.h */; };
+		6290E04718223C4A00A28FB9 /* GameCenterSocialSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6290E04418223C4A00A28FB9 /* GameCenterSocialSession.mm */; };
+		6290E04818223C4A00A28FB9 /* GameCenterSocialSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6290E04418223C4A00A28FB9 /* GameCenterSocialSession.mm */; };
+		6290E04A18223DCC00A28FB9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6290E04918223DCC00A28FB9 /* GameKit.framework */; };
+		6290E04C18223DDD00A28FB9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6290E04B18223DDD00A28FB9 /* GameKit.framework */; };
 		BD2636E516CF5B7400CFE15F /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */; };
 		BD2636E616CF5B7400CFE15F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636E016CF5B7400CFE15F /* Foundation.framework */; };
 		BD2636E716CF5B7400CFE15F /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636E116CF5B7400CFE15F /* OpenAL.framework */; };
@@ -1883,6 +1889,10 @@
 		5B5DB93114C25BA5007755DB /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/oggvorbis/lib/ios/armv7s/libogg.a"; sourceTree = "<group>"; };
 		5B5DB93214C25BA5007755DB /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/ios/armv7s/libvorbis.a"; sourceTree = "<group>"; };
 		5BC4E7D4150F8C3C00CBE1C0 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
+		6290E04318223C4A00A28FB9 /* GameCenterSocialSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCenterSocialSession.h; sourceTree = "<group>"; };
+		6290E04418223C4A00A28FB9 /* GameCenterSocialSession.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCenterSocialSession.mm; sourceTree = "<group>"; };
+		6290E04918223DCC00A28FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
+		6290E04B18223DDD00A28FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E016CF5B7400CFE15F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E116CF5B7400CFE15F /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
@@ -1896,6 +1906,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6290E04C18223DDD00A28FB9 /* GameKit.framework in Frameworks */,
 				5B21E99616153890006EBEAC /* IOKit.framework in Frameworks */,
 				5B2BC7641512516B00D176CD /* libz.dylib in Frameworks */,
 				5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */,
@@ -1909,6 +1920,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6290E04A18223DCC00A28FB9 /* GameKit.framework in Frameworks */,
 				BD2636E516CF5B7400CFE15F /* CoreMotion.framework in Frameworks */,
 				BD2636E616CF5B7400CFE15F /* Foundation.framework in Frameworks */,
 				BD2636E716CF5B7400CFE15F /* OpenAL.framework in Frameworks */,
@@ -2596,6 +2608,8 @@
 		42CC55331809A4EE00AAD8AD /* social */ = {
 			isa = PBXGroup;
 			children = (
+				6290E04318223C4A00A28FB9 /* GameCenterSocialSession.h */,
+				6290E04418223C4A00A28FB9 /* GameCenterSocialSession.mm */,
 				42CC55341809A4EE00AAD8AD /* GooglePlaySocialSession.cpp */,
 				42CC55351809A4EE00AAD8AD /* GooglePlaySocialSession.h */,
 				42CC55361809A4EE00AAD8AD /* ScoreloopSocialSession.cpp */,
@@ -2617,6 +2631,7 @@
 		5B04C5FD14BFE52300EB0071 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				6290E04918223DCC00A28FB9 /* GameKit.framework */,
 				BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */,
 				BD2636E016CF5B7400CFE15F /* Foundation.framework */,
 				BD2636E116CF5B7400CFE15F /* OpenAL.framework */,
@@ -2630,6 +2645,7 @@
 		5B04C5FE14BFE52F00EB0071 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				6290E04B18223DDD00A28FB9 /* GameKit.framework */,
 				5B21E99516153890006EBEAC /* IOKit.framework */,
 				5B2BC7611512514D00D176CD /* QuartzCore.framework */,
 				5B2BC75D1512514500D176CD /* OpenAL.framework */,
@@ -2729,6 +2745,7 @@
 				420BBD7C1817416F00C7B720 /* lua_Node.h in Headers */,
 				420BBD181817416F00C7B720 /* lua_Joint.h in Headers */,
 				420BBE941817416F00C7B720 /* lua_Theme.h in Headers */,
+				6290E04518223C4A00A28FB9 /* GameCenterSocialSession.h in Headers */,
 				420BBCD01817416F00C7B720 /* lua_FontStyle.h in Headers */,
 				420BBD501817416F00C7B720 /* lua_MathUtil.h in Headers */,
 				420BBE1C1817416F00C7B720 /* lua_RenderState.h in Headers */,
@@ -3039,6 +3056,7 @@
 				420BBD7D1817416F00C7B720 /* lua_Node.h in Headers */,
 				420BBD191817416F00C7B720 /* lua_Joint.h in Headers */,
 				420BBE951817416F00C7B720 /* lua_Theme.h in Headers */,
+				6290E04618223C4A00A28FB9 /* GameCenterSocialSession.h in Headers */,
 				420BBCD11817416F00C7B720 /* lua_FontStyle.h in Headers */,
 				420BBD511817416F00C7B720 /* lua_MathUtil.h in Headers */,
 				420BBE1D1817416F00C7B720 /* lua_RenderState.h in Headers */,
@@ -3495,6 +3513,7 @@
 				42CC562C1809A4EF00AAD8AD /* Logger.cpp in Sources */,
 				420BBD761817416F00C7B720 /* lua_MouseMouseEvent.cpp in Sources */,
 				420BBE3E1817416F00C7B720 /* lua_RenderTarget.cpp in Sources */,
+				6290E04718223C4A00A28FB9 /* GameCenterSocialSession.mm in Sources */,
 				42CC56281809A4EF00AAD8AD /* Light.cpp in Sources */,
 				420BBD8E1817416F00C7B720 /* lua_Pass.cpp in Sources */,
 				42CC59041809A4EF00AAD8AD /* MaterialParameter.cpp in Sources */,
@@ -3805,6 +3824,7 @@
 				42CC59D31809A4EF00AAD8AD /* SocialPlayer.cpp in Sources */,
 				420BBD771817416F00C7B720 /* lua_MouseMouseEvent.cpp in Sources */,
 				420BBE3F1817416F00C7B720 /* lua_RenderTarget.cpp in Sources */,
+				6290E04818223C4A00A28FB9 /* GameCenterSocialSession.mm in Sources */,
 				42CC562D1809A4EF00AAD8AD /* Logger.cpp in Sources */,
 				42CC56291809A4EF00AAD8AD /* Light.cpp in Sources */,
 				420BBD8F1817416F00C7B720 /* lua_Pass.cpp in Sources */,
@@ -4042,6 +4062,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"GP_USE_SOCIAL=1",
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -4131,7 +4152,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"GP_USE_SOCIAL=1",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -4154,7 +4178,7 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = gameplay;
 				PROVISIONING_PROFILE = "";
-				PUBLIC_HEADERS_FOLDER_PATH = include;
+				PUBLIC_HEADERS_FOLDER_PATH = gameplay_include;
 				SDKROOT = iphoneos;
 				SHARED_PRECOMPS_DIR = "";
 				SKIP_INSTALL = YES;
@@ -4202,7 +4226,7 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = gameplay;
 				PROVISIONING_PROFILE = "";
-				PUBLIC_HEADERS_FOLDER_PATH = include;
+				PUBLIC_HEADERS_FOLDER_PATH = gameplay_include;
 				SDKROOT = iphoneos;
 				SHARED_PRECOMPS_DIR = "";
 				SKIP_INSTALL = YES;

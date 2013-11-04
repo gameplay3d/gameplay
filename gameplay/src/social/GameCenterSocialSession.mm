@@ -16,11 +16,14 @@
 {
 	// check for presence of GKLocalPlayer API
 	Class gcClass = (NSClassFromString(@"GKLocalPlayer"));
+    BOOL osVersionSupported = TRUE;
 	
+#if TARGET_OS_IPHONE
 	// check if the device is running iOS 4.1 or later
 	NSString *reqSysVer = @"4.1";
 	NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
-	BOOL osVersionSupported = ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);
+	osVersionSupported = ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);
+#endif
 	
 	return (gcClass && osVersionSupported);
 }
@@ -49,7 +52,8 @@ GameCenterSocialSession::GameCenterSocialSession()
 : SocialSession(),
 _listener(NULL), _properties(NULL)
 {
-    [GameCenterController resetAchievements];
+    // uncomment to reset the achievements for testing
+ //   [GameCenterController resetAchievements];
 }
 
 GameCenterSocialSession::~GameCenterSocialSession()
@@ -68,12 +72,6 @@ SocialSession *GameCenterSocialSession::authenticate(SocialSessionListener* list
 		_session = new GameCenterSocialSession();
 		_session->_listener = listener;
 		_session->_properties = properties;
-        
-		const char* gameId = properties->getString("id");
-		const char* gameSecret = properties->getString("secret");
-		const char* gameVersion = properties->getString("version");
-		const char* gameCurrency = properties->getString("currency");
-		const char* gameLanguage = properties->getString("language");
         
         if ([GameCenterController isGameCenterAvailable])
         {
@@ -280,7 +278,7 @@ void GameCenterSocialSession::loadAchievements()
      }];
 }
     
-const SocialAchievement* GameCenterSocialSession::getAchievement(const char* achievementId) const
+SocialAchievement* GameCenterSocialSession::getAchievement(const char* achievementId)
 {
     uint size = _achievements.size();
     
@@ -291,15 +289,39 @@ const SocialAchievement* GameCenterSocialSession::getAchievement(const char* ach
     }
     return 0;
 }
+    
+const char* GameCenterSocialSession::getMapping(const char* identifier, const char *mapping)
+{
+    const char *mappedId = identifier;
+    
+    // Lookup the mapped achievementID if there is one
+    if (identifier != NULL && mapping != NULL)
+    {
+        Properties* mappings = _properties->getNamespace(mapping, true);
+        if (mappings)
+        {
+            mappedId = mappings->getString(identifier);
+            
+            // in case we couldn't find the id for some reason
+            if (mappedId == NULL)
+                mappedId = identifier;
+        }
+    }
+    
+    return mappedId;
+}
 
 /**
  * @see SocialSession::submitAchievement
  */
 void GameCenterSocialSession::submitAchievement(const char* achievementId, unsigned int value, bool achieved)
 {
-    NSString *achievementName = [[NSString alloc] initWithUTF8String:achievementId];
+    const char *realAchievementId = getMapping(achievementId, "achievement_mappings");
+    SocialAchievement *award = getAchievement(realAchievementId);
+    NSString *achievementName = [[NSString alloc] initWithUTF8String:realAchievementId];
     GKAchievement *achievement = [[GKAchievement alloc] initWithIdentifier: achievementName];
-    if (achievement)
+    
+    if (achievement && award && award->percentCompleted < 100)
     {
         achievement.percentComplete = (achieved) ? 100 : value;
         [achievement reportAchievementWithCompletionHandler:^(NSError *error)
@@ -308,9 +330,20 @@ void GameCenterSocialSession::submitAchievement(const char* achievementId, unsig
              {
                  if (achieved)
                  {
-                     const SocialAchievement *award = getAchievement(achievementId);
-                     if (award)
-                         _listener->awardAchievedEvent(SocialSessionListener::SUCCESS, *award);
+                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                     [formatter setDateFormat:@"ddmmyyyy"];
+                     // Optionally for time zone converstions
+                     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"..."]];
+                     
+                     NSString *dateString = [formatter stringFromDate:achievement.lastReportedDate];
+                     
+                     award->percentCompleted = achievement.percentComplete;
+                     award->value = achievement.percentComplete;
+                     award->dateTimeAchieved = [dateString UTF8String];
+
+                     _listener->awardAchievedEvent(SocialSessionListener::SUCCESS, *award);
+                     
+                     [formatter release];
                  }
                  else
                  {
@@ -339,29 +372,41 @@ void GameCenterSocialSession::submitAchievement(const char* achievementId, unsig
  */
 void GameCenterSocialSession::incrementAchievement(const char* achievementId, unsigned int totalSteps)
 {
-    NSString *achievementName = [[NSString alloc] initWithUTF8String:achievementId];
+    const char *realAchievementId = getMapping(achievementId, "achievement_mappings");
+    NSString *achievementName = [[NSString alloc] initWithUTF8String:realAchievementId];
     GKAchievement *achievement = [[GKAchievement alloc] initWithIdentifier: achievementName];
-    if ([achievement isCompleted] == NO)
+    SocialAchievement *award = getAchievement(realAchievementId);
+    
+    if (award && award->percentCompleted < 100)
     {
-        double newPercent = ((achievement.percentComplete/100.0f * totalSteps) + 1) / (float)totalSteps * 100;
-        fprintf(stderr, "percentComplete is %lf\n", achievement.percentComplete);
+        double newPercent = ((award->percentCompleted/100.0f * totalSteps) + 1) / (float)totalSteps * 100;
+
         achievement.percentComplete = newPercent;
         [achievement reportAchievementWithCompletionHandler:^(NSError *error)
          {
              if (error == nil)
              {
+                 award->percentCompleted = achievement.percentComplete;
+                 award->value = achievement.percentComplete;
+                 
                  if (achievement.percentComplete == 100)
                  {
-                     const SocialAchievement *award = getAchievement(achievementId);
-                     if (award)
-                         _listener->awardAchievedEvent(SocialSessionListener::SUCCESS, *award);
+                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                     [formatter setDateFormat:@"ddmmyyyy"];
+                     // Optionally for time zone converstions
+                     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"..."]];
+                     
+                     NSString *dateString = [formatter stringFromDate:achievement.lastReportedDate];
+                     award->dateTimeAchieved = [dateString UTF8String];
+                     
+                     _listener->awardAchievedEvent(SocialSessionListener::SUCCESS, *award);
+                     
+                     [formatter release];
                  }
                  else
                  {
                      _listener->submitAchievementEvent(SocialSessionListener::SUCCESS);
                  }
-                 
-                 fprintf(stderr, "the achievements percent complete is now %lf\n", achievement.percentComplete);
              }
              else
              {
@@ -385,7 +430,7 @@ void GameCenterSocialSession::incrementAchievement(const char* achievementId, un
  */
 void GameCenterSocialSession::synchronizeAchievements()
 {
-    // not supported on IOS
+    // loadAchievements();
 }
     
 void GameCenterSocialSession::attachPlayerNameToScore(const char *playerID, SocialScore *score)
@@ -420,6 +465,8 @@ void GameCenterSocialSession::attachPlayerNameToScore(const char *playerID, Soci
  */
 void GameCenterSocialSession::loadScores(const char* leaderboardId, SocialSession::CommunityScope community, SocialSession::TimeScope time, unsigned int start, unsigned int count)
 {
+    const char *realLeaderboardId = getMapping(leaderboardId, "leaderboard_mappings");
+    
     GKLeaderboard *leaderboardRequest = [[GKLeaderboard alloc] init];
     if (leaderboardRequest != nil)
     {
@@ -445,8 +492,10 @@ void GameCenterSocialSession::loadScores(const char* leaderboardId, SocialSessio
                 leaderboardRequest.timeScope = GKLeaderboardTimeScopeWeek;
                 break;
         }
-        
-        leaderboardRequest.identifier = [[NSString alloc] initWithUTF8String:leaderboardId];
+
+#if TARGET_OS_IPHONE
+        leaderboardRequest.identifier = [[NSString alloc] initWithUTF8String:realLeaderboardId];
+#endif
         leaderboardRequest.range = NSMakeRange(start, start+count);
         
         [leaderboardRequest loadScoresWithCompletionHandler: ^(NSArray *scores, NSError *error)
@@ -498,6 +547,8 @@ void GameCenterSocialSession::loadScores(const char* leaderboardId, SocialSessio
  */
 void GameCenterSocialSession::loadScores(const char* leaderboardId, SocialSession::CommunityScope community, SocialSession::TimeScope time, const SocialPlayer& player, unsigned int count)
 {
+    const char *realLeaderboardId = getMapping(leaderboardId, "leaderboard_mappings");
+    
     GKLeaderboard *leaderboardRequest = [[GKLeaderboard alloc] init];
     if (leaderboardRequest != nil)
     {
@@ -524,8 +575,9 @@ void GameCenterSocialSession::loadScores(const char* leaderboardId, SocialSessio
                 break;
         }
         
-        leaderboardRequest.identifier = [[NSString alloc] initWithUTF8String:leaderboardId];
-        
+#if TARGET_OS_IPHONE
+        leaderboardRequest.identifier = [[NSString alloc] initWithUTF8String:realLeaderboardId];
+#endif
         // first load all of the scores and find the player
         [leaderboardRequest loadScoresWithCompletionHandler: ^(NSArray *scores, NSError *error)
          {
@@ -577,7 +629,9 @@ void GameCenterSocialSession::loadScores(const char* leaderboardId, SocialSessio
  */
 void GameCenterSocialSession::submitScore(const char* leaderboardId, float score)
 {
-    NSString *leaderboardName = [[NSString alloc] initWithUTF8String:leaderboardId];
+    const char *realLeaderboardId = getMapping(leaderboardId, "leaderboard_mappings");;
+    
+    NSString *leaderboardName = [[NSString alloc] initWithUTF8String:realLeaderboardId];
     GKScore *scoreReporter = [[GKScore alloc] initWithCategory:leaderboardName];
     scoreReporter.value = score;
     scoreReporter.context = 0;
@@ -642,8 +696,9 @@ void GameCenterSocialSession::submitChallenge(const SocialPlayer *player, float 
 void GameCenterSocialSession::submitAchievementChallenge(const SocialPlayer *player, const char* achievementId, unsigned int wager)
 {
     SocialChallenge challenge;
+    const char *realAchievementId = getMapping(achievementId, "achievement_mappings");
     
-    NSString *achievementIdName = [[NSString alloc] initWithUTF8String:achievementId];
+    NSString *achievementIdName = [[NSString alloc] initWithUTF8String:realAchievementId];
     GKAchievement *gkAchievement = [[GKAchievement alloc] initWithIdentifier:achievementIdName];
     NSArray *challengedPlayer = [NSArray arrayWithObject: ((GKPlayer *)player->handle).playerID];
     
@@ -769,9 +824,9 @@ void GameCenterSocialSession::showGameCenter(int startingScreen) const
     GKGameCenterViewController *gameCenterController = [[GKGameCenterViewController alloc] init];
     if (gameCenterController != nil)
     {
-        gameCenterController.viewState = startingScreen;
+        gameCenterController.viewState = (GKGameCenterViewControllerState)startingScreen;
         
-#ifdef TARGET_OS_IPHONE        
+#if TARGET_OS_IPHONE
         id viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
         gameCenterController.gameCenterDelegate = viewController;
         [viewController presentViewController: gameCenterController animated: YES completion:nil];
@@ -804,14 +859,12 @@ void GameCenterSocialSession::displayChallengeSubmit(const SocialChallenge *chal
     return _listener->uiEvent(SocialSessionListener::ERROR_NOT_SUPPORTED);
 }
 
-void GameCenterSocialSession::displayPopup(const char *popupMessage) const
+void GameCenterSocialSession::displayPopup(const char *popupMessage, const char *title=0) const
 {
-    NSLog(@"display the popup");
-    
-    NSString* title = @"SAMPLE TITLE";
+    NSString* titleString = (title) ? [[NSString alloc] initWithUTF8String:title] : @"";
     NSString* message = [[NSString alloc] initWithUTF8String:popupMessage];
     
-    [GKNotificationBanner showBannerWithTitle: title message: message completionHandler:^{}];
+    [GKNotificationBanner showBannerWithTitle: titleString message: message completionHandler:^{}];
 }
 
 }

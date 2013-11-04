@@ -564,7 +564,7 @@ void GooglePlaySocialSession::displayChallengeSubmit(const SocialChallenge *chal
 {
 }
 
-void GooglePlaySocialSession::displayPopup(const char *popupMessage) const
+void GooglePlaySocialSession::displayPopup(const char *popupMessage, const char *title) const
 {
 
 }

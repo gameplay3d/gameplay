@@ -1398,11 +1398,9 @@ void ScoreloopSocialSession::displayChallengeSubmit(const SocialChallenge *chall
     }
 }
 
-void ScoreloopSocialSession::displayPopup(const char *popupMessage) const
+void ScoreloopSocialSession::displayPopup(const char *popupMessage, const char *title) const
 {
 	dialog_instance_t dialog = 0;
-
-fprintf(stderr, "launching a dialog %s\n", popupMessage);
 
 	dialog_create_toast(&dialog);
 
@@ -1410,6 +1408,9 @@ fprintf(stderr, "launching a dialog %s\n", popupMessage);
 
 	dialog_set_toast_position(dialog, DIALOG_POSITION_TOP_CENTER);
 	dialog_set_toast_message_text(dialog, popupMessage);
+    
+    if (title)
+        dialog_set_title_text(dialog, title);
 
 	dialog_show(dialog);
 }

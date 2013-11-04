@@ -94,7 +94,7 @@ public:
 
     virtual void displayChallengeSubmit(const SocialChallenge *challenge, float score) const = 0;
 
-    virtual void displayPopup(const char *string) const = 0;
+    virtual void displayPopup(const char *string, const char *title=0) const = 0;
 
     virtual bool handleEvent(void *event) { return true; }
 
