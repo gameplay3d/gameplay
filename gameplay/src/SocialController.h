@@ -18,7 +18,7 @@ namespace gameplay
   @verbatim
     social
     {
-         provider = Scoreloop | GooglePlay
+         provider = Scoreloop | GooglePlay | GameCenter
          id  = d346c484-12aa-49a2-a0a0-de2f87492d72
          secret = aAa+DehBfyGO/CYaE3nWomgu7SIbWFczUih+Qwf3/n7u0y3nyq5Hag==
          version = 1.0

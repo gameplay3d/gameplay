@@ -50,7 +50,7 @@ public:
 
     virtual void submitAchievement(const char* achievementId, unsigned int value, bool achieved=false) = 0;
 
-    virtual void incrementAchievement(const char* achievementId, unsigned int increment=1) = 0;
+    virtual void incrementAchievement(const char* achievementId, unsigned int totalSteps=1) = 0;
 
     virtual void synchronizeAchievements() = 0;
 
@@ -74,7 +74,9 @@ public:
 
     virtual void submitScore(const char* leaderboardId, float value) = 0;
 
-    virtual void submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId=0) = 0;
+    virtual void submitChallenge(const SocialPlayer *player, float score, const char* leaderboardId=0, unsigned int wager=0) = 0;
+
+    virtual void submitAchievementChallenge(const SocialPlayer *player, const char* achievementId=0, unsigned int wager=0) = 0;
 
     virtual void loadChallenges(bool showOpenChallengesOnly=true) = 0;
 
@@ -84,15 +86,25 @@ public:
 
     virtual void submitSavedData(const char* key, std::string data) = 0;
 
-    virtual void displayLeaderboard(const char* leaderboardId) = 0;
+    virtual void displayLeaderboard(const char* leaderboardId) const = 0;
 
-    virtual void displayAchievements() = 0;
+    virtual void displayAchievements() const = 0;
 
-    virtual void displayChallenges() = 0;
+    virtual void displayChallenges() const = 0;
 
-    virtual void displayChallengeSubmit(const SocialChallenge *challenge, float score) = 0;
+    virtual void displayChallengeSubmit(const SocialChallenge *challenge, float score) const = 0;
+
+    virtual void displayPopup(const char *string, const char *title=0) const = 0;
 
     virtual bool handleEvent(void *event) { return true; }
+
+    virtual bool supportsChallenges() const = 0;
+
+    virtual bool supportsAchievementChallenges() const = 0;
+
+    virtual bool supportsMultiplayer() const = 0;
+
+    virtual bool supportsTurns() const = 0;
 
 protected:
 
