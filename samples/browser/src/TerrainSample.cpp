@@ -90,9 +90,11 @@ void initializeLight(Material* material, Light* light)
 {
     // For this sample we will only bind a single light to each object in the scene.
     MaterialParameter* colorParam = material->getParameter("u_directionalLightColor[0]");
-    colorParam->setValue(light->getColor());
+    if (colorParam)
+        colorParam->setValue(light->getColor());
     MaterialParameter* directionParam = material->getParameter("u_directionalLightDirection[0]");
-    directionParam->bindValue(light->getNode(), &Node::getForwardVectorWorld);
+    if (directionParam)
+        directionParam->bindValue(light->getNode(), &Node::getForwardVectorWorld);
 }
 
 bool TerrainSample::intializeLights(Node* node)
