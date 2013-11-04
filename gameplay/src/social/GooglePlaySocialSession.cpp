@@ -5,10 +5,11 @@
 #include <android_native_app_glue.h>
 #include <android/log.h>
 
+extern struct android_app* __state;
+
 namespace gameplay
 {
 
-extern struct android_app* __state;
 
 GooglePlaySocialSession* GooglePlaySocialSession::_session = NULL;
 
@@ -44,9 +45,9 @@ SocialSession *GooglePlaySocialSession::authenticate(SocialSessionListener* list
 		const char* gameVersion = properties->getString("version");
 		const char* gameCurrency = properties->getString("currency");
 		const char* gameLanguage = properties->getString("language");
-#ifdef __ANDROID__
 	    android_app* state = __state;
-	    GP_ASSERT(state && state->activity && state->activity->vm);
+	
+		GP_ASSERT(state && state->activity && state->activity->vm);
 	    JavaVM* jvm = state->activity->vm;
 	    JNIEnv* env = NULL;
 	    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
@@ -69,7 +70,6 @@ SocialSession *GooglePlaySocialSession::authenticate(SocialSessionListener* list
 		fprintf(stderr, "the results is %d\n", result);
 
 		jvm->DetachCurrentThread();
-#endif
     }
 
     return _session;
@@ -97,14 +97,14 @@ void GooglePlaySocialSession::loadAchievements()
 /**
  * @see SocialSession::submitAchievement
  */
-void GooglePlaySocialSession::submitAchievement(const char* achievementId, unsigned int value, bool achieved=false)
+void GooglePlaySocialSession::submitAchievement(const char* achievementId, unsigned int value, bool achieved)
 {
 }
 
 /**
  * @see SocialSession::incrementAchievement
  */
-void GooglePlaySocialSession::incrementAchievement(const char* achievementId, unsigned int increment=1)
+void GooglePlaySocialSession::incrementAchievement(const char* achievementId, unsigned int increment)
 {
 }
 
@@ -139,14 +139,14 @@ void GooglePlaySocialSession::submitScore(const char* leaderboardId, float score
 /**
   * @see SocialSession::submitChallenge
   */
-void GooglePlaySocialSession::submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId=0)
+void GooglePlaySocialSession::submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId)
 {
 }
 
 /**
   * @see SocialSession::loadChallenges
   */
-void GooglePlaySocialSession::loadChallenges(bool showOpenChallengesOnly=true)
+void GooglePlaySocialSession::loadChallenges(bool showOpenChallengesOnly)
 {
 }
 
