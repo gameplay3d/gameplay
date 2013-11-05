@@ -538,6 +538,26 @@ bool TerrainPatch::updateMaterial()
                 material->getParameter("u_normalMatrix")->bindValue(_terrain, &Terrain::getNormalMatrix);
         }
 
+        // Add all the parameters from the old material to the new ones render state
+        Material* prevMaterial = _levels[i]->model->getMaterial();
+        if (prevMaterial)
+        {
+            RenderState* prevStates[3] = { prevMaterial, prevMaterial->getTechnique(), prevMaterial->getTechnique()->getPassByIndex(0) };
+            RenderState* newStates[3] = { material, material->getTechnique(), material->getTechnique()->getPassByIndex(0) };
+            for (unsigned int i = 0; i < 3; ++i)
+            {
+                for (unsigned int j = 0; j < prevStates[i]->getParameterCount(); ++j)
+                {
+                    newStates[i]->addParameter(prevStates[i]->getParameterByIndex(j));
+                    if (!_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
+                    {
+                        newStates[i]->removeParameter("u_row");
+                        newStates[i]->removeParameter("u_column");
+                    }
+                }
+            }
+        }
+
         // Set material on this lod level
         _levels[i]->model->setMaterial(material);
 
