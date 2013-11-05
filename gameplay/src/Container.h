@@ -34,8 +34,8 @@ namespace gameplay
          consumeEvents = <bool>             // Whether the container propagates input events to the Game's input event handler. Default is true.
 
          // All the nested controls within this container.
-         container 
-         { 
+         container
+         {
              ...
          }
 
@@ -241,7 +241,7 @@ public:
     /**
      * Set whether this container requires focus in order to handle scroll-wheel events.
      * If this property is set to true, scroll-wheel events will only be handled when the container has focus.
-     * If this property is set tofalse, scroll-wheel events will only be handled
+     * If this property is set to false, scroll-wheel events will only be handled
      * when the container is in the HOVER state.
      *
      * @param required Whether focus is required in order to handle scroll-wheel events.
@@ -324,7 +324,7 @@ protected:
      * @see Touch::TouchEvent
      */
     virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-    
+
     /**
      * Keyboard callback on key events.  Passes key events on to the currently focused control.
      *
@@ -333,7 +333,7 @@ protected:
      *            If evt is KEY_CHAR then key is the unicode value of the character.
      *
      * @return Whether the key event was consumed by this control.
-     * 
+     *
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
@@ -366,10 +366,10 @@ protected:
      * @param layoutString The layout string to parse
      */
     static Layout::Type getLayoutType(const char* layoutString);
-    
+
     /**
      * Returns whether this container or any of its controls have been modified and require an update.
-     * 
+     *
      * @return true if this container or any of its controls have been modified and require an update.
      */
     virtual bool isDirty();
@@ -444,7 +444,7 @@ protected:
      * @param data The event's data (depends on whether it is a mouse event or a touch event).
      *
      * @return Whether the pointer event was consumed by this container.
-     * 
+     *
      * @see Mouse::MouseEvent
      * @see Touch::TouchEvent
      */
@@ -491,31 +491,31 @@ protected:
      * Scrollbar horizontal image.
      */
     Theme::ThemeImage* _scrollBarRightCap;
-    /** 
+    /**
      * Flag representing whether scrolling is enabled, and in which directions.
      */
     Scroll _scroll;
-    /** 
+    /**
      * Scroll bar bounds.
      */
     Rectangle _scrollBarBounds;
-    /** 
+    /**
      * How far this layout has been scrolled in each direction.
      */
     Vector2 _scrollPosition;
-    /** 
+    /**
      * Whether the scrollbars should auto-hide. Default is false.
      */
     bool _scrollBarsAutoHide;
-    /** 
+    /**
      * Used to animate scrollbars fading out.
      */
     float _scrollBarOpacity;
-    /** 
+    /**
      * Whether the user is currently touching / holding the mouse down within this layout's container.
      */
     bool _scrolling;
-    /** 
+    /**
      * First scrolling touch x position.
      */
     int _scrollingVeryFirstX;
@@ -525,51 +525,51 @@ protected:
     int _scrollingVeryFirstY;
     /**
      * First scrolling touch x position since last change in direction.
-     */ 
+     */
     int _scrollingFirstX;
-    /** 
+    /**
      * First scrolling touch y position since last change in direction.
-     */ 
+     */
     int _scrollingFirstY;
-    /** 
+    /**
      * The last y position when scrolling.
-     */ 
+     */
     int _scrollingLastX;
-    /** 
+    /**
      * The last x position when scrolling.
-     */ 
+     */
     int _scrollingLastY;
-    /** 
+    /**
      * Time we started scrolling horizontally.
-     */ 
+     */
     double _scrollingStartTimeX;
-    /** 
+    /**
      * Time we started scrolling vertically.
-     */ 
+     */
     double _scrollingStartTimeY;
-    /** 
+    /**
      * The last time we were scrolling.
      */
     double _scrollingLastTime;
-    /** 
+    /**
      * Speed to continue scrolling at after touch release or a scroll-wheel event.
-     */ 
+     */
     Vector2 _scrollingVelocity;
-    /** 
+    /**
      * Friction dampens velocity.
-     */ 
+     */
     float _scrollingFriction;
     /**
      * Amount to add to scrolling velocity on a scroll-wheel event;
      */
     float _scrollWheelSpeed;
-    /** 
+    /**
      * Are we scrolling to the right?
-     */ 
+     */
     bool _scrollingRight;
-    /** 
+    /**
      * Are we scrolling down?
-     */ 
+     */
     bool _scrollingDown;
     /**
      * Locked to scrolling vertically by grabbing the scrollbar with the mouse.
