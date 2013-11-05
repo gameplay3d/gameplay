@@ -83,7 +83,7 @@ public:
     /**
      * @see SocialSession::incrementAchievement
      */
-    void incrementAchievement(const char* achievementId, unsigned int increment=1);
+    void incrementAchievement(const char* achievementId, unsigned int totalSteps=1);
 
     /**
       * @see SocialSession::syncAchievements
@@ -108,7 +108,12 @@ public:
     /**
       * @see SocialSession::submitChallenge
       */
-    void submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId=0);
+    void submitChallenge(const SocialPlayer *player, float score, const char* leaderboardId, unsigned int wager=0);
+
+    /**
+       * @see SocialSession::submitAchievementChallenge
+       */
+     void submitAchievementChallenge(const SocialPlayer *player, const char* achievementId, unsigned int wager=0);
 
     /**
       * @see SocialSession::loadChallenges
@@ -130,13 +135,50 @@ public:
      */
     void submitSavedData(const char* key, std::string data);
 
-    void displayLeaderboard(const char* leaderboardId);
+    /**
+     * @see SocialSession::displayLeaderboard
+     */
+    void displayLeaderboard(const char* leaderboardId) const;
 
-    void displayAchievements();
+    /**
+     * @see SocialSession::displayAchievements
+     */
+    void displayAchievements() const;
 
-    void displayChallenges();
+    /**
+     * @see SocialSession::displayChallenges
+     */
+    void displayChallenges() const;
 
-    void displayChallengeSubmit(const SocialChallenge *challenge, float score);
+    /**
+     * @see SocialSession::displayChallengeSubmit
+     */
+    void displayChallengeSubmit(const SocialChallenge *challenge, float score) const;
+
+    /**
+     * @see SocialSession::displayPopup
+     */
+    void displayPopup(const char *string, const char *title) const;
+
+    /**
+     * @see SocialSession::supportsChallenges
+     */
+    bool supportsChallenges() const { return true; }
+
+    /**
+     * @see SocialSession::supportsAchievementChallenges
+     */
+    bool supportsAchievementChallenges() const { return false; }
+
+    /**
+     * @see SocialSession::supportsMultiplayer
+     */
+    bool supportsMultiplayer() const { return false; }
+
+    /**
+     * @see SocialSession::supportsTurns
+     */
+    bool supportsTurns() const { return false; }
 
 protected:
 

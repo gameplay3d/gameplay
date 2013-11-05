@@ -14,7 +14,7 @@
     <transparent>false</transparent>
   </initialWindow>
   <asset path="icon.png">icon.png</asset>
-  <asset path="res/airstrip.gpb">airstrip.gpb</asset>
+  <asset path="res/airstrip.gpb">res/airstrip.gpb</asset>
   <asset path="res/spaceship.gpb">res/spaceship.gpb</asset>
   <asset path="res/spaceship.wav">res/spaceship.wav</asset>
   <asset path="res//background.ogg">res/background.ogg</asset>
@@ -27,6 +27,7 @@
   <asset path="res/menu.theme">res/menu.theme</asset>
   <asset path="res/menuAtlas.png">res/menuAtlas.png</asset>
   <asset path="res/challenge.form">res/challenge.form</asset>
+  <asset path="scoreloop">scoreloop</asset>
   <configuration name="Device-Debug">
     <platformArchitecture>armle-v7</platformArchitecture>
     <asset path="Device-Debug/sample-spaceship" entry="true" type="Qnx/Elf">sample-spaceship</asset>

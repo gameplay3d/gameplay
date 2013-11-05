@@ -13,6 +13,7 @@
 #import <OpenGL/OpenGL.h>
 #import <mach/mach_time.h>
 #import <Foundation/Foundation.h>
+#import <GameKit/GameKit.h>
 
 // These should probably be moved to a platform common file
 #define SONY_USB_VENDOR_ID              0x054c
@@ -1553,14 +1554,22 @@ int getUnicode(int key)
 @end
 
 @interface FullscreenWindow : NSWindow
-{ 
+{
 }
+
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController;
 @end
 
 @implementation FullscreenWindow
 - (BOOL)canBecomeKeyWindow
 {
     return YES;
+}
+
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController
+{
+    GKDialogController *sdc = [GKDialogController sharedDialogController];
+    [sdc dismiss: self];
 }
 @end
 

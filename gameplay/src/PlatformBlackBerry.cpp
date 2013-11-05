@@ -601,7 +601,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
             screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_ANALOG1, analog);
             break;
         }
-        
+
         // So far we've tested two gamepads with analog sticks on BlackBerry:
         // the SteelSeries FREE, and the iControlPad.
         // Both return values between -128 and +127, with the y axis starting from
@@ -1009,7 +1009,7 @@ Platform* Platform::create(Game* game)
     screenDevs = (screen_device_t*)calloc(count, sizeof(screen_device_t));
     screen_get_context_property_pv(__screenContext, SCREEN_PROPERTY_DEVICES, (void**)screenDevs);
 
-	for (int i = 0; i < count; i++) 
+	for (int i = 0; i < count; i++)
     {
 	    int type;
         screen_get_device_property_iv(screenDevs[i], SCREEN_PROPERTY_TYPE, &type);
@@ -1086,7 +1086,7 @@ int Platform::enterMessagePump()
     while (true)
     {
         bps_event_t* event = NULL;
-        
+
         while (true)
         {
             rc = bps_get_event(&event, 1);
@@ -1095,9 +1095,11 @@ int Platform::enterMessagePump()
             if (event == NULL)
                 break;
 
+#ifdef GP_USE_SOCIAL
             // if the social controller needs to deal with the event do that here
             if (Game::getInstance()->getSocialController()->handleEvent(event))
             	break;
+#endif
 
             domain = bps_event_get_domain(event);
 

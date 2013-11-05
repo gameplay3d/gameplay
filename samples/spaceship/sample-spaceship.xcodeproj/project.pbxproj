@@ -41,6 +41,8 @@
 		5B43D19F14C35A0E008A5D9D /* SpaceshipGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */; };
 		5B43D1AF14C35A0E008A5D9D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55D146EC24F00353661 /* icon.png */; };
 		5B43D1B014C35A0E008A5D9D /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD55F146EC27A00353661 /* res */; };
+		6290E04E1824348500A28FB9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6290E04D1824348500A28FB9 /* GameKit.framework */; };
+		6290E050182434A600A28FB9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6290E04F182434A600A28FB9 /* GameKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +81,8 @@
 		42DFAB0616AD8B840000F342 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		42DFAB2F16AD8CA20000F342 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5B43D1B414C35A0E008A5D9D /* sample-spaceship-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-spaceship-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6290E04D1824348500A28FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		6290E04F182434A600A28FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6290E04E1824348500A28FB9 /* GameKit.framework in Frameworks */,
 				4284B8FD16ADA7DF00FB52B4 /* libgameplay.a in Frameworks */,
 				42CD0EF3147D932B0000361E /* libbullet.a in Frameworks */,
 				42CD0EF4147D932B0000361E /* libogg.a in Frameworks */,
@@ -106,6 +111,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4284B8FF16ADA7F400FB52B4 /* libgameplay.a in Frameworks */,
+				6290E050182434A600A28FB9 /* GameKit.framework in Frameworks */,
 				4284B90516ADA81B00FB52B4 /* libz.dylib in Frameworks */,
 				42512C8217FB424000373866 /* libbullet.a in Frameworks */,
 				4284B90616ADA88600FB52B4 /* CoreMotion.framework in Frameworks */,
@@ -208,6 +214,7 @@
 		5B43D1B914C35A7A008A5D9D /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				6290E04D1824348500A28FB9 /* GameKit.framework */,
 				42DFAAC316AD89B80000F342 /* CoreMotion.framework */,
 				42DFAAD916AD8AD00000F342 /* Foundation.framework */,
 				42DFAB0316AD8B840000F342 /* OpenAL.framework */,
@@ -221,6 +228,7 @@
 		5B43D1BA14C35A81008A5D9D /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				6290E04F182434A600A28FB9 /* GameKit.framework */,
 				424CC034161FCB5B00577827 /* IOKit.framework */,
 				42CCD51A146EBF3600353661 /* Cocoa.framework */,
 				42CCD54A146EC10200353661 /* QuartzCore.framework */,
