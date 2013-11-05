@@ -15,8 +15,8 @@ class Game;
 
 /**
  * Defines a platform abstraction.
- * 
- * This class has only a few public methods for creating a platform 
+ *
+ * This class has only a few public methods for creating a platform
  *
  */
 class Platform
@@ -36,7 +36,7 @@ public:
      * Creates a platform for the specified game which it will interact with.
      *
      * @param game The game to create a platform for.
-     * 
+     *
      * @return The created platform interface.
      * @script{ignore}
      */
@@ -47,7 +47,7 @@ public:
      *
      * This method handles all OS window messages and drives the game loop.
      * It normally does not return until the application is closed.
-     * 
+     *
      * If a attachToWindow is passed to Platform::create the message pump will instead attach
      * to or allow the attachToWindow to drive the game loop on the platform.
      *
@@ -61,9 +61,9 @@ public:
     static void swapBuffers();
 
 private:
-    
+
     /**
-     * This method informs the platform that the game is shutting down 
+     * This method informs the platform that the game is shutting down
      * and anything platform specific should be shutdown as well or halted
      * This function is called automatically when the game shutdown function is called
      */
@@ -76,17 +76,17 @@ private:
      * @return whether a programmatic exit is allowed on this platform.
      */
     static bool canExit();
-    
+
     /**
      * Gets the display width.
-     * 
+     *
      * @return The display width.
      */
     static unsigned int getDisplayWidth();
-    
+
     /**
      * Gets the display height.
-     * 
+     *
      * @return The display height.
      */
     static unsigned int getDisplayHeight();
@@ -107,7 +107,7 @@ private:
 
     /**
      * Gets whether vertical sync is enabled for the game display.
-     * 
+     *
      * @return true if vsync is enabled; false if not.
      */
     static bool isVsync();
@@ -155,7 +155,7 @@ private:
      * Whether the platform has mouse support.
      */
     static bool hasMouse();
-    
+
     /**
      * Enables or disabled mouse capture.
      *
@@ -210,7 +210,7 @@ private:
      * accelerometer data with data from other sensors as well, such as the gyros.
      * This method is best used to obtain an indication of device orientation; it
      * does not necessarily distinguish between acceleration and rotation rate.
-     * 
+     *
      * @param pitch The accelerometer pitch. Zero if hasAccelerometer() returns false.
      * @param roll The accelerometer roll. Zero if hasAccelerometer() returns false.
      */
@@ -232,12 +232,12 @@ private:
 
     /**
      * Gets the command line arguments.
-     * 
+     *
      * @param argc The number of command line arguments.
      * @param argv The array of command line arguments.
      */
     static void getArguments(int* argc, char*** argv);
-    
+
     /**
      * Shows or hides the virtual keyboard (if supported).
      *
@@ -356,7 +356,7 @@ public:
      * @script{ignore}
      */
     static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                              unsigned int vendorId, unsigned int productId, 
+                                              unsigned int vendorId, unsigned int productId,
                                               const char* vendorString, const char* productString);
 
     /**
@@ -367,7 +367,7 @@ public:
     static void gamepadEventDisconnectedInternal(GamepadHandle handle);
 
     /**
-     * Internal metehod used by Gamepad that polls the platform for the updated Gamepad
+     * Internal method used by Gamepad that polls the platform for the updated Gamepad
      * states such as joysticks, buttons and trigger values.
      *
      * @param gamepad The gamepad to be returned with the latest polled values populated.

@@ -29,14 +29,14 @@ public:
     enum InterpolationType
     {
         /**
-         * Bezier Interpolation. 
+         * Bezier Interpolation.
          *
          * Requires that two control points are set for each segment.
          */
         BEZIER,
 
         /**
-         * B-Spline Interpolation. 
+         * B-Spline Interpolation.
          *
          * Uses the points as control points, and the curve is guaranteed to only pass through the
          * first and last point.
@@ -44,14 +44,14 @@ public:
         BSPLINE,
 
         /**
-         * Flat Interpolation. 
-         * 
+         * Flat Interpolation.
+         *
          * A form of Hermite interpolation that generates flat tangents for you. The tangents have a value equal to 0.
          */
         FLAT,
 
         /**
-         * Hermite Interpolation. 
+         * Hermite Interpolation.
          *
          * Requires that two tangents for each segment.
          */
@@ -62,8 +62,8 @@ public:
          */
         LINEAR,
 
-        /** 
-         * Smooth Interpolation. 
+        /**
+         * Smooth Interpolation.
          *
          * A form of Hermite interpolation that generates tangents for each segment based on the points prior to and after the segment.
          */
@@ -71,14 +71,14 @@ public:
 
         /**
          * Discrete Interpolation.
-         */ 
+         */
         STEP,
 
         /**
          * Quadratic-In Interpolation.
          */
-        QUADRATIC_IN, 
-        
+        QUADRATIC_IN,
+
         /**
          * Quadratic-Out Interpolation.
          */
@@ -98,17 +98,17 @@ public:
          * Cubic-In Interpolation.
          */
         CUBIC_IN,
-        
+
         /**
          * Cubic-Out Interpolation.
          */
         CUBIC_OUT,
-        
+
         /**
          * Cubic-In-Out Interpolation.
          */
         CUBIC_IN_OUT,
-        
+
         /**
          * Cubic-Out-In Interpolation.
          */
@@ -138,37 +138,37 @@ public:
          * Quintic-In Interpolation.
          */
         QUINTIC_IN,
-        
+
         /**
          * Quintic-Out Interpolation.
          */
         QUINTIC_OUT,
-        
+
         /**
          * Quintic-In-Out Interpolation.
          */
         QUINTIC_IN_OUT,
-        
+
         /**
          * Quintic-Out-In Interpolation.
          */
         QUINTIC_OUT_IN,
-        
+
         /**
          * Sine-In Interpolation.
          */
         SINE_IN,
-        
+
         /**
          * Sine-Out Interpolation.
          */
         SINE_OUT,
-        
+
         /**
          * Sine-In-Out Interpolation.
          */
         SINE_IN_OUT,
-        
+
         /**
          * Sine-Out-In Interpolation.
          */
@@ -277,7 +277,7 @@ public:
 
     /**
      * Creates a new curve.
-     * 
+     *
      * @param pointCount The number of points in the curve.
      * @param componentCount The number of float component values per key value.
      * @script{create}
@@ -343,7 +343,7 @@ public:
      * @param outValue The tangent leaving the point.
      */
     void setTangent(unsigned int index, InterpolationType type, float* inValue, float* outValue);
-    
+
     /**
      * Evaluates the curve at the given position value.
      *
@@ -373,7 +373,7 @@ public:
      * interpolating a repeat of the curve.
      *
      * @param time The position within the subregion of the curve to evaluate the curve at.
-     *      A time of zero representes the start of the subregion, with a time of one
+     *      A time of zero represents the start of the subregion, with a time of one
      *      representing the end of the subregion.
      * @param startTime Start time for the subregion (between 0.0 - 1.0).
      * @param endTime End time for the subregion (between 0.0 - 1.0).
@@ -478,19 +478,19 @@ private:
      */
     void interpolateHermiteSmooth(float s, unsigned int index, Point* from, Point* to, float* dst) const;
 
-    /** 
+    /**
      * Linear interpolation function.
-     */ 
+     */
     void interpolateLinear(float s, Point* from, Point* to, float* dst) const;
 
     /**
      * Quaternion interpolation function.
      */
     void interpolateQuaternion(float s, float* from, float* to, float* dst) const;
-    
+
     /**
      * Determines the current keyframe to interpolate from based on the specified time.
-     */ 
+     */
     int determineIndex(float time, unsigned int min, unsigned int max) const;
 
     /**
@@ -498,7 +498,7 @@ private:
      * index. The next four components of data starting at the given index will be interpolated as a Quaternion.
      * This function will assert an error if the given index is greater than the component size subtracted by the four components required
      * to store a quaternion.
-     * 
+     *
      * @param index The index of the Quaternion rotation data.
      */
     void setQuaternionOffset(unsigned int index);

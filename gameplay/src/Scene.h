@@ -27,7 +27,7 @@ public:
 
     /**
      * Creates a new empty scene.
-     * 
+     *
      * @param id ID of the new scene, or NULL to use an empty string for the ID (default).
      *
      * @return The newly created empty scene.
@@ -37,7 +37,7 @@ public:
 
     /**
      * Loads a scene from the given '.scene' or '.gpb' file.
-     * 
+     *
      * @param filePath The path to the '.scene' or '.gpb' file to load from.
      * @return The loaded scene or <code>NULL</code> if the scene
      *      could not be loaded from the given file.
@@ -77,7 +77,7 @@ public:
      * @param recursive true if a recursive search should be performed, false otherwise.
      * @param exactMatch true if only nodes whose ID exactly matches the specified ID are returned,
      *      or false if nodes that start with the given ID are returned.
-     * 
+     *
      * @return The first node found that matches the given ID.
      */
     Node* findNode(const char* id, bool recursive = true, bool exactMatch = true) const;
@@ -90,7 +90,7 @@ public:
      * @param recursive true if a recursive search should be performed, false otherwise.
      * @param exactMatch true if only nodes who's ID exactly matches the specified ID are returned,
      *      or false if nodes that start with the given ID are returned.
-     * 
+     *
      * @return The number of matches found.
      * @script{ignore}
      */
@@ -100,14 +100,14 @@ public:
      * Creates and adds a new node to the scene.
      *
      * @param id An optional node ID.
-     * 
+     *
      * @return The new node.
      */
     Node* addNode(const char* id = NULL);
 
     /**
      * Adds the specified node to the scene.
-     * 
+     *
      * @param node The node to be added to the scene.
      */
     void addNode(Node* node);
@@ -133,7 +133,7 @@ public:
 
     /**
      * Returns the first node in the scene.
-     * 
+     *
      * @return The first node in the scene.
      */
     Node* getFirstNode() const;
@@ -147,15 +147,15 @@ public:
 
     /**
      * Sets the active camera on the scene.
-     * 
+     *
      * @param camera The active camera to be set on the scene.
      */
     void setActiveCamera(Camera* camera);
 
     /**
-     * Sets the audio listener to transform along with the active camera if set to true.  
+     * Sets the audio listener to transform along with the active camera if set to true.
      * If you have a 2D game that doesn't require it, then set to false.  This is on by default for the scene.
-     * 
+     *
      * @param bind true if you want to the audio listener to follow the active camera's transform.
      */
     void bindAudioListenerToCamera(bool bind);
@@ -166,14 +166,14 @@ public:
      * The default ambient light color is black (0,0,0).
      *
      * This value can be bound to materials using the SCENE_LIGHT_AMBIENT_COLOR auto binding.
-     * 
+     *
      * @return The scene's ambient color.
      */
     const Vector3& getAmbientColor() const;
 
     /**
      * Sets the ambient color of the scene.
-     * 
+     *
      * @param red The red channel between 0.0 and 1.0.
      * @param green The green channel between 0.0 and 1.0.
      * @param blue The blue channel between 0.0 and 1.0.
@@ -181,7 +181,7 @@ public:
      * @see getAmbientColor()
      */
     void setAmbientColor(float red, float green, float blue);
-    
+
     /**
      * Visits each node in the scene and calls the specified method pointer.
      *
@@ -206,7 +206,7 @@ public:
      *
      * Calling this method invokes the specified method pointer for each node
      * in the scene hierarchy, passing the Node and the specified cookie value.
-     * 
+     *
      * The visitMethod parameter must be a pointer to a method that has a bool
      * return type and accepts two parameters: a Node pointer and a cookie of a
      * user-specified type.
@@ -229,7 +229,7 @@ public:
      * in the scene hierarchy.
      *
      * The visitMethod parameter must be a string containing the name of a
-     * valid Lua function that has a boolean return type and accepts a 
+     * valid Lua function that has a boolean return type and accepts a
      * single parameter of type Node*.
      *
      * A depth-first traversal of the scene continues while the visit method
@@ -333,7 +333,7 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
         return;
 
     // If this node has a model with a mesh skin, visit the joint hierarchy within it
-    // since we don't add joint hierarcies directly to the scene. If joints are never
+    // since we don't add joint hierarchies directly to the scene. If joints are never
     // visited, it's possible that nodes embedded within the joint hierarchy that contain
     // models will never get visited (and therefore never get drawn).
     if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)
@@ -356,7 +356,7 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), 
         return;
 
     // If this node has a model with a mesh skin, visit the joint hierarchy within it
-    // since we don't add joint hierarcies directly to the scene. If joints are never
+    // since we don't add joint hierarchies directly to the scene. If joints are never
     // visited, it's possible that nodes embedded within the joint hierarchy that contain
     // models will never get visited (and therefore never get drawn).
     if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)

@@ -212,10 +212,10 @@ public:
     /**
      * Sets a custom projection matrix to be used by the camera.
      *
-     * Setting a custom projection matrix results in the internally 
-     * computed projection matrix being completely overriden until
+     * Setting a custom projection matrix results in the internally
+     * computed projection matrix being completely overridden until
      * the resetProjectionMatrix method is called. A custom projection
-     * matrix is normally not neccessary, but can be used for special
+     * matrix is normally not necessary, but can be used for special
      * projection effects, such as setting an oblique view frustum
      * for near plane clipping.
      *
@@ -343,7 +343,7 @@ private:
 
     /**
      * Clones the camera and returns a new camera.
-     * 
+     *
      * @param context The clone context.
      * @return The newly created camera.
      */

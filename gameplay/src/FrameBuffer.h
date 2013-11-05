@@ -13,11 +13,11 @@ namespace gameplay
  * Defines a frame buffer object that may contain one or more render targets and optionally
  * a depth-stencil target.
  *
- * Frame buffers can be created and used for off-screen rendering, which is useful for 
+ * Frame buffers can be created and used for off-screen rendering, which is useful for
  * techniques such as shadow mapping and post-processing. Render targets within a frame
  * buffer can be both written to and read (by calling RenderTarget::getTexture).
  *
- * When binding a custom frame buffer, you should always store the return value of 
+ * When binding a custom frame buffer, you should always store the return value of
  * FrameBuffer::bind and restore it when you are finished drawing to your frame buffer.
  *
  * To bind the default frame buffer, call FrameBuffer::bindDefault.
@@ -97,7 +97,7 @@ public:
      * @return The number of color attachments available on the current hardware.
      */
     static unsigned int getMaxRenderTargets();
- 
+
     /**
      * Set a RenderTarget on this FrameBuffer's color attachment at the specified index.
      *
@@ -105,7 +105,7 @@ public:
      * @param index The index of the color attachment to set.
      */
     void setRenderTarget(RenderTarget* target, unsigned int index = 0);
- 
+
     /**
      * Get the RenderTarget attached to the FrameBuffer's color attachment at the specified index.
      *
@@ -121,30 +121,30 @@ public:
      * @return The number of render targets attached.
      */
     unsigned int getRenderTargetCount() const;
- 
+
     /**
      * Set this FrameBuffer's DepthStencilTarget.
      *
      * @param target The DepthStencilTarget to set on this FrameBuffer.
      */
     void setDepthStencilTarget(DepthStencilTarget* target);
-  
+
     /**
      * Get this FrameBuffer's DepthStencilTarget.
      *
      * @return This FrameBuffer's DepthStencilTarget.
      */
     DepthStencilTarget* getDepthStencilTarget() const;
- 
+
     /**
-     * Determines whether this is the default frame bufffer.
+     * Determines whether this is the default frame buffer.
      *
      * @return true if this is the default frame buffer, false otherwise.
      */
     bool isDefault() const;
 
     /**
-     * Binds this FrameBuffer for off-screen rendering and return you the curently bound one.
+     * Binds this FrameBuffer for off-screen rendering and return you the currently bound one.
      *
      * You should keep the return FrameBuffer and store it and call bind() when you rendering is complete.
      *
@@ -154,17 +154,17 @@ public:
 
 	/**
 	 * Records a screenshot of what is stored on the current FrameBuffer.
-	 * 
+	 *
 	 * @return A screenshot of the current framebuffer's content.
 	 */
 	static Image* createScreenshot();
 
 	/**
 	 * Records a screenshot of what is stored on the current FrameBuffer to an Image.
-	 * 
+	 *
 	 * The Image must be the same size as the FrameBuffer, otherwise the operation will fail.
 	 * The Image must be format RGBA.
-	 * 
+	 *
 	 * @param image The Image to write the current framebuffer's content to.
 	 */
 	static void getScreenshot(Image* image);
@@ -174,7 +174,7 @@ public:
      *
      * @ return The default framebuffer.
      */
-    static FrameBuffer* bindDefault(); 
+    static FrameBuffer* bindDefault();
 
     /**
      * Gets the currently bound FrameBuffer.
@@ -182,7 +182,7 @@ public:
      * @return The currently bound FrameBuffer.
      */
     static FrameBuffer* getCurrent();
-     
+
 private:
 
     /**
