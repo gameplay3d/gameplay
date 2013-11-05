@@ -418,7 +418,7 @@ public:
     };
 
     /**
-     * Returns a MaterialParameter for the specified name.
+     * Gets a MaterialParameter for the specified name.
      * 
      * The returned MaterialParameter can be used to set values for the specified
      * parameter name.
@@ -433,14 +433,35 @@ public:
     MaterialParameter* getParameter(const char* name) const;
 
     /**
-     * Clears the MaterialParameter with the given name.
+     * Gets the number of material parameters.
+     *
+     * @return The number of material parameters.
+     */
+    unsigned int getParameterCount() const;
+
+    /**
+     * Gets a MaterialParameter for the specified index.
+     *
+     * @return A MaterialParameter for the specified index.
+     */
+    MaterialParameter* getParameterByIndex(unsigned int index);
+
+    /**
+     * Adds a MaterialParameter to the render state.
+     *
+     * @param param The parameters to to added.
+     */
+    void addParameter(MaterialParameter* param);
+
+    /**
+     * Removes(clears) the MaterialParameter with the given name.
      *
      * If a material parameter exists for the given name, it is destroyed and
      * removed from this RenderState.
      *
      * @param name Material parameter (uniform) name.
      */
-    void clearParameter(const char* name);
+    void removeParameter(const char* name);
 
     /**
      * Sets a material parameter auto-binding.

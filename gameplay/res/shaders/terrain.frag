@@ -108,7 +108,6 @@ void main()
     #endif
 
     #if defined(DEBUG_PATCHES)
-    // If patch debug drawing is enabled, tint patches alternate colors
     float tint = mod(u_row + mod(u_column, 2.0), 2.0);
     _baseColor.rgb = _baseColor.rgb * 0.75 + vec3(1.0-tint, tint, 0) * 0.25;
     #endif
