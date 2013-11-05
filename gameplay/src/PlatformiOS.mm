@@ -8,6 +8,7 @@
 #include "ScriptController.h"
 #include <unistd.h>
 #import <UIKit/UIKit.h>
+#import <GameKit/GameKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CoreMotion/CoreMotion.h>
 #import <OpenGLES/EAGL.h>
@@ -749,6 +750,7 @@ int getUnicode(int key);
 @interface ViewController : UIViewController
 - (void)startUpdating;
 - (void)stopUpdating;
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController;
 @end
 
 
@@ -821,6 +823,10 @@ int getUnicode(int key);
     [(View*)self.view stopUpdating];
 }
 
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 @end
 
 

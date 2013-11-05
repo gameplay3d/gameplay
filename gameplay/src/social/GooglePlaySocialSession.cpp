@@ -5,11 +5,11 @@
 #include <android_native_app_glue.h>
 #include <android/log.h>
 
-extern struct android_app* __state;
-
 namespace gameplay
 {
 
+// Externally referenced global variable.
+struct android_app* __state;
 
 GooglePlaySocialSession* GooglePlaySocialSession::_session = NULL;
 
@@ -34,6 +34,7 @@ SocialSessionListener* GooglePlaySocialSession::getListener()
 
 SocialSession *GooglePlaySocialSession::authenticate(SocialSessionListener* listener, Properties* properties)
 {
+#if 0
     if (!_session)
     {
 		_session = new GooglePlaySocialSession();
@@ -71,6 +72,7 @@ SocialSession *GooglePlaySocialSession::authenticate(SocialSessionListener* list
 
 		jvm->DetachCurrentThread();
     }
+#endif
 
     return _session;
 }
@@ -80,101 +82,112 @@ const SocialPlayer& GooglePlaySocialSession::getUser() const
 	return _user;
 }
 
-/**
- * @see SocialSession::loadFriends
- */
 void GooglePlaySocialSession::loadFriends()
 {
 }
 
-/**
- * @see SocialSession::loadAchievements
- */
+void GooglePlaySocialSession::loadAchievementData()
+{
+
+}
+
 void GooglePlaySocialSession::loadAchievements()
 {
+
 }
 
-/**
- * @see SocialSession::submitAchievement
- */
+const SocialAchievement* GooglePlaySocialSession::getAchievement(const char* achievementId) const
+{
+    uint size = _achievements.size();
+
+    for (uint i = 0; i < size; i++)
+    {
+        if (strcmp(_achievements[i].name.data(), achievementId) == 0)
+            return &_achievements[i];
+    }
+    return 0;
+}
+
 void GooglePlaySocialSession::submitAchievement(const char* achievementId, unsigned int value, bool achieved)
 {
+
 }
 
-/**
- * @see SocialSession::incrementAchievement
- */
-void GooglePlaySocialSession::incrementAchievement(const char* achievementId, unsigned int increment)
+void GooglePlaySocialSession::incrementAchievement(const char* achievementId, unsigned int totalSteps)
 {
+
 }
 
-/**
-  * @see SocialSession::synchronizeAchievements
-  */
 void GooglePlaySocialSession::synchronizeAchievements()
 {
 }
 
-/**
- * @see SocialSession::loadScores
- */
-void GooglePlaySocialSession::loadScores(const char* leaderboardId, SocialSession::CommunityScope community, SocialSession::TimeScope time, const SocialPlayer& player, unsigned int count)
-{
-}
-
-/**
- * @see SocialSession::loadScores
- */
 void GooglePlaySocialSession::loadScores(const char* leaderboardId, SocialSession::CommunityScope community, SocialSession::TimeScope time, unsigned int start, unsigned int count)
 {
+
 }
 
-/**
- * @see SocialSession::submitScore
- */
+void GooglePlaySocialSession::loadScores(const char* leaderboardId, SocialSession::CommunityScope community, SocialSession::TimeScope time, const SocialPlayer& player, unsigned int count)
+{
+
+}
+
 void GooglePlaySocialSession::submitScore(const char* leaderboardId, float score)
 {
+
 }
 
-/**
-  * @see SocialSession::submitChallenge
-  */
-void GooglePlaySocialSession::submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId)
+void GooglePlaySocialSession::submitChallenge(const SocialPlayer *player, float score, const char* leaderboardId, unsigned int wager)
 {
+    SocialChallenge challenge;
+    _listener->submitChallengeEvent(SocialSessionListener::ERROR_NOT_SUPPORTED, challenge);
 }
 
-/**
-  * @see SocialSession::loadChallenges
-  */
+void GooglePlaySocialSession::submitAchievementChallenge(const SocialPlayer *player, const char* achievementId, unsigned int wager)
+{
+    SocialChallenge challenge;
+    _listener->submitChallengeEvent(SocialSessionListener::ERROR_NOT_SUPPORTED, challenge);
+}
+
 void GooglePlaySocialSession::loadChallenges(bool showOpenChallengesOnly)
 {
+	_listener->loadChallengesEvent(SocialSessionListener::ERROR_NOT_SUPPORTED, _challenges);
 }
 
-/**
-  * @see SocialSession::acceptChallenge
-  */
+
 void GooglePlaySocialSession::replyToChallenge(const SocialChallenge *challenge, bool accept)
 {
 }
 
-/**
- * @see SocialSession::requestSavedData
- */
-void GooglePlaySocialSession::loadSavedData(const char* key) {}
+void GooglePlaySocialSession::loadSavedData(const char* key)
+{
+}
 
-/**
- * @see SocialSession::submitSavedData
- */
-void GooglePlaySocialSession::submitSavedData(const char* key, std::string data) {}
+void GooglePlaySocialSession::submitSavedData(const char* key, std::string data)
+{
 
-void GooglePlaySocialSession::displayLeaderboard(const char* leaderboardId) {}
+}
 
-void GooglePlaySocialSession::displayAchievements() {}
+void GooglePlaySocialSession::displayLeaderboard(const char* leaderboardId) const
+{
+}
 
-void GooglePlaySocialSession::displayChallenges() {}
+void GooglePlaySocialSession::displayAchievements() const
+{
+}
 
-void GooglePlaySocialSession::displayChallengeSubmit(const SocialChallenge *challenge, float score) {}
+void GooglePlaySocialSession::displayChallenges() const
+{
+}
 
+void GooglePlaySocialSession::displayChallengeSubmit(const SocialChallenge *challenge, float score) const
+{
+}
+
+void GooglePlaySocialSession::displayPopup(const char *popupMessage, const char *title) const
+{
+
+}
 
 }
 
