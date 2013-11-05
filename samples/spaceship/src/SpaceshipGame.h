@@ -249,6 +249,8 @@ private:
     std::vector<SocialPlayer> _friends;
     std::vector<SocialChallenge> _challenges;
     bool _hitSomething;
+    bool _wonChallenge;
+    bool _createdChallenge;
     bool _creatingChallenge;
     bool _hasAcceptedChallenge;
 

@@ -2,6 +2,7 @@
 
 #include "Base.h"
 #include "ScoreloopSocialSession.h"
+#include <bps/dialog.h>
 
 namespace gameplay
 {
@@ -867,7 +868,7 @@ void ScoreloopSocialSession::submitScoreCallback(void* cookie, SC_Error_t result
     session->_pendingSubmitScoreResponse = false;
 }
 
-void ScoreloopSocialSession::submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId)
+void ScoreloopSocialSession::submitChallenge(const SocialPlayer *player, float score, const char* leaderboardId, unsigned int wager)
 {
 	SocialChallenge challenge;
 
@@ -966,6 +967,15 @@ void ScoreloopSocialSession::submitChallenge(const SocialPlayer *player, unsigne
 	SC_Score_Release(sc_score);
 
 //	_listener->submitChallengeEvent(SocialSessionListener::SUCESS, challenge);
+}
+
+/**
+ * @see SocialSession::submitChallenge
+ */
+void ScoreloopSocialSession::submitAchievementChallenge(const SocialPlayer *player, const char* achievementId, unsigned int wager)
+{
+	SocialChallenge challenge;
+    _listener->submitChallengeEvent(SocialSessionListener::ERROR_NOT_SUPPORTED, challenge);
 }
 
 void ScoreloopSocialSession::submitChallengeCallback(void* cookie, SC_Error_t result)
@@ -1187,8 +1197,6 @@ void ScoreloopSocialSession::loadChallengesCallback(void* cookie, SC_Error_t res
 {
     ScoreloopSocialSession* session = (ScoreloopSocialSession*)cookie;
 
-
-fprintf(stderr, "loadChallengesCallback is called!\n");
     switch (result)
     {
     	case SC_OK:
@@ -1274,7 +1282,7 @@ void ScoreloopSocialSession::submitSavedData(const char* key, std::string data)
     }
 }
 
-void ScoreloopSocialSession::displayLeaderboard(const char* leaderboardId)
+void ScoreloopSocialSession::displayLeaderboard(const char* leaderboardId) const
 {
 	SC_Error_t rc;
 	int mode = 0;
@@ -1303,7 +1311,7 @@ void ScoreloopSocialSession::displayLeaderboard(const char* leaderboardId)
 	}
 }
 
-void ScoreloopSocialSession::displayAchievements()
+void ScoreloopSocialSession::displayAchievements() const
 {
 	SC_Error_t rc;
 
@@ -1321,7 +1329,7 @@ void ScoreloopSocialSession::displayAchievements()
 	}
 }
 
-void ScoreloopSocialSession::displayChallenges()
+void ScoreloopSocialSession::displayChallenges() const
 {
 	fprintf(stderr, "displayChallenges has been called\n");
     SC_Error_t rc = SC_NOT_IMPLEMENTED_YET;
@@ -1349,7 +1357,7 @@ void ScoreloopSocialSession::displayChallenges()
     }
 }
 
-void ScoreloopSocialSession::displayChallengeSubmit(const SocialChallenge *challenge, float score)
+void ScoreloopSocialSession::displayChallengeSubmit(const SocialChallenge *challenge, float score) const
 {
 	SC_Error_t rc = SC_NOT_IMPLEMENTED_YET;
 
@@ -1387,6 +1395,23 @@ void ScoreloopSocialSession::displayChallengeSubmit(const SocialChallenge *chall
     {
     	fprintf(stderr, "Failed to start a Challenges card! %s\n", SC_MapErrorToStr(rc));
     }
+}
+
+void ScoreloopSocialSession::displayPopup(const char *popupMessage, const char *title) const
+{
+	dialog_instance_t dialog = 0;
+
+	dialog_create_toast(&dialog);
+
+	dialog_set_group_id(dialog, "dialogId");
+
+	dialog_set_toast_position(dialog, DIALOG_POSITION_TOP_CENTER);
+	dialog_set_toast_message_text(dialog, popupMessage);
+    
+    if (title)
+        dialog_set_title_text(dialog, title);
+
+	dialog_show(dialog);
 }
 
 }

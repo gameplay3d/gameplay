@@ -29,6 +29,12 @@ namespace gameplay
              medium = 1
              hard = 2
          }
+
+         achievement_mappings
+         {
+             // Format: myAchievementKey =  DestinationAchievementID
+             gameplay.spaceship.winchallenge = destination.spaceship.winchallengeid
+         }
     }
  *
  * Note: Ensure your bar-descriptor.xml has:
@@ -44,95 +50,137 @@ class GooglePlaySocialSession : public SocialSession
 public:
 
     /**
-     * @see SocialSession::getListener
-     */
-    SocialSessionListener* getListener();
+      * @see SocialSession::getListener
+      */
+     SocialSessionListener* getListener();
 
-    /**
-     * Initializes the session with the local client definition for this game.
-     *
-     * @param listener The listener for responses for this session
-     * @param properties The properties to initialize this session with for this game.
-     */
-    static SocialSession *authenticate(SocialSessionListener* listener, Properties* properties);
+     /**
+      * Initializes the session with the local client definition for this game.
+      *
+      * @param listener The listener for responses for this session
+      * @param properties The properties to initialize this session with for this game.
+      */
+     static SocialSession *authenticate(SocialSessionListener* listener, Properties* properties);
 
-    /**
-     * @see SocialSession::getUser
-     */
-    const SocialPlayer& getUser() const;
+     /**
+      * @see SocialSession::getUser
+      */
+     const SocialPlayer& getUser() const;
 
-    /**
-     * @see SocialSession::loadFriends
-     */
-    void loadFriends();
+     /**
+      * @see SocialSession::loadFriends
+      */
+     void loadFriends();
 
-    /**
-     * @see SocialSession::loadAchievements
-     */
-    void loadAchievements();
+     /**
+      * @see SocialSession::loadAchievements
+      */
+     void loadAchievements();
 
-    /**
-     * @see SocialSession::submitAchievement
-     */
-    void submitAchievement(const char* achievementId, unsigned int value, bool achieved=false);
+     /**
+      * @see SocialSession::submitAchievement
+      */
+     void submitAchievement(const char* achievementId, unsigned int value, bool achieved=false);
 
-    /**
-     * @see SocialSession::incrementAchievement
-     */
-    void incrementAchievement(const char* achievementId, unsigned int increment=1);
+     /**
+      * @see SocialSession::incrementAchievement
+      */
+     void incrementAchievement(const char* achievementId, unsigned int totalSteps=1);
 
-    /**
+     /**
       * @see SocialSession::syncAchievements
       */
-    void synchronizeAchievements();
+     void synchronizeAchievements();
 
-    /**
-     * @see SocialSession::loadScores
-     */
-    void loadScores(const char* leaderboardId, CommunityScope community, TimeScope time, const SocialPlayer& player, unsigned int count);
+     /**
+      * @see SocialSession::loadScores
+      */
+     void loadScores(const char* leaderboardId, CommunityScope community, TimeScope time, const SocialPlayer& player, unsigned int count);
 
-    /**
-     * @see SocialSession::loadScores
-     */
-    void loadScores(const char* leaderboardId, CommunityScope community, TimeScope time, unsigned int start, unsigned int count);
+     /**
+      * @see SocialSession::loadScores
+      */
+     void loadScores(const char* leaderboardId, CommunityScope community, TimeScope time, unsigned int start, unsigned int count);
 
-    /**
-     * @see SocialSession::submitScore
-     */
-    void submitScore(const char* leaderboardId, float score);
+     /**
+      * @see SocialSession::submitScore
+      */
+     void submitScore(const char* leaderboardId, float score);
 
-    /**
+     /**
       * @see SocialSession::submitChallenge
       */
-    void submitChallenge(const SocialPlayer *player, unsigned int wager, float score, const char* leaderboardId=0);
+     void submitChallenge(const SocialPlayer *player, float score, const char* leaderboardId, unsigned int wager=0);
 
-    /**
+     /**
+      * @see SocialSession::submitAchievementChallenge
+      */
+     void submitAchievementChallenge(const SocialPlayer *player, const char* achievementId, unsigned int wager=0);
+
+     /**
       * @see SocialSession::loadChallenges
       */
-    void loadChallenges(bool showOpenChallengesOnly=true);
+     void loadChallenges(bool showOpenChallengesOnly=true);
 
-    /**
+     /**
       * @see SocialSession::acceptChallenge
       */
-    void replyToChallenge(const SocialChallenge *challenge, bool accept);
+     void replyToChallenge(const SocialChallenge *challenge, bool accept);
 
     /**
      * @see SocialSession::requestSavedData
      */
     void loadSavedData(const char* key);
-
+    
     /**
      * @see SocialSession::submitSavedData
      */
     void submitSavedData(const char* key, std::string data);
-
-    void displayLeaderboard(const char* leaderboardId);
-
-    void displayAchievements();
-
-    void displayChallenges();
-
-    void displayChallengeSubmit(const SocialChallenge *challenge, float score);
+    
+    /**
+     * @see SocialSession::displayLeaderboard
+     */
+    void displayLeaderboard(const char* leaderboardId) const;
+    
+    /**
+     * @see SocialSession::displayAchievements
+     */
+    void displayAchievements() const;
+    
+    /**
+     * @see SocialSession::displayChallenges
+     */
+    void displayChallenges() const;
+    
+    /**
+     * @see SocialSession::displayChallengeSubmit
+     */
+    void displayChallengeSubmit(const SocialChallenge *challenge, float score) const;
+    
+    /**
+     * @see SocialSession::displayPopup
+     */
+    void displayPopup(const char *string, const char *title) const;
+    
+    /**
+     * @see SocialSession::supportsChallenges
+     */
+    bool supportsChallenges() const { return true; }
+    
+    /**
+     * @see SocialSession::supportsAchievementChallenges
+     */
+    bool supportsAchievementChallenges() const { return false; }
+    
+    /**
+     * @see SocialSession::supportsMultiplayer
+     */
+    bool supportsMultiplayer() const { return false; }
+    
+    /**
+     * @see SocialSession::supportsTurns
+     */
+    bool supportsTurns() const { return false; }
 
 
 protected:
@@ -148,26 +196,10 @@ private:
      * Destructor
      */
     virtual ~GooglePlaySocialSession();
-#if 0
-
-    static void userCallback(void* cookie, unsigned int result);
-
-    static void uiCallback(void *cookie, SCUI_Result_t result, const void *data);
-
-    static void loadFriendsCallback(void* cookie, SC_Error_t result);
-
-    static void loadAchievementsCallback(void* cookie, SC_Error_t result);
-
-    static void submitAchievementCallback(void* cookie, SC_Error_t result);
-
-    static void loadScoresCallback(void* cookie, SC_Error_t result);
-
-    static void submitScoreCallback(void* cookie, SC_Error_t result);
 
     const SocialAchievement* getAchievement(const char* achievementId) const;
+    void loadAchievementData();
 
-    SocialChallenge &addChallenge(SC_Challenge_h challenge);
-#endif
     static GooglePlaySocialSession* _session;
 
     enum UserOp
@@ -192,6 +224,7 @@ private:
     std::vector<SocialPlayer> _friends;
     std::vector<SocialAchievement> _achievements;
     std::vector<SocialScore> _scores;
+    std::vector<SocialChallenge> _challenges;
 };
 
 }
