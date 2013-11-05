@@ -244,3 +244,8 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/spaceship/android/local.properties
 /samples/spaceship/sample-spaceship.xcodeproj/xcuserdata
 
+/tools/encoder/Debug
+/tools/encoder/Release
+
+/tools/luagen/Debug
+/tools/luagen/Release
