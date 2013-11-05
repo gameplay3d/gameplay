@@ -43,6 +43,7 @@ void TerrainSample::initialize()
 	_scene = Scene::load("res/common/terrain/sample.scene");
 	_terrain = _scene->findNode("terrain")->getTerrain();
     _sky = _scene->findNode("sky");
+    _sky->setTag("lighting", "none");
 
     // Load shapes
     Bundle* bundle;
@@ -81,18 +82,22 @@ void TerrainSample::initialize()
     Node* lightNode = Node::create("directionalLight");
     _scene->addNode(lightNode);
     lightNode->setLight(_directionalLight);
-    lightNode->setRotation(Vector3(1, 0, 0), -MATH_DEG_TO_RAD(90));
+    lightNode->setRotation(Vector3(1, 0, 0), -MATH_DEG_TO_RAD(45));
     
     _scene->visit(this, &TerrainSample::intializeLights);
 }
 
 void initializeLight(Material* material, Light* light)
 {
-    // For this sample we will only bind a single light to each object in the scene.
-    MaterialParameter* colorParam = material->getParameter("u_directionalLightColor[0]");
-    colorParam->setValue(light->getColor());
-    MaterialParameter* directionParam = material->getParameter("u_directionalLightDirection[0]");
-    directionParam->bindValue(light->getNode(), &Node::getForwardVectorWorld);
+    if (material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_directionalLightDirection[0]"))
+    {
+        // For this sample we will only bind a single light to each object in the scene.
+        MaterialParameter* colorParam = material->getParameter("u_directionalLightColor[0]");
+        colorParam->setValue(light->getColor());
+
+        MaterialParameter* directionParam = material->getParameter("u_directionalLightDirection[0]");
+        directionParam->bindValue(light->getNode(), &Node::getForwardVectorWorld);
+    }
 }
 
 bool TerrainSample::intializeLights(Node* node)
