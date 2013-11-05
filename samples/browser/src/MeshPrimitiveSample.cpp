@@ -148,40 +148,6 @@ static Mesh* createLinesMesh()
 }
 
 
-static Mesh* createPointsMesh()
-{
-    float scale = 0.2f;
-    unsigned int vertexCount = 100;
-
-    std::vector<float> vertices;
-    vertices.reserve(vertexCount * 6);
-    for (unsigned int i = 0; i < vertexCount; ++i)
-    {
-        // x, y, z, r, g, b
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
-        vertices.push_back(MATH_RANDOM_0_1());
-        vertices.push_back(MATH_RANDOM_0_1());
-        vertices.push_back(MATH_RANDOM_0_1()); 
-    }
-    
-    VertexFormat::Element elements[] =
-    {
-        VertexFormat::Element(VertexFormat::POSITION, 3),
-        VertexFormat::Element(VertexFormat::COLOR, 3)
-    };
-    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 2), vertexCount, false);
-    if (mesh == NULL)
-    {
-        GP_ERROR("Failed to create mesh.");
-        return NULL;
-    }
-    mesh->setPrimitiveType(Mesh::POINTS);
-    mesh->setVertexData(&vertices[0], 0, vertexCount);
-    return mesh;
-}
-
 MeshPrimitiveSample::MeshPrimitiveSample()
     : _font(NULL), _triangles(NULL), _triangleStrip(NULL), _lineStrip(NULL), _lines(NULL), _points(NULL)
 {

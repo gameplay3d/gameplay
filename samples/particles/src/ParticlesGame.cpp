@@ -15,7 +15,7 @@ ParticlesGame::ParticlesGame() : _scene(NULL), _panning(false), _rotating(false)
 {
 }
 
-void addGrid(unsigned int lineCount)
+void ParticlesGame::addGrid(unsigned int lineCount)
 {
     float z = -1;
 
@@ -317,61 +317,61 @@ std::string ParticlesGame::openFile(const char* title, const char* filterDescrip
     return "";
 }
 
-std::string toString(ParticleEmitter::TextureBlending blending)
+std::string ParticlesGame::toString(bool b)
 {
-    switch (blending)
-    {
-    case ParticleEmitter::BLEND_OPAQUE:
-        return "OPAQUE";
-    case ParticleEmitter::BLEND_TRANSPARENT:
-        return "TRANSPARENT";
-    case ParticleEmitter::BLEND_ADDITIVE:
-        return "ADDITIVE";
-    case ParticleEmitter::BLEND_MULTIPLIED:
-        return "MULTIPLIED";
-    default:
-        return "TRANSPARENT";
-    }
+    return b ? "true" : "false";
 }
 
-std::string toString(const Vector4& v)
+std::string ParticlesGame::toString(int i)
 {
-    std::ostringstream s;
-    s << v.x << ", " << v.y << ", " << v.z << ", " << v.w;
-    return s.str();
+    char buf[1024];
+    sprintf(buf, "%d", i);
+    return buf;
 }
 
-std::string toString(const Vector3& v)
+std::string ParticlesGame::toString(unsigned int i)
+{
+    char buf[1024];
+    sprintf(buf, "%d", i);
+    return buf;
+}
+
+std::string ParticlesGame::toString(const Vector3& v)
 {
     std::ostringstream s;
     s << v.x << ", " << v.y << ", " << v.z;
     return s.str();
 }
 
-std::string toString(const Quaternion& q)
+std::string ParticlesGame::toString(const Vector4& v)
+{
+    std::ostringstream s;
+    s << v.x << ", " << v.y << ", " << v.z << ", " << v.w;
+    return s.str();
+}
+
+std::string ParticlesGame::toString(const Quaternion& q)
 {
     std::ostringstream s;
     s << q.x << ", " << q.y << ", " << q.z << ", " << q.w;
     return s.str();
 }
 
-std::string toString(bool b)
+std::string ParticlesGame::toString(ParticleEmitter::TextureBlending blending)
 {
-    return b ? "true" : "false";
-}
-
-std::string toString(int i)
-{
-    char buf[1024];
-    sprintf(buf, "%d", i);
-    return buf;
-}
-
-std::string toString(unsigned int i)
-{
-    char buf[1024];
-    sprintf(buf, "%d", i);
-    return buf;
+    switch (blending)
+    {
+        case ParticleEmitter::BLEND_OPAQUE:
+            return "OPAQUE";
+        case ParticleEmitter::BLEND_TRANSPARENT:
+            return "TRANSPARENT";
+        case ParticleEmitter::BLEND_ADDITIVE:
+            return "ADDITIVE";
+        case ParticleEmitter::BLEND_MULTIPLIED:
+            return "MULTIPLIED";
+        default:
+            return "TRANSPARENT";
+    }
 }
 
 void ParticlesGame::saveFile()
