@@ -555,8 +555,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_Terrain.h
     src/lua/lua_TerrainFlags.cpp
     src/lua/lua_TerrainFlags.h
-    src/lua/lua_TerrainListener.cpp
-    src/lua/lua_TerrainListener.h
     src/lua/lua_TextBox.cpp
     src/lua/lua_TextBox.h
     src/lua/lua_TextBoxInputMode.cpp
