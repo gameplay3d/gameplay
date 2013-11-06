@@ -825,7 +825,7 @@ void SpaceshipGame::loadScoresEvent(ResponseCode code, std::vector<SocialScore> 
 {
 	if (code == SUCCESS)
 	{
-        for (size_t i = 0 ; i < scores.size(); i++)
+        for (unsigned int i = 0 ; i < scores.size(); i++)
 		{
 			fprintf(stderr, "Score %d for %s is %lf\n", i, scores[i].playerName.data(), scores[i].value);
 		}
