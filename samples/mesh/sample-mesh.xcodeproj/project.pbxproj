@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		421090F018299F5100761E40 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421090EF18299F5100761E40 /* GameKit.framework */; };
 		4217006314697FF100A45C02 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4217006214697FF100A45C02 /* Cocoa.framework */; };
 		4220A6E5146B121000CAEB3A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4220A6E4146B121000CAEB3A /* QuartzCore.framework */; };
 		424CC02C161F8DDE00577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC02B161F8DDE00577827 /* IOKit.framework */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		421090EF18299F5100761E40 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		4217005E14697FF100A45C02 /* sample-mesh-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-mesh-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4217006214697FF100A45C02 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4220A6E4146B121000CAEB3A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -117,6 +119,7 @@
 				42512C5C17FB40AA00373866 /* libvorbis.a in Frameworks */,
 				42DFAB1716AD8BA80000F342 /* OpenAL.framework in Frameworks */,
 				42512C5B17FB40AA00373866 /* libogg.a in Frameworks */,
+				421090F018299F5100761E40 /* GameKit.framework in Frameworks */,
 				42DFAB1816AD8BA80000F342 /* OpenGLES.framework in Frameworks */,
 				42DFAB1916AD8BA80000F342 /* QuartzCore.framework in Frameworks */,
 				42512C5A17FB40AA00373866 /* libpng.a in Frameworks */,
@@ -174,7 +177,6 @@
 		42CCD4B1146D814F00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6212DAB11829D999006213DD /* GameKit.framework */,
 				5B04C5FF14BFE53F00EB0071 /* MacOSX */,
 				5B04C60014BFE54200EB0071 /* iOS */,
 			);
@@ -212,6 +214,7 @@
 		5B04C5FF14BFE53F00EB0071 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				6212DAB11829D999006213DD /* GameKit.framework */,
 				424CC02B161F8DDE00577827 /* IOKit.framework */,
 				4217006214697FF100A45C02 /* Cocoa.framework */,
 				4220A6E4146B121000CAEB3A /* QuartzCore.framework */,
@@ -224,6 +227,7 @@
 		5B04C60014BFE54200EB0071 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				421090EF18299F5100761E40 /* GameKit.framework */,
 				42DFAABF16AD898F0000F342 /* CoreMotion.framework */,
 				42DFAAD516AD8A9D0000F342 /* Foundation.framework */,
 				42DFAB1316AD8BA80000F342 /* OpenAL.framework */,
