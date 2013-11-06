@@ -41,6 +41,7 @@
 		42DFAB0216AD8B780000F342 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAAFE16AD8B780000F342 /* UIKit.framework */; };
 		5B43D1C814C35F4C008A5D9D /* CharacterGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD5AD146EC62000353661 /* CharacterGame.cpp */; };
 		5B43D1D814C35F4C008A5D9D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD5B0146EC62A00353661 /* icon.png */; };
+		6212DAB61829D9E6006213DD /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6212DAB51829D9E6006213DD /* GameKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,7 @@
 		42DFAAFE16AD8B780000F342 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		42DFAB4316AD8E3F0000F342 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5B43D1DD14C35F4C008A5D9D /* sample-character-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-character-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6212DAB51829D9E6006213DD /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		DDBBAE861574040C00D39DE7 /* game.dxt.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.dxt.config; sourceTree = "<group>"; };
 		DDBBAE8B1574067600D39DE7 /* game.pvrtc.config */ = {isa = PBXFileReference; lastKnownFileType = text; path = game.pvrtc.config; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,6 +97,7 @@
 				42CCD5AA146EC5F000353661 /* libpng.a in Frameworks */,
 				42CCD5A8146EC5DE00353661 /* libz.dylib in Frameworks */,
 				42B7026315B0A8F2002BB8C3 /* liblua.a in Frameworks */,
+				6212DAB61829D9E6006213DD /* GameKit.framework in Frameworks */,
 				424CC038161FCB7B00577827 /* IOKit.framework in Frameworks */,
 				42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */,
 				42CCD5A6146EC5CE00353661 /* QuartzCore.framework in Frameworks */,
@@ -165,6 +168,7 @@
 		42CCD56F146EC4B300353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6212DAB51829D9E6006213DD /* GameKit.framework */,
 				5B43D1F114C36054008A5D9D /* MacOSX */,
 				5B43D1F014C36051008A5D9D /* iOS */,
 			);
