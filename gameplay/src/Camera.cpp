@@ -28,7 +28,7 @@ Camera::Camera(float fieldOfView, float aspectRatio, float nearPlane, float farP
 
 Camera::Camera(float zoomX, float zoomY, float aspectRatio, float nearPlane, float farPlane)
     : _type(ORTHOGRAPHIC), _aspectRatio(aspectRatio), _nearPlane(nearPlane), _farPlane(farPlane),
-      _bits(CAMERA_DIRTY_ALL), _node(NULL)
+	_bits(CAMERA_DIRTY_ALL), _node(NULL), _listeners(NULL)
 {
     // Orthographic camera.
     _zoom[0] = zoomX;
