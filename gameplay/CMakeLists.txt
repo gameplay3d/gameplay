@@ -306,6 +306,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_Button.h
     src/lua/lua_Camera.cpp
     src/lua/lua_Camera.h
+    src/lua/lua_CameraListener.h
+    src/lua/lua_CameraListener.cpp
     src/lua/lua_CameraType.cpp
     src/lua/lua_CameraType.h
     src/lua/lua_CheckBox.cpp
@@ -555,8 +557,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_Terrain.h
     src/lua/lua_TerrainFlags.cpp
     src/lua/lua_TerrainFlags.h
-    src/lua/lua_TerrainListener.cpp
-    src/lua/lua_TerrainListener.h
+    src/lua/lua_TerrainPatch.cpp
+    src/lua/lua_TerrainPatch.h
     src/lua/lua_TextBox.cpp
     src/lua/lua_TextBox.h
     src/lua/lua_TextBoxInputMode.cpp
