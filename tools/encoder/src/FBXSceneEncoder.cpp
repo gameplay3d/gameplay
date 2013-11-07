@@ -607,24 +607,13 @@ static string getBaseMaterialName(Material* material)
     ostringstream baseName;
     if (material->isTextured())
     {
-        baseName << "Textured";
+        baseName << "textured";
     }
     else
     {
-        baseName << "Colored";
+        baseName << "colored";
     }
 
-    if (material->isLit())
-    {
-        if (material->isSpecular())
-        {
-            baseName << "Specular";
-        }
-    }
-    else
-    {
-        baseName << "Unlit";
-    }
     return baseName.str();
 }
 
@@ -660,36 +649,15 @@ Material* FBXSceneEncoder::createBaseMaterial(const string& baseMaterialName, Ma
     baseMaterial->setUniform("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
     baseMaterial->setRenderState("cullFace", "true");
     baseMaterial->setRenderState("depthTest", "true");
-    if (childMaterial->isLit())
-    {
-        baseMaterial->setLit(true);
-        baseMaterial->setUniform("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
 
-        if (childMaterial->isSpecular())
-        {
-            baseMaterial->addDefine(SPECULAR);
-            baseMaterial->setUniform("u_cameraPosition", "CAMERA_WORLD_POSITION");
-        }
-    }
     if (childMaterial->isTextured())
     {
-        if (childMaterial->isLit())
+		baseMaterial->setVertexShader("res/shaders/textured.vert");
+        baseMaterial->setFragmentShader("res/shaders/textured.frag");
+
+        if (childMaterial->isLit() && childMaterial->isBumped())
         {
-            if (childMaterial->isBumped())
-            {
-                baseMaterial->setVertexShader("res/shaders/textured-bumped.vert");
-                baseMaterial->setFragmentShader("res/shaders/textured-bumped.frag");
-            }
-            else
-            {
-                baseMaterial->setVertexShader("res/shaders/textured.vert");
-                baseMaterial->setFragmentShader("res/shaders/textured.frag");
-            }
-        }
-        else
-        {
-            baseMaterial->setVertexShader("res/shaders/textured-unlit.vert");
-            baseMaterial->setFragmentShader("res/shaders/textured-unlit.frag");
+			baseMaterial->addDefine("BUMPED");
         }
         Sampler* sampler = baseMaterial->createSampler(u_diffuseTexture);
         sampler->set("mipmap", "true");
@@ -700,16 +668,24 @@ Material* FBXSceneEncoder::createBaseMaterial(const string& baseMaterialName, Ma
     }
     else
     {
-        if (childMaterial->isLit())
+		baseMaterial->setVertexShader("res/shaders/colored.vert");
+        baseMaterial->setFragmentShader("res/shaders/colored.frag");
+    }
+
+	if (childMaterial->isLit())
+    {
+        baseMaterial->setLit(true);
+		baseMaterial->setUniform("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
+		baseMaterial->setUniform("u_directionalLightColor[0]", "1, 1, 1");
+		baseMaterial->setUniform("u_directionalLightDirection[0]", "0, -1, 0");		
+
+        if (childMaterial->isSpecular())
         {
-            baseMaterial->setVertexShader("res/shaders/colored.vert");
-            baseMaterial->setFragmentShader("res/shaders/colored.frag");
+            baseMaterial->addDefine(SPECULAR);
+            baseMaterial->setUniform("u_cameraPosition", "CAMERA_WORLD_POSITION");
         }
-        else
-        {
-            baseMaterial->setVertexShader("res/shaders/colored-unlit.vert");
-            baseMaterial->setFragmentShader("res/shaders/colored-unlit.frag");
-        }
+
+		baseMaterial->addDefine("DIRECTIONAL_LIGHT_COUNT 1");		
     }
     assert(baseMaterial);
     return baseMaterial;
