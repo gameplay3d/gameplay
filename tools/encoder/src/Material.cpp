@@ -146,11 +146,6 @@ bool Material::isTextured() const
     return !_samplers.empty();
 }
 
-bool Material::isBumped() const
-{
-    return getSampler("u_normalmapTexture") != NULL;
-}
-
 bool Material::isLit() const
 {
     return _lit;
