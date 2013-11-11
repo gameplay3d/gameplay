@@ -4,29 +4,22 @@
 TemplateGame game;
 
 TemplateGame::TemplateGame()
-    : _scene(NULL)
+    : _scene(NULL), _wireframe(false)
 {
 }
 
 void TemplateGame::initialize()
 {
     // Load game scene from file
-    _scene = Scene::load("res/box.gpb");
+    _scene = Scene::load("res/demo.scene");
+
+    // Get the box model and initialize its material parameter values and bindings
+    Node* boxNode = _scene->findNode("box");
+    Model* boxModel = boxNode->getModel();
+    Material* boxMaterial = boxModel->getMaterial();
 
     // Set the aspect ratio for the scene's camera to match the current resolution
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
-    
-    // Get light node
-    Node* lightNode = _scene->findNode("directionalLight");
-    Light* light = lightNode->getLight();
-
-    // Initialize box model
-    Node* boxNode = _scene->findNode("box");
-    Model* boxModel = boxNode->getModel();
-    Material* boxMaterial = boxModel->setMaterial("res/box.material");
-    boxMaterial->getParameter("u_ambientColor")->setValue(_scene->getAmbientColor());
-    boxMaterial->getParameter("u_lightColor")->setValue(light->getColor());
-    boxMaterial->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
 }
 
 void TemplateGame::finalize()
@@ -55,7 +48,7 @@ bool TemplateGame::drawScene(Node* node)
     Model* model = node->getModel(); 
     if (model)
     {
-        model->draw();
+        model->draw(_wireframe);
     }
     return true;
 }
@@ -78,6 +71,7 @@ void TemplateGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int 
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
+        _wireframe = !_wireframe;
         break;
     case Touch::TOUCH_RELEASE:
         break;

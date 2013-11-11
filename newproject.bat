@@ -152,7 +152,7 @@ REM    rmdir /S /Q %projPath%
 REM Generate relative path from project folder to GamePlay folder
 set gpPath=%cd%
 call:makerelative gpPath "%projPath%\"
-call:replacevar gpPath "\" "/"
+call:replacevar gpPath "\" "\"
 
 mkdir "%projPath%"
 mkdir "%projPath%\src"
