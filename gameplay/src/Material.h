@@ -35,7 +35,7 @@ public:
      * 
      * @param url The URL pointing to the Properties object defining the material.
      * 
-     * @return A new Material.
+     * @return A new Material or NULL if there was an error.
      * @script{create}
      */
     static Material* create(const char* url);

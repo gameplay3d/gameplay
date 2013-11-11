@@ -44,6 +44,7 @@
     <asset path="icon.png">icon.png</asset>
     <asset path="res/arial.gpb">res/arial.gpb</asset>
     <asset path="res/duck-diffuse.png">res/duck-diffuse.png</asset>
+    <asset path="res/sample.scene">res/sample.scene</asset>
     <asset path="res/duck.gpb">res/duck.gpb</asset>
     <asset path="res/duck.material">res/duck.material</asset>
     <asset path="res/grid.material">res/grid.material</asset>
