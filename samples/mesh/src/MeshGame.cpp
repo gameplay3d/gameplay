@@ -17,17 +17,14 @@ void MeshGame::initialize()
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
 
-    // Load font
+    // Load the font
     _font = Font::create("res/arial.gpb");
 
-    // Load mesh/scene from file
-    _scene = Scene::load("res/duck.gpb");
+    // Load the scene from file
+    _scene = Scene::load("res/sample.scene");
 
     // Get the duck node
     _modelNode = _scene->findNode("duck");
-
-    // Bind the material to the model
-    _modelNode->getModel()->setMaterial("res/duck.material");
 
     // Find the light node
     Node* lightNode = _scene->findNode("directionalLight1");

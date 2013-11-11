@@ -336,6 +336,7 @@
     <None Include="res\box.material" />
     <None Include="res\game.lua" />
     <None Include="res\grid.material" />
+    <None Include="res\lua.scene" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LuaGame.cpp" />

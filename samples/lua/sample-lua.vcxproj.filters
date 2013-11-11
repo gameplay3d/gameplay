@@ -34,6 +34,9 @@
     <None Include="res\arial.gpb">
       <Filter>res</Filter>
     </None>
+    <None Include="res\lua.scene">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\LuaGame.h">

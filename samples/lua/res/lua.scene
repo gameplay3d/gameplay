@@ -1,0 +1,9 @@
+scene
+{
+    path = res/box.gpb
+    
+    node box
+    {
+        material = res/box.material
+    }
+}

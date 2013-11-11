@@ -75,6 +75,12 @@ extern void print(const char* format, ...);
 #define GP_ASSERT(expression)
 #endif
 
+#if defined(WIN32) && defined(_MSC_VER)
+#define DEBUG_BREAK() __debugbreak()
+#else
+#define DEBUG_BREAK()
+#endif
+
 // Error macro.
 #ifdef GP_ERRORS_AS_WARNINGS
 #define GP_ERROR GP_WARN
@@ -84,6 +90,7 @@ extern void print(const char* format, ...);
         gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "%s -- ", __current__func__); \
         gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, __VA_ARGS__); \
         gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "\n"); \
+        DEBUG_BREAK(); \
         assert(0); \
         std::exit(-1); \
     } while (0)

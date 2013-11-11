@@ -329,10 +329,11 @@
     <None Include="icon.png" />
     <None Include="res\arial.gpb" />
     <None Include="res\duck-diffuse.png" />
-    <None Include="res\duck.dae" />
+    <None Include="res\duck.fbx" />
     <None Include="res\duck.gpb" />
     <None Include="res\duck.material" />
     <None Include="res\grid.material" />
+    <None Include="res\sample.scene" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp" />

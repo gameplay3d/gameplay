@@ -63,6 +63,7 @@
     <target name="-post-compile">
         <copy file="../game.config" tofile="assets/game.config"/>
         <copy file="../res/arial40.gpb" tofile="assets/res/arial40.gpb"/>
+        <copy file="../res/sample.scene" tofile="assets/res/sample.scene"/>
         <copy file="../res/duck.gpb" tofile="assets/res/duck.gpb"/>
         <copy file="../res/duck.material" tofile="assets/res/duck.material"/>
         <copy file="../res/duck-diffuse.png" tofile="assets/res/duck-diffuse.png"/>

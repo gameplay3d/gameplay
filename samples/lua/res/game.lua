@@ -11,13 +11,12 @@ function initialize()
     _font = Font.create("res/arial.gpb")
 
     -- Load mesh/scene from file
-    _scene = Scene.load("res/box.gpb")
+    _scene = Scene.load("res/lua.scene")
 
     -- Get the box node
     _modelNode = _scene:findNode("box")
 
     -- Bind the material to the model
-    _modelNode:getModel():setMaterial("res/box.material")
 
     -- Find the light node
     local lightNode = _scene:findNode("directionalLight1")

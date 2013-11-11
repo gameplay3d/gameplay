@@ -11,9 +11,6 @@
   <ItemGroup>
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
-    <None Include="res\duck.dae">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\duck.gpb">
       <Filter>res</Filter>
     </None>
@@ -29,6 +26,12 @@
     <None Include="game.config" />
     <None Include="../../gameplay\res\logo_powered_white.png" />
     <None Include="res\arial.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\duck.fbx">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\sample.scene">
       <Filter>res</Filter>
     </None>
   </ItemGroup>
