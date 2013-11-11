@@ -293,8 +293,6 @@ private:
     Node* _lastNode;
     unsigned int _nodeCount;
     Vector3 _ambientColor;
-    Vector3 _lightColor;
-    Vector3 _lightDirection;
     bool _bindAudioListenerToCamera;
     MeshBatch* _debugBatch;
 };
