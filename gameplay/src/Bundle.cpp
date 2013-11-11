@@ -233,6 +233,9 @@ Bundle* Bundle::create(const char* path)
     bundle->_references = refs;
     bundle->_stream = stream;
 
+	// Add bundle to the cache.
+    __bundleCache.push_back(bundle);
+
     return bundle;
 }
 
