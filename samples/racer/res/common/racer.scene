@@ -1,0 +1,392 @@
+scene main
+{
+    path = res/common/racer.gpb
+
+    activeCamera = camera1
+
+    node carbody
+    {
+        url = car_top
+        material = res/common/racer.material#car
+        collisionObject = res/common/racer.physics#car
+    }
+
+    node wheelFrontLeft
+    {
+        url = Left_top
+        material = res/common/racer.material#car
+        collisionObject = res/common/racer.physics#carWheelFrontLeft
+    }
+
+    node wheelFrontRight
+    {
+        url = Right_top
+        material = res/common/racer.material#car
+        collisionObject = res/common/racer.physics#carWheelFrontRight
+    }
+
+    node wheelBackLeft
+    {
+        url = Left_bottom
+        material = res/common/racer.material#car
+        collisionObject = res/common/racer.physics#carWheelBackLeft
+    }
+
+    node wheelBackRight
+    {
+        url = Right_bottom
+        material = res/common/racer.material#car
+        collisionObject = res/common/racer.physics#carWheelBackRight
+    }
+
+    node mapplane_1
+    {
+        material = res/common/racer.material#tile1
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_2
+    {
+        material = res/common/racer.material#tile2
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_3
+    {
+        material = res/common/racer.material#tile3
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_4
+    {
+        material = res/common/racer.material#tile4
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_5
+    {
+        material = res/common/racer.material#tile5
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_6
+    {
+        material = res/common/racer.material#tile6
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_7
+    {
+        material = res/common/racer.material#tile7
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_8
+    {
+        material = res/common/racer.material#tile8
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_9
+    {
+        material = res/common/racer.material#tile9
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_10
+    {
+        material = res/common/racer.material#tile10
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_11
+    {
+        material = res/common/racer.material#tile11
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_12
+    {
+        material = res/common/racer.material#tile12
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_13
+    {
+        material = res/common/racer.material#tile13
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_14
+    {
+        material = res/common/racer.material#tile14
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_15
+    {
+        material = res/common/racer.material#tile15
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node mapplane_16
+    {
+        material = res/common/racer.material#tile16
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node overhang_1
+    {
+        material = res/common/racer.material#tile3
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node overhang_2
+    {
+        material = res/common/racer.material#tile3
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node overhang_3
+    {
+        material = res/common/racer.material#tile11
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node overhang_4
+    {
+        material = res/common/racer.material#tile12
+        collisionObject = res/common/racer.physics#static_mesh
+    }
+
+    node track_0
+    {
+        material = res/common/racer.material#track
+        collisionObject = res/common/racer.physics#roadway
+    }
+
+    node pillar
+    {
+        url = pillar_*
+        material = res/common/racer.material#pillar
+    }
+
+    node rail_1
+    {
+        material = res/common/racer.material#rail
+        collisionObject = res/common/racer.physics#guard_rail
+        tags
+        {
+            transparent
+        }
+    }
+
+    node rail_2
+    {
+        material = res/common/racer.material#rail
+        collisionObject = res/common/racer.physics#guard_rail
+        tags
+        {
+            transparent
+        }
+    }
+
+    node treepine
+    {
+        url = treepine_*
+        material = res/common/racer.material#treepine
+        collisionObject = res/common/racer.physics#treepine
+        tags
+        {
+            transparent
+        }
+    }
+
+    node treelightgreen
+    {
+        url = treelightgreen_*
+        material[0] = res/common/racer.material#treelightgreen
+        material[1] = res/common/racer.material#trunk
+        collisionObject = res/common/racer.physics#treelightgreen
+        tags
+        {
+            transparent
+        }
+    }
+
+    node treebig
+    {
+        url = treebig_*
+        material[0] = res/common/racer.material#treebig
+        material[1] = res/common/racer.material#trunk
+        collisionObject = res/common/racer.physics#treebig
+        tags
+        {
+            transparent
+        }
+    }
+
+    node treebrown
+    {
+        url = treebrown_*
+        material[1] = res/common/racer.material#treebrown
+        material[0] = res/common/racer.material#trunk
+        collisionObject = res/common/racer.physics#treebrown
+        tags
+        {
+            transparent
+        }
+    }
+
+    node treetall
+    {
+        url = treetall_*
+        material[0] = res/common/racer.material#treetall
+        material[1] = res/common/racer.material#trunk
+        collisionObject = res/common/racer.physics#treetall
+        tags
+        {
+            transparent
+        }
+    }
+
+    node treetallpine
+    {
+        url = treetallpine*
+        material = res/common/racer.material#treetallpine
+        collisionObject = res/common/racer.physics#treetallpine
+        tags
+        {
+            transparent
+        }
+    }
+
+    node treewhitepine
+    {
+        url = treewhitepine*
+        material = res/common/racer.material#treewhitepine
+        collisionObject = res/common/racer.physics#treepine
+        tags
+        {
+            transparent
+        }
+    }
+
+    node treedetailed
+    {
+        url = treedetailed*
+        material[0] = res/common/racer.material#trunk2
+        material[1] = res/common/racer.material#treedetailed
+        collisionObject = res/common/racer.physics#static_mesh
+        tags
+        {
+            transparent
+        }
+    }
+
+    node shrublightgreen
+    {
+        url = shrublightgreen_*
+        material = res/common/racer.material#shrublightgreen
+        tags
+        {
+            transparent
+        }
+    }
+
+    node shrubdark
+    {
+        url = shrubdark_*
+        material = res/common/racer.material#shrubdark
+        tags
+        {
+            transparent
+        }
+    }
+
+    node shruborange
+    {
+        url = shruborange_*
+        material = res/common/racer.material#shruborange
+        tags
+        {
+            transparent
+        }
+    }
+
+    node shrubyellow
+    {
+        url = shrubyellow_*
+        material = res/common/racer.material#shruborange
+        tags
+        {
+            transparent
+        }
+    }
+
+    node grassdrygreen
+    {
+        url = grassdrygreen*
+        material = res/common/racer.material#grassgreen
+        tags
+        {
+            transparent
+        }
+    }
+
+    node grassdryred
+    {
+        url = grassdryred*
+        material = res/common/racer.material#grassred
+        tags
+        {
+            transparent
+        }
+    }
+
+    node chainfence_0
+    {
+        material[0] = res/common/racer.material#chain
+        material[1] = res/common/racer.material#wall
+        collisionObject = res/common/racer.physics#static_mesh
+        tags
+        {
+            transparent
+        }
+    }
+
+    node light
+    {
+        url = light_*
+        material[0] = res/common/racer.material#lightpost
+        material[1] = res/common/racer.material#lightbulb
+    }
+
+    node water
+    {
+        material = res/common/racer.material#water
+        tags
+        {
+            transparent
+        }
+    }
+
+    node mountains_0
+    {
+        material = res/common/racer.material#mountains
+        tags
+        {
+            transparent
+        }
+    }
+
+    node skydome_0
+    {
+        material = res/common/racer.material#skydome
+    }
+
+    physics
+    {
+        gravity = 0.0, -9.8, 0.0
+    }
+}
