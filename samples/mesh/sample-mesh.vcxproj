@@ -152,8 +152,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -214,8 +214,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -278,8 +278,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -328,18 +328,36 @@
     <None Include="game.config" />
     <None Include="icon.png" />
     <None Include="res\arial.gpb" />
-    <None Include="res\duck-diffuse.png" />
-    <None Include="res\duck.fbx" />
-    <None Include="res\duck.gpb" />
-    <None Include="res\duck.material" />
-    <None Include="res\grid.material" />
-    <None Include="res\sample.scene" />
+    <None Include="res\mesh.fbx" />
+    <None Include="res\mesh.gpb" />
+    <None Include="res\mesh.material" />
+    <None Include="res\mesh.mb" />
+    <None Include="res\mesh.scene" />
+    <None Include="res\shaders\colored.frag" />
+    <None Include="res\shaders\colored.vert" />
+    <None Include="res\shaders\font.frag" />
+    <None Include="res\shaders\font.vert" />
+    <None Include="res\shaders\form.frag" />
+    <None Include="res\shaders\form.vert" />
+    <None Include="res\shaders\lighting.frag" />
+    <None Include="res\shaders\lighting.vert" />
+    <None Include="res\shaders\skinning-none.vert" />
+    <None Include="res\shaders\skinning.vert" />
+    <None Include="res\shaders\sprite.frag" />
+    <None Include="res\shaders\sprite.vert" />
+    <None Include="res\shaders\terrain.frag" />
+    <None Include="res\shaders\terrain.vert" />
+    <None Include="res\shaders\textured.frag" />
+    <None Include="res\shaders\textured.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MeshGame.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\duck.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

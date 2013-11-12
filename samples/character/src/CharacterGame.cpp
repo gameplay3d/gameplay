@@ -39,7 +39,7 @@ void CharacterGame::initialize()
     _font = Font::create("res/common/arial.gpb");
 
     // Load scene.
-    _scene = Scene::load("res/common/scene.scene");
+    _scene = Scene::load("res/common/sample.scene");
 
     // Update the aspect ratio for our scene's camera to match the current device resolution.
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());

@@ -20,7 +20,7 @@ void SpriteBatchSample::initialize()
     float width = getWidth() / (float)getHeight();
     float height = 1.0f;
     Matrix::createOrthographic(width, height, -1.0f, 1.0f, &_worldViewProjectionMatrix);
-    _spriteBatch = SpriteBatch::create("res/png/box-diffuse.png");
+    _spriteBatch = SpriteBatch::create("res/png/logo.png");
 }
 
 void SpriteBatchSample::finalize()

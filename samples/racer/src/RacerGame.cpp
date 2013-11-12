@@ -63,7 +63,7 @@ void RacerGame::initialize()
     static_cast<Button*>(_overlay->getControl("menuButton"))->addListener(this, Listener::CLICK);
 
     // Load the scene
-    _scene = Scene::load("res/common/game.scene");
+    _scene = Scene::load("res/common/racer.scene");
 
     // Set the aspect ratio for the scene's camera to match the current resolution
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
@@ -72,7 +72,7 @@ void RacerGame::initialize()
     _scene->visit(this, &RacerGame::initializeScene);
 
     // Load and initialize game script
-    getScriptController()->loadScript("res/common/game.lua");
+    getScriptController()->loadScript("res/common/racer.lua");
     getScriptController()->executeFunction<void>("setScene", "<Scene>", _scene);
 
     Node* carNode = _scene->findNode("carbody");
@@ -121,7 +121,6 @@ bool RacerGame::initializeScene(Node* node)
             material->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());
         }
     }
-
     return true;
 }
 

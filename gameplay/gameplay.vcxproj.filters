@@ -1840,18 +1840,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\logo_black.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\logo_powered_black.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\logo_powered_white.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\logo_white.png">
-      <Filter>res</Filter>
-    </None>
     <None Include="src\ScriptController.inl">
       <Filter>src</Filter>
     </None>
