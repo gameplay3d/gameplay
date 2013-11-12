@@ -21,7 +21,7 @@ void MeshGame::initialize()
     _font = Font::create("res/arial.gpb");
 
     // Load the scene from file
-    _scene = Scene::load("res/sample.scene");
+    _scene = Scene::load("res/mesh.scene");
 
     // Get the duck node
     _modelNode = _scene->findNode("duck");
@@ -214,7 +214,7 @@ Model* MeshGame::createGridModel(unsigned int lineCount)
     mesh->setVertexData(&vertices[0], 0, pointCount);
 
     Model* model = Model::create(mesh);
-    model->setMaterial("res/grid.material");
+    model->setMaterial("res/mesh.material#grid");
     SAFE_RELEASE(mesh);
     return model;
 }

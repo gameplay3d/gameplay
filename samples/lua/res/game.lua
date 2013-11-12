@@ -16,14 +16,12 @@ function initialize()
     -- Get the box node
     _modelNode = _scene:findNode("box")
 
-    -- Bind the material to the model
-
     -- Find the light node
     local lightNode = _scene:findNode("directionalLight1")
 
     -- Bind the light node's direction into the box material.
     _modelNode:getModel():getMaterial():getParameter("u_directionalLightColor[0]"):setValue(lightNode:getLight():getColor())
-    _modelNode:getModel():getMaterial():getParameter("u_directionalLightDirection[0]"):bindValue(lightNode, "&Node::getForwardVectorView")
+    _modelNode:getModel():getMaterial():getParameter("u_directionalLightDirection[0]"):bindValue(lightNode, "&Node::getForwardVectorWorld")
 
     -- Update the aspect ratio for our scene's camera to match the current device resolution
     local game = Game.getInstance()
@@ -179,6 +177,6 @@ function createGridModel()
     mesh:setVertexData(vertices, 0, pointCount)
 
     local model = Model.create(mesh)
-    model:setMaterial("res/grid.material")
+    model:setMaterial("res/lua.material#grid")
     return model
 end

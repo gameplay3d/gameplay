@@ -47,14 +47,34 @@
     </None>
     <None Include="res\arial.gpb" />
     <None Include="res\editor.form" />
-    <None Include="res\editor.png" />
     <None Include="res\editor.theme" />
     <None Include="res\explosion.particle" />
-    <None Include="res\explosion.png" />
     <None Include="res\fire.particle" />
-    <None Include="res\fire.png" />
+    <None Include="res\grid.material" />
+    <None Include="res\shaders\colored.frag" />
+    <None Include="res\shaders\colored.vert" />
+    <None Include="res\shaders\font.frag" />
+    <None Include="res\shaders\font.vert" />
+    <None Include="res\shaders\form.frag" />
+    <None Include="res\shaders\form.vert" />
+    <None Include="res\shaders\lighting.frag" />
+    <None Include="res\shaders\lighting.vert" />
+    <None Include="res\shaders\skinning-none.vert" />
+    <None Include="res\shaders\skinning.vert" />
+    <None Include="res\shaders\sprite.frag" />
+    <None Include="res\shaders\sprite.vert" />
+    <None Include="res\shaders\terrain.frag" />
+    <None Include="res\shaders\terrain.vert" />
+    <None Include="res\shaders\textured.frag" />
+    <None Include="res\shaders\textured.vert" />
     <None Include="res\smoke.particle" />
-    <None Include="res\smoke.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\editor.png" />
+    <Image Include="res\explosion.png" />
+    <Image Include="res\fire.png" />
+    <Image Include="res\logo_powered_white.png" />
+    <Image Include="res\smoke.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}</ProjectGuid>
@@ -182,8 +202,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -244,8 +264,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -308,8 +328,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>

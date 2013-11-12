@@ -637,10 +637,6 @@
     <ClInclude Include="src\VisibleSetDefault.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\logo_black.png" />
-    <None Include="res\logo_powered_black.png" />
-    <None Include="res\logo_powered_white.png" />
-    <None Include="res\logo_white.png" />
     <None Include="res\shaders\colored.frag" />
     <None Include="res\shaders\colored.vert" />
     <None Include="res\shaders\font.frag" />

@@ -1,9 +1,0 @@
-scene
-{
-    path = res/duck.gpb
-    
-    node duck
-    {
-        material = res/duck.material
-    }
-}

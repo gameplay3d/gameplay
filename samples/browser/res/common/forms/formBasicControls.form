@@ -108,9 +108,7 @@ form basicControls
 		position = 300, 250
 		style = basic
 		size = 256, 256
-		path = res/png/box-diffuse.png
-		//srcRegion = 20, 20, 100, 100
-		//dstRegion = 20, 20, 100, 100
+		path = res/png/logo.png
 	}
 	
 	button alignedButton

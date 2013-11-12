@@ -1,4 +1,4 @@
-material box
+material lambert1
 {
     technique
     {
@@ -19,7 +19,7 @@ material box
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/png/box-diffuse.png
+                path = res/png/logo.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP

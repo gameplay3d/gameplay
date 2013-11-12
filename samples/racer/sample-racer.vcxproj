@@ -158,8 +158,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
@@ -214,8 +214,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
@@ -272,8 +272,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
@@ -319,21 +319,49 @@
     <None Include="game.png.config" />
     <None Include="game.pvr.config" />
     <None Include="icon.png" />
-    <None Include="res\common\game.lua" />
-    <None Include="res\common\game.material" />
-    <None Include="res\common\game.physics" />
-    <None Include="res\common\game.scene" />
+    <None Include="res\common\arial.gpb" />
+    <None Include="res\common\background.ogg" />
+    <None Include="res\common\engine.ogg" />
     <None Include="res\common\gamepad.form" />
     <None Include="res\common\gamepad.theme" />
     <None Include="res\common\menu.form" />
-    <None Include="res\common\menu.png" />
     <None Include="res\common\menu.theme" />
+    <None Include="res\common\overlay.form" />
+    <None Include="res\common\racer.gpb" />
+    <None Include="res\common\racer.lua" />
+    <None Include="res\common\racer.material" />
+    <None Include="res\common\racer.physics" />
+    <None Include="res\common\racer.scene" />
+    <None Include="res\shaders\colored.frag" />
+    <None Include="res\shaders\colored.vert" />
+    <None Include="res\shaders\font.frag" />
+    <None Include="res\shaders\font.vert" />
+    <None Include="res\shaders\form.frag" />
+    <None Include="res\shaders\form.vert" />
+    <None Include="res\shaders\lighting.frag" />
+    <None Include="res\shaders\lighting.vert" />
+    <None Include="res\shaders\skinning-none.vert" />
+    <None Include="res\shaders\skinning.vert" />
+    <None Include="res\shaders\sprite.frag" />
+    <None Include="res\shaders\sprite.vert" />
+    <None Include="res\shaders\terrain.frag" />
+    <None Include="res\shaders\terrain.vert" />
+    <None Include="res\shaders\textured.frag" />
+    <None Include="res\shaders\textured.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\RacerGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\RacerGame.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\common\braking.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\common\heightmap_combinedmap_0.png" />
+    <Image Include="res\common\menu.png" />
+    <Image Include="res\logo_powered_white.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

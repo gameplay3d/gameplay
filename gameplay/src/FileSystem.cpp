@@ -349,27 +349,8 @@ bool FileSystem::fileExists(const char* filePath)
     getFullPath(filePath, fullPath);
 
     gp_stat_struct s;
-
-#ifdef WIN32
-    if (!isAbsolutePath(filePath) && stat(fullPath.c_str(), &s) != 0)
-    {
-        fullPath = __resourcePath;
-        fullPath += "../../gameplay/";
-        fullPath += filePath;
-        
-        int result = stat(fullPath.c_str(), &s);
-        if (result != 0)
-        {
-            fullPath = __resourcePath;
-            fullPath += "../gameplay/";
-            fullPath += filePath;
-            return stat(fullPath.c_str(), &s) == 0;
-        }
-    }
-    return true;
-#else
     return stat(fullPath.c_str(), &s) == 0;
-#endif
+
 }
 
 Stream* FileSystem::open(const char* path, size_t mode)
@@ -402,28 +383,6 @@ Stream* FileSystem::open(const char* path, size_t mode)
 #else
     std::string fullPath;
     getFullPath(path, fullPath);
-    
-#ifdef WIN32
-    gp_stat_struct s;
-    if (!isAbsolutePath(path) && stat(fullPath.c_str(), &s) != 0 && (mode & WRITE) == 0)
-    {
-        fullPath = __resourcePath;
-        fullPath += "../../gameplay/";
-        fullPath += path;
-        
-        int result = stat(fullPath.c_str(), &s);
-        if (result != 0)
-        {
-            fullPath = __resourcePath;
-            fullPath += "../gameplay/";
-            fullPath += path;
-            if (stat(fullPath.c_str(), &s) != 0)
-            {
-                return NULL;
-            }
-        }
-    }
-#endif
     FileStream* stream = FileStream::create(fullPath.c_str(), modeStr);
     return stream;
 #endif
@@ -440,25 +399,6 @@ FILE* FileSystem::openFile(const char* filePath, const char* mode)
     createFileFromAsset(filePath);
     
     FILE* fp = fopen(fullPath.c_str(), mode);
-    
-#ifdef WIN32
-    if (fp == NULL && !isAbsolutePath(filePath))
-    {
-        fullPath = __resourcePath;
-        fullPath += "../../gameplay/";
-        fullPath += filePath;
-        
-        fp = fopen(fullPath.c_str(), mode);
-        if (!fp)
-        {
-            fullPath = __resourcePath;
-            fullPath += "../gameplay/";
-            fullPath += filePath;
-            fp = fopen(fullPath.c_str(), mode);
-        }
-    }
-#endif
-
     return fp;
 }
 

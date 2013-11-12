@@ -1,9 +1,9 @@
 scene
 {
-    path = res/box.gpb
+    path = res/lua.gpb
     
     node box
     {
-        material = res/box.material
+        material = res/lua.material
     }
 }

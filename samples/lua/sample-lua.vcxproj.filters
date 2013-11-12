@@ -5,36 +5,36 @@
     </Filter>
     <Filter Include="src">
     </Filter>
+    <Filter Include="res\shaders">
+      <UniqueIdentifier>{68243144-f027-4318-bbef-5f0e62ae5e82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
-    <None Include="res\box.gpb">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\box.material">
-      <Filter>res</Filter>
-    </None>
     <None Include="game.config" />
-    <None Include="res\box-diffuse.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\grid.material">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\arial.ttf">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\ai.lua">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\game.lua">
       <Filter>res</Filter>
     </None>
     <None Include="res\arial.gpb">
       <Filter>res</Filter>
     </None>
+    <None Include="res\game.lua">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\lua.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\lua.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\lua.mb">
+      <Filter>res</Filter>
+    </None>
     <None Include="res\lua.scene">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\lua.fbx">
       <Filter>res</Filter>
     </None>
   </ItemGroup>
@@ -47,5 +47,10 @@
     <ClCompile Include="src\LuaGame.cpp">
       <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\lua-logo.png">
+      <Filter>res</Filter>
+    </Image>
   </ItemGroup>
 </Project>
