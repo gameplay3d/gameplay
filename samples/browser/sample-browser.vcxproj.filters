@@ -407,8 +407,8 @@
     <Image Include="res\common\terrain\sky.dds">
       <Filter>res\common\terrain</Filter>
     </Image>
-    <Image Include="res\png\box-diffuse.png">
-      <Filter>res\png</Filter>
+    <Image Include="res\logo_powered_white.png">
+      <Filter>res</Filter>
     </Image>
     <Image Include="res\png\brick.png">
       <Filter>res\png</Filter>
@@ -428,7 +428,7 @@
     <Image Include="res\png\dirt.png">
       <Filter>res\png</Filter>
     </Image>
-    <Image Include="res\png\duck-diffuse.png">
+    <Image Include="res\png\duck.png">
       <Filter>res\png</Filter>
     </Image>
     <Image Include="res\png\gamepad.png">
@@ -446,8 +446,8 @@
     <Image Include="res\png\light-spot.png">
       <Filter>res\png</Filter>
     </Image>
-    <Image Include="res\logo_powered_white.png">
-      <Filter>res</Filter>
+    <Image Include="res\png\logo.png">
+      <Filter>res\png</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
