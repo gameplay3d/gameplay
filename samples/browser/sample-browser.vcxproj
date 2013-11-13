@@ -464,19 +464,19 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <Image Include="res\common\terrain\rock.dds" />
     <Image Include="res\common\terrain\sky.dds" />
     <Image Include="res\logo_powered_white.png" />
-    <Image Include="res\png\box-diffuse.png" />
     <Image Include="res\png\brick.png" />
     <Image Include="res\png\brickn.png" />
     <Image Include="res\png\color-wheel.png" />
     <Image Include="res\png\crate.png" />
     <Image Include="res\png\default-theme.png" />
     <Image Include="res\png\dirt.png" />
-    <Image Include="res\png\duck-diffuse.png" />
+    <Image Include="res\png\duck.png" />
     <Image Include="res\png\gamepad.png" />
     <Image Include="res\png\grass.png" />
     <Image Include="res\png\light-directional.png" />
     <Image Include="res\png\light-point.png" />
     <Image Include="res\png\light-spot.png" />
+    <Image Include="res\png\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\common\footsteps.wav" />
