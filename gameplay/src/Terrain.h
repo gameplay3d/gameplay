@@ -46,18 +46,18 @@ class TerrainPatch;
  * normal map is used, it should be an object-space normal map containing normal vectors for
  * the entire terrain, encoded into the red, green and blue channels of the texture. This is
  * useful as a replacement for vertex normals, especially when using level-of-detail, since
- * it allows you to provide high quality normal vectors regardless of the tessellation or 
+ * it allows you to provide high quality normal vectors regardless of the tessellation or
  * LOD of the terrain. This also eliminates lighting artifacts/popping from LOD changes,
  * which commonly occurs when vertex normals are used. A terrain normal map can only be
  * specified at creation time, since it requires omission of vertex normal information in
  * the generated terrain geometry data.
  *
- * Internally, Terrain is broken into smaller, more managable patches, which can be culled
+ * Internally, Terrain is broken into smaller, more manageable patches, which can be culled
  * separately for more efficient rendering. The size of the terrain patches can be controlled
  * via the patchSize property. Patches can be previewed by enabling the DEBUG_PATCHES flag
  * via the setFlag method. Other terrain behavior can also be enabled and disabled using terrain
  * flags.
- * 
+ *
  * Level of detail (LOD) is supported using a technique that is similar to texture mipmapping.
  * A distance-to-camera based test, using a simple screen-space error metric is used to decide
  * the appropriate LOD for a terrain patch. The number of LOD levels is 1 by default (which
@@ -67,14 +67,14 @@ class TerrainPatch;
  *
  * Finally, when LOD is enabled, cracks can begin to appear between terrain patches of
  * different LOD levels. If the cracks are only minor (depends on your terrain topology
- * and tetures used), an acceptable appraoch might be to simply use a background clear 
+ * and textures used), an acceptable approach might be to simply use a background clear
  * color that closely matches your terrain to make the cracks much less visible. However,
  * often that is not acceptable, so the Terrain class also supports a simple solution called
  * "vertical skirts". When enabled (via the skirtScale parameter in the terrain file), a vertical
  * edge will extend down along the sides of all terrain patches, which fills in the crack.
  * This is a very fast approach as it adds only a small number of triangles per patch and requires
- * zero extra CPU time or draw calls, which are often needed for more complex stitching 
- * approaches. In practice, the skirts are often not noticable at all unless the LOD variation
+ * zero extra CPU time or draw calls, which are often needed for more complex stitching
+ * approaches. In practice, the skirts are often not noticeable at all unless the LOD variation
  * is very large and the terrain is excessively hilly on the edge of a LOD transition.
  */
 class Terrain : public Ref, public Transform::Listener
@@ -117,7 +117,7 @@ public:
     /**
      * Loads a Terrain from the given properties file.
      *
-     * The specified properties file can contain a full terrain definition, including a 
+     * The specified properties file can contain a full terrain definition, including a
      * heightmap (PNG, RAW8, RAW16), level of detail information, patch size, layer texture
      * details and vertical skirt size.
      *
@@ -150,7 +150,7 @@ public:
      *
      * @param heightfield The heightfield object containing height data for the terrain.
      * @param scale A scale to apply to the terrain along the X, Y and Z axes. The terrain and any associated
-     *      physics hegihtfield is scaled by this amount. Pass Vector3::one() to use the exact dimensions and heights
+     *      physics heightfield is scaled by this amount. Pass Vector3::one() to use the exact dimensions and heights
      *      in the supplied height array.
      * @param patchSize Size of terrain patches (number of quads).
      * @param detailLevels Number of detail levels to generate for the terrain (a value of one generates only the base
@@ -164,7 +164,7 @@ public:
      * @return A new Terrain.
      * @script{create}
      */
-    static Terrain* create(HeightField* heightfield, const Vector3& scale = Vector3::one(), unsigned int patchSize = 32,  
+    static Terrain* create(HeightField* heightfield, const Vector3& scale = Vector3::one(), unsigned int patchSize = 32,
                            unsigned int detailLevels = 1, float skirtScale = 0.0f, const char* normalMapPath = NULL);
 
     /**
@@ -249,8 +249,8 @@ public:
     * the repeat count is relative to the entire terrain. For layers that span only specific
     * patches, the repeat count is relative to those patches only.
     *
-    * @param index Layer index number. Layer indexes do not neccessarily need to be sequential and
-    *      are used simply to uinquely identify layers, where higher numbers specificy higher-level
+    * @param index Layer index number. Layer indexes do not necessarily need to be sequential and
+    *      are used simply to uniquely identify layers, where higher numbers specify higher-level
     *      layers.
     * @param texturePath Path to the color texture for this layer.
     * @param textureRepeat Repeat count for the color texture across the terrain or patches.

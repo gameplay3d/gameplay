@@ -73,7 +73,7 @@ public:
         ALIGN_LEFT = 0x01,
         ALIGN_HCENTER = 0x02,
         ALIGN_RIGHT = 0x04,
-    
+
         // Specify vertical alignment, use default horizontal alignment (ALIGN_LEFT).
         ALIGN_TOP = 0x10,
         ALIGN_VCENTER = 0x20,
@@ -174,7 +174,7 @@ public:
              */
             LEAVE           = 0x100,
         };
-    
+
         /*
          * Destructor.
          */
@@ -182,7 +182,7 @@ public:
 
         /**
          * Method called by controls when an event is triggered.
-         * 
+         *
          * @param control The control triggering the event.
          * @param evt The event triggered.
          */
@@ -341,7 +341,7 @@ public:
      * Set the position of this control relative to its parent container.
      *
      * This method sets the local position of the control, relative to its container.
-     * Setting percetage values is not supported with this method, use setX
+     * Setting percentage values is not supported with this method, use setX
      * and setY instead.
      *
      * @param x The x coordinate.
@@ -353,7 +353,7 @@ public:
      * Set the desired size of this control, including its border and padding, before clipping.
      *
      * This method sets the size of the control, relative to its container.
-     * Setting percetage values is not supported with this method, use setWidth
+     * Setting percentage values is not supported with this method, use setWidth
      * and setHeight instead.
      *
      * @param width The width.
@@ -374,7 +374,7 @@ public:
      * border and padding, before clipping.
      *
      * This method sets the local bounds of the control, relative to its container.
-     * Setting percetage values is not supported with this method, use setX,
+     * Setting percentage values is not supported with this method, use setX,
      * setY, setWidth and setHeight instead.
      *
      * @param bounds The new bounds to set.
@@ -385,7 +385,7 @@ public:
      * Get the absolute bounds of this control, in pixels, including border and padding,
      * before clipping.
      *
-     * The absolute bounds of a control represents its final computed bounds after all 
+     * The absolute bounds of a control represents its final computed bounds after all
      * alignment, auto sizing, relative position and sizing has been computed. The
      * returned bounds is in absolute coordinates, relative to the control's top-most
      * parent container (usually its form).
@@ -483,7 +483,7 @@ public:
     void setBorder(float top, float bottom, float left, float right, unsigned char states = STATE_ALL);
 
     /**
-     * Get the measurements of this control's border for a given state. 
+     * Get the measurements of this control's border for a given state.
      *
      * @return This control's border.
      */
@@ -644,7 +644,7 @@ public:
      * @return The blend color of this control's cursor.
      */
     const Vector4& getCursorColor(State state);
-    
+
     /**
      * Get the texture coordinates of this control's cursor for a given state.
      *
@@ -769,7 +769,7 @@ public:
     void setOpacity(float opacity, unsigned char states = STATE_ALL);
 
     /**
-     * Get the opacity of this control for a given state. 
+     * Get the opacity of this control for a given state.
      *
      * @param state The state to get this property from.
      *
@@ -778,7 +778,7 @@ public:
     float getOpacity(State state = NORMAL) const;
 
 	/**
-	 * Enables/Disables a control. 
+	 * Enables/Disables a control.
 	 *
 	 * @param enabled true if the control is enabled; false if disabled.
 	 */
@@ -890,7 +890,7 @@ public:
 
     /**
      * Removes a listener from this control.
-     * 
+     *
      * @param listener The listener to remove.
      */
     virtual void removeListener(Control::Listener* listener);
@@ -961,7 +961,7 @@ protected:
      *            If evt is KEY_CHAR then key is the unicode value of the character.
      *
      * @return Whether the key event was consumed by this control.
-     * 
+     *
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
@@ -1090,9 +1090,9 @@ protected:
      */
     bool hasFocus() const;
 
-    /** 
+    /**
      * The Control's ID.
-     */ 
+     */
     std::string _id;
 
     /**
@@ -1143,18 +1143,18 @@ protected:
     /**
      * Previous frame's absolute clip bounds, to be cleared if necessary.
      */
-    Rectangle _clearBounds;         
+    Rectangle _clearBounds;
 
     /**
      * If the control is dirty and need updating.
      */
     bool _dirty;
-    
+
     /**
      * Flag for whether the Control consumes input events.
      */
     bool _consumeInputEvents;
-    
+
     /**
      * The Control's Alignment
      */
@@ -1164,23 +1164,23 @@ protected:
      * Whether the Control's alignment has been set programmatically.
      */
     bool _isAlignmentSet;
-    
+
     /**
      * Whether the Control's width is auto-sized.
      */
     AutoSize _autoWidth;
-    
+
     /**
      * Whether the Control's height is auto-sized.
      */
     AutoSize _autoHeight;
-    
+
     /**
      * Listeners map of EventType's to a list of Listeners.
      */
     //std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
     std::map<Control::Listener::EventType, std::list<Control::Listener*>*>* _listeners;
-    
+
     /**
      * The Control's Theme::Style.
      */
@@ -1195,7 +1195,7 @@ protected:
      * The current opacity of the control.
      */
     float _opacity;
-    
+
     /**
      * The z-order of the control.
      */
@@ -1220,7 +1220,7 @@ private:
 
     /*
      * Constructor.
-     */    
+     */
     Control(const Control& copy);
 
     Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
@@ -1240,7 +1240,7 @@ private:
     Theme::Skin* getSkin(State state);
 
     void addSpecificListener(Control::Listener* listener, Control::Listener::EventType eventType);
-    
+
     bool _styleOverridden;
     Theme::Skin* _skin;
     State _previousState;

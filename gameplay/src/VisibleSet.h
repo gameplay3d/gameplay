@@ -14,7 +14,7 @@ namespace gameplay
 class VisibleSet
 {
 public:
-    
+
     /**
      * Destructor.
      */
@@ -40,9 +40,9 @@ public:
     virtual void reset() = 0;
 
     /**
-     * Gets the next visible node in the set or NULL 
-     * onces you have reached the end of the set.
-     * 
+     * Gets the next visible node in the set or NULL
+     * once you have reached the end of the set.
+     *
      * @return The next visible node in the set or NULL at end of set.
      */
     virtual Node* getNext() = 0;

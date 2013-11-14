@@ -7,7 +7,7 @@ namespace gameplay
 {
 
     /**
-     * Defines a reference counted class that holds heightfeild data.
+     * Defines a reference counted class that holds heightfield data.
      *
      * Heightfields can be used to construct both Terrain objects as well as PhysicsCollisionShape
      * heightfield defintions, which are used in heightfield rigid body creation. Heightfields can
@@ -31,7 +31,7 @@ namespace gameplay
          * Creates a HeightField from the specified heightfield image.
          *
          * The specified image path must refer to a valid heightfield image. Supported images are
-         * the same as those supported by the Image class (i.e. PNG). 
+         * the same as those supported by the Image class (i.e. PNG).
          *
          * The minHeight and maxHeight parameters provides a mapping from heightfield pixel
          * intensity to height values. The minHeight parameter is mapped to zero intensity
@@ -40,7 +40,7 @@ namespace gameplay
          * @param path Path to a heightfield image.
          * @param heightMin Minimum height value for a zero intensity pixel.
          * @param heightMax Maximum height value for a full intensity heightfield pixel (must be >= minHeight).
-         * 
+         *
          * @return The new HeightField.
          */
         static HeightField* createFromImage(const char* path, float heightMin = 0, float heightMax = 1);
@@ -54,7 +54,7 @@ namespace gameplay
          * This method automatically determines (based on file size) whether the input file
          * is RAW8 or RAW16. RAW files must have a .raw or .r16 file extension.
          *
-         * RAW files are commonly used in software that produces heightmap images. Using RAW16 is 
+         * RAW files are commonly used in software that produces heightmap images. Using RAW16 is
          * preferred or any 8-bit heightfield source since it allows greater precision, resulting in
          * smoother height transitions.
          *
@@ -67,13 +67,13 @@ namespace gameplay
          * @param height Height of the RAW data.
          * @param heightMin Minimum height value for a zero intensity pixel.
          * @param heightMax Maximum height value for a full intensity heightfield pixel (must be >= minHeight).
-         * 
+         *
          * @return The new HeightField.
          */
         static HeightField* createFromRAW(const char* path, unsigned int width, unsigned int height, float heightMin = 0, float heightMax = 1);
 
         /**
-         * Returns a pointer to the underying height array.
+         * Returns a pointer to the underlying height array.
          *
          * The array is packed in row major order, meaning that the data is aligned in rows,
          * from top left to bottom right.
@@ -87,7 +87,7 @@ namespace gameplay
          *
          * The specified row and column are specified as floating point numbers so that values
          * between points can be specified. In this case, a height value is calculated that is
-         * interpolated between neighboring height values. 
+         * interpolated between neighboring height values.
          *
          * If the specified point lies outside the heightfield, it is clamped to the boundary
          * of the heightfield.
@@ -108,7 +108,7 @@ namespace gameplay
 
         /**
          * Returns the number of columns in the heightfield.
-         * 
+         *
          * @return The column count.
          */
         unsigned int getColumnCount() const;

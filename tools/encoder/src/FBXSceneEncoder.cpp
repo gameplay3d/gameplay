@@ -607,24 +607,13 @@ static string getBaseMaterialName(Material* material)
     ostringstream baseName;
     if (material->isTextured())
     {
-        baseName << "Textured";
+        baseName << "textured";
     }
     else
     {
-        baseName << "Colored";
+        baseName << "colored";
     }
 
-    if (material->isLit())
-    {
-        if (material->isSpecular())
-        {
-            baseName << "Specular";
-        }
-    }
-    else
-    {
-        baseName << "Unlit";
-    }
     return baseName.str();
 }
 
@@ -660,37 +649,12 @@ Material* FBXSceneEncoder::createBaseMaterial(const string& baseMaterialName, Ma
     baseMaterial->setUniform("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
     baseMaterial->setRenderState("cullFace", "true");
     baseMaterial->setRenderState("depthTest", "true");
-    if (childMaterial->isLit())
-    {
-        baseMaterial->setLit(true);
-        baseMaterial->setUniform("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
 
-        if (childMaterial->isSpecular())
-        {
-            baseMaterial->addDefine(SPECULAR);
-            baseMaterial->setUniform("u_cameraPosition", "CAMERA_WORLD_POSITION");
-        }
-    }
     if (childMaterial->isTextured())
     {
-        if (childMaterial->isLit())
-        {
-            if (childMaterial->isBumped())
-            {
-                baseMaterial->setVertexShader("res/shaders/textured-bumped.vert");
-                baseMaterial->setFragmentShader("res/shaders/textured-bumped.frag");
-            }
-            else
-            {
-                baseMaterial->setVertexShader("res/shaders/textured.vert");
-                baseMaterial->setFragmentShader("res/shaders/textured.frag");
-            }
-        }
-        else
-        {
-            baseMaterial->setVertexShader("res/shaders/textured-unlit.vert");
-            baseMaterial->setFragmentShader("res/shaders/textured-unlit.frag");
-        }
+		baseMaterial->setVertexShader("res/shaders/textured.vert");
+        baseMaterial->setFragmentShader("res/shaders/textured.frag");
+
         Sampler* sampler = baseMaterial->createSampler(u_diffuseTexture);
         sampler->set("mipmap", "true");
         sampler->set("wrapS", CLAMP);
@@ -700,16 +664,19 @@ Material* FBXSceneEncoder::createBaseMaterial(const string& baseMaterialName, Ma
     }
     else
     {
-        if (childMaterial->isLit())
+		baseMaterial->setVertexShader("res/shaders/colored.vert");
+        baseMaterial->setFragmentShader("res/shaders/colored.frag");
+    }
+
+	if (childMaterial->isLit())
+    {
+        baseMaterial->setLit(true);
+		childMaterial->setUniform("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
+
+        if (childMaterial->isSpecular())
         {
-            baseMaterial->setVertexShader("res/shaders/colored.vert");
-            baseMaterial->setFragmentShader("res/shaders/colored.frag");
-        }
-        else
-        {
-            baseMaterial->setVertexShader("res/shaders/colored-unlit.vert");
-            baseMaterial->setFragmentShader("res/shaders/colored-unlit.frag");
-        }
+            childMaterial->setUniform("u_cameraPosition", "CAMERA_WORLD_POSITION");
+        }		
     }
     assert(baseMaterial);
     return baseMaterial;
@@ -986,7 +953,6 @@ void FBXSceneEncoder::loadMaterialTextures(FbxSurfaceMaterial* fbxMaterial, Mate
                 FbxLayeredTexture *layeredTexture = fbxProperty.GetSrcObject<FbxLayeredTexture>(j);
                 if (layeredTexture)
                 {
-                    //DisplayInt("    Layered Texture: ", j);
                     FbxLayeredTexture *layeredTexture = fbxProperty.GetSrcObject<FbxLayeredTexture>(j);
                     int lNbTextures = layeredTexture->GetSrcObjectCount<FbxTexture>();
                     for (int k = 0; k<lNbTextures; ++k)
@@ -994,22 +960,13 @@ void FBXSceneEncoder::loadMaterialTextures(FbxSurfaceMaterial* fbxMaterial, Mate
                         FbxTexture* fbxTexture = layeredTexture->GetSrcObject<FbxTexture>(k);
                         if (fbxTexture)
                         {
-                            /*
-                            if (pDisplayHeader){
-                                DisplayInt("    Textures connected to Material ", pMaterialIndex);
-                                pDisplayHeader = false;
-                            }
-                            */
 
-                            //NOTE the blend mode is ALWAYS on the LayeredTexture and NOT the one on the texture.
-                            //Why is that?  because one texture can be shared on different layered textures and might
-                            //have different blend modes.
+                            // NOTE the blend mode is ALWAYS on the LayeredTexture and NOT the one on the texture.
+                            // Why is that?  because one texture can be shared on different layered textures and might
+                            // have different blend modes.
 
                             FbxLayeredTexture::EBlendMode lBlendMode;
                             layeredTexture->GetTextureBlendMode(k, lBlendMode);
-                            //DisplayString("    Textures for ", pProperty.GetName());
-                            //DisplayInt("        Texture ", k);
-                            //DisplayTextureInfo(fbxTexture, (int) lBlendMode);
                         }
 
                     }
@@ -1036,19 +993,12 @@ void FBXSceneEncoder::loadMaterialFileTexture(FbxFileTexture* fileTexture, Mater
         if (!material->getSampler("u_diffuseTexture"))
             sampler = material->createSampler("u_diffuseTexture");
     }
-    else if (textureUse == FbxTexture::eBumpNormalMap)
-    {
-        if (!material->getSampler("u_normalmapTexture"))
-            sampler = material->createSampler("u_normalmapTexture");
-    }
     if (sampler)
     {
         sampler->set("absolutePath", fileTexture->GetFileName());
         sampler->set("relativePath", fileTexture->GetRelativeFileName());
         sampler->set("wrapS", fileTexture->GetWrapModeU() == FbxTexture::eClamp ? CLAMP : REPEAT);
         sampler->set("wrapT", fileTexture->GetWrapModeV() == FbxTexture::eClamp ? CLAMP : REPEAT);
-        //sampler->set(MIN_FILTER, LINEAR_MIPMAP_LINEAR);
-        //sampler->set(MAG_FILTER, LINEAR);
 
         if (textureUse == FbxTexture::eStandard)
         {
@@ -1105,7 +1055,7 @@ void FBXSceneEncoder::loadMaterialUniforms(FbxSurfaceMaterial* fbxMaterial, Mate
     if (fbxMaterial->GetClassId().Is(FbxSurfacePhong::ClassId))
     {
         FbxSurfacePhong* phong = FbxCast<FbxSurfacePhong>(fbxMaterial);
-        //FbxDouble specularFactor = phong->SpecularFactor.Get();
+
         if (material->isLit())
         {
             FbxDouble shininess = phong->Shininess.Get();
@@ -1117,9 +1067,6 @@ void FBXSceneEncoder::loadMaterialUniforms(FbxSurfaceMaterial* fbxMaterial, Mate
                 material->addDefine(SPECULAR);
             }
         }
-        //
-        //((FbxSurfacePhong *) fbxMaterial)->GetAmbientColor();
-        //((FbxSurfacePhong *) fbxMaterial)->GetDiffuseColor();
     }
 }
 

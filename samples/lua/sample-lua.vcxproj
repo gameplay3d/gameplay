@@ -152,8 +152,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -214,8 +214,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -278,8 +278,8 @@
       <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows/x86;../../external-deps/bullet/lib/windows/x86;../../external-deps/openal/lib/windows/x86;../../external-deps/oggvorbis/lib/windows/x86;../../external-deps/glew/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86;../../gameplay/windows/x86/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -330,18 +330,21 @@
     <None Include="icon.png" />
     <None Include="res\ai.lua" />
     <None Include="res\arial.gpb" />
-    <None Include="res\arial.ttf" />
-    <None Include="res\box-diffuse.png" />
-    <None Include="res\box.gpb" />
-    <None Include="res\box.material" />
     <None Include="res\game.lua" />
-    <None Include="res\grid.material" />
+    <None Include="res\lua.fbx" />
+    <None Include="res\lua.gpb" />
+    <None Include="res\lua.material" />
+    <None Include="res\lua.mb" />
+    <None Include="res\lua.scene" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LuaGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\LuaGame.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\lua-logo.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

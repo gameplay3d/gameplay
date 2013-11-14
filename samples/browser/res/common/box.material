@@ -1,4 +1,4 @@
-material box
+material lambert1
 {
     technique
     {
@@ -7,19 +7,17 @@ material box
             // shaders
             vertexShader = res/shaders/textured.vert
             fragmentShader = res/shaders/textured.frag
-            defines = SPECULAR;DIRECTIONAL_LIGHT_COUNT 1
+            defines = DIRECTIONAL_LIGHT_COUNT 1
             
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_cameraPosition = CAMERA_WORLD_POSITION
-            u_ambientColor = SCENE_AMBIENT_COLOR
-            u_specularExponent = 50
+            u_ambientColor = 0.2, 0.2, 0.2            
             
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/png/box-diffuse.png
+                path = res/png/crate.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP

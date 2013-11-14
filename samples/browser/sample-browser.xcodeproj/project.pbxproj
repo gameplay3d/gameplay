@@ -33,6 +33,7 @@
 		420D547315FE430D00AD0B91 /* TextureSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545415FE430D00AD0B91 /* TextureSample.cpp */; };
 		420D547415FE430D00AD0B91 /* TriangleSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545615FE430D00AD0B91 /* TriangleSample.cpp */; };
 		420D547515FE430D00AD0B91 /* TriangleSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545615FE430D00AD0B91 /* TriangleSample.cpp */; };
+		421090EA18299EBA00761E40 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421090E918299EBA00761E40 /* GameKit.framework */; };
 		422FE594169690830062D1FE /* PostProcessSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422FE592169690830062D1FE /* PostProcessSample.cpp */; };
 		422FE595169690830062D1FE /* PostProcessSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422FE592169690830062D1FE /* PostProcessSample.cpp */; };
 		424CC030161F8E3000577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC02F161F8E3000577827 /* IOKit.framework */; };
@@ -77,6 +78,7 @@
 		5B61611614CCC24C0073B857 /* SamplesGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* SamplesGame.cpp */; };
 		5B61612614CCC24C0073B857 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
 		5B61612714CCC24C0073B857 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
+		6212DAB81829DA1D006213DD /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6212DAB71829DA1D006213DD /* GameKit.framework */; };
 		9F4C6D00162735020076E137 /* GestureSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F4C6CFE162735020076E137 /* GestureSample.cpp */; };
 		9F4C6D01162735020076E137 /* GestureSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F4C6CFE162735020076E137 /* GestureSample.cpp */; };
 		B616B282161119EF00CB514C /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 428F7BDD15CB131A009ED24C /* game.config */; };
@@ -114,6 +116,7 @@
 		420D545515FE430D00AD0B91 /* TextureSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureSample.h; sourceTree = "<group>"; };
 		420D545615FE430D00AD0B91 /* TriangleSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleSample.cpp; sourceTree = "<group>"; };
 		420D545715FE430D00AD0B91 /* TriangleSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriangleSample.h; sourceTree = "<group>"; };
+		421090E918299EBA00761E40 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		422FE592169690830062D1FE /* PostProcessSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PostProcessSample.cpp; sourceTree = "<group>"; };
 		422FE593169690830062D1FE /* PostProcessSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostProcessSample.h; sourceTree = "<group>"; };
 		424CC02F161F8E3000577827 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -159,6 +162,7 @@
 		5B61611214CCC2200073B857 /* sample-browser-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample-browser-macosx.plist"; sourceTree = "<group>"; };
 		5B61612C14CCC24C0073B857 /* sample-browser-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-browser-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* sample-browser-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample-browser-ios.plist"; sourceTree = "<group>"; };
+		6212DAB71829DA1D006213DD /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		9F4C6CFE162735020076E137 /* GestureSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GestureSample.cpp; sourceTree = "<group>"; };
 		9F4C6CFF162735020076E137 /* GestureSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureSample.h; sourceTree = "<group>"; };
 		F10DEAB516726157006FFFDC /* BillboardSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BillboardSample.cpp; sourceTree = "<group>"; };
@@ -181,6 +185,7 @@
 				42C933271491A6E50098216A /* libvorbis.a in Frameworks */,
 				42C9332C1491A7680098216A /* libpng.a in Frameworks */,
 				42C9332F1491A78D0098216A /* libz.dylib in Frameworks */,
+				6212DAB81829DA1D006213DD /* GameKit.framework in Frameworks */,
 				424CC030161F8E3000577827 /* IOKit.framework in Frameworks */,
 				42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */,
 				42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */,
@@ -202,6 +207,7 @@
 				42DFAABC16AD89670000F342 /* CoreMotion.framework in Frameworks */,
 				42DFAAD416AD8A8C0000F342 /* Foundation.framework in Frameworks */,
 				42DFAB1F16AD8BBC0000F342 /* OpenAL.framework in Frameworks */,
+				421090EA18299EBA00761E40 /* GameKit.framework in Frameworks */,
 				42DFAB2016AD8BBC0000F342 /* OpenGLES.framework in Frameworks */,
 				425F3A5617FBCBF00085454F /* libgameplay.a in Frameworks */,
 				42DFAB2116AD8BBC0000F342 /* QuartzCore.framework in Frameworks */,
@@ -347,6 +353,7 @@
 		5B61613914CCC3560073B857 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				421090E918299EBA00761E40 /* GameKit.framework */,
 				42DFAABB16AD89670000F342 /* CoreMotion.framework */,
 				42DFAAD316AD8A8C0000F342 /* Foundation.framework */,
 				42DFAB1B16AD8BBC0000F342 /* OpenAL.framework */,
@@ -360,6 +367,7 @@
 		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				6212DAB71829DA1D006213DD /* GameKit.framework */,
 				424CC02F161F8E3000577827 /* IOKit.framework */,
 				42C932C01491A0DB0098216A /* Cocoa.framework */,
 				42C9331C1491A6750098216A /* QuartzCore.framework */,

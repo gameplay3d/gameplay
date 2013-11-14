@@ -198,37 +198,31 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
 	}
 	else
 	{
-		// Texture Cube
-		const unsigned char** cubeData = new const unsigned char*[6];
-		memset(cubeData, 0, sizeof(const unsigned char*) * 6);
-		if(data)
+		// Get texture size
+		unsigned int textureSize = width * height;
+		switch (format)
 		{
-			// Get texture pointers
-			unsigned int textureSize = width * height;
-			switch (format)
-			{
-				case Texture::RGB:
-					textureSize *= 3;
-					break;
-				case Texture::RGBA:
-					textureSize *= 4;
-					break;
-				case Texture::ALPHA:
-					break;
-				case Texture::UNKNOWN:
+			case Texture::RGB:
+				textureSize *= 3;
+				break;
+			case Texture::RGBA:
+				textureSize *= 4;
+				break;
+			case Texture::ALPHA:
+				break;
+			case Texture::UNKNOWN:
+				if (data)
+				{
 					GP_ERROR("Failed to determine texture size because format is UNKNOWN.");
-					break;
-			}
-			for (unsigned int i = 0; i < 6; i++)
-			{
-				cubeData[i] = &data[i * textureSize];
-			}
+				}
+				break;
 		}
+		// Texture Cube
 		for (unsigned int i = 0; i < 6; i++)
 		{
-			GL_ASSERT( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, cubeData[i]) );
+			const unsigned char* texturePtr = (data == NULL) ? NULL : &data[i * textureSize];
+			GL_ASSERT( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, texturePtr) );
 		}
-		SAFE_DELETE_ARRAY(cubeData);
 	}
 
     // Set initial minification filter based on whether or not mipmaping was enabled.

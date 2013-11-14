@@ -31,7 +31,7 @@ Material* Material::create(const char* url)
     Properties* properties = Properties::create(url);
     if (properties == NULL)
     {
-        GP_ERROR("Failed to create material from file.");
+        GP_WARN("Failed to create material from file.");
         return NULL;
     }
 

@@ -1,0 +1,517 @@
+material textured
+{
+    // uniforms
+    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+    u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+
+    // samplers
+    sampler u_diffuseTexture
+    {
+        mipmap = true
+        wrapS = REPEAT
+        wrapT = REPEAT
+        minFilter = LINEAR_MIPMAP_LINEAR
+        magFilter = LINEAR
+    }
+
+    // render state
+    renderState
+    {
+        cullFace = true
+        depthTest = true
+    }
+
+    technique
+    {
+        pass 0
+        {
+            // shaders
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+            defines = DIRECTIONAL_LIGHT_COUNT 1
+        }
+    }
+}
+
+material texturedUnlit
+{
+    // uniforms
+    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+
+    // samplers
+    sampler u_diffuseTexture
+    {
+        mipmap = true
+        wrapS = REPEAT
+        wrapT = REPEAT
+        minFilter = LINEAR_MIPMAP_LINEAR
+        magFilter = LINEAR
+    }
+
+    // render state
+    renderState
+    {
+        cullFace = true
+        depthTest = true
+    }
+
+    technique
+    {
+        pass 0
+        {
+            // shaders
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+        }
+    }
+}
+
+material textured-alphatest : texturedUnlit
+{
+    technique
+    {
+        pass 0
+        {
+            defines = TEXTURE_DISCARD_ALPHA
+        }
+    }
+}
+
+material colored
+{
+    // uniforms
+    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+    u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+
+    // render state
+    renderState
+    {
+        cullFace = true
+        depthTest = true
+    }
+
+    technique
+    {
+        pass 0
+        {
+            // shaders
+            vertexShader = res/shaders/colored.vert
+            fragmentShader = res/shaders/colored.frag
+            defines = DIRECTIONAL_LIGHT_COUNT 1
+        }
+    }
+}
+
+material coloredUnlit
+{
+    // uniforms
+    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+    
+    // render state
+    renderState
+    {
+        cullFace = true
+        depthTest = true
+    }
+
+    technique
+    {
+        pass 0
+        {
+            // shaders
+            vertexShader = res/shaders/colored.vert
+            fragmentShader = res/shaders/colored.frag
+        }
+    }
+}
+
+material car : textured
+{
+    sampler u_diffuseTexture
+    {
+        path = @car
+    }
+}
+
+material tile : texturedUnlit
+{
+}
+
+material tile1 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_1
+    }
+}
+
+material tile2 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_2
+    }
+}
+
+material tile3 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_3
+    }
+}
+
+material tile4 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_4
+    }
+}
+
+material tile5 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_5
+    }
+}
+
+material tile6 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_6
+    }
+}
+
+material tile7 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_7
+    }
+}
+
+material tile8 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_8
+    }
+}
+
+material tile9 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_9
+    }
+}
+
+material tile10 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_10
+    }
+}
+
+material tile11 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_11
+    }
+}
+
+material tile12 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_12
+    }
+}
+
+material tile13 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_13
+    }
+}
+
+material tile14 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_14
+    }
+}
+
+material tile15 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_15
+    }
+}
+
+material tile16 : tile
+{
+    sampler u_diffuseTexture
+    {
+        path = @panel_16
+    }
+}
+
+material track : texturedUnlit
+{
+    sampler u_diffuseTexture
+    {
+        path = @gravel_2
+    }
+
+    sampler u_lightmapTexture
+    {
+        path = @track_1
+        mipmap = true
+        wrapS = REPEAT
+        wrapT = REPEAT
+        minFilter = LINEAR_MIPMAP_LINEAR
+        magFilter = LINEAR
+    }
+
+    technique
+    {
+        pass 0
+        {
+            defines = LIGHTMAP;TEXCOORD1
+        }
+    }
+}
+
+material pillar : textured
+{
+    sampler u_diffuseTexture
+    {
+        path = @textures_8
+    }
+}
+
+material rail : texturedUnlit
+{
+    sampler u_diffuseTexture
+    {
+        path = @rails
+    }
+
+    renderState
+    {
+        cullFace = false
+        blend = true
+        srcBlend = SRC_ALPHA
+        dstBlend = ONE_MINUS_SRC_ALPHA
+    }
+}
+
+material tree : textured-alphatest
+{
+    renderState
+    {
+        cullFace = false
+    }
+}
+
+material treepine : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @tree_3
+    }
+}
+
+material treelightgreen : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @tree_7
+    }
+}
+
+material treebig : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @tree_4
+    }
+}
+
+material treebrown : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @tree_2
+    }
+}
+
+material treetall : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @tree
+    }
+}
+
+material treetallpine : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @tree_5
+    }
+}
+
+material treewhitepine : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @tree_6
+    }
+}
+
+material treedetailed : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @d_tree
+    }
+}
+
+material shrublightgreen : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @shrub_1
+    }
+}
+
+material shrubdark : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @shrub_2
+    }
+}
+
+material shruborange : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @shrub_3
+    }
+}
+
+material grassgreen : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @grassbunch_1
+    }
+}
+
+material grassred : tree
+{
+    sampler u_diffuseTexture
+    {
+        path = @grassbunch_2
+    }
+}
+
+material trunk : textured
+{
+    sampler u_diffuseTexture
+    {
+        path = @trunk_1
+    }
+}
+
+material trunk2 : textured
+{
+    sampler u_diffuseTexture
+    {
+        path = @trunk_2
+    }
+}
+
+material chain : textured-alphatest
+{
+    sampler u_diffuseTexture
+    {
+        path = @chain_fence_1
+    }
+
+    renderState
+    {
+        cullFace = false
+    }
+}
+
+material wall : texturedUnlit
+{
+    sampler u_diffuseTexture
+    {
+        path = @design_11
+    }
+}
+
+material lightpost : colored
+{
+    u_diffuseColor = 0.1, 0.1, 0.1, 1.0
+}
+
+material lightbulb : coloredUnlit
+{
+    u_diffuseColor = 1, 1, 0.815, 1
+}
+
+material water : colored
+{
+    u_diffuseColor = 0.75, 0.9, 0.95, 0.85
+
+    renderState
+    {
+        blend = true
+        srcBlend = SRC_ALPHA
+        dstBlend = ONE_MINUS_SRC_ALPHA
+    }
+}
+
+material mountains : texturedUnlit
+{
+    sampler u_diffuseTexture
+    {
+        path = @panorama_2
+    }
+
+    renderState
+    {
+        cullFace = false
+        depthWrite = false
+        blend = true
+        srcBlend = SRC_ALPHA
+        dstBlend = ONE_MINUS_SRC_ALPHA
+    }
+}
+
+material skydome : texturedUnlit
+{
+    sampler u_diffuseTexture
+    {
+        path = @panorama_3
+    }
+
+    renderState
+    {
+        cullFace = false
+    }
+}

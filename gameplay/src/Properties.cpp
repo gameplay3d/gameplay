@@ -96,7 +96,7 @@ Properties* Properties::create(const char* url)
     Properties* p = getPropertiesFromNamespacePath(properties, namespacePath);
     if (!p)
     {
-        GP_ERROR("Failed to load properties from url '%s'.", url);
+        GP_WARN("Failed to load properties from url '%s'.", url);
         return NULL;
     }
 
@@ -1102,7 +1102,7 @@ Properties* getPropertiesFromNamespacePath(Properties* properties, const std::ve
             {
                 if (iter == NULL)
                 {
-                    GP_ERROR("Failed to load properties object from url.");
+                    GP_WARN("Failed to load properties object from url.");
                     return NULL;
                 }
 

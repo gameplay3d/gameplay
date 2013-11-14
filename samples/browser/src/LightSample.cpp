@@ -251,6 +251,16 @@ void LightSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
 	};
 }
 
+bool LightSample::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (evt == Mouse::MOUSE_WHEEL && wheelDelta != 0)
+    {
+        _modelNode->translate(0, 0, wheelDelta);
+        return true;
+    }
+    return false;
+}
+
 void LightSample::keyEvent(Keyboard::KeyEvent evt, int key)
 {
 	switch(evt)
