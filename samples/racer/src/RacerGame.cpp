@@ -576,7 +576,7 @@ void RacerGame::menuEvent()
         static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Resume");
         pause();
         _menu->setEnabled(true);
-        _menu->setState(Control::FOCUS);
+        //_menu->setState(Control::FOCUS);
     }
     else
     {

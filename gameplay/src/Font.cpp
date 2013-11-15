@@ -161,6 +161,13 @@ Font::Format Font::getFormat()
     return _format;
 }
 
+bool Font::isCharacterSupported(int character) const
+{
+    // TODO: Update this once we support unicode fonts
+    int glyphIndex = character - 32; // HACK for ASCII
+    return (glyphIndex >= 0 && glyphIndex < (int)_glyphCount);
+}
+
 void Font::start()
 {
     GP_ASSERT(_batch);

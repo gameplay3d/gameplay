@@ -14,14 +14,15 @@ class Keyboard
 
 public:
 
-   /**
+    /**
      * The keyboard event.
      */
     enum KeyEvent
     {
         KEY_PRESS,
         KEY_RELEASE,
-        KEY_CHAR
+        KEY_CHAR,
+        KEY_REPEAT
     };
 
     /**

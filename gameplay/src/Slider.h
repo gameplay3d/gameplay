@@ -164,6 +164,11 @@ public:
      */
     void addListener(Control::Listener* listener, int eventFlags);
 
+    /**
+     * @see Control#canFocus()
+     */
+    bool canFocus() const;
+
 protected:
 
     /**
@@ -357,6 +362,9 @@ private:
      * Constructor.
      */
     Slider(const Slider& copy);
+
+    void updateValue(int x, int y);
+
 };
 
 }

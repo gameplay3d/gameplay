@@ -315,8 +315,7 @@ form particleEditor
             textAlignment = ALIGN_TOP_HCENTER
             valueTextVisible = true
             valueTextAlignment = ALIGN_BOTTOM_HCENTER
-            valueTextPrecision = 2            
-            consumeInputEvents = false
+            valueTextPrecision = 2
         }
 
         slider energyMax : energyMin
@@ -342,7 +341,6 @@ form particleEditor
             valueTextVisible = true
             valueTextAlignment = ALIGN_BOTTOM_HCENTER
             valueTextPrecision = 2
-            consumeInputEvents = false
         }
 
         slider startGreen : startRed

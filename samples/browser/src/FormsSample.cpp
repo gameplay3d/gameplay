@@ -79,7 +79,7 @@ void FormsSample::initialize()
     
     RadioButton* form0Button = static_cast<RadioButton*>(_formSelect->getControl("form0"));
     form0Button->addListener(this, Control::Listener::CLICK);
-    form0Button->setState(Control::FOCUS);
+    //form0Button->setState(Control::FOCUS);
 
     RadioButton* form1Button = static_cast<RadioButton*>(_formSelect->getControl("form1"));
     form1Button->addListener(this, Control::Listener::CLICK);
@@ -107,7 +107,7 @@ void FormsSample::initialize()
     createSampleForm(_forms[0]->getTheme());
 
     Button* button = static_cast<Button*>(_forms[0]->getControl("testButton"));
-    button->setState(Control::FOCUS);
+    //button->setState(Control::FOCUS);
 
     // Create a scene with a camera node.
     Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 100.0f);
@@ -135,8 +135,8 @@ void FormsSample::formChanged()
         _activeForm->setEnabled(false);
     _activeForm = _forms[_formIndex];
     _activeForm->setEnabled(true);
-    _activeForm->setState(Control::FOCUS);
-    _formSelect->setState(Control::NORMAL);
+    //_activeForm->setState(Control::FOCUS);
+    //_formSelect->setState(Control::NORMAL);
 
     // Add the form to a node to allow it to be placed in 3D space.
     const Rectangle& bounds = _activeForm->getBounds();
@@ -210,16 +210,16 @@ void FormsSample::update(float elapsedTime)
         _keyFlags |= KEY_SELECT_MASK;
         if (_formSelect->getState() == Control::FOCUS)
         {
-            _formSelect->setState(Control::NORMAL);
+            //_formSelect->setState(Control::NORMAL);
         }
         else if (_activeForm->getState() == Control::FOCUS)
         {
-            _activeForm->setState(Control::NORMAL);
-            _formSelect->setState(Control::FOCUS);
+            //_activeForm->setState(Control::NORMAL);
+            //_formSelect->setState(Control::FOCUS);
         }
         else
         {
-            _formSelect->setState(Control::FOCUS);
+            //_formSelect->setState(Control::FOCUS);
         }
     }
     else if ((_keyFlags & KEY_SELECT_MASK) && !_gamepad->isButtonDown(Gamepad::BUTTON_MENU1))

@@ -39,107 +39,6 @@ Button* Button::create(Theme::Style* style, Properties* properties)
     return button;
 }
 
-bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    switch (evt)
-    {
-    case Touch::TOUCH_PRESS:
-        if (_contactIndex == INVALID_CONTACT_INDEX)
-        {
-            if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-            {
-                _contactIndex = (int) contactIndex;
-                setState(Control::ACTIVE);
-                notifyListeners(Control::Listener::PRESS);
-                return _consumeInputEvents;
-            }
-            else
-            {
-                setState(Control::NORMAL);
-            }
-        }
-        break;
-
-    case Touch::TOUCH_RELEASE:
-        if (_contactIndex == (int) contactIndex)
-        {
-            _contactIndex = INVALID_CONTACT_INDEX;
-            notifyListeners(Control::Listener::RELEASE);
-            if (!_parent->isScrolling() &&
-                x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-            {
-                setState(Control::FOCUS);
-                notifyListeners(Control::Listener::CLICK);
-            }
-            else
-            {
-                setState(Control::NORMAL);
-            }
-            return _consumeInputEvents;
-        }
-        break;
-    case Touch::TOUCH_MOVE:
-        return Control::touchEvent(evt, x, y, contactIndex);
-    }
-
-    return false;
-}
-
-bool Button::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
-{
-    switch (evt)
-    {
-    case Gamepad::BUTTON_EVENT:
-        if (_state == Control::FOCUS)
-        {
-            if (gamepad->isButtonDown(Gamepad::BUTTON_A) ||
-                gamepad->isButtonDown(Gamepad::BUTTON_X))
-            {
-                notifyListeners(Control::Listener::PRESS);
-                setState(Control::ACTIVE);
-                return _consumeInputEvents;
-            }
-        }
-        else if (_state == Control::ACTIVE)
-        {
-            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
-                !gamepad->isButtonDown(Gamepad::BUTTON_X))
-            {
-                notifyListeners(Control::Listener::RELEASE);
-                notifyListeners(Control::Listener::CLICK);
-                setState(Control::FOCUS);
-                return _consumeInputEvents;
-            }
-        }
-        break;
-    default:
-        break;
-    }
-
-    return false;
-}
-
-bool Button::keyEvent(Keyboard::KeyEvent evt, int key)
-{
-    if (evt == Keyboard::KEY_PRESS && key == Keyboard::KEY_RETURN)
-    {
-        notifyListeners(Control::Listener::PRESS);
-        setState(Control::ACTIVE);
-        return _consumeInputEvents;
-    }
-    else if (_state == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN)
-    {
-        notifyListeners(Control::Listener::RELEASE);
-        notifyListeners(Control::Listener::CLICK);
-        setState(Control::FOCUS);
-        return _consumeInputEvents;
-    }
-
-    return false;
-}
-
 const char* Button::getType() const
 {
     return "button";
@@ -153,6 +52,11 @@ const unsigned int Button::getDataBinding() const
 void Button::setDataBinding(unsigned int dataBinding)
 {
     _dataBinding = dataBinding;
+}
+
+bool Button::canFocus() const
+{
+    return true;
 }
 
 }

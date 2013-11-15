@@ -7,6 +7,7 @@
 #include "Button.h"
 #include "CheckBox.h"
 #include "Control.h"
+#include "Form.h"
 #include "Game.h"
 #include "Gamepad.h"
 #include "Label.h"
@@ -62,6 +63,7 @@ void luaRegister_CheckBox()
         {"getMargin", lua_CheckBox_getMargin},
         {"getOpacity", lua_CheckBox_getOpacity},
         {"getPadding", lua_CheckBox_getPadding},
+        {"getParent", lua_CheckBox_getParent},
         {"getRefCount", lua_CheckBox_getRefCount},
         {"getSkinColor", lua_CheckBox_getSkinColor},
         {"getSkinRegion", lua_CheckBox_getSkinRegion},
@@ -112,7 +114,6 @@ void luaRegister_CheckBox()
         {"setSize", lua_CheckBox_setSize},
         {"setSkinColor", lua_CheckBox_setSkinColor},
         {"setSkinRegion", lua_CheckBox_setSkinRegion},
-        {"setState", lua_CheckBox_setState},
         {"setStyle", lua_CheckBox_setStyle},
         {"setText", lua_CheckBox_setText},
         {"setTextAlignment", lua_CheckBox_setTextAlignment},
@@ -1953,6 +1954,50 @@ int lua_CheckBox_getPadding(lua_State* state)
             }
 
             lua_pushstring(state, "lua_CheckBox_getPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_CheckBox_getParent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                CheckBox* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParent();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_CheckBox_getParent - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4349,42 +4394,6 @@ int lua_CheckBox_setSkinRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_CheckBox_setState(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
-
-                CheckBox* instance = getInstance(state);
-                instance->setState(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_CheckBox_setState - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

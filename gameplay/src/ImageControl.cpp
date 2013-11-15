@@ -24,7 +24,6 @@ ImageControl* ImageControl::create(const char* id, Theme::Style* style)
         imageControl->_id = id;
     imageControl->setStyle(style);
 
-    imageControl->_consumeInputEvents = false;
     imageControl->_focusIndex = -2;
 
     return imageControl;
@@ -35,7 +34,6 @@ ImageControl* ImageControl::create(Theme::Style* style, Properties* properties)
     ImageControl* imageControl = new ImageControl();
     imageControl->initialize(style, properties);
 
-    imageControl->_consumeInputEvents = false;
     imageControl->_focusIndex = -2;
 
     return imageControl;
