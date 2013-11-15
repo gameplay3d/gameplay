@@ -6,6 +6,7 @@
 #include "Base.h"
 #include "Button.h"
 #include "Control.h"
+#include "Form.h"
 #include "Game.h"
 #include "Gamepad.h"
 #include "Label.h"
@@ -63,6 +64,7 @@ void luaRegister_RadioButton()
         {"getMargin", lua_RadioButton_getMargin},
         {"getOpacity", lua_RadioButton_getOpacity},
         {"getPadding", lua_RadioButton_getPadding},
+        {"getParent", lua_RadioButton_getParent},
         {"getRefCount", lua_RadioButton_getRefCount},
         {"getSkinColor", lua_RadioButton_getSkinColor},
         {"getSkinRegion", lua_RadioButton_getSkinRegion},
@@ -114,7 +116,6 @@ void luaRegister_RadioButton()
         {"setSize", lua_RadioButton_setSize},
         {"setSkinColor", lua_RadioButton_setSkinColor},
         {"setSkinRegion", lua_RadioButton_setSkinRegion},
-        {"setState", lua_RadioButton_setState},
         {"setStyle", lua_RadioButton_setStyle},
         {"setText", lua_RadioButton_setText},
         {"setTextAlignment", lua_RadioButton_setTextAlignment},
@@ -1990,6 +1991,50 @@ int lua_RadioButton_getPadding(lua_State* state)
             }
 
             lua_pushstring(state, "lua_RadioButton_getPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RadioButton_getParent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                RadioButton* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParent();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_RadioButton_getParent - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4422,42 +4467,6 @@ int lua_RadioButton_setSkinRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_RadioButton_setState(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
-
-                RadioButton* instance = getInstance(state);
-                instance->setState(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_RadioButton_setState - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

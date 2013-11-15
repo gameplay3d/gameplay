@@ -5,6 +5,7 @@
 #include "AnimationTarget.h"
 #include "Base.h"
 #include "Control.h"
+#include "Form.h"
 #include "Game.h"
 #include "Label.h"
 #include "Node.h"
@@ -61,6 +62,7 @@ void luaRegister_Slider()
         {"getMin", lua_Slider_getMin},
         {"getOpacity", lua_Slider_getOpacity},
         {"getPadding", lua_Slider_getPadding},
+        {"getParent", lua_Slider_getParent},
         {"getRefCount", lua_Slider_getRefCount},
         {"getSkinColor", lua_Slider_getSkinColor},
         {"getSkinRegion", lua_Slider_getSkinRegion},
@@ -115,7 +117,6 @@ void luaRegister_Slider()
         {"setSize", lua_Slider_setSize},
         {"setSkinColor", lua_Slider_setSkinColor},
         {"setSkinRegion", lua_Slider_setSkinRegion},
-        {"setState", lua_Slider_setState},
         {"setStep", lua_Slider_setStep},
         {"setStyle", lua_Slider_setStyle},
         {"setText", lua_Slider_setText},
@@ -1987,6 +1988,50 @@ int lua_Slider_getPadding(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Slider_getPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_getParent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Slider* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParent();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Slider_getParent - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4519,42 +4564,6 @@ int lua_Slider_setSkinRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Slider_setState(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
-
-                Slider* instance = getInstance(state);
-                instance->setState(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Slider_setState - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

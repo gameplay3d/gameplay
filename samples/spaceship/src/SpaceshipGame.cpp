@@ -919,7 +919,6 @@ void SpaceshipGame::buildFriendsChooser()
 		button->setPosition(0, 110*(i+1));
 		button->setWidth(400);
 		button->setHeight(100);
-		button->setConsumeInputEvents(false);   // This lets the user scroll the container if they swipe starting from a button.
 		button->addListener(this, Control::Listener::CLICK);
 		_friendsContainer->addControl(button);
 		button->release();
@@ -957,7 +956,6 @@ void SpaceshipGame::buildChallengeChooser()
 		button->setPosition(0, 110*i);
 		button->setWidth(400);
 		button->setHeight(100);
-		button->setConsumeInputEvents(false);   // This lets the user scroll the container if they swipe starting from a button.
 		button->addListener(this, Control::Listener::CLICK);
 		_challengeContainer->addControl(button);
 		button->release();

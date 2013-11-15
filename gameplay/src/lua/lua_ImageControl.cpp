@@ -6,6 +6,7 @@
 #include "Base.h"
 #include "Button.h"
 #include "Control.h"
+#include "Form.h"
 #include "Game.h"
 #include "Gamepad.h"
 #include "ImageControl.h"
@@ -61,6 +62,7 @@ void luaRegister_ImageControl()
         {"getMargin", lua_ImageControl_getMargin},
         {"getOpacity", lua_ImageControl_getOpacity},
         {"getPadding", lua_ImageControl_getPadding},
+        {"getParent", lua_ImageControl_getParent},
         {"getRefCount", lua_ImageControl_getRefCount},
         {"getRegionDst", lua_ImageControl_getRegionDst},
         {"getRegionSrc", lua_ImageControl_getRegionSrc},
@@ -113,7 +115,6 @@ void luaRegister_ImageControl()
         {"setSize", lua_ImageControl_setSize},
         {"setSkinColor", lua_ImageControl_setSkinColor},
         {"setSkinRegion", lua_ImageControl_setSkinRegion},
-        {"setState", lua_ImageControl_setState},
         {"setStyle", lua_ImageControl_setStyle},
         {"setText", lua_ImageControl_setText},
         {"setTextAlignment", lua_ImageControl_setTextAlignment},
@@ -1910,6 +1911,50 @@ int lua_ImageControl_getPadding(lua_State* state)
             }
 
             lua_pushstring(state, "lua_ImageControl_getPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ImageControl_getParent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ImageControl* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParent();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ImageControl_getParent - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4469,42 +4514,6 @@ int lua_ImageControl_setSkinRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_ImageControl_setState(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
-
-                ImageControl* instance = getInstance(state);
-                instance->setState(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_ImageControl_setState - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

@@ -43,7 +43,8 @@ public:
     /**
      * Input modes. Default is Text.
      */
-    enum InputMode {
+    enum InputMode
+    {
         /**
          * Text: Text is displayed directly.
          */
@@ -72,16 +73,18 @@ public:
     virtual void initialize(Theme::Style* style, Properties* properties);
 
     /**
-     * Add a listener to be notified of specific events affecting
-     * this control.  Event types can be OR'ed together.
-     * E.g. To listen to touch-press and touch-release events,
-     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
-     * as the second parameter.
+     * Returns the current location of the caret with the text of this TextBox.
      *
-     * @param listener The listener to add.
-     * @param eventFlags The events to listen for.
+     * @return The current caret location.
      */
-    virtual void addListener(Control::Listener* listener, int eventFlags);
+    unsigned int getCaretLocation() const;
+
+    /**
+     * Sets the location of the caret within this text box.
+     *
+     * @param index The new location of the caret within the text of this TextBox.
+     */
+    void setCaretLocation(unsigned int index);
 
     /**
      * Get the last key pressed within this text box.
@@ -122,6 +125,11 @@ public:
      * @return The input mode.
      */
     InputMode getInputMode() const;
+
+    /**
+     * @see Control#canFocus()
+     */
+    bool canFocus() const;
 
 protected:
 
@@ -172,6 +180,11 @@ protected:
     bool keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
+     * @see Control#controlEvent
+     */
+    void controlEvent(Control::Listener::EventType evt);
+
+    /**
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
      *
@@ -213,9 +226,9 @@ protected:
     std::string getDisplayedText() const;
 
     /**
-     * The current position of the TextBox's caret.
+     * The current location of the TextBox's caret.
      */
-    Vector2 _caretLocation;
+    unsigned int _caretLocation;
 
     /**
      * The previous position of the TextBox's caret.
@@ -260,6 +273,8 @@ private:
     TextBox(const TextBox& copy);
 
     void setCaretLocation(int x, int y);
+
+    void getCaretLocation(Vector2* p);
 };
 
 }

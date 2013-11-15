@@ -48,8 +48,10 @@ namespace gameplay
     }
  @endverbatim
  */
-class Container : public Control, TimeListener
+class Container : public Control
 {
+    friend class Form;
+    friend class Control;
 
 public:
 
@@ -144,12 +146,26 @@ public:
     Control* getControl(const char* id) const;
 
     /**
+     * Returns the number of child controls for this container.
+     *
+     * @return The number of child controls.
+     */
+    unsigned int getControlCount() const;
+
+    /**
      * Get the vector of controls within this container.
      *
      * @return The vector of the controls within this container.
      * @script{ignore}
      */
     const std::vector<Control*>& getControls() const;
+
+    /**
+     * Determines if this container is a top level form.
+     *
+     * @return True if the container is a top level form, false otherwise.
+     */
+    virtual bool isForm() const;
 
     /**
      * Sets the allowed scroll directions for this container.
@@ -262,13 +278,6 @@ public:
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
-    /**
-     * @see TimeListener::timeEvent
-     *
-     * @script{ignore}
-     */
-    void timeEvent(long timeDiff, void* cookie);
-
 protected:
 
     /**
@@ -311,61 +320,12 @@ protected:
     virtual void update(const Control* container, const Vector2& offset);
 
     /**
-     * Touch callback on touch events.  Controls return true if they consume the touch event.
-     *
-     * @param evt The touch event that occurred.
-     * @param x The x position of the touch in pixels. Left edge is zero.
-     * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
-     *
-     * @return Whether the touch event was consumed by a control within this container.
-     *
-     * @see Touch::TouchEvent
-     */
-    virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-    
-    /**
-     * Keyboard callback on key events.  Passes key events on to the currently focused control.
-     *
-     * @param evt The key event that occurred.
-     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
-     *            If evt is KEY_CHAR then key is the unicode value of the character.
-     *
-     * @return Whether the key event was consumed by this control.
-     * 
-     * @see Keyboard::KeyEvent
-     * @see Keyboard::Key
-     */
-    virtual bool keyEvent(Keyboard::KeyEvent evt, int key);
-
-    /**
-     * Mouse callback on mouse events.
-     *
-     * @param evt The mouse event that occurred.
-     * @param x The x position of the mouse in pixels. Left edge is zero.
-     * @param y The y position of the mouse in pixels. Top edge is zero.
-     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
-     *
-     * @return True if the mouse event is consumed or false if it is not consumed.
-     *
-     * @see Mouse::mouseEvent
-     */
-    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
-
-    /**
-     * Gamepad callback on gamepad events.
-     *
-     * @see Control::gamepadEvent
-     */
-    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
-
-    /**
      * Gets a Layout::Type enum from a matching string.
      *
      * @param layoutString The layout string to parse
      */
     static Layout::Type getLayoutType(const char* layoutString);
-    
+
     /**
      * Returns whether this container or any of its controls have been modified and require an update.
      * 
@@ -432,22 +392,6 @@ protected:
      * @see Mouse::MouseEvent
      */
     bool mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
-
-    /**
-     * Mouse pointer event callback.
-     *
-     * @param mouse Whether to treat the event as a mouse event or a touch event.
-     * @param evt The pointer event (either a Mouse::MouseEvent or a Touch::TouchEvent).
-     * @param x The x position of the pointer event in pixels. Left edge is zero.
-     * @param y The y position of the pointer event in pixels. Top edge is zero.
-     * @param data The event's data (depends on whether it is a mouse event or a touch event).
-     *
-     * @return Whether the pointer event was consumed by this container.
-     * 
-     * @see Mouse::MouseEvent
-     * @see Touch::TouchEvent
-     */
-    bool pointerEvent(bool mouse, char evt, int x, int y, int data);
 
     /**
      * Get a Scroll enum from a matching string.
@@ -601,8 +545,6 @@ private:
     // in which case scrolling can be initiated.
     bool moveFocus(Direction direction, Control* outsideControl = NULL);
 
-    void guaranteeFocus(Control* inFocus);
-
     // Starts scrolling at the given horizontal and vertical speeds.
     void startScrolling(float x, float y, bool resetTime = true);
 
@@ -615,16 +557,8 @@ private:
     int _zIndexDefault;
     int _focusIndexDefault;
     int _focusIndexMax;
-    unsigned int _focusPressed;
     bool _selectButtonDown;
     double _lastFrameTime;
-
-    // Timing information for repeating focus changes.
-    bool _focusChangeRepeat;
-    double _focusChangeStartTime;
-    double _focusChangeRepeatDelay;
-    unsigned int _focusChangeCount;
-    Direction _direction;
 
     float _totalWidth;
     float _totalHeight;

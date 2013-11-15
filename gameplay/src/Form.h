@@ -51,6 +51,8 @@ class Form : public Container
     friend class Platform;
     friend class Game;
     friend class Gamepad;
+    friend class Control;
+    friend class Container;
 
 public:
 
@@ -86,6 +88,11 @@ public:
     static Form* getForm(const char* id);
     
     /**
+     * @see Container#isForm()
+     */
+    bool isForm() const;
+
+    /**
      * Gets the theme for the form.
      *
      * @return The theme for the form.
@@ -118,6 +125,13 @@ public:
      * @see Control::getType
      */
     const char* getType() const;
+
+    /**
+     * Returns the single currently active control within the UI system.
+     *
+     * @return The currently active control, or NULL if no controls are currently active.
+     */
+    static Control* getActiveControl();
 
 protected:
 
@@ -218,6 +232,22 @@ private:
      */
     void updateFrameBuffer();
 
+    static Control* findInputControl(int* x, int* y, bool focus);
+
+    static Control* findInputControl(Control* control, int x, int y, bool focus);
+
+    static Control* handlePointerPressRelease(int* x, int* y, bool pressed);
+
+    static Control* handlePointerMove(int* x, int* y);
+
+    static bool screenToForm(Control* ctrl, int* x, int* y);
+
+    static void verifyRemovedControlState(Control* control);
+
+    static void controlDisabled(Control* control);
+
+    static void setFocusControl(Control* control);
+
     Theme* _theme;                      // The Theme applied to this Form.
     FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad. 
     SpriteBatch* _spriteBatch;
@@ -227,7 +257,9 @@ private:
     float _u2;
     float _v1;
     Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
-    bool _isGamepad;
+    static Control* _focusControl;
+    static Control* _activeControl;
+    static Control::State _activeControlState;
 };
 
 }

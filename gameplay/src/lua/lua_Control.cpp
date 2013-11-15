@@ -5,6 +5,7 @@
 #include "AnimationTarget.h"
 #include "Base.h"
 #include "Control.h"
+#include "Form.h"
 #include "Game.h"
 #include "Node.h"
 #include "Ref.h"
@@ -57,6 +58,7 @@ void luaRegister_Control()
         {"getMargin", lua_Control_getMargin},
         {"getOpacity", lua_Control_getOpacity},
         {"getPadding", lua_Control_getPadding},
+        {"getParent", lua_Control_getParent},
         {"getRefCount", lua_Control_getRefCount},
         {"getSkinColor", lua_Control_getSkinColor},
         {"getSkinRegion", lua_Control_getSkinRegion},
@@ -103,7 +105,6 @@ void luaRegister_Control()
         {"setSize", lua_Control_setSize},
         {"setSkinColor", lua_Control_setSkinColor},
         {"setSkinRegion", lua_Control_setSkinRegion},
-        {"setState", lua_Control_setState},
         {"setStyle", lua_Control_setStyle},
         {"setTextAlignment", lua_Control_setTextAlignment},
         {"setTextColor", lua_Control_setTextColor},
@@ -1898,6 +1899,50 @@ int lua_Control_getPadding(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Control_getPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Control_getParent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Control* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParent();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Control_getParent - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4148,42 +4193,6 @@ int lua_Control_setSkinRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Control_setState(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
-
-                Control* instance = getInstance(state);
-                instance->setState(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Control_setState - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

@@ -79,6 +79,7 @@ void luaRegister_Form()
         {"getMargin", lua_Form_getMargin},
         {"getOpacity", lua_Form_getOpacity},
         {"getPadding", lua_Form_getPadding},
+        {"getParent", lua_Form_getParent},
         {"getRefCount", lua_Form_getRefCount},
         {"getScroll", lua_Form_getScroll},
         {"getScrollPosition", lua_Form_getScrollPosition},
@@ -142,7 +143,6 @@ void luaRegister_Form()
         {"setSize", lua_Form_setSize},
         {"setSkinColor", lua_Form_setSkinColor},
         {"setSkinRegion", lua_Form_setSkinRegion},
-        {"setState", lua_Form_setState},
         {"setStyle", lua_Form_setStyle},
         {"setTextAlignment", lua_Form_setTextAlignment},
         {"setTextColor", lua_Form_setTextColor},
@@ -166,6 +166,7 @@ void luaRegister_Form()
         {"ANIMATE_SIZE_HEIGHT", lua_Form_static_ANIMATE_SIZE_HEIGHT},
         {"ANIMATE_SIZE_WIDTH", lua_Form_static_ANIMATE_SIZE_WIDTH},
         {"create", lua_Form_static_create},
+        {"getActiveControl", lua_Form_static_getActiveControl},
         {"getForm", lua_Form_static_getForm},
         {NULL, NULL}
     };
@@ -2143,6 +2144,50 @@ int lua_Form_getPadding(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Form_getPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_getParent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParent();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_getParent - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -5080,42 +5125,6 @@ int lua_Form_setSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_Form_setState(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
-
-                Form* instance = getInstance(state);
-                instance->setState(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Form_setState - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Form_setStyle(lua_State* state)
 {
     // Get the number of parameters.
@@ -5848,6 +5857,43 @@ int lua_Form_static_create(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1, 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_static_getActiveControl(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            void* returnPtr = (void*)Form::getActiveControl();
+            if (returnPtr)
+            {
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Control");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }
