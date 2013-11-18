@@ -22,6 +22,7 @@ static std::vector<Form*> __forms;
 Control* Form::_focusControl = NULL;
 Control* Form::_activeControl = NULL;
 Control::State Form::_activeControlState = Control::NORMAL;
+static bool _shiftKeyDown = false;
 
 Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL),
     _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0)
@@ -584,20 +585,6 @@ Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
 
             ctrl->notifyListeners(Control::Listener::PRESS);
         }
-
-        // Update focus state?
-        if (!(ctrl && ctrl->canFocus()))
-        {
-            newX = *x;
-            newY = *y;
-            ctrl = findInputControl(&newX, &newY, true);
-        }
-
-        // Update focus
-        if (_focusControl != ctrl)
-        {
-            setFocusControl(ctrl);
-        }
     }
     else // !pressed
     {
@@ -793,6 +780,11 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
         ctrl = handlePointerPressRelease(&formX, &formY, evt == Mouse::MOUSE_PRESS_LEFT_BUTTON);
         break;
 
+    case Mouse::MOUSE_PRESS_MIDDLE_BUTTON:
+    case Mouse::MOUSE_PRESS_RIGHT_BUTTON:
+
+        break;
+
     case Mouse::MOUSE_MOVE:
         ctrl = handlePointerMove(&formX, &formY);
         break;
@@ -823,6 +815,18 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
                 }
             }
             tmp = tmp->_parent;
+        }
+
+        // Handle setting focus for press events
+        switch (evt)
+        {
+        case Mouse::MOUSE_PRESS_LEFT_BUTTON:
+        case Mouse::MOUSE_PRESS_MIDDLE_BUTTON:
+        case Mouse::MOUSE_PRESS_RIGHT_BUTTON:
+            Control* focusControl = ctrl;
+            while (focusControl && !focusControl->setFocus())
+                focusControl = focusControl->_parent;
+            break;
         }
 
         // Dispatch the event from the bottom upwards, until a control intersecting the point consumes the event
@@ -857,13 +861,36 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
             ctrl = ctrl->getParent();
         }
     }
+    else
+    {
+        // If this was a press event, remove all focus
+        switch (evt)
+        {
+        case Mouse::MOUSE_PRESS_LEFT_BUTTON:
+        case Mouse::MOUSE_PRESS_MIDDLE_BUTTON:
+        case Mouse::MOUSE_PRESS_RIGHT_BUTTON:
+            setFocusControl(NULL);
+            break;
+        }
+    }
 
     return false;
 }
 
 bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    // Ignore the escape key
+    switch (key)
+    {
+    case Keyboard::KEY_ESCAPE:
+        return false; // ignore escape key presses
+
+    case Keyboard::KEY_SHIFT:
+        if (evt == Keyboard::KEY_PRESS)
+            _shiftKeyDown = true;
+        else if (evt == Keyboard::KEY_RELEASE)
+            _shiftKeyDown = false;
+        break;
+    }
     if (key == Keyboard::KEY_ESCAPE)
         return false;
 
@@ -878,7 +905,7 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
             case Keyboard::KEY_TAB:
                 if (_focusControl->_parent && _focusControl->_parent->isContainer())
                 {
-                    if (static_cast<Container*>(_focusControl->_parent)->moveFocus(Container::NEXT))
+                    if (static_cast<Container*>(_focusControl->_parent)->moveFocus(Container::PREVIOUS))
                         return true;
                 }
                 break;
@@ -1023,16 +1050,25 @@ void Form::setFocusControl(Control* control)
 
     _focusControl = control;
 
+    // Deactivate the old focus control
     if (oldFocus)
     {
         oldFocus->_dirty = true;
         oldFocus->notifyListeners(Control::Listener::FOCUS_LOST);
     }
 
+    // Activate the new focus control
     if (_focusControl)
     {
         _focusControl->_dirty = true;
         _focusControl->notifyListeners(Control::Listener::FOCUS_GAINED);
+
+        // Set the activeControl property of the control's parent container
+        if (_focusControl->_parent && _focusControl->_parent->isContainer())
+        {
+            Container* parent = static_cast<Container*>(_focusControl->_parent);
+            parent->_activeControl = _focusControl;
+        }
     }
 }
 

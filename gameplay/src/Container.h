@@ -264,6 +264,28 @@ public:
     void setScrollWheelRequiresFocus(bool required);
 
     /**
+     * @see Control::setFocus
+     */
+    bool setFocus();
+
+    /**
+     * Returns the currently active control for this container.
+     *
+     * @return This container's active control.
+     */
+    Control* getActiveControl() const;
+    
+    /**
+     * Sets the active control for this container.
+     *
+     * A container's active control is the control that will receive focus
+     * when the container receives focus.
+     *
+     * @param control The container's new active control (must be a child of this container).
+     */
+    void setActiveControl(Control* control);
+
+    /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
@@ -411,6 +433,10 @@ protected:
      */
     std::vector<Control*> _controls;
     /**
+     * The active control for the container.
+     */
+    Control* _activeControl;
+    /**
      * Scrollbar top cap image.
      */
     Theme::ThemeImage* _scrollBarTopCap;
@@ -536,7 +562,8 @@ private:
         DOWN = 0x02,
         LEFT = 0x04,
         RIGHT = 0x08,
-        NEXT = 0x10
+        NEXT = 0x10,
+        PREVIOUS = 0x20
     };
 
     static const int MAX_CONTACT_INDICES = 10;

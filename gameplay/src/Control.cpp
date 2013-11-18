@@ -437,13 +437,24 @@ bool Control::isVisibleInHierarchy() const
     return true;
 }
 
+bool Control::canFocus() const
+{
+    return false;
+}
+
 bool Control::hasFocus() const
 {
     return (Form::_focusControl == this);
 }
 
-bool Control::canFocus() const
+bool Control::setFocus()
 {
+    if (Form::_focusControl != this && canFocus())
+    {
+        Form::setFocusControl(this);
+        return true;
+    }
+
     return false;
 }
 

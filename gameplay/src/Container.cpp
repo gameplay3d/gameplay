@@ -47,7 +47,7 @@ void Container::clearContacts()
 }
 
 Container::Container()
-    : _layout(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
+    : _layout(NULL), _activeControl(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
       _scroll(SCROLL_NONE), _scrollBarBounds(Rectangle::empty()), _scrollPosition(Vector2::zero()),
       _scrollBarsAutoHide(false), _scrollBarOpacity(1.0f), _scrolling(false),
@@ -152,6 +152,19 @@ Container* Container::create(Theme::Style* style, Properties* properties, Theme*
     container->addControls(theme, properties);
     container->_layout->update(container, container->_scrollPosition);
 
+    const char* activeControl = properties->getString("activeControl");
+    if (activeControl)
+    {
+        for (size_t i = 0, count = container->_controls.size(); i < count; ++i)
+        {
+            if (container->_controls[i]->_id == activeControl)
+            {
+                container->_activeControl = container->_controls[i];
+                break;
+            }
+        }
+    }
+
     return container;
 }
 
@@ -246,6 +259,7 @@ unsigned int Container::addControl(Control* control)
 {
     GP_ASSERT(control);
 
+    // Remove the control from its current parent
     if (control->_parent && control->_parent != this)
     {
         control->_parent->removeControl(control);
@@ -319,6 +333,9 @@ void Container::removeControl(unsigned int index)
     Control* control = *it;
     _controls.erase(it);
     control->_parent = NULL;
+
+    if (_activeControl == control)
+        _activeControl = NULL;
 
     Form::verifyRemovedControlState(control);
 
@@ -484,6 +501,47 @@ bool Container::getScrollWheelRequiresFocus() const
 void Container::setScrollWheelRequiresFocus(bool required)
 {
     _scrollWheelRequiresFocus = required;
+}
+
+bool Container::setFocus()
+{
+    // If this container (or one of its children) already has focus, do nothing
+    if (Form::_focusControl && Form::_focusControl->isChild(this))
+        return true;
+
+    // First try to set focus to our active control
+    if (_activeControl)
+    {
+        if (_activeControl->setFocus())
+            return true;
+    }
+
+    // Try to set focus to one of our children
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
+    {
+        if (_controls[i]->setFocus())
+            return true;
+    }
+
+    // Lastly, try to set focus to ourself if none of our children will accept it
+    return Control::setFocus();
+}
+
+Control* Container::getActiveControl() const
+{
+    return _activeControl;
+}
+
+void Container::setActiveControl(Control* control)
+{
+    if (std::find(_controls.begin(), _controls.end(), control) != _controls.end())
+    {
+        _activeControl = control;
+
+        // If a control within this container currently has focus, switch focus to the new active control
+        if (Form::_focusControl && Form::_focusControl != control && Form::_focusControl->isChild(this))
+            Form::setFocusControl(control);
+    }
 }
 
 void Container::update(const Control* container, const Vector2& offset)
@@ -783,11 +841,9 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
             vStart.set(startBounds.right(),
                         startBounds.y + startBounds.height * 0.5f);
             break;
-        case NEXT:
-            break;
         }
 
-        if (direction != NEXT)
+        if (direction != NEXT && direction != PREVIOUS)
         {
             std::vector<Control*>::const_iterator itt;
             for (itt = _controls.begin(); itt < _controls.end(); itt++)
@@ -802,7 +858,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
                 }
 
                 const Rectangle& nextBounds = nextControl->getAbsoluteBounds();
-                switch(direction)
+                switch (direction)
                 {
                 case UP:
                     vNext.set(nextBounds.x + nextBounds.width * 0.5f,
@@ -838,7 +894,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
         if (!next)
         {
             // Check for controls in the given direction in our parent container.
-            if (direction != NEXT && !outsideControl && _parent && _parent->moveFocus(direction, start))
+            if (direction != NEXT && direction != PREVIOUS && !outsideControl && _parent && _parent->moveFocus(direction, start))
                 return true;
             
             // No control is in the given direction.  Move to the next control in the focus order.
@@ -853,6 +909,9 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
             case RIGHT:
             case NEXT:
                 focusDelta = 1;
+                break;
+            case PREVIOUS:
+                focusDelta = -1;
                 break;
             }
 
@@ -875,6 +934,9 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
             }
             else if (focusIndex < 0)
             {
+                if (direction == PREVIOUS && !outsideControl && _parent && _parent->moveFocus(direction, start))
+                    return true;
+
                 focusIndex = _focusIndexMax;
             }
         }
@@ -1152,7 +1214,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
             }
             _scrollBarOpacity = 1.0f;
             _dirty = true;
-            return _consumeInputEvents;
+            return false;
         }
         break;
 

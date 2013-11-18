@@ -1,7 +1,7 @@
 #ifndef IMAGECONTROL_H_
 #define IMAGECONTROL_H_
 
-#include "Button.h"
+#include "Control.h"
 #include "Theme.h"
 #include "Image.h"
 #include "SpriteBatch.h"
@@ -33,7 +33,7 @@ namespace gameplay
      }
  @endverbatim
  */
-class ImageControl : public Button
+class ImageControl : public Control
 {
     friend class Container;
 

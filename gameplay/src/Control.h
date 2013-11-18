@@ -1134,6 +1134,13 @@ protected:
     static Alignment getAlignment(const char* alignment);
 
     /**
+     * Determines if this control accepts focus.
+     *
+     * @return True if this control accepts focus, false if it does not.
+     */
+    virtual bool canFocus() const;
+
+    /**
      * Determines if this control is currently in focus.
      *
      * @return True if the control is currently in focus.
@@ -1141,11 +1148,16 @@ protected:
     bool hasFocus() const;
 
     /**
-     * Determines if this control accepts focus.
+     * Sets input focus to this control.
      *
-     * @return True if this control accepts focus, false if it does not.
+     * If this control accepts focus (the hasFocus method returns true), input focus
+     * is set to this control. If this control is a container, the first focusable
+     * control within it gains focus.
+     *
+     * @return True if this control or one of its children successfully gained focus,
+     *      false otherwise.
      */
-    virtual bool canFocus() const;
+    virtual bool setFocus();
 
     /** 
      * The Control's ID.

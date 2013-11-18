@@ -150,7 +150,7 @@ void ImageControl::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 
 void ImageControl::update(const Control* container, const Vector2& offset)
 {
-    Button::update(container, offset);
+    Control::update(container, offset);
 
     if (_batch)
     {

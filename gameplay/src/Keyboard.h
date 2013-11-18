@@ -21,8 +21,7 @@ public:
     {
         KEY_PRESS,
         KEY_RELEASE,
-        KEY_CHAR,
-        KEY_REPEAT
+        KEY_CHAR
     };
 
     /**
