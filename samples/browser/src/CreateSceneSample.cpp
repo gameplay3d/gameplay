@@ -88,7 +88,7 @@ void CreateSceneSample::initialize()
     cameraNode->rotateX(MATH_DEG_TO_RAD(-11.25f));
 
     // Create a white light.
-    Light* light = Light::createDirectional(1.0f, 1.0f, 1.0f);
+    Light* light = Light::createDirectional(0.75f, 0.75f, 0.75f);
     Node* lightNode = _scene->addNode("light");
     lightNode->setLight(light);
     // Release the light because the node now holds a reference to it.
@@ -109,14 +109,14 @@ void CreateSceneSample::initialize()
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
     material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
     // Set the ambient color of the material.
-    material->getParameter("u_ambientColor")->setValue(Vector3(1, 1, 1));
+    material->getParameter("u_ambientColor")->setValue(Vector3(0.2f, 0.2f, 0.2f));
 
     // Bind the light's color and direction to the material.
     material->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
-    material->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorView);
+    material->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorWorld);
 
     // Load the texture from file.
-    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/png/box-diffuse.png", true);
+    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/png/crate.png", true);
     sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
     material->getStateBlock()->setCullFace(true);
     material->getStateBlock()->setDepthTest(true);
@@ -137,7 +137,7 @@ void CreateSceneSample::finalize()
 void CreateSceneSample::update(float elapsedTime)
 {
     // Rotate the directional light.
-    _cubeNode->rotateY(elapsedTime * 0.002 * MATH_PI);
+    _cubeNode->rotateY(elapsedTime * 0.001 * MATH_PI);
 }
 
 void CreateSceneSample::render(float elapsedTime)

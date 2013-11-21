@@ -1,0 +1,513 @@
+material texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material texturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+			defines = SPECULAR;DIRECTIONAL_LIGHT_COUNT 1
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_worldViewMatrix = WORLD_VIEW_MATRIX
+            u_cameraPosition = CAMERA_VIEW_POSITION
+            u_ambientColor = SCENE_AMBIENT_COLOR
+            u_specularExponent = 50
+
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material texturedTransparent
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+            defines = DIRECTIONAL_LIGHT_COUNT 1
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            sampler u_diffuseTexture
+            {
+                mipmap = true
+                wrapS = CLAMP
+                wrapT = CLAMP
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+            }
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+	            blend = true
+                blendSrc = SRC_ALPHA
+                blendDst = ONE_MINUS_SRC_ALPHA
+            }
+        }
+    }
+}
+
+material colored
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/colored.vert
+            fragmentShader = res/shaders/colored.frag
+            defines = DIRECTIONAL_LIGHT_COUNT 1
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material boy : texturedTransparent
+{
+    technique
+    {
+        pass
+        {
+            defines = SKINNING;SKINNING_JOINT_COUNT 31;MODULATE_ALPHA;DIRECTIONAL_LIGHT_COUNT 1
+            u_matrixPalette = MATRIX_PALETTE
+            u_modulateAlpha = 1.0
+
+            sampler u_diffuseTexture
+            {
+                path = @character
+            }
+        }
+    }
+}
+
+material boyshadow : texturedTransparent
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @shadow
+            }
+        }
+    }
+}
+
+material floortiles : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @floortiles
+            }
+        }
+    }
+}
+
+material floor : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @floor
+            }
+        }
+    }
+}
+
+material wallwest : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @wallwest
+            }
+        }
+    }
+}
+
+material walleast : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @walleast
+            }
+        }
+    }
+}
+
+material wallnorth : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @wallnorth
+            }
+        }
+    }
+}
+
+material wallsouth : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @wallsouth
+            }
+        }
+    }
+}
+
+material walloverhang : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @walloverhang
+            }
+        }
+    }
+}
+
+material toybox : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @toybox
+            }
+        }
+    }
+}
+
+material green : colored
+{
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.65, 0.7, 0, 1
+        }
+    }
+}
+
+material lightblue : colored
+{
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.38, 0.72, 0.85, 1
+        }
+    }
+}
+
+material basketball : texturedSpecular
+{
+    technique
+    {
+        pass
+        {
+            u_specularExponent = 12
+
+            sampler u_diffuseTexture
+            {
+                path = @basketball
+                wrapS = REPEAT
+                wrapT = REPEAT
+            }
+        }
+    }
+}
+
+material playtable : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @playtable
+            }
+        }
+    }
+}
+
+material easel : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @easel
+            }
+        }
+    }
+}
+
+material door : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @door
+            }
+        }
+    }
+}
+
+material basketballnet : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @basketballnet
+            }
+        }
+    }
+}
+
+material backboard : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @backboard
+            }
+        }
+    }
+}
+
+material doorframe : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @doorframe
+            }
+        }
+    }
+}
+
+material windowledge : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @windowledge
+            }
+        }
+    }
+}
+
+material bookshelf : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @bookshelf
+            }
+        }
+    }
+}
+
+material book : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @book
+            }
+        }
+    }
+}
+
+material tabletop : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @tabletop
+            }
+        }
+    }
+}
+
+material tableleg1 : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @tableleg1
+            }
+        }
+    }
+}
+
+material tableleg2 : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @tableleg2
+            }
+        }
+    }
+}
+
+material tableleg3 : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @tableleg3
+            }
+        }
+    }
+}
+
+material tableleg4 : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @tableleg4
+            }
+        }
+    }
+}
+
+material storageorganizer : texturedUnlit
+{
+    technique
+    {
+        pass
+        {
+            sampler u_diffuseTexture
+            {
+                path = @storageorganizer
+            }
+        }
+    }
+}

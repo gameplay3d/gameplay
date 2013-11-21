@@ -65,17 +65,18 @@ macro (append_gameplay_ext_lib listToAppend libName libDirName)
 endmacro (append_gameplay_ext_lib)
 
 macro(copy_files TARGET_NAME GLOBPAT SOURCE DESTINATION RECUR)
+    get_filename_component(REALPATH_SOURCE ${SOURCE} REALPATH)
     IF(${RECUR})
         SET(RECURSE_PARAM GLOB_RECURSE)
     ELSEIF(NOT ${RECUR})
         SET(RECURSE_PARAM GLOB)
     ENDIF(${RECUR})
-    file(${RECURSE_PARAM} COPY_FILES RELATIVE ${SOURCE} "${SOURCE}/${GLOBPAT}")
+    file(${RECURSE_PARAM} COPY_FILES RELATIVE ${REALPATH_SOURCE} "${REALPATH_SOURCE}/${GLOBPAT}")
 
-  add_custom_target(${TARGET_NAME} ALL COMMENT "Copying files: ${SOURCE}/${GLOBPAT}")
+  add_custom_target(${TARGET_NAME} ALL COMMENT "Copying files: ${REALPATH_SOURCE}/${GLOBPAT}")
 
   foreach(FILENAME ${COPY_FILES})
-    set(SRC "${SOURCE}/${FILENAME}")
+    set(SRC "${REALPATH_SOURCE}/${FILENAME}")
     set(DST "${DESTINATION}/${FILENAME}")
 
     IF(IS_DIRECTORY ${SRC})
@@ -101,7 +102,7 @@ include_directories(
 append_gameplay_lib(GAMEPLAY_LIBRARIES)
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "GLEW" "glew" "glew32")
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "lua" "lua")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "png" "libpng" "libpng16")
+append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "png" "png" "libpng")
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "BulletDynamics" "bullet")
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "BulletCollision" "bullet")
 append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "LinearMath" "bullet")
@@ -149,4 +150,5 @@ set_target_properties(${GAME_NAME} PROPERTIES
 #processing to the the res files in the future like zipping or preparation to
 #per platfom format.
 copy_files(CopyRes * "${CMAKE_SOURCE_DIR}/res" "$<TARGET_FILE_DIR:${GAME_NAME}>/res" 1)
+copy_files(CopyShaders * "${GAMEPLAY_SRC_PATH}/gameplay/res/shaders" "$<TARGET_FILE_DIR:${GAME_NAME}>/res/shaders" 1)
 copy_files(CopyConfig *.config "${CMAKE_SOURCE_DIR}" "$<TARGET_FILE_DIR:${GAME_NAME}>" 0)

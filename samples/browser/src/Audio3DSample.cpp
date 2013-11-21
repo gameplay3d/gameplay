@@ -35,10 +35,10 @@ void Audio3DSample::initialize()
     // Initialize box model
     Node* boxNode = _scene->findNode("box");
     Model* boxModel = boxNode->getModel();
-    Material* boxMaterial = boxModel->setMaterial("res/common/box.material");
+    Material* boxMaterial = boxModel->setMaterial("res/common/box.material#lambert1");
 
     boxMaterial->getParameter("u_directionalLightColor[0]")->setValue(light->getColor());
-    boxMaterial->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());
+    boxMaterial->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorWorld());
 
     // Remove the cube from the scene but keep a reference to it.
     _cubeNode = boxNode;

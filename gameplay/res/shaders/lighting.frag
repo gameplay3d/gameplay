@@ -1,21 +1,27 @@
 
 vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, float attenuation)
 {
-    float diffuse = clamp(dot(normalVector, lightDirection), 0.0, 1.0);
-    vec3 diffuseColor = lightColor * _baseColor.rgb * diffuse;
+    float diffuse = max(dot(normalVector, lightDirection), 0.0);
+     vec3 diffuseColor = lightColor * _baseColor.rgb * diffuse * attenuation;
 
     #if defined(SPECULAR)
 
+	// Phong shading
+    //vec3 vertexToEye = normalize(v_cameraDirection);
+    //vec3 specularAngle = normalize(normalVector * diffuse * 2.0 - lightDirection);  
+    //vec3 specularColor = vec3(pow(clamp(dot(specularAngle, vertexToEye), 0.0, 1.0), u_specularExponent)); 
+
+    // Blinn-Phong shading
     vec3 vertexToEye = normalize(v_cameraDirection);
-    vec3 reflect = normalize(normalVector * diffuse * 2.0 - lightDirection);  
-    float specular = pow(clamp(dot(reflect, vertexToEye), 0.0, 1.0), u_specularExponent);
-    vec3 specularColor = vec3(specular, specular, specular); 
-    
-    return (diffuseColor + specularColor) * attenuation;
+    vec3 halfVector = normalize(lightDirection + vertexToEye);
+    float specularAngle = clamp(dot(normalVector, halfVector), 0.0, 1.0);
+    vec3 specularColor = vec3(pow(specularAngle, u_specularExponent)) * attenuation;
+
+    return diffuseColor + specularColor;
 
     #else
     
-        return diffuseColor * attenuation;
+    return diffuseColor;
     
     #endif
 }
@@ -64,7 +70,7 @@ vec3 getLitPixel()
     {
         // Compute range attenuation
         vec3 ldir = v_vertexToSpotLightDirection[i] * u_spotLightRangeInverse[i];
-        float att = clamp(1.0 - dot(ldir, ldir), 0.0, 1.0);
+        float attenuation = clamp(1.0 - dot(ldir, ldir), 0.0, 1.0);
         vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection[i]);
 
         // TODO: 
@@ -77,8 +83,8 @@ vec3 getLitPixel()
         float spotCurrentAngleCos = dot(spotLightDirection, -vertexToSpotLightDirection);
 
 		// Apply spot attenuation
-        att *= smoothstep(u_spotLightOuterAngleCos[i], u_spotLightInnerAngleCos[i], spotCurrentAngleCos);
-        combinedColor += computeLighting(normalVector, vertexToSpotLightDirection, u_spotLightColor[i], att);
+        attenuation *= smoothstep(u_spotLightOuterAngleCos[i], u_spotLightInnerAngleCos[i], spotCurrentAngleCos);
+        combinedColor += computeLighting(normalVector, vertexToSpotLightDirection, u_spotLightColor[i], attenuation);
     }
     #endif
     

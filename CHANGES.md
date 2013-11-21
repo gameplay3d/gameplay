@@ -1,12 +1,16 @@
 ## v2.0.0
 
-- Adds support for Visual Studio 2012
+- Adds support for Visual Studio 2013.
 - Adds support for iOS 7, MacOS 10.8 and XCode 5.
 - Adds support for BlackBerry NDK 10.2.
 - Adds support for social achievements, leaderboard and challenges.
 - Adds password mode on textbox controls.
 - Adds collision object group mask filtering.
+- Adds support in shaders for mulitple lights.
+- Adds support for scene renderer.
+- Adds support for encoding distance field based fonts.
 - Fixes Mesh Collision shapes.
+
 
 ## v1.7.0
 

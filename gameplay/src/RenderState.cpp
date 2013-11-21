@@ -85,7 +85,23 @@ MaterialParameter* RenderState::getParameter(const char* name) const
     return param;
 }
 
-void RenderState::clearParameter(const char* name)
+unsigned int RenderState::getParameterCount() const
+{
+    return _parameters.size();
+}
+
+MaterialParameter* RenderState::getParameterByIndex(unsigned int index)
+{
+    return _parameters[index];
+}
+
+void RenderState::addParameter(MaterialParameter* param)
+{
+    _parameters.push_back(param);
+    param->addRef();
+}
+
+void RenderState::removeParameter(const char* name)
 {
     for (size_t i = 0, count = _parameters.size(); i < count; ++i)
     {

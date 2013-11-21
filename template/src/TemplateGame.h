@@ -57,6 +57,7 @@ private:
     bool drawScene(Node* node);
 
     Scene* _scene;
+    bool _wireframe;
 };
 
 #endif

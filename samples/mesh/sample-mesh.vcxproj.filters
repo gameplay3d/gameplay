@@ -7,29 +7,80 @@
     <Filter Include="res">
       <UniqueIdentifier>{529d46d5-f3a6-4e0d-94f1-80461113f474}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\shaders">
+      <UniqueIdentifier>{7fbb53de-b9f0-4748-a142-1bd7c040565f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
-    <None Include="res\duck.dae">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\duck.gpb">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\duck.material">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\duck-diffuse.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\grid.material">
-      <Filter>res</Filter>
-    </None>
     <None Include="game.config" />
     <None Include="../../gameplay\res\logo_powered_white.png" />
     <None Include="res\arial.gpb">
       <Filter>res</Filter>
+    </None>
+    <None Include="res\mesh.fbx">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\mesh.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\mesh.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\mesh.mb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\mesh.scene">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\shaders\colored.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\colored.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\font.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\font.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\form.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\form.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lighting.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lighting.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\skinning.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\skinning-none.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\sprite.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\sprite.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\terrain.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\terrain.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\textured.vert">
+      <Filter>res\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -41,5 +92,10 @@
     <ClInclude Include="src\MeshGame.h">
       <Filter>src</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\duck.png">
+      <Filter>res</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -54,6 +54,7 @@
 #include "ScreenDisplayer.h"
 #include "HeightField.h"
 #include "Terrain.h"
+#include "TerrainPatch.h"
 #include "VisibleSet.h"
 #include "VisibleSetDefault.h"
 
@@ -95,6 +96,7 @@
 // Forms UI
 #include "Theme.h"
 #include "Control.h"
+#include "ControlFactory.h"
 #include "Container.h"
 #include "Form.h"
 #include "Label.h"

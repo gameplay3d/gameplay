@@ -25,7 +25,6 @@
 								<option id="com.qnx.qcc.option.compiler.security.2012394098" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="false" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1031425461" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
-									<listOptionValue builtIn="false" value="GP_USE_SOCIAL"/>
 									<listOptionValue builtIn="false" value="GP_USE_GAMEPAD"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1786077513" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
@@ -116,7 +115,6 @@
 								<option id="com.qnx.qcc.option.compiler.security.1305913768" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="false" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1393479764" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
-									<listOptionValue builtIn="false" value="GP_USE_SOCIAL"/>
 									<listOptionValue builtIn="false" value="GP_USE_GAMEPAD"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1846473564" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
@@ -204,7 +202,6 @@
 								<option id="com.qnx.qcc.option.compiler.security.1801893474" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="false" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1406768557" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
-									<listOptionValue builtIn="false" value="GP_USE_SOCIAL"/>
 									<listOptionValue builtIn="false" value="GP_USE_GAMEPAD"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.2118333103" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">

@@ -1261,21 +1261,6 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     return _collisionObject;
 }
 
-unsigned int Node::getNumAdvertisedDescendants() const
-{
-    return (unsigned int)_advertisedDescendants.size();
-}
-
-Node* Node::getAdvertisedDescendant(unsigned int i) const
-{
-    return _advertisedDescendants.at(i);
-}
-
-void Node::addAdvertisedDescendant(Node* node)
-{
-    _advertisedDescendants.push_back(node);
-}
-
 AIAgent* Node::getAgent() const
 {
     return _agent;

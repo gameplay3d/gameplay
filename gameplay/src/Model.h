@@ -33,14 +33,14 @@ public:
 
     /**
      * Returns the Mesh for this Model.
-     * 
+     *
      * @return The Mesh for this Model.
      */
     Mesh* getMesh() const;
 
     /**
      * Returns the number of parts in the Mesh for this Model.
-     * 
+     *
      * @return The number of parts in the Mesh for this Model.
      */
     unsigned int getMeshPartCount() const;
@@ -52,7 +52,7 @@ public:
      * mesh part, the shared Material will be returned.
      *
      * @param partIndex The index of the mesh part whose Material to return (-1 for shared material).
-     * 
+     *
      * @return The requested Material, or NULL if no Material is set.
      */
     Material* getMaterial(int partIndex = -1);
@@ -83,12 +83,12 @@ public:
      *
      * Mesh parts will use an explicitly set part material, if set; otherwise they
      * will use the globally set material.
-     * 
+     *
      * @param vshPath The path to the vertex shader file.
      * @param fshPath The path to the fragment shader file.
      * @param defines A new-line delimited list of preprocessor defines. May be NULL.
      * @param partIndex The index of the mesh part to set the material for (-1 for shared material).
-     * 
+     *
      * @return The newly created and bound Material, or NULL if the Material could not be created.
      */
     Material* setMaterial(const char* vshPath, const char* fshPath, const char* defines = NULL, int partIndex = -1);
@@ -103,10 +103,10 @@ public:
      *
      * Mesh parts will use an explicitly set part material, if set; otherwise they
      * will use the globally set material.
-     * 
+     *
      * @param materialPath The path to the material file.
      * @param partIndex The index of the mesh part to set the material for (-1 for shared material).
-     * 
+     *
      * @return The newly created and bound Material, or NULL if the Material could not be created.
      */
     Material* setMaterial(const char* materialPath, int partIndex = -1);
@@ -122,14 +122,14 @@ public:
 
     /**
      * Returns the MeshSkin.
-     * 
+     *
      * @return The MeshSkin, or NULL if one is not set.
      */
     MeshSkin* getSkin() const;
 
     /**
      * Returns the node that is associated with this model.
-     * 
+     *
      * @return The node that is associated with this model.
      */
     Node* getNode() const;
@@ -139,7 +139,7 @@ public:
      *
      * This method is automatically called when a model is attached to a node
      * and therefore should not normally be called explicitly.
-     * 
+     *
      * @param node The node that is associated with this model.
      */
     void setNode(Node* node);
@@ -148,7 +148,7 @@ public:
      * Sets if this model cast shadows.
      *
      * Note: This is only applied to a SceneRenderer.
-     * 
+     *
      * @param casts if this model casts shadows
      * @see SceneRenderer
      */
@@ -172,7 +172,7 @@ public:
     void setShadowReceiver(bool receives);
 
     /**
-     * Returns whether this objects recieves shadows.
+     * Returns whether this objects receives shadows.
      *
      * Note: This is only applied to a SceneRenderer.
      *
@@ -213,7 +213,7 @@ private:
 
     /**
      * Sets the MeshSkin for this model.
-     * 
+     *
      * @param skin The MeshSkin for this model.
      */
     void setSkin(MeshSkin* skin);
@@ -225,7 +225,7 @@ private:
 
     /**
      * Clones the model and returns a new model.
-     * 
+     *
      * @param context The clone context.
      * @return The new cloned model.
      */

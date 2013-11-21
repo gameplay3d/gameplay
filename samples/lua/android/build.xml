@@ -60,6 +60,7 @@
        -->
     <target name="-post-compile">
         <copy file="../game.config" tofile="assets/game.config"/>
+        <copy file="../res/lua.scene" tofile="assets/res/lua.scene"/>
         <copy file="../res/box.gpb" tofile="assets/res/box.gpb"/>
         <copy file="../res/box.material" tofile="assets/res/box.material"/>
         <copy file="../res/grid.material" tofile="assets/res/grid.material"/>

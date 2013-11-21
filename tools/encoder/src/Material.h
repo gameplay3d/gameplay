@@ -56,7 +56,6 @@ public:
     Sampler* getSampler(const std::string& id) const;
     
     bool isTextured() const;
-    bool isBumped() const;
     bool isLit() const;
     bool isSpecular() const;
     bool isTextureRepeat() const;

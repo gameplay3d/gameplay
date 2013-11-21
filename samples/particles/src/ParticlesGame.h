@@ -85,6 +85,22 @@ private:
     void updateImageControl();
 
     void updateFrames();
+    
+    void addGrid(unsigned int lineCount);
+    
+    std::string toString(bool b);
+    
+    std::string toString(int i);
+    
+    std::string toString(unsigned int i);
+    
+    std::string toString(const Vector3& v);
+    
+    std::string toString(const Vector4& v);
+    
+    std::string toString(const Quaternion& q);
+    
+    std::string toString(ParticleEmitter::TextureBlending blending);
 
     Scene* _scene;
     Node* _particleEmitterNode;

@@ -24,7 +24,7 @@ struct TerrainHitFilter : public PhysicsController::HitFilter
 TerrainSample::TerrainSample()
 	: _font(NULL), _scene(NULL), _terrain(NULL), _sky(NULL), _form(NULL), _formVisible(true),
 	  _wireframe(false), _debugPhysics(false), _snapToGround(true), _vsync(true),
-	  _mode(MODE_LOOK), _sphere(NULL), _box(NULL)
+      _mode(MODE_LOOK), _sphere(NULL), _box(NULL), _directionalLight(NULL)
 {
 }
 
@@ -43,6 +43,7 @@ void TerrainSample::initialize()
 	_scene = Scene::load("res/common/terrain/sample.scene");
 	_terrain = _scene->findNode("terrain")->getTerrain();
     _sky = _scene->findNode("sky");
+    _sky->setTag("lighting", "none");
 
     // Load shapes
     Bundle* bundle;
@@ -76,6 +77,50 @@ void TerrainSample::initialize()
     // Use script camera for navigation
 	enableScriptCamera(true);
     setScriptCameraSpeed(20, 80);
+
+    _directionalLight = Light::createDirectional(1, 1, 1);
+    Node* lightNode = Node::create("directionalLight");
+    _scene->addNode(lightNode);
+    lightNode->setLight(_directionalLight);
+    lightNode->setRotation(Vector3(1, 0, 0), -MATH_DEG_TO_RAD(45));
+    
+    _scene->visit(this, &TerrainSample::intializeLights);
+}
+
+void initializeLight(Material* material, Light* light)
+{
+    if (material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_directionalLightDirection[0]"))
+    {
+        // For this sample we will only bind a single light to each object in the scene.
+        MaterialParameter* colorParam = material->getParameter("u_directionalLightColor[0]");
+        colorParam->setValue(light->getColor());
+
+        MaterialParameter* directionParam = material->getParameter("u_directionalLightDirection[0]");
+        directionParam->bindValue(light->getNode(), &Node::getForwardVectorWorld);
+    }
+}
+
+bool TerrainSample::intializeLights(Node* node)
+{
+    Model* model = node->getModel();
+    if (model)
+    {
+        initializeLight(model->getMaterial(), _directionalLight);
+    }
+
+    Terrain* terrain = node->getTerrain();
+    if (terrain)
+    {
+        unsigned int patchCount = terrain->getPatchCount();
+        for (unsigned int i = 0; i < patchCount; i++)
+        {
+            TerrainPatch* patch = terrain->getPatch(i);
+            Material* material = patch->getMaterial();
+
+            initializeLight(material, _directionalLight);
+        }
+    }
+    return true;
 }
 
 void TerrainSample::finalize()
@@ -144,32 +189,25 @@ void TerrainSample::render(float elapsedTime)
     sprintf(buffer, "FPS: %d", getFrameRate());
     _font->start();
     _font->drawText(buffer, 65, 18, Vector4::one(), 30);
-    if (_formVisible)
-    {
-        // Draw stats
-        sprintf(buffer,
-            "Total Patches: %d\n" \
-            "Visible Patches: %d\n" \
-            "Total Triangles: %d\n" \
-            "Visible Triangles: %d\n",
-            _terrain->getPatchCount(),
-            _terrain->getVisiblePatchCount(),
-            _terrain->getTriangleCount(),
-            _terrain->getVisibleTriangleCount());
-        _font->drawText(buffer, 25, 300, Vector4::one(), 20);
-    }
+
     _font->finish();
 }
 
 bool TerrainSample::drawScene(Node* node)
 {
+    Camera* camera = _scene->getActiveCamera();
+
 	if (node->getModel())
 	{
-		node->getModel()->draw();
+        if (node->getBoundingSphere().intersects(camera->getFrustum()))
+        {
+            node->getModel()->draw();
+        }
 	}
 	else if (node->getTerrain())
 	{
-		node->getTerrain()->draw(_wireframe);
+        Terrain* terrain = node->getTerrain();
+        terrain->draw(_wireframe);
 	}
 
 	return true;
@@ -244,7 +282,7 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
             {
                 Node* clone = NULL;
                 PhysicsCollisionShape::Definition rbShape;
-                const char* material = NULL;
+                const char* materialUrl = NULL;
 
                 switch (_mode)
                 {
@@ -252,7 +290,7 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
                     {
                         clone = _sphere->clone();
                         rbShape = PhysicsCollisionShape::sphere();
-                        material = "res/common/terrain/shapes.material#sphere";
+                        materialUrl = "res/common/terrain/shapes.material#sphere";
                     }
                     break;
 
@@ -260,7 +298,7 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
                     {
                         clone = _box->clone();
                         rbShape = PhysicsCollisionShape::box();
-                        material = "res/common/terrain/shapes.material#box";
+                        materialUrl = "res/common/terrain/shapes.material#box";
                     }
                     break;
                 }
@@ -272,7 +310,9 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
                     PhysicsRigidBody::Parameters rbParams(1);
                     clone->setCollisionObject(PhysicsCollisionObject::RIGID_BODY, rbShape, &rbParams);
                     _scene->addNode(clone);
-                    clone->getModel()->setMaterial(material);
+                    clone->getModel()->setMaterial(materialUrl);
+                    Material* material = clone->getModel()->getMaterial();
+                    initializeLight(material, _directionalLight);
                     clone->release();
 
                     _shapes.push_back(clone);
@@ -326,10 +366,6 @@ void TerrainSample::controlEvent(Control* control, EventType evt)
     {
         _terrain->setFlag(Terrain::LEVEL_OF_DETAIL, static_cast<CheckBox*>(control)->isChecked());
     }
-    else if (strcmp(control->getId(), "culling") == 0)
-    {
-        _terrain->setFlag(Terrain::FRUSTUM_CULLING, static_cast<CheckBox*>(control)->isChecked());
-    }
     else if (strcmp(control->getId(), "snapToGround") == 0)
     {
         _snapToGround = static_cast<CheckBox*>(control)->isChecked();
@@ -378,3 +414,4 @@ void TerrainSample::setMessage(const char* message)
     label->setText(message ? message : "");
     _form->getControl("messageBox")->setVisible(message ? true : false);
 }
+

@@ -6,7 +6,6 @@ namespace gameplay
 
 // Lua bindings for Node.
 int lua_Node__gc(lua_State* state);
-int lua_Node_addAdvertisedDescendant(lua_State* state);
 int lua_Node_addChild(lua_State* state);
 int lua_Node_addListener(lua_State* state);
 int lua_Node_addRef(lua_State* state);
@@ -19,7 +18,6 @@ int lua_Node_destroyAnimation(lua_State* state);
 int lua_Node_findNode(lua_State* state);
 int lua_Node_getActiveCameraTranslationView(lua_State* state);
 int lua_Node_getActiveCameraTranslationWorld(lua_State* state);
-int lua_Node_getAdvertisedDescendant(lua_State* state);
 int lua_Node_getAgent(lua_State* state);
 int lua_Node_getAnimation(lua_State* state);
 int lua_Node_getAnimationPropertyComponentCount(lua_State* state);
@@ -46,7 +44,6 @@ int lua_Node_getLight(lua_State* state);
 int lua_Node_getMatrix(lua_State* state);
 int lua_Node_getModel(lua_State* state);
 int lua_Node_getNextSibling(lua_State* state);
-int lua_Node_getNumAdvertisedDescendants(lua_State* state);
 int lua_Node_getParent(lua_State* state);
 int lua_Node_getParticleEmitter(lua_State* state);
 int lua_Node_getPreviousSibling(lua_State* state);

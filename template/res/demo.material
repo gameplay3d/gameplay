@@ -1,0 +1,38 @@
+material colored
+{
+    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+    
+    renderState
+    {
+        cullFace = true
+        depthTest = true
+    }
+    
+    technique
+    {
+        pass 
+        {
+            vertexShader = res/shaders/colored.vert
+            fragmentShader = res/shaders/colored.frag
+        }
+    }
+}
+
+material lambert2 : colored
+{
+    u_diffuseColor = 0.4, 0.4, 0.4, 1
+
+    u_ambientColor = SCENE_AMBIENT_COLOR
+    u_directionalLightColor[0] = 1, 1, 1
+    u_directionalLightDirection[0] = 0, -1, 0
+    u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+
+    technique
+    {
+        pass 
+        {
+            defines = DIRECTIONAL_LIGHT_COUNT 1
+        }
+    }
+}
+

@@ -47,8 +47,8 @@ uniform mat4 u_inverseTransposeWorldViewMatrix;
 uniform mat4 u_worldViewMatrix;
 #endif
 
-#if (DIRECTION_LIGHT_COUNT > 0)
-uniform vec3 u_directionalLightDirection[DIRECTION_LIGHT_COUNT];
+#if (DIRECTIONAL_LIGHT_COUNT > 0)
+uniform vec3 u_directionalLightDirection[DIRECTIONAL_LIGHT_COUNT];
 #endif
 
 #if (POINT_LIGHT_COUNT > 0) 

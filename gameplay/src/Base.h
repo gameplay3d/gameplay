@@ -75,6 +75,12 @@ extern void print(const char* format, ...);
 #define GP_ASSERT(expression)
 #endif
 
+#if defined(WIN32) && defined(_MSC_VER)
+#define DEBUG_BREAK() __debugbreak()
+#else
+#define DEBUG_BREAK()
+#endif
+
 // Error macro.
 #ifdef GP_ERRORS_AS_WARNINGS
 #define GP_ERROR GP_WARN
@@ -84,6 +90,7 @@ extern void print(const char* format, ...);
         gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "%s -- ", __current__func__); \
         gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, __VA_ARGS__); \
         gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "\n"); \
+        DEBUG_BREAK(); \
         assert(0); \
         std::exit(-1); \
     } while (0)
@@ -103,6 +110,7 @@ extern void print(const char* format, ...);
     #pragma warning( disable : 4244 )
     #pragma warning( disable : 4267 )
     #pragma warning( disable : 4311 )
+	#pragma warning( disable : 4316 )
     #pragma warning( disable : 4390 )
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )
@@ -157,13 +165,6 @@ extern void print(const char* format, ...);
 #define MATH_CLAMP(x, lo, hi)       ((x < lo) ? lo : ((x > hi) ? hi : x))
 #ifndef M_1_PI
 #define M_1_PI                      0.31830988618379067154
-#endif
-
-#ifdef WIN32
-    inline float round(float r)
-    {
-        return (r > 0.0f) ? floor(r + 0.5f) : ceil(r - 0.5f);
-    }
 #endif
 
 // NOMINMAX makes sure that windef.h doesn't add macros min and max
@@ -310,6 +311,11 @@ typedef GLuint RenderBufferHandle;
     typedef unsigned long SocialAchievementHandle;
     typedef unsigned long SocialScoreHandle;
     typedef unsigned long SocialChallengeHandle;
+#elif defined(__APPLE__)
+    typedef void* SocialPlayerHandle;
+    typedef void* SocialAchievementHandle;
+    typedef void* SocialScoreHandle;
+    typedef void* SocialChallengeHandle;
 #else
     typedef unsigned int SocialPlayerHandle;
     typedef unsigned int SocialAchievementHandle;

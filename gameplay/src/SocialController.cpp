@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "social/ScoreloopSocialSession.h"
 #include "social/GooglePlaySocialSession.h"
+#include "social/GameCenterSocialSession.h"
 
 namespace gameplay
 {
@@ -80,6 +81,23 @@ void SocialController::authenticate(SocialSessionListener* listener)
     if (strcmp(providerStr, "GooglePlay") == 0)
     {
         _session = GooglePlaySocialSession::authenticate(listener, socialProperties);
+    }
+    else
+    {
+        listener->authenticateEvent(SocialSessionListener::ERROR_INITIALIZATION, NULL);
+    }
+#elif defined(__APPLE__)
+    Properties* socialProperties = Game::getInstance()->getConfig()->getNamespace("social", true);
+    const char* providerStr = "";
+
+    if (socialProperties)
+    {
+    	providerStr = socialProperties->getString("provider");
+    }
+
+    if (strcmp(providerStr, "GameCenter") == 0)
+    {
+        _session = GameCenterSocialSession::authenticate(listener, socialProperties);
     }
     else
     {
