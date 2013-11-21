@@ -290,9 +290,4 @@ const char* Joystick::getType() const
     return "joystick";
 }
 
-bool Joystick::canFocus() const
-{
-    return true;
-}
-
 }

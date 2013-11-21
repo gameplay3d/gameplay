@@ -126,11 +126,6 @@ public:
      */
     InputMode getInputMode() const;
 
-    /**
-     * @see Control#canFocus()
-     */
-    bool canFocus() const;
-
 protected:
 
     /**

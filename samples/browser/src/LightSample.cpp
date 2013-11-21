@@ -135,6 +135,7 @@ void LightSample::initialize()
     _properties->setEnabled(false);
     _noLight->setSelected(true);
 	_form->setConsumeInputEvents(false);
+    _form->setFocus();
 
 	setSpecularValue(_specularSlider->getValue());
 }

@@ -67,7 +67,7 @@ void SamplesGame::initialize()
             sampleButton->release();
         }
     }
-    //_sampleSelectForm->setState(Control::FOCUS);
+    _sampleSelectForm->setFocus();
 
     // Disable virtual gamepads.
     unsigned int gamepadCount = getGamepadCount();
@@ -256,7 +256,7 @@ void SamplesGame::exitActiveSample()
         SAFE_DELETE(_activeSample);
 
         _sampleSelectForm->setEnabled(true);
-        //_sampleSelectForm->setState(Control::FOCUS);
+        _sampleSelectForm->setFocus();
     }
 
     // Reset some game options

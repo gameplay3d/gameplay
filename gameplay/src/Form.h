@@ -88,6 +88,18 @@ public:
     static Form* getForm(const char* id);
     
     /**
+     * Returns the current UI control that is in focus.
+     *
+     * @return The current control in focus, or NULL if no controls are in focus.
+     */
+    static Control* getFocusControl();
+
+    /**
+     * Removes focus from any currently focused UI control.
+     */
+    static void clearFocus();
+
+    /**
      * @see Container#isForm()
      */
     bool isForm() const;
@@ -197,7 +209,7 @@ private:
      *
      * @see Control::gamepadEvent
      */
-    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+    static bool gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
      * Fired by the platform when the game window resizes.
@@ -232,6 +244,8 @@ private:
      */
     void updateFrameBuffer();
 
+    static bool pointerEventInternal(bool mouse, int evt, int x, int y, int param);
+
     static Control* findInputControl(int* x, int* y, bool focus);
 
     static Control* findInputControl(Control* control, int x, int y, bool focus);
@@ -247,6 +261,10 @@ private:
     static void controlDisabled(Control* control);
 
     static void setFocusControl(Control* control);
+
+    static void pollGamepads();
+
+    static bool pollGamepad(Gamepad* gamepad);
 
     Theme* _theme;                      // The Theme applied to this Form.
     FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad. 

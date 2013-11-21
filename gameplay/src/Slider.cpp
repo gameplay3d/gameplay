@@ -17,6 +17,7 @@ Slider::Slider() : _min(0.0f), _max(0.0f), _step(0.0f), _value(0.0f), _delta(0.0
     _valueTextAlignment(Font::ALIGN_BOTTOM_HCENTER), _valueTextPrecision(0), _valueText(""),
     _selectButtonDown(false), _directionButtonDown(false), _gamepadValue(0.0f)
 {
+    _canFocus = true;
 }
 
 Slider::~Slider()
@@ -162,11 +163,6 @@ void Slider::addListener(Control::Listener* listener, int eventFlags)
     Control::addListener(listener, eventFlags);
 }
 
-bool Slider::canFocus() const
-{
-    return true;
-}
-
 void Slider::updateValue(int x, int y)
 {
     State state = getState();
@@ -276,85 +272,27 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
-    /*bool eventConsumed = false;
+    bool eventConsumed = false;
 
-    if (_state == ACTIVE)
+    switch (evt)
     {
-        switch (evt)
+        case Gamepad::JOYSTICK_EVENT:
         {
-            case Gamepad::BUTTON_EVENT:
+            // The right analog stick can be used to change a slider's value.
+            if (analogIndex == 1)
             {
-                if (gamepad->isButtonDown(Gamepad::BUTTON_LEFT))
-                {
-                    _delta = -1.0f;
-                    _directionButtonDown = true;
-                }
-                else if (gamepad->isButtonDown(Gamepad::BUTTON_RIGHT))
-                {
-                    _delta = 1.0f;
-                    _directionButtonDown = true;
-                }
-                else if (_delta != 0.0f && _directionButtonDown)
-                {
-                    _delta = 0.0f;
-                    _directionButtonDown = false;
-                }
-
-                if (_step > 0.0f && _delta != 0.0f)
-                {
-                    _value += _step * _delta;
-                    _gamepadValue = _value - (_step * _delta * 0.49f);
-                    _delta *= 0.2f;
-                }
-
-                // A slider consumes all button events until it is no longer active.
-                eventConsumed = true;
+                Vector2 joy;
+                gamepad->getJoystickValues(analogIndex, &joy);
+                _gamepadValue = _value;
+                _delta = joy.x;
                 _dirty = true;
-                break;
+                return true;
             }
-            case Gamepad::JOYSTICK_EVENT:
-            {
-                // The left analog stick can be used to change a slider's value.
-                if (analogIndex == 0)
-                {
-                    Vector2 joy;
-                    gamepad->getJoystickValues(analogIndex, &joy);
-                    _gamepadValue = _value;
-                    _delta = joy.x;
-                    _dirty = true;
-                    eventConsumed = true;
-                }
-                break;
-            }
+            break;
         }
     }
 
-    if (evt == Gamepad::BUTTON_EVENT && _delta == 0.0f)
-    {
-        if (gamepad->isButtonDown(Gamepad::BUTTON_A) ||
-            gamepad->isButtonDown(Gamepad::BUTTON_X))
-        {
-            _selectButtonDown = true;
-            eventConsumed |= _consumeInputEvents;
-        }
-        else if (_selectButtonDown && 
-                 !gamepad->isButtonDown(Gamepad::BUTTON_A) &&
-                 !gamepad->isButtonDown(Gamepad::BUTTON_X))
-        {
-            _selectButtonDown = false;
-
-            if (hasFocus())
-                setState(ACTIVE);
-            else if (_state == ACTIVE)
-                setState(FOCUS);
-
-            eventConsumed |= _consumeInputEvents;
-        }
-    }    
-
-    return eventConsumed;*/
-    
-    return Control::gamepadEvent(evt, gamepad, analogIndex);
+    return Label::gamepadEvent(evt, gamepad, analogIndex);
 }
 
 bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)

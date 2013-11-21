@@ -869,6 +869,39 @@ public:
     void setZIndex(int zIndex);
 
     /**
+     * Determines if this control accepts focus.
+     *
+     * @return True if this control accepts focus, false if it does not.
+     */
+    bool canFocus() const;
+
+    /**
+     * Sets whether or not the control accepts input focus.
+     *
+     * @param acceptsFocus True if the control should accept input focus, false otherwise.
+     */
+    void setCanFocus(bool acceptsFocus);
+
+    /**
+     * Determines if this control is currently in focus.
+     *
+     * @return True if the control is currently in focus.
+     */
+    bool hasFocus() const;
+
+    /**
+     * Sets input focus to this control.
+     *
+     * If this control accepts focus (the hasFocus method returns true), input focus
+     * is set to this control. If this control is a container, the first focusable
+     * control within it gains focus.
+     *
+     * @return True if this control or one of its children successfully gained focus,
+     *      false otherwise.
+     */
+    virtual bool setFocus();
+
+    /**
      * Get this control's focus index.
      *
      * @return This control's focus index.
@@ -1133,32 +1166,6 @@ protected:
      */
     static Alignment getAlignment(const char* alignment);
 
-    /**
-     * Determines if this control accepts focus.
-     *
-     * @return True if this control accepts focus, false if it does not.
-     */
-    virtual bool canFocus() const;
-
-    /**
-     * Determines if this control is currently in focus.
-     *
-     * @return True if the control is currently in focus.
-     */
-    bool hasFocus() const;
-
-    /**
-     * Sets input focus to this control.
-     *
-     * If this control accepts focus (the hasFocus method returns true), input focus
-     * is set to this control. If this control is a container, the first focusable
-     * control within it gains focus.
-     *
-     * @return True if this control or one of its children successfully gained focus,
-     *      false otherwise.
-     */
-    virtual bool setFocus();
-
     /** 
      * The Control's ID.
      */ 
@@ -1279,6 +1286,11 @@ protected:
      * The focus order of the control.
      */
     int _focusIndex;
+
+    /**
+     * Whether or not the control accepts input focus.
+     */
+    bool _canFocus;
 
     /**
      * The control's parent container.

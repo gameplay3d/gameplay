@@ -7,6 +7,7 @@ namespace gameplay
 
 Button::Button() : _dataBinding(0)
 {
+    _canFocus = true;
 }
 
 Button::~Button()
@@ -52,11 +53,6 @@ const unsigned int Button::getDataBinding() const
 void Button::setDataBinding(unsigned int dataBinding)
 {
     _dataBinding = dataBinding;
-}
-
-bool Button::canFocus() const
-{
-    return true;
 }
 
 }

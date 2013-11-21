@@ -49,11 +49,6 @@ public:
      */
     static Button* create(const char* id, Theme::Style* style);
 
-    /**
-     * @see Control#canFocus()
-     */
-    bool canFocus() const;
-
 protected:
 
     /**

@@ -24,10 +24,6 @@ static const long SCROLL_INERTIA_DELAY = 100L;
 static const float SCROLL_FRICTION_FACTOR = 5.0f;
 // Distance that must be scrolled before isScrolling() will return true, used e.g. to cancel button-click events.
 static const float SCROLL_THRESHOLD = 10.0f;
-// Distance a joystick must be pushed in order to trigger focus-change and/or scrolling.
-static const float JOYSTICK_THRESHOLD = 0.75f;
-// Scroll speed when using a DPad -- max scroll speed when using a joystick.
-static const float GAMEPAD_SCROLL_SPEED = 500.0f;
 // If the DPad or joystick is held down, this is the initial delay in milliseconds between focus change events.
 static const float FOCUS_CHANGE_REPEAT_DELAY = 300.0f;
 
@@ -77,35 +73,11 @@ Container* Container::create(const char* id, Theme::Style* style, Layout::Type l
 {
     GP_ASSERT(style);
 
-    Container* container = Container::create(layoutType);
+    Container* container = new Container();
+    container->_layout = createLayout(layoutType);
     if (id)
         container->_id = id;
     container->_style = style;
-    return container;
-}
-
-Container* Container::create(Layout::Type type)
-{
-    Layout* layout = NULL;
-    switch (type)
-    {
-    case Layout::LAYOUT_ABSOLUTE:
-        layout = AbsoluteLayout::create();
-        break;
-    case Layout::LAYOUT_FLOW:
-        layout = FlowLayout::create();
-        break;
-    case Layout::LAYOUT_VERTICAL:
-        layout = VerticalLayout::create();
-        break;
-    default:
-        layout = AbsoluteLayout::create();
-        break;
-    }
-
-    Container* container = new Container();
-    container->_layout = layout;
-
     return container;
 }
 
@@ -113,59 +85,63 @@ Container* Container::create(Theme::Style* style, Properties* properties, Theme*
 {
     GP_ASSERT(properties);
 
+    Container* container = new Container();
+    container->initialize(style, properties, theme);
+    return container;
+}
+
+void Container::initialize(Theme::Style* style, Properties* properties, Theme* theme)
+{
+    Control::initialize(style, properties);
+
     // Parse layout
-    Container* container;
     Properties* layoutNS = properties->getNamespace("layout", true, false);
     if (layoutNS)
     {
-        Layout::Type layoutType = getLayoutType(layoutNS->getString("type"));
-        container = Container::create(layoutType);
-        switch (layoutType)
+        _layout = createLayout(getLayoutType(layoutNS->getString("type")));
+        switch (_layout->getType())
         {
         case Layout::LAYOUT_FLOW:
-            static_cast<FlowLayout*>(container->getLayout())->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
+            static_cast<FlowLayout*>(_layout)->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
             break;
         case Layout::LAYOUT_VERTICAL:
-            static_cast<VerticalLayout*>(container->getLayout())->setSpacing(layoutNS->getInt("spacing"));
+            static_cast<VerticalLayout*>(_layout)->setSpacing(layoutNS->getInt("spacing"));
             break;
         }
     }
     else
     {
-        container = Container::create(getLayoutType(properties->getString("layout")));
+        _layout = createLayout(getLayoutType(properties->getString("layout")));
     }
 
-    container->initialize(style, properties);
-    container->_scroll = getScroll(properties->getString("scroll"));
-    container->_scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
-    if (container->_scrollBarsAutoHide)
+    setScroll(getScroll(properties->getString("scroll")));
+    _scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
+    if (_scrollBarsAutoHide)
     {
-        container->_scrollBarOpacity = 0.0f;
+        _scrollBarOpacity = 0.0f;
     }
     
-    container->_scrollWheelRequiresFocus = properties->getBool("scrollWheelRequiresFocus");
+    _scrollWheelRequiresFocus = properties->getBool("scrollWheelRequiresFocus");
     if (properties->exists("scrollingFriction"))
-        container->_scrollingFriction = properties->getFloat("scrollingFriction");
+        _scrollingFriction = properties->getFloat("scrollingFriction");
     if (properties->exists("scrollWheelSpeed"))
-        container->_scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
+        _scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
 
-    container->addControls(theme, properties);
-    container->_layout->update(container, container->_scrollPosition);
+    addControls(theme, properties);
+    _layout->update(this, _scrollPosition);
 
     const char* activeControl = properties->getString("activeControl");
     if (activeControl)
     {
-        for (size_t i = 0, count = container->_controls.size(); i < count; ++i)
+        for (size_t i = 0, count = _controls.size(); i < count; ++i)
         {
-            if (container->_controls[i]->_id == activeControl)
+            if (_controls[i]->_id == activeControl)
             {
-                container->_activeControl = container->_controls[i];
+                _activeControl = _controls[i];
                 break;
             }
         }
     }
-
-    return container;
 }
 
 void Container::addControls(Theme* theme, Properties* properties)
@@ -423,6 +399,10 @@ void Container::setScroll(Scroll scroll)
     {
         _scroll = scroll;
         _dirty = true;
+
+        // Scrollable containers can be focused (to allow scrolling)
+        if (_scroll != SCROLL_NONE)
+            _canFocus = true;
     }
 }
 
@@ -506,7 +486,7 @@ void Container::setScrollWheelRequiresFocus(bool required)
 bool Container::setFocus()
 {
     // If this container (or one of its children) already has focus, do nothing
-    if (Form::_focusControl && Form::_focusControl->isChild(this))
+    if (Form::_focusControl && (Form::_focusControl == this || Form::_focusControl->isChild(this)))
         return true;
 
     // First try to set focus to our active control
@@ -1015,7 +995,7 @@ void Container::startScrolling(float x, float y, bool resetTime)
 
     if (resetTime)
     {
-        _lastFrameTime = Game::getGameTime();
+        _lastFrameTime = Game::getAbsoluteTime();
     }
 }
 
@@ -1059,6 +1039,21 @@ Layout::Type Container::getLayoutType(const char* layoutString)
     }
 }
 
+Layout* Container::createLayout(Layout::Type type)
+{
+    switch (type)
+    {
+    case Layout::LAYOUT_ABSOLUTE:
+        return AbsoluteLayout::create();
+    case Layout::LAYOUT_FLOW:
+        return FlowLayout::create();
+    case Layout::LAYOUT_VERTICAL:
+        return VerticalLayout::create();
+    default:
+        return AbsoluteLayout::create();
+    }
+}
+
 void Container::updateScroll()
 {
     if (!_initializedWithScroll)
@@ -1072,9 +1067,9 @@ void Container::updateScroll()
     // Update time.
     if (!_lastFrameTime)
     {
-        _lastFrameTime = Game::getGameTime();
+        _lastFrameTime = Game::getAbsoluteTime();
     }
-    double frameTime = Game::getGameTime();
+    double frameTime = Game::getAbsoluteTime();
     float elapsedTime = (float)(frameTime - _lastFrameTime);
     _lastFrameTime = frameTime;
 
@@ -1404,7 +1399,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
         {
             if (_scrollingVelocity.isZero())
             {
-                _lastFrameTime = Game::getGameTime();
+                _lastFrameTime = Game::getAbsoluteTime();
             }
             _scrolling = _scrollingMouseVertically = _scrollingMouseHorizontally = false;
 

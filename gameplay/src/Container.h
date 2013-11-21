@@ -313,15 +313,6 @@ protected:
     virtual ~Container();
 
     /**
-     * Create an empty container.  A container's layout type must be specified at creation time.
-     *
-     * @param type The container's layout type.
-     *
-     * @return The new container.
-     */
-    static Container* create(Layout::Type type);
-
-    /**
      * Create a container with a given style and properties, including a list of controls.
      *
      * @param style The style to apply to this container.
@@ -331,6 +322,15 @@ protected:
      * @return The new container.
      */
     static Container* create(Theme::Style* style, Properties* properties, Theme* theme);
+
+    /**
+     * Initialize properties common to all Containers from a Properties object.
+     *
+     * @param style The style to apply to this control.
+     * @param properties The properties to set on this control.
+     * @param theme The theme for this control.
+     */
+    void initialize(Theme::Style* style, Properties* properties, Theme* theme);
 
     /**
      * Updates each control within this container,
@@ -345,8 +345,17 @@ protected:
      * Gets a Layout::Type enum from a matching string.
      *
      * @param layoutString The layout string to parse
+     * @return The parsed layout type.
      */
     static Layout::Type getLayoutType(const char* layoutString);
+
+    /**
+     * Creates a layout for the specified layout type.
+     *
+     * @param type The type of layout to create.
+     * @return The new Layout.
+     */
+    static Layout* createLayout(Layout::Type type);
 
     /**
      * Returns whether this container or any of its controls have been modified and require an update.

@@ -27,7 +27,8 @@
     <description>Samples</description>
 
     <!-- Name of author which is used for signing. Must match the developer name of your development certificate. -->
-    <author>RIM Canada</author>
+    <author>Steve Grenier</author>
+    <authorId>gYAAgKe4iG8txlFg4PTJpbImmxI</authorId>
 
     <!-- Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->

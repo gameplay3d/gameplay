@@ -148,6 +148,7 @@ void Gamepad::bindGamepadControls(Container* container)
         {
             Button* button = (Button*)control;
             button->setConsumeInputEvents(true);
+            button->setCanFocus(false);
             _uiButtons[button->getDataBinding()] = button;
             _buttonCount++;
         }

@@ -120,11 +120,6 @@ public:
      */
     inline const unsigned int getIndex() const;
 
-    /**
-     * @see Control#canFocus()
-     */
-    bool canFocus() const;
-
 protected:
     
     /**

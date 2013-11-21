@@ -47,7 +47,7 @@ static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percenta
 Control::Control()
     : _id(""), _enabled(true), _boundsBits(0), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false),
     _autoWidth(AUTO_SIZE_NONE), _autoHeight(AUTO_SIZE_NONE), _listeners(NULL), _visible(true), _zIndex(-1),
-    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _parent(NULL), _styleOverridden(false), _skin(NULL)
+    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
@@ -109,6 +109,9 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     {
         _zIndex = -1;
     }
+
+    if (properties->exists("canFocus"))
+        _canFocus = properties->getBool("canFocus", false);
 
     if (properties->exists("focusIndex"))
     {
@@ -439,7 +442,12 @@ bool Control::isVisibleInHierarchy() const
 
 bool Control::canFocus() const
 {
-    return false;
+    return _canFocus;
+}
+
+void Control::setCanFocus(bool acceptsFocus)
+{
+    _canFocus = acceptsFocus;
 }
 
 bool Control::hasFocus() const
@@ -844,7 +852,7 @@ Control::State Control::getState() const
     if (Form::_focusControl == this)
         return FOCUS;
 
-    return State::NORMAL;
+    return NORMAL;
 }
 
 Theme::Style::OverlayType Control::getOverlayType() const

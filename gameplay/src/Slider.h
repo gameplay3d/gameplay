@@ -164,11 +164,6 @@ public:
      */
     void addListener(Control::Listener* listener, int eventFlags);
 
-    /**
-     * @see Control#canFocus()
-     */
-    bool canFocus() const;
-
 protected:
 
     /**

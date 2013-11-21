@@ -11,6 +11,7 @@ static bool space(char c)
 
 TextBox::TextBox() : _caretLocation(0), _lastKeypress(0), _fontSize(0), _caretImage(NULL), _passwordChar('*'), _inputMode(TEXT), _ctrlPressed(false)
 {
+    _canFocus = true;
 }
 
 TextBox::~TextBox()
@@ -102,7 +103,7 @@ static bool isWhitespace(char c)
     }
 }
 
-static unsigned int findNextWord(std::string& text, unsigned int from, bool backwards)
+static unsigned int findNextWord(const std::string& text, unsigned int from, bool backwards)
 {
     int pos = (int)from;
     if (backwards)
@@ -445,11 +446,6 @@ void TextBox::setInputMode(InputMode inputMode)
 TextBox::InputMode TextBox::getInputMode() const
 {
     return _inputMode;
-}
-
-bool TextBox::canFocus() const
-{
-    return true;
 }
 
 void TextBox::drawText(const Rectangle& clip)
