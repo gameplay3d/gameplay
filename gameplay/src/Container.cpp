@@ -52,7 +52,7 @@ Container::Container()
       _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f), _scrollWheelSpeed(400.0f),
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
-      _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0),
+      _scrollBarOpacityClip(NULL), _zIndexDefault(0),
       _selectButtonDown(false), _lastFrameTime(0), _totalWidth(0), _totalHeight(0),
       _initializedWithScroll(false), _scrollWheelRequiresFocus(false), _allowRelayout(true)
 {
@@ -81,7 +81,7 @@ Container* Container::create(const char* id, Theme::Style* style, Layout::Type l
     return container;
 }
 
-Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
 {
     GP_ASSERT(properties);
 
@@ -248,12 +248,15 @@ unsigned int Container::addControl(Control* control)
 
     if (control->getFocusIndex() == -1)
     {
-        control->setFocusIndex(_focusIndexDefault++);
+        // Find the current largest focus index
+        int maxFocusIndex = 0;
+        for (size_t i = 0, count = _controls.size(); i < count; ++i)
+        {
+            if (_controls[i]->_focusIndex > maxFocusIndex)
+                maxFocusIndex = _controls[i]->_focusIndex;
+        }
+        control->setFocusIndex(maxFocusIndex + 1);
     }
-
-    int focusIndex = control->getFocusIndex();
-    if (focusIndex > _focusIndexMax)
-        _focusIndexMax = focusIndex;
 
     if (control->_parent != this)
     {
@@ -786,197 +789,55 @@ bool Container::isDirty()
     return false;
 }
 
-bool Container::moveFocus(Direction direction, Control* outsideControl)
+bool Container::moveFocus(Direction direction)
 {
-    Control* start = outsideControl;
-    if (!start)
+    switch (direction)
     {
-        if (Form::_focusControl && Form::_focusControl->_parent == this)
-            start = Form::_focusControl;
+    case UP:
+        return moveFocus(Vector2(0, -1));
+
+    case DOWN:
+        return moveFocus(Vector2(0, 1));
+
+    case LEFT:
+        return moveFocus(Vector2(-1, 0));
+
+    case RIGHT:
+        return moveFocus(Vector2(1, 0));
     }
 
-    int focusIndex = 0;
-    Control* next = NULL;
-    if (start)
+    // Get the current control that has focus within this container
+    Control* current = NULL;
+    if (Form::_focusControl && Form::_focusControl->_parent == this)
+        current = Form::_focusControl;
+
+    if (current)
     {
-        const Rectangle& startBounds = start->getAbsoluteBounds();
-        Vector2 vStart, vNext;
-        float distance = FLT_MAX;
-
-        switch (direction)
+        // Find the next control in this container in the specified direction
+        int focusDir = direction == PREVIOUS ? -1 : 1;
+    }
+    else
+    {
+        // No controls within this container have focus, so set focus to the first or last focus control
+        Control* next = NULL;
+        for (size_t i = 0, count = _controls.size(); i < count; ++i)
         {
-        case UP:
-            vStart.set(startBounds.x + startBounds.width * 0.5f,
-                        startBounds.y);
-            break;
-        case DOWN:
-            vStart.set(startBounds.x + startBounds.width * 0.5f,
-                        startBounds.bottom());
-            break;
-        case LEFT:
-            vStart.set(startBounds.x,
-                        startBounds.y + startBounds.height * 0.5f);
-            break;
-        case RIGHT:
-            vStart.set(startBounds.right(),
-                        startBounds.y + startBounds.height * 0.5f);
-            break;
-        }
-
-        if (direction != NEXT && direction != PREVIOUS)
-        {
-            std::vector<Control*>::const_iterator itt;
-            for (itt = _controls.begin(); itt < _controls.end(); itt++)
+            Control* ctrl = _controls[i];
+            if (ctrl->canFocus())
             {
-                Control* nextControl = *itt;
-
-                if (nextControl == start || nextControl->getFocusIndex() < 0 ||
-                    !nextControl->isEnabled() || !nextControl->isVisible())
-                {
-                    // Control is not focusable.
-                    continue;
-                }
-
-                const Rectangle& nextBounds = nextControl->getAbsoluteBounds();
-                switch (direction)
-                {
-                case UP:
-                    vNext.set(nextBounds.x + nextBounds.width * 0.5f,
-                              nextBounds.bottom());
-                    if (vNext.y > vStart.y) continue;
-                    break;
-                case DOWN:
-                    vNext.set(nextBounds.x + nextBounds.width * 0.5f,
-                              nextBounds.y);
-                    if (vNext.y < vStart.y) continue;
-                    break;
-                case LEFT:
-                    vNext.set(nextBounds.right(),
-                              nextBounds.y + nextBounds.height * 0.5f);
-                    if (vNext.x > vStart.x) continue;
-                    break;
-                case RIGHT:
-                    vNext.set(nextBounds.x,
-                              nextBounds.y + nextBounds.height * 0.5f);
-                    if (vNext.x < vStart.x) continue;
-                    break;
-                }
-
-                float nextDistance = vStart.distance(vNext);
-                if (abs(nextDistance) < distance)
-                {
-                    distance = nextDistance;
-                    next = nextControl;
-                }
+                if (!next || (direction == NEXT && ctrl->_focusIndex < next->_focusIndex) || (direction == PREVIOUS && ctrl->_focusIndex > next->_focusIndex))
+                    next = ctrl;
             }
         }
-
-        if (!next)
-        {
-            // Check for controls in the given direction in our parent container.
-            if (direction != NEXT && direction != PREVIOUS && !outsideControl && _parent && _parent->moveFocus(direction, start))
-                return true;
-            
-            // No control is in the given direction.  Move to the next control in the focus order.
-            int focusDelta;
-            switch (direction)
-            {
-            case UP:
-            case LEFT:
-                focusDelta = -1;
-                break;
-            case DOWN:
-            case RIGHT:
-            case NEXT:
-                focusDelta = 1;
-                break;
-            case PREVIOUS:
-                focusDelta = -1;
-                break;
-            }
-
-            // Find the index to search for.
-            if (outsideControl)
-            {
-                focusIndex = outsideControl->_parent->getFocusIndex() + focusDelta;
-            }
-            else
-            {
-                focusIndex = start->getFocusIndex() + focusDelta;
-            }
-
-            if (focusIndex > _focusIndexMax)
-            {
-                if (direction == NEXT && !outsideControl && _parent && _parent->moveFocus(direction, start))
-                    return true;
-
-                focusIndex = 0;
-            }
-            else if (focusIndex < 0)
-            {
-                if (direction == PREVIOUS && !outsideControl && _parent && _parent->moveFocus(direction, start))
-                    return true;
-
-                focusIndex = _focusIndexMax;
-            }
-        }
+        //if (next && next->setFocus())
     }
 
-    if (!next)
-    {
-        std::vector<Control*>::const_iterator itt;
-        for (itt = _controls.begin(); itt < _controls.end(); itt++)
-        {
-            Control* nextControl = *itt;
-            if (nextControl->getFocusIndex() == focusIndex &&
-                nextControl->isEnabled() && nextControl->isVisible())
-            {
-                next = nextControl;
-                break;
-            }
-        }
-    }
+    return false;
+}
 
-    // If we haven't found next by now, then there are no focusable controls in this container.
-    if (next)
-    {
-        // If this control is a container, try to move focus to the first control within it
-        if (next->isContainer())
-        {
-            if ((direction == NEXT && ((Container*)next)->moveFocus(direction)) || ((Container*)next)->moveFocus(direction, start))
-                return true;
-        }
-
-        if (next->canFocus())
-            Form::setFocusControl(next);
-
-        // If the next control is not fully visible, scroll the container so that it is.
-        const Rectangle& bounds = next->getBounds();
-        if (bounds.x < _scrollPosition.x)
-        {
-            // Control is to the left of the scrolled viewport.
-            _scrollPosition.x = -bounds.x;
-        }
-        else if (bounds.x + bounds.width > _scrollPosition.x + _viewportBounds.width)
-        {
-            // Control is off to the right.
-            _scrollPosition.x = -(bounds.x + bounds.width - _viewportBounds.width);
-        }
-
-        if (bounds.y < _viewportBounds.y - _scrollPosition.y)
-        {
-            // Control is above the viewport.
-            _scrollPosition.y = -bounds.y;
-        }
-        else if (bounds.y + bounds.height > _viewportBounds.height - _scrollPosition.y)
-        {
-            // Control is below the viewport.
-            _scrollPosition.y = -(bounds.y + bounds.height - _viewportBounds.height);
-        }
-
-        return true;
-    }
-
+bool Container::moveFocus(const Vector2& direction)
+{
+    // TODO
     return false;
 }
 

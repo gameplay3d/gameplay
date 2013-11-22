@@ -1361,10 +1361,10 @@ bool Control::isChild(Control* control) const
     return false;
 }
 
-Form* Control::getForm() const
+Form* Control::getTopLevelForm() const
 {
     if (_parent)
-        return _parent->getForm();
+        return _parent->getTopLevelForm();
 
     if (isContainer())
     {

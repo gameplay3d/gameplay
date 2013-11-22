@@ -27,7 +27,7 @@ Label* Label::create(const char* id, Theme::Style* style)
     return label;
 }
 
-Label* Label::create(Theme::Style* style, Properties* properties)
+Control* Label::create(Theme::Style* style, Properties* properties, Theme* theme)
 {
     Label* label = new Label();
     label->initialize(style, properties);

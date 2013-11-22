@@ -911,6 +911,12 @@ public:
     /**
      * Set this control's focus index.
      *
+     * Focus indexes control the order in which input focus changes between controls
+     * when using the focus change controls such as the TAB key.
+     *
+     * Valid focus indexes should be zero or greater, with a negative number indicating
+     * an unset focus index.
+     *
      * @param focusIndex The new focus index.
      */
     void setFocusIndex(int focusIndex);
@@ -950,7 +956,7 @@ public:
      *
      * @return this control's form.
      */
-    Form* getForm() const;
+    Form* getTopLevelForm() const;
 
     /**
      * Adds a listener to be notified of specific events affecting

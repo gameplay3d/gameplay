@@ -31,6 +31,7 @@ void luaRegister_TextBox()
         {"addListener", lua_TextBox_addListener},
         {"addRef", lua_TextBox_addRef},
         {"addScriptCallback", lua_TextBox_addScriptCallback},
+        {"canFocus", lua_TextBox_canFocus},
         {"createAnimation", lua_TextBox_createAnimation},
         {"createAnimationFromBy", lua_TextBox_createAnimationFromBy},
         {"createAnimationFromTo", lua_TextBox_createAnimationFromTo},
@@ -44,6 +45,7 @@ void luaRegister_TextBox()
         {"getAutoWidth", lua_TextBox_getAutoWidth},
         {"getBorder", lua_TextBox_getBorder},
         {"getBounds", lua_TextBox_getBounds},
+        {"getCaretLocation", lua_TextBox_getCaretLocation},
         {"getClip", lua_TextBox_getClip},
         {"getClipBounds", lua_TextBox_getClipBounds},
         {"getConsumeInputEvents", lua_TextBox_getConsumeInputEvents},
@@ -74,16 +76,21 @@ void luaRegister_TextBox()
         {"getTextAlignment", lua_TextBox_getTextAlignment},
         {"getTextColor", lua_TextBox_getTextColor},
         {"getTextRightToLeft", lua_TextBox_getTextRightToLeft},
+        {"getTopLevelForm", lua_TextBox_getTopLevelForm},
         {"getType", lua_TextBox_getType},
         {"getWidth", lua_TextBox_getWidth},
         {"getX", lua_TextBox_getX},
         {"getY", lua_TextBox_getY},
         {"getZIndex", lua_TextBox_getZIndex},
+        {"hasFocus", lua_TextBox_hasFocus},
         {"initialize", lua_TextBox_initialize},
+        {"isChild", lua_TextBox_isChild},
         {"isContainer", lua_TextBox_isContainer},
         {"isEnabled", lua_TextBox_isEnabled},
+        {"isEnabledInHierarchy", lua_TextBox_isEnabledInHierarchy},
         {"isHeightPercentage", lua_TextBox_isHeightPercentage},
         {"isVisible", lua_TextBox_isVisible},
+        {"isVisibleInHierarchy", lua_TextBox_isVisibleInHierarchy},
         {"isWidthPercentage", lua_TextBox_isWidthPercentage},
         {"isXPercentage", lua_TextBox_isXPercentage},
         {"isYPercentage", lua_TextBox_isYPercentage},
@@ -96,10 +103,13 @@ void luaRegister_TextBox()
         {"setAutoWidth", lua_TextBox_setAutoWidth},
         {"setBorder", lua_TextBox_setBorder},
         {"setBounds", lua_TextBox_setBounds},
+        {"setCanFocus", lua_TextBox_setCanFocus},
+        {"setCaretLocation", lua_TextBox_setCaretLocation},
         {"setConsumeInputEvents", lua_TextBox_setConsumeInputEvents},
         {"setCursorColor", lua_TextBox_setCursorColor},
         {"setCursorRegion", lua_TextBox_setCursorRegion},
         {"setEnabled", lua_TextBox_setEnabled},
+        {"setFocus", lua_TextBox_setFocus},
         {"setFocusIndex", lua_TextBox_setFocusIndex},
         {"setFont", lua_TextBox_setFont},
         {"setFontSize", lua_TextBox_setFontSize},
@@ -300,6 +310,41 @@ int lua_TextBox_addScriptCallback(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_canFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->canFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_canFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -1109,6 +1154,41 @@ int lua_TextBox_getBounds(lua_State* state)
             }
 
             lua_pushstring(state, "lua_TextBox_getBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_getCaretLocation(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                unsigned int result = instance->getCaretLocation();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_getCaretLocation - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -2556,6 +2636,50 @@ int lua_TextBox_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_TextBox_getTopLevelForm(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTopLevelForm();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Form");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_getTopLevelForm - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_TextBox_getType(lua_State* state)
 {
     // Get the number of parameters.
@@ -2731,6 +2855,41 @@ int lua_TextBox_getZIndex(lua_State* state)
     return 0;
 }
 
+int lua_TextBox_hasFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->hasFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_hasFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_TextBox_initialize(lua_State* state)
 {
     // Get the number of parameters.
@@ -2776,6 +2935,51 @@ int lua_TextBox_initialize(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_isChild(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Control> param1 = gameplay::ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control'.");
+                    lua_error(state);
+                }
+
+                TextBox* instance = getInstance(state);
+                bool result = instance->isChild(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_isChild - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -2853,6 +3057,41 @@ int lua_TextBox_isEnabled(lua_State* state)
     return 0;
 }
 
+int lua_TextBox_isEnabledInHierarchy(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->isEnabledInHierarchy();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_isEnabledInHierarchy - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_TextBox_isHeightPercentage(lua_State* state)
 {
     // Get the number of parameters.
@@ -2910,6 +3149,41 @@ int lua_TextBox_isVisible(lua_State* state)
             }
 
             lua_pushstring(state, "lua_TextBox_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_isVisibleInHierarchy(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->isVisibleInHierarchy();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_isVisibleInHierarchy - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3488,6 +3762,78 @@ int lua_TextBox_setBounds(lua_State* state)
     return 0;
 }
 
+int lua_TextBox_setCanFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                TextBox* instance = getInstance(state);
+                instance->setCanFocus(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setCanFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_setCaretLocation(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                TextBox* instance = getInstance(state);
+                instance->setCaretLocation(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setCaretLocation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_TextBox_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
@@ -3645,6 +3991,41 @@ int lua_TextBox_setEnabled(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_setFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->setFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

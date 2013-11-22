@@ -22,7 +22,6 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "TextBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Transform");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "CheckBox");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "RadioButton");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Camera::Listener", "TerrainPatch");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Container", "Form");
@@ -38,7 +37,6 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "TextBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "CheckBox");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "RadioButton");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "Slider");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "TextBox");
@@ -239,6 +237,8 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("RIGHT_CLICK", "RIGHT_CLICK", scopePath);
         gameplay::ScriptUtil::registerConstantString("ENTER", "ENTER", scopePath);
         gameplay::ScriptUtil::registerConstantString("LEAVE", "LEAVE", scopePath);
+        gameplay::ScriptUtil::registerConstantString("FOCUS_GAINED", "FOCUS_GAINED", scopePath);
+        gameplay::ScriptUtil::registerConstantString("FOCUS_LOST", "FOCUS_LOST", scopePath);
     }
 
     // Register enumeration Control::State.

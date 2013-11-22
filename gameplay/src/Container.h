@@ -52,6 +52,7 @@ class Container : public Control
 {
     friend class Form;
     friend class Control;
+    friend class ControlFactory;
 
 public:
 
@@ -321,7 +322,7 @@ protected:
      *
      * @return The new container.
      */
-    static Container* create(Theme::Style* style, Properties* properties, Theme* theme);
+    static Control* create(Theme::Style* style, Properties* properties, Theme* theme = NULL);
 
     /**
      * Initialize properties common to all Containers from a Properties object.
@@ -579,7 +580,9 @@ private:
 
     // Returns true on success; false if there are no controls to focus on,
     // in which case scrolling can be initiated.
-    bool moveFocus(Direction direction, Control* outsideControl = NULL);
+    bool moveFocus(Direction direction);
+
+    bool moveFocus(const Vector2& direction);
 
     // Starts scrolling at the given horizontal and vertical speeds.
     void startScrolling(float x, float y, bool resetTime = true);
@@ -591,8 +594,6 @@ private:
 
     AnimationClip* _scrollBarOpacityClip;
     int _zIndexDefault;
-    int _focusIndexDefault;
-    int _focusIndexMax;
     bool _selectButtonDown;
     double _lastFrameTime;
 

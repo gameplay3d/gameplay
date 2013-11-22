@@ -17,6 +17,7 @@ int lua_Font_getLocationAtIndex(lua_State* state);
 int lua_Font_getRefCount(lua_State* state);
 int lua_Font_getSize(lua_State* state);
 int lua_Font_getSpriteBatch(lua_State* state);
+int lua_Font_isCharacterSupported(lua_State* state);
 int lua_Font_measureText(lua_State* state);
 int lua_Font_release(lua_State* state);
 int lua_Font_setCharacterSpacing(lua_State* state);
