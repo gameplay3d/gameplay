@@ -789,47 +789,139 @@ bool Container::isDirty()
     return false;
 }
 
+static bool canReceiveFocus(Control* control)
+{
+    if (!(control->isEnabled() && control->isVisible()))
+        return false;
+
+    if (control->canFocus())
+        return true;
+
+    if (control->isContainer())
+    {
+        Container* container = static_cast<Container*>(control);
+        for (unsigned int i = 0, count = (unsigned int)container->getControlCount(); i < count; ++i)
+        {
+            if (canReceiveFocus(container->getControl(i)))
+                return true;
+        }
+    }
+
+    return false;
+}
+
 bool Container::moveFocus(Direction direction)
 {
     switch (direction)
     {
     case UP:
         return moveFocus(Vector2(0, -1));
-
     case DOWN:
         return moveFocus(Vector2(0, 1));
-
     case LEFT:
         return moveFocus(Vector2(-1, 0));
-
     case RIGHT:
         return moveFocus(Vector2(1, 0));
     }
 
-    // Get the current control that has focus within this container
+    // Get the current control that has focus (either directly or indirectly) within this container
     Control* current = NULL;
-    if (Form::_focusControl && Form::_focusControl->_parent == this)
-        current = Form::_focusControl;
+    if (Form::_focusControl && Form::_focusControl->isChild(this))
+    {
+        if (Form::_focusControl->_parent == this)
+        {
+            // Currently focused control is a direct child of us
+            current = Form::_focusControl;
+        }
+        else
+        {
+            // Currently focused control is a child of one of our child containers
+            for (size_t i = 0, count = _controls.size(); i < count; ++i)
+            {
+                if (Form::_focusControl->isChild(_controls[i]))
+                {
+                    current = _controls[i];
+                    break;
+                }
+            }
+        }
+    }
+
+    Control* nextCtrl = NULL;
+    int nextIndex = direction == NEXT ? INT_MAX : INT_MIN;
+    bool moveFirst = false;
 
     if (current)
     {
-        // Find the next control in this container in the specified direction
-        int focusDir = direction == PREVIOUS ? -1 : 1;
-    }
-    else
-    {
-        // No controls within this container have focus, so set focus to the first or last focus control
-        Control* next = NULL;
+        // There is a control inside us that currently has focus, so find the next control that
+        // should receive focus.
+        int focusableControlCount = 0; // track the number of valid focusable controls in this container
+
         for (size_t i = 0, count = _controls.size(); i < count; ++i)
         {
             Control* ctrl = _controls[i];
-            if (ctrl->canFocus())
+            if (ctrl->_focusIndex < 0 || !canReceiveFocus(ctrl))
+                continue;
+
+            if ((direction == NEXT && ctrl->_focusIndex > current->_focusIndex && ctrl->_focusIndex < nextIndex) ||
+                (direction == PREVIOUS && ctrl->_focusIndex < current->_focusIndex && ctrl->_focusIndex > nextIndex))
             {
-                if (!next || (direction == NEXT && ctrl->_focusIndex < next->_focusIndex) || (direction == PREVIOUS && ctrl->_focusIndex > next->_focusIndex))
-                    next = ctrl;
+                nextCtrl = ctrl;
+                nextIndex = ctrl->_focusIndex;
+            }
+
+            ++focusableControlCount;
+        }
+
+        if (nextCtrl)
+        {
+            if (nextCtrl->isContainer() && static_cast<Container*>(nextCtrl)->moveFocus(direction))
+                return true;
+            if (nextCtrl->setFocus())
+                return true;
+        }
+
+        // Search up into our parent container for a focus move
+        if (_parent && _parent->isContainer() && static_cast<Container*>(_parent)->moveFocus(direction))
+            return true;
+
+        // We didn't find a control to move to, so we must be the first or last focusable control in our parent.
+        // Wrap focus to the other side of the container.
+        if (focusableControlCount > 1)
+        {
+            moveFirst = true;
+        }
+    }
+    else
+    {
+        moveFirst = true;
+    }
+
+    if (moveFirst)
+    {
+
+        nextIndex = direction == NEXT ? INT_MAX : INT_MIN;
+        nextCtrl = NULL;
+        for (size_t i = 0, count = _controls.size(); i < count; ++i)
+        {
+            Control* ctrl = _controls[i];
+            if (ctrl->_focusIndex < 0 || !canReceiveFocus(ctrl))
+                continue;
+            if ((direction == NEXT && ctrl->_focusIndex < nextIndex) ||
+                (direction == PREVIOUS && ctrl->_focusIndex > nextIndex))
+            {
+                nextCtrl = ctrl;
+                nextIndex = ctrl->_focusIndex;
             }
         }
-        //if (next && next->setFocus())
+
+        if (nextCtrl)
+        {
+            if (nextCtrl->isContainer() && static_cast<Container*>(nextCtrl)->moveFocus(direction))
+                return true;
+            if (nextCtrl->setFocus())
+                return true;
+        }
     }
 
     return false;

@@ -1163,10 +1163,39 @@ void Form::setFocusControl(Control* control)
         _focusControl->notifyListeners(Control::Listener::FOCUS_GAINED);
 
         // Set the activeControl property of the control's parent container
+        Container* parent = NULL;
         if (_focusControl->_parent && _focusControl->_parent->isContainer())
         {
-            Container* parent = static_cast<Container*>(_focusControl->_parent);
+            parent = static_cast<Container*>(_focusControl->_parent);
             parent->_activeControl = _focusControl;
+        }
+
+        // If this control is inside a scrollable container and is not fully visible,
+        // scroll the container so that it is.
+        if (parent && parent->_scroll != SCROLL_NONE && !parent->_viewportBounds.isEmpty())
+        {
+            const Rectangle& bounds = _focusControl->getBounds();
+            if (bounds.x < parent->_scrollPosition.x)
+            {
+                // Control is to the left of the scrolled viewport.
+                parent->_scrollPosition.x = -bounds.x;
+            }
+            else if (bounds.x + bounds.width > parent->_scrollPosition.x + parent->_viewportBounds.width)
+            {
+                // Control is off to the right.
+                parent->_scrollPosition.x = -(bounds.x + bounds.width - parent->_viewportBounds.width);
+            }
+
+            if (bounds.y < parent->_viewportBounds.y - parent->_scrollPosition.y)
+            {
+                // Control is above the viewport.
+                parent->_scrollPosition.y = -bounds.y;
+            }
+            else if (bounds.y + bounds.height > parent->_viewportBounds.height - parent->_scrollPosition.y)
+            {
+                // Control is below the viewport.
+                parent->_scrollPosition.y = -(bounds.y + bounds.height - parent->_viewportBounds.height);
+            }
         }
     }
 }
