@@ -26,4 +26,4 @@ COPY_RES_EXTRA( ${GAME_NAME} ${CMAKE_SOURCE_DIR}/gameplay
 )
 
 # Just use the PNG config file (most compatible)
-configure_file( game.png.config game.config COPYONLY )
+configure_file( game.dxt.config game.config COPYONLY )
