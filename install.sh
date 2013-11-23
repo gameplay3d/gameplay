@@ -1,21 +1,15 @@
 #!/bin/bash
 #
-# ./install.sh [master | next]
+# ./install.sh
 #
-# Download GamePlay resources from HTTP server and extract from ZIP
+# Download GamePlay dependencies and binaries from github releases and extracts from ZIP
 #
-# Helps prevent repo bloat due to large binary files since they can
-# be hosted separately.
+# Helps prevent repo bloat due to large binary files
 #
 
-prefix=http://www.gameplay3d.org
+prefix=https://github.com/blackberry/GamePlay/releases/download/v2.0.0
 
-branchname=$1
-if [[ "$branchname" == "" ]]; then
-  branchname="next"
-fi
-
-filename=gameplay-deps-$branchname
+filename=gameplay-deps
 
 echo Downloading $filename.zip from $prefix...
 curl -# -O $prefix/$filename.zip

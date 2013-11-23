@@ -1,22 +1,15 @@
 @echo off
 REM
-REM install.bat [master | next]
+REM install.bat
 REM
-REM Download GamePlay resources from HTTP server and extract from ZIP
+REM Download GamePlay dependencies and binaries from github releases and extracts from ZIP
 REM
-REM Helps prevent repo bloat due to large binary files since they can
-REM be hosted separately.
+REM Helps prevent repo bloat due to large binary files
 REM
 
-REM Production URL
-set prefix=http://www.gameplay3d.org
+set prefix=https://github.com/blackberry/GamePlay/releases/download/v2.0.0
 
-set branchname=%1
-if "%branchname%" == "" (
-  set branchname=next
-)
-
-set filename=gameplay-deps-%branchname%
+set filename=gameplay-deps
 
 echo Downloading %filename%.zip from %prefix%
 %~d0
