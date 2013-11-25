@@ -6,6 +6,7 @@
 #include "Base.h"
 #include "Button.h"
 #include "Control.h"
+#include "Form.h"
 #include "Game.h"
 #include "Gamepad.h"
 #include "Label.h"
@@ -30,6 +31,7 @@ void luaRegister_Button()
         {"addListener", lua_Button_addListener},
         {"addRef", lua_Button_addRef},
         {"addScriptCallback", lua_Button_addScriptCallback},
+        {"canFocus", lua_Button_canFocus},
         {"createAnimation", lua_Button_createAnimation},
         {"createAnimationFromBy", lua_Button_createAnimationFromBy},
         {"createAnimationFromTo", lua_Button_createAnimationFromTo},
@@ -60,6 +62,7 @@ void luaRegister_Button()
         {"getMargin", lua_Button_getMargin},
         {"getOpacity", lua_Button_getOpacity},
         {"getPadding", lua_Button_getPadding},
+        {"getParent", lua_Button_getParent},
         {"getRefCount", lua_Button_getRefCount},
         {"getSkinColor", lua_Button_getSkinColor},
         {"getSkinRegion", lua_Button_getSkinRegion},
@@ -69,14 +72,19 @@ void luaRegister_Button()
         {"getTextAlignment", lua_Button_getTextAlignment},
         {"getTextColor", lua_Button_getTextColor},
         {"getTextRightToLeft", lua_Button_getTextRightToLeft},
+        {"getTopLevelForm", lua_Button_getTopLevelForm},
         {"getWidth", lua_Button_getWidth},
         {"getX", lua_Button_getX},
         {"getY", lua_Button_getY},
         {"getZIndex", lua_Button_getZIndex},
+        {"hasFocus", lua_Button_hasFocus},
+        {"isChild", lua_Button_isChild},
         {"isContainer", lua_Button_isContainer},
         {"isEnabled", lua_Button_isEnabled},
+        {"isEnabledInHierarchy", lua_Button_isEnabledInHierarchy},
         {"isHeightPercentage", lua_Button_isHeightPercentage},
         {"isVisible", lua_Button_isVisible},
+        {"isVisibleInHierarchy", lua_Button_isVisibleInHierarchy},
         {"isWidthPercentage", lua_Button_isWidthPercentage},
         {"isXPercentage", lua_Button_isXPercentage},
         {"isYPercentage", lua_Button_isYPercentage},
@@ -89,10 +97,12 @@ void luaRegister_Button()
         {"setAutoWidth", lua_Button_setAutoWidth},
         {"setBorder", lua_Button_setBorder},
         {"setBounds", lua_Button_setBounds},
+        {"setCanFocus", lua_Button_setCanFocus},
         {"setConsumeInputEvents", lua_Button_setConsumeInputEvents},
         {"setCursorColor", lua_Button_setCursorColor},
         {"setCursorRegion", lua_Button_setCursorRegion},
         {"setEnabled", lua_Button_setEnabled},
+        {"setFocus", lua_Button_setFocus},
         {"setFocusIndex", lua_Button_setFocusIndex},
         {"setFont", lua_Button_setFont},
         {"setFontSize", lua_Button_setFontSize},
@@ -106,7 +116,6 @@ void luaRegister_Button()
         {"setSize", lua_Button_setSize},
         {"setSkinColor", lua_Button_setSkinColor},
         {"setSkinRegion", lua_Button_setSkinRegion},
-        {"setState", lua_Button_setState},
         {"setStyle", lua_Button_setStyle},
         {"setText", lua_Button_setText},
         {"setTextAlignment", lua_Button_setTextAlignment},
@@ -292,6 +301,41 @@ int lua_Button_addScriptCallback(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Button_canFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Button* instance = getInstance(state);
+                bool result = instance->canFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_canFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -1916,6 +1960,50 @@ int lua_Button_getPadding(lua_State* state)
     return 0;
 }
 
+int lua_Button_getParent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Button* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParent();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_getParent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Button_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
@@ -2399,6 +2487,50 @@ int lua_Button_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_Button_getTopLevelForm(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Button* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTopLevelForm();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Form");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_getTopLevelForm - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Button_getWidth(lua_State* state)
 {
     // Get the number of parameters.
@@ -2539,6 +2671,86 @@ int lua_Button_getZIndex(lua_State* state)
     return 0;
 }
 
+int lua_Button_hasFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Button* instance = getInstance(state);
+                bool result = instance->hasFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_hasFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Button_isChild(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Control> param1 = gameplay::ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control'.");
+                    lua_error(state);
+                }
+
+                Button* instance = getInstance(state);
+                bool result = instance->isChild(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_isChild - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Button_isContainer(lua_State* state)
 {
     // Get the number of parameters.
@@ -2609,6 +2821,41 @@ int lua_Button_isEnabled(lua_State* state)
     return 0;
 }
 
+int lua_Button_isEnabledInHierarchy(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Button* instance = getInstance(state);
+                bool result = instance->isEnabledInHierarchy();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_isEnabledInHierarchy - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Button_isHeightPercentage(lua_State* state)
 {
     // Get the number of parameters.
@@ -2666,6 +2913,41 @@ int lua_Button_isVisible(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Button_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Button_isVisibleInHierarchy(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Button* instance = getInstance(state);
+                bool result = instance->isVisibleInHierarchy();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_isVisibleInHierarchy - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3244,6 +3526,42 @@ int lua_Button_setBounds(lua_State* state)
     return 0;
 }
 
+int lua_Button_setCanFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                Button* instance = getInstance(state);
+                instance->setCanFocus(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Button_setCanFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Button_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
@@ -3401,6 +3719,41 @@ int lua_Button_setEnabled(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Button_setFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Button* instance = getInstance(state);
+                bool result = instance->setFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_setFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -4153,42 +4506,6 @@ int lua_Button_setSkinRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Button_setState(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
-
-                Button* instance = getInstance(state);
-                instance->setState(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Button_setState - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

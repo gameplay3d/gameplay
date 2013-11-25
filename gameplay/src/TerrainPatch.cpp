@@ -523,7 +523,7 @@ bool TerrainPatch::updateMaterial()
         if (_layers.size() > 0)
             material->getParameter("u_surfaceLayerMaps")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
 
-        if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
+        if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES) && !_levels[i]->model->getMaterial())
         {
             material->getParameter("u_row")->setValue((float)_row);
             material->getParameter("u_column")->setValue((float)_column);

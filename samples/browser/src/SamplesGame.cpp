@@ -62,13 +62,12 @@ void SamplesGame::initialize()
             sampleButton->setText(sampleRecord.title.c_str());
             sampleButton->setAutoWidth(true);
             sampleButton->setHeight(60);      // Tall enough to touch easily on a BB10 device.
-            sampleButton->setConsumeInputEvents(false);   // This lets the user scroll the container if they swipe starting from a button.
             sampleButton->addListener(this, Control::Listener::CLICK);
             _sampleSelectForm->addControl(sampleButton);
             sampleButton->release();
         }
     }
-    _sampleSelectForm->setState(Control::FOCUS);
+    _sampleSelectForm->setFocus();
 
     // Disable virtual gamepads.
     unsigned int gamepadCount = getGamepadCount();
@@ -257,7 +256,7 @@ void SamplesGame::exitActiveSample()
         SAFE_DELETE(_activeSample);
 
         _sampleSelectForm->setEnabled(true);
-        _sampleSelectForm->setState(Control::FOCUS);
+        _sampleSelectForm->setFocus();
     }
 
     // Reset some game options

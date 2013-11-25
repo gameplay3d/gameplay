@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Game.h"
 #include "Control.h"
+#include "Form.h"
 
 #define BOUNDS_X_PERCENTAGE_BIT 1
 #define BOUNDS_Y_PERCENTAGE_BIT 2
@@ -44,15 +45,17 @@ static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percenta
 }
 
 Control::Control()
-    : _id(""), _state(Control::NORMAL), _boundsBits(0), _dirty(true), _consumeInputEvents(false),
-    _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false), _autoWidth(AUTO_SIZE_NONE), _autoHeight(AUTO_SIZE_NONE), _listeners(NULL), _visible(true),
-    _zIndex(-1), _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _parent(NULL), _styleOverridden(false), _skin(NULL), _previousState(NORMAL)
+    : _id(""), _enabled(true), _boundsBits(0), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false),
+    _autoWidth(AUTO_SIZE_NONE), _autoHeight(AUTO_SIZE_NONE), _listeners(NULL), _visible(true), _zIndex(-1),
+    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
 
 Control::~Control()
 {
+    Form::verifyRemovedControlState(this);
+
     if (_listeners)
     {
         for (std::map<Control::Listener::EventType, std::list<Control::Listener*>*>::const_iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
@@ -94,7 +97,7 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     _autoWidth = parseAutoSize(properties->getString("autoWidth"));
     _autoHeight = parseAutoSize(properties->getString("autoHeight"));
 
-    _consumeInputEvents = properties->getBool("consumeInputEvents", false);
+    _consumeInputEvents = properties->getBool("consumeInputEvents", true);
 
     _visible = properties->getBool("visible", true);
 
@@ -106,6 +109,9 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     {
         _zIndex = -1;
     }
+
+    if (properties->exists("canFocus"))
+        _canFocus = properties->getBool("canFocus", false);
 
     if (properties->exists("focusIndex"))
     {
@@ -408,15 +414,13 @@ void Control::setAutoHeight(AutoSize mode)
 
 void Control::setVisible(bool visible)
 {
-    if (visible && !_visible)
+    if (_visible != visible)
     {
-        _visible = true;
+        _visible = visible;
         _dirty = true;
-    }
-    else if (!visible && _visible)
-    {
-        _visible = false;
-        _dirty = true;
+
+        if (!_visible)
+            Form::controlDisabled(this);
     }
 }
 
@@ -425,9 +429,41 @@ bool Control::isVisible() const
     return _visible;
 }
 
+bool Control::isVisibleInHierarchy() const
+{
+    if (!_visible)
+        return false;
+
+    if (_parent)
+        return _parent->isVisibleInHierarchy();
+
+    return true;
+}
+
+bool Control::canFocus() const
+{
+    return _canFocus;
+}
+
+void Control::setCanFocus(bool acceptsFocus)
+{
+    _canFocus = acceptsFocus;
+}
+
 bool Control::hasFocus() const
 {
-    return (_state == FOCUS || (_state == HOVER && _previousState == FOCUS));
+    return (Form::_focusControl == this);
+}
+
+bool Control::setFocus()
+{
+    if (Form::_focusControl != this && canFocus())
+    {
+        Form::setFocusControl(this);
+        return true;
+    }
+
+    return false;
 }
 
 void Control::setOpacity(float opacity, unsigned char states)
@@ -453,21 +489,30 @@ float Control::getOpacity(State state) const
 
 void Control::setEnabled(bool enabled)
 {
-	if (enabled && _state == Control::DISABLED)
-	{
-		_state = Control::NORMAL;
+    if (_enabled != enabled)
+    {
+        _enabled = enabled;
         _dirty = true;
-	}
-	else if (!enabled && _state != Control::DISABLED)
-	{
-		_state = Control::DISABLED;
-		_dirty = true;
-	}
+
+        if (!_enabled)
+            Form::controlDisabled(this);
+    }
 }
 
 bool Control::isEnabled() const
 {
-    return _state != DISABLED;
+    return _enabled;
+}
+
+bool Control::isEnabledInHierarchy() const
+{
+    if (!_enabled)
+        return false;
+
+    if (_parent)
+        return _parent->isEnabledInHierarchy();
+
+    return true;
 }
 
 void Control::setBorder(float top, float bottom, float left, float right, unsigned char states)
@@ -790,22 +835,29 @@ Theme::Style* Control::getStyle() const
     return _style;
 }
 
-void Control::setState(State state)
-{
-    if (getOverlay(_state) != getOverlay(state))
-        _dirty = true;
-
-    _state = state;
-}
-
 Control::State Control::getState() const
 {
-    return _state;
+    if (!_enabled)
+        return DISABLED;
+
+    if (Form::_activeControl == this)
+    {
+        if (Form::_activeControlState == ACTIVE)
+            return ACTIVE;
+        if (Form::_focusControl == this)
+            return FOCUS;
+        return Form::_activeControlState;
+    }
+    
+    if (Form::_focusControl == this)
+        return FOCUS;
+
+    return NORMAL;
 }
 
 Theme::Style::OverlayType Control::getOverlayType() const
 {
-    switch (_state)
+    switch (getState())
     {
     case Control::NORMAL:
         return Theme::Style::OVERLAY_NORMAL;
@@ -843,6 +895,11 @@ void Control::setZIndex(int zIndex)
     {
         _zIndex = zIndex;
         _dirty = true;
+
+        if (_parent)
+        {
+			_parent->sortControls();
+        }
     }
 }
 
@@ -931,133 +988,24 @@ void Control::addSpecificListener(Control::Listener* listener, Control::Listener
 
 bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch (evt)
-    {
-    case Touch::TOUCH_PRESS:
-        // Controls that don't have an ACTIVE state go to the FOCUS state when pressed.
-        // (Other controls, such as buttons and sliders, become ACTIVE when pressed and go to the FOCUS state on release.)
-        // Labels are never any state other than NORMAL.
-        if (_contactIndex == INVALID_CONTACT_INDEX && x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-        {
-            _contactIndex = (int) contactIndex;
-
-            notifyListeners(Control::Listener::PRESS);
-
-            return _consumeInputEvents;
-        }
-        else
-        {
-            // If this control was in focus, it's not any more.
-            _state = NORMAL;
-        }
-        break;
-            
-    case Touch::TOUCH_MOVE:
-        break;
-
-    case Touch::TOUCH_RELEASE:
-        if (_contactIndex == (int)contactIndex)
-        {
-            _contactIndex = INVALID_CONTACT_INDEX;
-
-            // Always trigger Control::Listener::RELEASE
-            notifyListeners(Control::Listener::RELEASE);
-
-            // Only trigger Control::Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
-            if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-            {
-                // Leave this control in the FOCUS state.
-                notifyListeners(Control::Listener::CLICK);
-            }
-
-            return _consumeInputEvents;
-        }
-        break;
-    }
-
-    return false;
+    return _consumeInputEvents;
 }
 
 bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    return false;
+    return _consumeInputEvents;
 }
 
 bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    // By default, mouse events are either interpreted as touch events or ignored.
-    switch (evt)
-    {
-    case Mouse::MOUSE_PRESS_LEFT_BUTTON:
-        return touchEvent(Touch::TOUCH_PRESS, x, y, 0);
-
-    case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
-        return touchEvent(Touch::TOUCH_RELEASE, x, y, 0);
-
-    case Mouse::MOUSE_MOVE:
-        if (_state != ACTIVE)
-        {
-            if (_state != HOVER &&
-                x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-            {
-                _previousState = _state;
-                setState(HOVER);
-                notifyListeners(Control::Listener::ENTER);
-                return _consumeInputEvents;
-            }
-            else if (_state == HOVER && !(x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                        y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height))
-            {
-                setState(_previousState);
-                notifyListeners(Control::Listener::LEAVE);
-                return _consumeInputEvents;
-            }
-        }
-        return touchEvent(Touch::TOUCH_MOVE, x, y, 0);
-
-    default:
-        break;
-    }
-
+    // Return false instead of _consumeInputEvents to allow handling to be 
+    // routed to touchEvent before consuming.
     return false;
 }
 
 bool Control::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
-    // Default behavior for gamepad events.
-    switch (evt)
-    {
-    case Gamepad::BUTTON_EVENT:
-        if (_state == Control::FOCUS)
-        {
-            if (gamepad->isButtonDown(Gamepad::BUTTON_A) ||
-                gamepad->isButtonDown(Gamepad::BUTTON_X))
-            {
-                notifyListeners(Control::Listener::PRESS);
-                return _consumeInputEvents;
-            }
-        }
-        else if (_state == Control::ACTIVE)
-        {
-            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
-                !gamepad->isButtonDown(Gamepad::BUTTON_X))
-            {
-                notifyListeners(Control::Listener::RELEASE);
-                notifyListeners(Control::Listener::CLICK);
-                return _consumeInputEvents;
-            }
-        }
-        break;
-    case Gamepad::JOYSTICK_EVENT:
-        break;
-    case Gamepad::TRIGGER_EVENT:
-        break;
-    }
-
-    return false;
+    return _consumeInputEvents;
 }
 
 void Control::notifyListeners(Control::Listener::EventType eventType)
@@ -1066,6 +1014,8 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
     // If the user calls exit() or otherwise releases this control, we
     // need to keep it alive until the method returns.
     addRef();
+
+    controlEvent(eventType);
 
     if (_listeners)
     {
@@ -1084,6 +1034,10 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
     fireScriptEvent<void>("controlEvent", this, eventType);
 
     release();
+}
+
+void Control::controlEvent(Control::Listener::EventType evt)
+{
 }
 
 void Control::update(const Control* container, const Vector2& offset)
@@ -1173,7 +1127,7 @@ void Control::update(const Control* container, const Vector2& offset)
 
     // Calculate the absolute viewport bounds (content area, which does not include border and padding)
     // Absolute bounds minus border and padding.
-    const Theme::Border& border = getBorder(_state);
+    const Theme::Border& border = getBorder(getState());
     const Theme::Padding& padding = getPadding();
     x += border.left + padding.left;
     y += border.top + padding.top;
@@ -1226,10 +1180,10 @@ void Control::update(const Control* container, const Vector2& offset)
     }
 
     // Cache themed attributes for performance.
-    _skin = getSkin(_state);
+    _skin = getSkin(getState());
 
     // Current opacity should be multiplied by that of the parent container.
-    _opacity = getOpacity(_state);
+    _opacity = getOpacity(getState());
     if (container)
         _opacity *= container->_opacity;
 }
@@ -1251,7 +1205,7 @@ void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     const Theme::UVs& bottomRight = _skin->getUVs(Theme::Skin::BOTTOM_RIGHT);
 
     // Calculate screen-space positions.
-    const Theme::Border& border = getBorder(_state);
+    const Theme::Border& border = getBorder(getState());
     const Theme::Padding& padding = getPadding();
     Vector4 skinColor = _skin->getColor();
     skinColor.w *= _opacity;
@@ -1386,6 +1340,42 @@ const char* Control::getType() const
     return "control";
 }
 
+Control* Control::getParent() const
+{
+    return _parent;
+}
+
+bool Control::isChild(Control* control) const
+{
+    if (!control)
+        return false;
+
+    Control* parent = _parent;
+    while (parent)
+    {
+        if (parent == control)
+            return true;
+        parent = parent->_parent;
+    }
+
+    return false;
+}
+
+Form* Control::getTopLevelForm() const
+{
+    if (_parent)
+        return _parent->getTopLevelForm();
+
+    if (isContainer())
+    {
+        Container* container = static_cast<Container*>(const_cast<Control*>(this));
+        if (container->isForm())
+            return static_cast<Form*>(container);
+    }
+
+    return NULL;
+}
+
 // Implementation of AnimationHandler
 unsigned int Control::getAnimationPropertyComponentCount(int propertyId) const
 {
@@ -1511,33 +1501,39 @@ Theme::Style::Overlay* Control::getOverlay(State state) const
 {
     GP_ASSERT(_style);
 
-    switch(state)
+    Theme::Style::Overlay* overlay = NULL;
+
+    switch (state)
     {
     case Control::NORMAL:
         return _style->getOverlay(Theme::Style::OVERLAY_NORMAL);
+
     case Control::FOCUS:
-        return _style->getOverlay(Theme::Style::OVERLAY_FOCUS);
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_FOCUS);
+        break;
+
     case Control::ACTIVE:
-    {
-        Theme::Style::Overlay* activeOverlay = _style->getOverlay(Theme::Style::OVERLAY_ACTIVE);
-        if (activeOverlay)
-            return activeOverlay;
-        else
-            return getOverlay(_previousState);
-    }
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_ACTIVE);
+        if (!overlay && hasFocus())
+            overlay = _style->getOverlay(Theme::Style::OVERLAY_FOCUS);
+        break;
+
     case Control::DISABLED:
-        return _style->getOverlay(Theme::Style::OVERLAY_DISABLED);
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_DISABLED);
+        break;
+
     case Control::HOVER:
-    {
-        Theme::Style::Overlay* hoverOverlay = _style->getOverlay(Theme::Style::OVERLAY_HOVER);
-        if (hoverOverlay)
-            return hoverOverlay;
-        else
-            return getOverlay(_previousState);
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_HOVER);
+        if (!overlay && hasFocus())
+            overlay = _style->getOverlay(Theme::Style::OVERLAY_FOCUS);
+        break;
     }
-    default:
-        return NULL;
-    }
+
+    // Fall back to normal overlay if more specific state overlay not found
+    if (!overlay)
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_NORMAL);
+
+    return overlay;
 }
 
 void Control::overrideStyle()

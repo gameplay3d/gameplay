@@ -6,7 +6,7 @@ form formSelect
     alignment = ALIGN_TOP_LEFT
     width = 200
     autoHeight = true
-	consumeInputEvents = true
+	consumeInputEvents = false
 
 	radioButton form0
 	{

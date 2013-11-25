@@ -130,6 +130,14 @@ public:
     Format getFormat();
 
     /**
+     * Determines if this font supports the specified character code.
+     *
+     * @param character The character code to check.
+     * @return True if this Font supports (can draw) the specified character, false otherwise.
+     */
+    bool isCharacterSupported(int character) const;
+
+    /**
      * Starts text drawing for this font.
      */
     void start();

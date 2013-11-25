@@ -339,6 +339,11 @@ theme mainMenu
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
+        stateFocus
+		{
+			textAlignment = ALIGN_VCENTER_LEFT
+		}
+
         stateActive
         {
             font = res/common/arial.gpb
@@ -355,6 +360,16 @@ theme mainMenu
         }
 
         stateActive
+        {
+            textAlignment = ALIGN_TOP_LEFT
+        }
+
+        stateFocus
+        {
+            textAlignment = ALIGN_TOP_LEFT
+        }
+
+        stateHover
         {
             textAlignment = ALIGN_TOP_LEFT
         }
