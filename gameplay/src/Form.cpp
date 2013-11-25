@@ -601,8 +601,7 @@ Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
             // originally pressed, fire a click event
             if (active->_absoluteClipBounds.contains(newX, newY))
             {
-                Control* parent = active->getParent();
-                if (!parent || (parent->isContainer() && !static_cast<Container*>(parent)->isScrolling()))
+				if (!active->_parent || !active->_parent->isScrolling())
                 {
                     active->notifyListeners(Control::Listener::CLICK);
                 }
@@ -844,9 +843,9 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
             switch (key)
             {
             case Keyboard::KEY_TAB:
-                if (_focusControl->_parent && _focusControl->_parent->isContainer())
+                if (_focusControl->_parent)
                 {
-                    if (static_cast<Container*>(_focusControl->_parent)->moveFocus(_shiftKeyDown ? Container::PREVIOUS : Container::NEXT))
+                    if (_focusControl->_parent->moveFocus(_shiftKeyDown ? Container::PREVIOUS : Container::NEXT))
                         return true;
                 }
                 break;
@@ -897,8 +896,8 @@ bool Form::pollGamepad(Gamepad* gamepad)
 
     // Get parent container
     Container* parentContainer = NULL;
-    if (_focusControl->_parent && _focusControl->_parent->isContainer())
-        parentContainer = static_cast<Container*>(_focusControl->_parent);
+    if (_focusControl->_parent)
+        parentContainer = _focusControl->_parent;
 
     // Get scroll container
     Container* scrollContainer = NULL;
@@ -1164,9 +1163,9 @@ void Form::setFocusControl(Control* control)
 
         // Set the activeControl property of the control's parent container
         Container* parent = NULL;
-        if (_focusControl->_parent && _focusControl->_parent->isContainer())
+        if (_focusControl->_parent)
         {
-            parent = static_cast<Container*>(_focusControl->_parent);
+            parent = _focusControl->_parent;
             parent->_activeControl = _focusControl;
         }
 

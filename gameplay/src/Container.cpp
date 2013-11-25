@@ -791,7 +791,7 @@ bool Container::isDirty()
 
 static bool canReceiveFocus(Control* control)
 {
-    if (!(control->isEnabled() && control->isVisible()))
+    if (control->getFocusIndex() < 0 || !(control->isEnabled() && control->isVisible()))
         return false;
 
     if (control->canFocus())
@@ -812,18 +812,25 @@ static bool canReceiveFocus(Control* control)
 
 bool Container::moveFocus(Direction direction)
 {
-    switch (direction)
-    {
-    case UP:
-        return moveFocus(Vector2(0, -1));
-    case DOWN:
-        return moveFocus(Vector2(0, 1));
-    case LEFT:
-        return moveFocus(Vector2(-1, 0));
-    case RIGHT:
-        return moveFocus(Vector2(1, 0));
-    }
+	switch (direction)
+	{
+	case NEXT:
+	case PREVIOUS:
+		return moveFocusNextPrevious(direction);
 
+	case UP:
+	case DOWN:
+	case LEFT:
+	case RIGHT:
+		return moveFocusDirectional(direction);
+
+	default:
+		return false;
+	}
+}
+
+bool Container::moveFocusNextPrevious(Direction direction)
+{
     // Get the current control that has focus (either directly or indirectly) within this container
     Control* current = NULL;
     if (Form::_focusControl && Form::_focusControl->isChild(this))
@@ -860,7 +867,7 @@ bool Container::moveFocus(Direction direction)
         for (size_t i = 0, count = _controls.size(); i < count; ++i)
         {
             Control* ctrl = _controls[i];
-            if (ctrl->_focusIndex < 0 || !canReceiveFocus(ctrl))
+            if (!canReceiveFocus(ctrl))
                 continue;
 
             if ((direction == NEXT && ctrl->_focusIndex > current->_focusIndex && ctrl->_focusIndex < nextIndex) ||
@@ -882,7 +889,7 @@ bool Container::moveFocus(Direction direction)
         }
 
         // Search up into our parent container for a focus move
-        if (_parent && _parent->isContainer() && static_cast<Container*>(_parent)->moveFocus(direction))
+        if (_parent && _parent->moveFocus(direction))
             return true;
 
         // We didn't find a control to move to, so we must be the first or last focusable control in our parent.
@@ -899,13 +906,12 @@ bool Container::moveFocus(Direction direction)
 
     if (moveFirst)
     {
-
         nextIndex = direction == NEXT ? INT_MAX : INT_MIN;
         nextCtrl = NULL;
         for (size_t i = 0, count = _controls.size(); i < count; ++i)
         {
             Control* ctrl = _controls[i];
-            if (ctrl->_focusIndex < 0 || !canReceiveFocus(ctrl))
+            if (!canReceiveFocus(ctrl))
                 continue;
             if ((direction == NEXT && ctrl->_focusIndex < nextIndex) ||
                 (direction == PREVIOUS && ctrl->_focusIndex > nextIndex))
@@ -927,9 +933,92 @@ bool Container::moveFocus(Direction direction)
     return false;
 }
 
-bool Container::moveFocus(const Vector2& direction)
+bool Container::moveFocusDirectional(Direction direction)
 {
-    // TODO
+	Control* startControl = Form::_focusControl;
+	if (startControl == NULL)
+		return false;
+
+	const Rectangle& startBounds = startControl->_absoluteBounds;
+
+	Control* next = NULL;
+	Vector2 vStart, vNext;
+	float distance = FLT_MAX;
+
+	switch (direction)
+	{
+	case UP:
+		vStart.set(startBounds.x + startBounds.width * 0.5f, startBounds.y);
+		break;
+	case DOWN:
+		vStart.set(startBounds.x + startBounds.width * 0.5f, startBounds.bottom());
+		break;
+	case LEFT:
+		vStart.set(startBounds.x, startBounds.y + startBounds.height * 0.5f);
+		break;
+	case RIGHT:
+		vStart.set(startBounds.right(), startBounds.y + startBounds.height * 0.5f);
+		break;
+	}
+
+	for (size_t i = 0, count = _controls.size(); i < count; ++i)
+	{
+		Control* ctrl = _controls[i];
+		if (!canReceiveFocus(ctrl))
+			continue;
+
+		const Rectangle& nextBounds = ctrl->getAbsoluteBounds();
+		switch (direction)
+		{
+		case UP:
+			vNext.set(nextBounds.x + nextBounds.width * 0.5f, nextBounds.bottom());
+			if (vNext.y > vStart.y)
+				continue;
+			break;
+		case DOWN:
+			vNext.set(nextBounds.x + nextBounds.width * 0.5f, nextBounds.y);
+			if (vNext.y < vStart.y)
+				continue;
+			break;
+		case LEFT:
+			vNext.set(nextBounds.right(), nextBounds.y + nextBounds.height * 0.5f);
+			if (vNext.x > vStart.x)
+				continue;
+			break;
+		case RIGHT:
+			vNext.set(nextBounds.x, nextBounds.y + nextBounds.height * 0.5f);
+			if (vNext.x < vStart.x)
+				continue;
+			break;
+		}
+
+		float nextDistance = vStart.distance(vNext);
+		if (std::fabs(nextDistance) < distance)
+		{
+			distance = nextDistance;
+			next = ctrl;
+		}
+	}
+
+	if (next)
+	{
+		// If this control is a container, try to move focus to the first control within it
+		if (next->isContainer())
+		{
+			if (static_cast<Container*>(next)->moveFocusDirectional(direction))
+				return true;
+		}
+
+		if (next->setFocus())
+			return true;
+	}
+	else
+	{
+		// If no control was found, try searching in our parent container
+		if (_parent && _parent->moveFocusDirectional(direction))
+			return true;
+	}
+
     return false;
 }
 

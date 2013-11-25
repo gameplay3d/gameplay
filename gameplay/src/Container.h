@@ -582,7 +582,8 @@ private:
     // in which case scrolling can be initiated.
     bool moveFocus(Direction direction);
 
-    bool moveFocus(const Vector2& direction);
+	bool moveFocusNextPrevious(Direction direction);
+	bool moveFocusDirectional(Direction direction);
 
     // Starts scrolling at the given horizontal and vertical speeds.
     void startScrolling(float x, float y, bool resetTime = true);

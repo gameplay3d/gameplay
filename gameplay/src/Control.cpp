@@ -896,9 +896,9 @@ void Control::setZIndex(int zIndex)
         _zIndex = zIndex;
         _dirty = true;
 
-        if (_parent && _parent->isContainer())
+        if (_parent)
         {
-            static_cast<Container*>(_parent)->sortControls();
+			_parent->sortControls();
         }
     }
 }
