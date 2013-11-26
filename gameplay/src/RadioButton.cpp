@@ -33,7 +33,7 @@ RadioButton* RadioButton::create(const char* id, Theme::Style* style)
     return radioButton;
 }
 
-Control* RadioButton::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* RadioButton::create(Theme::Style* style, Properties* properties)
 {
     GP_ASSERT(properties);
 

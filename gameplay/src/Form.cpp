@@ -130,7 +130,7 @@ Form* Form::create(const char* url)
     form->_theme = theme;
 
     // Initialize common container properties
-    form->initialize(style, formProperties, theme);
+    form->initialize(style, formProperties);
 
     form->updateFrameBuffer();
 

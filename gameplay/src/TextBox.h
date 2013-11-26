@@ -144,11 +144,10 @@ protected:
      *
      * @param style The style to apply to this text box.
      * @param properties The properties to set on this text box.
-     * @param theme The theme to set on this control if needed.
      *
      * @return The new text box.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme* theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
