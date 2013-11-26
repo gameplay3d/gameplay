@@ -25,7 +25,6 @@ form textTest
         style = buttonStyle
         autoWidth = true
         height = 50
-        consumeInputEvents = false
         text = Font (arial)
     }
 
@@ -71,7 +70,6 @@ form textTest
             style = buttonStyle
             width = 50
             height = 50
-            consumeInputEvents = false
             text = -
         }
 
@@ -102,7 +100,6 @@ form textTest
             style = buttonStyle
             size = 60, 60
             text = 7
-            consumeInputEvents = false
         }
 
         button topCenterButton : topLeftButton

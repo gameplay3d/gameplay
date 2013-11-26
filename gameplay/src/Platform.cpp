@@ -80,19 +80,11 @@ void Platform::resizeEventInternal(unsigned int width, unsigned int height)
 
 void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
-	switch(evt)
-	{
-	case Gamepad::CONNECTED_EVENT:
-	case Gamepad::DISCONNECTED_EVENT:
-		Game::getInstance()->gamepadEvent(evt, gamepad);
+    if (!Form::gamepadEventInternal(evt, gamepad, analogIndex))
+    {
+        Game::getInstance()->gamepadEvent(evt, gamepad);
         Game::getInstance()->getScriptController()->gamepadEvent(evt, gamepad);
-		break;
-	case Gamepad::BUTTON_EVENT:
-	case Gamepad::JOYSTICK_EVENT:
-	case Gamepad::TRIGGER_EVENT:
-		Form::gamepadEventInternal(evt, gamepad, analogIndex);
-		break;
-	}
+    }
 }
 
 void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,

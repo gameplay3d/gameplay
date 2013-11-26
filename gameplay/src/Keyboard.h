@@ -14,7 +14,7 @@ class Keyboard
 
 public:
 
-   /**
+    /**
      * The keyboard event.
      */
     enum KeyEvent

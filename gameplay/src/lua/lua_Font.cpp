@@ -28,6 +28,7 @@ void luaRegister_Font()
         {"getRefCount", lua_Font_getRefCount},
         {"getSize", lua_Font_getSize},
         {"getSpriteBatch", lua_Font_getSpriteBatch},
+        {"isCharacterSupported", lua_Font_isCharacterSupported},
         {"measureText", lua_Font_measureText},
         {"release", lua_Font_release},
         {"setCharacterSpacing", lua_Font_setCharacterSpacing},
@@ -1755,6 +1756,45 @@ int lua_Font_getSpriteBatch(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Font_isCharacterSupported(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                Font* instance = getInstance(state);
+                bool result = instance->isCharacterSupported(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Font_isCharacterSupported - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

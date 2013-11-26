@@ -1,7 +1,7 @@
 #ifndef IMAGECONTROL_H_
 #define IMAGECONTROL_H_
 
-#include "Button.h"
+#include "Control.h"
 #include "Theme.h"
 #include "Image.h"
 #include "SpriteBatch.h"
@@ -33,10 +33,10 @@ namespace gameplay
      }
  @endverbatim
  */
-class ImageControl : public Button
+class ImageControl : public Control
 {
     friend class Container;
-	friend class ControlFactory;
+    friend class ControlFactory;
 
 public:
 
@@ -118,7 +118,7 @@ protected:
     
     virtual ~ImageControl();
 
-    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties, Theme* theme = NULL);
 
     virtual void initialize(Theme::Style* style, Properties* properties);
 

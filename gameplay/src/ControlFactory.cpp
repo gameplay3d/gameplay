@@ -58,7 +58,7 @@ void ControlFactory::unregisterCustomControl(const char* controlName)
 Control *ControlFactory::createControl(const char* controlName, Theme::Style* style, Properties* properties, Theme* theme)
 {
 	if (_registeredControls.find(controlName) == _registeredControls.end())
-		return NULL;	
+		return NULL;
 
 	return (*_registeredControls[controlName])(style, properties, theme);
 }
