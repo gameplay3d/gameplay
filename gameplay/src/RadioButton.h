@@ -126,11 +126,10 @@ protected:
      *
      * @param style The style to apply to this radio button.
      * @param properties The properties to set on this radio button.
-     * @param theme The theme to set on this control if needed.
      *
      * @return The new radio button.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme* theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties);
 
     /**
      * Keyboard callback on key events.
