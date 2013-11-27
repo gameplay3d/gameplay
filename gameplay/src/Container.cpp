@@ -4,14 +4,7 @@
 #include "AbsoluteLayout.h"
 #include "FlowLayout.h"
 #include "VerticalLayout.h"
-#include "Label.h"
-#include "Button.h"
-#include "CheckBox.h"
-#include "RadioButton.h"
-#include "Slider.h"
-#include "TextBox.h"
-#include "Joystick.h"
-#include "ImageControl.h"
+#include "ControlFactory.h"
 #include "Form.h"
 #include "Game.h"
 
@@ -81,16 +74,16 @@ Container* Container::create(const char* id, Theme::Style* style, Layout::Type l
     return container;
 }
 
-Control* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* Container::create(Theme::Style* style, Properties* properties)
 {
     GP_ASSERT(properties);
 
     Container* container = new Container();
-    container->initialize(style, properties, theme);
+    container->initialize(style, properties);
     return container;
 }
 
-void Container::initialize(Theme::Style* style, Properties* properties, Theme* theme)
+void Container::initialize(Theme::Style* style, Properties* properties)
 {
     Control::initialize(style, properties);
 
@@ -127,7 +120,7 @@ void Container::initialize(Theme::Style* style, Properties* properties, Theme* t
     if (properties->exists("scrollWheelSpeed"))
         _scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
 
-    addControls(theme, properties);
+    addControls(style->getTheme(), properties);
     _layout->update(this, _scrollPosition);
 
     const char* activeControl = properties->getString("activeControl");
@@ -168,48 +161,8 @@ void Container::addControls(Theme* theme, Properties* properties)
 
         std::string controlName(controlSpace->getNamespace());
         std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
-        if (controlName == "LABEL")
-        {
-            control = Label::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "BUTTON")
-        {
-            control = Button::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CHECKBOX")
-        {
-            control = CheckBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "RADIOBUTTON")
-        {
-            control = RadioButton::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CONTAINER")
-        {
-            control = Container::create(controlStyle, controlSpace, theme);
-        }
-        else if (controlName == "SLIDER")
-        {
-            control = Slider::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "TEXTBOX")
-        {
-            control = TextBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "JOYSTICK")
-        {
-            control = Joystick::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "IMAGE")
-        {
-            control = ImageControl::create(controlStyle, controlSpace);
-        }
-        else
-        {
-            // Ignore - not a valid control name.
-            // This used to fail, but I see no reason to hard fail here (this also fixes not being able
-            // to set padding on containers).
-        }
+
+        control = ControlFactory::getInstance()->createControl(controlName.c_str(), controlStyle, controlSpace);
 
         // Add the new control to the form.
         if (control)

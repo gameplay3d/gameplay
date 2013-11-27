@@ -30,7 +30,7 @@ TextBox* TextBox::create(const char* id, Theme::Style* style)
     return textBox;
 }
 
-Control* TextBox::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* TextBox::create(Theme::Style* style, Properties* properties)
 {
     TextBox* textBox = new TextBox();
     textBox->initialize(style, properties);

@@ -318,20 +318,18 @@ protected:
      *
      * @param style The style to apply to this container.
      * @param properties The properties to set on this container, including nested controls.
-     * @param theme The theme to search for control styles within.
      *
      * @return The new container.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme* theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties);
 
     /**
      * Initialize properties common to all Containers from a Properties object.
      *
      * @param style The style to apply to this control.
      * @param properties The properties to set on this control.
-     * @param theme The theme for this control.
      */
-    void initialize(Theme::Style* style, Properties* properties, Theme* theme);
+    void initialize(Theme::Style* style, Properties* properties);
 
     /**
      * Updates each control within this container,

@@ -26,7 +26,7 @@ CheckBox* CheckBox::create(const char* id, Theme::Style* style)
     return checkBox;
 }
 
-Control* CheckBox::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* CheckBox::create(Theme::Style* style, Properties* properties)
 {
     GP_ASSERT(properties);
 
