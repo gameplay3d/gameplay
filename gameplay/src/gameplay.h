@@ -56,7 +56,6 @@
 #include "Terrain.h"
 #include "TerrainPatch.h"
 #include "VisibleSet.h"
-#include "VisibleSetDefault.h"
 
 // Audio
 #include "AudioController.h"

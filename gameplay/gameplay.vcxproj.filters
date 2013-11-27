@@ -207,9 +207,6 @@
     <ClCompile Include="src\SceneRendererForward.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\VisibleSetDefault.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\social\GooglePlaySocialSession.cpp">
       <Filter>src\social</Filter>
     </ClCompile>
@@ -804,9 +801,6 @@
     <ClCompile Include="src\lua\lua_Scene.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_SceneDebugFlags.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_SceneRenderer.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
@@ -913,9 +907,6 @@
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_VisibleSet.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_VisibleSetDefault.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_TerrainPatch.cpp">
@@ -1116,9 +1107,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\VisibleSet.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VisibleSetDefault.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\social\GooglePlaySocialSession.h">
@@ -1718,9 +1706,6 @@
     <ClInclude Include="src\lua\lua_Scene.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_SceneDebugFlags.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_SceneRenderer.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1827,9 +1812,6 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_VisibleSet.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_VisibleSetDefault.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_TerrainPatch.h">

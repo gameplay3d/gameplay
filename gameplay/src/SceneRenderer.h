@@ -29,31 +29,13 @@ public:
     virtual ~SceneRenderer();
 
     /**
-     * Sets if the scene should be rendered in wireframe mode.
-     *
-     * @param wireframe if the scene should be rendered in wireframe mode.
-     */
-    void setWireframe(bool wireframe);
-
-    /**
-     * Determines if the scene should be rendered in wireframe mode.
-     *
-     * @return if the scene should be rendered in wireframe mode.
-     */
-    bool isWireframe() const;
-
-    /**
      * Renders the scene with all the nodes visible from the active camera in the scene.
      *
-     * @param scene
-     * param
+     * @param set The visible set of node to render
+     * @param wireframe true to show the wireframe 
      * @return The number of nodes visited.
      */
-    virtual unsigned int render(VisibleSet* set) = 0;
-
-protected:
-
-    bool _wireframe;
+    virtual unsigned int render(VisibleSet* set, bool wireframe = false) = 0;
 
 };
 

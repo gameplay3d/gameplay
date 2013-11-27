@@ -11,9 +11,7 @@ void luaRegister_SceneRenderer()
 {
     const luaL_Reg lua_members[] = 
     {
-        {"isWireframe", lua_SceneRenderer_isWireframe},
         {"render", lua_SceneRenderer_render},
-        {"setWireframe", lua_SceneRenderer_setWireframe},
         {NULL, NULL}
     };
     const luaL_Reg* lua_statics = NULL;
@@ -67,41 +65,6 @@ int lua_SceneRenderer__gc(lua_State* state)
     return 0;
 }
 
-int lua_SceneRenderer_isWireframe(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                SceneRenderer* instance = getInstance(state);
-                bool result = instance->isWireframe();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_SceneRenderer_isWireframe - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_SceneRenderer_render(lua_State* state)
 {
     // Get the number of parameters.
@@ -137,45 +100,40 @@ int lua_SceneRenderer_render(lua_State* state)
             lua_error(state);
             break;
         }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_SceneRenderer_setWireframe(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
+        case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<VisibleSet> param1 = gameplay::ScriptUtil::getObjectPointer<VisibleSet>(2, "VisibleSet", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'VisibleSet'.");
+                    lua_error(state);
+                }
+
+                // Get parameter 2 off the stack.
+                bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
 
                 SceneRenderer* instance = getInstance(state);
-                instance->setWireframe(param1);
-                
-                return 0;
+                unsigned int result = instance->render(param1, param2);
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
             }
 
-            lua_pushstring(state, "lua_SceneRenderer_setWireframe - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_SceneRenderer_render - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
             lua_error(state);
             break;
         }

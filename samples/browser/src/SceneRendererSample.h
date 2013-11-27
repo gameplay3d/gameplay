@@ -29,7 +29,6 @@ private:
 
     Font* _font;
     Scene* _scene;
-    VisibleSet* _visibleSet;
     SceneRenderer* _renderer;
 };
 

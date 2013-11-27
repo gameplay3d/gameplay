@@ -5,7 +5,7 @@
     ADD_SAMPLE("Scene", "SceneRenderer", SceneRendererSample, 3);
 #endif
 
-SceneRendererSample::SceneRendererSample() : _font(NULL), _scene(NULL), _visibleSet(NULL)
+SceneRendererSample::SceneRendererSample() : _font(NULL), _scene(NULL)
 {
 }
 
@@ -15,9 +15,11 @@ void SceneRendererSample::initialize()
 
     _font = Font::create("res/common/arial.gpb");
     _scene = Scene::load("res/common/sample.scene");
-    _visibleSet = VisibleSetDefault::create(_scene);
     _renderer = SceneRendererForward::create();
 
+    // Test de-activating a node.
+    Node* pipe = _scene->findNode("pipe");
+    pipe->setActive(false);
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 
     // TODO: Remove this automatically Do this in the forward renderer
@@ -47,13 +49,14 @@ void SceneRendererSample::finalize()
 
 void SceneRendererSample::update(float elapsedTime)
 {
+    _scene->update(elapsedTime);
 }
 
 void SceneRendererSample::render(float elapsedTime)
 {
     clear(CLEAR_COLOR_DEPTH, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0);
 
-    _renderer->render(_visibleSet);
+    _renderer->render(_scene);
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
