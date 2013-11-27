@@ -114,7 +114,7 @@ public:
      * @param path The path to a bundle file containing a font resource.
      * @param id An optional ID of the font resource within the bundle (NULL for the first/only resource).
      * 
-     * @return The specified font.
+     * @return The specified Font or NULL if there was an error.
      * @script{create}
      */
     static Font* create(const char* path, const char* id = NULL);
@@ -351,7 +351,7 @@ private:
      * @param texture A texture map containing rendered glyphs.
      * @param format The format of the font (bitmap or distance fields)
      * 
-     * @return The new Font.
+     * @return The new Font or NULL if there was an error.
      */
     static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture, Font::Format format);
 

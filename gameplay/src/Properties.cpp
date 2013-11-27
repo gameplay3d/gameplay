@@ -84,7 +84,7 @@ Properties* Properties::create(const char* url)
     std::auto_ptr<Stream> stream(FileSystem::open(fileString.c_str()));
     if (stream.get() == NULL)
     {
-        GP_ERROR("Failed to open file '%s'.", fileString.c_str());
+        GP_WARN("Failed to open file '%s'.", fileString.c_str());
         return NULL;
     }
 
