@@ -26,14 +26,14 @@ SceneRendererForward* SceneRendererForward::create()
     return new SceneRendererForward();
 }
 
-unsigned int SceneRendererForward::render(VisibleSet* set)
+unsigned int SceneRendererForward::render(VisibleSet* set, bool wireframe)
 {
     set->reset();
     unsigned int drawCalls = 0;
     Node* next = set->getNext();
     do
     {
-        drawCalls += drawNode(next);
+        drawCalls += drawNode(next, wireframe);
         next = set->getNext();
 
     } while ( next != NULL);
@@ -41,21 +41,21 @@ unsigned int SceneRendererForward::render(VisibleSet* set)
     return drawCalls;
 }
 
-unsigned int SceneRendererForward::drawNode(Node* node)
+unsigned int SceneRendererForward::drawNode(Node* node, bool wireframe)
 {
     unsigned int drawCalls = 0;
 
     // Draw Terrain
     Terrain* terrain = node->getTerrain();
     if (terrain)
-        drawCalls += terrain->draw(isWireframe());
+        drawCalls += terrain->draw(wireframe);
 
     // Draw Models (Shadows) TODO:
 
     // Draw Modes
     Model* model = node->getModel();
     if (model)
-        drawCalls += model->draw(isWireframe());
+        drawCalls += model->draw(wireframe);
 
     // Draw particles
     ParticleEmitter* emitter = node->getParticleEmitter();

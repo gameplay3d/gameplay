@@ -129,7 +129,6 @@
 #include "lua_VertexFormatElement.h"
 #include "lua_VerticalLayout.h"
 #include "lua_VisibleSet.h"
-#include "lua_VisibleSetDefault.h"
 #include "lua_Global.h"
 
 namespace gameplay

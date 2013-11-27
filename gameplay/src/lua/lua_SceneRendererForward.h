@@ -5,9 +5,7 @@ namespace gameplay
 {
 
 // Lua bindings for SceneRendererForward.
-int lua_SceneRendererForward_isWireframe(lua_State* state);
 int lua_SceneRendererForward_render(lua_State* state);
-int lua_SceneRendererForward_setWireframe(lua_State* state);
 int lua_SceneRendererForward_static_create(lua_State* state);
 
 void luaRegister_SceneRendererForward();

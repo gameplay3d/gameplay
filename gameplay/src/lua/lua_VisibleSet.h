@@ -9,7 +9,6 @@ int lua_VisibleSet__gc(lua_State* state);
 int lua_VisibleSet_getNext(lua_State* state);
 int lua_VisibleSet_getScene(lua_State* state);
 int lua_VisibleSet_reset(lua_State* state);
-int lua_VisibleSet_setScene(lua_State* state);
 
 void luaRegister_VisibleSet();
 
