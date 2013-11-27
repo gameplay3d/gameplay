@@ -291,8 +291,6 @@
 		420BBE3F1817416F00C7B720 /* lua_RenderTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBBBC1817416E00C7B720 /* lua_RenderTarget.cpp */; };
 		420BBE421817416F00C7B720 /* lua_Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBBBE1817416E00C7B720 /* lua_Scene.cpp */; };
 		420BBE431817416F00C7B720 /* lua_Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBBBE1817416E00C7B720 /* lua_Scene.cpp */; };
-		420BBE461817416F00C7B720 /* lua_SceneDebugFlags.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBBC01817416E00C7B720 /* lua_SceneDebugFlags.cpp */; };
-		420BBE471817416F00C7B720 /* lua_SceneDebugFlags.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBBC01817416E00C7B720 /* lua_SceneDebugFlags.cpp */; };
 		420BBE4A1817416F00C7B720 /* lua_SceneRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBBC21817416E00C7B720 /* lua_SceneRenderer.cpp */; };
 		420BBE4B1817416F00C7B720 /* lua_SceneRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBBC21817416E00C7B720 /* lua_SceneRenderer.cpp */; };
 		420BBE4E1817416F00C7B720 /* lua_SceneRendererForward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBBC41817416E00C7B720 /* lua_SceneRendererForward.cpp */; };
@@ -365,8 +363,6 @@
 		420BBED71817416F00C7B720 /* lua_VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBC081817416F00C7B720 /* lua_VerticalLayout.cpp */; };
 		420BBEDA1817416F00C7B720 /* lua_VisibleSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBC0A1817416F00C7B720 /* lua_VisibleSet.cpp */; };
 		420BBEDB1817416F00C7B720 /* lua_VisibleSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBC0A1817416F00C7B720 /* lua_VisibleSet.cpp */; };
-		420BBEDE1817416F00C7B720 /* lua_VisibleSetDefault.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBC0C1817416F00C7B720 /* lua_VisibleSetDefault.cpp */; };
-		420BBEDF1817416F00C7B720 /* lua_VisibleSetDefault.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBC0C1817416F00C7B720 /* lua_VisibleSetDefault.cpp */; };
 		42252DCC1828145B00EE234B /* lua_CameraListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42252DC81828145B00EE234B /* lua_CameraListener.cpp */; };
 		42252DCD1828145B00EE234B /* lua_CameraListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42252DC81828145B00EE234B /* lua_CameraListener.cpp */; };
 		42252DD01828145B00EE234B /* lua_TerrainPatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42252DCA1828145B00EE234B /* lua_TerrainPatch.cpp */; };
@@ -614,15 +610,11 @@
 		42CC5A1B1809A4EF00AAD8AD /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55651809A4EE00AAD8AD /* VertexFormat.cpp */; };
 		42CC5A1E1809A4EF00AAD8AD /* VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */; };
 		42CC5A1F1809A4EF00AAD8AD /* VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */; };
-		42CC5A241809A4EF00AAD8AD /* VisibleSetDefault.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC556A1809A4EE00AAD8AD /* VisibleSetDefault.cpp */; };
-		42CC5A251809A4EF00AAD8AD /* VisibleSetDefault.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC556A1809A4EE00AAD8AD /* VisibleSetDefault.cpp */; };
 		5B21E99616153890006EBEAC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B21E99516153890006EBEAC /* IOKit.framework */; };
 		5B2BC75F1512514500D176CD /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75D1512514500D176CD /* OpenAL.framework */; };
 		5B2BC7601512514500D176CD /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75E1512514500D176CD /* OpenGL.framework */; };
 		5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7611512514D00D176CD /* QuartzCore.framework */; };
 		5B2BC7641512516B00D176CD /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7631512516B00D176CD /* libz.dylib */; };
-		6290E04518223C4A00A28FB9 /* GameCenterSocialSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 6290E04318223C4A00A28FB9 /* GameCenterSocialSession.h */; };
-		6290E04618223C4A00A28FB9 /* GameCenterSocialSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 6290E04318223C4A00A28FB9 /* GameCenterSocialSession.h */; };
 		6290E04718223C4A00A28FB9 /* GameCenterSocialSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6290E04418223C4A00A28FB9 /* GameCenterSocialSession.mm */; };
 		6290E04818223C4A00A28FB9 /* GameCenterSocialSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6290E04418223C4A00A28FB9 /* GameCenterSocialSession.mm */; };
 		6290E04A18223DCC00A28FB9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6290E04918223DCC00A28FB9 /* GameKit.framework */; };
@@ -920,8 +912,6 @@
 		420BBBBD1817416E00C7B720 /* lua_RenderTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_RenderTarget.h; sourceTree = "<group>"; };
 		420BBBBE1817416E00C7B720 /* lua_Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Scene.cpp; sourceTree = "<group>"; };
 		420BBBBF1817416E00C7B720 /* lua_Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Scene.h; sourceTree = "<group>"; };
-		420BBBC01817416E00C7B720 /* lua_SceneDebugFlags.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_SceneDebugFlags.cpp; sourceTree = "<group>"; };
-		420BBBC11817416E00C7B720 /* lua_SceneDebugFlags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_SceneDebugFlags.h; sourceTree = "<group>"; };
 		420BBBC21817416E00C7B720 /* lua_SceneRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_SceneRenderer.cpp; sourceTree = "<group>"; };
 		420BBBC31817416E00C7B720 /* lua_SceneRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_SceneRenderer.h; sourceTree = "<group>"; };
 		420BBBC41817416E00C7B720 /* lua_SceneRendererForward.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_SceneRendererForward.cpp; sourceTree = "<group>"; };
@@ -994,8 +984,6 @@
 		420BBC091817416F00C7B720 /* lua_VerticalLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_VerticalLayout.h; sourceTree = "<group>"; };
 		420BBC0A1817416F00C7B720 /* lua_VisibleSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_VisibleSet.cpp; sourceTree = "<group>"; };
 		420BBC0B1817416F00C7B720 /* lua_VisibleSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_VisibleSet.h; sourceTree = "<group>"; };
-		420BBC0C1817416F00C7B720 /* lua_VisibleSetDefault.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_VisibleSetDefault.cpp; sourceTree = "<group>"; };
-		420BBC0D1817416F00C7B720 /* lua_VisibleSetDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_VisibleSetDefault.h; sourceTree = "<group>"; };
 		42252DC81828145B00EE234B /* lua_CameraListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_CameraListener.cpp; sourceTree = "<group>"; };
 		42252DC91828145B00EE234B /* lua_CameraListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_CameraListener.h; sourceTree = "<group>"; };
 		42252DCA1828145B00EE234B /* lua_TerrainPatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_TerrainPatch.cpp; sourceTree = "<group>"; };
@@ -1269,8 +1257,6 @@
 		42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VerticalLayout.cpp; path = src/VerticalLayout.cpp; sourceTree = SOURCE_ROOT; };
 		42CC55681809A4EE00AAD8AD /* VerticalLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerticalLayout.h; path = src/VerticalLayout.h; sourceTree = SOURCE_ROOT; };
 		42CC55691809A4EE00AAD8AD /* VisibleSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VisibleSet.h; path = src/VisibleSet.h; sourceTree = SOURCE_ROOT; };
-		42CC556A1809A4EE00AAD8AD /* VisibleSetDefault.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VisibleSetDefault.cpp; path = src/VisibleSetDefault.cpp; sourceTree = SOURCE_ROOT; };
-		42CC556B1809A4EF00AAD8AD /* VisibleSetDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VisibleSetDefault.h; path = src/VisibleSetDefault.h; sourceTree = SOURCE_ROOT; };
 		42CCD555146EC1EB00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/png/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42CD0DA6147D8EA80000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
 		42CD0DA7147D8EA80000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
@@ -1618,8 +1604,6 @@
 				420BBBBD1817416E00C7B720 /* lua_RenderTarget.h */,
 				420BBBBE1817416E00C7B720 /* lua_Scene.cpp */,
 				420BBBBF1817416E00C7B720 /* lua_Scene.h */,
-				420BBBC01817416E00C7B720 /* lua_SceneDebugFlags.cpp */,
-				420BBBC11817416E00C7B720 /* lua_SceneDebugFlags.h */,
 				420BBBC21817416E00C7B720 /* lua_SceneRenderer.cpp */,
 				420BBBC31817416E00C7B720 /* lua_SceneRenderer.h */,
 				420BBBC41817416E00C7B720 /* lua_SceneRendererForward.cpp */,
@@ -1694,8 +1678,6 @@
 				420BBC091817416F00C7B720 /* lua_VerticalLayout.h */,
 				420BBC0A1817416F00C7B720 /* lua_VisibleSet.cpp */,
 				420BBC0B1817416F00C7B720 /* lua_VisibleSet.h */,
-				420BBC0C1817416F00C7B720 /* lua_VisibleSetDefault.cpp */,
-				420BBC0D1817416F00C7B720 /* lua_VisibleSetDefault.h */,
 			);
 			name = lua;
 			path = src/lua;
@@ -1989,8 +1971,6 @@
 				42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */,
 				42CC55681809A4EE00AAD8AD /* VerticalLayout.h */,
 				42CC55691809A4EE00AAD8AD /* VisibleSet.h */,
-				42CC556A1809A4EE00AAD8AD /* VisibleSetDefault.cpp */,
-				42CC556B1809A4EF00AAD8AD /* VisibleSetDefault.h */,
 			);
 			name = src;
 			path = gameplay;
@@ -2161,7 +2141,6 @@
 				420BBCC21817416F00C7B720 /* lua_Font.cpp in Sources */,
 				42CC56041809A4EF00AAD8AD /* gameplay-main-windows.cpp in Sources */,
 				42CC59BE1809A4EF00AAD8AD /* GooglePlaySocialSession.cpp in Sources */,
-				42CC5A241809A4EF00AAD8AD /* VisibleSetDefault.cpp in Sources */,
 				420BBC861817416F00C7B720 /* lua_Container.cpp in Sources */,
 				420BBC5A1817416F00C7B720 /* lua_AudioController.cpp in Sources */,
 				420BBE0E1817416F00C7B720 /* lua_Ray.cpp in Sources */,
@@ -2224,7 +2203,6 @@
 				42CC55941809A4EF00AAD8AD /* AnimationValue.cpp in Sources */,
 				42CC5A0E1809A4EF00AAD8AD /* Vector3.cpp in Sources */,
 				420BBCC61817416F00C7B720 /* lua_FontFormat.cpp in Sources */,
-				420BBE461817416F00C7B720 /* lua_SceneDebugFlags.cpp in Sources */,
 				42CC59741809A4EF00AAD8AD /* PlatformBlackBerry.cpp in Sources */,
 				42CC55BA1809A4EF00AAD8AD /* Camera.cpp in Sources */,
 				42CC59201809A4EF00AAD8AD /* Model.cpp in Sources */,
@@ -2395,7 +2373,6 @@
 				42CC556C1809A4EF00AAD8AD /* AbsoluteLayout.cpp in Sources */,
 				42CC59C61809A4EF00AAD8AD /* SocialAchievement.cpp in Sources */,
 				42CC59181809A4EF00AAD8AD /* MeshPart.cpp in Sources */,
-				420BBEDE1817416F00C7B720 /* lua_VisibleSetDefault.cpp in Sources */,
 				42CC55FA1809A4EF00AAD8AD /* gameplay-main-android.cpp in Sources */,
 				420BBE2E1817416F00C7B720 /* lua_RenderStateFrontFace.cpp in Sources */,
 				42CC59CE1809A4EF00AAD8AD /* SocialController.cpp in Sources */,
@@ -2473,7 +2450,6 @@
 				420BBCC31817416F00C7B720 /* lua_Font.cpp in Sources */,
 				42CC56051809A4EF00AAD8AD /* gameplay-main-windows.cpp in Sources */,
 				42CC59BF1809A4EF00AAD8AD /* GooglePlaySocialSession.cpp in Sources */,
-				42CC5A251809A4EF00AAD8AD /* VisibleSetDefault.cpp in Sources */,
 				420BBC871817416F00C7B720 /* lua_Container.cpp in Sources */,
 				420BBC5B1817416F00C7B720 /* lua_AudioController.cpp in Sources */,
 				420BBE0F1817416F00C7B720 /* lua_Ray.cpp in Sources */,
@@ -2536,7 +2512,6 @@
 				42CC55AB1809A4EF00AAD8AD /* BoundingBox.cpp in Sources */,
 				42CC55951809A4EF00AAD8AD /* AnimationValue.cpp in Sources */,
 				420BBCC71817416F00C7B720 /* lua_FontFormat.cpp in Sources */,
-				420BBE471817416F00C7B720 /* lua_SceneDebugFlags.cpp in Sources */,
 				42CC5A0F1809A4EF00AAD8AD /* Vector3.cpp in Sources */,
 				42CC59751809A4EF00AAD8AD /* PlatformBlackBerry.cpp in Sources */,
 				42CC55BB1809A4EF00AAD8AD /* Camera.cpp in Sources */,
@@ -2707,7 +2682,6 @@
 				42CC556D1809A4EF00AAD8AD /* AbsoluteLayout.cpp in Sources */,
 				42CC59C71809A4EF00AAD8AD /* SocialAchievement.cpp in Sources */,
 				42CC59191809A4EF00AAD8AD /* MeshPart.cpp in Sources */,
-				420BBEDF1817416F00C7B720 /* lua_VisibleSetDefault.cpp in Sources */,
 				42CC55FB1809A4EF00AAD8AD /* gameplay-main-android.cpp in Sources */,
 				420BBE2F1817416F00C7B720 /* lua_RenderStateFrontFace.cpp in Sources */,
 				42CC59CF1809A4EF00AAD8AD /* SocialController.cpp in Sources */,
