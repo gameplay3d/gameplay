@@ -22,7 +22,7 @@ public:
     /**
      * @see SceneRenderer#render
      */
-    unsigned int render(VisibleSet* set);
+    unsigned int render(VisibleSet* set, bool wireframe);
 
 private:
 
@@ -41,7 +41,7 @@ private:
      */
     ~SceneRendererForward();
 
-    unsigned int drawNode(Node* node);
+    unsigned int drawNode(Node* node, bool wireframe);
 };
 
 }

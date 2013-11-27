@@ -134,7 +134,6 @@ void lua_RegisterAllBindings()
     luaRegister_VertexFormatElement();
     luaRegister_VerticalLayout();
     luaRegister_VisibleSet();
-    luaRegister_VisibleSetDefault();
     luaRegister_lua_Global();
 }
 

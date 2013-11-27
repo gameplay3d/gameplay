@@ -1,10 +1,10 @@
 #ifndef VISIBLESET_H_
 #define VISIBLESET_H_
 
-#include "Scene.h"
-
 namespace gameplay
 {
+
+class Scene;
 
 /**
  * Represents a set of nodes that are visible from the
@@ -19,13 +19,6 @@ public:
      * Destructor.
      */
     virtual ~VisibleSet() { }
-
-    /**
-     * Sets the scene to determine the visible set from.
-     *
-     * @param scene The scene to determine the visible set from.
-     */
-    virtual void setScene(Scene* scene) = 0;
 
     /**
      * Gets the scene to determine the visible set from.

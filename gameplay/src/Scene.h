@@ -5,6 +5,7 @@
 #include "MeshBatch.h"
 #include "ScriptController.h"
 #include "Light.h"
+#include "VisibleSet.h"
 
 namespace gameplay
 {
@@ -12,18 +13,9 @@ namespace gameplay
 /**
  * Represents the root container for a hierarchy of nodes.
  */
-class Scene : public Ref
+class Scene : public Ref, public VisibleSet
 {
 public:
-
-    /**
-     * Enumeration of supported scene debug flags for debug drawing.
-     */
-    enum DebugFlags
-    {
-        DEBUG_BOXES = 1,
-        DEBUG_SPHERES = 2
-    };
 
     /**
      * Creates a new empty scene.
@@ -44,17 +36,6 @@ public:
      * @script{create}
      */
     static Scene* load(const char* filePath);
-
-    /**
-     * Gets a currently active scene.
-     *
-     * If id is an NULL, the first active scene is returned.
-     *
-     * @param id ID of the scene to retrieve, or NULL to retrieve the first active scene.
-     *
-     * @return The scene that matches the specified ID, or NULL if no matching scene could be found.
-     */
-    static Scene* getScene(const char* id = NULL);
 
     /**
      * Gets the identifier for the scene.
@@ -241,19 +222,31 @@ public:
     inline void visit(const char* visitMethod);
 
     /**
-     * Draws debugging information (bounding volumes, etc.) for the scene.
-     *
-     * @param debugFlags Bitwise combination of debug flags from the DebugFlags
-     *        enumeration, specifying which debugging information to draw.
+     * Updates all the active nodes in the scene.
      */
-    void drawDebug(unsigned int debugFlags);
+    void update(float elapsedTime);
+
+    /**
+     * @see VisibleSet#getScene
+     */
+    Scene* getScene();
+
+    /**
+     * @see VisibleSet#getNext
+     */
+    Node* getNext();
+
+    /**
+     * @see VisibleSet#reset
+     */
+    void reset();
 
 private:
 
     /**
      * Constructor.
      */
-    Scene(const char* id);
+    Scene();
 
     /**
      * Hidden copy constructor.
@@ -287,6 +280,10 @@ private:
      */
     void visitNode(Node* node, const char* visitMethod);
 
+    Node* findNextVisibleSibling(Node* node);
+
+    bool isNodeVisible(Node* node);
+
     std::string _id;
     Camera* _activeCamera;
     Node* _firstNode;
@@ -294,7 +291,8 @@ private:
     unsigned int _nodeCount;
     Vector3 _ambientColor;
     bool _bindAudioListenerToCamera;
-    MeshBatch* _debugBatch;
+    Node* _nextItr;
+    bool _nextReset;
 };
 
 template <class T>
