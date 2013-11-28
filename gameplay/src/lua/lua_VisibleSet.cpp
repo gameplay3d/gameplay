@@ -10,8 +10,8 @@ void luaRegister_VisibleSet()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"getActiveCamera", lua_VisibleSet_getActiveCamera},
         {"getNext", lua_VisibleSet_getNext},
-        {"getScene", lua_VisibleSet_getScene},
         {"reset", lua_VisibleSet_reset},
         {NULL, NULL}
     };
@@ -66,6 +66,50 @@ int lua_VisibleSet__gc(lua_State* state)
     return 0;
 }
 
+int lua_VisibleSet_getActiveCamera(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                VisibleSet* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getActiveCamera();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Camera");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_VisibleSet_getActiveCamera - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_VisibleSet_getNext(lua_State* state)
 {
     // Get the number of parameters.
@@ -97,50 +141,6 @@ int lua_VisibleSet_getNext(lua_State* state)
             }
 
             lua_pushstring(state, "lua_VisibleSet_getNext - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_VisibleSet_getScene(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                VisibleSet* instance = getInstance(state);
-                void* returnPtr = (void*)instance->getScene();
-                if (returnPtr)
-                {
-                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Scene");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_VisibleSet_getScene - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
