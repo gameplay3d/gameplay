@@ -2,6 +2,7 @@
 #include "ScriptController.h"
 #include "lua_Game.h"
 #include "Base.h"
+#include "ControlFactory.h"
 #include "FileSystem.h"
 #include "FrameBuffer.h"
 #include "Game.h"

@@ -8,7 +8,7 @@ class Scene;
 
 /**
  * Represents a set of nodes that are visible from the
- * scenes active camera. This provides an enumerator
+ * active camera. This provides an enumerator
  * to traverse the scene returning only visible nodes.
  */
 class VisibleSet
@@ -21,11 +21,11 @@ public:
     virtual ~VisibleSet() { }
 
     /**
-     * Gets the scene to determine the visible set from.
+     * Gets the active camera being used to test the visibility.
      *
-     * @return The scene to determine the visible set from.
+     * @return The active camera being used to test the visibility.
      */
-    virtual Scene* getScene() = 0;
+    virtual Camera* getActiveCamera() = 0;
 
     /**
      * Resets the enumerator for enumerating the visible set.
