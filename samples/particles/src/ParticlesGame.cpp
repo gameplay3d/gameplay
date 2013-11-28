@@ -98,7 +98,7 @@ void ParticlesGame::addGrid(unsigned int lineCount)
     model->setMaterial("res/grid.material");
     SAFE_RELEASE(mesh);
 
-    Scene::getScene()->addNode("grid")->setModel(model);
+    _scene->addNode("grid")->setModel(model);
     model->release();
 }
 

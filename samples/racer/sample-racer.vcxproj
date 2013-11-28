@@ -320,8 +320,8 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="game.pvr.config" />
     <None Include="icon.png" />
     <None Include="res\common\arial.gpb" />
-    <None Include="res\common\background.ogg" />
-    <None Include="res\common\engine.ogg" />
+    <None Include="res\common\background_track.ogg" />
+    <None Include="res\common\engine_loop.ogg" />
     <None Include="res\common\gamepad.form" />
     <None Include="res\common\gamepad.theme" />
     <None Include="res\common\menu.form" />
@@ -356,12 +356,12 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <ClInclude Include="src\RacerGame.h" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="res\common\braking.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\common\heightmap_combinedmap_0.png" />
+    <Image Include="res\common\heightmap-combinedmap_0.png" />
     <Image Include="res\common\menu.png" />
     <Image Include="res\logo_powered_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\common\braking.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

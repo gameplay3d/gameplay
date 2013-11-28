@@ -30,45 +30,6 @@
     <None Include="game.pvr.config">
       <Filter>config</Filter>
     </None>
-    <None Include="res\common\arial.gpb">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\background.ogg">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\engine.ogg">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\gamepad.form">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\gamepad.theme">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\menu.form">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\menu.theme">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\overlay.form">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\racer.gpb">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\racer.lua">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\racer.material">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\racer.physics">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\racer.scene">
-      <Filter>res\common</Filter>
-    </None>
     <None Include="res\shaders\colored.frag">
       <Filter>res\shaders</Filter>
     </None>
@@ -117,6 +78,45 @@
     <None Include="res\shaders\textured.vert">
       <Filter>res\shaders</Filter>
     </None>
+    <None Include="res\common\arial.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\background_track.ogg">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\engine_loop.ogg">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\gamepad.form">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\gamepad.theme">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\menu.form">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\menu.theme">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\overlay.form">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\racer.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\racer.lua">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\racer.material">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\racer.physics">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\racer.scene">
+      <Filter>res\common</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\RacerGame.h">
@@ -129,19 +129,19 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="res\common\braking.wav">
-      <Filter>res\common</Filter>
-    </Media>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\common\heightmap_combinedmap_0.png">
+    <Image Include="res\logo_powered_white.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\common\heightmap-combinedmap_0.png">
       <Filter>res\common</Filter>
     </Image>
     <Image Include="res\common\menu.png">
       <Filter>res\common</Filter>
     </Image>
-    <Image Include="res\logo_powered_white.png">
-      <Filter>res</Filter>
-    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\common\braking.wav">
+      <Filter>res\common</Filter>
+    </Media>
   </ItemGroup>
 </Project>
