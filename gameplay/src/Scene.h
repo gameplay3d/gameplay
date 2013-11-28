@@ -38,6 +38,17 @@ public:
     static Scene* load(const char* filePath);
 
     /**
+     * Gets a currently active scene.
+     *
+     * If id is an NULL, the first active scene is returned.
+     *
+     * @param id ID of the scene to retrieve, or NULL to retrieve the first active scene.
+     *
+     * @return The scene that matches the specified ID, or NULL if no matching scene could be found.
+     */
+    static Scene* getScene(const char* id = NULL);
+
+    /**
      * Gets the identifier for the scene.
      *
      * @return The scene identifier.
@@ -123,8 +134,9 @@ public:
      * Gets the active camera for the scene.
      *
      * @return The active camera for the scene.
+     * @see VisibleSet#getActiveCamera
      */
-    Camera* getActiveCamera() const;
+    Camera* getActiveCamera();
 
     /**
      * Sets the active camera on the scene.
@@ -225,11 +237,6 @@ public:
      * Updates all the active nodes in the scene.
      */
     void update(float elapsedTime);
-
-    /**
-     * @see VisibleSet#getScene
-     */
-    Scene* getScene();
 
     /**
      * @see VisibleSet#getNext

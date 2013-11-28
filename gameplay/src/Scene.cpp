@@ -10,6 +10,9 @@
 namespace gameplay
 {
 
+// Global list of active scenes
+static std::vector<Scene*> __sceneList;
+
 static inline char lowercase(char c)
 {
     if (c >= 'A' && c <='Z')
@@ -60,6 +63,7 @@ Scene::Scene()
     : _id(""), _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCount(0), _bindAudioListenerToCamera(true), 
       _nextItr(NULL), _nextReset(true)
 {
+    __sceneList.push_back(this);
 }
 
 Scene::~Scene()
@@ -78,6 +82,11 @@ Scene::~Scene()
 
     // Remove all nodes from the scene
     removeAllNodes();
+
+    // Remove the scene from global list
+    std::vector<Scene*>::iterator itr = std::find(__sceneList.begin(), __sceneList.end(), this);
+    if (itr != __sceneList.end())
+        __sceneList.erase(itr);
 }
 
 Scene* Scene::create(const char* id)
@@ -102,6 +111,21 @@ Scene* Scene::load(const char* filePath)
     }
     return SceneLoader::load(filePath);
 }
+
+Scene* Scene::getScene(const char* id)
+{
+    if (id == NULL)
+        return __sceneList.size() ? __sceneList[0] : NULL;
+
+    for (size_t i = 0, count = __sceneList.size(); i < count; ++i)
+    {
+        if (__sceneList[i]->_id == id)
+            return __sceneList[i];
+    }
+
+    return NULL;
+}
+
 
 const char* Scene::getId() const
 {
@@ -300,7 +324,7 @@ Node* Scene::getFirstNode() const
     return _firstNode;
 }
 
-Camera* Scene::getActiveCamera() const
+Camera* Scene::getActiveCamera()
 {
     return _activeCamera;
 }
@@ -367,11 +391,6 @@ void Scene::update(float elapsedTime)
         if (node->isActive())
             node->update(elapsedTime);
     }
-}
-
-Scene* Scene::getScene()
-{
-    return this;
 }
 
 void Scene::reset()
