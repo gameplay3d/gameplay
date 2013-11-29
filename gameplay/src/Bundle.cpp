@@ -189,7 +189,7 @@ Bundle* Bundle::create(const char* path)
     Stream* stream = FileSystem::open(path);
     if (!stream)
     {
-        GP_ERROR("Failed to open file '%s'.", path);
+        GP_WARN("Failed to open file '%s'.", path);
         return NULL;
     }
 
@@ -198,7 +198,7 @@ Bundle* Bundle::create(const char* path)
     if (stream->read(sig, 1, 9) != 9 || memcmp(sig, "\xABGPB\xBB\r\n\x1A\n", 9) != 0)
     {
         SAFE_DELETE(stream);
-        GP_ERROR("Invalid GPB header for bundle '%s'.", path);
+        GP_WARN("Invalid GPB header for bundle '%s'.", path);
         return NULL;
     }
 
@@ -207,14 +207,14 @@ Bundle* Bundle::create(const char* path)
     if (stream->read(version, 1, 2) != 2)
     {
         SAFE_DELETE(stream);
-        GP_ERROR("Failed to read GPB version for bundle '%s'.", path);
+        GP_WARN("Failed to read GPB version for bundle '%s'.", path);
         return NULL;
     }
     // Check for the minimal 
     if (version[0] != BUNDLE_VERSION_MAJOR_REQUIRED || version[1] < BUNDLE_VERSION_MINOR_REQUIRED)
     {
         SAFE_DELETE(stream);
-        GP_ERROR("Unsupported version (%d.%d) for bundle '%s' (expected %d.%d).", (int)version[0], (int)version[1], path, BUNDLE_VERSION_MAJOR_REQUIRED, BUNDLE_VERSION_MINOR_REQUIRED);
+        GP_WARN("Unsupported version (%d.%d) for bundle '%s' (expected %d.%d).", (int)version[0], (int)version[1], path, BUNDLE_VERSION_MAJOR_REQUIRED, BUNDLE_VERSION_MINOR_REQUIRED);
         return NULL;
     }
 
@@ -223,7 +223,7 @@ Bundle* Bundle::create(const char* path)
     if (stream->read(&refCount, 4, 1) != 1)
     {
         SAFE_DELETE(stream);
-        GP_ERROR("Failed to read ref table for bundle '%s'.", path);
+        GP_WARN("Failed to read ref table for bundle '%s'.", path);
         return NULL;
     }
 
@@ -236,7 +236,7 @@ Bundle* Bundle::create(const char* path)
             stream->read(&refs[i].offset, 4, 1) != 1)
         {
             SAFE_DELETE(stream);
-            GP_ERROR("Failed to read ref number %d for bundle '%s'.", i, path);
+            GP_WARN("Failed to read ref number %d for bundle '%s'.", i, path);
             SAFE_DELETE_ARRAY(refs);
             return NULL;
         }
