@@ -28,6 +28,11 @@ ControlFactory::~ControlFactory()
 {
 }
 
+void ControlFactory::finalize()
+{
+    SAFE_DELETE(__controlFactory);
+}
+
 ControlFactory* ControlFactory::getInstance() 
 {
 	if (__controlFactory == NULL)

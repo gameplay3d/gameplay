@@ -475,7 +475,7 @@ bool TerrainPatch::updateMaterial()
         std::ostringstream defines;
         defines << "LAYER_COUNT " << _layers.size();
         defines << ";SAMPLER_COUNT " << _samplers.size();
-        
+
         if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
             defines << ";DEBUG_PATCHES";
         if (_terrain->_normalMap)
@@ -523,7 +523,7 @@ bool TerrainPatch::updateMaterial()
         if (_layers.size() > 0)
             material->getParameter("u_surfaceLayerMaps")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
 
-        if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES) && !_levels[i]->model->getMaterial())
+        if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
         {
             material->getParameter("u_row")->setValue((float)_row);
             material->getParameter("u_column")->setValue((float)_column);
