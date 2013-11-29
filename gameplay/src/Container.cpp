@@ -14,6 +14,7 @@
 #include "ImageControl.h"
 #include "Form.h"
 #include "Game.h"
+#include "ControlFactory.h"
 
 namespace gameplay
 {
@@ -69,79 +70,74 @@ Container::~Container()
     SAFE_RELEASE(_layout);
 }
 
-Container* Container::create(const char* id, Theme::Style* style, Layout::Type layoutType)
+Control* Container::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(style);
-
     Container* container = new Container();
-    container->_layout = createLayout(layoutType);
-    if (id)
-        container->_id = id;
-    container->_style = style;
+    container->initialize(style, properties);
+
+	if (container->_layout == NULL)
+		container->_layout = createLayout(Layout::LAYOUT_ABSOLUTE);
+
     return container;
 }
 
-Control* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
+void Container::initialize(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
+	GP_ASSERT(style);
 
-    Container* container = new Container();
-    container->initialize(style, properties, theme);
-    return container;
-}
-
-void Container::initialize(Theme::Style* style, Properties* properties, Theme* theme)
-{
     Control::initialize(style, properties);
 
-    // Parse layout
-    Properties* layoutNS = properties->getNamespace("layout", true, false);
-    if (layoutNS)
-    {
-        _layout = createLayout(getLayoutType(layoutNS->getString("type")));
-        switch (_layout->getType())
-        {
-        case Layout::LAYOUT_FLOW:
-            static_cast<FlowLayout*>(_layout)->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
-            break;
-        case Layout::LAYOUT_VERTICAL:
-            static_cast<VerticalLayout*>(_layout)->setSpacing(layoutNS->getInt("spacing"));
-            break;
-        }
-    }
-    else
-    {
-        _layout = createLayout(getLayoutType(properties->getString("layout")));
-    }
+	if (properties)
+	{
+		// Parse layout
+		Properties* layoutNS = properties->getNamespace("layout", true, false);
+		if (layoutNS)
+		{
+			_layout = createLayout(getLayoutType(layoutNS->getString("type")));
+			switch (_layout->getType())
+			{
+			case Layout::LAYOUT_FLOW:
+				static_cast<FlowLayout*>(_layout)->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
+				break;
+			case Layout::LAYOUT_VERTICAL:
+				static_cast<VerticalLayout*>(_layout)->setSpacing(layoutNS->getInt("spacing"));
+				break;
+			}
+		}
+		else
+		{
+			_layout = createLayout(getLayoutType(properties->getString("layout")));
+		}
 
-    setScroll(getScroll(properties->getString("scroll")));
-    _scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
-    if (_scrollBarsAutoHide)
-    {
-        _scrollBarOpacity = 0.0f;
-    }
-    
-    _scrollWheelRequiresFocus = properties->getBool("scrollWheelRequiresFocus");
-    if (properties->exists("scrollingFriction"))
-        _scrollingFriction = properties->getFloat("scrollingFriction");
-    if (properties->exists("scrollWheelSpeed"))
-        _scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
+		setScroll(getScroll(properties->getString("scroll")));
+		_scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
+		if (_scrollBarsAutoHide)
+		{
+			_scrollBarOpacity = 0.0f;
+		}
 
-    addControls(theme, properties);
-    _layout->update(this, _scrollPosition);
+		_scrollWheelRequiresFocus = properties->getBool("scrollWheelRequiresFocus");
+		if (properties->exists("scrollingFriction"))
+			_scrollingFriction = properties->getFloat("scrollingFriction");
+		if (properties->exists("scrollWheelSpeed"))
+			_scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
 
-    const char* activeControl = properties->getString("activeControl");
-    if (activeControl)
-    {
-        for (size_t i = 0, count = _controls.size(); i < count; ++i)
-        {
-            if (_controls[i]->_id == activeControl)
-            {
-                _activeControl = _controls[i];
-                break;
-            }
-        }
-    }
+		addControls(style->getTheme(), properties);
+		_layout->update(this, _scrollPosition);
+
+		const char* activeControl = properties->getString("activeControl");
+		if (activeControl)
+		{
+			for (size_t i = 0, count = _controls.size(); i < count; ++i)
+			{
+				if (_controls[i]->_id == activeControl)
+				{
+					_activeControl = _controls[i];
+					break;
+				}
+			}
+		}
+	}
 }
 
 void Container::addControls(Theme* theme, Properties* properties)
@@ -168,48 +164,8 @@ void Container::addControls(Theme* theme, Properties* properties)
 
         std::string controlName(controlSpace->getNamespace());
         std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
-        if (controlName == "LABEL")
-        {
-            control = Label::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "BUTTON")
-        {
-            control = Button::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CHECKBOX")
-        {
-            control = CheckBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "RADIOBUTTON")
-        {
-            control = RadioButton::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CONTAINER")
-        {
-            control = Container::create(controlStyle, controlSpace, theme);
-        }
-        else if (controlName == "SLIDER")
-        {
-            control = Slider::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "TEXTBOX")
-        {
-            control = TextBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "JOYSTICK")
-        {
-            control = Joystick::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "IMAGE")
-        {
-            control = ImageControl::create(controlStyle, controlSpace);
-        }
-        else
-        {
-            // Ignore - not a valid control name.
-            // This used to fail, but I see no reason to hard fail here (this also fixes not being able
-            // to set padding on containers).
-        }
+
+		control = ControlFactory::getInstance()->createControl(controlName.c_str(), controlStyle, controlSpace);
 
         // Add the new control to the form.
         if (control)
@@ -231,9 +187,39 @@ Layout* Container::getLayout()
     return _layout;
 }
 
-unsigned int Container::addControl(Control* control)
+void Container::setLayout(Layout::Type type)
 {
-    GP_ASSERT(control);
+	if (_layout == NULL || _layout->getType() != type)
+	{
+		SAFE_RELEASE(_layout);
+
+		_layout = createLayout(type);
+		_layout->update(this, _scrollPosition);
+		_dirty = true;
+	}
+}
+
+unsigned int Container::addControl(const char* typeName, const char* styleName)
+{
+	GP_ASSERT(typeName);
+
+	Form* form = getTopLevelForm();
+	if (!form)
+	{
+		GP_WARN("Attempted to add a new control to an orphaned container.");
+		return 0;
+	}
+
+	Theme* theme = form->getTheme();
+	GP_ASSERT(theme);
+
+	Theme::Style* style = NULL;
+	if (styleName)
+		style = theme->getStyle(styleName);
+	if (!style)
+		style = theme->getStyle(typeName);
+
+	Control* control = ControlFactory::getInstance()->createControl()
 
     // Remove the control from its current parent
     if (control->_parent && control->_parent != this)

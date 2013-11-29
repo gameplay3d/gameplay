@@ -24,36 +24,25 @@ Slider::~Slider()
 {
 }
 
-Slider* Slider::create(const char* id, Theme::Style* style)
+Control* Slider::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(style);
-
-    Slider* slider = new Slider();
-    if (id)
-        slider->_id = id;
-    slider->setStyle(style);
-
-    return slider;
-}
-
-Control* Slider::create(Theme::Style* style, Properties* properties, Theme* theme)
-{
-    GP_ASSERT(properties);
-
     Slider* slider = new Slider();
     slider->initialize(style, properties);
 
-    slider->_min = properties->getFloat("min");
-    slider->_max = properties->getFloat("max");
-    slider->_value = properties->getFloat("value");
-    slider->_step = properties->getFloat("step");
-    slider->_valueTextVisible = properties->getBool("valueTextVisible");
-    slider->_valueTextPrecision = properties->getInt("valueTextPrecision");
+	if (properties)
+	{
+		slider->_min = properties->getFloat("min");
+		slider->_max = properties->getFloat("max");
+		slider->_value = properties->getFloat("value");
+		slider->_step = properties->getFloat("step");
+		slider->_valueTextVisible = properties->getBool("valueTextVisible");
+		slider->_valueTextPrecision = properties->getInt("valueTextPrecision");
 
-    if (properties->exists("valueTextAlignment"))
-    {
-        slider->_valueTextAlignment = Font::getJustify(properties->getString("valueTextAlignment"));
-    }
+		if (properties->exists("valueTextAlignment"))
+		{
+			slider->_valueTextAlignment = Font::getJustify(properties->getString("valueTextAlignment"));
+		}
+	}
 
     return slider;
 }

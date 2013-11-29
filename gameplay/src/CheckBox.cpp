@@ -14,26 +14,16 @@ CheckBox::~CheckBox()
 
 }
 
-CheckBox* CheckBox::create(const char* id, Theme::Style* style)
+Control* CheckBox::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(style);
-
     CheckBox* checkBox = new CheckBox();
-    if (id)
-        checkBox->_id = id;
-    checkBox->setStyle(style);
+	checkBox->initialize(style, properties);
 
-    return checkBox;
-}
-
-Control* CheckBox::create(Theme::Style* style, Properties* properties, Theme* theme)
-{
-    GP_ASSERT(properties);
-
-    CheckBox* checkBox = new CheckBox();
-    checkBox->initialize(style, properties);
-    properties->getVector2("imageSize", &checkBox->_imageSize);
-    checkBox->_checked = properties->getBool("checked");
+	if (properties)
+	{
+		properties->getVector2("imageSize", &checkBox->_imageSize);
+		checkBox->_checked = properties->getBool("checked");
+	}
 
     return checkBox;
 }

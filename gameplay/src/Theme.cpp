@@ -1,11 +1,14 @@
 #include "Base.h"
 #include "Theme.h"
 #include "ThemeStyle.h"
+#include "Game.h"
+#include "FileSystem.h"
 
 namespace gameplay
 {
 
 static std::vector<Theme*> __themeCache;
+static Theme* __defaultTheme = NULL;
 
 Theme::Theme()
 {
@@ -47,6 +50,39 @@ Theme::~Theme()
     {
         __themeCache.erase(itr);
     }
+
+	if (__defaultTheme == this)
+		__defaultTheme = NULL;
+}
+
+Theme* Theme::getDefault()
+{
+	if (!__defaultTheme)
+	{
+		// Check game.config for a default theme setting
+		Properties* config = Game::getInstance()->getConfig()->getNamespace("ui", true);
+		if (config)
+		{
+			const char* defaultTheme = config->getString("defaultTheme");
+			if (defaultTheme && FileSystem::fileExists(defaultTheme))
+				__defaultTheme = Theme::create(defaultTheme);
+		}
+
+		// Look for a default.theme file at the root of the resource directory
+		if (!__defaultTheme)
+		{
+			__defaultTheme = Theme::create("res/default.theme");
+		}
+
+		// TODO: Use a built-in (compiled-in) default theme resource as the final fallback so that
+		// UI still works even when no theme files are present.
+	}
+	else
+	{
+		__defaultTheme->addRef();
+	}
+
+	return __defaultTheme;
 }
 
 Theme* Theme::create(const char* url)
@@ -451,6 +487,8 @@ Theme* Theme::create(const char* url)
 
     return theme;
 }
+
+strcmpi
 
 Theme::Style* Theme::getStyle(const char* name) const
 {

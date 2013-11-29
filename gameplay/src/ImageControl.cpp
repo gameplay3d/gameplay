@@ -15,21 +15,7 @@ ImageControl::~ImageControl()
     SAFE_DELETE(_batch);
 }
 
-ImageControl* ImageControl::create(const char* id, Theme::Style* style)
-{
-    GP_ASSERT(style);
-
-    ImageControl* imageControl = new ImageControl();
-    if (id)
-        imageControl->_id = id;
-    imageControl->setStyle(style);
-
-    imageControl->_focusIndex = -2;
-
-    return imageControl;
-}
-
-Control* ImageControl::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* ImageControl::create(Theme::Style* style, Properties* properties)
 {
     ImageControl* imageControl = new ImageControl();
     imageControl->initialize(style, properties);
@@ -41,29 +27,30 @@ Control* ImageControl::create(Theme::Style* style, Properties* properties, Theme
 
 void ImageControl::initialize(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
+	Control::initialize(style, properties);
 
-    Control::initialize(style, properties);
+	if (properties)
+	{
+		std::string path;
+		if (properties->getPath("path", &path))
+		{
+			setImage(path.c_str());
+		}
 
-    std::string path;
-    if (properties->getPath("path", &path))
-    {
-        setImage(path.c_str());
-    }
+		if (properties->exists("srcRegion"))
+		{
+			Vector4 region;
+			properties->getVector4("srcRegion", &region);
+			setRegionSrc(region.x, region.y, region.z, region.w);
+		}
 
-    if (properties->exists("srcRegion"))
-    {
-        Vector4 region;
-        properties->getVector4("srcRegion", &region);
-        setRegionSrc(region.x, region.y, region.z, region.w);
-    }
-
-    if (properties->exists("dstRegion"))
-    {
-        Vector4 region;
-        properties->getVector4("dstRegion", &region);
-        setRegionDst(region.x, region.y, region.z, region.w);
-    }
+		if (properties->exists("dstRegion"))
+		{
+			Vector4 region;
+			properties->getVector4("dstRegion", &region);
+			setRegionDst(region.x, region.y, region.z, region.w);
+		}
+	}
 }
 
 void ImageControl::setImage(const char* path)

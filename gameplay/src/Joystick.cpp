@@ -16,23 +16,11 @@ Joystick::~Joystick()
         SAFE_DELETE(_outerSize);
 }
 
-Joystick* Joystick::create(const char* id, Theme::Style* style)
-{
-    GP_ASSERT(style);
-
-    Joystick* joystick = new Joystick();
-    if (id)
-        joystick->_id = id;
-    joystick->setStyle(style);
-
-    return joystick;
-}
-
-Control* Joystick::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* Joystick::create(Theme::Style* style, Properties* properties)
 {
     Joystick* joystick = new Joystick();
     joystick->initialize(style, properties);
-    joystick->_index = properties->getInt("index");
+
     return joystick;
 }
 
@@ -42,72 +30,83 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
 
     Control::initialize(style, properties);
 
-    Control::State state = getState();
+	if (!properties)
+	{
+		GP_WARN("Joystick creation without properties object is unsupported.");
+		return;
+	}
 
-    if (!properties->exists("radius"))
-    {
-        GP_ERROR("Failed to load joystick; required attribute 'radius' is missing.");
-        return;
-    }
-    _radius = properties->getFloat("radius");
-    GP_ASSERT(_radius != 0.0f);
+	Control::State state = getState();
 
-    if (properties->exists("relative"))
-    {
-        setRelative(properties->getBool("relative"));
-    }
-    else
-    {
-        setRelative(false);
-    }
+	if (!properties->exists("radius"))
+	{
+		GP_WARN("Joystick: required attribute 'radius' is missing.");
+	}
+	else
+	{
+		_radius = properties->getFloat("radius");
+		if (_radius < 1.0f)
+			_radius = 1.0f;
+	}
 
-    Theme::ThemeImage* inner = getImage("inner", state);
-    if (inner)
-    {
-        _innerSize = new Vector2();
-        Vector2 innerSize;
-        if (properties->getVector2("innerRegion", &innerSize))
-        {
-            _innerSize->set(innerSize.x, innerSize.y);
-        }
-        else
-        {
-            const Rectangle& rect = inner->getRegion();
-            _innerSize->set(rect.width, rect.height);
-        }
-    }
+	if (properties->exists("relative"))
+	{
+		setRelative(properties->getBool("relative"));
+	}
+	else
+	{
+		setRelative(false);
+	}
 
-    Theme::ThemeImage* outer = getImage("outer", state);
-    if (outer)
-    {
-        _outerSize = new Vector2();
-        Vector2 outerSize;
-        if (properties->getVector2("outerRegion", &outerSize))
-        {
-            _outerSize->set(outerSize.x, outerSize.y);
-        }
-        else
-        {
-            const Rectangle& rect = outer->getRegion();
-            _outerSize->set(rect.width, rect.height);
-        }
-        _screenRegion.width = _outerSize->x;
-        _screenRegion.height = _outerSize->y;
-    }
-    else
-    {
-        if (inner)
-        {
-            const Rectangle& rect = inner->getRegion();
-            _screenRegion.width = rect.width;
-            _screenRegion.height = rect.height;
-        }
-        else
-        {
-            _screenRegion.width = _radius * 2.0f;
-            _screenRegion.height = _screenRegion.width;
-        }
-    }
+	Theme::ThemeImage* inner = getImage("inner", state);
+	if (inner)
+	{
+		_innerSize = new Vector2();
+		Vector2 innerSize;
+		if (properties->getVector2("innerRegion", &innerSize))
+		{
+			_innerSize->set(innerSize.x, innerSize.y);
+		}
+		else
+		{
+			const Rectangle& rect = inner->getRegion();
+			_innerSize->set(rect.width, rect.height);
+		}
+	}
+
+	Theme::ThemeImage* outer = getImage("outer", state);
+	if (outer)
+	{
+		_outerSize = new Vector2();
+		Vector2 outerSize;
+		if (properties->getVector2("outerRegion", &outerSize))
+		{
+			_outerSize->set(outerSize.x, outerSize.y);
+		}
+		else
+		{
+			const Rectangle& rect = outer->getRegion();
+			_outerSize->set(rect.width, rect.height);
+		}
+		_screenRegion.width = _outerSize->x;
+		_screenRegion.height = _outerSize->y;
+	}
+	else
+	{
+		if (inner)
+		{
+			const Rectangle& rect = inner->getRegion();
+			_screenRegion.width = rect.width;
+			_screenRegion.height = rect.height;
+		}
+		else
+		{
+			_screenRegion.width = _radius * 2.0f;
+			_screenRegion.height = _screenRegion.width;
+		}
+	}
+
+	_index = properties->getInt("index");
 }
 
 void Joystick::addListener(Control::Listener* listener, int eventFlags)

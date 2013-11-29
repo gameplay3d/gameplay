@@ -38,17 +38,6 @@ class Slider : public Label
 public:
 
     /**
-     * Create a new slider control.
-     *
-     * @param id The control's ID.
-     * @param style The control's style.
-     *
-     * @return The new slider.
-     * @script{create}
-     */
-    static Slider* create(const char* id, Theme::Style* style);
-
-    /**
      * Set the minimum value that can be set on this slider.
      *
      * @param min The new minimum.
@@ -181,12 +170,11 @@ protected:
      * Create a slider with a given style and properties.
      *
      * @param style The style to apply to this slider.
-     * @param properties The properties to set on this slider.
-     * @param theme The theme to set on this control if needed.
+     * @param properties A properties object containing a definition of the slider (optional).
      *
      * @return The new slider.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme* theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.

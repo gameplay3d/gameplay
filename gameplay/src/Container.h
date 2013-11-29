@@ -73,41 +73,37 @@ public:
     };
 
     /**
-     * Create a new container.
-     *
-     * @param id The container's ID.
-     * @param style The container's style.
-     * @param layoutType The container's layout type.
-     *
-     * @return The new container.
-     * @script{create}
-     */
-    static Container* create(const char* id, Theme::Style* style, Layout::Type layoutType = Layout::LAYOUT_ABSOLUTE);
-
-    /**
      * Get this container's layout.
      *
      * @return This container's layout object.
      */
     Layout* getLayout();
 
-    /**
-     * Add a control to this layout.
-     * The control will be assigned the next available index.
-     *
-     * @param control The Control to add.
-     *
-     * @return The index assigned to the added Control.
-     */
-    unsigned int addControl(Control* control);
+	/**
+	 * Sets the layout type for this container.
+	 *
+	 * @param type The new layout type for the container.
+	 */
+	void setLayout(Layout::Type type);
 
     /**
-     * Insert a control at a specific index.
+     * Creates and adds a new control to this container.
      *
-     * @param control The control to add.
-     * @param index The index at which to insert the control.
+	 * @param type The type of the control to add.
+	 * @param style Name of the theme style to use for the new control (optional).
+     *
+     * @return The index assigned to the new Control.
      */
-    void insertControl(Control* control, unsigned int index);
+    unsigned int addControl(const char* type, const char* style = NULL);
+
+    /**
+     * Creates and inserts a control at a specific index.
+     *
+     * @param type The type of the control to add.
+     * @param index The index at which to insert the control.
+	 * @param style Name of the style to use for the new control (optional).
+     */
+    void insertControl(const char* type, unsigned int index, const char* style = NULL);
 
     /**
      * Remove a control at a specific index.
@@ -317,21 +313,19 @@ protected:
      * Create a container with a given style and properties, including a list of controls.
      *
      * @param style The style to apply to this container.
-     * @param properties The properties to set on this container, including nested controls.
-     * @param theme The theme to search for control styles within.
+     * @param properties A properties object containing a definition of the container and its nested controls (optional).
      *
      * @return The new container.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme* theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     /**
      * Initialize properties common to all Containers from a Properties object.
      *
      * @param style The style to apply to this control.
      * @param properties The properties to set on this control.
-     * @param theme The theme for this control.
      */
-    void initialize(Theme::Style* style, Properties* properties, Theme* theme);
+    void initialize(Theme::Style* style, Properties* properties);
 
     /**
      * Updates each control within this container,

@@ -12,41 +12,28 @@ Label::~Label()
 {
 }
 
-Label* Label::create(const char* id, Theme::Style* style)
-{
-    GP_ASSERT(style);
-
-    Label* label = new Label();
-    if (id)
-        label->_id = id;
-    label->setStyle(style);
-
-    // Ensure that labels cannot receive focus.
-    label->_focusIndex = -2;
-
-    return label;
-}
-
-Control* Label::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* Label::create(Theme::Style* style, Properties* properties)
 {
     Label* label = new Label();
-    label->initialize(style, properties);
+	label->initialize(style, properties);
 
-    label->_focusIndex = -2;
+	label->_focusIndex = -2;
 
     return label;
 }
 
 void Label::initialize(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
-
     Control::initialize(style, properties);
-    const char* text = properties->getString("text");
-    if (text)
-    {
-        _text = text;
-    }
+
+	if (properties)
+	{
+		const char* text = properties->getString("text");
+		if (text)
+		{
+			_text = text;
+		}
+	}
 }
 
 void Label::addListener(Control::Listener* listener, int eventFlags)

@@ -4,7 +4,7 @@ theme mainMenu
 
     imageList normalImages
     {
-        color = #4A8799ff
+        color = #ffffffff
 
         image unchecked
         {
@@ -49,7 +49,6 @@ theme mainMenu
         image textCaret
         {
             region = 5, 149, 11, 25
-            color = #C3D9BFff
         }
 
         image scrollBarTopCap
@@ -85,7 +84,7 @@ theme mainMenu
 
     imageList activeImages : normalImages
     {
-        color = #C3D9BFff
+        color = #ffffffff
 
         image unchecked
         {
@@ -390,4 +389,8 @@ theme mainMenu
             textColor = #C3D9BFff
         }
     }
+
+	style form : basic
+	{
+	}
 }

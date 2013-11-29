@@ -36,17 +36,6 @@ class Label : public Control
 public:
 
     /**
-     * Create a new label control.
-     *
-     * @param id The control's ID.
-     * @param style The control's style.
-     *
-     * @return The new label.
-     * @script{create}
-     */
-    static Label* create(const char*id, Theme::Style* style);
-
-    /**
      * Set the text for this label to display.
      *
      * @param text The text to display.
@@ -89,16 +78,16 @@ protected:
      */
     virtual ~Label();
 
-    /**
-     * Create a label with a given style and properties.
-     *
-     * @param style The style to apply to this label.
-     * @param properties The properties to set on this label.
-     * @param theme The theme to set on this control if needed.
-	 * 
-     * @return The new label.
-     */
-    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
+	/**
+	* Create a new label control.
+	*
+	* @param style The control's custom style.
+	* @param properties A properties object containing a definition of the label (optional).
+	*
+	* @return The new label.
+	* @script{create}
+	*/
+	static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     /**
      * Initialize this label.

@@ -248,6 +248,13 @@ public:
      */
     const char* getId() const;
 
+	/**
+	 * Sets this control's ID string.
+	 *
+	 * @param id The new control ID.
+	 */
+	void setId(const char* id);
+
     /**
      * Get the x coordinate of this control.
      *

@@ -85,129 +85,136 @@ static Control::AutoSize parseAutoSize(const char* str)
 
 void Control::initialize(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
-    _style = style;
+	_style = style;
 
-    // Properties not defined by the style.
-    const char * alignmentString = properties->getString("alignment");
+	if (properties)
+	{
+		// Properties not defined by the style.
+		const char * alignmentString = properties->getString("alignment");
 
-    _isAlignmentSet = alignmentString != NULL;
-    _alignment = getAlignment(alignmentString);
+		_isAlignmentSet = alignmentString != NULL;
+		_alignment = getAlignment(alignmentString);
 
-    _autoWidth = parseAutoSize(properties->getString("autoWidth"));
-    _autoHeight = parseAutoSize(properties->getString("autoHeight"));
+		_autoWidth = parseAutoSize(properties->getString("autoWidth"));
+		_autoHeight = parseAutoSize(properties->getString("autoHeight"));
 
-    _consumeInputEvents = properties->getBool("consumeInputEvents", true);
+		_consumeInputEvents = properties->getBool("consumeInputEvents", true);
 
-    _visible = properties->getBool("visible", true);
+		_visible = properties->getBool("visible", true);
 
-    if (properties->exists("zIndex"))
-    {
-        _zIndex = properties->getInt("zIndex");
-    }
-    else
-    {
-        _zIndex = -1;
-    }
+		if (properties->exists("zIndex"))
+		{
+			_zIndex = properties->getInt("zIndex");
+		}
+		else
+		{
+			_zIndex = -1;
+		}
 
-    if (properties->exists("canFocus"))
-        _canFocus = properties->getBool("canFocus", false);
+		if (properties->exists("canFocus"))
+			_canFocus = properties->getBool("canFocus", false);
 
-    if (properties->exists("focusIndex"))
-    {
-        _focusIndex = properties->getInt("focusIndex");
-    }
-    else
-    {
-        _focusIndex = -1;
-    }
+		if (properties->exists("focusIndex"))
+		{
+			_focusIndex = properties->getInt("focusIndex");
+		}
+		else
+		{
+			_focusIndex = -1;
+		}
 
-    float bounds[4];
-    bool boundsBits[4];
-    if (properties->exists("position"))
-    {
-        parseCoordPair(properties->getString("position", "0,0"), &bounds[0], &bounds[1], &boundsBits[0], &boundsBits[1]);
-    }
-    else
-    {
-        bounds[0] = parseCoord(properties->getString("x", "0"), &boundsBits[0]);
-        bounds[1] = parseCoord(properties->getString("y", "0"), &boundsBits[1]);
-    }
+		float bounds[4];
+		bool boundsBits[4];
+		if (properties->exists("position"))
+		{
+			parseCoordPair(properties->getString("position", "0,0"), &bounds[0], &bounds[1], &boundsBits[0], &boundsBits[1]);
+		}
+		else
+		{
+			bounds[0] = parseCoord(properties->getString("x", "0"), &boundsBits[0]);
+			bounds[1] = parseCoord(properties->getString("y", "0"), &boundsBits[1]);
+		}
 
-    if (properties->exists("size"))
-    {
-        parseCoordPair(properties->getString("size", "0,0"), &bounds[2], &bounds[3], &boundsBits[2], &boundsBits[3]);
-    }
-    else
-    {
-        bounds[2] = parseCoord(properties->getString("width", "0"), &boundsBits[2]);
-        bounds[3] = parseCoord(properties->getString("height", "0"), &boundsBits[3]);
-    }
-    setX(bounds[0], boundsBits[0]);
-    setY(bounds[1], boundsBits[1]);
-    setWidth(bounds[2], boundsBits[2]);
-    setHeight(bounds[3], boundsBits[3]);
+		if (properties->exists("size"))
+		{
+			parseCoordPair(properties->getString("size", "0,0"), &bounds[2], &bounds[3], &boundsBits[2], &boundsBits[3]);
+		}
+		else
+		{
+			bounds[2] = parseCoord(properties->getString("width", "0"), &boundsBits[2]);
+			bounds[3] = parseCoord(properties->getString("height", "0"), &boundsBits[3]);
+		}
+		setX(bounds[0], boundsBits[0]);
+		setY(bounds[1], boundsBits[1]);
+		setWidth(bounds[2], boundsBits[2]);
+		setHeight(bounds[3], boundsBits[3]);
 
-    const char* id = properties->getId();
-    if (id)
-        _id = id;
+		const char* id = properties->getId();
+		if (id)
+			_id = id;
 
-    if (properties->exists("enabled"))
-    {
-        setEnabled(properties->getBool("enabled"));
-    }
+		if (properties->exists("enabled"))
+		{
+			setEnabled(properties->getBool("enabled"));
+		}
 
-    // Register script listeners for control events
-    if (properties->exists("listener"))
-        addScriptCallback("controlEvent", properties->getString("listener"));
+		// Register script listeners for control events
+		if (properties->exists("listener"))
+			addScriptCallback("controlEvent", properties->getString("listener"));
 
-    // Potentially override themed properties for all states.
-    overrideThemedProperties(properties, STATE_ALL);
+		// Potentially override themed properties for all states.
+		overrideThemedProperties(properties, STATE_ALL);
 
-    // Override themed properties on specific states.
-    Properties* innerSpace = properties->getNextNamespace();
-    while (innerSpace != NULL)
-    {
-        std::string spaceName(innerSpace->getNamespace());
-        std::transform(spaceName.begin(), spaceName.end(), spaceName.begin(), (int(*)(int))toupper);
-        if (spaceName == "STATENORMAL")
-        {
-            overrideThemedProperties(innerSpace, NORMAL);
-        }
-        else if (spaceName == "STATEFOCUS")
-        {
-            overrideThemedProperties(innerSpace, FOCUS);
-        }
-        else if (spaceName == "STATEACTIVE")
-        {
-            overrideThemedProperties(innerSpace, ACTIVE);
-        }
-        else if (spaceName == "STATEDISABLED")
-        {
-            overrideThemedProperties(innerSpace, DISABLED);
-        }
-        else if (spaceName == "STATEHOVER")
-        {
-            overrideThemedProperties(innerSpace, HOVER);
-        }
-        else if (spaceName == "MARGIN")
-        {
-            setMargin(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
-                innerSpace->getFloat("left"), innerSpace->getFloat("right"));
-        }
-        else if (spaceName == "PADDING")
-        {
-            setPadding(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
-                innerSpace->getFloat("left"), innerSpace->getFloat("right"));
-        }
+		// Override themed properties on specific states.
+		Properties* innerSpace = properties->getNextNamespace();
+		while (innerSpace != NULL)
+		{
+			std::string spaceName(innerSpace->getNamespace());
+			std::transform(spaceName.begin(), spaceName.end(), spaceName.begin(), (int(*)(int))toupper);
+			if (spaceName == "STATENORMAL")
+			{
+				overrideThemedProperties(innerSpace, NORMAL);
+			}
+			else if (spaceName == "STATEFOCUS")
+			{
+				overrideThemedProperties(innerSpace, FOCUS);
+			}
+			else if (spaceName == "STATEACTIVE")
+			{
+				overrideThemedProperties(innerSpace, ACTIVE);
+			}
+			else if (spaceName == "STATEDISABLED")
+			{
+				overrideThemedProperties(innerSpace, DISABLED);
+			}
+			else if (spaceName == "STATEHOVER")
+			{
+				overrideThemedProperties(innerSpace, HOVER);
+			}
+			else if (spaceName == "MARGIN")
+			{
+				setMargin(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
+					innerSpace->getFloat("left"), innerSpace->getFloat("right"));
+			}
+			else if (spaceName == "PADDING")
+			{
+				setPadding(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
+					innerSpace->getFloat("left"), innerSpace->getFloat("right"));
+			}
 
-        innerSpace = properties->getNextNamespace();
-    }
+			innerSpace = properties->getNextNamespace();
+		}
+	}
 }
 
 const char* Control::getId() const
 {
     return _id.c_str();
+}
+
+void Control::setId(const char* id)
+{
+	_id = id ? id : "";
 }
 
 float Control::getX() const

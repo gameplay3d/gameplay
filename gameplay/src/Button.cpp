@@ -14,28 +14,21 @@ Button::~Button()
 {
 }
 
-Button* Button::create(const char* id, Theme::Style* style)
+Control* Button::create(Theme::Style* style, Properties* properties)
 {
     Button* button = new Button();
+	button->initialize(style, properties);
 
-    button->_id = id;
-    button->_style = style;
-
-    return button;
-}
-
-Control* Button::create(Theme::Style* style, Properties* properties, Theme* theme)
-{
-    Button* button = new Button();
-    button->initialize(style, properties);
-
-    // Different types of data bindings can be named differently in a button namespace.
-    // Gamepad button mappings have the name "mapping" and correspond to Gamepad::ButtonMapping enums.
-    const char* mapping = properties->getString("mapping");
-    if (mapping)
-    {
-        button->_dataBinding = Gamepad::getButtonMappingFromString(mapping);
-    }
+	if (properties)
+	{
+		// Different types of data bindings can be named differently in a button namespace.
+		// Gamepad button mappings have the name "mapping" and correspond to Gamepad::ButtonMapping enums.
+		const char* mapping = properties->getString("mapping");
+		if (mapping)
+		{
+			button->_dataBinding = Gamepad::getButtonMappingFromString(mapping);
+		}
+	}
 
     return button;
 }

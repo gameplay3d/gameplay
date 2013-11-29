@@ -15,13 +15,15 @@ class Control;
  * @script{ignore}
  */
 class ControlFactory 
-{	
-public :
+{
+	friend class Container;
+
+public:
 
 	/**
 	 * The activator interface for controls that are created.
 	 */
-	typedef Control* (*ControlActivator)(Theme::Style*, Properties*, Theme*);
+	typedef Control* (*ControlActivator)(Theme::Style*, Properties*);
 
 	/**
 	 * Gets the single instance of the control factory used to create controls and register/unregister custom controls.
@@ -46,13 +48,6 @@ public :
 	 * @param controlName The name of the custom control to unregister.
 	 */
 	void unregisterCustomControl(const char* controlName);
-		
-	/**
-	 * Creates a controls from the set of core and custom controls registered.
-	 *
-	 * @param controlName The name of the control to create
-	 */
-	Control* createControl(const char* controlName, Theme::Style *style, Properties *properties, Theme *theme = NULL);
 
 private:
 
@@ -75,6 +70,16 @@ private:
 	 * Assignment operator
 	 */
 	ControlFactory &operator=(const ControlFactory&);
+
+	/**
+	* Creates a controls from the set of core and custom controls registered.
+	*
+	* @param controlName The name of the control to create.
+	* @param style The style to apply to the control.
+	* @param properties A Properties object describing the control (optional).
+	* @return The new control.
+	*/
+	Control* createControl(const char* controlName, Theme::Style *style, Properties *properties = NULL);
 	
 	/**
 	 * Registers the standard (built-in) controls
@@ -87,4 +92,3 @@ private:
 }
 
 #endif
-

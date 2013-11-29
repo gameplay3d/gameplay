@@ -41,17 +41,6 @@ class ImageControl : public Control
 public:
 
     /**
-     * Create a new ImageControl.
-     *
-     * @param id The control's ID.
-     * @param style The control's style.
-     *
-     * @return The new ImageControl.
-     * @script{create}
-     */
-    static ImageControl* create(const char* id, Theme::Style* style);
-
-    /**
      * Set the path of the image for this ImageControl to display.
      *
      * @param path The path to the image.
@@ -94,7 +83,7 @@ public:
      * @param height The height of the destination region.
      */
     void setRegionDst(float x, float y, float width, float height);
-    
+
     /**
      * Sets the destination region of this ImageControl.  This is the region
      * within the control's viewport to draw the image.
@@ -115,10 +104,10 @@ public:
 protected:
 
     ImageControl();
-    
+
     virtual ~ImageControl();
 
-    static Control* create(Theme::Style* style, Properties* properties, Theme* theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     virtual void initialize(Theme::Style* style, Properties* properties);
 

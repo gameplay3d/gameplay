@@ -18,19 +18,7 @@ TextBox::~TextBox()
 {
 }
 
-TextBox* TextBox::create(const char* id, Theme::Style* style)
-{
-    GP_ASSERT(style);
-
-    TextBox* textBox = new TextBox();
-    if (id)
-        textBox->_id = id;
-    textBox->setStyle(style);
-
-    return textBox;
-}
-
-Control* TextBox::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* TextBox::create(Theme::Style* style, Properties* properties)
 {
     TextBox* textBox = new TextBox();
     textBox->initialize(style, properties);
@@ -40,10 +28,12 @@ Control* TextBox::create(Theme::Style* style, Properties* properties, Theme* the
 
 void TextBox::initialize(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
-
     Label::initialize(style, properties);
-    _inputMode = getInputMode(properties->getString("inputMode"));
+
+	if (properties)
+	{
+		_inputMode = getInputMode(properties->getString("inputMode"));
+	}
 }
 
 int TextBox::getLastKeypress()

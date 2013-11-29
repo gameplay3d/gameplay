@@ -17,7 +17,12 @@ namespace gameplay
 class Theme;
 
 /**
- * Top-level container of UI controls.  The following properties are available for forms:
+ * Top-level container of UI controls.
+ 
+   Child controls and containers can be created and added to a form using the
+   Container::addControl and Container::insertControl methods.
+
+   The following properties are available for forms:
 
  @verbatim
     form <formID>
@@ -68,9 +73,13 @@ public:
 
     /**
      * Create a new Form.
+	 *
+	 * The specified style defines the visual style for the form. If NULL is passed
+	 * for the style, the default UI theme is used. All controls attached to this
+	 * form will inherit the theme that contains the form's style.
      *
      * @param id The Form's ID.
-     * @param style The Form's style.
+     * @param style The Form's custom style (optional).
      * @param layoutType The form's layout type.
      *
      * @return The new Form.

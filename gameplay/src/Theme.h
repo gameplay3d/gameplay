@@ -236,17 +236,17 @@ public:
          */
         float right;
     };
-    
+
     /** 
      * Struct representing margin areas by the width or height of each side.
      */
     typedef SideRegions Margin;
-    
+
     /** 
      * Struct representing border areas by the width or height of each side.
      */
     typedef SideRegions Border;
-    
+
     /** 
      * Struct representing padding areas by the width or height of each side.
      */
@@ -307,6 +307,16 @@ public:
      * @script{create}
      */
     static Theme* create(const char* url);
+
+    /**
+     * Returns the default theme.
+	 *
+	 * Calling this method increases the reference count of the returned theme,
+	 * so you must ensure you call release() on it when you are finished with it.
+     *
+     * @return The default theme.
+     */
+    static Theme* getDefault();
 
     /**
      * Get a style by its ID.

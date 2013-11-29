@@ -58,17 +58,6 @@ public:
     };
 
     /**
-     * Create a new text box control.
-     *
-     * @param id The control's ID.
-     * @param style The control's style.
-     *
-     * @return The new text box.
-     * @script{create}
-     */
-    static TextBox* create(const char* id, Theme::Style* style);
-
-    /**
      * Initialize this textbox.
      */
     virtual void initialize(Theme::Style* style, Properties* properties);
@@ -143,12 +132,11 @@ protected:
      * Create a text box with a given style and properties.
      *
      * @param style The style to apply to this text box.
-     * @param properties The properties to set on this text box.
-     * @param theme The theme to set on this control if needed.
+     * @param properties A properties object containing a definition of the text box (optional).
      *
      * @return The new text box.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme* theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.

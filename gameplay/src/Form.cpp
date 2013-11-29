@@ -61,7 +61,18 @@ Form::~Form()
 
 Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
 {
-    GP_ASSERT(style);
+	Theme* theme;
+	if (style)
+	{
+		theme = style->getTheme();
+	}
+	else
+	{
+		theme = Theme::getDefault();
+		style = theme->getStyle("form");
+	}
+
+	GP_ASSERT(style);
 
     Layout* layout;
     switch (layoutType)
@@ -76,7 +87,8 @@ Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
         layout = VerticalLayout::create();
         break;
     default:
-        GP_ERROR("Unsupported layout type '%d'.", layoutType);
+		layout = AbsoluteLayout::create();
+        GP_WARN("Unsupported layout type '%d'.", layoutType);
         break;
     }
 
@@ -85,7 +97,7 @@ Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
         form->_id = id;
     form->_style = style;
     form->_layout = layout;
-    form->_theme = style->getTheme();
+	form->_theme = theme;
     form->_theme->addRef();
 
     form->updateFrameBuffer();
@@ -130,7 +142,7 @@ Form* Form::create(const char* url)
     form->_theme = theme;
 
     // Initialize common container properties
-    form->initialize(style, formProperties, theme);
+    form->initialize(style, formProperties);
 
     form->updateFrameBuffer();
 

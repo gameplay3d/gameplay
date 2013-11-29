@@ -19,40 +19,27 @@ RadioButton::~RadioButton()
     }
 }
 
-RadioButton* RadioButton::create(const char* id, Theme::Style* style)
+Control* RadioButton::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(style);
-
-    RadioButton* radioButton = new RadioButton();
-    if (id)
-        radioButton->_id = id;
-    radioButton->setStyle(style);
-
-    __radioButtons.push_back(radioButton);
-
-    return radioButton;
-}
-
-Control* RadioButton::create(Theme::Style* style, Properties* properties, Theme* theme)
-{
-    GP_ASSERT(properties);
-
     RadioButton* radioButton = new RadioButton();
     radioButton->initialize(style, properties);
 
-    properties->getVector2("imageSize", &radioButton->_imageSize);
+	if (properties)
+	{
+		properties->getVector2("imageSize", &radioButton->_imageSize);
 
-    if (properties->getBool("selected"))
-    {
-        RadioButton::clearSelected(radioButton->_groupId);
-        radioButton->_selected = true;
-    }
+		if (properties->getBool("selected"))
+		{
+			RadioButton::clearSelected(radioButton->_groupId);
+			radioButton->_selected = true;
+		}
 
-    const char* groupId = properties->getString("group");
-    if (groupId)
-    {
-        radioButton->_groupId = groupId;
-    }
+		const char* groupId = properties->getString("group");
+		if (groupId)
+		{
+			radioButton->_groupId = groupId;
+		}
+	}
 
     __radioButtons.push_back(radioButton);
 
