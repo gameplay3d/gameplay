@@ -292,8 +292,6 @@ void Node::setUserPointer(void* pointer, void (*cleanupCallback)(void*))
     }
 }
 
-
-
 void Node::setActive(bool active)
 {
     if (_active != active)
