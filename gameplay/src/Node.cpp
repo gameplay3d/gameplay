@@ -294,7 +294,13 @@ void Node::setUserPointer(void* pointer, void (*cleanupCallback)(void*))
 
 void Node::setActive(bool active)
 {
-    _active = active;
+    if (_active != active)
+    {
+        if (_collisionObject)
+            _collisionObject->setEnabled(active);
+
+        _active = active;
+    }
 }
 
 bool Node::isActive() const
