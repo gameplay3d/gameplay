@@ -68,21 +68,16 @@ Theme* Theme::getDefault()
 				__defaultTheme = Theme::create(defaultTheme);
 		}
 
-		// Look for a default.theme file at the root of the resource directory
-		if (!__defaultTheme)
-		{
-			__defaultTheme = Theme::create("res/default.theme");
-		}
-
 		// TODO: Use a built-in (compiled-in) default theme resource as the final fallback so that
 		// UI still works even when no theme files are present.
 	}
-	else
-	{
-		__defaultTheme->addRef();
-	}
 
 	return __defaultTheme;
+}
+
+void Theme::finalize()
+{
+    SAFE_RELEASE(__defaultTheme);
 }
 
 Theme* Theme::create(const char* url)
@@ -113,7 +108,7 @@ Theme* Theme::create(const char* url)
     // Check if the Properties is valid and has a valid namespace.
     Properties* themeProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
     GP_ASSERT(themeProperties);
-    if (!themeProperties || !(strcmp(themeProperties->getNamespace(), "theme") == 0))
+    if (!themeProperties || !(strcmpnocase(themeProperties->getNamespace(), "theme") == 0))
     {
         SAFE_DELETE(properties);
         return NULL;
@@ -142,22 +137,22 @@ Theme* Theme::create(const char* url)
         // First load all cursors, checkboxes etc. that can be referred to by styles.
         const char* spacename = space->getNamespace();
             
-        if (strcmp(spacename, "image") == 0)
+        if (strcmpnocase(spacename, "image") == 0)
         {
             theme->_images.push_back(ThemeImage::create(tw, th, space, Vector4::one()));
         }
-        else if (strcmp(spacename, "imageList") == 0)
+        else if (strcmpnocase(spacename, "imageList") == 0)
         {
             theme->_imageLists.push_back(ImageList::create(tw, th, space));
         }
-        else if (strcmp(spacename, "skin") == 0)
+        else if (strcmpnocase(spacename, "skin") == 0)
         {
             Theme::Border border;
             Properties* innerSpace = space->getNextNamespace();
             if (innerSpace)
             {
                 const char* innerSpacename = innerSpace->getNamespace();
-                if (strcmp(innerSpacename, "border") == 0)
+                if (strcmpnocase(innerSpacename, "border") == 0)
                 {
                     border.top = innerSpace->getFloat("top");
                     border.bottom = innerSpace->getFloat("bottom");
@@ -189,7 +184,7 @@ Theme* Theme::create(const char* url)
     while (space != NULL)
     {
         const char* spacename = space->getNamespace();
-        if (strcmp(spacename, "style") == 0)
+        if (strcmpnocase(spacename, "style") == 0)
         {
             // Each style contains up to MAX_OVERLAYS overlays,
             // as well as Border and Padding namespaces.
@@ -206,7 +201,7 @@ Theme* Theme::create(const char* url)
             while (innerSpace != NULL)
             {
                 const char* innerSpacename = innerSpace->getNamespace();
-                if (strcmp(innerSpacename, "stateNormal") == 0)
+                if (strcmpnocase(innerSpacename, "stateNormal") == 0)
                 {
                     Vector4 textColor(0, 0, 0, 1);
                     if (innerSpace->exists("textColor"))
@@ -274,21 +269,21 @@ Theme* Theme::create(const char* url)
             while (innerSpace != NULL)
             {
                 const char* innerSpacename = innerSpace->getNamespace();
-                if (strcmp(innerSpacename, "margin") == 0)
+                if (strcmpnocase(innerSpacename, "margin") == 0)
                 {
                     margin.top = innerSpace->getFloat("top");
                     margin.bottom = innerSpace->getFloat("bottom");
                     margin.left = innerSpace->getFloat("left");
                     margin.right = innerSpace->getFloat("right");
                 }
-                else if (strcmp(innerSpacename, "padding") == 0)
+                else if (strcmpnocase(innerSpacename, "padding") == 0)
                 {
                     padding.top = innerSpace->getFloat("top");
                     padding.bottom = innerSpace->getFloat("bottom");
                     padding.left = innerSpace->getFloat("left");
                     padding.right = innerSpace->getFloat("right");
                 }
-                else if (strcmp(innerSpacename, "stateNormal") != 0)
+                else if (strcmpnocase(innerSpacename, "stateNormal") != 0)
                 {
                     // Either OVERLAY_FOCUS or OVERLAY_ACTIVE.
                     // If a property isn't specified, it inherits from OVERLAY_NORMAL.
@@ -372,7 +367,7 @@ Theme* Theme::create(const char* url)
                         skin = normal->getSkin();
                     }
 
-                    if (strcmp(innerSpacename, "stateFocus") == 0)
+                    if (strcmpnocase(innerSpacename, "stateFocus") == 0)
                     {
                         focus = Theme::Style::Overlay::create();
                         GP_ASSERT(focus);
@@ -392,7 +387,7 @@ Theme* Theme::create(const char* url)
                             font->release();
                         }
                     }
-                    else if (strcmp(innerSpacename, "stateActive") == 0)
+                    else if (strcmpnocase(innerSpacename, "stateActive") == 0)
                     {
                         active = Theme::Style::Overlay::create();
                         GP_ASSERT(active);
@@ -412,7 +407,7 @@ Theme* Theme::create(const char* url)
                             font->release();
                         }
                     }
-                    else if (strcmp(innerSpacename, "stateDisabled") == 0)
+                    else if (strcmpnocase(innerSpacename, "stateDisabled") == 0)
                     {
                         disabled = Theme::Style::Overlay::create();
                         GP_ASSERT(disabled);
@@ -432,7 +427,7 @@ Theme* Theme::create(const char* url)
                             font->release();
                         }
                     }
-                    else if (strcmp(innerSpacename, "stateHover") == 0)
+                    else if (strcmpnocase(innerSpacename, "stateHover") == 0)
                     {
                         hover = Theme::Style::Overlay::create();
                         GP_ASSERT(hover);
@@ -456,7 +451,7 @@ Theme* Theme::create(const char* url)
 
                 innerSpace = space->getNextNamespace();
             }
-                
+
             if (!focus)
             {
                 focus = normal;
@@ -488,8 +483,6 @@ Theme* Theme::create(const char* url)
     return theme;
 }
 
-strcmpi
-
 Theme::Style* Theme::getStyle(const char* name) const
 {
     GP_ASSERT(name);
@@ -497,7 +490,7 @@ Theme::Style* Theme::getStyle(const char* name) const
     for (size_t i = 0, count = _styles.size(); i < count; ++i)
     {
         GP_ASSERT(_styles[i]);
-        if (strcmp(name, _styles[i]->getId()) == 0)
+        if (strcmpnocase(name, _styles[i]->getId()) == 0)
         {
             return _styles[i];
         }
@@ -704,7 +697,7 @@ Theme::ThemeImage* Theme::ImageList::getImage(const char* imageId) const
         ThemeImage* image = *it;
         GP_ASSERT(image);
         GP_ASSERT(image->getId());
-        if (strcmp(image->getId(), imageId) == 0)
+        if (strcmpnocase(image->getId(), imageId) == 0)
         {
             return image;
         }
@@ -846,7 +839,7 @@ void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList,
         {
             GP_ASSERT(_imageLists[i]);
             GP_ASSERT(_imageLists[i]->getId());
-            if (strcmp(_imageLists[i]->getId(), imageListString) == 0)
+            if (strcmpnocase(_imageLists[i]->getId(), imageListString) == 0)
             {
                 GP_ASSERT(imageList);
                 *imageList = _imageLists[i];
@@ -862,7 +855,7 @@ void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList,
         {
             GP_ASSERT(_images[i]);
             GP_ASSERT(_images[i]->getId());
-            if (strcmp(_images[i]->getId(), cursorString) == 0)
+            if (strcmpnocase(_images[i]->getId(), cursorString) == 0)
             {
                 GP_ASSERT(cursor);
                 *cursor = _images[i];
@@ -878,7 +871,7 @@ void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList,
         {
             GP_ASSERT(_skins[i]);
             GP_ASSERT(_skins[i]->getId());
-            if (strcmp(_skins[i]->getId(), skinString) == 0)
+            if (strcmpnocase(_skins[i]->getId(), skinString) == 0)
             {
                 GP_ASSERT(skin);
                 *skin = _skins[i];

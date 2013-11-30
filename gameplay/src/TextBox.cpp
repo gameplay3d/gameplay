@@ -18,17 +18,24 @@ TextBox::~TextBox()
 {
 }
 
-Control* TextBox::create(Theme::Style* style, Properties* properties)
+TextBox* TextBox::create(const char* id, Theme::Style* style)
 {
     TextBox* textBox = new TextBox();
-    textBox->initialize(style, properties);
-
+    textBox->_id = id ? id : "";
+    textBox->initialize("TextBox", style, NULL);
     return textBox;
 }
 
-void TextBox::initialize(Theme::Style* style, Properties* properties)
+Control* TextBox::create(Theme::Style* style, Properties* properties)
 {
-    Label::initialize(style, properties);
+    TextBox* textBox = new TextBox();
+    textBox->initialize("TextBox", style, properties);
+    return textBox;
+}
+
+void TextBox::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Label::initialize(typeName, style, properties);
 
 	if (properties)
 	{

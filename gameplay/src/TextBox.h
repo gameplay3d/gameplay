@@ -58,9 +58,15 @@ public:
     };
 
     /**
-     * Initialize this textbox.
+     * Creates a new TextBox.
+     *
+     * @param id The textbox ID.
+     * @param style The textbox style (optional).
+     *
+     * @return The new textbox.
+     * @script{create}
      */
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    static TextBox* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Returns the current location of the caret with the text of this TextBox.
@@ -137,6 +143,11 @@ protected:
      * @return The new text box.
      */
     static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.

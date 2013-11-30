@@ -848,6 +848,13 @@ public:
     bool getConsumeInputEvents();
 
     /**
+     * Get this control's style.
+     *
+     * @return This control's style.
+     */
+    Theme::Style* getStyle() const;
+
+    /**
      * Set the style this control will use when rendering.
      *
      * @param style The style this control will use when rendering.
@@ -855,11 +862,9 @@ public:
     void setStyle(Theme::Style* style);
 
     /**
-     * Get this control's style.
-     *
-     * @return This control's style.
+     * Returns the theme for this control.
      */
-    Theme::Style* getStyle() const;
+    Theme* getTheme() const;
 
     /**
      * Get this control's z-index.
@@ -1123,12 +1128,13 @@ protected:
     virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
 
     /**
-     * Initialize properties common to all Controls from a Properties object.
+     * Initializes the control.
      *
-     * @param style The style to apply to this control.
-     * @param properties The properties to set on this control.
+     * @param typeName The type name of the control being initalized.
+     * @param style The style to apply to this control (optional).
+     * @param properties The properties to set on this control (optional).
      */
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    virtual void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Returns whether this control has been modified and requires an update.

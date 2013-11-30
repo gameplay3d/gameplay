@@ -42,6 +42,17 @@ class RadioButton : public Button
 public:
 
     /**
+     * Creates a new RadioButton.
+     *
+     * @param id The radio button ID.
+     * @param id The radio button style (optional).
+     *
+     * @return The new radio button.
+     * @script{create}
+     */
+    static RadioButton* create(const char* id, Theme::Style* style = NULL);
+
+    /**
      * Get whether this radio button is currently selected.
      *
      * @return Whether this radio button is currently selected.
@@ -119,6 +130,11 @@ protected:
      * @return The new radio button.
      */
     static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Keyboard callback on key events.

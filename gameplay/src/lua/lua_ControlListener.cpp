@@ -11,6 +11,7 @@
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Theme.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
 #include "lua_ControlListenerEventType.h"

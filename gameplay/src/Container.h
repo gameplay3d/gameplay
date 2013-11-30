@@ -73,6 +73,18 @@ public:
     };
 
     /**
+     * Creates a new container.
+     *
+     * @param id The container ID.
+     * @param style The container style (optional).
+     * @param layout The container layout (optional).
+     *
+     * @return The new container.
+     * @script{create}
+     */
+    static Container* create(const char* id, Theme::Style* style = NULL, Layout::Type layout = Layout::LAYOUT_ABSOLUTE);
+
+    /**
      * Get this container's layout.
      *
      * @return This container's layout object.
@@ -87,23 +99,21 @@ public:
 	void setLayout(Layout::Type type);
 
     /**
-     * Creates and adds a new control to this container.
+     * Adds a new control to this container.
      *
-	 * @param type The type of the control to add.
-	 * @param style Name of the theme style to use for the new control (optional).
+	 * @param control The control to add.
      *
      * @return The index assigned to the new Control.
      */
-    unsigned int addControl(const char* type, const char* style = NULL);
+    unsigned int addControl(Control* control);
 
     /**
-     * Creates and inserts a control at a specific index.
+     * Inserts a control at a specific index.
      *
-     * @param type The type of the control to add.
+     * @param control The control to insert.
      * @param index The index at which to insert the control.
-	 * @param style Name of the style to use for the new control (optional).
      */
-    void insertControl(const char* type, unsigned int index, const char* style = NULL);
+    void insertControl(Control* control, unsigned int index);
 
     /**
      * Remove a control at a specific index.
@@ -320,12 +330,9 @@ protected:
     static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     /**
-     * Initialize properties common to all Containers from a Properties object.
-     *
-     * @param style The style to apply to this control.
-     * @param properties The properties to set on this control.
+     * @see Control::initialize
      */
-    void initialize(Theme::Style* style, Properties* properties);
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Updates each control within this container,
@@ -360,13 +367,11 @@ protected:
     virtual bool isDirty();
 
     /**
-     * Adds controls nested within a properties object to this container,
-     * searching for styles within the given theme.
+     * Adds controls nested within a properties object to this container.
      *
-     * @param theme The them to add controls from
      * @param properties The properties to use.
      */
-    void addControls(Theme* theme, Properties* properties);
+    void addControls(Properties* properties);
 
     /**
      * Draws a sprite batch for the specified clipping rect.

@@ -14,18 +14,30 @@ CheckBox::~CheckBox()
 
 }
 
+CheckBox* CheckBox::create(const char* id, Theme::Style* style)
+{
+    CheckBox* cb = new CheckBox();
+    cb->_id = id ? id : "";
+    cb->initialize("CheckBox", style, NULL);
+    return cb;
+}
+
 Control* CheckBox::create(Theme::Style* style, Properties* properties)
 {
-    CheckBox* checkBox = new CheckBox();
-	checkBox->initialize(style, properties);
+    CheckBox* cb = new CheckBox();
+    cb->initialize("CheckBox", style, properties);
+    return cb;
+}
 
-	if (properties)
-	{
-		properties->getVector2("imageSize", &checkBox->_imageSize);
-		checkBox->_checked = properties->getBool("checked");
-	}
+void CheckBox::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Button::initialize(typeName, style, properties);
 
-    return checkBox;
+    if (properties)
+    {
+        properties->getVector2("imageSize", &_imageSize);
+        _checked = properties->getBool("checked");
+    }
 }
 
 bool CheckBox::isChecked()

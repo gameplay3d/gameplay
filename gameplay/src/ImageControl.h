@@ -41,6 +41,17 @@ class ImageControl : public Control
 public:
 
     /**
+     * Creates a new ImageControl.
+     *
+     * @param id The image control ID.
+     * @param style The image control style (optional).
+     *
+     * @return The new image control.
+     * @script{create}
+     */
+    static ImageControl* create(const char* id, Theme::Style* style = NULL);
+
+    /**
      * Set the path of the image for this ImageControl to display.
      *
      * @param path The path to the image.
@@ -109,7 +120,7 @@ protected:
 
     static Control* create(Theme::Style* style, Properties* properties = NULL);
 
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 

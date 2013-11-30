@@ -40,6 +40,17 @@ class CheckBox : public Button
 public:
 
     /**
+     * Creates a new CheckBox.
+     *
+     * @param id The checkbox ID.
+     * @param style The checkbox style (optional).
+     *
+     * @return The new checkbox.
+     * @script{create}
+     */
+    static CheckBox* create(const char* id, Theme::Style* style = NULL);
+
+    /**
      * Gets whether this checkbox is checked.
      *
      * @return Whether this checkbox is checked.
@@ -106,6 +117,11 @@ protected:
      * @return The new checkbox.
      */
     static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+    * @see Control::initialize
+    */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Keyboard callback on key events.

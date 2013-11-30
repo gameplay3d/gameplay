@@ -542,6 +542,11 @@ namespace gameplay
         va_end(argptr);
     }
 
+    extern int strcmpnocase(const char* s1, const char* s2)
+    {
+        return strcasecmp(s1, s2);
+    }
+
     Platform::Platform(Game* game) : _game(game)
     {
     }

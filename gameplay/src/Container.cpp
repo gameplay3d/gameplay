@@ -70,22 +70,25 @@ Container::~Container()
     SAFE_RELEASE(_layout);
 }
 
-Control* Container::create(Theme::Style* style, Properties* properties)
+Container* Container::create(const char* id, Theme::Style* style, Layout::Type layout)
 {
     Container* container = new Container();
-    container->initialize(style, properties);
-
-	if (container->_layout == NULL)
-		container->_layout = createLayout(Layout::LAYOUT_ABSOLUTE);
-
+    container->_id = id ? id : "";
+    container->_layout = createLayout(layout);
+    container->initialize("Container", style, NULL);
     return container;
 }
 
-void Container::initialize(Theme::Style* style, Properties* properties)
+Control* Container::create(Theme::Style* style, Properties* properties)
 {
-	GP_ASSERT(style);
+    Container* container = new Container();
+    container->initialize("Container", style, properties);
+    return container;
+}
 
-    Control::initialize(style, properties);
+void Container::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Control::initialize(typeName, style, properties);
 
 	if (properties)
 	{
@@ -122,7 +125,7 @@ void Container::initialize(Theme::Style* style, Properties* properties)
 		if (properties->exists("scrollWheelSpeed"))
 			_scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
 
-		addControls(style->getTheme(), properties);
+		addControls(properties);
 		_layout->update(this, _scrollPosition);
 
 		const char* activeControl = properties->getString("activeControl");
@@ -138,34 +141,25 @@ void Container::initialize(Theme::Style* style, Properties* properties)
 			}
 		}
 	}
+
+    // Create a default layout if one does not yet exist
+    if (_layout == NULL)
+        _layout = createLayout(Layout::LAYOUT_ABSOLUTE);
 }
 
-void Container::addControls(Theme* theme, Properties* properties)
+void Container::addControls(Properties* properties)
 {
-    GP_ASSERT(theme);
     GP_ASSERT(properties);
 
     // Add all the controls to this container.
     Properties* controlSpace = properties->getNextNamespace();
     while (controlSpace != NULL)
     {
-        Control* control = NULL;
+        const char* controlName = controlSpace->getNamespace();
 
-        const char* controlStyleName = controlSpace->getString("style");
-        Theme::Style* controlStyle = NULL;
-        if (controlStyleName)
-        {
-            controlStyle = theme->getStyle(controlStyleName);
-        }
-        else
-        {
-            controlStyle = theme->getEmptyStyle();
-        }
-
-        std::string controlName(controlSpace->getNamespace());
-        std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
-
-		control = ControlFactory::getInstance()->createControl(controlName.c_str(), controlStyle, controlSpace);
+        // Pass our own style into the creation of the child control.
+        // The child control's style will be looked up using the passed in style's theme.
+        Control* control = ControlFactory::getInstance()->createControl(controlName, _style, controlSpace);
 
         // Add the new control to the form.
         if (control)
@@ -199,27 +193,9 @@ void Container::setLayout(Layout::Type type)
 	}
 }
 
-unsigned int Container::addControl(const char* typeName, const char* styleName)
+unsigned int Container::addControl(Control* control)
 {
-	GP_ASSERT(typeName);
-
-	Form* form = getTopLevelForm();
-	if (!form)
-	{
-		GP_WARN("Attempted to add a new control to an orphaned container.");
-		return 0;
-	}
-
-	Theme* theme = form->getTheme();
-	GP_ASSERT(theme);
-
-	Theme::Style* style = NULL;
-	if (styleName)
-		style = theme->getStyle(styleName);
-	if (!style)
-		style = theme->getStyle(typeName);
-
-	Control* control = ControlFactory::getInstance()->createControl()
+	GP_ASSERT(control);
 
     // Remove the control from its current parent
     if (control->_parent && control->_parent != this)

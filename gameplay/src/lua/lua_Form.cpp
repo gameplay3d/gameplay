@@ -9,6 +9,7 @@
 #include "CheckBox.h"
 #include "Container.h"
 #include "Control.h"
+#include "ControlFactory.h"
 #include "FlowLayout.h"
 #include "Form.h"
 #include "Game.h"
@@ -139,8 +140,10 @@ void luaRegister_Form()
         {"setFont", lua_Form_setFont},
         {"setFontSize", lua_Form_setFontSize},
         {"setHeight", lua_Form_setHeight},
+        {"setId", lua_Form_setId},
         {"setImageColor", lua_Form_setImageColor},
         {"setImageRegion", lua_Form_setImageRegion},
+        {"setLayout", lua_Form_setLayout},
         {"setMargin", lua_Form_setMargin},
         {"setNode", lua_Form_setNode},
         {"setOpacity", lua_Form_setOpacity},
@@ -4801,6 +4804,42 @@ int lua_Form_setHeight(lua_State* state)
     return 0;
 }
 
+int lua_Form_setId(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                Form* instance = getInstance(state);
+                instance->setId(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -4950,6 +4989,42 @@ int lua_Form_setImageRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setLayout(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Layout::Type param1 = (Layout::Type)lua_enumFromString_LayoutType(luaL_checkstring(state, 2));
+
+                Form* instance = getInstance(state);
+                instance->setLayout(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setLayout - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

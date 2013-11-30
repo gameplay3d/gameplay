@@ -16,19 +16,24 @@ Joystick::~Joystick()
         SAFE_DELETE(_outerSize);
 }
 
-Control* Joystick::create(Theme::Style* style, Properties* properties)
+Joystick* Joystick::create(const char* id, Theme::Style* style)
 {
     Joystick* joystick = new Joystick();
-    joystick->initialize(style, properties);
-
+    joystick->_id = id ? id : "";
+    joystick->initialize("Joystick", style, NULL);
     return joystick;
 }
 
-void Joystick::initialize(Theme::Style* style, Properties* properties)
+Control* Joystick::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
+    Joystick* joystick = new Joystick();
+    joystick->initialize("Joystick", style, properties);
+    return joystick;
+}
 
-    Control::initialize(style, properties);
+void Joystick::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Control::initialize(typeName, style, properties);
 
 	if (!properties)
 	{

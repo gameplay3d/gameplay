@@ -114,13 +114,6 @@ public:
     bool isForm() const;
 
     /**
-     * Gets the theme for the form.
-     *
-     * @return The theme for the form.
-     */
-    Theme* getTheme() const;
-
-    /**
      * Attach this form to a node.
      *
      * A form can be drawn as part of the 3-dimensional world if it is attached to a node.
@@ -177,6 +170,11 @@ private:
      * Destructor.
      */
     virtual ~Form();
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Initialize a quad for this form in order to draw it in 3D.
@@ -275,7 +273,6 @@ private:
 
     static bool pollGamepad(Gamepad* gamepad);
 
-    Theme* _theme;                      // The Theme applied to this Form.
     FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad. 
     SpriteBatch* _spriteBatch;
     Node* _node;                        // Node for transforming this Form in world-space.

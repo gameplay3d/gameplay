@@ -137,6 +137,7 @@ class Theme: public Ref
     friend class Control;
     friend class Form;
     friend class Skin;
+    friend class Game;
 
 public:
 
@@ -310,9 +311,6 @@ public:
 
     /**
      * Returns the default theme.
-	 *
-	 * Calling this method increases the reference count of the returned theme,
-	 * so you must ensure you call release() on it when you are finished with it.
      *
      * @return The default theme.
      */
@@ -459,6 +457,11 @@ private:
      * Destructor.
      */
     ~Theme();
+
+    /**
+     * Cleans up any theme related resources when the game shuts down.
+     */
+    static void finalize();
 
     /**
      * Hidden copy assignment operator.

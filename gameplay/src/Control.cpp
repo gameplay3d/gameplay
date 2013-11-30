@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Control.h"
 #include "Form.h"
+#include "Theme.h"
 
 #define BOUNDS_X_PERCENTAGE_BIT 1
 #define BOUNDS_Y_PERCENTAGE_BIT 2
@@ -66,9 +67,15 @@ Control::~Control()
         SAFE_DELETE(_listeners);
     }
 
-    if (_styleOverridden)
+    if (_style)
     {
-        SAFE_DELETE(_style);
+        // Release the style's theme since we addRef'd it in initialize()
+        _style->getTheme()->release();
+
+        if (_styleOverridden)
+        {
+            SAFE_DELETE(_style);
+        }
     }
 }
 
@@ -83,12 +90,49 @@ static Control::AutoSize parseAutoSize(const char* str)
     return Control::AUTO_SIZE_NONE;
 }
 
-void Control::initialize(Theme::Style* style, Properties* properties)
+void Control::initialize(const char* typeName, Theme::Style* style, Properties* properties)
 {
-	_style = style;
+    // Load our theme style
+    if (properties)
+    {
+        // The style passed is in our parent control's style.
+        // Attempt to load our own style from our parent style's theme.
+        const char* styleName = properties->getString("style", typeName);
+        if (style)
+        {
+            // The passed in style is our parent control's style : attempt to load our style from it.
+            _style = style->getTheme()->getStyle(styleName);
+        }
 
-	if (properties)
-	{
+        if (!_style)
+        {
+            // Try loading a style from the default theme
+            _style = Theme::getDefault()->getStyle(styleName);
+        }
+    }
+    else
+    {
+        // No properties passed in - the style passed in was explicity for us.
+        _style = style;
+    }
+
+    if (!_style)
+    {
+        // Search for a style from the default theme that matches this control's name
+        _style = Theme::getDefault()->getStyle(typeName);
+
+        if (!_style)
+        {
+            // No style was found, use an empty style
+            _style = Theme::getDefault()->getEmptyStyle();
+        }
+    }
+
+    // Increase the reference count of the style's theme while we hold the style
+    _style->getTheme()->addRef();
+
+    if (properties)
+    {
 		// Properties not defined by the style.
 		const char * alignmentString = properties->getString("alignment");
 
@@ -827,6 +871,11 @@ bool Control::getTextRightToLeft(State state) const
     return overlay->getTextRightToLeft();
 }
 
+Theme::Style* Control::getStyle() const
+{
+    return _style;
+}
+
 void Control::setStyle(Theme::Style* style)
 {
     if (style != _style)
@@ -837,9 +886,9 @@ void Control::setStyle(Theme::Style* style)
     _style = style;
 }
 
-Theme::Style* Control::getStyle() const
+Theme* Control::getTheme() const
 {
-    return _style;
+    return _style ? _style->getTheme() : NULL;
 }
 
 Control::State Control::getState() const

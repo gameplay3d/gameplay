@@ -15,19 +15,24 @@ ImageControl::~ImageControl()
     SAFE_DELETE(_batch);
 }
 
-Control* ImageControl::create(Theme::Style* style, Properties* properties)
+ImageControl* ImageControl::create(const char* id, Theme::Style* style)
 {
     ImageControl* imageControl = new ImageControl();
-    imageControl->initialize(style, properties);
-
-    imageControl->_focusIndex = -2;
-
+    imageControl->_id = id ? id : "";
+    imageControl->initialize("Image", style, NULL);
     return imageControl;
 }
 
-void ImageControl::initialize(Theme::Style* style, Properties* properties)
+Control* ImageControl::create(Theme::Style* style, Properties* properties)
 {
-	Control::initialize(style, properties);
+    ImageControl* imageControl = new ImageControl();
+    imageControl->initialize("Image", style, properties);
+    return imageControl;
+}
+
+void ImageControl::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+	Control::initialize(typeName, style, properties);
 
 	if (properties)
 	{

@@ -13,6 +13,7 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "TextBox.h"
+#include "Theme.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
 #include "lua_ControlListenerEventType.h"
@@ -76,6 +77,7 @@ void luaRegister_TextBox()
         {"getTextAlignment", lua_TextBox_getTextAlignment},
         {"getTextColor", lua_TextBox_getTextColor},
         {"getTextRightToLeft", lua_TextBox_getTextRightToLeft},
+        {"getTheme", lua_TextBox_getTheme},
         {"getTopLevelForm", lua_TextBox_getTopLevelForm},
         {"getType", lua_TextBox_getType},
         {"getWidth", lua_TextBox_getWidth},
@@ -83,7 +85,6 @@ void luaRegister_TextBox()
         {"getY", lua_TextBox_getY},
         {"getZIndex", lua_TextBox_getZIndex},
         {"hasFocus", lua_TextBox_hasFocus},
-        {"initialize", lua_TextBox_initialize},
         {"isChild", lua_TextBox_isChild},
         {"isContainer", lua_TextBox_isContainer},
         {"isEnabled", lua_TextBox_isEnabled},
@@ -114,6 +115,7 @@ void luaRegister_TextBox()
         {"setFont", lua_TextBox_setFont},
         {"setFontSize", lua_TextBox_setFontSize},
         {"setHeight", lua_TextBox_setHeight},
+        {"setId", lua_TextBox_setId},
         {"setImageColor", lua_TextBox_setImageColor},
         {"setImageRegion", lua_TextBox_setImageRegion},
         {"setInputMode", lua_TextBox_setInputMode},
@@ -2636,6 +2638,50 @@ int lua_TextBox_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_TextBox_getTheme(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTheme();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Theme");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_getTheme - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_TextBox_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
@@ -2883,58 +2929,6 @@ int lua_TextBox_hasFocus(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_TextBox_initialize(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                gameplay::ScriptUtil::LuaArray<Theme::Style> param1 = gameplay::ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false, &param1Valid);
-                if (!param1Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Theme::Style'.");
-                    lua_error(state);
-                }
-
-                // Get parameter 2 off the stack.
-                bool param2Valid;
-                gameplay::ScriptUtil::LuaArray<Properties> param2 = gameplay::ScriptUtil::getObjectPointer<Properties>(3, "Properties", false, &param2Valid);
-                if (!param2Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Properties'.");
-                    lua_error(state);
-                }
-
-                TextBox* instance = getInstance(state);
-                instance->initialize(param1, param2);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_TextBox_initialize - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -4255,6 +4249,42 @@ int lua_TextBox_setHeight(lua_State* state)
     return 0;
 }
 
+int lua_TextBox_setId(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                TextBox* instance = getInstance(state);
+                instance->setId(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextBox_setId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_TextBox_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -5494,6 +5524,34 @@ int lua_TextBox_static_create(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                void* returnPtr = (void*)TextBox::create(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "TextBox");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
@@ -5534,7 +5592,7 @@ int lua_TextBox_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
             lua_error(state);
             break;
         }

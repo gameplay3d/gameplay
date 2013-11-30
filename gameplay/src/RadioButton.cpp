@@ -19,31 +19,47 @@ RadioButton::~RadioButton()
     }
 }
 
+RadioButton* RadioButton::create(const char* id, Theme::Style* style)
+{
+    RadioButton* rb = new RadioButton();
+    rb->_id = id ? id : "";
+    rb->initialize("RadioButton", style, NULL);
+
+    __radioButtons.push_back(rb);
+
+    return rb;
+}
+
 Control* RadioButton::create(Theme::Style* style, Properties* properties)
 {
-    RadioButton* radioButton = new RadioButton();
-    radioButton->initialize(style, properties);
+    RadioButton* rb = new RadioButton();
+    rb->initialize("RadioButton", style, properties);
 
-	if (properties)
-	{
-		properties->getVector2("imageSize", &radioButton->_imageSize);
+    __radioButtons.push_back(rb);
 
-		if (properties->getBool("selected"))
-		{
-			RadioButton::clearSelected(radioButton->_groupId);
-			radioButton->_selected = true;
-		}
+    return rb;
+}
 
-		const char* groupId = properties->getString("group");
-		if (groupId)
-		{
-			radioButton->_groupId = groupId;
-		}
-	}
+void RadioButton::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Button::initialize(typeName, style, properties);
 
-    __radioButtons.push_back(radioButton);
+    if (properties)
+    {
+        properties->getVector2("imageSize", &_imageSize);
 
-    return radioButton;
+        if (properties->getBool("selected"))
+        {
+            RadioButton::clearSelected(_groupId);
+            _selected = true;
+        }
+
+        const char* groupId = properties->getString("group");
+        if (groupId)
+        {
+            _groupId = groupId;
+        }
+    }
 }
 
 bool RadioButton::isSelected() const

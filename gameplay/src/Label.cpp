@@ -12,19 +12,24 @@ Label::~Label()
 {
 }
 
-Control* Label::create(Theme::Style* style, Properties* properties)
+Label* Label::create(const char* id, Theme::Style* style)
 {
     Label* label = new Label();
-	label->initialize(style, properties);
-
-	label->_focusIndex = -2;
-
+    label->_id = id ? id : "";
+    label->initialize("Label", style, NULL);
     return label;
 }
 
-void Label::initialize(Theme::Style* style, Properties* properties)
+Control* Label::create(Theme::Style* style, Properties* properties)
 {
-    Control::initialize(style, properties);
+    Label* label = new Label();
+	label->initialize("Label", style, properties);
+    return label;
+}
+
+void Label::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Control::initialize(typeName, style, properties);
 
 	if (properties)
 	{

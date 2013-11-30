@@ -27,14 +27,14 @@ void SamplesGame::initialize()
     getScriptController()->loadScript("res/common/camera.lua");
 
     // Construct a form for selecting which sample to run.
-    //Theme* theme = Theme::create("res/common/default.theme");
-    //Theme::Style* formStyle = theme->getStyle("basicContainer");
-    //Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
-    //Theme::Style* titleStyle = theme->getStyle("title");
+    Theme* theme = Theme::create("res/common/default.theme");
+    Theme::Style* formStyle = theme->getStyle("basicContainer");
+    Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
+    Theme::Style* titleStyle = theme->getStyle("title");
 
     // Note: this calls addRef() on formStyle's Theme, which we created above.
-    _sampleSelectForm = Form::create("sampleSelect", NULL, Layout::LAYOUT_VERTICAL);
-    //theme->release();   // So we can release it once we're done creating forms with it.
+    _sampleSelectForm = Form::create("sampleSelect", formStyle, Layout::LAYOUT_VERTICAL);
+    theme->release();   // So we can release it once we're done creating forms with it.
 
     _sampleSelectForm->setAutoHeight(true);
     _sampleSelectForm->setWidth(200.0f);
@@ -44,7 +44,7 @@ void SamplesGame::initialize()
     const size_t size = _samples->size();
     for (size_t i = 0; i < size; ++i)
     {
-        Label* categoryLabel = Label::create((*_categories)[i].c_str());// titleStyle);
+        Label* categoryLabel = Label::create((*_categories)[i].c_str(), titleStyle);
         categoryLabel->setAutoWidth(true);
         categoryLabel->setTextAlignment(Font::ALIGN_BOTTOM_LEFT);
         categoryLabel->setHeight(40);
@@ -58,7 +58,7 @@ void SamplesGame::initialize()
         for (size_t j = 0; j < listSize; ++j)
         {
             SampleRecord sampleRecord = list[j];
-            Button* sampleButton = Button::create(sampleRecord.title.c_str());// buttonStyle);
+            Button* sampleButton = Button::create(sampleRecord.title.c_str(), buttonStyle);
             sampleButton->setText(sampleRecord.title.c_str());
             sampleButton->setAutoWidth(true);
             sampleButton->setHeight(60);      // Tall enough to touch easily on a BB10 device.

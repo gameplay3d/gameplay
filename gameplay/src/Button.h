@@ -37,6 +37,19 @@ class Button : public Label
     friend class Gamepad;
     friend class ControlFactory;
 
+public:
+
+    /**
+     * Creates a new Button.
+     *
+     * @param id The button ID.
+     * @param style The button style (optional).
+     *
+     * @return The new button.
+     * @script{create}
+     */
+    static Button* create(const char* id, Theme::Style* style = NULL);
+
 protected:
 
     /**
@@ -58,6 +71,11 @@ protected:
      * @return The new button.
      */
     static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * @see Control::getType

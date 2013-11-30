@@ -30,6 +30,17 @@ class Joystick : public Control
 public:
 
     /**
+     * Creates a new Joystick.
+     *
+     * @param id The joystick ID.
+     * @param style The joystick style.
+     *
+     * @return The new joystick.
+     * @script{create}
+     */
+    static Joystick* create(const char* id, Theme::Style* style = NULL);
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
@@ -133,9 +144,9 @@ protected:
     static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     /**
-     * Initialize this joystick.
+     * @see Control::initialize
      */
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.

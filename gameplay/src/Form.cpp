@@ -31,7 +31,7 @@ Control* Form::_activeControl = NULL;
 Control::State Form::_activeControlState = Control::NORMAL;
 static bool _shiftKeyDown = false;
 
-Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL),
+Form::Form() : _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL),
     _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0)
 {
 }
@@ -40,7 +40,6 @@ Form::~Form()
 {
     SAFE_DELETE(_spriteBatch);
     SAFE_RELEASE(_frameBuffer);
-    SAFE_RELEASE(_theme);
 
     if (__formEffect)
     {
@@ -61,94 +60,72 @@ Form::~Form()
 
 Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
 {
-	Theme* theme;
-	if (style)
-	{
-		theme = style->getTheme();
-	}
-	else
-	{
-		theme = Theme::getDefault();
-		style = theme->getStyle("form");
-	}
-
-	GP_ASSERT(style);
-
-    Layout* layout;
-    switch (layoutType)
-    {
-    case Layout::LAYOUT_ABSOLUTE:
-        layout = AbsoluteLayout::create();
-        break;
-    case Layout::LAYOUT_FLOW:
-        layout = FlowLayout::create();
-        break;
-    case Layout::LAYOUT_VERTICAL:
-        layout = VerticalLayout::create();
-        break;
-    default:
-		layout = AbsoluteLayout::create();
-        GP_WARN("Unsupported layout type '%d'.", layoutType);
-        break;
-    }
-
     Form* form = new Form();
-    if (id)
-        form->_id = id;
-    form->_style = style;
-    form->_layout = layout;
-	form->_theme = theme;
-    form->_theme->addRef();
-
-    form->updateFrameBuffer();
-
-    __forms.push_back(form);
-
+    form->_id = id ? id : "";
+    form->_layout = createLayout(layoutType);
+    form->initialize("Form", style, NULL);
     return form;
 }
 
 Form* Form::create(const char* url)
 {
+    Form* form = new Form();
+
     // Load Form from .form file.
     Properties* properties = Properties::create(url);
-    if (properties == NULL)
+    Properties* formProperties = NULL;
+    if (properties)
     {
-        GP_ASSERT(properties);
-        return NULL;
+        // Check if the Properties is valid and has a valid namespace.
+        formProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
+        if (!formProperties || !(strcmpnocase(formProperties->getNamespace(), "form") == 0))
+        {
+            GP_WARN("Invalid properties file for form: %s", url);
+            SAFE_DELETE(properties);
+        }
+    }
+    if (!properties)
+    {
+        GP_WARN("Failed to load properties file for Form.");
     }
 
-    // Check if the Properties is valid and has a valid namespace.
-    Properties* formProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
-    assert(formProperties);
-    if (!formProperties || !(strcmp(formProperties->getNamespace(), "form") == 0))
+    // Load the form's theme style.
+    Theme* theme = NULL;
+    Theme::Style* style = NULL;
+    if (formProperties->exists("theme"))
     {
-        GP_ASSERT(formProperties);
-        SAFE_DELETE(properties);
-        return NULL;
+        std::string themeFile;
+        if (formProperties->getPath("theme", &themeFile))
+        {
+            theme = Theme::create(themeFile.c_str());
+            if (theme)
+            {
+                // Load the form's style
+                const char* styleName = formProperties->getString("style", "Form");
+                style = theme->getStyle(styleName);
+                if (!style)
+                    style = theme->getEmptyStyle();
+            }
+        }
     }
 
-    // Parse theme
-    std::string themeFile;
-    formProperties->getPath("theme", &themeFile);
-    Theme* theme = Theme::create(themeFile.c_str());
-    GP_ASSERT(theme);
+    // Initialize the form and all of its child controls
+    form->initialize("Form", style, formProperties);
 
-    // Parse style
-    const char* styleName = formProperties->getString("style");
-    Theme::Style* style = styleName ? theme->getStyle(styleName) : theme->getEmptyStyle();
-
-    // Create new form
-    Form* form = new Form();
-    form->_theme = theme;
-
-    // Initialize common container properties
-    form->initialize(style, formProperties);
-
-    form->updateFrameBuffer();
-
-    __forms.push_back(form);
+    // Release the theme: its lifetime is controlled by addRef() and release() calls
+    // in initialize (above) and ~Control.
+    SAFE_RELEASE(theme);
 
     return form;
+}
+
+void Form::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Container::initialize(typeName, style, properties);
+
+    updateFrameBuffer();
+
+    __forms.push_back(this);
 }
 
 Form* Form::getForm(const char* id)
@@ -178,11 +155,6 @@ void Form::clearFocus()
 bool Form::isForm() const
 {
     return true;
-}
-
-Theme* Form::getTheme() const
-{
-    return _theme;
 }
 
 void Form::updateFrameBuffer()
@@ -222,7 +194,7 @@ void Form::updateFrameBuffer()
         Rectangle previousViewport = game->getViewport();
 
         game->setViewport(Rectangle(0, 0, width, height));
-        _theme->setProjectionMatrix(_projectionMatrix);
+        //_theme->setProjectionMatrix(_projectionMatrix);
         game->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0, 0);
 
         previousFrameBuffer->bind();
@@ -385,14 +357,18 @@ unsigned int Form::draw()
         Rectangle prevViewport = game->getViewport();
         game->setViewport(Rectangle(0, 0, _absoluteClipBounds.width, _absoluteClipBounds.height));
 
-        GP_ASSERT(_theme);
-        _theme->setProjectionMatrix(_projectionMatrix);
+        //_theme->setProjectionMatrix(_projectionMatrix);
+        _style->getTheme()->setProjectionMatrix(_projectionMatrix);
 
         // By setting needsClear to true here, an optimization meant to clear and redraw only areas of the form
         // that have changed is disabled.  Currently, repositioning controls can result in areas of the screen being cleared
         // after another control has been drawn there.  This should probably be done in two passes -- one to clear areas where
         // dirty controls were last frame, and another to draw them where they are now.
-        Container::draw(_theme->getSpriteBatch(), _absoluteClipBounds, /*_skin != NULL*/ true, false, _absoluteClipBounds.height);
+
+        // !!! TODO !!!
+        //
+        //Container::draw(_theme->getSpriteBatch(), _absoluteClipBounds, /*_skin != NULL*/ true, false, _absoluteClipBounds.height);
+        Container::draw(_style->getTheme()->getSpriteBatch(), _absoluteClipBounds, /*_skin != NULL*/ true, false, _absoluteClipBounds.height);
 
         // Restore the previous game viewport.
         game->setViewport(prevViewport);

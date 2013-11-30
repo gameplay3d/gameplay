@@ -24,27 +24,39 @@ Slider::~Slider()
 {
 }
 
+Slider* Slider::create(const char* id, Theme::Style* style)
+{
+    Slider* slider = new Slider();
+    slider->_id = id ? id : "";
+    slider->initialize("Slider", style, NULL);
+    return slider;
+}
+
 Control* Slider::create(Theme::Style* style, Properties* properties)
 {
     Slider* slider = new Slider();
-    slider->initialize(style, properties);
-
-	if (properties)
-	{
-		slider->_min = properties->getFloat("min");
-		slider->_max = properties->getFloat("max");
-		slider->_value = properties->getFloat("value");
-		slider->_step = properties->getFloat("step");
-		slider->_valueTextVisible = properties->getBool("valueTextVisible");
-		slider->_valueTextPrecision = properties->getInt("valueTextPrecision");
-
-		if (properties->exists("valueTextAlignment"))
-		{
-			slider->_valueTextAlignment = Font::getJustify(properties->getString("valueTextAlignment"));
-		}
-	}
-
+    slider->initialize("Slider", style, properties);
     return slider;
+}
+
+void Slider::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Label::initialize(typeName, style, properties);
+
+    if (properties)
+    {
+        _min = properties->getFloat("min");
+        _max = properties->getFloat("max");
+        _value = properties->getFloat("value");
+        _step = properties->getFloat("step");
+        _valueTextVisible = properties->getBool("valueTextVisible");
+        _valueTextPrecision = properties->getInt("valueTextPrecision");
+
+        if (properties->exists("valueTextAlignment"))
+        {
+            _valueTextAlignment = Font::getJustify(properties->getString("valueTextAlignment"));
+        }
+    }
 }
 
 void Slider::setMin(float min)
