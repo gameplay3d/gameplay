@@ -97,6 +97,7 @@ Properties* Properties::create(const char* url)
     if (!p)
     {
         GP_WARN("Failed to load properties from url '%s'.", url);
+		SAFE_DELETE(properties);
         return NULL;
     }
 

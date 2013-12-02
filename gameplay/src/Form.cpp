@@ -136,6 +136,8 @@ Form* Form::create(const char* url)
 
     __forms.push_back(form);
 
+	SAFE_DELETE(properties);
+
     return form;
 }
 
