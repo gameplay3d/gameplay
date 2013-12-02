@@ -285,16 +285,14 @@ private:
     PhysicsVehicleWheel(Node* node, const PhysicsCollisionShape::Definition& shape, const PhysicsRigidBody::Parameters& parameters);
 
     /**
-     * Creates a vehicle wheel based on the given rigid body and some 'safe' defaults.
+     * Creates a vehicle wheel based on some 'safe' defaults.
      * Also, traverse up the scene graph until we find the first common ancestor with another node
      * of collision type VEHICLE and add ourself as a wheel onto that vehicle. This assumes that the
      * VEHICLE comes before the VEHICLE_WHEEL in the ".scene" (properties) file.
      * 
-     * @param node The node to create a rigid body for; note that the node must have
-     *      a model attached to it prior to creating a rigid body for it.
-     * @param rigidBody The rigid body.
+     * @param node The node to create a vehicle wheel for.
      */
-    PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody);
+    PhysicsVehicleWheel(Node* node);
 
     /**
      * Private copy constructor to prevent copying.
@@ -380,7 +378,6 @@ private:
      */
     void getWheelPos(Vector3* result) const;
 
-    PhysicsRigidBody* _rigidBody;
     PhysicsVehicle* _host;
     unsigned int _indexInHost;
     Vector3 _initialOffset;
