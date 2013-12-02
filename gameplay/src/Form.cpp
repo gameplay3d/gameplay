@@ -136,6 +136,8 @@ Form* Form::create(const char* url)
 
     __forms.push_back(form);
 
+    SAFE_DELETE(properties);
+
     return form;
 }
 
@@ -601,7 +603,7 @@ Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
             // originally pressed, fire a click event
             if (active->_absoluteClipBounds.contains(newX, newY))
             {
-				if (!active->_parent || !active->_parent->isScrolling())
+                if (!active->_parent || !active->_parent->isScrolling())
                 {
                     active->notifyListeners(Control::Listener::CLICK);
                 }

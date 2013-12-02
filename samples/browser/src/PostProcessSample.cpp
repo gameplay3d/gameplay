@@ -83,6 +83,7 @@ void PostProcessSample::initialize()
 
     // Load game scene from file
     _scene = Scene::load("res/common/duck.gpb");
+    _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 
     // Initialize box model
     _modelNode = _scene->findNode("duck");
