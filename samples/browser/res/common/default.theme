@@ -53,17 +53,20 @@ theme mainMenu
 
         image scrollBarTopCap
         {
-            region = 0, 99, 12, 5
+            //region = 0, 99, 12, 5
+            region = 0, 43, 17, 10
         }
 
         image verticalScrollBar
         {
-            region = 0, 104, 12, 19
+            //region = 0, 104, 12, 19
+            region = 0, 53, 17, 16
         }
 
         image scrollBarBottomCap
         {
-            region = 0, 138, 12, 5
+            //region = 0, 138, 12, 5
+            region = 0, 69, 17, 10
         }
 
         image scrollBarLeftCap
@@ -107,6 +110,106 @@ theme mainMenu
         }
     }
 
+    style Container
+    {
+        stateNormal
+        {
+            imageList = normalImages
+        }
+    }
+
+    skin FormNormal
+    {
+        border
+        {
+            left = 10
+            right = 10
+            top = 10
+            bottom = 10
+        }
+
+        region = 1, 1, 40, 40
+        color = #ffffffff
+    }
+
+    style Form
+    {
+        stateNormal
+        {
+            skin = FormNormal
+            imageList = normalImages
+            font = res/common/arial.gpb
+        }
+    }
+
+    style Label
+    {
+        stateNormal
+        {
+            //textColor = #ccccccff
+            textColor = #ffffffff
+            font = res/common/arial.gpb
+            fontSize = 16
+            textAlignment = ALIGN_VCENTER_LEFT
+            imageList = normalImages
+        }
+    }
+
+    skin ButtonNormal
+    {
+        border
+        {
+            left = 10
+            right = 10
+            top = 10
+            bottom = 10
+        }
+
+        region = 176, 0, 48, 47
+        color = #ffffffff
+    }
+
+    skin ButtonActive
+    {
+        border
+        {
+            left = 10
+            right = 10
+            top = 10
+            bottom = 10
+        }
+
+        region = 176, 47, 48, 47
+        color = #ffffffff
+    }
+
+    style Button : Label
+    {
+        stateNormal
+        {
+            skin = ButtonNormal
+            textAlignment = ALIGN_VCENTER_HCENTER
+        }
+
+        stateActive
+        {
+            skin = ButtonActive
+            textColor = #ffffffff
+            imageList = activeImages
+        }
+
+        stateDisabled
+		{
+			opacity = 0.6
+		}
+    }
+
+
+
+
+
+
+
     skin mainNormal
     {
         border
@@ -118,28 +221,28 @@ theme mainMenu
         }
         
         region = 1, 1, 74, 74
-        color = #4A8799ff
+        color = #ffffffff
     }
 
     skin mainActive : mainNormal
     {
-        color = #C3D9BFff
+        color = #ffffffff
     }
 
 	skin mainFocus : mainNormal
 	{
-		color = #2A6779ff
+		color = #ffffffff
 	}
 
     skin formEntry : mainNormal
     {
         region = 78, 1, 46, 46
-        color = #35535Cff
+        color = #ffffffff
     }
 
 	skin formFocus : formEntry
 	{
-        color = #15333Cff
+        color = #ffffffff
 	}
     
     skin underliner
@@ -156,23 +259,23 @@ theme mainMenu
     skin plusNormal
     {
         region = 81, 139, 40, 40
-        color = #4A8799ff
+        color = #ffffffff
     }
 
     skin plusActive : plusNormal
     {
-        color = #C3D9BFff
+        color = #ffffffff
     }
 
     skin minusNormal
     {
         region = 81, 184, 40, 40
-        color = #4A8799ff
+        color = #ffffffff
     }
 
     skin minusActive : minusNormal
     {
-        color = #C3D9BFff
+        color = #ffffffff
     }
 
     style plus
@@ -260,7 +363,7 @@ theme mainMenu
 		stateFocus
 		{
 			skin = mainNormal
-			textColor = #aaa000ff
+			textColor = #ffffffff
 		}
     }
 
@@ -302,7 +405,7 @@ theme mainMenu
 	{
 		stateHover
 		{
-			textColor = #ff0000ff
+			textColor = #ffffffff
 		}
 	}
 
@@ -319,7 +422,7 @@ theme mainMenu
 		
 		stateFocus
 		{
-			textColor = #aaa000ff
+			textColor = #ffffffff
 		}
 
         stateActive
@@ -386,11 +489,27 @@ theme mainMenu
 
         stateActive
         {
-            textColor = #C3D9BFff
+            textColor = #ffffffff
         }
     }
 
-	style form : basic
-	{
-	}
+    style CheckBox : iconNoBorder
+    {
+    }
+
+    style RadioButton : iconNoBorder
+    {
+    }
+
+    style Slider : topLeftNoBorder
+    {
+    }
+
+    style TextBox : topLeftAlignedEntry
+    {
+    }
+
+    style Image
+    {
+    }
 }

@@ -1,8 +1,6 @@
 form formSelect
 {
-    theme = res/common/default.theme
     layout = LAYOUT_VERTICAL
-    style = basicContainer
     alignment = ALIGN_TOP_LEFT
     width = 200
     autoHeight = true
@@ -10,7 +8,7 @@ form formSelect
 
 	radioButton form0
 	{
-		style = basic
+		style = Button
 		text = Basic Controls
 		group = formSelection
 		size = 180, 60

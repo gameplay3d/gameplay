@@ -382,7 +382,7 @@ protected:
      * @param cleared Whether it was previously cleared
      * @param targetHeight The targets height
      */
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight);
 
     /**
      * Update scroll position and velocity.

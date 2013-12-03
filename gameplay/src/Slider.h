@@ -236,10 +236,9 @@ protected:
     bool keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
-     * Slider overrides draw() so that it can avoid resetting the _dirty flag
-     * when a joystick is being used to change its value.
+     * @see Control::draw
      */
-    void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
+    void draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight);
 
     /**
      * Draw the images associated with this control.

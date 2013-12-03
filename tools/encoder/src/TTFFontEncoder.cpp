@@ -110,7 +110,7 @@ unsigned char* createDistanceFields(unsigned char* img, unsigned int width, unsi
 int writeFont(const char* inFilePath, const char* outFilePath, unsigned int fontSize, const char* id, bool fontpreview = false, Font::FontFormat fontFormat = Font::BITMAP)
 {
     TTFGlyph glyphArray[END_INDEX - START_INDEX];
-    
+
     // Initialize freetype library.
     FT_Library library;
     FT_Error error = FT_Init_FreeType(&library);
@@ -119,7 +119,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         LOG(1, "FT_Init_FreeType error: %d \n", error);
         return -1;
     }
-    
+
     // Initialize font face.
     FT_Face face;
     error = FT_New_Face(library, inFilePath, 0, &face);
@@ -128,46 +128,75 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         LOG(1, "FT_New_Face error: %d \n", error);
         return -1;
     }
-    
-    // Set the pixel size.  char_width in 1/64th of points.
-    error = FT_Set_Char_Size(  face,  0, fontSize * 64, 0, 0 ); 
-    
-    if (error)
-    {
-        LOG(1, "FT_Set_Char_Size error: %d \n", error);
-        return -1;
-    }
 
-    // Save glyph information (slot contains the actual glyph bitmap).
-    FT_GlyphSlot slot = face->glyph;
     int actualfontHeight = 0;
-    // Stores the total number of rows required to all glyphs.
+
+    // Stores final height of a row required to render all glyphs
     int rowSize = 0;
-    
-    // Find the width of the image.
-    for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
+
+    FT_GlyphSlot slot = NULL;
+    //FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
+    FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;// | FT_LOAD_MONOCHROME;
+    //FT_Int32 loadFlags = FT_LOAD_NO_SCALE;
+
+    // We want to generate fonts that fit exactly the requested pixels size.
+    // Since free type (due to modern fonts) does not directly correlate requested
+    // size to glyph size, we'll brute-force attempt to set the largest font size
+    // possible that will fit within the requested pixel size.
+    for (unsigned int requestedSize = fontSize; requestedSize > 0; --requestedSize)
     {
-        // Load glyph image into the slot (erase previous one)
-        FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
-        error = FT_Load_Char(face, ascii, loadFlags);
+        // Set the pixel size.
+        //error = FT_Set_Char_Size( face, 0, requestedSize );
+        error = FT_Set_Char_Size( face, 0, requestedSize * 64, 0, 0 );
         if (error)
         {
-            LOG(1, "FT_Load_Char error : %d \n", error);
+            LOG(1, "FT_Set_Pixel_Sizes error: %d \n", error);
+            return -1;
         }
-        
-        int bitmapRows = slot->bitmap.rows;
-        actualfontHeight = (actualfontHeight < bitmapRows) ? bitmapRows : actualfontHeight;
-        
-        if (slot->bitmap.rows > slot->bitmap_top)
+
+        // Save glyph information (slot contains the actual glyph bitmap).
+        slot = face->glyph;
+
+        rowSize = 0;
+        actualfontHeight = 0;
+
+        // Find the width of the image.
+        for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
         {
-            bitmapRows += (slot->bitmap.rows - slot->bitmap_top);
+            // Load glyph image into the slot (erase previous one)
+            error = FT_Load_Char(face, ascii, loadFlags);
+            if (error)
+            {
+                LOG(1, "FT_Load_Char error : %d \n", error);
+            }
+
+            int bitmapRows = slot->bitmap.rows;
+            actualfontHeight = (actualfontHeight < bitmapRows) ? bitmapRows : actualfontHeight;
+
+            if (slot->bitmap.rows > slot->bitmap_top)
+            {
+                bitmapRows += (slot->bitmap.rows - slot->bitmap_top);
+            }
+            rowSize = (rowSize < bitmapRows) ? bitmapRows : rowSize;
         }
-        rowSize = (rowSize < bitmapRows) ? bitmapRows : rowSize;
+
+        // Have we found a pixel size that fits?
+        if (rowSize <= (int)fontSize)
+        {
+            rowSize = fontSize;
+            break;
+        }
+    }
+
+    if (slot == NULL)
+    {
+        LOG(1, "Cannot generate a font of the requested size.");
+        return -1;
     }
 
     // Include padding in the rowSize.
     rowSize += GLYPH_PADDING;
-    
+
     // Initialize with padding.
     int penX = 0;
     int penY = 0;
@@ -194,7 +223,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
         {
             // Load glyph image into the slot (erase the previous one).
-            error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
+            error = FT_Load_Char(face, ascii, loadFlags);
             if (error)
             {
                 LOG(1, "FT_Load_Char error : %d \n", error);
@@ -259,7 +288,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
     {
         // Load glyph image into the slot (erase the previous one).
-        error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
+        error = FT_Load_Char(face, ascii, loadFlags);
         if (error)
         {
             LOG(1, "FT_Load_Char error : %d \n", error);
@@ -297,18 +326,18 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
 
         glyphArray[i].index = ascii;
         glyphArray[i].width = advance - GLYPH_PADDING;
-        
+
         // Generate UV coords.
         glyphArray[i].uvCoords[0] = (float)penX / (float)imageWidth;
         glyphArray[i].uvCoords[1] = (float)penY / (float)imageHeight;
         glyphArray[i].uvCoords[2] = (float)(penX + advance - GLYPH_PADDING) / (float)imageWidth;
-        glyphArray[i].uvCoords[3] = (float)(penY + rowSize) / (float)imageHeight;
+        glyphArray[i].uvCoords[3] = (float)(penY + rowSize - GLYPH_PADDING) / (float)imageHeight;
 
         // Set the pen position for the next glyph
         penX += advance;
         i++;
     }
-    
+
     // File header and version.
     FILE *gpbFp = fopen(outFilePath, "wb");    
     char fileHeader[9]     = {'\xAB', 'G', 'P', 'B', '\xBB', '\r', '\n', '\x1A', '\n'};
@@ -328,17 +357,17 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     // TODO: Switch based on TTF style name and write appropriate font style unsigned int for now just hardcoding to 0 = PLAIN.
     writeUint(gpbFp, 0);
 
-    // Font size.
-    writeUint(gpbFp, rowSize);
+    // Font size (pixels).
+    writeUint(gpbFp, rowSize - GLYPH_PADDING);
 
     // Character set. TODO: Empty for now
     writeString(gpbFp, "");
-    
+
     // Glyphs.
     unsigned int glyphSetSize = END_INDEX - START_INDEX;
     writeUint(gpbFp, glyphSetSize);
     fwrite(&glyphArray, sizeof(TTFGlyph), glyphSetSize, gpbFp);
-    
+
     // Image dimensions
     unsigned int imageSize = imageWidth * imageHeight;
     writeUint(gpbFp, imageWidth);

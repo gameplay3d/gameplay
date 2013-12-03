@@ -1125,7 +1125,7 @@ protected:
      * @param cleared Whether it was previously cleared
      * @param targetHeight The targets height
      */
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
+    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight);
 
     /**
      * Initializes the control.
@@ -1234,11 +1234,6 @@ protected:
      * Absolute bounds of content area (i.e. without border and padding), after clipping.
      */
     Rectangle _viewportClipBounds;
-
-    /**
-     * Previous frame's absolute clip bounds, to be cleared if necessary.
-     */
-    Rectangle _clearBounds;         
 
     /**
      * If the control is dirty and need updating.

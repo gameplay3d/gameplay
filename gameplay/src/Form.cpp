@@ -31,16 +31,12 @@ Control* Form::_activeControl = NULL;
 Control::State Form::_activeControlState = Control::NORMAL;
 static bool _shiftKeyDown = false;
 
-Form::Form() : _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL),
-    _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0)
+Form::Form() : _node(NULL), _u2(0), _v1(0)
 {
 }
 
 Form::~Form()
 {
-    SAFE_DELETE(_spriteBatch);
-    SAFE_RELEASE(_frameBuffer);
-
     if (__formEffect)
     {
         if (__formEffect->getRefCount() == 1)
@@ -56,15 +52,6 @@ Form::~Form()
     {
         __forms.erase(it);
     }
-}
-
-Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
-{
-    Form* form = new Form();
-    form->_id = id ? id : "";
-    form->_layout = createLayout(layoutType);
-    form->initialize("Form", style, NULL);
-    return form;
 }
 
 Form* Form::create(const char* url)
@@ -119,11 +106,18 @@ Form* Form::create(const char* url)
     return form;
 }
 
+Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
+{
+	Form* form = new Form();
+	form->_id = id ? id : "";
+	form->_layout = createLayout(layoutType);
+	form->initialize("Form", style, NULL);
+	return form;
+}
+
 void Form::initialize(const char* typeName, Theme::Style* style, Properties* properties)
 {
     Container::initialize(typeName, style, properties);
-
-    updateFrameBuffer();
 
     __forms.push_back(this);
 }
@@ -157,54 +151,6 @@ bool Form::isForm() const
     return true;
 }
 
-void Form::updateFrameBuffer()
-{
-    float width = _absoluteClipBounds.width;
-    float height = _absoluteClipBounds.height;
-
-    SAFE_RELEASE(_frameBuffer);
-    SAFE_DELETE(_spriteBatch);
-
-    if (width != 0.0f && height != 0.0f)
-    {
-        // Width and height must be powers of two to create a texture.
-        unsigned int w = nextPowerOfTwo(width);
-        unsigned int h = nextPowerOfTwo(height);
-        _u2 = width / (float)w;
-        _v1 = height / (float)h;
-        
-        _frameBuffer = FrameBuffer::create(_id.c_str(), w, h);
-        GP_ASSERT(_frameBuffer);
-
-        // Re-create projection matrix for drawing onto framebuffer
-        Matrix::createOrthographicOffCenter(0, width, height, 0, 0, 1, &_projectionMatrix);
-
-        // Re-create sprite batch
-        _spriteBatch = SpriteBatch::create(_frameBuffer->getRenderTarget()->getTexture());
-        GP_ASSERT(_spriteBatch);
-
-        // Compute full-viewport ortho matrix for drawing frame buffer onto screen
-        Matrix viewportProjection;
-        Matrix::createOrthographicOffCenter(0, Game::getInstance()->getViewport().width, Game::getInstance()->getViewport().height, 0, 0, 1, &viewportProjection);
-        _spriteBatch->setProjectionMatrix(viewportProjection);
-
-        // Clear the framebuffer black
-        Game* game = Game::getInstance();
-        FrameBuffer* previousFrameBuffer = _frameBuffer->bind();
-        Rectangle previousViewport = game->getViewport();
-
-        game->setViewport(Rectangle(0, 0, width, height));
-        //_theme->setProjectionMatrix(_projectionMatrix);
-        game->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0, 0);
-
-        previousFrameBuffer->bind();
-        game->setViewport(previousViewport);
-
-        // Force any attached node to be updated
-        setNode(_node);
-    }
-}
-
 static Effect* createEffect()
 {
     Effect* effect = NULL;
@@ -227,72 +173,6 @@ static Effect* createEffect()
 
 void Form::setNode(Node* node)
 {
-    // If we were already attached to a node, remove ourself from it
-    if (_node)
-    {
-        _node->setModel(NULL);
-        _nodeQuad = NULL;
-        _nodeMaterial = NULL;
-        _node = NULL;
-    }
-
-    if (node)
-    {
-        // Set this Form up to be 3D by initializing a quad.
-        float x2 = _absoluteBounds.width;
-        float y2 = _absoluteBounds.height;
-        float vertices[] =
-        {
-            0, y2, 0,   0, _v1,
-            0, 0, 0,    0, 0,
-            x2, y2, 0,  _u2, _v1,
-            x2, 0, 0,   _u2, 0
-        };
-        VertexFormat::Element elements[] =
-        {
-            VertexFormat::Element(VertexFormat::POSITION, 3),
-            VertexFormat::Element(VertexFormat::TEXCOORD0, 2)
-        };
-        Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 2), 4, false);
-        GP_ASSERT(mesh);
-        mesh->setPrimitiveType(Mesh::TRIANGLE_STRIP);
-        mesh->setVertexData(vertices, 0, 4);
-
-        _nodeQuad = Model::create(mesh);
-        SAFE_RELEASE(mesh);
-        GP_ASSERT(_nodeQuad);
-
-        // Create the effect and material
-        Effect* effect = createEffect();
-        GP_ASSERT(effect);
-        _nodeMaterial = Material::create(effect);
-
-        GP_ASSERT(_nodeMaterial);
-        _nodeQuad->setMaterial(_nodeMaterial);
-        _nodeMaterial->release();
-        node->setModel(_nodeQuad);
-        _nodeQuad->release();
-
-        // Bind the WorldViewProjection matrix.
-        _nodeMaterial->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
-
-        // Bind the texture from the framebuffer and set the texture to clamp
-        if (_frameBuffer)
-        {
-            Texture::Sampler* sampler = Texture::Sampler::create(_frameBuffer->getRenderTarget()->getTexture());
-            GP_ASSERT(sampler);
-            sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
-            _nodeMaterial->getParameter("u_texture")->setValue(sampler);
-            sampler->release();
-        }
-
-        RenderState::StateBlock* rsBlock = _nodeMaterial->getStateBlock();
-        rsBlock->setDepthWrite(true);
-        rsBlock->setBlend(true);
-        rsBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
-        rsBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
-    }
-
     _node = node;
 }
 
@@ -328,68 +208,38 @@ void Form::update(const Control* container, const Vector2& offset)
     Container::update(container, offset);
 
     _layout->align(this, NULL);
-
-    if (_absoluteClipBounds.width != oldAbsoluteClipBounds.width || _absoluteClipBounds.height != oldAbsoluteClipBounds.height)
-    {
-        updateFrameBuffer();
-    }
 }
 
 unsigned int Form::draw()
 {
-    if (!_visible || !_frameBuffer)
+    if (!_visible || _absoluteClipBounds.width == 0 || _absoluteClipBounds.height == 0)
         return 0;
 
-    // The first time a form is drawn, its contents are rendered into a framebuffer.
-    // The framebuffer will only be drawn into again when the contents of the form change.
-    // If this form has a node then it's a 3D form and the framebuffer will be used
-    // to texture a quad.  The quad will be given the same dimensions as the form and
-    // must be transformed appropriately by the user, unless they call setQuad() themselves.
-    // On the other hand, if this form has not been set on a node, SpriteBatch will be used
-    // to render the contents of the framebuffer directly to the display.
-
-    // Check whether this form has changed since the last call to draw() and if so, render into the framebuffer.
-    if (isDirty())
-    {
-        FrameBuffer* previousFrameBuffer = _frameBuffer->bind();
-
-        Game* game = Game::getInstance();
-        Rectangle prevViewport = game->getViewport();
-        game->setViewport(Rectangle(0, 0, _absoluteClipBounds.width, _absoluteClipBounds.height));
-
-        //_theme->setProjectionMatrix(_projectionMatrix);
-        _style->getTheme()->setProjectionMatrix(_projectionMatrix);
-
-        // By setting needsClear to true here, an optimization meant to clear and redraw only areas of the form
-        // that have changed is disabled.  Currently, repositioning controls can result in areas of the screen being cleared
-        // after another control has been drawn there.  This should probably be done in two passes -- one to clear areas where
-        // dirty controls were last frame, and another to draw them where they are now.
-
-        // !!! TODO !!!
-        //
-        //Container::draw(_theme->getSpriteBatch(), _absoluteClipBounds, /*_skin != NULL*/ true, false, _absoluteClipBounds.height);
-        Container::draw(_style->getTheme()->getSpriteBatch(), _absoluteClipBounds, /*_skin != NULL*/ true, false, _absoluteClipBounds.height);
-
-        // Restore the previous game viewport.
-        game->setViewport(prevViewport);
-        // Rebind the previous framebuffer and game viewport.
-        previousFrameBuffer->bind();
-    }
-
-    // Draw either with a 3D quad or sprite batch.
     if (_node)
     {
-         // If we have the node set, then draw a 3D quad model.
-        _nodeQuad->draw();
+        // TODO: Create a perspective projection matrix based off the node's camera
+        GP_WARN("TODO: Support forms attached to nodes.");
     }
     else
     {
-        // Otherwise we draw the framebuffer in ortho space with a spritebatch.
-        _spriteBatch->start();
-        _spriteBatch->draw(_bounds.x, _bounds.y, 0, _bounds.width, _bounds.height, 0, _v1, _u2, 0, Vector4::one());
-        _spriteBatch->finish();
+        // Create an orthographic projection mapped to the current viewport
+        const Rectangle& viewport = Game::getInstance()->getViewport();
+        Matrix::createOrthographicOffCenter(0, viewport.width, viewport.height, 0, 0, 1, &_projectionMatrix);
     }
-    return 2;
+
+    _style->getTheme()->setProjectionMatrix(_projectionMatrix);
+
+    // TODO: Maintain multiple sprite batches (for different styles/themes and fonts) and start/top them all as neccessary
+    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+    //batch->start();
+
+    // Draw the form
+    Container::draw(batch, _absoluteClipBounds, _absoluteClipBounds.height);
+
+    //batch->finish();
+
+    // TODO: We should return the actual number of draw calls here (number fo batches flushed)
+    return 1;
 }
 
 const char* Form::getType() const
@@ -430,16 +280,13 @@ bool Form::screenToForm(Control* ctrl, int* x, int* y)
             if (form->projectPoint(*x, *y, &point))
             {
                 *x = (int)point.x;
-                *y = form->_bounds.height - (int)point.y;
+                *y = form->_absoluteBounds.height - (int)point.y;
             }
             else
             {
                 return false;
             }
         }
-
-        *x -= form->_bounds.x;
-        *y -= form->_bounds.y;
 
         return true;
     }
@@ -496,9 +343,9 @@ Control* Form::findInputControl(Control* control, int x, int y, bool focus)
     if (control->isContainer())
     {
         Container* container = static_cast<Container*>(control);
-        for (int i = (int)container->getControlCount() - 1; i >= 0; --i)
+        for (unsigned int i = 0, childCount = container->getControlCount(); i < childCount; ++i)
         {
-            Control* ctrl = findInputControl(container->getControl((unsigned int)i), x, y, focus);
+            Control* ctrl = findInputControl(container->getControl(i), x, y, focus);
             if (ctrl)
                 result = ctrl;
         }
@@ -1037,14 +884,6 @@ void Form::resizeEventInternal(unsigned int width, unsigned int height)
         Form* form = __forms[i];
         if (form)
         {
-            if (form->_spriteBatch)
-            {
-                // Update viewport projection matrix
-                Matrix viewportProjection;
-                Matrix::createOrthographicOffCenter(0, Game::getInstance()->getViewport().width, Game::getInstance()->getViewport().height, 0, 0, 1, &viewportProjection);
-                form->_spriteBatch->setProjectionMatrix(viewportProjection);
-            }
-
             // Dirty the form
             form->_dirty = true;
         }
@@ -1093,24 +932,6 @@ bool Form::projectPoint(int x, int y, Vector3* point)
         }
     }
     return false;
-}
-
-unsigned int Form::nextPowerOfTwo(unsigned int v)
-{
-    if (!((v & (v - 1)) == 0))
-    {
-        v--;
-        v |= v >> 1;
-        v |= v >> 2;
-        v |= v >> 4;
-        v |= v >> 8;
-        v |= v >> 16;
-        return v + 1;
-    }
-    else
-    {
-        return v;
-    }
 }
 
 void Form::controlDisabled(Control* control)

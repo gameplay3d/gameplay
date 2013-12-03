@@ -96,7 +96,7 @@ void LightSample::initialize()
 	_model->setMaterial(_lighting);
 
     // Create and initialize ui form
-	_form = Form::create("res/common/light.form");
+    _form = Form::create("res/common/light.form");
     _properties = static_cast<Container*>(_form->getControl("lightProperties"));
 	_redSlider = static_cast<Slider*>(_form->getControl("redSlider"));
 	_redSlider->addListener(this, Control::Listener::VALUE_CHANGED);

@@ -5,7 +5,6 @@
 #include "Container.h"
 #include "Mesh.h"
 #include "Node.h"
-#include "FrameBuffer.h"
 #include "Touch.h"
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -79,8 +78,8 @@ public:
 	 * form will inherit the theme that contains the form's style.
      *
      * @param id The Form's ID.
-     * @param style The Form's custom style (optional).
-     * @param layoutType The form's layout type.
+     * @param style The Form's custom style (optional - may be NULL).
+	 * @param layoutType The form's layout type (optional).
      *
      * @return The new Form.
      * @script{create}
@@ -117,9 +116,6 @@ public:
      * Attach this form to a node.
      *
      * A form can be drawn as part of the 3-dimensional world if it is attached to a node.
-     * The form's contents will be rendered into a framebuffer which will be used to texture a quad.
-     * This quad will be given the same dimensions as the form and must be transformed appropriately.
-     * Alternatively, a quad can be set explicitly on a form with the setQuad() methods.
      *
      * @param node The node to attach this form to.
      */
@@ -227,15 +223,6 @@ private:
     static void resizeEventInternal(unsigned int width, unsigned int height);
 
     /**
-     * Get the next highest power of two of an integer.  Used when creating framebuffers.
-     *
-     * @param x The number to start with.
-     *
-     * @return The next highest power of two after x, or x if it is already a power of two.
-     */
-    static unsigned int nextPowerOfTwo(unsigned int x);
-
-    /**
      * Unproject a point (from a mouse or touch event) into the scene and then project it onto the form.
      *
      * @param x The x coordinate of the mouse/touch point.
@@ -245,11 +232,6 @@ private:
      * @return True if the projected point lies within the form's plane, false otherwise.
      */
     bool projectPoint(int x, int y, Vector3* point);
-
-    /**
-     * Called when the form is resized to update its internal frame buffer.
-     */
-    void updateFrameBuffer();
 
     static bool pointerEventInternal(bool mouse, int evt, int x, int y, int param);
 
@@ -273,11 +255,7 @@ private:
 
     static bool pollGamepad(Gamepad* gamepad);
 
-    FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad. 
-    SpriteBatch* _spriteBatch;
     Node* _node;                        // Node for transforming this Form in world-space.
-    Model* _nodeQuad;                   // Quad for rendering this Form in 3d space.
-    Material* _nodeMaterial;            // Material for rendering this Form in 3d space.
     float _u2;
     float _v1;
     Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.

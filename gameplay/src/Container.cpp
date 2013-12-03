@@ -607,43 +607,21 @@ void Container::update(const Control* container, const Vector2& offset)
     }
 }
 
-void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
+void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight)
 {
-    if (needsClear)
-    {
-        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        float clearY = targetHeight - _clearBounds.y - _clearBounds.height;
-        GL_ASSERT( glScissor(_clearBounds.x, clearY, _clearBounds.width, _clearBounds.height) );
-        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
-        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
-        needsClear = false;
-        cleared = true;
-    }
-    else if (!cleared)
-    {
-        needsClear = true;
-    }
-
     if (!_visible)
-    {
-        _dirty = false;
         return;
-    }
 
     spriteBatch->start();
     Control::drawBorder(spriteBatch, clip);
     spriteBatch->finish();
 
-    std::vector<Control*>::const_iterator it;
-    Rectangle boundsUnion = Rectangle::empty();
-    for (it = _controls.begin(); it < _controls.end(); it++)
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
     {
-        Control* control = *it;
-        GP_ASSERT(control);
-        if (!needsClear || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
+        Control* control = _controls[i];
+        if (control && control->_absoluteClipBounds.intersects(_absoluteClipBounds))
         {
-            control->draw(spriteBatch, _viewportClipBounds, needsClear, cleared, targetHeight);
-            Rectangle::combine(control->_clearBounds, boundsUnion, &boundsUnion);
+            control->draw(spriteBatch, _viewportClipBounds, targetHeight);
         }
     }
 
@@ -1346,7 +1324,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             if (_scrollBarVertical)
             {
                 float vWidth = _scrollBarVertical->getRegion().width;
-                Rectangle vBounds(_viewportBounds.x + _viewportBounds.width,
+                Rectangle vBounds(_viewportBounds.right() - _absoluteBounds.x,
                                  _scrollBarBounds.y,
                                  vWidth, _scrollBarBounds.height);
 

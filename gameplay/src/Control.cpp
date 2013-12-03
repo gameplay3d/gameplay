@@ -47,7 +47,7 @@ static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percenta
 
 Control::Control()
     : _id(""), _enabled(true), _boundsBits(0), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false),
-    _autoWidth(AUTO_SIZE_NONE), _autoHeight(AUTO_SIZE_NONE), _listeners(NULL), _visible(true), _zIndex(-1),
+    _autoWidth(AUTO_SIZE_NONE), _autoHeight(AUTO_SIZE_NONE), _style(NULL), _listeners(NULL), _visible(true), _zIndex(-1),
     _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
@@ -1099,13 +1099,22 @@ void Control::controlEvent(Control::Listener::EventType evt)
 void Control::update(const Control* container, const Vector2& offset)
 {
     Game* game = Game::getInstance();
+
     const Rectangle parentAbsoluteBounds = container ? container->_viewportBounds : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
-    const Rectangle parentAbsoluteClip = container ? container->getClip() : parentAbsoluteBounds;
+    const Rectangle parentAbsoluteClip = container ? container->_viewportClipBounds : parentAbsoluteBounds;
 
-    // Store previous absolute clip bounds
-    _clearBounds.set(_absoluteClipBounds);
+    const Theme::Border& border = getBorder(getState());
+    const Theme::Padding& padding = getPadding();
 
-    // Calculate local un-clipped bounds.
+    // Compute content are padding values
+    float lpadding = border.left + padding.left;
+    float rpadding = border.right + padding.right;
+    float tpadding = border.top + padding.top;
+    float bpadding = border.bottom + padding.bottom;
+    float hpadding = lpadding + rpadding;
+    float vpadding = tpadding + bpadding;
+
+    // Calculate local unclipped bounds.
     _bounds.set(_relativeBounds);
     if (isXPercentage())
         _bounds.x *= parentAbsoluteBounds.width;
@@ -1120,9 +1129,43 @@ void Control::update(const Control* container, const Vector2& offset)
     else if (isHeightPercentage())
         _bounds.height *= parentAbsoluteBounds.height;
 
-    float x, y, width, height, clipX2, x2, clipY2, y2;
+    // Calculate absolute unclipped bounds
+    _absoluteBounds.set(
+        parentAbsoluteBounds.x + offset.x + _bounds.x,
+        parentAbsoluteBounds.y + offset.y + _bounds.y,
+        _bounds.width,
+        _bounds.height);
+
+    // Calculate absolute clipped bounds
+    /*_absoluteClipBounds.x = min(max(_absoluteBounds.x, parentAbsoluteClip.x), _absoluteBounds.right());
+    _absoluteClipBounds.y = min(max(_absoluteBounds.y, parentAbsoluteClip.y), _absoluteBounds.bottom());
+    _absoluteClipBounds.width = max(min(_absoluteBounds.right(), parentAbsoluteClip.right()) - _absoluteClipBounds.x, 0.0f);
+    _absoluteClipBounds.height = max(min(_absoluteBounds.bottom(), parentAbsoluteClip.bottom()) - _absoluteClipBounds.y, 0.0f);*/
+    Rectangle::intersect(_absoluteBounds, parentAbsoluteClip, &_absoluteClipBounds);
 
     // Calculate the local clipped bounds
+    _clipBounds.set(
+        max(_absoluteClipBounds.x - _absoluteBounds.x, 0.0f),
+        max(_absoluteClipBounds.y - _absoluteBounds.y, 0.0f),
+        _absoluteClipBounds.width,
+        _absoluteClipBounds.height
+        );
+
+    // Calculate the absolute unclipped viewport bounds (content area, which does not include border and padding)
+    _viewportBounds.set(
+        _absoluteBounds.x + lpadding,
+        _absoluteBounds.y + tpadding,
+        _absoluteBounds.width - hpadding,
+        _absoluteBounds.height - vpadding);
+
+    // Calculate the absolute clipped viewport bounds
+    Rectangle::intersect(_viewportBounds, parentAbsoluteClip, &_viewportClipBounds);
+
+    /*float x, y, width, height, clipX2, x2, clipY2, y2;
+
+    // Calculate the local clipped bounds
+    const Theme::Border& border = getBorder(getState());
+    const Theme::Padding& padding = getPadding();
     width = _bounds.width;
     height = _bounds.height;
     if (container)
@@ -1134,8 +1177,8 @@ void Control::update(const Control* container, const Vector2& offset)
     }
     else
     {
-        x = 0;
-        y = 0;
+        x = border.left + padding.left;
+        y = border.top + padding.top;
         x2 = width;
         y2 = height;
     }
@@ -1165,45 +1208,27 @@ void Control::update(const Control* container, const Vector2& offset)
     {
         y = 0;
     }
-
     _clipBounds.set(x, y, width, height);
-
-    // Calculate absolute bounds un-clipped bounds
-    if (container)
-    {
-        x = _bounds.x + offset.x + parentAbsoluteBounds.x;
-        y = _bounds.y + offset.y + parentAbsoluteBounds.y;
-    }
-    else
-    {
-        x = 0;
-        y = 0;
-    }
-    _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
+    */
 
     // Calculate the absolute viewport bounds (content area, which does not include border and padding)
-    // Absolute bounds minus border and padding.
-    const Theme::Border& border = getBorder(getState());
-    const Theme::Padding& padding = getPadding();
-    x += border.left + padding.left;
+    /*x += border.left + padding.left;
     y += border.top + padding.top;
     width = _bounds.width - border.left - padding.left - border.right - padding.right;
     height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
-    _viewportBounds.set(x, y, width, height);
+    _viewportBounds.set(x, y, width, height);*/
 
-    // Calculate the clip area.
-    // Absolute bounds, minus border and padding,
-    // clipped to the parent container's clip area.
-    if (container)
-    {
+    // Calculate the clipped viewport bounds (clipped content area).
+    //if (container)
+    /*{
         clipX2 = parentAbsoluteClip.x + parentAbsoluteClip.width;
         clipY2 = parentAbsoluteClip.y + parentAbsoluteClip.height;
     }
-    else
-    {
-        clipX2 = parentAbsoluteClip.width;
-        clipY2 = parentAbsoluteClip.height;
-    }
+    //else
+    //{
+        //clipX2 = parentAbsoluteClip.width;
+        //clipY2 = parentAbsoluteClip.height;
+    //}
     x2 = x + width;
     if (x2 > clipX2)
         width = clipX2 - x;
@@ -1226,14 +1251,7 @@ void Control::update(const Control* container, const Vector2& offset)
     }
 
     _viewportClipBounds.set(x, y, width, height);
-
-    width += border.left + padding.left + border.right + padding.right;
-    height += border.top + padding.top + border.bottom + padding.bottom;
-    _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top, max(width, 0.0f), max(height, 0.0f));
-    if (_clearBounds.isEmpty())
-    {
-        _clearBounds.set(_absoluteClipBounds);
-    }
+    */
 
     // Cache themed attributes for performance.
     _skin = getSkin(getState());
@@ -1313,21 +1331,10 @@ void Control::drawText(const Rectangle& position)
 {
 }
 
-void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
+void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight)
 {
-    if (needsClear)
-    {
-        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height, _clearBounds.width, _clearBounds.height) );
-        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
-        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
-    }
-
     if (!_visible)
-    {
-        _dirty = false;
         return;
-    }
 
     spriteBatch->start();
     drawBorder(spriteBatch, clip);
@@ -1335,7 +1342,6 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
     spriteBatch->finish();
 
     drawText(clip);
-    _dirty = false;
 }
 
 bool Control::isDirty()

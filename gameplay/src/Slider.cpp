@@ -388,21 +388,10 @@ void Slider::update(const Control* container, const Vector2& offset)
     }
 }
 
-void Slider::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
+void Slider::draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight)
 {
-    if (needsClear)
-    {
-        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height, _clearBounds.width, _clearBounds.height) );
-        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
-        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
-    }
-
     if (!_visible)
-    {
-        _dirty = false;
         return;
-    }
 
     spriteBatch->start();
     drawBorder(spriteBatch, clip);
@@ -410,10 +399,6 @@ void Slider::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCle
     spriteBatch->finish();
 
     drawText(clip);
-    if (_delta == 0.0f)
-    {
-        _dirty = false;
-    }
 }
 
 void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
