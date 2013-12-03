@@ -196,19 +196,6 @@ set(GAMEPLAY_SRC
     src/ScriptTarget.h
     src/Slider.cpp
     src/Slider.h
-    src/SocialAchievement.cpp
-    src/SocialAchievement.h
-    src/SocialChallenge.cpp
-    src/SocialChallenge.h
-    src/SocialController.cpp
-    src/SocialController.h
-    src/SocialPlayer.cpp
-    src/SocialPlayer.h
-    src/SocialScore.cpp
-    src/SocialScore.h
-    src/SocialSession.h
-    src/SocialSessionListener.cpp
-    src/SocialSessionListener.h
     src/SpriteBatch.cpp
     src/SpriteBatch.h
     src/Technique.cpp

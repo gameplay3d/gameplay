@@ -92,12 +92,6 @@ LOCAL_SRC_FILES := \
     ScriptController.cpp \
     ScriptTarget.cpp \
     Slider.cpp \
-	SocialAchievement.cpp \
-	SocialChallenge.cpp \
-	SocialController.cpp \
-	SocialPlayer.cpp \
-	SocialScore.cpp \
-	SocialSessionListener.cpp \
     SpriteBatch.cpp \
     Technique.cpp \
     Terrain.cpp \

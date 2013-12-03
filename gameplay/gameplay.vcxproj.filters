@@ -13,9 +13,6 @@
     <Filter Include="src\lua">
       <UniqueIdentifier>{21cf31c6-9c10-44cb-a864-d46a0e7bfe5e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\social">
-      <UniqueIdentifier>{7bd5ee6c-c0cc-4ae3-b7a9-443fb391b944}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Plane.cpp">
@@ -179,30 +176,6 @@
     </ClCompile>
     <ClCompile Include="src\Platform.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SocialController.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\social\ScoreloopSocialSession.cpp">
-      <Filter>src\social</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SocialAchievement.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SocialPlayer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SocialScore.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SocialChallenge.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SocialSessionListener.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\social\GooglePlaySocialSession.cpp">
-      <Filter>src\social</Filter>
     </ClCompile>
     <ClCompile Include="src\AIState.cpp">
       <Filter>src</Filter>
@@ -1060,33 +1033,6 @@
     </ClInclude>
     <ClInclude Include="src\TerrainPatch.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SocialController.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SocialSession.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SocialAchievement.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SocialPlayer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SocialSessionListener.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SocialScore.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\social\ScoreloopSocialSession.h">
-      <Filter>src\social</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SocialChallenge.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\social\GooglePlaySocialSession.h">
-      <Filter>src\social</Filter>
     </ClInclude>
     <ClInclude Include="src\AIMessage.h">
       <Filter>src</Filter>

@@ -12,7 +12,7 @@ material lambert1
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_ambientColor = 0.2, 0.2, 0.2            
+            u_ambientColor = 0.4, 0.4, 0.4
             
             // samplers
             sampler u_diffuseTexture
