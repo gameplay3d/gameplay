@@ -29,6 +29,8 @@ public:
      * release() method must be called. Note that calling release() does
      * NOT free any actual game objects created/returned from the Bundle
      * instance and those objects must be released separately.
+     * 
+     * @return The new Bundle or NULL if there was an error.
      * @script{create}
      */
     static Bundle* create(const char* path);

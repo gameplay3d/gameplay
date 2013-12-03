@@ -84,7 +84,7 @@ Properties* Properties::create(const char* url)
     std::auto_ptr<Stream> stream(FileSystem::open(fileString.c_str()));
     if (stream.get() == NULL)
     {
-        GP_ERROR("Failed to open file '%s'.", fileString.c_str());
+        GP_WARN("Failed to open file '%s'.", fileString.c_str());
         return NULL;
     }
 
@@ -97,6 +97,7 @@ Properties* Properties::create(const char* url)
     if (!p)
     {
         GP_WARN("Failed to load properties from url '%s'.", url);
+        SAFE_DELETE(properties);
         return NULL;
     }
 
