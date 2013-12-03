@@ -79,4 +79,12 @@ theme gamepad
 			skin = buttonBActiveSkin
 		}
 	}
+
+    style form
+    {
+    }
+
+    style container
+    {
+    }
 }

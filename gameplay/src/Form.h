@@ -79,8 +79,8 @@ public:
 	 * form will inherit the theme that contains the form's style.
      *
      * @param id The Form's ID.
-     * @param style The Form's custom style (optional).
-     * @param layoutType The form's layout type.
+     * @param style The Form's custom style (optional - may be NULL).
+	 * @param layoutType The form's layout type (optional).
      *
      * @return The new Form.
      * @script{create}

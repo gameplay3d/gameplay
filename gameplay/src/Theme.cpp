@@ -262,7 +262,9 @@ Theme* Theme::create(const char* url)
 
             // At least the OVERLAY_NORMAL is required.
             if (!normal)
-                GP_ERROR("All themes require the normal state overlay to be defined.");
+            {
+                normal = Theme::Style::Overlay::create();
+            }
 
             space->rewind();
             innerSpace = space->getNextNamespace();

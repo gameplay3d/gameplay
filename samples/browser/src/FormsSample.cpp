@@ -95,7 +95,7 @@ void FormsSample::initialize()
     form5Button->addListener(this, Control::Listener::CLICK);
     for (unsigned int i = 0; i < _formFiles.size(); i++)
     {
-        Form* form = Form::create(_formFiles[i]);
+		Form* form = Form::create(_formFiles[i]);
         form->setEnabled(false);
         _forms.push_back(form);
     }
@@ -155,7 +155,7 @@ void FormsSample::formChanged()
 
 void FormsSample::createSampleForm(Theme* theme)
 {
-    Form* form = Form::create("testForm", theme->getStyle("basicContainer"));
+    Form* form = Form::create("testForm", theme->getStyle("basicContainer"), Layout::LAYOUT_ABSOLUTE);
     form->setSize(600, 600);
 
     Label* label = Label::create("testLabel", theme->getStyle("iconNoBorder"));
