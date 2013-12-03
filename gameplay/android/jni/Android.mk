@@ -88,8 +88,6 @@ LOCAL_SRC_FILES := \
     RenderTarget.cpp \
     Scene.cpp \
     SceneLoader.cpp \
-    SceneRenderer.cpp \
-    SceneRendererForward.cpp \
     ScreenDisplayer.cpp \
     ScriptController.cpp \
     ScriptTarget.cpp \
@@ -257,8 +255,6 @@ LOCAL_SRC_FILES := \
     lua/lua_RenderStateStencilOperation.cpp \
     lua/lua_RenderTarget.cpp \
     lua/lua_Scene.cpp \
-    lua/lua_SceneRenderer.cpp \
-    lua/lua_SceneRendererForward.cpp \
     lua/lua_ScreenDisplayer.cpp \
     lua/lua_ScriptController.cpp \
     lua/lua_ScriptTarget.cpp \
@@ -293,7 +289,6 @@ LOCAL_SRC_FILES := \
     lua/lua_VertexFormatElement.cpp \
     lua/lua_VertexFormatUsage.cpp \
     lua/lua_VerticalLayout.cpp \
-    lua/lua_VisibleSet.cpp \
     social/GooglePlaySocialSession.cpp
 
     

@@ -187,10 +187,6 @@ set(GAMEPLAY_SRC
     src/Scene.h
     src/SceneLoader.cpp
     src/SceneLoader.h
-    src/SceneRenderer.cpp
-    src/SceneRenderer.h
-    src/SceneRendererForward.cpp
-    src/SceneRendererForward.h
     src/ScreenDisplayer.cpp
     src/ScreenDisplayer.h
     src/ScriptController.cpp
@@ -246,7 +242,6 @@ set(GAMEPLAY_SRC
     src/VertexFormat.h
     src/VerticalLayout.cpp
     src/VerticalLayout.h
-    src/VisibleSet.h
 )
 
 set(GAMEPLAY_LUA
@@ -533,10 +528,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_RenderTarget.h
     src/lua/lua_Scene.cpp
     src/lua/lua_Scene.h
-    src/lua/lua_SceneRenderer.cpp
-    src/lua/lua_SceneRenderer.h
-    src/lua/lua_SceneRendererForward.cpp
-    src/lua/lua_SceneRendererForward.h
     src/lua/lua_ScreenDisplayer.cpp
     src/lua/lua_ScreenDisplayer.h
     src/lua/lua_ScriptController.cpp
@@ -605,8 +596,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_VertexFormatUsage.h
     src/lua/lua_VerticalLayout.cpp
     src/lua/lua_VerticalLayout.h
-    src/lua/lua_VisibleSet.cpp
-    src/lua/lua_VisibleSet.h
 )
 
 set(GAMEPLAY_RES
@@ -617,30 +606,22 @@ set(GAMEPLAY_RES
 )
 
 set(GAMEPLAY_RES_SHADERS
-    res/shaders/colored-unlit.frag
-    res/shaders/colored-unlit.vert
     res/shaders/colored.frag
     res/shaders/colored.vert
-    res/shaders/textured-bumped.frag
-    res/shaders/textured-bumped.vert
-    res/shaders/textured-unlit.frag
-    res/shaders/textured-unlit.vert
-    res/shaders/textured.frag
-    res/shaders/textured.vert
+    res/shaders/font.frag
+    res/shaders/font.vert
+    res/shaders/form.frag
+    res/shaders/form.vert
+    res/shaders/lighting.frag
+    res/shaders/lighting.vert
+    res/shaders/skinning.vert
+    res/shaders/skinning-none.vert
+    res/shaders/sprite.frag
+    res/shaders/sprite.vert
     res/shaders/terrain.frag
     res/shaders/terrain.vert
-)
-
-set(GAMEPLAY_RES_SHADERS_LIB
-    res/shaders/lib/attributes-skinning.vert
-    res/shaders/lib/attributes.vert
-    res/shaders/lib/lighting-directional.frag
-    res/shaders/lib/lighting-directional.vert
-    res/shaders/lib/lighting-point.frag
-    res/shaders/lib/lighting-point.vert
-    res/shaders/lib/lighting-spot.frag
-    res/shaders/lib/lighting-spot.vert
-    res/shaders/lib/lighting.frag
+    res/shaders/textured.frag
+    res/shaders/textured.vert
 )
 
 include_directories( 
@@ -669,7 +650,7 @@ set_target_properties(gameplay PROPERTIES
 )
 
 source_group(lua FILES ${GAMEPLAY_LUA})
-source_group(res FILES ${GAMEPLAY_RES} ${GAMEPLAY_RES} ${GAMEPLAY_RES_SHADERS} ${GAMEPLAY_RES_SHADERS_LIB})
+source_group(res FILES ${GAMEPLAY_RES} ${GAMEPLAY_RES} ${GAMEPLAY_RES_SHADERS})
 source_group(src FILES ${GAMEPLAY_SRC})
 
 

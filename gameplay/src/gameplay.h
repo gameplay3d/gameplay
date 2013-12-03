@@ -43,8 +43,6 @@
 #include "Node.h"
 #include "Joint.h"
 #include "Scene.h"
-#include "SceneRenderer.h"
-#include "SceneRendererForward.h"
 #include "Font.h"
 #include "SpriteBatch.h"
 #include "ParticleEmitter.h"
@@ -55,7 +53,7 @@
 #include "HeightField.h"
 #include "Terrain.h"
 #include "TerrainPatch.h"
-#include "VisibleSet.h"
+
 
 // Audio
 #include "AudioController.h"
