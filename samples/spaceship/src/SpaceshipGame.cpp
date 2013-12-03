@@ -59,8 +59,6 @@ SpaceshipGame game;
 // Clamp function
 #define CLAMP(x, min, max) (x < min ? min : (x > max ? max : x))
 
-static const char *leaderboardName = "leaderboard";
-
 SpaceshipGame::SpaceshipGame()
     : _scene(NULL), _cameraNode(NULL), _shipGroupNode(NULL), _shipNode(NULL), _propulsionNode(NULL), _glowNode(NULL),
       _stateBlock(NULL), _font(NULL), _throttle(0), _shipTilt(0), _finished(true), _finishedTime(0), _pushing(false), _time(0),
@@ -502,7 +500,7 @@ void SpaceshipGame::drawText()
     char text[1024];
     sprintf(text, "%dsec.", (int)_time);
     _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1), _font->getSize());
-    if (0 && _finished)
+    if (_finished)
     {
         _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
     }
@@ -527,10 +525,10 @@ void SpaceshipGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
-     //   if (_finished && (getAbsoluteTime() - _finishedTime) > 1000L)
-     //   {
-     //       resetGame();
-     //   }
+        if (_finished && (getAbsoluteTime() - _finishedTime) > 1000L)
+        {
+            resetGame();
+        }
     case Touch::TOUCH_MOVE:
         if (!_finished)
         {
