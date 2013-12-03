@@ -5,7 +5,6 @@
 #include "MeshBatch.h"
 #include "ScriptController.h"
 #include "Light.h"
-#include "VisibleSet.h"
 
 namespace gameplay
 {
@@ -13,7 +12,7 @@ namespace gameplay
 /**
  * Represents the root container for a hierarchy of nodes.
  */
-class Scene : public Ref, public VisibleSet
+class Scene : public Ref
 {
 public:
 
