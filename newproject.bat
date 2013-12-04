@@ -152,7 +152,6 @@ REM    rmdir /S /Q %projPath%
 REM Generate relative path from project folder to GamePlay folder
 set gpPath=%cd%
 call:makerelative gpPath "%projPath%\"
-call:replacevar gpPath "\" "\"
 
 mkdir "%projPath%"
 mkdir "%projPath%\src"
@@ -169,6 +168,8 @@ call:replace "%projPath%\%projName%.vcxproj.filters" TemplateGame "%className%"
 
 copy template\template.vcxproj.user "%projPath%\%projName%.vcxproj.user"
 call:replace "%projPath%\%projName%.vcxproj.user" GAMEPLAY_PATH "%gpPath%"
+
+call:replacevar gpPath "\" "/"
 
 REM Copy Apple XCode project files
 mkdir "%projPath%\%projName%.xcodeproj"
