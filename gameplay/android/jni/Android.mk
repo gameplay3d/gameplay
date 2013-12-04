@@ -282,8 +282,7 @@ LOCAL_SRC_FILES := \
     lua/lua_VertexFormat.cpp \
     lua/lua_VertexFormatElement.cpp \
     lua/lua_VertexFormatUsage.cpp \
-    lua/lua_VerticalLayout.cpp \
-    social/GooglePlaySocialSession.cpp
+    lua/lua_VerticalLayout.cpp
 
     
 LOCAL_CFLAGS := -D__ANDROID__ -DGP_USE_SOCIAL -I"../../external-deps/lua/include" -I"../../external-deps/bullet/include" -I"../../external-deps/png/include" -I"../../external-deps/oggvorbis/include" -I"../../external-deps/openal/include"
