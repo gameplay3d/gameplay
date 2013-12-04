@@ -50,7 +50,14 @@
      in between standard targets -->
 
     <target name="-pre-build">
-		<mkdir dir="src"/>
+        <mkdir dir="src"/>
+        <exec executable="ndk-build" failonerror="true" />
+    </target>
+
+    <target name="clean">
+        <exec executable="ndk-build" failonerror="true">
+            <arg value="clean" />
+        </exec>
     </target>
 	
 <!--
@@ -62,9 +69,12 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
-    	<delete dir="assets/res"/>
+        <delete dir="assets/res" />
         <copy todir="assets/res">
             <fileset dir="../res" />
+        </copy>
+        <copy todir="assets/res/shaders">
+            <fileset dir="../GAMEPLAY_PATH/gameplay/res/shaders" />
         </copy>
     </target>
 
