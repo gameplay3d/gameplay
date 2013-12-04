@@ -212,6 +212,7 @@ call:replace "%projPath%\android\AndroidManifest.xml" TEMPLATE_UUID "%uuid%"
 
 copy template\android\template.build.xml "%projPath%\android\build.xml"
 call:replace "%projPath%\android\build.xml" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\android\build.xml" GAMEPLAY_PATH "%gpPath%"
 
 mkdir "%projPath%\android\jni"
 
