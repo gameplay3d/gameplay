@@ -1000,11 +1000,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 }
 
-- (void)mouseMoved:(NSEvent*) event 
+// helper function to handle mouse capture
+bool getMousePointForEvent(NSPoint& point, NSEvent* event)
 {
-    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    
-    float y;
     if (__mouseCaptured)
     {
         if (__mouseCapturedFirstPass)
@@ -1012,36 +1010,61 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
             // Discard the first mouseMoved event following transition into capture
             // since it contains bogus x,y data.
             __mouseCapturedFirstPass = false;
-            return;
+            return false;
         }
-
+        
         point.x = [event deltaX];
         point.y = [event deltaY];
-
+        
         NSWindow* window = __view.window;
         NSRect rect = window.frame;
         CGPoint centerPoint;
         centerPoint.x = rect.origin.x + (rect.size.width / 2);
         centerPoint.y = rect.origin.y + (rect.size.height / 2);
         CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
-        y = point.y;
     }
     else
     {
-        y = __height - point.y;
+        point.y = __height - point.y;
     }
+
+    return true;
+}
+
+- (void)mouseMoved:(NSEvent*) event
+{
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     
+    if (!getMousePointForEvent(point, event))
+    {
+        return;
+    }
+
     [__view->gameLock lock];
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, point.y, 0);
     [__view->gameLock unlock];
 }
 
 - (void) mouseDragged: (NSEvent*) event
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    if (__leftMouseDown && !__mouseCaptured)
+    if (__leftMouseDown)
     {
-        [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
+        if (__mouseCaptured)
+        {
+            if (!getMousePointForEvent(point, event))
+            {
+                return;
+            }
+            
+            [__view->gameLock lock];
+            gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, point.y, 0);
+            [__view->gameLock unlock];
+        }
+        else
+        {
+            [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
+        }
     }
 }
 
@@ -1069,10 +1092,15 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     
+    if (!getMousePointForEvent(point, event))
+    {
+        return;
+    }
+    
     // In right-mouse case, whether __rightMouseDown is true or false
     // this should not matter, mouse move is still occuring
     [__view->gameLock lock];
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, point.y, 0);
     [__view->gameLock unlock];
 }
 
