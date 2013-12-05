@@ -117,8 +117,8 @@ void Light::writeBinary(FILE* file)
         }
 
         write(_range, file);
-        write(MATH_DEG_TO_RAD(_innerAngle), file);
-        write(MATH_DEG_TO_RAD(_outerAngle), file);
+        write(_innerAngle, file);
+        write(_outerAngle, file);
     }
     else if (_lightType == PointLight)
     {
