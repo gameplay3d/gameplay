@@ -12,7 +12,7 @@ namespace gameplay
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), 
       _stateBits(0x00), _repeatCount(1.0f), _loopBlendTime(0), _activeDuration(_duration * _repeatCount), _speed(1.0f), _timeStarted(0), 
-      _elapsedTime(0), _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), 
+      _elapsedTime(0), _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f),
       _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _listenerItr(NULL), _scriptListeners(NULL)
 {
     GP_ASSERT(_animation);
@@ -124,7 +124,7 @@ float AnimationClip::getRepeatCount() const
 
 void AnimationClip::setActiveDuration(unsigned long duration)
 {
-    GP_ASSERT(duration > 0.0f);
+    GP_ASSERT(duration >= 0);
 
     if (duration == REPEAT_INDEFINITE)
     {
