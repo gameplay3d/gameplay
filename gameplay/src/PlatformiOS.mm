@@ -62,9 +62,12 @@ public:
 
 // gestures
 
-#define GESTURE_LONG_TAP_DURATION_MIN   0.2
+#define GESTURE_LONG_PRESS_DURATION_MIN 0.2
+#define GESTURE_LONG_PRESS_DISTANCE_MIN 10
 
+static CGPoint  __gestureLongPressStartPosition;
 static long __gestureLongTapStartTimestamp = 0;
+static bool __gestureDraging = false;
 
 // more than we'd ever need, to be safe
 #define TOUCH_POINTS_MAX (10)
@@ -100,9 +103,11 @@ int getUnicode(int key);
     BOOL oglDiscardSupported;
     
     UITapGestureRecognizer *_tapRecognizer;
-    UILongPressGestureRecognizer *_longTapRecognizer;
     UIPinchGestureRecognizer *_pinchRecognizer;
     UISwipeGestureRecognizer *_swipeRecognizer;
+    UILongPressGestureRecognizer *_longPressRecognizer;
+    UILongPressGestureRecognizer *_longTapRecognizer;
+    UILongPressGestureRecognizer *_dragAndDropRecognizer;
 }
 
 @property (readonly, nonatomic, getter=isUpdating) BOOL updating;
@@ -652,6 +657,9 @@ int getUnicode(int key);
             return (_tapRecognizer != NULL);
         case Gesture::GESTURE_LONG_TAP:
             return (_longTapRecognizer != NULL);
+        case Gesture::GESTURE_DRAG:
+        case Gesture::GESTURE_DROP:
+            return (_dragAndDropRecognizer != NULL);
         default:
             break;
     }
@@ -696,9 +704,25 @@ int getUnicode(int key);
     }
     if ((evt & Gesture::GESTURE_LONG_TAP) == Gesture::GESTURE_LONG_TAP && _longTapRecognizer == NULL)
     {
-        _longTapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongTapGesture:)];
-        _longTapRecognizer.minimumPressDuration = GESTURE_LONG_TAP_DURATION_MIN;
-        [self addGestureRecognizer:_longTapRecognizer];
+        if (_longPressRecognizer == NULL)
+        {
+            _longPressRecognizer =[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGestures:)];
+            _longPressRecognizer.minimumPressDuration = GESTURE_LONG_PRESS_DURATION_MIN;
+            _longPressRecognizer.allowableMovement = CGFLOAT_MAX;
+            [self addGestureRecognizer:_longPressRecognizer];
+        }
+        _longTapRecognizer = _longPressRecognizer;
+    }
+    if (((evt & Gesture::GESTURE_DRAG) == Gesture::GESTURE_DRAG || (evt & Gesture::GESTURE_DROP) == Gesture::GESTURE_DROP) && _dragAndDropRecognizer == NULL)
+    {
+        if (_longPressRecognizer == NULL)
+        {
+            _longPressRecognizer =[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGestures:)];
+            _longPressRecognizer.minimumPressDuration = GESTURE_LONG_PRESS_DURATION_MIN;
+            _longPressRecognizer.allowableMovement = CGFLOAT_MAX;
+            [self addGestureRecognizer:_longPressRecognizer];
+        }
+        _dragAndDropRecognizer = _longPressRecognizer;
     }
 }
 
@@ -724,9 +748,22 @@ int getUnicode(int key);
     }
     if((evt & Gesture::GESTURE_LONG_TAP) == Gesture::GESTURE_LONG_TAP && _longTapRecognizer != NULL)
     {
-        [self removeGestureRecognizer:_longTapRecognizer];
-        [_longTapRecognizer release];
+        if (_dragAndDropRecognizer == NULL)
+        {
+            [self removeGestureRecognizer:_longPressRecognizer];
+            [_longPressRecognizer release];
+        }
         _longTapRecognizer = NULL;
+    }
+    if (((evt & Gesture::GESTURE_DRAG) == Gesture::GESTURE_DRAG || (evt & Gesture::GESTURE_DROP) == Gesture::GESTURE_DROP) && _dragAndDropRecognizer != NULL)
+    {
+        
+        if (_longTapRecognizer == NULL)
+        {
+            [self removeGestureRecognizer:_longPressRecognizer];
+            [_longPressRecognizer release];
+        }
+        _dragAndDropRecognizer = NULL;
     }
 }
 
@@ -784,6 +821,57 @@ int getUnicode(int key);
             break;
     }
     gameplay::Platform::gestureSwipeEventInternal(location.x, location.y, gameplayDirection);
+}
+
+- (void)handleLongPressGestures:(UILongPressGestureRecognizer*)sender
+{
+    CGPoint location = [sender locationInView:self];
+    
+    if (sender.state == UIGestureRecognizerStateBegan)
+    {
+        struct timeval time;
+        
+        gettimeofday(&time, NULL);
+        __gestureLongTapStartTimestamp = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+        __gestureLongPressStartPosition = location;
+    }
+    if (sender.state == UIGestureRecognizerStateChanged)
+    {
+        if (__gestureDraging)
+            gameplay::Platform::gestureDragEventInternal(location.x, location.y);
+        else
+        {
+            float delta = sqrt(pow(__gestureLongPressStartPosition.x - location.x, 2) + pow(__gestureLongPressStartPosition.y - location.y, 2));
+        
+            if (delta >= GESTURE_LONG_PRESS_DISTANCE_MIN)
+            {
+                __gestureDraging = true;
+                gameplay::Platform::gestureDragEventInternal(__gestureLongPressStartPosition.x, __gestureLongPressStartPosition.y);
+            }
+        }
+    }
+    if (sender.state == UIGestureRecognizerStateEnded)
+    {
+        if (__gestureDraging)
+        {
+            gameplay::Platform::gestureDropEventInternal(location.x, location.y);
+            __gestureDraging = false;
+        }
+        else
+        {
+            struct timeval time;
+            long currentTimeStamp;
+        
+            gettimeofday(&time, NULL);
+            currentTimeStamp = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+            gameplay::Platform::gestureLongTapEventInternal(location.x, location.y, currentTimeStamp - __gestureLongTapStartTimestamp);
+        }
+    }
+    if ((sender.state == UIGestureRecognizerStateCancelled || sender.state == UIGestureRecognizerStateFailed) && __gestureDraging)
+    {
+        gameplay::Platform::gestureDropEventInternal(location.x, location.y);
+        __gestureDraging = false;
+    }
 }
 
 @end
