@@ -23,6 +23,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Transform");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "CheckBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "RadioButton");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Camera::Listener", "AudioListener");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Camera::Listener", "TerrainPatch");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Container", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Button");
@@ -130,7 +131,6 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Transform");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform", "Joint");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform", "Node");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "AudioListener");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "AudioSource");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "Camera");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "MeshSkin");
