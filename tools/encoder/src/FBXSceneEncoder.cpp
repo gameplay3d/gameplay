@@ -34,7 +34,7 @@ void FBXSceneEncoder::write(const string& filepath, const EncoderArguments& argu
     if (!importer->Initialize(filepath.c_str(), -1, sdkManager->GetIOSettings()))
     {
         LOG(1, "Call to FbxImporter::Initialize() failed.\n");
-        LOG(1, "Error returned: %s\n\n", importer->GetLastErrorString());
+        LOG(1, "Error returned: %s\n\n", importer->GetStatus().GetErrorString());
         exit(-1);
     }
     

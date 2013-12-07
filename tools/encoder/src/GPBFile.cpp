@@ -4,6 +4,7 @@
 #include "StringUtil.h"
 #include "EncoderArguments.h"
 #include "Heightmap.h"
+#include <climits>
 
 #define EPSILON 1.2e-7f;
 

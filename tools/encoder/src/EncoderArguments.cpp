@@ -7,6 +7,9 @@
     #define PATH_MAX    _MAX_PATH
     #define realpath(A,B)    _fullpath(B,A,PATH_MAX)
 #endif
+#ifdef __linux__
+    #include <linux/limits.h>
+#endif
 
 #define MAX_HEIGHTMAP_SIZE 2049
 
