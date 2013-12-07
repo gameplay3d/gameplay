@@ -27,13 +27,9 @@ void luaRegister_Model()
         {"getRefCount", lua_Model_getRefCount},
         {"getSkin", lua_Model_getSkin},
         {"hasMaterial", lua_Model_hasMaterial},
-        {"isShadowCaster", lua_Model_isShadowCaster},
-        {"isShadowReceiver", lua_Model_isShadowReceiver},
         {"release", lua_Model_release},
         {"setMaterial", lua_Model_setMaterial},
         {"setNode", lua_Model_setNode},
-        {"setShadowCaster", lua_Model_setShadowCaster},
-        {"setShadowReceiver", lua_Model_setShadowReceiver},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -494,76 +490,6 @@ int lua_Model_hasMaterial(lua_State* state)
     return 0;
 }
 
-int lua_Model_isShadowCaster(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Model* instance = getInstance(state);
-                bool result = instance->isShadowCaster();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Model_isShadowCaster - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Model_isShadowReceiver(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Model* instance = getInstance(state);
-                bool result = instance->isShadowReceiver();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Model_isShadowReceiver - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Model_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -870,78 +796,6 @@ int lua_Model_setNode(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Model_setNode - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Model_setShadowCaster(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
-            {
-                // Get parameter 1 off the stack.
-                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
-
-                Model* instance = getInstance(state);
-                instance->setShadowCaster(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Model_setShadowCaster - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Model_setShadowReceiver(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
-            {
-                // Get parameter 1 off the stack.
-                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
-
-                Model* instance = getInstance(state);
-                instance->setShadowReceiver(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Model_setShadowReceiver - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

@@ -10,7 +10,7 @@ namespace gameplay
 {
 
 Model::Model(Mesh* mesh) :
-    _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _node(NULL), _skin(NULL), _shadowCaster(true), _shadowReceiver(true)
+    _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _node(NULL), _skin(NULL)
 {
     GP_ASSERT(mesh);
     _partCount = mesh->getPartCount();
@@ -254,26 +254,6 @@ void Model::setNode(Node* node)
             }
         }
     }
-}
-
-void Model::setShadowCaster(bool casts)
-{
-    _shadowCaster = casts;
-}
-
-bool Model::isShadowCaster() const
-{
-    return _shadowCaster;
-}
-
-void Model::setShadowReceiver(bool receives)
-{
-    _shadowReceiver = receives;
-}
-
-bool Model::isShadowReceiver() const
-{
-    return _shadowReceiver;
 }
 
 static bool drawWireframe(Mesh* mesh)
