@@ -237,6 +237,18 @@ void Sample::gestureTapEvent(int x, int y)
 {
 }
 
+void Sample::gestureLongTapEvent(int x, int y, float duration)
+{
+}
+
+void Sample::gestureDragEvent(int x, int y)
+{
+}
+
+void Sample::gestureDropEvent(int x, int y)
+{
+}
+
 void Sample::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
 }

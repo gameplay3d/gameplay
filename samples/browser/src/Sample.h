@@ -72,7 +72,10 @@ public:
     virtual void gestureSwipeEvent(int x, int y, int direction);
     virtual void gesturePinchEvent(int x, int y, float scale);
     virtual void gestureTapEvent(int x, int y);
-    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    virtual void gestureLongTapEvent(int x, int y, float duration);
+    virtual void gestureDragEvent(int x, int y);
+	virtual void gestureDropEvent(int x, int y);
+	virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
     unsigned int getGamepadCount() const;
     Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
 

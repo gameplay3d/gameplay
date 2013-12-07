@@ -26,7 +26,7 @@ class ScriptController;
 class Game
 {
     friend class Platform;
-	friend class ShutdownListener;
+    friend class ShutdownListener;
 
 public:
     
@@ -430,12 +430,37 @@ public:
     virtual void gesturePinchEvent(int x, int y, float scale);
 
     /**
+     * Gesture callback on Gesture::LONG_TAP events.
+     *
+     * @param x The x-coordinate of the long tap.
+     * @param y The y-coordinate of the long tap.
+     * @param duration The duration of the long tap in ms.
+     */
+    virtual void gestureLongTapEvent(int x, int y, float duration);
+
+    /**
      * Gesture callback on Gesture::TAP events.
      *
      * @param x The x-coordinate of the tap.
      * @param y The y-coordinate of the tap.
      */
     virtual void gestureTapEvent(int x, int y);
+
+    /**
+     * Gesture callback on Gesture::DRAG events.
+     *
+     * @param x The x-coordinate of the start of the drag event.
+     * @param y The y-coordinate of the start of the drag event.
+     */
+    virtual void gestureDragEvent(int x, int y);
+
+    /**
+     * Gesture callback on Gesture::DROP events.
+     *
+     * @param x The x-coordinate of the drop event.
+     * @param y The y-coordinate of the drop event.
+     */
+    virtual void gestureDropEvent(int x, int y);
 
     /**
      * Gamepad callback on gamepad events.  Override to receive Gamepad::CONNECTED_EVENT 
@@ -471,18 +496,18 @@ public:
     inline Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
 
     /**
-	 * Sets whether multi-sampling is to be enabled/disabled. Default is disabled.
-	 *
-	 * @param enabled true sets multi-sampling to be enabled, false to be disabled.
-	 */
-	inline void setMultiSampling(bool enabled);
+     * Sets whether multi-sampling is to be enabled/disabled. Default is disabled.
+     *
+     * @param enabled true sets multi-sampling to be enabled, false to be disabled.
+     */
+    inline void setMultiSampling(bool enabled);
 
-	/*
-	 * Is multi-sampling enabled.
-	 *
-	 * @return true if multi-sampling is enabled.
-	 */
-	inline bool isMultiSampling() const;
+    /*
+     * Is multi-sampling enabled.
+     *
+     * @return true if multi-sampling is enabled.
+     */
+    inline bool isMultiSampling() const;
 
     /**
      * Sets multi-touch is to be enabled/disabled. Default is disabled.
@@ -660,10 +685,10 @@ private:
         std::string function;
     };
 
-	struct ShutdownListener : public TimeListener
-	{
-		void timeEvent(long timeDiff, void* cookie);
-	};
+    struct ShutdownListener : public TimeListener
+    {
+        void timeEvent(long timeDiff, void* cookie);
+    };
 
     /**
      * TimeEvent represents the event that is sent to TimeListeners as a result of calling Game::schedule().

@@ -341,6 +341,27 @@ public:
      *
      * @script{ignore}
      */
+	static void gestureLongTapEventInternal(int x, int y, float duration);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+	static void gestureDragEventInternal(int x, int y);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+	static void gestureDropEventInternal(int x, int y);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
     static void resizeEventInternal(unsigned int width, unsigned int height);
 
     /**

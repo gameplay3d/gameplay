@@ -205,6 +205,24 @@ void SamplesGame::gestureTapEvent(int x, int y)
         _activeSample->gestureTapEvent(x, y);
 }
 
+void SamplesGame::gestureLongTapEvent(int x, int y, float duration)
+{
+	if (_activeSample)
+		_activeSample->gestureLongTapEvent(x, y, duration);
+}
+
+void SamplesGame::gestureDragEvent(int x, int y)
+{
+	if (_activeSample)
+		_activeSample->gestureDragEvent(x, y);
+}
+
+void SamplesGame::gestureDropEvent(int x, int y)
+{
+	if (_activeSample)
+		_activeSample->gestureDropEvent(x, y);
+}
+
 void SamplesGame::controlEvent(Control* control, EventType evt)
 {
     const size_t size = _samples->size();
