@@ -7,6 +7,7 @@
 #include "Form.h"
 #include "ScriptController.h"
 #include <unistd.h>
+#include <sys/time.h>
 #import <UIKit/UIKit.h>
 #import <GameKit/GameKit.h>
 #import <QuartzCore/QuartzCore.h>
@@ -59,6 +60,12 @@ public:
     }
 };
 
+// gestures
+
+#define GESTURE_LONG_TAP_DURATION_MIN   0.2
+
+static long __gestureLongTapStartTimestamp = 0;
+
 // more than we'd ever need, to be safe
 #define TOUCH_POINTS_MAX (10)
 static TouchPoint __touchPoints[TOUCH_POINTS_MAX];
@@ -68,7 +75,6 @@ static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __pitch;
 static float __roll;
-
 
 double getMachTimeInMilliseconds();
 
@@ -94,6 +100,7 @@ int getUnicode(int key);
     BOOL oglDiscardSupported;
     
     UITapGestureRecognizer *_tapRecognizer;
+    UILongPressGestureRecognizer *_longTapRecognizer;
     UIPinchGestureRecognizer *_pinchRecognizer;
     UISwipeGestureRecognizer *_swipeRecognizer;
 }
@@ -643,6 +650,8 @@ int getUnicode(int key);
             return (_pinchRecognizer != NULL);
         case Gesture::GESTURE_TAP:
             return (_tapRecognizer != NULL);
+        case Gesture::GESTURE_LONG_TAP:
+            return (_longTapRecognizer != NULL);
         default:
             break;
     }
@@ -685,6 +694,12 @@ int getUnicode(int key);
         _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
         [self addGestureRecognizer:_tapRecognizer];
     }
+    if ((evt & Gesture::GESTURE_LONG_TAP) == Gesture::GESTURE_LONG_TAP && _longTapRecognizer == NULL)
+    {
+        _longTapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongTapGesture:)];
+        _longTapRecognizer.minimumPressDuration = GESTURE_LONG_TAP_DURATION_MIN;
+        [self addGestureRecognizer:_longTapRecognizer];
+    }
 }
 
 - (void)unregisterGesture: (Gesture::GestureEvent) evt
@@ -707,12 +722,39 @@ int getUnicode(int key);
         [_tapRecognizer release];
         _tapRecognizer = NULL;
     }
+    if((evt & Gesture::GESTURE_LONG_TAP) == Gesture::GESTURE_LONG_TAP && _longTapRecognizer != NULL)
+    {
+        [self removeGestureRecognizer:_longTapRecognizer];
+        [_longTapRecognizer release];
+        _longTapRecognizer = NULL;
+    }
 }
 
 - (void)handleTapGesture:(UITapGestureRecognizer*)sender
 {
     CGPoint location = [sender locationInView:self];
     gameplay::Platform::gestureTapEventInternal(location.x, location.y);
+}
+
+- (void)handleLongTapGesture:(UILongPressGestureRecognizer*)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan)
+    {
+        struct timeval time;
+        
+        gettimeofday(&time, NULL);
+        __gestureLongTapStartTimestamp = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+    }
+    else if (sender.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint location = [sender locationInView:self];
+        struct timeval time;
+        long currentTimeStamp;
+        
+        gettimeofday(&time, NULL);
+        currentTimeStamp = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+        gameplay::Platform::gestureLongTapEventInternal(location.x, location.y, currentTimeStamp - __gestureLongTapStartTimestamp);
+    }
 }
 
 - (void)handlePinchGesture:(UIPinchGestureRecognizer*)sender
