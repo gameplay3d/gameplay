@@ -2,28 +2,71 @@
 precision highp float;
 #endif
 
-// Uniforms
-uniform vec3 u_ambientColor;                    // Ambient color
-uniform vec3 u_lightColor;                      // Light color
-uniform vec3 u_lightDirection;					// Light direction
-#if defined(DEBUG_PATCHES)
-uniform float u_row;                            // Patch row
-uniform float u_column;                         // Patch column
+#ifndef DIRECTIONAL_LIGHT_COUNT
+#define DIRECTIONAL_LIGHT_COUNT 0
 #endif
-#if (LAYER_COUNT > 0)
-uniform sampler2D u_samplers[SAMPLER_COUNT];    // Surface layer samplers
+#ifndef SPOT_LIGHT_COUNT
+#define SPOT_LIGHT_COUNT 0
 #endif
-#if defined (NORMAL_MAP)
-uniform sampler2D u_normalMap;                  // Normal map
+#ifndef POINT_LIGHT_COUNT
+#define POINT_LIGHT_COUNT 0
+#endif
+#if (DIRECTIONAL_LIGHT_COUNT > 0) || (POINT_LIGHT_COUNT > 0) || (SPOT_LIGHT_COUNT > 0)
+#define LIGHTING
 #endif
 
-// Varyings
-#if defined(NORMAL_MAP)
-vec3 v_normalVector;                            // Normal vector variable (from normal map)
-#else
-varying vec3 v_normalVector;					// Normal vector from vertex shader
+///////////////////////////////////////////////////////////
+// Uniforms
+uniform vec3 u_ambientColor; 
+
+#if defined(LIGHTING)
+
+#if (DIRECTIONAL_LIGHT_COUNT > 0)
+uniform vec3 u_directionalLightColor[DIRECTIONAL_LIGHT_COUNT];
+uniform vec3 u_directionalLightDirection[DIRECTIONAL_LIGHT_COUNT];
 #endif
+
+#if (POINT_LIGHT_COUNT > 0)
+uniform vec3 u_pointLightColor[POINT_LIGHT_COUNT];
+uniform vec3 u_pointLightPosition[POINT_LIGHT_COUNT];
+uniform float u_pointLightRangeInverse[POINT_LIGHT_COUNT];
+#endif
+
+#if (SPOT_LIGHT_COUNT > 0)
+uniform vec3 u_spotLightColor[SPOT_LIGHT_COUNT];
+uniform vec3 u_spotLightDirection[SPOT_LIGHT_COUNT];
+uniform float u_spotLightRangeInverse[SPOT_LIGHT_COUNT];
+uniform float u_spotLightInnerAngleCos[SPOT_LIGHT_COUNT];
+uniform float u_spotLightOuterAngleCos[SPOT_LIGHT_COUNT];
+#endif
+
+#if defined (NORMAL_MAP)
+uniform sampler2D u_normalMap; 
+#endif
+
+#endif
+
+#if defined(DEBUG_PATCHES)
+uniform float u_row;
+uniform float u_column;
+#endif
+
+#if (LAYER_COUNT > 0)
+uniform sampler2D u_surfaceLayerMaps[SAMPLER_COUNT];
+#endif
+
+///////////////////////////////////////////////////////////
+// Variables
+vec4 _baseColor;
+
+///////////////////////////////////////////////////////////
+// Varyings
+#if defined(LIGHTING)
+vec3 v_normalVector;
+#endif
+
 varying vec2 v_texCoord0;
+
 #if (LAYER_COUNT > 0)
 varying vec2 v_texCoordLayer0;
 #endif
@@ -33,50 +76,54 @@ varying vec2 v_texCoordLayer1;
 #if (LAYER_COUNT > 2)
 varying vec2 v_texCoordLayer2;
 #endif
-
-// Lighting
-#include "lighting.frag"
-#include "lighting-directional.frag"
-
 #if (LAYER_COUNT > 1)
 void blendLayer(sampler2D textureMap, vec2 texCoord, float alphaBlend)
 {
-    // Sample full intensity diffuse color
     vec3 diffuse = texture2D(textureMap,  mod(texCoord, vec2(1,1))).rgb;
-
     _baseColor.rgb = _baseColor.rgb * (1.0 - alphaBlend) + diffuse * alphaBlend;
 }
 #endif
 
+#if defined(LIGHTING)
+#include "lighting.frag"
+#endif
+
+
 void main()
 {
-#if (LAYER_COUNT > 0)
+    #if (LAYER_COUNT > 0)
     // Sample base texture
-	_baseColor.rgb = texture2D(u_samplers[TEXTURE_INDEX_0], mod(v_texCoordLayer0, vec2(1,1))).rgb;
+	_baseColor.rgb = texture2D(u_surfaceLayerMaps[TEXTURE_INDEX_0], mod(v_texCoordLayer0, vec2(1,1))).rgb;
     _baseColor.a = 1.0;
-#else
+    #else
     // If no layers are defined, simply use a white color
-    _baseColor = vec4(1,1,1,1);
-#endif
+    _baseColor = vec4(1, 1, 1, 1);
+    #endif
 
-#if (LAYER_COUNT > 1)
-    blendLayer(u_samplers[TEXTURE_INDEX_1], v_texCoordLayer1, texture2D(u_samplers[BLEND_INDEX_1], v_texCoord0)[BLEND_CHANNEL_1]);
-#endif
-#if (LAYER_COUNT > 2)
-    blendLayer(u_samplers[TEXTURE_INDEX_2], v_texCoordLayer2, texture2D(u_samplers[BLEND_INDEX_2], v_texCoord0)[BLEND_CHANNEL_2]);
-#endif
+    #if (LAYER_COUNT > 1)
+    blendLayer(u_surfaceLayerMaps[TEXTURE_INDEX_1], v_texCoordLayer1, texture2D(u_surfaceLayerMaps[BLEND_INDEX_1], v_texCoord0)[BLEND_CHANNEL_1]);
+    #endif
+    #if (LAYER_COUNT > 2)
+    blendLayer(u_surfaceLayerMaps[TEXTURE_INDEX_2], v_texCoordLayer2, texture2D(u_surfaceLayerMaps[BLEND_INDEX_2], v_texCoord0)[BLEND_CHANNEL_2]);
+    #endif
 
-#if defined(DEBUG_PATCHES)
-    // If patch debug drawing is enabled, tint patches alternate colors
+    #if defined(DEBUG_PATCHES)
     float tint = mod(u_row + mod(u_column, 2.0), 2.0);
     _baseColor.rgb = _baseColor.rgb * 0.75 + vec3(1.0-tint, tint, 0) * 0.25;
-#endif
+    #endif
 
-    // Light the pixel
-#if defined(NORMAL_MAP)
+    #if defined(LIGHTING)
+
+    #if defined(NORMAL_MAP)
     v_normalVector = normalize(texture2D(u_normalMap, v_texCoord0).xyz * 2.0 - 1.0);
-#endif
+    #endif
 
     gl_FragColor.a = _baseColor.a;
     gl_FragColor.rgb = getLitPixel();
+
+    #else
+
+    gl_FragColor.rgb = _baseColor;
+
+    #endif
 }

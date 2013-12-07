@@ -47,6 +47,7 @@ void LightSample::initialize()
 
 	// Load the scene
 	_scene = Scene::load("res/common/lightBrickWall.gpb");
+    _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 
 	// Get the wall model node
 	_modelNode = _scene->findNode("wall"); 
@@ -135,6 +136,7 @@ void LightSample::initialize()
     _properties->setEnabled(false);
     _noLight->setSelected(true);
 	_form->setConsumeInputEvents(false);
+    _form->setFocus();
 
 	setSpecularValue(_specularSlider->getValue());
 }
@@ -249,6 +251,16 @@ void LightSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
 	default:
 		break;
 	};
+}
+
+bool LightSample::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (evt == Mouse::MOUSE_WHEEL && wheelDelta != 0)
+    {
+        _modelNode->translate(0, 0, wheelDelta);
+        return true;
+    }
+    return false;
 }
 
 void LightSample::keyEvent(Keyboard::KeyEvent evt, int key)

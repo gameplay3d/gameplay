@@ -4,10 +4,8 @@
     ADD_SAMPLE("Graphics", "Forms", FormsSample, 10);
 #endif
 
-// Input bit-flags (powers of 2)
-#define KEY_A_MASK (1 << 0)
-#define KEY_B_MASK (1 << 1)
-#define KEY_SELECT_MASK (1 << 2)
+// Input bit-flags
+#define KEY_BACK 1
 
 const static unsigned int __formsCount = 5;
 
@@ -76,10 +74,10 @@ void FormsSample::initialize()
     setVsync(false);
 
     _formSelect = Form::create("res/common/forms/formSelect.form");
-    
+    _formSelect->setFocus();
+
     RadioButton* form0Button = static_cast<RadioButton*>(_formSelect->getControl("form0"));
     form0Button->addListener(this, Control::Listener::CLICK);
-    form0Button->setState(Control::FOCUS);
 
     RadioButton* form1Button = static_cast<RadioButton*>(_formSelect->getControl("form1"));
     form1Button->addListener(this, Control::Listener::CLICK);
@@ -107,7 +105,7 @@ void FormsSample::initialize()
     createSampleForm(_forms[0]->getTheme());
 
     Button* button = static_cast<Button*>(_forms[0]->getControl("testButton"));
-    button->setState(Control::FOCUS);
+    button->setFocus();
 
     // Create a scene with a camera node.
     Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 100.0f);
@@ -135,8 +133,7 @@ void FormsSample::formChanged()
         _activeForm->setEnabled(false);
     _activeForm = _forms[_formIndex];
     _activeForm->setEnabled(true);
-    _activeForm->setState(Control::FOCUS);
-    _formSelect->setState(Control::NORMAL);
+    _activeForm->setFocus();
 
     // Add the form to a node to allow it to be placed in 3D space.
     const Rectangle& bounds = _activeForm->getBounds();
@@ -183,89 +180,62 @@ void FormsSample::createSampleForm(Theme* theme)
 void FormsSample::update(float elapsedTime)
 {
     float speedFactor = 0.001f * elapsedTime;
-    bool aDown = (_keyFlags & KEY_A_MASK);
-    bool bDown = (_keyFlags & KEY_B_MASK);
 
-	// If no form is in focus, then we poll the gamepad for movement input.
-	if (_activeForm->getState() == Control::NORMAL &&
-        _formSelect->getState() == Control::NORMAL)
-    {
-        if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
-            _keyFlags |= KEY_A_MASK;
-        else
-            _keyFlags &= ~KEY_A_MASK;
-
-        if (_gamepad->isButtonDown(Gamepad::BUTTON_B))
-            _keyFlags |= KEY_B_MASK;
-        else
-            _keyFlags &= ~KEY_B_MASK;
-
-        _gamepad->getJoystickValues(0, &_joysticks[0]);
-        _gamepad->getJoystickValues(1, &_joysticks[1]);
-    }
+    _gamepad->getJoystickValues(0, &_joysticks[0]);
+    _gamepad->getJoystickValues(1, &_joysticks[1]);
 
     // We'll use a physical gamepad's MENU1 button as the "back" button.
-    if (!(_keyFlags & KEY_SELECT_MASK) && _gamepad->isButtonDown(Gamepad::BUTTON_MENU1))
+    // Toggle focus between the active form, the selection form and no focus.
+    if (_gamepad->isButtonDown(Gamepad::BUTTON_MENU1))
     {
-        _keyFlags |= KEY_SELECT_MASK;
-        if (_formSelect->getState() == Control::FOCUS)
+        if (!(_keyFlags & KEY_BACK))
         {
-            _formSelect->setState(Control::NORMAL);
+            _keyFlags |= KEY_BACK;
+            if (Form::getFocusControl())
+            {
+                if (Form::getFocusControl() == _activeForm || Form::getFocusControl()->isChild(_activeForm))
+                    _formSelect->setFocus();
+                else
+                    Form::clearFocus();
+            }
+            else
+            {
+                if (!(_activeForm && _activeForm->setFocus()))
+                    _formSelect->setFocus();
+            }
         }
-        else if (_activeForm->getState() == Control::FOCUS)
-        {
-            _activeForm->setState(Control::NORMAL);
-            _formSelect->setState(Control::FOCUS);
-        }
-        else
-        {
-            _formSelect->setState(Control::FOCUS);
-        }
-    }
-    else if ((_keyFlags & KEY_SELECT_MASK) && !_gamepad->isButtonDown(Gamepad::BUTTON_MENU1))
-    {
-        _keyFlags &= ~KEY_SELECT_MASK;  
-    }
-
-    if (_gamepad->isVirtual())
-    {
-        aDown |= _gamepad->isButtonDown(Gamepad::BUTTON_A);
-        bDown |= _gamepad->isButtonDown(Gamepad::BUTTON_B);
-        _gamepad->getJoystickValues(0, &_joysticks[0]);
-    }
-
-    if (!_joysticks[0].isZero())
-    {
-        _gamepad->getJoystickValues(0, &_joysticks[0]);
-    }
-
-    if (!_joysticks[1].isZero())
-    {
-        Matrix m;
-        _formNodeParent->getWorldMatrix().transpose(&m);
-        Vector3 yaw;
-        m.getUpVector(&yaw);
-        _formNodeParent->rotate(yaw, speedFactor * _joysticks[1].x * 2.0f);
-        _formNodeParent->rotateX(-speedFactor * _joysticks[1].y * 2.0f);
-    }
-
-    if (bDown)
-    {
-        _formNodeParent->setRotation(0, 0, 0, 1);
-    }
-    else if (aDown)
-    {
-        // Yaw in world frame, pitch in body frame
-        Matrix m;
-        _formNodeParent->getWorldMatrix().transpose(&m);
-        Vector3 yaw;
-        m.getUpVector(&yaw);
-        _formNodeParent->rotate(yaw, speedFactor * _joysticks[0].x);
-        _formNodeParent->rotateX(-speedFactor * _joysticks[0].y);
     }
     else
     {
-        _formNodeParent->translate(0.5f * speedFactor * _joysticks[0].x, 0.5f * speedFactor * _joysticks[0].y, 0);
+        _keyFlags &= ~KEY_BACK;
+    }
+
+    // If no controls are in focus, then we poll the gamepad for movement input.
+    if (Form::getFocusControl() == NULL)
+    {
+        if (!_joysticks[0].isZero())
+        {
+            _formNodeParent->translate(0.5f * speedFactor * _joysticks[0].x, 0.5f * speedFactor * _joysticks[0].y, 0);
+        }
+
+        if (!_joysticks[1].isZero())
+        {
+            Matrix m;
+            _formNodeParent->getWorldMatrix().transpose(&m);
+            Vector3 yaw;
+            m.getUpVector(&yaw);
+            _formNodeParent->rotate(yaw, speedFactor * _joysticks[1].x * 2.0f);
+            _formNodeParent->rotateX(-speedFactor * _joysticks[1].y * 2.0f);
+        }
+    }
+
+    if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
+    {
+        _formNodeParent->setTranslation(0, 0, -1.5f);
+    }
+    if (_gamepad->isButtonDown(Gamepad::BUTTON_B))
+    {
+        _formNodeParent->setRotation(0, 0, 0, 1);
     }
 }
 
@@ -351,28 +321,9 @@ void FormsSample::keyEvent(Keyboard::KeyEvent keyEvent, int key)
             case Keyboard::KEY_MINUS:
                 _formNodeParent->translateZ(-0.1f);
                 break;
-            case Keyboard::KEY_A:
-            case Keyboard::KEY_CAPITAL_A:
-                _keyFlags |= KEY_A_MASK;
-                break;
-            case Keyboard::KEY_B:
-            case Keyboard::KEY_CAPITAL_B:
-                _keyFlags |= KEY_B_MASK;
-                break;
             }
             break;
         case Keyboard::KEY_RELEASE:
-            switch (key)
-            {
-            case Keyboard::KEY_A:
-            case Keyboard::KEY_CAPITAL_A:
-                _keyFlags &= ~KEY_A_MASK;
-                break;
-            case Keyboard::KEY_B:
-            case Keyboard::KEY_CAPITAL_B:
-                _keyFlags &= ~KEY_B_MASK;
-                break;
-            }
             break;
         }
     }
@@ -380,41 +331,44 @@ void FormsSample::keyEvent(Keyboard::KeyEvent keyEvent, int key)
 
 void FormsSample::controlEvent(Control* control, EventType evt)
 {
-    if (strcmp("form0", control->getId()) == 0)
+    if (evt == CLICK)
     {
-        _formIndex = 0;
-        formChanged();
-    }
-    else if (strcmp("form1", control->getId()) == 0)
-    {
-        _formIndex = 1;
-        formChanged();
-    }
-    else if (strcmp("form2", control->getId()) == 0)
-    {
-        _formIndex = 2;
-        formChanged();
-    }
-    else if (strcmp("form3", control->getId()) == 0)
-    {
-        _formIndex = 3;
-        formChanged();
-    }
-    else if (strcmp("form4", control->getId()) == 0)
-    {
-        _formIndex = 4;
-        formChanged();
-    }
-    else if (strcmp("form5", control->getId()) == 0)
-    {
-        _formIndex = 5;
-        formChanged();
-    }
-    else if (strcmp("opacityButton", control->getId()) == 0)
-    {
-        float from[] = { 1.0f };
-        float to[] = { 0.5f };
-        control->createAnimationFromTo("opacityButton", Form::ANIMATE_OPACITY, from, to, Curve::LINEAR, 1000)->getClip()->play();
+        if (strcmp("form0", control->getId()) == 0)
+        {
+            _formIndex = 0;
+            formChanged();
+        }
+        else if (strcmp("form1", control->getId()) == 0)
+        {
+            _formIndex = 1;
+            formChanged();
+        }
+        else if (strcmp("form2", control->getId()) == 0)
+        {
+            _formIndex = 2;
+            formChanged();
+        }
+        else if (strcmp("form3", control->getId()) == 0)
+        {
+            _formIndex = 3;
+            formChanged();
+        }
+        else if (strcmp("form4", control->getId()) == 0)
+        {
+            _formIndex = 4;
+            formChanged();
+        }
+        else if (strcmp("form5", control->getId()) == 0)
+        {
+            _formIndex = 5;
+            formChanged();
+        }
+        else if (strcmp("opacityButton", control->getId()) == 0)
+        {
+            float from[] = { 1.0f };
+            float to[] = { 0.5f };
+            control->createAnimationFromTo("opacityButton", Form::ANIMATE_OPACITY, from, to, Curve::LINEAR, 1000)->getClip()->play();
+        }
     }
 }
 

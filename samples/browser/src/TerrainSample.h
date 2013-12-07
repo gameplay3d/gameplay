@@ -26,6 +26,8 @@ protected:
 
     void initialize();
 
+    bool intializeLights(Node* node);
+
     void finalize();
 
     void update(float elapsedTime);
@@ -60,6 +62,7 @@ private:
     Node* _sphere;
     Node* _box;
     std::list<Node*> _shapes;
+    Light* _directionalLight;
 
 };
 

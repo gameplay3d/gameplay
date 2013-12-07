@@ -20,7 +20,7 @@ namespace gameplay
 {
 
 Node::Node(const char* id)
-    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _visible(true),
+    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _active(true),
     _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
@@ -292,27 +292,30 @@ void Node::setUserPointer(void* pointer, void (*cleanupCallback)(void*))
     }
 }
 
-void Node::setVisible(bool visible)
+void Node::setActive(bool active)
 {
-    if (_visible != visible)
+    if (_active != active)
     {
-        _visible = visible;
+        if (_collisionObject)
+            _collisionObject->setEnabled(active);
+
+        _active = active;
     }
 }
 
-bool Node::isVisible() const
+bool Node::isActive() const
 {
-    return _visible;
+    return _active;
 }
 
-bool Node::isVisibleInHierarchy() const
+bool Node::isActiveInHierarchy() const
 {
-   if (!_visible)
+    if (!_active)
        return false;
    Node* node = _parent;
    while (node)
    {
-       if (!node->_visible)
+       if (!node->_active)
            return false;
    }
    return true;
@@ -432,6 +435,15 @@ Node* Node::getRootNode() const
         n = n->getParent();
     }
     return n;
+}
+
+void Node::update(float elapsedTime)
+{
+    for (Node* node = _firstChild; node != NULL; node = node->_nextSibling)
+    {
+        if (node->isActive())
+            node->update(elapsedTime);
+    }
 }
 
 bool Node::isStatic() const

@@ -22,7 +22,7 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterNode(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL), _basketballNode(NULL),
       _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0), _wireframe(false), _hasBall(false), _applyKick(false), _gamepad(NULL)
+      _keyFlags(0), _physicsDebug(false), _wireframe(false), _hasBall(false), _applyKick(false), _gamepad(NULL)
 {
     _buttonPressed = new bool[2];
 }
@@ -39,7 +39,7 @@ void CharacterGame::initialize()
     _font = Font::create("res/common/arial.gpb");
 
     // Load scene.
-    _scene = Scene::load("res/common/scene.scene");
+    _scene = Scene::load("res/common/sample.scene");
 
     // Update the aspect ratio for our scene's camera to match the current device resolution.
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
@@ -380,19 +380,9 @@ void CharacterGame::render(float elapsedTime)
     _scene->visit(this, &CharacterGame::drawScene, false);
     _scene->visit(this, &CharacterGame::drawScene, true);
 
-    // Draw debug info (physics bodies, bounds, etc).
-    switch (_drawDebug)
-    {
-    case 1:
+    // Draw physics debug
+    if (_physicsDebug)
         getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
-        break;
-    case 2:
-        _scene->drawDebug(Scene::DEBUG_BOXES);
-        break;
-    case 3:
-        _scene->drawDebug(Scene::DEBUG_SPHERES);
-        break;
-    }
 
     _gamepad->draw();
 
@@ -434,9 +424,7 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             _keyFlags &= ~WEST;
             break;
         case Keyboard::KEY_B:
-            _drawDebug++;
-            if (_drawDebug > 3)
-                _drawDebug = 0;
+            _physicsDebug = !_physicsDebug;
             break;
         case Keyboard::KEY_SPACE:
             jump();

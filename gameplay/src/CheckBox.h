@@ -35,7 +35,7 @@ namespace gameplay
 class CheckBox : public Button
 {
     friend class Container;
-	friend class ControlFactory;
+    friend class ControlFactory;
 
 public:
 
@@ -113,32 +113,10 @@ protected:
      *
      * @param style The style to apply to this checkbox.
      * @param properties The properties to set on this checkbox.
-     * @param theme The theme to set on this control if needed
-	 *
+     *
      * @return The new checkbox.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
-
-    /**
-     * Touch callback on touch events.  Controls return true if they consume the touch event.
-     *
-     * @param evt The touch event that occurred.
-     * @param x The x position of the touch in pixels. Left edge is zero.
-     * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
-     *
-     * @return Whether the touch event was consumed by the control.
-     *
-     * @see Touch::TouchEvent
-     */
-    bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-
-    /**
-     * Gamepad callback on gamepad events.
-     *
-     * @see Control::gamepadEvent
-     */
-    bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+    static Control* create(Theme::Style* style, Properties* properties);
 
     /**
      * Keyboard callback on key events.
@@ -147,6 +125,11 @@ protected:
      * @see Keyboard::Key
      */
     bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * @see Control#controlEvent
+     */
+    void controlEvent(Control::Listener::EventType evt);
 
     /**
      * Called when a control's properties change.  Updates this control's internal rendering

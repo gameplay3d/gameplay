@@ -35,7 +35,7 @@ class Button : public Label
 {
     friend class Container;
     friend class Gamepad;
-	friend class ControlFactory;
+    friend class ControlFactory;
 
 public:
 
@@ -67,40 +67,10 @@ protected:
      *
      * @param style The style to apply to this button.
      * @param properties The properties to set on this button.
-     * @param theme The theme to set on this control if needed.
-	 *
+     *
      * @return The new button.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
-
-    /**
-     * Touch callback on touch events.  Controls return true if they consume the touch event.
-     *
-     * @param evt The touch event that occurred.
-     * @param x The x position of the touch in pixels. Left edge is zero.
-     * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
-     *
-     * @return Whether the touch event was consumed by the control.
-     *
-     * @see Touch::TouchEvent
-     */
-    bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-
-    /**
-     * Gamepad callback on gamepad events.
-     *
-     * @see Control::gamepadEvent
-     */
-    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
-
-    /**
-     * Keyboard callback on key events.
-     *
-     * @see Keyboard::KeyEvent
-     * @see Keyboard::Key
-     */
-    virtual bool keyEvent(Keyboard::KeyEvent evt, int key);
+    static Control* create(Theme::Style* style, Properties* properties);
 
     /**
      * @see Control::getType

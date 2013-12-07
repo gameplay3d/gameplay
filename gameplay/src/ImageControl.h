@@ -1,7 +1,7 @@
 #ifndef IMAGECONTROL_H_
 #define IMAGECONTROL_H_
 
-#include "Button.h"
+#include "Control.h"
 #include "Theme.h"
 #include "Image.h"
 #include "SpriteBatch.h"
@@ -33,10 +33,10 @@ namespace gameplay
      }
  @endverbatim
  */
-class ImageControl : public Button
+class ImageControl : public Control
 {
     friend class Container;
-	friend class ControlFactory;
+    friend class ControlFactory;
 
 public:
 
@@ -94,7 +94,7 @@ public:
      * @param height The height of the destination region.
      */
     void setRegionDst(float x, float y, float width, float height);
-    
+
     /**
      * Sets the destination region of this ImageControl.  This is the region
      * within the control's viewport to draw the image.
@@ -115,10 +115,10 @@ public:
 protected:
 
     ImageControl();
-    
+
     virtual ~ImageControl();
 
-    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties);
 
     virtual void initialize(Theme::Style* style, Properties* properties);
 

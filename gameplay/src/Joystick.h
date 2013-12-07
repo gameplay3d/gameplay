@@ -138,11 +138,10 @@ protected:
      *
      * @param style The style to apply to this joystick.
      * @param properties The properties to set on this joystick.
-     * @param theme The theme to set on this control if needed.
 	 *
      * @return The new joystick.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties);
 
     /**
      * Initialize this joystick.

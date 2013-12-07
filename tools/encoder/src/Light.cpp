@@ -9,7 +9,6 @@ Light::Light(void) :
     _constantAttenuation(0.0f),
     _linearAttenuation(0.0f),
     _quadraticAttenuation(0.0f),
-    _falloffAngle(0.0f),
     _falloffExponent(0.0f),
     _range(-1.0f),
     _innerAngle(-1.0f),
@@ -55,44 +54,6 @@ float Light::computeRange(float constantAttenuation, float linearAttenuation, fl
     return range;
 }
 
-float lerpstep( float lower, float upper, float s)
-{
-    float lerpstep = ( s - lower ) / ( upper - lower );
-    
-    if (lerpstep < 0.0f)
-        lerpstep = 0.0f;
-    else if (lerpstep > 1.0f)
-        lerpstep = 1.0f;
-    
-    return lerpstep;
-}
-
-float Light::computeInnerAngle(float outerAngle)
-{
-    const float epsilon = 0.15f;
-
-    // Set inner angle to half of outer angle.
-    float innerAngle = outerAngle / 2.0f;
-
-    // Try to find the inner angle by sampling the attenuation with steps of angle.
-    for (float angle = 0.0; angle < outerAngle; angle += epsilon)
-    {
-        float outerCosAngle = cos(MATH_DEG_TO_RAD(outerAngle));
-        float innerCosAngle = cos(MATH_DEG_TO_RAD(innerAngle));
-            
-        float cosAngle = cos(MATH_DEG_TO_RAD(angle));
-        float att = lerpstep(outerCosAngle, innerCosAngle, cosAngle);
-        
-        if (att < 1.0f)
-        {
-            innerAngle = angle;
-            break;
-        }
-    }
-
-    return innerAngle;
-}
-
 void Light::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
@@ -108,17 +69,9 @@ void Light::writeBinary(FILE* file)
 
     if (_lightType == SpotLight)
     {
-        // Compute an approximate inner angle of the spot light using Collada's outer angle.
-        _outerAngle = _falloffAngle / 2.0f;
-        
-        if (_innerAngle == -1.0f)
-        {
-            _innerAngle = computeInnerAngle(_outerAngle);
-        }
-
         write(_range, file);
-        write(MATH_DEG_TO_RAD(_innerAngle), file);
-        write(MATH_DEG_TO_RAD(_outerAngle), file);
+        write(_innerAngle, file);
+        write(_outerAngle, file);
     }
     else if (_lightType == PointLight)
     {
@@ -141,13 +94,6 @@ void Light::writeText(FILE* file)
 
     if (_lightType == SpotLight)
     {
-        // Compute an approximate inner angle of the spot light using Collada's outer angle.
-        _outerAngle = _falloffAngle / 2.0f;
-        if (_innerAngle == -1.0f)
-        {
-            _innerAngle = computeInnerAngle(_outerAngle);
-        }
-
         fprintfElement(file, "range", _range);
         fprintfElement(file, "innerAngle", MATH_DEG_TO_RAD(_innerAngle));
         fprintfElement(file, "outerAngle", MATH_DEG_TO_RAD(_outerAngle));
@@ -214,9 +160,13 @@ void Light::setQuadraticAttenuation(float value)
 {
     _quadraticAttenuation = value;
 }
-void Light::setFalloffAngle(float value)
+void Light::setInnerAngle(float value)
 {
-    _falloffAngle = value;
+    _innerAngle = value;
+}
+void Light::setOuterAngle(float value)
+{
+    _outerAngle = value;
 }
 void Light::setFalloffExponent(float value)
 {

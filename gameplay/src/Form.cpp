@@ -14,14 +14,25 @@
 #define FORM_VSH "res/shaders/form.vert"
 #define FORM_FSH "res/shaders/form.frag"
 
+// Scroll speed when using a DPad -- max scroll speed when using a joystick.
+static const float GAMEPAD_SCROLL_SPEED = 500.0f;
+// Distance a joystick must be pushed in order to trigger focus-change and/or scrolling.
+static const float JOYSTICK_THRESHOLD = 0.75f;
+// If the DPad or joystick is held down, this is the initial delay in milliseconds between focus changes.
+static const float GAMEPAD_FOCUS_REPEAT_DELAY = 300.0f;
+
 namespace gameplay
 {
 
 static Effect* __formEffect = NULL;
 static std::vector<Form*> __forms;
+Control* Form::_focusControl = NULL;
+Control* Form::_activeControl = NULL;
+Control::State Form::_activeControlState = Control::NORMAL;
+static bool _shiftKeyDown = false;
 
 Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL),
-    _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0), _isGamepad(false)
+    _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0)
 {
 }
 
@@ -104,97 +115,37 @@ Form* Form::create(const char* url)
         return NULL;
     }
 
-    // Create new form with given ID, theme and layout.
+    // Parse theme
     std::string themeFile;
     formProperties->getPath("theme", &themeFile);
-
-    // Parse layout
-    Layout* layout = NULL;
-    Properties* layoutNS = formProperties->getNamespace("layout", true, false);
-    if (layoutNS)
-    {
-        Layout::Type layoutType = getLayoutType(layoutNS->getString("type"));
-        switch (layoutType)
-        {
-        case Layout::LAYOUT_ABSOLUTE:
-            layout = AbsoluteLayout::create();
-            break;
-        case Layout::LAYOUT_FLOW:
-            layout = FlowLayout::create();
-            static_cast<FlowLayout*>(layout)->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
-            break;
-        case Layout::LAYOUT_VERTICAL:
-            layout = VerticalLayout::create();
-            static_cast<VerticalLayout*>(layout)->setSpacing(layoutNS->getInt("spacing"));
-            break;
-        }
-    }
-    else
-    {
-        switch (getLayoutType(formProperties->getString("layout")))
-        {
-        case Layout::LAYOUT_ABSOLUTE:
-            layout = AbsoluteLayout::create();
-            break;
-        case Layout::LAYOUT_FLOW:
-            layout = FlowLayout::create();
-            break;
-        case Layout::LAYOUT_VERTICAL:
-            layout = VerticalLayout::create();
-            break;
-        }
-    }
-    if (layout == NULL)
-    {
-        GP_ERROR("Unsupported layout type for form: %s", url);
-    }
-
     Theme* theme = Theme::create(themeFile.c_str());
     GP_ASSERT(theme);
 
+    // Parse style
+    const char* styleName = formProperties->getString("style");
+    Theme::Style* style = styleName ? theme->getStyle(styleName) : theme->getEmptyStyle();
+
+    // Create new form
     Form* form = new Form();
-    form->_layout = layout;
     form->_theme = theme;
 
-    Theme::Style* style = NULL;
-    const char* styleName = formProperties->getString("style");
-    if (styleName)
-    {
-        style = theme->getStyle(styleName);
-    }
-    else
-    {
-        style = theme->getEmptyStyle();
-    }
+    // Initialize common container properties
     form->initialize(style, formProperties);
 
-    form->_consumeInputEvents = formProperties->getBool("consumeInputEvents", false);
-
-    form->_scroll = getScroll(formProperties->getString("scroll"));
-    form->_scrollBarsAutoHide = formProperties->getBool("scrollBarsAutoHide");
-    if (form->_scrollBarsAutoHide)
-    {
-        form->_scrollBarOpacity = 0.0f;
-    }
-
-    // Add all the controls to the form.
-    form->addControls(theme, formProperties);
-
-    SAFE_DELETE(properties);
-    
     form->updateFrameBuffer();
 
     __forms.push_back(form);
+
+    SAFE_DELETE(properties);
 
     return form;
 }
 
 Form* Form::getForm(const char* id)
 {
-    std::vector<Form*>::const_iterator it;
-    for (it = __forms.begin(); it < __forms.end(); ++it)
+    for (size_t i = 0, size = __forms.size(); i < size; ++i)
     {
-        Form* f = *it;
+        Form* f = __forms[i];
         GP_ASSERT(f);
         if (strcmp(id, f->getId()) == 0)
         {
@@ -202,6 +153,21 @@ Form* Form::getForm(const char* id)
         }
     }
     return NULL;
+}
+
+Control* Form::getFocusControl()
+{
+    return _focusControl;
+}
+
+void Form::clearFocus()
+{
+    setFocusControl(NULL);
+}
+
+bool Form::isForm() const
+{
+    return true;
 }
 
 Theme* Form::getTheme() const
@@ -350,13 +316,15 @@ void Form::setNode(Node* node)
 
 void Form::update(float elapsedTime)
 {
-    if (true)//isDirty())
+    if (isDirty())
     {
         update(NULL, Vector2::zero());
 
+        Control::State state = getState();
+
         // Cache themed attributes for performance.
-        _skin = getSkin(_state);
-        _opacity = getOpacity(_state);
+        _skin = getSkin(state);
+        _opacity = getOpacity(state);
 
         GP_ASSERT(_layout);
         if (_scroll != SCROLL_NONE)
@@ -375,9 +343,9 @@ void Form::update(const Control* container, const Vector2& offset)
     // Store previous absolute bounds
     Rectangle oldAbsoluteClipBounds = _absoluteClipBounds;
 
-    _layout->align(this, NULL);
-
     Container::update(container, offset);
+
+    _layout->align(this, NULL);
 
     if (_absoluteClipBounds.width != oldAbsoluteClipBounds.width || _absoluteClipBounds.height != oldAbsoluteClipBounds.height)
     {
@@ -399,7 +367,7 @@ unsigned int Form::draw()
     // to render the contents of the framebuffer directly to the display.
 
     // Check whether this form has changed since the last call to draw() and if so, render into the framebuffer.
-    if (true)//isDirty())
+    if (isDirty())
     {
         FrameBuffer* previousFrameBuffer = _frameBuffer->bind();
 
@@ -443,162 +411,642 @@ const char* Form::getType() const
     return "form";
 }
 
+Control* Form::getActiveControl()
+{
+    return _activeControl;
+}
+
 void Form::updateInternal(float elapsedTime)
 {
-    size_t size = __forms.size();
-    for (size_t i = 0; i < size; ++i)
+    pollGamepads();
+
+    for (size_t i = 0, size = __forms.size(); i < size; ++i)
     {
         Form* form = __forms[i];
-        GP_ASSERT(form);
 
-        if (form->isEnabled() && form->isVisible())
+        if (form && form->isEnabled() && form->isVisible())
         {
             form->update(elapsedTime);
         }
     }
 }
 
-static bool shouldPropagateTouchEvent(Control::State state, Touch::TouchEvent evt, const Rectangle& bounds, int x, int y)
+bool Form::screenToForm(Control* ctrl, int* x, int* y)
 {
-    return (state != Control::NORMAL ||
-            (evt == Touch::TOUCH_PRESS &&
-             x >= bounds.x &&
-             x <= bounds.x + bounds.width &&
-             y >= bounds.y &&
-             y <= bounds.y + bounds.height));
+    Form* form = ctrl->getTopLevelForm();
+    if (form)
+    {
+        if (form->_node)
+        {
+            // Form is attached to a scene node, so project the screen space point into the
+            // form's coordinate space (which may be transformed by the node).
+            Vector3 point;
+            if (form->projectPoint(*x, *y, &point))
+            {
+                *x = (int)point.x;
+                *y = form->_bounds.height - (int)point.y;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        *x -= form->_bounds.x;
+        *y -= form->_bounds.y;
+
+        return true;
+    }
+
+    return false;
+}
+
+Control* Form::findInputControl(int* x, int* y, bool focus)
+{
+    for (int i = (int)__forms.size() - 1; i >= 0; --i)
+    {
+        Form* form = __forms[i];
+        if (!form || !form->isEnabled() || !form->isVisible())
+            continue;
+
+        // Convert to local form coordinates
+        int formX = *x;
+        int formY = *y;
+        if (!screenToForm(form, &formX, &formY))
+            continue;
+
+        // Search for an input control within this form
+        Control* ctrl = findInputControl(form, formX, formY, focus);
+        if (ctrl)
+        {
+            *x = formX;
+            *y = formY;
+            return ctrl;
+        }
+
+        // If the form consumes input events and the point intersects the form,
+        // don't traverse other forms below it.
+        if (form->_consumeInputEvents && form->_absoluteClipBounds.contains(formX, formY))
+            return NULL;
+    }
+
+    return NULL;
+}
+
+Control* Form::findInputControl(Control* control, int x, int y, bool focus)
+{
+    Control* result = NULL;
+
+    // Does the passed in control's bounds intersect the specified coordinates - and 
+    // does the control support the specified input state?
+    if (control->_consumeInputEvents && control->_visible && control->_enabled && (!focus || control->canFocus()))
+    {
+        if (control->_absoluteClipBounds.contains(x, y))
+            result = control;
+    }
+
+    // If the control has children, search for an input control inside it that also
+    // supports the above conditions.
+    if (control->isContainer())
+    {
+        Container* container = static_cast<Container*>(control);
+        for (int i = (int)container->getControlCount() - 1; i >= 0; --i)
+        {
+            Control* ctrl = findInputControl(container->getControl((unsigned int)i), x, y, focus);
+            if (ctrl)
+                result = ctrl;
+        }
+    }
+
+    return result;
+}
+
+Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
+{
+    Control* ctrl = NULL;
+
+    int newX = *x;
+    int newY = *y;
+
+    if (pressed)
+    {
+        // Update active state changes
+        if ((ctrl = findInputControl(&newX, &newY, false)) != NULL)
+        {
+            if (_activeControl != ctrl || _activeControlState != Control::ACTIVE)
+            {
+                if (_activeControl)
+                    _activeControl->_dirty = true;
+
+                _activeControl = ctrl;
+                _activeControlState = Control::ACTIVE;
+                _activeControl->_dirty = true;
+            }
+
+            ctrl->notifyListeners(Control::Listener::PRESS);
+        }
+    }
+    else // !pressed
+    {
+        Control* active = _activeControlState == Control::ACTIVE ? _activeControl : NULL;
+
+        if (active)
+        {
+            active->addRef(); // protect against event-hanlder evil
+
+            // Release happened for the active control (that was pressed)
+            ctrl = active;
+
+            // Transform point to form-space
+            screenToForm(ctrl, &newX, &newY);
+
+            // No longer any active control
+            _activeControl->_dirty = true;
+            _activeControl = NULL;
+            _activeControlState = Control::NORMAL;
+        }
+        else
+        {
+            // Update active and hover control state on release
+            Control* inputControl = findInputControl(&newX, &newY, false);
+            if (inputControl)
+            {
+                ctrl = inputControl;
+
+                if (_activeControl != ctrl || _activeControlState != Control::HOVER)
+                {
+                    if (_activeControl)
+                        _activeControl->_dirty = true;
+
+                    _activeControl = ctrl;
+                    _activeControlState = Control::HOVER;
+                    _activeControl->_dirty = true;
+                }
+            }
+            else
+            {
+                // No longer any active control
+                if (_activeControl)
+                    _activeControl->_dirty = true;
+
+                _activeControl = NULL;
+                _activeControlState = Control::NORMAL;
+            }
+        }
+
+        if (active)
+        {
+            // Fire release event for the previously active control
+            active->notifyListeners(Control::Listener::RELEASE);
+
+            // If the release event was received on the same control that was
+            // originally pressed, fire a click event
+            if (active->_absoluteClipBounds.contains(newX, newY))
+            {
+                if (!active->_parent || !active->_parent->isScrolling())
+                {
+                    active->notifyListeners(Control::Listener::CLICK);
+                }
+            }
+
+            active->release();
+        }
+    }
+
+    *x = newX;
+    *y = newY;
+
+    return ctrl;
+}
+
+Control* Form::handlePointerMove(int* x, int* y)
+{
+    Control* ctrl = NULL;
+
+    // Handle hover control changes on move, only if there is no currently active control
+    // (i.e. when the mouse or a finger is not down).
+    if (_activeControl && (_activeControlState == Control::ACTIVE))
+    {
+        ctrl = _activeControl;
+        screenToForm(ctrl, x, y);
+    }
+    else
+    {
+        ctrl = findInputControl(x, y, false);
+        if (ctrl)
+        {
+            // Update hover control
+            if (_activeControl != ctrl || _activeControlState != Control::HOVER)
+            {
+                if (_activeControl)
+                    _activeControl->_dirty = true;
+
+                _activeControl = ctrl;
+                _activeControlState = Control::HOVER;
+                _activeControl->_dirty = true;
+            }
+        }
+        else
+        {
+            // No active/hover control
+            if (_activeControl)
+                _activeControl->_dirty = true;
+
+            _activeControl = NULL;
+            _activeControlState = Control::NORMAL;
+        }
+    }
+
+    return ctrl;
+}
+
+void Form::verifyRemovedControlState(Control* control)
+{
+    if (_focusControl == control)
+        _focusControl = NULL;
+
+    if (_activeControl == control)
+    {
+        _activeControl = NULL;
+        _activeControlState = Control::NORMAL;
+    }
+}
+
+// Generic pointer event handler that both touch and mouse events map to.
+// Mappings:
+//   mouse - true for mouse events, false for touch events
+//   evt - Mouse::MouseEvent or Touch::TouchEvent
+//   x, y - Point of event
+//   param - wheelData for mouse events, contactIndex for touch events
+bool Form::pointerEventInternal(bool mouse, int evt, int x, int y, int param)
+{
+    // Do not process mouse input when mouse is captured
+    if (mouse && Game::getInstance()->isMouseCaptured())
+        return false;
+
+    // Is this a press event (TOUCH_PRESS has the same value as MOUSE_PRESS_LEFT_BUTTON)
+    bool pressEvent = evt == Touch::TOUCH_PRESS || (mouse && (evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON || evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON));
+
+    Control* ctrl = NULL;
+    int formX = x;
+    int formY = y;
+
+    if (mouse || (param == 0))
+    {
+        // Note: TOUCH_PRESS and TOUCH_RELEASE have same values as MOUSE_PRESS_LEFT_BUTTON and MOUSE_RELEASE_LEFT_BUTTON
+        if (evt == Touch::TOUCH_PRESS)
+        {
+            ctrl = handlePointerPressRelease(&formX, &formY, true);
+        }
+        else if (evt == Touch::TOUCH_RELEASE)
+        {
+            ctrl = handlePointerPressRelease(&formX, &formY, false);
+        }
+        else if ((mouse && evt == Mouse::MOUSE_MOVE) || (!mouse && evt == Touch::TOUCH_MOVE))
+        {
+            ctrl = handlePointerMove(&formX, &formY);
+        }
+    }
+
+    // Dispatch input events to all controls that intersect this point
+    if (ctrl == NULL)
+    {
+        formX = x;
+        formY = y;
+        ctrl = findInputControl(&formX, &formY, false);
+    }
+
+    if (ctrl)
+    {
+        // Handle container scrolling
+        Control* tmp = ctrl;
+        while (tmp)
+        {
+            if (tmp->isContainer())
+            {
+                Container* container = static_cast<Container*>(tmp);
+                if (container->_scroll != SCROLL_NONE)
+                {
+                    if (mouse)
+                    {
+                        if (container->mouseEventScroll((Mouse::MouseEvent)evt, formX - tmp->_absoluteBounds.x, formY - tmp->_absoluteBounds.y, param))
+                            return true;
+                    }
+                    else
+                    {
+                        if (container->touchEventScroll((Touch::TouchEvent)evt, formX - tmp->_absoluteBounds.x, formY - tmp->_absoluteBounds.y, param))
+                            return true;
+                    }
+                    break; // scrollable parent container found
+                }
+            }
+            tmp = tmp->_parent;
+        }
+
+        // Handle setting focus for all press events
+        if (pressEvent)
+        {
+            Control* focusControl = ctrl;
+            while (focusControl && !focusControl->setFocus())
+                focusControl = focusControl->_parent;
+
+            if (focusControl == NULL)
+            {
+                // Nothing got focus on this press, so remove current focused control
+                setFocusControl(NULL);
+            }
+        }
+
+        // Dispatch the event from the bottom upwards, until a control intersecting the point consumes the event
+        while (ctrl)
+        {
+            int localX = formX - ctrl->_absoluteBounds.x;
+            int localY = formY - ctrl->_absoluteBounds.y;
+            if (mouse)
+            {
+                if (ctrl->mouseEvent((Mouse::MouseEvent)evt, localX, localY, param))
+                    return true;
+
+                // Forward to touch event hanlder if unhandled by mouse handler
+                switch (evt)
+                {
+                case Mouse::MOUSE_PRESS_LEFT_BUTTON:
+                    if (ctrl->touchEvent(Touch::TOUCH_PRESS, localX, localY, 0))
+                        return true;
+                    break;
+                case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
+                    if (ctrl->touchEvent(Touch::TOUCH_RELEASE, localX, localY, 0))
+                        return true;
+                    break;
+                case Mouse::MOUSE_MOVE:
+                    if (ctrl->touchEvent(Touch::TOUCH_MOVE, localX, localY, 0))
+                        return true;
+                    break;
+                }
+            }
+            else
+            {
+                if (ctrl->touchEvent((Touch::TouchEvent)evt, localX, localY, param))
+                    return true;
+            }
+
+            // Consume all input events anyways?
+            if (ctrl->getConsumeInputEvents())
+                return true;
+
+            ctrl = ctrl->getParent();
+        }
+    }
+    else
+    {
+        // If this was a press event, remove all focus
+        if (pressEvent)
+        {
+            setFocusControl(NULL);
+        }
+    }
+
+    return false;
 }
 
 bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    // Check for a collision with each Form in __forms.
-    // Pass the event on.
-    size_t size = __forms.size();
-    for (size_t i = 0; i < size; ++i)
-    {
-        Form* form = __forms[i];
-        GP_ASSERT(form);
-
-        if (form->isEnabled() && form->isVisible())
-        {
-            if (form->_node)
-            {
-                Vector3 point;
-                if (form->projectPoint(x, y, &point))
-                {
-                    const Rectangle& bounds = form->getBounds();
-                    if (shouldPropagateTouchEvent(form->getState(), evt, bounds, point.x, point.y))
-                    {
-                        if (form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex))
-                            return true;
-                    }
-                }
-            }
-            else
-            {
-                // Simply compare with the form's bounds.
-                const Rectangle& bounds = form->getBounds();
-                if (shouldPropagateTouchEvent(form->getState(), evt, bounds, x, y))
-                {
-                    // Pass on the event's position relative to the form.
-                    if (form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex))
-                        return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
-{
-    size_t size = __forms.size();
-    for (size_t i = 0; i < size; ++i)
-    {
-        Form* form = __forms[i];
-        GP_ASSERT(form);
-        if (form->isEnabled() && form->isVisible() && form->hasFocus() && !form->_isGamepad)
-        {
-            if (form->keyEvent(evt, key))
-                return true;
-        }
-    }
-    return false;
-}
-
-static bool shouldPropagateMouseEvent(Control::State state, Mouse::MouseEvent evt, const Rectangle& bounds, int x, int y)
-{
-    return (state != Control::NORMAL ||
-            ((evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
-              evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
-              evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
-              evt == Mouse::MOUSE_MOVE ||
-              evt == Mouse::MOUSE_WHEEL) &&
-                x >= bounds.x &&
-                x <= bounds.x + bounds.width &&
-                y >= bounds.y &&
-                y <= bounds.y + bounds.height));
+    return pointerEventInternal(false, evt, x, y, (int)contactIndex);
 }
 
 bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    // Do not process mouse input when mouse is captured
-    if (Game::getInstance()->isMouseCaptured())
+    return pointerEventInternal(true, evt, x, y, wheelDelta);
+}
+
+bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    switch (key)
+    {
+    case Keyboard::KEY_ESCAPE:
+        return false; // ignore escape key presses
+
+    case Keyboard::KEY_SHIFT:
+        if (evt == Keyboard::KEY_PRESS)
+            _shiftKeyDown = true;
+        else if (evt == Keyboard::KEY_RELEASE)
+            _shiftKeyDown = false;
+        break;
+    }
+    if (key == Keyboard::KEY_ESCAPE)
         return false;
 
-    for (size_t i = 0; i < __forms.size(); ++i)
+    // Handle focus changing
+    if (_focusControl)
     {
-        Form* form = __forms[i];
-        GP_ASSERT(form);
-
-        if (form->isEnabled() && form->isVisible())
+        switch (evt)
         {
-            if (form->_node)
+        case Keyboard::KEY_CHAR:
+            switch (key)
             {
-                Vector3 point;
-                if (form->projectPoint(x, y, &point))
+            case Keyboard::KEY_TAB:
+                if (_focusControl->_parent)
                 {
-                    const Rectangle& bounds = form->getBounds();
-                    if (shouldPropagateMouseEvent(form->getState(), evt, bounds, point.x, point.y))
-                    {
-                        if (form->mouseEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, wheelDelta))
-                            return true;
-                    }
-                }
-            }
-            else
-            {
-                // Simply compare with the form's bounds.
-                const Rectangle& bounds = form->getBounds();
-                if (shouldPropagateMouseEvent(form->getState(), evt, bounds, x, y))
-                {
-                    // Pass on the event's position relative to the form.
-                    if (form->mouseEvent(evt, x - bounds.x, y - bounds.y, wheelDelta))
+                    if (_focusControl->_parent->moveFocus(_shiftKeyDown ? Container::PREVIOUS : Container::NEXT))
                         return true;
                 }
+                break;
             }
+            break;
         }
     }
+
+    // Dispatch key events
+    Control* ctrl = _focusControl;
+    while (ctrl)
+    {
+        if (ctrl->isEnabled() && ctrl->isVisible())
+        {
+            if (ctrl->keyEvent(evt, key))
+                return true;
+        }
+
+        ctrl = ctrl->getParent();
+    }
+
     return false;
 }
 
-void Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+void Form::pollGamepads()
 {
-    for (size_t i = 0; i < __forms.size(); ++i)
-    {
-        Form* form = __forms[i];
-        GP_ASSERT(form);
+    Game* game = Game::getInstance();
 
-        if (form->isEnabled() && form->isVisible() && form->hasFocus())
+    // If no gamepads are connected, return immediately
+    unsigned int gamepadCount = game->getGamepadCount();
+    if (gamepadCount == 0)
+        return;
+
+    // For now, always use gamepad zero for controlling the UI.
+    // Possibly allow the developer to set the active gamepad for UI later.
+    Gamepad* gamepad = game->getGamepad(0, true);
+    if (!gamepad)
+        return;
+
+    pollGamepad(gamepad);
+}
+
+bool Form::pollGamepad(Gamepad* gamepad)
+{
+    // Get the currently focused control's container for focus management and scrolling
+    if (!_focusControl)
+        return false;
+
+    // Get parent container
+    Container* parentContainer = NULL;
+    if (_focusControl->_parent)
+        parentContainer = _focusControl->_parent;
+
+    // Get scroll container
+    Container* scrollContainer = NULL;
+    if (_focusControl->isContainer())
+    {
+        scrollContainer = static_cast<Container*>(_focusControl);
+        if (scrollContainer->_scroll == SCROLL_NONE)
+            scrollContainer = NULL;
+    }
+    if (!scrollContainer && parentContainer && parentContainer->_scroll != SCROLL_NONE)
+        scrollContainer = parentContainer;
+
+    // Static static maintained across function calls
+    static bool scrolling = false;
+    static double lastFocusChangeTime = 0;
+
+    bool focusPressed = false;
+    bool stillScrolling = false;
+    double currentTime = Game::getAbsoluteTime();
+    double focusChangeElapsedTime = currentTime - lastFocusChangeTime;
+
+    // Is a selection button down (i.e. buttons used for UI clicking/interactions)?
+    bool selectButtonDown = gamepad->isButtonDown(Gamepad::BUTTON_A) || gamepad->isButtonDown(Gamepad::BUTTON_X);
+
+    if (!selectButtonDown)
+    {
+        // Get values of analog joysticks 1 and 2 (assume left and right analog sticks)
+        Vector2 joystick;
+        unsigned int joystickCount = gamepad->getJoystickCount();
+        gamepad->getJoystickValues(0, &joystick);
+
+        if (parentContainer)
         {
-            if (form->gamepadEvent(evt, gamepad, analogIndex))
-                return;
+            // The Dpad and left analog stick (i.e. first analog stick when there are two joysticks) controls focus
+            if (gamepad->isButtonDown(Gamepad::BUTTON_UP) || (joystickCount > 1 && joystick.y > JOYSTICK_THRESHOLD))
+            {
+                focusPressed = true;
+                if (focusChangeElapsedTime > GAMEPAD_FOCUS_REPEAT_DELAY && parentContainer->moveFocus(UP))
+                {
+                    lastFocusChangeTime = currentTime;
+                }
+            }
+
+            if (gamepad->isButtonDown(Gamepad::BUTTON_DOWN) || (joystickCount > 1 && joystick.y < -JOYSTICK_THRESHOLD))
+            {
+                focusPressed = true;
+                if (focusChangeElapsedTime > GAMEPAD_FOCUS_REPEAT_DELAY && parentContainer->moveFocus(DOWN))
+                {
+                    lastFocusChangeTime = currentTime;
+                }
+            }
+
+            if (gamepad->isButtonDown(Gamepad::BUTTON_LEFT) || (joystickCount > 1 && joystick.x < -JOYSTICK_THRESHOLD))
+            {
+                focusPressed = true;
+                if (focusChangeElapsedTime > GAMEPAD_FOCUS_REPEAT_DELAY && parentContainer->moveFocus(LEFT))
+                {
+                    lastFocusChangeTime = currentTime;
+                }
+            }
+
+            if (gamepad->isButtonDown(Gamepad::BUTTON_RIGHT) || (joystickCount > 1 && joystick.x > JOYSTICK_THRESHOLD))
+            {
+                focusPressed = true;
+                if (focusChangeElapsedTime > GAMEPAD_FOCUS_REPEAT_DELAY && parentContainer->moveFocus(RIGHT))
+                {
+                    lastFocusChangeTime = currentTime;
+                }
+            }
+        }
+
+        // The RIGHT analog stick (i.e. second), or ONLY analog stick (when only 1 joystick), is used to scroll.
+        if (scrollContainer && joystickCount > 0)
+        {
+            if (joystickCount > 1)
+                gamepad->getJoystickValues(1, &joystick);
+            if (std::fabs(joystick.x) > JOYSTICK_THRESHOLD || std::fabs(joystick.y) > JOYSTICK_THRESHOLD)
+            {
+                scrollContainer->startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, GAMEPAD_SCROLL_SPEED * joystick.y, !scrolling);
+                scrolling = stillScrolling = true;
+            }
         }
     }
+
+    if (!focusPressed)
+    {
+        // Reset focus repeat
+        lastFocusChangeTime = 0;
+    }
+
+    if (scrolling && !stillScrolling)
+    {
+        scrolling = false;
+        if (scrollContainer)
+            scrollContainer->stopScrolling();
+    }
+
+    return focusPressed || scrolling;
+}
+
+bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    if (!_focusControl)
+        return false;
+
+    bool selectButtonPressed = gamepad->isButtonDown(Gamepad::BUTTON_A) || gamepad->isButtonDown(Gamepad::BUTTON_X);
+
+    // Fire press, release and click events to focused controls
+    switch (evt)
+    {
+    case Gamepad::BUTTON_EVENT:
+        if (selectButtonPressed && (_activeControl != _focusControl || _activeControlState != Control::ACTIVE))
+        {
+            _activeControl = _focusControl;
+            _activeControlState = Control::ACTIVE;
+            _activeControl->notifyListeners(Control::Listener::PRESS);
+            return true;
+        }
+        else if (!selectButtonPressed && _activeControl == _focusControl && _activeControlState == Control::ACTIVE)
+        {
+            _activeControlState = Control::NORMAL;
+            _activeControl->notifyListeners(Control::Listener::RELEASE);
+            _activeControl->notifyListeners(Control::Listener::CLICK);
+            return true;
+        }
+        break;
+    }
+
+    // Dispatch gamepad events to focused controls (or their parents)
+    Control * ctrl = _focusControl;
+    while (ctrl)
+    {
+        if (ctrl->isEnabled() && ctrl->isVisible())
+        {
+            if (ctrl->gamepadEvent(evt, gamepad, analogIndex))
+                return true;
+        }
+
+        ctrl = ctrl->getParent();
+    }
+
+    return false;
 }
 
 void Form::resizeEventInternal(unsigned int width, unsigned int height)
 {
-    for (size_t i = 0; i < __forms.size(); ++i)
+    for (size_t i = 0, size = __forms.size(); i < size; ++i)
     {
         Form* form = __forms[i];
         if (form)
@@ -619,6 +1067,9 @@ void Form::resizeEventInternal(unsigned int width, unsigned int height)
 
 bool Form::projectPoint(int x, int y, Vector3* point)
 {
+    if (!_node)
+        return false;
+
     Scene* scene = _node->getScene();
     Camera* camera;
 
@@ -673,6 +1124,80 @@ unsigned int Form::nextPowerOfTwo(unsigned int v)
     else
     {
         return v;
+    }
+}
+
+void Form::controlDisabled(Control* control)
+{
+    if (Form::_focusControl && (Form::_focusControl == control || Form::_focusControl->isChild(control)))
+    {
+        setFocusControl(NULL);
+    }
+
+    if (Form::_activeControl)
+    {
+        if (Form::_activeControl == control || Form::_activeControl->isChild(control))
+        {
+            Form::_activeControl = NULL;
+            Form::_activeControlState = Control::NORMAL;
+        }
+    }
+}
+
+void Form::setFocusControl(Control* control)
+{
+    Control* oldFocus = _focusControl;
+
+    _focusControl = control;
+
+    // Deactivate the old focus control
+    if (oldFocus)
+    {
+        oldFocus->_dirty = true;
+        oldFocus->notifyListeners(Control::Listener::FOCUS_LOST);
+    }
+
+    // Activate the new focus control
+    if (_focusControl)
+    {
+        _focusControl->_dirty = true;
+        _focusControl->notifyListeners(Control::Listener::FOCUS_GAINED);
+
+        // Set the activeControl property of the control's parent container
+        Container* parent = NULL;
+        if (_focusControl->_parent)
+        {
+            parent = _focusControl->_parent;
+            parent->_activeControl = _focusControl;
+        }
+
+        // If this control is inside a scrollable container and is not fully visible,
+        // scroll the container so that it is.
+        if (parent && parent->_scroll != SCROLL_NONE && !parent->_viewportBounds.isEmpty())
+        {
+            const Rectangle& bounds = _focusControl->getBounds();
+            if (bounds.x < parent->_scrollPosition.x)
+            {
+                // Control is to the left of the scrolled viewport.
+                parent->_scrollPosition.x = -bounds.x;
+            }
+            else if (bounds.x + bounds.width > parent->_scrollPosition.x + parent->_viewportBounds.width)
+            {
+                // Control is off to the right.
+                parent->_scrollPosition.x = -(bounds.x + bounds.width - parent->_viewportBounds.width);
+            }
+
+            if (bounds.y < parent->_viewportBounds.y - parent->_scrollPosition.y)
+            {
+                // Control is above the viewport.
+                parent->_scrollPosition.y = -bounds.y;
+            }
+            else if (bounds.y + bounds.height > parent->_viewportBounds.height - parent->_scrollPosition.y)
+            {
+                // Control is below the viewport.
+                parent->_scrollPosition.y = -(bounds.y + bounds.height - parent->_viewportBounds.height);
+            }
+        }
     }
 }
 

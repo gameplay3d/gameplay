@@ -48,9 +48,11 @@ namespace gameplay
     }
  @endverbatim
  */
-class Container : public Control, TimeListener
+class Container : public Control
 {
-	friend class ControlFactory;
+    friend class Form;
+    friend class Control;
+    friend class ControlFactory;
 
 public:
 
@@ -145,12 +147,26 @@ public:
     Control* getControl(const char* id) const;
 
     /**
+     * Returns the number of child controls for this container.
+     *
+     * @return The number of child controls.
+     */
+    unsigned int getControlCount() const;
+
+    /**
      * Get the vector of controls within this container.
      *
      * @return The vector of the controls within this container.
      * @script{ignore}
      */
     const std::vector<Control*>& getControls() const;
+
+    /**
+     * Determines if this container is a top level form.
+     *
+     * @return True if the container is a top level form, false otherwise.
+     */
+    virtual bool isForm() const;
 
     /**
      * Sets the allowed scroll directions for this container.
@@ -249,6 +265,28 @@ public:
     void setScrollWheelRequiresFocus(bool required);
 
     /**
+     * @see Control::setFocus
+     */
+    bool setFocus();
+
+    /**
+     * Returns the currently active control for this container.
+     *
+     * @return This container's active control.
+     */
+    Control* getActiveControl() const;
+    
+    /**
+     * Sets the active control for this container.
+     *
+     * A container's active control is the control that will receive focus
+     * when the container receives focus.
+     *
+     * @param control The container's new active control (must be a child of this container).
+     */
+    void setActiveControl(Control* control);
+
+    /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
@@ -263,13 +301,6 @@ public:
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
-    /**
-     * @see TimeListener::timeEvent
-     *
-     * @script{ignore}
-     */
-    void timeEvent(long timeDiff, void* cookie);
-
 protected:
 
     /**
@@ -283,24 +314,22 @@ protected:
     virtual ~Container();
 
     /**
-     * Create an empty container.  A container's layout type must be specified at creation time.
-     *
-     * @param type The container's layout type.
-     *
-     * @return The new container.
-     */
-    static Container* create(Layout::Type type);
-
-    /**
      * Create a container with a given style and properties, including a list of controls.
      *
      * @param style The style to apply to this container.
      * @param properties The properties to set on this container, including nested controls.
-     * @param theme The theme to search for control styles within.
      *
      * @return The new container.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme* theme);
+    static Control* create(Theme::Style* style, Properties* properties);
+
+    /**
+     * Initialize properties common to all Containers from a Properties object.
+     *
+     * @param style The style to apply to this control.
+     * @param properties The properties to set on this control.
+     */
+    void initialize(Theme::Style* style, Properties* properties);
 
     /**
      * Updates each control within this container,
@@ -312,61 +341,21 @@ protected:
     virtual void update(const Control* container, const Vector2& offset);
 
     /**
-     * Touch callback on touch events.  Controls return true if they consume the touch event.
-     *
-     * @param evt The touch event that occurred.
-     * @param x The x position of the touch in pixels. Left edge is zero.
-     * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
-     *
-     * @return Whether the touch event was consumed by a control within this container.
-     *
-     * @see Touch::TouchEvent
-     */
-    virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-    
-    /**
-     * Keyboard callback on key events.  Passes key events on to the currently focused control.
-     *
-     * @param evt The key event that occurred.
-     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
-     *            If evt is KEY_CHAR then key is the unicode value of the character.
-     *
-     * @return Whether the key event was consumed by this control.
-     * 
-     * @see Keyboard::KeyEvent
-     * @see Keyboard::Key
-     */
-    virtual bool keyEvent(Keyboard::KeyEvent evt, int key);
-
-    /**
-     * Mouse callback on mouse events.
-     *
-     * @param evt The mouse event that occurred.
-     * @param x The x position of the mouse in pixels. Left edge is zero.
-     * @param y The y position of the mouse in pixels. Top edge is zero.
-     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
-     *
-     * @return True if the mouse event is consumed or false if it is not consumed.
-     *
-     * @see Mouse::mouseEvent
-     */
-    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
-
-    /**
-     * Gamepad callback on gamepad events.
-     *
-     * @see Control::gamepadEvent
-     */
-    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
-
-    /**
      * Gets a Layout::Type enum from a matching string.
      *
      * @param layoutString The layout string to parse
+     * @return The parsed layout type.
      */
     static Layout::Type getLayoutType(const char* layoutString);
-    
+
+    /**
+     * Creates a layout for the specified layout type.
+     *
+     * @param type The type of layout to create.
+     * @return The new Layout.
+     */
+    static Layout* createLayout(Layout::Type type);
+
     /**
      * Returns whether this container or any of its controls have been modified and require an update.
      * 
@@ -435,22 +424,6 @@ protected:
     bool mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
-     * Mouse pointer event callback.
-     *
-     * @param mouse Whether to treat the event as a mouse event or a touch event.
-     * @param evt The pointer event (either a Mouse::MouseEvent or a Touch::TouchEvent).
-     * @param x The x position of the pointer event in pixels. Left edge is zero.
-     * @param y The y position of the pointer event in pixels. Top edge is zero.
-     * @param data The event's data (depends on whether it is a mouse event or a touch event).
-     *
-     * @return Whether the pointer event was consumed by this container.
-     * 
-     * @see Mouse::MouseEvent
-     * @see Touch::TouchEvent
-     */
-    bool pointerEvent(bool mouse, char evt, int x, int y, int data);
-
-    /**
      * Get a Scroll enum from a matching string.
      *
      * @param scroll A string representing a Scroll enum.
@@ -467,6 +440,10 @@ protected:
      * List of controls within the container.
      */
     std::vector<Control*> _controls;
+    /**
+     * The active control for the container.
+     */
+    Control* _activeControl;
     /**
      * Scrollbar top cap image.
      */
@@ -593,16 +570,18 @@ private:
         DOWN = 0x02,
         LEFT = 0x04,
         RIGHT = 0x08,
-        NEXT = 0x10
+        NEXT = 0x10,
+        PREVIOUS = 0x20
     };
 
     static const int MAX_CONTACT_INDICES = 10;
 
     // Returns true on success; false if there are no controls to focus on,
     // in which case scrolling can be initiated.
-    bool moveFocus(Direction direction, Control* outsideControl = NULL);
+    bool moveFocus(Direction direction);
 
-    void guaranteeFocus(Control* inFocus);
+	bool moveFocusNextPrevious(Direction direction);
+	bool moveFocusDirectional(Direction direction);
 
     // Starts scrolling at the given horizontal and vertical speeds.
     void startScrolling(float x, float y, bool resetTime = true);
@@ -614,18 +593,8 @@ private:
 
     AnimationClip* _scrollBarOpacityClip;
     int _zIndexDefault;
-    int _focusIndexDefault;
-    int _focusIndexMax;
-    unsigned int _focusPressed;
     bool _selectButtonDown;
     double _lastFrameTime;
-
-    // Timing information for repeating focus changes.
-    bool _focusChangeRepeat;
-    double _focusChangeStartTime;
-    double _focusChangeRepeatDelay;
-    unsigned int _focusChangeCount;
-    Direction _direction;
 
     float _totalWidth;
     float _totalHeight;

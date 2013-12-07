@@ -28,7 +28,7 @@ Joystick* Joystick::create(const char* id, Theme::Style* style)
     return joystick;
 }
 
-Control* Joystick::create(Theme::Style* style, Properties* properties, Theme *theme)
+Control* Joystick::create(Theme::Style* style, Properties* properties)
 {
     Joystick* joystick = new Joystick();
     joystick->initialize(style, properties);
@@ -41,6 +41,8 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
     GP_ASSERT(properties);
 
     Control::initialize(style, properties);
+
+    Control::State state = getState();
 
     if (!properties->exists("radius"))
     {
@@ -59,7 +61,7 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
         setRelative(false);
     }
 
-    Theme::ThemeImage* inner = getImage("inner", _state);
+    Theme::ThemeImage* inner = getImage("inner", state);
     if (inner)
     {
         _innerSize = new Vector2();
@@ -75,7 +77,7 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
         }
     }
 
-    Theme::ThemeImage* outer = getImage("outer", _state);
+    Theme::ThemeImage* outer = getImage("outer", state);
     if (outer)
     {
         _outerSize = new Vector2();
@@ -118,9 +120,9 @@ void Joystick::addListener(Control::Listener* listener, int eventFlags)
     Control::addListener(listener, eventFlags);
 }
 
-bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned int contactIndex)
+bool Joystick::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch (touchEvent)
+    switch (evt)
     {
         case Touch::TOUCH_PRESS:
         {
@@ -129,8 +131,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 float dx = 0.0f;
                 float dy = 0.0f;
 
-                _contactIndex = (int) contactIndex;
-                notifyListeners(Control::Listener::PRESS);
+                _contactIndex = (int)contactIndex;
 
                 // Get the displacement of the touch from the centre.
                 if (!_relative)
@@ -148,7 +149,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
 
                 // If the displacement is greater than the radius, then cap the displacement to the
                 // radius.
-                
+
                 Vector2 value;
                 if ((fabs(_displacement.x) > _radius) || (fabs(_displacement.y) > _radius))
                 {
@@ -171,20 +172,20 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
-                setState(ACTIVE);
-                return _consumeInputEvents;
+                return true;
             }
             break;
         }
+
         case Touch::TOUCH_MOVE:
         {
             if (_contactIndex == (int) contactIndex)
             {
                 float dx = x - ((_relative) ? _screenRegion.x - _bounds.x : 0.0f) - _screenRegion.width * 0.5f;
                 float dy = -(y - ((_relative) ? _screenRegion.y - _bounds.y : 0.0f) - _screenRegion.height * 0.5f);
-            
+
                 _displacement.set(dx, dy);
-            
+
                 Vector2 value;
                 if ((fabs(_displacement.x) > _radius) || (fabs(_displacement.y) > _radius))
                 {
@@ -206,17 +207,16 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
-                return _consumeInputEvents;
+                return true;
             }
             break;
         }
+
         case Touch::TOUCH_RELEASE:
         {
             if (_contactIndex == (int) contactIndex)
             {
                 _contactIndex = INVALID_CONTACT_INDEX;
-
-                notifyListeners(Control::Listener::RELEASE);
 
                 // Reset displacement and direction vectors.
                 _displacement.set(0.0f, 0.0f);
@@ -228,22 +228,23 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
-                setState(NORMAL);
-                return _consumeInputEvents;
+                return true;
             }
             break;
         }
     }
 
-    return false;
+    return Control::touchEvent(evt, x, y, contactIndex);
 }
 
 void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     GP_ASSERT(spriteBatch);
 
+    Control::State state = getState();
+
     // If the joystick is not absolute, then only draw if it is active.
-    if (!_relative || (_relative && _state == ACTIVE))
+    if (!_relative || (_relative && state == ACTIVE))
     {
         if (!_relative)
         {
@@ -252,7 +253,7 @@ void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
         }
 
         // Draw the outer image.
-        Theme::ThemeImage* outer = getImage("outer", _state);
+        Theme::ThemeImage* outer = getImage("outer", state);
         if (outer)
         {
             const Theme::UVs& uvs = outer->getUVs();
@@ -264,7 +265,7 @@ void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
         }
 
         // Draw the inner image.
-        Theme::ThemeImage* inner = getImage("inner", _state);
+        Theme::ThemeImage* inner = getImage("inner", state);
         if (inner)
         {
             Vector2 position(_screenRegion.x, _screenRegion.y);

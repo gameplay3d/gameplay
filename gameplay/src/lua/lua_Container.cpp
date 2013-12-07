@@ -5,24 +5,17 @@
 #include "Animation.h"
 #include "AnimationTarget.h"
 #include "Base.h"
-#include "Button.h"
-#include "CheckBox.h"
 #include "Container.h"
 #include "Control.h"
 #include "ControlFactory.h"
 #include "FlowLayout.h"
+#include "Form.h"
 #include "Game.h"
-#include "ImageControl.h"
-#include "Joystick.h"
-#include "Label.h"
 #include "Layout.h"
 #include "Node.h"
-#include "RadioButton.h"
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
-#include "Slider.h"
-#include "TextBox.h"
 #include "VerticalLayout.h"
 #include "lua_ContainerScroll.h"
 #include "lua_ControlAlignment.h"
@@ -44,11 +37,13 @@ void luaRegister_Container()
         {"addListener", lua_Container_addListener},
         {"addRef", lua_Container_addRef},
         {"addScriptCallback", lua_Container_addScriptCallback},
+        {"canFocus", lua_Container_canFocus},
         {"createAnimation", lua_Container_createAnimation},
         {"createAnimationFromBy", lua_Container_createAnimationFromBy},
         {"createAnimationFromTo", lua_Container_createAnimationFromTo},
         {"destroyAnimation", lua_Container_destroyAnimation},
         {"getAbsoluteBounds", lua_Container_getAbsoluteBounds},
+        {"getActiveControl", lua_Container_getActiveControl},
         {"getAlignment", lua_Container_getAlignment},
         {"getAnimation", lua_Container_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Container_getAnimationPropertyComponentCount},
@@ -61,6 +56,7 @@ void luaRegister_Container()
         {"getClipBounds", lua_Container_getClipBounds},
         {"getConsumeInputEvents", lua_Container_getConsumeInputEvents},
         {"getControl", lua_Container_getControl},
+        {"getControlCount", lua_Container_getControlCount},
         {"getCursorColor", lua_Container_getCursorColor},
         {"getCursorRegion", lua_Container_getCursorRegion},
         {"getCursorUVs", lua_Container_getCursorUVs},
@@ -76,6 +72,7 @@ void luaRegister_Container()
         {"getMargin", lua_Container_getMargin},
         {"getOpacity", lua_Container_getOpacity},
         {"getPadding", lua_Container_getPadding},
+        {"getParent", lua_Container_getParent},
         {"getRefCount", lua_Container_getRefCount},
         {"getScroll", lua_Container_getScroll},
         {"getScrollPosition", lua_Container_getScrollPosition},
@@ -89,18 +86,24 @@ void luaRegister_Container()
         {"getTextAlignment", lua_Container_getTextAlignment},
         {"getTextColor", lua_Container_getTextColor},
         {"getTextRightToLeft", lua_Container_getTextRightToLeft},
+        {"getTopLevelForm", lua_Container_getTopLevelForm},
         {"getType", lua_Container_getType},
         {"getWidth", lua_Container_getWidth},
         {"getX", lua_Container_getX},
         {"getY", lua_Container_getY},
         {"getZIndex", lua_Container_getZIndex},
+        {"hasFocus", lua_Container_hasFocus},
         {"insertControl", lua_Container_insertControl},
+        {"isChild", lua_Container_isChild},
         {"isContainer", lua_Container_isContainer},
         {"isEnabled", lua_Container_isEnabled},
+        {"isEnabledInHierarchy", lua_Container_isEnabledInHierarchy},
+        {"isForm", lua_Container_isForm},
         {"isHeightPercentage", lua_Container_isHeightPercentage},
         {"isScrollBarsAutoHide", lua_Container_isScrollBarsAutoHide},
         {"isScrolling", lua_Container_isScrolling},
         {"isVisible", lua_Container_isVisible},
+        {"isVisibleInHierarchy", lua_Container_isVisibleInHierarchy},
         {"isWidthPercentage", lua_Container_isWidthPercentage},
         {"isXPercentage", lua_Container_isXPercentage},
         {"isYPercentage", lua_Container_isYPercentage},
@@ -108,16 +111,19 @@ void luaRegister_Container()
         {"removeControl", lua_Container_removeControl},
         {"removeListener", lua_Container_removeListener},
         {"removeScriptCallback", lua_Container_removeScriptCallback},
+        {"setActiveControl", lua_Container_setActiveControl},
         {"setAlignment", lua_Container_setAlignment},
         {"setAnimationPropertyValue", lua_Container_setAnimationPropertyValue},
         {"setAutoHeight", lua_Container_setAutoHeight},
         {"setAutoWidth", lua_Container_setAutoWidth},
         {"setBorder", lua_Container_setBorder},
         {"setBounds", lua_Container_setBounds},
+        {"setCanFocus", lua_Container_setCanFocus},
         {"setConsumeInputEvents", lua_Container_setConsumeInputEvents},
         {"setCursorColor", lua_Container_setCursorColor},
         {"setCursorRegion", lua_Container_setCursorRegion},
         {"setEnabled", lua_Container_setEnabled},
+        {"setFocus", lua_Container_setFocus},
         {"setFocusIndex", lua_Container_setFocusIndex},
         {"setFont", lua_Container_setFont},
         {"setFontSize", lua_Container_setFontSize},
@@ -137,7 +143,6 @@ void luaRegister_Container()
         {"setSize", lua_Container_setSize},
         {"setSkinColor", lua_Container_setSkinColor},
         {"setSkinRegion", lua_Container_setSkinRegion},
-        {"setState", lua_Container_setState},
         {"setStyle", lua_Container_setStyle},
         {"setTextAlignment", lua_Container_setTextAlignment},
         {"setTextColor", lua_Container_setTextColor},
@@ -368,6 +373,41 @@ int lua_Container_addScriptCallback(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_canFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->canFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_canFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -795,6 +835,50 @@ int lua_Container_getAbsoluteBounds(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Container_getAbsoluteBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_getActiveControl(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getActiveControl();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_getActiveControl - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1384,6 +1468,41 @@ int lua_Container_getControl(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_getControlCount(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                unsigned int result = instance->getControlCount();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_getControlCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -2114,6 +2233,50 @@ int lua_Container_getPadding(lua_State* state)
     return 0;
 }
 
+int lua_Container_getParent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParent();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_getParent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
@@ -2746,6 +2909,50 @@ int lua_Container_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_Container_getTopLevelForm(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTopLevelForm();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Form");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_getTopLevelForm - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_getType(lua_State* state)
 {
     // Get the number of parameters.
@@ -2921,6 +3128,41 @@ int lua_Container_getZIndex(lua_State* state)
     return 0;
 }
 
+int lua_Container_hasFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->hasFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_hasFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_insertControl(lua_State* state)
 {
     // Get the number of parameters.
@@ -2960,6 +3202,51 @@ int lua_Container_insertControl(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_isChild(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Control> param1 = gameplay::ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control'.");
+                    lua_error(state);
+                }
+
+                Container* instance = getInstance(state);
+                bool result = instance->isChild(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_isChild - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3024,6 +3311,76 @@ int lua_Container_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Container_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_isEnabledInHierarchy(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->isEnabledInHierarchy();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_isEnabledInHierarchy - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_isForm(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->isForm();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_isForm - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3164,6 +3521,41 @@ int lua_Container_isVisible(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Container_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_isVisibleInHierarchy(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->isVisibleInHierarchy();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_isVisibleInHierarchy - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3461,6 +3853,48 @@ int lua_Container_removeScriptCallback(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_setActiveControl(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Control> param1 = gameplay::ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control'.");
+                    lua_error(state);
+                }
+
+                Container* instance = getInstance(state);
+                instance->setActiveControl(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_setActiveControl - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3814,6 +4248,42 @@ int lua_Container_setBounds(lua_State* state)
     return 0;
 }
 
+int lua_Container_setCanFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setCanFocus(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_setCanFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
@@ -3971,6 +4441,41 @@ int lua_Container_setEnabled(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_setFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->setFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_setFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -4945,42 +5450,6 @@ int lua_Container_setSkinRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Container_setState(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
-
-                Container* instance = getInstance(state);
-                instance->setState(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Container_setState - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

@@ -55,7 +55,7 @@ Font* Font::create(const char* path, const char* id)
     Bundle* bundle = Bundle::create(path);
     if (bundle == NULL)
     {
-        GP_ERROR("Failed to load font bundle '%s'.", path);
+        GP_WARN("Failed to load font bundle '%s'.", path);
         return NULL;
     }
 
@@ -66,7 +66,7 @@ Font* Font::create(const char* path, const char* id)
         const char* id;
         if ((id = bundle->getObjectId(0)) == NULL)
         {
-            GP_ERROR("Failed to load font without explicit id; the first object in the font bundle has a null id.");
+            GP_WARN("Failed to load font without explicit id; the first object in the font bundle has a null id.");
             return NULL;
         }
 
@@ -105,7 +105,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
         __fontEffect = Effect::createFromFile(FONT_VSH, FONT_FSH, defines);
         if (__fontEffect == NULL)
         {
-            GP_ERROR("Failed to create effect for font.");
+            GP_WARN("Failed to create effect for font.");
             SAFE_RELEASE(texture);
             return NULL;
         }
@@ -123,7 +123,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
 
     if (batch == NULL)
     {
-        GP_ERROR("Failed to create batch for font.");
+        GP_WARN("Failed to create batch for font.");
         return NULL;
     }
 
@@ -159,6 +159,13 @@ unsigned int Font::getSize()
 Font::Format Font::getFormat()
 {
     return _format;
+}
+
+bool Font::isCharacterSupported(int character) const
+{
+    // TODO: Update this once we support unicode fonts
+    int glyphIndex = character - 32; // HACK for ASCII
+    return (glyphIndex >= 0 && glyphIndex < (int)_glyphCount);
 }
 
 void Font::start()

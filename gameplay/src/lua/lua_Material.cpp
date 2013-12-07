@@ -28,15 +28,18 @@ void luaRegister_Material()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"addParameter", lua_Material_addParameter},
         {"addRef", lua_Material_addRef},
-        {"clearParameter", lua_Material_clearParameter},
         {"getParameter", lua_Material_getParameter},
+        {"getParameterByIndex", lua_Material_getParameterByIndex},
+        {"getParameterCount", lua_Material_getParameterCount},
         {"getRefCount", lua_Material_getRefCount},
         {"getStateBlock", lua_Material_getStateBlock},
         {"getTechnique", lua_Material_getTechnique},
         {"getTechniqueByIndex", lua_Material_getTechniqueByIndex},
         {"getTechniqueCount", lua_Material_getTechniqueCount},
         {"release", lua_Material_release},
+        {"removeParameter", lua_Material_removeParameter},
         {"setParameterAutoBinding", lua_Material_setParameterAutoBinding},
         {"setStateBlock", lua_Material_setStateBlock},
         {"setTechnique", lua_Material_setTechnique},
@@ -97,6 +100,48 @@ int lua_Material__gc(lua_State* state)
     return 0;
 }
 
+int lua_Material_addParameter(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<MaterialParameter> param1 = gameplay::ScriptUtil::getObjectPointer<MaterialParameter>(2, "MaterialParameter", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'MaterialParameter'.");
+                    lua_error(state);
+                }
+
+                Material* instance = getInstance(state);
+                instance->addParameter(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Material_addParameter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Material_addRef(lua_State* state)
 {
     // Get the number of parameters.
@@ -122,42 +167,6 @@ int lua_Material_addRef(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Material_clearParameter(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = gameplay::ScriptUtil::getString(2, false);
-
-                Material* instance = getInstance(state);
-                instance->clearParameter(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Material_clearParameter - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -206,6 +215,89 @@ int lua_Material_getParameter(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Material_getParameterByIndex(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                Material* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParameterByIndex(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "MaterialParameter");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Material_getParameterByIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Material_getParameterCount(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Material* instance = getInstance(state);
+                unsigned int result = instance->getParameterCount();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Material_getParameterCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -480,6 +572,42 @@ int lua_Material_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Material_removeParameter(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                Material* instance = getInstance(state);
+                instance->removeParameter(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Material_removeParameter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

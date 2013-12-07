@@ -113,7 +113,7 @@ void TextureSample::initialize()
     // Mipmapping Off
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/box-diffuse.png", false);
+        setTextureUnlitMaterial(node->getModel(), "res/png/logo.png", false);
         node->setId("mipmap off");
         node->setTranslation(-25.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
@@ -122,7 +122,7 @@ void TextureSample::initialize()
     // Mipmapping On
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/box-diffuse.png");
+        setTextureUnlitMaterial(node->getModel(), "res/png/logo.png");
         node->setId("mipmap on");
         node->setTranslation(-5.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);

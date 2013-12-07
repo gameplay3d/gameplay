@@ -17,6 +17,7 @@ namespace gameplay
 {
 
 class Container;
+class Form;
 
 /**
  * Base class for UI controls.
@@ -43,7 +44,7 @@ public:
         NORMAL = 0x01,
 
         /**
-         * State of a control currently in focus.
+         * State of a control when it is currently in focus.
          */
         FOCUS = 0x02,
 
@@ -173,8 +174,18 @@ public:
              * Event triggered when a mouse cursor leaves a control.
              */
             LEAVE           = 0x100,
+
+            /**
+             * Event triggered when a control gains focus.
+             */
+            FOCUS_GAINED    = 0x200,
+
+            /**
+             * Event triggered when a control loses focus.
+             */
+            FOCUS_LOST      = 0x400
         };
-    
+
         /*
          * Destructor.
          */
@@ -193,7 +204,7 @@ public:
      * @script{ignore}
      * A constant used for setting themed attributes on all control states simultaneously.
      */
-    static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED | HOVER;
+    static const unsigned char STATE_ALL = NORMAL | ACTIVE | FOCUS | DISABLED | HOVER;
 
     /**
      * Position animation property. Data = x, y
@@ -761,6 +772,14 @@ public:
     bool isVisible() const;
 
     /**
+     * Determines if this control is visible in its hierarchy.
+     *
+     * A control is visible in its hierarchy if it is visible and all of its parents
+     * are also visible.
+     */
+    bool isVisibleInHierarchy() const;
+
+    /**
      * Set the opacity of this control.
      *
      * @param opacity The new opacity.
@@ -792,11 +811,12 @@ public:
     bool isEnabled() const;
 
     /**
-     * Change this control's state.
+     * Determines if this control is enabled in its hierarchy.
      *
-     * @param state The state to switch this control to.
+     * A control is enabled in its hierarchy if it is enabled and all of its parents
+     * are also enabled.
      */
-    void setState(State state);
+    bool isEnabledInHierarchy() const;
 
     /**
      * Get this control's current state.
@@ -849,6 +869,39 @@ public:
     void setZIndex(int zIndex);
 
     /**
+     * Determines if this control accepts focus.
+     *
+     * @return True if this control accepts focus, false if it does not.
+     */
+    bool canFocus() const;
+
+    /**
+     * Sets whether or not the control accepts input focus.
+     *
+     * @param acceptsFocus True if the control should accept input focus, false otherwise.
+     */
+    void setCanFocus(bool acceptsFocus);
+
+    /**
+     * Determines if this control is currently in focus.
+     *
+     * @return True if the control is currently in focus.
+     */
+    bool hasFocus() const;
+
+    /**
+     * Sets input focus to this control.
+     *
+     * If this control accepts focus (the hasFocus method returns true), input focus
+     * is set to this control. If this control is a container, the first focusable
+     * control within it gains focus.
+     *
+     * @return True if this control or one of its children successfully gained focus,
+     *      false otherwise.
+     */
+    virtual bool setFocus();
+
+    /**
      * Get this control's focus index.
      *
      * @return This control's focus index.
@@ -857,6 +910,12 @@ public:
 
     /**
      * Set this control's focus index.
+     *
+     * Focus indexes control the order in which input focus changes between controls
+     * when using the focus change controls such as the TAB key.
+     *
+     * Valid focus indexes should be zero or greater, with a negative number indicating
+     * an unset focus index.
      *
      * @param focusIndex The new focus index.
      */
@@ -875,6 +934,29 @@ public:
      * @return The string of the Control type, all in lower-case.
      */
     virtual const char* getType() const;
+
+    /**
+     * Returns this control's parent, or NULL if this control does not have a parent.
+     *
+     * @return This control's parent.
+     */
+    Control* getParent() const;
+
+    /**
+     * Determines if this control is a child (at any level of hierarchy) of the 
+     * specified control.
+     *
+     * @param control The control to check.
+     * @return True if this control is a direct or indirect child of the specified control.
+     */
+    bool isChild(Control* control) const;
+
+    /**
+     * Returns this control's top level form, or NULL if this control does not belong to a form.
+     *
+     * @return this control's form.
+     */
+    Form* getTopLevelForm() const;
 
     /**
      * Adds a listener to be notified of specific events affecting
@@ -1075,6 +1157,14 @@ protected:
     void notifyListeners(Control::Listener::EventType eventType);
 
     /**
+     * Called when a control event is fired for this control, before external
+     * listeners are notified of the event.
+     *
+     * @param evt The event type.
+     */
+    virtual void controlEvent(Control::Listener::EventType evt);
+
+    /**
      * Gets the Alignment by string.
      *
      * @param alignment The string representation of the Alignment type.
@@ -1082,23 +1172,15 @@ protected:
      */
     static Alignment getAlignment(const char* alignment);
 
-    /**
-     * Gets whether this control is in focus.
-     * Note that a control's state can be HOVER while the control is in focus.
-     * When the cursor leaves the control, it will return to the FOCUS state.
-     * This method will still return true in this case.
-     */
-    bool hasFocus() const;
-
     /** 
      * The Control's ID.
      */ 
     std::string _id;
 
     /**
-     * Determines overlay used during draw().
+     * Whether the control is enabled.
      */
-    State _state;
+    bool _enabled;
 
     /**
      * Bits indicating whether bounds values are absolute values or percentages.
@@ -1212,6 +1294,11 @@ protected:
     int _focusIndex;
 
     /**
+     * Whether or not the control accepts input focus.
+     */
+    bool _canFocus;
+
+    /**
      * The control's parent container.
      */
     Container* _parent;
@@ -1243,7 +1330,7 @@ private:
     
     bool _styleOverridden;
     Theme::Skin* _skin;
-    State _previousState;
+
 };
 
 }

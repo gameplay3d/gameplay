@@ -26,7 +26,7 @@ CheckBox* CheckBox::create(const char* id, Theme::Style* style)
     return checkBox;
 }
 
-Control* CheckBox::create(Theme::Style* style, Properties* properties, Theme *theme)
+Control* CheckBox::create(Theme::Style* style, Properties* properties)
 {
     GP_ASSERT(properties);
 
@@ -75,47 +75,9 @@ void CheckBox::addListener(Control::Listener* listener, int eventFlags)
     Control::addListener(listener, eventFlags);
 }
 
-bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    switch (evt)
-    {
-    case Touch::TOUCH_RELEASE:
-        if (_contactIndex == (int) contactIndex && _state == Control::ACTIVE)
-        {
-            if (!_parent->isScrolling() &&
-                x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-            {
-                setChecked( !_checked );
-            }
-        }
-        break;
-    }
-    return Button::touchEvent(evt, x, y, contactIndex);
-}
-
-bool CheckBox::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
-{
-    switch (evt)
-    {
-    case Gamepad::BUTTON_EVENT:
-        if (_state == Control::ACTIVE)
-        {
-            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
-                !gamepad->isButtonDown(Gamepad::BUTTON_X))
-            {
-                setChecked( !_checked );
-            }
-        }
-        break;
-    }
-
-    return Button::gamepadEvent(evt, gamepad, analogIndex);
-}
-
 bool CheckBox::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    if (_state == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN)
+    if (getState() == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN)
     {
         setChecked( !_checked );
     }
@@ -123,21 +85,35 @@ bool CheckBox::keyEvent(Keyboard::KeyEvent evt, int key)
     return Button::keyEvent(evt, key);
 }
 
+void CheckBox::controlEvent(Control::Listener::EventType evt)
+{
+    Button::controlEvent(evt);
+
+    switch (evt)
+    {
+    case Control::Listener::CLICK:
+        setChecked( !_checked );
+        break;
+    }
+}
+
 void CheckBox::update(const Control* container, const Vector2& offset)
 {
     Label::update(container, offset);
+
+    Control::State state = getState();
 
     Vector2 size;
     if (_imageSize.isZero())
     {
         if (_checked)
         {
-            const Rectangle& selectedRegion = getImageRegion("checked", _state);
+            const Rectangle& selectedRegion = getImageRegion("checked", state);
             size.set(selectedRegion.width, selectedRegion.height);
         }
         else
         {
-            const Rectangle& unselectedRegion = getImageRegion("unchecked", _state);
+            const Rectangle& unselectedRegion = getImageRegion("unchecked", state);
             size.set(unselectedRegion.width, unselectedRegion.height);
         }
     }
@@ -162,11 +138,11 @@ void CheckBox::update(const Control* container, const Vector2& offset)
     
     if (_checked)
     {
-        _image = getImage("checked", _state);
+        _image = getImage("checked", state);
     }
     else
     {
-        _image = getImage("unchecked", _state);
+        _image = getImage("unchecked", state);
     }
 }
 

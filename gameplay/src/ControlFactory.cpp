@@ -30,6 +30,11 @@ ControlFactory::~ControlFactory()
 {
 }
 
+void ControlFactory::finalize()
+{
+    SAFE_DELETE(__controlFactory);
+}
+
 ControlFactory* ControlFactory::getInstance() 
 {
 	if (__controlFactory == NULL)
@@ -55,12 +60,12 @@ void ControlFactory::unregisterCustomControl(const char* controlName)
 	}
 }
 
-Control *ControlFactory::createControl(const char* controlName, Theme::Style* style, Properties* properties, Theme* theme)
+Control *ControlFactory::createControl(const char* controlName, Theme::Style* style, Properties* properties)
 {
 	if (_registeredControls.find(controlName) == _registeredControls.end())
-		return NULL;	
+		return NULL;
 
-	return (*_registeredControls[controlName])(style, properties, theme);
+	return (*_registeredControls[controlName])(style, properties);
 }
 
 void ControlFactory::registerStandardControls() 

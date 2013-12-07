@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		421090F618299FD800761E40 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421090F518299FD800761E40 /* GameKit.framework */; };
+		421090F818299FF500761E40 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421090F718299FF500761E40 /* GameKit.framework */; };
 		421A5DFB17FE6B0B00A6AA7C /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 421A5DFA17FE6B0B00A6AA7C /* libpng.a */; };
 		424CC035161FCB5B00577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC034161FCB5B00577827 /* IOKit.framework */; };
 		42512C8217FB424000373866 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42512C7B17FB424000373866 /* libbullet.a */; };
@@ -44,6 +46,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		421090F518299FD800761E40 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
+		421090F718299FF500761E40 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = "<absolute>"; };
 		421A5DFA17FE6B0B00A6AA7C /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/png/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42458CBA14C3AB4D00EFFB61 /* sample-spaceship-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample-spaceship-ios.plist"; sourceTree = "<group>"; };
 		424CC034161FCB5B00577827 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -90,6 +94,7 @@
 				42CD0EF3147D932B0000361E /* libbullet.a in Frameworks */,
 				42CD0EF4147D932B0000361E /* libogg.a in Frameworks */,
 				42CD0EF5147D932B0000361E /* libvorbis.a in Frameworks */,
+				421090F818299FF500761E40 /* GameKit.framework in Frameworks */,
 				42CCD558146EC22900353661 /* libz.dylib in Frameworks */,
 				42B7026015B0A8D5002BB8C3 /* liblua.a in Frameworks */,
 				424CC035161FCB5B00577827 /* IOKit.framework in Frameworks */,
@@ -113,6 +118,7 @@
 				42DFAADA16AD8AD00000F342 /* Foundation.framework in Frameworks */,
 				42512C8617FB424000373866 /* libvorbis.a in Frameworks */,
 				42DFAB0716AD8B840000F342 /* OpenAL.framework in Frameworks */,
+				421090F618299FD800761E40 /* GameKit.framework in Frameworks */,
 				42512C8517FB424000373866 /* libogg.a in Frameworks */,
 				42DFAB0816AD8B840000F342 /* OpenGLES.framework in Frameworks */,
 				42DFAB0916AD8B840000F342 /* QuartzCore.framework in Frameworks */,
@@ -208,6 +214,7 @@
 		5B43D1B914C35A7A008A5D9D /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				421090F518299FD800761E40 /* GameKit.framework */,
 				42DFAAC316AD89B80000F342 /* CoreMotion.framework */,
 				42DFAAD916AD8AD00000F342 /* Foundation.framework */,
 				42DFAB0316AD8B840000F342 /* OpenAL.framework */,
@@ -221,6 +228,7 @@
 		5B43D1BA14C35A81008A5D9D /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				421090F718299FF500761E40 /* GameKit.framework */,
 				424CC034161FCB5B00577827 /* IOKit.framework */,
 				42CCD51A146EBF3600353661 /* Cocoa.framework */,
 				42CCD54A146EC10200353661 /* QuartzCore.framework */,
@@ -331,7 +339,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "rsync -rau ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\nrsync -rau ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B43D1AD14C35A0E008A5D9D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -344,7 +352,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "rsync -rau ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\nrsync -rau ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 

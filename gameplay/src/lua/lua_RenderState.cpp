@@ -24,12 +24,15 @@ void luaRegister_RenderState()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"addParameter", lua_RenderState_addParameter},
         {"addRef", lua_RenderState_addRef},
-        {"clearParameter", lua_RenderState_clearParameter},
         {"getParameter", lua_RenderState_getParameter},
+        {"getParameterByIndex", lua_RenderState_getParameterByIndex},
+        {"getParameterCount", lua_RenderState_getParameterCount},
         {"getRefCount", lua_RenderState_getRefCount},
         {"getStateBlock", lua_RenderState_getStateBlock},
         {"release", lua_RenderState_release},
+        {"removeParameter", lua_RenderState_removeParameter},
         {"setParameterAutoBinding", lua_RenderState_setParameterAutoBinding},
         {"setStateBlock", lua_RenderState_setStateBlock},
         {NULL, NULL}
@@ -85,6 +88,48 @@ int lua_RenderState__gc(lua_State* state)
     return 0;
 }
 
+int lua_RenderState_addParameter(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<MaterialParameter> param1 = gameplay::ScriptUtil::getObjectPointer<MaterialParameter>(2, "MaterialParameter", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'MaterialParameter'.");
+                    lua_error(state);
+                }
+
+                RenderState* instance = getInstance(state);
+                instance->addParameter(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RenderState_addParameter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_RenderState_addRef(lua_State* state)
 {
     // Get the number of parameters.
@@ -110,42 +155,6 @@ int lua_RenderState_addRef(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_RenderState_clearParameter(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = gameplay::ScriptUtil::getString(2, false);
-
-                RenderState* instance = getInstance(state);
-                instance->clearParameter(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_RenderState_clearParameter - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -194,6 +203,89 @@ int lua_RenderState_getParameter(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderState_getParameterByIndex(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                RenderState* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getParameterByIndex(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "MaterialParameter");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_RenderState_getParameterByIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderState_getParameterCount(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                RenderState* instance = getInstance(state);
+                unsigned int result = instance->getParameterCount();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_RenderState_getParameterCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -305,6 +397,42 @@ int lua_RenderState_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderState_removeParameter(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                RenderState* instance = getInstance(state);
+                instance->removeParameter(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RenderState_removeParameter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

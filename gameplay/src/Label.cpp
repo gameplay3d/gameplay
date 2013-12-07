@@ -21,21 +21,17 @@ Label* Label::create(const char* id, Theme::Style* style)
         label->_id = id;
     label->setStyle(style);
 
-    // Labels don't consume input events by default like other controls.
-    label->_consumeInputEvents = false;
-
     // Ensure that labels cannot receive focus.
     label->_focusIndex = -2;
 
     return label;
 }
 
-Control* Label::create(Theme::Style* style, Properties* properties, Theme *theme)
+Control* Label::create(Theme::Style* style, Properties* properties)
 {
     Label* label = new Label();
     label->initialize(style, properties);
 
-	label->_consumeInputEvents = false;
     label->_focusIndex = -2;
 
     return label;
@@ -89,19 +85,20 @@ void Label::update(const Control* container, const Vector2& offset)
 
     _textBounds.set((int)_viewportBounds.x, (int)_viewportBounds.y, _viewportBounds.width, _viewportBounds.height);
 
-    _font = getFont(_state);
-    _textColor = getTextColor(_state);
+    Control::State state = getState();
+    _font = getFont(state);
+    _textColor = getTextColor(state);
     _textColor.w *= _opacity;
 
-    Font* font = getFont(_state);
+    Font* font = getFont(state);
     if ((_autoWidth == Control::AUTO_SIZE_FIT || _autoHeight == Control::AUTO_SIZE_FIT) && font)
     {
         unsigned int w, h;
-        font->measureText(_text.c_str(), getFontSize(_state), &w, &h);
+        font->measureText(_text.c_str(), getFontSize(state), &w, &h);
         if (_autoWidth == Control::AUTO_SIZE_FIT)
-            setWidth(w + getBorder(_state).left + getBorder(_state).right + getPadding().left + getPadding().right);
+            setWidth(w + getBorder(state).left + getBorder(state).right + getPadding().left + getPadding().right);
         if (_autoHeight == Control::AUTO_SIZE_FIT)
-            setHeight(h + getBorder(_state).top + getBorder(_state).bottom + getPadding().top + getPadding().bottom);
+            setHeight(h + getBorder(state).top + getBorder(state).bottom + getPadding().top + getPadding().bottom);
     }
 }
 
@@ -113,8 +110,9 @@ void Label::drawText(const Rectangle& clip)
     // Draw the text.
     if (_font)
     {
+        Control::State state = getState();
         _font->start();
-        _font->drawText(_text.c_str(), _textBounds, _textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_viewportClipBounds);
+        _font->drawText(_text.c_str(), _textBounds, _textColor, getFontSize(state), getTextAlignment(state), true, getTextRightToLeft(state), &_viewportClipBounds);
         _font->finish();
     }
 }

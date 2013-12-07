@@ -19,7 +19,6 @@ Gamepad::Gamepad(const char* formPath)
     _form = Form::create(formPath);
     GP_ASSERT(_form);
     _form->setConsumeInputEvents(false);
-    _form->_isGamepad = true;
     _vendorString = "None";
     _productString = "Virtual";
 
@@ -149,6 +148,7 @@ void Gamepad::bindGamepadControls(Container* container)
         {
             Button* button = (Button*)control;
             button->setConsumeInputEvents(true);
+            button->setCanFocus(false);
             _uiButtons[button->getDataBinding()] = button;
             _buttonCount++;
         }

@@ -31,11 +31,12 @@ void Audio3DSample::initialize()
     // Get light node
     Node* lightNode = _scene->findNode("directionalLight1");
     Light* light = lightNode->getLight();
+    lightNode->setRotation(Vector3(1, 0, 0), -MATH_DEG_TO_RAD(45));
 
     // Initialize box model
     Node* boxNode = _scene->findNode("box");
     Model* boxModel = boxNode->getModel();
-    Material* boxMaterial = boxModel->setMaterial("res/common/box.material");
+    Material* boxMaterial = boxModel->setMaterial("res/common/box.material#lambert1");
 
     boxMaterial->getParameter("u_directionalLightColor[0]")->setValue(light->getColor());
     boxMaterial->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());

@@ -11,22 +11,68 @@ class Terrain;
 
 /**
  * Represents a single patch for a Terrain.
- *
- * This is an internal class used exclusively by Terrain.
- *
- * @script{ignore}
  */
-class TerrainPatch
+class TerrainPatch : public Camera::Listener
 {
     friend class Terrain;
 
+public:
+
+    /**
+     * Gets the number of material for this patch for all level of details.
+     *
+     * @return The number of material for this patch for all level of details. 
+     */
+    unsigned int getMaterialCount() const;
+
+    /**
+     * Gets the material for the specified level of detail index or -1 for the current level of detail
+     * based on the scene camera.
+     *
+     * @param index The index for the level of detail to get the material for.
+     */
+    Material* getMaterial(int index = -1) const;
+
+    /**
+     * Gets the local bounding box for this patch, at the base LOD level.
+     */
+    const BoundingBox& getBoundingBox(bool worldSpace) const;
+
+    /**
+     * @see Camera::Listener
+     */
+    void cameraChanged(Camera* camera);
+
 private:
+
+    /**
+     * Constructor.
+     */
+    TerrainPatch();
+
+    /**
+     * Hidden copy constructor.
+     */
+    TerrainPatch(const TerrainPatch&);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    TerrainPatch& operator=(const TerrainPatch&);
+
+    /**
+     * Destructor.
+     */
+    ~TerrainPatch();
 
     struct Layer
     {
         Layer();
+
         Layer(const Layer&);
+
         ~Layer();
+
         Layer& operator=(const Layer&);
 
         int index;
@@ -50,103 +96,44 @@ private:
         bool operator() (const Layer* lhs, const Layer* rhs) const;
     };
 
-    /**
-     * Constructor.
-     */
-    TerrainPatch();
-
-    /**
-     * Hidden copy constructor.
-     */
-    TerrainPatch(const TerrainPatch&);
-
-    /**
-     * Hidden copy assignment operator.
-     */
-    TerrainPatch& operator=(const TerrainPatch&);
-
-    /**
-     * Destructor.
-     */
-    ~TerrainPatch();
-
-    /**
-     * Internal method to create new terrain patch.
-     */
     static TerrainPatch* create(Terrain* terrain, 
                                 unsigned int row, unsigned int column,
                                 float* heights, unsigned int width, unsigned int height,
                                 unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
                                 float xOffset, float zOffset, unsigned int maxStep, float verticalSkirtSize);
 
-    /**
-     * Adds a single LOD level to the terrain patch.
-     */
     void addLOD(float* heights, unsigned int width, unsigned int height,
                 unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
                 float xOffset, float zOffset, unsigned int step, float verticalSkirtSize);
 
-    /**
-     * Sets details for a layer of this patch.
-     */
+
     bool setLayer(int index, const char* texturePath, const Vector2& textureRepeat, const char* blendPath, int blendChannel);
 
-    /**
-     * Adds a sampler to the patch.
-     */
-    int addSampler(const char* path);
-
-    /**
-     * Deletes the specified layer.
-     */
     void deleteLayer(Layer* layer);
 
-    /**
-     * Determines whether this patch is current visible by the scene's active camera.
-     */
-    bool isVisible() const;
+    int addSampler(const char* path);
 
-    /**
-     * Returns the triangle count of the base LOD level of this terrain patch.
-     */
-    unsigned int getTriangleCount() const;
-
-    /**
-     * Returns the currently visible triangle count, taking the current LOD into account.
-     */
-    unsigned int getVisibleTriangleCount() const;
-
-    /**
-     * Draws the terrain patch.
-     */
     unsigned int draw(bool wireframe);
 
-    /**
-     * Updates the material for the patch.
-     */
     bool updateMaterial();
 
-    /**
-     * Computes the current LOD for this patch, from the viewpoint of the specified camera.
-     */
-    size_t computeLOD(Camera* camera, const BoundingBox& worldBounds) const;
-
-    /**
-     * Returns the local bounding box for this patch, at the base LOD level.
-     */
-    BoundingBox getBoundingBox(bool worldSpace) const;
+    unsigned int computeLOD(Camera* camera, const BoundingBox& worldBounds);
 
     const Vector3& getAmbientColor() const;
 
+    void setMaterialDirty();
+
     Terrain* _terrain;
-    std::vector<Level*> _levels;
     unsigned int _row;
     unsigned int _column;
+    std::vector<Level*> _levels;
     std::set<Layer*, LayerCompare> _layers;
     std::vector<Texture::Sampler*> _samplers;
-    bool _materialDirty;
-    BoundingBox _boundingBox;
-
+    mutable BoundingBox _boundingBox;
+    mutable BoundingBox _boundingBoxWorld;
+    mutable Camera* _camera;
+    mutable unsigned int _level;
+    mutable int _bits;
 };
 
 }
