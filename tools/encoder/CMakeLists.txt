@@ -16,11 +16,12 @@ link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
     /usr/lib/gcc4/${ARCH_DIR}
     /usr/lib
+    /usr/lib/gcc4/x64/release/
 )
 
 set(APP_LIBRARIES
     dl
-    fbxsdk-2013.3-static
+    fbxsdk
     png
     z   
     freetype
