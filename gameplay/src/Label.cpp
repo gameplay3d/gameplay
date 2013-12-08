@@ -94,19 +94,22 @@ void Label::update(const Control* container, const Vector2& offset)
     }
 }
 
-void Label::drawText(const Rectangle& clip)
+unsigned int Label::drawText(Form* form, const Rectangle& clip)
 {
-    if (_text.size() <= 0)
-        return;
-
     // Draw the text.
-    if (_font)
+    if (_text.size() > 0 && _font)
     {
         Control::State state = getState();
-        _font->start();
+
+        SpriteBatch* batch = _font->getSpriteBatch();
+        startBatch(form, batch);
         _font->drawText(_text.c_str(), _textBounds, _textColor, getFontSize(state), getTextAlignment(state), true, getTextRightToLeft(state), &_viewportClipBounds);
-        _font->finish();
+        finishBatch(form, batch);
+
+        return 1;
     }
+
+    return 0;
 }
 
 const char* Label::getType() const

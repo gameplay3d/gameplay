@@ -5,6 +5,7 @@ form zOrder
     size = 600, 600
     scroll = SCROLL_BOTH
 	consumeInputEvents = true
+    batchingEnabled = false
 	
     label label1
     {

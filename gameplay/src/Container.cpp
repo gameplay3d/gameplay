@@ -607,30 +607,32 @@ void Container::update(const Control* container, const Vector2& offset)
     }
 }
 
-void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight)
+unsigned int Container::draw(Form* form, const Rectangle& clip)
 {
     if (!_visible)
-        return;
+        return 0;
 
-    spriteBatch->start();
-    Control::drawBorder(spriteBatch, clip);
-    spriteBatch->finish();
+    // Draw container skin
+    unsigned int drawCalls = Control::draw(form, clip);
 
+    // Draw child controls
     for (size_t i = 0, count = _controls.size(); i < count; ++i)
     {
         Control* control = _controls[i];
         if (control && control->_absoluteClipBounds.intersects(_absoluteClipBounds))
         {
-            control->draw(spriteBatch, _viewportClipBounds, targetHeight);
+            drawCalls += control->draw(form, _viewportClipBounds);
         }
     }
 
+    // Draw scrollbars
     if (_scroll != SCROLL_NONE && (_scrollBarOpacity > 0.0f))
     {
         // Draw scroll bars.
         Rectangle clipRegion(_viewportClipBounds);
 
-        spriteBatch->start();
+        SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+        startBatch(form, batch);
 
         if (_scrollBarBounds.height > 0 && ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
         {
@@ -652,15 +654,17 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targ
             clipRegion.width += verticalRegion.width;
 
             Rectangle bounds(_viewportBounds.x + _viewportBounds.width, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
 
             bounds.y += topRegion.height;
             bounds.height = _scrollBarBounds.height - topRegion.height - bottomRegion.height;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, verticalUVs.u1, verticalUVs.v1, verticalUVs.u2, verticalUVs.v2, verticalColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, verticalUVs.u1, verticalUVs.v1, verticalUVs.u2, verticalUVs.v2, verticalColor, clipRegion);
 
             bounds.y += bounds.height;
             bounds.height = bottomRegion.height;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
+
+            drawCalls += 3;
         }
 
         if (_scrollBarBounds.width > 0 && ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL))
@@ -683,28 +687,23 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targ
             clipRegion.height += horizontalRegion.height;
         
             Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.y + _viewportBounds.height, leftRegion.width, leftRegion.height);
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
 
             bounds.x += leftRegion.width;
             bounds.width = _scrollBarBounds.width - leftRegion.width - rightRegion.width;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, horizontalUVs.u1, horizontalUVs.v1, horizontalUVs.u2, horizontalUVs.v2, horizontalColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, horizontalUVs.u1, horizontalUVs.v1, horizontalUVs.u2, horizontalUVs.v2, horizontalColor, clipRegion);
 
             bounds.x += bounds.width;
             bounds.width = rightRegion.width;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, rightUVs.u1, rightUVs.v1, rightUVs.u2, rightUVs.v2, rightColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, rightUVs.u1, rightUVs.v1, rightUVs.u2, rightUVs.v2, rightColor, clipRegion);
+
+            drawCalls += 3;
         }
 
-        spriteBatch->finish();
+        finishBatch(form, batch);
+    }
 
-        if (_scrollingVelocity.isZero())
-        {
-            _dirty = false;
-        }
-    }
-    else
-    {
-        _dirty = false;
-    }
+    return drawCalls;
 }
 
 bool Container::isDirty()

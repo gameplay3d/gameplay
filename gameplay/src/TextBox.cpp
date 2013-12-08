@@ -324,7 +324,7 @@ void TextBox::update(const Control* container, const Vector2& offset)
     _caretImage = getImage("textCaret", state);
 }
 
-void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
+unsigned int TextBox::drawImages(Form* form, const Rectangle& clip)
 {
     Control::State state = getState();
 
@@ -334,7 +334,6 @@ void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
         const Rectangle& region = _caretImage->getRegion();
         if (!region.isEmpty())
         {
-            GP_ASSERT(spriteBatch);
             const Theme::UVs uvs = _caretImage->getUVs();
             Vector4 color = _caretImage->getColor();
             color.w *= _opacity;
@@ -346,11 +345,39 @@ void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             Vector2 point;
             font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &point, _caretLocation, 
                  getTextAlignment(state), true, getTextRightToLeft(state));
-            spriteBatch->draw(point.x - caretWidth * 0.5f, point.y, caretWidth, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+
+            SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+            startBatch(form, batch);
+            batch->draw(point.x - caretWidth * 0.5f, point.y, caretWidth, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+            finishBatch(form, batch);
+
+            return 1;
         }
     }
 
-    _dirty = false;
+    return 0;
+}
+
+unsigned int TextBox::drawText(Form* form, const Rectangle& clip)
+{
+    if (_text.size() <= 0)
+        return 0;
+
+    // Draw the text.
+    if (_font)
+    {
+        Control::State state = getState();
+        const std::string displayedText = getDisplayedText();
+
+        SpriteBatch* batch = _font->getSpriteBatch();
+        startBatch(form, batch);
+        _font->drawText(displayedText.c_str(), _textBounds, _textColor, getFontSize(state), getTextAlignment(state), true, getTextRightToLeft(state), &_viewportClipBounds);
+        finishBatch(form, batch);
+
+        return 1;
+    }
+
+    return 0;
 }
 
 void TextBox::setCaretLocation(int x, int y)
@@ -443,22 +470,6 @@ void TextBox::setInputMode(InputMode inputMode)
 TextBox::InputMode TextBox::getInputMode() const
 {
     return _inputMode;
-}
-
-void TextBox::drawText(const Rectangle& clip)
-{
-    if (_text.size() <= 0)
-        return;
-
-    // Draw the text.
-    if (_font)
-    {
-        Control::State state = getState();
-        const std::string displayedText = getDisplayedText();
-        _font->start();
-        _font->drawText(displayedText.c_str(), _textBounds, _textColor, getFontSize(state), getTextAlignment(state), true, getTextRightToLeft(state), &_viewportClipBounds);
-        _font->finish();
-    }
 }
 
 TextBox::InputMode TextBox::getInputMode(const char* inputMode)

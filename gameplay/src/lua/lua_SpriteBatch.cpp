@@ -19,6 +19,7 @@ void luaRegister_SpriteBatch()
         {"getProjectionMatrix", lua_SpriteBatch_getProjectionMatrix},
         {"getSampler", lua_SpriteBatch_getSampler},
         {"getStateBlock", lua_SpriteBatch_getStateBlock},
+        {"isStarted", lua_SpriteBatch_isStarted},
         {"setProjectionMatrix", lua_SpriteBatch_setProjectionMatrix},
         {"start", lua_SpriteBatch_start},
         {NULL, NULL}
@@ -600,6 +601,67 @@ int lua_SpriteBatch_draw(lua_State* state)
                     lua_type(state, 9) == LUA_TNUMBER &&
                     lua_type(state, 10) == LUA_TNUMBER &&
                     (lua_type(state, 11) == LUA_TUSERDATA || lua_type(state, 11) == LUA_TNIL) &&
+                    (lua_type(state, 12) == LUA_TUSERDATA || lua_type(state, 12) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 2);
+
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 3);
+
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 4);
+
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 5);
+
+                    // Get parameter 5 off the stack.
+                    float param5 = (float)luaL_checknumber(state, 6);
+
+                    // Get parameter 6 off the stack.
+                    float param6 = (float)luaL_checknumber(state, 7);
+
+                    // Get parameter 7 off the stack.
+                    float param7 = (float)luaL_checknumber(state, 8);
+
+                    // Get parameter 8 off the stack.
+                    float param8 = (float)luaL_checknumber(state, 9);
+
+                    // Get parameter 9 off the stack.
+                    float param9 = (float)luaL_checknumber(state, 10);
+
+                    // Get parameter 10 off the stack.
+                    bool param10Valid;
+                    gameplay::ScriptUtil::LuaArray<Vector4> param10 = gameplay::ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true, &param10Valid);
+                    if (!param10Valid)
+                        break;
+
+                    // Get parameter 11 off the stack.
+                    bool param11Valid;
+                    gameplay::ScriptUtil::LuaArray<Rectangle> param11 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(12, "Rectangle", true, &param11Valid);
+                    if (!param11Valid)
+                        break;
+
+                    SpriteBatch* instance = getInstance(state);
+                    instance->draw(param1, param2, param3, param4, param5, param6, param7, param8, param9, *param10, *param11);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
+                    lua_type(state, 7) == LUA_TNUMBER &&
+                    lua_type(state, 8) == LUA_TNUMBER &&
+                    lua_type(state, 9) == LUA_TNUMBER &&
+                    lua_type(state, 10) == LUA_TNUMBER &&
+                    (lua_type(state, 11) == LUA_TUSERDATA || lua_type(state, 11) == LUA_TNIL) &&
                     lua_type(state, 12) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
@@ -1074,6 +1136,41 @@ int lua_SpriteBatch_getStateBlock(lua_State* state)
             }
 
             lua_pushstring(state, "lua_SpriteBatch_getStateBlock - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_SpriteBatch_isStarted(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                SpriteBatch* instance = getInstance(state);
+                bool result = instance->isStarted();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_SpriteBatch_isStarted - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

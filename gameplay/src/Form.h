@@ -9,6 +9,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Gamepad.h"
+#include "FrameBuffer.h"
 
 namespace gameplay
 {
@@ -128,6 +129,8 @@ public:
 
     /**
      * Draws this form.
+     *
+     * @return The nubmer of draw calls issued to draw the form.
      */
     unsigned int draw();
 
@@ -135,6 +138,25 @@ public:
      * @see Control::getType
      */
     const char* getType() const;
+
+    /**
+     * Determines whether batching is enabled for this form.
+     *
+     * @return True if batching is enabled for this form, false otherwise.
+     */
+    bool isBatchingEnabled() const;
+
+    /**
+     * Turns batching on or off for this form.
+     *
+     * By default, forms enable batching as a way to optimize performance. However, on certain
+     * complex forms that contain multiple layers of overlapping text and transparent controls,
+     * batching may cause some visual artifacts due alpha blending issues. In these cases,
+     * turning batching off usually fixes the issue at a slight performance cost.
+     *
+     * @param enabled True to enable batching (default), false otherwise.
+     */
+    void setBatchingEnabled(bool enabled);
 
     /**
      * Returns the single currently active control within the UI system.
@@ -223,6 +245,21 @@ private:
     static void resizeEventInternal(unsigned int width, unsigned int height);
 
     /**
+     * Called to update internal framebuffer when forms are attached to a node.
+     */
+    void updateFrameBuffer();
+
+    /**
+     * Called during drawing to prepare a sprite batch for being drawn into for this form.
+     */
+    void startBatch(SpriteBatch* batch);
+
+    /**
+     * Called during drawing to signal completion of drawing into a batch.
+     */
+    void finishBatch(SpriteBatch* batch);
+
+    /**
      * Unproject a point (from a mouse or touch event) into the scene and then project it onto the form.
      *
      * @param x The x coordinate of the mouse/touch point.
@@ -232,6 +269,8 @@ private:
      * @return True if the projected point lies within the form's plane, false otherwise.
      */
     bool projectPoint(int x, int y, Vector3* point);
+
+    const Matrix& getProjectionMatrix() const;
 
     static bool pointerEventInternal(bool mouse, int evt, int x, int y, int param);
 
@@ -256,9 +295,11 @@ private:
     static bool pollGamepad(Gamepad* gamepad);
 
     Node* _node;                        // Node for transforming this Form in world-space.
-    float _u2;
-    float _v1;
-    Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
+    FrameBuffer* _frameBuffer;          // FrameBuffer for offscreen drawing of forms that are attached to a Node
+    Model* _model;                      // Model used to render form in 3D when attached to a Node
+    Matrix _projectionMatrix;           // Projection matrix to be set on SpriteBatch objects when rendering the form
+    std::vector<SpriteBatch*> _batches;
+    bool _batched;
     static Control* _focusControl;
     static Control* _activeControl;
     static Control::State _activeControlState;

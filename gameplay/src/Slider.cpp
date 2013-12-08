@@ -388,26 +388,10 @@ void Slider::update(const Control* container, const Vector2& offset)
     }
 }
 
-void Slider::draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight)
+unsigned int Slider::drawImages(Form* form, const Rectangle& clip)
 {
-    if (!_visible)
-        return;
-
-    spriteBatch->start();
-    drawBorder(spriteBatch, clip);
-    drawImages(spriteBatch, clip);
-    spriteBatch->finish();
-
-    drawText(clip);
-}
-
-void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
-{
-    GP_ASSERT(spriteBatch);
-    GP_ASSERT(_minImage);
-    GP_ASSERT(_maxImage);
-    GP_ASSERT(_markerImage);
-    GP_ASSERT(_trackImage);
+    if (!(_minImage && _maxImage && _markerImage && _trackImage))
+        return 0;
 
     // TODO: Vertical slider.
 
@@ -434,37 +418,50 @@ void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     markerColor.w *= _opacity;
     trackColor.w *= _opacity;
 
+    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+    startBatch(form, batch);
+
     // Draw order: track, caps, marker.
     float midY = _viewportBounds.y + (_viewportBounds.height) * 0.5f;
     Vector2 pos(_viewportBounds.x, midY - trackRegion.height * 0.5f);
-    spriteBatch->draw(pos.x, pos.y, _viewportBounds.width, trackRegion.height, track.u1, track.v1, track.u2, track.v2, trackColor, _viewportClipBounds);
+    batch->draw(pos.x, pos.y, _viewportBounds.width, trackRegion.height, track.u1, track.v1, track.u2, track.v2, trackColor, _viewportClipBounds);
 
     pos.y = midY - minCapRegion.height * 0.5f;
     pos.x -= minCapRegion.width * 0.5f;
-    spriteBatch->draw(pos.x, pos.y, minCapRegion.width, minCapRegion.height, minCap.u1, minCap.v1, minCap.u2, minCap.v2, minCapColor, _viewportClipBounds);
+    batch->draw(pos.x, pos.y, minCapRegion.width, minCapRegion.height, minCap.u1, minCap.v1, minCap.u2, minCap.v2, minCapColor, _viewportClipBounds);
 
     pos.x = _viewportBounds.x + _viewportBounds.width - maxCapRegion.width * 0.5f;
-    spriteBatch->draw(pos.x, pos.y, maxCapRegion.width, maxCapRegion.height, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, maxCapColor, _viewportClipBounds);
+    batch->draw(pos.x, pos.y, maxCapRegion.width, maxCapRegion.height, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, maxCapColor, _viewportClipBounds);
 
     // Percent across.
     float markerPosition = (_value - _min) / (_max - _min);
     markerPosition *= _viewportBounds.width - minCapRegion.width * 0.5f - maxCapRegion.width * 0.5f - markerRegion.width;
     pos.x = _viewportBounds.x + minCapRegion.width * 0.5f + markerPosition;
     pos.y = midY - markerRegion.height / 2.0f;
-    spriteBatch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor, _viewportClipBounds);
+    batch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor, _viewportClipBounds);
+
+    finishBatch(form, batch);
+
+    return 4;
 }
 
-void Slider::drawText(const Rectangle& clip)
+unsigned int Slider::drawText(Form* form, const Rectangle& clip)
 {
-    Label::drawText(clip);
+    unsigned int drawCalls = Label::drawText(form, clip);
 
     if (_valueTextVisible && _font)
     {
         Control::State state = getState();
-        _font->start();
+
+        SpriteBatch* batch = _font->getSpriteBatch();
+        startBatch(form, batch);
         _font->drawText(_valueText.c_str(), _textBounds, _textColor, getFontSize(state), _valueTextAlignment, true, getTextRightToLeft(state), &_viewportClipBounds);
-        _font->finish();
+        finishBatch(form, batch);
+
+        ++drawCalls;
     }
+
+    return drawCalls;
 }
 
 const char* Slider::getType() const

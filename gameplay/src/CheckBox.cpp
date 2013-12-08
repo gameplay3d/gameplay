@@ -148,14 +148,14 @@ void CheckBox::update(const Control* container, const Vector2& offset)
     }
 }
 
-void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
+unsigned int CheckBox::drawImages(Form* form, const Rectangle& clip)
 {
-    GP_ASSERT(spriteBatch);
-    GP_ASSERT(_image);
+    if (!_image)
+        return 0;
 
     // Left, v-center.
     // TODO: Set an alignment for icons.
-    
+
     const Rectangle& region = _image->getRegion();
     const Theme::UVs& uvs = _image->getUVs();
     Vector4 color = _image->getColor();
@@ -173,7 +173,12 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 
     Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
 
-    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+    startBatch(form, batch);
+    batch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    finishBatch(form, batch);
+
+    return 1;
 }
 
 const char* CheckBox::getType() const

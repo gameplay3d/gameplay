@@ -122,7 +122,10 @@ protected:
 
     void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    /**
+     * @see Control::drawImages
+     */
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
      * @see Control#update(const Control*, const Vector2&)
@@ -134,7 +137,7 @@ protected:
     // Destination region.
     Rectangle _dstRegion;
     SpriteBatch* _batch;
-    
+
     // One over texture width and height, for use when calculating UVs from a new source region.
     float _tw;
     float _th;

@@ -236,24 +236,14 @@ protected:
     bool keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
-     * @see Control::draw
+     * @see Control::drawImages
      */
-    void draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight);
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
-     * Draw the images associated with this control.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The clipping rectangle of this control's parent container.
+     * @see Control::drawText
      */
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    /**
-     * Draw this slider's text.
-     *
-     * @param clip The clipping rectangle of this slider's parent container.
-     */
-    void drawText(const Rectangle& clip);
+    unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
      * Called when a slider's properties change. Updates this slider's internal rendering

@@ -336,6 +336,13 @@ public:
      */
     Theme::Style* getEmptyStyle();
 
+    /**
+     * Returns the sprite batch for this theme.
+     *
+     * @return The theme's sprite batch.
+     */
+    SpriteBatch* getSpriteBatch() const;
+
 private:
 
     /**
@@ -469,8 +476,6 @@ private:
     Theme& operator=(const Theme&);
 
     void setProjectionMatrix(const Matrix& matrix);
-
-    SpriteBatch* getSpriteBatch() const;
 
     static void generateUVs(float tw, float th, float x, float y, float width, float height, UVs* uvs);
 

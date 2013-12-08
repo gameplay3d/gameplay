@@ -115,11 +115,9 @@ protected:
     void update(const Control* container, const Vector2& offset);
 
     /**
-     * Draw this label's text.
-     *
-     * @param clip The clipping rectangle of this label's parent container.
+     * @see Control::drawText
      */
-    virtual void drawText(const Rectangle& clip);
+    virtual unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
      * The text displayed by this label.

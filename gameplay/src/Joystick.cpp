@@ -241,11 +241,11 @@ bool Joystick::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     return Control::touchEvent(evt, x, y, contactIndex);
 }
 
-void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
+unsigned int Joystick::drawImages(Form* form, const Rectangle& clip)
 {
-    GP_ASSERT(spriteBatch);
-
     Control::State state = getState();
+
+    unsigned int drawCalls = 0;
 
     // If the joystick is not absolute, then only draw if it is active.
     if (!_relative || (_relative && state == ACTIVE))
@@ -256,6 +256,9 @@ void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             _screenRegion.y = _viewportClipBounds.y + (_viewportClipBounds.height - _screenRegion.height) / 2.0f;
         }
 
+        SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+        startBatch(form, batch);
+
         // Draw the outer image.
         Theme::ThemeImage* outer = getImage("outer", state);
         if (outer)
@@ -263,9 +266,10 @@ void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             const Theme::UVs& uvs = outer->getUVs();
             const Vector4& color = outer->getColor();
             if (_relative)
-                spriteBatch->draw(_screenRegion.x, _screenRegion.y, _outerSize->x, _outerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+                batch->draw(_screenRegion.x, _screenRegion.y, _outerSize->x, _outerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
             else
-                spriteBatch->draw(_screenRegion.x, _screenRegion.y, _outerSize->x, _outerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+                batch->draw(_screenRegion.x, _screenRegion.y, _outerSize->x, _outerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+            ++drawCalls;
         }
 
         // Draw the inner image.
@@ -273,20 +277,25 @@ void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
         if (inner)
         {
             Vector2 position(_screenRegion.x, _screenRegion.y);
-            
+
             // Adjust position to reflect displacement.
             position.x += _displacement.x;
             position.y += -_displacement.y;
-            
+
             // Get the uvs and color and draw.
             const Theme::UVs& uvs = inner->getUVs();
             const Vector4& color = inner->getColor();
             if (_relative)
-                spriteBatch->draw(position.x, position.y, _innerSize->x, _innerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+                batch->draw(position.x, position.y, _innerSize->x, _innerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
             else
-                spriteBatch->draw(position.x, position.y, _innerSize->x, _innerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+                batch->draw(position.x, position.y, _innerSize->x, _innerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+            ++drawCalls;
         }
+
+        finishBatch(form, batch);
     }
+
+    return drawCalls;
 }
 
 const char* Joystick::getType() const

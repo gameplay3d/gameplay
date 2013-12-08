@@ -1137,10 +1137,6 @@ void Control::update(const Control* container, const Vector2& offset)
         _bounds.height);
 
     // Calculate absolute clipped bounds
-    /*_absoluteClipBounds.x = min(max(_absoluteBounds.x, parentAbsoluteClip.x), _absoluteBounds.right());
-    _absoluteClipBounds.y = min(max(_absoluteBounds.y, parentAbsoluteClip.y), _absoluteBounds.bottom());
-    _absoluteClipBounds.width = max(min(_absoluteBounds.right(), parentAbsoluteClip.right()) - _absoluteClipBounds.x, 0.0f);
-    _absoluteClipBounds.height = max(min(_absoluteBounds.bottom(), parentAbsoluteClip.bottom()) - _absoluteClipBounds.y, 0.0f);*/
     Rectangle::intersect(_absoluteBounds, parentAbsoluteClip, &_absoluteClipBounds);
 
     // Calculate the local clipped bounds
@@ -1161,98 +1157,6 @@ void Control::update(const Control* container, const Vector2& offset)
     // Calculate the absolute clipped viewport bounds
     Rectangle::intersect(_viewportBounds, parentAbsoluteClip, &_viewportClipBounds);
 
-    /*float x, y, width, height, clipX2, x2, clipY2, y2;
-
-    // Calculate the local clipped bounds
-    const Theme::Border& border = getBorder(getState());
-    const Theme::Padding& padding = getPadding();
-    width = _bounds.width;
-    height = _bounds.height;
-    if (container)
-    {
-        x = _bounds.x + offset.x;
-        y = _bounds.y + offset.y;
-        x2 = parentAbsoluteClip.x + x + width;
-        y2 = parentAbsoluteClip.y + y + height;
-    }
-    else
-    {
-        x = border.left + padding.left;
-        y = border.top + padding.top;
-        x2 = width;
-        y2 = height;
-    }
-    clipX2 = parentAbsoluteClip.x + parentAbsoluteClip.width;
-    clipY2 = parentAbsoluteClip.y + parentAbsoluteClip.height;
-    if (x2 > clipX2)
-        width -= x2 - clipX2;
-    if (y2 > clipY2)
-        height -= y2 - clipY2;
-
-    if (x < 0)
-    {
-        width += x;
-        x = -x;
-    }
-    else
-    {
-        x = 0;
-    }
-
-    if (y < 0)
-    {
-        height += y;
-        y = -y;
-    }
-    else
-    {
-        y = 0;
-    }
-    _clipBounds.set(x, y, width, height);
-    */
-
-    // Calculate the absolute viewport bounds (content area, which does not include border and padding)
-    /*x += border.left + padding.left;
-    y += border.top + padding.top;
-    width = _bounds.width - border.left - padding.left - border.right - padding.right;
-    height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
-    _viewportBounds.set(x, y, width, height);*/
-
-    // Calculate the clipped viewport bounds (clipped content area).
-    //if (container)
-    /*{
-        clipX2 = parentAbsoluteClip.x + parentAbsoluteClip.width;
-        clipY2 = parentAbsoluteClip.y + parentAbsoluteClip.height;
-    }
-    //else
-    //{
-        //clipX2 = parentAbsoluteClip.width;
-        //clipY2 = parentAbsoluteClip.height;
-    //}
-    x2 = x + width;
-    if (x2 > clipX2)
-        width = clipX2 - x;
-    y2 = y + height;
-    if (y2 > clipY2)
-        height = clipY2 - y;
-
-    if (x < parentAbsoluteClip.x)
-    {
-        float dx = parentAbsoluteClip.x - x;
-        width -= dx;
-        x = parentAbsoluteClip.x;
-    }
-
-    if (y < parentAbsoluteClip.y)
-    {
-        float dy = parentAbsoluteClip.y - y;
-        height -= dy;
-        y = parentAbsoluteClip.y;
-    }
-
-    _viewportClipBounds.set(x, y, width, height);
-    */
-
     // Cache themed attributes for performance.
     _skin = getSkin(getState());
 
@@ -1262,10 +1166,36 @@ void Control::update(const Control* container, const Vector2& offset)
         _opacity *= container->_opacity;
 }
 
-void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
+void Control::startBatch(Form* form, SpriteBatch* batch)
 {
-    if (!spriteBatch || !_skin || _absoluteBounds.width <= 0 || _absoluteBounds.height <= 0)
-        return;
+    form->startBatch(batch);
+}
+
+void Control::finishBatch(Form* form, SpriteBatch* batch)
+{
+    form->finishBatch(batch);
+}
+
+unsigned int Control::draw(Form* form, const Rectangle& clip)
+{
+    if (!_visible)
+        return 0;
+
+    unsigned int drawCalls = drawBorder(form, clip);
+    drawCalls += drawImages(form, clip);
+    drawCalls += drawText(form, clip);
+    return drawCalls;
+}
+
+unsigned int Control::drawBorder(Form* form, const Rectangle& clip)
+{
+    if (!form || !_skin || _absoluteBounds.width <= 0 || _absoluteBounds.height <= 0)
+        return 0;
+
+    unsigned int drawCalls = 0;
+
+    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+    startBatch(form, batch);
 
     // Get the border and background images for this control's current state.
     const Theme::UVs& topLeft = _skin->getUVs(Theme::Skin::TOP_LEFT);
@@ -1295,53 +1225,72 @@ void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     if (!border.left && !border.right && !border.top && !border.bottom)
     {
         // No border, just draw the image.
-        spriteBatch->draw(_absoluteBounds.x, _absoluteBounds.y, _absoluteBounds.width, _absoluteBounds.height, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        batch->draw(_absoluteBounds.x, _absoluteBounds.y, _absoluteBounds.width, _absoluteBounds.height, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        ++drawCalls;
     }
     else
     {
         if (border.left && border.top)
-            spriteBatch->draw(_absoluteBounds.x, _absoluteBounds.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x, _absoluteBounds.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.top)
-            spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.right && border.top)
-            spriteBatch->draw(rightX, _absoluteBounds.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
+        {
+            batch->draw(rightX, _absoluteBounds.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.left)
-            spriteBatch->draw(_absoluteBounds.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
+            ++drawCalls;
+        }
 
         // Always draw the background.
-        spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _absoluteBounds.width - border.left - border.right, _absoluteBounds.height - border.top - border.bottom,
+        batch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _absoluteBounds.width - border.left - border.right, _absoluteBounds.height - border.top - border.bottom,
             center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        ++drawCalls;
 
         if (border.right)
-            spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
+        {
+            batch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.bottom && border.left)
-            spriteBatch->draw(_absoluteBounds.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.bottom)
-            spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, skinColor, clip);
+        {
+            batch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.bottom && border.right)
-            spriteBatch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, skinColor, clip);
+        {
+            batch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, skinColor, clip);
+            ++drawCalls;
+        }
     }
+
+    finishBatch(form, batch);
+
+    return drawCalls;
 }
 
-void Control::drawImages(SpriteBatch* spriteBatch, const Rectangle& position)
+unsigned int Control::drawImages(Form* form, const Rectangle& position)
 {
+    return 0;
 }
 
-void Control::drawText(const Rectangle& position)
+unsigned int Control::drawText(Form* form, const Rectangle& position)
 {
-}
-
-void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight)
-{
-    if (!_visible)
-        return;
-
-    spriteBatch->start();
-    drawBorder(spriteBatch, clip);
-    drawImages(spriteBatch, clip);
-    spriteBatch->finish();
-
-    drawText(clip);
+    return 0;
 }
 
 bool Control::isDirty()

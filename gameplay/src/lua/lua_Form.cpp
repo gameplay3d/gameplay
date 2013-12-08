@@ -106,6 +106,7 @@ void luaRegister_Form()
         {"getZIndex", lua_Form_getZIndex},
         {"hasFocus", lua_Form_hasFocus},
         {"insertControl", lua_Form_insertControl},
+        {"isBatchingEnabled", lua_Form_isBatchingEnabled},
         {"isChild", lua_Form_isChild},
         {"isContainer", lua_Form_isContainer},
         {"isEnabled", lua_Form_isEnabled},
@@ -128,6 +129,7 @@ void luaRegister_Form()
         {"setAnimationPropertyValue", lua_Form_setAnimationPropertyValue},
         {"setAutoHeight", lua_Form_setAutoHeight},
         {"setAutoWidth", lua_Form_setAutoWidth},
+        {"setBatchingEnabled", lua_Form_setBatchingEnabled},
         {"setBorder", lua_Form_setBorder},
         {"setBounds", lua_Form_setBounds},
         {"setCanFocus", lua_Form_setCanFocus},
@@ -3308,6 +3310,41 @@ int lua_Form_insertControl(lua_State* state)
     return 0;
 }
 
+int lua_Form_isBatchingEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                bool result = instance->isBatchingEnabled();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_isBatchingEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_isChild(lua_State* state)
 {
     // Get the number of parameters.
@@ -4210,6 +4247,42 @@ int lua_Form_setAutoWidth(lua_State* state)
             } while (0);
 
             lua_pushstring(state, "lua_Form_setAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setBatchingEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setBatchingEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setBatchingEnabled - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

@@ -146,12 +146,9 @@ protected:
     void update(const Control* container, const Vector2& offset);
 
     /**
-     * Draw the checkbox icon associated with this control.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The container position this control is relative to.
+     * @see Control::drawImages
      */
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
      * Whether this checkbox is currently checked.

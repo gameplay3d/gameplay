@@ -3,6 +3,7 @@ form basicControls
     layout = LAYOUT_ABSOLUTE
     size = 600, 600
 	consumeInputEvents = true
+    batchingEnabled = false
     	
 	label title
 	{

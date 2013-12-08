@@ -113,17 +113,16 @@ const char* ImageControl::getType() const
     return "image";
 }
 
-void ImageControl::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
+unsigned int ImageControl::drawImages(Form* form, const Rectangle& clip)
 {
-    spriteBatch->finish();
+    if (!_batch)
+        return 0;
 
-    // An ImageControl is not part of the texture atlas but should use the same projection matrix.
-    _batch->setProjectionMatrix(spriteBatch->getProjectionMatrix());
+    startBatch(form, _batch);
 
     Vector4 color = Vector4::one();
     color.w *= _opacity;
 
-    _batch->start();
     if (_dstRegion.isEmpty())
     {
         _batch->draw(_viewportBounds.x, _viewportBounds.y, _viewportBounds.width, _viewportBounds.height,
@@ -135,9 +134,10 @@ void ImageControl::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             _dstRegion.width, _dstRegion.height,
             _uvs.u1, _uvs.v1, _uvs.u2, _uvs.v2, color, _viewportClipBounds);
     }
-    _batch->finish();
 
-    spriteBatch->start();
+    finishBatch(form, _batch);
+
+    return 1;
 }
 
 void ImageControl::update(const Control* container, const Vector2& offset)

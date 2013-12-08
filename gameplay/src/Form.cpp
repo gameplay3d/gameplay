@@ -10,10 +10,6 @@
 #include "CheckBox.h"
 #include "Scene.h"
 
-// Default form shaders
-#define FORM_VSH "res/shaders/form.vert"
-#define FORM_FSH "res/shaders/form.frag"
-
 // Scroll speed when using a DPad -- max scroll speed when using a joystick.
 static const float GAMEPAD_SCROLL_SPEED = 500.0f;
 // Distance a joystick must be pushed in order to trigger focus-change and/or scrolling.
@@ -21,30 +17,29 @@ static const float JOYSTICK_THRESHOLD = 0.75f;
 // If the DPad or joystick is held down, this is the initial delay in milliseconds between focus changes.
 static const float GAMEPAD_FOCUS_REPEAT_DELAY = 300.0f;
 
+// Shaders used for drawing offscreen quad when form is attached to a node
+#define FORM_VSH "res/shaders/sprite.vert"
+#define FORM_FSH "res/shaders/sprite.frag"
+
+//#define GAMEPLAY_FORMS_USE_FRAMEBUFFER
+
 namespace gameplay
 {
 
-static Effect* __formEffect = NULL;
 static std::vector<Form*> __forms;
 Control* Form::_focusControl = NULL;
 Control* Form::_activeControl = NULL;
 Control::State Form::_activeControlState = Control::NORMAL;
 static bool _shiftKeyDown = false;
 
-Form::Form() : _node(NULL), _u2(0), _v1(0)
+Form::Form() : _node(NULL), _frameBuffer(NULL), _model(NULL), _batched(true)
 {
 }
 
 Form::~Form()
 {
-    if (__formEffect)
-    {
-        if (__formEffect->getRefCount() == 1)
-        {
-            __formEffect->release();
-            __formEffect = NULL;
-        }
-    }
+    SAFE_RELEASE(_model);
+    SAFE_RELEASE(_frameBuffer);
 
     // Remove this Form from the global list.
     std::vector<Form*>::iterator it = std::find(__forms.begin(), __forms.end(), this);
@@ -95,6 +90,8 @@ Form* Form::create(const char* url)
             }
         }
     }
+
+    form->_batched = formProperties->getBool("batchingEnabled", true);
 
     // Initialize the form and all of its child controls
     form->initialize("Form", style, formProperties);
@@ -151,52 +148,108 @@ bool Form::isForm() const
     return true;
 }
 
-static Effect* createEffect()
-{
-    Effect* effect = NULL;
-    if (__formEffect == NULL)
-    {
-        __formEffect = Effect::createFromFile(FORM_VSH, FORM_FSH);
-        if (__formEffect == NULL)
-        {
-            GP_ERROR("Unable to load form effect.");
-            return NULL;
-        }
-        effect = __formEffect;
-    }
-    else
-    {
-        effect = __formEffect;
-    }
-    return effect;
-}
-
 void Form::setNode(Node* node)
 {
-    _node = node;
+    if (_node != node)
+    {
+        _node = node;
+
+        updateFrameBuffer();
+    }
+}
+
+static unsigned int nextPowerOfTwo(unsigned int v)
+{
+    if (!((v & (v - 1)) == 0))
+    {
+        v--;
+        v |= v >> 1;
+        v |= v >> 2;
+        v |= v >> 4;
+        v |= v >> 8;
+        v |= v >> 16;
+        return v + 1;
+    }
+
+    return v;
+}
+
+void Form::updateFrameBuffer()
+{
+    SAFE_RELEASE(_model);
+    SAFE_RELEASE(_frameBuffer);
+
+#ifdef GAMEPLAY_FORMS_USE_FRAMEBUFFER
+
+    if (_node && _absoluteClipBounds.width > 0 && _absoluteClipBounds.height > 0)
+    {
+        // Create an offscreen buffer to draw our form into
+        unsigned int width = nextPowerOfTwo(_absoluteClipBounds.width);
+        unsigned int height = nextPowerOfTwo(_absoluteClipBounds.height);
+
+        _frameBuffer = FrameBuffer::create(_id.c_str(), width, height);
+
+        // Create a model (quad) to draw our offscreen buffer onto
+        float x2 = _absoluteClipBounds.width;
+        float y2 = _absoluteClipBounds.height;
+        float u2 = x2 / width;
+        float v1 = y2 / height;
+        float vertices[] =
+        {
+            0, y2, 0, 0, v1, 1, 1, 1, 1,
+            0, 0, 0, 0, 0, 1, 1, 1, 1,
+            x2, y2, 0, u2, v1, 1, 1, 1, 1,
+            x2, 0, 0, u2, 0, 1, 1, 1, 1
+        };
+        VertexFormat::Element elements[] =
+        {
+            VertexFormat::Element(VertexFormat::POSITION, 3),
+            VertexFormat::Element(VertexFormat::TEXCOORD0, 2),
+            VertexFormat::Element(VertexFormat::COLOR, 4)
+        };
+        Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 3), 4, false);
+        GP_ASSERT(mesh);
+        mesh->setPrimitiveType(Mesh::TRIANGLE_STRIP);
+        mesh->setVertexData(vertices, 0, 4);
+
+        _model = Model::create(mesh);
+        SAFE_RELEASE(mesh);
+
+        Material* material = _model->setMaterial(FORM_VSH, FORM_FSH);
+        material->getParameter("u_projectionMatrix")->bindValue(this, &Form::getProjectionMatrix);
+
+        Texture::Sampler* sampler = Texture::Sampler::create(_frameBuffer->getRenderTarget()->getTexture());
+        sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
+        material->getParameter("u_texture")->setSampler(sampler);
+        sampler->release();
+
+        material->getStateBlock()->setDepthWrite(true);
+        material->getStateBlock()->setBlend(true);
+        material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
+        material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
+    }
+
+#endif
 }
 
 void Form::update(float elapsedTime)
 {
-    if (isDirty())
+    update(NULL, Vector2::zero());
+
+    Control::State state = getState();
+
+    // Cache themed attributes for performance.
+    _skin = getSkin(state);
+    _opacity = getOpacity(state);
+
+    GP_ASSERT(_layout);
+    if (_scroll != SCROLL_NONE)
     {
-        update(NULL, Vector2::zero());
-
-        Control::State state = getState();
-
-        // Cache themed attributes for performance.
-        _skin = getSkin(state);
-        _opacity = getOpacity(state);
-
-        GP_ASSERT(_layout);
-        if (_scroll != SCROLL_NONE)
-        {
-            updateScroll();
-        }
-        else
-        {
-            _layout->update(this, Vector2::zero());
-        }
+        updateScroll();
+    }
+    else
+    {
+        _layout->update(this, Vector2::zero());
     }
 }
 
@@ -208,6 +261,38 @@ void Form::update(const Control* container, const Vector2& offset)
     Container::update(container, offset);
 
     _layout->align(this, NULL);
+
+    if (_absoluteClipBounds != oldAbsoluteClipBounds)
+    {
+        if (_node)
+            updateFrameBuffer();
+    }
+}
+
+void Form::startBatch(SpriteBatch* batch)
+{
+    // TODO (note: might want to pass a level number/depth here so that batch draw calls can be sorted correctly, such as all text on top)
+    if (!batch->isStarted())
+    {
+        batch->setProjectionMatrix(_projectionMatrix);
+        batch->start();
+
+        if (_batched)
+            _batches.push_back(batch);
+    }
+}
+
+void Form::finishBatch(SpriteBatch* batch)
+{
+    if (!_batched)
+    {
+        batch->finish();
+    }
+}
+
+const Matrix& Form::getProjectionMatrix() const
+{
+    return  _projectionMatrix;
 }
 
 unsigned int Form::draw()
@@ -215,36 +300,90 @@ unsigned int Form::draw()
     if (!_visible || _absoluteClipBounds.width == 0 || _absoluteClipBounds.height == 0)
         return 0;
 
-    if (_node)
+    Game* game = Game::getInstance();
+    Rectangle viewport = game->getViewport();
+
+    FrameBuffer* oldFrameBuffer = NULL;
+    if (_frameBuffer)
     {
-        // TODO: Create a perspective projection matrix based off the node's camera
-        GP_WARN("TODO: Support forms attached to nodes.");
+        // Update the viewport
+        game->setViewport(Rectangle(0, 0, _absoluteClipBounds.width, _absoluteClipBounds.height));
+
+        // Bind the offscreen buffer and clear its color and depth.
+        oldFrameBuffer = _frameBuffer->bind();
+        Game::getInstance()->clear(Game::CLEAR_COLOR_DEPTH, Vector4::zero(), 1, 0);
+
+        // Setup an ortho matrix the maps to the size of the form
+        Matrix::createOrthographicOffCenter(0, _absoluteClipBounds.width, _absoluteClipBounds.height, 0, 0, 1, &_projectionMatrix);
     }
     else
     {
-        // Create an orthographic projection mapped to the current viewport
-        const Rectangle& viewport = Game::getInstance()->getViewport();
-        Matrix::createOrthographicOffCenter(0, viewport.width, viewport.height, 0, 0, 1, &_projectionMatrix);
+        // If we're drawing in 2D (i.e. not attached to a node), we need to clear the depth buffer
+        if (_node)
+        {
+            // Drawing in 3D.
+            // Setup a projection matrix for drawing the form via the node's world transform.
+            Matrix world(_node->getWorldMatrix());
+            world.scale(1, -1, 1);
+            world.translate(0, -_absoluteClipBounds.height, 0);
+            Matrix::multiply(_node->getViewProjectionMatrix(), world, &_projectionMatrix);
+        }
+        else
+        {
+            // Drawing in 2D, so we need to clear the depth buffer
+            Game::getInstance()->clear(Game::CLEAR_DEPTH, Vector4::zero(), 1, 0);
+
+            // Setup an ortho matrix that maps to the current viewport
+            const Rectangle& viewport = Game::getInstance()->getViewport();
+            Matrix::createOrthographicOffCenter(0, viewport.width, viewport.height, 0, 0, 1, &_projectionMatrix);
+        }
     }
 
-    _style->getTheme()->setProjectionMatrix(_projectionMatrix);
-
-    // TODO: Maintain multiple sprite batches (for different styles/themes and fonts) and start/top them all as neccessary
-    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
-    //batch->start();
-
     // Draw the form
-    Container::draw(batch, _absoluteClipBounds, _absoluteClipBounds.height);
+    unsigned int drawCalls = Container::draw(this, _absoluteClipBounds);
 
-    //batch->finish();
+    // Flush all batches that were queued during drawing and then empty the batch list
+    if (_batched)
+    {
+        unsigned int batchCount = _batches.size();
+        for (unsigned int i = 0; i < batchCount; ++i)
+            _batches[i]->finish();
+        _batches.clear();
+        drawCalls = batchCount;
+    }
 
-    // TODO: We should return the actual number of draw calls here (number fo batches flushed)
-    return 1;
+    // If the form was drawn into an offscreen buffer, we need to now draw that buffer
+    // using the WVP matrix of the node we're attached to.
+    if (oldFrameBuffer)
+    {
+        game->setViewport(viewport);
+        oldFrameBuffer->bind();
+
+        if (_model)
+        {
+            _projectionMatrix = _node->getWorldViewProjectionMatrix();
+            _model->draw();
+            ++drawCalls;
+        }
+    }
+
+    return drawCalls;
 }
 
 const char* Form::getType() const
 {
     return "form";
+}
+
+
+bool Form::isBatchingEnabled() const
+{
+    return _batched;
+}
+
+void Form::setBatchingEnabled(bool enabled)
+{
+    _batched = enabled;
 }
 
 Control* Form::getActiveControl()

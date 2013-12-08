@@ -105,6 +105,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int
     material->getStateBlock()->setBlend(true);
     material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
+    //material->getStateBlock()->setDepthFunction(RenderState::DEPTH_LEQUAL);
 
     // Bind the texture to the material as a sampler
     Texture::Sampler* sampler = Texture::Sampler::create(texture); // +ref texture
@@ -142,6 +143,11 @@ SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int
 void SpriteBatch::start()
 {
     _batch->start();
+}
+
+bool SpriteBatch::isStarted() const
+{
+    return _batch->isStarted();
 }
 
 void SpriteBatch::draw(const Rectangle& dst, const Rectangle& src, const Vector4& color)
@@ -298,9 +304,16 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
 
 void SpriteBatch::draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip)
 {
+    draw(x, y, 0, width, height, u1, v1, u2, v2, color, clip);
+}
+
+void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip)
+{
+    // TODO: Perform software clipping instead of culling the entire sprite.
+
     // Only draw if at least part of the sprite is within the clip region.
     if (clipSprite(clip, x, y, width, height, u1, v1, u2, v2))
-        draw(x, y, 0, width, height, u1, v1, u2, v2, color);
+        draw(x, y, z, width, height, u1, v1, u2, v2, color);
 }
 
 void SpriteBatch::addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, SpriteBatch::SpriteVertex* vertices)

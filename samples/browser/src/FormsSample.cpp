@@ -150,8 +150,7 @@ void FormsSample::formChanged()
     _formNode->setScale(scale, scale, 1.0f);
     _formNodeParent->setTranslation(0, 0, -1.5f);
     _formNode->setTranslation(-0.5f, -0.5f, 0);
-    _activeForm->setAlignment(Control::ALIGN_VCENTER_HCENTER);
-    //_formNode->setForm(_activeForm);
+    _formNode->setForm(_activeForm);
 }
 
 void FormsSample::createSampleForm()

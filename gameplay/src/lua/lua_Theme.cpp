@@ -18,6 +18,7 @@ void luaRegister_Theme()
         {"addRef", lua_Theme_addRef},
         {"getEmptyStyle", lua_Theme_getEmptyStyle},
         {"getRefCount", lua_Theme_getRefCount},
+        {"getSpriteBatch", lua_Theme_getSpriteBatch},
         {"getStyle", lua_Theme_getStyle},
         {"release", lua_Theme_release},
         {NULL, NULL}
@@ -176,6 +177,50 @@ int lua_Theme_getRefCount(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Theme_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Theme_getSpriteBatch(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Theme* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getSpriteBatch();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "SpriteBatch");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Theme_getSpriteBatch - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

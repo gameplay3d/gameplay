@@ -374,15 +374,9 @@ protected:
     void addControls(Properties* properties);
 
     /**
-     * Draws a sprite batch for the specified clipping rect.
-     *
-     * @param spriteBatch The sprite batch to use.
-     * @param clip The clipping rectangle.
-     * @param needsClear Whether it needs to be cleared.
-     * @param cleared Whether it was previously cleared
-     * @param targetHeight The targets height
+     * @see Control::draw
      */
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight);
+    virtual unsigned int draw(Form* form, const Rectangle& clip);
 
     /**
      * Update scroll position and velocity.

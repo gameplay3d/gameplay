@@ -4,7 +4,6 @@
 #include "Ref.h"
 #include "Rectangle.h"
 #include "Vector2.h"
-#include "SpriteBatch.h"
 #include "Theme.h"
 #include "ThemeStyle.h"
 #include "Touch.h"
@@ -1094,38 +1093,83 @@ protected:
     virtual void update(const Control* container, const Vector2& offset);
 
     /**
+     * Indicates that a control will begin drawing into the specified batch.
+     *
+     * When drawing is finshed (before any other batch can be drawn into), the
+     * finishBatch method should be called.
+     *
+     * @param form The form beign drawn.
+     * @param batch The sprite batch to be drawn into.
+     */
+    void startBatch(Form* form, SpriteBatch* batch);
+
+    /**
+     * Called after a batch has been drawn into and before any other batch is used.
+     *
+     * @param form The form being drawn.
+     * @param batch The batch that was previously started (via Control::startBatch).
+     */
+    void finishBatch(Form* form, SpriteBatch* batch);
+
+    /**
+     * Draws the control.
+     *
+     * Implementations of Control are expected to perform all drawing into a SpriteBatch.
+     * Batches should not be explicitly started or finished, but instead should be passed
+     * to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting
+     * and finishing the batch when neccessary.
+     *
+     * @param form The top level form being drawn.
+     * @param clip The clipping rectangle.
+     *
+     * @return The number of draw calls issued.
+     */
+    virtual unsigned int draw(Form* form, const Rectangle& clip);
+
+    /**
      * Draws the themed border and background of a control.
      *
-     * @param spriteBatch The sprite batch containing this control's border images.
+     * Implementations of Control are expected to perform all drawing into a SpriteBatch.
+     * Batches should not be explicitly started or finished, but instead should be passed
+     * to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting
+     * and finishing the batch when neccessary.
+     *
+     * @param form The top level form being drawn.
      * @param clip The clipping rectangle of this control's parent container.
+     *
+     * @return The number of draw calls issued.
      */
-    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+    virtual unsigned int drawBorder(Form* form, const Rectangle& clip);
 
     /**
      * Draw the images associated with this control.
      *
-     * @param spriteBatch The sprite batch containing this control's icons.
+     * Implementations of Control are expected to perform all drawing into a SpriteBatch.
+     * Batches should not be explicitly started or finished, but instead should be passed
+     * to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting
+     * and finishing the batch when neccessary.
+     *
+     * @param form The top level form being drawn.
      * @param clip The clipping rectangle of this control's parent container.
+     *
+     * @return The number of draw calls issued.
      */
-    virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    virtual unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
      * Draw this control's text.
      *
-     * @param clip The clipping rectangle of this control's parent container.
-     */
-    virtual void drawText(const Rectangle& clip);
-
-    /**
-     * Draws a sprite batch for the specified clipping rect.
+     * Implementations of Control are expected to perform all drawing into a SpriteBatch.
+     * Batches should not be explicitly started or finished, but instead should be passed
+     * to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting
+     * and finishing the batch when neccessary.
      *
-     * @param spriteBatch The sprite batch to use.
-     * @param clip The clipping rectangle.
-     * @param needsClear Whether it needs to be cleared.
-     * @param cleared Whether it was previously cleared
-     * @param targetHeight The targets height
+     * @param form The top level form being drawn.
+     * @param clip The clipping rectangle of this control's parent container.
+     *
+     * @return The number of draw calls issued.
      */
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, float targetHeight);
+    virtual unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
      * Initializes the control.
@@ -1335,7 +1379,7 @@ private:
     Theme::Skin* getSkin(State state);
 
     void addSpecificListener(Control::Listener* listener, Control::Listener::EventType eventType);
-    
+
     bool _styleOverridden;
     Theme::Skin* _skin;
 
