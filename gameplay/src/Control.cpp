@@ -1337,13 +1337,14 @@ Control::State Control::getState(const char* state)
 Theme::ThemeImage* Control::getImage(const char* id, State state)
 {
     Theme::Style::Overlay* overlay = getOverlay(state);
-    GP_ASSERT(overlay);
-    
-    Theme::ImageList* imageList = overlay->getImageList();
-    if (!imageList)
-        return NULL;
+    if (overlay)
+    {
+        Theme::ImageList* imageList = overlay->getImageList();
+        if (imageList)
+            return imageList->getImage(id);
+    }
 
-    return imageList->getImage(id);
+    return _style->getTheme()->_emptyImage;
 }
 
 const char* Control::getType() const

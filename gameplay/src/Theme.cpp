@@ -10,7 +10,7 @@ namespace gameplay
 static std::vector<Theme*> __themeCache;
 static Theme* __defaultTheme = NULL;
 
-Theme::Theme()
+Theme::Theme() : _texture(NULL), _spriteBatch(NULL), _emptyImage(NULL)
 {
 }
 
@@ -51,6 +51,8 @@ Theme::~Theme()
         __themeCache.erase(itr);
     }
 
+    SAFE_RELEASE(_emptyImage);
+
 	if (__defaultTheme == this)
 		__defaultTheme = NULL;
 }
@@ -67,6 +69,20 @@ Theme* Theme::getDefault()
 			if (defaultTheme && FileSystem::fileExists(defaultTheme))
 				__defaultTheme = Theme::create(defaultTheme);
 		}
+
+        if (!__defaultTheme)
+        {
+            GP_WARN("No default theme detected.");
+
+            // Create an empty theme so that UI's with no theme don't just crash
+            __defaultTheme = new Theme();
+            unsigned int color = 0x00000000;
+            __defaultTheme->_texture = Texture::create(Texture::RGBA, 1, 1, (unsigned char*)&color, false);
+            __defaultTheme->_emptyImage = new Theme::ThemeImage(1.0f, 1.0f, Rectangle::empty(), Vector4::zero());
+            __defaultTheme->_spriteBatch = SpriteBatch::create(__defaultTheme->_texture);
+            __defaultTheme->_spriteBatch->getSampler()->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
+            __defaultTheme->_spriteBatch->getSampler()->setWrapMode(Texture::CLAMP, Texture::CLAMP);
+        }
 
 		// TODO: Use a built-in (compiled-in) default theme resource as the final fallback so that
 		// UI still works even when no theme files are present.
@@ -117,19 +133,21 @@ Theme* Theme::create(const char* url)
     // Create a new theme.
     Theme* theme = new Theme();
     theme->_url = url;
-        
+
     // Parse the Properties object and set up the theme.
     std::string textureFile;
     themeProperties->getPath("texture", &textureFile);
-    theme->_texture = Texture::create(textureFile.c_str(), false);
+    theme->_texture = Texture::create(textureFile.c_str(), true);
     GP_ASSERT(theme->_texture);
     theme->_spriteBatch = SpriteBatch::create(theme->_texture);
     GP_ASSERT(theme->_spriteBatch);
-    theme->_spriteBatch->getSampler()->setFilterMode(Texture::LINEAR, Texture::LINEAR);
+    theme->_spriteBatch->getSampler()->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
     theme->_spriteBatch->getSampler()->setWrapMode(Texture::CLAMP, Texture::CLAMP);
 
     float tw = 1.0f / theme->_texture->getWidth();
     float th = 1.0f / theme->_texture->getHeight();
+
+    theme->_emptyImage = new Theme::ThemeImage(tw, th, Rectangle::empty(), Vector4::zero());
 
     Properties* space = themeProperties->getNextNamespace();
     while (space != NULL)

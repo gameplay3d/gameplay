@@ -484,6 +484,7 @@ private:
     std::string _url;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
+    Theme::ThemeImage* _emptyImage;
     std::vector<Style*> _styles;
     std::vector<ThemeImage*> _images;
     std::vector<ImageList*> _imageLists;
