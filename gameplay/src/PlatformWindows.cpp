@@ -9,6 +9,7 @@
 #include "ScriptController.h"
 #include <GL/wglew.h>
 #include <windowsx.h>
+#include <Commdlg.h>
 #include <shellapi.h>
 #ifdef GP_USE_GAMEPAD
 #include <XInput.h>
@@ -1347,6 +1348,57 @@ bool Platform::launchURL(const char* url)
     int r = (int)ShellExecute(NULL, NULL, wurl, NULL, NULL, SW_SHOWNORMAL);
     SAFE_DELETE_ARRAY(wurl);
     return (r > 32);
+}
+
+std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension)
+{
+    std::string filename;
+    OPENFILENAMEA ofn;
+    memset(&ofn, 0, sizeof(ofn));
+
+    char currentDir[256];
+    GetCurrentDirectoryA(256, currentDir);
+    std::string initialDir = currentDir;
+    initialDir += "\\res";
+
+    std::string desc = filterDescription;
+    desc += " (*.";
+    desc += filterExtension;
+    desc += ")";
+    std::string ext = "*.";
+    ext += filterExtension;
+    char filter[512];
+    memset(filter, 0, 512);
+    strcpy(filter, desc.c_str());
+    strcpy(filter + desc.length() + 1, ext.c_str());
+
+    char szFileName[256] = "";
+    ofn.lpstrFile = szFileName;
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = GetForegroundWindow();
+    ofn.lpstrTitle = title;
+    ofn.lpstrFilter = filter;
+    ofn.lpstrInitialDir = initialDir.c_str();
+    ofn.nMaxFile = 256;
+    ofn.lpstrDefExt = filter;
+
+    if (mode == FileSystem::OPEN)
+    {
+        ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
+        GetOpenFileNameA(&ofn);
+    }
+    else
+    {
+        ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+        GetSaveFileNameA(&ofn);
+    }
+
+    filename = szFileName;
+        
+    // Restore current dir
+    SetCurrentDirectoryA(currentDir);
+
+    return filename;
 }
 
 }

@@ -1650,6 +1650,11 @@ bool Platform::launchURL(const char* url)
     return navigator_invoke(url, NULL) == BPS_SUCCESS;
 }
 
+std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension)
+{
+    return "";
+}
+
 }
 
 #endif

@@ -416,6 +416,9 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("GESTURE_TAP", "GESTURE_TAP", scopePath);
         gameplay::ScriptUtil::registerConstantString("GESTURE_SWIPE", "GESTURE_SWIPE", scopePath);
         gameplay::ScriptUtil::registerConstantString("GESTURE_PINCH", "GESTURE_PINCH", scopePath);
+        gameplay::ScriptUtil::registerConstantString("GESTURE_LONG_TAP", "GESTURE_LONG_TAP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("GESTURE_DRAG", "GESTURE_DRAG", scopePath);
+        gameplay::ScriptUtil::registerConstantString("GESTURE_DROP", "GESTURE_DROP", scopePath);
         gameplay::ScriptUtil::registerConstantString("GESTURE_ANY_SUPPORTED", "GESTURE_ANY_SUPPORTED", scopePath);
     }
 

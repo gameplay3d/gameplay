@@ -2,6 +2,7 @@
 #include "FileSystem.h"
 #include "Properties.h"
 #include "Stream.h"
+#include "Platform.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -64,7 +65,6 @@ static void makepath(std::string path, int mode)
             }
         }
     }
-    
     return;
 }
 
@@ -223,6 +223,11 @@ void FileSystem::loadResourceAliases(Properties* properties)
     {
         __aliases[name] = properties->getString();
     }
+}
+
+std::string FileSystem::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension)
+{
+    return Platform::displayFileDialog(mode, title, filterDescription, filterExtension);
 }
 
 const char* FileSystem::resolvePath(const char* path)
