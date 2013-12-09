@@ -2326,7 +2326,76 @@ bool Platform::launchURL(const char *url)
 
 std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension)
 {
-    return "";
+    std::string filename;
+    
+    
+    if (mode == FileSystem::OPEN)
+    {
+        NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+        
+        [openPanel setCanChooseFiles:TRUE];
+        [openPanel setCanChooseDirectories:FALSE];
+        [openPanel setAllowsMultipleSelection:FALSE];
+
+        // Title
+        NSString* titleStr = [NSString stringWithUTF8String:title];
+        [openPanel setTitle:titleStr];
+        // Filter ext.
+        NSString* ext = [NSString stringWithUTF8String:filterExtension];
+        NSArray* fileTypes = [NSArray arrayWithObjects: ext, nil];
+        [openPanel setAllowedFileTypes:fileTypes];
+        
+        // Set initial directory
+        NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
+        NSString* initialDir = [bundlePath stringByAppendingString:@"/Contents/Resources"];
+        NSURL* intialURL = [NSURL fileURLWithPath:initialDir];
+        [openPanel setDirectoryURL:intialURL];
+        
+        // Run the model dialog
+        if ( [openPanel runModal] == NSOKButton )
+        {
+            NSURL* selectedFileName = [openPanel URL];
+            NSString* urlStr = [selectedFileName absoluteString];
+            filename = std::string([urlStr UTF8String]);
+            std::string initialDirStr = std::string("file://localhost");
+            initialDirStr.append(std::string([initialDir UTF8String]));
+            initialDirStr.append("/");
+            filename.replace(filename.find(initialDirStr), initialDirStr.size(), "");
+        }
+    }
+    else
+    {
+        NSSavePanel* savePanel = [NSSavePanel savePanel];
+        [savePanel setCanCreateDirectories:TRUE];
+        [savePanel setCanSelectHiddenExtension:TRUE];
+        // Title
+        NSString* titleStr = [NSString stringWithUTF8String:title];
+        [savePanel setTitle:titleStr];
+        // Filter ext.
+        NSString* ext = [NSString stringWithUTF8String:filterExtension];
+        NSArray* fileTypes = [NSArray arrayWithObjects: ext, nil];
+        [savePanel setAllowedFileTypes:fileTypes];
+        
+        // Set initial directory
+        NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
+        NSString* initialDir = [bundlePath stringByAppendingString:@"/Contents/Resources"];
+        NSURL* intialURL = [NSURL fileURLWithPath:initialDir];
+        [savePanel setDirectoryURL:intialURL];
+        
+        // Run the model dialog
+        if ( [savePanel runModal] == NSOKButton )
+        {
+            NSURL* selectedFileName = [savePanel URL];
+            NSString* urlStr = [selectedFileName absoluteString];
+            filename = std::string([urlStr UTF8String]);
+            std::string initialDirStr = std::string("file://localhost");
+            initialDirStr.append(std::string([initialDir UTF8String]));
+            initialDirStr.append("/");
+            filename.replace(filename.find(initialDirStr), initialDirStr.size(), "");
+        }
+    }
+    
+    return filename;
 }
 
 #endif
