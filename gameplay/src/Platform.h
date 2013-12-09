@@ -7,6 +7,7 @@
 #include "Touch.h"
 #include "Gesture.h"
 #include "Gamepad.h"
+#include "FileSystem.h"
 
 namespace gameplay
 {
@@ -26,6 +27,7 @@ public:
     friend class Game;
     friend class Gamepad;
     friend class ScreenDisplayer;
+    friend class FileSystem;
 
     /**
      * Destructor.
@@ -396,7 +398,20 @@ public:
      */
     static void pollGamepadState(Gamepad* gamepad);
 
-   /**
+    /**
+     * Displays an open or save dialog using the native platform dialog system.
+     *
+     * @param mode The mode of the dialog. (Ex. OPEN or SAVE)
+     * @param title The title of the dialog. (Ex. Select File or Save File)
+     *  @param filterDescription The file filter description. (Ex. All Files or PNG Files)
+     * @param filterExtension The extension. Ex. (* or png)  Note: This prefixed with *.
+     * @return The file that is opened or saved.
+     *
+     * @script{ignore}
+     */
+    static std::string displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension);
+
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}

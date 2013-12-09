@@ -76,10 +76,6 @@ private:
 
     void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
-    std::string openFile(const char* title, const char* filterDescription, const char* filterExtension);
-
-    void saveFile();
-
     void updateTexture();
 
     void updateImageControl();
@@ -87,6 +83,8 @@ private:
     void updateFrames();
     
     void addGrid(unsigned int lineCount);
+
+    void saveFile();
     
     std::string toString(bool b);
     
