@@ -403,13 +403,14 @@ public:
      *
      * @param mode The mode of the dialog. (Ex. OPEN or SAVE)
      * @param title The title of the dialog. (Ex. Select File or Save File)
-     *  @param filterDescription The file filter description. (Ex. All Files or PNG Files)
-     * @param filterExtension The extension. Ex. (* or png)  Note: This prefixed with *.
+     * @param filterDescription The file filter description. (Ex. Image Files)
+     * @param filterExtensions The semi-colon delimited list of filtered file extensions. (Ex. png;jpg;bmp)
+     * @param initialDirectory The initial directory to open or save files from. (Ex. "res") If NULL this will use the executable directory.
      * @return The file that is opened or saved.
      *
      * @script{ignore}
      */
-    static std::string displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension);
+    static std::string displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory);
 
     /**
      * Internal method used only from static code in various platform implementation.

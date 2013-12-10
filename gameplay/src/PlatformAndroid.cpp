@@ -1621,7 +1621,7 @@ bool Platform::launchURL(const char *url)
     return result;
 }
 
-std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension)
+std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
 {
     return "";
 }
