@@ -2324,10 +2324,32 @@ bool Platform::launchURL(const char *url)
     return (err == noErr);
 }
 
+NSString* getAbsolutePath(const char* path)
+{
+    NSString* bundlePathStr = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/Contents/Resources"];
+    if (path == NULL )
+        return bundlePathStr;
+    
+    NSString* absPath = [NSString stringWithUTF8String:path];
+    if ([absPath length] == 0)
+        return @"";
+    
+    if ([absPath hasPrefix:@"/"])
+    {
+        absPath = [NSString stringWithUTF8String:path];
+    }
+    else
+    {
+        absPath = bundlePathStr;
+        absPath = [absPath stringByAppendingString:@"/"];
+        absPath = [absPath stringByAppendingString:[NSString stringWithUTF8String:path]];
+    }
+    return absPath;
+}
+
 std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
 {
-    std::string filename;
-    
+    std::string filename = "";
     
     if (mode == FileSystem::OPEN)
     {
@@ -2340,27 +2362,25 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
         // Title
         NSString* titleStr = [NSString stringWithUTF8String:title];
         [openPanel setTitle:titleStr];
+        
         // Filter ext.
         NSString* ext = [NSString stringWithUTF8String:filterExtensions];
         NSArray* fileTypes = [NSArray arrayWithObjects: ext, nil];
         [openPanel setAllowedFileTypes:fileTypes];
         
-        // Set initial directory
-        NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
-        NSString* initialDir = [bundlePath stringByAppendingString:@"/Contents/Resources"];
-        NSURL* intialURL = [NSURL fileURLWithPath:initialDir];
-        [openPanel setDirectoryURL:intialURL];
+        // Set the initial directory
+        NSString* absPath = getAbsolutePath(initialDirectory);
+        NSURL* url = [NSURL fileURLWithPath:absPath];
+        [openPanel setDirectoryURL:url];
         
-        // Run the model dialog
-        if ( [openPanel runModal] == NSOKButton )
+        // Show the open dialog
+        if ([openPanel runModal] == NSOKButton)
         {
             NSURL* selectedFileName = [openPanel URL];
             NSString* urlStr = [selectedFileName absoluteString];
             filename = std::string([urlStr UTF8String]);
-            std::string initialDirStr = std::string("file://localhost");
-            initialDirStr.append(std::string([initialDir UTF8String]));
-            initialDirStr.append("/");
-            filename.replace(filename.find(initialDirStr), initialDirStr.size(), "");
+            const std::string fileProtocol = std::string("file://localhost");
+            filename.replace(filename.find(fileProtocol), fileProtocol.size(), "");
         }
     }
     else
@@ -2371,27 +2391,25 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
         // Title
         NSString* titleStr = [NSString stringWithUTF8String:title];
         [savePanel setTitle:titleStr];
+        
         // Filter ext.
         NSString* ext = [NSString stringWithUTF8String:filterExtensions];
         NSArray* fileTypes = [NSArray arrayWithObjects: ext, nil];
         [savePanel setAllowedFileTypes:fileTypes];
         
-        // Set initial directory
-        NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
-        NSString* initialDir = [bundlePath stringByAppendingString:@"/Contents/Resources"];
-        NSURL* intialURL = [NSURL fileURLWithPath:initialDir];
-        [savePanel setDirectoryURL:intialURL];
+        // Set the initial directory
+        NSString* absPath = getAbsolutePath(initialDirectory);
+        NSURL* url = [NSURL fileURLWithPath:absPath];
+        [savePanel setDirectoryURL:url];
         
-        // Run the model dialog
-        if ( [savePanel runModal] == NSOKButton )
+        // Show the save dialog
+        if ([savePanel runModal] == NSOKButton)
         {
             NSURL* selectedFileName = [savePanel URL];
             NSString* urlStr = [selectedFileName absoluteString];
             filename = std::string([urlStr UTF8String]);
-            std::string initialDirStr = std::string("file://localhost");
-            initialDirStr.append(std::string([initialDir UTF8String]));
-            initialDirStr.append("/");
-            filename.replace(filename.find(initialDirStr), initialDirStr.size(), "");
+            const std::string fileProtocol = std::string("file://localhost");
+            filename.replace(filename.find(fileProtocol), fileProtocol.size(), "");
         }
     }
     
