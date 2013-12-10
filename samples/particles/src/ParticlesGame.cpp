@@ -319,7 +319,7 @@ std::string ParticlesGame::toString(ParticleEmitter::TextureBlending blending)
 void ParticlesGame::saveFile()
 {
     std::string filename;
-    filename = FileSystem::displayFileDialog(FileSystem::SAVE, "Save Particle File", "Particle Files", "particle");
+    filename = FileSystem::displayFileDialog(FileSystem::SAVE, "Save Particle File", "Particle Files", "particle", "res");
 
     if (filename.length() == 0)
         return;
@@ -737,7 +737,7 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         else if (control == _load)
         {
             Game::getInstance()->pause();
-            std::string filename = FileSystem::displayFileDialog(FileSystem::OPEN, "Select Particle File", "Particle Files", "particle");
+            std::string filename = FileSystem::displayFileDialog(FileSystem::OPEN, "Select Particle File", "Particle Files", "particle", "res");
             if (filename.length() > 0)
             {
                 _url = filename;
@@ -1144,7 +1144,7 @@ void ParticlesGame::resizeEvent(unsigned int width, unsigned int height)
 
 void ParticlesGame::updateTexture()
 {
-    std::string file = FileSystem::displayFileDialog(FileSystem::OPEN, "Select Texture", "PNG Files", "png");
+    std::string file = FileSystem::displayFileDialog(FileSystem::OPEN, "Select Texture", "Texture Files", "png", "res");
     if (file.length() > 0)
     {
         // Set new sprite on our emitter

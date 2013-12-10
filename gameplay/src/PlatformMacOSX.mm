@@ -2324,7 +2324,7 @@ bool Platform::launchURL(const char *url)
     return (err == noErr);
 }
 
-std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension)
+std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
 {
     std::string filename;
     
@@ -2341,7 +2341,7 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
         NSString* titleStr = [NSString stringWithUTF8String:title];
         [openPanel setTitle:titleStr];
         // Filter ext.
-        NSString* ext = [NSString stringWithUTF8String:filterExtension];
+        NSString* ext = [NSString stringWithUTF8String:filterExtensions];
         NSArray* fileTypes = [NSArray arrayWithObjects: ext, nil];
         [openPanel setAllowedFileTypes:fileTypes];
         
@@ -2372,7 +2372,7 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
         NSString* titleStr = [NSString stringWithUTF8String:title];
         [savePanel setTitle:titleStr];
         // Filter ext.
-        NSString* ext = [NSString stringWithUTF8String:filterExtension];
+        NSString* ext = [NSString stringWithUTF8String:filterExtensions];
         NSArray* fileTypes = [NSArray arrayWithObjects: ext, nil];
         [savePanel setAllowedFileTypes:fileTypes];
         

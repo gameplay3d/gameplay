@@ -225,9 +225,9 @@ void FileSystem::loadResourceAliases(Properties* properties)
     }
 }
 
-std::string FileSystem::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension)
+std::string FileSystem::displayFileDialog(size_t dialogMode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
 {
-    return Platform::displayFileDialog(mode, title, filterDescription, filterExtension);
+    return Platform::displayFileDialog(dialogMode, title, filterDescription, filterExtensions, initialDirectory);
 }
 
 const char* FileSystem::resolvePath(const char* path)
@@ -358,13 +358,13 @@ bool FileSystem::fileExists(const char* filePath)
 
 }
 
-Stream* FileSystem::open(const char* path, size_t mode)
+Stream* FileSystem::open(const char* path, size_t streamMode)
 {
     char modeStr[] = "rb";
-    if ((mode & WRITE) != 0)
+    if ((streamMode & WRITE) != 0)
         modeStr[0] = 'w';
 #ifdef __ANDROID__
-    if ((mode & WRITE) != 0)
+    if ((streamMode & WRITE) != 0)
     {
         // Open a file on the SD card
         std::string fullPath(__resourcePath);

@@ -18,6 +18,7 @@ public:
 
     /**
      * Mode flags for opening a stream.
+     *
      * @script{ignore}
      */
     enum StreamMode
@@ -27,13 +28,14 @@ public:
     };
 
     /**
-     * Mode flags for opening a stream.
+     * Mode flags for displaying a dialog.
+     *
      * @script{ignore}
      */
     enum DialogMode
     {
         OPEN,
-        SAVE
+        SAVE 
     };
 
     /**
@@ -97,15 +99,16 @@ public:
     /**
      * Displays an open or save dialog using the native platform dialog system.
      *
-     * @param mode The mode of the dialog. (Ex. OPEN or SAVE)
+     * @param dialogMode The mode of the dialog. (Ex. OPEN or SAVE)
      * @param title The title of the dialog. (Ex. Select File or Save File)
-     * @param filterDescription The file filter description. (Ex. All Files or PNG Files)
-     * @param filterExtension The extension. Ex. (* or png)  Note: This prefixed with *.
+     * @param filterDescription The file filter description. (Ex. All Files or Image Files)
+     * @param filterExtensions The extensions to filter on. (Ex. png;bmp)
+     * @param initialDirectory The initial directory to start. NULL runs from the executable directory.
      * @return The file that is opened or saved.
      *
      * @script{ignore}
      */
-    static std::string displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtension);
+    static std::string displayFileDialog(size_t dialogMode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory);
 
     /**
      * Resolves a filesystem path.
@@ -150,14 +153,14 @@ public:
      * resource path.
      *
      * @param path The path to the resource to be opened, relative to the currently set resource path.
-     * @param mode The mode used to open the file.
+     * @param streamMode The stream mode used to open the file.
      * 
      * @return A stream that can be used to read or write to the file depending on the mode.
      *         Returns NULL if there was an error. (Request mode not supported).
-     * 
+     *
      * @script{ignore}
      */
-    static Stream* open(const char* path, size_t mode = READ);
+    static Stream* open(const char* path, size_t streamMode = READ);
 
     /**
      * Opens the specified file.
