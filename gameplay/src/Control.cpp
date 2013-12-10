@@ -124,7 +124,7 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
         if (!_style)
         {
             // No style was found, use an empty style
-            _style = Theme::getDefault()->getEmptyStyle();
+            _style = style ? style->getTheme()->getEmptyStyle() : Theme::getDefault()->getEmptyStyle();
         }
     }
 

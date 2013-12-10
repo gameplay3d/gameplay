@@ -676,6 +676,13 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     // Draw this character.
                     if (draw)
                     {
+                        if (getFormat() == DISTANCE_FIELD)
+                        {
+                            if (_cutoffParam == NULL)
+                                _cutoffParam = getSpriteBatch()->getMaterial()->getParameter("u_cutoff");
+                            // TODO: Fix me so that smaller font are much smoother
+                            _cutoffParam->setVector2(Vector2(1.0, 1.0));
+                        }
                         if (clip)
                         {
                             _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, *clip);

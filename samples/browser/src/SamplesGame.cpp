@@ -27,6 +27,7 @@ void SamplesGame::initialize()
     getScriptController()->loadScript("res/common/camera.lua");
 
     // Create the selection form
+    Font* titleFont = Font::create("res/common/title.gpb");
     _sampleSelectForm = Form::create("sampleSelect", NULL, Layout::LAYOUT_VERTICAL);
     _sampleSelectForm->setWidth(200);
     _sampleSelectForm->setAutoHeight(Control::AUTO_SIZE_STRETCH);
@@ -37,7 +38,8 @@ void SamplesGame::initialize()
 		Label* categoryLabel = Label::create((*_categories)[i].c_str());
         categoryLabel->setAutoWidth(Control::AUTO_SIZE_FIT);
         categoryLabel->setAutoHeight(Control::AUTO_SIZE_FIT);
-        categoryLabel->setFontSize(24);
+        categoryLabel->setFont(titleFont);
+        categoryLabel->setFontSize(22);
         categoryLabel->setText((*_categories)[i].c_str());
         _sampleSelectForm->addControl(categoryLabel);
         categoryLabel->release();
@@ -57,6 +59,7 @@ void SamplesGame::initialize()
         }
     }
     _sampleSelectForm->setFocus();
+    SAFE_RELEASE(titleFont);
 
     // Disable virtual gamepads.
     unsigned int gamepadCount = getGamepadCount();

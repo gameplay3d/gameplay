@@ -24,8 +24,8 @@ form terrainForm
 
         padding
         {
-            top = -8
-            left = -8
+            top = -5
+            left = -5
         }
 
         button plusButton
@@ -143,9 +143,11 @@ form terrainForm
 
         label message
         {
+            consumeInputEvents = false
             autoWidth = true
             autoHeight = true
-            fontSize = 30
+            font = res/common/title.gpb
+            fontSize = 24
             textAlignment = ALIGN_VCENTER_HCENTER
         }
     }

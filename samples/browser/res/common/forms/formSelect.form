@@ -2,8 +2,8 @@ form formSelect
 {
     layout = LAYOUT_VERTICAL
     alignment = ALIGN_TOP_LEFT
-    width = 200
-    autoHeight = true
+    width = 220
+    autoHeight = AUTO_SIZE_FIT
 	consumeInputEvents = false
 
 	radioButton form0
@@ -11,7 +11,8 @@ form formSelect
 		style = Button
 		text = Basic Controls
 		group = formSelection
-		size = 180, 60
+        autoWidth = AUTO_SIZE_STRETCH
+		height = 60
 		textAlignment = ALIGN_VCENTER_LEFT
 		selected = true
 	}
