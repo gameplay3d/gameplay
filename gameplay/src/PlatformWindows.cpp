@@ -586,18 +586,15 @@ bool createWindow(WindowCreationParams* params, HWND* hwnd, HDC* hdc)
     return true;
 }
 
-bool initializeGL(WindowCreationParams* params)
+bool initializeGL2(WindowCreationParams* params, HWND& hwnd, HDC& hdc, PIXELFORMATDESCRIPTOR& pfd, HGLRC& context, int& pixelFormat)
 {
-    // Create a temporary window and context to we can initialize GLEW and get access
-    // to additional OpenGL extension functions. This is a neccessary evil since the
-    // function for querying GL extensions is a GL extension itself.
-    HWND hwnd = NULL;
-    HDC hdc = NULL;
-
-    if (params)
+    if (params || !__hwnd || !__hrc)
     {
-        if (!createWindow(NULL, &hwnd, &hdc))
+        if (!createWindow(params, &hwnd, &hdc))
+        {
+            GP_ERROR("Failed creating a new window.");
             return false;
+        }
     }
     else
     {
@@ -605,18 +602,17 @@ bool initializeGL(WindowCreationParams* params)
         hdc = __hdc;
     }
 
-    PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
-    pfd.nSize  = sizeof(PIXELFORMATDESCRIPTOR);
-    pfd.nVersion   = 1;
-    pfd.dwFlags    = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
+    pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+    pfd.nVersion = 1;
+    pfd.dwFlags = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = DEFAULT_COLOR_BUFFER_SIZE;
     pfd.cDepthBits = DEFAULT_DEPTH_BUFFER_SIZE;
     pfd.cStencilBits = DEFAULT_STENCIL_BUFFER_SIZE;
     pfd.iLayerType = PFD_MAIN_PLANE;
 
-    int pixelFormat = ChoosePixelFormat(hdc, &pfd);
+    pixelFormat = ChoosePixelFormat(hdc, &pfd);
     if (pixelFormat == 0)
     {
         DestroyWindow(hwnd);
@@ -631,14 +627,97 @@ bool initializeGL(WindowCreationParams* params)
         return false;
     }
 
-    HGLRC tempContext = wglCreateContext(hdc);
-    if (!tempContext)
+    if (context)
+        wglDeleteContext(context);
+
+    context = wglCreateContext(hdc);
+    if (!context)
     {
         DestroyWindow(hwnd);
-        GP_ERROR("Failed to create temporary context for initialization.");
+        GP_ERROR("Failed to create OpenGL 2 context for initialization.");
         return false;
     }
-    wglMakeCurrent(hdc, tempContext);
+
+    if (!wglMakeCurrent(hdc, context))
+    {
+        wglDeleteContext(context);
+        GP_ERROR("Failed to make the window current.");
+        return false;
+    }
+
+    return true;
+}
+
+void initializeGLCommonEnd()
+{
+    // Vertical sync.
+    wglSwapIntervalEXT(__vsync ? 1 : 0);
+
+    // Some old graphics cards support EXT_framebuffer_object instead of ARB_framebuffer_object.
+    // Patch ARB_framebuffer_object functions to EXT_framebuffer_object ones since semantic is same.
+    if (!GLEW_ARB_framebuffer_object && GLEW_EXT_framebuffer_object)
+    {
+        glBindFramebuffer = glBindFramebufferEXT;
+        glBindRenderbuffer = glBindRenderbufferEXT;
+        glBlitFramebuffer = glBlitFramebufferEXT;
+        glCheckFramebufferStatus = glCheckFramebufferStatusEXT;
+        glDeleteFramebuffers = glDeleteFramebuffersEXT;
+        glDeleteRenderbuffers = glDeleteRenderbuffersEXT;
+        glFramebufferRenderbuffer = glFramebufferRenderbufferEXT;
+        glFramebufferTexture1D = glFramebufferTexture1DEXT;
+        glFramebufferTexture2D = glFramebufferTexture2DEXT;
+        glFramebufferTexture3D = glFramebufferTexture3DEXT;
+        glFramebufferTextureLayer = glFramebufferTextureLayerEXT;
+        glGenFramebuffers = glGenFramebuffersEXT;
+        glGenRenderbuffers = glGenRenderbuffersEXT;
+        glGenerateMipmap = glGenerateMipmapEXT;
+        glGetFramebufferAttachmentParameteriv = glGetFramebufferAttachmentParameterivEXT;
+        glGetRenderbufferParameteriv = glGetRenderbufferParameterivEXT;
+        glIsFramebuffer = glIsFramebufferEXT;
+        glIsRenderbuffer = glIsRenderbufferEXT;
+        glRenderbufferStorage = glRenderbufferStorageEXT;
+        glRenderbufferStorageMultisample = glRenderbufferStorageMultisampleEXT;
+    }
+}
+
+bool fallbackToOpenGL2(WindowCreationParams* params, HWND& hwnd, HDC& hdc, PIXELFORMATDESCRIPTOR& pfd, HGLRC& context, int& pixelFormat)
+{
+    // Clean up previous window and context
+    if (__hwnd || __hdc) {
+        DestroyWindow(__hwnd);
+        __hwnd = NULL;
+        __hdc = NULL;
+    }
+
+    if (context) {
+        wglDeleteContext(context);
+        context = NULL;
+    }
+
+    // Initialize OpenGL 2
+    if (!initializeGL2(params, __hwnd, __hdc, pfd, __hrc, pixelFormat)) {
+        GP_ERROR("Error falling back to OpenGL 2");
+        return false;
+    }
+
+    initializeGLCommonEnd();
+
+    return true;
+}
+
+bool initializeGL(WindowCreationParams* params)
+{
+    // Create a temporary window and context to we can initialize GLEW and get access
+    // to additional OpenGL extension functions. This is a neccessary evil since the
+    // function for querying GL extensions is a GL extension itself.
+    HWND hwnd = NULL;
+    HDC hdc = NULL;
+    PIXELFORMATDESCRIPTOR pfd;
+    HGLRC tempContext = NULL;
+    int pixelFormat = 0;
+
+    if (!initializeGL2(params, hwnd, hdc, pfd, tempContext, pixelFormat))
+        return false;
 
     // Initialize GLEW
     if (GLEW_OK != glewInit())
@@ -649,6 +728,8 @@ bool initializeGL(WindowCreationParams* params)
         return false;
     }
 
+    if( wglChoosePixelFormatARB && wglCreateContextAttribsARB )
+    {
     // Choose pixel format using wglChoosePixelFormatARB, which allows us to specify
     // additional attributes such as multisampling.
     //
@@ -693,10 +774,8 @@ bool initializeGL(WindowCreationParams* params)
 
         if (!valid)
         {
-            wglDeleteContext(tempContext);
-            DestroyWindow(hwnd);
-            GP_ERROR("Failed to choose a pixel format.");
-            return false;
+            GP_ERROR("Failed to choose a pixel format. Trying to fallback to OpenGL 2");
+            return fallbackToOpenGL2(params, hwnd, hdc, pfd, tempContext, pixelFormat);
         }
     }
 
@@ -709,16 +788,16 @@ bool initializeGL(WindowCreationParams* params)
 
         if (!createWindow(params, &__hwnd, &__hdc))
         {
-            wglDeleteContext(tempContext);
-            return false;
+            GP_ERROR("Failed creating a new window. Trying to fallback to OpenGL 2");
+            return fallbackToOpenGL2(params, hwnd, hdc, pfd, tempContext, pixelFormat);
         }
     }
 
     // Set final pixel format for window
     if (!SetPixelFormat(__hdc, pixelFormat, &pfd))
     {
-        GP_ERROR("Failed to set the pixel format: %d.", (int)GetLastError());
-        return false;
+        GP_ERROR("Failed to set the pixel format: %d. Trying to fallback to OpenGL 2", (int)GetLastError());
+        return fallbackToOpenGL2(params, hwnd, hdc, pfd, tempContext, pixelFormat);
     }
 
     // Create our new GL context
@@ -729,25 +808,30 @@ bool initializeGL(WindowCreationParams* params)
         0
     };
 
-    if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs) ) )
-    {
+    if ((__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs))) {
+        // Delete the old/temporary context and window
         wglDeleteContext(tempContext);
-        GP_ERROR("Failed to create OpenGL context.");
-        return false;
-    }
 
-    // Delete the old/temporary context and window
-    wglDeleteContext(tempContext);
-
-    // Make the new context current
+        // Make the new context current
     if (!__hrc || !wglMakeCurrent(__hdc, __hrc) )
+        {
+            GP_ERROR("Failed to make the window current. Trying to fallback to OpenGL 2", (int)GetLastError());
+            return fallbackToOpenGL2(params, hwnd, hdc, pfd, tempContext, pixelFormat);
+        }
+    } else
     {
-        GP_ERROR("Failed to make the window current.");
-        return false;
+        // Something went wrong. Fallback to OpenGL 2
+        fallbackToOpenGL2(params, hwnd, hdc, pfd, tempContext, pixelFormat);
+    }
+    } else    // fallback to OpenGL 2.0 if wglChoosePixelFormatARB or wglCreateContextAttribsARB is NULL.
+    {
+        // OpenGL 2 context is already here, just use it.
+        __hrc = tempContext;
+        __hwnd = hwnd;
+        __hdc = hdc;
     }
 
-    // Vertical sync.
-    wglSwapIntervalEXT(__vsync ? 1 : 0);
+    initializeGLCommonEnd();
 
     return true;
 }
