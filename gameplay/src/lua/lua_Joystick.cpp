@@ -12,6 +12,7 @@
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Theme.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
 #include "lua_ControlListenerEventType.h"
@@ -72,6 +73,7 @@ void luaRegister_Joystick()
         {"getTextAlignment", lua_Joystick_getTextAlignment},
         {"getTextColor", lua_Joystick_getTextColor},
         {"getTextRightToLeft", lua_Joystick_getTextRightToLeft},
+        {"getTheme", lua_Joystick_getTheme},
         {"getTopLevelForm", lua_Joystick_getTopLevelForm},
         {"getType", lua_Joystick_getType},
         {"getValue", lua_Joystick_getValue},
@@ -110,6 +112,7 @@ void luaRegister_Joystick()
         {"setFont", lua_Joystick_setFont},
         {"setFontSize", lua_Joystick_setFontSize},
         {"setHeight", lua_Joystick_setHeight},
+        {"setId", lua_Joystick_setId},
         {"setImageColor", lua_Joystick_setImageColor},
         {"setImageRegion", lua_Joystick_setImageRegion},
         {"setInnerRegionSize", lua_Joystick_setInnerRegionSize},
@@ -2580,6 +2583,50 @@ int lua_Joystick_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_Joystick_getTheme(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joystick* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTheme();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Theme");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Joystick_getTheme - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joystick_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
@@ -4190,6 +4237,42 @@ int lua_Joystick_setHeight(lua_State* state)
     return 0;
 }
 
+int lua_Joystick_setId(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                Joystick* instance = getInstance(state);
+                instance->setId(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Joystick_setId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joystick_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -5441,6 +5524,34 @@ int lua_Joystick_static_create(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                void* returnPtr = (void*)Joystick::create(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Joystick");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Joystick_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
@@ -5481,7 +5592,7 @@ int lua_Joystick_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
             lua_error(state);
             break;
         }

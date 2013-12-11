@@ -15,6 +15,7 @@
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Theme.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
 #include "lua_ControlListenerEventType.h"
@@ -75,6 +76,7 @@ void luaRegister_RadioButton()
         {"getTextAlignment", lua_RadioButton_getTextAlignment},
         {"getTextColor", lua_RadioButton_getTextColor},
         {"getTextRightToLeft", lua_RadioButton_getTextRightToLeft},
+        {"getTheme", lua_RadioButton_getTheme},
         {"getTopLevelForm", lua_RadioButton_getTopLevelForm},
         {"getType", lua_RadioButton_getType},
         {"getWidth", lua_RadioButton_getWidth},
@@ -113,6 +115,7 @@ void luaRegister_RadioButton()
         {"setFontSize", lua_RadioButton_setFontSize},
         {"setGroupId", lua_RadioButton_setGroupId},
         {"setHeight", lua_RadioButton_setHeight},
+        {"setId", lua_RadioButton_setId},
         {"setImageColor", lua_RadioButton_setImageColor},
         {"setImageRegion", lua_RadioButton_setImageRegion},
         {"setImageSize", lua_RadioButton_setImageSize},
@@ -2574,6 +2577,50 @@ int lua_RadioButton_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_RadioButton_getTheme(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                RadioButton* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTheme();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Theme");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_RadioButton_getTheme - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_RadioButton_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
@@ -4176,6 +4223,42 @@ int lua_RadioButton_setHeight(lua_State* state)
     return 0;
 }
 
+int lua_RadioButton_setId(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                RadioButton* instance = getInstance(state);
+                instance->setId(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RadioButton_setId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_RadioButton_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -5419,6 +5502,34 @@ int lua_RadioButton_static_create(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                void* returnPtr = (void*)RadioButton::create(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "RadioButton");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_RadioButton_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
@@ -5459,7 +5570,7 @@ int lua_RadioButton_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
             lua_error(state);
             break;
         }

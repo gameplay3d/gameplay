@@ -59,6 +59,7 @@ int lua_Container_getStyle(lua_State* state);
 int lua_Container_getTextAlignment(lua_State* state);
 int lua_Container_getTextColor(lua_State* state);
 int lua_Container_getTextRightToLeft(lua_State* state);
+int lua_Container_getTheme(lua_State* state);
 int lua_Container_getTopLevelForm(lua_State* state);
 int lua_Container_getType(lua_State* state);
 int lua_Container_getWidth(lua_State* state);
@@ -101,8 +102,10 @@ int lua_Container_setFocusIndex(lua_State* state);
 int lua_Container_setFont(lua_State* state);
 int lua_Container_setFontSize(lua_State* state);
 int lua_Container_setHeight(lua_State* state);
+int lua_Container_setId(lua_State* state);
 int lua_Container_setImageColor(lua_State* state);
 int lua_Container_setImageRegion(lua_State* state);
+int lua_Container_setLayout(lua_State* state);
 int lua_Container_setMargin(lua_State* state);
 int lua_Container_setOpacity(lua_State* state);
 int lua_Container_setPadding(lua_State* state);
@@ -134,6 +137,7 @@ int lua_Container_static_ANIMATE_SIZE(lua_State* state);
 int lua_Container_static_ANIMATE_SIZE_HEIGHT(lua_State* state);
 int lua_Container_static_ANIMATE_SIZE_WIDTH(lua_State* state);
 int lua_Container_static_create(lua_State* state);
+int lua_Container_stopScrolling(lua_State* state);
 
 void luaRegister_Container();
 

@@ -44,6 +44,6 @@ particle fire
         cameraZoom = 0, 0, 13.3
         cameraRotation = 0, 0, 0, 0
         sizeMax = 5
-        energyMax = 5
+        energyMax = 1500
     }
 }

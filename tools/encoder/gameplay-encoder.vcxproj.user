@@ -12,7 +12,7 @@
     <LocalDebuggerEnvironment>
     </LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-s 12 arial.ttf</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>C:\Users\sgrenier\Documents\Sourcecode\GamePlay\samples\browser\res\common\arial.ttf</LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>.\Release</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
 </Project>

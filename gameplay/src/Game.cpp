@@ -6,6 +6,7 @@
 #include "FrameBuffer.h"
 #include "SceneLoader.h"
 #include "ControlFactory.h"
+#include "Theme.h"
 
 /** @script{ignore} */
 GLenum __gl_error_code = GL_NO_ERROR;
@@ -196,6 +197,8 @@ void Game::shutdown()
         SAFE_DELETE(_aiController);
         
         ControlFactory::finalize();
+
+        Theme::finalize();
 
         // Note: we do not clean up the script controller here
         // because users can call Game::exit() from a script.

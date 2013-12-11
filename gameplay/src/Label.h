@@ -36,15 +36,15 @@ class Label : public Control
 public:
 
     /**
-     * Create a new label control.
+     * Creates a new label.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The label id.
+     * @param style The label style (optional).
      *
      * @return The new label.
      * @script{create}
      */
-    static Label* create(const char*id, Theme::Style* style);
+    static Label* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Set the text for this label to display.
@@ -89,20 +89,21 @@ protected:
      */
     virtual ~Label();
 
-    /**
-     * Create a label with a given style and properties.
-     *
-     * @param style The style to apply to this label.
-     * @param properties The properties to set on this label.
-	 * 
-     * @return The new label.
-     */
-    static Control* create(Theme::Style* style, Properties* properties);
+	/**
+	* Create a new label control.
+	*
+	* @param style The control's custom style.
+	* @param properties A properties object containing a definition of the label (optional).
+	*
+	* @return The new label.
+	* @script{create}
+	*/
+	static Control* create(Theme::Style* style, Properties* properties);
 
     /**
-     * Initialize this label.
+     * @see Control::initialize
      */
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Called when a label's properties change. Updates this label's internal rendering
@@ -114,11 +115,9 @@ protected:
     void update(const Control* container, const Vector2& offset);
 
     /**
-     * Draw this label's text.
-     *
-     * @param clip The clipping rectangle of this label's parent container.
+     * @see Control::drawText
      */
-    virtual void drawText(const Rectangle& clip);
+    virtual unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
      * The text displayed by this label.

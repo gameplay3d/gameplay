@@ -40,15 +40,15 @@ class CheckBox : public Button
 public:
 
     /**
-     * Create a new check box control.
+     * Creates a new CheckBox.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The checkbox ID.
+     * @param style The checkbox style (optional).
      *
-     * @return The new check box.
+     * @return The new checkbox.
      * @script{create}
      */
-    static CheckBox* create(const char* id, Theme::Style* style);
+    static CheckBox* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Gets whether this checkbox is checked.
@@ -112,11 +112,16 @@ protected:
      * Create a checkbox with a given style and properties.
      *
      * @param style The style to apply to this checkbox.
-     * @param properties The properties to set on this checkbox.
+     * @param properties A properties object containing a definition of the checkbox (optional).
      *
      * @return The new checkbox.
      */
-    static Control* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+    * @see Control::initialize
+    */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Keyboard callback on key events.
@@ -141,12 +146,9 @@ protected:
     void update(const Control* container, const Vector2& offset);
 
     /**
-     * Draw the checkbox icon associated with this control.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The container position this control is relative to.
+     * @see Control::drawImages
      */
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
      * Whether this checkbox is currently checked.

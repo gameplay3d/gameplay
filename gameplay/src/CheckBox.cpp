@@ -16,26 +16,28 @@ CheckBox::~CheckBox()
 
 CheckBox* CheckBox::create(const char* id, Theme::Style* style)
 {
-    GP_ASSERT(style);
-
-    CheckBox* checkBox = new CheckBox();
-    if (id)
-        checkBox->_id = id;
-    checkBox->setStyle(style);
-
-    return checkBox;
+    CheckBox* cb = new CheckBox();
+    cb->_id = id ? id : "";
+    cb->initialize("CheckBox", style, NULL);
+    return cb;
 }
 
 Control* CheckBox::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
+    CheckBox* cb = new CheckBox();
+    cb->initialize("CheckBox", style, properties);
+    return cb;
+}
 
-    CheckBox* checkBox = new CheckBox();
-    checkBox->initialize(style, properties);
-    properties->getVector2("imageSize", &checkBox->_imageSize);
-    checkBox->_checked = properties->getBool("checked");
+void CheckBox::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Button::initialize(typeName, style, properties);
 
-    return checkBox;
+    if (properties)
+    {
+        properties->getVector2("imageSize", &_imageSize);
+        _checked = properties->getBool("checked");
+    }
 }
 
 bool CheckBox::isChecked()
@@ -146,14 +148,14 @@ void CheckBox::update(const Control* container, const Vector2& offset)
     }
 }
 
-void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
+unsigned int CheckBox::drawImages(Form* form, const Rectangle& clip)
 {
-    GP_ASSERT(spriteBatch);
-    GP_ASSERT(_image);
+    if (!_image)
+        return 0;
 
     // Left, v-center.
     // TODO: Set an alignment for icons.
-    
+
     const Rectangle& region = _image->getRegion();
     const Theme::UVs& uvs = _image->getUVs();
     Vector4 color = _image->getColor();
@@ -171,7 +173,12 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 
     Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
 
-    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+    startBatch(form, batch);
+    batch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    finishBatch(form, batch);
+
+    return 1;
 }
 
 const char* CheckBox::getType() const

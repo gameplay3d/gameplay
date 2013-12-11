@@ -95,14 +95,14 @@ void FormsSample::initialize()
     form5Button->addListener(this, Control::Listener::CLICK);
     for (unsigned int i = 0; i < _formFiles.size(); i++)
     {
-        Form* form = Form::create(_formFiles[i]);
+		Form* form = Form::create(_formFiles[i]);
         form->setEnabled(false);
         _forms.push_back(form);
     }
     _formIndex = 0;
 
     // Create a form programmatically.
-    createSampleForm(_forms[0]->getTheme());
+    createSampleForm();
 
     Button* button = static_cast<Button*>(_forms[0]->getControl("testButton"));
     button->setFocus();
@@ -153,19 +153,19 @@ void FormsSample::formChanged()
     _formNode->setForm(_activeForm);
 }
 
-void FormsSample::createSampleForm(Theme* theme)
+void FormsSample::createSampleForm()
 {
-    Form* form = Form::create("testForm", theme->getStyle("basicContainer"));
+    Form* form = Form::create("testForm", NULL);
     form->setSize(600, 600);
 
-    Label* label = Label::create("testLabel", theme->getStyle("iconNoBorder"));
+    Label* label = Label::create("testLabel");
     label->setPosition(50, 50);
     label->setSize(200, 50);
     label->setText("Label:");
     form->addControl(label);
     label->release();
 
-    Button* button = Button::create("opacityButton", theme->getStyle("buttonStyle"));
+    Button* button = Button::create("opacityButton");
     button->setPosition(45, 100);
     button->setSize(200, 100);
     button->setText("This is a button.  Click to change its opacity.");

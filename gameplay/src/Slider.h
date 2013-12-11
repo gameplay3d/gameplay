@@ -38,15 +38,15 @@ class Slider : public Label
 public:
 
     /**
-     * Create a new slider control.
+     * Creates a new Slider.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The slider ID.
+     * @param style The slider style (optional).
      *
      * @return The new slider.
      * @script{create}
      */
-    static Slider* create(const char* id, Theme::Style* style);
+    static Slider* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Set the minimum value that can be set on this slider.
@@ -181,11 +181,16 @@ protected:
      * Create a slider with a given style and properties.
      *
      * @param style The style to apply to this slider.
-     * @param properties The properties to set on this slider.
+     * @param properties A properties object containing a definition of the slider (optional).
      *
      * @return The new slider.
      */
-    static Control* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -231,25 +236,14 @@ protected:
     bool keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
-     * Slider overrides draw() so that it can avoid resetting the _dirty flag
-     * when a joystick is being used to change its value.
+     * @see Control::drawImages
      */
-    void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
-     * Draw the images associated with this control.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The clipping rectangle of this control's parent container.
+     * @see Control::drawText
      */
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
-
-    /**
-     * Draw this slider's text.
-     *
-     * @param clip The clipping rectangle of this slider's parent container.
-     */
-    void drawText(const Rectangle& clip);
+    unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
      * Called when a slider's properties change. Updates this slider's internal rendering
@@ -284,26 +278,6 @@ protected:
      * When a gamepad is in use, this stores how much to move the slider's value.
      */
     float _delta;
-
-    /**
-     * The X coordinate of the first touch event in a sequence.
-     */
-    float _originalX;
-
-    /**
-     * The Slider's original value at the start of a sequence of touch events.
-     */
-    float _originalValue;
-
-    /**
-     * The Slider's original setting of _consumeInputEvents at the start of a sequence of touch events.
-     */
-    bool _originalConsumeInputEvents;
-
-    /**
-     * Whether the Slider's current movement has been cancelled, e.g. because the user is scrolling the parent container.
-     */
-    bool _moveCancelled;
 
     /**
      * The image for the minimum slider value.
@@ -344,11 +318,6 @@ protected:
      * The text displayed by this slider if set to display its value.
      */
     std::string _valueText;
-
-    // Used by gamepads to toggle Slider state between FOCUS and ACTIVE.
-    bool _selectButtonDown;
-
-    bool _directionButtonDown;
 
     float _gamepadValue;
 

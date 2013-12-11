@@ -58,20 +58,15 @@ public:
     };
 
     /**
-     * Create a new text box control.
+     * Creates a new TextBox.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The textbox ID.
+     * @param style The textbox style (optional).
      *
-     * @return The new text box.
+     * @return The new textbox.
      * @script{create}
      */
-    static TextBox* create(const char* id, Theme::Style* style);
-
-    /**
-     * Initialize this textbox.
-     */
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    static TextBox* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Returns the current location of the caret with the text of this TextBox.
@@ -143,11 +138,16 @@ protected:
      * Create a text box with a given style and properties.
      *
      * @param style The style to apply to this text box.
-     * @param properties The properties to set on this text box.
+     * @param properties A properties object containing a definition of the text box (optional).
      *
      * @return The new text box.
      */
-    static Control* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -190,20 +190,14 @@ protected:
     void update(const Control* container, const Vector2& offset);
 
     /**
-     * Draw the images associated with this control.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The clipping rectangle of this control's parent container.
+     * @see Control::drawImages
      */
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
-     * Draw this textbox's text.
-     *
-     * @param clip The clipping rectangle of this textbox's
-     * parent container.
+     * @see Control::drawText
      */
-    virtual void drawText(const Rectangle& clip);
+    unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
      * Gets an InputMode by string.

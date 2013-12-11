@@ -12,6 +12,7 @@
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Theme.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
 #include "lua_ControlListenerEventType.h"
@@ -71,6 +72,7 @@ void luaRegister_ImageControl()
         {"getTextAlignment", lua_ImageControl_getTextAlignment},
         {"getTextColor", lua_ImageControl_getTextColor},
         {"getTextRightToLeft", lua_ImageControl_getTextRightToLeft},
+        {"getTheme", lua_ImageControl_getTheme},
         {"getTopLevelForm", lua_ImageControl_getTopLevelForm},
         {"getType", lua_ImageControl_getType},
         {"getWidth", lua_ImageControl_getWidth},
@@ -107,6 +109,7 @@ void luaRegister_ImageControl()
         {"setFont", lua_ImageControl_setFont},
         {"setFontSize", lua_ImageControl_setFontSize},
         {"setHeight", lua_ImageControl_setHeight},
+        {"setId", lua_ImageControl_setId},
         {"setImage", lua_ImageControl_setImage},
         {"setImageColor", lua_ImageControl_setImageColor},
         {"setImageRegion", lua_ImageControl_setImageRegion},
@@ -2542,6 +2545,50 @@ int lua_ImageControl_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_ImageControl_getTheme(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                ImageControl* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTheme();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Theme");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ImageControl_getTheme - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_ImageControl_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
@@ -4073,6 +4120,42 @@ int lua_ImageControl_setHeight(lua_State* state)
     return 0;
 }
 
+int lua_ImageControl_setId(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                ImageControl* instance = getInstance(state);
+                instance->setId(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_ImageControl_setId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_ImageControl_setImage(lua_State* state)
 {
     // Get the number of parameters.
@@ -5390,6 +5473,34 @@ int lua_ImageControl_static_create(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                void* returnPtr = (void*)ImageControl::create(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "ImageControl");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ImageControl_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
@@ -5430,7 +5541,7 @@ int lua_ImageControl_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
             lua_error(state);
             break;
         }

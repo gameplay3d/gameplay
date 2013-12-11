@@ -59,6 +59,9 @@ namespace gameplay
  * @script{ignore}
  */
 extern void print(const char* format, ...);
+
+// Define a platform-independent case-insensitive ASCII string comparison function.
+extern int strcmpnocase(const char* s1, const char* s2);
 }
 
 // Current function macro.

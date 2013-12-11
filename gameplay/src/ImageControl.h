@@ -41,15 +41,15 @@ class ImageControl : public Control
 public:
 
     /**
-     * Create a new ImageControl.
+     * Creates a new ImageControl.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The image control ID.
+     * @param style The image control style (optional).
      *
-     * @return The new ImageControl.
+     * @return The new image control.
      * @script{create}
      */
-    static ImageControl* create(const char* id, Theme::Style* style);
+    static ImageControl* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Set the path of the image for this ImageControl to display.
@@ -118,11 +118,14 @@ protected:
 
     virtual ~ImageControl();
 
-    static Control* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
 
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    /**
+     * @see Control::drawImages
+     */
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
      * @see Control#update(const Control*, const Vector2&)
@@ -134,7 +137,7 @@ protected:
     // Destination region.
     Rectangle _dstRegion;
     SpriteBatch* _batch;
-    
+
     // One over texture width and height, for use when calculating UVs from a new source region.
     float _tw;
     float _th;

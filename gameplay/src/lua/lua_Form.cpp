@@ -13,13 +13,18 @@
 #include "FlowLayout.h"
 #include "Form.h"
 #include "Game.h"
+#include "ImageControl.h"
+#include "Joystick.h"
 #include "Label.h"
 #include "Layout.h"
 #include "Node.h"
+#include "RadioButton.h"
 #include "Ref.h"
 #include "Scene.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Slider.h"
+#include "TextBox.h"
 #include "Theme.h"
 #include "VerticalLayout.h"
 #include "lua_ContainerScroll.h"
@@ -101,6 +106,7 @@ void luaRegister_Form()
         {"getZIndex", lua_Form_getZIndex},
         {"hasFocus", lua_Form_hasFocus},
         {"insertControl", lua_Form_insertControl},
+        {"isBatchingEnabled", lua_Form_isBatchingEnabled},
         {"isChild", lua_Form_isChild},
         {"isContainer", lua_Form_isContainer},
         {"isEnabled", lua_Form_isEnabled},
@@ -123,6 +129,7 @@ void luaRegister_Form()
         {"setAnimationPropertyValue", lua_Form_setAnimationPropertyValue},
         {"setAutoHeight", lua_Form_setAutoHeight},
         {"setAutoWidth", lua_Form_setAutoWidth},
+        {"setBatchingEnabled", lua_Form_setBatchingEnabled},
         {"setBorder", lua_Form_setBorder},
         {"setBounds", lua_Form_setBounds},
         {"setCanFocus", lua_Form_setCanFocus},
@@ -135,8 +142,10 @@ void luaRegister_Form()
         {"setFont", lua_Form_setFont},
         {"setFontSize", lua_Form_setFontSize},
         {"setHeight", lua_Form_setHeight},
+        {"setId", lua_Form_setId},
         {"setImageColor", lua_Form_setImageColor},
         {"setImageRegion", lua_Form_setImageRegion},
+        {"setLayout", lua_Form_setLayout},
         {"setMargin", lua_Form_setMargin},
         {"setNode", lua_Form_setNode},
         {"setOpacity", lua_Form_setOpacity},
@@ -160,6 +169,7 @@ void luaRegister_Form()
         {"setX", lua_Form_setX},
         {"setY", lua_Form_setY},
         {"setZIndex", lua_Form_setZIndex},
+        {"stopScrolling", lua_Form_stopScrolling},
         {"update", lua_Form_update},
         {NULL, NULL}
     };
@@ -3301,6 +3311,41 @@ int lua_Form_insertControl(lua_State* state)
     return 0;
 }
 
+int lua_Form_isBatchingEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                bool result = instance->isBatchingEnabled();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_isBatchingEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_isChild(lua_State* state)
 {
     // Get the number of parameters.
@@ -4216,6 +4261,42 @@ int lua_Form_setAutoWidth(lua_State* state)
     return 0;
 }
 
+int lua_Form_setBatchingEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setBatchingEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setBatchingEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_setBorder(lua_State* state)
 {
     // Get the number of parameters.
@@ -4797,6 +4878,42 @@ int lua_Form_setHeight(lua_State* state)
     return 0;
 }
 
+int lua_Form_setId(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                Form* instance = getInstance(state);
+                instance->setId(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -4946,6 +5063,42 @@ int lua_Form_setImageRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setLayout(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Layout::Type param1 = (Layout::Type)lua_enumFromString_LayoutType(luaL_checkstring(state, 2));
+
+                Form* instance = getInstance(state);
+                instance->setLayout(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setLayout - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -6462,6 +6615,38 @@ int lua_Form_static_getForm(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Form_static_getForm - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_stopScrolling(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                instance->stopScrolling();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_stopScrolling - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

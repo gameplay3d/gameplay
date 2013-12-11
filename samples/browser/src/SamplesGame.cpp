@@ -26,30 +26,21 @@ void SamplesGame::initialize()
     // Load camera script
     getScriptController()->loadScript("res/common/camera.lua");
 
-    // Construct a form for selecting which sample to run.
-    Theme* theme = Theme::create("res/common/default.theme");
-    Theme::Style* formStyle = theme->getStyle("basicContainer");
-    Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
-    Theme::Style* titleStyle = theme->getStyle("title");
-
-    // Note: this calls addRef() on formStyle's Theme, which we created above.
-    _sampleSelectForm = Form::create("sampleSelect", formStyle, Layout::LAYOUT_VERTICAL);
-    theme->release();   // So we can release it once we're done creating forms with it.
-
-    _sampleSelectForm->setAutoHeight(true);
-    _sampleSelectForm->setWidth(200.0f);
+    // Create the selection form
+    Font* titleFont = Font::create("res/common/title.gpb");
+    _sampleSelectForm = Form::create("sampleSelect", NULL, Layout::LAYOUT_VERTICAL);
+    _sampleSelectForm->setWidth(200);
+    _sampleSelectForm->setAutoHeight(Control::AUTO_SIZE_STRETCH);
     _sampleSelectForm->setScroll(Container::SCROLL_VERTICAL);
-    _sampleSelectForm->setConsumeInputEvents(true);
-
     const size_t size = _samples->size();
     for (size_t i = 0; i < size; ++i)
     {
-        Label* categoryLabel = Label::create((*_categories)[i].c_str(), titleStyle);
-        categoryLabel->setAutoWidth(true);
-        categoryLabel->setTextAlignment(Font::ALIGN_BOTTOM_LEFT);
-        categoryLabel->setHeight(40);
+		Label* categoryLabel = Label::create((*_categories)[i].c_str());
+        categoryLabel->setAutoWidth(Control::AUTO_SIZE_FIT);
+        categoryLabel->setAutoHeight(Control::AUTO_SIZE_FIT);
+        categoryLabel->setFont(titleFont);
+        categoryLabel->setFontSize(22);
         categoryLabel->setText((*_categories)[i].c_str());
-        categoryLabel->setConsumeInputEvents(false);
         _sampleSelectForm->addControl(categoryLabel);
         categoryLabel->release();
 
@@ -58,16 +49,17 @@ void SamplesGame::initialize()
         for (size_t j = 0; j < listSize; ++j)
         {
             SampleRecord sampleRecord = list[j];
-            Button* sampleButton = Button::create(sampleRecord.title.c_str(), buttonStyle);
+			Button* sampleButton = Button::create(sampleRecord.title.c_str());
             sampleButton->setText(sampleRecord.title.c_str());
-            sampleButton->setAutoWidth(true);
-            sampleButton->setHeight(60);      // Tall enough to touch easily on a BB10 device.
+            sampleButton->setAutoWidth(Control::AUTO_SIZE_STRETCH);
+            sampleButton->setHeight(50);
             sampleButton->addListener(this, Control::Listener::CLICK);
             _sampleSelectForm->addControl(sampleButton);
             sampleButton->release();
         }
     }
     _sampleSelectForm->setFocus();
+    SAFE_RELEASE(titleFont);
 
     // Disable virtual gamepads.
     unsigned int gamepadCount = getGamepadCount();

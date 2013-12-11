@@ -11,6 +11,7 @@
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Theme.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
 #include "lua_ControlListenerEventType.h"
@@ -68,6 +69,7 @@ void luaRegister_Control()
         {"getTextAlignment", lua_Control_getTextAlignment},
         {"getTextColor", lua_Control_getTextColor},
         {"getTextRightToLeft", lua_Control_getTextRightToLeft},
+        {"getTheme", lua_Control_getTheme},
         {"getTopLevelForm", lua_Control_getTopLevelForm},
         {"getType", lua_Control_getType},
         {"getWidth", lua_Control_getWidth},
@@ -104,6 +106,7 @@ void luaRegister_Control()
         {"setFont", lua_Control_setFont},
         {"setFontSize", lua_Control_setFontSize},
         {"setHeight", lua_Control_setHeight},
+        {"setId", lua_Control_setId},
         {"setImageColor", lua_Control_setImageColor},
         {"setImageRegion", lua_Control_setImageRegion},
         {"setMargin", lua_Control_setMargin},
@@ -2447,6 +2450,50 @@ int lua_Control_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_Control_getTheme(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Control* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTheme();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Theme");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Control_getTheme - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Control_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
@@ -3971,6 +4018,42 @@ int lua_Control_setHeight(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Control_setId(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                Control* instance = getInstance(state);
+                instance->setId(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Control_setId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

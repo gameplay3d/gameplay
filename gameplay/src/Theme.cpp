@@ -1,13 +1,16 @@
 #include "Base.h"
 #include "Theme.h"
 #include "ThemeStyle.h"
+#include "Game.h"
+#include "FileSystem.h"
 
 namespace gameplay
 {
 
 static std::vector<Theme*> __themeCache;
+static Theme* __defaultTheme = NULL;
 
-Theme::Theme()
+Theme::Theme() : _texture(NULL), _spriteBatch(NULL), _emptyImage(NULL)
 {
 }
 
@@ -47,6 +50,50 @@ Theme::~Theme()
     {
         __themeCache.erase(itr);
     }
+
+    SAFE_RELEASE(_emptyImage);
+
+	if (__defaultTheme == this)
+		__defaultTheme = NULL;
+}
+
+Theme* Theme::getDefault()
+{
+	if (!__defaultTheme)
+	{
+		// Check game.config for a default theme setting
+		Properties* config = Game::getInstance()->getConfig()->getNamespace("ui", true);
+		if (config)
+		{
+			const char* defaultTheme = config->getString("defaultTheme");
+			if (defaultTheme && FileSystem::fileExists(defaultTheme))
+				__defaultTheme = Theme::create(defaultTheme);
+		}
+
+        if (!__defaultTheme)
+        {
+            GP_WARN("No default theme detected.");
+
+            // Create an empty theme so that UI's with no theme don't just crash
+            __defaultTheme = new Theme();
+            unsigned int color = 0x00000000;
+            __defaultTheme->_texture = Texture::create(Texture::RGBA, 1, 1, (unsigned char*)&color, false);
+            __defaultTheme->_emptyImage = new Theme::ThemeImage(1.0f, 1.0f, Rectangle::empty(), Vector4::zero());
+            __defaultTheme->_spriteBatch = SpriteBatch::create(__defaultTheme->_texture);
+            __defaultTheme->_spriteBatch->getSampler()->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
+            __defaultTheme->_spriteBatch->getSampler()->setWrapMode(Texture::CLAMP, Texture::CLAMP);
+        }
+
+		// TODO: Use a built-in (compiled-in) default theme resource as the final fallback so that
+		// UI still works even when no theme files are present.
+	}
+
+	return __defaultTheme;
+}
+
+void Theme::finalize()
+{
+    SAFE_RELEASE(__defaultTheme);
 }
 
 Theme* Theme::create(const char* url)
@@ -77,7 +124,7 @@ Theme* Theme::create(const char* url)
     // Check if the Properties is valid and has a valid namespace.
     Properties* themeProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
     GP_ASSERT(themeProperties);
-    if (!themeProperties || !(strcmp(themeProperties->getNamespace(), "theme") == 0))
+    if (!themeProperties || !(strcmpnocase(themeProperties->getNamespace(), "theme") == 0))
     {
         SAFE_DELETE(properties);
         return NULL;
@@ -86,19 +133,21 @@ Theme* Theme::create(const char* url)
     // Create a new theme.
     Theme* theme = new Theme();
     theme->_url = url;
-        
+
     // Parse the Properties object and set up the theme.
     std::string textureFile;
     themeProperties->getPath("texture", &textureFile);
-    theme->_texture = Texture::create(textureFile.c_str(), false);
+    theme->_texture = Texture::create(textureFile.c_str(), true);
     GP_ASSERT(theme->_texture);
     theme->_spriteBatch = SpriteBatch::create(theme->_texture);
     GP_ASSERT(theme->_spriteBatch);
-    theme->_spriteBatch->getSampler()->setFilterMode(Texture::LINEAR, Texture::LINEAR);
+    theme->_spriteBatch->getSampler()->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
     theme->_spriteBatch->getSampler()->setWrapMode(Texture::CLAMP, Texture::CLAMP);
 
     float tw = 1.0f / theme->_texture->getWidth();
     float th = 1.0f / theme->_texture->getHeight();
+
+    theme->_emptyImage = new Theme::ThemeImage(tw, th, Rectangle::empty(), Vector4::zero());
 
     Properties* space = themeProperties->getNextNamespace();
     while (space != NULL)
@@ -106,22 +155,22 @@ Theme* Theme::create(const char* url)
         // First load all cursors, checkboxes etc. that can be referred to by styles.
         const char* spacename = space->getNamespace();
             
-        if (strcmp(spacename, "image") == 0)
+        if (strcmpnocase(spacename, "image") == 0)
         {
             theme->_images.push_back(ThemeImage::create(tw, th, space, Vector4::one()));
         }
-        else if (strcmp(spacename, "imageList") == 0)
+        else if (strcmpnocase(spacename, "imageList") == 0)
         {
             theme->_imageLists.push_back(ImageList::create(tw, th, space));
         }
-        else if (strcmp(spacename, "skin") == 0)
+        else if (strcmpnocase(spacename, "skin") == 0)
         {
             Theme::Border border;
             Properties* innerSpace = space->getNextNamespace();
             if (innerSpace)
             {
                 const char* innerSpacename = innerSpace->getNamespace();
-                if (strcmp(innerSpacename, "border") == 0)
+                if (strcmpnocase(innerSpacename, "border") == 0)
                 {
                     border.top = innerSpace->getFloat("top");
                     border.bottom = innerSpace->getFloat("bottom");
@@ -153,7 +202,7 @@ Theme* Theme::create(const char* url)
     while (space != NULL)
     {
         const char* spacename = space->getNamespace();
-        if (strcmp(spacename, "style") == 0)
+        if (strcmpnocase(spacename, "style") == 0)
         {
             // Each style contains up to MAX_OVERLAYS overlays,
             // as well as Border and Padding namespaces.
@@ -170,7 +219,7 @@ Theme* Theme::create(const char* url)
             while (innerSpace != NULL)
             {
                 const char* innerSpacename = innerSpace->getNamespace();
-                if (strcmp(innerSpacename, "stateNormal") == 0)
+                if (strcmpnocase(innerSpacename, "stateNormal") == 0)
                 {
                     Vector4 textColor(0, 0, 0, 1);
                     if (innerSpace->exists("textColor"))
@@ -231,28 +280,30 @@ Theme* Theme::create(const char* url)
 
             // At least the OVERLAY_NORMAL is required.
             if (!normal)
-                GP_ERROR("All themes require the normal state overlay to be defined.");
+            {
+                normal = Theme::Style::Overlay::create();
+            }
 
             space->rewind();
             innerSpace = space->getNextNamespace();
             while (innerSpace != NULL)
             {
                 const char* innerSpacename = innerSpace->getNamespace();
-                if (strcmp(innerSpacename, "margin") == 0)
+                if (strcmpnocase(innerSpacename, "margin") == 0)
                 {
                     margin.top = innerSpace->getFloat("top");
                     margin.bottom = innerSpace->getFloat("bottom");
                     margin.left = innerSpace->getFloat("left");
                     margin.right = innerSpace->getFloat("right");
                 }
-                else if (strcmp(innerSpacename, "padding") == 0)
+                else if (strcmpnocase(innerSpacename, "padding") == 0)
                 {
                     padding.top = innerSpace->getFloat("top");
                     padding.bottom = innerSpace->getFloat("bottom");
                     padding.left = innerSpace->getFloat("left");
                     padding.right = innerSpace->getFloat("right");
                 }
-                else if (strcmp(innerSpacename, "stateNormal") != 0)
+                else if (strcmpnocase(innerSpacename, "stateNormal") != 0)
                 {
                     // Either OVERLAY_FOCUS or OVERLAY_ACTIVE.
                     // If a property isn't specified, it inherits from OVERLAY_NORMAL.
@@ -336,7 +387,7 @@ Theme* Theme::create(const char* url)
                         skin = normal->getSkin();
                     }
 
-                    if (strcmp(innerSpacename, "stateFocus") == 0)
+                    if (strcmpnocase(innerSpacename, "stateFocus") == 0)
                     {
                         focus = Theme::Style::Overlay::create();
                         GP_ASSERT(focus);
@@ -356,7 +407,7 @@ Theme* Theme::create(const char* url)
                             font->release();
                         }
                     }
-                    else if (strcmp(innerSpacename, "stateActive") == 0)
+                    else if (strcmpnocase(innerSpacename, "stateActive") == 0)
                     {
                         active = Theme::Style::Overlay::create();
                         GP_ASSERT(active);
@@ -376,7 +427,7 @@ Theme* Theme::create(const char* url)
                             font->release();
                         }
                     }
-                    else if (strcmp(innerSpacename, "stateDisabled") == 0)
+                    else if (strcmpnocase(innerSpacename, "stateDisabled") == 0)
                     {
                         disabled = Theme::Style::Overlay::create();
                         GP_ASSERT(disabled);
@@ -396,7 +447,7 @@ Theme* Theme::create(const char* url)
                             font->release();
                         }
                     }
-                    else if (strcmp(innerSpacename, "stateHover") == 0)
+                    else if (strcmpnocase(innerSpacename, "stateHover") == 0)
                     {
                         hover = Theme::Style::Overlay::create();
                         GP_ASSERT(hover);
@@ -420,7 +471,7 @@ Theme* Theme::create(const char* url)
 
                 innerSpace = space->getNextNamespace();
             }
-                
+
             if (!focus)
             {
                 focus = normal;
@@ -459,7 +510,7 @@ Theme::Style* Theme::getStyle(const char* name) const
     for (size_t i = 0, count = _styles.size(); i < count; ++i)
     {
         GP_ASSERT(_styles[i]);
-        if (strcmp(name, _styles[i]->getId()) == 0)
+        if (strcmpnocase(name, _styles[i]->getId()) == 0)
         {
             return _styles[i];
         }
@@ -660,13 +711,12 @@ Theme::ThemeImage* Theme::ImageList::getImage(const char* imageId) const
 {
     GP_ASSERT(imageId);
 
-    std::vector<ThemeImage*>::const_iterator it;
-    for (it = _images.begin(); it != _images.end(); ++it)
+    for (size_t i = 0, count = _images.size(); i < count; ++i)
     {
-        ThemeImage* image = *it;
+        ThemeImage* image = _images[i];
         GP_ASSERT(image);
         GP_ASSERT(image->getId());
-        if (strcmp(image->getId(), imageId) == 0)
+        if (strcmpnocase(image->getId(), imageId) == 0)
         {
             return image;
         }
@@ -808,7 +858,7 @@ void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList,
         {
             GP_ASSERT(_imageLists[i]);
             GP_ASSERT(_imageLists[i]->getId());
-            if (strcmp(_imageLists[i]->getId(), imageListString) == 0)
+            if (strcmpnocase(_imageLists[i]->getId(), imageListString) == 0)
             {
                 GP_ASSERT(imageList);
                 *imageList = _imageLists[i];
@@ -824,7 +874,7 @@ void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList,
         {
             GP_ASSERT(_images[i]);
             GP_ASSERT(_images[i]->getId());
-            if (strcmp(_images[i]->getId(), cursorString) == 0)
+            if (strcmpnocase(_images[i]->getId(), cursorString) == 0)
             {
                 GP_ASSERT(cursor);
                 *cursor = _images[i];
@@ -840,7 +890,7 @@ void Theme::lookUpSprites(const Properties* overlaySpace, ImageList** imageList,
         {
             GP_ASSERT(_skins[i]);
             GP_ASSERT(_skins[i]->getId());
-            if (strcmp(_skins[i]->getId(), skinString) == 0)
+            if (strcmpnocase(_skins[i]->getId(), skinString) == 0)
             {
                 GP_ASSERT(skin);
                 *skin = _skins[i];

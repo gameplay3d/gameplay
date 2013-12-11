@@ -40,15 +40,15 @@ class Button : public Label
 public:
 
     /**
-     * Create a new button control.
+     * Creates a new Button.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The button ID.
+     * @param style The button style (optional).
      *
      * @return The new button.
      * @script{create}
      */
-    static Button* create(const char* id, Theme::Style* style);
+    static Button* create(const char* id, Theme::Style* style = NULL);
 
 protected:
 
@@ -66,11 +66,16 @@ protected:
      * Create a button with a given style and properties.
      *
      * @param style The style to apply to this button.
-     * @param properties The properties to set on this button.
+     * @param properties A properties object containing a definition of the button (optional).
      *
      * @return The new button.
      */
-    static Control* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * @see Control::getType

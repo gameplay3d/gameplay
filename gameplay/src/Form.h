@@ -5,11 +5,11 @@
 #include "Container.h"
 #include "Mesh.h"
 #include "Node.h"
-#include "FrameBuffer.h"
 #include "Touch.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Gamepad.h"
+#include "FrameBuffer.h"
 
 namespace gameplay
 {
@@ -17,7 +17,12 @@ namespace gameplay
 class Theme;
 
 /**
- * Top-level container of UI controls.  The following properties are available for forms:
+ * Top-level container of UI controls.
+ 
+   Child controls and containers can be created and added to a form using the
+   Container::addControl and Container::insertControl methods.
+
+   The following properties are available for forms:
 
  @verbatim
     form <formID>
@@ -68,10 +73,14 @@ public:
 
     /**
      * Create a new Form.
+	 *
+	 * The specified style defines the visual style for the form. If NULL is passed
+	 * for the style, the default UI theme is used. All controls attached to this
+	 * form will inherit the theme that contains the form's style.
      *
      * @param id The Form's ID.
-     * @param style The Form's style.
-     * @param layoutType The form's layout type.
+     * @param style The Form's custom style (optional - may be NULL).
+	 * @param layoutType The form's layout type (optional).
      *
      * @return The new Form.
      * @script{create}
@@ -105,19 +114,9 @@ public:
     bool isForm() const;
 
     /**
-     * Gets the theme for the form.
-     *
-     * @return The theme for the form.
-     */
-    Theme* getTheme() const;
-
-    /**
      * Attach this form to a node.
      *
      * A form can be drawn as part of the 3-dimensional world if it is attached to a node.
-     * The form's contents will be rendered into a framebuffer which will be used to texture a quad.
-     * This quad will be given the same dimensions as the form and must be transformed appropriately.
-     * Alternatively, a quad can be set explicitly on a form with the setQuad() methods.
      *
      * @param node The node to attach this form to.
      */
@@ -130,6 +129,8 @@ public:
 
     /**
      * Draws this form.
+     *
+     * @return The nubmer of draw calls issued to draw the form.
      */
     unsigned int draw();
 
@@ -137,6 +138,25 @@ public:
      * @see Control::getType
      */
     const char* getType() const;
+
+    /**
+     * Determines whether batching is enabled for this form.
+     *
+     * @return True if batching is enabled for this form, false otherwise.
+     */
+    bool isBatchingEnabled() const;
+
+    /**
+     * Turns batching on or off for this form.
+     *
+     * By default, forms enable batching as a way to optimize performance. However, on certain
+     * complex forms that contain multiple layers of overlapping text and transparent controls,
+     * batching may cause some visual artifacts due alpha blending issues. In these cases,
+     * turning batching off usually fixes the issue at a slight performance cost.
+     *
+     * @param enabled True to enable batching (default), false otherwise.
+     */
+    void setBatchingEnabled(bool enabled);
 
     /**
      * Returns the single currently active control within the UI system.
@@ -168,6 +188,11 @@ private:
      * Destructor.
      */
     virtual ~Form();
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Initialize a quad for this form in order to draw it in 3D.
@@ -220,13 +245,19 @@ private:
     static void resizeEventInternal(unsigned int width, unsigned int height);
 
     /**
-     * Get the next highest power of two of an integer.  Used when creating framebuffers.
-     *
-     * @param x The number to start with.
-     *
-     * @return The next highest power of two after x, or x if it is already a power of two.
+     * Called to update internal framebuffer when forms are attached to a node.
      */
-    static unsigned int nextPowerOfTwo(unsigned int x);
+    void updateFrameBuffer();
+
+    /**
+     * Called during drawing to prepare a sprite batch for being drawn into for this form.
+     */
+    void startBatch(SpriteBatch* batch);
+
+    /**
+     * Called during drawing to signal completion of drawing into a batch.
+     */
+    void finishBatch(SpriteBatch* batch);
 
     /**
      * Unproject a point (from a mouse or touch event) into the scene and then project it onto the form.
@@ -239,10 +270,7 @@ private:
      */
     bool projectPoint(int x, int y, Vector3* point);
 
-    /**
-     * Called when the form is resized to update its internal frame buffer.
-     */
-    void updateFrameBuffer();
+    const Matrix& getProjectionMatrix() const;
 
     static bool pointerEventInternal(bool mouse, int evt, int x, int y, int param);
 
@@ -266,15 +294,12 @@ private:
 
     static bool pollGamepad(Gamepad* gamepad);
 
-    Theme* _theme;                      // The Theme applied to this Form.
-    FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad. 
-    SpriteBatch* _spriteBatch;
     Node* _node;                        // Node for transforming this Form in world-space.
-    Model* _nodeQuad;                   // Quad for rendering this Form in 3d space.
-    Material* _nodeMaterial;            // Material for rendering this Form in 3d space.
-    float _u2;
-    float _v1;
-    Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
+    FrameBuffer* _frameBuffer;          // FrameBuffer for offscreen drawing of forms that are attached to a Node
+    Model* _model;                      // Model used to render form in 3D when attached to a Node
+    Matrix _projectionMatrix;           // Projection matrix to be set on SpriteBatch objects when rendering the form
+    std::vector<SpriteBatch*> _batches;
+    bool _batched;
     static Control* _focusControl;
     static Control* _activeControl;
     static Control::State _activeControlState;

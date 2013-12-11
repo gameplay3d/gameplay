@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Control.h"
 #include "Form.h"
+#include "Theme.h"
 
 #define BOUNDS_X_PERCENTAGE_BIT 1
 #define BOUNDS_Y_PERCENTAGE_BIT 2
@@ -46,7 +47,7 @@ static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percenta
 
 Control::Control()
     : _id(""), _enabled(true), _boundsBits(0), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false),
-    _autoWidth(AUTO_SIZE_NONE), _autoHeight(AUTO_SIZE_NONE), _listeners(NULL), _visible(true), _zIndex(-1),
+    _autoWidth(AUTO_SIZE_NONE), _autoHeight(AUTO_SIZE_NONE), _style(NULL), _listeners(NULL), _visible(true), _zIndex(-1),
     _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
@@ -66,9 +67,15 @@ Control::~Control()
         SAFE_DELETE(_listeners);
     }
 
-    if (_styleOverridden)
+    if (_style)
     {
-        SAFE_DELETE(_style);
+        // Release the style's theme since we addRef'd it in initialize()
+        _style->getTheme()->release();
+
+        if (_styleOverridden)
+        {
+            SAFE_DELETE(_style);
+        }
     }
 }
 
@@ -83,131 +90,175 @@ static Control::AutoSize parseAutoSize(const char* str)
     return Control::AUTO_SIZE_NONE;
 }
 
-void Control::initialize(Theme::Style* style, Properties* properties)
+void Control::initialize(const char* typeName, Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
-    _style = style;
-
-    // Properties not defined by the style.
-    const char * alignmentString = properties->getString("alignment");
-
-    _isAlignmentSet = alignmentString != NULL;
-    _alignment = getAlignment(alignmentString);
-
-    _autoWidth = parseAutoSize(properties->getString("autoWidth"));
-    _autoHeight = parseAutoSize(properties->getString("autoHeight"));
-
-    _consumeInputEvents = properties->getBool("consumeInputEvents", true);
-
-    _visible = properties->getBool("visible", true);
-
-    if (properties->exists("zIndex"))
+    // Load our theme style
+    if (properties)
     {
-        _zIndex = properties->getInt("zIndex");
+        // The style passed is in our parent control's style.
+        // Attempt to load our own style from our parent style's theme.
+        const char* styleName = properties->getString("style", typeName);
+        if (style)
+        {
+            // The passed in style is our parent control's style : attempt to load our style from it.
+            _style = style->getTheme()->getStyle(styleName);
+        }
+
+        if (!_style)
+        {
+            // Try loading a style from the default theme
+            _style = Theme::getDefault()->getStyle(styleName);
+        }
     }
     else
     {
-        _zIndex = -1;
+        // No properties passed in - the style passed in was explicity for us.
+        _style = style;
     }
 
-    if (properties->exists("canFocus"))
-        _canFocus = properties->getBool("canFocus", false);
-
-    if (properties->exists("focusIndex"))
+    if (!_style)
     {
-        _focusIndex = properties->getInt("focusIndex");
-    }
-    else
-    {
-        _focusIndex = -1;
-    }
+        // Search for a style from the default theme that matches this control's name
+        _style = Theme::getDefault()->getStyle(typeName);
 
-    float bounds[4];
-    bool boundsBits[4];
-    if (properties->exists("position"))
-    {
-        parseCoordPair(properties->getString("position", "0,0"), &bounds[0], &bounds[1], &boundsBits[0], &boundsBits[1]);
-    }
-    else
-    {
-        bounds[0] = parseCoord(properties->getString("x", "0"), &boundsBits[0]);
-        bounds[1] = parseCoord(properties->getString("y", "0"), &boundsBits[1]);
-    }
-
-    if (properties->exists("size"))
-    {
-        parseCoordPair(properties->getString("size", "0,0"), &bounds[2], &bounds[3], &boundsBits[2], &boundsBits[3]);
-    }
-    else
-    {
-        bounds[2] = parseCoord(properties->getString("width", "0"), &boundsBits[2]);
-        bounds[3] = parseCoord(properties->getString("height", "0"), &boundsBits[3]);
-    }
-    setX(bounds[0], boundsBits[0]);
-    setY(bounds[1], boundsBits[1]);
-    setWidth(bounds[2], boundsBits[2]);
-    setHeight(bounds[3], boundsBits[3]);
-
-    const char* id = properties->getId();
-    if (id)
-        _id = id;
-
-    if (properties->exists("enabled"))
-    {
-        setEnabled(properties->getBool("enabled"));
-    }
-
-    // Register script listeners for control events
-    if (properties->exists("listener"))
-        addScriptCallback("controlEvent", properties->getString("listener"));
-
-    // Potentially override themed properties for all states.
-    overrideThemedProperties(properties, STATE_ALL);
-
-    // Override themed properties on specific states.
-    Properties* innerSpace = properties->getNextNamespace();
-    while (innerSpace != NULL)
-    {
-        std::string spaceName(innerSpace->getNamespace());
-        std::transform(spaceName.begin(), spaceName.end(), spaceName.begin(), (int(*)(int))toupper);
-        if (spaceName == "STATENORMAL")
+        if (!_style)
         {
-            overrideThemedProperties(innerSpace, NORMAL);
+            // No style was found, use an empty style
+            _style = style ? style->getTheme()->getEmptyStyle() : Theme::getDefault()->getEmptyStyle();
         }
-        else if (spaceName == "STATEFOCUS")
-        {
-            overrideThemedProperties(innerSpace, FOCUS);
-        }
-        else if (spaceName == "STATEACTIVE")
-        {
-            overrideThemedProperties(innerSpace, ACTIVE);
-        }
-        else if (spaceName == "STATEDISABLED")
-        {
-            overrideThemedProperties(innerSpace, DISABLED);
-        }
-        else if (spaceName == "STATEHOVER")
-        {
-            overrideThemedProperties(innerSpace, HOVER);
-        }
-        else if (spaceName == "MARGIN")
-        {
-            setMargin(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
-                innerSpace->getFloat("left"), innerSpace->getFloat("right"));
-        }
-        else if (spaceName == "PADDING")
-        {
-            setPadding(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
-                innerSpace->getFloat("left"), innerSpace->getFloat("right"));
-        }
-
-        innerSpace = properties->getNextNamespace();
     }
+
+    // Increase the reference count of the style's theme while we hold the style
+    _style->getTheme()->addRef();
+
+    if (properties)
+    {
+		// Properties not defined by the style.
+		const char * alignmentString = properties->getString("alignment");
+
+		_isAlignmentSet = alignmentString != NULL;
+		_alignment = getAlignment(alignmentString);
+
+		_autoWidth = parseAutoSize(properties->getString("autoWidth"));
+		_autoHeight = parseAutoSize(properties->getString("autoHeight"));
+
+		_consumeInputEvents = properties->getBool("consumeInputEvents", true);
+
+		_visible = properties->getBool("visible", true);
+
+		if (properties->exists("zIndex"))
+		{
+			_zIndex = properties->getInt("zIndex");
+		}
+		else
+		{
+			_zIndex = -1;
+		}
+
+		if (properties->exists("canFocus"))
+			_canFocus = properties->getBool("canFocus", false);
+
+		if (properties->exists("focusIndex"))
+		{
+			_focusIndex = properties->getInt("focusIndex");
+		}
+		else
+		{
+			_focusIndex = -1;
+		}
+
+		float bounds[4];
+		bool boundsBits[4];
+		if (properties->exists("position"))
+		{
+			parseCoordPair(properties->getString("position", "0,0"), &bounds[0], &bounds[1], &boundsBits[0], &boundsBits[1]);
+		}
+		else
+		{
+			bounds[0] = parseCoord(properties->getString("x", "0"), &boundsBits[0]);
+			bounds[1] = parseCoord(properties->getString("y", "0"), &boundsBits[1]);
+		}
+
+		if (properties->exists("size"))
+		{
+			parseCoordPair(properties->getString("size", "0,0"), &bounds[2], &bounds[3], &boundsBits[2], &boundsBits[3]);
+		}
+		else
+		{
+			bounds[2] = parseCoord(properties->getString("width", "0"), &boundsBits[2]);
+			bounds[3] = parseCoord(properties->getString("height", "0"), &boundsBits[3]);
+		}
+		setX(bounds[0], boundsBits[0]);
+		setY(bounds[1], boundsBits[1]);
+		setWidth(bounds[2], boundsBits[2]);
+		setHeight(bounds[3], boundsBits[3]);
+
+		const char* id = properties->getId();
+		if (id)
+			_id = id;
+
+		if (properties->exists("enabled"))
+		{
+			setEnabled(properties->getBool("enabled"));
+		}
+
+		// Register script listeners for control events
+		if (properties->exists("listener"))
+			addScriptCallback("controlEvent", properties->getString("listener"));
+
+		// Potentially override themed properties for all states.
+		overrideThemedProperties(properties, STATE_ALL);
+
+		// Override themed properties on specific states.
+		Properties* innerSpace = properties->getNextNamespace();
+		while (innerSpace != NULL)
+		{
+			std::string spaceName(innerSpace->getNamespace());
+			std::transform(spaceName.begin(), spaceName.end(), spaceName.begin(), (int(*)(int))toupper);
+			if (spaceName == "STATENORMAL")
+			{
+				overrideThemedProperties(innerSpace, NORMAL);
+			}
+			else if (spaceName == "STATEFOCUS")
+			{
+				overrideThemedProperties(innerSpace, FOCUS);
+			}
+			else if (spaceName == "STATEACTIVE")
+			{
+				overrideThemedProperties(innerSpace, ACTIVE);
+			}
+			else if (spaceName == "STATEDISABLED")
+			{
+				overrideThemedProperties(innerSpace, DISABLED);
+			}
+			else if (spaceName == "STATEHOVER")
+			{
+				overrideThemedProperties(innerSpace, HOVER);
+			}
+			else if (spaceName == "MARGIN")
+			{
+				setMargin(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
+					innerSpace->getFloat("left"), innerSpace->getFloat("right"));
+			}
+			else if (spaceName == "PADDING")
+			{
+				setPadding(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
+					innerSpace->getFloat("left"), innerSpace->getFloat("right"));
+			}
+
+			innerSpace = properties->getNextNamespace();
+		}
+	}
 }
 
 const char* Control::getId() const
 {
     return _id.c_str();
+}
+
+void Control::setId(const char* id)
+{
+	_id = id ? id : "";
 }
 
 float Control::getX() const
@@ -820,6 +871,11 @@ bool Control::getTextRightToLeft(State state) const
     return overlay->getTextRightToLeft();
 }
 
+Theme::Style* Control::getStyle() const
+{
+    return _style;
+}
+
 void Control::setStyle(Theme::Style* style)
 {
     if (style != _style)
@@ -830,9 +886,9 @@ void Control::setStyle(Theme::Style* style)
     _style = style;
 }
 
-Theme::Style* Control::getStyle() const
+Theme* Control::getTheme() const
 {
-    return _style;
+    return _style ? _style->getTheme() : NULL;
 }
 
 Control::State Control::getState() const
@@ -988,12 +1044,12 @@ void Control::addSpecificListener(Control::Listener* listener, Control::Listener
 
 bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    return _consumeInputEvents;
+    return false;// _consumeInputEvents;
 }
 
 bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    return _consumeInputEvents;
+    return false;// _consumeInputEvents;
 }
 
 bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
@@ -1005,7 +1061,7 @@ bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 bool Control::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
-    return _consumeInputEvents;
+    return false;// _consumeInputEvents;
 }
 
 void Control::notifyListeners(Control::Listener::EventType eventType)
@@ -1043,13 +1099,22 @@ void Control::controlEvent(Control::Listener::EventType evt)
 void Control::update(const Control* container, const Vector2& offset)
 {
     Game* game = Game::getInstance();
+
     const Rectangle parentAbsoluteBounds = container ? container->_viewportBounds : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
-    const Rectangle parentAbsoluteClip = container ? container->getClip() : parentAbsoluteBounds;
+    const Rectangle parentAbsoluteClip = container ? container->_viewportClipBounds : parentAbsoluteBounds;
 
-    // Store previous absolute clip bounds
-    _clearBounds.set(_absoluteClipBounds);
+    const Theme::Border& border = getBorder(getState());
+    const Theme::Padding& padding = getPadding();
 
-    // Calculate local un-clipped bounds.
+    // Compute content are padding values
+    float lpadding = border.left + padding.left;
+    float rpadding = border.right + padding.right;
+    float tpadding = border.top + padding.top;
+    float bpadding = border.bottom + padding.bottom;
+    float hpadding = lpadding + rpadding;
+    float vpadding = tpadding + bpadding;
+
+    // Calculate local unclipped bounds.
     _bounds.set(_relativeBounds);
     if (isXPercentage())
         _bounds.x *= parentAbsoluteBounds.width;
@@ -1064,120 +1129,33 @@ void Control::update(const Control* container, const Vector2& offset)
     else if (isHeightPercentage())
         _bounds.height *= parentAbsoluteBounds.height;
 
-    float x, y, width, height, clipX2, x2, clipY2, y2;
+    // Calculate absolute unclipped bounds
+    _absoluteBounds.set(
+        parentAbsoluteBounds.x + offset.x + _bounds.x,
+        parentAbsoluteBounds.y + offset.y + _bounds.y,
+        _bounds.width,
+        _bounds.height);
+
+    // Calculate absolute clipped bounds
+    Rectangle::intersect(_absoluteBounds, parentAbsoluteClip, &_absoluteClipBounds);
 
     // Calculate the local clipped bounds
-    width = _bounds.width;
-    height = _bounds.height;
-    if (container)
-    {
-        x = _bounds.x + offset.x;
-        y = _bounds.y + offset.y;
-        x2 = parentAbsoluteClip.x + x + width;
-        y2 = parentAbsoluteClip.y + y + height;
-    }
-    else
-    {
-        x = 0;
-        y = 0;
-        x2 = width;
-        y2 = height;
-    }
-    clipX2 = parentAbsoluteClip.x + parentAbsoluteClip.width;
-    clipY2 = parentAbsoluteClip.y + parentAbsoluteClip.height;
-    if (x2 > clipX2)
-        width -= x2 - clipX2;
-    if (y2 > clipY2)
-        height -= y2 - clipY2;
+    _clipBounds.set(
+        max(_absoluteClipBounds.x - _absoluteBounds.x, 0.0f),
+        max(_absoluteClipBounds.y - _absoluteBounds.y, 0.0f),
+        _absoluteClipBounds.width,
+        _absoluteClipBounds.height
+        );
 
-    if (x < 0)
-    {
-        width += x;
-        x = -x;
-    }
-    else
-    {
-        x = 0;
-    }
+    // Calculate the absolute unclipped viewport bounds (content area, which does not include border and padding)
+    _viewportBounds.set(
+        _absoluteBounds.x + lpadding,
+        _absoluteBounds.y + tpadding,
+        _absoluteBounds.width - hpadding,
+        _absoluteBounds.height - vpadding);
 
-    if (y < 0)
-    {
-        height += y;
-        y = -y;
-    }
-    else
-    {
-        y = 0;
-    }
-
-    _clipBounds.set(x, y, width, height);
-
-    // Calculate absolute bounds un-clipped bounds
-    if (container)
-    {
-        x = _bounds.x + offset.x + parentAbsoluteBounds.x;
-        y = _bounds.y + offset.y + parentAbsoluteBounds.y;
-    }
-    else
-    {
-        x = 0;
-        y = 0;
-    }
-    _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
-
-    // Calculate the absolute viewport bounds (content area, which does not include border and padding)
-    // Absolute bounds minus border and padding.
-    const Theme::Border& border = getBorder(getState());
-    const Theme::Padding& padding = getPadding();
-    x += border.left + padding.left;
-    y += border.top + padding.top;
-    width = _bounds.width - border.left - padding.left - border.right - padding.right;
-    height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
-    _viewportBounds.set(x, y, width, height);
-
-    // Calculate the clip area.
-    // Absolute bounds, minus border and padding,
-    // clipped to the parent container's clip area.
-    if (container)
-    {
-        clipX2 = parentAbsoluteClip.x + parentAbsoluteClip.width;
-        clipY2 = parentAbsoluteClip.y + parentAbsoluteClip.height;
-    }
-    else
-    {
-        clipX2 = parentAbsoluteClip.width;
-        clipY2 = parentAbsoluteClip.height;
-    }
-    x2 = x + width;
-    if (x2 > clipX2)
-        width = clipX2 - x;
-    y2 = y + height;
-    if (y2 > clipY2)
-        height = clipY2 - y;
-
-    if (x < parentAbsoluteClip.x)
-    {
-        float dx = parentAbsoluteClip.x - x;
-        width -= dx;
-        x = parentAbsoluteClip.x;
-    }
-
-    if (y < parentAbsoluteClip.y)
-    {
-        float dy = parentAbsoluteClip.y - y;
-        height -= dy;
-        y = parentAbsoluteClip.y;
-    }
-
-    _viewportClipBounds.set(x, y, width, height);
-
-    width += border.left + padding.left + border.right + padding.right;
-    height += border.top + padding.top + border.bottom + padding.bottom;
-    _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top, max(width, 0.0f), max(height, 0.0f));
-    if (_clearBounds.isEmpty())
-    {
-        _clearBounds.set(_absoluteClipBounds);
-    }
+    // Calculate the absolute clipped viewport bounds
+    Rectangle::intersect(_viewportBounds, parentAbsoluteClip, &_viewportClipBounds);
 
     // Cache themed attributes for performance.
     _skin = getSkin(getState());
@@ -1188,10 +1166,36 @@ void Control::update(const Control* container, const Vector2& offset)
         _opacity *= container->_opacity;
 }
 
-void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
+void Control::startBatch(Form* form, SpriteBatch* batch)
 {
-    if (!spriteBatch || !_skin || _absoluteBounds.width <= 0 || _absoluteBounds.height <= 0)
-        return;
+    form->startBatch(batch);
+}
+
+void Control::finishBatch(Form* form, SpriteBatch* batch)
+{
+    form->finishBatch(batch);
+}
+
+unsigned int Control::draw(Form* form, const Rectangle& clip)
+{
+    if (!_visible)
+        return 0;
+
+    unsigned int drawCalls = drawBorder(form, clip);
+    drawCalls += drawImages(form, clip);
+    drawCalls += drawText(form, clip);
+    return drawCalls;
+}
+
+unsigned int Control::drawBorder(Form* form, const Rectangle& clip)
+{
+    if (!form || !_skin || _absoluteBounds.width <= 0 || _absoluteBounds.height <= 0)
+        return 0;
+
+    unsigned int drawCalls = 0;
+
+    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+    startBatch(form, batch);
 
     // Get the border and background images for this control's current state.
     const Theme::UVs& topLeft = _skin->getUVs(Theme::Skin::TOP_LEFT);
@@ -1221,65 +1225,72 @@ void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     if (!border.left && !border.right && !border.top && !border.bottom)
     {
         // No border, just draw the image.
-        spriteBatch->draw(_absoluteBounds.x, _absoluteBounds.y, _absoluteBounds.width, _absoluteBounds.height, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        batch->draw(_absoluteBounds.x, _absoluteBounds.y, _absoluteBounds.width, _absoluteBounds.height, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        ++drawCalls;
     }
     else
     {
         if (border.left && border.top)
-            spriteBatch->draw(_absoluteBounds.x, _absoluteBounds.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x, _absoluteBounds.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.top)
-            spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.right && border.top)
-            spriteBatch->draw(rightX, _absoluteBounds.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
+        {
+            batch->draw(rightX, _absoluteBounds.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.left)
-            spriteBatch->draw(_absoluteBounds.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
+            ++drawCalls;
+        }
 
         // Always draw the background.
-        spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _absoluteBounds.width - border.left - border.right, _absoluteBounds.height - border.top - border.bottom,
+        batch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _absoluteBounds.width - border.left - border.right, _absoluteBounds.height - border.top - border.bottom,
             center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        ++drawCalls;
 
         if (border.right)
-            spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
+        {
+            batch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.bottom && border.left)
-            spriteBatch->draw(_absoluteBounds.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.bottom)
-            spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, skinColor, clip);
+        {
+            batch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.bottom && border.right)
-            spriteBatch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, skinColor, clip);
-    }
-}
-
-void Control::drawImages(SpriteBatch* spriteBatch, const Rectangle& position)
-{
-}
-
-void Control::drawText(const Rectangle& position)
-{
-}
-
-void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
-{
-    if (needsClear)
-    {
-        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height, _clearBounds.width, _clearBounds.height) );
-        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
-        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
+        {
+            batch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, skinColor, clip);
+            ++drawCalls;
+        }
     }
 
-    if (!_visible)
-    {
-        _dirty = false;
-        return;
-    }
+    finishBatch(form, batch);
 
-    spriteBatch->start();
-    drawBorder(spriteBatch, clip);
-    drawImages(spriteBatch, clip);
-    spriteBatch->finish();
+    return drawCalls;
+}
 
-    drawText(clip);
-    _dirty = false;
+unsigned int Control::drawImages(Form* form, const Rectangle& position)
+{
+    return 0;
+}
+
+unsigned int Control::drawText(Form* form, const Rectangle& position)
+{
+    return 0;
 }
 
 bool Control::isDirty()
@@ -1325,14 +1336,17 @@ Control::State Control::getState(const char* state)
 
 Theme::ThemeImage* Control::getImage(const char* id, State state)
 {
-    Theme::Style::Overlay* overlay = getOverlay(state);
-    GP_ASSERT(overlay);
-    
-    Theme::ImageList* imageList = overlay->getImageList();
-    if (!imageList)
-        return NULL;
+    Theme::ThemeImage* image = NULL;
 
-    return imageList->getImage(id);
+    Theme::Style::Overlay* overlay = getOverlay(state);
+    if (overlay)
+    {
+        Theme::ImageList* imageList = overlay->getImageList();
+        if (imageList)
+            image = imageList->getImage(id);
+    }
+
+    return image ? image : _style->getTheme()->_emptyImage;
 }
 
 const char* Control::getType() const

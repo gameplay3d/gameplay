@@ -43,7 +43,7 @@ particle smoke
         cameraTranslation = -0.0200001, 4.06, 0
         cameraZoom = 0, 0, 16.8
         cameraRotation = 0, 0, 0, 0
-        sizeMax = 5
-        energyMax = 5
+        sizeMax = 20
+        energyMax = 5000
     }
 }

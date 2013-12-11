@@ -137,6 +137,7 @@ class Theme: public Ref
     friend class Control;
     friend class Form;
     friend class Skin;
+    friend class Game;
 
 public:
 
@@ -236,17 +237,17 @@ public:
          */
         float right;
     };
-    
+
     /** 
      * Struct representing margin areas by the width or height of each side.
      */
     typedef SideRegions Margin;
-    
+
     /** 
      * Struct representing border areas by the width or height of each side.
      */
     typedef SideRegions Border;
-    
+
     /** 
      * Struct representing padding areas by the width or height of each side.
      */
@@ -309,6 +310,13 @@ public:
     static Theme* create(const char* url);
 
     /**
+     * Returns the default theme.
+     *
+     * @return The default theme.
+     */
+    static Theme* getDefault();
+
+    /**
      * Get a style by its ID.
      *
      * @param id The style ID.
@@ -327,6 +335,13 @@ public:
      * @return The empty style.
      */
     Theme::Style* getEmptyStyle();
+
+    /**
+     * Returns the sprite batch for this theme.
+     *
+     * @return The theme's sprite batch.
+     */
+    SpriteBatch* getSpriteBatch() const;
 
 private:
 
@@ -451,13 +466,16 @@ private:
     ~Theme();
 
     /**
+     * Cleans up any theme related resources when the game shuts down.
+     */
+    static void finalize();
+
+    /**
      * Hidden copy assignment operator.
      */
     Theme& operator=(const Theme&);
 
     void setProjectionMatrix(const Matrix& matrix);
-
-    SpriteBatch* getSpriteBatch() const;
 
     static void generateUVs(float tw, float th, float x, float y, float width, float height, UVs* uvs);
 
@@ -466,6 +484,7 @@ private:
     std::string _url;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
+    Theme::ThemeImage* _emptyImage;
     std::vector<Style*> _styles;
     std::vector<ThemeImage*> _images;
     std::vector<ImageList*> _imageLists;

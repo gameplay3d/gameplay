@@ -2,6 +2,7 @@
 #include "ScriptController.h"
 #include "lua_Theme.h"
 #include "Base.h"
+#include "FileSystem.h"
 #include "Game.h"
 #include "Ref.h"
 #include "Theme.h"
@@ -17,6 +18,7 @@ void luaRegister_Theme()
         {"addRef", lua_Theme_addRef},
         {"getEmptyStyle", lua_Theme_getEmptyStyle},
         {"getRefCount", lua_Theme_getRefCount},
+        {"getSpriteBatch", lua_Theme_getSpriteBatch},
         {"getStyle", lua_Theme_getStyle},
         {"release", lua_Theme_release},
         {NULL, NULL}
@@ -24,6 +26,7 @@ void luaRegister_Theme()
     const luaL_Reg lua_statics[] = 
     {
         {"create", lua_Theme_static_create},
+        {"getDefault", lua_Theme_static_getDefault},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -187,6 +190,50 @@ int lua_Theme_getRefCount(lua_State* state)
     return 0;
 }
 
+int lua_Theme_getSpriteBatch(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Theme* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getSpriteBatch();
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "SpriteBatch");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Theme_getSpriteBatch - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Theme_getStyle(lua_State* state)
 {
     // Get the number of parameters.
@@ -306,6 +353,43 @@ int lua_Theme_static_create(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Theme_static_getDefault(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            void* returnPtr = (void*)Theme::getDefault();
+            if (returnPtr)
+            {
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Theme");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }

@@ -10,12 +10,10 @@
 #include "Joystick.h"
 #include "ImageControl.h"
 
-
-namespace gameplay 
+namespace gameplay
 {
 
 static ControlFactory* __controlFactory = NULL;
-
 
 ControlFactory::ControlFactory() 
 {
@@ -42,43 +40,53 @@ ControlFactory* ControlFactory::getInstance()
 	return __controlFactory;
 }
 
-bool ControlFactory::registerCustomControl(const char* name, ControlActivator activator)
+bool ControlFactory::registerCustomControl(const char* typeName, ControlActivator activator)
 {
-	if (_registeredControls.find(name) != _registeredControls.end())
+    std::string upper(typeName);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+
+	if (_registeredControls.find(upper) != _registeredControls.end())
 		return false;
 
-	_registeredControls[name] = activator;
+	_registeredControls[upper] = activator;
 	return true;
 }
 
-void ControlFactory::unregisterCustomControl(const char* controlName)
+void ControlFactory::unregisterCustomControl(const char* typeName)
 {
+    std::string upper(typeName);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+
 	std::map<std::string, ControlActivator>::iterator it;
-	if ((it = _registeredControls.find(controlName)) != _registeredControls.end())
+	if ((it = _registeredControls.find(upper)) != _registeredControls.end())
 	{
 		_registeredControls.erase(it);
 	}
 }
 
-Control *ControlFactory::createControl(const char* controlName, Theme::Style* style, Properties* properties)
+Control *ControlFactory::createControl(const char* typeName, Theme::Style* style, Properties* properties)
 {
-	if (_registeredControls.find(controlName) == _registeredControls.end())
+    std::string upper(typeName);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+
+    std::map<std::string, ControlActivator>::iterator it = _registeredControls.find(upper);
+    if (it == _registeredControls.end())
 		return NULL;
 
-	return (*_registeredControls[controlName])(style, properties);
+    return (*it->second)(style, properties);
 }
 
 void ControlFactory::registerStandardControls() 
 {
-	_registeredControls["LABEL"] = &Label::create;
-	_registeredControls["BUTTON"] = &Button::create;
-	_registeredControls["CHECKBOX"] = &CheckBox::create;
-	_registeredControls["RADIOBUTTON"] = &RadioButton::create;
-	_registeredControls["CONTAINER"] = &Container::create;
-	_registeredControls["SLIDER"] = &Slider::create;
-	_registeredControls["TEXTBOX"] = &TextBox::create;
-	_registeredControls["JOYSTICK"] = &Joystick::create;
-	_registeredControls["IMAGE"] = &ImageControl::create;
+    registerCustomControl("LABEL", &Label::create);
+    registerCustomControl("BUTTON", &Button::create);
+    registerCustomControl("CHECKBOX", &CheckBox::create);
+    registerCustomControl("RADIOBUTTON", &RadioButton::create);
+    registerCustomControl("CONTAINER", &Container::create);
+    registerCustomControl("SLIDER", &Slider::create);
+    registerCustomControl("TEXTBOX", &TextBox::create);
+    registerCustomControl("JOYSTICK", &Joystick::create);
+    registerCustomControl("IMAGE", &ImageControl::create);
 }
 
 }

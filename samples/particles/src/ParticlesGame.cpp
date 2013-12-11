@@ -1007,6 +1007,41 @@ void ParticlesGame::emitterChanged()
     _cameraParent->setIdentity();
     _particleEmitterNode->setIdentity();
 
+    // Parse editor section of particle properties
+    Properties* p = Properties::create(_url.c_str());
+    Properties* ns = p->getNamespace("editor", true);
+    if (ns)
+    {
+        Vector3 v3;
+        if (ns->getVector3("cameraTranslation", &v3))
+        {
+            _cameraParent->setTranslation(v3);
+        }
+        if (ns->getVector3("cameraZoom", &v3))
+        {
+            _scene->getActiveCamera()->getNode()->setTranslation(v3);
+        }
+        Quaternion q;
+        if (ns->getQuaternionFromAxisAngle("cameraRotation", &q))
+        {
+            _cameraParent->setRotation(q);
+        }
+        float f;
+        if ((f = ns->getFloat("sizeMax")) != 0.0f)
+        {
+            _startMin->setMax(f);
+            _startMax->setMax(f);
+            _endMin->setMax(f);
+            _endMax->setMax(f);
+        }
+        if ((f = ns->getFloat("energyMax")) != 0.0f)
+        {
+            _energyMin->setMax(f);
+            _energyMax->setMax(f);
+        }
+    }
+    SAFE_DELETE(p);
+
     // Set the values of UI controls to display the new emitter's settings.
     _startRed->setValue(emitter->getColorStart().x);
     _startGreen->setValue(emitter->getColorStart().y);
@@ -1076,41 +1111,6 @@ void ParticlesGame::emitterChanged()
 
     // Update our image control
     updateImageControl();
-
-    // Parse editor section of particle properties
-    Properties* p = Properties::create(_url.c_str());
-    Properties* ns = p->getNamespace("editor", true);
-    if (ns)
-    {
-        Vector3 v3;
-        if (ns->getVector3("cameraTranslation", &v3))
-        {
-            _cameraParent->setTranslation(v3);
-        }
-        if (ns->getVector3("cameraZoom", &v3))
-        {
-            _scene->getActiveCamera()->getNode()->setTranslation(v3);
-        }
-        Quaternion q;
-        if (ns->getQuaternionFromAxisAngle("cameraRotation", &q))
-        {
-            _cameraParent->setRotation(q);
-        }
-        float f;
-        if ((f = ns->getFloat("sizeMax")) != 0.0f)
-        {
-            _startMin->setMax(f);
-            _startMax->setMax(f);
-            _endMin->setMax(f);
-            _endMax->setMax(f);
-        }
-        if ((f = ns->getFloat("energyMax")) != 0.0f)
-        {
-            _energyMin->setMax(f);
-            _energyMax->setMax(f);
-        }
-    }
-    SAFE_DELETE(p);
 
     // Start the emitter
     emitter->start();

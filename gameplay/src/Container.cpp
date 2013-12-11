@@ -4,9 +4,17 @@
 #include "AbsoluteLayout.h"
 #include "FlowLayout.h"
 #include "VerticalLayout.h"
-#include "ControlFactory.h"
+#include "Label.h"
+#include "Button.h"
+#include "CheckBox.h"
+#include "RadioButton.h"
+#include "Slider.h"
+#include "TextBox.h"
+#include "Joystick.h"
+#include "ImageControl.h"
 #include "Form.h"
 #include "Game.h"
+#include "ControlFactory.h"
 
 namespace gameplay
 {
@@ -62,107 +70,96 @@ Container::~Container()
     SAFE_RELEASE(_layout);
 }
 
-Container* Container::create(const char* id, Theme::Style* style, Layout::Type layoutType)
+Container* Container::create(const char* id, Theme::Style* style, Layout::Type layout)
 {
-    GP_ASSERT(style);
-
     Container* container = new Container();
-    container->_layout = createLayout(layoutType);
-    if (id)
-        container->_id = id;
-    container->_style = style;
+    container->_id = id ? id : "";
+    container->_layout = createLayout(layout);
+    container->initialize("Container", style, NULL);
     return container;
 }
 
 Control* Container::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
-
     Container* container = new Container();
-    container->initialize(style, properties);
+    container->initialize("Container", style, properties);
     return container;
 }
 
-void Container::initialize(Theme::Style* style, Properties* properties)
+void Container::initialize(const char* typeName, Theme::Style* style, Properties* properties)
 {
-    Control::initialize(style, properties);
+    Control::initialize(typeName, style, properties);
 
-    // Parse layout
-    Properties* layoutNS = properties->getNamespace("layout", true, false);
-    if (layoutNS)
-    {
-        _layout = createLayout(getLayoutType(layoutNS->getString("type")));
-        switch (_layout->getType())
-        {
-        case Layout::LAYOUT_FLOW:
-            static_cast<FlowLayout*>(_layout)->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
-            break;
-        case Layout::LAYOUT_VERTICAL:
-            static_cast<VerticalLayout*>(_layout)->setSpacing(layoutNS->getInt("spacing"));
-            break;
-        }
-    }
-    else
-    {
-        _layout = createLayout(getLayoutType(properties->getString("layout")));
-    }
+	if (properties)
+	{
+		// Parse layout
+		Properties* layoutNS = properties->getNamespace("layout", true, false);
+		if (layoutNS)
+		{
+			_layout = createLayout(getLayoutType(layoutNS->getString("type")));
+			switch (_layout->getType())
+			{
+			case Layout::LAYOUT_FLOW:
+				static_cast<FlowLayout*>(_layout)->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
+				break;
+			case Layout::LAYOUT_VERTICAL:
+				static_cast<VerticalLayout*>(_layout)->setSpacing(layoutNS->getInt("spacing"));
+				break;
+			}
+		}
+		else
+		{
+			_layout = createLayout(getLayoutType(properties->getString("layout")));
+		}
 
-    setScroll(getScroll(properties->getString("scroll")));
-    _scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
-    if (_scrollBarsAutoHide)
-    {
-        _scrollBarOpacity = 0.0f;
-    }
-    
-    _scrollWheelRequiresFocus = properties->getBool("scrollWheelRequiresFocus");
-    if (properties->exists("scrollingFriction"))
-        _scrollingFriction = properties->getFloat("scrollingFriction");
-    if (properties->exists("scrollWheelSpeed"))
-        _scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
+		setScroll(getScroll(properties->getString("scroll")));
+		_scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
+		if (_scrollBarsAutoHide)
+		{
+			_scrollBarOpacity = 0.0f;
+		}
 
-    addControls(style->getTheme(), properties);
-    _layout->update(this, _scrollPosition);
+		_scrollWheelRequiresFocus = properties->getBool("scrollWheelRequiresFocus");
+		if (properties->exists("scrollingFriction"))
+			_scrollingFriction = properties->getFloat("scrollingFriction");
+		if (properties->exists("scrollWheelSpeed"))
+			_scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
 
-    const char* activeControl = properties->getString("activeControl");
-    if (activeControl)
-    {
-        for (size_t i = 0, count = _controls.size(); i < count; ++i)
-        {
-            if (_controls[i]->_id == activeControl)
-            {
-                _activeControl = _controls[i];
-                break;
-            }
-        }
-    }
+		addControls(properties);
+		_layout->update(this, _scrollPosition);
+
+		const char* activeControl = properties->getString("activeControl");
+		if (activeControl)
+		{
+			for (size_t i = 0, count = _controls.size(); i < count; ++i)
+			{
+				if (_controls[i]->_id == activeControl)
+				{
+					_activeControl = _controls[i];
+					break;
+				}
+			}
+		}
+	}
+
+    // Create a default layout if one does not yet exist
+    if (_layout == NULL)
+        _layout = createLayout(Layout::LAYOUT_ABSOLUTE);
 }
 
-void Container::addControls(Theme* theme, Properties* properties)
+void Container::addControls(Properties* properties)
 {
-    GP_ASSERT(theme);
     GP_ASSERT(properties);
 
     // Add all the controls to this container.
     Properties* controlSpace = properties->getNextNamespace();
     while (controlSpace != NULL)
     {
-        Control* control = NULL;
+        const char* controlName = controlSpace->getNamespace();
 
-        const char* controlStyleName = controlSpace->getString("style");
-        Theme::Style* controlStyle = NULL;
-        if (controlStyleName)
-        {
-            controlStyle = theme->getStyle(controlStyleName);
-        }
-        else
-        {
-            controlStyle = theme->getEmptyStyle();
-        }
-
-        std::string controlName(controlSpace->getNamespace());
-        std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
-
-        control = ControlFactory::getInstance()->createControl(controlName.c_str(), controlStyle, controlSpace);
+        // Pass our own style into the creation of the child control.
+        // The child control's style will be looked up using the passed in style's theme.
+        Control* control = ControlFactory::getInstance()->createControl(controlName, _style, controlSpace);
 
         // Add the new control to the form.
         if (control)
@@ -184,9 +181,21 @@ Layout* Container::getLayout()
     return _layout;
 }
 
+void Container::setLayout(Layout::Type type)
+{
+	if (_layout == NULL || _layout->getType() != type)
+	{
+		SAFE_RELEASE(_layout);
+
+		_layout = createLayout(type);
+		_layout->update(this, _scrollPosition);
+		_dirty = true;
+	}
+}
+
 unsigned int Container::addControl(Control* control)
 {
-    GP_ASSERT(control);
+	GP_ASSERT(control);
 
     // Remove the control from its current parent
     if (control->_parent && control->_parent != this)
@@ -383,12 +392,17 @@ bool Container::isScrollBarsAutoHide() const
 
 bool Container::isScrolling() const
 {
+    if (_scrolling &&
+        (abs(_scrollingLastX - _scrollingVeryFirstX) > SCROLL_THRESHOLD ||
+        abs(_scrollingLastY - _scrollingVeryFirstY) > SCROLL_THRESHOLD))
+    {
+        return true;
+    }
+
     if (_parent && _parent->isScrolling())
         return true;
 
-    return (_scrolling &&
-            (abs(_scrollingLastX - _scrollingVeryFirstX) > SCROLL_THRESHOLD ||
-             abs(_scrollingLastY - _scrollingVeryFirstY) > SCROLL_THRESHOLD));
+    return false;
 }
 
 const Vector2& Container::getScrollPosition() const
@@ -598,52 +612,32 @@ void Container::update(const Control* container, const Vector2& offset)
     }
 }
 
-void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
+unsigned int Container::draw(Form* form, const Rectangle& clip)
 {
-    if (needsClear)
-    {
-        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        float clearY = targetHeight - _clearBounds.y - _clearBounds.height;
-        GL_ASSERT( glScissor(_clearBounds.x, clearY, _clearBounds.width, _clearBounds.height) );
-        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
-        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
-        needsClear = false;
-        cleared = true;
-    }
-    else if (!cleared)
-    {
-        needsClear = true;
-    }
-
     if (!_visible)
-    {
-        _dirty = false;
-        return;
-    }
+        return 0;
 
-    spriteBatch->start();
-    Control::drawBorder(spriteBatch, clip);
-    spriteBatch->finish();
+    // Draw container skin
+    unsigned int drawCalls = Control::draw(form, clip);
 
-    std::vector<Control*>::const_iterator it;
-    Rectangle boundsUnion = Rectangle::empty();
-    for (it = _controls.begin(); it < _controls.end(); it++)
+    // Draw child controls
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
     {
-        Control* control = *it;
-        GP_ASSERT(control);
-        if (!needsClear || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
+        Control* control = _controls[i];
+        if (control && control->_absoluteClipBounds.intersects(_absoluteClipBounds))
         {
-            control->draw(spriteBatch, _viewportClipBounds, needsClear, cleared, targetHeight);
-            Rectangle::combine(control->_clearBounds, boundsUnion, &boundsUnion);
+            drawCalls += control->draw(form, _viewportClipBounds);
         }
     }
 
+    // Draw scrollbars
     if (_scroll != SCROLL_NONE && (_scrollBarOpacity > 0.0f))
     {
         // Draw scroll bars.
         Rectangle clipRegion(_viewportClipBounds);
 
-        spriteBatch->start();
+        SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+        startBatch(form, batch);
 
         if (_scrollBarBounds.height > 0 && ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
         {
@@ -665,15 +659,17 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             clipRegion.width += verticalRegion.width;
 
             Rectangle bounds(_viewportBounds.x + _viewportBounds.width, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
 
             bounds.y += topRegion.height;
             bounds.height = _scrollBarBounds.height - topRegion.height - bottomRegion.height;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, verticalUVs.u1, verticalUVs.v1, verticalUVs.u2, verticalUVs.v2, verticalColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, verticalUVs.u1, verticalUVs.v1, verticalUVs.u2, verticalUVs.v2, verticalColor, clipRegion);
 
             bounds.y += bounds.height;
             bounds.height = bottomRegion.height;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
+
+            drawCalls += 3;
         }
 
         if (_scrollBarBounds.width > 0 && ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL))
@@ -696,28 +692,23 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             clipRegion.height += horizontalRegion.height;
         
             Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.y + _viewportBounds.height, leftRegion.width, leftRegion.height);
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
 
             bounds.x += leftRegion.width;
             bounds.width = _scrollBarBounds.width - leftRegion.width - rightRegion.width;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, horizontalUVs.u1, horizontalUVs.v1, horizontalUVs.u2, horizontalUVs.v2, horizontalColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, horizontalUVs.u1, horizontalUVs.v1, horizontalUVs.u2, horizontalUVs.v2, horizontalColor, clipRegion);
 
             bounds.x += bounds.width;
             bounds.width = rightRegion.width;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, rightUVs.u1, rightUVs.v1, rightUVs.u2, rightUVs.v2, rightColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, rightUVs.u1, rightUVs.v1, rightUVs.u2, rightUVs.v2, rightColor, clipRegion);
+
+            drawCalls += 3;
         }
 
-        spriteBatch->finish();
+        finishBatch(form, batch);
+    }
 
-        if (_scrollingVelocity.isZero())
-        {
-            _dirty = false;
-        }
-    }
-    else
-    {
-        _dirty = false;
-    }
+    return drawCalls;
 }
 
 bool Container::isDirty()
@@ -999,6 +990,9 @@ void Container::stopScrolling()
     _scrollingVelocity.set(0, 0);
     _scrolling = false;
     _dirty = true;
+
+    if (_parent)
+        _parent->stopScrolling();
 }
 
 bool Container::isContainer() const
@@ -1337,7 +1331,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             if (_scrollBarVertical)
             {
                 float vWidth = _scrollBarVertical->getRegion().width;
-                Rectangle vBounds(_viewportBounds.x + _viewportBounds.width,
+                Rectangle vBounds(_viewportBounds.right() - _absoluteBounds.x,
                                  _scrollBarBounds.y,
                                  vWidth, _scrollBarBounds.height);
 

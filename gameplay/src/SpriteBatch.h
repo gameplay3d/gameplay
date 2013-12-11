@@ -97,6 +97,13 @@ public:
     void start();
 
     /**
+     * Determines if the sprite batch has been started but not yet finished.
+     *
+     * @return True if the batch has been started and not finished.
+     */
+    bool isStarted() const;
+
+    /**
      * Draws a single sprite.
      * 
      * @param dst The destination rectangle.
@@ -219,6 +226,23 @@ public:
      * @param clip The clip rectangle.
      */
     void draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip);
+
+    /**
+     * Draws a single sprite, clipped within a rectangle.
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param z The z coordinate.
+     * @param width The sprite width.
+     * @param height The sprite height
+     * @param u1 Texture coordinate.
+     * @param v1 Texture coordinate.
+     * @param u2 Texture coordinate.
+     * @param v2 Texture coordinate.
+     * @param color The color to tint the sprite. Use white for no tint.
+     * @param clip The clip rectangle.
+     */
+    void draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip);
 
     /**
      * Draws a single sprite.

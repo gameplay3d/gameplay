@@ -1,7 +1,7 @@
 #ifndef	CONTROLFACTORY_H_
 #define	CONTROLFACTORY_H_
 
-#include "ThemeStyle.h"
+#include "Theme.h"
 
 namespace gameplay 
 {	
@@ -17,6 +17,7 @@ class Control;
 class ControlFactory 
 {
     friend class Game;
+	friend class Container;
 
 public:
 
@@ -35,29 +36,19 @@ public:
 	/**
 	 * Registers a custom control and specify the activator.
 	 *
-	 * @param controlName The name of the custom control to register.
-	 * @param activator The activator for applying the style and properties to the control.
+	 * @param typeName The name of the custom control type to register.
+	 * @param activator The activator for applying the style, properties and theme to the control.
 	 *
 	 * @return true if the control was successfully registered.
 	 */
-	bool registerCustomControl(const char* controlName, ControlActivator activator);
+    bool registerCustomControl(const char* typeName, ControlActivator activator);
 
 	/**
 	 * Unregisters a custom control and specify the activator.
 	 *
-	 * @param controlName The name of the custom control to unregister.
+	 * @param typeName The name of the custom control type to unregister.
 	 */
-	void unregisterCustomControl(const char* controlName);
-
-	/**
-	 * Creates a controls from the set of core and custom controls registered.
-	 *
-	 * @param controlName The name of the control to create.
-     * @param style The style to apply to the control.
-     * @param properties The Properties object containing the definition of the controlo.
-     * @return The newly created control.
-	 */
-	Control* createControl(const char* controlName, Theme::Style *style, Properties *properties);
+    void unregisterCustomControl(const char* typeName);
 
 private:
 
@@ -65,8 +56,8 @@ private:
 	 * Constructor.
 	 */
 	ControlFactory();
-		
-	/**
+
+    /**
 	 * Constructor.
 	 */
 	ControlFactory(const ControlFactory& copy);
@@ -77,16 +68,26 @@ private:
 	~ControlFactory();
 
     /**
-    * Called when the game is shutting down to clean up resources.
-    */
+     * Cleans up resources allocated by the ControlFactory.
+     */
     static void finalize();
 
 	/**
 	 * Assignment operator
 	 */
 	ControlFactory &operator=(const ControlFactory&);
-	
+
 	/**
+	* Creates a controls from the set of core and custom controls registered.
+	*
+	* @param typeName The type of the control to create.
+	* @param style The style to apply to the control.
+	* @param properties A Properties object describing the control (optional).
+	* @return The new control.
+	*/
+    Control* createControl(const char* typeName, Theme::Style *style, Properties *properties = NULL);
+
+    /**
 	 * Registers the standard (built-in) controls
 	 */
 	void registerStandardControls();
@@ -97,4 +98,3 @@ private:
 }
 
 #endif
-
