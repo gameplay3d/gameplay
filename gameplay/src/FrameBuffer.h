@@ -207,8 +207,6 @@ private:
     static bool isPowerOfTwo(unsigned int value);
 
     std::string _id;
-    unsigned int _width;
-    unsigned int _height;
     FrameBufferHandle _handle;
     RenderTarget** _renderTargets;
     unsigned int _renderTargetCount;
