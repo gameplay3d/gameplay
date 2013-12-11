@@ -280,26 +280,6 @@ protected:
     float _delta;
 
     /**
-     * The X coordinate of the first touch event in a sequence.
-     */
-    float _originalX;
-
-    /**
-     * The Slider's original value at the start of a sequence of touch events.
-     */
-    float _originalValue;
-
-    /**
-     * The Slider's original setting of _consumeInputEvents at the start of a sequence of touch events.
-     */
-    bool _originalConsumeInputEvents;
-
-    /**
-     * Whether the Slider's current movement has been cancelled, e.g. because the user is scrolling the parent container.
-     */
-    bool _moveCancelled;
-
-    /**
      * The image for the minimum slider value.
      */
     Theme::ThemeImage* _minImage;
@@ -338,11 +318,6 @@ protected:
      * The text displayed by this slider if set to display its value.
      */
     std::string _valueText;
-
-    // Used by gamepads to toggle Slider state between FOCUS and ACTIVE.
-    bool _selectButtonDown;
-
-    bool _directionButtonDown;
 
     float _gamepadValue;
 

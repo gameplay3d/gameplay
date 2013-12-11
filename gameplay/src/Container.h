@@ -210,6 +210,11 @@ public:
     bool isScrolling() const;
 
     /**
+     * Stops this container from scrolling if it is currently being scrolled.
+     */
+    void stopScrolling();
+
+    /**
      * Get the friction applied to scrolling velocity for this container.
      */
     float getScrollingFriction() const;
@@ -580,8 +585,6 @@ private:
 
     // Starts scrolling at the given horizontal and vertical speeds.
     void startScrolling(float x, float y, bool resetTime = true);
-
-    void stopScrolling();
 
     void clearContacts();
     bool inContact();

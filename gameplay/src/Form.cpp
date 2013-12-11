@@ -693,31 +693,6 @@ bool Form::pointerEventInternal(bool mouse, int evt, int x, int y, int param)
 
     if (ctrl)
     {
-        // Handle container scrolling
-        Control* tmp = ctrl;
-        while (tmp)
-        {
-            if (tmp->isContainer())
-            {
-                Container* container = static_cast<Container*>(tmp);
-                if (container->_scroll != SCROLL_NONE)
-                {
-                    if (mouse)
-                    {
-                        if (container->mouseEventScroll((Mouse::MouseEvent)evt, formX - tmp->_absoluteBounds.x, formY - tmp->_absoluteBounds.y, param))
-                            return true;
-                    }
-                    else
-                    {
-                        if (container->touchEventScroll((Touch::TouchEvent)evt, formX - tmp->_absoluteBounds.x, formY - tmp->_absoluteBounds.y, param))
-                            return true;
-                    }
-                    break; // scrollable parent container found
-                }
-            }
-            tmp = tmp->_parent;
-        }
-
         // Handle setting focus for all press events
         if (pressEvent)
         {
@@ -763,6 +738,31 @@ bool Form::pointerEventInternal(bool mouse, int evt, int x, int y, int param)
             {
                 if (ctrl->touchEvent((Touch::TouchEvent)evt, localX, localY, param))
                     return true;
+            }
+
+            // Handle container scrolling
+            Control* tmp = ctrl;
+            while (tmp)
+            {
+                if (tmp->isContainer())
+                {
+                    Container* container = static_cast<Container*>(tmp);
+                    if (container->_scroll != SCROLL_NONE)
+                    {
+                        if (mouse)
+                        {
+                            if (container->mouseEventScroll((Mouse::MouseEvent)evt, formX - tmp->_absoluteBounds.x, formY - tmp->_absoluteBounds.y, param))
+                                return true;
+                        }
+                        else
+                        {
+                            if (container->touchEventScroll((Touch::TouchEvent)evt, formX - tmp->_absoluteBounds.x, formY - tmp->_absoluteBounds.y, param))
+                                return true;
+                        }
+                        break; // scrollable parent container found
+                    }
+                }
+                tmp = tmp->_parent;
             }
 
             // Consume all input events anyways?

@@ -8,14 +8,10 @@ namespace gameplay
 static const float SCROLLWHEEL_FRACTION = 0.1f;
 // Fraction of slider to scroll for a delta of 1.0f when a gamepad or keyboard is used.
 static const float MOVE_FRACTION = 0.005f;
-// Distance that a slider must be moved before it starts consuming input events,
-// e.g. to prevent its parent container from scrolling at the same time.
-static const float SLIDER_THRESHOLD = 5.0f;
 
 Slider::Slider() : _min(0.0f), _max(0.0f), _step(0.0f), _value(0.0f), _delta(0.0f), _minImage(NULL),
     _maxImage(NULL), _trackImage(NULL), _markerImage(NULL), _valueTextVisible(false),
-    _valueTextAlignment(Font::ALIGN_BOTTOM_HCENTER), _valueTextPrecision(0), _valueText(""),
-    _selectButtonDown(false), _directionButtonDown(false), _gamepadValue(0.0f)
+    _valueTextAlignment(Font::ALIGN_BOTTOM_HCENTER), _valueTextPrecision(0), _valueText(""), _gamepadValue(0.0f)
 {
     _canFocus = true;
 }
@@ -229,13 +225,22 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     return Control::touchEvent(evt, x, y, contactIndex);
 }
 
+static bool isScrollable(Container* container)
+{
+    if (container->getScroll() != Container::SCROLL_NONE)
+        return true;
+
+    Container* parent = static_cast<Container*>(container->getParent());
+    return parent ? isScrollable(parent) : false;
+}
+
 bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     switch (evt)
     {
         case Mouse::MOUSE_WHEEL:
         {
-            if (hasFocus())
+            if (hasFocus() && !isScrollable(_parent))
             {
                 float total = _max - _min;
                 float oldValue = _value;

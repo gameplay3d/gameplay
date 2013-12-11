@@ -1044,12 +1044,12 @@ void Control::addSpecificListener(Control::Listener* listener, Control::Listener
 
 bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    return _consumeInputEvents;
+    return false;// _consumeInputEvents;
 }
 
 bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    return _consumeInputEvents;
+    return false;// _consumeInputEvents;
 }
 
 bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
@@ -1061,7 +1061,7 @@ bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 bool Control::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
-    return _consumeInputEvents;
+    return false;// _consumeInputEvents;
 }
 
 void Control::notifyListeners(Control::Listener::EventType eventType)
@@ -1336,15 +1336,17 @@ Control::State Control::getState(const char* state)
 
 Theme::ThemeImage* Control::getImage(const char* id, State state)
 {
+    Theme::ThemeImage* image = NULL;
+
     Theme::Style::Overlay* overlay = getOverlay(state);
     if (overlay)
     {
         Theme::ImageList* imageList = overlay->getImageList();
         if (imageList)
-            return imageList->getImage(id);
+            image = imageList->getImage(id);
     }
 
-    return _style->getTheme()->_emptyImage;
+    return image ? image : _style->getTheme()->_emptyImage;
 }
 
 const char* Control::getType() const

@@ -711,10 +711,9 @@ Theme::ThemeImage* Theme::ImageList::getImage(const char* imageId) const
 {
     GP_ASSERT(imageId);
 
-    std::vector<ThemeImage*>::const_iterator it;
-    for (it = _images.begin(); it != _images.end(); ++it)
+    for (size_t i = 0, count = _images.size(); i < count; ++i)
     {
-        ThemeImage* image = *it;
+        ThemeImage* image = _images[i];
         GP_ASSERT(image);
         GP_ASSERT(image->getId());
         if (strcmpnocase(image->getId(), imageId) == 0)

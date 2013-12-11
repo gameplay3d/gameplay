@@ -392,12 +392,17 @@ bool Container::isScrollBarsAutoHide() const
 
 bool Container::isScrolling() const
 {
+    if (_scrolling &&
+        (abs(_scrollingLastX - _scrollingVeryFirstX) > SCROLL_THRESHOLD ||
+        abs(_scrollingLastY - _scrollingVeryFirstY) > SCROLL_THRESHOLD))
+    {
+        return true;
+    }
+
     if (_parent && _parent->isScrolling())
         return true;
 
-    return (_scrolling &&
-            (abs(_scrollingLastX - _scrollingVeryFirstX) > SCROLL_THRESHOLD ||
-             abs(_scrollingLastY - _scrollingVeryFirstY) > SCROLL_THRESHOLD));
+    return false;
 }
 
 const Vector2& Container::getScrollPosition() const
@@ -985,6 +990,9 @@ void Container::stopScrolling()
     _scrollingVelocity.set(0, 0);
     _scrolling = false;
     _dirty = true;
+
+    if (_parent)
+        _parent->stopScrolling();
 }
 
 bool Container::isContainer() const
