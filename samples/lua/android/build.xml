@@ -60,14 +60,13 @@
        -->
     <target name="-post-compile">
         <copy file="../game.config" tofile="assets/game.config"/>
-        <copy file="../res/lua.scene" tofile="assets/res/lua.scene"/>
-        <copy file="../res/box.gpb" tofile="assets/res/box.gpb"/>
-        <copy file="../res/box.material" tofile="assets/res/box.material"/>
-        <copy file="../res/grid.material" tofile="assets/res/grid.material"/>
-        <copy file="../res/box-diffuse.png" tofile="assets/res/box-diffuse.png"/>
-        <copy file="../res/arial40.gpb" tofile="assets/res/arial40.gpb"/>
         <copy file="../res/ai.lua" tofile="assets/res/ai.lua"/>
+        <copy file="../res/arial.gpb" tofile="assets/res/arial.gpb"/>
         <copy file="../res/game.lua" tofile="assets/res/game.lua"/>
+        <copy file="../res/lua.gpb" tofile="assets/res/lua.gpb"/>
+        <copy file="../res/lua.material" tofile="assets/res/lua.material"/>
+        <copy file="../res/lua.scene" tofile="assets/res/lua.scene"/>
+        <copy file="../res/lua-logo.png" tofile="assets/res/lua-logo.png"/>
         <copy todir="assets/res/shaders">
             <fileset dir="../../../gameplay/res/shaders"/>
         </copy>

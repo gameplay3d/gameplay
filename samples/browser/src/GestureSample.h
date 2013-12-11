@@ -23,6 +23,12 @@ public:
     
     void gestureTapEvent(int x, int y);
 
+	void gestureLongTapEvent(int x, int y, float duration);
+
+	void gestureDragEvent(int x, int y);
+	
+	void gestureDropEvent(int x, int y);
+
 protected:
 
     void initialize();

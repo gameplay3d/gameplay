@@ -100,40 +100,47 @@ Camera* AudioListener::getCamera() const
     return _camera;
 }
 
-void AudioListener::setCamera(Camera* c)
+void AudioListener::setCamera(Camera* camera)
 {
-    if (_camera != c)
+    if (!camera || _camera == camera)
+        return;
+
+    // Disconnect our current camera.
+    if (_camera)
     {
-        // Disconnect our current camera.
-        if (_camera)
-        {
-            GP_ASSERT(_camera->getNode());
-            _camera->getNode()->removeListener(this);
-            SAFE_RELEASE(_camera);
-        }
+        _camera->removeListener(this);
+        SAFE_RELEASE(_camera);
+    }
 
-        // Connect the new camera.
-        _camera = c;
-
-        if (_camera)
-        {
-            GP_ASSERT(_camera->getNode());
-            _camera->addRef();
-            _camera->getNode()->addListener(this);
-        }
+    // Connect the new camera.
+    _camera = camera;
+    if (_camera)
+    {
+        _camera->addRef();
+        _camera->addListener(this);
     }
 }
 
-void AudioListener::transformChanged(Transform* transform, long cookie)
+void AudioListener::cameraChanged(Camera* camera)
 {
-    if (transform)
+    if (_camera != camera)
+        setCamera(camera);
+   
+    if (_camera)
     {
-        Node* node = static_cast<Node*>(transform);
-        setPosition(node->getTranslationWorld());
-        
-        Vector3 up;
-        node->getWorldMatrix().getUpVector(&up);
-        setOrientation(node->getForwardVectorWorld(), up);
+        Node* node = camera->getNode();
+        if (node)
+        {
+            setPosition(node->getTranslationWorld());
+            Vector3 up;
+            node->getWorldMatrix().getUpVector(&up);
+            setOrientation(node->getForwardVectorWorld(), up);
+        }
+        else
+        {
+            setPosition(Vector3::zero());
+            setOrientation(Vector3::unitY(), -Vector3::unitZ());
+        }
     }
 }
 

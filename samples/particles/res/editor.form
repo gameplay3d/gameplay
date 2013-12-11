@@ -299,6 +299,7 @@ form particleEditor
             orientation = HORIZONTAL
             min = 0
             max = 5000
+            step = 1
             text = Min
             textAlignment = ALIGN_TOP_HCENTER
             valueTextVisible = true

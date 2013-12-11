@@ -9,6 +9,7 @@
 #include "ScriptController.h"
 #include <GL/wglew.h>
 #include <windowsx.h>
+#include <Commdlg.h>
 #include <shellapi.h>
 #ifdef GP_USE_GAMEPAD
 #include <XInput.h>
@@ -1352,6 +1353,77 @@ bool Platform::launchURL(const char* url)
     int r = (int)ShellExecute(NULL, NULL, wurl, NULL, NULL, SW_SHOWNORMAL);
     SAFE_DELETE_ARRAY(wurl);
     return (r > 32);
+}
+
+std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
+{
+    std::string filename;
+    OPENFILENAMEA ofn;
+    memset(&ofn, 0, sizeof(ofn));
+
+    // Set initial directory
+    std::string initialDirectoryStr;
+    char currentDir[256];
+    if (initialDirectory == NULL)
+    {
+        char currentDir[512];
+        GetCurrentDirectoryA(512, currentDir);
+        initialDirectoryStr = currentDir;
+    }
+    else
+    {
+        initialDirectoryStr = initialDirectory;
+    }
+
+    // Filter on extensions
+    std::istringstream f(filterExtensions);
+    std::string s;
+    unsigned int count = 0;
+    std::string descStr = filterDescription;
+    descStr += " (";
+    std::string extStr = "";
+    while (std::getline(f, s, ';'))
+    {
+        if (count > 0)
+            extStr += ";";
+        extStr += "*.";
+        extStr += s;
+        count++;
+    }
+    descStr += extStr;
+    descStr += ")";
+    char filter[1024];
+    memset(filter, 0, 1024);
+    strcpy(filter, descStr.c_str());
+    strcpy(filter + descStr.length() + 1, extStr.c_str());
+
+    char szFileName[512] = "";
+    ofn.lpstrFile = szFileName;
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = GetForegroundWindow();
+    ofn.lpstrTitle = title;
+    ofn.lpstrFilter = filter;
+    ofn.lpstrInitialDir = initialDirectoryStr.c_str();
+    ofn.nMaxFile = 512;
+    ofn.lpstrDefExt = filter;
+
+    if (mode == FileSystem::OPEN)
+    {
+        ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
+        GetOpenFileNameA(&ofn);
+    }
+    else
+    {
+        ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+        GetSaveFileNameA(&ofn);
+    }
+
+    filename = szFileName;
+        
+    if (initialDirectory == NULL)
+        SetCurrentDirectoryA(currentDir);
+
+    return filename;
 }
 
 }

@@ -901,6 +901,31 @@ private:
      */
     void gestureTapEvent(int x, int y);
 
+	/**
+	 * Gesture callback on Gesture::LONG_TAP events.
+	 *
+	 * @param x The x-coordinate of the long tap.
+	 * @param y The y-coordinate of the long tap.
+	 * @param duration The duration of the long tap in ms.
+	 */
+	void gestureLongTapEvent(int x, int y, float duration);
+
+	/**
+	 * Gesture callback on Gesture::DRAG events.
+	 *
+	 * @param x The x-coordinate of the start of the drag event.
+	 * @param y The y-coordinate of the start of the drag event.
+	 */
+	void gestureDragEvent(int x, int y);
+
+	/**
+	 * Gesture callback on Gesture::DROP events.
+	 *
+	 * @param x The x-coordinate of the drop event.
+	 * @param y The y-coordinate of the drop event.
+	 */
+	void gestureDropEvent(int x, int y);
+
     /**
      * Script gamepad callback on gamepad events.
      *

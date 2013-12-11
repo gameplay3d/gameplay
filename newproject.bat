@@ -152,7 +152,6 @@ REM    rmdir /S /Q %projPath%
 REM Generate relative path from project folder to GamePlay folder
 set gpPath=%cd%
 call:makerelative gpPath "%projPath%\"
-call:replacevar gpPath "\" "\"
 
 mkdir "%projPath%"
 mkdir "%projPath%\src"
@@ -169,6 +168,8 @@ call:replace "%projPath%\%projName%.vcxproj.filters" TemplateGame "%className%"
 
 copy template\template.vcxproj.user "%projPath%\%projName%.vcxproj.user"
 call:replace "%projPath%\%projName%.vcxproj.user" GAMEPLAY_PATH "%gpPath%"
+
+call:replacevar gpPath "\" "/"
 
 REM Copy Apple XCode project files
 mkdir "%projPath%\%projName%.xcodeproj"
@@ -212,6 +213,7 @@ call:replace "%projPath%\android\AndroidManifest.xml" TEMPLATE_UUID "%uuid%"
 
 copy template\android\template.build.xml "%projPath%\android\build.xml"
 call:replace "%projPath%\android\build.xml" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\android\build.xml" GAMEPLAY_PATH "%gpPath%"
 
 mkdir "%projPath%\android\jni"
 

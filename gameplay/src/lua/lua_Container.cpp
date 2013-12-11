@@ -164,6 +164,7 @@ void luaRegister_Container()
         {"setX", lua_Container_setX},
         {"setY", lua_Container_setY},
         {"setZIndex", lua_Container_setZIndex},
+        {"stopScrolling", lua_Container_stopScrolling},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -6314,6 +6315,38 @@ int lua_Container_static_create(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1, 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_stopScrolling(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                instance->stopScrolling();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_stopScrolling - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

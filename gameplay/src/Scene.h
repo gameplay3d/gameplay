@@ -17,15 +17,6 @@ class Scene : public Ref
 public:
 
     /**
-     * Enumeration of supported scene debug flags for debug drawing.
-     */
-    enum DebugFlags
-    {
-        DEBUG_BOXES = 1,
-        DEBUG_SPHERES = 2
-    };
-
-    /**
      * Creates a new empty scene.
      *
      * @param id ID of the new scene, or NULL to use an empty string for the ID (default).
@@ -142,8 +133,9 @@ public:
      * Gets the active camera for the scene.
      *
      * @return The active camera for the scene.
+     * @see VisibleSet#getActiveCamera
      */
-    Camera* getActiveCamera() const;
+    Camera* getActiveCamera();
 
     /**
      * Sets the active camera on the scene.
@@ -241,19 +233,26 @@ public:
     inline void visit(const char* visitMethod);
 
     /**
-     * Draws debugging information (bounding volumes, etc.) for the scene.
-     *
-     * @param debugFlags Bitwise combination of debug flags from the DebugFlags
-     *        enumeration, specifying which debugging information to draw.
+     * Updates all the active nodes in the scene.
      */
-    void drawDebug(unsigned int debugFlags);
+    void update(float elapsedTime);
+
+    /**
+     * @see VisibleSet#getNext
+     */
+    Node* getNext();
+
+    /**
+     * @see VisibleSet#reset
+     */
+    void reset();
 
 private:
 
     /**
      * Constructor.
      */
-    Scene(const char* id);
+    Scene();
 
     /**
      * Hidden copy constructor.
@@ -287,6 +286,10 @@ private:
      */
     void visitNode(Node* node, const char* visitMethod);
 
+    Node* findNextVisibleSibling(Node* node);
+
+    bool isNodeVisible(Node* node);
+
     std::string _id;
     Camera* _activeCamera;
     Node* _firstNode;
@@ -294,7 +297,8 @@ private:
     unsigned int _nodeCount;
     Vector3 _ambientColor;
     bool _bindAudioListenerToCamera;
-    MeshBatch* _debugBatch;
+    Node* _nextItr;
+    bool _nextReset;
 };
 
 template <class T>

@@ -63,8 +63,6 @@
 		42CACBE116ADA466000D911A /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F2377116AD99EA0019CAC9 /* libpng.a */; };
 		42CACBE216ADA468000D911A /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB9B16AD90080000F342 /* libvorbis.a */; };
 		42CACBE516ADA473000D911A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB2316AD8C1C0000F342 /* libz.dylib */; };
-		42CC5A2A1809A6D900AAD8AD /* SceneRendererSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC5A281809A6D900AAD8AD /* SceneRendererSample.cpp */; };
-		42CC5A2B1809A6D900AAD8AD /* SceneRendererSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC5A281809A6D900AAD8AD /* SceneRendererSample.cpp */; };
 		42DFAABC16AD89670000F342 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAABB16AD89670000F342 /* CoreMotion.framework */; };
 		42DFAAD416AD8A8C0000F342 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAAD316AD8A8C0000F342 /* Foundation.framework */; };
 		42DFAB1F16AD8BBC0000F342 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB1B16AD8BBC0000F342 /* OpenAL.framework */; };
@@ -142,8 +140,6 @@
 		42C933231491A6E50098216A /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
 		42C9332A1491A7390098216A /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/png/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42C9332D1491A7810098216A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		42CC5A281809A6D900AAD8AD /* SceneRendererSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneRendererSample.cpp; sourceTree = "<group>"; };
-		42CC5A291809A6D900AAD8AD /* SceneRendererSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneRendererSample.h; sourceTree = "<group>"; };
 		42DFAABB16AD89670000F342 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		42DFAAD316AD8A8C0000F342 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		42DFAB1B16AD8BBC0000F342 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
@@ -325,8 +321,6 @@
 				42BE773716A68D07008AFA65 /* PhysicsCollisionObjectSample.h */,
 				422FE592169690830062D1FE /* PostProcessSample.cpp */,
 				422FE593169690830062D1FE /* PostProcessSample.h */,
-				42CC5A281809A6D900AAD8AD /* SceneRendererSample.cpp */,
-				42CC5A291809A6D900AAD8AD /* SceneRendererSample.h */,
 				420D544E15FE430D00AD0B91 /* SpriteBatchSample.cpp */,
 				420D544F15FE430D00AD0B91 /* SpriteBatchSample.h */,
 				42DFABD216AD96F10000F342 /* TerrainSample.cpp */,
@@ -478,7 +472,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "rsync -rau ../../gameplay/res/shaders ${SRCROOT}/res\nrsync -rau ../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B61612414CCC24C0073B857 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -491,7 +485,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "rsync -rau ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\nrsync -rau ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -511,7 +505,6 @@
 				420D546615FE430D00AD0B91 /* MeshPrimitiveSample.cpp in Sources */,
 				420D546C15FE430D00AD0B91 /* SpriteBatchSample.cpp in Sources */,
 				420D546E15FE430D00AD0B91 /* Sample.cpp in Sources */,
-				42CC5A2A1809A6D900AAD8AD /* SceneRendererSample.cpp in Sources */,
 				420D547015FE430D00AD0B91 /* TextSample.cpp in Sources */,
 				420D547215FE430D00AD0B91 /* TextureSample.cpp in Sources */,
 				420D547415FE430D00AD0B91 /* TriangleSample.cpp in Sources */,
@@ -541,7 +534,6 @@
 				420D546715FE430D00AD0B91 /* MeshPrimitiveSample.cpp in Sources */,
 				420D546D15FE430D00AD0B91 /* SpriteBatchSample.cpp in Sources */,
 				420D546F15FE430D00AD0B91 /* Sample.cpp in Sources */,
-				42CC5A2B1809A6D900AAD8AD /* SceneRendererSample.cpp in Sources */,
 				420D547115FE430D00AD0B91 /* TextSample.cpp in Sources */,
 				420D547315FE430D00AD0B91 /* TextureSample.cpp in Sources */,
 				420D547515FE430D00AD0B91 /* TriangleSample.cpp in Sources */,

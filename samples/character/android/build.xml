@@ -61,26 +61,21 @@
        -->
     <target name="-post-compile">
         <copy file="../game.png.config" tofile="assets/game.config"/>
-        <copy file="../res/common/arial40.gpb" tofile="assets/res/common/arial40.gpb"/>
         <copy file="../res/design/backboard.png" tofile="assets/res/png/backboard.png"/>
         <copy file="../res/design/basketball.png" tofile="assets/res/png/basketball.png"/>
         <copy file="../res/design/basketballnet.png" tofile="assets/res/png/basketballnet.png"/>
         <copy file="../res/design/book.png" tofile="assets/res/png/book.png"/>
         <copy file="../res/design/bookshelf.png" tofile="assets/res/png/bookshelf.png"/>
-        <copy file="../res/common/boy.animation" tofile="assets/res/common/boy.animation"/>
-        <copy file="../res/design/character.png" tofile="assets/res/png/character.png"/>
+        <copy file="../res/design/boy.png" tofile="assets/res/png/boy.png"/>
         <copy file="../res/design/decals.png" tofile="assets/res/png/decals.png"/>
         <copy file="../res/design/door.png" tofile="assets/res/png/door.png"/>
         <copy file="../res/design/doorframe.png" tofile="assets/res/png/doorframe.png"/>
         <copy file="../res/design/easel.png" tofile="assets/res/png/easel.png"/>
         <copy file="../res/design/floor.png" tofile="assets/res/png/floor.png"/>
         <copy file="../res/design/floortiles.png" tofile="assets/res/png/floortiles.png"/>
+        <copy file="../res/design/playtable.png" tofile="assets/res/png/playtable.png"/>
         <copy file="../res/design/gamepad.png" tofile="assets/res/png/gamepad.png"/>
         <copy file="../res/design/playtable.png" tofile="assets/res/png/playtable.png"/>
-        <copy file="../res/common/scene.gpb" tofile="assets/res/common/scene.gpb"/>
-        <copy file="../res/common/scene.material" tofile="assets/res/common/scene.material"/>
-        <copy file="../res/common/scene.physics" tofile="assets/res/common/scene.physics"/>
-        <copy file="../res/common/scene.scene" tofile="assets/res/common/scene.scene"/>
         <copy file="../res/design/shadow.png" tofile="assets/res/png/shadow.png"/>
         <copy file="../res/design/storageorganizer.png" tofile="assets/res/png/storageorganizer.png"/>
         <copy file="../res/design/tableleg1.png" tofile="assets/res/png/tableleg1.png"/>

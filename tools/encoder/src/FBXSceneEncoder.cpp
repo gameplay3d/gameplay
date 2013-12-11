@@ -830,7 +830,8 @@ void FBXSceneEncoder::loadLight(FbxNode* fbxNode, Node* node)
             break;
         }
 
-        light->setFalloffAngle(MATH_DEG_TO_RAD((float)fbxLight->OuterAngle.Get())); // fall off angle
+        light->setInnerAngle(MATH_DEG_TO_RAD((float)fbxLight->InnerAngle.Get()));
+        light->setOuterAngle(MATH_DEG_TO_RAD((float)fbxLight->OuterAngle.Get()));
         break;
     }
     default:

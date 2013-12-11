@@ -235,6 +235,7 @@ aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/android/AndroidManifest.xml
 
 cp "template/android/template.build.xml" "$projPath/android/build.xml"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/build.xml"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/build.xml"
 
 cp "template/android/jni/Application.mk" "$projPath/android/jni/Application.mk"
 cp "template/android/jni/template.Android.mk" "$projPath/android/jni/Android.mk"

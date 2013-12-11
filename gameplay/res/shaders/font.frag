@@ -1,6 +1,6 @@
 #ifdef OPENGL_ES
-precision highp float;
 #extension GL_OES_standard_derivatives : enable
+precision highp float;
 #endif
 
 ///////////////////////////////////////////////////////////

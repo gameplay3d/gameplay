@@ -30,7 +30,7 @@ cd %~dp0
 >> temp.cs ECHO             client.Proxy = null;
 >> temp.cs ECHO             client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
 >> temp.cs ECHO             client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
->> temp.cs ECHO             Console.Write("Downloading " + url + ": 0%%    ");
+>> temp.cs ECHO             Console.Write("Downloading " + file + ": 0%%    ");
 >> temp.cs ECHO             client.DownloadFileAsync(new Uri(url), file);
 >> temp.cs ECHO             while (!done) System.Threading.Thread.Sleep(500);
 >> temp.cs ECHO         }
@@ -41,11 +41,11 @@ cd %~dp0
 >> temp.cs ECHO     }
 >> temp.cs ECHO     static void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
 >> temp.cs ECHO     {
->> temp.cs ECHO         Console.Write("\rDownloading " + url + ": " + e.ProgressPercentage + "%%    ");
+>> temp.cs ECHO         Console.Write("\rDownloading " + file + ": " + e.ProgressPercentage + "%%    ");
 >> temp.cs ECHO     }
 >> temp.cs ECHO     static void DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
 >> temp.cs ECHO     {
->> temp.cs ECHO         Console.WriteLine("\rDownloading " + url + ": Done.    ");
+>> temp.cs ECHO         Console.WriteLine("\rDownloading " + file + ": Done.    ");
 >> temp.cs ECHO         done = true;
 >> temp.cs ECHO     }
 >> temp.cs ECHO }

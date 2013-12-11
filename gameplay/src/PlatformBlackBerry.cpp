@@ -3,7 +3,6 @@
 #include "Base.h"
 #include "Platform.h"
 #include "FileSystem.h"
-#include "SocialController.h"
 #include "Game.h"
 #include "Form.h"
 #include "ScriptController.h"
@@ -1654,6 +1653,11 @@ bool Platform::launchURL(const char* url)
         return false;
 
     return navigator_invoke(url, NULL) == BPS_SUCCESS;
+}
+
+std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
+{
+    return "";
 }
 
 }

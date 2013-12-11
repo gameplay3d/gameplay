@@ -88,18 +88,10 @@ LOCAL_SRC_FILES := \
     RenderTarget.cpp \
     Scene.cpp \
     SceneLoader.cpp \
-    SceneRenderer.cpp \
-    SceneRendererForward.cpp \
     ScreenDisplayer.cpp \
     ScriptController.cpp \
     ScriptTarget.cpp \
     Slider.cpp \
-	SocialAchievement.cpp \
-	SocialChallenge.cpp \
-	SocialController.cpp \
-	SocialPlayer.cpp \
-	SocialScore.cpp \
-	SocialSessionListener.cpp \
     SpriteBatch.cpp \
     Technique.cpp \
     Terrain.cpp \
@@ -115,7 +107,6 @@ LOCAL_SRC_FILES := \
     VertexAttributeBinding.cpp \
     VertexFormat.cpp \
     VerticalLayout.cpp \
-    VisibleSetDefault.cpp \
     lua/lua_AbsoluteLayout.cpp \
     lua/lua_AIAgent.cpp \
     lua/lua_AIAgentListener.cpp \
@@ -258,9 +249,6 @@ LOCAL_SRC_FILES := \
     lua/lua_RenderStateStencilOperation.cpp \
     lua/lua_RenderTarget.cpp \
     lua/lua_Scene.cpp \
-    lua/lua_SceneDebugFlags.cpp \
-    lua/lua_SceneRenderer.cpp \
-    lua/lua_SceneRendererForward.cpp \
     lua/lua_ScreenDisplayer.cpp \
     lua/lua_ScriptController.cpp \
     lua/lua_ScriptTarget.cpp \
@@ -294,10 +282,7 @@ LOCAL_SRC_FILES := \
     lua/lua_VertexFormat.cpp \
     lua/lua_VertexFormatElement.cpp \
     lua/lua_VertexFormatUsage.cpp \
-    lua/lua_VerticalLayout.cpp \
-    lua/lua_VisibleSet.cpp \
-    lua/lua_VisibleSetDefault.cpp \
-    social/GooglePlaySocialSession.cpp
+    lua/lua_VerticalLayout.cpp
 
     
 LOCAL_CFLAGS := -D__ANDROID__ -DGP_USE_SOCIAL -I"../../external-deps/lua/include" -I"../../external-deps/bullet/include" -I"../../external-deps/png/include" -I"../../external-deps/oggvorbis/include" -I"../../external-deps/openal/include"

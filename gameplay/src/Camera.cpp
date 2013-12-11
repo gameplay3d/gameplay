@@ -362,7 +362,7 @@ void Camera::project(const Rectangle& viewport, const Vector3& position, float* 
     if (depth)
     {
         float ndcZ = clipPos.z / clipPos.w;
-        *depth = ndcZ + 1.0f / 2.0f;
+        *depth = (ndcZ + 1.0f) / 2.0f;
     }
 }
 

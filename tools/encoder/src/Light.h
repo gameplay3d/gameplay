@@ -47,7 +47,8 @@ public:
     void setConstantAttenuation(float value);
     void setLinearAttenuation(float value);
     void setQuadraticAttenuation(float value);
-    void setFalloffAngle(float value);
+    void setInnerAngle(float value);
+    void setOuterAngle(float value);
     void setFalloffExponent(float value);
 
     enum LightType
@@ -69,7 +70,6 @@ private:
     float _constantAttenuation;
     float _linearAttenuation;
     float _quadraticAttenuation;
-    float _falloffAngle;
     float _falloffExponent;
 
     float _range;

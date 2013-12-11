@@ -217,9 +217,6 @@
     <ClCompile Include="src\lua\lua_RenderStateStencilOperation.cpp" />
     <ClCompile Include="src\lua\lua_RenderTarget.cpp" />
     <ClCompile Include="src\lua\lua_Scene.cpp" />
-    <ClCompile Include="src\lua\lua_SceneDebugFlags.cpp" />
-    <ClCompile Include="src\lua\lua_SceneRenderer.cpp" />
-    <ClCompile Include="src\lua\lua_SceneRendererForward.cpp" />
     <ClCompile Include="src\lua\lua_ScreenDisplayer.cpp" />
     <ClCompile Include="src\lua\lua_ScriptController.cpp" />
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp" />
@@ -254,8 +251,6 @@
     <ClCompile Include="src\lua\lua_VertexFormatElement.cpp" />
     <ClCompile Include="src\lua\lua_VertexFormatUsage.cpp" />
     <ClCompile Include="src\lua\lua_VerticalLayout.cpp" />
-    <ClCompile Include="src\lua\lua_VisibleSet.cpp" />
-    <ClCompile Include="src\lua\lua_VisibleSetDefault.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MathUtil.cpp" />
     <ClCompile Include="src\MeshBatch.cpp" />
@@ -299,20 +294,10 @@
     <ClCompile Include="src\RenderTarget.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneLoader.cpp" />
-    <ClCompile Include="src\SceneRenderer.cpp" />
-    <ClCompile Include="src\SceneRendererForward.cpp" />
     <ClCompile Include="src\ScreenDisplayer.cpp" />
     <ClCompile Include="src\ScriptController.cpp" />
     <ClCompile Include="src\ScriptTarget.cpp" />
     <ClCompile Include="src\Slider.cpp" />
-    <ClCompile Include="src\SocialAchievement.cpp" />
-    <ClCompile Include="src\SocialChallenge.cpp" />
-    <ClCompile Include="src\SocialController.cpp" />
-    <ClCompile Include="src\SocialPlayer.cpp" />
-    <ClCompile Include="src\SocialScore.cpp" />
-    <ClCompile Include="src\SocialSessionListener.cpp" />
-    <ClCompile Include="src\social\GooglePlaySocialSession.cpp" />
-    <ClCompile Include="src\social\ScoreloopSocialSession.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
     <ClCompile Include="src\Terrain.cpp" />
@@ -328,7 +313,6 @@
     <ClCompile Include="src\VertexAttributeBinding.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\VerticalLayout.cpp" />
-    <ClCompile Include="src\VisibleSetDefault.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AbsoluteLayout.h" />
@@ -521,9 +505,6 @@
     <ClInclude Include="src\lua\lua_RenderStateStencilOperation.h" />
     <ClInclude Include="src\lua\lua_RenderTarget.h" />
     <ClInclude Include="src\lua\lua_Scene.h" />
-    <ClInclude Include="src\lua\lua_SceneDebugFlags.h" />
-    <ClInclude Include="src\lua\lua_SceneRenderer.h" />
-    <ClInclude Include="src\lua\lua_SceneRendererForward.h" />
     <ClInclude Include="src\lua\lua_ScreenDisplayer.h" />
     <ClInclude Include="src\lua\lua_ScriptController.h" />
     <ClInclude Include="src\lua\lua_ScriptTarget.h" />
@@ -558,8 +539,6 @@
     <ClInclude Include="src\lua\lua_VertexFormatElement.h" />
     <ClInclude Include="src\lua\lua_VertexFormatUsage.h" />
     <ClInclude Include="src\lua\lua_VerticalLayout.h" />
-    <ClInclude Include="src\lua\lua_VisibleSet.h" />
-    <ClInclude Include="src\lua\lua_VisibleSetDefault.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MathUtil.h" />
     <ClInclude Include="src\MeshBatch.h" />
@@ -600,21 +579,10 @@
     <ClInclude Include="src\RenderTarget.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
-    <ClInclude Include="src\SceneRenderer.h" />
-    <ClInclude Include="src\SceneRendererForward.h" />
     <ClInclude Include="src\ScreenDisplayer.h" />
     <ClInclude Include="src\ScriptController.h" />
     <ClInclude Include="src\ScriptTarget.h" />
     <ClInclude Include="src\Slider.h" />
-    <ClInclude Include="src\SocialAchievement.h" />
-    <ClInclude Include="src\SocialChallenge.h" />
-    <ClInclude Include="src\SocialController.h" />
-    <ClInclude Include="src\SocialPlayer.h" />
-    <ClInclude Include="src\SocialScore.h" />
-    <ClInclude Include="src\SocialSession.h" />
-    <ClInclude Include="src\SocialSessionListener.h" />
-    <ClInclude Include="src\social\GooglePlaySocialSession.h" />
-    <ClInclude Include="src\social\ScoreloopSocialSession.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Stream.h" />
     <ClInclude Include="src\Technique.h" />
@@ -633,8 +601,6 @@
     <ClInclude Include="src\VertexAttributeBinding.h" />
     <ClInclude Include="src\VertexFormat.h" />
     <ClInclude Include="src\VerticalLayout.h" />
-    <ClInclude Include="src\VisibleSet.h" />
-    <ClInclude Include="src\VisibleSetDefault.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\colored.frag" />

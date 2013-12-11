@@ -71,6 +71,7 @@ void InputSample::initialize()
     _formNodeParent->setTranslation(_formNodeRestPosition);
     _formNode->setTranslation(-0.2f, -0.2f, 0);
     _formNode->setForm(form);
+    form->release();
 }
 
 void InputSample::finalize()

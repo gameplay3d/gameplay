@@ -19,6 +19,9 @@ public:
         GESTURE_TAP = 0,
         GESTURE_SWIPE,
         GESTURE_PINCH,
+        GESTURE_LONG_TAP,
+        GESTURE_DRAG,
+        GESTURE_DROP,
         GESTURE_ANY_SUPPORTED = -1,
     };
 

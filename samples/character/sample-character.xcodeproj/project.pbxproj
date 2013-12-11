@@ -343,7 +343,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/game.dxt.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
+			shellScript = "rsync -rau ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\nrsync -rau ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\nrsync -rau ${SRCROOT}/game.dxt.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
 		};
 		5B43D1D614C35F4C008A5D9D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -356,7 +356,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/game.pvrtc.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
+			shellScript = "rsync -rau ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\nrsync -rau ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\nrsync -rau ${SRCROOT}/game.pvrtc.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -47,6 +47,7 @@ void LightSample::initialize()
 
 	// Load the scene
 	_scene = Scene::load("res/common/lightBrickWall.gpb");
+    _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 
 	// Get the wall model node
 	_modelNode = _scene->findNode("wall"); 

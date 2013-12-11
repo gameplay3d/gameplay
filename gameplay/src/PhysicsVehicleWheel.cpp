@@ -7,29 +7,20 @@ namespace gameplay
 {
 
 PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, const PhysicsCollisionShape::Definition& shape, const PhysicsRigidBody::Parameters& parameters)
-    : PhysicsCollisionObject(node), _rigidBody(NULL), _host(NULL), _indexInHost(0)
+    : PhysicsCollisionObject(node), _host(NULL), _indexInHost(0)
 {
-    // Note that the constructor for PhysicsRigidBody calls addCollisionObject and so
-    // that is where the rigid body gets added to the dynamics world.
-    _rigidBody = new PhysicsRigidBody(node, shape, parameters);
-
     findAncestorAndBind();
 }
 
-PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody)
-    : PhysicsCollisionObject(node), _rigidBody(NULL), _host(NULL), _indexInHost(0)
+PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node)
+    : PhysicsCollisionObject(node), _host(NULL), _indexInHost(0)
 {
-    _rigidBody = rigidBody;
-
     findAncestorAndBind();
 }
 
 PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* properties)
 {
-    // Note that the constructor for PhysicsRigidBody calls addCollisionObject and so
-    // that is where the rigid body gets added to the dynamics world.
-    PhysicsRigidBody* rigidBody = PhysicsRigidBody::create(node, properties, "VEHICLE_WHEEL");
-    PhysicsVehicleWheel* wheel = new PhysicsVehicleWheel(node, rigidBody);
+    PhysicsVehicleWheel* wheel = new PhysicsVehicleWheel(node);
 
     // Load the defined wheel parameters.
     properties->rewind();
@@ -100,14 +91,13 @@ PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* propert
 
 PhysicsVehicleWheel::~PhysicsVehicleWheel()
 {
-    SAFE_DELETE(_rigidBody);
 }
 
 btCollisionObject* PhysicsVehicleWheel::getCollisionObject() const
 {
-    GP_ASSERT(_rigidBody);
+    GP_ASSERT(_host);
 
-    return _rigidBody->getCollisionObject();
+    return _host->getCollisionObject();
 }
 
 PhysicsCollisionObject::Type PhysicsVehicleWheel::getType() const

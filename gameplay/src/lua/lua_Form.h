@@ -145,6 +145,7 @@ int lua_Form_static_create(lua_State* state);
 int lua_Form_static_getActiveControl(lua_State* state);
 int lua_Form_static_getFocusControl(lua_State* state);
 int lua_Form_static_getForm(lua_State* state);
+int lua_Form_stopScrolling(lua_State* state);
 int lua_Form_update(lua_State* state);
 
 void luaRegister_Form();

@@ -137,6 +137,7 @@ int lua_Container_static_ANIMATE_SIZE(lua_State* state);
 int lua_Container_static_ANIMATE_SIZE_HEIGHT(lua_State* state);
 int lua_Container_static_ANIMATE_SIZE_WIDTH(lua_State* state);
 int lua_Container_static_create(lua_State* state);
+int lua_Container_stopScrolling(lua_State* state);
 
 void luaRegister_Container();
 
