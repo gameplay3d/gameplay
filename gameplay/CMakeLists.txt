@@ -1,3 +1,4 @@
+
 set(GAMEPLAY_SRC
     src/AbsoluteLayout.cpp
     src/AbsoluteLayout.h
@@ -48,8 +49,8 @@ set(GAMEPLAY_SRC
     src/Container.h
     src/Control.cpp
     src/Control.h
-	src/ControlFactory.h
-	src/ControlFactory.cpp
+    src/ControlFactory.h
+    src/ControlFactory.cpp
     src/Curve.cpp
     src/Curve.h
     src/DebugNew.cpp
@@ -623,13 +624,11 @@ include_directories(
 )
 
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
-
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
 include_directories(${GTK3_INCLUDE_DIRS})
 add_definitions(${GTK3_CFLAGS_OTHER})
 add_definitions(-D__linux__)
-
 ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 add_definitions(-lstdc++)
