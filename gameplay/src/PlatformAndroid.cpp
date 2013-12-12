@@ -99,6 +99,11 @@ extern void print(const char* format, ...)
     va_end(argptr);
 }
 
+extern int strcmpnocase(const char* s1, const char* s2)
+{
+    return strcasecmp(s1, s2);
+}
+
 static EGLenum checkErrorEGL(const char* msg)
 {
     GP_ASSERT(msg);
