@@ -104,7 +104,7 @@ public:
      * @param filterDescription The file filter description. (Ex. All Files or Image Files)
      * @param filterExtensions The extensions to filter on. (Ex. png;bmp)
      * @param initialDirectory The initial directory to start. NULL runs from the executable directory.
-     * @return The file that is opened or saved.
+     * @return The file that is opened or saved, or an empty string if canceled.
      *
      * @script{ignore}
      */

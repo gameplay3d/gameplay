@@ -20,6 +20,12 @@
 #include <errno.h>
 #include <fstream>
 
+#ifdef USE_GTK_EXTENSIONS
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#endif
+
 #define TOUCH_COUNT_MAX     4
 #define MAX_GAMEPADS 4
 
@@ -1668,7 +1674,72 @@ bool Platform::launchURL(const char* url)
 
 std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
 {
-    return "";
+    std::string filename="";
+
+#ifdef USE_GTK_EXTENSIONS
+    if (!gtk_init_check(NULL,NULL))
+        return "";
+
+    // Create the dialog in one of two modes, SAVE or OPEN
+    GtkWidget *dialog;
+    dialog = gtk_file_chooser_dialog_new (title,
+        NULL,
+        mode == FileSystem::SAVE ? GTK_FILE_CHOOSER_ACTION_SAVE : GTK_FILE_CHOOSER_ACTION_OPEN,
+        _("_Cancel"), GTK_RESPONSE_CANCEL,
+        mode == FileSystem::SAVE ? _("_Save") : _("_Open"),
+        GTK_RESPONSE_ACCEPT,
+        NULL);
+
+    // Filter on extensions
+    GtkFileFilter *filter = gtk_file_filter_new();
+    std::istringstream f(filterExtensions);
+    std::string s;
+    std::string descStr = filterDescription;
+    std::string extStr;
+    while (std::getline(f, s, ';'))
+    {
+        extStr = "*.";
+        extStr += s;
+        gtk_file_filter_add_pattern( filter, extStr.c_str() );
+    }
+    gtk_file_chooser_set_filter( GTK_FILE_CHOOSER (dialog), filter );
+
+    // Set initial directory
+    std::string initialDirectoryStr;
+    if (initialDirectory == NULL)
+    {
+        char* currentDir = g_get_current_dir();
+        initialDirectoryStr = currentDir;
+        g_free (currentDir);
+    }
+    else
+    {
+        initialDirectoryStr = initialDirectory;
+    }
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), initialDirectoryStr.c_str());
+
+    if (mode==FileSystem::SAVE)
+    {
+        gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+        gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "untitled");
+    }
+
+    // Finally, show the dialog
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    {
+        char *szFilename;
+        szFilename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+        filename = szFilename;
+        g_free (szFilename);
+    }
+
+    gtk_widget_destroy (dialog);
+
+    // Since we are not using gtk_main(), this will let the dialog close
+    while (gtk_events_pending ()) gtk_main_iteration ();
+#endif
+
+    return filename;
 }
 
 }
