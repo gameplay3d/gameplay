@@ -550,10 +550,6 @@ extern void print(const char* format, ...)
         return strcasecmp(s1, s2);
     }
 
-    Platform::Platform(Game* game) : _game(game)
-    {
-    }
-
 Platform::Platform(Game* game) : _game(game)
 {
 }
