@@ -1512,7 +1512,7 @@ void Platform::setCursorVisible(bool visible)
 {
     if (visible != __cursorVisible)
     {
-        if (visible)
+        if (visible==false)
         {
             Cursor invisibleCursor;
             Pixmap bitmapNoData;
