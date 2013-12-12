@@ -1676,7 +1676,6 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
 {
     std::string filename="";
 
-#ifdef USE_GTK_EXTENSIONS
     if (!gtk_init_check(NULL,NULL))
         return "";
 
@@ -1694,7 +1693,6 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
     GtkFileFilter *filter = gtk_file_filter_new();
     std::istringstream f(filterExtensions);
     std::string s;
-    std::string descStr = filterDescription;
     std::string extStr;
     while (std::getline(f, s, ';'))
     {
@@ -1724,7 +1722,7 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
         gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "untitled");
     }
 
-    // Finally, show the dialog
+    // Show the dialog
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
     {
         char *szFilename;
@@ -1737,7 +1735,6 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
 
     // Since we are not using gtk_main(), this will let the dialog close
     while (gtk_events_pending ()) gtk_main_iteration ();
-#endif
 
     return filename;
 }

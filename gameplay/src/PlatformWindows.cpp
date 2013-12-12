@@ -346,7 +346,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_CLOSE:
-        DestroyWindow(__hwnd);
+        exit(0);
         return 0;
 
     case WM_DESTROY:

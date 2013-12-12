@@ -622,16 +622,16 @@ include_directories(
     ../external-deps/glew/include
 )
 
-option(WITH_GTK_EXTENSIONS "Add GTK extensions to GamePlay" ON)
-if(WITH_GTK_EXTENSIONS)
-   add_definitions(-DUSE_GTK_EXTENSIONS=1)
-   find_package(PkgConfig REQUIRED)
-   pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-   include_directories(${GTK3_INCLUDE_DIRS})
-   add_definitions(${GTK3_CFLAGS_OTHER})
-endif()
+IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+include_directories(${GTK3_INCLUDE_DIRS})
+add_definitions(${GTK3_CFLAGS_OTHER})
 add_definitions(-D__linux__)
+
+ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+
 add_definitions(-lstdc++)
 
 add_library(gameplay STATIC
