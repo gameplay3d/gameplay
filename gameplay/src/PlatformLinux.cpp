@@ -19,12 +19,9 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <fstream>
-
-#ifdef USE_GTK_EXTENSIONS
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#endif
 
 #define TOUCH_COUNT_MAX     4
 #define MAX_GAMEPADS 4
@@ -74,7 +71,6 @@ struct GamepadInfoEntry
     long* buttons;
 };
 
-
 struct ConnectedGamepadDevInfo
 {
     dev_t deviceId;
@@ -92,12 +88,11 @@ static float __mouseCapturePointY = 0;
 static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static Display* __display;
-static Window   __window;
+static Window __window;
 static int __windowSize[2];
 static GLXContext __context;
 static Atom __atomWmDeleteWindow;
 static list<ConnectedGamepadDevInfo> __connectedGamepads;
-
 
 // Gets the gameplay::Keyboard::Key enumeration constant that corresponds to the given X11 key symbol.
 static gameplay::Keyboard::Key getKey(KeySym sym)
@@ -551,10 +546,11 @@ extern void print(const char* format, ...)
     vfprintf(stderr, format, argptr);
     va_end(argptr);
 }
-    extern int strcmpnocase(const char* s1, const char* s2)
-    {
-        return strcasecmp(s1, s2);
-    }
+
+extern int strcmpnocase(const char* s1, const char* s2)
+{
+    return strcasecmp(s1, s2);
+}
 
 Platform::Platform(Game* game) : _game(game)
 {
@@ -781,7 +777,7 @@ void updateWindowSize()
 // Will need to be dynamic, also should be handled in Gamepad class
 static const GamepadInfoEntry gamepadLookupTable[] = 
 {
-    {0x0,0x0,"GENERIC XBOX360",2,6,20,2, 
+    {0x0,0x0,"Microsoft Xbox 360 Controller",2,6,20,2, 
                                             (GamepadJoystickAxisInfo[]) {
                                                                     {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
                                                                     {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
@@ -814,33 +810,7 @@ static const GamepadInfoEntry gamepadLookupTable[] =
                                                                         Gamepad::BUTTON_Y
                                                                         }
     },
-    {0x79,0x6,"DragonRise Inc. Generic USB Joystick",2,7,12,0, 
-                                            (GamepadJoystickAxisInfo[]) {
-                                                                    {0,1, GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                    {1,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                    {2,0,GP_AXIS_SKIP,0,0,2240,NEG_TO_POS},
-                                                                    {3,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                    {4,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                    {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,2240,NEG_TO_POS},
-                                                                    {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,2240,NEG_TO_POS},
-                                                                    {-1,0,0,0,0,0,NEG_TO_POS}
-                                                                },
-                                            (long[]) {
-                                                                        Gamepad::BUTTON_Y,    
-                                                                        Gamepad::BUTTON_B,  
-                                                                        Gamepad::BUTTON_A,  
-                                                                        Gamepad::BUTTON_X, 
-                                                                        Gamepad::BUTTON_L1, 
-                                                                        Gamepad::BUTTON_R1, 
-                                                                        Gamepad::BUTTON_L2,    
-                                                                        Gamepad::BUTTON_R2,   
-                                                                        Gamepad::BUTTON_MENU1,   
-                                                                        Gamepad::BUTTON_MENU2,   
-                                                                        Gamepad::BUTTON_L3,
-                                                                        Gamepad::BUTTON_R3,
-                                                                        }
-    },
-    {0x54c,0x268,"Sony Corp. Batoh Device / PlayStation 3 Controller",2,27,19,2, 
+    {0x54c,0x268,"Sony PlayStation 3 Controller",2,27,19,2, 
                                             (GamepadJoystickAxisInfo[]) {
                                                                     {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
                                                                     {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
@@ -871,14 +841,41 @@ static const GamepadInfoEntry gamepadLookupTable[] =
                                                                         -1,
                                                                         -1
                                                                         }
+    },
+    {0x79,0x6,"Generic USB Controller",2,7,12,0, 
+                                            (GamepadJoystickAxisInfo[]) {
+                                                                    {0,1, GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                    {1,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                    {2,0,GP_AXIS_SKIP,0,0,2240,NEG_TO_POS},
+                                                                    {3,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                    {4,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                    {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,2240,NEG_TO_POS},
+                                                                    {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,2240,NEG_TO_POS},
+                                                                    {-1,0,0,0,0,0,NEG_TO_POS}
+                                                                },
+                                            (long[]) {
+                                                                        Gamepad::BUTTON_Y,    
+                                                                        Gamepad::BUTTON_B,  
+                                                                        Gamepad::BUTTON_A,  
+                                                                        Gamepad::BUTTON_X, 
+                                                                        Gamepad::BUTTON_L1, 
+                                                                        Gamepad::BUTTON_R1, 
+                                                                        Gamepad::BUTTON_L2,    
+                                                                        Gamepad::BUTTON_R2,   
+                                                                        Gamepad::BUTTON_MENU1,   
+                                                                        Gamepad::BUTTON_MENU2,   
+                                                                        Gamepad::BUTTON_L3,
+                                                                        Gamepad::BUTTON_R3,
+                                                                        }
     }
 };
 
 bool isGamepadDevRegistered(dev_t devId)
 {
-    for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end(); ++it)
     {
-        if(devId == (*it).deviceId) return true;
+        if (devId == (*it).deviceId) 
+            return true;
     }
     return false;
 }
@@ -890,9 +887,9 @@ void closeGamepad(const ConnectedGamepadDevInfo& gamepadDevInfo)
 
 void unregisterGamepad(GamepadHandle handle)
 {
-    for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end(); ++it)
     {
-        if(handle == (*it).fd)
+        if (handle == (*it).fd)
         {
             closeGamepad(*it);
             __connectedGamepads.erase(it);
@@ -903,7 +900,7 @@ void unregisterGamepad(GamepadHandle handle)
 
 void closeAllGamepads()
 {
-    for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end(); ++it)
     {
         closeGamepad(*it);
         __connectedGamepads.erase(it);
@@ -912,19 +909,19 @@ void closeAllGamepads()
 
 const GamepadInfoEntry& getGamepadMappedInfo(unsigned int vendorId, unsigned int productId, unsigned int numberOfAxes, unsigned int numberOfButtons)
 {
-    for(int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry);i++)
+    for (int i = 0; i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry); i++)
     {
         const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
-        if(curEntry.vendorId == vendorId && curEntry.productId == productId)
+        if (curEntry.vendorId == vendorId && curEntry.productId == productId)
         {
             return curEntry;
         }
     }
 
-    for(int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry);i++)
+    for (int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry);i++)
     {
         const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
-        if(curEntry.vendorId == 0 && curEntry.productId == 0 && curEntry.numberOfAxes == numberOfAxes && curEntry.numberOfButtons == numberOfButtons)
+        if (curEntry.vendorId == 0 && curEntry.productId == 0 && curEntry.numberOfAxes == numberOfAxes && curEntry.numberOfButtons == numberOfButtons)
         {
             return curEntry;
         }
@@ -937,9 +934,9 @@ const GamepadInfoEntry& getGamepadMappedInfo(const GamepadHandle handle)
 {
     GP_ASSERT(handle >= 0);
 
-    for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
     {
-        if(handle == (*it).fd)
+        if (handle == (*it).fd)
         {
             return it->gamepadInfo;
         }
@@ -950,15 +947,15 @@ const GamepadInfoEntry& getGamepadMappedInfo(const GamepadHandle handle)
 
 const GamepadJoystickAxisInfo* tryGetGamepadMappedAxisInfo(const GamepadInfoEntry& gpinfo, unsigned int axisNumber)
 {
-    if(axisNumber >= 0 && axisNumber < gpinfo.numberOfAxes)
+    if (axisNumber >= 0 && axisNumber < gpinfo.numberOfAxes)
     {
         int i = 0;
-        while(true)
+        while (true)
         {
             const GamepadJoystickAxisInfo* curAxisInfo = &gpinfo.axes[i++];
-            if(curAxisInfo->axisIndex == axisNumber)
+            if (curAxisInfo->axisIndex == axisNumber)
                 return curAxisInfo;
-            else if(curAxisInfo->axisIndex < 0)
+            else if (curAxisInfo->axisIndex < 0)
                 return NULL;
         }
     }
@@ -967,9 +964,9 @@ const GamepadJoystickAxisInfo* tryGetGamepadMappedAxisInfo(const GamepadInfoEntr
 
 bool tryGetGamepadMappedButton(const GamepadInfoEntry& gpinfo, unsigned long btnNumber, long& outMap)
 {
-    if(btnNumber >= 0 && btnNumber < gpinfo.numberOfButtons )
+    if (btnNumber >= 0 && btnNumber < gpinfo.numberOfButtons )
     {
-        if(gpinfo.buttons[btnNumber] >= 0)
+        if (gpinfo.buttons[btnNumber] >= 0)
         {
             outMap = gpinfo.buttons[btnNumber];
             return true;
@@ -986,12 +983,15 @@ bool tryGetGamepadMappedButton(const GamepadInfoEntry& gpinfo, unsigned long btn
 unsigned int readIntegerGamepadIdPropery(const char* sysFSIdPath, const char* propertyName)
 {
     unsigned int ret = 0;
-    try {
+    try 
+    {
         ifstream propStream;
         propStream.open((string(sysFSIdPath) + propertyName).c_str(),ifstream::in);
         propStream >> std::hex >> ret;
         propStream.close();
-    } catch (exception e) {
+    } 
+    catch (exception e) 
+    {
         GP_WARN("Could not read propery from SysFS for Gamepad: %s", propertyName);
     }
     return ret;
@@ -999,10 +999,10 @@ unsigned int readIntegerGamepadIdPropery(const char* sysFSIdPath, const char* pr
 
 bool isBlackListed(unsigned int vendorId, unsigned int productId)
 {
-    switch(vendorId)
+    switch (vendorId)
     {
         case 0x0e0f: //virtual machine devices
-            if(productId == 0x0003) // Virtual Mouse
+            if (productId == 0x0003) // Virtual Mouse
                 return true;
     }
     return false;
@@ -1015,7 +1015,7 @@ void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSI
     unsigned int vendorId =readIntegerGamepadIdPropery(sysFSIdPath,"vendor");
     unsigned int productId =readIntegerGamepadIdPropery(sysFSIdPath,"product");
 
-    if(isBlackListed(vendorId,productId)) return;
+    if (isBlackListed(vendorId,productId)) return;
 
     GamepadHandle handle = ::open(devPath,O_RDONLY | O_NONBLOCK);
     if(handle < 0)
@@ -1024,7 +1024,7 @@ void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSI
         return;
     }
 
-    if(!(fcntl(handle, F_GETFL) != -1 || errno != EBADF))
+    if (!(fcntl(handle, F_GETFL) != -1 || errno != EBADF))
         return;
 
     char axesNum, btnsNum, name[256];
@@ -1046,10 +1046,10 @@ void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSI
 static float normalizeJoystickAxis(int axisValue, int deadZone, bool zeroToOne)
 {
     int absAxisValue = 0;
-    if(zeroToOne)
+    if (zeroToOne)
         absAxisValue = (axisValue + 32767) / 2.0;
     else
-            absAxisValue = abs(axisValue);
+        absAxisValue = abs(axisValue);
 
     if (absAxisValue < deadZone)
     {
@@ -1400,8 +1400,7 @@ void Platform::setMultiSampling(bool enabled)
         return;
     }
         
-        //todo
-            
+        // TODO
         __multiSampling = enabled;
 }
     
@@ -1674,23 +1673,21 @@ bool Platform::launchURL(const char* url)
 
 std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
 {
-    std::string filename="";
+    std::string filename = "";
 
     if (!gtk_init_check(NULL,NULL))
         return "";
 
     // Create the dialog in one of two modes, SAVE or OPEN
     GtkWidget *dialog;
-    dialog = gtk_file_chooser_dialog_new (title,
-        NULL,
-        mode == FileSystem::SAVE ? GTK_FILE_CHOOSER_ACTION_SAVE : GTK_FILE_CHOOSER_ACTION_OPEN,
-        _("_Cancel"), GTK_RESPONSE_CANCEL,
-        mode == FileSystem::SAVE ? _("_Save") : _("_Open"),
-        GTK_RESPONSE_ACCEPT,
-        NULL);
+    dialog = gtk_file_chooser_dialog_new(title, NULL,
+                                         mode == FileSystem::SAVE ? GTK_FILE_CHOOSER_ACTION_SAVE : GTK_FILE_CHOOSER_ACTION_OPEN,
+                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                         mode == FileSystem::SAVE ? _("_Save") : _("_Open"),
+                                         GTK_RESPONSE_ACCEPT, NULL);
 
     // Filter on extensions
-    GtkFileFilter *filter = gtk_file_filter_new();
+    GtkFileFilter* filter = gtk_file_filter_new();
     std::istringstream f(filterExtensions);
     std::string s;
     std::string extStr;
@@ -1698,9 +1695,9 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
     {
         extStr = "*.";
         extStr += s;
-        gtk_file_filter_add_pattern( filter, extStr.c_str() );
+        gtk_file_filter_add_pattern(filter, extStr.c_str());
     }
-    gtk_file_chooser_set_filter( GTK_FILE_CHOOSER (dialog), filter );
+    gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
     // Set initial directory
     std::string initialDirectoryStr;
@@ -1708,33 +1705,33 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
     {
         char* currentDir = g_get_current_dir();
         initialDirectoryStr = currentDir;
-        g_free (currentDir);
+        g_free(currentDir);
     }
     else
     {
         initialDirectoryStr = initialDirectory;
     }
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), initialDirectoryStr.c_str());
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initialDirectoryStr.c_str());
 
-    if (mode==FileSystem::SAVE)
+    if (mode == FileSystem::SAVE)
     {
-        gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-        gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "untitled");
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "");
     }
 
     // Show the dialog
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
     {
-        char *szFilename;
-        szFilename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+        char* szFilename;
+        szFilename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
         filename = szFilename;
-        g_free (szFilename);
+        g_free(szFilename);
     }
-
-    gtk_widget_destroy (dialog);
+    gtk_widget_destroy(dialog);
 
     // Since we are not using gtk_main(), this will let the dialog close
-    while (gtk_events_pending ()) gtk_main_iteration ();
+    while (gtk_events_pending()) 
+        gtk_main_iteration();
 
     return filename;
 }
