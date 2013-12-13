@@ -91,12 +91,7 @@ void TerrainSample::initialize()
 	enableScriptCamera(true);
     setScriptCameraSpeed(20, 80);
 
-    _directionalLight = Light::createDirectional(1, 1, 1);
-    Node* lightNode = Node::create("directionalLight");
-    _scene->addNode(lightNode);
-    lightNode->setLight(_directionalLight);
-    lightNode->setRotation(Vector3(1, 0, 0), -MATH_DEG_TO_RAD(45));
-    _directionalLight->release();
+    _directionalLight = _scene->findNode("directionalLight")->getLight();
 }
 
 void TerrainSample::finalize()

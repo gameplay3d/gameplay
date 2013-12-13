@@ -248,6 +248,9 @@
     <None Include="res\shaders\textured.vert">
       <Filter>res\shaders</Filter>
     </None>
+    <None Include="res\common\terrain\terrain.material">
+      <Filter>res\common\terrain</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MeshPrimitiveSample.h">

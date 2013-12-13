@@ -5,9 +5,6 @@
 #include "Scene.h"
 #include "Game.h"
 
-// Default terrain material
-#define TERRAIN_MATERIAL "res/materials/terrain.material"
-
 namespace gameplay
 {
 
@@ -531,9 +528,11 @@ bool TerrainPatch::updateMaterial()
 
     for (size_t i = 0, count = _levels.size(); i < count; ++i)
     {
-        Material* material = Material::create(TERRAIN_MATERIAL, &passCallback, this);
+        Material* material = Material::create(_terrain->_materialPath.c_str(), &passCallback, this);
+        GP_ASSERT(material);
         if (!material)
         {
+            GP_WARN("Failed to load material for terrain patch: %s", _terrain->_materialPath.c_str());
             __currentPatchIndex = -1;
             return false;
         }

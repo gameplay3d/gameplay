@@ -7,9 +7,11 @@
 namespace gameplay
 {
 
+// Default terrain material path
+#define TERRAIN_MATERIAL "res/materials/terrain.material"
+
 // The default square size of terrain patches for a terrain that
 // does not have an explicitly specified patch size.
-//
 #define DEFAULT_TERRAIN_PATCH_SIZE 32
 
 // The default height of a terrain that does not have an explicitly
@@ -68,6 +70,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     int detailLevels = 1;
     float skirtScale = 0;
     const char* normalMap = NULL;
+    std::string materialPath;
 
     if (!p && path)
     {
@@ -192,6 +195,9 @@ Terrain* Terrain::create(const char* path, Properties* properties)
 
         // Read 'normalMap'
         normalMap = pTerrain->getString("normalMap");
+
+        // Read 'material'
+        materialPath = pTerrain->getString("material", "");
     }
 
     if (heightfield == NULL)
@@ -222,8 +228,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     Vector3 scale(terrainSize.x / (heightfield->getColumnCount()-1), terrainSize.y, terrainSize.z / (heightfield->getRowCount()-1));
 
     // Create terrain
-    Terrain* terrain = create(heightfield, scale, (unsigned int)patchSize, (unsigned int)detailLevels, skirtScale, normalMap, pTerrain);
-
+    Terrain* terrain = create(heightfield, scale, (unsigned int)patchSize, (unsigned int)detailLevels, skirtScale, normalMap, materialPath.c_str(), pTerrain);
 
     if (!externalProperties)
         SAFE_DELETE(p);
@@ -231,12 +236,14 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     return terrain;
 }
 
-Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigned int patchSize, unsigned int detailLevels, float skirtScale, const char* normalMapPath)
+Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigned int patchSize, unsigned int detailLevels, float skirtScale, const char* normalMapPath, const char* materialPath)
 {
-    return create(heightfield, scale, patchSize, detailLevels, skirtScale, normalMapPath, NULL);
+    return create(heightfield, scale, patchSize, detailLevels, skirtScale, normalMapPath, materialPath, NULL);
 }
 
-Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigned int patchSize, unsigned int detailLevels, float skirtScale, const char* normalMapPath, Properties* properties)
+Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale,
+    unsigned int patchSize, unsigned int detailLevels, float skirtScale,
+    const char* normalMapPath, const char* materialPath, Properties* properties)
 {
     GP_ASSERT(heightfield);
 
@@ -247,6 +254,7 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
     Terrain* terrain = new Terrain();
     terrain->_heightfield = heightfield;
     terrain->_localScale = scale;
+    terrain->_materialPath = (materialPath == NULL || strlen(materialPath) == 0) ? TERRAIN_MATERIAL : materialPath;
 
     // Store reference to bounding box (it is calculated and updated from TerrainPatch)
     BoundingBox& bounds = terrain->_boundingBox;

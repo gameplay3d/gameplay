@@ -389,6 +389,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="res\common\terrain\sky.gpb" />
     <None Include="res\common\terrain\sky.material" />
     <None Include="res\common\terrain\terrain.form" />
+    <None Include="res\common\terrain\terrain.material" />
     <None Include="res\common\text.form" />
     <None Include="res\shaders\colored.frag" />
     <None Include="res\shaders\colored.vert" />

@@ -1,5 +1,7 @@
 terrain
 {
+    material = res/common/terrain/terrain.material
+
 	heightmap
 	{
 		path = res/common/terrain/heightmap.r16
