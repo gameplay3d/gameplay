@@ -62,7 +62,7 @@ public:
      * @param cookie Optional custom parameter to be passed to the callback function.
      *
      * @return A new Material or NULL if there was an error.
-     * @script{create}
+     * @script{ignore}
      */
     static Material* create(const char* url, PassCallback callback, void* cookie = NULL);
 
