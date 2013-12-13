@@ -1375,12 +1375,12 @@ bool Platform::isVsync()
 
 void Platform::setVsync(bool enable)
 {
+    __vsync = enable;
+
     if (glXSwapIntervalEXT)
         glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
     else if(glXSwapIntervalMESA)
         glXSwapIntervalMESA(__vsync ? 1 : 0);
-
-    __vsync = enable;
 }
 
 void Platform::swapBuffers()
