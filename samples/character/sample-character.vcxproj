@@ -156,8 +156,9 @@
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res
+copy .\game.dxt.config .\game.config</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -215,8 +216,9 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res
+copy .\game.dxt.config .\game.config</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
@@ -275,8 +277,9 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res
+copy .\game.dxt.config .\game.config</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
