@@ -13,6 +13,9 @@
     <Filter Include="src\lua">
       <UniqueIdentifier>{21cf31c6-9c10-44cb-a864-d46a0e7bfe5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\materials">
+      <UniqueIdentifier>{b5f23c37-1023-4796-ba7b-b45aa30d67b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Plane.cpp">
@@ -1812,6 +1815,9 @@
     </None>
     <None Include="res\shaders\skinning-none.vert">
       <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\materials\terrain.material">
+      <Filter>res\materials</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
