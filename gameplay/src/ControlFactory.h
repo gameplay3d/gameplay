@@ -10,7 +10,7 @@ class Properties;
 class Control;
 
 /**
- * Represents a factory for creating core controls and registered custom controls.
+ * Defines a factory for creating core controls and registered custom controls.
  *
  * @script{ignore}
  */

@@ -22,7 +22,13 @@ class Form;
 class Terrain;
 
 /**
- * Defines a basic hierarchical structure of transformation spaces.
+ * Defines a hierarchical structure of objects in 3D transformation spaces.
+ *
+ * This object allow you to attach components to a scene such as:
+ * Model, Camera, Light, PhysicsCollisionObject, AudioSource, ParticleEmitter and
+ * Form components.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Node
  */
 class Node : public Transform, public Ref
 {

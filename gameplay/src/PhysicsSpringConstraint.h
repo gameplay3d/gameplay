@@ -7,10 +7,12 @@ namespace gameplay
 {
 
 /**
- * Represents a generic spring constraint between two
+ * Defines a generic spring constraint between two
  * rigid bodies (or one rigid body and the world)
  * where the spring strength and damping can be set
  * for all six degrees of freedom.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
  */
 class PhysicsSpringConstraint : public PhysicsGenericConstraint
 {

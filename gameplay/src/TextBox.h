@@ -10,29 +10,14 @@ namespace gameplay
 {
 
 /**
- * An editable text label.  Tap or click within the text box to bring up the
- * virtual keyboard.
+ * Defines a text control. 
  *
  * Listeners can listen for a TEXT_CHANGED event, and then query the text box
  * for the last keypress it received.
+ * On mobile device you can tap or click within the text box to
+ * bring up the virtual keyboard.
  *
- * The following properties are available for text boxes:
-
- @verbatim
-    textBox <labelID>
-    {
-         style       = <styleID>
-         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-         position    = <x, y>
-         autoWidth   = <bool>
-         autoHeight  = <bool>
-         size        = <width, height>
-         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
-         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         text        = <string>
-         inputMode   = <TextBox::InputMode constant>
-    }
- @endverbatim
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class TextBox : public Label
 {

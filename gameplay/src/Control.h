@@ -19,7 +19,9 @@ class Container;
 class Form;
 
 /**
- * Base class for UI controls.
+ * Defines the base class for all controls.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Control : public Ref, public AnimationTarget, public ScriptTarget
 {

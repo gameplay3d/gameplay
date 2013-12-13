@@ -3,7 +3,6 @@
 
 #include "Base.h"
 #include "Game.h"
-//#include "Gamepad.h"
 #include "Control.h"
 
 namespace gameplay
@@ -156,7 +155,7 @@ void registerConstantString(const std::string& name, const std::string& value, c
  * @script{ignore}
  */
 void registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg* statics,
-    const std::vector<std::string>& scopePath);
+                   const std::vector<std::string>& scopePath);
 
 /**
  * Register a function with Lua.

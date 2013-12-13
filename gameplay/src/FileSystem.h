@@ -10,7 +10,7 @@ namespace gameplay
 class Properties;
 
 /**
- * Defines a set of functions for interacting with the device filesystem.
+ * Defines a set of functions for interacting with the device file system.
  */
 class FileSystem
 {

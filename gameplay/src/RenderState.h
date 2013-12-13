@@ -14,7 +14,7 @@ class NodeCloneContext;
 class Pass;
 
 /**
- * Defines the render state of the graphics device.
+ * Defines the rendering state of the graphics device.
  */
 class RenderState : public Ref
 {

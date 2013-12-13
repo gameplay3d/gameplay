@@ -8,25 +8,11 @@ namespace gameplay
 {
 
 /**
- * A label is the most basic type of control, capable only of rendering text within its border.
+ * Defines a label control.
+ * 
+ * This is capable of rendering text within its border.
  *
- * The following properties are available for labels:
-
- @verbatim
-    label <labelID>
-    {
-         style       = <styleID>
-         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-         position    = <x, y>
-         autoWidth   = <bool>
-         autoHeight  = <bool>
-         size        = <width, height>
-         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
-         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         text        = <string>
-         consumeEvents = <bool>  // Whether the label propagates input events to the Game's input event handler. Default is true.
-    }
- @endverbatim
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Label : public Control
 {

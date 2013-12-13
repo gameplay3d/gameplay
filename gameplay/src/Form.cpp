@@ -96,8 +96,7 @@ Form* Form::create(const char* url)
     // Initialize the form and all of its child controls
     form->initialize("Form", style, formProperties);
 
-    // Release the theme: its lifetime is controlled by addRef() and release() calls
-    // in initialize (above) and ~Control.
+    // Release the theme: its lifetime is controlled by addRef() and release() calls in initialize (above) and ~Control.
     SAFE_RELEASE(theme);
 
     SAFE_DELETE(properties);
@@ -133,6 +132,11 @@ Form* Form::getForm(const char* id)
         }
     }
     return NULL;
+}
+
+Control* Form::getActiveControl()
+{
+    return _activeControl;
 }
 
 Control* Form::getFocusControl()
@@ -386,11 +390,6 @@ bool Form::isBatchingEnabled() const
 void Form::setBatchingEnabled(bool enabled)
 {
     _batched = enabled;
-}
-
-Control* Form::getActiveControl()
-{
-    return _activeControl;
 }
 
 void Form::updateInternal(float elapsedTime)

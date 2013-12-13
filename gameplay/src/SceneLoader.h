@@ -11,7 +11,8 @@ namespace gameplay
 {
 
 /**
- * Helper class for loading scenes from .scene files.
+ * Defines an internal helper class for loading scenes from .scene files.
+ *
  * @script{ignore}
  */
 class SceneLoader

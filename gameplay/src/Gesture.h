@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 /**
- * Gesture event
+ * Defines a gesture touch screen event.
  */
 class Gesture
 {
