@@ -9,30 +9,13 @@ namespace gameplay
 {
 
 /**
- * Similar to a checkbox, a radio button can be toggled between two states.
+ * Defines a radio button control.
  *
- * However, a radio button can belong to a group, and only one radio button
+ * Radio buttons can be toggled between two states.
+ * A radio button can belong to a group, and only one radio button
  * from a group can be selected at one time.
  *
- * The following properties are available for radio buttons:
-
- @verbatim
-    radioButton <RadioButton ID>
-    {
-         style       = <Style ID>
-         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-         position    = <x, y>
-         autoWidth   = <bool>
-         autoHeight  = <bool>
-         size        = <width, height>
-         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
-         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         text        = <string>
-         group       = <string>
-         iconSize    = <width, height>   // The size to draw the radio button icon, if different from its size in the texture.
-         consumeEvents = <bool>          // Whether the radio button propagates input events to the Game's input event handler. Default is true.
-    }
- @endverbatim
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class RadioButton : public Button
 {

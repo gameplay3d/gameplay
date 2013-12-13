@@ -8,7 +8,9 @@ namespace gameplay
 {
 
 /**
- * Vertical layout: Controls are placed next to one another vertically until
+ * Defines a vertical layout.
+ *
+ * Controls are placed next to one another vertically until
  * the bottom-most edge of the container is reached.
  */
 class VerticalLayout : public Layout

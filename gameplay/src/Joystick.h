@@ -9,17 +9,9 @@ namespace gameplay
 /**
  * Defines a control representing a joystick (axis).
  *
-  @verbatim
-    slider
-    {
-        style       = <styleID>                 // A Style from the Theme.
-        position    = <x, y>                    // Position of the Control on-screen, measured in pixels.
-        alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-        size        = <width, height>           // Size of the Control, measured in pixels.
-        radius      = <float>                   // The value of the left- / bottom-most point on the slider.
-        consumeEvents = <bool>                  // Whether the slider propagates input events to the Game's input event handler. Default is true.
-    }
- @endverbatim
+ * This is used in virtual Gamepad instances.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Joystick : public Control
 {

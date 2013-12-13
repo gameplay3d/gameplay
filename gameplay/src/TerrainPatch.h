@@ -10,7 +10,7 @@ namespace gameplay
 class Terrain;
 
 /**
- * Represents a single patch for a Terrain.
+ * Defines a single patch for a Terrain.
  */
 class TerrainPatch : public Camera::Listener
 {

@@ -14,7 +14,10 @@ class Node;
 class NodeCloneContext;
 
 /**
- * Defines a Model (MeshRenderer) which is an instance of a Mesh that can be drawn with the specified Materials.
+ * Defines a Model or mesh renderer which is an instance of a Mesh. 
+ *
+ * A model has a mesh that can be drawn with the specified materials for
+ * each of the mesh parts within it.
  */
 class Model : public Ref
 {

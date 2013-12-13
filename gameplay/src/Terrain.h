@@ -76,6 +76,8 @@ class TerrainPatch;
  * zero extra CPU time or draw calls, which are often needed for more complex stitching
  * approaches. In practice, the skirts are often not noticeable at all unless the LOD variation
  * is very large and the terrain is excessively hilly on the edge of a LOD transition.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Terrain
  */
 class Terrain : public Ref, public Transform::Listener
 {
