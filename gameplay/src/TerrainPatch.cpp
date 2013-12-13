@@ -5,9 +5,8 @@
 #include "Scene.h"
 #include "Game.h"
 
-// Default terrain shaders
-#define TERRAIN_VSH "res/shaders/terrain.vert"
-#define TERRAIN_FSH "res/shaders/terrain.frag"
+// Default terrain material
+#define TERRAIN_MATERIAL "res/materials/terrain.material"
 
 namespace gameplay
 {
@@ -27,9 +26,17 @@ template <class T> T clamp(T value, T min, T max) { return value < min ? min : (
 #define TERRAINPATCH_DIRTY_LEVEL 4
 #define TERRAINPATCH_DIRTY_ALL (TERRAINPATCH_DIRTY_MATERIAL | TERRAINPATCH_DIRTY_BOUNDS | TERRAINPATCH_DIRTY_LEVEL)
 
+static bool __autoBindingResolverRegistered = false;
+static int __currentPatchIndex = -1;
+
 TerrainPatch::TerrainPatch() :
 _terrain(NULL), _row(0), _column(0), _camera(NULL), _level(0), _bits(TERRAINPATCH_DIRTY_ALL)
 {
+    if (!__autoBindingResolverRegistered)
+    {
+        RenderState::registerAutoBindingResolver(TerrainPatch::autoBindingResolver);
+        __autoBindingResolverRegistered = true;
+    }
 }
 
 TerrainPatch::~TerrainPatch()
@@ -48,7 +55,7 @@ TerrainPatch::~TerrainPatch()
     }
 }
 
-TerrainPatch* TerrainPatch::create(Terrain* terrain,
+TerrainPatch* TerrainPatch::create(Terrain* terrain, unsigned int index,
                                    unsigned int row, unsigned int column,
                                    float* heights, unsigned int width, unsigned int height,
                                    unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
@@ -58,6 +65,7 @@ TerrainPatch* TerrainPatch::create(Terrain* terrain,
     // Create patch
     TerrainPatch* patch = new TerrainPatch();
     patch->_terrain = terrain;
+    patch->_index = index;
     patch->_row = row;
     patch->_column = column;
 
@@ -459,6 +467,59 @@ bool TerrainPatch::setLayer(int index, const char* texturePath, const Vector2& t
     return true;
 }
 
+std::string TerrainPatch::passCallback(Pass* pass, void* cookie)
+{
+    TerrainPatch* patch = reinterpret_cast<TerrainPatch*>(cookie);
+    GP_ASSERT(patch);
+
+    return patch->passCreated(pass);
+}
+
+std::string TerrainPatch::passCreated(Pass* pass)
+{
+    // Build preprocessor string to be passed to the terrain shader.
+    // NOTE: I make heavy use of preprocessor definitions, rather than passing in arrays and doing
+    // non-constant array access in the shader. This is due to the fact that non-constant array access
+    // in GLES is very slow on some hardware.
+    std::ostringstream defines;
+    defines << "LAYER_COUNT " << _layers.size();
+    defines << ";SAMPLER_COUNT " << _samplers.size();
+
+    if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
+    {
+        defines << ";DEBUG_PATCHES";
+        pass->getParameter("u_row")->setFloat(_row);
+        pass->getParameter("u_column")->setFloat(_column);
+    }
+
+    if (_terrain->_normalMap)
+        defines << ";NORMAL_MAP";
+
+    // Append texture and blend index constants to preprocessor definition.
+    // We need to do this since older versions of GLSL only allow sampler arrays
+    // to be indexed using constant expressions (otherwise we could simply pass an
+    // array of indices to use for sampler lookup).
+    //
+    // Rebuild layer lists while we're at it.
+    //
+    int layerIndex = 0;
+    for (std::set<Layer*, LayerCompare>::iterator itr = _layers.begin(); itr != _layers.end(); ++itr, ++layerIndex)
+    {
+        Layer* layer = *itr;
+
+        defines << ";TEXTURE_INDEX_" << layerIndex << " " << layer->textureIndex;
+        defines << ";TEXTURE_REPEAT_" << layerIndex << " vec2(" << layer->textureRepeat.x << "," << layer->textureRepeat.y << ")";
+
+        if (layerIndex > 0)
+        {
+            defines << ";BLEND_INDEX_" << layerIndex << " " << layer->blendIndex;
+            defines << ";BLEND_CHANNEL_" << layerIndex << " " << layer->blendChannel;
+        }
+    }
+
+    return defines.str();
+}
+
 bool TerrainPatch::updateMaterial()
 {
     if (!(_bits & TERRAINPATCH_DIRTY_MATERIAL))
@@ -466,103 +527,27 @@ bool TerrainPatch::updateMaterial()
 
     _bits &= ~TERRAINPATCH_DIRTY_MATERIAL;
 
+    __currentPatchIndex = _index;
+
     for (size_t i = 0, count = _levels.size(); i < count; ++i)
     {
-        // Build preprocessor string to pass to shader.
-        // NOTE: I make heavy use of preprocessor definitions, rather than passing in arrays and doing
-        // non-constant array access in the shader. This is due to the fact that non-constant array access
-        // in GLES is very slow on some GLES 2.x hardware.
-        std::ostringstream defines;
-        defines << "LAYER_COUNT " << _layers.size();
-        defines << ";SAMPLER_COUNT " << _samplers.size();
-
-        if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
-            defines << ";DEBUG_PATCHES";
-        if (_terrain->_normalMap)
-            defines << ";NORMAL_MAP";
-
-        // Append texture and blend index constants to preprocessor definition.
-        // We need to do this since older versions of GLSL only allow sampler arrays
-        // to be indexed using constant expressions (otherwise we could simply pass an
-        // array of indices to use for sampler lookup).
-        //
-        // Rebuild layer lists while we're at it.
-        //
-        int layerIndex = 0;
-        for (std::set<Layer*, LayerCompare>::iterator itr = _layers.begin(); itr != _layers.end(); ++itr, ++layerIndex)
-        {
-            Layer* layer = *itr;
-
-            defines << ";TEXTURE_INDEX_" << layerIndex << " " << layer->textureIndex;
-            defines << ";TEXTURE_REPEAT_" << layerIndex << " vec2(" << layer->textureRepeat.x << "," << layer->textureRepeat.y << ")";
-
-            if (layerIndex > 0)
-            {
-                defines << ";BLEND_INDEX_" << layerIndex << " " << layer->blendIndex;
-                defines << ";BLEND_CHANNEL_" << layerIndex << " " << layer->blendChannel;
-            }
-        }
-
-        if (_terrain->_directionalLightCount > 0)
-            defines << ";DIRECTIONAL_LIGHT_COUNT " << _terrain->_directionalLightCount;
-        if (_terrain->_pointLightCount > 0)
-            defines << ";POINT_LIGHT_COUNT " << _terrain->_pointLightCount;
-        if (_terrain->_spotLightCount > 0)
-            defines << ";SPOT_LIGHT_COUNT " << _terrain->_spotLightCount;
-
-        Material* material = Material::create(TERRAIN_VSH, TERRAIN_FSH, defines.str().c_str());
+        Material* material = Material::create(TERRAIN_MATERIAL, &passCallback, this);
         if (!material)
+        {
+            __currentPatchIndex = -1;
             return false;
-
-        material->getStateBlock()->setCullFace(true);
-        material->getStateBlock()->setDepthTest(true);
-
-        // Set material parameter bindings
-        material->getParameter("u_worldViewProjectionMatrix")->bindValue(_terrain, &Terrain::getWorldViewProjectionMatrix);
-
-        if (_layers.size() > 0)
-            material->getParameter("u_surfaceLayerMaps")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
-
-        if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
-        {
-            material->getParameter("u_row")->setValue((float)_row);
-            material->getParameter("u_column")->setValue((float)_column);
         }
 
-        if (_terrain->_directionalLightCount > 0 || _terrain->_pointLightCount > 0 || _terrain->_spotLightCount > 0)
-        {
-            material->getParameter("u_ambientColor")->bindValue(this, &TerrainPatch::getAmbientColor);
-            if (_terrain->_normalMap)
-                material->getParameter("u_normalMap")->setValue(_terrain->_normalMap);
-            else
-                material->getParameter("u_normalMatrix")->bindValue(_terrain, &Terrain::getNormalMatrix);
-        }
-
-        // Add all the parameters from the old material to the new ones render state
-        Material* prevMaterial = _levels[i]->model->getMaterial();
-        if (prevMaterial)
-        {
-            RenderState* prevStates[3] = { prevMaterial, prevMaterial->getTechnique(), prevMaterial->getTechnique()->getPassByIndex(0) };
-            RenderState* newStates[3] = { material, material->getTechnique(), material->getTechnique()->getPassByIndex(0) };
-            for (unsigned int i = 0; i < 3; ++i)
-            {
-                for (unsigned int j = 0; j < prevStates[i]->getParameterCount(); ++j)
-                {
-                    newStates[i]->addParameter(prevStates[i]->getParameterByIndex(j));
-                    if (!_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
-                    {
-                        newStates[i]->removeParameter("u_row");
-                        newStates[i]->removeParameter("u_column");
-                    }
-                }
-            }
-        }
+        if (_terrain->_node)
+            material->setNodeBinding(_terrain->_node);
 
         // Set material on this lod level
         _levels[i]->model->setMaterial(material);
 
         material->release();
     }
+
+    __currentPatchIndex = -1;
 
     return true;
 }
@@ -710,6 +695,117 @@ TerrainPatch::Level::Level() : model(NULL)
 bool TerrainPatch::LayerCompare::operator() (const Layer* lhs, const Layer* rhs) const
 {
     return (lhs->index < rhs->index);
+}
+
+void TerrainPatch::updateNodeBinding(Node* node)
+{
+    __currentPatchIndex = _index;
+
+    for (size_t i = 0, count = _levels.size(); i < count; ++i)
+    {
+        _levels[i]->model->getMaterial()->setNodeBinding(node);
+    }
+
+    __currentPatchIndex = -1;
+}
+
+bool TerrainPatch::autoBindingResolver(const char* autoBinding, Node* node, MaterialParameter* parameter)
+{
+    if (strcmp(autoBinding, "TERRAIN_WORLD_MATRIX") == 0)
+    {
+        Terrain* terrain = node->getTerrain();
+        if (terrain)
+        {
+            parameter->bindValue(terrain, &Terrain::getWorldMatrix);
+            return true;
+        }
+    }
+    else if (strcmp(autoBinding, "TERRAIN_WORLD_VIEW_MATRIX") == 0)
+    {
+        Terrain* terrain = node->getTerrain();
+        if (terrain)
+        {
+            parameter->bindValue(terrain, &Terrain::getWorldViewMatrix);
+            return true;
+        }
+    }
+    else if (strcmp(autoBinding, "TERRAIN_WORLD_VIEW_PROJECTION_MATRIX") == 0)
+    {
+        Terrain* terrain = node->getTerrain();
+        if (terrain)
+        {
+            parameter->bindValue(terrain, &Terrain::getWorldViewProjectionMatrix);
+            return true;
+        }
+    }
+    else if (strcmp(autoBinding, "TERRAIN_INVERSE_WORLD_MATRIX") == 0)
+    {
+        Terrain* terrain = node->getTerrain();
+        if (terrain)
+        {
+            parameter->bindValue(terrain, &Terrain::getInverseWorldMatrix);
+            return true;
+        }
+    }
+    else if (strcmp(autoBinding, "TERRAIN_NORMAL_MATRIX") == 0)
+    {
+        Terrain* terrain = node->getTerrain();
+        if (terrain)
+        {
+            parameter->bindValue(terrain, &Terrain::getNormalMatrix);
+            return true;
+        }
+    }
+    else if (strcmp(autoBinding, "TERRAIN_LAYER_MAPS") == 0)
+    {
+        Terrain* terrain = node->getTerrain();
+        if (terrain && __currentPatchIndex >= 0 && __currentPatchIndex < (int)terrain->_patches.size())
+        {
+            TerrainPatch* patch = terrain->_patches[__currentPatchIndex];
+            if (patch && patch->_layers.size() > 0)
+            {
+                parameter->setValue((const Texture::Sampler**)&patch->_samplers[0], (unsigned int)patch->_samplers.size());
+            }
+            return true;
+        }
+    }
+    else if (strcmp(autoBinding, "TERRAIN_NORMAL_MAP") == 0)
+    {
+        Terrain* terrain = node->getTerrain();
+        if (terrain && terrain->_normalMap)
+        {
+            parameter->setValue(terrain->_normalMap);
+            return true;
+        }
+    }
+    else if (strcmp(autoBinding, "TERRAIN_ROW") == 0)
+    {
+        Terrain* terrain = node->getTerrain();
+        if (terrain && __currentPatchIndex >= 0 && __currentPatchIndex < (int)terrain->_patches.size())
+        {
+            TerrainPatch* patch = terrain->_patches[__currentPatchIndex];
+            if (patch)
+            {
+                parameter->setValue((float)patch->_row);
+                return true;
+            }
+        }
+    }
+    else if (strcmp(autoBinding, "TERRAIN_COLUMN") == 0)
+    {
+        Terrain* terrain = node->getTerrain();
+        if (terrain && __currentPatchIndex >= 0 && __currentPatchIndex < (int)terrain->_patches.size())
+        {
+            TerrainPatch* patch = terrain->_patches[__currentPatchIndex];
+            if (patch)
+            {
+                parameter->setValue((float)patch->_column);
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 }

@@ -27,6 +27,11 @@ Material::~Material()
 
 Material* Material::create(const char* url)
 {
+    return create(url, (PassCallback)NULL, NULL);
+}
+
+Material* Material::create(const char* url, PassCallback callback, void* cookie)
+{
     // Load the material properties from file.
     Properties* properties = Properties::create(url);
     if (properties == NULL)
@@ -35,13 +40,18 @@ Material* Material::create(const char* url)
         return NULL;
     }
 
-    Material* material = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
+    Material* material = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace(), callback, cookie);
     SAFE_DELETE(properties);
 
     return material;
 }
 
 Material* Material::create(Properties* materialProperties)
+{
+    return create(materialProperties, (PassCallback)NULL, NULL);
+}
+
+Material* Material::create(Properties* materialProperties, PassCallback callback, void* cookie)
 {
     // Check if the Properties is valid and has a valid namespace.
     if (!materialProperties || !(strcmp(materialProperties->getNamespace(), "material") == 0))
@@ -53,13 +63,16 @@ Material* Material::create(Properties* materialProperties)
     // Create new material from the file passed in.
     Material* material = new Material();
 
+    // Load uniform value parameters for this material.
+    loadRenderState(material, materialProperties);
+
     // Go through all the material properties and create techniques under this material.
     Properties* techniqueProperties = NULL;
     while ((techniqueProperties = materialProperties->getNextNamespace()))
     {
         if (strcmp(techniqueProperties->getNamespace(), "technique") == 0)
         {
-            if (!loadTechnique(material, techniqueProperties))
+            if (!loadTechnique(material, techniqueProperties, callback, cookie))
             {
                 GP_ERROR("Failed to load technique for material.");
                 SAFE_RELEASE(material);
@@ -67,9 +80,6 @@ Material* Material::create(Properties* materialProperties)
             }
         }
     }
-
-    // Load uniform value parameters for this material.
-    loadRenderState(material, materialProperties);
 
     // Set the current technique to the first found technique.
     if (material->getTechniqueCount() > 0)
@@ -93,7 +103,8 @@ Material* Material::create(Effect* effect)
     Technique* technique = new Technique(NULL, material);
     material->_techniques.push_back(technique);
 
-    Pass* pass = new Pass(NULL, technique, effect);
+    Pass* pass = new Pass(NULL, technique);
+    pass->_effect = effect;
     technique->_passes.push_back(pass);
     effect->addRef();
 
@@ -104,16 +115,20 @@ Material* Material::create(Effect* effect)
 
 Material* Material::create(const char* vshPath, const char* fshPath, const char* defines)
 {
+    GP_ASSERT(vshPath);
+    GP_ASSERT(fshPath);
+
     // Create a new material with a single technique and pass for the given effect
     Material* material = new Material();
 
     Technique* technique = new Technique(NULL, material);
     material->_techniques.push_back(technique);
 
-    Pass* pass = Pass::create(NULL, technique, vshPath, fshPath, defines);
-    if (!pass)
+    Pass* pass = new Pass(NULL, technique);
+    if (!pass->initialize(vshPath, fshPath, defines))
     {
-        GP_ERROR("Failed to create pass for material.");
+        GP_WARN("Failed to create pass for material: vertexShader = %s, fragmentShader = %s, defines = %s", vshPath, fshPath, defines ? defines : "");
+        SAFE_RELEASE(pass);
         SAFE_RELEASE(material);
         return NULL;
     }
@@ -165,6 +180,16 @@ void Material::setTechnique(const char* id)
     }
 }
 
+void Material::setNodeBinding(Node* node)
+{
+    RenderState::setNodeBinding(node);
+
+    for (size_t i = 0, count = _techniques.size(); i < count; ++i)
+    {
+        _techniques[i]->setNodeBinding(node);
+    }
+}
+
 Material* Material::clone(NodeCloneContext &context) const
 {
     Material* material = new Material();
@@ -184,13 +209,16 @@ Material* Material::clone(NodeCloneContext &context) const
     return material;
 }
 
-bool Material::loadTechnique(Material* material, Properties* techniqueProperties)
+bool Material::loadTechnique(Material* material, Properties* techniqueProperties, PassCallback callback, void* cookie)
 {
     GP_ASSERT(material);
     GP_ASSERT(techniqueProperties);
 
     // Create a new technique.
     Technique* technique = new Technique(techniqueProperties->getId(), material);
+
+    // Load uniform value parameters for this technique.
+    loadRenderState(technique, techniqueProperties);
 
     // Go through all the properties and create passes under this technique.
     techniqueProperties->rewind();
@@ -200,7 +228,7 @@ bool Material::loadTechnique(Material* material, Properties* techniqueProperties
         if (strcmp(passProperties->getNamespace(), "pass") == 0)
         {
             // Create and load passes.
-            if (!loadPass(technique, passProperties))
+            if (!loadPass(technique, passProperties, callback, cookie))
             {
                 GP_ERROR("Failed to create pass for technique.");
                 SAFE_RELEASE(technique);
@@ -209,16 +237,13 @@ bool Material::loadTechnique(Material* material, Properties* techniqueProperties
         }
     }
 
-    // Load uniform value parameters for this technique.
-    loadRenderState(technique, techniqueProperties);
-
     // Add the new technique to the material.
     material->_techniques.push_back(technique);
 
     return true;
 }
 
-bool Material::loadPass(Technique* technique, Properties* passProperties)
+bool Material::loadPass(Technique* technique, Properties* passProperties, PassCallback callback, void* cookie)
 {
     GP_ASSERT(passProperties);
     GP_ASSERT(technique);
@@ -228,18 +253,34 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
     GP_ASSERT(vertexShaderPath);
     const char* fragmentShaderPath = passProperties->getString("fragmentShader");
     GP_ASSERT(fragmentShaderPath);
-    const char* defines = passProperties->getString("defines");
+    const char* passDefines = passProperties->getString("defines");
 
-    // Create the pass.
-    Pass* pass = Pass::create(passProperties->getId(), technique, vertexShaderPath, fragmentShaderPath, defines);
-    if (!pass)
-    {
-        GP_ERROR("Failed to create pass for technique.");
-        return false;
-    }
+    // Create the pass
+    Pass* pass = new Pass(passProperties->getId(), technique);
 
     // Load render state.
     loadRenderState(pass, passProperties);
+
+    // If a pass callback was specified, call it and add the result to our list of defines
+    std::string allDefines = passDefines ? passDefines : "";
+    if (callback)
+    {
+        std::string customDefines = callback(pass, cookie);
+        if (customDefines.length() > 0)
+        {
+            if (allDefines.length() > 0)
+                allDefines += ';';
+            allDefines += customDefines;
+        }
+    }
+
+    // Initialize/compile the effect with the full set of defines
+    if (!pass->initialize(vertexShaderPath, fragmentShaderPath, allDefines.c_str()))
+    {
+        GP_WARN("Failed to create pass for technique.");
+        SAFE_RELEASE(pass);
+        return false;
+    }
 
     // Add the new pass to the technique.
     technique->_passes.push_back(pass);

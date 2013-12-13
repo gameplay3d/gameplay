@@ -307,48 +307,48 @@ private:
     void setNode(Node* node);
 
     /**
-    * @see Transform::Listener::transformChanged.
-    *
-    * Internal use only.
-    *
-    * @script{ignore}
-    */
+     * @see Transform::Listener::transformChanged.
+     *
+     * Internal use only.
+     *
+     * @script{ignore}
+     */
     void transformChanged(Transform* transform, long cookie);
 
     /**
-    * Returns the world matrix of the terrain, factoring in terrain local scaling.
-    *
-    * @return The world matrix for the terrain.
-    */
+     * Returns the world matrix of the terrain, factoring in terrain local scaling.
+     *
+     * @return The world matrix for the terrain.
+     */
     const Matrix& getWorldMatrix() const;
 
     /**
-    * Returns the terrain's inverse world matrix.
-    *
-    * @return The inverse world matrix for the terrain.
-    */
-    const Matrix& getInverseWorldMatrix() const;
-
-    /**
-    * Returns a matrix to be used for transforming normal vectors for the terrain.
-    *
-    * @return The matrix used for normal vector transformation for the terrain.
-    */
-    const Matrix& getNormalMatrix() const;
-
-    /**
-    * Returns the world view matrix for the terrain, factoring in terrain local scaling.
-    *
-    * @return The world-view matrix for the terrain.
-    */
+     * Returns the world view matrix for the terrain, factoring in terrain local scaling.
+     *
+     * @return The world-view matrix for the terrain.
+     */
     const Matrix& getWorldViewMatrix() const;
 
     /**
-    * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
-    *
-    * @return The world-view-projection matrix for the terrain.
-    */
+     * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
+     *
+     * @return The world-view-projection matrix for the terrain.
+     */
     const Matrix& getWorldViewProjectionMatrix() const;
+
+    /**
+     * Returns the terrain's inverse world matrix.
+     *
+     * @return The inverse world matrix for the terrain.
+     */
+    const Matrix& getInverseWorldMatrix() const;
+
+    /**
+     * Returns a matrix to be used for transforming normal vectors for the terrain.
+     *
+     * @return The matrix used for normal vector transformation for the terrain.
+     */
+    const Matrix& getNormalMatrix() const;
 
     /**
      * Returns the local bounding box for this patch, at the base LOD level.
@@ -366,9 +366,6 @@ private:
     mutable Matrix _normalMatrix;
     mutable unsigned int _dirtyFlags;
     BoundingBox _boundingBox;
-    unsigned int _directionalLightCount;
-    unsigned int _pointLightCount;
-    unsigned int _spotLightCount;
 };
 
 }

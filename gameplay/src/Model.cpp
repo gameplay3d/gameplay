@@ -398,24 +398,6 @@ void Model::setMaterialNodeBinding(Material *material)
     if (_node)
     {
         material->setNodeBinding(_node);
-
-        unsigned int techniqueCount = material->getTechniqueCount();
-        for (unsigned int i = 0; i < techniqueCount; ++i)
-        {
-            Technique* technique = material->getTechniqueByIndex(i);
-            GP_ASSERT(technique);
-            
-            technique->setNodeBinding(_node);
-
-            unsigned int passCount = technique->getPassCount();
-            for (unsigned int j = 0; j < passCount; ++j)
-            {
-                Pass* pass = technique->getPassByIndex(j);
-                GP_ASSERT(pass);
-
-                pass->setNodeBinding(_node);
-            }
-        }
     }
 }
 

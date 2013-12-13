@@ -42,6 +42,11 @@ public:
      */
     Pass* getPass(const char* id) const;
 
+    /**
+     * @see RenderState::setNodeBinding
+     */
+    void setNodeBinding(Node* node);
+
 private:
 
     /**

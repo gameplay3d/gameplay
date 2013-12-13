@@ -7,8 +7,8 @@
 namespace gameplay
 {
 
-Pass::Pass(const char* id, Technique* technique, Effect* effect) :
-    _id(id ? id : ""), _technique(technique), _effect(effect), _vaBinding(NULL)
+Pass::Pass(const char* id, Technique* technique) :
+    _id(id ? id : ""), _technique(technique), _effect(NULL), _vaBinding(NULL)
 {
     RenderState::_parent = _technique;
 }
@@ -19,18 +19,23 @@ Pass::~Pass()
     SAFE_RELEASE(_vaBinding);
 }
 
-Pass* Pass::create(const char* id, Technique* technique, const char* vshPath, const char* fshPath, const char* defines)
+bool Pass::initialize(const char* vshPath, const char* fshPath, const char* defines)
 {
+    GP_ASSERT(vshPath);
+    GP_ASSERT(fshPath);
+
+    SAFE_RELEASE(_effect);
+    SAFE_RELEASE(_vaBinding);
+
     // Attempt to create/load the effect.
-    Effect* effect = Effect::createFromFile(vshPath, fshPath, defines);
-    if (effect == NULL)
+    _effect = Effect::createFromFile(vshPath, fshPath, defines);
+    if (_effect == NULL)
     {
-        GP_ERROR("Failed to create effect for pass.");
-        return NULL;
+        GP_WARN("Failed to create effect for pass. vertexShader = %s, fragmentShader = %s, defines = %s", vshPath, fshPath, defines ? defines : "");
+        return false;
     }
 
-    // Return the new pass.
-    return new Pass(id, technique, effect);
+    return true;
 }
 
 const char* Pass::getId() const
@@ -87,10 +92,12 @@ void Pass::unbind()
 
 Pass* Pass::clone(Technique* technique, NodeCloneContext &context) const
 {
-    Effect* effect = getEffect();
-    GP_ASSERT(effect);
-    effect->addRef();
-    Pass* pass = new Pass(getId(), technique, effect);
+    GP_ASSERT(_effect);
+    _effect->addRef();
+
+    Pass* pass = new Pass(getId(), technique);
+    pass->_effect = _effect;
+
     RenderState::cloneInto(pass, context);
     pass->_parent = technique;
     return pass;

@@ -513,6 +513,17 @@ public:
     StateBlock* getStateBlock() const;
 
     /**
+     * Sets the node that this render state is bound to.
+     *
+     * The specified node is used to apply auto-bindings for the render state.
+     * This is typically set to the node of the model that a material is 
+     * applied to.
+     *
+     * @param node The node to use for applying auto-bindings.
+     */
+    virtual void setNodeBinding(Node* node);
+
+    /**
      * Registers a custom auto binding resolver.
      *
      * Implementing a custom auto binding resolver allows the set of built-in parameter auto
@@ -563,17 +574,6 @@ protected:
      * Static finalizer that is called during game shutdown.
      */
     static void finalize();
-
-    /**
-     * Sets the node that this render state is bound to.
-     *
-     * The specified node is used to apply auto-bindings for the render state.
-     * This is typically set to the node of the model that a material is 
-     * applied to.
-     *
-     * @param node The node to use for applying auto-bindings.
-     */
-    void setNodeBinding(Node* node);
 
     /**
      * Applies the specified custom auto-binding.

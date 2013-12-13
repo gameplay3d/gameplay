@@ -32,8 +32,7 @@ float getDefaultHeight(unsigned int width, unsigned int height);
 
 Terrain::Terrain() :
     _heightfield(NULL), _node(NULL), _normalMap(NULL), _flags(FRUSTUM_CULLING | LEVEL_OF_DETAIL),
-    _dirtyFlags(TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX),
-    _directionalLightCount(0), _pointLightCount(0), _spotLightCount(0)
+    _dirtyFlags(TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX)
 {
 }
 
@@ -69,9 +68,6 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     int detailLevels = 1;
     float skirtScale = 0;
     const char* normalMap = NULL;
-    unsigned int directionalLightCount = 0;
-    unsigned int pointLightCount = 0;
-    unsigned int spotLightCount = 0;
 
     if (!p && path)
     {
@@ -262,14 +258,6 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
     float halfHeight = (height - 1) * 0.5f;
     unsigned int maxStep = (unsigned int)std::pow(2.0, (double)(detailLevels-1));
 
-    Properties* lightingProps = properties->getNamespace("lighting", true);
-    if (lightingProps)
-    {
-        terrain->_directionalLightCount = lightingProps->getInt("directionalLights");
-        terrain->_pointLightCount = lightingProps->getInt("pointLights");
-        terrain->_spotLightCount = lightingProps->getInt("spotLights");
-    }
-
     // Create terrain patches
     unsigned int x1, x2, z1, z2;
     unsigned int row = 0, column = 0;
@@ -284,7 +272,7 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
             x2 = std::min(x1 + patchSize, width-1);
 
             // Create this patch
-            TerrainPatch* patch = TerrainPatch::create(terrain, row, column, heightfield->getArray(), width, height, x1, z1, x2, z2, -halfWidth, -halfHeight, maxStep, skirtScale);
+            TerrainPatch* patch = TerrainPatch::create(terrain, terrain->_patches.size(), row, column, heightfield->getArray(), width, height, x1, z1, x2, z2, -halfWidth, -halfHeight, maxStep, skirtScale);
             terrain->_patches.push_back(patch);
 
             // Append the new patch's local bounds to the terrain local bounds
@@ -380,6 +368,12 @@ void Terrain::setNode(Node* node)
             _node->removeListener(this);
 
         _node = node;
+
+        // Update node bindings for all materails
+        for (size_t i = 0, count = _patches.size(); i < count; ++i)
+        {
+            _patches[i]->updateNodeBinding(_node);
+        }
 
         if (_node)
             _node->addListener(this);
@@ -546,6 +540,7 @@ const Matrix& Terrain::getNormalMatrix() const
     {
         _dirtyFlags &= ~TERRAIN_DIRTY_NORMAL_MATRIX;
 
+        // Note: Terrain lighting is done in world space to simplify use of object-space height normal maps.
         getInverseWorldMatrix().transpose(&_normalMatrix);
     }
 
