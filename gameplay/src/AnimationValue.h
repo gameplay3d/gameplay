@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 /**
- * The runtime interface to represent an animation value.
+ * Defines a running animation value which can have one or more floats.
  */
 class AnimationValue
 {

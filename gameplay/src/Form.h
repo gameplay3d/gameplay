@@ -17,39 +17,11 @@ namespace gameplay
 class Theme;
 
 /**
- * Top-level container of UI controls.
- 
-   Child controls and containers can be created and added to a form using the
-   Container::addControl and Container::insertControl methods.
-
-   The following properties are available for forms:
-
- @verbatim
-    form <formID>
-    {
-        // Form properties.
-        theme       = <Path to .theme File> // See Theme.h.
-        layout      = <Layout::Type>        // A value from the Layout::Type enum.  e.g.: LAYOUT_VERTICAL
-        style       = <styleID>             // A style from the referenced theme.
-        position   = <x, y>                // Position of the form on-screen, measured in pixels.
-        alignment  = <Control::Alignment>  // Note: 'position' will be ignored.
-        autoWidth  = <bool>                // Will result in a form the width of the display.
-        autoHeight = <bool>                // Will result in a form the height of the display.
-        size       = <width, height>       // Size of the form, measured in pixels.
-        width      = <width>               // Can be used in place of 'size', e.g. with 'autoHeight = true'
-        height     = <height>              // Can be used in place of 'size', e.g. with 'autoWidth = true'
-        consumeEvents = <bool>             // Whether the form propagates input events to the Game's input event handler. Default is false
-      
-        // All the nested controls within this form.
-        container { }
-        label { }
-        textBox { }
-        button { }
-        checkBox { }
-        radioButton { }
-        slider { }
-    }
- @endverbatim
+ * Defines a form that is a root container that contains zero or more controls.
+ *
+ * This can also be attached on a scene Node to support 3D forms.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Form : public Container
 {
@@ -62,9 +34,7 @@ class Form : public Container
 public:
 
     /**
-     * Creates a form using the data from the Properties object defined at the specified URL, 
-     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
-     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * Creates a form from a .form properties file.
      * 
      * @param url The URL pointing to the Properties object defining the form. 
      * @script{create}
@@ -97,7 +67,14 @@ public:
     static Form* getForm(const char* id);
     
     /**
-     * Returns the current UI control that is in focus.
+    * Returns the single currently active control within the UI system.
+    *
+    * @return The currently active control, or NULL if no controls are currently active.
+    */
+    static Control* getActiveControl();
+
+    /**
+     * Returns the single current control that is in focus.
      *
      * @return The current control in focus, or NULL if no controls are in focus.
      */
@@ -157,13 +134,6 @@ public:
      * @param enabled True to enable batching (default), false otherwise.
      */
     void setBatchingEnabled(bool enabled);
-
-    /**
-     * Returns the single currently active control within the UI system.
-     *
-     * @return The currently active control, or NULL if no controls are currently active.
-     */
-    static Control* getActiveControl();
 
 protected:
 

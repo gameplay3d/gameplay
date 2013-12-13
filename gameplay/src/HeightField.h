@@ -7,7 +7,7 @@ namespace gameplay
 {
 
     /**
-     * Defines a reference counted class that holds heightfield data.
+     * Defines height data used to store values representing elevation.
      *
      * Heightfields can be used to construct both Terrain objects as well as PhysicsCollisionShape
      * heightfield defintions, which are used in heightfield rigid body creation. Heightfields can

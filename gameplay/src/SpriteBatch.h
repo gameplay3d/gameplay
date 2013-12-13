@@ -13,7 +13,7 @@ namespace gameplay
 {
 
 /**
- * Enables groups of sprites to be drawn with common settings.
+ * Defines a class for drawing groups of sprites.
  *
  * This class provides efficient rendering and sorting of two-dimensional
  * sprites. Only a single texture and effect can be used with a SpriteBatch.

@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 /**
- * Stream is an interface for reading and writing a sequence of bytes.
+ * Defines a stream for reading and writing a sequence of bytes.
  * 
  * Use FileSystem::open() to create a stream.
  * 

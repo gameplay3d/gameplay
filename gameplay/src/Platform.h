@@ -18,7 +18,6 @@ class Game;
  * Defines a platform abstraction.
  *
  * This class has only a few public methods for creating a platform
- *
  */
 class Platform
 {

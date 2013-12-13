@@ -10,9 +10,9 @@ namespace gameplay
 class AudioSource;
 
 /**
- * The actual audio buffer data.
+ * Defines the actual audio buffer data.
  *
- * Currently only supports supported formats: .wav, .au and .raw files.
+ * Currently only supports supported formats: .ogg, .wav, .au and .raw files.
  */
 class AudioBuffer : public Ref
 {

@@ -14,28 +14,7 @@ class PhysicsVehicle;
  * Defines a class for vehicle wheel physics which represents the individual wheel
  * itself as well as the tire and suspension.
  *
- * The following properties are available for wheels:
-
- @verbatim
-    collisionObject <wheelID>
-    {
-        type                     = VEHICLE_WHEEL
-
-        steerable                = <bool>                // indicates whether wheel is steerable
-        wheelDirection           = <float, float, float> // direction of strut extension, in chassis space
-        wheelAxle                = <float, float, float> // direction of axle (spin axis), in chassis space
-        strutConnectionOffset    = <float, float, float> // offset from default strut connection point
-        strutRestLength          = <float>               // strut rest length
-        strutTravelMax           = <float>               // maximum strut travel
-        strutStiffness           = <float>               // strut stiffness, normalized to chassis mass
-        strutDampingCompression  = <float>               // strut damping under compression, normalized to chassis mass
-        strutDampingRelaxation   = <float>               // strut damping under relaxation, normalized to chassis mass
-        strutForceMax            = <float>               // maximum strut force
-        frictionBreakout         = <float>               // breakout friction
-        wheelRadius              = <float>               // wheel radius
-        rollInfluence            = <float>               // how side friction affects chassis roll, normalized
-    }
- @endverbatim
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 
 class PhysicsVehicleWheel : public PhysicsCollisionObject

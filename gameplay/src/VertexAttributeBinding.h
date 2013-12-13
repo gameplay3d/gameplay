@@ -11,7 +11,7 @@ class Mesh;
 class Effect;
 
 /**
- * Represents a binding between the vertex layout of a Mesh and the vertex
+ * Defines a binding between the vertex layout of a Mesh and the vertex
  * input attributes of a vertex shader (Effect).
  *
  * In a perfect world, this class would always be a binding directly between

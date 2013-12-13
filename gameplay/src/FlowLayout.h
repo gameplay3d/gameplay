@@ -7,7 +7,9 @@ namespace gameplay
 {
 
 /**
- * Defines a layout that arranges controls in order, left-to-right, row by row.
+ * Defines a flow layout.
+ *
+ * A flow layout arranges controls in order, left-to-right, row by row and wraps.
  */
 class FlowLayout : public Layout
 {

@@ -9,15 +9,17 @@ namespace gameplay
 {
 
 /**
- * Physics controller class for a game character.
+ * Defines a physics controller class for a game character.
  *
- * This class can be used to control the movements and collisions of a character
+ * This can be used to control the movements and collisions of a character
  * in a game. It interacts with the Physics system to apply gravity and handle
  * collisions, however dynamics are not applied to the character directly by the
  * physics system. Instead, the character's movement is controlled directly by the
  * PhysicsCharacter class. This results in a more responsive and typical game
  * character than would be possible if trying to move a character by applying
  * physical simulation with forces.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsCharacter : public PhysicsGhostObject
 {

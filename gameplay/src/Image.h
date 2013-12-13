@@ -7,14 +7,16 @@ namespace gameplay
 {
 
 /**
- * Represents an image (currently only supports PNG files).
+ * Defines an image buffer of RGB or RGBA color data.
+ *
+ * Currently only supports loading from .png image files.
  */
 class Image : public Ref
 {
 public:
 
     /**
-     * Defines the set of supported image formats.
+     * Defines the set of supported color formats.
      */
     enum Format
     {

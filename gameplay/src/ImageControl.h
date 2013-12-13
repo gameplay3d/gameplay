@@ -11,27 +11,11 @@ namespace gameplay
 {
 
 /**
- * An ImageControl allows forms to display images from arbitrary files not specified in the theme.
+ * Defines an image control.
  *
- * The following properties are available for image controls:
-
- @verbatim
-     image <control ID>
-     {
-         style          = <styleID>
-         alignment      = <Control::Alignment constant> // Note: 'position' will be ignored.
-         position       = <x, y>
-         autoWidth      = <bool>
-         autoHeight     = <bool>
-         size           = <width, height>
-         width          = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
-         height         = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         consumeEvents  = <bool>    // Whether the label propagates input events to the Game's input event handler. Default is true.
-         path           = <string>  // Path to image or texture atlas.
-         srcRegion      = <x, y, width, height>  // Region within file to create UVs from.
-         dstRegion      = <x, y, width, height>  // Region of control's viewport to draw into.
-     }
- @endverbatim
+ * This allows forms to display seperate images from arbitrary files not specified in the theme.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class ImageControl : public Control
 {

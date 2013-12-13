@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 /**
- * Generic base class for supporting script callbacks.
+ * Defines an interface for supporting script callbacks.
  */
 class ScriptTarget
 {
@@ -18,8 +18,8 @@ public:
      * 
      * @param eventName The name of the event.
      * @param function The name of the Lua script function to call when the event is fired; can either be
-     *      just the name of a function (if the function's script file has already been loaded), or can be
-     *      a URL of the form scriptFile.lua#functionName.
+     *  just the name of a function (if the function's script file has already been loaded), or can be
+     *  a URL of the form scriptFile.lua#functionName.
      */
     virtual void addScriptCallback(const std::string& eventName, const std::string& function);
 

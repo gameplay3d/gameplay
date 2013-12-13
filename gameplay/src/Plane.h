@@ -12,7 +12,7 @@ class Frustum;
 class Ray;
 
 /**
- * Defines a plane.
+ * Defines a plane which is a flat surface with 2 sides.
  *
  * The plane is represented as a plane using a 3D vector normal and a
  * distance value (stored as a negative value).

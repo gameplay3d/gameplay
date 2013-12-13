@@ -8,7 +8,7 @@ namespace gameplay
 {
 
 /**
- * The AIController facilitates state machine execution and message passing
+ * Defines and facilitates the state machine execution and message passing
  * between AI objects in the game. This class is generally not interfaced
  * with directly.
  */
