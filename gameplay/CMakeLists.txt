@@ -625,9 +625,9 @@ include_directories(
 
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-include_directories(${GTK3_INCLUDE_DIRS})
-add_definitions(${GTK3_CFLAGS_OTHER})
+pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
+include_directories(${GTK2_INCLUDE_DIRS})
+add_definitions(${GTK2_CFLAGS_OTHER})
 add_definitions(-D__linux__)
 ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
