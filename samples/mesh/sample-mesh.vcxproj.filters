@@ -15,7 +15,6 @@
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
     <None Include="game.config" />
-    <None Include="../../gameplay\res\logo_powered_white.png" />
     <None Include="res\arial.gpb">
       <Filter>res</Filter>
     </None>

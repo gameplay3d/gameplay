@@ -5,9 +5,6 @@
     </Filter>
     <Filter Include="src">
     </Filter>
-    <Filter Include="config">
-      <UniqueIdentifier>{e9cd44da-992f-4483-8fec-0eb7f7d982d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="res\common">
       <UniqueIdentifier>{175385aa-76bd-4390-961c-c7634597f147}</UniqueIdentifier>
     </Filter>
@@ -18,18 +15,6 @@
   <ItemGroup>
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
-    <None Include="game.atc.config">
-      <Filter>config</Filter>
-    </None>
-    <None Include="game.dxt.config">
-      <Filter>config</Filter>
-    </None>
-    <None Include="game.png.config">
-      <Filter>config</Filter>
-    </None>
-    <None Include="game.pvr.config">
-      <Filter>config</Filter>
-    </None>
     <None Include="res\shaders\colored.frag">
       <Filter>res\shaders</Filter>
     </None>

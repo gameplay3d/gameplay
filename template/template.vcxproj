@@ -146,7 +146,7 @@
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x86;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x86;GAMEPLAY_PATH\external-deps\openal\lib\windows\x86;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x86;GAMEPLAY_PATH\external-deps\glew\lib\windows\x86;GAMEPLAY_PATH\external-deps\png\lib\windows\x86;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x86;GAMEPLAY_PATH\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y</Command>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -175,7 +175,7 @@
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x64;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x64;GAMEPLAY_PATH\external-deps\openal\lib\windows\x64;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x64;GAMEPLAY_PATH\external-deps\glew\lib\windows\x64;GAMEPLAY_PATH\external-deps\png\lib\windows\x64;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x64;GAMEPLAY_PATH\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y</Command>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -206,7 +206,7 @@
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x86;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x86;GAMEPLAY_PATH\external-deps\openal\lib\windows\x86;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x86;GAMEPLAY_PATH\external-deps\glew\lib\windows\x86;GAMEPLAY_PATH\external-deps\png\lib\windows\x86;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x86;GAMEPLAY_PATH\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y</Command>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -269,7 +269,7 @@
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x86;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x86;GAMEPLAY_PATH\external-deps\openal\lib\windows\x86;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x86;GAMEPLAY_PATH\external-deps\glew\lib\windows\x86;GAMEPLAY_PATH\external-deps\png\lib\windows\x86;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x86;GAMEPLAY_PATH\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y</Command>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>

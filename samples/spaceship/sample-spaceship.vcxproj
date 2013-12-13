@@ -151,7 +151,7 @@
       </Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /u
 copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -214,7 +214,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       </Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /u
 copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -280,7 +280,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       </Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /u
 copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
