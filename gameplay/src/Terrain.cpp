@@ -7,9 +7,11 @@
 namespace gameplay
 {
 
+// Default terrain material path
+#define TERRAIN_MATERIAL "res/materials/terrain.material"
+
 // The default square size of terrain patches for a terrain that
 // does not have an explicitly specified patch size.
-//
 #define DEFAULT_TERRAIN_PATCH_SIZE 32
 
 // The default height of a terrain that does not have an explicitly
@@ -32,8 +34,7 @@ float getDefaultHeight(unsigned int width, unsigned int height);
 
 Terrain::Terrain() :
     _heightfield(NULL), _node(NULL), _normalMap(NULL), _flags(FRUSTUM_CULLING | LEVEL_OF_DETAIL),
-    _dirtyFlags(TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX),
-    _directionalLightCount(0), _pointLightCount(0), _spotLightCount(0)
+    _dirtyFlags(TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX)
 {
 }
 
@@ -69,9 +70,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     int detailLevels = 1;
     float skirtScale = 0;
     const char* normalMap = NULL;
-    unsigned int directionalLightCount = 0;
-    unsigned int pointLightCount = 0;
-    unsigned int spotLightCount = 0;
+    std::string materialPath;
 
     if (!p && path)
     {
@@ -196,6 +195,9 @@ Terrain* Terrain::create(const char* path, Properties* properties)
 
         // Read 'normalMap'
         normalMap = pTerrain->getString("normalMap");
+
+        // Read 'material'
+        materialPath = pTerrain->getString("material", "");
     }
 
     if (heightfield == NULL)
@@ -226,8 +228,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     Vector3 scale(terrainSize.x / (heightfield->getColumnCount()-1), terrainSize.y, terrainSize.z / (heightfield->getRowCount()-1));
 
     // Create terrain
-    Terrain* terrain = create(heightfield, scale, (unsigned int)patchSize, (unsigned int)detailLevels, skirtScale, normalMap, pTerrain);
-
+    Terrain* terrain = create(heightfield, scale, (unsigned int)patchSize, (unsigned int)detailLevels, skirtScale, normalMap, materialPath.c_str(), pTerrain);
 
     if (!externalProperties)
         SAFE_DELETE(p);
@@ -235,12 +236,14 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     return terrain;
 }
 
-Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigned int patchSize, unsigned int detailLevels, float skirtScale, const char* normalMapPath)
+Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigned int patchSize, unsigned int detailLevels, float skirtScale, const char* normalMapPath, const char* materialPath)
 {
-    return create(heightfield, scale, patchSize, detailLevels, skirtScale, normalMapPath, NULL);
+    return create(heightfield, scale, patchSize, detailLevels, skirtScale, normalMapPath, materialPath, NULL);
 }
 
-Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigned int patchSize, unsigned int detailLevels, float skirtScale, const char* normalMapPath, Properties* properties)
+Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale,
+    unsigned int patchSize, unsigned int detailLevels, float skirtScale,
+    const char* normalMapPath, const char* materialPath, Properties* properties)
 {
     GP_ASSERT(heightfield);
 
@@ -251,6 +254,7 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
     Terrain* terrain = new Terrain();
     terrain->_heightfield = heightfield;
     terrain->_localScale = scale;
+    terrain->_materialPath = (materialPath == NULL || strlen(materialPath) == 0) ? TERRAIN_MATERIAL : materialPath;
 
     // Store reference to bounding box (it is calculated and updated from TerrainPatch)
     BoundingBox& bounds = terrain->_boundingBox;
@@ -261,14 +265,6 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
     float halfWidth = (width - 1) * 0.5f;
     float halfHeight = (height - 1) * 0.5f;
     unsigned int maxStep = (unsigned int)std::pow(2.0, (double)(detailLevels-1));
-
-    Properties* lightingProps = properties->getNamespace("lighting", true);
-    if (lightingProps)
-    {
-        terrain->_directionalLightCount = lightingProps->getInt("directionalLights");
-        terrain->_pointLightCount = lightingProps->getInt("pointLights");
-        terrain->_spotLightCount = lightingProps->getInt("spotLights");
-    }
 
     // Create terrain patches
     unsigned int x1, x2, z1, z2;
@@ -284,7 +280,7 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
             x2 = std::min(x1 + patchSize, width-1);
 
             // Create this patch
-            TerrainPatch* patch = TerrainPatch::create(terrain, row, column, heightfield->getArray(), width, height, x1, z1, x2, z2, -halfWidth, -halfHeight, maxStep, skirtScale);
+            TerrainPatch* patch = TerrainPatch::create(terrain, terrain->_patches.size(), row, column, heightfield->getArray(), width, height, x1, z1, x2, z2, -halfWidth, -halfHeight, maxStep, skirtScale);
             terrain->_patches.push_back(patch);
 
             // Append the new patch's local bounds to the terrain local bounds
@@ -380,6 +376,12 @@ void Terrain::setNode(Node* node)
             _node->removeListener(this);
 
         _node = node;
+
+        // Update node bindings for all materails
+        for (size_t i = 0, count = _patches.size(); i < count; ++i)
+        {
+            _patches[i]->updateNodeBinding(_node);
+        }
 
         if (_node)
             _node->addListener(this);
@@ -546,6 +548,7 @@ const Matrix& Terrain::getNormalMatrix() const
     {
         _dirtyFlags &= ~TERRAIN_DIRTY_NORMAL_MATRIX;
 
+        // Note: Terrain lighting is done in world space to simplify use of object-space height normal maps.
         getInverseWorldMatrix().transpose(&_normalMatrix);
     }
 

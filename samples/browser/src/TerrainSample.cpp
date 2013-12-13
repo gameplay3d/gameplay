@@ -21,11 +21,21 @@ struct TerrainHitFilter : public PhysicsController::HitFilter
     PhysicsCollisionObject* terrainObject;
 };
 
+static TerrainSample* __instance = NULL;
+
 TerrainSample::TerrainSample()
 	: _font(NULL), _scene(NULL), _terrain(NULL), _sky(NULL), _form(NULL), _formVisible(true),
 	  _wireframe(false), _debugPhysics(false), _snapToGround(true), _vsync(true),
       _mode(MODE_LOOK), _sphere(NULL), _box(NULL), _directionalLight(NULL)
 {
+    __instance = this;
+
+    static bool registered = false;
+    if (!registered)
+    {
+        RenderState::registerAutoBindingResolver(&resolveAutoBinding);
+        registered = true;
+    }
 }
 
 TerrainSample::~TerrainSample()
@@ -35,6 +45,9 @@ TerrainSample::~TerrainSample()
     SAFE_RELEASE(_form);
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
+
+    if (__instance == this)
+        __instance = NULL;
 }
 
 void TerrainSample::initialize()
@@ -78,49 +91,7 @@ void TerrainSample::initialize()
 	enableScriptCamera(true);
     setScriptCameraSpeed(20, 80);
 
-    _directionalLight = Light::createDirectional(1, 1, 1);
-    Node* lightNode = Node::create("directionalLight");
-    _scene->addNode(lightNode);
-    lightNode->setLight(_directionalLight);
-    lightNode->setRotation(Vector3(1, 0, 0), -MATH_DEG_TO_RAD(45));
-    
-    _scene->visit(this, &TerrainSample::intializeLights);
-}
-
-void initializeLight(Material* material, Light* light)
-{
-    if (material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_directionalLightDirection[0]"))
-    {
-        // For this sample we will only bind a single light to each object in the scene.
-        MaterialParameter* colorParam = material->getParameter("u_directionalLightColor[0]");
-        colorParam->setValue(light->getColor());
-
-        MaterialParameter* directionParam = material->getParameter("u_directionalLightDirection[0]");
-        directionParam->bindValue(light->getNode(), &Node::getForwardVectorWorld);
-    }
-}
-
-bool TerrainSample::intializeLights(Node* node)
-{
-    Model* model = node->getModel();
-    if (model)
-    {
-        initializeLight(model->getMaterial(), _directionalLight);
-    }
-
-    Terrain* terrain = node->getTerrain();
-    if (terrain)
-    {
-        unsigned int patchCount = terrain->getPatchCount();
-        for (unsigned int i = 0; i < patchCount; i++)
-        {
-            TerrainPatch* patch = terrain->getPatch(i);
-            Material* material = patch->getMaterial();
-
-            initializeLight(material, _directionalLight);
-        }
-    }
-    return true;
+    _directionalLight = _scene->findNode("directionalLight")->getLight();
 }
 
 void TerrainSample::finalize()
@@ -310,9 +281,6 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
                     PhysicsRigidBody::Parameters rbParams(1);
                     clone->setCollisionObject(PhysicsCollisionObject::RIGID_BODY, rbShape, &rbParams);
                     _scene->addNode(clone);
-                    clone->getModel()->setMaterial(materialUrl);
-                    Material* material = clone->getModel()->getMaterial();
-                    initializeLight(material, _directionalLight);
                     clone->release();
 
                     _shapes.push_back(clone);
@@ -415,3 +383,35 @@ void TerrainSample::setMessage(const char* message)
     _form->getControl("messageBox")->setVisible(message ? true : false);
 }
 
+Vector3 TerrainSample::getDirectionalLightDirection() const
+{
+    // Terrain expects world-space light vectors
+    return _directionalLight->getNode()->getForwardVectorWorld();
+}
+
+Vector3 TerrainSample::getDirectionalLightColor() const
+{
+    return _directionalLight->getColor();
+}
+
+bool TerrainSample::resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter)
+{
+    if (strcmp(autoBinding, "DIRECTIONAL_LIGHT_DIRECTION") == 0)
+    {
+        if (__instance)
+        {
+            parameter->bindValue(__instance, &TerrainSample::getDirectionalLightDirection);
+            return true;
+        }
+    }
+    else if (strcmp(autoBinding, "DIRECTIONAL_LIGHT_COLOR") == 0)
+    {
+        if (__instance)
+        {
+            parameter->bindValue(__instance, &TerrainSample::getDirectionalLightColor);
+            return true;
+        }
+    }
+
+    return false;
+}

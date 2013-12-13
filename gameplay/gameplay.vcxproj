@@ -603,6 +603,7 @@
     <ClInclude Include="src\VerticalLayout.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\materials\terrain.material" />
     <None Include="res\shaders\colored.frag" />
     <None Include="res\shaders\colored.vert" />
     <None Include="res\shaders\font.frag" />
