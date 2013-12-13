@@ -40,6 +40,7 @@ void luaRegister_Material()
         {"getTechniqueCount", lua_Material_getTechniqueCount},
         {"release", lua_Material_release},
         {"removeParameter", lua_Material_removeParameter},
+        {"setNodeBinding", lua_Material_setNodeBinding},
         {"setParameterAutoBinding", lua_Material_setParameterAutoBinding},
         {"setStateBlock", lua_Material_setStateBlock},
         {"setTechnique", lua_Material_setTechnique},
@@ -602,6 +603,48 @@ int lua_Material_removeParameter(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Material_removeParameter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Material_setNodeBinding(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Node> param1 = gameplay::ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
+                    lua_error(state);
+                }
+
+                Material* instance = getInstance(state);
+                instance->setNodeBinding(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Material_setNodeBinding - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

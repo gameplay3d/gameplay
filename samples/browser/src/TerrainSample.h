@@ -22,6 +22,8 @@ public:
 
     void controlEvent(Control* control, EventType evt);
 
+    static bool resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter);
+
 protected:
 
     void initialize();
@@ -46,6 +48,10 @@ private:
         MODE_DROP_SPHERE,
         MODE_DROP_BOX
     };
+
+    Vector3 getDirectionalLightDirection() const;
+    
+    Vector3 getDirectionalLightColor() const;
 
 	Font* _font;
 	Scene* _scene;

@@ -121,7 +121,8 @@ public:
      *
      * The specified properties file can contain a full terrain definition, including a
      * heightmap (PNG, RAW8, RAW16), level of detail information, patch size, layer texture
-     * details and vertical skirt size.
+     * details and vertical skirt size. A custom terrain material file can also be specified,
+     * otherwise the terrain will look for a material file at res/materials/terrain.material.
      *
      * @param path Path to a properties file describing the terrain.
      *
@@ -162,12 +163,15 @@ public:
      *      vertical skirts should extend down by half of the maximum height of the terrain. A value of zero
      *      disables vertical skirts.
      * @param normalMapPath Path to an object-space normal map to use for terrain lighting, instead of vertex normals.
+     * @param materialPath Optional path to a material file to use for the terrain (if not specified, looks for a material
+     *      file at res/materials/terrain.material.
      *
      * @return A new Terrain.
      * @script{create}
      */
     static Terrain* create(HeightField* heightfield, const Vector3& scale = Vector3::one(), unsigned int patchSize = 32,
-                           unsigned int detailLevels = 1, float skirtScale = 0.0f, const char* normalMapPath = NULL);
+                           unsigned int detailLevels = 1, float skirtScale = 0.0f, const char* normalMapPath = NULL,
+                           const char* materialPath = NULL);
 
     /**
      * Returns the node that this terrain is bound to.
@@ -296,7 +300,9 @@ private:
     /**
      * Internal method for creating terrain.
      */
-    static Terrain* create(HeightField* heightfield, const Vector3& scale, unsigned int patchSize, unsigned int detailLevels, float skirtScale, const char* normalMapPath, Properties* properties);
+    static Terrain* create(HeightField* heightfield, const Vector3& scale, 
+        unsigned int patchSize, unsigned int detailLevels, float skirtScale, 
+        const char* normalMapPath, const char* materialPath, Properties* properties);
 
     /**
      * Internal method for creating terrain.
@@ -309,54 +315,55 @@ private:
     void setNode(Node* node);
 
     /**
-    * @see Transform::Listener::transformChanged.
-    *
-    * Internal use only.
-    *
-    * @script{ignore}
-    */
+     * @see Transform::Listener::transformChanged.
+     *
+     * Internal use only.
+     *
+     * @script{ignore}
+     */
     void transformChanged(Transform* transform, long cookie);
 
     /**
-    * Returns the world matrix of the terrain, factoring in terrain local scaling.
-    *
-    * @return The world matrix for the terrain.
-    */
+     * Returns the world matrix of the terrain, factoring in terrain local scaling.
+     *
+     * @return The world matrix for the terrain.
+     */
     const Matrix& getWorldMatrix() const;
 
     /**
-    * Returns the terrain's inverse world matrix.
-    *
-    * @return The inverse world matrix for the terrain.
-    */
-    const Matrix& getInverseWorldMatrix() const;
-
-    /**
-    * Returns a matrix to be used for transforming normal vectors for the terrain.
-    *
-    * @return The matrix used for normal vector transformation for the terrain.
-    */
-    const Matrix& getNormalMatrix() const;
-
-    /**
-    * Returns the world view matrix for the terrain, factoring in terrain local scaling.
-    *
-    * @return The world-view matrix for the terrain.
-    */
+     * Returns the world view matrix for the terrain, factoring in terrain local scaling.
+     *
+     * @return The world-view matrix for the terrain.
+     */
     const Matrix& getWorldViewMatrix() const;
 
     /**
-    * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
-    *
-    * @return The world-view-projection matrix for the terrain.
-    */
+     * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
+     *
+     * @return The world-view-projection matrix for the terrain.
+     */
     const Matrix& getWorldViewProjectionMatrix() const;
+
+    /**
+     * Returns the terrain's inverse world matrix.
+     *
+     * @return The inverse world matrix for the terrain.
+     */
+    const Matrix& getInverseWorldMatrix() const;
+
+    /**
+     * Returns a matrix to be used for transforming normal vectors for the terrain.
+     *
+     * @return The matrix used for normal vector transformation for the terrain.
+     */
+    const Matrix& getNormalMatrix() const;
 
     /**
      * Returns the local bounding box for this patch, at the base LOD level.
      */
     BoundingBox getBoundingBox(bool worldSpace) const;
 
+    std::string _materialPath;
     HeightField* _heightfield;
     Node* _node;
     std::vector<TerrainPatch*> _patches;
@@ -368,9 +375,6 @@ private:
     mutable Matrix _normalMatrix;
     mutable unsigned int _dirtyFlags;
     BoundingBox _boundingBox;
-    unsigned int _directionalLightCount;
-    unsigned int _pointLightCount;
-    unsigned int _spotLightCount;
 };
 
 }

@@ -19,6 +19,7 @@ int lua_Pass_getStateBlock(lua_State* state);
 int lua_Pass_getVertexAttributeBinding(lua_State* state);
 int lua_Pass_release(lua_State* state);
 int lua_Pass_removeParameter(lua_State* state);
+int lua_Pass_setNodeBinding(lua_State* state);
 int lua_Pass_setParameterAutoBinding(lua_State* state);
 int lua_Pass_setStateBlock(lua_State* state);
 int lua_Pass_setVertexAttributeBinding(lua_State* state);
