@@ -37,6 +37,7 @@ Camera::Camera(float zoomX, float zoomY, float aspectRatio, float nearPlane, flo
 
 Camera::~Camera()
 {
+    SAFE_DELETE(_listeners);
 }
 
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)

@@ -102,7 +102,7 @@ Camera* AudioListener::getCamera() const
 
 void AudioListener::setCamera(Camera* camera)
 {
-    if (!camera || _camera == camera)
+    if (_camera == camera)
         return;
 
     // Disconnect our current camera.
