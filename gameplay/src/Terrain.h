@@ -13,6 +13,7 @@ namespace gameplay
 
 class Node;
 class TerrainPatch;
+class TerrainAutoBindingResolver;
 
 /**
  * Defines a Terrain that is capable of rendering large landscapes from 2D heightmap images.
@@ -82,9 +83,10 @@ class TerrainPatch;
 class Terrain : public Ref, public Transform::Listener
 {
     friend class Node;
-    friend class TerrainPatch;
     friend class PhysicsController;
     friend class PhysicsRigidBody;
+    friend class TerrainPatch;
+    friend class TerrainAutoBindingResolver;
 
 public:
 
