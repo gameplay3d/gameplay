@@ -23,17 +23,20 @@ template <class T> T clamp(T value, T min, T max) { return value < min ? min : (
 #define TERRAINPATCH_DIRTY_LEVEL 4
 #define TERRAINPATCH_DIRTY_ALL (TERRAINPATCH_DIRTY_MATERIAL | TERRAINPATCH_DIRTY_BOUNDS | TERRAINPATCH_DIRTY_LEVEL)
 
-static bool __autoBindingResolverRegistered = false;
+/**
+ * Custom material auto-binding resolver for terrain.
+ * @script{ignore}
+ */
+class TerrainAutoBindingResolver : RenderState::AutoBindingResolver
+{
+    bool resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter);
+};
+static TerrainAutoBindingResolver __autoBindingResolver;
 static int __currentPatchIndex = -1;
 
 TerrainPatch::TerrainPatch() :
-_terrain(NULL), _row(0), _column(0), _camera(NULL), _level(0), _bits(TERRAINPATCH_DIRTY_ALL)
+    _terrain(NULL), _row(0), _column(0), _camera(NULL), _level(0), _bits(TERRAINPATCH_DIRTY_ALL)
 {
-    if (!__autoBindingResolverRegistered)
-    {
-        RenderState::registerAutoBindingResolver(TerrainPatch::autoBindingResolver);
-        __autoBindingResolverRegistered = true;
-    }
 }
 
 TerrainPatch::~TerrainPatch()
@@ -708,7 +711,7 @@ void TerrainPatch::updateNodeBinding(Node* node)
     __currentPatchIndex = -1;
 }
 
-bool TerrainPatch::autoBindingResolver(const char* autoBinding, Node* node, MaterialParameter* parameter)
+bool TerrainAutoBindingResolver::resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter)
 {
     if (strcmp(autoBinding, "TERRAIN_WORLD_MATRIX") == 0)
     {

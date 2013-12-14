@@ -8,6 +8,7 @@ namespace gameplay
 {
 
 class Terrain;
+class TerrainAutoBindingResolver;
 
 /**
  * Defines a single patch for a Terrain.
@@ -15,6 +16,7 @@ class Terrain;
 class TerrainPatch : public Camera::Listener
 {
     friend class Terrain;
+    friend class TerrainAutoBindingResolver;
 
 public:
 
@@ -133,8 +135,6 @@ private:
     void updateNodeBinding(Node* node);
 
     std::string passCreated(Pass* pass);
-
-    static bool autoBindingResolver(const char* autoBinding, Node* node, MaterialParameter* parameter);
 
     Terrain* _terrain;
     unsigned int _index;

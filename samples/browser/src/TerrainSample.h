@@ -6,7 +6,7 @@
 
 using namespace gameplay;
 
-class TerrainSample : public Sample, public Control::Listener
+class TerrainSample : public Sample, public Control::Listener, private RenderState::AutoBindingResolver
 {
 public:
 
@@ -21,8 +21,6 @@ public:
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     void controlEvent(Control* control, EventType evt);
-
-    static bool resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter);
 
 protected:
 
@@ -49,9 +47,11 @@ private:
         MODE_DROP_BOX
     };
 
-    Vector3 getDirectionalLightDirection() const;
-    
-    Vector3 getDirectionalLightColor() const;
+    Vector3 getLight0DirectionWorld() const;
+    Vector3 getLight0DirectionView() const;
+    Vector3 getLight0Color() const;
+
+    bool resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter);
 
 	Font* _font;
 	Scene* _scene;

@@ -21,21 +21,11 @@ struct TerrainHitFilter : public PhysicsController::HitFilter
     PhysicsCollisionObject* terrainObject;
 };
 
-static TerrainSample* __instance = NULL;
-
 TerrainSample::TerrainSample()
 	: _font(NULL), _scene(NULL), _terrain(NULL), _sky(NULL), _form(NULL), _formVisible(true),
 	  _wireframe(false), _debugPhysics(false), _snapToGround(true), _vsync(true),
       _mode(MODE_LOOK), _sphere(NULL), _box(NULL), _directionalLight(NULL)
 {
-    __instance = this;
-
-    static bool registered = false;
-    if (!registered)
-    {
-        RenderState::registerAutoBindingResolver(&resolveAutoBinding);
-        registered = true;
-    }
 }
 
 TerrainSample::~TerrainSample()
@@ -45,9 +35,6 @@ TerrainSample::~TerrainSample()
     SAFE_RELEASE(_form);
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
-
-    if (__instance == this)
-        __instance = NULL;
 }
 
 void TerrainSample::initialize()
@@ -62,10 +49,12 @@ void TerrainSample::initialize()
     Bundle* bundle;
     bundle = Bundle::create("res/common/sphere.gpb");
     _sphere = bundle->loadNode("sphere");
+    _sphere->getModel()->setMaterial("res/common/terrain/shapes.material#sphere", 0);
     SAFE_RELEASE(bundle);
 
     bundle = Bundle::create("res/common/box.gpb");
     _box = bundle->loadNode("box");
+    _box->getModel()->setMaterial("res/common/terrain/shapes.material#box", 0);
     SAFE_RELEASE(bundle);
 
     // Load font
@@ -253,7 +242,6 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
             {
                 Node* clone = NULL;
                 PhysicsCollisionShape::Definition rbShape;
-                const char* materialUrl = NULL;
 
                 switch (_mode)
                 {
@@ -261,7 +249,6 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
                     {
                         clone = _sphere->clone();
                         rbShape = PhysicsCollisionShape::sphere();
-                        materialUrl = "res/common/terrain/shapes.material#sphere";
                     }
                     break;
 
@@ -269,7 +256,6 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
                     {
                         clone = _box->clone();
                         rbShape = PhysicsCollisionShape::box();
-                        materialUrl = "res/common/terrain/shapes.material#box";
                     }
                     break;
                 }
@@ -383,34 +369,37 @@ void TerrainSample::setMessage(const char* message)
     _form->getControl("messageBox")->setVisible(message ? true : false);
 }
 
-Vector3 TerrainSample::getDirectionalLightDirection() const
+Vector3 TerrainSample::getLight0DirectionWorld() const
 {
-    // Terrain expects world-space light vectors
     return _directionalLight->getNode()->getForwardVectorWorld();
 }
 
-Vector3 TerrainSample::getDirectionalLightColor() const
+Vector3 TerrainSample::getLight0DirectionView() const
+{
+    return _directionalLight->getNode()->getForwardVectorView();
+}
+
+Vector3 TerrainSample::getLight0Color() const
 {
     return _directionalLight->getColor();
 }
 
 bool TerrainSample::resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter)
 {
-    if (strcmp(autoBinding, "DIRECTIONAL_LIGHT_DIRECTION") == 0)
+    if (strcmp(autoBinding, "LIGHT0_DIRECTION_WORLD") == 0)
     {
-        if (__instance)
-        {
-            parameter->bindValue(__instance, &TerrainSample::getDirectionalLightDirection);
-            return true;
-        }
+        parameter->bindValue(this, &TerrainSample::getLight0DirectionWorld);
+        return true;
     }
-    else if (strcmp(autoBinding, "DIRECTIONAL_LIGHT_COLOR") == 0)
+    if (strcmp(autoBinding, "LIGHT0_DIRECTION_VIEW") == 0)
     {
-        if (__instance)
-        {
-            parameter->bindValue(__instance, &TerrainSample::getDirectionalLightColor);
-            return true;
-        }
+        parameter->bindValue(this, &TerrainSample::getLight0DirectionView);
+        return true;
+    }
+    else if (strcmp(autoBinding, "LIGHT0_COLOR") == 0)
+    {
+        parameter->bindValue(this, &TerrainSample::getLight0Color);
+        return true;
     }
 
     return false;

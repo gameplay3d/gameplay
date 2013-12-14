@@ -26,7 +26,7 @@ namespace gameplay
 {
 
 RenderState::StateBlock* RenderState::StateBlock::_defaultState = NULL;
-std::vector<RenderState::ResolveAutoBindingCallback> RenderState::_customAutoBindingResolvers;
+std::vector<RenderState::AutoBindingResolver*> RenderState::_customAutoBindingResolvers;
 
 RenderState::RenderState()
     : _nodeBinding(NULL), _state(NULL), _parent(NULL)
@@ -55,11 +55,6 @@ void RenderState::initialize()
 void RenderState::finalize()
 {
     SAFE_RELEASE(StateBlock::_defaultState);
-}
-
-void RenderState::registerAutoBindingResolver(ResolveAutoBindingCallback callback)
-{
-    _customAutoBindingResolvers.push_back(callback);
 }
 
 MaterialParameter* RenderState::getParameter(const char* name) const
@@ -248,16 +243,13 @@ void RenderState::applyAutoBinding(const char* uniformName, const char* autoBind
     bool bound = false;
 
     // First attempt to resolve the binding using custom registered resolvers.
-    if (_customAutoBindingResolvers.size() > 0)
+    for (size_t i = 0, count = _customAutoBindingResolvers.size(); i < count; ++i)
     {
-        for (size_t i = 0, count = _customAutoBindingResolvers.size(); i < count; ++i)
+        if (_customAutoBindingResolvers[i]->resolveAutoBinding(autoBinding, _nodeBinding, param))
         {
-            if (_customAutoBindingResolvers[i](autoBinding, _nodeBinding, param))
-            {
-                // Handled by custom auto binding resolver
-                bound = true;
-                break;
-            }
+            // Handled by custom auto binding resolver
+            bound = true;
+            break;
         }
     }
 
@@ -1218,6 +1210,18 @@ void RenderState::StateBlock::setStencilOperation(StencilOperation sfail, Stenci
 	{
 		_bits |= RS_STENCIL_OP;
 	}
+}
+
+RenderState::AutoBindingResolver::AutoBindingResolver()
+{
+    _customAutoBindingResolvers.push_back(this);
+}
+
+RenderState::AutoBindingResolver::~AutoBindingResolver()
+{
+    std::vector<RenderState::AutoBindingResolver*>::iterator itr = std::find(_customAutoBindingResolvers.begin(), _customAutoBindingResolvers.end(), this);
+    if (itr != _customAutoBindingResolvers.end())
+        _customAutoBindingResolvers.erase(itr);
 }
 
 }

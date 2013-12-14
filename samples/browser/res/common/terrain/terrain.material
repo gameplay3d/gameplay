@@ -9,8 +9,8 @@ material terrain
     u_surfaceLayerMaps = TERRAIN_LAYER_MAPS
 
     u_ambientColor = SCENE_AMBIENT_COLOR
-    u_directionalLightDirection[0] = DIRECTIONAL_LIGHT_DIRECTION
-    u_directionalLightColor[0] = DIRECTIONAL_LIGHT_COLOR
+    u_directionalLightDirection[0] = LIGHT0_DIRECTION_WORLD
+    u_directionalLightColor[0] = LIGHT0_COLOR
 
     renderState
     {
