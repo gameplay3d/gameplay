@@ -369,26 +369,26 @@ void TerrainSample::setMessage(const char* message)
     _form->getControl("messageBox")->setVisible(message ? true : false);
 }
 
-Vector3 TerrainSample::getLight0Direction() const
+Vector3 TerrainSample::getLightDirection0() const
 {
     return _directionalLight->getNode()->getForwardVectorView();
 }
 
-Vector3 TerrainSample::getLight0Color() const
+Vector3 TerrainSample::getLightColor0() const
 {
     return _directionalLight->getColor();
 }
 
 bool TerrainSample::resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter)
 {
-    if (strcmp(autoBinding, "LIGHT0_DIRECTION") == 0)
+    if (strcmp(autoBinding, "LIGHT_DIRECTION_0") == 0)
     {
-        parameter->bindValue(this, &TerrainSample::getLight0Direction);
+        parameter->bindValue(this, &TerrainSample::getLightDirection0);
         return true;
     }
-    else if (strcmp(autoBinding, "LIGHT0_COLOR") == 0)
+    else if (strcmp(autoBinding, "LIGHT_COLOR_0") == 0)
     {
-        parameter->bindValue(this, &TerrainSample::getLight0Color);
+        parameter->bindValue(this, &TerrainSample::getLightColor0);
         return true;
     }
 
