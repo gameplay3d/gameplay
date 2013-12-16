@@ -1033,7 +1033,7 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, HeightFi
     // If the node has a terrain, apply the terrain's local scale to the world scale
     if (node->getTerrain())
     {
-        Vector3& tScale = node->getTerrain()->_localScale;
+        const Vector3& tScale = node->getTerrain()->_localScale;
         scale.set(scale.x * tScale.x, scale.y * tScale.y, scale.z * tScale.z);
     }
 

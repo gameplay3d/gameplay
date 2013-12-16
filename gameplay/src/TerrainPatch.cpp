@@ -11,11 +11,6 @@ namespace gameplay
 /**
  * @script{ignore}
  */
-float calculateHeight(float* heights, unsigned int width, unsigned int height, unsigned int x, unsigned int z);
-
-/**
- * @script{ignore}
- */
 template <class T> T clamp(T value, T min, T max) { return value < min ? min : (value > max ? max : value); }
 
 #define TERRAINPATCH_DIRTY_MATERIAL 1
@@ -79,13 +74,6 @@ TerrainPatch* TerrainPatch::create(Terrain* terrain, unsigned int index,
     BoundingBox& bounds = patch->_boundingBox;
     bounds.set(patch->_levels[0]->model->getMesh()->getBoundingBox());
 
-    // Apply the terrain's local scale to our bounds
-    const Vector3& localScale = terrain->_localScale;
-    if (!localScale.isOne())
-    {
-        bounds.min.set(bounds.min.x * localScale.x, bounds.min.y * localScale.y, bounds.min.z * localScale.z);
-        bounds.max.set(bounds.max.x * localScale.x, bounds.max.y * localScale.y, bounds.max.z * localScale.z);
-    }
     return patch;
 }
 
@@ -147,6 +135,8 @@ void TerrainPatch::addLOD(float* heights, unsigned int width, unsigned int heigh
     unsigned int index = 0;
     Vector3 min(FLT_MAX, FLT_MAX, FLT_MAX);
     Vector3 max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    float stepXScaled = step * _terrain->_localScale.x;
+    float stepZScaled = step * _terrain->_localScale.z;
     bool zskirt = verticalSkirtSize > 0 ? true : false;
     for (unsigned int z = z1; ; )
     {
@@ -158,12 +148,12 @@ void TerrainPatch::addLOD(float* heights, unsigned int width, unsigned int heigh
             float* v = vertices + (index * vertexElements);
             index++;
 
-            // Compute position
-            v[0] = x + xOffset;
-            v[1] = calculateHeight(heights, width, height, x, z);
+            // Compute position - apply the local scale of the terrain into the vertex data
+            v[0] = (x + xOffset) * _terrain->_localScale.x;
+            v[1] = computeHeight(heights, width, x, z);
             if (xskirt || zskirt)
-                v[1] -= verticalSkirtSize;
-            v[2] = z + zOffset;
+                v[1] -= verticalSkirtSize * _terrain->_localScale.y;
+            v[2] = (z + zOffset) * _terrain->_localScale.z;
 
             // Update bounding box min/max (don't include vertical skirt vertices in bounding box)
             if (!(xskirt || zskirt))
@@ -181,16 +171,15 @@ void TerrainPatch::addLOD(float* heights, unsigned int width, unsigned int heigh
                 if (v[2] > max.z)
                     max.z = v[2];
             }
-            v += 3;
 
             // Compute normal
             if (!_terrain->_normalMap)
             {
-                Vector3 p(x, calculateHeight(heights, width, height, x, z), z);
-                Vector3 w(Vector3(x>=step ? x-step : x, calculateHeight(heights, width, height, x>=step ? x-step : x, z), z), p);
-                Vector3 e(Vector3(x<width-step ? x+step : x, calculateHeight(heights, width, height, x<width-step ? x+step : x, z), z), p);
-                Vector3 s(Vector3(x, calculateHeight(heights, width, height, x, z>=step ? z-step : z), z>=step ? z-step : z), p);
-                Vector3 n(Vector3(x, calculateHeight(heights, width, height, x, z<height-step ? z+step : z), z<height-step ? z+step : z), p);
+                Vector3 p(v[0], computeHeight(heights, width, x, z), v[2]);
+                Vector3 w(Vector3(x>=step ? v[0]-stepXScaled : v[0], computeHeight(heights, width, x>=step ? x-step : x, z), v[2]), p);
+                Vector3 e(Vector3(x<width-step ? v[0]+stepXScaled : v[0], computeHeight(heights, width, x<width-step ? x+step : x, z), v[2]), p);
+                Vector3 s(Vector3(v[0], computeHeight(heights, width, x, z>=step ? z-step : z), z>=step ? v[2]-stepZScaled : v[2]), p);
+                Vector3 n(Vector3(v[0], computeHeight(heights, width, x, z<height-step ? z+step : z), z<height-step ? v[2]+stepZScaled : v[2]), p);
                 Vector3 normals[4];
                 Vector3::cross(n, w, &normals[0]);
                 Vector3::cross(w, s, &normals[1]);
@@ -198,11 +187,13 @@ void TerrainPatch::addLOD(float* heights, unsigned int width, unsigned int heigh
                 Vector3::cross(s, e, &normals[3]);
                 Vector3 normal = -(normals[0] + normals[1] + normals[2] + normals[3]);
                 normal.normalize();
-                v[0] = normal.x;
-                v[1] = normal.y;
-                v[2] = normal.z;
+                v[3] = normal.x;
+                v[4] = normal.y;
+                v[5] = normal.z;
                 v += 3;
             }
+
+            v += 3;
 
             // Compute texture coord
             v[0] = (float)x / width;
@@ -540,8 +531,7 @@ bool TerrainPatch::updateMaterial()
             return false;
         }
 
-        if (_terrain->_node)
-            material->setNodeBinding(_terrain->_node);
+        material->setNodeBinding(_terrain->_node);
 
         // Set material on this lod level
         _levels[i]->model->setMaterial(material);
@@ -552,6 +542,16 @@ bool TerrainPatch::updateMaterial()
     __currentPatchIndex = -1;
 
     return true;
+}
+
+void TerrainPatch::updateNodeBindings()
+{
+    __currentPatchIndex = _index;
+    for (size_t i = 0, count = _levels.size(); i < count; ++i)
+    {
+        _levels[i]->model->getMaterial()->setNodeBinding(_terrain->_node);
+    }
+    __currentPatchIndex = -1;
 }
 
 unsigned int TerrainPatch::draw(bool wireframe)
@@ -592,9 +592,6 @@ const BoundingBox& TerrainPatch::getBoundingBox(bool worldSpace) const
     _boundingBoxWorld.set(_boundingBox);
 
     // Transform the bounding box by the terrain node's world transform.
-    // We don't use Terrain::getWorldMatrix because that returns a matrix
-    // that has terrain->_localScale factored in - and our patche's bounding
-    // box already has local scale factored in.
     if (_terrain->_node)
         _boundingBoxWorld.transform(_terrain->_node->getWorldMatrix());
 
@@ -676,9 +673,9 @@ void TerrainPatch::setMaterialDirty()
     _bits |= TERRAINPATCH_DIRTY_MATERIAL;
 }
 
-float calculateHeight(float* heights, unsigned int width, unsigned int height, unsigned int x, unsigned int z)
+float TerrainPatch::computeHeight(float* heights, unsigned int width, unsigned int x, unsigned int z)
 {
-    return heights[z * width + x];
+    return heights[z * width + x] * _terrain->_localScale.y;
 }
 
 TerrainPatch::Layer::Layer() :
@@ -699,112 +696,50 @@ bool TerrainPatch::LayerCompare::operator() (const Layer* lhs, const Layer* rhs)
     return (lhs->index < rhs->index);
 }
 
-void TerrainPatch::updateNodeBinding(Node* node)
-{
-    __currentPatchIndex = _index;
-
-    for (size_t i = 0, count = _levels.size(); i < count; ++i)
-    {
-        _levels[i]->model->getMaterial()->setNodeBinding(node);
-    }
-
-    __currentPatchIndex = -1;
-}
-
 bool TerrainAutoBindingResolver::resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter)
 {
-    if (strcmp(autoBinding, "TERRAIN_WORLD_MATRIX") == 0)
+    // Local helper functions
+    struct HelperFunctions
     {
-        Terrain* terrain = node->getTerrain();
-        if (terrain)
+        static TerrainPatch* getPatch(Node* node)
         {
-            parameter->bindValue(terrain, &Terrain::getWorldMatrix);
-            return true;
-        }
-    }
-    else if (strcmp(autoBinding, "TERRAIN_WORLD_VIEW_MATRIX") == 0)
-    {
-        Terrain* terrain = node->getTerrain();
-        if (terrain)
-        {
-            parameter->bindValue(terrain, &Terrain::getWorldViewMatrix);
-            return true;
-        }
-    }
-    else if (strcmp(autoBinding, "TERRAIN_WORLD_VIEW_PROJECTION_MATRIX") == 0)
-    {
-        Terrain* terrain = node->getTerrain();
-        if (terrain)
-        {
-            parameter->bindValue(terrain, &Terrain::getWorldViewProjectionMatrix);
-            return true;
-        }
-    }
-    else if (strcmp(autoBinding, "TERRAIN_INVERSE_WORLD_MATRIX") == 0)
-    {
-        Terrain* terrain = node->getTerrain();
-        if (terrain)
-        {
-            parameter->bindValue(terrain, &Terrain::getInverseWorldMatrix);
-            return true;
-        }
-    }
-    else if (strcmp(autoBinding, "TERRAIN_NORMAL_MATRIX") == 0)
-    {
-        Terrain* terrain = node->getTerrain();
-        if (terrain)
-        {
-            parameter->bindValue(terrain, &Terrain::getNormalMatrix);
-            return true;
-        }
-    }
-    else if (strcmp(autoBinding, "TERRAIN_LAYER_MAPS") == 0)
-    {
-        Terrain* terrain = node->getTerrain();
-        if (terrain && __currentPatchIndex >= 0 && __currentPatchIndex < (int)terrain->_patches.size())
-        {
-            TerrainPatch* patch = terrain->_patches[__currentPatchIndex];
-            if (patch && patch->_layers.size() > 0)
+            Terrain* terrain = node->getTerrain();
+            if (terrain)
             {
-                parameter->setValue((const Texture::Sampler**)&patch->_samplers[0], (unsigned int)patch->_samplers.size());
+                if (__currentPatchIndex >= 0 && __currentPatchIndex < (int)terrain->_patches.size())
+                    return terrain->_patches[__currentPatchIndex];
             }
-            return true;
+            return NULL;
         }
+    };
+
+    if (strcmp(autoBinding, "TERRAIN_LAYER_MAPS") == 0)
+    {
+        TerrainPatch* patch = HelperFunctions::getPatch(node);
+        if (patch && patch->_layers.size() > 0)
+            parameter->setValue((const Texture::Sampler**)&patch->_samplers[0], (unsigned int)patch->_samplers.size());
+        return true;
     }
     else if (strcmp(autoBinding, "TERRAIN_NORMAL_MAP") == 0)
     {
         Terrain* terrain = node->getTerrain();
         if (terrain && terrain->_normalMap)
-        {
             parameter->setValue(terrain->_normalMap);
-            return true;
-        }
+        return true;
     }
     else if (strcmp(autoBinding, "TERRAIN_ROW") == 0)
     {
-        Terrain* terrain = node->getTerrain();
-        if (terrain && __currentPatchIndex >= 0 && __currentPatchIndex < (int)terrain->_patches.size())
-        {
-            TerrainPatch* patch = terrain->_patches[__currentPatchIndex];
-            if (patch)
-            {
-                parameter->setValue((float)patch->_row);
-                return true;
-            }
-        }
+        TerrainPatch* patch = HelperFunctions::getPatch(node);
+        if (patch)
+            parameter->setValue((float)patch->_row);
+        return true;
     }
     else if (strcmp(autoBinding, "TERRAIN_COLUMN") == 0)
     {
-        Terrain* terrain = node->getTerrain();
-        if (terrain && __currentPatchIndex >= 0 && __currentPatchIndex < (int)terrain->_patches.size())
-        {
-            TerrainPatch* patch = terrain->_patches[__currentPatchIndex];
-            if (patch)
-            {
-                parameter->setValue((float)patch->_column);
-                return true;
-            }
-        }
+        TerrainPatch* patch = HelperFunctions::getPatch(node);
+        if (patch)
+            parameter->setValue((float)patch->_column);
+        return true;
     }
 
     return false;
