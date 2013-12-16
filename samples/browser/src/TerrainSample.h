@@ -47,8 +47,7 @@ private:
         MODE_DROP_BOX
     };
 
-    Vector3 getLight0DirectionWorld() const;
-    Vector3 getLight0DirectionView() const;
+    Vector3 getLight0Direction() const;
     Vector3 getLight0Color() const;
 
     bool resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter);

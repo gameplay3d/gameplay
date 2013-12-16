@@ -89,9 +89,9 @@ void main()
     gl_Position = u_worldViewProjectionMatrix * a_position;
 
     #if defined(LIGHTING)
-    
+
     #if !defined(NORMAL_MAP) 
-    v_normalVector = (u_normalMatrix * vec4(a_normal.x, a_normal.y, a_normal.z, 0)).xyz;
+    v_normalVector = normalize((u_normalMatrix * vec4(a_normal.x, a_normal.y, a_normal.z, 0)).xyz);
     #endif
 
     applyLight(a_position);

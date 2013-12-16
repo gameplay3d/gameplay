@@ -41,7 +41,8 @@ uniform float u_spotLightOuterAngleCos[SPOT_LIGHT_COUNT];
 #endif
 
 #if defined (NORMAL_MAP)
-uniform sampler2D u_normalMap; 
+uniform sampler2D u_normalMap;
+uniform mat4 u_normalMatrix;
 #endif
 
 #endif
@@ -62,7 +63,11 @@ vec4 _baseColor;
 ///////////////////////////////////////////////////////////
 // Varyings
 #if defined(LIGHTING)
+#if !defined(NORMAL_MAP)
+varying vec3 v_normalVector;
+#else
 vec3 v_normalVector;
+#endif
 #endif
 
 varying vec2 v_texCoord0;
@@ -115,7 +120,8 @@ void main()
     #if defined(LIGHTING)
 
     #if defined(NORMAL_MAP)
-    v_normalVector = normalize(texture2D(u_normalMap, v_texCoord0).xyz * 2.0 - 1.0);
+    v_normalVector = texture2D(u_normalMap, v_texCoord0).xyz * 2.0 - 1.0;
+    v_normalVector = (u_normalMatrix * vec4(v_normalVector.x, v_normalVector.y, v_normalVector.z, 0)).xyz;
     #endif
 
     gl_FragColor.a = _baseColor.a;

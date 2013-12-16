@@ -132,7 +132,9 @@ private:
 
     void setMaterialDirty();
 
-    void updateNodeBinding(Node* node);
+    float computeHeight(float* heights, unsigned int width, unsigned int x, unsigned int z);
+
+    void updateNodeBindings();
 
     std::string passCreated(Pass* pass);
 
