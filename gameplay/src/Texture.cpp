@@ -256,7 +256,20 @@ Texture* Texture::create(TextureHandle handle, int width, int height, Format for
     texture->_format = format;
 	if (glIsTexture(handle))
 	{
-		texture->_type = TEX_2D; //TODO figure out if 2D or cube
+		// There is no real way to query for texture type, but an error will be returned if a cube texture is bound to a 2D texture... so check for that
+		glBindTexture(GL_TEXTURE_2D, handle);
+		if (glGetError() == GL_NO_ERROR)
+		{
+			texture->_type = TEX_2D;
+		}
+		else
+		{
+			//For now, it's either or. But if 3D textures and others are added, it might be useful to simply test a bunch of bindings and seeing which one doesn't error out
+			texture->_type = TEX_CUBE;
+		}
+
+		// Restore the texture id
+		GL_ASSERT(glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId));
 	}
     texture->_width = width;
     texture->_height = height;

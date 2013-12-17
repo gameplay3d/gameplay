@@ -13,7 +13,7 @@ TextureCubeSample::TextureCubeSample()
 void TextureCubeSample::initialize()
 {
 	// Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/common/arial.gpb");
 
 	// Load game scene from file
     _scene = Scene::load("res/common/cubeenv.gpb");
