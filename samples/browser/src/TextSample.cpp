@@ -18,7 +18,7 @@ std::string _fontNames[] =
 };
 
 TextSample::TextSample()
-    : _form(NULL), _stateBlock(NULL), _size(16), _wrap(true), _ignoreClip(false), _useViewport(true), _rightToLeft(false), _simple(false), _alignment(Font::ALIGN_LEFT),
+    : _form(NULL), _stateBlock(NULL), _size(18), _wrap(true), _ignoreClip(false), _useViewport(true), _rightToLeft(false), _simple(false), _alignment(Font::ALIGN_LEFT),
       _fontsCount(FONT_COUNT), _fontIndex(0), _font(NULL), _viewport(250, 100, 512, 200)
 {
 }

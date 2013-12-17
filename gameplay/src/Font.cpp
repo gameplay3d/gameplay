@@ -476,7 +476,7 @@ Font* Font::findClosestSize(int size)
     {
         Font* f = _sizes[i];
         int d = abs(size - (int)f->_size);
-        if (d < diff)
+        if (d < diff || (d == diff && f->_size > closest->_size)) // prefer scaling down instead of up
         {
             diff = d;
             closest = f;
