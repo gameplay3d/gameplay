@@ -457,10 +457,11 @@ unsigned int Slider::drawText(Form* form, const Rectangle& clip)
     if (_valueTextVisible && _font)
     {
         Control::State state = getState();
+        unsigned int fontSize = getFontSize(state);
 
-        SpriteBatch* batch = _font->getSpriteBatch();
+        SpriteBatch* batch = _font->getSpriteBatch(fontSize);
         startBatch(form, batch);
-        _font->drawText(_valueText.c_str(), _textBounds, _textColor, getFontSize(state), _valueTextAlignment, true, getTextRightToLeft(state), &_viewportClipBounds);
+        _font->drawText(_valueText.c_str(), _textBounds, _textColor, fontSize, _valueTextAlignment, true, getTextRightToLeft(state), &_viewportClipBounds);
         finishBatch(form, batch);
 
         ++drawCalls;

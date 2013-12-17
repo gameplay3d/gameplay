@@ -365,7 +365,7 @@ theme mainMenu
         stateNormal
         {
             textColor = #ffffffff
-            font = res/common/title.gpb
+            font = res/common/arial.gpb
             fontSize = 24
             textAlignment = ALIGN_BOTTOM_HCENTER
         }

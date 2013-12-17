@@ -107,10 +107,8 @@ unsigned char* createDistanceFields(unsigned char* img, unsigned int width, unsi
     return out;
 }
 
-int writeFont(const char* inFilePath, const char* outFilePath, unsigned int fontSize, const char* id, bool fontpreview = false, Font::FontFormat fontFormat = Font::BITMAP)
+int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsigned int>& fontSizes, const char* id, bool fontpreview = false, Font::FontFormat fontFormat = Font::BITMAP)
 {
-    TTFGlyph glyphArray[END_INDEX - START_INDEX];
-
     // Initialize freetype library.
     FT_Library library;
     FT_Error error = FT_Init_FreeType(&library);
@@ -129,96 +127,219 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         return -1;
     }
 
-    int actualfontHeight = 0;
-
-    // Stores final height of a row required to render all glyphs
-    int rowSize = 0;
-
-    FT_GlyphSlot slot = NULL;
-    //FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
-    FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;// | FT_LOAD_MONOCHROME;
-    //FT_Int32 loadFlags = FT_LOAD_NO_SCALE;
-
-    // We want to generate fonts that fit exactly the requested pixels size.
-    // Since free type (due to modern fonts) does not directly correlate requested
-    // size to glyph size, we'll brute-force attempt to set the largest font size
-    // possible that will fit within the requested pixel size.
-    for (unsigned int requestedSize = fontSize; requestedSize > 0; --requestedSize)
+    // Stores a single genreated font size to be written into the GPB
+    struct FontData
     {
-        // Set the pixel size.
-        //error = FT_Set_Char_Size( face, 0, requestedSize );
-        error = FT_Set_Char_Size( face, 0, requestedSize * 64, 0, 0 );
-        if (error)
+        // Array of glyphs for a font
+        TTFGlyph glyphArray[END_INDEX - START_INDEX];
+
+        // Stores final height of a row required to render all glyphs
+        int fontSize;
+
+        // Actual size of the underlying glyphs (may be different from fontSize)
+        int glyphSize;
+
+        // Font texture
+        unsigned char* imageBuffer;
+        unsigned int imageWidth;
+        unsigned int imageHeight;
+
+        FontData() : fontSize(0), glyphSize(0), imageBuffer(NULL), imageWidth(0), imageHeight(0)
         {
-            LOG(1, "FT_Set_Pixel_Sizes error: %d \n", error);
+        }
+
+        ~FontData()
+        {
+            if (imageBuffer)
+                free(imageBuffer);
+        }
+    };
+    std::vector<FontData*> fonts;
+
+    for (size_t fontIndex = 0, count = fontSizes.size(); fontIndex < count; ++fontIndex)
+    {
+        unsigned int fontSize = fontSizes[fontIndex];
+
+        FontData* font = new FontData();
+        font->fontSize = fontSize;
+
+        TTFGlyph* glyphArray = font->glyphArray;
+
+        int rowSize = 0;
+        int glyphSize = 0;
+        int actualfontHeight = 0;
+
+        FT_GlyphSlot slot = NULL;
+        FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
+
+        // We want to generate fonts that fit exactly the requested pixels size.
+        // Since free type (due to modern fonts) does not directly correlate requested
+        // size to glyph size, we'll brute-force attempt to set the largest font size
+        // possible that will fit within the requested pixel size.
+        for (unsigned int requestedSize = fontSize; requestedSize > 0; --requestedSize)
+        {
+            // Set the pixel size.
+            error = FT_Set_Char_Size( face, 0, requestedSize * 64, 0, 0 );
+            if (error)
+            {
+                LOG(1, "FT_Set_Pixel_Sizes error: %d \n", error);
+                return -1;
+            }
+
+            // Save glyph information (slot contains the actual glyph bitmap).
+            slot = face->glyph;
+
+            rowSize = 0;
+            glyphSize = 0;
+            actualfontHeight = 0;
+
+            // Find the width of the image.
+            for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
+            {
+                // Load glyph image into the slot (erase previous one)
+                error = FT_Load_Char(face, ascii, loadFlags);
+                if (error)
+                {
+                    LOG(1, "FT_Load_Char error : %d \n", error);
+                }
+
+                int bitmapRows = slot->bitmap.rows;
+                actualfontHeight = (actualfontHeight < bitmapRows) ? bitmapRows : actualfontHeight;
+
+                if (slot->bitmap.rows > slot->bitmap_top)
+                {
+                    bitmapRows += (slot->bitmap.rows - slot->bitmap_top);
+                }
+                rowSize = (rowSize < bitmapRows) ? bitmapRows : rowSize;
+            }
+
+            // Have we found a pixel size that fits?
+            if (rowSize <= (int)fontSize)
+            {
+                glyphSize = rowSize;
+                rowSize = fontSize;
+                break;
+            }
+        }
+
+        if (slot == NULL || glyphSize == 0)
+        {
+            LOG(1, "Cannot generate a font of the requested size: %d\n", fontSize);
             return -1;
         }
 
-        // Save glyph information (slot contains the actual glyph bitmap).
-        slot = face->glyph;
-
-        rowSize = 0;
-        actualfontHeight = 0;
-
-        // Find the width of the image.
-        for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
+        // If there's an existing generated font in the list of this size, ignore and delete it
+        int duplicateSize = 0;
+        for (size_t i = 0; i < fonts.size(); ++i)
         {
-            // Load glyph image into the slot (erase previous one)
-            error = FT_Load_Char(face, ascii, loadFlags);
-            if (error)
+            if (fonts[i]->glyphSize == glyphSize)
             {
-                LOG(1, "FT_Load_Char error : %d \n", error);
+                duplicateSize = fonts[i]->fontSize;
+                break;
             }
-
-            int bitmapRows = slot->bitmap.rows;
-            actualfontHeight = (actualfontHeight < bitmapRows) ? bitmapRows : actualfontHeight;
-
-            if (slot->bitmap.rows > slot->bitmap_top)
-            {
-                bitmapRows += (slot->bitmap.rows - slot->bitmap_top);
-            }
-            rowSize = (rowSize < bitmapRows) ? bitmapRows : rowSize;
+        }
+        if (duplicateSize != 0)
+        {
+            LOG(1, "Warning: Requested font size (%d) produces same size glyphs as font size (%d). Skipping size %d.\n", fontSize, duplicateSize, fontSize);
+            SAFE_DELETE(font);
+            continue;
         }
 
-        // Have we found a pixel size that fits?
-        if (rowSize <= (int)fontSize)
+        if (rowSize != (int)fontSize)
         {
-            rowSize = fontSize;
-            break;
+            LOG(1, "Warning: Could not genreate font of requested size (%d). Generating size %d instead.\n", fontSize, rowSize);
         }
-    }
 
-    if (slot == NULL)
-    {
-        LOG(1, "Cannot generate a font of the requested size.");
-        return -1;
-    }
+        // Include padding in the rowSize.
+        rowSize += GLYPH_PADDING;
 
-    // Include padding in the rowSize.
-    rowSize += GLYPH_PADDING;
+        // Initialize with padding.
+        int penX = 0;
+        int penY = 0;
+        int row = 0;
 
-    // Initialize with padding.
-    int penX = 0;
-    int penY = 0;
-    int row = 0;
+        double powerOf2 = 2;
+        unsigned int imageWidth = 0;
+        unsigned int imageHeight = 0;
+        bool textureSizeFound = false;
 
-    double powerOf2 = 2;
-    unsigned int imageWidth = 0;
-    unsigned int imageHeight = 0;
-    bool textureSizeFound = false;
+        int advance;
+        int i;
 
-    int advance;
-    int i;
+        while (textureSizeFound == false)
+        {
+            imageWidth =  (unsigned int)pow(2.0, powerOf2);
+            imageHeight = (unsigned int)pow(2.0, powerOf2);
+            penX = 0;
+            penY = 0;
+            row = 0;
 
-    while (textureSizeFound == false)
-    {
-        imageWidth =  (unsigned int)pow(2.0, powerOf2);
-        imageHeight = (unsigned int)pow(2.0, powerOf2);
+            // Find out the squared texture size that would fit all the require font glyphs.
+            i = 0;
+            for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
+            {
+                // Load glyph image into the slot (erase the previous one).
+                error = FT_Load_Char(face, ascii, loadFlags);
+                if (error)
+                {
+                    LOG(1, "FT_Load_Char error : %d \n", error);
+                }
+                // Glyph image.
+                int glyphWidth = slot->bitmap.pitch;
+                int glyphHeight = slot->bitmap.rows;
+
+                advance = glyphWidth + GLYPH_PADDING; 
+
+                // If we reach the end of the image wrap aroud to the next row.
+                if ((penX + advance) > (int)imageWidth)
+                {
+                    penX = 0;
+                    row += 1;
+                    penY = row * rowSize;
+                    if (penY + rowSize > (int)imageHeight)
+                    {
+                        powerOf2++;
+                        break;
+                    }
+                }
+
+                // penY should include the glyph offsets.
+                penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
+
+                // Set the pen position for the next glyph
+                penX += advance; // Move X to next glyph position
+                // Move Y back to the top of the row.
+                penY = row * rowSize;
+
+                if (ascii == (END_INDEX - 1))
+                {
+                    textureSizeFound = true;
+                }
+                i++;
+            }
+        }
+
+        // Try further to find a tighter texture size.
+        powerOf2 = 1;
+        for (;;)
+        {
+            if ((penY + rowSize) >= pow(2.0, powerOf2))
+            {
+                powerOf2++;
+            }
+            else
+            {
+                imageHeight = (int)pow(2.0, powerOf2);
+                break;
+            }
+        }
+
+        // Allocate temporary image buffer to draw the glyphs into.
+        unsigned char* imageBuffer = (unsigned char*)malloc(imageWidth * imageHeight);
+        memset(imageBuffer, 0, imageWidth * imageHeight);
         penX = 0;
         penY = 0;
         row = 0;
-
-        // Find out the squared texture size that would fit all the require font glyphs.
         i = 0;
         for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
         {
@@ -228,11 +349,13 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
             {
                 LOG(1, "FT_Load_Char error : %d \n", error);
             }
+
             // Glyph image.
+            unsigned char* glyphBuffer =  slot->bitmap.buffer;
             int glyphWidth = slot->bitmap.pitch;
             int glyphHeight = slot->bitmap.rows;
 
-            advance = glyphWidth + GLYPH_PADDING; 
+            advance = glyphWidth + GLYPH_PADDING;
 
             // If we reach the end of the image wrap aroud to the next row.
             if ((penX + advance) > (int)imageWidth)
@@ -242,100 +365,40 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
                 penY = row * rowSize;
                 if (penY + rowSize > (int)imageHeight)
                 {
-                    powerOf2++;
-                    break;
+                    free(imageBuffer);
+                    LOG(1, "Image size exceeded!");
+                    return -1;
                 }
             }
 
             // penY should include the glyph offsets.
             penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
 
-            // Set the pen position for the next glyph
-            penX += advance; // Move X to next glyph position
+            // Draw the glyph to the bitmap with a one pixel padding.
+            drawBitmap(imageBuffer, penX, penY, imageWidth, glyphBuffer, glyphWidth, glyphHeight);
+
             // Move Y back to the top of the row.
             penY = row * rowSize;
 
-            if (ascii == (END_INDEX - 1))
-            {
-                textureSizeFound = true;
-            }
+            glyphArray[i].index = ascii;
+            glyphArray[i].width = advance - GLYPH_PADDING;
+
+            // Generate UV coords.
+            glyphArray[i].uvCoords[0] = (float)penX / (float)imageWidth;
+            glyphArray[i].uvCoords[1] = (float)penY / (float)imageHeight;
+            glyphArray[i].uvCoords[2] = (float)(penX + advance - GLYPH_PADDING) / (float)imageWidth;
+            glyphArray[i].uvCoords[3] = (float)(penY + rowSize - GLYPH_PADDING) / (float)imageHeight;
+
+            // Set the pen position for the next glyph
+            penX += advance;
             i++;
         }
-    }
 
-    // Try further to find a tighter texture size.
-    powerOf2 = 1;
-    for (;;)
-    {
-        if ((penY + rowSize) >= pow(2.0, powerOf2))
-        {
-            powerOf2++;
-        }
-        else
-        {
-            imageHeight = (int)pow(2.0, powerOf2);
-            break;
-        }
-    }
-    
-    // Allocate temporary image buffer to draw the glyphs into.
-    unsigned char* imageBuffer = (unsigned char*)malloc(imageWidth * imageHeight);
-    memset(imageBuffer, 0, imageWidth * imageHeight);
-    penX = 0;
-    penY = 0;
-    row = 0;
-    i = 0;
-    for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
-    {
-        // Load glyph image into the slot (erase the previous one).
-        error = FT_Load_Char(face, ascii, loadFlags);
-        if (error)
-        {
-            LOG(1, "FT_Load_Char error : %d \n", error);
-        }
-
-        // Glyph image.
-        unsigned char* glyphBuffer =  slot->bitmap.buffer;
-        int glyphWidth = slot->bitmap.pitch;
-        int glyphHeight = slot->bitmap.rows;
-
-        advance = glyphWidth + GLYPH_PADDING;
-
-        // If we reach the end of the image wrap aroud to the next row.
-        if ((penX + advance) > (int)imageWidth)
-        {
-            penX = 0;
-            row += 1;
-            penY = row * rowSize;
-            if (penY + rowSize > (int)imageHeight)
-            {
-                free(imageBuffer);
-                LOG(1, "Image size exceeded!");
-                return -1;
-            }
-        }
-        
-        // penY should include the glyph offsets.
-        penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
-
-        // Draw the glyph to the bitmap with a one pixel padding.
-        drawBitmap(imageBuffer, penX, penY, imageWidth, glyphBuffer, glyphWidth, glyphHeight);
-        
-        // Move Y back to the top of the row.
-        penY = row * rowSize;
-
-        glyphArray[i].index = ascii;
-        glyphArray[i].width = advance - GLYPH_PADDING;
-
-        // Generate UV coords.
-        glyphArray[i].uvCoords[0] = (float)penX / (float)imageWidth;
-        glyphArray[i].uvCoords[1] = (float)penY / (float)imageHeight;
-        glyphArray[i].uvCoords[2] = (float)(penX + advance - GLYPH_PADDING) / (float)imageWidth;
-        glyphArray[i].uvCoords[3] = (float)(penY + rowSize - GLYPH_PADDING) / (float)imageHeight;
-
-        // Set the pen position for the next glyph
-        penX += advance;
-        i++;
+        font->glyphSize = glyphSize;
+        font->imageBuffer = imageBuffer;
+        font->imageWidth = imageWidth;
+        font->imageHeight = imageHeight;
+        fonts.push_back(font);
     }
 
     // File header and version.
@@ -357,35 +420,75 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     // TODO: Switch based on TTF style name and write appropriate font style unsigned int for now just hardcoding to 0 = PLAIN.
     writeUint(gpbFp, 0);
 
-    // Font size (pixels).
-    writeUint(gpbFp, rowSize - GLYPH_PADDING);
+    // Number of included font sizes (GPB version 1.3+)
+    writeUint(gpbFp, (unsigned int)fonts.size());
 
-    // Character set. TODO: Empty for now
-    writeString(gpbFp, "");
-
-    // Glyphs.
-    unsigned int glyphSetSize = END_INDEX - START_INDEX;
-    writeUint(gpbFp, glyphSetSize);
-    fwrite(&glyphArray, sizeof(TTFGlyph), glyphSetSize, gpbFp);
-
-    // Image dimensions
-    unsigned int imageSize = imageWidth * imageHeight;
-    writeUint(gpbFp, imageWidth);
-    writeUint(gpbFp, imageHeight);
-    writeUint(gpbFp, imageSize);
-    
-    unsigned char* distanceFieldBuffer = NULL;
-    if (fontFormat == Font::DISTANCE_FIELD)
+    for (size_t i = 0, count = fonts.size(); i < count; ++i)
     {
-        // Flip height and width since the distance field map generator is column-wise.
-        distanceFieldBuffer = createDistanceFields(imageBuffer, imageHeight, imageWidth);
-        fwrite(distanceFieldBuffer, sizeof(unsigned char), imageSize, gpbFp);
-        writeUint(gpbFp, Font::DISTANCE_FIELD);
-    }
-    else
-    {
-        fwrite(imageBuffer, sizeof(unsigned char), imageSize, gpbFp);
-        writeUint(gpbFp, Font::BITMAP);
+        FontData* font = fonts[i];
+
+        // Font size (pixels).
+        writeUint(gpbFp, font->fontSize);
+
+        // Character set. TODO: Empty for now
+        writeString(gpbFp, "");
+
+        // Glyphs.
+        unsigned int glyphSetSize = END_INDEX - START_INDEX;
+        writeUint(gpbFp, glyphSetSize);
+        fwrite(&font->glyphArray, sizeof(TTFGlyph), glyphSetSize, gpbFp);
+
+        // Image dimensions
+        unsigned int imageSize = font->imageWidth * font->imageHeight;
+        writeUint(gpbFp, font->imageWidth);
+        writeUint(gpbFp, font->imageHeight);
+        writeUint(gpbFp, imageSize);
+
+        FILE* previewFp = NULL;
+        std::string pgmFilePath;
+        if (fontpreview)
+        {
+            // Save out a pgm monochome image file for preview
+            std::ostringstream pgmFilePathStream;
+            pgmFilePathStream << getFilenameNoExt(outFilePath) << "-" << font->fontSize << ".pgm";
+            pgmFilePath = pgmFilePathStream.str();
+            previewFp = fopen(pgmFilePath.c_str(), "wb");
+            fprintf(previewFp, "P5 %u %u 255\n", font->imageWidth, font->imageHeight);
+        }
+
+        if (fontFormat == Font::DISTANCE_FIELD)
+        {
+            // Flip height and width since the distance field map generator is column-wise.
+            unsigned char* distanceFieldBuffer = createDistanceFields(font->imageBuffer, font->imageHeight, font->imageWidth);
+
+            fwrite(distanceFieldBuffer, sizeof(unsigned char), imageSize, gpbFp);
+            writeUint(gpbFp, Font::DISTANCE_FIELD);
+
+            if (previewFp)
+            {
+                fwrite((const char*)distanceFieldBuffer, sizeof(unsigned char), imageSize, previewFp);
+                fclose(previewFp);
+            }
+
+            free(distanceFieldBuffer);
+        }
+        else
+        {
+            fwrite(font->imageBuffer, sizeof(unsigned char), imageSize, gpbFp);
+            writeUint(gpbFp, Font::BITMAP);
+
+            if (previewFp)
+            {
+                fwrite((const char*)font->imageBuffer, sizeof(unsigned char), font->imageWidth * font->imageHeight, previewFp);
+                fclose(previewFp);
+            }
+        }
+
+        if (previewFp)
+        {
+            fclose(previewFp);
+            LOG(1, "%s.pgm preview image created successfully. \n", getBaseName(pgmFilePath).c_str());
+        }
     }
 
     // Close file.
@@ -393,33 +496,10 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
 
     LOG(1, "%s.gpb created successfully. \n", getBaseName(outFilePath).c_str());
 
-    // Save out a pgm monochome image file for preview
-    if (fontpreview)
+    for (size_t i = 0, count = fonts.size(); i < count; ++i)
     {
-        // Write out font map to an image.
-        std::string pgmFilePath = getFilenameNoExt(outFilePath);
-        pgmFilePath.append(".pgm");
-        FILE* previewFp = fopen(pgmFilePath.c_str(), "wb");
-        fprintf(previewFp, "P5 %u %u 255\n", imageWidth, imageHeight);
-        
-        if (fontFormat == Font::DISTANCE_FIELD)
-        {
-            // Write out the preview buffer
-            fwrite((const char*)distanceFieldBuffer, sizeof(unsigned char), imageSize, previewFp);
-        }
-        else
-        {
-            fwrite((const char*)imageBuffer, sizeof(unsigned char), imageWidth * imageHeight, previewFp);
-        }
-        fclose(previewFp);
-
-        LOG(1, "%s.pgm preview image created successfully. \n", getBaseName(pgmFilePath).c_str());
+        delete fonts[i];
     }
-
-    // Cleanup resources.
-    free(imageBuffer);
-    if (fontFormat == Font::DISTANCE_FIELD)
-        free(distanceFieldBuffer);
 
     FT_Done_Face(face);
     FT_Done_FreeType(library);

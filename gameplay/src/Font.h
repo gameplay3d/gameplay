@@ -84,10 +84,12 @@ public:
         const char* getText();
 
     private:
+
         /**
          * Hidden copy constructor.
          */
-        Text(const Text&); 
+        Text(const Text&);
+
         /**
          * Hidden copy assignment operator.
          */
@@ -99,6 +101,7 @@ public:
         unsigned int _indexCount;
         unsigned short* _indices;
         Vector4 _color;
+        Font* _font;
     };
 
     /**
@@ -120,9 +123,20 @@ public:
     static Font* create(const char* path, const char* id = NULL);
 
     /**
-     * Gets the font size (max height of glyphs) in pixels.
+     * Gets the font size (max height of glyphs) in pixels, at the specified index.
+     *
+     * The Font class can store multiple sizes of glyphs for a font. The number of font
+     * sizes stored can be retrieved via getSizeCount.
+     *
+     * @param index Index of the size to returned (default is 0).
+     * @see getSizeCount
      */
-    unsigned int getSize();
+    unsigned int getSize(unsigned int index = 0) const;
+
+    /**
+     * Returns the number of font sizes supported by this Font.
+     */
+    unsigned int getSizeCount() const;
 
     /**
      * Gets the font format. BITMAP or DISTANCEMAP.
@@ -277,11 +291,13 @@ public:
                             Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
     /**
-     * Gets the sprite batch for this Font.
+     * Gets the sprite batch used to draw this Font.
      * 
-     * @return The sprite batch for this Font.
+     * @param size The font size to be drawn.
+     *
+     * @return The SpriteBatch that most closely matches the requested font size.
      */
-    SpriteBatch* getSpriteBatch() const;
+    SpriteBatch* getSpriteBatch(unsigned int size) const;
 
     /**
      * Gets the Justify value from the given string.
@@ -372,12 +388,17 @@ private:
     void addLineInfo(const Rectangle& area, int lineWidth, int lineLength, Justify hAlign,
                      std::vector<int>* xPositions, std::vector<unsigned int>* lineLengths, bool rightToLeft);
 
+    Font* findClosestSize(int size);
+
+    void lazyStart();
+
     Format _format;
     std::string _path;
     std::string _id;
     std::string _family;
     Style _style;
     unsigned int _size;
+    std::vector<Font*> _sizes; // stores additional font sizes of the same family
     float _spacing;
     Glyph* _glyphs;
     unsigned int _glyphCount;

@@ -209,7 +209,7 @@ void TextSample::controlEvent(Control* control, EventType evt)
     }
     else if (strcmp(id, "smallerButton") == 0)
     {
-        if (_size > 12)
+        if (_size > 8)
         {
             _size -= 2;
             Label* sizeLabel = static_cast<Label*>(_form->getControl("sizeLabel"));
