@@ -380,7 +380,7 @@ void LightSample::initializeDirectionalTechnique(const char* technique)
 {
 	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
     _lighting->getTechnique(technique)->getParameter("u_directionalLightColor[0]")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
-    _lighting->getTechnique(technique)->getParameter("u_directionalLightDirection[0]")->bindValue(_directionalLightNode, &Node::getForwardVectorWorld); 
+    _lighting->getTechnique(technique)->getParameter("u_directionalLightDirection[0]")->bindValue(_directionalLightNode, &Node::getForwardVectorView); 
 }	
 
 void LightSample::initializeSpotTechnique(const char* technique)
