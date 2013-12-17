@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 /**
- * Base class for game objects that require lifecycle management.
+ * Defines the base class for game objects that require lifecycle management.
  *
  * This class provides reference counting support for game objects that
  * contain system resources or data that is normally long lived and

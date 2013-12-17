@@ -49,10 +49,12 @@ void TerrainSample::initialize()
     Bundle* bundle;
     bundle = Bundle::create("res/common/sphere.gpb");
     _sphere = bundle->loadNode("sphere");
+    _sphere->getModel()->setMaterial("res/common/terrain/shapes.material#sphere", 0);
     SAFE_RELEASE(bundle);
 
     bundle = Bundle::create("res/common/box.gpb");
     _box = bundle->loadNode("box");
+    _box->getModel()->setMaterial("res/common/terrain/shapes.material#box", 0);
     SAFE_RELEASE(bundle);
 
     // Load font
@@ -78,49 +80,7 @@ void TerrainSample::initialize()
 	enableScriptCamera(true);
     setScriptCameraSpeed(20, 80);
 
-    _directionalLight = Light::createDirectional(1, 1, 1);
-    Node* lightNode = Node::create("directionalLight");
-    _scene->addNode(lightNode);
-    lightNode->setLight(_directionalLight);
-    lightNode->setRotation(Vector3(1, 0, 0), -MATH_DEG_TO_RAD(45));
-    
-    _scene->visit(this, &TerrainSample::intializeLights);
-}
-
-void initializeLight(Material* material, Light* light)
-{
-    if (material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_directionalLightDirection[0]"))
-    {
-        // For this sample we will only bind a single light to each object in the scene.
-        MaterialParameter* colorParam = material->getParameter("u_directionalLightColor[0]");
-        colorParam->setValue(light->getColor());
-
-        MaterialParameter* directionParam = material->getParameter("u_directionalLightDirection[0]");
-        directionParam->bindValue(light->getNode(), &Node::getForwardVectorWorld);
-    }
-}
-
-bool TerrainSample::intializeLights(Node* node)
-{
-    Model* model = node->getModel();
-    if (model)
-    {
-        initializeLight(model->getMaterial(), _directionalLight);
-    }
-
-    Terrain* terrain = node->getTerrain();
-    if (terrain)
-    {
-        unsigned int patchCount = terrain->getPatchCount();
-        for (unsigned int i = 0; i < patchCount; i++)
-        {
-            TerrainPatch* patch = terrain->getPatch(i);
-            Material* material = patch->getMaterial();
-
-            initializeLight(material, _directionalLight);
-        }
-    }
-    return true;
+    _directionalLight = _scene->findNode("directionalLight")->getLight();
 }
 
 void TerrainSample::finalize()
@@ -282,7 +242,6 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
             {
                 Node* clone = NULL;
                 PhysicsCollisionShape::Definition rbShape;
-                const char* materialUrl = NULL;
 
                 switch (_mode)
                 {
@@ -290,7 +249,6 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
                     {
                         clone = _sphere->clone();
                         rbShape = PhysicsCollisionShape::sphere();
-                        materialUrl = "res/common/terrain/shapes.material#sphere";
                     }
                     break;
 
@@ -298,7 +256,6 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
                     {
                         clone = _box->clone();
                         rbShape = PhysicsCollisionShape::box();
-                        materialUrl = "res/common/terrain/shapes.material#box";
                     }
                     break;
                 }
@@ -310,9 +267,6 @@ void TerrainSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
                     PhysicsRigidBody::Parameters rbParams(1);
                     clone->setCollisionObject(PhysicsCollisionObject::RIGID_BODY, rbShape, &rbParams);
                     _scene->addNode(clone);
-                    clone->getModel()->setMaterial(materialUrl);
-                    Material* material = clone->getModel()->getMaterial();
-                    initializeLight(material, _directionalLight);
                     clone->release();
 
                     _shapes.push_back(clone);
@@ -415,3 +369,28 @@ void TerrainSample::setMessage(const char* message)
     _form->getControl("messageBox")->setVisible(message ? true : false);
 }
 
+Vector3 TerrainSample::getLightDirection0() const
+{
+    return _directionalLight->getNode()->getForwardVectorView();
+}
+
+Vector3 TerrainSample::getLightColor0() const
+{
+    return _directionalLight->getColor();
+}
+
+bool TerrainSample::resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter)
+{
+    if (strcmp(autoBinding, "LIGHT_DIRECTION_0") == 0)
+    {
+        parameter->bindValue(this, &TerrainSample::getLightDirection0);
+        return true;
+    }
+    else if (strcmp(autoBinding, "LIGHT_COLOR_0") == 0)
+    {
+        parameter->bindValue(this, &TerrainSample::getLightColor0);
+        return true;
+    }
+
+    return false;
+}

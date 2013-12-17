@@ -10,41 +10,27 @@ namespace gameplay
 {
 
 /**
- * An editable text label.  Tap or click within the text box to bring up the
- * virtual keyboard.
+ * Defines a text control. 
  *
  * Listeners can listen for a TEXT_CHANGED event, and then query the text box
  * for the last keypress it received.
+ * On mobile device you can tap or click within the text box to
+ * bring up the virtual keyboard.
  *
- * The following properties are available for text boxes:
-
- @verbatim
-    textBox <labelID>
-    {
-         style       = <styleID>
-         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-         position    = <x, y>
-         autoWidth   = <bool>
-         autoHeight  = <bool>
-         size        = <width, height>
-         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
-         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         text        = <string>
-         inputMode   = <TextBox::InputMode constant>
-    }
- @endverbatim
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class TextBox : public Label
 {
     friend class Container;
-	friend class ControlFactory;
-	
+    friend class ControlFactory;
+
 public:
 
     /**
      * Input modes. Default is Text.
      */
-    enum InputMode {
+    enum InputMode
+    {
         /**
          * Text: Text is displayed directly.
          */
@@ -57,32 +43,29 @@ public:
     };
 
     /**
-     * Create a new text box control.
+     * Creates a new TextBox.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The textbox ID.
+     * @param style The textbox style (optional).
      *
-     * @return The new text box.
+     * @return The new textbox.
      * @script{create}
      */
-    static TextBox* create(const char* id, Theme::Style* style);
+    static TextBox* create(const char* id, Theme::Style* style = NULL);
 
     /**
-     * Initialize this textbox.
-     */
-    virtual void initialize(Theme::Style* style, Properties* properties);
-
-    /**
-     * Add a listener to be notified of specific events affecting
-     * this control.  Event types can be OR'ed together.
-     * E.g. To listen to touch-press and touch-release events,
-     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
-     * as the second parameter.
+     * Returns the current location of the caret with the text of this TextBox.
      *
-     * @param listener The listener to add.
-     * @param eventFlags The events to listen for.
+     * @return The current caret location.
      */
-    virtual void addListener(Control::Listener* listener, int eventFlags);
+    unsigned int getCaretLocation() const;
+
+    /**
+     * Sets the location of the caret within this text box.
+     *
+     * @param index The new location of the caret within the text of this TextBox.
+     */
+    void setCaretLocation(unsigned int index);
 
     /**
      * Get the last key pressed within this text box.
@@ -140,12 +123,16 @@ protected:
      * Create a text box with a given style and properties.
      *
      * @param style The style to apply to this text box.
-     * @param properties The properties to set on this text box.
-     * @param theme The theme to set on this control if needed
-	 *
+     * @param properties A properties object containing a definition of the text box (optional).
+     *
      * @return The new text box.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -174,6 +161,11 @@ protected:
     bool keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
+     * @see Control#controlEvent
+     */
+    void controlEvent(Control::Listener::EventType evt);
+
+    /**
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
      *
@@ -183,20 +175,14 @@ protected:
     void update(const Control* container, const Vector2& offset);
 
     /**
-     * Draw the images associated with this control.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The clipping rectangle of this control's parent container.
+     * @see Control::drawImages
      */
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
-     * Draw this textbox's text.
-     *
-     * @param clip The clipping rectangle of this textbox's
-     * parent container.
+     * @see Control::drawText
      */
-    virtual void drawText(const Rectangle& clip);
+    unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
      * Gets an InputMode by string.
@@ -215,9 +201,9 @@ protected:
     std::string getDisplayedText() const;
 
     /**
-     * The current position of the TextBox's caret.
+     * The current location of the TextBox's caret.
      */
-    Vector2 _caretLocation;
+    unsigned int _caretLocation;
 
     /**
      * The previous position of the TextBox's caret.
@@ -262,6 +248,8 @@ private:
     TextBox(const TextBox& copy);
 
     void setCaretLocation(int x, int y);
+
+    void getCaretLocation(Vector2* p);
 };
 
 }

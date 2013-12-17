@@ -15,6 +15,7 @@ int lua_RenderState_getRefCount(lua_State* state);
 int lua_RenderState_getStateBlock(lua_State* state);
 int lua_RenderState_release(lua_State* state);
 int lua_RenderState_removeParameter(lua_State* state);
+int lua_RenderState_setNodeBinding(lua_State* state);
 int lua_RenderState_setParameterAutoBinding(lua_State* state);
 int lua_RenderState_setStateBlock(lua_State* state);
 

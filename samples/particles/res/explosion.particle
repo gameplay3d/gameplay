@@ -44,6 +44,6 @@ particle explosion
         cameraZoom = 0, 0, 19
         cameraRotation = 0, 0, 0, 0
         sizeMax = 5
-        energyMax = 5
+        energyMax = 1500
     }
 }

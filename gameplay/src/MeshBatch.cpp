@@ -7,7 +7,7 @@ namespace gameplay
 
 MeshBatch::MeshBatch(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, Material* material, bool indexed, unsigned int initialCapacity, unsigned int growSize)
     : _vertexFormat(vertexFormat), _primitiveType(primitiveType), _material(material), _indexed(indexed), _capacity(0), _growSize(growSize),
-      _vertexCapacity(0), _indexCapacity(0), _vertexCount(0), _indexCount(0), _vertices(NULL), _verticesPtr(NULL), _indices(NULL), _indicesPtr(NULL)
+    _vertexCapacity(0), _indexCapacity(0), _vertexCount(0), _indexCount(0), _vertices(NULL), _verticesPtr(NULL), _indices(NULL), _indicesPtr(NULL), _started(false)
 {
     resize(initialCapacity);
 }
@@ -221,17 +221,24 @@ void MeshBatch::add(const float* vertices, unsigned int vertexCount, const unsig
 {
     add(vertices, sizeof(float), vertexCount, indices, indexCount);
 }
-    
+
 void MeshBatch::start()
 {
     _vertexCount = 0;
     _indexCount = 0;
     _verticesPtr = _vertices;
     _indicesPtr = _indices;
+    _started = true;
+}
+
+bool MeshBatch::isStarted() const
+{
+    return _started;
 }
 
 void MeshBatch::finish()
 {
+    _started = false;
 }
 
 void MeshBatch::draw()

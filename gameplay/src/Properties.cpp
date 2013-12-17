@@ -84,7 +84,7 @@ Properties* Properties::create(const char* url)
     std::auto_ptr<Stream> stream(FileSystem::open(fileString.c_str()));
     if (stream.get() == NULL)
     {
-        GP_ERROR("Failed to open file '%s'.", fileString.c_str());
+        GP_WARN("Failed to open file '%s'.", fileString.c_str());
         return NULL;
     }
 
@@ -97,6 +97,7 @@ Properties* Properties::create(const char* url)
     if (!p)
     {
         GP_WARN("Failed to load properties from url '%s'.", url);
+        SAFE_DELETE(properties);
         return NULL;
     }
 
@@ -961,7 +962,7 @@ bool Properties::getColor(const char* name, Vector4* out) const
             valueString[0] != '#')
         {
             // Not a color string.
-            GP_ERROR("Error attempting to parse property '%s' as an RGBA color (not specified as a color string).", name);
+            GP_WARN("Error attempting to parse property '%s' as an RGBA color (not specified as a color string).", name);
             out->set(0.0f, 0.0f, 0.0f, 0.0f);
             return false;
         }
@@ -970,7 +971,7 @@ bool Properties::getColor(const char* name, Vector4* out) const
         unsigned int color;
         if (sscanf(valueString+1, "%x", &color) != 1)
         {
-            GP_ERROR("Error attempting to parse property '%s' as an RGBA color.", name);
+            GP_WARN("Error attempting to parse property '%s' as an RGBA color.", name);
             out->set(0.0f, 0.0f, 0.0f, 0.0f);
             return false;
         }

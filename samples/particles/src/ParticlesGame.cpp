@@ -98,7 +98,7 @@ void ParticlesGame::addGrid(unsigned int lineCount)
     model->setMaterial("res/grid.material");
     SAFE_RELEASE(mesh);
 
-    Scene::getScene()->addNode("grid")->setModel(model);
+    _scene->addNode("grid")->setModel(model);
     model->release();
 }
 
@@ -136,7 +136,7 @@ void ParticlesGame::initialize()
     // Load the form for editing ParticleEmitters.
     _form = Form::create("res/editor.form");
     _form->setConsumeInputEvents(false);
-    _form->setState(Control::FOCUS);
+    //_form->setState(Control::FOCUS);
 
     // Store pointers to UI controls we care about.
     _startRed = (Slider*)_form->getControl("startRed");
@@ -251,15 +251,6 @@ void ParticlesGame::initialize()
     _form->getControl("multiply")->addListener(this, Listener::VALUE_CHANGED);
     _form->getControl("opaque")->addListener(this, Listener::VALUE_CHANGED);
     _form->getControl("updateFrames")->addListener(this, Listener::CLICK);
-    
-    // Hide save/load buttons for non-windows platforms until we implement picking dialogs for others
-#ifdef WIN32
-    _form->getControl("zoomIn")->setVisible(false);
-    _form->getControl("zoomOut")->setVisible(false);
-#else
-    _form->getControl("saveLoad")->setVisible(false);
-    _form->getControl("image")->setVisible(false);
-#endif
 
     // Load preset emitters.
     loadEmitters();
@@ -267,55 +258,6 @@ void ParticlesGame::initialize()
     updateImageControl();
 }
 
-#ifdef WIN32
-#include <Windows.h>
-#include <Commdlg.h>
-#endif
-
-std::string ParticlesGame::openFile(const char* title, const char* filterDescription, const char* filterExtension)
-{
-#ifdef WIN32
-    OPENFILENAMEA ofn;
-    memset(&ofn, 0, sizeof(ofn));
-
-    std::string desc = filterDescription;
-    desc += " (*.";
-    desc += filterExtension;
-    desc += ")";
-    std::string ext = "*.";
-    ext += filterExtension;
-    char filter[1024];
-    memset(filter, 0, 1024);
-    strcpy(filter, desc.c_str());
-    strcpy(filter + desc.length() + 1, ext.c_str());
-
-    char szCurrentDir[256];
-    GetCurrentDirectoryA(256, szCurrentDir);
-    std::string initialDir = szCurrentDir;
-    initialDir += "\\res";
-
-    char szFileName[256] = "";
-
-    ofn.lStructSize = sizeof(ofn); // SEE NOTE BELOW
-    ofn.hwndOwner = GetForegroundWindow();
-    ofn.lpstrTitle = title;
-    ofn.lpstrFilter = filter;//"Particle Files (*.particle)\0*.particle\0";
-    ofn.lpstrFile = szFileName;
-    ofn.lpstrInitialDir = initialDir.c_str();
-    ofn.nMaxFile = 256;
-    ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-    ofn.lpstrDefExt = "filterExtension";
-
-    GetOpenFileNameA(&ofn);
-
-    // Restore current dir
-    SetCurrentDirectoryA(szCurrentDir);
-
-    return szFileName;
-#endif
-
-    return "";
-}
 
 std::string ParticlesGame::toString(bool b)
 {
@@ -377,35 +319,7 @@ std::string ParticlesGame::toString(ParticleEmitter::TextureBlending blending)
 void ParticlesGame::saveFile()
 {
     std::string filename;
-
-#ifdef WIN32
-    OPENFILENAMEA ofn;
-    memset(&ofn, 0, sizeof(ofn));
-
-    char szCurrentDir[256];
-    GetCurrentDirectoryA(256, szCurrentDir);
-    std::string initialDir = szCurrentDir;
-    initialDir += "\\res";
-
-    char szFileName[256] = "";
-
-    ofn.lStructSize = sizeof(ofn); // SEE NOTE BELOW
-    ofn.hwndOwner = GetForegroundWindow();
-    ofn.lpstrFilter = "Particle Files (*.particle)\0*.particle\0";
-    ofn.lpstrFile = szFileName;
-    ofn.lpstrInitialDir = initialDir.c_str();
-    ofn.nMaxFile = 256;
-    ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
-    ofn.lpstrDefExt = "particle";
-
-    GetSaveFileNameA(&ofn);
-
-    filename = szFileName;
-
-    // Restore current dir
-    SetCurrentDirectoryA(szCurrentDir);
-
-#endif
+    filename = FileSystem::displayFileDialog(FileSystem::SAVE, "Save Particle File", "Particle Files", "particle", "res");
 
     if (filename.length() == 0)
         return;
@@ -823,7 +737,7 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         else if (control == _load)
         {
             Game::getInstance()->pause();
-            std::string filename = openFile("Select Particle File", "Particle Files", "particle");
+            std::string filename = FileSystem::displayFileDialog(FileSystem::OPEN, "Select Particle File", "Particle Files", "particle", "res");
             if (filename.length() > 0)
             {
                 _url = filename;
@@ -1093,6 +1007,41 @@ void ParticlesGame::emitterChanged()
     _cameraParent->setIdentity();
     _particleEmitterNode->setIdentity();
 
+    // Parse editor section of particle properties
+    Properties* p = Properties::create(_url.c_str());
+    Properties* ns = p->getNamespace("editor", true);
+    if (ns)
+    {
+        Vector3 v3;
+        if (ns->getVector3("cameraTranslation", &v3))
+        {
+            _cameraParent->setTranslation(v3);
+        }
+        if (ns->getVector3("cameraZoom", &v3))
+        {
+            _scene->getActiveCamera()->getNode()->setTranslation(v3);
+        }
+        Quaternion q;
+        if (ns->getQuaternionFromAxisAngle("cameraRotation", &q))
+        {
+            _cameraParent->setRotation(q);
+        }
+        float f;
+        if ((f = ns->getFloat("sizeMax")) != 0.0f)
+        {
+            _startMin->setMax(f);
+            _startMax->setMax(f);
+            _endMin->setMax(f);
+            _endMax->setMax(f);
+        }
+        if ((f = ns->getFloat("energyMax")) != 0.0f)
+        {
+            _energyMin->setMax(f);
+            _energyMax->setMax(f);
+        }
+    }
+    SAFE_DELETE(p);
+
     // Set the values of UI controls to display the new emitter's settings.
     _startRed->setValue(emitter->getColorStart().x);
     _startGreen->setValue(emitter->getColorStart().y);
@@ -1163,41 +1112,6 @@ void ParticlesGame::emitterChanged()
     // Update our image control
     updateImageControl();
 
-    // Parse editor section of particle properties
-    Properties* p = Properties::create(_url.c_str());
-    Properties* ns = p->getNamespace("editor", true);
-    if (ns)
-    {
-        Vector3 v3;
-        if (ns->getVector3("cameraTranslation", &v3))
-        {
-            _cameraParent->setTranslation(v3);
-        }
-        if (ns->getVector3("cameraZoom", &v3))
-        {
-            _scene->getActiveCamera()->getNode()->setTranslation(v3);
-        }
-        Quaternion q;
-        if (ns->getQuaternionFromAxisAngle("cameraRotation", &q))
-        {
-            _cameraParent->setRotation(q);
-        }
-        float f;
-        if ((f = ns->getFloat("sizeMax")) != 0.0f)
-        {
-            _startMin->setMax(f);
-            _startMax->setMax(f);
-            _endMin->setMax(f);
-            _endMax->setMax(f);
-        }
-        if ((f = ns->getFloat("energyMax")) != 0.0f)
-        {
-            _energyMin->setMax(f);
-            _energyMax->setMax(f);
-        }
-    }
-    SAFE_DELETE(p);
-
     // Start the emitter
     emitter->start();
 }
@@ -1230,7 +1144,7 @@ void ParticlesGame::resizeEvent(unsigned int width, unsigned int height)
 
 void ParticlesGame::updateTexture()
 {
-    std::string file = openFile("Select Texture", "PNG Files", "png");
+    std::string file = FileSystem::displayFileDialog(FileSystem::OPEN, "Select Texture", "Texture Files", "png", "res");
     if (file.length() > 0)
     {
         // Set new sprite on our emitter

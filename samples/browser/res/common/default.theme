@@ -214,7 +214,7 @@ theme mainMenu
             skin = underliner
             textColor = #ffffffff
             font = res/common/arial.gpb
-            fontSize = 24
+            fontSize = 16
             textAlignment = ALIGN_BOTTOM_HCENTER
         }
     }
@@ -236,7 +236,7 @@ theme mainMenu
 
             font = res/common/arial.gpb
             textColor = #ffffffff
-            fontSize = 18
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 
@@ -290,7 +290,7 @@ theme mainMenu
         stateNormal
         {
             font = res/common/arial.gpb
-            fontSize = 20
+            fontSize = 16
         }
 
         stateActive
@@ -314,7 +314,7 @@ theme mainMenu
             imageList = normalImages
             font = res/common/arial.gpb
             textColor = #ffffffff
-            fontSize = 14
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 		
@@ -335,14 +335,14 @@ theme mainMenu
         stateNormal
         {
             font = res/common/arial.gpb
-            fontSize = 20
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
             font = res/common/arial.gpb
-            fontSize = 20
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_LEFT
         }
     }
@@ -366,7 +366,7 @@ theme mainMenu
         {
             textColor = #ffffffff
             font = res/common/arial.gpb
-            fontSize = 26
+            fontSize = 24
             textAlignment = ALIGN_BOTTOM_HCENTER
         }
 
@@ -374,5 +374,41 @@ theme mainMenu
         {
             textColor = #C3D9BFff
         }
+    }
+
+    style Form : basicContainer
+    {
+    }
+
+    style Container
+    {
+    }
+
+    style Label : iconNoBorder
+    {
+    }
+
+    style Button : buttonStyle
+    {
+    }
+
+    style CheckBox : iconNoBorder
+    {
+    }
+
+    style RadioButton : iconNoBorder
+    {
+    }
+
+    style TextBox : topLeftAlignedEntry
+    {
+    }
+
+    style Slider : topLeftNoBorder
+    {
+    }
+
+    style Image
+    {
     }
 }

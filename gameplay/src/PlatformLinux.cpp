@@ -19,6 +19,9 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <fstream>
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #define TOUCH_COUNT_MAX     4
 #define MAX_GAMEPADS 4
@@ -68,7 +71,6 @@ struct GamepadInfoEntry
     long* buttons;
 };
 
-
 struct ConnectedGamepadDevInfo
 {
     dev_t deviceId;
@@ -86,12 +88,11 @@ static float __mouseCapturePointY = 0;
 static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static Display* __display;
-static Window   __window;
+static Window __window;
 static int __windowSize[2];
 static GLXContext __context;
 static Atom __atomWmDeleteWindow;
 static list<ConnectedGamepadDevInfo> __connectedGamepads;
-
 
 // Gets the gameplay::Keyboard::Key enumeration constant that corresponds to the given X11 key symbol.
 static gameplay::Keyboard::Key getKey(KeySym sym)
@@ -530,1134 +531,1210 @@ static int getUnicode(gameplay::Keyboard::Key key)
             return 0;
     }
 }
-#include <linux/joystick.h> //included here so i avoid the naming conflict between KEY_* defined in input.h and the ones defined in gameplay/Keyboard.h 
+
+// Included here to avoid the naming conflict between KEY_* defined in input.h and the ones defined in gameplay/Keyboard.h 
+#include <linux/joystick.h> 
+
 namespace gameplay
 {
-    extern void print(const char* format, ...)
+
+extern void print(const char* format, ...)
+{
+    GP_ASSERT(format);
+    va_list argptr;
+    va_start(argptr, format);
+    vfprintf(stderr, format, argptr);
+    va_end(argptr);
+}
+
+extern int strcmpnocase(const char* s1, const char* s2)
+{
+    return strcasecmp(s1, s2);
+}
+
+Platform::Platform(Game* game) : _game(game)
+{
+}
+
+Platform::~Platform()
+{
+}
+
+Platform* Platform::create(Game* game)
+{
+
+    GP_ASSERT(game);
+
+    FileSystem::setResourcePath("./");
+    Platform* platform = new Platform(game);
+
+    // Get the display and initialize
+    __display = XOpenDisplay(NULL);
+    if (__display == NULL)
     {
-        GP_ASSERT(format);
-        va_list argptr;
-        va_start(argptr, format);
-        vfprintf(stderr, format, argptr);
-        va_end(argptr);
-    }
-
-    Platform::Platform(Game* game) : _game(game)
-    {
-    }
-
-    Platform::~Platform()
-    {
-    }
-
-    Platform* Platform::create(Game* game)
-    {
-
-        GP_ASSERT(game);
-
-        FileSystem::setResourcePath("./");
-        Platform* platform = new Platform(game);
-
-        // Get the display and initialize
-        __display = XOpenDisplay(NULL);
-        if (__display == NULL)
-        {
-            perror("XOpenDisplay");
-            return NULL;
-        }
-
-        // Get the window configuration values
-        const char *title = NULL;
-        int __x = 0, __y = 0, __width = 1280, __height = 800, __samples = 0;
-        bool fullscreen = false;
-        if (game->getConfig())
-        {
-            Properties* config = game->getConfig()->getNamespace("window", true);
-            if (config)
-            {
-                // Read window title.
-                title = config->getString("title");
-
-                // Read window rect.
-                int x = config->getInt("x");
-                int y = config->getInt("y");
-                int width = config->getInt("width");
-                int height = config->getInt("height");
-                int samples = config->getInt("samples");
-                fullscreen = config->getBool("fullscreen");
-
-                if (fullscreen && width == 0 && height == 0)
-                {
-                    // Use the screen resolution if fullscreen is true but width and height were not set in the config
-                    int screen_num = DefaultScreen(__display);
-                    width = DisplayWidth(__display, screen_num);
-                    height = DisplayHeight(__display, screen_num);
-                }
-                if (x != 0) __x = x;
-                if (y != 0) __y = y;
-                if (width != 0) __width = width;
-                if (height != 0) __height = height;
-                if (samples != 0) __samples = samples;
-            }
-        }
-
-        // GLX version
-        GLint majorGLX, minorGLX = 0;
-        glXQueryVersion(__display, &majorGLX, &minorGLX);
-        if (majorGLX == 1 && minorGLX < 2)
-        {
-            perror("GLX 1.2 or greater is required.");
-            XCloseDisplay(__display);
-            return NULL;
-        }
-        else
-        {
-            printf( "GLX version: %d.%d\n", majorGLX , minorGLX);
-        }
-
-        // Get the GLX Functions
-        glXCreateContextAttribsARB = (GLXContext(*)(Display* dpy, GLXFBConfig config, GLXContext share_context, Bool direct,  const int *attrib_list))glXGetProcAddressARB((GLubyte*)"glXCreateContextAttribsARB");
-        glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
-        glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");
-        glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int *value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
-        glXSwapIntervalEXT = (void(*)(Display* dpy, GLXDrawable drawable, int interval))glXGetProcAddressARB((GLubyte*)"glXSwapIntervalEXT");
-        glXSwapIntervalMESA = (int(*)(unsigned int interval))glXGetProcAddressARB((GLubyte*)"glXSwapIntervalMESA");
-
-        // Get the configs
-        int configAttribs[] = 
-        {
-            GLX_RENDER_TYPE,    GLX_RGBA_BIT,
-            GLX_DRAWABLE_TYPE,  GLX_WINDOW_BIT,
-            GLX_X_RENDERABLE,   True,
-            GLX_DEPTH_SIZE,     24,
-            GLX_STENCIL_SIZE,   8,
-            GLX_RED_SIZE,       8,
-            GLX_GREEN_SIZE,     8,
-            GLX_BLUE_SIZE,      8,
-            GLX_DOUBLEBUFFER,   True,
-            GLX_SAMPLE_BUFFERS, __samples > 0 ? 1 : 0,
-            GLX_SAMPLES,        __samples,
-            0
-        };
-        __multiSampling = __samples > 0;
-
-        GLXFBConfig* configs;
-        int configCount = 0;
-        configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
-        if ( configCount == 0 || configs == 0 )
-        {
-            perror( "glXChooseFBConfig" );
-            return NULL;
-        }
-
-        // Create the windows
-        XVisualInfo* visualInfo;
-        visualInfo = glXGetVisualFromFBConfig(__display, configs[0]);
-
-        XSetWindowAttributes winAttribs;
-        long eventMask;
-        eventMask = ExposureMask | VisibilityChangeMask | StructureNotifyMask |
-            KeyPressMask | KeyReleaseMask | PointerMotionMask |
-            ButtonPressMask | ButtonReleaseMask |
-            EnterWindowMask | LeaveWindowMask;
-        winAttribs.event_mask = eventMask;
-        winAttribs.border_pixel = 0;
-        winAttribs.bit_gravity = StaticGravity;
-        winAttribs.colormap = XCreateColormap(__display, RootWindow(__display, visualInfo->screen), visualInfo->visual, AllocNone);
-
-        GLint winMask;
-        winMask = CWBorderPixel | CWBitGravity | CWEventMask| CWColormap;
-
-        __window = XCreateWindow(__display, DefaultRootWindow(__display), __x, __y, __width, __height, 0,
-                visualInfo->depth, InputOutput, visualInfo->visual, winMask,
-                &winAttribs);
-
-        // Tell the window manager that it should send the delete window notification through ClientMessage
-        __atomWmDeleteWindow = XInternAtom(__display, "WM_DELETE_WINDOW", False);
-        XSetWMProtocols(__display, __window, &__atomWmDeleteWindow, 1);
-
-        XMapWindow(__display, __window);
-
-        // Send fullscreen atom message to the window; most window managers respect WM_STATE messages
-        // Note: fullscreen mode will use native desktop resolution and won't care about width/height specified
-        if (fullscreen)
-        {
-            XEvent xev;
-            Atom atomWm_state = XInternAtom(__display, "_NET_WM_STATE", False);
-            Atom atomFullscreen = XInternAtom(__display, "_NET_WM_STATE_FULLSCREEN", False);
-
-            memset(&xev, 0, sizeof(xev));
-            xev.type = ClientMessage;
-            xev.xclient.window = __window;
-            xev.xclient.message_type = atomWm_state;
-            xev.xclient.format = 32;
-            xev.xclient.data.l[0] = 1;
-            xev.xclient.data.l[1] = atomFullscreen;
-            xev.xclient.data.l[2] = 0;
-
-            XSendEvent(__display, DefaultRootWindow(__display), false, SubstructureNotifyMask | SubstructureRedirectMask, &xev);
-        }
-
-        XStoreName(__display, __window, title ? title : "");
-
-        __context = glXCreateContext(__display, visualInfo, NULL, True);
-        if (!__context)
-        {
-            perror("glXCreateContext");
-            return NULL;
-        }
-        glXMakeCurrent(__display, __window, __context);
-
-        // Use OpenGL 2.x with GLEW
-        glewExperimental = GL_TRUE;
-        GLenum glewStatus = glewInit();
-        if (glewStatus != GLEW_OK)
-        {
-            perror("glewInit");
-            return NULL;
-        }
-
-        // GL Version
-        int versionGL[2] = {-1, -1};
-        glGetIntegerv(GL_MAJOR_VERSION, versionGL);
-        glGetIntegerv(GL_MINOR_VERSION, versionGL + 1);
-        printf("GL version: %d.%d\n", versionGL[0], versionGL[1]);
-
-        // TODO: Get this workings
-        if (glXSwapIntervalEXT)
-            glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
-        else if(glXSwapIntervalMESA)
-            glXSwapIntervalMESA(__vsync ? 1 : 0);
-
-        return platform;
-    }
-
-    void cleanupX11()
-    {
-        if (__display)
-        {
-            glXMakeCurrent(__display, None, NULL);
-
-            if (__context)
-                glXDestroyContext(__display, __context);
-            if (__window)
-                XDestroyWindow(__display, __window);
-
-            XCloseDisplay(__display);
-        }
-    }
-
-    double timespec2millis(struct timespec *a)
-    {
-        GP_ASSERT(a);
-        return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
-    }
-
-    void updateWindowSize()
-    {
-        GP_ASSERT(__display);
-        GP_ASSERT(__window);
-        XWindowAttributes windowAttrs;
-        XGetWindowAttributes(__display, __window, &windowAttrs);
-        __windowSize[0] = windowAttrs.width;
-        __windowSize[1] = windowAttrs.height;
-    }
-
-
-    //Will need to be dynamic, also should be handled in Gamepad class
-    static const GamepadInfoEntry gamepadLookupTable[] = 
-    {
-        {0x0,0x0,"GENERIC XBOX360",2,6,20,2, 
-                                             (GamepadJoystickAxisInfo[]) {
-                                                                     {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                     {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                     {2,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                     {3,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                     {4,2,GP_AXIS_IS_TRIGGER,0,0,2240,ZERO_TO_POS},
-                                                                     {5,2,GP_AXIS_IS_TRIGGER,1,0,2240,ZERO_TO_POS},
-                                                                     {-1,0,0,0,0,0,NEG_TO_POS}
-                                                                 },
-                                             (long[]) {
-                                                                          -1,    
-                                                                          -1,  
-                                                                          -1,  
-                                                                          -1, 
-                                                                          -1, 
-                                                                          Gamepad::BUTTON_UP,
-                                                                          Gamepad::BUTTON_DOWN,
-                                                                          Gamepad::BUTTON_LEFT,
-                                                                          Gamepad::BUTTON_RIGHT,
-                                                                          Gamepad::BUTTON_MENU2,
-                                                                          Gamepad::BUTTON_MENU1,
-                                                                          Gamepad::BUTTON_L3,
-                                                                          Gamepad::BUTTON_R3,
-                                                                          Gamepad::BUTTON_L1,
-                                                                          Gamepad::BUTTON_R1,
-                                                                          Gamepad::BUTTON_MENU3,
-                                                                          Gamepad::BUTTON_A,
-                                                                          Gamepad::BUTTON_B,
-                                                                          Gamepad::BUTTON_X,
-                                                                          Gamepad::BUTTON_Y
-                                                                         }
-        },
-        {0x79,0x6,"DragonRise Inc. Generic USB Joystick",2,7,12,0, 
-                                             (GamepadJoystickAxisInfo[]) {
-                                                                     {0,1, GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                     {1,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                     {2,0,GP_AXIS_SKIP,0,0,2240,NEG_TO_POS},
-                                                                     {3,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                     {4,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                     {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,2240,NEG_TO_POS},
-                                                                     {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,2240,NEG_TO_POS},
-                                                                     {-1,0,0,0,0,0,NEG_TO_POS}
-                                                                 },
-                                             (long[]) {
-                                                                          Gamepad::BUTTON_Y,    
-                                                                          Gamepad::BUTTON_B,  
-                                                                          Gamepad::BUTTON_A,  
-                                                                          Gamepad::BUTTON_X, 
-                                                                          Gamepad::BUTTON_L1, 
-                                                                          Gamepad::BUTTON_R1, 
-                                                                          Gamepad::BUTTON_L2,    
-                                                                          Gamepad::BUTTON_R2,   
-                                                                          Gamepad::BUTTON_MENU1,   
-                                                                          Gamepad::BUTTON_MENU2,   
-                                                                          Gamepad::BUTTON_L3,
-                                                                          Gamepad::BUTTON_R3,
-                                                                         }
-        },
-        {0x54c,0x268,"Sony Corp. Batoh Device / PlayStation 3 Controller",2,27,19,2, 
-                                             (GamepadJoystickAxisInfo[]) {
-                                                                     {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                     {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                     {2,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                     {3,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                     {12,1,GP_AXIS_IS_TRIGGER,0,0,2240,ZERO_TO_POS},
-                                                                     {13,2,GP_AXIS_IS_TRIGGER,1,0,2240,ZERO_TO_POS},
-                                                                     {-1,0,0,0,0,0,NEG_TO_POS}
-                                                                 },
-                                             (long[]) {
-                                                                          Gamepad::BUTTON_MENU1,    
-                                                                          Gamepad::BUTTON_L3,  
-                                                                          Gamepad::BUTTON_R3,  
-                                                                          Gamepad::BUTTON_MENU2, 
-                                                                          Gamepad::BUTTON_UP, 
-                                                                          Gamepad::BUTTON_RIGHT, 
-                                                                          Gamepad::BUTTON_DOWN,    
-                                                                          Gamepad::BUTTON_LEFT,   
-                                                                          Gamepad::BUTTON_L2,  //Use Trigger Instead of BUTTON_L2? or both should be called
-                                                                          Gamepad::BUTTON_R2,  //Use Trigger Instead of BUTTON_R2? or both should be called                                                                        
-                                                                          Gamepad::BUTTON_L1,
-                                                                          Gamepad::BUTTON_R1,
-                                                                          Gamepad::BUTTON_Y,    
-                                                                          Gamepad::BUTTON_B,  
-                                                                          Gamepad::BUTTON_A,  
-                                                                          Gamepad::BUTTON_X, 
-                                                                          Gamepad::BUTTON_MENU3, 
-                                                                          -1,
-                                                                          -1
-                                                                         }
-        }
-    };
-
-    bool isGamepadDevRegistered(dev_t devId)
-    {
-        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
-        {
-            if(devId == (*it).deviceId) return true;
-        }
-        return false;
-    }
-
-    void closeGamepad(const ConnectedGamepadDevInfo& gamepadDevInfo)
-    {
-        ::close(gamepadDevInfo.fd);
-    }
-
-    void unregisterGamepad(GamepadHandle handle)
-    {
-        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
-        {
-            if(handle == (*it).fd)
-            {
-                closeGamepad(*it);
-                __connectedGamepads.erase(it);
-                return;
-            }
-        }
-    }
-
-    void closeAllGamepads()
-    {
-        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
-        {
-            closeGamepad(*it);
-            __connectedGamepads.erase(it);
-        }
-    }
-
-    const GamepadInfoEntry& getGamepadMappedInfo(unsigned int vendorId, unsigned int productId, unsigned int numberOfAxes, unsigned int numberOfButtons)
-    {
-        for(int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry);i++)
-        {
-            const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
-            if(curEntry.vendorId == vendorId && curEntry.productId == productId)
-            {
-                return curEntry;
-            }
-        }
-
-        for(int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry);i++)
-        {
-            const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
-            if(curEntry.vendorId == 0 && curEntry.productId == 0 && curEntry.numberOfAxes == numberOfAxes && curEntry.numberOfButtons == numberOfButtons)
-            {
-                return curEntry;
-            }
-        }
-
-        return gamepadLookupTable[0];
-    }
-
-    const GamepadInfoEntry& getGamepadMappedInfo(const GamepadHandle handle)
-    {
-        GP_ASSERT(handle >= 0);
-
-        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
-        {
-            if(handle == (*it).fd)
-            {
-                return it->gamepadInfo;
-            }
-        }
-        GP_WARN("Gamepad not connected but yet trying to get its data. Falling back to generic one.");
-        return gamepadLookupTable[0];
-    }
-
-    const GamepadJoystickAxisInfo* tryGetGamepadMappedAxisInfo(const GamepadInfoEntry& gpinfo, unsigned int axisNumber)
-    {
-        if(axisNumber >= 0 && axisNumber < gpinfo.numberOfAxes)
-        {
-            int i = 0;
-            while(true)
-            {
-                const GamepadJoystickAxisInfo* curAxisInfo = &gpinfo.axes[i++];
-                if(curAxisInfo->axisIndex == axisNumber)
-                    return curAxisInfo;
-                else if(curAxisInfo->axisIndex < 0)
-                    return NULL;
-            }
-        }
+        perror("XOpenDisplay");
         return NULL;
     }
 
-    bool tryGetGamepadMappedButton(const GamepadInfoEntry& gpinfo, unsigned long btnNumber, long& outMap)
+    // Get the window configuration values
+    const char *title = NULL;
+    int __x = 0, __y = 0, __width = 1280, __height = 800, __samples = 0;
+    bool fullscreen = false;
+    if (game->getConfig())
     {
-        if(btnNumber >= 0 && btnNumber < gpinfo.numberOfButtons )
+        Properties* config = game->getConfig()->getNamespace("window", true);
+        if (config)
         {
-            if(gpinfo.buttons[btnNumber] >= 0)
+            // Read window title.
+            title = config->getString("title");
+
+            // Read window rect.
+            int x = config->getInt("x");
+            int y = config->getInt("y");
+            int width = config->getInt("width");
+            int height = config->getInt("height");
+            int samples = config->getInt("samples");
+            fullscreen = config->getBool("fullscreen");
+
+            if (fullscreen && width == 0 && height == 0)
             {
-                outMap = gpinfo.buttons[btnNumber];
+                // Use the screen resolution if fullscreen is true but width and height were not set in the config
+                int screen_num = DefaultScreen(__display);
+                width = DisplayWidth(__display, screen_num);
+                height = DisplayHeight(__display, screen_num);
+            }
+            if (x != 0) __x = x;
+            if (y != 0) __y = y;
+            if (width != 0) __width = width;
+            if (height != 0) __height = height;
+            if (samples != 0) __samples = samples;
+        }
+    }
+
+    // GLX version
+    GLint majorGLX, minorGLX = 0;
+    glXQueryVersion(__display, &majorGLX, &minorGLX);
+    if (majorGLX == 1 && minorGLX < 2)
+    {
+        perror("GLX 1.2 or greater is required.");
+        XCloseDisplay(__display);
+        return NULL;
+    }
+    else
+    {
+        printf( "GLX version: %d.%d\n", majorGLX , minorGLX);
+    }
+
+    // Get the GLX Functions
+    glXCreateContextAttribsARB = (GLXContext(*)(Display* dpy, GLXFBConfig config, GLXContext share_context, Bool direct,  const int *attrib_list))glXGetProcAddressARB((GLubyte*)"glXCreateContextAttribsARB");
+    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
+    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");
+    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int *value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
+    glXSwapIntervalEXT = (void(*)(Display* dpy, GLXDrawable drawable, int interval))glXGetProcAddressARB((GLubyte*)"glXSwapIntervalEXT");
+    glXSwapIntervalMESA = (int(*)(unsigned int interval))glXGetProcAddressARB((GLubyte*)"glXSwapIntervalMESA");
+
+    // Get the configs
+    int configAttribs[] = 
+    {
+        GLX_RENDER_TYPE,    GLX_RGBA_BIT,
+        GLX_DRAWABLE_TYPE,  GLX_WINDOW_BIT,
+        GLX_X_RENDERABLE,   True,
+        GLX_DEPTH_SIZE,     24,
+        GLX_STENCIL_SIZE,   8,
+        GLX_RED_SIZE,       8,
+        GLX_GREEN_SIZE,     8,
+        GLX_BLUE_SIZE,      8,
+        GLX_DOUBLEBUFFER,   True,
+        GLX_SAMPLE_BUFFERS, __samples > 0 ? 1 : 0,
+        GLX_SAMPLES,        __samples,
+        0
+    };
+    __multiSampling = __samples > 0;
+
+    GLXFBConfig* configs;
+    int configCount = 0;
+    configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
+    if ( configCount == 0 || configs == 0 )
+    {
+        perror( "glXChooseFBConfig" );
+        return NULL;
+    }
+
+    // Create the windows
+    XVisualInfo* visualInfo;
+    visualInfo = glXGetVisualFromFBConfig(__display, configs[0]);
+
+    XSetWindowAttributes winAttribs;
+    long eventMask;
+    eventMask = ExposureMask | VisibilityChangeMask | StructureNotifyMask |
+        KeyPressMask | KeyReleaseMask | PointerMotionMask |
+        ButtonPressMask | ButtonReleaseMask |
+        EnterWindowMask | LeaveWindowMask;
+    winAttribs.event_mask = eventMask;
+    winAttribs.border_pixel = 0;
+    winAttribs.bit_gravity = StaticGravity;
+    winAttribs.colormap = XCreateColormap(__display, RootWindow(__display, visualInfo->screen), visualInfo->visual, AllocNone);
+
+    GLint winMask;
+    winMask = CWBorderPixel | CWBitGravity | CWEventMask| CWColormap;
+
+    __window = XCreateWindow(__display, DefaultRootWindow(__display), __x, __y, __width, __height, 0,
+            visualInfo->depth, InputOutput, visualInfo->visual, winMask,
+            &winAttribs);
+
+    // Tell the window manager that it should send the delete window notification through ClientMessage
+    __atomWmDeleteWindow = XInternAtom(__display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(__display, __window, &__atomWmDeleteWindow, 1);
+
+    XMapWindow(__display, __window);
+
+    // Send fullscreen atom message to the window; most window managers respect WM_STATE messages
+    // Note: fullscreen mode will use native desktop resolution and won't care about width/height specified
+    if (fullscreen)
+    {
+        XEvent xev;
+        Atom atomWm_state = XInternAtom(__display, "_NET_WM_STATE", False);
+        Atom atomFullscreen = XInternAtom(__display, "_NET_WM_STATE_FULLSCREEN", False);
+
+        memset(&xev, 0, sizeof(xev));
+        xev.type = ClientMessage;
+        xev.xclient.window = __window;
+        xev.xclient.message_type = atomWm_state;
+        xev.xclient.format = 32;
+        xev.xclient.data.l[0] = 1;
+        xev.xclient.data.l[1] = atomFullscreen;
+        xev.xclient.data.l[2] = 0;
+
+        XSendEvent(__display, DefaultRootWindow(__display), false, SubstructureNotifyMask | SubstructureRedirectMask, &xev);
+    }
+
+    XStoreName(__display, __window, title ? title : "");
+
+    __context = glXCreateContext(__display, visualInfo, NULL, True);
+    if (!__context)
+    {
+        perror("glXCreateContext");
+        return NULL;
+    }
+    glXMakeCurrent(__display, __window, __context);
+
+    // Use OpenGL 2.x with GLEW
+    glewExperimental = GL_TRUE;
+    GLenum glewStatus = glewInit();
+    if (glewStatus != GLEW_OK)
+    {
+        perror("glewInit");
+        return NULL;
+    }
+
+    // GL Version
+    int versionGL[2] = {-1, -1};
+    glGetIntegerv(GL_MAJOR_VERSION, versionGL);
+    glGetIntegerv(GL_MINOR_VERSION, versionGL + 1);
+    printf("GL version: %d.%d\n", versionGL[0], versionGL[1]);
+
+    // TODO: Get this workings
+    if (glXSwapIntervalEXT)
+        glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
+    else if(glXSwapIntervalMESA)
+        glXSwapIntervalMESA(__vsync ? 1 : 0);
+
+    return platform;
+}
+
+void cleanupX11()
+{
+    if (__display)
+    {
+        glXMakeCurrent(__display, None, NULL);
+
+        if (__context)
+            glXDestroyContext(__display, __context);
+        if (__window)
+            XDestroyWindow(__display, __window);
+
+        XCloseDisplay(__display);
+    }
+}
+
+double timespec2millis(struct timespec *a)
+{
+    GP_ASSERT(a);
+    return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
+}
+
+void updateWindowSize()
+{
+    GP_ASSERT(__display);
+    GP_ASSERT(__window);
+    XWindowAttributes windowAttrs;
+    XGetWindowAttributes(__display, __window, &windowAttrs);
+    __windowSize[0] = windowAttrs.width;
+    __windowSize[1] = windowAttrs.height;
+}
+
+
+// Will need to be dynamic, also should be handled in Gamepad class
+static const GamepadInfoEntry gamepadLookupTable[] = 
+{
+    {0x0,0x0,"Microsoft Xbox 360 Controller",2,6,20,2, 
+                                            (GamepadJoystickAxisInfo[]) {
+                                                                    {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                    {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                    {2,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                    {3,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                    {4,2,GP_AXIS_IS_TRIGGER,0,0,2240,ZERO_TO_POS},
+                                                                    {5,2,GP_AXIS_IS_TRIGGER,1,0,2240,ZERO_TO_POS},
+                                                                    {-1,0,0,0,0,0,NEG_TO_POS}
+                                                                },
+                                            (long[]) {
+                                                                        -1,    
+                                                                        -1,  
+                                                                        -1,  
+                                                                        -1, 
+                                                                        -1, 
+                                                                        Gamepad::BUTTON_UP,
+                                                                        Gamepad::BUTTON_DOWN,
+                                                                        Gamepad::BUTTON_LEFT,
+                                                                        Gamepad::BUTTON_RIGHT,
+                                                                        Gamepad::BUTTON_MENU2,
+                                                                        Gamepad::BUTTON_MENU1,
+                                                                        Gamepad::BUTTON_L3,
+                                                                        Gamepad::BUTTON_R3,
+                                                                        Gamepad::BUTTON_L1,
+                                                                        Gamepad::BUTTON_R1,
+                                                                        Gamepad::BUTTON_MENU3,
+                                                                        Gamepad::BUTTON_A,
+                                                                        Gamepad::BUTTON_B,
+                                                                        Gamepad::BUTTON_X,
+                                                                        Gamepad::BUTTON_Y
+                                                                        }
+    },
+    {0x54c,0x268,"Sony PlayStation 3 Controller",2,27,19,2, 
+                                            (GamepadJoystickAxisInfo[]) {
+                                                                    {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                    {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                    {2,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                    {3,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                    {12,1,GP_AXIS_IS_TRIGGER,0,0,2240,ZERO_TO_POS},
+                                                                    {13,2,GP_AXIS_IS_TRIGGER,1,0,2240,ZERO_TO_POS},
+                                                                    {-1,0,0,0,0,0,NEG_TO_POS}
+                                                                },
+                                            (long[]) {
+                                                                        Gamepad::BUTTON_MENU1,    
+                                                                        Gamepad::BUTTON_L3,  
+                                                                        Gamepad::BUTTON_R3,  
+                                                                        Gamepad::BUTTON_MENU2, 
+                                                                        Gamepad::BUTTON_UP, 
+                                                                        Gamepad::BUTTON_RIGHT, 
+                                                                        Gamepad::BUTTON_DOWN,    
+                                                                        Gamepad::BUTTON_LEFT,   
+                                                                        Gamepad::BUTTON_L2,  //Use Trigger Instead of BUTTON_L2? or both should be called
+                                                                        Gamepad::BUTTON_R2,  //Use Trigger Instead of BUTTON_R2? or both should be called                                                                        
+                                                                        Gamepad::BUTTON_L1,
+                                                                        Gamepad::BUTTON_R1,
+                                                                        Gamepad::BUTTON_Y,    
+                                                                        Gamepad::BUTTON_B,  
+                                                                        Gamepad::BUTTON_A,  
+                                                                        Gamepad::BUTTON_X, 
+                                                                        Gamepad::BUTTON_MENU3, 
+                                                                        -1,
+                                                                        -1
+                                                                        }
+    },
+    {0x79,0x6,"Generic USB Controller",2,7,12,0, 
+                                            (GamepadJoystickAxisInfo[]) {
+                                                                    {0,1, GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                    {1,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                    {2,0,GP_AXIS_SKIP,0,0,2240,NEG_TO_POS},
+                                                                    {3,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                    {4,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                    {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,2240,NEG_TO_POS},
+                                                                    {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,2240,NEG_TO_POS},
+                                                                    {-1,0,0,0,0,0,NEG_TO_POS}
+                                                                },
+                                            (long[]) {
+                                                                        Gamepad::BUTTON_Y,    
+                                                                        Gamepad::BUTTON_B,  
+                                                                        Gamepad::BUTTON_A,  
+                                                                        Gamepad::BUTTON_X, 
+                                                                        Gamepad::BUTTON_L1, 
+                                                                        Gamepad::BUTTON_R1, 
+                                                                        Gamepad::BUTTON_L2,    
+                                                                        Gamepad::BUTTON_R2,   
+                                                                        Gamepad::BUTTON_MENU1,   
+                                                                        Gamepad::BUTTON_MENU2,   
+                                                                        Gamepad::BUTTON_L3,
+                                                                        Gamepad::BUTTON_R3,
+                                                                        }
+    }
+};
+
+bool isGamepadDevRegistered(dev_t devId)
+{
+    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end(); ++it)
+    {
+        if (devId == (*it).deviceId) 
+            return true;
+    }
+    return false;
+}
+
+void closeGamepad(const ConnectedGamepadDevInfo& gamepadDevInfo)
+{
+    ::close(gamepadDevInfo.fd);
+}
+
+void unregisterGamepad(GamepadHandle handle)
+{
+    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end(); ++it)
+    {
+        if (handle == (*it).fd)
+        {
+            closeGamepad(*it);
+            __connectedGamepads.erase(it);
+            return;
+        }
+    }
+}
+
+void closeAllGamepads()
+{
+    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end(); ++it)
+    {
+        closeGamepad(*it);
+        __connectedGamepads.erase(it);
+    }
+}
+
+const GamepadInfoEntry& getGamepadMappedInfo(unsigned int vendorId, unsigned int productId, unsigned int numberOfAxes, unsigned int numberOfButtons)
+{
+    for (int i = 0; i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry); i++)
+    {
+        const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
+        if (curEntry.vendorId == vendorId && curEntry.productId == productId)
+        {
+            return curEntry;
+        }
+    }
+
+    for (int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry);i++)
+    {
+        const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
+        if (curEntry.vendorId == 0 && curEntry.productId == 0 && curEntry.numberOfAxes == numberOfAxes && curEntry.numberOfButtons == numberOfButtons)
+        {
+            return curEntry;
+        }
+    }
+
+    return gamepadLookupTable[0];
+}
+
+const GamepadInfoEntry& getGamepadMappedInfo(const GamepadHandle handle)
+{
+    GP_ASSERT(handle >= 0);
+
+    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+    {
+        if (handle == (*it).fd)
+        {
+            return it->gamepadInfo;
+        }
+    }
+    GP_WARN("Gamepad not connected but yet trying to get its data. Falling back to generic one.");
+    return gamepadLookupTable[0];
+}
+
+const GamepadJoystickAxisInfo* tryGetGamepadMappedAxisInfo(const GamepadInfoEntry& gpinfo, unsigned int axisNumber)
+{
+    if (axisNumber >= 0 && axisNumber < gpinfo.numberOfAxes)
+    {
+        int i = 0;
+        while (true)
+        {
+            const GamepadJoystickAxisInfo* curAxisInfo = &gpinfo.axes[i++];
+            if (curAxisInfo->axisIndex == axisNumber)
+                return curAxisInfo;
+            else if (curAxisInfo->axisIndex < 0)
+                return NULL;
+        }
+    }
+    return NULL;
+}
+
+bool tryGetGamepadMappedButton(const GamepadInfoEntry& gpinfo, unsigned long btnNumber, long& outMap)
+{
+    if (btnNumber >= 0 && btnNumber < gpinfo.numberOfButtons )
+    {
+        if (gpinfo.buttons[btnNumber] >= 0)
+        {
+            outMap = gpinfo.buttons[btnNumber];
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    GP_WARN("Unmapped gamepad button: %u.",btnNumber);
+    return false;
+}
+
+unsigned int readIntegerGamepadIdPropery(const char* sysFSIdPath, const char* propertyName)
+{
+    unsigned int ret = 0;
+    try 
+    {
+        ifstream propStream;
+        propStream.open((string(sysFSIdPath) + propertyName).c_str(),ifstream::in);
+        propStream >> std::hex >> ret;
+        propStream.close();
+    } 
+    catch (exception e) 
+    {
+        GP_WARN("Could not read propery from SysFS for Gamepad: %s", propertyName);
+    }
+    return ret;
+}
+
+bool isBlackListed(unsigned int vendorId, unsigned int productId)
+{
+    switch (vendorId)
+    {
+        case 0x0e0f: //virtual machine devices
+            if (productId == 0x0003) // Virtual Mouse
                 return true;
-            }
-            else
+    }
+    return false;
+}
+
+void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSIdPath)
+{
+    GP_ASSERT(devPath);
+
+    unsigned int vendorId =readIntegerGamepadIdPropery(sysFSIdPath,"vendor");
+    unsigned int productId =readIntegerGamepadIdPropery(sysFSIdPath,"product");
+
+    if (isBlackListed(vendorId,productId)) return;
+
+    GamepadHandle handle = ::open(devPath,O_RDONLY | O_NONBLOCK);
+    if(handle < 0)
+    {
+        GP_WARN("Could not open Gamepad device.");
+        return;
+    }
+
+    if (!(fcntl(handle, F_GETFL) != -1 || errno != EBADF))
+        return;
+
+    char axesNum, btnsNum, name[256];
+    ioctl(handle, JSIOCGNAME(256), name);
+    ioctl (handle, JSIOCGAXES, &axesNum);
+    ioctl (handle, JSIOCGBUTTONS, &btnsNum);
+
+    const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(vendorId,productId,(unsigned int)axesNum,(unsigned int)btnsNum);
+    unsigned int numJS = gpInfo.numberOfJS;
+    unsigned int numTR = gpInfo.numberOfTriggers;
+
+
+    Platform::gamepadEventConnectedInternal(handle,btnsNum,numJS,numTR,vendorId,productId,"",name);
+
+    ConnectedGamepadDevInfo info = {devId,handle,gpInfo}; 
+    __connectedGamepads.push_back(info);
+}
+
+static float normalizeJoystickAxis(int axisValue, int deadZone, bool zeroToOne)
+{
+    int absAxisValue = 0;
+    if (zeroToOne)
+        absAxisValue = (axisValue + 32767) / 2.0;
+    else
+        absAxisValue = abs(axisValue);
+
+    if (absAxisValue < deadZone)
+    {
+        return 0.0f;
+    }
+    else
+    {
+        int maxVal = 0;
+        int value = 0;
+        if(!zeroToOne)
+        {
+            value = axisValue;
+            if (value < 0)
             {
-                return false;
+                value = -1;
+                maxVal = 32768;
             }
-        }
-        GP_WARN("Unmapped gamepad button: %u.",btnNumber);
-        return false;
-    }
-
-    unsigned int readIntegerGamepadIdPropery(const char* sysFSIdPath, const char* propertyName)
-    {
-        unsigned int ret = 0;
-        try {
-            ifstream propStream;
-            propStream.open((string(sysFSIdPath) + propertyName).c_str(),ifstream::in);
-            propStream >> std::hex >> ret;
-            propStream.close();
-        } catch (exception e) {
-            GP_WARN("Could not read propery from SysFS for Gamepad: %s", propertyName);
-        }
-        return ret;
-    }
-
-    bool isBlackListed(unsigned int vendorId, unsigned int productId)
-    {
-        switch(vendorId)
-        {
-            case 0x0e0f: //virtual machine devices
-                if(productId == 0x0003) // Virtual Mouse
-                    return true;
-        }
-        return false;
-    }
-
-    void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSIdPath)
-    {
-        GP_ASSERT(devPath);
-
-        unsigned int vendorId =readIntegerGamepadIdPropery(sysFSIdPath,"vendor");
-        unsigned int productId =readIntegerGamepadIdPropery(sysFSIdPath,"product");
-
-        if(isBlackListed(vendorId,productId)) return;
-
-        GamepadHandle handle = ::open(devPath,O_RDONLY | O_NONBLOCK);
-        if(handle < 0)
-        {
-            GP_WARN("Could not open Gamepad device.");
-            return;
-        }
-
-        if(!(fcntl(handle, F_GETFL) != -1 || errno != EBADF))
-            return;
-
-        char axesNum, btnsNum, name[256];
-        ioctl(handle, JSIOCGNAME(256), name);
-        ioctl (handle, JSIOCGAXES, &axesNum);
-        ioctl (handle, JSIOCGBUTTONS, &btnsNum);
-
-        const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(vendorId,productId,(unsigned int)axesNum,(unsigned int)btnsNum);
-        unsigned int numJS = gpInfo.numberOfJS;
-        unsigned int numTR = gpInfo.numberOfTriggers;
-
-
-        Platform::gamepadEventConnectedInternal(handle,btnsNum,numJS,numTR,vendorId,productId,"",name);
-
-        ConnectedGamepadDevInfo info = {devId,handle,gpInfo}; 
-        __connectedGamepads.push_back(info);
-    }
-
-    static float normalizeJoystickAxis(int axisValue, int deadZone, bool zeroToOne)
-    {
-        int absAxisValue = 0;
-        if(zeroToOne)
-            absAxisValue = (axisValue + 32767) / 2.0;
-        else
-             absAxisValue = abs(axisValue);
-
-        if (absAxisValue < deadZone)
-        {
-            return 0.0f;
-        }
-        else
-        {
-            int maxVal = 0;
-            int value = 0;
-            if(!zeroToOne)
-            {
-                value = axisValue;
-                if (value < 0)
-                {
-                    value = -1;
-                    maxVal = 32768;
-                }
-                else if (value > 0)
-                {
-                    value = 1;
-                    maxVal = 32767;
-                }
-                else
-                {
-                    return 0.0f;
-                }
-            }
-            else
+            else if (value > 0)
             {
                 value = 1;
                 maxVal = 32767;
             }
-
-            float ret = value * (absAxisValue - deadZone) / (float)(maxVal - deadZone);
-            return ret;
-        }
-    }
-
-    void enumGamepads()
-    {
-        const int maxDevs = 16;
-        const char* devPathFormat = "/dev/input/js%u";
-        const char* sysfsPathFormat = "/sys/class/input/js%u/device/id/";
-        char curDevPath[20];
-
-        for(int i=0;i<maxDevs;i++)
-        {
-            sprintf(curDevPath,devPathFormat,i);
-            struct stat gpstat;
-            if(::stat(curDevPath,&gpstat) == 0)
+            else
             {
-                dev_t devid = gpstat.st_rdev;
-                if(!isGamepadDevRegistered(devid))
-                {
-                    char cursysFSPath[35];
-                    sprintf(cursysFSPath,sysfsPathFormat,i);
-                    handleConnectedGamepad(devid,curDevPath,cursysFSPath);
-                }
+                return 0.0f;
+            }
+        }
+        else
+        {
+            value = 1;
+            maxVal = 32767;
+        }
+
+        float ret = value * (absAxisValue - deadZone) / (float)(maxVal - deadZone);
+        return ret;
+    }
+}
+
+void enumGamepads()
+{
+    const int maxDevs = 16;
+    const char* devPathFormat = "/dev/input/js%u";
+    const char* sysfsPathFormat = "/sys/class/input/js%u/device/id/";
+    char curDevPath[20];
+
+    for(int i=0;i<maxDevs;i++)
+    {
+        sprintf(curDevPath,devPathFormat,i);
+        struct stat gpstat;
+        if(::stat(curDevPath,&gpstat) == 0)
+        {
+            dev_t devid = gpstat.st_rdev;
+            if(!isGamepadDevRegistered(devid))
+            {
+                char cursysFSPath[35];
+                sprintf(cursysFSPath,sysfsPathFormat,i);
+                handleConnectedGamepad(devid,curDevPath,cursysFSPath);
             }
         }
     }
+}
 
-    void gamepadHandlingLoop()
+void gamepadHandlingLoop()
+{
+    enumGamepads();
+}
+
+int Platform::enterMessagePump()
+{
+    GP_ASSERT(_game);
+
+    updateWindowSize();
+
+    static bool shiftDown = false;
+    static bool capsOn = false;
+    static XEvent evt;
+
+    // Get the initial time.
+    clock_gettime(CLOCK_REALTIME, &__timespec);
+    __timeStart = timespec2millis(&__timespec);
+    __timeAbsolute = 0L;
+
+    // Run the game.
+    _game->run();
+
+    // Setup select for message handling (to allow non-blocking)
+    int x11_fd = ConnectionNumber(__display);
+
+    pollfd xpolls[1];
+    xpolls[0].fd = x11_fd;
+    xpolls[0].events = POLLIN|POLLPRI;
+
+    // Message loop.
+    while (true)
     {
-        enumGamepads();
-    }
-
-    int Platform::enterMessagePump()
-    {
-        GP_ASSERT(_game);
-
-        updateWindowSize();
-
-        static bool shiftDown = false;
-        static bool capsOn = false;
-        static XEvent evt;
-
-        // Get the initial time.
-        clock_gettime(CLOCK_REALTIME, &__timespec);
-        __timeStart = timespec2millis(&__timespec);
-        __timeAbsolute = 0L;
-
-        // Run the game.
-        _game->run();
-
-        // Setup select for message handling (to allow non-blocking)
-        int x11_fd = ConnectionNumber(__display);
-
-        pollfd xpolls[1];
-        xpolls[0].fd = x11_fd;
-        xpolls[0].events = POLLIN|POLLPRI;
-
-        // Message loop.
-        while (true)
+        poll( xpolls, 1, 16 );
+        // handle all pending events in one block
+        while (XPending(__display))
         {
-            poll( xpolls, 1, 16 );
-            // handle all pending events in one block
-            while (XPending(__display))
+            XNextEvent(__display, &evt);
+
+            switch (evt.type)
             {
-                XNextEvent(__display, &evt);
-
-                switch (evt.type)
-                {
-                    case ClientMessage:
+                case ClientMessage:
+                    {
+                        // Handle destroy window message correctly
+                        if (evt.xclient.data.l[0] == __atomWmDeleteWindow)
                         {
-                            // Handle destroy window message correctly
-                            if (evt.xclient.data.l[0] == __atomWmDeleteWindow)
-                            {
-                                _game->exit();
-                            }
+                            _game->exit();
                         }
-                        break;
-                    case DestroyNotify :
-                        {
-                            cleanupX11();
-                            exit(0);
-                        }
-                        break;
-
-                    case Expose:
-                        {
-                            updateWindowSize();
-                        }
-                        break;
-
-                    case KeyPress:
-                        {
-                            KeySym sym = XLookupKeysym(&evt.xkey, (evt.xkey.state & shiftDown) ? 1 : 0);
-
-
-                            //TempSym needed because XConvertCase operates on two keysyms: One lower and the other upper, we are only interested in the upper case
-                            KeySym tempSym;
-                            if (capsOn && !shiftDown)
-                                XConvertCase(sym,  &tempSym, &sym);
-
-                            Keyboard::Key key = getKey(sym);
-                            gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
-
-                            if (key == Keyboard::KEY_CAPS_LOCK)
-                                capsOn = !capsOn;
-                            if (key == Keyboard::KEY_SHIFT)
-                                shiftDown = true;
-
-                            if (int character = getUnicode(key))
-                                gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, character);
-
-                        }
-                        break;
-
-                    case KeyRelease:
-                        {
-                            //detect and drop repeating keystrokes (no other way to do this using the event interface)
-                            XEvent next;
-                            if ( XPending(__display) )
-                            {
-                                XPeekEvent(__display,&next);
-                                if ( next.type == KeyPress
-                                        && next.xkey.time == evt.xkey.time
-                                        && next.xkey.keycode == evt.xkey.keycode )
-                                {
-                                    XNextEvent(__display,&next);
-                                    continue;
-                                }
-                            }
-
-                            KeySym sym = XLookupKeysym(&evt.xkey, 0);
-                            Keyboard::Key key = getKey(sym);
-                            gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_RELEASE, key);
-
-                            if (key == Keyboard::KEY_SHIFT)
-                                shiftDown = false;
-                        }
-                        break;
-
-                    case ButtonPress:
-                        {
-                            gameplay::Mouse::MouseEvent mouseEvt;
-                            switch (evt.xbutton.button)
-                            {
-                                case 1:
-                                    mouseEvt = gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON;
-                                    break;
-                                case 2:
-                                    mouseEvt = gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON;
-                                    break;
-                                case 3:
-                                    mouseEvt = gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON;
-                                    break;
-                                case 4:
-                                case 5:
-                                    gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL,
-                                            evt.xbutton.x, evt.xbutton.y,
-                                            evt.xbutton.button == Button4 ? 1 : -1);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
-                            {
-                                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, evt.xbutton.x, evt.xbutton.y, 0, true);
-                            }
-                        }
-                        break;
-
-                    case ButtonRelease:
-                        {
-                            gameplay::Mouse::MouseEvent mouseEvt;
-                            switch (evt.xbutton.button)
-                            {
-                                case 1:
-                                    mouseEvt = gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON;
-                                    break;
-                                case 2:
-                                    mouseEvt = gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON;
-                                    break;
-                                case 3:
-                                    mouseEvt = gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON;
-                                    break;
-                                default:
-                                    break;
-                            }
-                            if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
-                            {
-                                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, evt.xbutton.x, evt.xbutton.y, 0, true);
-                            }
-                        }
-                        break;
-
-                    case MotionNotify:
-                        {
-                            int x = evt.xmotion.x;
-                            int y = evt.xmotion.y;
-
-                            if (__mouseCaptured)
-                            {
-                                if (x == __mouseCapturePointX && y == __mouseCapturePointY)
-                                {
-                                    // Discard the first MotionNotify following capture
-                                    // since it contains bogus x,y data.
-                                    break;
-                                }
-
-                                // Convert to deltas
-                                x -= __mouseCapturePointX;
-                                y -= __mouseCapturePointY;
-
-                                // Warp mouse back to center of screen.
-                                XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
-                            }
-
-                            if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
-                            {
-                                if (evt.xmotion.state & Button1Mask)
-                                {
-                                    gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0, true);
-                                }
-                            }
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            gamepadHandlingLoop();
-
-            if (_game)
-            {
-                // Game state will be uninitialized if game was closed through Game::exit()
-                if (_game->getState() == Game::UNINITIALIZED)
+                    }
+                    break;
+                case DestroyNotify :
+                    {
+                        cleanupX11();
+                        exit(0);
+                    }
                     break;
 
-                _game->frame();
-            }
+                case Expose:
+                    {
+                        updateWindowSize();
+                    }
+                    break;
 
-            glXSwapBuffers(__display, __window);
+                case KeyPress:
+                    {
+                        KeySym sym = XLookupKeysym(&evt.xkey, (evt.xkey.state & shiftDown) ? 1 : 0);
+
+
+                        //TempSym needed because XConvertCase operates on two keysyms: One lower and the other upper, we are only interested in the upper case
+                        KeySym tempSym;
+                        if (capsOn && !shiftDown)
+                            XConvertCase(sym,  &tempSym, &sym);
+
+                        Keyboard::Key key = getKey(sym);
+                        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
+
+                        if (key == Keyboard::KEY_CAPS_LOCK)
+                            capsOn = !capsOn;
+                        if (key == Keyboard::KEY_SHIFT)
+                            shiftDown = true;
+
+                        if (int character = getUnicode(key))
+                            gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, character);
+
+                    }
+                    break;
+
+                case KeyRelease:
+                    {
+                        //detect and drop repeating keystrokes (no other way to do this using the event interface)
+                        XEvent next;
+                        if ( XPending(__display) )
+                        {
+                            XPeekEvent(__display,&next);
+                            if ( next.type == KeyPress
+                                    && next.xkey.time == evt.xkey.time
+                                    && next.xkey.keycode == evt.xkey.keycode )
+                            {
+                                XNextEvent(__display,&next);
+                                continue;
+                            }
+                        }
+
+                        KeySym sym = XLookupKeysym(&evt.xkey, 0);
+                        Keyboard::Key key = getKey(sym);
+                        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_RELEASE, key);
+
+                        if (key == Keyboard::KEY_SHIFT)
+                            shiftDown = false;
+                    }
+                    break;
+
+                case ButtonPress:
+                    {
+                        gameplay::Mouse::MouseEvent mouseEvt;
+                        switch (evt.xbutton.button)
+                        {
+                            case 1:
+                                mouseEvt = gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON;
+                                break;
+                            case 2:
+                                mouseEvt = gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON;
+                                break;
+                            case 3:
+                                mouseEvt = gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON;
+                                break;
+                            case 4:
+                            case 5:
+                                gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL,
+                                        evt.xbutton.x, evt.xbutton.y,
+                                        evt.xbutton.button == Button4 ? 1 : -1);
+                                break;
+                            default:
+                                break;
+                        }
+                        if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
+                        {
+                            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, evt.xbutton.x, evt.xbutton.y, 0, true);
+                        }
+                    }
+                    break;
+
+                case ButtonRelease:
+                    {
+                        gameplay::Mouse::MouseEvent mouseEvt;
+                        switch (evt.xbutton.button)
+                        {
+                            case 1:
+                                mouseEvt = gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON;
+                                break;
+                            case 2:
+                                mouseEvt = gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON;
+                                break;
+                            case 3:
+                                mouseEvt = gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON;
+                                break;
+                            default:
+                                break;
+                        }
+                        if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
+                        {
+                            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, evt.xbutton.x, evt.xbutton.y, 0, true);
+                        }
+                    }
+                    break;
+
+                case MotionNotify:
+                    {
+                        int x = evt.xmotion.x;
+                        int y = evt.xmotion.y;
+
+                        if (__mouseCaptured)
+                        {
+                            if (x == __mouseCapturePointX && y == __mouseCapturePointY)
+                            {
+                                // Discard the first MotionNotify following capture
+                                // since it contains bogus x,y data.
+                                break;
+                            }
+
+                            // Convert to deltas
+                            x -= __mouseCapturePointX;
+                            y -= __mouseCapturePointY;
+
+                            // Warp mouse back to center of screen.
+                            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
+                        }
+
+                        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
+                        {
+                            if (evt.xmotion.state & Button1Mask)
+                            {
+                                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0, true);
+                            }
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+            }
         }
 
-        cleanupX11();
+        gamepadHandlingLoop();
 
-        return 0;
-    }
+        if (_game)
+        {
+            // Game state will be uninitialized if game was closed through Game::exit()
+            if (_game->getState() == Game::UNINITIALIZED)
+                break;
 
-    void Platform::signalShutdown()
-    {
-    }
+            _game->frame();
+        }
 
-    bool Platform::canExit()
-    {
-        return true;
-    }
-
-    unsigned int Platform::getDisplayWidth()
-    {
-        return __windowSize[0];
-    }
-
-    unsigned int Platform::getDisplayHeight()
-    {
-        return __windowSize[1];
-    }
-
-    double Platform::getAbsoluteTime()
-    {
-
-        clock_gettime(CLOCK_REALTIME, &__timespec);
-        double now = timespec2millis(&__timespec);
-        __timeAbsolute = now - __timeStart;
-
-        return __timeAbsolute;
-    }
-
-    void Platform::setAbsoluteTime(double time)
-    {
-        __timeAbsolute = time;
-    }
-
-    bool Platform::isVsync()
-    {
-        return __vsync;
-    }
-
-    void Platform::setVsync(bool enable)
-    {
-        if (glXSwapIntervalEXT)
-            glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
-        else if(glXSwapIntervalMESA)
-            glXSwapIntervalMESA(__vsync ? 1 : 0);
-
-        __vsync = enable;
-    }
-
-    void Platform::swapBuffers()
-    {
         glXSwapBuffers(__display, __window);
     }
 
-    void Platform::sleep(long ms)
-    {
-        usleep(ms * 1000);
-    }
+    cleanupX11();
 
-    void Platform::setMultiSampling(bool enabled)
+    return 0;
+}
+
+void Platform::signalShutdown()
+{
+}
+
+bool Platform::canExit()
+{
+    return true;
+}
+
+unsigned int Platform::getDisplayWidth()
+{
+    return __windowSize[0];
+}
+
+unsigned int Platform::getDisplayHeight()
+{
+    return __windowSize[1];
+}
+
+double Platform::getAbsoluteTime()
+{
+
+    clock_gettime(CLOCK_REALTIME, &__timespec);
+    double now = timespec2millis(&__timespec);
+    __timeAbsolute = now - __timeStart;
+
+    return __timeAbsolute;
+}
+
+void Platform::setAbsoluteTime(double time)
+{
+    __timeAbsolute = time;
+}
+
+bool Platform::isVsync()
+{
+    return __vsync;
+}
+
+void Platform::setVsync(bool enable)
+{
+    __vsync = enable;
+
+    if (glXSwapIntervalEXT)
+        glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
+    else if(glXSwapIntervalMESA)
+        glXSwapIntervalMESA(__vsync ? 1 : 0);
+}
+
+void Platform::swapBuffers()
+{
+    glXSwapBuffers(__display, __window);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
+}
+
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
     {
-        if (enabled == __multiSampling)
-        {
-            return;
-        }
+        return;
+    }
         
-            //todo
-            
-            __multiSampling = enabled;
-    }
+        // TODO
+        __multiSampling = enabled;
+}
     
-        bool Platform::isMultiSampling()
+    bool Platform::isMultiSampling()
+    {
+        return __multiSampling;
+    }
+
+void Platform::setMultiTouch(bool enabled)
+{
+    // not supported
+}
+
+bool Platform::isMultiTouch()
+{
+    false;
+}
+
+bool Platform::hasAccelerometer()
+{
+    return false;
+}
+
+void Platform::getAccelerometerValues(float* pitch, float* roll)
+{
+    GP_ASSERT(pitch);
+    GP_ASSERT(roll);
+
+    *pitch = 0;
+    *roll = 0;
+}
+
+void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+    if (accelX)
+    {
+        *accelX = 0;
+    }
+
+    if (accelY)
+    {
+        *accelY = 0;
+    }
+
+    if (accelZ)
+    {
+        *accelZ = 0;
+    }
+
+    if (gyroX)
+    {
+        *gyroX = 0;
+    }
+
+    if (gyroY)
+    {
+        *gyroY = 0;
+    }
+
+    if (gyroZ)
+    {
+        *gyroZ = 0;
+    }
+}
+
+void Platform::getArguments(int* argc, char*** argv)
+{
+    if (argc)
+        *argc = __argc;
+    if (argv)
+        *argv = __argv;
+}
+
+bool Platform::hasMouse()
+{
+    return true;
+}
+
+void Platform::setMouseCaptured(bool captured)
+{
+    if (captured != __mouseCaptured)
+    {
+        if (captured)
         {
-            return __multiSampling;
+            // Hide the cursor and warp it to the center of the screen
+            __mouseCapturePointX = getDisplayWidth() / 2;
+            __mouseCapturePointY = getDisplayHeight() / 2;
+
+            setCursorVisible(false);
+            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
+        }
+        else
+        {
+            // Restore cursor
+            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
+            setCursorVisible(true);
         }
 
-    void Platform::setMultiTouch(bool enabled)
-    {
-        // not supported
+        __mouseCaptured = captured;
     }
+}
 
-    bool Platform::isMultiTouch()
+bool Platform::isMouseCaptured()
+{
+    return __mouseCaptured;
+}
+
+void Platform::setCursorVisible(bool visible)
+{
+    if (visible != __cursorVisible)
     {
-        false;
-    }
-
-    bool Platform::hasAccelerometer()
-    {
-        return false;
-    }
-
-    void Platform::getAccelerometerValues(float* pitch, float* roll)
-    {
-        GP_ASSERT(pitch);
-        GP_ASSERT(roll);
-
-        *pitch = 0;
-        *roll = 0;
-    }
-
-    void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
-    {
-        if (accelX)
+        if (visible==false)
         {
-            *accelX = 0;
+            Cursor invisibleCursor;
+            Pixmap bitmapNoData;
+            XColor black;
+            static char noData[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            black.red = black.green = black.blue = 0;
+            bitmapNoData = XCreateBitmapFromData(__display, __window, noData, 8, 8);
+            invisibleCursor = XCreatePixmapCursor(__display, bitmapNoData, bitmapNoData, &black, &black, 0, 0);
+
+            XDefineCursor(__display, __window, invisibleCursor);
+            XFreeCursor(__display, invisibleCursor);
+            XFreePixmap(__display, bitmapNoData);
         }
-
-        if (accelY)
+        else
         {
-            *accelY = 0;
+            XUndefineCursor(__display, __window);
         }
+        XFlush(__display);
+        __cursorVisible = visible;
+    }
+}
 
-        if (accelZ)
+bool Platform::isCursorVisible()
+{
+    return __cursorVisible;
+}
+
+void Platform::displayKeyboard(bool display)
+{
+    // not supported
+}
+
+void Platform::shutdownInternal()
+{
+    closeAllGamepads();
+    Game::getInstance()->shutdown();
+}
+
+bool Platform::isGestureSupported(Gesture::GestureEvent evt)
+{
+    return false;
+}
+
+void Platform::registerGesture(Gesture::GestureEvent evt)
+{
+}
+
+void Platform::unregisterGesture(Gesture::GestureEvent evt)
+{
+}
+
+bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return false;
+}
+
+void Platform::pollGamepadState(Gamepad* gamepad)
+{
+    GP_ASSERT(gamepad);
+
+    struct js_event jevent;
+    const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(gamepad->_handle);
+
+    while (read(gamepad->_handle, &jevent, sizeof(struct js_event)) > 0)
+    {
+        switch (jevent.type)
         {
-            *accelZ = 0;
-        }
-
-        if (gyroX)
-        {
-            *gyroX = 0;
-        }
-
-        if (gyroY)
-        {
-            *gyroY = 0;
-        }
-
-        if (gyroZ)
-        {
-            *gyroZ = 0;
-        }
-    }
-
-    void Platform::getArguments(int* argc, char*** argv)
-    {
-        if (argc)
-            *argc = __argc;
-        if (argv)
-            *argv = __argv;
-    }
-
-    bool Platform::hasMouse()
-    {
-        return true;
-    }
-
-    void Platform::setMouseCaptured(bool captured)
-    {
-        if (captured != __mouseCaptured)
-        {
-            if (captured)
-            {
-                // Hide the cursor and warp it to the center of the screen
-                __mouseCapturePointX = getDisplayWidth() / 2;
-                __mouseCapturePointY = getDisplayHeight() / 2;
-
-                setCursorVisible(false);
-                XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
-            }
-            else
-            {
-                // Restore cursor
-                XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
-                setCursorVisible(true);
-            }
-
-            __mouseCaptured = captured;
-        }
-    }
-
-    bool Platform::isMouseCaptured()
-    {
-        return __mouseCaptured;
-    }
-
-    void Platform::setCursorVisible(bool visible)
-    {
-        if (visible != __cursorVisible)
-        {
-            if (visible)
-            {
-                Cursor invisibleCursor;
-                Pixmap bitmapNoData;
-                XColor black;
-                static char noData[] = {0, 0, 0, 0, 0, 0, 0, 0};
-                black.red = black.green = black.blue = 0;
-                bitmapNoData = XCreateBitmapFromData(__display, __window, noData, 8, 8);
-                invisibleCursor = XCreatePixmapCursor(__display, bitmapNoData, bitmapNoData, &black, &black, 0, 0);
-
-                XDefineCursor(__display, __window, invisibleCursor);
-                XFreeCursor(__display, invisibleCursor);
-                XFreePixmap(__display, bitmapNoData);
-            }
-            else
-            {
-                XUndefineCursor(__display, __window);
-            }
-            XFlush(__display);
-            __cursorVisible = visible;
-        }
-    }
-
-    bool Platform::isCursorVisible()
-    {
-        return __cursorVisible;
-    }
-
-    void Platform::displayKeyboard(bool display)
-    {
-        // not supported
-    }
-
-    void Platform::shutdownInternal()
-    {
-        closeAllGamepads();
-        Game::getInstance()->shutdown();
-    }
-
-    bool Platform::isGestureSupported(Gesture::GestureEvent evt)
-    {
-        return false;
-    }
-
-    void Platform::registerGesture(Gesture::GestureEvent evt)
-    {
-    }
-
-    void Platform::unregisterGesture(Gesture::GestureEvent evt)
-    {
-    }
-
-    bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
-    {
-        return false;
-    }
-
-    void Platform::pollGamepadState(Gamepad* gamepad)
-    {
-        GP_ASSERT(gamepad);
-
-        struct js_event jevent;
-        const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(gamepad->_handle);
-
-        while (read(gamepad->_handle, &jevent, sizeof(struct js_event)) > 0)
-        {
-            switch (jevent.type)
-            {
-                case JS_EVENT_BUTTON:
-                case JS_EVENT_BUTTON | JS_EVENT_INIT:
+            case JS_EVENT_BUTTON:
+            case JS_EVENT_BUTTON | JS_EVENT_INIT:
+                {
+                    long curMappingIndex = -1;
+                    if(tryGetGamepadMappedButton(gpInfo, jevent.number, curMappingIndex))
                     {
-                        long curMappingIndex = -1;
-                        if(tryGetGamepadMappedButton(gpInfo, jevent.number, curMappingIndex))
-                        {
-                            unsigned int buttons = 0;
-                            if (jevent.value)
-                                buttons |= (1 << curMappingIndex);
-                            else
-                                buttons &= ~(1 << curMappingIndex);
-                            gamepad->setButtons(buttons);
-                        }
-                        break;
+                        unsigned int buttons = 0;
+                        if (jevent.value)
+                            buttons |= (1 << curMappingIndex);
+                        else
+                            buttons &= ~(1 << curMappingIndex);
+                        gamepad->setButtons(buttons);
                     }
-                case JS_EVENT_AXIS:
-                case JS_EVENT_AXIS | JS_EVENT_INIT:
+                    break;
+                }
+            case JS_EVENT_AXIS:
+            case JS_EVENT_AXIS | JS_EVENT_INIT:
+                {
+                    if(jevent.number < gpInfo.numberOfAxes)
                     {
-                        if(jevent.number < gpInfo.numberOfAxes)
+                        const GamepadJoystickAxisInfo* jsInfo = tryGetGamepadMappedAxisInfo(gpInfo,jevent.number);
+                        if(jsInfo)
                         {
-                            const GamepadJoystickAxisInfo* jsInfo = tryGetGamepadMappedAxisInfo(gpInfo,jevent.number);
-                            if(jsInfo)
+                            float val = normalizeJoystickAxis(jevent.value,jsInfo->deadZone,jsInfo->mapFunc == ZERO_TO_POS);
+                            if(!(jsInfo->flags & GP_AXIS_SKIP))
                             {
-                                float val = normalizeJoystickAxis(jevent.value,jsInfo->deadZone,jsInfo->mapFunc == ZERO_TO_POS);
-                                if(!(jsInfo->flags & GP_AXIS_SKIP))
+                                if((jsInfo->flags & GP_AXIS_IS_NEG))
+                                    val = -1.0f * val;
+
+                                bool not_js_axis = false;
+                                if((jsInfo->flags & GP_AXIS_IS_DPAD))
                                 {
-                                    if((jsInfo->flags & GP_AXIS_IS_NEG))
-                                        val = -1.0f * val;
+                                    unsigned int buttons = 0;
+                                    if(jevent.value != 0)
+                                        buttons |= (1 << (jevent.value > 0 ? jsInfo->mappedPosArg : jsInfo->mappedNegArg));
+                                    else
+                                    {
+                                        buttons &= ~(1 << jsInfo->mappedPosArg);
+                                        buttons &= ~(1 << jsInfo->mappedNegArg);
+                                    }
+                                    gamepad->setButtons(buttons);
+                                    not_js_axis = true;
+                                }
+                                if((jsInfo->flags & GP_AXIS_IS_TRIGGER))
+                                {
+                                    gamepad->setTriggerValue(jsInfo->mappedPosArg, val);
+                                    not_js_axis = true;
+                                }
 
-                                    bool not_js_axis = false;
-                                    if((jsInfo->flags & GP_AXIS_IS_DPAD))
-                                    {
-                                        unsigned int buttons = 0;
-                                        if(jevent.value != 0)
-                                            buttons |= (1 << (jevent.value > 0 ? jsInfo->mappedPosArg : jsInfo->mappedNegArg));
-                                        else
-                                        {
-                                            buttons &= ~(1 << jsInfo->mappedPosArg);
-                                            buttons &= ~(1 << jsInfo->mappedNegArg);
-                                        }
-                                        gamepad->setButtons(buttons);
-                                        not_js_axis = true;
-                                    }
-                                    if((jsInfo->flags & GP_AXIS_IS_TRIGGER))
-                                    {
-                                        gamepad->setTriggerValue(jsInfo->mappedPosArg, val);
-                                        not_js_axis = true;
-                                    }
-
-                                    if(!not_js_axis)
-                                    {
-                                        Vector2 jsVals;
-                                        gamepad->getJoystickValues(jsInfo->joystickIndex,&jsVals);
-                                        if(jsInfo->flags & GP_AXIS_IS_XAXIS)
-                                            jsVals.x = val;
-                                        else
-                                            jsVals.y = val;
-                                        gamepad->setJoystickValue(jsInfo->joystickIndex,jsVals.x,jsVals.y);
-                                    }
+                                if(!not_js_axis)
+                                {
+                                    Vector2 jsVals;
+                                    gamepad->getJoystickValues(jsInfo->joystickIndex,&jsVals);
+                                    if(jsInfo->flags & GP_AXIS_IS_XAXIS)
+                                        jsVals.x = val;
+                                    else
+                                        jsVals.y = val;
+                                    gamepad->setJoystickValue(jsInfo->joystickIndex,jsVals.x,jsVals.y);
                                 }
                             }
                         }
                     }
-                    break;
+                }
+                break;
 
-                default: 
-                    GP_WARN("unhandled gamepad event: %x\n", jevent.type);
-            }
+            default: 
+                GP_WARN("unhandled gamepad event: %x\n", jevent.type);
         }
-        if(errno == ENODEV)
-        {
-            unregisterGamepad(gamepad->_handle);
-            gamepadEventDisconnectedInternal(gamepad->_handle);
-        }
-
     }
-
-    bool Platform::launchURL(const char* url)
+    if(errno == ENODEV)
     {
-        if (url == NULL || *url == '\0')
-            return false;
-
-        int len = strlen(url);
-
-        char* cmd = new char[11 + len];
-        sprintf(cmd, "xdg-open %s", url);
-        int r = system(cmd);
-        SAFE_DELETE_ARRAY(cmd);
-
-        return (r == 0);
+        unregisterGamepad(gamepad->_handle);
+        gamepadEventDisconnectedInternal(gamepad->_handle);
     }
+}
+
+bool Platform::launchURL(const char* url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    int len = strlen(url);
+
+    char* cmd = new char[11 + len];
+    sprintf(cmd, "xdg-open %s", url);
+    int r = system(cmd);
+    SAFE_DELETE_ARRAY(cmd);
+
+    return (r == 0);
+}
+
+std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
+{
+    std::string filename = "";
+
+    if (!gtk_init_check(NULL,NULL))
+        return "";
+
+    // Create the dialog in one of two modes, SAVE or OPEN
+    GtkWidget *dialog;
+    dialog = gtk_file_chooser_dialog_new(title, NULL,
+                                         mode == FileSystem::SAVE ? GTK_FILE_CHOOSER_ACTION_SAVE : GTK_FILE_CHOOSER_ACTION_OPEN,
+                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                         mode == FileSystem::SAVE ? _("_Save") : _("_Open"),
+                                         GTK_RESPONSE_ACCEPT, NULL);
+
+    // Filter on extensions
+    GtkFileFilter* filter = gtk_file_filter_new();
+    std::istringstream f(filterExtensions);
+    std::string s;
+    std::string extStr;
+    while (std::getline(f, s, ';'))
+    {
+        extStr = "*.";
+        extStr += s;
+        gtk_file_filter_add_pattern(filter, extStr.c_str());
+    }
+    gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+    // Set initial directory
+    std::string initialDirectoryStr;
+    if (initialDirectory == NULL)
+    {
+        char* currentDir = g_get_current_dir();
+        initialDirectoryStr = currentDir;
+        g_free(currentDir);
+    }
+    else
+    {
+        initialDirectoryStr = initialDirectory;
+    }
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initialDirectoryStr.c_str());
+
+    if (mode == FileSystem::SAVE)
+    {
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "");
+    }
+
+    // Show the dialog
+    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+    {
+        char* szFilename;
+        szFilename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        filename = szFilename;
+        g_free(szFilename);
+    }
+    gtk_widget_destroy(dialog);
+
+    // Since we are not using gtk_main(), this will let the dialog close
+    while (gtk_events_pending()) 
+        gtk_main_iteration();
+
+    return filename;
+}
 
 }
 

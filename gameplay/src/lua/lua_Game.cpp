@@ -2,12 +2,14 @@
 #include "ScriptController.h"
 #include "lua_Game.h"
 #include "Base.h"
+#include "ControlFactory.h"
 #include "FileSystem.h"
 #include "FrameBuffer.h"
 #include "Game.h"
 #include "Platform.h"
 #include "RenderState.h"
 #include "SceneLoader.h"
+#include "Theme.h"
 #include "lua_GameClearFlags.h"
 #include "lua_GameState.h"
 #include "lua_GamepadGamepadEvent.h"
@@ -29,6 +31,9 @@ void luaRegister_Game()
         {"exit", lua_Game_exit},
         {"frame", lua_Game_frame},
         {"gamepadEvent", lua_Game_gamepadEvent},
+        {"gestureDragEvent", lua_Game_gestureDragEvent},
+        {"gestureDropEvent", lua_Game_gestureDropEvent},
+        {"gestureLongTapEvent", lua_Game_gestureLongTapEvent},
         {"gesturePinchEvent", lua_Game_gesturePinchEvent},
         {"gestureSwipeEvent", lua_Game_gestureSwipeEvent},
         {"gestureTapEvent", lua_Game_gestureTapEvent},
@@ -408,6 +413,130 @@ int lua_Game_gamepadEvent(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_gestureDragEvent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                Game* instance = getInstance(state);
+                instance->gestureDragEvent(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Game_gestureDragEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_gestureDropEvent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                Game* instance = getInstance(state);
+                instance->gestureDropEvent(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Game_gestureDropEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_gestureLongTapEvent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                Game* instance = getInstance(state);
+                instance->gestureLongTapEvent(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Game_gestureLongTapEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
             lua_error(state);
             break;
         }

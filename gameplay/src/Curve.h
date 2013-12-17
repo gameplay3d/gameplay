@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 /**
- * Represents an n-dimensional curve.
+ * Defines an n-dimensional curve.
  */
 class Curve : public Ref
 {

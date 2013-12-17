@@ -9,17 +9,9 @@ namespace gameplay
 /**
  * Defines a control representing a joystick (axis).
  *
-  @verbatim
-    slider
-    {
-        style       = <styleID>                 // A Style from the Theme.
-        position    = <x, y>                    // Position of the Control on-screen, measured in pixels.
-        alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-        size        = <width, height>           // Size of the Control, measured in pixels.
-        radius      = <float>                   // The value of the left- / bottom-most point on the slider.
-        consumeEvents = <bool>                  // Whether the slider propagates input events to the Game's input event handler. Default is true.
-    }
- @endverbatim
+ * This is used in virtual Gamepad instances.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Joystick : public Control
 {
@@ -30,16 +22,16 @@ class Joystick : public Control
 public:
 
     /**
-     * Create a new joystick control.
+     * Creates a new Joystick.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The joystick ID.
+     * @param style The joystick style.
      *
      * @return The new joystick.
      * @script{create}
      */
-    static Joystick* create(const char* id, Theme::Style* style);
-    
+    static Joystick* create(const char* id, Theme::Style* style = NULL);
+
     /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
@@ -137,17 +129,16 @@ protected:
      * Create a joystick with a given style and properties.
      *
      * @param style The style to apply to this joystick.
-     * @param properties The properties to set on this joystick.
-     * @param theme The theme to set on this control if needed.
+     * @param properties A properties object containing a definition of the joystick (optional).
 	 *
      * @return The new joystick.
      */
-    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     /**
-     * Initialize this joystick.
+     * @see Control::initialize
      */
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -164,12 +155,9 @@ protected:
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
-     * Draw the images associated with this control.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The clipping rectangle of this control's parent container.
+     * @see Control::drawImages
      */
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
 private:
 

@@ -7,6 +7,7 @@
 #include "Touch.h"
 #include "Gesture.h"
 #include "Gamepad.h"
+#include "FileSystem.h"
 
 namespace gameplay
 {
@@ -17,7 +18,6 @@ class Game;
  * Defines a platform abstraction.
  *
  * This class has only a few public methods for creating a platform
- *
  */
 class Platform
 {
@@ -26,6 +26,7 @@ public:
     friend class Game;
     friend class Gamepad;
     friend class ScreenDisplayer;
+    friend class FileSystem;
 
     /**
      * Destructor.
@@ -341,6 +342,27 @@ public:
      *
      * @script{ignore}
      */
+	static void gestureLongTapEventInternal(int x, int y, float duration);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+	static void gestureDragEventInternal(int x, int y);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+	static void gestureDropEventInternal(int x, int y);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
     static void resizeEventInternal(unsigned int width, unsigned int height);
 
     /**
@@ -375,7 +397,21 @@ public:
      */
     static void pollGamepadState(Gamepad* gamepad);
 
-   /**
+    /**
+     * Displays an open or save dialog using the native platform dialog system.
+     *
+     * @param mode The mode of the dialog. (Ex. OPEN or SAVE)
+     * @param title The title of the dialog. (Ex. Select File or Save File)
+     * @param filterDescription The file filter description. (Ex. Image Files)
+     * @param filterExtensions The semi-colon delimited list of filtered file extensions. (Ex. png;jpg;bmp)
+     * @param initialDirectory The initial directory to open or save files from. (Ex. "res") If NULL this will use the executable directory.
+     * @return The file that is opened or saved, or an empty string if canceled.
+     *
+     * @script{ignore}
+     */
+    static std::string displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory);
+
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}

@@ -10,7 +10,7 @@ namespace gameplay
 {
 
 Model::Model(Mesh* mesh) :
-    _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _node(NULL), _skin(NULL), _shadowCaster(true), _shadowReceiver(true)
+    _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _node(NULL), _skin(NULL)
 {
     GP_ASSERT(mesh);
     _partCount = mesh->getPartCount();
@@ -256,26 +256,6 @@ void Model::setNode(Node* node)
     }
 }
 
-void Model::setShadowCaster(bool casts)
-{
-    _shadowCaster = casts;
-}
-
-bool Model::isShadowCaster() const
-{
-    return _shadowCaster;
-}
-
-void Model::setShadowReceiver(bool receives)
-{
-    _shadowReceiver = receives;
-}
-
-bool Model::isShadowReceiver() const
-{
-    return _shadowReceiver;
-}
-
 static bool drawWireframe(Mesh* mesh)
 {
     switch (mesh->getPrimitiveType())
@@ -330,7 +310,7 @@ static bool drawWireframe(MeshPart* part)
     {
     case Mesh::TRIANGLES:
         {
-            for (unsigned int i = 0; i < indexCount; i += 3)
+            for (size_t i = 0; i < indexCount; i += 3)
             {
                 GL_ASSERT( glDrawElements(GL_LINE_LOOP, 3, part->getIndexFormat(), ((const GLvoid*)(i*indexSize))) );
             }
@@ -339,7 +319,7 @@ static bool drawWireframe(MeshPart* part)
 
     case Mesh::TRIANGLE_STRIP:
         {
-            for (unsigned int i = 2; i < indexCount; ++i)
+            for (size_t i = 2; i < indexCount; ++i)
             {
                 GL_ASSERT( glDrawElements(GL_LINE_LOOP, 3, part->getIndexFormat(), ((const GLvoid*)((i-2)*indexSize))) );
             }
@@ -418,24 +398,6 @@ void Model::setMaterialNodeBinding(Material *material)
     if (_node)
     {
         material->setNodeBinding(_node);
-
-        unsigned int techniqueCount = material->getTechniqueCount();
-        for (unsigned int i = 0; i < techniqueCount; ++i)
-        {
-            Technique* technique = material->getTechniqueByIndex(i);
-            GP_ASSERT(technique);
-            
-            technique->setNodeBinding(_node);
-
-            unsigned int passCount = technique->getPassCount();
-            for (unsigned int j = 0; j < passCount; ++j)
-            {
-                Pass* pass = technique->getPassByIndex(j);
-                GP_ASSERT(pass);
-
-                pass->setNodeBinding(_node);
-            }
-        }
     }
 }
 

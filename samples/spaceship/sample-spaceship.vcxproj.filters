@@ -33,9 +33,6 @@
     <None Include="res\spaceship.gpb">
       <Filter>res</Filter>
     </None>
-    <None Include="res\spaceship.mb">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\shaders\colored.frag">
       <Filter>res\shaders</Filter>
     </None>
@@ -108,9 +105,6 @@
       <Filter>res</Filter>
     </Image>
     <Image Include="res\propulsion_glow.png">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\logo_powered_white.png">
       <Filter>res</Filter>
     </Image>
   </ItemGroup>

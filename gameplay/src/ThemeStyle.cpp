@@ -22,6 +22,7 @@ Theme::Style::Style(Theme* theme, const char* id, float tw, float th,
 
 Theme::Style::Style(const Style& copy)
 {
+    _theme = copy._theme;
     _id = copy._id;
     _margin = copy._margin;
     _padding = copy._padding;

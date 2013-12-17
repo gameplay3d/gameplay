@@ -12,7 +12,8 @@ namespace gameplay
 {
 
 /**
- * A theme is created and stored as part of a form and represents its appearance.
+ * Defines a theme used to represent the look or appearance of controls.
+ *
  * Once loaded, the appearance properties can be retrieved from their style IDs and set on other
  * UI controls.  A Theme has one property, 'texture', which points to a texture atlas containing
  * all the images used by the theme.  Cursor images, skins, and lists of images used by controls
@@ -20,123 +21,14 @@ namespace gameplay
  * A Style describes the border, margin, and padding of a Control, what images, skins, and cursors
  * are associated with a Control, and Font properties to apply to a Control's text.
  *
- * Below is an explanation of the properties that can be set within themes:
-
-@verbatim
-    theme
-    {
-        texture = <Path to texture>
-
-        // Describes a single image, to be used as a cursor.
-        cursor <Cursor ID>
-        {
-            region = <x, y, width, height>
-            color = <#ffffffff>
-        }
-
-        // Describes all the images used by a control for one or more states.
-        imageList <ImageList ID>
-        {
-            image checked
-            {
-                region = <x, y, width, height>
-            }
-
-            image unchecked
-            {
-                region = <x, y, width, height>
-                color = <#fffffffff>            // Optionally override image-list color.
-            }
-
-            color = <#fffffffff>    // Default blend color for images that don't specify their own.
-        }
-    
-        // Defines the border and background of a Control.
-        skin <Skin ID>
-        {
-            // The corners and edges of the given region will be used as border sprites.
-            border
-            {
-                top     =   <int>   // Height of top border, top corners.
-                bottom  =   <int>   // Height of bottom border, bottom corners.
-                left    =   <int>   // Width of left border, left corners.
-                right   =   <int>   // Width of right border, right corners.
-            }
-        
-            region  =   <x, y, width, height>   // Total container region including entire border.
-            color   =   <#ffffffff>             // Tint to apply to skin.
-        }
-    
-        style <Style ID>
-        {
-            // Layouts may make use of a style's margin to put space between adjacent controls.
-            margin
-            {
-                top     =   <int>
-                bottom  =   <int>
-                left    =   <int>
-                right   =   <int>        
-            }
-        
-            // Padding is the space between a control's border and its content.
-            padding
-            {
-                top     =   <int>
-                bottom  =   <int>
-                left    =   <int>
-                right   =   <int>        
-            }
-        
-            // Properties used when in control is in the normal state.
-            stateNormal
-            {
-                skin   =   <Skin ID>             // Skin to use for border and background sprites.
-                imageList = <ImageList ID>
-
-                cursor      =   <Cursor ID>                 // Cursor to use when the mouse is over this control.
-                font        =   <Path to font>              // Font to use for rendering text.
-                fontSize    =   <int>                       // Size of text.
-                textColor   =   <#ffffffff>                 // Color of text.
-                alignment   =   <Text alignment constant>   // Member of Font::Justify enum.
-                rightToLeft =   <bool>                      // Whether to draw text from right to left.
-                opacity     =   <float>                     // Opacity to apply to all text/border/icon colors.
-            }
-        
-            // Properties used when in control is in the focus state
-            // If not specified, the 'normal' overlay will be used.
-            stateFocus
-            {
-                skin   =   <Skin ID>             // Skin to use for border and background sprites.
-                ...
-            }
-        
-            // Properties used when in control is in the focus. 
-            // This is when a touch/mouse is down within the control.
-            // If not specified, the 'normal' overlay will be used.
-            stateActive
-            {
-                skin   =   <Skin ID>             // Skin to use for border and background sprites.
-                ...
-            }
-
-            // Properties used when in control is in the focus. 
-            // This is when a touch/mouse is down within the control.
-            // If not specified, the 'normal' overlay will be used.
-            state-disabled
-            {
-                skin   =   <Skin ID>             // Skin to use for border and background sprites.
-                ...        
-            }
-        }
-    }
-@endverbatim
- *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Theme
  */
 class Theme: public Ref
 {
     friend class Control;
     friend class Form;
     friend class Skin;
+    friend class Game;
 
 public:
 
@@ -236,17 +128,17 @@ public:
          */
         float right;
     };
-    
+
     /** 
      * Struct representing margin areas by the width or height of each side.
      */
     typedef SideRegions Margin;
-    
+
     /** 
      * Struct representing border areas by the width or height of each side.
      */
     typedef SideRegions Border;
-    
+
     /** 
      * Struct representing padding areas by the width or height of each side.
      */
@@ -309,6 +201,13 @@ public:
     static Theme* create(const char* url);
 
     /**
+     * Returns the default theme.
+     *
+     * @return The default theme.
+     */
+    static Theme* getDefault();
+
+    /**
      * Get a style by its ID.
      *
      * @param id The style ID.
@@ -327,6 +226,13 @@ public:
      * @return The empty style.
      */
     Theme::Style* getEmptyStyle();
+
+    /**
+     * Returns the sprite batch for this theme.
+     *
+     * @return The theme's sprite batch.
+     */
+    SpriteBatch* getSpriteBatch() const;
 
 private:
 
@@ -451,13 +357,16 @@ private:
     ~Theme();
 
     /**
+     * Cleans up any theme related resources when the game shuts down.
+     */
+    static void finalize();
+
+    /**
      * Hidden copy assignment operator.
      */
     Theme& operator=(const Theme&);
 
     void setProjectionMatrix(const Matrix& matrix);
-
-    SpriteBatch* getSpriteBatch() const;
 
     static void generateUVs(float tw, float th, float x, float y, float width, float height, UVs* uvs);
 
@@ -466,6 +375,7 @@ private:
     std::string _url;
     Texture* _texture;
     SpriteBatch* _spriteBatch;
+    Theme::ThemeImage* _emptyImage;
     std::vector<Style*> _styles;
     std::vector<ThemeImage*> _images;
     std::vector<ImageList*> _imageLists;

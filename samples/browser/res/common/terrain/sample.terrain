@@ -1,5 +1,7 @@
 terrain
 {
+    material = res/common/terrain/terrain.material
+
 	heightmap
 	{
 		path = res/common/terrain/heightmap.r16
@@ -12,13 +14,6 @@ terrain
 	skirtScale = 0.1
 
     normalMap = res/common/terrain/normalmap.dds
-
-    lighting
-    {
-        directionalLights = 1
-        pointLights = 0
-        spotLights = 0
-    }
 
 	layer rock
 	{

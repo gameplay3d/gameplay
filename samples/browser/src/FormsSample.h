@@ -33,7 +33,7 @@ private:
     
     void formChanged();
     
-    void createSampleForm(Theme* theme);
+    void createSampleForm();
     
     Scene* _scene;
     Node* _formNode;

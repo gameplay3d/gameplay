@@ -37,6 +37,7 @@ Camera::Camera(float zoomX, float zoomY, float aspectRatio, float nearPlane, flo
 
 Camera::~Camera()
 {
+    SAFE_DELETE(_listeners);
 }
 
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
@@ -362,7 +363,7 @@ void Camera::project(const Rectangle& viewport, const Vector3& position, float* 
     if (depth)
     {
         float ndcZ = clipPos.z / clipPos.w;
-        *depth = ndcZ + 1.0f / 2.0f;
+        *depth = (ndcZ + 1.0f) / 2.0f;
     }
 }
 

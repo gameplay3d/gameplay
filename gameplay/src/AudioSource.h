@@ -13,7 +13,11 @@ class Node;
 class NodeCloneContext;
 
 /**
- * Declares an audio source in 3D space.
+ * Defines an audio source in 3D space.
+ *
+ * This can be attached to a Node for applying its 3D transformation.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Audio
  */
 class AudioSource : public Ref, public Transform::Listener
 {

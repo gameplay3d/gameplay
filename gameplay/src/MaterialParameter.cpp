@@ -497,11 +497,11 @@ void MaterialParameter::bind(Effect* effect)
         effect->setValue(_uniform, _value.samplerArrayValue, _count);
         break;
     case MaterialParameter::METHOD:
-        GP_ASSERT(_value.method);
-        _value.method->setValue(effect);
+        if (_value.method)
+            _value.method->setValue(effect);
         break;
     default:
-        GP_ERROR("Unsupported material parameter type (%d).", _type);
+        GP_WARN("Unknown type (%d) for material parameter: %s", _type, _name.c_str());
         break;
     }
 }

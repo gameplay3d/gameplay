@@ -248,6 +248,9 @@
     <None Include="res\shaders\textured.vert">
       <Filter>res\shaders</Filter>
     </None>
+    <None Include="res\common\terrain\terrain.material">
+      <Filter>res\common\terrain</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MeshPrimitiveSample.h">
@@ -319,9 +322,6 @@
     <ClInclude Include="src\TextureCubeSample.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\SceneRendererSample.h">
-      <Filter>src</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshPrimitiveSample.cpp">
@@ -391,9 +391,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TextureCubeSample.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SceneRendererSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

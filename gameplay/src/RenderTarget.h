@@ -8,8 +8,8 @@ namespace gameplay
 {
 
 /**
- * Represents a linear area of display memory and usually reside 
- * in the display memory of the display card.
+ * Defines a linear area of display memory and usually resides 
+ * in the display memory of the graphics device.
  */
 class RenderTarget : public Ref
 {

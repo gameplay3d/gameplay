@@ -65,7 +65,7 @@ Scene* SceneLoader::loadInternal(const char* url)
         _scene = loadMainSceneData(sceneProperties);
         if (!_scene)
         {
-            GP_ERROR("Failed to load main scene from bundle.");
+            GP_WARN("Failed to load main scene from bundle.");
             SAFE_DELETE(properties);
             return NULL;
         }
@@ -919,7 +919,7 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
     Bundle* bundle = Bundle::create(_gpbPath.c_str());
     if (!bundle)
     {
-        GP_ERROR("Failed to load scene GPB file '%s'.", _gpbPath.c_str());
+        GP_WARN("Failed to load scene GPB file '%s'.", _gpbPath.c_str());
         return NULL;
     }
 
@@ -927,7 +927,7 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
     Scene* scene = bundle->loadScene(NULL);
     if (!scene)
     {
-        GP_ERROR("Failed to load scene from '%s'.", _gpbPath.c_str());
+        GP_WARN("Failed to load scene from '%s'.", _gpbPath.c_str());
         SAFE_RELEASE(bundle);
         return NULL;
     }
@@ -1068,7 +1068,7 @@ void SceneLoader::loadReferencedFiles()
                 properties = Properties::create(fileString.c_str());
                 if (properties == NULL)
                 {
-                    GP_ERROR("Failed to load referenced properties file '%s'.", fileString.c_str());
+                    GP_WARN("Failed to load referenced properties file '%s'.", fileString.c_str());
                     continue;
                 }
 
@@ -1079,7 +1079,7 @@ void SceneLoader::loadReferencedFiles()
             Properties* p = getPropertiesFromNamespacePath(properties, namespacePath);
             if (!p)
             {
-                GP_ERROR("Failed to load referenced properties from url '%s'.", iter->first.c_str());
+                GP_WARN("Failed to load referenced properties from url '%s'.", iter->first.c_str());
                 continue;
             }
             iter->second = p;

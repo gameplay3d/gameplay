@@ -42,6 +42,24 @@ void GestureSample::initialize()
         registerGesture(Gesture::GESTURE_PINCH);
         GP_ASSERT(isGestureRegistered(Gesture::GESTURE_PINCH));
     }
+	if (isGestureSupported(Gesture::GESTURE_LONG_TAP))
+	{
+        anySupported = true;
+        registerGesture(Gesture::GESTURE_LONG_TAP);
+        GP_ASSERT(isGestureRegistered(Gesture::GESTURE_LONG_TAP));
+	}
+	if (isGestureSupported(Gesture::GESTURE_DRAG))
+	{
+        anySupported = true;
+        registerGesture(Gesture::GESTURE_DRAG);
+        GP_ASSERT(isGestureRegistered(Gesture::GESTURE_DRAG));
+	}
+	if (isGestureSupported(Gesture::GESTURE_DROP))
+	{
+        anySupported = true;
+        registerGesture(Gesture::GESTURE_DROP);
+        GP_ASSERT(isGestureRegistered(Gesture::GESTURE_DROP));
+	}
     GP_ASSERT(anySupported == isGestureSupported(Gesture::GESTURE_ANY_SUPPORTED));
 }
 
@@ -52,6 +70,9 @@ void GestureSample::finalize()
     unregisterGesture(Gesture::GESTURE_TAP);
     unregisterGesture(Gesture::GESTURE_SWIPE);
     unregisterGesture(Gesture::GESTURE_PINCH);
+	unregisterGesture(Gesture::GESTURE_LONG_TAP);
+	unregisterGesture(Gesture::GESTURE_DRAG);
+	unregisterGesture(Gesture::GESTURE_DROP);
 }
 
 void GestureSample::update(float elapsedTime)
@@ -83,7 +104,7 @@ void GestureSample::render(float elapsedTime)
     }
     
     int x = getWidth() - 200;
-    y = getHeight() - _font->getSize() * 3;
+    y = getHeight() - _font->getSize() * 6;
 
     if (isGestureSupported(Gesture::GESTURE_TAP))
     {
@@ -98,6 +119,21 @@ void GestureSample::render(float elapsedTime)
     if (isGestureSupported(Gesture::GESTURE_PINCH))
     {
         _font->drawText("Pinch supported", x, y, fontColor, _font->getSize());
+        y += _font->getSize();
+    }
+    if (isGestureSupported(Gesture::GESTURE_LONG_TAP))
+    {
+        _font->drawText("Long tap supported", x, y, fontColor, _font->getSize());
+        y += _font->getSize();
+    }
+    if (isGestureSupported(Gesture::GESTURE_DRAG))
+    {
+        _font->drawText("Drag supported", x, y, fontColor, _font->getSize());
+        y += _font->getSize();
+    }
+    if (isGestureSupported(Gesture::GESTURE_DROP))
+    {
+        _font->drawText("Drop supported", x, y, fontColor, _font->getSize());
         y += _font->getSize();
     }
 
@@ -157,6 +193,27 @@ void GestureSample::gestureTapEvent(int x, int y)
 {
     std::ostringstream convert;
     convert << "Tap " << x << ", " << y;
+    _eventLog.push_front(convert.str());
+}
+
+void GestureSample::gestureLongTapEvent(int x, int y, float duration)
+{
+    std::ostringstream convert;
+    convert << "Long tap " << x << ", " << y << " (" << duration << "ms)";
+    _eventLog.push_front(convert.str());
+}
+
+void GestureSample::gestureDragEvent(int x, int y)
+{
+    std::ostringstream convert;
+    convert << "Drag " << x << ", " << y;
+    _eventLog.push_front(convert.str());
+}
+
+void GestureSample::gestureDropEvent(int x, int y)
+{
+    std::ostringstream convert;
+    convert << "Drop " << x << ", " << y;
     _eventLog.push_front(convert.str());
 }
 

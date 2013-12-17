@@ -10,7 +10,7 @@ namespace gameplay
 class Image;
 
 /**
- * Represents a texture.
+ * Defines a standard texture.
  */
 class Texture : public Ref
 {

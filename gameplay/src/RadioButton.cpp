@@ -21,42 +21,45 @@ RadioButton::~RadioButton()
 
 RadioButton* RadioButton::create(const char* id, Theme::Style* style)
 {
-    GP_ASSERT(style);
+    RadioButton* rb = new RadioButton();
+    rb->_id = id ? id : "";
+    rb->initialize("RadioButton", style, NULL);
 
-    RadioButton* radioButton = new RadioButton();
-    if (id)
-        radioButton->_id = id;
-    radioButton->setStyle(style);
+    __radioButtons.push_back(rb);
 
-    __radioButtons.push_back(radioButton);
-
-    return radioButton;
+    return rb;
 }
 
-Control* RadioButton::create(Theme::Style* style, Properties* properties, Theme *theme)
+Control* RadioButton::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
+    RadioButton* rb = new RadioButton();
+    rb->initialize("RadioButton", style, properties);
 
-    RadioButton* radioButton = new RadioButton();
-    radioButton->initialize(style, properties);
+    __radioButtons.push_back(rb);
 
-    properties->getVector2("imageSize", &radioButton->_imageSize);
+    return rb;
+}
 
-    if (properties->getBool("selected"))
+void RadioButton::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Button::initialize(typeName, style, properties);
+
+    if (properties)
     {
-        RadioButton::clearSelected(radioButton->_groupId);
-        radioButton->_selected = true;
+        properties->getVector2("imageSize", &_imageSize);
+
+        if (properties->getBool("selected"))
+        {
+            RadioButton::clearSelected(_groupId);
+            _selected = true;
+        }
+
+        const char* groupId = properties->getString("group");
+        if (groupId)
+        {
+            _groupId = groupId;
+        }
     }
-
-    const char* groupId = properties->getString("group");
-    if (groupId)
-    {
-        radioButton->_groupId = groupId;
-    }
-
-    __radioButtons.push_back(radioButton);
-
-    return radioButton;
 }
 
 bool RadioButton::isSelected() const
@@ -98,54 +101,6 @@ void RadioButton::addListener(Control::Listener* listener, int eventFlags)
     Control::addListener(listener, eventFlags);
 }
 
-bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    switch (evt)
-    {
-    case Touch::TOUCH_RELEASE:
-        {
-            if (_contactIndex == (int) _contactIndex && _state == Control::ACTIVE)
-            {
-                if (!_parent->isScrolling() &&
-                    x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                    y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-                {
-                    if (!_selected)
-                    {
-                        RadioButton::clearSelected(_groupId);
-                        _selected = true;
-                        notifyListeners(Control::Listener::VALUE_CHANGED);
-                    }
-                }
-            }
-        }
-        break;
-    }
-
-    return Button::touchEvent(evt, x, y, contactIndex);
-}
-
-bool RadioButton::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
-{
-    switch (evt)
-    {
-    case Gamepad::BUTTON_EVENT:
-        if (_state == Control::ACTIVE)
-        {
-            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
-                !gamepad->isButtonDown(Gamepad::BUTTON_X))
-            {
-                RadioButton::clearSelected(_groupId);
-                _selected = true;
-                notifyListeners(Control::Listener::VALUE_CHANGED);
-            }
-        }
-        break;
-    }
-
-    return Button::gamepadEvent(evt, gamepad, analogIndex);
-}
-
 void RadioButton::clearSelected(const std::string& groupId)
 {
     std::vector<RadioButton*>::const_iterator it;
@@ -164,7 +119,7 @@ void RadioButton::clearSelected(const std::string& groupId)
 
 bool RadioButton::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    if (_state == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN && !_selected)
+    if (getState() == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN && !_selected)
     {
         RadioButton::clearSelected(_groupId);
         _selected = true;
@@ -172,6 +127,23 @@ bool RadioButton::keyEvent(Keyboard::KeyEvent evt, int key)
     }
 
     return Button::keyEvent(evt, key);
+}
+
+void RadioButton::controlEvent(Control::Listener::EventType evt)
+{
+    Button::controlEvent(evt);
+
+    switch (evt)
+    {
+    case Control::Listener::CLICK:
+        if (!_selected)
+        {
+            RadioButton::clearSelected(_groupId);
+            _selected = true;
+            notifyListeners(Control::Listener::VALUE_CHANGED);
+        }
+        break;
+    }
 }
 
 void RadioButton::update(const Control* container, const Vector2& offset)
@@ -183,12 +155,12 @@ void RadioButton::update(const Control* container, const Vector2& offset)
     {
         if (_selected)
         {
-            const Rectangle& selectedRegion = getImageRegion("selected", _state);
+            const Rectangle& selectedRegion = getImageRegion("selected", getState());
             size.set(selectedRegion.width, selectedRegion.height);
         }
         else
         {
-            const Rectangle& unselectedRegion = getImageRegion("unselected", _state);
+            const Rectangle& unselectedRegion = getImageRegion("unselected", getState());
             size.set(unselectedRegion.width, unselectedRegion.height);
         }
     }
@@ -213,18 +185,18 @@ void RadioButton::update(const Control* container, const Vector2& offset)
     
     if (_selected)
     {
-        _image = getImage("selected", _state);
+        _image = getImage("selected", getState());
     }
     else
     {
-        _image = getImage("unselected", _state);
+        _image = getImage("unselected", getState());
     }
 }
 
-void RadioButton::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
+unsigned int RadioButton::drawImages(Form* form, const Rectangle& clip)
 {
-    GP_ASSERT(spriteBatch);
-    GP_ASSERT(_image);
+    if (!_image)
+        return 0;
 
     // Left, v-center.
     // TODO: Set an alignment for radio button images.   
@@ -245,7 +217,12 @@ void RadioButton::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 
     Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
 
-    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+    startBatch(form, batch);
+    batch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    finishBatch(form, batch);
+
+    return 1;
 }
 
 const char* RadioButton::getType() const

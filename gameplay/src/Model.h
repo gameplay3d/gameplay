@@ -14,7 +14,10 @@ class Node;
 class NodeCloneContext;
 
 /**
- * Defines a Model (MeshRenderer) which is an instance of a Mesh that can be drawn with the specified Materials.
+ * Defines a Model or mesh renderer which is an instance of a Mesh. 
+ *
+ * A model has a mesh that can be drawn with the specified materials for
+ * each of the mesh parts within it.
  */
 class Model : public Ref
 {
@@ -145,43 +148,6 @@ public:
     void setNode(Node* node);
 
     /**
-     * Sets if this model cast shadows.
-     *
-     * Note: This is only applied to a SceneRenderer.
-     *
-     * @param casts if this model casts shadows
-     * @see SceneRenderer
-     */
-    void setShadowCaster(bool casts);
-
-    /**
-     * Returns whether this model cast shadows.
-     *
-     * Note: This is only applied to a SceneRenderer.
-     *
-     * @return if this model casts shadows
-     * @see SceneRenderer
-     */
-    bool isShadowCaster() const;
-
-    /**
-     * Sets if this object receives shadows.
-     *
-     * @param bool if this object receives shadows
-     */
-    void setShadowReceiver(bool receives);
-
-    /**
-     * Returns whether this objects receives shadows.
-     *
-     * Note: This is only applied to a SceneRenderer.
-     *
-     * @return if this object receives shadows
-     * @see SceneRenderer
-     */
-    bool isShadowReceiver() const;
-
-    /**
      * Draws this mesh instance.
      *
      * This method binds the vertex buffer and index buffers for the Mesh and
@@ -239,8 +205,6 @@ private:
     Material** _partMaterials;
     Node* _node;
     MeshSkin* _skin;
-    bool _shadowCaster;
-    bool _shadowReceiver;
 };
 
 }

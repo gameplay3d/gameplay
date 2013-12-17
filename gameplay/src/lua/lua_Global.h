@@ -43,7 +43,6 @@
 #include "lua_RenderStateFrontFace.h"
 #include "lua_RenderStateStencilFunction.h"
 #include "lua_RenderStateStencilOperation.h"
-#include "lua_SceneDebugFlags.h"
 #include "lua_TerrainFlags.h"
 #include "lua_TextBoxInputMode.h"
 #include "lua_TextureCubeFace.h"
@@ -56,6 +55,9 @@
 
 namespace gameplay
 {
+
+// Lua bindings for global functions.
+int lua__strcmpnocase(lua_State* state);
 
 // Global enum to string conversion function (used to pass enums to Lua from C++).
 const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value);

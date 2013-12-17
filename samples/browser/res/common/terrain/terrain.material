@@ -1,0 +1,29 @@
+
+material terrain
+{
+    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+
+    u_normalMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+    u_normalMap = TERRAIN_NORMAL_MAP
+    u_surfaceLayerMaps = TERRAIN_LAYER_MAPS
+
+    u_ambientColor = SCENE_AMBIENT_COLOR
+    u_directionalLightDirection[0] = LIGHT_DIRECTION_0
+    u_directionalLightColor[0] = LIGHT_COLOR_0
+
+    renderState
+    {
+        cullFace = true
+        depthTest = true
+    }
+
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/terrain.vert
+            fragmentShader = res/shaders/terrain.frag
+            defines = DIRECTIONAL_LIGHT_COUNT 1
+        }
+    }
+}

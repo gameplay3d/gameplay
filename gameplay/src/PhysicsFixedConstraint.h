@@ -7,12 +7,14 @@ namespace gameplay
 {
 
 /**
- * Represents a constraint where two rigid bodies 
+ * Defines a constraint where two rigid bodies 
  * (or one rigid body and the world) are bound together.
  *
- * (This is similar in concept to parenting one node to another,
+ * This is similar in concept to parenting one node to another,
  * but can be used in specific situations for a more appropriate effect
- * (e.g. for implementing sticky projectiles, etc.).)
+ * Ex. for implementing sticky projectiles, etc.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
  */
 class PhysicsFixedConstraint : public PhysicsGenericConstraint
 {

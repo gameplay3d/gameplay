@@ -12,7 +12,8 @@
     <LocalDebuggerEnvironment>
     </LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-s 12 arial.ttf</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>
+    </LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>.\Release</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
 </Project>

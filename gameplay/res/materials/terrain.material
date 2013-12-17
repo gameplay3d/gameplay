@@ -1,0 +1,41 @@
+//
+// Default Terrain material file.
+// 
+// In addition to the built-in Node material auto-bindings, the following terrain-specific
+// auto-bindings are also supported:
+//
+// TERRAIN_NORMAL_MAP                   : normal map sampler (if using a normal map)
+// TERRAIN_LAYER_MAPS                   : array of texture samplers for each terrain layer
+// TERRAIN_ROW                          : row index of the current terrain patch
+// TERRAIN_COLUMN                       : column index of the current terrain patch
+//
+// To add lighting (other than ambient) to a terrain, you can add additional pass defines and
+// uniform bindings and handle them in your specific game or renderer. See the gameplay
+// terrain sample for an example.
+//
+material terrain
+{
+    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+
+    u_normalMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+    //u_normalMap = TERRAIN_NORMAL_MAP
+
+    u_surfaceLayerMaps = TERRAIN_LAYER_MAPS
+
+    u_ambientColor = SCENE_AMBIENT_COLOR
+
+    renderState
+    {
+        cullFace = true
+        depthTest = true
+    }
+
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/terrain.vert
+            fragmentShader = res/shaders/terrain.frag
+        }
+    }
+}

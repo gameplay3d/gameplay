@@ -4,7 +4,9 @@
 namespace gameplay
 {
 /**
- * Math utility class. Used for internal math optimizations.
+ * Defines a math utility class.
+ *
+ * This is primarily used for optimized internal math operations.
  */
 class MathUtil
 {

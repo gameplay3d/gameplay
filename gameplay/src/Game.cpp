@@ -5,6 +5,8 @@
 #include "FileSystem.h"
 #include "FrameBuffer.h"
 #include "SceneLoader.h"
+#include "ControlFactory.h"
+#include "Theme.h"
 
 /** @script{ignore} */
 GLenum __gl_error_code = GL_NO_ERROR;
@@ -24,7 +26,7 @@ Game::Game()
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL),
       _physicsController(NULL), _aiController(NULL), _audioListener(NULL),
-      _timeEvents(NULL), _scriptController(NULL), _socialController(NULL), _scriptListeners(NULL)
+      _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
@@ -114,9 +116,6 @@ bool Game::startup()
     _scriptController = new ScriptController();
     _scriptController->initialize();
 
-    _socialController = new SocialController();
-    _socialController->initialize();
-
     // Load any gamepads, ui or physical.
     loadGamepads();
 
@@ -196,9 +195,10 @@ void Game::shutdown()
         SAFE_DELETE(_physicsController);
         _aiController->finalize();
         SAFE_DELETE(_aiController);
+        
+        ControlFactory::finalize();
 
-        _socialController->finalize();
-        SAFE_DELETE(_socialController);
+        Theme::finalize();
 
         // Note: we do not clean up the script controller here
         // because users can call Game::exit() from a script.
@@ -228,7 +228,6 @@ void Game::pause()
         _audioController->pause();
         _physicsController->pause();
         _aiController->pause();
-        _socialController->pause();
     }
 
     ++_pausedCount;
@@ -252,7 +251,6 @@ void Game::resume()
             _audioController->resume();
             _physicsController->resume();
             _aiController->resume();
-            _socialController->resume();
         }
     }
 }
@@ -337,9 +335,6 @@ void Game::frame()
         // Audio Rendering.
         _audioController->update(elapsedTime);
 
-        // Social Update.
-        _socialController->update(elapsedTime);
-
         // Graphics Rendering.
         render(elapsedTime);
 
@@ -402,7 +397,6 @@ void Game::updateOnce()
     _aiController->update(elapsedTime);
     _audioController->update(elapsedTime);
     _scriptController->update(elapsedTime);
-    _socialController->update(elapsedTime);
 }
 
 void Game::setViewport(const Rectangle& viewport)
@@ -514,6 +508,18 @@ void Game::gesturePinchEvent(int x, int y, float scale)
 }
 
 void Game::gestureTapEvent(int x, int y)
+{
+}
+
+void Game::gestureLongTapEvent(int x, int y, float duration)
+{
+}
+
+void Game::gestureDragEvent(int x, int y)
+{
+}
+
+void Game::gestureDropEvent(int x, int y)
 {
 }
 

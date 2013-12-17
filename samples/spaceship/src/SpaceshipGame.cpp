@@ -59,14 +59,10 @@ SpaceshipGame game;
 // Clamp function
 #define CLAMP(x, min, max) (x < min ? min : (x > max ? max : x))
 
-static const char *leaderboardName = "leaderboard";
-
 SpaceshipGame::SpaceshipGame()
     : _scene(NULL), _cameraNode(NULL), _shipGroupNode(NULL), _shipNode(NULL), _propulsionNode(NULL), _glowNode(NULL),
       _stateBlock(NULL), _font(NULL), _throttle(0), _shipTilt(0), _finished(true), _finishedTime(0), _pushing(false), _time(0),
-       _glowDiffuseParameter(NULL), _shipSpecularParameter(NULL), _spaceshipSound(NULL), _socialSession(NULL), _currentChallenge(NULL),
-       _challengedPlayer(NULL), _hitSomething(false), _wonChallenge(false), _createdChallenge(false), _creatingChallenge(false), _hasAcceptedChallenge(false),
-       _menu(NULL), _challengeForm(NULL), _friendsContainer(NULL), _challengeContainer(NULL)
+       _glowDiffuseParameter(NULL), _shipSpecularParameter(NULL), _spaceshipSound(NULL)
 {
 }
 
@@ -106,26 +102,6 @@ void SpaceshipGame::initialize()
     // Create font
     _font = Font::create("res/airstrip.gpb");
 
-    // Create menu.
-    _menu = Form::create("res/menu.form");
-    _menu->setEnabled(true);
-
-    _challengeForm = Form::create("res/challenge.form");
-    _challengeForm->setEnabled(false);
-
-    // Listen for menu-button click events.
-    _menu->getControl("reset")->addListener(this, Control::Listener::CLICK);
-    _menu->getControl("leaderboard")->addListener(this, Control::Listener::CLICK);
-    _menu->getControl("achievements")->addListener(this, Control::Listener::CLICK);
-    _menu->getControl("challenges")->addListener(this, Control::Listener::CLICK);
-
-    _challengeForm->getControl("challengeanyone")->addListener(this, Control::Listener::CLICK);
-    _challengeForm->getControl("refreshChallenges")->addListener(this, Control::Listener::CLICK);
-    _challengeForm->getControl("back")->addListener(this, Control::Listener::CLICK);
-
-    _friendsContainer = static_cast<Container*>(_challengeForm->getControl("friendsList"));
-    _challengeContainer = static_cast<Container*>(_challengeForm->getControl("challengeList"));
-
     // Store camera node
     _cameraNode = _scene->findNode("camera1");
 
@@ -133,9 +109,6 @@ void SpaceshipGame::initialize()
     _initialShipPos = _shipGroupNode->getTranslation();
     _initialShipRot = _shipGroupNode->getRotation();
     _initialCameraPos = _cameraNode->getTranslation();
-
-    if (getSocialController())
-    	getSocialController()->authenticate(this);
 }
 
 void SpaceshipGame::initializeSpaceship()
@@ -255,8 +228,6 @@ void SpaceshipGame::finalize()
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_stateBlock);
     SAFE_RELEASE(_scene);
-    SAFE_RELEASE(_menu);
-    SAFE_RELEASE(_challengeForm);
 }
 
 void SpaceshipGame::update(float elapsedTime)
@@ -279,9 +250,6 @@ void SpaceshipGame::update(float elapsedTime)
 		{
             _backgroundSound->stop();
         	_throttle = 0.0f;
-
-        	postScore(_time);
-        	updateAchievements(_time);
 		}
     }
 
@@ -388,12 +356,6 @@ void SpaceshipGame::update(float elapsedTime)
     // Modify ship glow effect based on the throttle
     _glowDiffuseParameter->setValue(Vector4(1, 1, 1, _throttle * ENGINE_POWER));
     _shipSpecularParameter->setValue(SPECULAR - ((SPECULAR-2.0f) * _throttle));
-
-    if (_menu->isEnabled())
-        _menu->update(elapsedTime);
-
-    if (_challengeForm->isEnabled())
-    	_challengeForm->update(elapsedTime);
 }
 
 void SpaceshipGame::handleCollisions(float t)
@@ -459,7 +421,6 @@ void SpaceshipGame::handleCollisions(float t)
             _finished = true;
             _finishedTime = getAbsoluteTime();
             _pushing = false;
-            _menu->setEnabled(true);
         }
     }
 }
@@ -505,14 +466,6 @@ void SpaceshipGame::render(float elapsedTime)
 
     // Draw game text (yellow)
     drawText();
-
-    // Draw menu
-    if (_menu->isEnabled())
-        _menu->draw();
-
-    // Draw menu
-    if (_challengeForm->isEnabled())
-    	_challengeForm->draw();
 }
 
 void SpaceshipGame::drawSplash(void* param)
@@ -547,7 +500,7 @@ void SpaceshipGame::drawText()
     char text[1024];
     sprintf(text, "%dsec.", (int)_time);
     _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1), _font->getSize());
-    if (0 && _finished)
+    if (_finished)
     {
         _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
     }
@@ -572,10 +525,10 @@ void SpaceshipGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
-     //   if (_finished && (getAbsoluteTime() - _finishedTime) > 1000L)
-     //   {
-     //       resetGame();
-     //   }
+        if (_finished && (getAbsoluteTime() - _finishedTime) > 1000L)
+        {
+            resetGame();
+        }
     case Touch::TOUCH_MOVE:
         if (!_finished)
         {
@@ -590,362 +543,5 @@ void SpaceshipGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     }
 }
 
-void SpaceshipGame::controlEvent(Control* control, EventType evt)
-{
-    // Handle UI events.
-    switch (evt)
-    {
-		case Listener::CLICK:
-			if (strcmp(control->getId(), "reset") == 0)
-			{
-				// Play again.
-				_menu->setEnabled(false);
-				if (_creatingChallenge)
-				{
-					_creatingChallenge = false;
-					_challengedPlayer = 0;
-				}
-				resetGame();
-			}
-			else if (strcmp(control->getId(), "back") == 0)
-			{
-				_challengeForm->setEnabled(false);
-				_menu->setEnabled(true);
-			}
-			else if (_socialSession && strcmp(control->getId(), "leaderboard") == 0)
-			{
-				// Display the leaderboard.
-				_socialSession->displayLeaderboard(leaderboardName);
-			}
-			else if (_socialSession && strcmp(control->getId(), "achievements") == 0)
-			{
-				// Display the achievements.
-				_socialSession->displayAchievements();
-			}
-			else if (_socialSession && strcmp(control->getId(), "challenges") == 0)
-			{
-				// Display the challenges.
-				_socialSession->displayChallenges();
-			//	_menu->setEnabled(false);
-			//	_challengeForm->setEnabled(true);
-			}
-			else if (strcmp(control->getId(), "challengeanyone") == 0)
-			{
-				_challengedPlayer = 0;
-				_challengeForm->setEnabled(false);
-				_creatingChallenge = true;
-				resetGame();
-			}
-			else if (strncmp(control->getId(), "friend_", 7) == 0)
-			{
-				char *player = strchr((char *)control->getId(), '_');
-				player++;
-				fprintf(stderr, "searching for player %s\n", player);
-				_challengedPlayer = getPlayer(player);
-				_challengeForm->setEnabled(false);
-				_creatingChallenge = true;
-				resetGame();
-			}
-			else if (_socialSession && strcmp(control->getId(), "refreshChallenges") == 0)
-			{
-				_socialSession->loadChallenges(true);
-			}
-			else if (_socialSession && strncmp(control->getId(), "openchallenge_", 14) == 0)
-			{
-				char *challengeName = strchr((char *)control->getId(), '_');
-				challengeName++;
-				const SocialChallenge *challenge = getChallenge(challengeName);
-			//	_challengeForm->setEnabled(false);
-				if (challenge)
-				{
-					_hasAcceptedChallenge = true;
-					_socialSession->replyToChallenge(challenge, true);
-					_challengeForm->setEnabled(false);
-					resetGame();
-				}
-			}
-			break;
-        default:
-            break;
-    }
-}
 
-void SpaceshipGame::postScore(double result)
-{
-	if (_socialSession)
-	{
-		_socialSession->submitScore(leaderboardName, result);
 
-		if (_creatingChallenge)
-		{
-			_socialSession->submitChallenge(_challengedPlayer, result);
-			_creatingChallenge = false;
-            _createdChallenge = true;
-			_challengedPlayer = 0;
-		}
-		else if (_hasAcceptedChallenge)
-		{
-			if (_currentChallenge)
-				_socialSession->displayChallengeSubmit(_currentChallenge, result);
-
-			_currentChallenge = 0;
-			_hasAcceptedChallenge = false;
-		}
-	}
-}
-
-void SpaceshipGame::updateAchievements(double time)
-{
-	// go through our achievements and update them accordingly
-	if (_socialSession)
-	{
-		// increase the game count awards
-		_socialSession->incrementAchievement("gameplay.spaceship.firsttime", 1);
-		_socialSession->incrementAchievement("gameplay.spaceship.tentimes", 10);
-		_socialSession->incrementAchievement("gameplay.spaceship.fiftytimes", 50);
-		_socialSession->incrementAchievement("gameplay.spaceship.hundredtimes", 100);
-
-		// clean run award
-		if (!_hitSomething)
-			_socialSession->submitAchievement("gameplay.spaceship.cleanrun", 100, true);
-
-		if (time < 16)
-			_socialSession->submitAchievement("gameplay.spaceship.under16", 100, true);
-
-		if (time < 17)
-			_socialSession->submitAchievement("gameplay.spaceship.under17", 100, true);
-
-		if (time < 20)
-			_socialSession->submitAchievement("gameplay.spaceship.under20", 100, true);
-
-        if (_createdChallenge)
-            _socialSession->submitAchievement("gameplay.spaceship.challenge", 100, true);
-
-        if (_wonChallenge)
-            _socialSession->submitAchievement("gameplay.spaceship.winchallenge", 100, true);
-
-		_socialSession->synchronizeAchievements();
-	}
-}
-
-const SocialPlayer *SpaceshipGame::getPlayer(const char *name) const
-{
-	for (unsigned int i = 0; i < _friends.size(); i++)
-	{
-		if (strcmp(_friends[i].name.data(), name) == 0)
-			return &_friends[i];
-	}
-
-	return 0;
-}
-
-const SocialChallenge *SpaceshipGame::getChallenge(const char *date) const
-{
-	for (unsigned int i = 0; i < _challenges.size(); i++)
-	{
-		if (strcmp(_challenges[i].dateTimeIssued.data(), date) == 0)
-			return &_challenges[i];
-	}
-
-	return 0;
-}
-
-void SpaceshipGame::authenticateEvent(ResponseCode code, SocialSession* session)
-{
-	fprintf(stderr, "authentication FINISHED\n");
-
-	if (code == SUCCESS)
-	{
-		_socialSession = session;
-		_socialSession->loadFriends();
-	}
-	else
-    {
-		fprintf(stderr, "Error authenticating the social session %d\n", code);
-    }
-}
-
-void SpaceshipGame::loadFriendsEvent(ResponseCode code, std::vector<SocialPlayer> friends)
-{
-	if (code == SUCCESS)
-	{
-		_friends.clear();
-		_friends = friends;
-
-		buildFriendsChooser();
-
-		for (unsigned int i = 0 ; i < _friends.size(); i++)
-		{
-			fprintf(stderr, "Friend %d is %s\n", i, _friends[i].name.data());
-		}
-
-		_socialSession->loadAchievements();
-	}
-	else
-	{
-		fprintf(stderr, "Error loading friends\n");
-	}
-}
-
-void SpaceshipGame::loadAchievementsEvent(ResponseCode code, std::vector<SocialAchievement> achievements)
-{
-	if (code == SUCCESS)
-	{
-		for (unsigned int i = 0 ; i < achievements.size(); i++)
-		{
-			fprintf(stderr, "Achievement %d is %s\n", i, achievements[i].name.data());
-		}
-	}
-	else
-    {
-		fprintf(stderr, "Error loading achievements %d\n", code);
-    }
-}
-
-void SpaceshipGame::submitAchievementEvent(ResponseCode code)
-{
-}
-
-void SpaceshipGame::synchronizeAchievementEvent(ResponseCode code)
-{
-}
-
-void SpaceshipGame::awardAchievedEvent(ResponseCode code, const SocialAchievement &achievement)
-{
-	if (code == SUCCESS)
-	{
-		char message[256];
-		sprintf(message, "You've earned the %s award.", achievement.title.data());
-
-		_socialSession->displayPopup(message);
-	}
-}
-
-void SpaceshipGame::loadScoresEvent(ResponseCode code, std::vector<SocialScore> scores)
-{
-	if (code == SUCCESS)
-	{
-        for (unsigned int i = 0 ; i < scores.size(); i++)
-		{
-			fprintf(stderr, "Score %d for %s is %lf\n", i, scores[i].playerName.data(), scores[i].value);
-		}
-	}
-	else
-    {
-		fprintf(stderr, "Error loading scores %d\n", code);
-    }
-}
-
-void SpaceshipGame::submitScoreEvent(ResponseCode code)
-{
-	_socialSession->loadScores(leaderboardName, SocialSession::COMMUNITY_SCOPE_ALL, SocialSession::TIME_SCOPE_ALL, 1, 20);
-}
-
-void SpaceshipGame::submitChallengeEvent(ResponseCode code, const SocialChallenge &challenge)
-{
-    fprintf(stderr, "created challenge successfully\n");
-    _createdChallenge = true;
-}
-
-void SpaceshipGame::startChallengeEvent(ResponseCode code, const SocialChallenge &challenge)
-{
-	if (code == SUCCESS)
-	{
-		_hasAcceptedChallenge = true;
-		_currentChallenge = &challenge;
-		_menu->setEnabled(false);
-		resetGame();
-	}
-}
-
-void SpaceshipGame::replyToChallengeEvent(ResponseCode code)
-{
-}
-
-void SpaceshipGame::loadChallengesEvent(ResponseCode code, std::vector<SocialChallenge> challenges)
-{
-	if (code == SUCCESS)
-	{
-		_challenges.clear();
-		_challenges = challenges;
-
-		buildChallengeChooser();
-
-		for (unsigned int i = 0 ; i < challenges.size(); i++)
-		{
-            if (challenges[i].state == SocialChallenge::COMPLETE)
-                _wonChallenge = true;
-
-			fprintf(stderr, "Challenge score %lf issued on %s by %s for %s.  Status %d\n", challenges[i].score, challenges[i].dateTimeIssued.c_str(), challenges[i].issuedPlayerName.c_str(), challenges[i].challengedPlayerName.c_str(), challenges[i].state);
-		}
-	}
-	else
-    {
-		fprintf(stderr, "Error loading challenges %d\n", code);
-    }
-}
-
-void SpaceshipGame::loadSavedDataEvent(ResponseCode code, std::string data)
-{
-}
-
-void SpaceshipGame::submitSavedDataEvent(ResponseCode code)
-{
-}
-
-void SpaceshipGame::buildFriendsChooser()
-{
-	Theme* theme = _challengeForm->getTheme();
-	Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
-
-	if (!_friendsContainer) return;
-
-	const size_t size = _friends.size();
-	for (size_t i = 0; i < size; ++i)
-	{
-		char buf[128];
-		sprintf(buf, "friend_%s", _friends[i].name.data());
-		Button* button = Button::create(buf, buttonStyle);
-		button->setText(_friends[i].name.data());
-		button->setPosition(0, 110*(i+1));
-		button->setWidth(400);
-		button->setHeight(100);
-		button->setConsumeInputEvents(false);   // This lets the user scroll the container if they swipe starting from a button.
-		button->addListener(this, Control::Listener::CLICK);
-		_friendsContainer->addControl(button);
-		button->release();
-	}
-}
-
-void SpaceshipGame::buildChallengeChooser()
-{
-	if (!_challengeContainer) return;
-#if 0
-	const std::vector<Control*> controls = _challengeContainer->getControls();
-	if (controls.size() > 1)
-	{
-		for (int i = controls.size() - 1; i >= 0; i--)
-			_challengeContainer->removeControl(i);
-	}
-#endif
-
-	Theme* theme = _challengeForm->getTheme();
-	Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
-
-	const size_t size = _challenges.size();
-
-	for (size_t i = 0; i < size; ++i)
-	{
-		char buf[128];
-		sprintf(buf, "openchallenge_%s", _challenges[i].dateTimeIssued.data());
-		Button* button = Button::create(buf, buttonStyle);
-		button->setText(_challenges[i].issuedPlayerName.data());
-		button->setPosition(0, 110*i);
-		button->setWidth(400);
-		button->setHeight(100);
-		button->setConsumeInputEvents(false);   // This lets the user scroll the container if they swipe starting from a button.
-		button->addListener(this, Control::Listener::CLICK);
-		_challengeContainer->addControl(button);
-		button->release();
-	}
-}

@@ -63,6 +63,27 @@ void Platform::gestureTapEventInternal(int x, int y)
     Game::getInstance()->getScriptController()->gestureTapEvent(x, y);
 }
 
+void Platform::gestureLongTapEventInternal(int x, int y, float duration)
+{
+    // TODO: Add support to Form for gestures
+	Game::getInstance()->gestureLongTapEvent(x, y, duration);
+	Game::getInstance()->getScriptController()->gestureLongTapEvent(x, y, duration);
+}
+
+void Platform::gestureDragEventInternal(int x, int y)
+{
+    // TODO: Add support to Form for gestures
+	Game::getInstance()->gestureDragEvent(x, y);
+	Game::getInstance()->getScriptController()->gestureDragEvent(x, y);
+}
+
+void Platform::gestureDropEventInternal(int x, int y)
+{
+    // TODO: Add support to Form for gestures
+	Game::getInstance()->gestureDropEvent(x, y);
+	Game::getInstance()->getScriptController()->gestureDropEvent(x, y);
+}
+
 void Platform::resizeEventInternal(unsigned int width, unsigned int height)
 {
     // Update the width and height of the game
@@ -80,19 +101,11 @@ void Platform::resizeEventInternal(unsigned int width, unsigned int height)
 
 void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
-	switch(evt)
-	{
-	case Gamepad::CONNECTED_EVENT:
-	case Gamepad::DISCONNECTED_EVENT:
-		Game::getInstance()->gamepadEvent(evt, gamepad);
+    if (!Form::gamepadEventInternal(evt, gamepad, analogIndex))
+    {
+        Game::getInstance()->gamepadEvent(evt, gamepad);
         Game::getInstance()->getScriptController()->gamepadEvent(evt, gamepad);
-		break;
-	case Gamepad::BUTTON_EVENT:
-	case Gamepad::JOYSTICK_EVENT:
-	case Gamepad::TRIGGER_EVENT:
-		Form::gamepadEventInternal(evt, gamepad, analogIndex);
-		break;
-	}
+    }
 }
 
 void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,

@@ -191,6 +191,17 @@ public:
     bool intersects(const Rectangle& r) const;
 
     /**
+     * Computes the intersection of two rectangles and returns the result.
+     *
+     * @param r1 The first rectangle.
+     * @param r2 The second rectangle.
+     * @param dst Populated with the resulting intersection, or Rectangle.empty if they do not intersect.
+     *
+     * @return True if the two rectangles intersect, false otherwise.
+     */
+    static bool intersect(const Rectangle& r1, const Rectangle& r2, Rectangle* dst);
+
+    /**
      * Returns a new rectangle that exactly contains two other rectangles.
      *
      * @param r1 The first rectangle to contain.

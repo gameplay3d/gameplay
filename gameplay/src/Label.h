@@ -8,25 +8,11 @@ namespace gameplay
 {
 
 /**
- * A label is the most basic type of control, capable only of rendering text within its border.
+ * Defines a label control.
+ * 
+ * This is capable of rendering text within its border.
  *
- * The following properties are available for labels:
-
- @verbatim
-    label <labelID>
-    {
-         style       = <styleID>
-         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-         position    = <x, y>
-         autoWidth   = <bool>
-         autoHeight  = <bool>
-         size        = <width, height>
-         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
-         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         text        = <string>
-         consumeEvents = <bool>  // Whether the label propagates input events to the Game's input event handler. Default is true.
-    }
- @endverbatim
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Label : public Control
 {
@@ -36,15 +22,15 @@ class Label : public Control
 public:
 
     /**
-     * Create a new label control.
+     * Creates a new label.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The label id.
+     * @param style The label style (optional).
      *
      * @return The new label.
      * @script{create}
      */
-    static Label* create(const char*id, Theme::Style* style);
+    static Label* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Set the text for this label to display.
@@ -89,21 +75,21 @@ protected:
      */
     virtual ~Label();
 
-    /**
-     * Create a label with a given style and properties.
-     *
-     * @param style The style to apply to this label.
-     * @param properties The properties to set on this label.
-     * @param theme The theme to set on this control if needed
-	 * 
-     * @return The new label.
-     */
-    static Control* create(Theme::Style* style, Properties* properties, Theme *theme = NULL);
+	/**
+	* Create a new label control.
+	*
+	* @param style The control's custom style.
+	* @param properties A properties object containing a definition of the label (optional).
+	*
+	* @return The new label.
+	* @script{create}
+	*/
+	static Control* create(Theme::Style* style, Properties* properties);
 
     /**
-     * Initialize this label.
+     * @see Control::initialize
      */
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Called when a label's properties change. Updates this label's internal rendering
@@ -115,11 +101,9 @@ protected:
     void update(const Control* container, const Vector2& offset);
 
     /**
-     * Draw this label's text.
-     *
-     * @param clip The clipping rectangle of this label's parent container.
+     * @see Control::drawText
      */
-    virtual void drawText(const Rectangle& clip);
+    virtual unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
      * The text displayed by this label.

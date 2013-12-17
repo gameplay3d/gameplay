@@ -19,6 +19,7 @@ int lua_Rectangle_set(lua_State* state);
 int lua_Rectangle_setPosition(lua_State* state);
 int lua_Rectangle_static_combine(lua_State* state);
 int lua_Rectangle_static_empty(lua_State* state);
+int lua_Rectangle_static_intersect(lua_State* state);
 int lua_Rectangle_top(lua_State* state);
 int lua_Rectangle_width(lua_State* state);
 int lua_Rectangle_x(lua_State* state);

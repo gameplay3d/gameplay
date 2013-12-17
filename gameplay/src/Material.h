@@ -1,5 +1,5 @@
-# ifndef MATERIAL_H_
-# define MATERIAL_H_
+#ifndef MATERIAL_H_
+#define MATERIAL_H_
 
 #include "RenderState.h"
 #include "Technique.h"
@@ -17,6 +17,8 @@ class NodeCloneContext;
  * object. This class facilitates loading of techniques using specified shaders or
  * material files (.material). When multiple techniques are loaded using a material file,
  * the current technique for an object can be set at runtime.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Materials
  */
 class Material : public RenderState
 {
@@ -29,6 +31,11 @@ class Material : public RenderState
 public:
 
     /**
+     * Pass creation callback function definition.
+     */
+    typedef std::string(*PassCallback)(Pass*, void*);
+
+    /**
      * Creates a material using the data from the Properties object defined at the specified URL, 
      * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
      * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
@@ -39,6 +46,25 @@ public:
      * @script{create}
      */
     static Material* create(const char* url);
+
+    /**
+     * Creates a material from a Properties file.
+     *
+     * This overloaded method allows you to pass a function pointer to be called back for each
+     * pass that is loaded for the material. The passed in callback receives a pointer to each
+     * Pass being created and returns a string of optional defines to append to the shaders
+     * being compiled for each Pass. The function is called during Pass creation, prior to
+     * compiling the shaders for that Pass. MaterialParameters can be safely modified in this
+     * callback even though the shader is not yet compiled.
+     *
+     * @param url The URL pointing to the Properties object defining the material.
+     * @param callback Function pointer to be called during Pass creation.
+     * @param cookie Optional custom parameter to be passed to the callback function.
+     *
+     * @return A new Material or NULL if there was an error.
+     * @script{ignore}
+     */
+    static Material* create(const char* url, PassCallback callback, void* cookie = NULL);
 
     /**
      * Creates a material from the specified properties object.
@@ -117,6 +143,11 @@ public:
      */
     void setTechnique(const char* id);
 
+    /**
+     * @see RenderState::setNodeBinding
+     */
+    void setNodeBinding(Node* node);
+
 private:
 
     /**
@@ -145,14 +176,19 @@ private:
     Material* clone(NodeCloneContext &context) const;
 
     /**
+     * Creates a new material with optional pass callback function.
+     */
+    static Material* create(Properties* materialProperties, PassCallback callback, void* cookie);
+
+    /**
      * Loads a technique from the given properties object into the specified material.
      */
-    static bool loadTechnique(Material* material, Properties* techniqueProperties);
+    static bool loadTechnique(Material* material, Properties* techniqueProperties, PassCallback callback, void* cookie);
 
     /**
      * Load a pass from the given properties object into the specified technique.
      */
-    static bool loadPass(Technique* technique, Properties* passProperites);
+    static bool loadPass(Technique* technique, Properties* passProperites, PassCallback callback, void* cookie);
 
     /**
      * Loads render state from the specified properties object.

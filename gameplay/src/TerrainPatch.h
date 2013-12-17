@@ -8,13 +8,15 @@ namespace gameplay
 {
 
 class Terrain;
+class TerrainAutoBindingResolver;
 
 /**
- * Represents a single patch for a Terrain.
+ * Defines a single patch for a Terrain.
  */
 class TerrainPatch : public Camera::Listener
 {
     friend class Terrain;
+    friend class TerrainAutoBindingResolver;
 
 public:
 
@@ -42,6 +44,13 @@ public:
      * @see Camera::Listener
      */
     void cameraChanged(Camera* camera);
+
+    /**
+     * Internal use only.
+     *
+     * @script{ignore}
+     */
+    static std::string passCallback(Pass* pass, void* cookie);
 
 private:
 
@@ -96,7 +105,7 @@ private:
         bool operator() (const Layer* lhs, const Layer* rhs) const;
     };
 
-    static TerrainPatch* create(Terrain* terrain, 
+    static TerrainPatch* create(Terrain* terrain, unsigned int index,
                                 unsigned int row, unsigned int column,
                                 float* heights, unsigned int width, unsigned int height,
                                 unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
@@ -123,7 +132,14 @@ private:
 
     void setMaterialDirty();
 
+    float computeHeight(float* heights, unsigned int width, unsigned int x, unsigned int z);
+
+    void updateNodeBindings();
+
+    std::string passCreated(Pass* pass);
+
     Terrain* _terrain;
+    unsigned int _index;
     unsigned int _row;
     unsigned int _column;
     std::vector<Level*> _levels;

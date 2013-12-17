@@ -3,6 +3,7 @@
 #include "lua_FileSystem.h"
 #include "Base.h"
 #include "FileSystem.h"
+#include "Platform.h"
 #include "Properties.h"
 #include "Stream.h"
 

@@ -376,7 +376,7 @@ void PhysicsRigidBody::transformChanged(Transform* transform, long cookie)
         // If the node has a terrain attached, factor in the terrain local scaling as well for the collision shape
         if (_node->getTerrain())
         {
-            Vector3& tScale = _node->getTerrain()->_localScale;
+            const Vector3& tScale = _node->getTerrain()->_localScale;
             scale.set(scale.x * tScale.x, scale.y * tScale.y, scale.z * tScale.z);
         }
 

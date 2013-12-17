@@ -879,9 +879,70 @@ int lua_Terrain_static_create(lua_State* state)
             lua_error(state);
             break;
         }
+        case 7:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<HeightField> param1 = gameplay::ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                    // Get parameter 4 off the stack.
+                    unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                    // Get parameter 5 off the stack.
+                    float param5 = (float)luaL_checknumber(state, 5);
+
+                    // Get parameter 6 off the stack.
+                    const char* param6 = gameplay::ScriptUtil::getString(6, false);
+
+                    // Get parameter 7 off the stack.
+                    const char* param7 = gameplay::ScriptUtil::getString(7, false);
+
+                    void* returnPtr = (void*)Terrain::create(param1, *param2, param3, param4, param5, param6, param7);
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Terrain");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Terrain_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1, 2, 3, 4, 5 or 6).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1, 2, 3, 4, 5, 6 or 7).");
             lua_error(state);
             break;
         }

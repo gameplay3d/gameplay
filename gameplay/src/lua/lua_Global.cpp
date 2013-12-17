@@ -6,6 +6,7 @@ namespace gameplay
 
 void luaRegister_lua_Global()
 {
+    gameplay::ScriptUtil::registerFunction("strcmpnocase", lua__strcmpnocase);
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "CheckBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Container");
@@ -22,8 +23,8 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "TextBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Transform");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "CheckBox");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "RadioButton");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Camera::Listener", "AudioListener");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Camera::Listener", "TerrainPatch");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Container", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Button");
@@ -38,7 +39,6 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "TextBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "CheckBox");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "RadioButton");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "Slider");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "TextBox");
@@ -113,7 +113,6 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("RenderState", "Material");
     gameplay::ScriptUtil::setGlobalHierarchyPair("RenderState", "Pass");
     gameplay::ScriptUtil::setGlobalHierarchyPair("RenderState", "Technique");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("SceneRenderer", "SceneRendererForward");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "AIAgent");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "AIState");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Button");
@@ -133,7 +132,6 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Transform");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform", "Joint");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform", "Node");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "AudioListener");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "AudioSource");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "Camera");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "MeshSkin");
@@ -141,7 +139,6 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsGhostObject");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsRigidBody");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "Terrain");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("VisibleSet", "VisibleSetDefault");
     gameplay::ScriptUtil::addStringFromEnumConversionFunction(&gameplay::lua_stringFromEnumGlobal);
 
     // Register enumeration AIMessage::ParameterType.
@@ -239,6 +236,8 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("RIGHT_CLICK", "RIGHT_CLICK", scopePath);
         gameplay::ScriptUtil::registerConstantString("ENTER", "ENTER", scopePath);
         gameplay::ScriptUtil::registerConstantString("LEAVE", "LEAVE", scopePath);
+        gameplay::ScriptUtil::registerConstantString("FOCUS_GAINED", "FOCUS_GAINED", scopePath);
+        gameplay::ScriptUtil::registerConstantString("FOCUS_LOST", "FOCUS_LOST", scopePath);
     }
 
     // Register enumeration Control::State.
@@ -418,6 +417,9 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("GESTURE_TAP", "GESTURE_TAP", scopePath);
         gameplay::ScriptUtil::registerConstantString("GESTURE_SWIPE", "GESTURE_SWIPE", scopePath);
         gameplay::ScriptUtil::registerConstantString("GESTURE_PINCH", "GESTURE_PINCH", scopePath);
+        gameplay::ScriptUtil::registerConstantString("GESTURE_LONG_TAP", "GESTURE_LONG_TAP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("GESTURE_DRAG", "GESTURE_DRAG", scopePath);
+        gameplay::ScriptUtil::registerConstantString("GESTURE_DROP", "GESTURE_DROP", scopePath);
         gameplay::ScriptUtil::registerConstantString("GESTURE_ANY_SUPPORTED", "GESTURE_ANY_SUPPORTED", scopePath);
     }
 
@@ -831,14 +833,6 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("STENCIL_OP_DECR_WRAP", "STENCIL_OP_DECR_WRAP", scopePath);
     }
 
-    // Register enumeration Scene::DebugFlags.
-    {
-        std::vector<std::string> scopePath;
-        scopePath.push_back("Scene");
-        gameplay::ScriptUtil::registerConstantString("DEBUG_BOXES", "DEBUG_BOXES", scopePath);
-        gameplay::ScriptUtil::registerConstantString("DEBUG_SPHERES", "DEBUG_SPHERES", scopePath);
-    }
-
     // Register enumeration Terrain::Flags.
     {
         std::vector<std::string> scopePath;
@@ -939,6 +933,47 @@ void luaRegister_lua_Global()
     }
 }
 
+int lua__strcmpnocase(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(2, false);
+
+                int result = strcmpnocase(param1, param2);
+
+                // Push the return value onto the stack.
+                lua_pushinteger(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua__strcmpnocase - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 static const char* enumStringEmpty = "";
 
 const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
@@ -1027,8 +1062,6 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_RenderStateStencilFunction((RenderState::StencilFunction)value);
     if (enumname == "RenderState::StencilOperation")
         return lua_stringFromEnum_RenderStateStencilOperation((RenderState::StencilOperation)value);
-    if (enumname == "Scene::DebugFlags")
-        return lua_stringFromEnum_SceneDebugFlags((Scene::DebugFlags)value);
     if (enumname == "Terrain::Flags")
         return lua_stringFromEnum_TerrainFlags((Terrain::Flags)value);
     if (enumname == "TextBox::InputMode")

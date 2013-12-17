@@ -28,7 +28,7 @@
 #define BUNDLE_MAX_STRING_LENGTH        5000
 
 #define BUNDLE_VERSION_MAJOR_FONT_FORMAT  1
-#define BUNDLE_VERSION_MINOR_FONT_FORMAT  3
+#define BUNDLE_VERSION_MINOR_FONT_FORMAT  4
 
 namespace gameplay
 {
@@ -189,7 +189,7 @@ Bundle* Bundle::create(const char* path)
     Stream* stream = FileSystem::open(path);
     if (!stream)
     {
-        GP_ERROR("Failed to open file '%s'.", path);
+        GP_WARN("Failed to open file '%s'.", path);
         return NULL;
     }
 
@@ -198,7 +198,7 @@ Bundle* Bundle::create(const char* path)
     if (stream->read(sig, 1, 9) != 9 || memcmp(sig, "\xABGPB\xBB\r\n\x1A\n", 9) != 0)
     {
         SAFE_DELETE(stream);
-        GP_ERROR("Invalid GPB header for bundle '%s'.", path);
+        GP_WARN("Invalid GPB header for bundle '%s'.", path);
         return NULL;
     }
 
@@ -207,14 +207,14 @@ Bundle* Bundle::create(const char* path)
     if (stream->read(version, 1, 2) != 2)
     {
         SAFE_DELETE(stream);
-        GP_ERROR("Failed to read GPB version for bundle '%s'.", path);
+        GP_WARN("Failed to read GPB version for bundle '%s'.", path);
         return NULL;
     }
     // Check for the minimal 
     if (version[0] != BUNDLE_VERSION_MAJOR_REQUIRED || version[1] < BUNDLE_VERSION_MINOR_REQUIRED)
     {
         SAFE_DELETE(stream);
-        GP_ERROR("Unsupported version (%d.%d) for bundle '%s' (expected %d.%d).", (int)version[0], (int)version[1], path, BUNDLE_VERSION_MAJOR_REQUIRED, BUNDLE_VERSION_MINOR_REQUIRED);
+        GP_WARN("Unsupported version (%d.%d) for bundle '%s' (expected %d.%d).", (int)version[0], (int)version[1], path, BUNDLE_VERSION_MAJOR_REQUIRED, BUNDLE_VERSION_MINOR_REQUIRED);
         return NULL;
     }
 
@@ -223,7 +223,7 @@ Bundle* Bundle::create(const char* path)
     if (stream->read(&refCount, 4, 1) != 1)
     {
         SAFE_DELETE(stream);
-        GP_ERROR("Failed to read ref table for bundle '%s'.", path);
+        GP_WARN("Failed to read ref table for bundle '%s'.", path);
         return NULL;
     }
 
@@ -236,7 +236,7 @@ Bundle* Bundle::create(const char* path)
             stream->read(&refs[i].offset, 4, 1) != 1)
         {
             SAFE_DELETE(stream);
-            GP_ERROR("Failed to read ref number %d for bundle '%s'.", i, path);
+            GP_WARN("Failed to read ref number %d for bundle '%s'.", i, path);
             SAFE_DELETE_ARRAY(refs);
             return NULL;
         }
@@ -1647,123 +1647,147 @@ Font* Bundle::loadFont(const char* id)
         return NULL;
     }
 
-    // Read font style and size.
-    unsigned int style, size;
+    // Read font style
+    unsigned int style;
     if (_stream->read(&style, 4, 1) != 1)
     {
         GP_ERROR("Failed to read style for font '%s'.", id);
         return NULL;
     }
-    if (_stream->read(&size, 4, 1) != 1)
-    {
-        GP_ERROR("Failed to read size for font '%s'.", id);
-        return NULL;
-    }
 
-    // Read character set.
-    std::string charset = readString(_stream);
-
-    // Read font glyphs.
-    unsigned int glyphCount;
-    if (_stream->read(&glyphCount, 4, 1) != 1)
+    // In bundle version 1.4 we introduced storing multiple font sizes per font
+    unsigned int fontSizeCount = 1;
+    if (getVersionMajor() >= 1 && getVersionMinor() >= 4)
     {
-        GP_ERROR("Failed to read glyph count for font '%s'.", id);
-        return NULL;
-    }
-    if (glyphCount == 0)
-    {
-        GP_ERROR("Invalid glyph count (must be greater than 0) for font '%s'.", id);
-        return NULL;
-    }
-
-    Font::Glyph* glyphs = new Font::Glyph[glyphCount];
-    if (_stream->read(glyphs, sizeof(Font::Glyph), glyphCount) != glyphCount)
-    {
-        GP_ERROR("Failed to read glyphs for font '%s'.", id);
-        SAFE_DELETE_ARRAY(glyphs);
-        return NULL;
-    }
-
-    // Read texture attributes.
-    unsigned int width, height, textureByteCount;
-    if (_stream->read(&width, 4, 1) != 1)
-    {
-        GP_ERROR("Failed to read texture width for font '%s'.", id);
-        SAFE_DELETE_ARRAY(glyphs);
-        return NULL;
-    }
-    if (_stream->read(&height, 4, 1) != 1)
-    {
-        GP_ERROR("Failed to read texture height for font '%s'.", id);
-        SAFE_DELETE_ARRAY(glyphs);
-        return NULL;
-    }
-    if (_stream->read(&textureByteCount, 4, 1) != 1)
-    {
-        GP_ERROR("Failed to read texture byte count for font '%s'.", id);
-        SAFE_DELETE_ARRAY(glyphs);
-        return NULL;
-    }
-    if (textureByteCount != (width * height))
-    {
-        GP_ERROR("Invalid texture byte count for font '%s'.", id);
-        SAFE_DELETE_ARRAY(glyphs);
-        return NULL;
-    }
-
-    // Read texture data.
-    unsigned char* textureData = new unsigned char[textureByteCount];
-    if (_stream->read(textureData, 1, textureByteCount) != textureByteCount)
-    {
-        GP_ERROR("Failed to read texture data for font '%s'.", id);
-        SAFE_DELETE_ARRAY(glyphs);
-        SAFE_DELETE_ARRAY(textureData);
-        return NULL;
-    }
-
-    unsigned int format = Font::BITMAP;
-    // After bundle version we add enum FontFormat to bundle format
-    if (getVersionMajor() >= BUNDLE_VERSION_MAJOR_FONT_FORMAT &&
-        getVersionMinor() >= BUNDLE_VERSION_MINOR_FONT_FORMAT)
-    {
-        if (_stream->read(&format, 4, 1) != 1)
+        if (_stream->read(&fontSizeCount, 4, 1) != 1)
         {
-            GP_ERROR("Failed to font format'%u'.", format);
-            SAFE_DELETE_ARRAY(glyphs);
-            SAFE_DELETE_ARRAY(textureData);
+            GP_ERROR("Failed to read font size count for font '%s'.", id);
             return NULL;
         }
     }
 
-    // Create the texture for the font.
-    Texture* texture = Texture::create(Texture::ALPHA, width, height, textureData, true);
+    Font* masterFont = NULL;
 
-    // Free the texture data (no longer needed).
-    SAFE_DELETE_ARRAY(textureData);
-
-    if (texture == NULL)
+    for (unsigned int i = 0; i < fontSizeCount; ++i)
     {
-        GP_ERROR("Failed to create texture for font '%s'.", id);
+        // Read font size
+        unsigned int size;
+        if (_stream->read(&size, 4, 1) != 1)
+        {
+            GP_ERROR("Failed to read size for font '%s'.", id);
+            return NULL;
+        }
+
+        // Read character set.
+        std::string charset = readString(_stream);
+
+        // Read font glyphs.
+        unsigned int glyphCount;
+        if (_stream->read(&glyphCount, 4, 1) != 1)
+        {
+            GP_ERROR("Failed to read glyph count for font '%s'.", id);
+            return NULL;
+        }
+        if (glyphCount == 0)
+        {
+            GP_ERROR("Invalid glyph count (must be greater than 0) for font '%s'.", id);
+            return NULL;
+        }
+
+        Font::Glyph* glyphs = new Font::Glyph[glyphCount];
+        if (_stream->read(glyphs, sizeof(Font::Glyph), glyphCount) != glyphCount)
+        {
+            GP_ERROR("Failed to read glyphs for font '%s'.", id);
+            SAFE_DELETE_ARRAY(glyphs);
+            return NULL;
+        }
+
+        // Read texture attributes.
+        unsigned int width, height, textureByteCount;
+        if (_stream->read(&width, 4, 1) != 1)
+        {
+            GP_ERROR("Failed to read texture width for font '%s'.", id);
+            SAFE_DELETE_ARRAY(glyphs);
+            return NULL;
+        }
+        if (_stream->read(&height, 4, 1) != 1)
+        {
+            GP_ERROR("Failed to read texture height for font '%s'.", id);
+            SAFE_DELETE_ARRAY(glyphs);
+            return NULL;
+        }
+        if (_stream->read(&textureByteCount, 4, 1) != 1)
+        {
+            GP_ERROR("Failed to read texture byte count for font '%s'.", id);
+            SAFE_DELETE_ARRAY(glyphs);
+            return NULL;
+        }
+        if (textureByteCount != (width * height))
+        {
+            GP_ERROR("Invalid texture byte count for font '%s'.", id);
+            SAFE_DELETE_ARRAY(glyphs);
+            return NULL;
+        }
+
+        // Read texture data.
+        unsigned char* textureData = new unsigned char[textureByteCount];
+        if (_stream->read(textureData, 1, textureByteCount) != textureByteCount)
+        {
+            GP_ERROR("Failed to read texture data for font '%s'.", id);
+            SAFE_DELETE_ARRAY(glyphs);
+            SAFE_DELETE_ARRAY(textureData);
+            return NULL;
+        }
+
+        unsigned int format = Font::BITMAP;
+
+        // In bundle version 1.3 we added a format field
+        if (getVersionMajor() >= 1 && getVersionMinor() >= 3)
+        {
+            if (_stream->read(&format, 4, 1) != 1)
+            {
+                GP_ERROR("Failed to font format'%u'.", format);
+                SAFE_DELETE_ARRAY(glyphs);
+                SAFE_DELETE_ARRAY(textureData);
+                return NULL;
+            }
+        }
+
+        // Create the texture for the font.
+        Texture* texture = Texture::create(Texture::ALPHA, width, height, textureData, true);
+
+        // Free the texture data (no longer needed).
+        SAFE_DELETE_ARRAY(textureData);
+
+        if (texture == NULL)
+        {
+            GP_ERROR("Failed to create texture for font '%s'.", id);
+            SAFE_DELETE_ARRAY(glyphs);
+            return NULL;
+        }
+
+        // Create the font for this size
+        Font* font = Font::create(family.c_str(), Font::PLAIN, size, glyphs, glyphCount, texture, (Font::Format)format);
+
+        // Free the glyph array.
         SAFE_DELETE_ARRAY(glyphs);
-        return NULL;
+
+        // Release the texture since the Font now owns it.
+        SAFE_RELEASE(texture);
+
+        if (font)
+        {
+            font->_path = _path;
+            font->_id = id;
+
+            if (masterFont)
+                masterFont->_sizes.push_back(font);
+            else
+                masterFont = font;
+        }
     }
 
-    // Create the font.
-    Font* font = Font::create(family.c_str(), Font::PLAIN, size, glyphs, glyphCount, texture, (Font::Format)format);
-
-    // Free the glyph array.
-    SAFE_DELETE_ARRAY(glyphs);
-
-    // Release the texture since the Font now owns it.
-    SAFE_RELEASE(texture);
-
-    if (font)
-    {
-        font->_path = _path;
-        font->_id = id;
-    }
-
-    return font;
+    return masterFont;
 }
 
 void Bundle::setTransform(const float* values, Transform* transform)

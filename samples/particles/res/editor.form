@@ -14,7 +14,6 @@ form particleEditor
 		imageSize = 30, 30
 		text = VSYNC
 		checked = true
-		consumeInputEvents = true
 	}
  
     container leftSide
@@ -23,18 +22,15 @@ form particleEditor
         layout = LAYOUT_VERTICAL
         width = 160
         autoHeight = true
-        consumeInputEvents = true
 
         container saveLoad
         {
             style = basic
             size = 160, 100
-            consumeInputEvents = true
             layout = LAYOUT_VERTICAL
 
 	        button save
 	        {
-                consumeInputEvents = true
 		        style = buttonStyle
                 width = 140
 		        height = 40
@@ -54,7 +50,6 @@ form particleEditor
         {
 	        style = basic
 	        size = 160, 200
-	        consumeInputEvents = true
 	        layout = LAYOUT_VERTICAL
 
             label
@@ -75,7 +70,6 @@ form particleEditor
             {
                 style = noBorder
                 size = 160, 230
-                consumeInputEvents = true
 		        layout = LAYOUT_VERTICAL
 
                 radioButton additive
@@ -121,7 +115,6 @@ form particleEditor
 
                     textBox frameCount
                     {
-                        consumeInputEvents = true
                         style = textBox
                         text = 1
                         size = 45, 22
@@ -144,7 +137,6 @@ form particleEditor
 
                     textBox frameWidth
                     {
-                        consumeInputEvents = true
                         style = textBox
                         text = 1
                         size = 45, 22
@@ -167,7 +159,6 @@ form particleEditor
 
                     textBox frameHeight
                     {
-                        consumeInputEvents = true
                         style = textBox
                         text = 1
                         size = 45, 22
@@ -191,7 +182,6 @@ form particleEditor
 	        style = basic
 	        layout = LAYOUT_VERTICAL
 	        size = 160, 200
-	        consumeInputEvents = true
 
 	        // Burst emission
 	        button emit
@@ -240,7 +230,6 @@ form particleEditor
 
         button reset
 	    {
-            consumeInputEvents = true
 		    style = buttonStyle
             width = 160
 		    height = 40
@@ -257,7 +246,6 @@ form particleEditor
         layout = LAYOUT_VERTICAL
         scroll = SCROLL_VERTICAL
         scrollBarsAutoHide = false
-        consumeInputEvents = true
 
         // Particle Size
         label titleSize
@@ -311,12 +299,12 @@ form particleEditor
             orientation = HORIZONTAL
             min = 0
             max = 5000
+            step = 1
             text = Min
             textAlignment = ALIGN_TOP_HCENTER
             valueTextVisible = true
             valueTextAlignment = ALIGN_BOTTOM_HCENTER
-            valueTextPrecision = 2            
-            consumeInputEvents = false
+            valueTextPrecision = 2
         }
 
         slider energyMax : energyMin
@@ -342,7 +330,6 @@ form particleEditor
             valueTextVisible = true
             valueTextAlignment = ALIGN_BOTTOM_HCENTER
             valueTextPrecision = 2
-            consumeInputEvents = false
         }
 
         slider startGreen : startRed
@@ -592,7 +579,6 @@ form particleEditor
 	{
 		style = noBorder
 		size = 160, 50
-		consumeInputEvents = true
         alignment = ALIGN_BOTTOM_HCENTER
 
 		button zoomIn

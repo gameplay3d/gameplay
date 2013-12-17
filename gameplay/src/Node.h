@@ -22,7 +22,13 @@ class Form;
 class Terrain;
 
 /**
- * Defines a basic hierarchical structure of transformation spaces.
+ * Defines a hierarchical structure of objects in 3D transformation spaces.
+ *
+ * This object allow you to attach components to a scene such as:
+ * Model, Camera, Light, PhysicsCollisionObject, AudioSource, ParticleEmitter and
+ * Form components.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Node
  */
 class Node : public Transform, public Ref
 {
@@ -181,26 +187,25 @@ public:
     void setUserPointer(void* pointer, void (*cleanupCallback)(void*) = NULL);
 
     /**
-     * Sets if visual components themselves set as visible.
+     * Sets if the node is active in the scene.
      *
-     * @param visible if visual components themselves set as visible.
+     * @param active if the node is active in the scene.
      */
-    void setVisible(bool visible);
+    void setActive(bool active);
 
     /**
-     * Gets if visual components themselves set as visible.
+     * Gets if the node is active in the scene.
      *
-     * @return if visual components themselves set as visible.
+     * @return if the node is active in the scene.
      */
-    bool isVisible() const;
+    bool isActive() const;
 
     /**
-     * Gets if visual components are either inherited visible or they are themselves.
+     * Gets if the node  either inherited active.
      *
-     * @param inherit true if visible is based on inherited behaviour or false is its self is visible.
      * @return if visual components attached on this node should be drawn.
      */
-    bool isVisibleInHierarchy() const;
+    bool isActiveInHierarchy() const;
 
     /**
      * Returns the number of direct children of this item.
@@ -250,6 +255,11 @@ public:
      * Gets the top level node in this node's parent hierarchy.
      */
     Node* getRootNode() const;
+
+    /**
+     * Updates this node and any active children.
+     */
+    void update(float elapsedTime);
 
     /**
      * Returns whether the transformation of this node is static.
@@ -766,9 +776,9 @@ protected:
     unsigned int _childCount;
 
     /**
-     * If this node is visible. This may not be visible in hierarchy if its parents are hidden
+     * If this node is active in the scrne. This may not be active in hierarchy if its parents are not active.
      */
-    bool _visible;
+    bool _active;
 
     /**
      * List of custom tags for a node.

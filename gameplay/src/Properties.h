@@ -8,13 +8,11 @@
 
 namespace gameplay
 {
+
 class Properties;
+
 /**
- * Defines a utility for loading text files in the GamePlay "properties" files
- * and reading primitive types and GamePlay math classes out of them.
- *
- * This class is used by ParticleEmitter, Animation and Materials to create objects
- * of these types from text files.
+ * Defines a properties file for loading text files.
  *
  * A properties file has very simple syntax and can contain only namespaces and
  * name/value pairs (the properties of a namespace).  

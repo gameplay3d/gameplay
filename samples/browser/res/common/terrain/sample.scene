@@ -23,6 +23,17 @@ scene terrainSampleScene
         translate = 0,25000,0
     }
 
+    node directionalLight
+    {
+        light
+        {
+            type = DIRECTIONAL
+            color = 1,1,1
+        }
+
+        rotate = 1,0,0, -45
+    }
+
 	node camera
 	{
 		camera
