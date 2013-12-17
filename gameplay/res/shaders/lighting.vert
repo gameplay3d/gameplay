@@ -27,6 +27,7 @@ void applyLight(vec4 position, mat3 tangentSpaceTransformMatrix)
     {
         // Compute the vertex to light direction, in tangent space
 	    v_vertexToSpotLightDirection[i] = tangentSpaceTransformMatrix * (u_spotLightPosition[i] - positionWorldViewSpace.xyz);
+        v_spotLightDirection[i] = tangentSpaceTransformMatrix * u_spotLightDirection[i];
     }
     #endif
     
@@ -41,7 +42,7 @@ void applyLight(vec4 position)
     #if defined(SPECULAR) || (POINT_LIGHT_COUNT > 0) || (SPOT_LIGHT_COUNT > 0)
 	vec4 positionWorldViewSpace = u_worldViewMatrix * position;
     #endif
-    
+
     #if (POINT_LIGHT_COUNT > 0)
     for (int i = 0; i < POINT_LIGHT_COUNT; ++i)
     {
@@ -49,7 +50,7 @@ void applyLight(vec4 position)
         v_vertexToPointLightDirection[i] = u_pointLightPosition[i] - positionWorldViewSpace.xyz;
     }
     #endif
-    
+
     #if (SPOT_LIGHT_COUNT > 0)
     for (int i = 0; i < SPOT_LIGHT_COUNT; ++i)
     {
