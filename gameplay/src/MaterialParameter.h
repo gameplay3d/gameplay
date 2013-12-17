@@ -430,7 +430,7 @@ private:
 
     void clearValue();
 
-    void bind(Effect* effect);
+    bool bind(Effect* effect);
 
     void applyAnimationValue(AnimationValue* value, float blendWeight, int components);
 
