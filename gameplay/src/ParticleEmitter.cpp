@@ -685,8 +685,6 @@ void ParticleEmitter::setSpriteFrameCoords(unsigned int frameCount, int width, i
     GP_ASSERT(width);
     GP_ASSERT(height);
 
-    int x;
-    int y;
     Rectangle* frameCoords = new Rectangle[frameCount];
     unsigned int cols = _spriteTextureWidth / width;
     unsigned int rows = _spriteTextureHeight / height;
@@ -694,10 +692,10 @@ void ParticleEmitter::setSpriteFrameCoords(unsigned int frameCount, int width, i
     unsigned int n = 0;
     for (unsigned int i = 0; i < rows; ++i)
     {
-        y = i * height;
+        int y = i * height;
         for (unsigned int j = 0; j < cols; ++j)
         {
-            x = j * width;
+            int x = j * width;
             frameCoords[i*cols + j] = Rectangle(x, y, width, height);
             if (++n == frameCount)
             {
