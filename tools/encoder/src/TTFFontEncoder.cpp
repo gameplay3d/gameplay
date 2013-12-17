@@ -228,28 +228,6 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
             return -1;
         }
 
-        // If there's an existing generated font in the list of this size, ignore and delete it
-        int duplicateSize = 0;
-        for (size_t i = 0; i < fonts.size(); ++i)
-        {
-            if (fonts[i]->glyphSize == glyphSize)
-            {
-                duplicateSize = fonts[i]->fontSize;
-                break;
-            }
-        }
-        if (duplicateSize != 0)
-        {
-            LOG(1, "Warning: Requested font size (%d) produces same size glyphs as font size (%d). Skipping size %d.\n", fontSize, duplicateSize, fontSize);
-            SAFE_DELETE(font);
-            continue;
-        }
-
-        if (rowSize != (int)fontSize)
-        {
-            LOG(1, "Warning: Could not genreate font of requested size (%d). Generating size %d instead.\n", fontSize, rowSize);
-        }
-
         // Include padding in the rowSize.
         rowSize += GLYPH_PADDING;
 
