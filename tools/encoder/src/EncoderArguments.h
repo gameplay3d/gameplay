@@ -152,7 +152,7 @@ public:
      */
     void printUsage() const;
 
-    unsigned int getFontSize() const;
+    std::vector<unsigned int> getFontSizes() const;
 
     bool fontPreviewEnabled() const;
 
@@ -165,8 +165,6 @@ public:
     bool outputMaterialEnabled() const;
 
     const char* getNodeId() const;
-
-
 
     static std::string getRealPath(const std::string& filepath);
 
@@ -205,7 +203,7 @@ private:
     int _heightmapResolution[2];
 
     bool _parseError;
-    unsigned int _fontSize;
+    std::vector<unsigned int> _fontSizes;
     bool _fontPreview;
     Font::FontFormat _fontFormat;
     bool _textOutput;

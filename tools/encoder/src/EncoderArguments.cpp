@@ -23,7 +23,6 @@ extern int __logVerbosity = 1;
 EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _normalMap(false),
     _parseError(false),
-    _fontSize(0),
     _fontPreview(false),
     _fontFormat(Font::BITMAP),
     _textOutput(false),
@@ -288,7 +287,7 @@ void EncoderArguments::printUsage() const
         "  terrain generation tools.\n" \
     "\n" \
     "TTF file options:\n" \
-    "  -s <size>\tSize of the bitmap font. (in pixels).\n" \
+    "  -s <sizes>\tComma-separated list of font sizes (in pixels).\n" \
     "  -p\t\tOutput font preview.\n" \
     "  -f Format of font. -f:b (BITMAP), -f:d (DISTANCE_FIELD).\n" \
     "\n" \
@@ -331,9 +330,9 @@ const char* EncoderArguments::getNodeId() const
     return _nodeId.c_str();
 }
 
-unsigned int EncoderArguments::getFontSize() const
+std::vector<unsigned int> EncoderArguments::getFontSizes() const
 {
-    return _fontSize;
+    return _fontSizes;
 }
 
 EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
@@ -578,29 +577,60 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         else
         {
-            // Font Size
+            // Font Sizes
             // old format was -s##
+            const char* sizes = NULL;
             if (str.length() > 2)
             {
                 char n = str[2];
                 if (n > '0' && n <= '9')
                 {
-                    const char* number = str.c_str() + 2;
-                    _fontSize = atoi(number);
-                    break;
+                    sizes = str.c_str() + 2;
                 }
-            }
-
-            (*index)++;
-            if (*index < options.size())
-            {
-                _fontSize = atoi(options[*index].c_str());
             }
             else
             {
-                LOG(1, "Error: missing arguemnt for -%c.\n", str[1]);
+                (*index)++;
+                if (*index < options.size())
+                {
+                    sizes = options[*index].c_str();
+                }
+            }
+
+            if (sizes == NULL)
+            {
+                LOG(1, "Error: invalid format for argument: -s");
                 _parseError = true;
                 return;
+            }
+
+            // Parse comma-separated list of font sizes
+            char* ptr = const_cast<char*>(sizes);
+            std::string sizeStr;
+            while (ptr)
+            {
+                char* end = strchr(ptr, ',');
+                if (end)
+                {
+                    sizeStr = std::string(ptr, end - ptr);
+                    ptr = end + 1;
+                }
+                else
+                {
+                    sizeStr = ptr;
+                    ptr = NULL;
+                }
+                if (sizeStr.length() > 0)
+                {
+                    int size = atoi(sizeStr.c_str());
+                    if (size <= 0)
+                    {
+                        LOG(1, "Error: invalid font size provided: %s", sizeStr.c_str());
+                        _parseError = true;
+                        return;
+                    }
+                    _fontSizes.push_back((unsigned int)size);
+                }
             }
         }
         break;

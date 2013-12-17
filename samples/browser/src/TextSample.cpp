@@ -18,7 +18,7 @@ std::string _fontNames[] =
 };
 
 TextSample::TextSample()
-    : _form(NULL), _stateBlock(NULL), _size(16), _wrap(true), _ignoreClip(false), _useViewport(true), _rightToLeft(false), _simple(false), _alignment(Font::ALIGN_LEFT),
+    : _form(NULL), _stateBlock(NULL), _size(18), _wrap(true), _ignoreClip(false), _useViewport(true), _rightToLeft(false), _simple(false), _alignment(Font::ALIGN_LEFT),
       _fontsCount(FONT_COUNT), _fontIndex(0), _font(NULL), _viewport(250, 100, 512, 200)
 {
 }
@@ -209,7 +209,7 @@ void TextSample::controlEvent(Control* control, EventType evt)
     }
     else if (strcmp(id, "smallerButton") == 0)
     {
-        if (_size > 12)
+        if (_size > 8)
         {
             _size -= 2;
             Label* sizeLabel = static_cast<Label*>(_form->getControl("sizeLabel"));

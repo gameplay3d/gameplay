@@ -100,10 +100,11 @@ unsigned int Label::drawText(Form* form, const Rectangle& clip)
     if (_text.size() > 0 && _font)
     {
         Control::State state = getState();
+        unsigned int fontSize = getFontSize(state);
 
-        SpriteBatch* batch = _font->getSpriteBatch();
+        SpriteBatch* batch = _font->getSpriteBatch(fontSize);
         startBatch(form, batch);
-        _font->drawText(_text.c_str(), _textBounds, _textColor, getFontSize(state), getTextAlignment(state), true, getTextRightToLeft(state), &_viewportClipBounds);
+        _font->drawText(_text.c_str(), _textBounds, _textColor, fontSize, getTextAlignment(state), true, getTextRightToLeft(state), &_viewportClipBounds);
         finishBatch(form, batch);
 
         return 1;
