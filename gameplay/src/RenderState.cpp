@@ -418,7 +418,15 @@ void RenderState::bind(Pass* pass)
         for (size_t i = 0, count = rs->_parameters.size(); i < count; ++i)
         {
             GP_ASSERT(rs->_parameters[i]);
-            rs->_parameters[i]->bind(effect);
+            
+            // If this parameter cannot be found in the shader, drop it from this effect, printing the warning only once
+            if( !rs->_parameters[i]->bind(effect) ) {
+                removeParameter( _parameters[i]->getName() );
+                
+                // Since we removed the element at index i, we must revisit this index, and update count
+                i--;
+                count--;
+            }
         }
 
         if (rs->_state)

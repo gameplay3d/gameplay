@@ -446,7 +446,7 @@ void MaterialParameter::setSamplerArray(const Texture::Sampler** values, unsigne
     _type = MaterialParameter::SAMPLER_ARRAY;
 }
 
-void MaterialParameter::bind(Effect* effect)
+bool MaterialParameter::bind(Effect* effect)
 {
     GP_ASSERT(effect);
 
@@ -459,8 +459,8 @@ void MaterialParameter::bind(Effect* effect)
         if (!_uniform)
         {
             // This parameter was not found in the specified effect, so do nothing.
-            GP_WARN("Warning: Material parameter '%s' not found in effect '%s'.", _name.c_str(), effect->getId());
-            return;
+            GP_WARN("Warning: Material parameter '%s' not found in effect '%s', removing...", _name.c_str(), effect->getId());
+            return false;
         }
     }
 
@@ -504,6 +504,7 @@ void MaterialParameter::bind(Effect* effect)
         GP_WARN("Unknown type (%d) for material parameter: %s", _type, _name.c_str());
         break;
     }
+    return true;
 }
 
 void MaterialParameter::bindValue(Node* node, const char* binding)
