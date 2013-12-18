@@ -36,7 +36,7 @@ void CharacterGame::initialize()
     displayScreen(this, &CharacterGame::drawSplash, NULL, 1000L);
 
     // Load the font.
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Load scene.
     _scene = Scene::load("res/common/sample.scene");
@@ -586,6 +586,7 @@ void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener:
 {
     if (clip == _kickClip && !_applyKick)
     {
+        _keyFlags = 0;
         if (_hasBall)
         {
             _applyKick = true;
@@ -594,7 +595,7 @@ void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener:
     }
     else
     {
-        clip->crossFade(_currentClip, 150);
+        clip->crossFade(_currentClip, 100);
     }
 }
 

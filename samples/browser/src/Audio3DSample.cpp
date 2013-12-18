@@ -24,7 +24,7 @@ Audio3DSample::Audio3DSample()
 void Audio3DSample::initialize()
 {
     setMultiTouch(true);
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
     // Load game scene from file
     _scene = Scene::load("res/common/box.gpb");
 

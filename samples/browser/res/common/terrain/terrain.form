@@ -146,7 +146,7 @@ form terrainForm
             consumeInputEvents = false
             autoWidth = true
             autoHeight = true
-            font = res/common/arial.gpb
+            font = res/ui/arial.gpb
             fontSize = 24
             textAlignment = ALIGN_VCENTER_HCENTER
         }

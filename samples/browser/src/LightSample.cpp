@@ -43,7 +43,7 @@ LightSample::LightSample()
 void LightSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
 	// Load the scene
 	_scene = Scene::load("res/common/lightBrickWall.gpb");

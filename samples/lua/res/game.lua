@@ -8,7 +8,7 @@ function initialize()
     _touchX = 0
 
     -- Load font
-    _font = Font.create("res/arial.gpb")
+    _font = Font.create("res/ui/arial.gpb")
 
     -- Load mesh/scene from file
     _scene = Scene.load("res/lua.scene")

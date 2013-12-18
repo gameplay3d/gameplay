@@ -43,7 +43,7 @@ void MeshBatchSample::initialize()
 {
     setMultiTouch(true);
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     Matrix::createOrthographic(getWidth(), getHeight(), -1.0f, 1.0f, &_worldViewProjectionMatrix);
     _meshBatch = createMeshBatch(Mesh::TRIANGLES);
