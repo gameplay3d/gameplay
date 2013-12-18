@@ -9,7 +9,7 @@
 
 std::string _fontNames[] =
 {
-    "arial-default)",
+    "arial",
     "arial-dist.field",
     "badaboom",
     "fishfingers",
