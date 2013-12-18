@@ -294,41 +294,6 @@ void FormsSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
     }
 }
 
-void FormsSample::keyEvent(Keyboard::KeyEvent keyEvent, int key)
-{
-    if (_formNode)
-    {
-        switch(keyEvent)
-        {
-        case Keyboard::KEY_PRESS:
-            switch (key)
-            {
-            case Keyboard::KEY_LEFT_ARROW:
-                _formNodeParent->translateX(-0.1f);
-                break;
-            case Keyboard::KEY_RIGHT_ARROW:
-                _formNodeParent->translateX(0.1f);
-                break;
-            case Keyboard::KEY_UP_ARROW:
-                _formNodeParent->translateY(0.1f);
-                break;
-            case Keyboard::KEY_DOWN_ARROW:
-                _formNodeParent->translateY(-0.1f);
-                break;
-            case Keyboard::KEY_PLUS:
-                _formNodeParent->translateZ(0.1f);
-                break;
-            case Keyboard::KEY_MINUS:
-                _formNodeParent->translateZ(-0.1f);
-                break;
-            }
-            break;
-        case Keyboard::KEY_RELEASE:
-            break;
-        }
-    }
-}
-
 void FormsSample::controlEvent(Control* control, EventType evt)
 {
     if (evt == CLICK)
