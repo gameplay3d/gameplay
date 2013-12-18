@@ -1,15 +1,48 @@
 ## v2.0.0
 
 - Adds support for Visual Studio 2013.
-- Adds support for iOS 7, MacOS 10.8 and XCode 5.
+- Adds support for iOS 7, MacOS X 10.8 and XCode 5.
 - Adds support for BlackBerry NDK 10.2.
-- Adds support for social achievements, leaderboard and challenges.
-- Adds password mode on textbox controls.
-- Adds collision object group mask filtering.
-- Adds support in shaders for mulitple lights.
-- Adds support for scene renderer.
+- Adds support for CollisionObject group mask filtering.
+- Adds support in shaders for mulitple lights using shader defines.
+- Adds various improvements to Material binding support.
+- Adds support for array MaterialParameter's.
 - Adds support for encoding distance field based fonts.
-- Fixes Mesh Collision shapes.
+- Adds support for multiple sizes of fonts encoded into single bundle.
+- Adds improvements for simplified layout for forms and theming.
+- Adds ControlFactory to instantiate core controls and support users registering custom controls.
+- Adds support for percentage based layout definitions for controls in forms.
+- Adds password mode on Textbox controls.
+- Adds improvements to Textbox key repeat and cursor jump modifiers.
+- Adds FileSystem::displayFileDialog on all desktop platforms.
+- Adds Terrain support for material definition for user customization.
+- Adds support to RenderState FrontFace.
+- Adds Node::setActive, getActive and getActiveInHierachy.
+- Adds ETC compressed texture support.
+- Adds gameplay::strcmpnocase as a platform-independent case-insensitive string compare function.
+- Adds new gestures for Long Tap, Drag and Drop.
+- Adds support for Android pinch gestures.
+- Adds version number to encoder output files.
+- Fixes to specular and bumped shader for spot lights.
+- Fixes to UI rendering quality from FrameBuffer usage which is no longer used.
+- Fixes to Texbox focus related issues.
+- Fixes to Label clipping and Labels to automatically re-size around their text.
+- Fixes in Camera related to invalid project() and setActiveCamera() issues.
+- Fixes for Linux VSYNC and Mouse capture.
+- Fixes various logging and warning problems and annoyances.
+- Fixes bitmap font rendering quality in gameplay-encoder and Font class.
+- Fixes Mesh CollisionShape's.
+- Fixes for destroying CollisionObject that does not notify CollisionListener.
+- Fixes to PhysicsVehicle where wheels detach and may collide with body.
+- Fixes to encoder spotlight for properly extracting inner and outer angle from FBX.
+- Fixes to invalid assertion in AnimationClip.
+- Fixes for FrameBuffer width/height goeing out of date.
+- Fixes for incorrect RenderState Type specifier.
+- Fixes to FileSystem for Windows file paths.
+- Fixes to improve speed of installation of binaries via install.sh/.bat scripts.
+- Fixes related to disable and non-visible controls not receiving input.
+- Fixes to Bundle, Font, Properties and SceneLoader to use GP_WARN and improve locations of errors.
+- Fixes to encoder related to Material generation.
 
 
 ## v1.7.0

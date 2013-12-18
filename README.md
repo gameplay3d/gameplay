@@ -19,7 +19,7 @@ GamePlay3D is an open-source, cross-platform 3D native C++ game framework making
 - [BlackBerry](https://github.com/blackberry/GamePlay/wiki/BlackBerry-Setup) (using BlackBerry Native SDK)
 
 ## Roadmap for 'next' branch
-- [2.0.0](https://github.com/blackberry/GamePlay/issues?milestone=6&page=1&state=open)
+- [3.0.0](https://github.com/blackberry/GamePlay/issues?milestone=7&page=1&state=open)
 - [backlog](https://github.com/blackberry/GamePlay/issues?milestone=5&page=1&state=open)
 
 ## License
