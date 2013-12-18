@@ -21,7 +21,7 @@ void InputSample::initialize()
     setMultiTouch(true);
 
     // Load font
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
     assert(_font);
 
     // Reuse part of the gamepad texture as the crosshair in this sample.

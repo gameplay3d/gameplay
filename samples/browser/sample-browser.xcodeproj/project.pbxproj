@@ -472,7 +472,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\nrsync -rau ../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "rsync -rau ../../gameplay/res/shaders ${SRCROOT}/res\nrsync -rau ../../gameplay/res/ui ${SRCROOT}/res\ncp -rf ../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B61612414CCC24C0073B857 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -485,7 +485,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\nrsync -rau ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "rsync -rau ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\nrsync -rau ${SRCROOT}/../../gameplay/res/ui ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -145,9 +145,6 @@
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x86;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x86;GAMEPLAY_PATH\external-deps\openal\lib\windows\x86;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x86;GAMEPLAY_PATH\external-deps\glew\lib\windows\x86;GAMEPLAY_PATH\external-deps\png\lib\windows\x86;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x86;GAMEPLAY_PATH\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -156,6 +153,10 @@
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy GAMEPLAY_PATH\gameplay\res\ui res\ui\* /s /y /d</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -174,9 +175,6 @@
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x64;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x64;GAMEPLAY_PATH\external-deps\openal\lib\windows\x64;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x64;GAMEPLAY_PATH\external-deps\glew\lib\windows\x64;GAMEPLAY_PATH\external-deps\png\lib\windows\x64;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x64;GAMEPLAY_PATH\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -205,9 +203,6 @@
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x86;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x86;GAMEPLAY_PATH\external-deps\openal\lib\windows\x86;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x86;GAMEPLAY_PATH\external-deps\glew\lib\windows\x86;GAMEPLAY_PATH\external-deps\png\lib\windows\x86;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x86;GAMEPLAY_PATH\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -216,6 +211,10 @@
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy GAMEPLAY_PATH\gameplay\res\ui res\ui\* /s /y /d</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
     <ClCompile>
@@ -236,10 +235,6 @@
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x64;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x64;GAMEPLAY_PATH\external-deps\openal\lib\windows\x64;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x64;GAMEPLAY_PATH\external-deps\glew\lib\windows\x64;GAMEPLAY_PATH\external-deps\png\lib\windows\x64;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x64;GAMEPLAY_PATH\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -268,9 +263,6 @@
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x86;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x86;GAMEPLAY_PATH\external-deps\openal\lib\windows\x86;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x86;GAMEPLAY_PATH\external-deps\glew\lib\windows\x86;GAMEPLAY_PATH\external-deps\png\lib\windows\x86;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x86;GAMEPLAY_PATH\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -279,6 +271,10 @@
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy GAMEPLAY_PATH\gameplay\res\ui res\ui\* /s /y /d</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -299,10 +295,6 @@
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lua\lib\windows\x64;GAMEPLAY_PATH\external-deps\bullet\lib\windows\x64;GAMEPLAY_PATH\external-deps\openal\lib\windows\x64;GAMEPLAY_PATH\external-deps\oggvorbis\lib\windows\x64;GAMEPLAY_PATH\external-deps\glew\lib\windows\x64;GAMEPLAY_PATH\external-deps\png\lib\windows\x64;GAMEPLAY_PATH\external-deps\zlib\lib\windows\x64;GAMEPLAY_PATH\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>

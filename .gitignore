@@ -75,6 +75,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/browser/Device-Profile
 /samples/browser/Device-Release
 /samples/browser/res/shaders
+/samples/browser/res/ui
 /samples/browser/res/logo_powered_white.png
 /samples/browser/android/src
 /samples/browser/android/assets
@@ -102,6 +103,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/character/Device-Release-QC
 /samples/character/game.config
 /samples/character/res/shaders
+/samples/character/res/ui
 /samples/character/res/logo_powered_white.png
 /samples/character/android/project.properties
 /samples/character/android/proguard.cfg
@@ -127,6 +129,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/lua/Device-Profile
 /samples/lua/Device-Release
 /samples/lua/res/shaders
+/samples/lua/res/ui
 /samples/lua/res/logo_powered_white.png
 /samples/lua/android/src
 /samples/lua/android/assets
@@ -151,6 +154,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/mesh/Device-Profile
 /samples/mesh/Device-Release
 /samples/mesh/res/shaders
+/samples/mesh/res/ui
 /samples/mesh/res/logo_powered_white.png
 /samples/mesh/android/src
 /samples/mesh/android/assets
@@ -175,6 +179,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/particles/Device-Profile
 /samples/particles/Device-Release
 /samples/particles/res/shaders
+/samples/particles/res/ui
 /samples/particles/res/logo_powered_white.png
 /samples/particles/Device-Debug
 /samples/particles/Debug
@@ -204,6 +209,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/racer/Device-Release-QC
 /samples/racer/game.config
 /samples/racer/res/shaders
+/samples/racer/res/ui
 /samples/racer/res/logo_powered_white.png
 /samples/racer/android/project.properties
 /samples/racer/android/proguard.cfg
@@ -231,6 +237,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/spaceship/Device-Profile
 /samples/spaceship/Device-Release
 /samples/spaceship/res/shaders
+/samples/spaceship/res/ui
 /samples/spaceship/res/logo_powered_white.png
 /samples/spaceship/android/NUL
 /samples/spaceship/android/project.properties

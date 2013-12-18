@@ -33,7 +33,9 @@ uniform sampler2D u_normalmapTexture;
 
 #if (DIRECTIONAL_LIGHT_COUNT > 0)
 uniform vec3 u_directionalLightColor[DIRECTIONAL_LIGHT_COUNT];
+#if !defined(BUMPED)
 uniform vec3 u_directionalLightDirection[DIRECTIONAL_LIGHT_COUNT];
+#endif
 #endif
 
 #if (POINT_LIGHT_COUNT > 0)
@@ -44,10 +46,12 @@ uniform float u_pointLightRangeInverse[POINT_LIGHT_COUNT];
 
 #if (SPOT_LIGHT_COUNT > 0)
 uniform vec3 u_spotLightColor[SPOT_LIGHT_COUNT];
-uniform vec3 u_spotLightDirection[SPOT_LIGHT_COUNT];
 uniform float u_spotLightRangeInverse[SPOT_LIGHT_COUNT];
 uniform float u_spotLightInnerAngleCos[SPOT_LIGHT_COUNT];
 uniform float u_spotLightOuterAngleCos[SPOT_LIGHT_COUNT];
+#if !defined(BUMPED)
+uniform vec3 u_spotLightDirection[SPOT_LIGHT_COUNT];
+#endif
 #endif
 
 #if defined(SPECULAR)
@@ -82,7 +86,7 @@ varying vec2 v_texCoord1;
 varying vec3 v_normalVector;
 #endif
 
-#if (defined(BUMPED) && (DIRECTIONAL_LIGHT_COUNT > 0))
+#if defined(BUMPED) && (DIRECTIONAL_LIGHT_COUNT > 0)
 varying vec3 v_directionalLightDirection[DIRECTIONAL_LIGHT_COUNT];
 #endif
 
@@ -92,6 +96,9 @@ varying vec3 v_vertexToPointLightDirection[POINT_LIGHT_COUNT];
 
 #if (SPOT_LIGHT_COUNT > 0)
 varying vec3 v_vertexToSpotLightDirection[SPOT_LIGHT_COUNT];
+#if defined(BUMPED)
+varying vec3 v_spotLightDirection[SPOT_LIGHT_COUNT];
+#endif
 #endif
 
 #if defined(SPECULAR)

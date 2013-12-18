@@ -73,11 +73,12 @@ vec3 getLitPixel()
         float attenuation = clamp(1.0 - dot(ldir, ldir), 0.0, 1.0);
         vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection[i]);
 
-        // TODO: 
-        // Let app normalize this! Need Node::getForwardVectorViewNorm
-        // This needs to be in TANGENT SPACE for bump mapping
-        // and should always pass from vertex shader via v_spotLightDirection[i]
-        vec3 spotLightDirection = normalize(u_spotLightDirection[i]);
+        // TODO: Let app normalize this! Need Node::getForwardVectorViewNorm
+        #if defined(BUMPED)
+            vec3 spotLightDirection = normalize(v_spotLightDirection[i]);
+        #else
+            vec3 spotLightDirection = normalize(u_spotLightDirection[i]);
+        #endif
 
         // "-lightDirection" is used because light direction points in opposite direction to spot direction.
         float spotCurrentAngleCos = dot(spotLightDirection, -vertexToSpotLightDirection);
@@ -87,6 +88,6 @@ vec3 getLitPixel()
         combinedColor += computeLighting(normalVector, vertexToSpotLightDirection, u_spotLightColor[i], attenuation);
     }
     #endif
-    
+
     return combinedColor;
 }

@@ -50,7 +50,7 @@ uniform mat4 u_inverseTransposeWorldViewMatrix;
 uniform mat4 u_worldViewMatrix;
 #endif
 
-#if (DIRECTIONAL_LIGHT_COUNT > 0)
+#if defined(BUMPED) && (DIRECTIONAL_LIGHT_COUNT > 0)
 uniform vec3 u_directionalLightDirection[DIRECTIONAL_LIGHT_COUNT];
 #endif
 
@@ -60,7 +60,9 @@ uniform vec3 u_pointLightPosition[POINT_LIGHT_COUNT];
 
 #if (SPOT_LIGHT_COUNT > 0) 
 uniform vec3 u_spotLightPosition[SPOT_LIGHT_COUNT];
+#if defined(BUMPED)
 uniform vec3 u_spotLightDirection[SPOT_LIGHT_COUNT];
+#endif
 #endif
 
 #if defined(SPECULAR)
@@ -101,6 +103,9 @@ varying vec3 v_vertexToPointLightDirection[POINT_LIGHT_COUNT];
 
 #if (SPOT_LIGHT_COUNT > 0)
 varying vec3 v_vertexToSpotLightDirection[SPOT_LIGHT_COUNT];
+#if defined(BUMPED)
+varying vec3 v_spotLightDirection[SPOT_LIGHT_COUNT];
+#endif
 #endif
 
 #if defined(SPECULAR)
@@ -116,7 +121,6 @@ varying vec3 v_cameraDirection;
 #else
 #include "skinning-none.vert" 
 #endif
-
 
 void main()
 {

@@ -110,7 +110,7 @@ form particleEditor
                     {
                         style = noBorder
                         text = Frame Count:
-                        size = 100, 25
+                        size = 100, 26
                     }
 
                     textBox frameCount
@@ -132,7 +132,7 @@ form particleEditor
                     {
                         style = noBorder
                         text = Frame Width:
-                        size = 100, 25
+                        size = 100, 26
                     }
 
                     textBox frameWidth
@@ -154,7 +154,7 @@ form particleEditor
                     {
                         style = noBorder
                         text = Frame Height:
-                        size = 100, 25
+                        size = 100, 26
                     }
 
                     textBox frameHeight
