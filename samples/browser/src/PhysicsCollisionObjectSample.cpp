@@ -21,7 +21,7 @@ PhysicsCollisionObjectSample::PhysicsCollisionObjectSample()
 void PhysicsCollisionObjectSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     _scene = Scene::load("res/common/physics.scene");
     // Use the aspect ratio of the display instead of the aspect ratio defined in the scene file.

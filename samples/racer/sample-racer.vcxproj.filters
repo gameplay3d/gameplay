@@ -63,9 +63,6 @@
     <None Include="res\shaders\textured.vert">
       <Filter>res\shaders</Filter>
     </None>
-    <None Include="res\common\arial.gpb">
-      <Filter>res\common</Filter>
-    </None>
     <None Include="res\common\background_track.ogg">
       <Filter>res\common</Filter>
     </None>

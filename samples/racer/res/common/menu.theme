@@ -119,7 +119,7 @@ theme menuTheme
             skin = mainNormal
             imageList = normalImages
 
-            font = res/common/arial.gpb
+            font = res/ui/arial.gpb
             textColor = #ffffffff
             fontSize = 18
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -141,7 +141,7 @@ theme menuTheme
 
         stateNormal
         {
-            font = res/common/arial.gpb
+            font = res/ui/arial.gpb
             fontSize = 20
         }
 
@@ -161,7 +161,7 @@ theme menuTheme
         stateNormal
         {
             imageList = normalImages
-            font = res/common/arial.gpb
+            font = res/ui/arial.gpb
             textColor = #ffffffff
             fontSize = 14
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -183,14 +183,14 @@ theme menuTheme
     {
         stateNormal
         {
-            font = res/common/arial.gpb
+            font = res/ui/arial.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
-            font = res/common/arial.gpb
+            font = res/ui/arial.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
@@ -201,7 +201,7 @@ theme menuTheme
         stateNormal
         {
             textColor = #ffffffff
-            font = res/common/arial.gpb
+            font = res/ui/arial.gpb
             fontSize = 26
             textAlignment = ALIGN_TOP_HCENTER
         }

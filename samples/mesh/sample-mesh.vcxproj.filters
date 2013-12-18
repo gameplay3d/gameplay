@@ -15,9 +15,6 @@
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
     <None Include="game.config" />
-    <None Include="res\arial.gpb">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\mesh.fbx">
       <Filter>res</Filter>
     </None>
