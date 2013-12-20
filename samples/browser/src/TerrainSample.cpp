@@ -58,7 +58,7 @@ void TerrainSample::initialize()
     SAFE_RELEASE(bundle);
 
     // Load font
-	_font = Font::create("res/common/arial.gpb");
+	_font = Font::create("res/ui/arial.gpb");
 
     // Setup form
     _form = Form::create("res/common/terrain/terrain.form");

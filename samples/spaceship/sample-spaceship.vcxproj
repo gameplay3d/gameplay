@@ -150,10 +150,12 @@
       <Outputs>
       </Outputs>
     </CustomBuildStep>
-    <PostBuildEvent>
+    <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /u
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+
 copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PostBuildEvent>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -213,10 +215,12 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
-    <PostBuildEvent>
+    <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /u
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+
 copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PostBuildEvent>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
     <ClCompile>
@@ -279,10 +283,12 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
-    <PostBuildEvent>
+    <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /u
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+
 copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PostBuildEvent>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -322,9 +328,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="icon.png" />
     <None Include="res\airstrip.gpb" />
     <None Include="res\background.ogg" />
-    <None Include="res\challenge.form" />
-    <None Include="res\menu.form" />
-    <None Include="res\menu.theme" />
     <None Include="res\shaders\colored.frag" />
     <None Include="res\shaders\colored.vert" />
     <None Include="res\shaders\font.frag" />
@@ -354,7 +357,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\background.png" />
-    <Image Include="res\menuAtlas.png" />
     <Image Include="res\propulsion_glow.png" />
   </ItemGroup>
   <ItemGroup>

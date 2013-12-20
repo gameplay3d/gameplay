@@ -67,7 +67,7 @@ CreateSceneSample::CreateSceneSample()
 void CreateSceneSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Create a new empty scene.
     _scene = Scene::create();

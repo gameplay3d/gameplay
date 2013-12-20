@@ -34,7 +34,7 @@ void BillboardSample::initialize()
     setMultiTouch(true);
 
 	// Create the font and scene
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 	_scene = Scene::create();
 
 	// Initialize the camera

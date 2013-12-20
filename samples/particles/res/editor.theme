@@ -137,9 +137,9 @@ theme particleEditor
             skin = mainNormal
             imageList = normalImages
 
-            font = res/arial.gpb
+            font = res/ui/arial.gpb
             textColor = #ffffffff
-            fontSize = 20
+            fontSize = 18
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 
@@ -172,8 +172,8 @@ theme particleEditor
 
         stateNormal
         {
-            font = res/arial.gpb
-            fontSize = 20
+            font = res/ui/arial.gpb
+            fontSize = 18
         }
 
         stateActive
@@ -187,9 +187,9 @@ theme particleEditor
         stateNormal
         {
             imageList = normalImages
-            font = res/arial.gpb
+            font = res/ui/arial.gpb
             textColor = #ffffffff
-            fontSize = 18
+            fontSize = 14
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 
@@ -209,15 +209,15 @@ theme particleEditor
     {
         stateNormal
         {
-            font = res/arial.gpb
-            fontSize = 20
+            font = res/ui/arial.gpb
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
-            font = res/arial.gpb
-            fontSize = 20
+            font = res/ui/arial.gpb
+            fontSize = 18
             textAlignment = ALIGN_VCENTER_LEFT
         }
     }
@@ -234,15 +234,15 @@ theme particleEditor
     {
         stateNormal
         {
-            font = res/arial.gpb
-            fontSize = 20
+            font = res/ui/arial.gpb
+            fontSize = 18
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
-            font = res/arial.gpb
-            fontSize = 20
+            font = res/ui/arial.gpb
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_LEFT
         }
     }
@@ -252,16 +252,16 @@ theme particleEditor
         stateNormal
         {
             skin = formEntry
-            font = res/arial.gpb
-            fontSize = 16
+            font = res/ui/arial.gpb
+            fontSize = 14
             textAlignment = ALIGN_TOP_LEFT
         }
 
         stateFocus
         {
             skin = formFocus
-            font = res/arial.gpb
-            fontSize = 16
+            font = res/ui/arial.gpb
+            fontSize = 14
         }
     }
 
@@ -277,8 +277,8 @@ theme particleEditor
         stateNormal
         {
             textColor = #ffffffff
-            font = res/arial.gpb
-            fontSize = 24
+            font = res/ui/arial.gpb
+            fontSize = 18
             textAlignment = ALIGN_TOP_LEFT
         }
 

@@ -18,7 +18,7 @@ void GamepadSample::initialize()
     if (_gamepad && _gamepad->isVirtual())
         _gamepad->getForm()->setEnabled(true);
 
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
     _status = "Looking for gamepads...";
 }
 
