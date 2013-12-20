@@ -163,12 +163,13 @@ public:
     /**
      * Get the name of the next property.
      *
-     * @param value Optional pointer to a const char* to store the value of the next property in.
-     * 
+     * If a valid next property is returned, the value of the property can be
+     * retrieved using any of the get methods in this class, passing NULL for
+     // the property name.
+     *
      * @return The name of the next property, or NULL if there are no properties remaining.
-     * @script{ignore}
      */
-    const char* getNextProperty(char** value = NULL);
+    const char* getNextProperty();
 
     /**
      * Get the next namespace.
@@ -240,6 +241,24 @@ public:
      * @return The value of the given property as a string, or the empty string if no property with that name exists.
      */
     const char* getString(const char* name = NULL, const char* defaultValue = NULL) const;
+
+    /**
+     * Sets the value of the property with the specified name.
+     *
+     * If there is no property in this namespace with the current name,
+     * one is added. Otherwise, the value of the first property with the
+     * specified name is updated.
+     *
+     * If name is NULL, the value current property (see getNextProperty) is
+     * set, unless there is no current property, in which case false
+     * is returned.
+     *
+     * @param name The name of the property to set.
+     * @param value The property value.
+     *
+     * @return True if the property was set, false otherwise.
+     */
+    bool setString(const char* name, const char* value);
 
     /**
      * Interpret the value of the given property as a boolean.
@@ -395,8 +414,90 @@ public:
      */
     bool getPath(const char* name, std::string* path) const;
 
+    /**
+     * Attempts to parse the specified string as a Vector2 value.
+     *
+     * On error, false is returned and the output is set to all zero values.
+     *
+     * @param str The string to parse.
+     * @param out The value to populate if successful.
+     *
+     * @return True if a valid Vector2 was parsed, false otherwise.
+     */
+    static bool parseVector2(const char* str, Vector2* out);
+
+    /**
+     * Attempts to parse the specified string as a Vector3 value.
+     *
+     * On error, false is returned and the output is set to all zero values.
+     *
+     * @param str The string to parse.
+     * @param out The value to populate if successful.
+     *
+     * @return True if a valid Vector3 was parsed, false otherwise.
+     */
+    static bool parseVector3(const char* str, Vector3* out);
+    
+    /**
+     * Attempts to parse the specified string as a Vector4 value.
+     *
+     * On error, false is returned and the output is set to all zero values.
+     *
+     * @param str The string to parse.
+     * @param out The value to populate if successful.
+     *
+     * @return True if a valid Vector4 was parsed, false otherwise.
+     */
+    static bool parseVector4(const char* str, Vector4* out);
+
+    /**
+     * Attempts to parse the specified string as an axis-angle value.
+     *
+     * The specified string is expected to contain four comma-separated
+     * values, where the first three values represents the axis and the
+     * fourth value represents the angle, in degrees.
+     *
+     * On error, false is returned and the output is set to all zero values.
+     *
+     * @param str The string to parse.
+     * @param out A Quaternion populated with the orientation of the axis-angle, if successful.
+     *
+     * @return True if a valid axis-angle was parsed, false otherwise.
+     */
+    static bool parseAxisAngle(const char* str, Quaternion* out);
+
+    /**
+     * Atempts to parse the specified string as an RGB color value.
+     *
+     * @param str The string to parse.
+     * @param out The value to populate if successful.
+     *
+     * @return True if a valid RGB color was parsed, false otherwise.
+     */
+    static bool parseColor(const char* str, Vector3* out);
+
+    /**
+     * Atempts to parse the specified string as an RGBA color value.
+     *
+     * @param str The string to parse.
+     * @param out The value to populate if successful.
+     *
+     * @return True if a valid RGBA color was parsed, false otherwise.
+     */
+    static bool parseColor(const char* str, Vector4* out);
+
 private:
     
+    /**
+     * Internal structure containing a single property.
+     */
+    struct Property
+    {
+        std::string name;
+        std::string value;
+        Property(const char* name, const char* value) : name(name), value(value) { }
+    };
+
     /**
      * Constructor.
      */
@@ -436,8 +537,8 @@ private:
     std::string _namespace;
     std::string _id;
     std::string _parentID;
-    std::map<std::string, std::string> _properties;
-    std::map<std::string, std::string>::const_iterator _propertiesItr;
+    std::list<Property> _properties;
+    std::list<Property>::iterator _propertiesItr;
     std::vector<Properties*> _namespaces;
     std::vector<Properties*>::const_iterator _namespacesItr;
     std::string* _dirPath;
