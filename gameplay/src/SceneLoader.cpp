@@ -1230,7 +1230,7 @@ void splitURL(const std::string& url, std::string* file, std::string* id)
 }
 
 SceneLoader::SceneNode::SceneNode()
-    : _nodeID(""), _exactMatch(true)
+    : _nodeID(""), _exactMatch(true), _namespace(NULL)
 {
 }
 

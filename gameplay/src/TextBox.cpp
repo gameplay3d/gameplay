@@ -334,7 +334,7 @@ unsigned int TextBox::drawImages(Form* form, const Rectangle& clip)
         const Rectangle& region = _caretImage->getRegion();
         if (!region.isEmpty())
         {
-            const Theme::UVs uvs = _caretImage->getUVs();
+            const Theme::UVs& uvs = _caretImage->getUVs();
             Vector4 color = _caretImage->getColor();
             color.w *= _opacity;
 

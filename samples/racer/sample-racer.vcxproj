@@ -164,11 +164,8 @@
     </CustomBuildStep>
     <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-
 xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
-
 copy ..\..\gameplay\res\logo_powered_white.png res
-
 copy .\game.dxt.config .\game.config</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -221,11 +218,8 @@ copy .\game.dxt.config .\game.config</Command>
     </CustomBuildStep>
     <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-
 xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
-
 copy ..\..\gameplay\res\logo_powered_white.png res
-
 copy .\game.dxt.config .\game.config</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -280,11 +274,8 @@ copy .\game.dxt.config .\game.config</Command>
     </CustomBuildStep>
     <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-
 xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
-
 copy ..\..\gameplay\res\logo_powered_white.png res
-
 copy .\game.dxt.config .\game.config</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
