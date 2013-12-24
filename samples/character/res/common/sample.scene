@@ -124,7 +124,7 @@ scene
     node wallnorth
     {
         material = res/common/sample.material#wallnorth
-        collisionObject = res/common/sample.physics#staticMesh
+        collisionObject = res/common/sample.physics#staticBox
     }
 
     node wallsouth
@@ -153,7 +153,7 @@ scene
     node doorframe
     {
         material = res/common/sample.material#doorframe
-        collisionObject = res/common/sample.physics#staticMesh
+        collisionObject = res/common/sample.physics#staticBox
     }
 
     node bookshelf
@@ -198,31 +198,6 @@ scene
     {
         material = res/common/sample.material#backboard
         collisionObject = res/common/sample.physics#staticBox
-    }
-
-	node terrain
-	{
-		terrain = res/common/terrain/sample.terrain
-
-        translate = -2500,-430,2500
-
-		collisionObject
-		{
-			type = RIGID_BODY
-			shape = HEIGHTFIELD
-			mass = 0
-			kinematic = true
-		}
-	}
-
-    node sky
-    {
-        url = res/common/terrain/sky.gpb#sphere
-
-        material = res/common/terrain/sky.material
-
-        scale = 30000,30000,30000
-        translate = 0,25000,0
     }
 
     physics

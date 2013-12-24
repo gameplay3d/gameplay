@@ -58,8 +58,6 @@ void CharacterGame::initialize()
     rbParams.angularDamping = 0.16f;
     ceiling->setCollisionObject(PhysicsCollisionObject::RIGID_BODY, PhysicsCollisionShape::box(Vector3(49.5f, 1.0f, 49.5f)), &rbParams);
 
-    _scene->removeNode(_scene->findNode("door"));
-
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initializeScene);
 
@@ -98,7 +96,6 @@ void CharacterGame::initializeCharacter()
     
     // Store the physics character object.
     _character = static_cast<PhysicsCharacter*>(node->getCollisionObject());
-    _character->setMaxSlopeAngle(20.0f);
     
     // Store character nodes.
     _characterNode = node->findNode("boyScale");
@@ -149,14 +146,7 @@ void CharacterGame::drawSplash(void* param)
 bool CharacterGame::drawScene(Node* node, bool transparent)
 {
     if (node->getModel() && (transparent == node->hasTag("transparent")))
-    {
         node->getModel()->draw(_wireframe);
-    }
-    else if (node->getTerrain())
-    {
-        Terrain* terrain = node->getTerrain();
-        terrain->draw(_wireframe);
-    }
 
     return true;
 }
@@ -646,6 +636,8 @@ void CharacterGame::grabBall()
     Node* boy = _character->getNode();
     boy->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(2.9f, 6.0f, Vector3(0.0f, 3.0f, 0.0f), true), &rbParams);
     _character = static_cast<PhysicsCharacter*>(boy->getCollisionObject());
+    _character->setMaxSlopeAngle(0.0f);
+    _character->setMaxStepHeight(0.0f);
     _character->setVelocity(currentVelocity);
 }
 
@@ -659,6 +651,8 @@ void CharacterGame::releaseBall()
     boy->setCollisionObject(PhysicsCollisionObject::CHARACTER, PhysicsCollisionShape::capsule(1.2f, 6.0f, Vector3(0.0f, 3.0f, 0.0f), true), &rbParams);
     _character = static_cast<PhysicsCharacter*>(boy->getCollisionObject());
     _character->setVelocity(velocity);
+    _character->setMaxSlopeAngle(0.0f);
+    _character->setMaxStepHeight(0.0f);
     
     PhysicsRigidBody* basketball = (PhysicsRigidBody*) _basketballNode->getCollisionObject();
     basketball->setEnabled(true);
