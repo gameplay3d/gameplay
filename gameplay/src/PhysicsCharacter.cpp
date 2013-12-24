@@ -53,7 +53,7 @@ PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Defi
     : PhysicsGhostObject(node, shape, group, mask), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
     _verticalVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
     _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0), _stepHeight(0.1f),
-    _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true), _mass(mass), _actionInterface(NULL)
+    _slopeAngle(0.0f), _cosSlopeAngle(1.0f), _physicsEnabled(true), _mass(mass), _actionInterface(NULL)
 {
     setMaxSlopeAngle(45.0f);
 
@@ -460,7 +460,7 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
             normal.normalize();
 
             float dot = normal.dot(Vector3::unitY());
-            if (dot > 1.0f - MATH_EPSILON)
+            if (dot > _cosSlopeAngle - MATH_EPSILON)
             {
                 targetPosition.setInterpolate3(_currentPosition, targetPosition, callback.m_closestHitFraction);
 
@@ -544,7 +544,10 @@ void PhysicsCharacter::updateTargetPositionFromCollision(btVector3& targetPositi
 
         // Disallow the character from moving up during collision recovery (using an arbitrary reasonable epsilon).
         // Note that this will need to be generalized to allow for an arbitrary up axis.
-        if (perpindicularDir.y() < _stepHeight + 0.001)
+        //
+        // TO DO: FIX THIS! Fine tuning of this condition is needed. For now we force it true.
+        bool forceTrue = true;
+        if (forceTrue || perpindicularDir.y() < _stepHeight + 0.001 || collisionNormal.y() > _cosSlopeAngle - MATH_EPSILON)
         {
             btVector3 perpComponent = perpindicularDir * movementLength;
             targetPosition += perpComponent;
