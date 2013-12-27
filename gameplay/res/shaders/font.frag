@@ -1,6 +1,10 @@
 #ifdef OPENGL_ES
 #extension GL_OES_standard_derivatives : enable
+#ifdef OPENGL_ES_MEDIUMP
+precision mediump float;
+#else
 precision highp float;
+#endif
 #endif
 
 ///////////////////////////////////////////////////////////
