@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-Joystick::Joystick() : _radius(1.0f), _relative(true), _innerSize(NULL), _outerSize(NULL)
+Joystick::Joystick() : _radius(1.0f), _relative(true), _innerSize(NULL), _outerSize(NULL), _index(0)
 {
 }
 

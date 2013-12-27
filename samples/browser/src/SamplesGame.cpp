@@ -16,7 +16,7 @@ SamplesGame::SamplesGame()
 
 void SamplesGame::initialize()
 {
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     for (size_t i = 0; i < _categories->size(); ++i)
     {

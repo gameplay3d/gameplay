@@ -27,6 +27,9 @@
     <Filter Include="res\shaders">
       <UniqueIdentifier>{e1543678-e81b-48de-b753-3d5f000fd70b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\common\fonts">
+      <UniqueIdentifier>{10e17594-e3ef-49d2-a2a4-fb874c32b5c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
@@ -104,15 +107,6 @@
     <None Include="res\common\terrain\terrain.form">
       <Filter>res\common\terrain</Filter>
     </None>
-    <None Include="res\common\arial.gpb">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\arial-distance.gpb">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\badaboom.gpb">
-      <Filter>res\common</Filter>
-    </None>
     <None Include="res\common\box.gpb">
       <Filter>res\common</Filter>
     </None>
@@ -131,9 +125,6 @@
     <None Include="res\common\constraints.scene">
       <Filter>res\common</Filter>
     </None>
-    <None Include="res\common\custom.gpb">
-      <Filter>res\common</Filter>
-    </None>
     <None Include="res\common\default.theme">
       <Filter>res\common</Filter>
     </None>
@@ -141,9 +132,6 @@
       <Filter>res\common</Filter>
     </None>
     <None Include="res\common\duck.material">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\fishfingers.gpb">
       <Filter>res\common</Filter>
     </None>
     <None Include="res\common\gamepad.form">
@@ -165,9 +153,6 @@
       <Filter>res\common</Filter>
     </None>
     <None Include="res\common\lightBrickWall.gpb">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\neuropol.gpb">
       <Filter>res\common</Filter>
     </None>
     <None Include="res\common\physics.form">
@@ -250,6 +235,21 @@
     </None>
     <None Include="res\common\terrain\terrain.material">
       <Filter>res\common\terrain</Filter>
+    </None>
+    <None Include="res\common\fonts\arial-distance.gpb">
+      <Filter>res\common\fonts</Filter>
+    </None>
+    <None Include="res\common\fonts\badaboom.gpb">
+      <Filter>res\common\fonts</Filter>
+    </None>
+    <None Include="res\common\fonts\custom.gpb">
+      <Filter>res\common\fonts</Filter>
+    </None>
+    <None Include="res\common\fonts\fishfingers.gpb">
+      <Filter>res\common\fonts</Filter>
+    </None>
+    <None Include="res\common\fonts\neuropol.gpb">
+      <Filter>res\common\fonts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

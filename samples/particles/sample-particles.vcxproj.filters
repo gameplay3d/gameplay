@@ -24,9 +24,6 @@
     <None Include="icon.png" />
     <None Include="game.config" />
     <None Include="bar-descriptor.xml" />
-    <None Include="res\arial.gpb">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\editor.form">
       <Filter>res</Filter>
     </None>

@@ -149,7 +149,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\bullet\include;..\..\external-deps\lua\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -157,16 +157,17 @@
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x86;..\..\external-deps\bullet\lib\windows\x86;..\..\external-deps\openal\lib\windows\x86;..\..\external-deps\oggvorbis\lib\windows\x86;..\..\external-deps\glew\lib\windows\x86;..\..\external-deps\png\lib\windows\x86;..\..\external-deps\zlib\lib\windows\x86;..\..\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-copy ..\..\gameplay\res\logo_powered_white.png res
-copy .\game.dxt.config .\game.config</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
       <Message>Copying game.config...</Message>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res
+copy .\game.dxt.config .\game.config</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -185,10 +186,6 @@ copy .\game.dxt.config .\game.config</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64;..\..\external-deps\bullet\lib\windows\x64;..\..\external-deps\openal\lib\windows\x64;..\..\external-deps\oggvorbis\lib\windows\x64;..\..\external-deps\glew\lib\windows\x64;..\..\external-deps\png\lib\windows\x64;..\..\external-deps\zlib\lib\windows\x64;..\..\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
       <Message>Copying game.config...</Message>
@@ -206,7 +203,7 @@ copy .\game.dxt.config .\game.config</Command>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessToFile>false</PreprocessToFile>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -214,16 +211,17 @@ copy .\game.dxt.config .\game.config</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x86;..\..\external-deps\bullet\lib\windows\x86;..\..\external-deps\openal\lib\windows\x86;..\..\external-deps\oggvorbis\lib\windows\x86;..\..\external-deps\glew\lib\windows\x86;..\..\external-deps\png\lib\windows\x86;..\..\external-deps\zlib\lib\windows\x86;..\..\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-copy ..\..\gameplay\res\logo_powered_white.png res
-copy .\game.dxt.config .\game.config</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
       <Message>Copying game.config...</Message>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res
+copy .\game.dxt.config .\game.config</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
     <ClCompile>
@@ -244,10 +242,6 @@ copy .\game.dxt.config .\game.config</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64;..\..\external-deps\bullet\lib\windows\x64;..\..\external-deps\openal\lib\windows\x64;..\..\external-deps\oggvorbis\lib\windows\x64;..\..\external-deps\glew\lib\windows\x64;..\..\external-deps\png\lib\windows\x64;..\..\external-deps\zlib\lib\windows\x64;..\..\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
       <Message>Copying game.config...</Message>
@@ -273,16 +267,17 @@ copy .\game.dxt.config .\game.config</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x86;..\..\external-deps\bullet\lib\windows\x86;..\..\external-deps\openal\lib\windows\x86;..\..\external-deps\oggvorbis\lib\windows\x86;..\..\external-deps\glew\lib\windows\x86;..\..\external-deps\png\lib\windows\x86;..\..\external-deps\zlib\lib\windows\x86;..\..\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-copy ..\..\gameplay\res\logo_powered_white.png res
-copy .\game.dxt.config .\game.config</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
       <Message>Copying game.config...</Message>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res
+copy .\game.dxt.config .\game.config</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -303,10 +298,6 @@ copy .\game.dxt.config .\game.config</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64;..\..\external-deps\bullet\lib\windows\x64;..\..\external-deps\openal\lib\windows\x64;..\..\external-deps\oggvorbis\lib\windows\x64;..\..\external-deps\glew\lib\windows\x64;..\..\external-deps\png\lib\windows\x64;..\..\external-deps\zlib\lib\windows\x64;..\..\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
       <Message>Copying game.config...</Message>
@@ -318,7 +309,6 @@ copy .\game.dxt.config .\game.config</Command>
       <SubType>Designer</SubType>
     </None>
     <None Include="icon.png" />
-    <None Include="res\common\arial.gpb" />
     <None Include="res\common\background_track.ogg" />
     <None Include="res\common\engine_loop.ogg" />
     <None Include="res\common\gamepad.form" />

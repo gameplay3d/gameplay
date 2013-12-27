@@ -176,23 +176,31 @@ void SceneLoader::addSceneAnimation(const char* animationID, const char* targetI
     _animations.push_back(SceneAnimation(animationID, targetID, urlStr));
 }
 
-void SceneLoader::addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* url, int index)
+void SceneLoader::addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* value, bool supportsUrl, int index)
 {
-    std::string urlStr = url ? url : "";
+    bool isUrl = false;
 
-    // If there is a non-GPB file that needs to be loaded later, add an 
-    // empty entry to the properties table to signify it.
-    if (urlStr.length() > 0 && urlStr.find(".") != std::string::npos && urlStr.find(".gpb") == std::string::npos && _properties.count(urlStr) == 0)
-        _properties[urlStr] = NULL;
+    std::string str = value ? value : "";
 
-    SceneNodeProperty prop(type, urlStr, index);
+    if (supportsUrl)
+    {
+        // If there is a non-GPB file that needs to be loaded later, add an 
+        // empty entry to the properties table to signify it.
+        if (str.length() > 0 && str.find(".") != std::string::npos && str.find(".gpb") == std::string::npos && _properties.count(str) == 0)
+        {
+            isUrl = true;
+            _properties[str] = NULL;
+        }
+    }
+
+    SceneNodeProperty prop(type, str, index, isUrl);
 
     // Parse for wildcharacter character (only supported on the URL attribute)
     if (type == SceneNodeProperty::URL)
     {
-        if (urlStr.length() > 1 && urlStr.at(urlStr.length()-1) == '*')
+        if (str.length() > 1 && str.at(str.length() - 1) == '*')
         {
-            prop._url = urlStr.substr(0, urlStr.length()-1);
+            prop._value = str.substr(0, str.length() - 1);
             sceneNode._exactMatch = false;
         }
     }
@@ -240,10 +248,10 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         snp._type == SceneNodeProperty::COLLISION_OBJECT)
     {
         // Check to make sure the referenced properties object was loaded properly.
-        Properties* p = _properties[snp._url];
+        Properties* p = _properties[snp._value];
         if (!p)
         {
-            GP_ERROR("The referenced node data at url '%s' failed to load.", snp._url.c_str());
+            GP_ERROR("The referenced node data at url '%s' failed to load.", snp._value.c_str());
             return;
         }
         p->rewind();
@@ -370,28 +378,26 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
     else
     {
         // Handle scale, rotate and translate.
-        Properties* np = sceneProperties->getNamespace(sceneNode._nodeID);
-
         switch (snp._type)
         {
         case SceneNodeProperty::TRANSLATE:
         {
             Vector3 t;
-            if (np && np->getVector3("translate", &t))
+            if (Properties::parseVector3(snp._value.c_str(), &t))
                 node->translate(t);
             break;
         }
         case SceneNodeProperty::ROTATE:
         {
             Quaternion r;
-            if (np && np->getQuaternionFromAxisAngle("rotate", &r))
+            if (Properties::parseAxisAngle(snp._value.c_str(), &r))
                 node->rotate(r);
             break;
         }
         case SceneNodeProperty::SCALE:
         {
             Vector3 s;
-            if (np && np->getVector3("scale", &s))
+            if (Properties::parseVector3(snp._value.c_str(), &s))
                 node->scale(s);
             break;
         }
@@ -427,7 +433,7 @@ void SceneLoader::applyNodeUrls(SceneNode& sceneNode, Node* parent)
 
         std::string file;
         std::string id;
-        splitURL(snp._url, &file, &id);
+        splitURL(snp._value, &file, &id);
 
         if (file.empty())
         {
@@ -716,11 +722,11 @@ void SceneLoader::parseNode(Properties* ns, SceneNode* parent, const std::string
     {
         if (strcmp(name, "url") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::URL, ns->getString());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::URL, ns->getString(), true);
         }
         else if (strcmp(name, "audio") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::AUDIO, ns->getString());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::AUDIO, ns->getString(), true);
         }
         else if (strncmp(name, "material", 8) == 0)
         {
@@ -732,27 +738,27 @@ void SceneLoader::parseNode(Properties* ns, SceneNode* parent, const std::string
                 indexString = indexString.substr(1, indexString.size()-2);
                 materialIndex = (unsigned int)atoi(indexString.c_str());
             }
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::MATERIAL, ns->getString(), materialIndex);
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::MATERIAL, ns->getString(), true, materialIndex);
         }
         else if (strcmp(name, "particle") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::PARTICLE, ns->getString());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::PARTICLE, ns->getString(), true);
         }
         else if (strcmp(name, "terrain") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::TERRAIN, ns->getString());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::TERRAIN, ns->getString(), true);
         }
         else if (strcmp(name, "light") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::LIGHT, ns->getString());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::LIGHT, ns->getString(), true);
         }
         else if (strcmp(name, "camera") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::CAMERA, ns->getString());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::CAMERA, ns->getString(), true);
         }
         else if (strcmp(name, "collisionObject") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::COLLISION_OBJECT, ns->getString());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::COLLISION_OBJECT, ns->getString(), true);
         }
         else if (strcmp(name, "rigidBodyModel") == 0)
         {
@@ -764,15 +770,15 @@ void SceneLoader::parseNode(Properties* ns, SceneNode* parent, const std::string
         }
         else if (strcmp(name, "translate") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::TRANSLATE);
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::TRANSLATE, ns->getString());
         }
         else if (strcmp(name, "rotate") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::ROTATE);
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::ROTATE, ns->getString());
         }
         else if (strcmp(name, "scale") == 0)
         {
-            addSceneNodeProperty(sceneNode, SceneNodeProperty::SCALE);
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::SCALE, ns->getString());
         }
         else
         {
@@ -1224,12 +1230,12 @@ void splitURL(const std::string& url, std::string* file, std::string* id)
 }
 
 SceneLoader::SceneNode::SceneNode()
-    : _nodeID(""), _exactMatch(true)
+    : _nodeID(""), _exactMatch(true), _namespace(NULL)
 {
 }
 
-SceneLoader::SceneNodeProperty::SceneNodeProperty(Type type, const std::string& url, int index)
-    : _type(type), _url(url), _index(index)
+SceneLoader::SceneNodeProperty::SceneNodeProperty(Type type, const std::string& value, int index, bool isUrl)
+    : _type(type), _value(value), _isUrl(isUrl), _index(index)
 {
 }
 

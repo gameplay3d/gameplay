@@ -16,9 +16,6 @@
     <None Include="res\ai.lua">
       <Filter>res</Filter>
     </None>
-    <None Include="res\arial.gpb">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\game.lua">
       <Filter>res</Filter>
     </None>

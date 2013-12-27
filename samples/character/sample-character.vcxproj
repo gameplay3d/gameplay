@@ -138,7 +138,7 @@
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\bullet\include;..\..\external-deps\lua\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,11 +155,12 @@
     <CustomBuildStep>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
-    <PostBuildEvent>
+    <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
 copy ..\..\gameplay\res\logo_powered_white.png res
 copy .\game.dxt.config .\game.config</Command>
-    </PostBuildEvent>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -198,7 +199,7 @@ copy .\game.dxt.config .\game.config</Command>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_WINDOWS;GP_USE_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\bullet\include;..\..\external-deps\lua\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -215,11 +216,12 @@ copy .\game.dxt.config .\game.config</Command>
     <CustomBuildStep>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
-    <PostBuildEvent>
+    <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
 copy ..\..\gameplay\res\logo_powered_white.png res
 copy .\game.dxt.config .\game.config</Command>
-    </PostBuildEvent>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
     <ClCompile>
@@ -276,11 +278,12 @@ copy .\game.dxt.config .\game.config</Command>
     <CustomBuildStep>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
-    <PostBuildEvent>
+    <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
 copy ..\..\gameplay\res\logo_powered_white.png res
 copy .\game.dxt.config .\game.config</Command>
-    </PostBuildEvent>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

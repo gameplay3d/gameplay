@@ -5,16 +5,24 @@
     ADD_SAMPLE("Graphics", "Text", TextSample, 9);
 #endif
 
-#define FONT_COUNT 6
+#define FONT_COUNT 5
 
 std::string _fontNames[] =
 {
     "arial",
-    "arial-distance",
+    "arial-dist.field",
     "badaboom",
     "fishfingers",
-    "neuropol",
-    "custom",
+    "neuropol"
+};
+
+std::string _fontFiles[] =
+{
+    "res/ui/arial.gpb",
+    "res/common/fonts/arial-distance.gpb",
+    "res/common/fonts/badaboom.gpb",
+    "res/common/fonts/fishfingers.gpb",
+    "res/common/fonts/neuropol.gpb"
 };
 
 TextSample::TextSample()
@@ -47,9 +55,7 @@ void TextSample::initialize()
 
     for (unsigned int i = 0; i < _fontsCount; i++)
     {
-        std::string s = "res/common/";
-        s += _fontNames[i].c_str();
-        s += ".gpb";
+        std::string s = _fontFiles[i].c_str();
         Font* f = Font::create(s.c_str());
         _fonts.push_back(f);
     }

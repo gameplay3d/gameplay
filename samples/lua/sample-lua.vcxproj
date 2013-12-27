@@ -143,7 +143,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\bullet\include;..\..\external-deps\lua\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,10 +151,6 @@
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x86;..\..\external-deps\bullet\lib\windows\x86;..\..\external-deps\openal\lib\windows\x86;..\..\external-deps\oggvorbis\lib\windows\x86;..\..\external-deps\glew\lib\windows\x86;..\..\external-deps\png\lib\windows\x86;..\..\external-deps\zlib\lib\windows\x86;..\..\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -163,6 +159,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -181,10 +182,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64;..\..\external-deps\bullet\lib\windows\x64;..\..\external-deps\openal\lib\windows\x64;..\..\external-deps\oggvorbis\lib\windows\x64;..\..\external-deps\glew\lib\windows\x64;..\..\external-deps\png\lib\windows\x64;..\..\external-deps\zlib\lib\windows\x64;..\..\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -205,7 +202,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessToFile>false</PreprocessToFile>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -213,10 +210,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x86;..\..\external-deps\bullet\lib\windows\x86;..\..\external-deps\openal\lib\windows\x86;..\..\external-deps\oggvorbis\lib\windows\x86;..\..\external-deps\glew\lib\windows\x86;..\..\external-deps\png\lib\windows\x86;..\..\external-deps\zlib\lib\windows\x86;..\..\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -225,6 +218,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
     <ClCompile>
@@ -245,10 +243,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64;..\..\external-deps\bullet\lib\windows\x64;..\..\external-deps\openal\lib\windows\x64;..\..\external-deps\oggvorbis\lib\windows\x64;..\..\external-deps\glew\lib\windows\x64;..\..\external-deps\png\lib\windows\x64;..\..\external-deps\zlib\lib\windows\x64;..\..\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -277,10 +271,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x86;..\..\external-deps\bullet\lib\windows\x86;..\..\external-deps\openal\lib\windows\x86;..\..\external-deps\oggvorbis\lib\windows\x86;..\..\external-deps\glew\lib\windows\x86;..\..\external-deps\png\lib\windows\x86;..\..\external-deps\zlib\lib\windows\x86;..\..\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -289,6 +279,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -309,10 +304,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64;..\..\external-deps\bullet\lib\windows\x64;..\..\external-deps\openal\lib\windows\x64;..\..\external-deps\oggvorbis\lib\windows\x64;..\..\external-deps\glew\lib\windows\x64;..\..\external-deps\png\lib\windows\x64;..\..\external-deps\zlib\lib\windows\x64;..\..\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
     <CustomBuildStep>
       <Command>
       </Command>
@@ -329,7 +320,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="game.config" />
     <None Include="icon.png" />
     <None Include="res\ai.lua" />
-    <None Include="res\arial.gpb" />
     <None Include="res\game.lua" />
     <None Include="res\lua.fbx" />
     <None Include="res\lua.gpb" />

@@ -130,7 +130,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\bullet\include;..\..\external-deps\lua\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,10 +150,11 @@
       <Outputs>
       </Outputs>
     </CustomBuildStep>
-    <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /u
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+      xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
 copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PostBuildEvent>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -193,7 +194,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_WINDOWS;GP_USE_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\bullet\include;..\..\external-deps\lua\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -213,10 +214,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
-    <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /u
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+      xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+      copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
     <ClCompile>
@@ -279,10 +281,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
-    <PostBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /u
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+      xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+      copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -322,9 +325,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="icon.png" />
     <None Include="res\airstrip.gpb" />
     <None Include="res\background.ogg" />
-    <None Include="res\challenge.form" />
-    <None Include="res\menu.form" />
-    <None Include="res\menu.theme" />
     <None Include="res\shaders\colored.frag" />
     <None Include="res\shaders\colored.vert" />
     <None Include="res\shaders\font.frag" />
@@ -354,7 +354,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\background.png" />
-    <Image Include="res\menuAtlas.png" />
     <Image Include="res\propulsion_glow.png" />
   </ItemGroup>
   <ItemGroup>

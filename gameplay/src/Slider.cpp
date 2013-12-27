@@ -278,8 +278,6 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
-    bool eventConsumed = false;
-
     switch (evt)
     {
         case Gamepad::JOYSTICK_EVENT:

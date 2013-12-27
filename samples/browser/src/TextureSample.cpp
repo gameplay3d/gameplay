@@ -49,7 +49,7 @@ TextureSample::TextureSample()
 void TextureSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Create an empty scene.
     _scene = Scene::create();
