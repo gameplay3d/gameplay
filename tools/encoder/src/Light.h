@@ -44,12 +44,9 @@ public:
     void setColor(float r, float g, float b);
     void setColor(float r, float g, float b, float a);
 
-    void setConstantAttenuation(float value);
-    void setLinearAttenuation(float value);
-    void setQuadraticAttenuation(float value);
+    void setRange(float value);
     void setInnerAngle(float value);
     void setOuterAngle(float value);
-    void setFalloffExponent(float value);
 
     enum LightType
     {
@@ -66,11 +63,6 @@ private:
     
     unsigned char _lightType;
     float _color[COLOR_SIZE];
-
-    float _constantAttenuation;
-    float _linearAttenuation;
-    float _quadraticAttenuation;
-    float _falloffExponent;
 
     float _range;
     float _innerAngle;

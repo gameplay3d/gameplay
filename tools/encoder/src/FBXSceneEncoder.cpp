@@ -770,75 +770,66 @@ void FBXSceneEncoder::loadLight(FbxNode* fbxNode, Node* node)
     FbxDouble3 color = fbxLight->Color.Get();
     light->setColor((float)color[0], (float)color[1], (float)color[2]);
     
+    float range;
+    if( fbxLight->EnableFarAttenuation.Get() ) {
+        // If FarAttenuation is enabled, that gives us range directly
+        range = (float)fbxLight->FarAttenuationEnd.Get();
+    } else {
+        // Otherwise, we need to fit a decay type to calculate range
+        // For each attenuation type, the range at which the intensity falls to 1/100 can be computed as:
+        //
+        // Linear:      1/100 = I/(a*r)     =>    r = 100*I/a
+        // Quadratic:   1/100 = I/(a*r^2)   =>    r = sqrt(100*I/a)
+        // Cubic:       1/100 = I/(a*r^3)   =>    r = pow(100*I/a,1/3.0)
+        float attenuation = fbxLight->DecayStart.Get();
+        float intensity = fbxLight->Intensity.Get()/100.0f;
+        switch( fbxLight->DecayType.Get() ) {
+            case FbxLight::eLinear:
+                range = 100.0f*intensity/attenuation;
+                break;
+            case FbxLight::eQuadratic:
+                range = 10.0f*sqrtf(intensity/attenuation);
+                break;
+            case FbxLight::eCubic:
+                range = pow(100.0f*intensity/attenuation,1/3.0);
+                break;
+            case FbxLight::eNone:
+                // We don't support no attenuation; set range to 1.0f by default
+                range = 1.0f;
+                break;
+        }
+    }
+    
     switch (fbxLight->LightType.Get())
     {
-    case FbxLight::ePoint:
-    {
-        FbxLight::EDecayType decayType = fbxLight->DecayType.Get();
-        switch (decayType)
+        case FbxLight::ePoint:
         {
-        case FbxLight::eNone:
-            // FBX does not support ambients lights so ambient lights are converted 
-            // to point lights with no decay and visibility set to false.
-            if (fbxNode->GetVisibility())
-            {
-                light->setPointLight();
-            }
-            else
-            {
+            FbxLight::EDecayType decayType = fbxLight->DecayType.Get();
+            if( decayType == FbxLight::eNone && !fbxNode->GetVisibility() )
                 light->setAmbientLight();
+            else {
+                light->setPointLight();
+                light->setRange(range);
             }
-            break;
-        case FbxLight::eLinear:
-            light->setPointLight();
-            light->setLinearAttenuation((float)fbxLight->DecayStart.Get());
-            break;
-        case FbxLight::eQuadratic:
-            light->setPointLight();
-            light->setQuadraticAttenuation((float)fbxLight->DecayStart.Get());
-            break;
-        case FbxLight::eCubic:
-        default:
-            // Not supported..
-            break;
         }
-        break;
-    }
-    case FbxLight::eDirectional:
-    {
-        light->setDirectionalLight();
-        break;
-    }
-    case FbxLight::eSpot:
-    {
-        light->setSpotLight();
-
-        FbxLight::EDecayType decayType = fbxLight->DecayType.Get();
-        switch (decayType)
+        case FbxLight::eDirectional:
         {
-        case FbxLight::eNone:
-            // No decay.
-            break;
-        case FbxLight::eLinear:
-            light->setLinearAttenuation((float)fbxLight->DecayStart.Get());
-            break;
-        case FbxLight::eQuadratic:
-            light->setQuadraticAttenuation((float)fbxLight->DecayStart.Get());
-            break;
-        case FbxLight::eCubic:
-            // Not supported..
+            light->setDirectionalLight();
             break;
         }
-
-        light->setInnerAngle(MATH_DEG_TO_RAD((float)fbxLight->InnerAngle.Get()));
-        light->setOuterAngle(MATH_DEG_TO_RAD((float)fbxLight->OuterAngle.Get()));
-        break;
-    }
-    default:
-    {
-        LOG(2, "Warning: Unknown light type in node.\n");
-        return;
-    }
+        case FbxLight::eSpot:
+        {
+            light->setSpotLight();
+            light->setInnerAngle(MATH_DEG_TO_RAD((float)fbxLight->InnerAngle.Get()));
+            light->setOuterAngle(MATH_DEG_TO_RAD((float)fbxLight->OuterAngle.Get()));
+            light->setRange(range);
+            break;
+        }
+        default:
+        {
+            LOG(2, "Warning: Unknown light type in node.\n");
+            return;
+        }
     }
 
     _gamePlayFile.addLight(light);
