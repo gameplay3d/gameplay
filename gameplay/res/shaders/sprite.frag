@@ -1,5 +1,9 @@
 #ifdef OPENGL_ES
+#ifdef OPENGL_ES_MEDIUMP
+precision mediump float;
+#else
 precision highp float;
+#endif
 #endif
 
 ///////////////////////////////////////////////////////////

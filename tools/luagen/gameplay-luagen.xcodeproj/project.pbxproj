@@ -210,10 +210,10 @@
 		42B7F6EB15B06E85002BB8C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "../external-deps/tinyxml2/include";
+				HEADER_SEARCH_PATHS = "../../external-deps/tinyxml2/include";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/tinyxml2/lib/macosx\"",
+					"../../external-deps/tinyxml2/lib/macosx",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -222,10 +222,10 @@
 		42B7F6EC15B06E85002BB8C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "../external-deps/tinyxml2/include";
+				HEADER_SEARCH_PATHS = "../../external-deps/tinyxml2/include";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/tinyxml2/lib/macosx\"",
+					"../../external-deps/tinyxml2/lib/macosx",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
