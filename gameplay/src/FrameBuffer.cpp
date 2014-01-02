@@ -285,18 +285,17 @@ FrameBuffer* FrameBuffer::bind()
 void FrameBuffer::getScreenshot(Image* image)
 {
 	GP_ASSERT(image);
-	GP_ASSERT(image->getFormat() == Image::RGBA);
 
 	unsigned int width = _currentFrameBuffer->getWidth();
 	unsigned int height = _currentFrameBuffer->getHeight();
 
 	if (image->getWidth() == width && image->getHeight() == height)
-		GL_ASSERT( glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, image->getData()) );
+		GL_ASSERT( glReadPixels(0, 0, width, height, (image->getFormat() == Image::RGBA ? GL_RGBA : GL_RGB), GL_UNSIGNED_BYTE, image->getData()) );
 }
 
-Image* FrameBuffer::createScreenshot()
+Image* FrameBuffer::createScreenshot(Image::Format format)
 {
-	Image* screenshot = Image::create(_currentFrameBuffer->getWidth(), _currentFrameBuffer->getHeight(), Image::RGBA, NULL);
+	Image* screenshot = Image::create(_currentFrameBuffer->getWidth(), _currentFrameBuffer->getHeight(), format, NULL);
 	getScreenshot(screenshot);
 
 	return screenshot;
