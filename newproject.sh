@@ -220,6 +220,7 @@ aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/bar-descriptor.xml"
 aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/bar-descriptor.xml"
 aliassedinplace "s*TEMPLATE_AUTHOR*$author*g" "$projPath/bar-descriptor.xml"
 aliassedinplace "s*TEMPLATE_DESCRIPTION*$desc*g" "$projPath/bar-descriptor.xml"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/bar-descriptor.xml"
 
 #############################################
 # Copy Android NDK project files

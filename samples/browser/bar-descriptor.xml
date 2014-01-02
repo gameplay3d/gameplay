@@ -27,8 +27,7 @@
     <description>Samples</description>
 
     <!-- Name of author which is used for signing. Must match the developer name of your development certificate. -->
-    <author>Steve Grenier</author>
-    <authorId>gYAAgKe4iG8txlFg4PTJpbImmxI</authorId>
+    <author>RIM Canada</author>
 
     <!-- Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
@@ -45,6 +44,7 @@
     <asset path="icon.png">icon.png</asset>
 	<asset path="game.config">game.config</asset>
     <asset path="../../gameplay/res/shaders">res/shaders</asset>
+    <asset path="../../gameplay/res/ui">res/ui</asset>
 	<asset path="res/common">res/common</asset>
 	<asset path="res/png">res/png</asset>
 

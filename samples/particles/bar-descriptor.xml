@@ -42,7 +42,6 @@
     <category>core.games</category>
 
     <asset path="icon.png">icon.png</asset>
-    <asset path="res/arial.gpb">res/arial.gpb</asset>
     <asset path="res/editor.form">res/editor.form</asset>
     <asset path="res/editor.png">res/editor.png</asset>
     <asset path="res/editor.theme">res/editor.theme</asset>
@@ -55,6 +54,7 @@
     <asset path="res/smoke.png">res/smoke.png</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
     <asset path="../../gameplay/res/shaders">res/shaders</asset>
+    <asset path="../../gameplay/res/ui">res/ui</asset>
 
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

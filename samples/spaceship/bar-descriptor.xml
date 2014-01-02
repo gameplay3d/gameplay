@@ -22,12 +22,8 @@
   <asset path="res/propulsion_glow.png">res/propulsion_glow.png</asset>
   <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
   <asset path="../../gameplay/res/shaders">res/shaders</asset>
+  <asset path="../../gameplay/res/ui">res/ui</asset>
   <asset path="game.config">game.config</asset>
-  <asset path="res/menu.form">res/menu.form</asset>
-  <asset path="res/menu.theme">res/menu.theme</asset>
-  <asset path="res/menuAtlas.png">res/menuAtlas.png</asset>
-  <asset path="res/challenge.form">res/challenge.form</asset>
-  <asset path="scoreloop">scoreloop</asset>
   <configuration name="Device-Debug">
     <platformArchitecture>armle-v7</platformArchitecture>
     <asset path="Device-Debug/sample-spaceship" entry="true" type="Qnx/Elf">sample-spaceship</asset>

@@ -23,7 +23,6 @@ link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/glew/lib/linux/${ARCH_DIR}
 )
 
-
 set(GAMEPLAY_LIBRARIES
     gameplay
     m
@@ -56,5 +55,3 @@ add_subdirectory(mesh)
 add_subdirectory(particles)
 add_subdirectory(racer)
 add_subdirectory(spaceship)
-
-
