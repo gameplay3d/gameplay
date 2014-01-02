@@ -203,6 +203,7 @@ call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_TITLE "%title%"
 call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_UUID "%uuid%"
 call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_AUTHOR "%author%"
 call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_DESCRIPTION "%desc%"
+call:replace "%projPath%\bar-descriptor.xml" GAMEPLAY_PATH "%gpPath%"
 
 REM Copy Android NDK project files
 mkdir "%projPath%\android"
