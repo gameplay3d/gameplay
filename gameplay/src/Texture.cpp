@@ -48,7 +48,7 @@ namespace gameplay
 {
 
 static std::vector<Texture*> __textureCache;
-static TextureHandle __currentTextureId;
+static TextureHandle __currentTextureId = 0;
 static Texture::Type __currentTextureType = Texture::TEX_2D;
 
 Texture::Texture() : _handle(0), _format(UNKNOWN), _type(TEX_UNKNOWN), _width(0), _height(0), _mipmapped(false), _cached(false), _compressed(false),
@@ -69,7 +69,7 @@ Texture::~Texture()
 	{
 		for(unsigned int i = 0; i < 6; i++)
 		{
-			GP_ASSERT(_cubeFaces[i]->getRefCount() == 1);
+			GP_ASSERT( _cubeFaces[i]->getRefCount() == 1 );
 			SAFE_RELEASE(_cubeFaces[i]);
 		}
 		SAFE_DELETE_ARRAY(_cubeFaces);
@@ -88,13 +88,13 @@ Texture::~Texture()
 
 Texture* Texture::create(const char* path, bool generateMipmaps)
 {
-    GP_ASSERT(path);
+    GP_ASSERT( path );
 
     // Search texture cache first.
     for (size_t i = 0, count = __textureCache.size(); i < count; ++i)
     {
         Texture* t = __textureCache[i];
-        GP_ASSERT(t);
+        GP_ASSERT( t );
         if (t->_path == path)
         {
             // If 'generateMipmaps' is true, call Texture::generateMipamps() to force the 
@@ -158,7 +158,7 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
 
 Texture* Texture::create(Image* image, bool generateMipmaps)
 {
-    GP_ASSERT(image);
+    GP_ASSERT( image );
 
     switch (image->getFormat())
     {
@@ -249,7 +249,7 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
 
 Texture* Texture::create(TextureHandle handle, int width, int height, Format format)
 {
-    GP_ASSERT(handle);
+    GP_ASSERT( handle );
 
     Texture* texture = new Texture();
     texture->_handle = handle;
@@ -269,7 +269,7 @@ Texture* Texture::create(TextureHandle handle, int width, int height, Format for
 		}
 
 		// Restore the texture id
-		GL_ASSERT(glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId));
+		GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
 	}
     texture->_width = width;
     texture->_height = height;
@@ -385,17 +385,20 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     // Free data.
     SAFE_DELETE_ARRAY(data);
 
+	// Restore the texture id
+	GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
+
     return texture;
 }
 
 GLubyte* Texture::readCompressedPVRTC(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount)
 {
-    GP_ASSERT(stream);
-    GP_ASSERT(path);
-    GP_ASSERT(width);
-    GP_ASSERT(height);
-    GP_ASSERT(format);
-    GP_ASSERT(mipMapCount);
+    GP_ASSERT( stream );
+    GP_ASSERT( path );
+    GP_ASSERT( width );
+    GP_ASSERT( height );
+    GP_ASSERT( format );
+    GP_ASSERT( mipMapCount );
 
     struct pvrtc_file_header
     {
@@ -582,7 +585,7 @@ int Texture::getMaskByteIndex(unsigned int mask)
 
 Texture* Texture::createCompressedDDS(const char* path)
 {
-    GP_ASSERT(path);
+    GP_ASSERT( path );
 
     // DDS file structures.
     struct dds_pixel_format
@@ -890,6 +893,9 @@ Texture* Texture::createCompressedDDS(const char* path)
     // Clean up mip levels structure.
     SAFE_DELETE_ARRAY(mipLevels);
 
+	// Restore the texture id
+	GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
+
     return texture;
 }
 
@@ -995,6 +1001,9 @@ void Texture::generateMipmaps()
 					_cubeFaces[i]->_mipmapped = true;
 			}
 		}
+
+		// Restore the texture id
+		GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
     }
 }
 
@@ -1011,7 +1020,7 @@ bool Texture::isCompressed() const
 Texture::Sampler::Sampler(Texture* texture)
     : _texture(texture), _wrapS(Texture::REPEAT), _wrapT(Texture::REPEAT), _wrapR(Texture::REPEAT)
 {
-    GP_ASSERT(texture);
+    GP_ASSERT( texture );
     _minFilter = texture->_minFilter;
     _magFilter = texture->_magFilter;
 }
@@ -1023,9 +1032,9 @@ Texture::Sampler::~Sampler()
 
 Texture::Sampler* Texture::Sampler::create(Texture* texture)
 {
-    GP_ASSERT(texture);
-	GP_ASSERT(texture->_type == Texture::TEX_2D || texture->_type == Texture::TEX_CUBE);
-	GP_ASSERT(texture->_cubeFace == Texture::NOT_A_FACE);
+    GP_ASSERT( texture );
+	GP_ASSERT( texture->_type == Texture::TEX_2D || texture->_type == Texture::TEX_CUBE );
+	GP_ASSERT( texture->_cubeFace == Texture::NOT_A_FACE );
     texture->addRef();
     return new Sampler(texture);
 }
@@ -1056,10 +1065,15 @@ Texture* Texture::Sampler::getTexture() const
 
 void Texture::Sampler::bind()
 {
-    GP_ASSERT(_texture);
+    GP_ASSERT( _texture );
 
 	GLenum target = _texture->_type == Texture::TEX_2D && _texture->_cubeFace == Texture::NOT_A_FACE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP;
-	GL_ASSERT( glBindTexture(target, _texture->_handle) );
+	if (__currentTextureId != _texture->_handle)
+	{
+		GL_ASSERT( glBindTexture(target, _texture->_handle) );
+		__currentTextureId = _texture->_handle;
+		__currentTextureType = _texture->_type;
+	}
 
     if (_texture->_minFilter != _minFilter)
     {

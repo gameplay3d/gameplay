@@ -13,7 +13,7 @@ TextureCubeSample::TextureCubeSample()
 void TextureCubeSample::initialize()
 {
 	// Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
 	// Load game scene from file
     _scene = Scene::load("res/common/cubeenv.gpb");
@@ -86,10 +86,9 @@ Material* createDefaultMaterial(Properties* prop, Node* lightNode)
 	Light* light = lightNode->getLight();
 
 	Material* def = Material::create(prop);
-	def->getParameter("u_pointLightPosition")->bindValue(lightNode, &Node::getTranslationView);
-	def->getParameter("u_pointLightRangeInverse")->bindValue(light, &Light::getRangeInverse);
-	def->getParameter("u_lightColor")->bindValue(light, &Light::getColor);
-	def->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
+	def->getParameter("u_pointLightPosition[0]")->bindValue(lightNode, &Node::getTranslationView);
+	def->getParameter("u_pointLightRangeInverse[0]")->bindValue(light, &Light::getRangeInverse);
+	def->getParameter("u_pointLightColor[0]")->bindValue(light, &Light::getColor);
 
 	return def;
 }

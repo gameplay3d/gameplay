@@ -1,18 +1,5 @@
 material base
 {
-    // uniforms
-    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-    u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-    u_worldViewMatrix = WORLD_VIEW_MATRIX
-    u_ambientColor = 0.0, 0.0, 0.0
-
-    // render state
-    renderState
-    {
-        cullFace = true
-        depthTest = true
-    }
-
     technique
     {
         pass
@@ -20,62 +7,111 @@ material base
             // shaders
             vertexShader = res/shaders/colored.vert
             fragmentShader = res/shaders/colored.frag
-            defines = POINT_LIGHT
+            defines = POINT_LIGHT_COUNT 1
+
+            // uniforms
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_worldViewMatrix = WORLD_VIEW_MATRIX
+            u_ambientColor = SCENE_AMBIENT_COLOR
+
+            // render state
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
         }
     }
 }
 
 material default : base
 {
-    u_diffuseColor = 0.5, 0.5, 0.5, 1.0
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.5, 0.5, 0.5, 1.0
+        }
+    }
 }
 
 material couch : base
 {
-    u_diffuseColor = 0.921569, 0.0361399, 0.0361399, 1.0
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.921569, 0.0361399, 0.0361399, 1.0
+        }
+    }
 }
 
 material random : base
 {
-    u_diffuseColor = 0.134948, 0.764706, 0.179943, 1.0
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.134948, 0.764706, 0.179943, 1.0
+        }
+    }
 }
 
 material random2 : base
 {
-    u_diffuseColor = 0.0, 0.0, 1.0, 1.0
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.0, 0.0, 1.0, 1.0
+        }
+    }
 }
 
 material table : base
 {
-    u_diffuseColor = 0.607843, 0.313685, 0.0, 1.0
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.607843, 0.313685, 0.0, 1.0
+        }
+    }
 }
 
 material me : base
 {
-    u_diffuseColor = 1.0, 1.0, 0.0, 1.0
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 1.0, 1.0, 0.0, 1.0
+        }
+    }
 }
 
 material almighty_sphere
 {
-    // uniforms
-    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-    u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-    u_worldMatrix = WORLD_MATRIX
-
-    // render state
-    renderState
-    {
-        cullFace = true
-        depthTest = true
-    }
-	
     technique
     {
         pass
         {
             // shaders
-            vertexShader = res/common/shaders/cubemap.vert
-            fragmentShader = res/common/shaders/cubemap.frag
+            vertexShader = res/shaders/cubemap.vert
+            fragmentShader = res/shaders/cubemap.frag
+
+            // uniforms
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            u_worldMatrix = WORLD_MATRIX
+
+            // render state
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
         }
     }
 }
