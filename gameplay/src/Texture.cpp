@@ -101,21 +101,15 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
 
     Texture* texture = NULL;
 
-    // Filter loading based on file extension.
+    // Try compressed formats firstly.
     const char* ext = strrchr(FileSystem::resolvePath(path), '.');
     if (ext)
     {
+        // Filter loading based on file extension.
         switch (strlen(ext))
         {
         case 4:
-            if (tolower(ext[1]) == 'p' && tolower(ext[2]) == 'n' && tolower(ext[3]) == 'g')
-            {
-                Image* image = Image::create(path);
-                if (image)
-                    texture = create(image, generateMipmaps);
-                SAFE_RELEASE(image);
-            }
-            else if (tolower(ext[1]) == 'p' && tolower(ext[2]) == 'v' && tolower(ext[3]) == 'r')
+            if (tolower(ext[1]) == 'p' && tolower(ext[2]) == 'v' && tolower(ext[3]) == 'r')
             {
                 // PowerVR Compressed Texture RGBA.
                 texture = createCompressedPVRTC(path);
@@ -128,6 +122,15 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
             break;
         }
     }
+
+	// If not compressed format, try Image loader.
+	if (!texture)
+	{
+		Image* image = Image::create(path);
+		if (image)
+			texture = create(image, generateMipmaps);
+		SAFE_RELEASE(image);
+	}
 
     if (texture)
     {

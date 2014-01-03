@@ -194,9 +194,6 @@ extern int strcmpnocase(const char* s1, const char* s2);
 #endif
 #include <vorbis/vorbisfile.h>
 
-// Image
-#include <png.h>
-
 // Scripting
 using std::va_list;
 #include <lua.hpp>
