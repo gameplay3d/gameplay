@@ -1,8 +1,8 @@
 #ifdef OPENGL_ES
-#ifdef OPENGL_ES_MEDIUMP
-precision mediump float;
-#else
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
 #endif
 #endif
 
