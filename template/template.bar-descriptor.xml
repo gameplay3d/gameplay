@@ -43,6 +43,8 @@
 
     <asset path="icon.png">icon.png</asset>
     <asset path="res">res</asset>
+    <asset path="GAMEPLAY_PATH/gameplay/res/shaders">res/shaders</asset>
+    <asset path="GAMEPLAY_PATH/gameplay/res/ui">res/ui</asset>
 
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

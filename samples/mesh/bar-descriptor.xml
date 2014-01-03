@@ -42,13 +42,13 @@
     <category>core.games</category>
     
     <asset path="icon.png">icon.png</asset>
-    <asset path="res/arial.gpb">res/arial.gpb</asset>
     <asset path="res/duck.png">res/duck.png</asset>
     <asset path="res/mesh.scene">res/mesh.scene</asset>
     <asset path="res/mesh.gpb">res/mesh.gpb</asset>
     <asset path="res/mesh.material">res/mesh.material</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
     <asset path="../../gameplay/res/shaders">res/shaders</asset>
+    <asset path="../../gameplay/res/ui">res/ui</asset>
     <asset path="game.config">game.config</asset>
     
     <configuration name="Device-Debug">
