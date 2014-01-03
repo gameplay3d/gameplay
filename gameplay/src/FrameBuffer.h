@@ -155,9 +155,10 @@ public:
 	/**
 	 * Records a screenshot of what is stored on the current FrameBuffer.
 	 *
+	 * @param format The format the Image should be in.
 	 * @return A screenshot of the current framebuffer's content.
 	 */
-	static Image* createScreenshot();
+	static Image* createScreenshot(Image::Format format = Image::RGBA);
 
 	/**
 	 * Records a screenshot of what is stored on the current FrameBuffer to an Image.
