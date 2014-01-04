@@ -1,8 +1,8 @@
 #ifdef OPENGL_ES
-#ifdef OPENGL_ES_MEDIUMP
-precision mediump float;
-#else
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
 #endif
 #endif
 
@@ -112,6 +112,7 @@ void main()
     
     #if defined(VERTEX_COLOR)
     gl_FragColor.rgb = v_color;
+    gl_FragColor.a = 1.0;
     #else
     gl_FragColor = u_diffuseColor;
     #endif
