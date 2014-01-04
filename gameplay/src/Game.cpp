@@ -20,7 +20,7 @@ static Game* __gameInstance = NULL;
 double Game::_pausedTimeLast = 0.0;
 double Game::_pausedTimeTotal = 0.0;
 
-Game::Game()
+Game::Game(const char* configFile)
     : _initialized(false), _state(UNINITIALIZED), _pausedCount(0),
       _frameLastFPS(0), _frameCount(0), _frameRate(0), _width(0), _height(0),
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
@@ -31,11 +31,14 @@ Game::Game()
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
+    _configFile = strdup(configFile);
 }
 
 Game::~Game()
 {
 	SAFE_DELETE(_scriptController);
+    if (_configFile)
+        free(_configFile);
 
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
@@ -600,9 +603,9 @@ void Game::loadConfig()
     if (_properties == NULL)
     {
         // Try to load custom config from file.
-        if (FileSystem::fileExists("game.config"))
+        if (FileSystem::fileExists(_configFile))
         {
-            _properties = Properties::create("game.config");
+            _properties = Properties::create(_configFile);
 
             // Load filesystem aliases.
             Properties* aliases = _properties->getNamespace("aliases", true);

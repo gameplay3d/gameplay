@@ -611,8 +611,10 @@ protected:
 
     /**
      * Constructor.
+     *
+     * @param configFile Name of the game configuration file. The default value is "game.config".
      */
-    Game();
+    Game(const char* configFile = "game.config");
 
     /**
      * Initialize callback that is called just before the first frame when the game starts.
@@ -766,6 +768,7 @@ private:
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
     ScriptController* _scriptController;            // Controls the scripting engine.
     std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.
+    char* _configFile; // Name of the game configuration file
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 
