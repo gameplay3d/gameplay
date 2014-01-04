@@ -26,12 +26,12 @@ void calculateNamespacePath(const std::string& urlString, std::string& fileStrin
 Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath);
 
 Properties::Properties()
-    : _dirPath(NULL), _parent(NULL)
+    : _variables(NULL), _dirPath(NULL), _parent(NULL)
 {
 }
 
 Properties::Properties(const Properties& copy)
-    : _namespace(copy._namespace), _id(copy._id), _parentID(copy._parentID), _properties(copy._properties), _dirPath(NULL), _parent(copy._parent)
+    : _namespace(copy._namespace), _id(copy._id), _parentID(copy._parentID), _properties(copy._properties), _variables(NULL), _dirPath(NULL), _parent(copy._parent)
 {
     setDirectoryPath(copy._dirPath);
     _namespaces = std::vector<Properties*>();
@@ -45,14 +45,14 @@ Properties::Properties(const Properties& copy)
 }
 
 Properties::Properties(Stream* stream)
-    : _dirPath(NULL), _parent(NULL)
+    : _variables(NULL), _dirPath(NULL), _parent(NULL)
 {
     readProperties(stream);
     rewind();
 }
 
 Properties::Properties(Stream* stream, const char* name, const char* id, const char* parentID, Properties* parent)
-    : _namespace(name), _dirPath(NULL), _parent(parent)
+    : _namespace(name), _variables(NULL), _dirPath(NULL), _parent(parent)
 {
     if (id)
     {
@@ -112,11 +112,28 @@ Properties* Properties::create(const char* url)
     return p;
 }
 
+static bool isVariable(const char* str, char* outName, size_t outSize)
+{
+    size_t len = strlen(str);
+    if (len > 3 && str[0] == '$' && str[1] == '{' && str[len - 1] == '}')
+    {
+        size_t size = len - 3;
+        if (size > (outSize - 1))
+            size = outSize - 1;
+        strncpy(outName, str + 2, len - 3);
+        outName[len - 3] = 0;
+        return true;
+    }
+
+    return false;
+}
+
 void Properties::readProperties(Stream* stream)
 {
     GP_ASSERT(stream);
 
     char line[2048];
+    char variable[256];
     int c;
     char* name;
     char* value;
@@ -169,9 +186,6 @@ void Properties::readProperties(Stream* stream)
             rc = strchr(line, '=');
             if (rc != NULL)
             {
-                // There could be a '}' at the end of the line, ending a namespace.
-                rc = strchr(line, '}');
-
                 // First token should be the property name.
                 name = strtok(line, "=");
                 if (name == NULL)
@@ -194,13 +208,15 @@ void Properties::readProperties(Stream* stream)
                 // Remove white-space from value.
                 value = trimWhiteSpace(value);
 
-                // Store name/value pair.
-                _properties.push_back(Property(name, value));
-
-                if (rc != NULL)
+                // Is this a variable assignment?
+                if (isVariable(name, variable, 256))
                 {
-                    // End of namespace.
-                    return;
+                    setVariable(variable, value);
+                }
+                else
+                {
+                    // Normal name/value pair
+                    _properties.push_back(Property(name, value));
                 }
             }
             else
@@ -369,6 +385,8 @@ Properties::~Properties()
     {
         SAFE_DELETE(_namespaces[i]);
     }
+
+    SAFE_DELETE(_variables);
 }
 
 void Properties::skipWhiteSpace(Stream* stream)
@@ -695,20 +713,42 @@ Properties::Type Properties::getType(const char* name) const
 
 const char* Properties::getString(const char* name, const char* defaultValue) const
 {
+    char variable[256];
+    const char* value = NULL;
+
     if (name)
     {
+        // If 'name' is a variable, return the variable value
+        if (isVariable(name, variable, 256))
+        {
+            return getVariable(variable, defaultValue);
+        }
+
         for (std::list<Property>::const_iterator itr = _properties.begin(); itr != _properties.end(); ++itr)
         {
             if (itr->name == name)
-                return itr->value.c_str();
+            {
+                value = itr->value.c_str();
+                break;
+            }
         }
     }
     else
     {
+        // No name provided - get the value at the current iterator position
         if (_propertiesItr != _properties.end())
         {
-            return _propertiesItr->value.c_str();
+            value = _propertiesItr->value.c_str();
         }
+    }
+
+    if (value)
+    {
+        // If the value references a variable, return the variable value
+        if (isVariable(value, variable, 256))
+            return getVariable(variable, defaultValue);
+
+        return value;
     }
 
     return defaultValue;
@@ -902,6 +942,65 @@ bool Properties::getPath(const char* name, std::string* path) const
         }
     }
     return false;
+}
+
+const char* Properties::getVariable(const char* name, const char* defaultValue) const
+{
+    if (name == NULL)
+        return defaultValue;
+
+    // Search for variable in this Properties object
+    if (_variables)
+    {
+        for (size_t i = 0, count = _variables->size(); i < count; ++i)
+        {
+            Property& prop = (*_variables)[i];
+            if (prop.name == name)
+                return prop.value.c_str();
+        }
+    }
+
+    // Search for variable in parent Properties
+    return _parent ? _parent->getVariable(name, defaultValue) : defaultValue;
+}
+
+void Properties::setVariable(const char* name, const char* value)
+{
+    GP_ASSERT(name);
+
+    Property* prop = NULL;
+
+    // Search for variable in this Properties object and parents
+    Properties* current = const_cast<Properties*>(this);
+    while (current)
+    {
+        if (current->_variables)
+        {
+            for (size_t i = 0, count = current->_variables->size(); i < count; ++i)
+            {
+                Property* p = &(*current->_variables)[i];
+                if (p->name == name)
+                {
+                    prop = p;
+                    break;
+                }
+            }
+        }
+        current = current->_parent;
+    }
+
+    if (prop)
+    {
+        // Found an existing property, set it
+        prop->value = value ? value : "";
+    }
+    else
+    {
+        // Add a new variable with this name
+        if (!_variables)
+            _variables = new std::vector<Property>();
+        _variables->push_back(Property(name, value ? value : ""));
+    }
 }
 
 Properties* Properties::clone()
