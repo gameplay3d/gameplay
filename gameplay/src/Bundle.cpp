@@ -1007,14 +1007,17 @@ Model* Bundle::readModel(const char* nodeId)
                 {
                     std::string materialName = readString(_stream);
                     std::string materialPath = getMaterialPath();
-                    materialPath.append("#");
-                    materialPath.append(materialName);
-                    Material* material = Material::create(materialPath.c_str());
-                    if (material)
+                    if (materialPath.length() > 0)
                     {
-                        int partIndex = model->getMesh()->getPartCount() > 0 ? i : -1;
-                        model->setMaterial(material, partIndex);
-                        SAFE_RELEASE(material);
+                        materialPath.append("#");
+                        materialPath.append(materialName);
+                        Material* material = Material::create(materialPath.c_str());
+                        if (material)
+                        {
+                            int partIndex = model->getMesh()->getPartCount() > 0 ? i : -1;
+                            model->setMaterial(material, partIndex);
+                            SAFE_RELEASE(material);
+                        }
                     }
                 }
             }

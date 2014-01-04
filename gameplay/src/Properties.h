@@ -415,6 +415,26 @@ public:
     bool getPath(const char* name, std::string* path) const;
 
     /**
+     * Returns the value of a variable that is set in this Properties object.
+     *
+     * Variables take on the format ${name} and are inherited from parent Property objects.
+     *
+     * @param name Name of the variable to get.
+     * @param defaultValue Value to return if the variable is not found.
+     *
+     * @return The value of the specified variable, or defaultValue if not found.
+     */
+    const char* getVariable(const char* name, const char* defaultValue = NULL) const;
+
+    /**
+     * Sets the value of the specified variable.
+     *
+     * @param name Name of the variable to set.
+     * @param value The value to set.
+     */
+    void setVariable(const char* name, const char* value);
+
+    /**
      * Attempts to parse the specified string as a Vector2 value.
      *
      * On error, false is returned and the output is set to all zero values.
@@ -541,6 +561,7 @@ private:
     std::list<Property>::iterator _propertiesItr;
     std::vector<Properties*> _namespaces;
     std::vector<Properties*>::const_iterator _namespacesItr;
+    std::vector<Property>* _variables;
     std::string* _dirPath;
     Properties* _parent;
 };
