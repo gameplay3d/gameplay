@@ -28,7 +28,7 @@ public:
      * Creates a new RadioButton.
      *
      * @param id The radio button ID.
-     * @param id The radio button style (optional).
+     * @param style The radio button style (optional).
      *
      * @return The new radio button.
      * @script{create}

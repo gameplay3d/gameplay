@@ -301,13 +301,6 @@ protected:
      */
     unsigned int _valueTextPrecision;
 
-    /**
-     * The text displayed by this slider if set to display its value.
-     */
-    std::string _valueText;
-
-    float _gamepadValue;
-
 private:
 
     /**
@@ -317,6 +310,12 @@ private:
 
     void updateValue(int x, int y);
 
+    /**
+     * The text displayed by this slider if set to display its value.
+     */
+    std::string _valueText;
+
+    float _gamepadValue;
 };
 
 }
