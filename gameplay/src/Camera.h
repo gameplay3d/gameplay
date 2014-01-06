@@ -43,8 +43,7 @@ public:
         /**
          * Handles when an camera settings change or the transform changed for the node its attached to.
          *
-         * @param transform The Transform object that was changed.
-         * @param cookie Cookie value that was specified when the listener was registered.
+         * @param camera The camera that was changed.
          */
         virtual void cameraChanged(Camera* camera) = 0;
     };
