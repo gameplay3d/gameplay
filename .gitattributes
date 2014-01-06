@@ -2,23 +2,23 @@
 * text=auto
 
 # Explicitly declare text files we want to always be normalized and converted to native line endings on checkout.
-*.cpp text eol=lf
-*.c text eol=lf
-*.h text eol=lf
-*.inl text eol=lf
-*.lua text eol=lf
-*.vert text eol=lf
-*.frag text eol=lf
-*.material text eol=lf
-*.form text eol=lf
-*.theme text eol=lf
-*.particle text eol=lf
-*.animation text eol=lf
-*.audio text eol=lf
-*.terrain text eol=lf
-*.config text eol=lf
-*.txt text eol=lf
-*.md text eol=lf
+*.cpp text
+*.c text
+*.h text
+*.inl text
+*.lua text
+*.vert text
+*.frag text
+*.material text
+*.form text
+*.theme text
+*.particle text
+*.animation text
+*.audio text
+*.terrain text
+*.config text
+*.txt text
+*.md text
 
 # Declare windows files that will always have CRLF line endings on checkout.
 *.sln text eol=crlf
