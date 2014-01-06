@@ -2,9 +2,13 @@ theme mainMenu
 {
     texture = res/png/default-theme.png
 
+    // Global color values that affect overal theme color
+    ${tint} = #aabbaaff
+    ${text} = #ffffffff
+
     imageList normalImages
     {
-        color = #4A8799ff
+        color = ${tint}
 
         image unchecked
         {
@@ -85,7 +89,7 @@ theme mainMenu
 
     imageList activeImages : normalImages
     {
-        color = #C3D9BFff
+        color = ${tint}
 
         image unchecked
         {
@@ -106,6 +110,49 @@ theme mainMenu
         {
             region = 127, 91, 46, 46
         }
+    }
+
+    skin FormSkin
+    {
+        border
+        {
+            left = 10
+            right = 10
+            top = 10
+            bottom = 10
+        }
+
+        region = 3, 3, 69, 70
+        color = ${tint}
+    }
+
+    skin ButtonSkin
+    {
+        border
+        {
+            left = 12
+            right = 12
+            top = 12
+            bottom = 12
+        }
+
+        //region = 179, 3, 44, 44
+        region = 180, 145, 34, 34
+        color = ${tint}
+    }
+
+    skin ButtonSkinHover : ButtonSkin
+    {
+        //region = 179, 49, 44, 44
+        region = 180, 182, 34, 34
+        ${tint}
+    }
+
+    skin ButtonSkinActive : ButtonSkin
+    {
+        //region = 179, 96, 44, 44
+        region = 180, 219, 34, 34
+        ${tint}
     }
 
     skin mainNormal
@@ -278,28 +325,8 @@ theme mainMenu
             skin = formFocus
         }
     }
-
-    style buttonStyle : basic
-    {
-        padding
-        {
-            top = -10
-            bottom = -10
-        }
-
-        stateNormal
-        {
-            font = res/ui/arial.gpb
-            fontSize = 16
-        }
-
-        stateActive
-        {
-            skin = mainActive
-        }
-    }
 	
-	style buttonHover : buttonStyle
+	style buttonHover : Button
 	{
 		stateHover
 		{
@@ -376,20 +403,60 @@ theme mainMenu
         }
     }
 
-    style Form : basicContainer
+    style Form
     {
+        stateNormal
+        {
+            skin = FormSkin
+        }
     }
 
     style Container
     {
     }
 
-    style Label : iconNoBorder
+    style Label
     {
+        stateNormal
+        {
+            font = res/ui/arial.gpb
+            fontSize = 16
+            textColor = #ffffffff
+            textAlignment = ALIGN_VCENTER_LEFT
+        }
     }
 
-    style Button : buttonStyle
+    style Button
     {
+        padding
+        {
+            top = -10
+            bottom = -10
+        }
+
+        stateNormal
+        {
+            skin = ButtonSkin
+            font = res/ui/arial.gpb
+            textColor = #ffffffff
+            fontSize = 16
+            textAlignment = ALIGN_VCENTER_HCENTER
+        }
+
+        stateHover
+        {
+            skin = ButtonSkinHover
+        }
+
+        stateActive
+        {
+            skin = ButtonSkinActive
+        }
+
+        stateFocus
+        {
+            skin = ButtonSkinHover
+        }
     }
 
     style CheckBox : iconNoBorder
