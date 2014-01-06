@@ -2,7 +2,7 @@
 #define ABSOLUTELAYOUT_H_
 
 #include "Layout.h"
-// test
+
 namespace gameplay
 {
 
