@@ -5,6 +5,7 @@
 *.cpp text
 *.c text
 *.mm text
+*.m text
 *.h text
 *.inl text
 *.lua text
@@ -21,6 +22,7 @@
 *.txt text
 *.xml text
 *.md text
+*.sh text
 
 # Declare windows files that will always have CRLF line endings on checkout.
 *.sln text eol=crlf
