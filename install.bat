@@ -2,13 +2,12 @@
 REM
 REM install.bat
 REM
-REM Download GamePlay external dependencies and binaries and extract from ZIP
+REM Download GamePlay dependencies and binaries from github releases and extracts from ZIP
 REM
-REM Helps prevent repo bloat due to large binary files since they can
-REM be hosted separately.
+REM Helps prevent repo bloat due to large binary files
 REM
 
-set prefix=https://github.com/blackberry/GamePlay/releases/download/v1.7.0
+set prefix=https://github.com/blackberry/GamePlay/releases/download/v2.0.0
 
 set filename=gameplay-deps
 
@@ -28,11 +27,12 @@ cd %~dp0
 >> temp.cs ECHO         try
 >> temp.cs ECHO         {
 >> temp.cs ECHO             WebClient client = new WebClient();
+>> temp.cs ECHO             client.Proxy = null;
 >> temp.cs ECHO             client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
 >> temp.cs ECHO             client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
->> temp.cs ECHO             Console.Write("Downloading " + url + ": 0%%    ");
+>> temp.cs ECHO             Console.Write("Downloading " + file + ": 0%%    ");
 >> temp.cs ECHO             client.DownloadFileAsync(new Uri(url), file);
->> temp.cs ECHO             while (!done) System.Threading.Thread.Sleep(1000);
+>> temp.cs ECHO             while (!done) System.Threading.Thread.Sleep(500);
 >> temp.cs ECHO         }
 >> temp.cs ECHO         catch (Exception x)
 >> temp.cs ECHO         {
@@ -41,11 +41,11 @@ cd %~dp0
 >> temp.cs ECHO     }
 >> temp.cs ECHO     static void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
 >> temp.cs ECHO     {
->> temp.cs ECHO         Console.Write("\rDownloading " + url + ": " + e.ProgressPercentage + "%%    ");
+>> temp.cs ECHO         Console.Write("\rDownloading " + file + ": " + e.ProgressPercentage + "%%    ");
 >> temp.cs ECHO     }
 >> temp.cs ECHO     static void DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
 >> temp.cs ECHO     {
->> temp.cs ECHO         Console.WriteLine("\rDownloading " + url + ": Done.    ");
+>> temp.cs ECHO         Console.WriteLine("\rDownloading " + file + ": Done.    ");
 >> temp.cs ECHO         done = true;
 >> temp.cs ECHO     }
 >> temp.cs ECHO }

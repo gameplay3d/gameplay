@@ -2,7 +2,7 @@ form terrainForm
 {
     theme = res/common/default.theme
 
-    style = noBorder
+    style = Container
     autoWidth = true
     autoHeight = true
     consumeInputEvents = false
@@ -17,7 +17,7 @@ form terrainForm
 
     container main
     {
-        style = basic
+        style = Form
         width = 230
         height = 395
         consumeInputEvents = false
@@ -45,20 +45,18 @@ form terrainForm
 
         container settings
         {
-            style = noBorder
             autoWidth = true
             autoHeight = true
             consumeInputEvents = false
 
             checkbox wireframe
 		    {
-			    style = noBorder
 			    imageSize = 35, 35
 			    size = 200, 40
                 position = 10, 50
 			    text = Wireframe (1)
                 textAlignment = ALIGN_VCENTER_LEFT
-                fontSize = 20
+                fontSize = 16
                 checked = false
 		    }
 
@@ -101,7 +99,7 @@ form terrainForm
 
     container physicsSettings
     {
-        style = basic
+        style = Form
         position = 0, 395
         width = 230
         height = 165
@@ -118,7 +116,6 @@ form terrainForm
 
         button dropSphere
         {
-            style = buttonStyle
             autoWidth = true
             text = Drop Sphere
             height = 45
@@ -137,7 +134,7 @@ form terrainForm
 
     container messageBox
     {
-        style = basic
+        style = Form
         alignment = ALIGN_VCENTER_HCENTER
         width = 500
         height = 50
@@ -146,10 +143,11 @@ form terrainForm
 
         label message
         {
-            style = noBorder
+            consumeInputEvents = false
             autoWidth = true
             autoHeight = true
-            fontSize = 30
+            font = res/ui/arial.gpb
+            fontSize = 24
             textAlignment = ALIGN_VCENTER_HCENTER
         }
     }

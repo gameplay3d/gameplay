@@ -435,6 +435,12 @@ private:
     void applyAnimationValue(AnimationValue* value, float blendWeight, int components);
 
     void cloneInto(MaterialParameter* materialParameter) const;
+
+    enum LOGGER_DIRTYBITS
+    {
+        UNIFORM_NOT_FOUND = 0x01,
+        PARAMETER_VALUE_NOT_SET = 0x02
+    };
     
     union
     {
@@ -474,6 +480,7 @@ private:
     bool _dynamic;
     std::string _name;
     Uniform* _uniform;
+    char _loggerDirtyBits;
 };
 
 template <class ClassType, class ParameterType>

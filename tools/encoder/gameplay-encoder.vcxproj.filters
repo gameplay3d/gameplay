@@ -136,6 +136,9 @@
     <ClCompile Include="src\Sampler.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\edtaa3func.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\VertexElement.h">
@@ -271,6 +274,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Sampler.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\edtaa3func.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,7 +8,10 @@
     #define realpath(A,B)    _fullpath(B,A,PATH_MAX)
 #endif
 
-#define MAX_HEIGHTMAP_SIZE 2049
+// The encoder version number should be incremented when a feature is added to the encoder.
+// The encoder version is not the same as the GPB version.
+#define ENCODER_VERSION "2.0.0"
+#define HEIGHTMAP_SIZE_MAX 2049
 
 namespace gameplay
 {
@@ -18,10 +21,10 @@ static EncoderArguments* __instance;
 extern int __logVerbosity = 1;
 
 EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
-    _fontSize(0),
     _normalMap(false),
     _parseError(false),
     _fontPreview(false),
+    _fontFormat(Font::BITMAP),
     _textOutput(false),
     _optimizeAnimations(false),
     _animationGrouping(ANIMATIONGROUP_PROMPT),
@@ -234,11 +237,12 @@ void splitString(const char* str, std::vector<std::string>* tokens)
 void EncoderArguments::printUsage() const
 {
     LOG(1, "Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n" \
+    "Encoder version: " ENCODER_VERSION "\n\n" \
     "Supported file extensions:\n" \
-    "  .fbx\t(FBX)\n" \
-    "  .ttf\t(TrueType Font)\n" \
+    "  .fbx\t(FBX scenes)\n" \
+    "  .ttf\t(TrueType fonts)\n" \
     "\n" \
-    "General Options:\n" \
+    "General options:\n" \
     "  -v <verbosity>\tVerbosity level (0-4).\n" \
     "\n" \
     "FBX file options:\n" \
@@ -267,25 +271,25 @@ void EncoderArguments::printUsage() const
         "\t\tMultiple -h arguments can be supplied to generate more than one \n" \
         "\t\theightmap. For 24-bit packed height data use -hp instead of -h.\n" \
     "\n" \
-    "Normal map generation options:\n" \
+    "Normal map options:\n" \
         "  -n\t\tGenerate normal map (requires input file of type PNG or RAW)\n" \
-        "  -s\t\tSize/resolution of the input heightmap image \n" \
-        "    \t\t(required for RAW files)\n" \
+        "  -s\t\tSize/resolution of the input heightmap image (required for RAW files)\n" \
         "  -w <size>\tSpecifies the size of an input terrain heightmap file in world\n" \
         "\t\tunits, along the X, Y and Z axes. <size> should be three \n" \
-        "\t\tcomma-separated numbers in the format \"X,Y,Z\". The Y value \n" \
-        "\t\trepresents the maximum possible height value of a full \n" \
-        "\t\tintensity heightmap pixel.\n" \
+        "\t\tcomma-separated numbers in the format \"X,Y,Z\".  \n" \
+        "\t\tThe Y value represents the maximum possible height value of a  \n" \
+        "\t\tfull intensity heightmap pixel.\n" \
         "\n" \
-        "  Normal map generation can be used to create object-space normal maps from \n" \
-        "  heightmap images. Heightmaps must be in either PNG format (where the \n" \
-        "  intensity of each pixel represents a height value), or in RAW format \n" \
-        "  (8 or 16-bit), which is a common headerless format supported by most \n" \
-        "  terrain generation tools.\n" \
+        "  \t\tNormal map generation can be used to create object-space normal maps from \n" \
+        "  \t\theightmap images. Heightmaps must be in either PNG format (where the \n" \
+        "  \t\tintensity of each pixel represents a height value), or in RAW format \n" \
+        "  \t\t(8 or 16-bit), which is a common headerless format supported by most \n" \
+        "  \t\tterrain generation tools.\n" \
     "\n" \
     "TTF file options:\n" \
-    "  -s <size>\tSize of the font.\n" \
+    "  -s <sizes>\tComma-separated list of font sizes (in pixels).\n" \
     "  -p\t\tOutput font preview.\n" \
+    "  -f\t\tFormat of font. -f:b (BITMAP), -f:d (DISTANCE_FIELD).\n" \
     "\n");
     exit(8);
 }
@@ -293,6 +297,11 @@ void EncoderArguments::printUsage() const
 bool EncoderArguments::fontPreviewEnabled() const
 {
     return _fontPreview;
+}
+
+Font::FontFormat EncoderArguments::getFontFormat() const
+{
+    return _fontFormat;
 }
 
 bool EncoderArguments::textOutputEnabled() const
@@ -319,9 +328,9 @@ const char* EncoderArguments::getNodeId() const
     return _nodeId.c_str();
 }
 
-unsigned int EncoderArguments::getFontSize() const
+std::vector<unsigned int> EncoderArguments::getFontSizes() const
 {
-    return _fontSize;
+    return _fontSizes;
 }
 
 EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
@@ -378,6 +387,16 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     }
     switch (str[1])
     {
+    case 'f':
+        if (str.compare("-f:b") == 0)
+        {
+            _fontFormat = Font::BITMAP;
+        }
+       else  if (str.compare("-f:d") == 0)
+        {
+            _fontFormat = Font::DISTANCE_FIELD;
+        }
+        break;
     case 'g':
         if (str.compare("-groupAnimations:auto") == 0 || str.compare("-g:auto") == 0)
         {
@@ -450,9 +469,9 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
                     heightmap.height = atoi(parts[1].c_str());
 
                     // Put some artificial bounds on heightmap dimensions
-                    if (heightmap.width <= 0 || heightmap.height <= 0 || heightmap.width > MAX_HEIGHTMAP_SIZE || heightmap.height > MAX_HEIGHTMAP_SIZE)
+                    if (heightmap.width <= 0 || heightmap.height <= 0 || heightmap.width > HEIGHTMAP_SIZE_MAX || heightmap.height > HEIGHTMAP_SIZE_MAX)
                     {
-                        LOG(1, "Error: size argument for -h|-heightmap must be between (1,1) and (%d,%d).\n", (int)MAX_HEIGHTMAP_SIZE, (int)MAX_HEIGHTMAP_SIZE);
+                        LOG(1, "Error: size argument for -h|-heightmap must be between (1,1) and (%d,%d).\n", (int)HEIGHTMAP_SIZE_MAX, (int)HEIGHTMAP_SIZE_MAX);
                         _parseError = true;
                         return;
                     }
@@ -556,30 +575,60 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         else
         {
-            // Font Size
-
+            // Font Sizes
             // old format was -s##
+            const char* sizes = NULL;
             if (str.length() > 2)
             {
                 char n = str[2];
                 if (n > '0' && n <= '9')
                 {
-                    const char* number = str.c_str() + 2;
-                    _fontSize = atoi(number);
-                    break;
+                    sizes = str.c_str() + 2;
                 }
-            }
-
-            (*index)++;
-            if (*index < options.size())
-            {
-                _fontSize = atoi(options[*index].c_str());
             }
             else
             {
-                LOG(1, "Error: missing arguemnt for -%c.\n", str[1]);
+                (*index)++;
+                if (*index < options.size())
+                {
+                    sizes = options[*index].c_str();
+                }
+            }
+
+            if (sizes == NULL)
+            {
+                LOG(1, "Error: invalid format for argument: -s");
                 _parseError = true;
                 return;
+            }
+
+            // Parse comma-separated list of font sizes
+            char* ptr = const_cast<char*>(sizes);
+            std::string sizeStr;
+            while (ptr)
+            {
+                char* end = strchr(ptr, ',');
+                if (end)
+                {
+                    sizeStr = std::string(ptr, end - ptr);
+                    ptr = end + 1;
+                }
+                else
+                {
+                    sizeStr = ptr;
+                    ptr = NULL;
+                }
+                if (sizeStr.length() > 0)
+                {
+                    int size = atoi(sizeStr.c_str());
+                    if (size <= 0)
+                    {
+                        LOG(1, "Error: invalid font size provided: %s", sizeStr.c_str());
+                        _parseError = true;
+                        return;
+                    }
+                    _fontSizes.push_back((unsigned int)size);
+                }
             }
         }
         break;
@@ -684,7 +733,6 @@ std::string concat(const std::string& a, const char* b)
     str.append(b);
     return str;
 }
-
 
 void unittestsEncoderArguments()
 {

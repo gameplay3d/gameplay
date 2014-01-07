@@ -7,8 +7,7 @@ namespace gameplay
 /**
  * Defines the format of a vertex layout used by a mesh.
  *
- * A VertexFormat is immutable and cannot be changed
- * once created.
+ * A VertexFormat is immutable and cannot be changed once created.
  */
 class VertexFormat
 {

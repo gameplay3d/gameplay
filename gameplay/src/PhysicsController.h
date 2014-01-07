@@ -19,6 +19,8 @@ class ScriptListener;
 
 /**
  * Defines a class for controlling game physics.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Physics
  */
 class PhysicsController : public ScriptTarget
 {
@@ -419,7 +421,7 @@ private:
 
     // Creates a collision shape for the given node and gameplay shape definition.
     // Populates 'centerOfMassOffset' with the correct calculated center of mass offset.
-    PhysicsCollisionShape* createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset);
+    PhysicsCollisionShape* createShape(Node* node, const PhysicsCollisionShape::Definition& shape, Vector3* centerOfMassOffset, bool dynamic);
     
     // Creates a box collision shape.
     PhysicsCollisionShape* createBox(const Vector3& extents, const Vector3& scale);
@@ -434,7 +436,7 @@ private:
     PhysicsCollisionShape* createHeightfield(Node* node, HeightField* heightfield, Vector3* centerOfMassOffset);
 
     // Creates a triangle mesh collision shape.
-    PhysicsCollisionShape* createMesh(Mesh* mesh, const Vector3& scale);
+    PhysicsCollisionShape* createMesh(Mesh* mesh, const Vector3& scale, bool dynamic);
 
     // Destroys a collision shape created through PhysicsController
     void destroyShape(PhysicsCollisionShape* shape);

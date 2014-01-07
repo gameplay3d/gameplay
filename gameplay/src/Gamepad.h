@@ -13,7 +13,10 @@ class Joystick;
 class Platform;
 
 /**
- * Defines an interface for handling gamepad input.
+ * Defines a gamepad interface for handling input from joysticks and buttons.
+ *
+ * A gamepad can be either physical or virtual. Most platform support up to 4
+ * gamepad controllers connected simulataneously.
  */
 class Gamepad
 {

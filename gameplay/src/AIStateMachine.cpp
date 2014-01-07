@@ -71,10 +71,9 @@ AIState* AIStateMachine::getState(const char* id) const
 {
     GP_ASSERT(id);
 
-    AIState* state;
     for (std::list<AIState*>::const_iterator itr = _states.begin(); itr != _states.end(); ++itr)
     {
-        state = (*itr);
+        AIState* state = (*itr);
 
         if (strcmp(id, state->getId()) == 0)
             return state;

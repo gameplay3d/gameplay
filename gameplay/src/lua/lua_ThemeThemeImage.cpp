@@ -2,6 +2,7 @@
 #include "ScriptController.h"
 #include "lua_ThemeThemeImage.h"
 #include "Base.h"
+#include "FileSystem.h"
 #include "Game.h"
 #include "Ref.h"
 #include "Theme.h"

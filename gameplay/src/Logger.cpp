@@ -1,3 +1,4 @@
+
 #include "Base.h"
 #include "Game.h"
 #include "ScriptController.h"
@@ -66,7 +67,7 @@ void Logger::log(Level level, const char* message, ...)
     else
     {
         // Log to the default output
-        gameplay::print(str);
+        gameplay::print("%s", str);
     }
 
     va_end(args);

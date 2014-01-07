@@ -22,7 +22,7 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterNode(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL), _basketballNode(NULL),
       _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0), _wireframe(false), _hasBall(false), _applyKick(false), _gamepad(NULL)
+      _keyFlags(0), _physicsDebug(false), _wireframe(false), _hasBall(false), _applyKick(false), _gamepad(NULL)
 {
     _buttonPressed = new bool[2];
 }
@@ -36,10 +36,10 @@ void CharacterGame::initialize()
     displayScreen(this, &CharacterGame::drawSplash, NULL, 1000L);
 
     // Load the font.
-    _font = Font::create("res/common/arial40.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Load scene.
-    _scene = Scene::load("res/common/scene.scene");
+    _scene = Scene::load("res/common/sample.scene");
 
     // Update the aspect ratio for our scene's camera to match the current device resolution.
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
@@ -80,10 +80,13 @@ void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* mater
     // Bind light shader parameters to dynamic objects only
     if (node->hasTag("dynamic"))
     {
-        Node* lightNode = scene->findNode("sun");
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
-        material->getParameter("u_lightColor")->bindValue(lightNode->getLight(), &Light::getColor);
-        material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
+        Node* lightNode = scene->findNode("sun");
+        if (lightNode)
+        {
+            material->getParameter("u_directionalLightColor[0]")->bindValue(lightNode->getLight(), &Light::getColor);
+            material->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorView);
+        }
     }
 }
 
@@ -114,8 +117,10 @@ void CharacterGame::initializeCharacter()
     _jumpClip = _animation->getClip("jump");
     _jumpClip->addListener(this, _jumpClip->getDuration() - 250);
     _kickClip = _animation->getClip("kick");
-    _kickClip->addListener(this, _kickClip->getDuration() - 250); // when to cross fade
-    _kickClip->addListener(this, 416);  // when to turn on _isKicking.
+    // when to cross fade
+    _kickClip->addListener(this, _kickClip->getDuration() - 250); 
+    // when to turn on _isKicking.
+    _kickClip->addListener(this, 416);  
 
     // Start playing the idle animation when we load.
     play("idle", true);
@@ -204,8 +209,10 @@ void CharacterGame::update(float elapsedTime)
         // apply impulse from kick.
         Vector3 impulse(-_characterNode->getForwardVectorWorld());
         impulse.normalize();
-        impulse.y = 1.0f; // add some lift to kick
-        impulse.scale(16.6f); //scale the impulse.
+        // add some lift to kick
+        impulse.y = 1.0f; 
+        //scale the impulse.
+        impulse.scale(16.6f);
         ((PhysicsRigidBody*)_basketballNode->getCollisionObject())->applyImpulse(impulse);
         _hasBall = false;
         _applyKick = false;
@@ -326,7 +333,9 @@ void CharacterGame::update(float elapsedTime)
     PhysicsController::HitResult hitResult;
     Vector3 v = _character->getNode()->getTranslationWorld();
     if (getPhysicsController()->rayTest(Ray(Vector3(v.x, v.y + 1.0f, v.z), Vector3(0, -1, 0)), 100.0f, &hitResult, NULL))
+    {
         _characterShadowNode->setTranslation(Vector3(hitResult.point.x, hitResult.point.y + 0.1f, hitResult.point.z));
+    }
 
     if (_hasBall)
     {
@@ -335,7 +344,9 @@ void CharacterGame::update(float elapsedTime)
         // This will ensure the boy cannot walk through walls/objects with the basketball.
         PhysicsRigidBody* basketball = (PhysicsRigidBody*)_basketballNode->getCollisionObject();
         if (basketball->isEnabled())
+        {
             grabBall();
+        }
 
         // Capture the basketball's old position, and then calculate the basketball's new position in front of the character
         _oldBallPosition = _basketballNode->getTranslationWorld();
@@ -356,7 +367,6 @@ void CharacterGame::update(float elapsedTime)
             rotNorm.normalize();
             _basketballNode->rotate(rotNorm, rotationVector.length());
         }
-        
         _basketballNode->setTranslation(translation.x, _floorLevel, translation.z);
     }
 }
@@ -370,19 +380,9 @@ void CharacterGame::render(float elapsedTime)
     _scene->visit(this, &CharacterGame::drawScene, false);
     _scene->visit(this, &CharacterGame::drawScene, true);
 
-    // Draw debug info (physics bodies, bounds, etc).
-    switch (_drawDebug)
-    {
-    case 1:
+    // Draw physics debug
+    if (_physicsDebug)
         getPhysicsController()->drawDebug(_scene->getActiveCamera()->getViewProjectionMatrix());
-        break;
-    case 2:
-        _scene->drawDebug(Scene::DEBUG_BOXES);
-        break;
-    case 3:
-        _scene->drawDebug(Scene::DEBUG_SPHERES);
-        break;
-    }
 
     _gamepad->draw();
 
@@ -424,9 +424,7 @@ void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)
             _keyFlags &= ~WEST;
             break;
         case Keyboard::KEY_B:
-            _drawDebug++;
-            if (_drawDebug > 3)
-                _drawDebug = 0;
+            _physicsDebug = !_physicsDebug;
             break;
         case Keyboard::KEY_SPACE:
             jump();
@@ -588,6 +586,7 @@ void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener:
 {
     if (clip == _kickClip && !_applyKick)
     {
+        _keyFlags = 0;
         if (_hasBall)
         {
             _applyKick = true;
@@ -596,7 +595,7 @@ void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener:
     }
     else
     {
-        clip->crossFade(_currentClip, 150);
+        clip->crossFade(_currentClip, 100);
     }
 }
 

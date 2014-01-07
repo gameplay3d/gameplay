@@ -13,6 +13,9 @@
 #include "lua_RenderStateBlend.h"
 #include "lua_RenderStateCullFaceSide.h"
 #include "lua_RenderStateDepthFunction.h"
+#include "lua_RenderStateFrontFace.h"
+#include "lua_RenderStateStencilFunction.h"
+#include "lua_RenderStateStencilOperation.h"
 
 namespace gameplay
 {
@@ -33,7 +36,12 @@ void luaRegister_RenderStateStateBlock()
         {"setDepthFunction", lua_RenderStateStateBlock_setDepthFunction},
         {"setDepthTest", lua_RenderStateStateBlock_setDepthTest},
         {"setDepthWrite", lua_RenderStateStateBlock_setDepthWrite},
+        {"setFrontFace", lua_RenderStateStateBlock_setFrontFace},
         {"setState", lua_RenderStateStateBlock_setState},
+        {"setStencilFunction", lua_RenderStateStateBlock_setStencilFunction},
+        {"setStencilOperation", lua_RenderStateStateBlock_setStencilOperation},
+        {"setStencilTest", lua_RenderStateStateBlock_setStencilTest},
+        {"setStencilWrite", lua_RenderStateStateBlock_setStencilWrite},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -511,6 +519,42 @@ int lua_RenderStateStateBlock_setDepthWrite(lua_State* state)
     return 0;
 }
 
+int lua_RenderStateStateBlock_setFrontFace(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                RenderState::FrontFace param1 = (RenderState::FrontFace)lua_enumFromString_RenderStateFrontFace(luaL_checkstring(state, 2));
+
+                RenderState::StateBlock* instance = getInstance(state);
+                instance->setFrontFace(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setFrontFace - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_RenderStateStateBlock_setState(lua_State* state)
 {
     // Get the number of parameters.
@@ -544,6 +588,166 @@ int lua_RenderStateStateBlock_setState(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderStateStateBlock_setStencilFunction(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                RenderState::StencilFunction param1 = (RenderState::StencilFunction)lua_enumFromString_RenderStateStencilFunction(luaL_checkstring(state, 2));
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                // Get parameter 3 off the stack.
+                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                RenderState::StateBlock* instance = getInstance(state);
+                instance->setStencilFunction(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setStencilFunction - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderStateStateBlock_setStencilOperation(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 4) == LUA_TSTRING || lua_type(state, 4) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                RenderState::StencilOperation param1 = (RenderState::StencilOperation)lua_enumFromString_RenderStateStencilOperation(luaL_checkstring(state, 2));
+
+                // Get parameter 2 off the stack.
+                RenderState::StencilOperation param2 = (RenderState::StencilOperation)lua_enumFromString_RenderStateStencilOperation(luaL_checkstring(state, 3));
+
+                // Get parameter 3 off the stack.
+                RenderState::StencilOperation param3 = (RenderState::StencilOperation)lua_enumFromString_RenderStateStencilOperation(luaL_checkstring(state, 4));
+
+                RenderState::StateBlock* instance = getInstance(state);
+                instance->setStencilOperation(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setStencilOperation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderStateStateBlock_setStencilTest(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                RenderState::StateBlock* instance = getInstance(state);
+                instance->setStencilTest(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setStencilTest - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderStateStateBlock_setStencilWrite(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                RenderState::StateBlock* instance = getInstance(state);
+                instance->setStencilWrite(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setStencilWrite - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

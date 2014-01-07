@@ -1,6 +1,7 @@
 #include "Material.h"
 #include "FileIO.h"
 #include "StringUtil.h"
+#include "edtaa3func.h"
 
 namespace gameplay
 {
@@ -143,11 +144,6 @@ Sampler* Material::getSampler(const string& id) const
 bool Material::isTextured() const
 {
     return !_samplers.empty();
-}
-
-bool Material::isBumped() const
-{
-    return getSampler("u_normalmapTexture") != NULL;
 }
 
 bool Material::isLit() const

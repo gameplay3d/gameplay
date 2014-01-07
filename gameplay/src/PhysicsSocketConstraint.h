@@ -9,9 +9,11 @@ namespace gameplay
 {
 
 /**
- * Represents a ball-socket or point-to-point constraint
+ * Defines a ball-socket or point-to-point constraint
  * between two rigid bodies (or one rigid body and the world)
  * where rotation is unrestricted about the constraint joint (pivot point).
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
  */
 class PhysicsSocketConstraint : public PhysicsConstraint
 {

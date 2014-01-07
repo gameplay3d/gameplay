@@ -12,9 +12,8 @@ std::vector<FrameBuffer*> FrameBuffer::_frameBuffers;
 FrameBuffer* FrameBuffer::_defaultFrameBuffer = NULL;
 FrameBuffer* FrameBuffer::_currentFrameBuffer = NULL;
 
-FrameBuffer::FrameBuffer(const char* id, unsigned int width, unsigned int height, FrameBufferHandle handle) :
-    _id(id ? id : ""), _width(width), _height(height), _handle(handle), 
-    _renderTargets(NULL), _renderTargetCount(0), _depthStencilTarget(NULL)
+FrameBuffer::FrameBuffer(const char* id, unsigned int width, unsigned int height, FrameBufferHandle handle) 
+    : _id(id ? id : ""), _handle(handle), _renderTargets(NULL), _renderTargetCount(0), _depthStencilTarget(NULL)
 {
 }
 
@@ -31,16 +30,13 @@ FrameBuffer::~FrameBuffer()
         }
         SAFE_DELETE_ARRAY(_renderTargets);
     }
+
     if (_depthStencilTarget)
-    {
         SAFE_RELEASE(_depthStencilTarget);
-    }
 
     // Release GL resource.
     if (_handle)
-    {
         GL_ASSERT( glDeleteFramebuffers(1, &_handle) );
-    }
 
     // Remove self from vector.
     std::vector<FrameBuffer*>::iterator it = std::find(_frameBuffers.begin(), _frameBuffers.end(), this);
@@ -108,7 +104,6 @@ FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned in
         frameBuffer->setRenderTarget(renderTarget, 0);
         SAFE_RELEASE(renderTarget);
     }
-
     _frameBuffers.push_back(frameBuffer);
 
     return frameBuffer;
@@ -139,12 +134,18 @@ const char* FrameBuffer::getId() const
 
 unsigned int FrameBuffer::getWidth() const
 {
-    return _width;
+    if (_renderTargetCount > 0 && _renderTargets != NULL && _renderTargets[0] != NULL)
+        return _renderTargets[0]->getWidth();
+
+    return 0;
 }
 
 unsigned int FrameBuffer::getHeight() const
 {
-    return _height;
+    if (_renderTargetCount > 0 && _renderTargets != NULL && _renderTargets[0] != NULL)
+        return _renderTargets[0]->getHeight();
+
+    return 0;
 }
 
 unsigned int FrameBuffer::getMaxRenderTargets()
@@ -192,7 +193,6 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
         // Restore the FBO binding
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _currentFrameBuffer->_handle) );
     }
-
 }
 
 RenderTarget* FrameBuffer::getRenderTarget(unsigned int index) const
@@ -267,6 +267,26 @@ FrameBuffer* FrameBuffer::bind()
     FrameBuffer* previousFrameBuffer = _currentFrameBuffer;
     _currentFrameBuffer = this;
     return previousFrameBuffer;
+}
+
+void FrameBuffer::getScreenshot(Image* image)
+{
+	GP_ASSERT(image);
+	GP_ASSERT(image->getFormat() == Image::RGBA);
+
+	unsigned int width = _currentFrameBuffer->getWidth();
+	unsigned int height = _currentFrameBuffer->getHeight();
+
+	if (image->getWidth() == width && image->getHeight() == height)
+		GL_ASSERT( glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, image->getData()) );
+}
+
+Image* FrameBuffer::createScreenshot()
+{
+	Image* screenshot = Image::create(_currentFrameBuffer->getWidth(), _currentFrameBuffer->getHeight(), Image::RGBA, NULL);
+	getScreenshot(screenshot);
+
+	return screenshot;
 }
 
 FrameBuffer* FrameBuffer::bindDefault()

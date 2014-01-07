@@ -11,7 +11,7 @@
 static Mesh* createTriangleMesh()
 {
     // Calculate the vertices of the equilateral triangle.
-    float a = 0.25f;        // Length of side
+    float a = 0.25f;      // Length of side
     Vector2 p1(0.0f,       a / sqrtf(3.0f));
     Vector2 p2(-a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
     Vector2 p3( a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
@@ -148,40 +148,6 @@ static Mesh* createLinesMesh()
 }
 
 
-static Mesh* createPointsMesh()
-{
-    float scale = 0.2f;
-    unsigned int vertexCount = 100;
-
-    std::vector<float> vertices;
-    vertices.reserve(vertexCount * 6);
-    for (unsigned int i = 0; i < vertexCount; ++i)
-    {
-        // x, y, z, r, g, b
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
-        vertices.push_back(MATH_RANDOM_0_1());
-        vertices.push_back(MATH_RANDOM_0_1());
-        vertices.push_back(MATH_RANDOM_0_1()); 
-    }
-    
-    VertexFormat::Element elements[] =
-    {
-        VertexFormat::Element(VertexFormat::POSITION, 3),
-        VertexFormat::Element(VertexFormat::COLOR, 3)
-    };
-    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 2), vertexCount, false);
-    if (mesh == NULL)
-    {
-        GP_ERROR("Failed to create mesh.");
-        return NULL;
-    }
-    mesh->setPrimitiveType(Mesh::POINTS);
-    mesh->setVertexData(&vertices[0], 0, vertexCount);
-    return mesh;
-}
-
 MeshPrimitiveSample::MeshPrimitiveSample()
     : _font(NULL), _triangles(NULL), _triangleStrip(NULL), _lineStrip(NULL), _lines(NULL), _points(NULL)
 {
@@ -190,7 +156,7 @@ MeshPrimitiveSample::MeshPrimitiveSample()
 void MeshPrimitiveSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Create an orthographic projection matrix.
     float width = getWidth() / (float)getHeight();
@@ -205,24 +171,24 @@ void MeshPrimitiveSample::initialize()
     // Create a material from the built-in "colored-unlit" vertex and fragment shaders.
     // This sample doesn't use lighting so the unlit shader is used.
     // This sample uses vertex color so VERTEX_COLOR is defined. Look at the shader source files to see the supported defines.
-    _triangles->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    _triangles->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
     
     Mesh* triangleStripMesh = createTriangleStripMesh();
     _triangleStrip = Model::create(triangleStripMesh);
     SAFE_RELEASE(triangleStripMesh);
-    Material* material = _triangleStrip->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    Material* material = _triangleStrip->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
     material->getStateBlock()->setDepthTest(true);
     material->getStateBlock()->setDepthWrite(true);
 
     Mesh* lineStripMesh = createLineStripMesh();
     _lineStrip = Model::create(lineStripMesh);
     SAFE_RELEASE(lineStripMesh);
-    _lineStrip->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    _lineStrip->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
     
     Mesh* lineMesh = createLinesMesh();
     _lines = Model::create(lineMesh);
     SAFE_RELEASE(lineMesh);
-    _lines->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    _lines->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
 }
 
 void MeshPrimitiveSample::finalize()

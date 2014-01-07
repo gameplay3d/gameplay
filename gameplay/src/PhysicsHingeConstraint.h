@@ -10,9 +10,11 @@ namespace gameplay
 {
 
 /**
- * Represents a hinge constraint between two rigid bodies
+ * Defines a hinge constraint between two rigid bodies
  * (or one rigid body and the world) where movement is
  * restricted to rotation about one axis.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
  */
 class PhysicsHingeConstraint : public PhysicsConstraint
 {

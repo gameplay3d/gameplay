@@ -15,7 +15,7 @@ class BoundingBox;
 /**
  * Defines a 3-dimensional ray.
  *
- * This class guarantees that its direction vector is always normalized.
+ * Rays direction vector are always normalized.
  */
 class Ray
 {

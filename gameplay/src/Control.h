@@ -4,7 +4,6 @@
 #include "Ref.h"
 #include "Rectangle.h"
 #include "Vector2.h"
-#include "SpriteBatch.h"
 #include "Theme.h"
 #include "ThemeStyle.h"
 #include "Touch.h"
@@ -17,9 +16,12 @@ namespace gameplay
 {
 
 class Container;
+class Form;
 
 /**
- * Base class for UI controls.
+ * Defines the base class for all controls.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Control : public Ref, public AnimationTarget, public ScriptTarget
 {
@@ -43,7 +45,7 @@ public:
         NORMAL = 0x01,
 
         /**
-         * State of a control currently in focus.
+         * State of a control when it is currently in focus.
          */
         FOCUS = 0x02,
 
@@ -89,6 +91,29 @@ public:
         ALIGN_TOP_RIGHT = ALIGN_TOP | ALIGN_RIGHT,
         ALIGN_VCENTER_RIGHT = ALIGN_VCENTER | ALIGN_RIGHT,
         ALIGN_BOTTOM_RIGHT = ALIGN_BOTTOM | ALIGN_RIGHT
+    };
+
+    /**
+     * Defines supported auto sizing modes for controls.
+     */
+    enum AutoSize
+    {
+        /**
+         * No auto sizing is applied.
+         */
+        AUTO_SIZE_NONE = 0x00,
+
+        /**
+         * The control's size is stretched to fill the content area of its parent container.
+         */
+        AUTO_SIZE_STRETCH = 0x01,
+
+        /**
+         * The control's size is set to tightly fit its contents.
+         *
+         * Not all controls support this auto sizing mode.
+         */
+        AUTO_SIZE_FIT = 0x02
     };
 
     /**
@@ -150,8 +175,18 @@ public:
              * Event triggered when a mouse cursor leaves a control.
              */
             LEAVE           = 0x100,
+
+            /**
+             * Event triggered when a control gains focus.
+             */
+            FOCUS_GAINED    = 0x200,
+
+            /**
+             * Event triggered when a control loses focus.
+             */
+            FOCUS_LOST      = 0x400
         };
-    
+
         /*
          * Destructor.
          */
@@ -170,7 +205,7 @@ public:
      * @script{ignore}
      * A constant used for setting themed attributes on all control states simultaneously.
      */
-    static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED | HOVER;
+    static const unsigned char STATE_ALL = NORMAL | ACTIVE | FOCUS | DISABLED | HOVER;
 
     /**
      * Position animation property. Data = x, y
@@ -214,8 +249,119 @@ public:
      */
     const char* getId() const;
 
+	/**
+	 * Sets this control's ID string.
+	 *
+	 * @param id The new control ID.
+	 */
+	void setId(const char* id);
+
+    /**
+     * Get the x coordinate of this control.
+     *
+     * @return The x coordinate of this control.
+     */
+    float getX() const;
+
+    /**
+     * Sets the X coordinate for the control.
+     *
+     * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
+     * between 0-1, where 1 equals the full size of it's parent.
+     *
+     * @param x The new X coordinate.
+     * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
+     */
+    void setX(float x, bool percentage = false);
+
+    /**
+     * Determines if the X coordinate of this control computed as a percentage of its parent container.
+     *
+     * @return True if the X value is computed as a percentage of its parent container.
+     */
+    bool isXPercentage() const;
+
+    /**
+     * Get the y coordinate of this control.
+     *
+     * @return The y coordinate of this control.
+     */
+    float getY() const;
+
+    /**
+     * Sets the Y coordinate for the control.
+     *
+     * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
+     * between 0-1, where 1 equals the full size of it's parent.
+     *
+     * @param y The new Y coordinate.
+     * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
+     */
+    void setY(float y, bool percentage = false);
+
+    /**
+     * Determines if the Y coordinate of this control is computed as a percentage of its parent container.
+     *
+     * @return True if the Y value is computed as a percentage of its parent container.
+     */
+    bool isYPercentage() const;
+
+    /**
+     * Get the width of this control.
+     *
+     * @return The width of this control.
+     */
+    float getWidth() const;
+
+    /**
+     * Set the desired width of the control, including it's border and padding, before clipping.
+     *
+     * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
+     * between 0-1, where 1 equals the full size of it's parent.
+     *
+     * @param width The width.
+     * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
+     */
+    void setWidth(float width, bool percentage = false);
+
+    /**
+     * Determines if the width of this control is computed as a percentage of its parent container.
+     *
+     * @return True if the width is computed as a percentage of its parent container.
+     */
+    bool isWidthPercentage() const;
+
+    /**
+     * Get the height of this control.
+     *
+     * @return The height of this control.
+     */
+    float getHeight() const;
+
+    /**
+     * Set the desired height of the control, including it's border and padding, before clipping.
+     *
+     * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
+     * between 0-1, where 1 equals the full size of it's parent.
+     *
+     * @param height The height.
+     * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
+     */
+    void setHeight(float height, bool percentage = false);
+
+    /**
+     * Determines if the height of this control is computed as a percentage of its parent container.
+     *
+     * @return True if the height is computed as a percentage of its parent container.
+     */
+    bool isHeightPercentage() const;
+
     /**
      * Set the position of this control relative to its parent container.
+     *
+     * This method sets the local position of the control, relative to its container.
+     * Setting percetage values is not supported with this method, use setX
+     * and setY instead.
      *
      * @param x The x coordinate.
      * @param y The y coordinate.
@@ -225,32 +371,14 @@ public:
     /**
      * Set the desired size of this control, including its border and padding, before clipping.
      *
+     * This method sets the size of the control, relative to its container.
+     * Setting percetage values is not supported with this method, use setWidth
+     * and setHeight instead.
+     *
      * @param width The width.
      * @param height The height.
      */
-    virtual void setSize(float width, float height);
-
-    /** 
-     * Set the desired width of the control, including it's border and padding, before clipping.
-     *
-     * @param width The width.
-     */
-    virtual void setWidth(float width);
-
-    /** 
-     * Set the desired height of the control, including it's border and padding, before clipping.
-     *
-     * @param height The height.
-     */
-    virtual void setHeight(float height);
-
-    /**
-     * Set the bounds of this control, relative to its parent container and including its
-     * border and padding, before clipping.
-     *
-     * @param bounds The new bounds to set.
-     */
-    virtual void setBounds(const Rectangle& bounds);
+    void setSize(float width, float height);
 
     /**
      * Get the bounds of this control, relative to its parent container and including its
@@ -261,40 +389,91 @@ public:
     const Rectangle& getBounds() const;
 
     /**
+     * Set the bounds of this control, relative to its parent container and including its
+     * border and padding, before clipping.
+     *
+     * This method sets the local bounds of the control, relative to its container.
+     * Setting percetage values is not supported with this method, use setX,
+     * setY, setWidth and setHeight instead.
+     *
+     * @param bounds The new bounds to set.
+     */
+    void setBounds(const Rectangle& bounds);
+
+    /**
      * Get the absolute bounds of this control, in pixels, including border and padding,
      * before clipping.
+     *
+     * The absolute bounds of a control represents its final computed bounds after all 
+     * alignment, auto sizing, relative position and sizing has been computed. The
+     * returned bounds is in absolute coordinates, relative to the control's top-most
+     * parent container (usually its form).
      *
      * @return The absolute bounds of this control.
      */
     const Rectangle& getAbsoluteBounds() const;
 
     /**
-     * Get the x coordinate of this control's bounds.
+     * Get the bounds of this control, relative to its parent container, after clipping.
      *
-     * @return The x coordinate of this control's bounds.
+     * @return The bounds of this control.
      */
-    float getX() const;
-    
-    /**
-     * Get the y coordinate of this control's bounds.
-     *
-     * @return The y coordinate of this control's bounds.
-     */
-    float getY() const;
+    const Rectangle& getClipBounds() const;
 
     /**
-     * Get the width of this control's bounds.
+     * Get the content area of this control, in screen coordinates, after clipping.
      *
-     * @return The width of this control's bounds.
+     * @return The clipping area of this control.
      */
-    float getWidth() const;
+    const Rectangle& getClip() const;
 
     /**
-     * Get the height of this control's bounds.
+     * Returns the auto sizing mode for this control's width.
      *
-     * @return The height of this control's bounds.
+     * @return The auto size mode for this control's width.
      */
-    float getHeight() const;
+    AutoSize getAutoWidth() const;
+
+    /**
+     * Enables or disables auto sizing for this control's width.
+     *
+     * This method is a simplified version of setAutoWidth(AutoSize) left intact for legacy reasons.
+     * It enables or disables the AUTO_SIZE_STRETCH mode for the control's width.
+     *
+     * @param autoWidth True to enable AUTO_SIZE_STRETCH for this control's width.
+     */
+    void setAutoWidth(bool autoWidth);
+
+    /**
+     * Sets the auto size mode for this control's width.
+     *
+     * @param mode The new auto size mode for this control's width.
+     */
+    void setAutoWidth(AutoSize mode);
+
+    /**
+     * Returns the auto sizing mode for this control's height.
+     *
+     * @return The auto size mode for this control's height.
+     */
+    AutoSize getAutoHeight() const;
+
+    /**
+     * Enables or disables auto sizing for this control's height.
+     *
+     * This method is a simplified version of setAutoHeight(AutoSize) left intact for legacy reasons.
+     * It enables or disables the AUTO_SIZE_STRETCH mode for the control's height.
+     *
+     * @param autoHeight True to enable AUTO_SIZE_STRETCH for this control's height.
+     */
+    void setAutoHeight(bool autoHeight);
+
+    /**
+     * Sets the auto size mode for this control's height.
+     *
+     * @param mode The new auto size mode for this control's height.
+     */
+    void setAutoHeight(AutoSize mode);
 
     /**
      * Set the alignment of this control within its parent container.
@@ -309,36 +488,6 @@ public:
      * @return The alignment of this control within its parent container.
      */
     Alignment getAlignment() const;
-
-    /**
-     * Set this control to fit horizontally within its parent container.
-     *
-     * @param autoWidth Whether to size this control to fit horizontally within its parent container.
-     */
-    virtual void setAutoWidth(bool autoWidth);
-
-    /**
-     * Get whether this control's width is set to automatically adjust to
-     * fit horizontally within its parent container.
-     *
-     * @return Whether this control's width is set to automatically adjust.
-     */
-    bool getAutoWidth() const;
-
-    /**
-     * Set this control to fit vertically within its parent container.
-     *
-     * @param autoHeight Whether to size this control to fit vertically within its parent container.
-     */
-    virtual void setAutoHeight(bool autoHeight);
-
-    /**
-     * Get whether this control's height is set to automatically adjust to
-     * fit vertically within its parent container.
-     *
-     * @return Whether this control's height is set to automatically adjust.
-     */
-    bool getAutoHeight() const;
 
     /**
      * Set the size of this control's border.
@@ -631,6 +780,14 @@ public:
     bool isVisible() const;
 
     /**
+     * Determines if this control is visible in its hierarchy.
+     *
+     * A control is visible in its hierarchy if it is visible and all of its parents
+     * are also visible.
+     */
+    bool isVisibleInHierarchy() const;
+
+    /**
      * Set the opacity of this control.
      *
      * @param opacity The new opacity.
@@ -662,25 +819,12 @@ public:
     bool isEnabled() const;
 
     /**
-     * Get the bounds of this control, relative to its parent container, after clipping.
+     * Determines if this control is enabled in its hierarchy.
      *
-     * @return The bounds of this control.
+     * A control is enabled in its hierarchy if it is enabled and all of its parents
+     * are also enabled.
      */
-    const Rectangle& getClipBounds() const;
-
-    /**
-     * Get the content area of this control, in screen coordinates, after clipping.
-     *
-     * @return The clipping area of this control.
-     */
-    const Rectangle& getClip() const;
-
-    /**
-     * Change this control's state.
-     *
-     * @param state The state to switch this control to.
-     */
-    void setState(State state);
+    bool isEnabledInHierarchy() const;
 
     /**
      * Get this control's current state.
@@ -705,6 +849,13 @@ public:
     bool getConsumeInputEvents();
 
     /**
+     * Get this control's style.
+     *
+     * @return This control's style.
+     */
+    Theme::Style* getStyle() const;
+
+    /**
      * Set the style this control will use when rendering.
      *
      * @param style The style this control will use when rendering.
@@ -712,11 +863,9 @@ public:
     void setStyle(Theme::Style* style);
 
     /**
-     * Get this control's style.
-     *
-     * @return This control's style.
+     * Returns the theme for this control.
      */
-    Theme::Style* getStyle() const;
+    Theme* getTheme() const;
 
     /**
      * Get this control's z-index.
@@ -733,6 +882,39 @@ public:
     void setZIndex(int zIndex);
 
     /**
+     * Determines if this control accepts focus.
+     *
+     * @return True if this control accepts focus, false if it does not.
+     */
+    bool canFocus() const;
+
+    /**
+     * Sets whether or not the control accepts input focus.
+     *
+     * @param acceptsFocus True if the control should accept input focus, false otherwise.
+     */
+    void setCanFocus(bool acceptsFocus);
+
+    /**
+     * Determines if this control is currently in focus.
+     *
+     * @return True if the control is currently in focus.
+     */
+    bool hasFocus() const;
+
+    /**
+     * Sets input focus to this control.
+     *
+     * If this control accepts focus (the hasFocus method returns true), input focus
+     * is set to this control. If this control is a container, the first focusable
+     * control within it gains focus.
+     *
+     * @return True if this control or one of its children successfully gained focus,
+     *      false otherwise.
+     */
+    virtual bool setFocus();
+
+    /**
      * Get this control's focus index.
      *
      * @return This control's focus index.
@@ -741,6 +923,12 @@ public:
 
     /**
      * Set this control's focus index.
+     *
+     * Focus indexes control the order in which input focus changes between controls
+     * when using the focus change controls such as the TAB key.
+     *
+     * Valid focus indexes should be zero or greater, with a negative number indicating
+     * an unset focus index.
      *
      * @param focusIndex The new focus index.
      */
@@ -759,6 +947,29 @@ public:
      * @return The string of the Control type, all in lower-case.
      */
     virtual const char* getType() const;
+
+    /**
+     * Returns this control's parent, or NULL if this control does not have a parent.
+     *
+     * @return This control's parent.
+     */
+    Control* getParent() const;
+
+    /**
+     * Determines if this control is a child (at any level of hierarchy) of the 
+     * specified control.
+     *
+     * @param control The control to check.
+     * @return True if this control is a direct or indirect child of the specified control.
+     */
+    bool isChild(Control* control) const;
+
+    /**
+     * Returns this control's top level form, or NULL if this control does not belong to a form.
+     *
+     * @return this control's form.
+     */
+    Form* getTopLevelForm() const;
 
     /**
      * Adds a listener to be notified of specific events affecting
@@ -884,46 +1095,92 @@ protected:
     virtual void update(const Control* container, const Vector2& offset);
 
     /**
+     * Indicates that a control will begin drawing into the specified batch.
+     *
+     * When drawing is finshed (before any other batch can be drawn into), the
+     * finishBatch method should be called.
+     *
+     * @param form The form beign drawn.
+     * @param batch The sprite batch to be drawn into.
+     */
+    void startBatch(Form* form, SpriteBatch* batch);
+
+    /**
+     * Called after a batch has been drawn into and before any other batch is used.
+     *
+     * @param form The form being drawn.
+     * @param batch The batch that was previously started (via Control::startBatch).
+     */
+    void finishBatch(Form* form, SpriteBatch* batch);
+
+    /**
+     * Draws the control.
+     *
+     * Implementations of Control are expected to perform all drawing into a SpriteBatch.
+     * Batches should not be explicitly started or finished, but instead should be passed
+     * to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting
+     * and finishing the batch when neccessary.
+     *
+     * @param form The top level form being drawn.
+     * @param clip The clipping rectangle.
+     *
+     * @return The number of draw calls issued.
+     */
+    virtual unsigned int draw(Form* form, const Rectangle& clip);
+
+    /**
      * Draws the themed border and background of a control.
      *
-     * @param spriteBatch The sprite batch containing this control's border images.
+     * Implementations of Control are expected to perform all drawing into a SpriteBatch.
+     * Batches should not be explicitly started or finished, but instead should be passed
+     * to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting
+     * and finishing the batch when neccessary.
+     *
+     * @param form The top level form being drawn.
      * @param clip The clipping rectangle of this control's parent container.
+     *
+     * @return The number of draw calls issued.
      */
-    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+    virtual unsigned int drawBorder(Form* form, const Rectangle& clip);
 
     /**
      * Draw the images associated with this control.
      *
-     * @param spriteBatch The sprite batch containing this control's icons.
+     * Implementations of Control are expected to perform all drawing into a SpriteBatch.
+     * Batches should not be explicitly started or finished, but instead should be passed
+     * to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting
+     * and finishing the batch when neccessary.
+     *
+     * @param form The top level form being drawn.
      * @param clip The clipping rectangle of this control's parent container.
+     *
+     * @return The number of draw calls issued.
      */
-    virtual void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    virtual unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
      * Draw this control's text.
      *
+     * Implementations of Control are expected to perform all drawing into a SpriteBatch.
+     * Batches should not be explicitly started or finished, but instead should be passed
+     * to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting
+     * and finishing the batch when neccessary.
+     *
+     * @param form The top level form being drawn.
      * @param clip The clipping rectangle of this control's parent container.
+     *
+     * @return The number of draw calls issued.
      */
-    virtual void drawText(const Rectangle& clip);
+    virtual unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
-     * Draws a sprite batch for the specified clipping rect.
+     * Initializes the control.
      *
-     * @param spriteBatch The sprite batch to use.
-     * @param clip The clipping rectangle.
-     * @param needsClear Whether it needs to be cleared.
-     * @param cleared Whether it was previously cleared
-     * @param targetHeight The targets height
+     * @param typeName The type name of the control being initalized.
+     * @param style The style to apply to this control (optional).
+     * @param properties The properties to set on this control (optional).
      */
-    virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
-
-    /**
-     * Initialize properties common to all Controls from a Properties object.
-     *
-     * @param style The style to apply to this control.
-     * @param properties The properties to set on this control.
-     */
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    virtual void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Returns whether this control has been modified and requires an update.
@@ -959,6 +1216,14 @@ protected:
     void notifyListeners(Control::Listener::EventType eventType);
 
     /**
+     * Called when a control event is fired for this control, before external
+     * listeners are notified of the event.
+     *
+     * @param evt The event type.
+     */
+    virtual void controlEvent(Control::Listener::EventType evt);
+
+    /**
      * Gets the Alignment by string.
      *
      * @param alignment The string representation of the Alignment type.
@@ -966,31 +1231,33 @@ protected:
      */
     static Alignment getAlignment(const char* alignment);
 
-    /**
-     * Gets whether this control is in focus.
-     * Note that a control's state can be HOVER while the control is in focus.
-     * When the cursor leaves the control, it will return to the FOCUS state.
-     * This method will still return true in this case.
-     */
-    bool hasFocus() const;
-
     /** 
      * The Control's ID.
      */ 
     std::string _id;
 
     /**
-     * Determines overlay used during draw().
+     * Whether the control is enabled.
      */
-    State _state;
+    bool _enabled;
 
     /**
-     * Position, relative to parent container's clipping window, and desired size.
+     * Bits indicating whether bounds values are absolute values or percentages.
+     */
+    int _boundsBits;
+
+    /**
+     * Local bounds, relative to parent container's clipping window, possibly stored as percentages (see _boundsBits).
+     */
+    Rectangle _relativeBounds;
+
+    /**
+     * Local bounds, relative to parent container's clipping window, and desired size.
      */
     Rectangle _bounds;
 
     /**
-     * Position, relative to parent container's clipping window, including border and padding, after clipping.
+     * Local bounds, relative to parent container's clipping window, including border and padding, after clipping.
      */
     Rectangle _clipBounds;
 
@@ -1015,11 +1282,6 @@ protected:
     Rectangle _viewportClipBounds;
 
     /**
-     * Previous frame's absolute clip bounds, to be cleared if necessary.
-     */
-    Rectangle _clearBounds;         
-
-    /**
      * If the control is dirty and need updating.
      */
     bool _dirty;
@@ -1042,12 +1304,12 @@ protected:
     /**
      * Whether the Control's width is auto-sized.
      */
-    bool _autoWidth;
+    AutoSize _autoWidth;
     
     /**
      * Whether the Control's height is auto-sized.
      */
-    bool _autoHeight;
+    AutoSize _autoHeight;
     
     /**
      * Listeners map of EventType's to a list of Listeners.
@@ -1086,6 +1348,11 @@ protected:
     int _focusIndex;
 
     /**
+     * Whether or not the control accepts input focus.
+     */
+    bool _canFocus;
+
+    /**
      * The control's parent container.
      */
     Container* _parent;
@@ -1114,10 +1381,10 @@ private:
     Theme::Skin* getSkin(State state);
 
     void addSpecificListener(Control::Listener* listener, Control::Listener::EventType eventType);
-    
+
     bool _styleOverridden;
     Theme::Skin* _skin;
-    State _previousState;
+
 };
 
 }

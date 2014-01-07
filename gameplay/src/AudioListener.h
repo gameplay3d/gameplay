@@ -3,16 +3,20 @@
 
 #include "Vector3.h"
 #include "Transform.h"
+#include "Camera.h"
 
 namespace gameplay
 {
 
-class Camera;
-
 /**
  * Defines an audio listener in 3D space.
+ *
+ * The audio listener represents where you are listening from.
+ * In a 3D scene this is usually the active camera.
+ * 
+ * @see Scene::bindAudioListenerToCamera
  */
-class AudioListener : public Transform::Listener
+class AudioListener : public Camera::Listener
 {
     friend class AudioController;
     friend class Game;
@@ -156,9 +160,9 @@ private:
     ~AudioListener();
 
     /**
-    * @see Transform::Listener::transformChanged
+    * @see Camera::Listener::cameraChanged
     */
-    void transformChanged(Transform* transform, long cookie);
+    void cameraChanged(Camera* camera);
 
     float _gain;
     Vector3 _position;

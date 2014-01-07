@@ -31,13 +31,12 @@ protected:
 
 private:
 
-    bool drawScene(Node* node);
+    bool initializeMaterials(Node* node);
 
-    bool bindLights(Node* node);
+    bool drawScene(Node* node);
 
     Font* _font;
     Scene* _scene;
-    Node* _lightNode;
     bool _wireFrame;
 };
 

@@ -7,7 +7,7 @@
 
 static Material* createMaterial()
 {
-    Material* material = Material::create("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
+    Material* material = Material::create("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
     GP_ASSERT(material && material->getStateBlock());
     return material;
 }
@@ -43,7 +43,7 @@ void MeshBatchSample::initialize()
 {
     setMultiTouch(true);
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     Matrix::createOrthographic(getWidth(), getHeight(), -1.0f, 1.0f, &_worldViewProjectionMatrix);
     _meshBatch = createMeshBatch(Mesh::TRIANGLES);

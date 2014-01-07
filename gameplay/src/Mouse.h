@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 /**
- * Mouse event
+ * Defines a mouse event.
  */
 class Mouse
 {

@@ -70,6 +70,7 @@ private:
     std::list<Node*> _nodes;
     Node* _cameraNode;
     float _ambientColor[Light::COLOR_SIZE];
+    Node* _lightNode;
 };
 
 }

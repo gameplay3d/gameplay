@@ -10,15 +10,15 @@
 namespace gameplay
 {
 
-PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters)
-        : PhysicsCollisionObject(node), _body(NULL), _mass(parameters.mass), _constraints(NULL), _inDestructor(false)
+PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters, int group, int mask)
+        : PhysicsCollisionObject(node, group, mask), _body(NULL), _mass(parameters.mass), _constraints(NULL), _inDestructor(false)
 {
     GP_ASSERT(Game::getInstance()->getPhysicsController());
     GP_ASSERT(_node);
 
     // Create our collision shape.
     Vector3 centerOfMassOffset;
-    _collisionShape = Game::getInstance()->getPhysicsController()->createShape(node, shape, &centerOfMassOffset);
+    _collisionShape = Game::getInstance()->getPhysicsController()->createShape(node, shape, &centerOfMassOffset, parameters.mass != 0.0f);
     GP_ASSERT(_collisionShape && _collisionShape->getShape());
 
     // Create motion state object.
@@ -28,7 +28,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Defi
     // inertia. However, if the collision shape is a triangle mesh, we don't calculate 
     // inertia since Bullet doesn't currently support this.
     btVector3 localInertia(0.0, 0.0, 0.0);
-    if (parameters.mass != 0.0 && _collisionShape->getType() != PhysicsCollisionShape::SHAPE_MESH)
+    if (parameters.mass != 0.0)
         _collisionShape->getShape()->calculateLocalInertia(parameters.mass, localInertia);
 
     // Create the Bullet physics rigid body object.
@@ -376,7 +376,7 @@ void PhysicsRigidBody::transformChanged(Transform* transform, long cookie)
         // If the node has a terrain attached, factor in the terrain local scaling as well for the collision shape
         if (_node->getTerrain())
         {
-            Vector3& tScale = _node->getTerrain()->_localScale;
+            const Vector3& tScale = _node->getTerrain()->_localScale;
             scale.set(scale.x * tScale.x, scale.y * tScale.y, scale.z * tScale.z);
         }
 

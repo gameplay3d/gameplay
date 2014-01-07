@@ -11,7 +11,7 @@ namespace gameplay
     class Properties;
 
 /**
- * Base physics collision shape class that all supported shapes derive from.
+ * Defines the physics collision shape class that all supported shapes derive from.
  */
 class PhysicsCollisionShape : public Ref
 {

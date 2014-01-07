@@ -9,7 +9,12 @@ namespace gameplay
 {
 
 /**
- * Defines a class for physics ghost objects.
+ * Defines a physics ghost object.
+ *
+ * It is a collision volume that does not participate in the physics
+ * simulation but can be used the test against other phyics collision objects.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsGhostObject : public PhysicsCollisionObject, public Transform::Listener
 {
@@ -42,8 +47,10 @@ protected:
      * 
      * @param node The node to attach the ghost object to.
      * @param shape The collision shape definition for the ghost object.
+     * @param group Group identifier
+     * @param mask Bitmask field for filtering collisions with this object.
      */
-    PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape);
+    PhysicsGhostObject(Node* node, const PhysicsCollisionShape::Definition& shape, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Destructor.

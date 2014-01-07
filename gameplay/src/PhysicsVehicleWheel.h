@@ -14,28 +14,7 @@ class PhysicsVehicle;
  * Defines a class for vehicle wheel physics which represents the individual wheel
  * itself as well as the tire and suspension.
  *
- * The following properties are available for wheels:
-
- @verbatim
-    collisionObject <wheelID>
-    {
-        type                     = VEHICLE_WHEEL
-
-        steerable                = <bool>                // indicates whether wheel is steerable
-        wheelDirection           = <float, float, float> // direction of strut extension, in chassis space
-        wheelAxle                = <float, float, float> // direction of axle (spin axis), in chassis space
-        strutConnectionOffset    = <float, float, float> // offset from default strut connection point
-        strutRestLength          = <float>               // strut rest length
-        strutTravelMax           = <float>               // maximum strut travel
-        strutStiffness           = <float>               // strut stiffness, normalized to chassis mass
-        strutDampingCompression  = <float>               // strut damping under compression, normalized to chassis mass
-        strutDampingRelaxation   = <float>               // strut damping under relaxation, normalized to chassis mass
-        strutForceMax            = <float>               // maximum strut force
-        frictionBreakout         = <float>               // breakout friction
-        wheelRadius              = <float>               // wheel radius
-        rollInfluence            = <float>               // how side friction affects chassis roll, normalized
-    }
- @endverbatim
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 
 class PhysicsVehicleWheel : public PhysicsCollisionObject
@@ -285,16 +264,14 @@ private:
     PhysicsVehicleWheel(Node* node, const PhysicsCollisionShape::Definition& shape, const PhysicsRigidBody::Parameters& parameters);
 
     /**
-     * Creates a vehicle wheel based on the given rigid body and some 'safe' defaults.
+     * Creates a vehicle wheel based on some 'safe' defaults.
      * Also, traverse up the scene graph until we find the first common ancestor with another node
      * of collision type VEHICLE and add ourself as a wheel onto that vehicle. This assumes that the
      * VEHICLE comes before the VEHICLE_WHEEL in the ".scene" (properties) file.
      * 
-     * @param node The node to create a rigid body for; note that the node must have
-     *      a model attached to it prior to creating a rigid body for it.
-     * @param rigidBody The rigid body.
+     * @param node The node to create a vehicle wheel for.
      */
-    PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody);
+    PhysicsVehicleWheel(Node* node);
 
     /**
      * Private copy constructor to prevent copying.
@@ -330,6 +307,13 @@ private:
      */
     // Note: Currently this method is silent on failure to find a host.
     void findAncestorAndBind();
+
+    /**
+     * Depth-first search for the first vehicle starting from the specified node.
+     *
+     * @param node the starting node for the recursive search.
+     */
+    PhysicsVehicle* findVehicle(Node* node);
 
     /**
      * Sets the host vehicle for this wheel.
@@ -373,7 +357,6 @@ private:
      */
     void getWheelPos(Vector3* result) const;
 
-    PhysicsRigidBody* _rigidBody;
     PhysicsVehicle* _host;
     unsigned int _indexInHost;
     Vector3 _initialOffset;

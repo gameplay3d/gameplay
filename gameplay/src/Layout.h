@@ -12,10 +12,12 @@ class Container;
 class Control;
 
 /**
- * The layout interface for UI containers.
+ * Defines the layout for containers.
  *
- * Implementations of this interface are responsible for positioning, resizing
- * and then calling update on all the controls within a container.
+ * Implementations are responsible for positioning, resizing and
+ * calling update on all the controls within a container.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Layout : public Ref
 {
@@ -23,6 +25,7 @@ class Layout : public Ref
     friend class Form;
 
 public:
+
     /**
      * Layout types available to containers.
      */

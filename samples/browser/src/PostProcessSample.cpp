@@ -79,21 +79,21 @@ PostProcessSample::PostProcessSample()
 
 void PostProcessSample::initialize()
 {
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Load game scene from file
     _scene = Scene::load("res/common/duck.gpb");
-
-    // Get light node
-    Node* lightNode = _scene->findNode("directionalLight1");
-    Light* light = lightNode->getLight();
+    _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 
     // Initialize box model
     _modelNode = _scene->findNode("duck");
     Model* model = _modelNode->getModel();
     Material* material = model->setMaterial("res/common/duck.material");
-    material->getParameter("u_lightColor")->setValue(light->getColor());
-    material->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
+    // Get light node
+    Node* lightNode = _scene->findNode("directionalLight1");
+    Light* light = lightNode->getLight();
+    material->getParameter("u_directionalLightColor[0]")->setValue(light->getColor());
+    material->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());
 
     // Create one frame buffer for the full screen compositerss.
     _frameBuffer = FrameBuffer::create("PostProcessSample", FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);

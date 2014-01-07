@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 /**
- * Touch event
+ * Defines a touch screen event.
  */
 class Touch
 {

@@ -13,9 +13,12 @@ namespace gameplay
 {
 
 /**
- * This class represents the appearance of a control.  A style can have padding and margin values,
- * as well as overlays for each of the control's states.  Each overlay in turn can reference
- * other theme classes to determine the border, background, cursor, and image settings to use for
+ * Defines the style of a control.  
+ *
+ * A style can have padding and margin values,
+ * as well as overlays for each of the control's states.  
+ * Each overlay in turn can reference other theme classes to determine
+ * the border, background, cursor, and image settings to use for
  * a particular state, as well as color and font settings, etcetera.
  */
 class Theme::Style
