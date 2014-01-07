@@ -464,7 +464,7 @@ public:
      * This method is a simplified version of setAutoHeight(AutoSize) left intact for legacy reasons.
      * It enables or disables the AUTO_SIZE_STRETCH mode for the control's height.
      *
-     * @param autoWidth True to enable AUTO_SIZE_STRETCH for this control's height.
+     * @param autoHeight True to enable AUTO_SIZE_STRETCH for this control's height.
      */
     void setAutoHeight(bool autoHeight);
 

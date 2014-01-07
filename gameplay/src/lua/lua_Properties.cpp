@@ -28,11 +28,13 @@ void luaRegister_Properties()
         {"getQuaternionFromAxisAngle", lua_Properties_getQuaternionFromAxisAngle},
         {"getString", lua_Properties_getString},
         {"getType", lua_Properties_getType},
+        {"getVariable", lua_Properties_getVariable},
         {"getVector2", lua_Properties_getVector2},
         {"getVector3", lua_Properties_getVector3},
         {"getVector4", lua_Properties_getVector4},
         {"rewind", lua_Properties_rewind},
         {"setString", lua_Properties_setString},
+        {"setVariable", lua_Properties_setVariable},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -955,6 +957,70 @@ int lua_Properties_getType(lua_State* state)
     return 0;
 }
 
+int lua_Properties_getVariable(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                Properties* instance = getInstance(state);
+                const char* result = instance->getVariable(param1);
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Properties_getVariable - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
+
+                Properties* instance = getInstance(state);
+                const char* result = instance->getVariable(param1, param2);
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Properties_getVariable - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Properties_getVector2(lua_State* state)
 {
     // Get the number of parameters.
@@ -1164,6 +1230,46 @@ int lua_Properties_setString(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Properties_setString - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Properties_setVariable(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
+
+                Properties* instance = getInstance(state);
+                instance->setVariable(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Properties_setVariable - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

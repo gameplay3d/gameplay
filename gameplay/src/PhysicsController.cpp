@@ -551,7 +551,8 @@ void PhysicsController::update(float elapsedTime)
                 size_t size = iter->second._listeners.size();
                 for (size_t i = 0; i < size; i++)
                 {
-                    iter->second._listeners[i]->collisionEvent(PhysicsCollisionObject::CollisionListener::NOT_COLLIDING, iter->first);
+                    PhysicsCollisionObject::CollisionPair cp(iter->first.objectA, NULL);
+                    iter->second._listeners[i]->collisionEvent(PhysicsCollisionObject::CollisionListener::NOT_COLLIDING, cp);
                 }
             }
 

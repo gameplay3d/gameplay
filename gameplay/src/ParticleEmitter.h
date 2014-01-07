@@ -203,7 +203,7 @@ public:
      * The reference count of the specified texture is increased, and the 
      * current texture's reference count is decreased.
      *
-     * @param The new texture to set.
+     * @param texture The new texture to set.
      * @param textureBlending Blending mode for the new texture.
      */
     void setTexture(Texture* texture, TextureBlending textureBlending);

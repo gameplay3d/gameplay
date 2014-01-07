@@ -14,7 +14,7 @@ namespace gameplay
  * The audio listener represents where you are listening from.
  * In a 3D scene this is usually the active camera.
  * 
- * @seee Scene::bindAudioListenerToCamera
+ * @see Scene::bindAudioListenerToCamera
  */
 class AudioListener : public Camera::Listener
 {

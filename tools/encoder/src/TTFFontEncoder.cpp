@@ -107,6 +107,34 @@ unsigned char* createDistanceFields(unsigned char* img, unsigned int width, unsi
     return out;
 }
 
+// Stores a single genreated font size to be written into the GPB
+struct FontData
+{
+    // Array of glyphs for a font
+    TTFGlyph glyphArray[END_INDEX - START_INDEX];
+
+    // Stores final height of a row required to render all glyphs
+    int fontSize;
+
+    // Actual size of the underlying glyphs (may be different from fontSize)
+    int glyphSize;
+
+    // Font texture
+    unsigned char* imageBuffer;
+    unsigned int imageWidth;
+    unsigned int imageHeight;
+
+    FontData() : fontSize(0), glyphSize(0), imageBuffer(NULL), imageWidth(0), imageHeight(0)
+    {
+    }
+
+    ~FontData()
+    {
+        if (imageBuffer)
+            free(imageBuffer);
+    }
+};
+ 
 int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsigned int>& fontSizes, const char* id, bool fontpreview = false, Font::FontFormat fontFormat = Font::BITMAP)
 {
     // Initialize freetype library.
@@ -127,33 +155,6 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
         return -1;
     }
 
-    // Stores a single genreated font size to be written into the GPB
-    struct FontData
-    {
-        // Array of glyphs for a font
-        TTFGlyph glyphArray[END_INDEX - START_INDEX];
-
-        // Stores final height of a row required to render all glyphs
-        int fontSize;
-
-        // Actual size of the underlying glyphs (may be different from fontSize)
-        int glyphSize;
-
-        // Font texture
-        unsigned char* imageBuffer;
-        unsigned int imageWidth;
-        unsigned int imageHeight;
-
-        FontData() : fontSize(0), glyphSize(0), imageBuffer(NULL), imageWidth(0), imageHeight(0)
-        {
-        }
-
-        ~FontData()
-        {
-            if (imageBuffer)
-                free(imageBuffer);
-        }
-    };
     std::vector<FontData*> fonts;
 
     for (size_t fontIndex = 0, count = fontSizes.size(); fontIndex < count; ++fontIndex)
