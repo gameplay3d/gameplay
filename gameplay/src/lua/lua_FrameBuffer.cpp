@@ -5,6 +5,7 @@
 #include "FrameBuffer.h"
 #include "Game.h"
 #include "Ref.h"
+#include "lua_ImageFormat.h"
 
 namespace gameplay
 {
@@ -789,9 +790,37 @@ int lua_FrameBuffer_static_createScreenshot(lua_State* state)
             return 1;
             break;
         }
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Image::Format param1 = (Image::Format)lua_enumFromString_ImageFormat(luaL_checkstring(state, 1));
+
+                void* returnPtr = (void*)FrameBuffer::createScreenshot(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Image");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_FrameBuffer_static_createScreenshot - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
             lua_error(state);
             break;
         }

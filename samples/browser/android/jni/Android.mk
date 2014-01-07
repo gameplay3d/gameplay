@@ -84,6 +84,7 @@ LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp \
 	TerrainSample.cpp \
     TextSample.cpp \
     TextureSample.cpp \
+    TextureCubeSample.cpp \
 	TriangleSample.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES

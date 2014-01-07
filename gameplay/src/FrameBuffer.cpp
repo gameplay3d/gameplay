@@ -174,6 +174,7 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
     if (target)
     {
         GP_ASSERT( _renderTargets[index]->getTexture() );
+		GP_ASSERT( _renderTargets[index]->getTexture()->getType() == Texture::TEX_2D );
 
         ++_renderTargetCount;
 
@@ -182,8 +183,20 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 
         // Now set this target as the color attachment corresponding to index.
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
+		Texture* texture = _renderTargets[index]->getTexture();
         GLenum attachment = GL_COLOR_ATTACHMENT0 + index;
-        GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, _renderTargets[index]->getTexture()->getHandle(), 0) );
+		GLenum textarget;
+		Texture::CubeFace face = texture->getFace();
+		if(face == Texture::NOT_A_FACE)
+		{
+			textarget = GL_TEXTURE_2D;
+		}
+		else
+		{
+			// Texture cube. A face from a texture cube will return the cube's handle, so we need to point to an explicit face
+			textarget = GL_TEXTURE_CUBE_MAP_POSITIVE_X + face;
+		}
+        GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textarget, texture->getHandle(), 0) );
         GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
         {
@@ -272,18 +285,17 @@ FrameBuffer* FrameBuffer::bind()
 void FrameBuffer::getScreenshot(Image* image)
 {
 	GP_ASSERT(image);
-	GP_ASSERT(image->getFormat() == Image::RGBA);
 
 	unsigned int width = _currentFrameBuffer->getWidth();
 	unsigned int height = _currentFrameBuffer->getHeight();
 
 	if (image->getWidth() == width && image->getHeight() == height)
-		GL_ASSERT( glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, image->getData()) );
+		GL_ASSERT( glReadPixels(0, 0, width, height, (image->getFormat() == Image::RGBA ? GL_RGBA : GL_RGB), GL_UNSIGNED_BYTE, image->getData()) );
 }
 
-Image* FrameBuffer::createScreenshot()
+Image* FrameBuffer::createScreenshot(Image::Format format)
 {
-	Image* screenshot = Image::create(_currentFrameBuffer->getWidth(), _currentFrameBuffer->getHeight(), Image::RGBA, NULL);
+	Image* screenshot = Image::create(_currentFrameBuffer->getWidth(), _currentFrameBuffer->getHeight(), format, NULL);
 	getScreenshot(screenshot);
 
 	return screenshot;
