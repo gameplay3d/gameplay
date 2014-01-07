@@ -19,6 +19,7 @@
 *.terrain text
 *.config text
 *.txt text
+*.xml text
 *.md text
 
 # Declare windows files that will always have CRLF line endings on checkout.
