@@ -143,9 +143,15 @@ Public Types</h2></td></tr>
 <b>ALIGN_BOTTOM_RIGHT</b> =  ALIGN_BOTTOM | ALIGN_RIGHT
 <br/>
  }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#ab18b618d412a0dd790d6a6078765b665">Format</a> { <b>BITMAP</b> =  0, 
+<b>DISTANCE_FIELD</b> =  1
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a37eadad72bb882e24a656c9efb0ebda1">getSize</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a33ca3f276d3f64f1cf5f0061572ffc0a">getSize</a> (unsigned int index=0) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a7fa9034b1edaa5b023187ffadea2ea95">getSizeCount</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_font.html#ab18b618d412a0dd790d6a6078765b665">Format</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#abf656ae4ce13449a06394926a86ddaf1">getFormat</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#ad3e16d8bc79aff1f0e316067a48a6759">isCharacterSupported</a> (int character) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a9c1ba229364193649f71d5e93c7f5637">start</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">drawText</a> (const char *text, int x, int y, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, bool rightToLeft=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a570322bf3209492e5778554ef6292dc5">drawText</a> (const char *text, int x, int y, float red, float green, float blue, float alpha, unsigned int size=0, bool rightToLeft=false)</td></tr>
@@ -155,9 +161,11 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#af15e5143cd584d253cfa8cf4722fe868">finish</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a15ef90498b3283f8472d8caa0020ef7e">measureText</a> (const char *text, unsigned int size, unsigned int *widthOut, unsigned int *heightOut)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#af0b1d2b8dec763cde4ee5c9e3e9bb9e2">measureText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, unsigned int size, <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *out, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool ignoreClip=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a80e9f57a12e9e91bceba16d970bc5948">getCharacterSpacing</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#af6cf5b02e2bc7a3486993b890693ad62">setCharacterSpacing</a> (float spacing)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#aaafb11282d2a2e67d28eecd192397092">getIndexAtLocation</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, unsigned int size, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;inLocation, <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *outLocation, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#aaf8f5afae37d25978c8c40baaa550c09">getLocationAtIndex</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, unsigned int size, <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *outLocation, const unsigned int destIndex, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#ac2264cf9588e7eb56e56454fa2436c95">getSpriteBatch</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a58eba5183cb1dcf44c33fc4d5194d5c8">getSpriteBatch</a> (unsigned int size) const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_font.html">Font</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a0a57a9b33b572f8e99724174e2a17c37">create</a> (const char *path, const char *id=NULL)</td></tr>
@@ -166,6 +174,20 @@ Static Public Member Functions</h2></td></tr>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a font for text rendering. </p>
 </div><hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="ab18b618d412a0dd790d6a6078765b665"></a><!-- doxytag: member="gameplay::Font::Format" ref="ab18b618d412a0dd790d6a6078765b665" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classgameplay_1_1_font.html#ab18b618d412a0dd790d6a6078765b665">gameplay::Font::Format</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Defines the format of the font. </p>
+
+</div>
+</div>
 <a class="anchor" id="aac2de4588d23d69e5d0cee7b19a5b9cf"></a><!-- doxytag: member="gameplay::Font::Justify" ref="aac2de4588d23d69e5d0cee7b19a5b9cf" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -229,7 +251,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The specified font.  </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The specified <a class="el" href="classgameplay_1_1_font.html">Font</a> or NULL if there was an error.  </dd></dl>
 
 </div>
 </div>
@@ -576,6 +598,41 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a80e9f57a12e9e91bceba16d970bc5948"></a><!-- doxytag: member="gameplay::Font::getCharacterSpacing" ref="a80e9f57a12e9e91bceba16d970bc5948" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_font.html#a80e9f57a12e9e91bceba16d970bc5948">gameplay::Font::getCharacterSpacing</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns current character spacing for this font in percentage of fonts size.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_font.html#af6cf5b02e2bc7a3486993b890693ad62">setCharacterSpacing(float)</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abf656ae4ce13449a06394926a86ddaf1"></a><!-- doxytag: member="gameplay::Font::getFormat" ref="abf656ae4ce13449a06394926a86ddaf1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_font.html#ab18b618d412a0dd790d6a6078765b665">Format</a> <a class="el" href="classgameplay_1_1_font.html#abf656ae4ce13449a06394926a86ddaf1">gameplay::Font::getFormat</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the font format. BITMAP or DISTANCEMAP. </p>
+
+</div>
+</div>
 <a class="anchor" id="aaafb11282d2a2e67d28eecd192397092"></a><!-- doxytag: member="gameplay::Font::getIndexAtLocation" ref="aaafb11282d2a2e67d28eecd192397092" args="(const char *text, const Rectangle &amp;clip, unsigned int size, const Vector2 &amp;inLocation, Vector2 *outLocation, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false)" -->
 <div class="memitem">
 <div class="memproto">
@@ -729,29 +786,38 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a37eadad72bb882e24a656c9efb0ebda1"></a><!-- doxytag: member="gameplay::Font::getSize" ref="a37eadad72bb882e24a656c9efb0ebda1" args="()" -->
+<a class="anchor" id="a33ca3f276d3f64f1cf5f0061572ffc0a"></a><!-- doxytag: member="gameplay::Font::getSize" ref="a33ca3f276d3f64f1cf5f0061572ffc0a" args="(unsigned int index=0) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_font.html#a37eadad72bb882e24a656c9efb0ebda1">gameplay::Font::getSize</a> </td>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_font.html#a33ca3f276d3f64f1cf5f0061572ffc0a">gameplay::Font::getSize</a> </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the font size (max height of glyphs) in pixels. </p>
+<p>Gets the font size (max height of glyphs) in pixels, at the specified index.</p>
+<p>The <a class="el" href="classgameplay_1_1_font.html">Font</a> class can store multiple sizes of glyphs for a font. The number of font sizes stored can be retrieved via getSizeCount.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index of the size to returned (default is 0). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_font.html#a7fa9034b1edaa5b023187ffadea2ea95">getSizeCount</a> </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ac2264cf9588e7eb56e56454fa2436c95"></a><!-- doxytag: member="gameplay::Font::getSpriteBatch" ref="ac2264cf9588e7eb56e56454fa2436c95" args="() const " -->
+<a class="anchor" id="a7fa9034b1edaa5b023187ffadea2ea95"></a><!-- doxytag: member="gameplay::Font::getSizeCount" ref="a7fa9034b1edaa5b023187ffadea2ea95" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* <a class="el" href="classgameplay_1_1_font.html#ac2264cf9588e7eb56e56454fa2436c95">gameplay::Font::getSpriteBatch</a> </td>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_font.html#a7fa9034b1edaa5b023187ffadea2ea95">gameplay::Font::getSizeCount</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -759,8 +825,57 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the sprite batch for this <a class="el" href="classgameplay_1_1_font.html">Font</a>.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The sprite batch for this <a class="el" href="classgameplay_1_1_font.html">Font</a>. </dd></dl>
+<p>Returns the number of font sizes supported by this <a class="el" href="classgameplay_1_1_font.html">Font</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a58eba5183cb1dcf44c33fc4d5194d5c8"></a><!-- doxytag: member="gameplay::Font::getSpriteBatch" ref="a58eba5183cb1dcf44c33fc4d5194d5c8" args="(unsigned int size) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* <a class="el" href="classgameplay_1_1_font.html#a58eba5183cb1dcf44c33fc4d5194d5c8">gameplay::Font::getSpriteBatch</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the sprite batch used to draw this <a class="el" href="classgameplay_1_1_font.html">Font</a>.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>The font size to be drawn.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> that most closely matches the requested font size. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad3e16d8bc79aff1f0e316067a48a6759"></a><!-- doxytag: member="gameplay::Font::isCharacterSupported" ref="ad3e16d8bc79aff1f0e316067a48a6759" args="(int character) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_font.html#ad3e16d8bc79aff1f0e316067a48a6759">gameplay::Font::isCharacterSupported</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>character</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if this font supports the specified character code.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">character</td><td>The character code to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if this <a class="el" href="classgameplay_1_1_font.html">Font</a> supports (can draw) the specified character, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -883,6 +998,32 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af6cf5b02e2bc7a3486993b890693ad62"></a><!-- doxytag: member="gameplay::Font::setCharacterSpacing" ref="af6cf5b02e2bc7a3486993b890693ad62" args="(float spacing)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_font.html#af6cf5b02e2bc7a3486993b890693ad62">gameplay::Font::setCharacterSpacing</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>spacing</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the fixed character spacing for this font.</p>
+<p>Character spacing is the fixed amount of space that is inserted between characters. This is a simplified type of kerning and does not take adjacent characters into consideration. Character spacing is defined as a floating point value that is interpreted as a percentage of size used to draw the font. For example, a value of 0.1 would cause a spacing of 10% of the font size to be inserted between adjacent characters. For a font size of 20, this would equate to 2 pixels of extra space between characters.</p>
+<p>The default character spacing for fonts is 0.125.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">spacing</td><td>New fixed character spacing, expressed as a percentage of font size. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a9c1ba229364193649f71d5e93c7f5637"></a><!-- doxytag: member="gameplay::Font::start" ref="a9c1ba229364193649f71d5e93c7f5637" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -918,7 +1059,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay::AudioListener Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="gameplay::AudioListener" --><!-- doxytag: inherits="gameplay::Transform::Listener" -->
+<!-- doxytag: class="gameplay::AudioListener" --><!-- doxytag: inherits="gameplay::Camera::Listener" -->
 <p><code>#include &lt;AudioListener.h&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for gameplay::AudioListener:</div>
@@ -103,7 +103,7 @@ Inheritance diagram for gameplay::AudioListener:</div>
  <div class="center">
   <img src="classgameplay_1_1_audio_listener.png" usemap="#gameplay::AudioListener_map" alt=""/>
   <map id="gameplay::AudioListener_map" name="gameplay::AudioListener_map">
-<area href="classgameplay_1_1_transform_1_1_listener.html" alt="gameplay::Transform::Listener" shape="rect" coords="0,0,180,24"/>
+<area href="classgameplay_1_1_camera_1_1_listener.html" alt="gameplay::Camera::Listener" shape="rect" coords="0,0,167,24"/>
 </map>
  </div></div>
 
@@ -131,7 +131,9 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_audio_listener.html">AudioListener</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_listener.html#a7a90fece59eef16495a6a1fba56dc141">getInstance</a> ()</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines an audio listener in 3D space. </p>
+<div class="textblock"><p>Defines an audio listener in 3D space.</p>
+<p>The audio listener represents where you are listening from. In a 3D scene this is usually the active camera.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_scene.html#a3c3e6c8ff626476027f67d08d409ba36">Scene::bindAudioListenerToCamera</a> </dd></dl>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="aa937d6023a8f273beabe4d3dc0868842"></a><!-- doxytag: member="gameplay::AudioListener::getCamera" ref="aa937d6023a8f273beabe4d3dc0868842" args="() const " -->
 <div class="memitem">
@@ -573,7 +575,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:36 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -80,6 +80,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 This is the complete list of members for <a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a>, including all inherited members.<table>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a4e310ae4419c45a6fed11fd34c27c7e1">createFileFromAsset</a>(const char *path)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#ae4f5cab63325b8800eec48e8cfecd821">DialogMode</a> enum name</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a83a243e2b7b02e7efe4207e59f4cfa55">displayFileDialog</a>(size_t dialogMode, const char *title, const char *filterDescription, const char *filterExtensions, const char *initialDirectory)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a6a2fa61565252c8652bc4b972444d905">fileExists</a>(const char *filePath)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#ab7324718472508fe11c4042c62879f61">getDirectoryName</a>(const char *path)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a2a9e75f6ad418973f51e435a11b4b3d3">getExtension</a>(const char *path)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
@@ -88,11 +90,13 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_f
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a697fdbb8456f35f68f6aed8ebacea912">listFiles</a>(const char *dirPath, std::vector&lt; std::string &gt; &amp;files)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a136986ea0a1564698c405df64f13632e">loadResourceAliases</a>(const char *aliasFilePath)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a05c6773c471a5378fdda80806df2b220">loadResourceAliases</a>(Properties *properties)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a9bb7c1945ac2c840cd541e52ccc11924">open</a>(const char *path, size_t mode=READ)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>OPEN</b> enum value (defined in <a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a>)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a9eee9d3715de6d12c959911a390d6717">open</a>(const char *path, size_t streamMode=READ)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#ad51e142f9305ac652edd4989197dba87">openFile</a>(const char *filePath, const char *mode)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>READ</b> enum value (defined in <a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a>)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#af65e3195958242239fcb8db228a9db0c">readAll</a>(const char *filePath, int *fileSize=NULL)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a738a80f4df479ac37fcfe173adad5e90">resolvePath</a>(const char *path)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>SAVE</b> enum value (defined in <a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a>)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#ac3c9fe8cc588bc76a53c5c3841781f73">setResourcePath</a>(const char *path)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_file_system.html#a2c2688215938e9f5883b994cce172f3d">StreamMode</a> enum name</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>WRITE</b> enum value (defined in <a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a>)</td><td><a class="el" href="classgameplay_1_1_file_system.html">gameplay::FileSystem</a></td><td></td></tr>
@@ -115,7 +119,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_f
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

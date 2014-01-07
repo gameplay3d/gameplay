@@ -146,27 +146,8 @@ Protected Member Functions</h2></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a class for vehicle wheel physics which represents the individual wheel itself as well as the tire and suspension.</p>
-<p>The following properties are available for wheels:</p>
-<div class="fragment"><pre class="fragment">
-    collisionObject &lt;wheelID&gt;
-    {
-        type                     = VEHICLE_WHEEL
-
-        steerable                = &lt;bool&gt;                // indicates whether wheel is steerable
-        wheelDirection           = &lt;float, float, float&gt; // direction of strut extension, in chassis space
-        wheelAxle                = &lt;float, float, float&gt; // direction of axle (spin axis), in chassis space
-        strutConnectionOffset    = &lt;float, float, float&gt; // offset from default strut connection point
-        strutRestLength          = &lt;float&gt;               // strut rest length
-        strutTravelMax           = &lt;float&gt;               // maximum strut travel
-        strutStiffness           = &lt;float&gt;               // strut stiffness, normalized to chassis mass
-        strutDampingCompression  = &lt;float&gt;               // strut damping under compression, normalized to chassis mass
-        strutDampingRelaxation   = &lt;float&gt;               // strut damping under relaxation, normalized to chassis mass
-        strutForceMax            = &lt;float&gt;               // maximum strut force
-        frictionBreakout         = &lt;float&gt;               // breakout friction
-        wheelRadius              = &lt;float&gt;               // wheel radius
-        rollInfluence            = &lt;float&gt;               // how side friction affects chassis roll, normalized
-    }
- </pre></div> </div><hr/><h2>Member Function Documentation</h2>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects</a> </dd></dl>
+</div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a78a18f9a2b05b865774fdc809d8cf8b2"></a><!-- doxytag: member="gameplay::PhysicsVehicleWheel::getCollisionObject" ref="a78a18f9a2b05b865774fdc809d8cf8b2" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -831,7 +812,7 @@ Protected Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

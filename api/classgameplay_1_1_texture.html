@@ -148,11 +148,11 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#abd9c85cfbbba9068ed9b50a64288d609">create</a> (const char *path, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a154ece331771656e95c174d20c35bed7">create</a> (<a class="el" href="classgameplay_1_1_image.html">Image</a> *image, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a0c79e32bab9ddfcba065d2e3c898d5bc">create</a> (<a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> format, unsigned int width, unsigned int height, unsigned char *data, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#af4154b0c1ac69906b3fbcf8114ee24c2">create</a> (<a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> format, unsigned int width, unsigned int height, const unsigned char *data, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a22178110f5ec57b0360d11e67f811627">create</a> (TextureHandle handle, int width, int height, <a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> format=UNKNOWN)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Represents a texture. </p>
+<div class="textblock"><p>Defines a standard texture. </p>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a17d2554f8fb6b579843f5fe348dc887e"></a><!-- doxytag: member="gameplay::Texture::Filter" ref="a17d2554f8fb6b579843f5fe348dc887e" args="" -->
 <div class="memitem">
@@ -270,7 +270,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0c79e32bab9ddfcba065d2e3c898d5bc"></a><!-- doxytag: member="gameplay::Texture::create" ref="a0c79e32bab9ddfcba065d2e3c898d5bc" args="(Format format, unsigned int width, unsigned int height, unsigned char *data, bool generateMipmaps=false)" -->
+<a class="anchor" id="af4154b0c1ac69906b3fbcf8114ee24c2"></a><!-- doxytag: member="gameplay::Texture::create" ref="af4154b0c1ac69906b3fbcf8114ee24c2" args="(Format format, unsigned int width, unsigned int height, const unsigned char *data, bool generateMipmaps=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -295,7 +295,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramtype">const unsigned char *&#160;</td>
           <td class="paramname"><em>data</em>, </td>
         </tr>
         <tr>
@@ -539,7 +539,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -106,7 +106,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ab5379118d7f39805fb7d62820aa36cd6">enterMessagePump</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_platform.html">Platform</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a60e8f036665c1b3ab0f36f7cfb55622d">create</a> (<a class="el" href="classgameplay_1_1_game.html">Game</a> *game, void *attachToWindow=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_platform.html">Platform</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a665a2091d832c2eca7a29a51228fe9e9">create</a> (<a class="el" href="classgameplay_1_1_game.html">Game</a> *game)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a52ceea1e71f2c8d99310baa61a69223b">swapBuffers</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a7fa2c9df76b7c19c6711ae496649ee76">touchEventInternal</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex, bool actuallyMouse=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a8b1b7b370d990cf54d22653b308b9497">keyEventInternal</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
@@ -114,11 +114,15 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#af6c5f44e7970c3ce97508251cc23f64f">gestureSwipeEventInternal</a> (int x, int y, int direction)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aca1769dd866f2b7de9fd9009ed0bd0ad">gesturePinchEventInternal</a> (int x, int y, float scale)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a4aa435ce550836b3ab3e5585ba1e3cdd">gestureTapEventInternal</a> (int x, int y)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a8a260e6c8b6e44ef0c30cbd3f97038da">gestureLongTapEventInternal</a> (int x, int y, float duration)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aefd362c33509d818b5109182d94f16fc">gestureDragEventInternal</a> (int x, int y)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a267ff1910dabcb5dfc78672e150279d9">gestureDropEventInternal</a> (int x, int y)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a675072446a9bb21dbe840b896e52bfd0">resizeEventInternal</a> (unsigned int width, unsigned int height)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a0256707204f0ade5bdfdd85b4a43693d">gamepadEventInternal</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad, unsigned int analogIndex=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a7e094074d74f3ca49f7669bb6f93f4a5">gamepadEventConnectedInternal</a> (GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int vendorId, unsigned int productId, const char *vendorString, const char *productString)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a4a282fb3ebd9cae31ab3c00a17c10acd">gamepadEventDisconnectedInternal</a> (GamepadHandle handle)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a8be3321d6f355bd53b5a3ab179d8c9ee">pollGamepadState</a> (<a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a451762616bc523f10cbe23b3f5a299b9">displayFileDialog</a> (size_t mode, const char *title, const char *filterDescription, const char *filterExtensions, const char *initialDirectory)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a1f27f0260b230dad54f08bd5d439d4bd">shutdownInternal</a> ()</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
@@ -143,21 +147,64 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a60e8f036665c1b3ab0f36f7cfb55622d"></a><!-- doxytag: member="gameplay::Platform::create" ref="a60e8f036665c1b3ab0f36f7cfb55622d" args="(Game *game, void *attachToWindow=NULL)" -->
+<a class="anchor" id="a665a2091d832c2eca7a29a51228fe9e9"></a><!-- doxytag: member="gameplay::Platform::create" ref="a665a2091d832c2eca7a29a51228fe9e9" args="(Game *game)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classgameplay_1_1_platform.html">Platform</a>* <a class="el" href="classgameplay_1_1_platform.html#a60e8f036665c1b3ab0f36f7cfb55622d">gameplay::Platform::create</a> </td>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_platform.html">Platform</a>* <a class="el" href="classgameplay_1_1_platform.html#a665a2091d832c2eca7a29a51228fe9e9">gameplay::Platform::create</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_game.html">Game</a> *&#160;</td>
-          <td class="paramname"><em>game</em>, </td>
+          <td class="paramname"><em>game</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates a platform for the specified game which it will interact with.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">game</td><td>The game to create a platform for.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The created platform interface.  </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a451762616bc523f10cbe23b3f5a299b9"></a><!-- doxytag: member="gameplay::Platform::displayFileDialog" ref="a451762616bc523f10cbe23b3f5a299b9" args="(size_t mode, const char *title, const char *filterDescription, const char *filterExtensions, const char *initialDirectory)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string <a class="el" href="classgameplay_1_1_platform.html#a451762616bc523f10cbe23b3f5a299b9">gameplay::Platform::displayFileDialog</a> </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>attachToWindow</em> = <code>NULL</code>&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>title</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filterDescription</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filterExtensions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>initialDirectory</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -167,16 +214,19 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Creates a platform for the specified game which it will interact with.</p>
+<p>Displays an open or save dialog using the native platform dialog system.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">game</td><td>The game to create a platform for. </td></tr>
-    <tr><td class="paramname">attachToWindow</td><td>The native window handle to optionally attach to.</td></tr>
+    <tr><td class="paramname">mode</td><td>The mode of the dialog. (Ex. OPEN or SAVE) </td></tr>
+    <tr><td class="paramname">title</td><td>The title of the dialog. (Ex. Select File or Save File) </td></tr>
+    <tr><td class="paramname">filterDescription</td><td>The file filter description. (Ex. <a class="el" href="classgameplay_1_1_image.html">Image</a> Files) </td></tr>
+    <tr><td class="paramname">filterExtensions</td><td>The semi-colon delimited list of filtered file extensions. (Ex. png;jpg;bmp) </td></tr>
+    <tr><td class="paramname">initialDirectory</td><td>The initial directory to open or save files from. (Ex. "res") If NULL this will use the executable directory. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The created platform interface.  </dd></dl>
-
+<dl class="return"><dt><b>Returns:</b></dt><dd>The file that is opened or saved, or an empty string if canceled.</dd></dl>
+ 
 </div>
 </div>
 <a class="anchor" id="ab5379118d7f39805fb7d62820aa36cd6"></a><!-- doxytag: member="gameplay::Platform::enterMessagePump" ref="ab5379118d7f39805fb7d62820aa36cd6" args="()" -->
@@ -194,7 +244,7 @@ Static Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Begins processing the platform messages.</p>
 <p>This method handles all OS window messages and drives the game loop. It normally does not return until the application is closed.</p>
-<p>If a attachToWindow is passed to <a class="el" href="classgameplay_1_1_platform.html#a60e8f036665c1b3ab0f36f7cfb55622d">Platform::create</a> the message pump will instead attach to or allow the attachToWindow to drive the game loop on the platform.</p>
+<p>If a attachToWindow is passed to <a class="el" href="classgameplay_1_1_platform.html#a665a2091d832c2eca7a29a51228fe9e9">Platform::create</a> the message pump will instead attach to or allow the attachToWindow to drive the game loop on the platform.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The platform message pump return code. </dd></dl>
 
 </div>
@@ -302,6 +352,96 @@ Static Public Member Functions</h2></td></tr>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>analogIndex</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Internal method used only from static code in various platform implementation.</p>
+ 
+</div>
+</div>
+<a class="anchor" id="aefd362c33509d818b5109182d94f16fc"></a><!-- doxytag: member="gameplay::Platform::gestureDragEventInternal" ref="aefd362c33509d818b5109182d94f16fc" args="(int x, int y)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#aefd362c33509d818b5109182d94f16fc">gameplay::Platform::gestureDragEventInternal</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Internal method used only from static code in various platform implementation.</p>
+ 
+</div>
+</div>
+<a class="anchor" id="a267ff1910dabcb5dfc78672e150279d9"></a><!-- doxytag: member="gameplay::Platform::gestureDropEventInternal" ref="a267ff1910dabcb5dfc78672e150279d9" args="(int x, int y)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#a267ff1910dabcb5dfc78672e150279d9">gameplay::Platform::gestureDropEventInternal</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Internal method used only from static code in various platform implementation.</p>
+ 
+</div>
+</div>
+<a class="anchor" id="a8a260e6c8b6e44ef0c30cbd3f97038da"></a><!-- doxytag: member="gameplay::Platform::gestureLongTapEventInternal" ref="a8a260e6c8b6e44ef0c30cbd3f97038da" args="(int x, int y, float duration)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#a8a260e6c8b6e44ef0c30cbd3f97038da">gameplay::Platform::gestureLongTapEventInternal</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>duration</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -493,7 +633,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Internal metehod used by <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> that polls the platform for the updated <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> states such as joysticks, buttons and trigger values.</p>
+<p>Internal method used by <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> that polls the platform for the updated <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> states such as joysticks, buttons and trigger values.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">gamepad</td><td>The gamepad to be returned with the latest polled values populated.  </td></tr>
@@ -629,7 +769,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

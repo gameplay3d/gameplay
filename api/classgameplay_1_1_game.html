@@ -150,7 +150,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_a_i_controller.html">AIController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ac04cc7164369d033284e0012d2851a9d">getAIController</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_script_controller.html">ScriptController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4c1106e6ca7b0f1e8f4de70c23170c48">getScriptController</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_audio_listener.html">AudioListener</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a616975fdf2f3592980419dbe4839b13e">getAudioListener</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#afcaae61eaa0e0773499d869a6826e562">menuEvent</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a092768704d671429dc791304f208c75c">displayKeyboard</a> (bool display)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a13a086704042c967d04f97838ca076e8">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5a6a1e2e2774f849a75b21a79a22deae">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
@@ -167,19 +166,21 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a50324c58dde49681f70a46d01c950f6d">isGestureRegistered</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ac99596b24be12650f1280dbee3b16754">gestureSwipeEvent</a> (int x, int y, int direction)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a51e9c3ea567f7c01297fd8a864a6f6f8">gesturePinchEvent</a> (int x, int y, float scale)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5172bbd6c9d498663942d0c72a974e4f">gestureLongTapEvent</a> (int x, int y, float duration)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3616fd8d58c48099ddc7e7f0ffa1645a">gestureTapEvent</a> (int x, int y)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a9781aec3d5a99e3c3aa72c829d461670">gestureDragEvent</a> (int x, int y)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a428b224f1d3a2a959ff4fac35be224e7">gestureDropEvent</a> (int x, int y)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a15ebb285ef4dfafbe1cc0875ca2593d2">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">getGamepadCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a9e6c607105f69b400ca5e41815b43286">getGamepad</a> (unsigned int index, bool preferPhysical=true) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4eb19ea23a8d277a472a4443479d2f50">setMultiSampling</a> (bool enabled)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8973e99ca5f49d8a6805efaa6768ad8c"></a><!-- doxytag: member="gameplay::Game::isMultiSampling" ref="a8973e99ca5f49d8a6805efaa6768ad8c" args="() const " -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMultiSampling</b> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a8973e99ca5f49d8a6805efaa6768ad8c">isMultiSampling</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ade96e57a1dbd20ab2dfb4203b4c0d6f6">setMultiTouch</a> (bool enabled)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04720fabcd25eba03eaee2f81cfcdc16">isMultiTouch</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5">canExit</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a37c0937707f24f78e6b6a255ec542283">hasAccelerometer</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#adaf93336c9fe6575ba2efa4664136eb0">getRawSensorValues</a> (float *accelX, float *accelY, float *accelZ, float *gyroX, float *gyroY, float *gyroZ)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3ed6fe6af24270d1c517534da3d305a7">getSensorValues</a> (float *accelX, float *accelY, float *accelZ, float *gyroX, float *gyroY, float *gyroZ)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aef085f98f47e0bb24b4befa6f79cfc82">getArguments</a> (int *argc, char ***argv) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3b8adb5a096f735bfcfec801f02ea0da">schedule</a> (float timeOffset, <a class="el" href="classgameplay_1_1_time_listener.html">TimeListener</a> *timeListener, void *cookie=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aae0c5115535c01bcac52aae65b7f4bbb">schedule</a> (float timeOffset, const char *function)</td></tr>
@@ -204,7 +205,9 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#abff1327e3158e34922d8ecb8f01d9960">updateOnce</a> ()</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines the basic game initialization, logic and platform delegates. </p>
+<div class="textblock"><p>Defines the base class your game will extend for game initialization, logic and platform delegates.</p>
+<p>This represents a running cross-platform game application and provides an abstraction to most typical platform functionality and events.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Game_Config">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Game_Config</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a7866ef6e9e0ee3b812b408a75cc13cdb"></a><!-- doxytag: member="gameplay::Game::ClearFlags" ref="a7866ef6e9e0ee3b812b408a75cc13cdb" args="" -->
 <div class="memitem">
@@ -512,6 +515,118 @@ Protected Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">evt</td><td>The gamepad event that occurred. </td></tr>
     <tr><td class="paramname">gamepad</td><td>The gamepad that generated the event. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a9781aec3d5a99e3c3aa72c829d461670"></a><!-- doxytag: member="gameplay::Game::gestureDragEvent" ref="a9781aec3d5a99e3c3aa72c829d461670" args="(int x, int y)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a9781aec3d5a99e3c3aa72c829d461670">gameplay::Game::gestureDragEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gesture.html">Gesture</a> callback on Gesture::DRAG events.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x-coordinate of the start of the drag event. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the start of the drag event. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a428b224f1d3a2a959ff4fac35be224e7"></a><!-- doxytag: member="gameplay::Game::gestureDropEvent" ref="a428b224f1d3a2a959ff4fac35be224e7" args="(int x, int y)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a428b224f1d3a2a959ff4fac35be224e7">gameplay::Game::gestureDropEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gesture.html">Gesture</a> callback on Gesture::DROP events.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x-coordinate of the drop event. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the drop event. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a5172bbd6c9d498663942d0c72a974e4f"></a><!-- doxytag: member="gameplay::Game::gestureLongTapEvent" ref="a5172bbd6c9d498663942d0c72a974e4f" args="(int x, int y, float duration)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a5172bbd6c9d498663942d0c72a974e4f">gameplay::Game::gestureLongTapEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>duration</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gesture.html">Gesture</a> callback on Gesture::LONG_TAP events.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x-coordinate of the long tap. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the long tap. </td></tr>
+    <tr><td class="paramname">duration</td><td>The duration of the long tap in ms. </td></tr>
   </table>
   </dd>
 </dl>
@@ -988,12 +1103,30 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="adaf93336c9fe6575ba2efa4664136eb0"></a><!-- doxytag: member="gameplay::Game::getRawSensorValues" ref="adaf93336c9fe6575ba2efa4664136eb0" args="(float *accelX, float *accelY, float *accelZ, float *gyroX, float *gyroY, float *gyroZ)" -->
+<a class="anchor" id="a4c1106e6ca7b0f1e8f4de70c23170c48"></a><!-- doxytag: member="gameplay::Game::getScriptController" ref="a4c1106e6ca7b0f1e8f4de70c23170c48" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_game.html#adaf93336c9fe6575ba2efa4664136eb0">gameplay::Game::getRawSensorValues</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_script_controller.html">ScriptController</a>* <a class="el" href="classgameplay_1_1_game.html#a4c1106e6ca7b0f1e8f4de70c23170c48">gameplay::Game::getScriptController</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the script controller for managing control of Lua scripts associated with the game.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The script controller for this game. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3ed6fe6af24270d1c517534da3d305a7"></a><!-- doxytag: member="gameplay::Game::getSensorValues" ref="a3ed6fe6af24270d1c517534da3d305a7" args="(float *accelX, float *accelY, float *accelZ, float *gyroX, float *gyroY, float *gyroZ)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_game.html#a3ed6fe6af24270d1c517534da3d305a7">gameplay::Game::getSensorValues</a> </td>
           <td>(</td>
           <td class="paramtype">float *&#160;</td>
           <td class="paramname"><em>accelX</em>, </td>
@@ -1036,7 +1169,7 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets raw sensor values, if equipped, allowing a distinction between device acceleration and rotation rate. Returns zeros on platforms with no corresponding support. See also <a class="el" href="classgameplay_1_1_game.html#a37c0937707f24f78e6b6a255ec542283">hasAccelerometer()</a> and <a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues()</a>.</p>
+<p>Gets sensor values (raw), if equipped, allowing a distinction between device acceleration and rotation rate. Returns zeros on platforms with no corresponding support. See also <a class="el" href="classgameplay_1_1_game.html#a37c0937707f24f78e6b6a255ec542283">hasAccelerometer()</a> and <a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues()</a>.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">accelX</td><td>The x-coordinate of the raw accelerometer data. </td></tr>
@@ -1048,24 +1181,6 @@ Protected Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a class="anchor" id="a4c1106e6ca7b0f1e8f4de70c23170c48"></a><!-- doxytag: member="gameplay::Game::getScriptController" ref="a4c1106e6ca7b0f1e8f4de70c23170c48" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_script_controller.html">ScriptController</a>* <a class="el" href="classgameplay_1_1_game.html#a4c1106e6ca7b0f1e8f4de70c23170c48">gameplay::Game::getScriptController</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const<code> [inline]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Gets the script controller for managing control of Lua scripts associated with the game.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The script controller for this game. </dd></dl>
 
 </div>
 </div>
@@ -1274,6 +1389,24 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8973e99ca5f49d8a6805efaa6768ad8c"></a><!-- doxytag: member="gameplay::Game::isMultiSampling" ref="a8973e99ca5f49d8a6805efaa6768ad8c" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_game.html#a8973e99ca5f49d8a6805efaa6768ad8c">gameplay::Game::isMultiSampling</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Is multi-sampling enabled.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>true if multi-sampling is enabled. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a04720fabcd25eba03eaee2f81cfcdc16"></a><!-- doxytag: member="gameplay::Game::isMultiTouch" ref="a04720fabcd25eba03eaee2f81cfcdc16" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1370,23 +1503,6 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>True if URL was opened successfully, false otherwise. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="afcaae61eaa0e0773499d869a6826e562"></a><!-- doxytag: member="gameplay::Game::menuEvent" ref="afcaae61eaa0e0773499d869a6826e562" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#afcaae61eaa0e0773499d869a6826e562">gameplay::Game::menuEvent</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Menu callback on menu events for platforms with special menu keys or special platform gestures. </p>
 
 </div>
 </div>
@@ -1993,7 +2109,7 @@ template&lt;class T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

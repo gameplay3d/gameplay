@@ -115,10 +115,12 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_technique.html#a6b3eb03a4b337fc4b473cd08f88f14be">getPassCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_pass.html">Pass</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_technique.html#ac35490ff24a19a07961de9004aeab472">getPassByIndex</a> (unsigned int index) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_pass.html">Pass</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_technique.html#a71c7982a45632ae7efd257df5c43140f">getPass</a> (const char *id) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_technique.html#acc90af9ab4b9a2bfbdb9c98add2b3f7e">setNodeBinding</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines a technique for an object to be rendered.</p>
-<p>This class encapsulates a set of passes. </p>
+<div class="textblock"><p>Defines a technique for how an object to be rendered.</p>
+<p>You should use techniques to support different sets of shader + definitions that will be all loaded when a material is loaded. You can then change the rendering technique at runtime without having to first load the shaders.</p>
+<p>A technique has one or more passes for supporting multi pass rendering. </p>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a300a94dfacfcb259eb1aaeb1ce44f310"></a><!-- doxytag: member="gameplay::Technique::getId" ref="a300a94dfacfcb259eb1aaeb1ce44f310" args="() const " -->
 <div class="memitem">
@@ -133,7 +135,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the Id of this <a class="el" href="classgameplay_1_1_material.html">Material</a> technique. </p>
+<p>Gets the id of this technique.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The Id of this technique. </dd></dl>
 
 </div>
 </div>
@@ -151,7 +154,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the pass with the specified ID. </p>
+<p>Gets the pass with the specified id.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The pass at the specified id. </dd></dl>
 
 </div>
 </div>
@@ -169,7 +173,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the pass at the specified index. </p>
+<p>Gets the pass at the specified index.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The pass at the specified index. </dd></dl>
 
 </div>
 </div>
@@ -186,7 +191,28 @@ Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the number of passes in this technique. </p>
+<p>Gets the number of passes in this technique.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The number of passes in this technique. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="acc90af9ab4b9a2bfbdb9c98add2b3f7e"></a><!-- doxytag: member="gameplay::Technique::setNodeBinding" ref="acc90af9ab4b9a2bfbdb9c98add2b3f7e" args="(Node *node)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_technique.html#acc90af9ab4b9a2bfbdb9c98add2b3f7e">gameplay::Technique::setNodeBinding</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_render_state.html#a267bd93726e3dc28f3bd7f9e1383b5cc">RenderState::setNodeBinding</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_render_state.html#a267bd93726e3dc28f3bd7f9e1383b5cc">gameplay::RenderState</a>.</p>
 
 </div>
 </div>
@@ -208,7 +234,7 @@ Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

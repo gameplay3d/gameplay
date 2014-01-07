@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a>  </div>
@@ -111,6 +112,9 @@ Inheritance diagram for gameplay::Camera:</div>
 
 <p><a href="classgameplay_1_1_camera-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera_1_1_listener.html">Listener</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#aa7448d20162cefe7afc712a258c15595">Type</a> { <b>PERSPECTIVE</b> =  1, 
@@ -145,6 +149,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a12ec9f52b59825cf84d03bf9b185f0bb">project</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;position, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#aad7e4fca47d80aa100a2d5b1cb3f1104">unproject</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, float depth, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a8e253da4bd8ed477f19ca07e9934c328">pickRay</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, <a class="el" href="classgameplay_1_1_ray.html">Ray</a> *dst) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a6a2db07e6b3830e5a6c8ba07cca0efb3">addListener</a> (<a class="el" href="classgameplay_1_1_camera_1_1_listener.html">Camera::Listener</a> *listener)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#aec69611d4a33c605a5629e3e2a9813a3">removeListener</a> (<a class="el" href="classgameplay_1_1_camera_1_1_listener.html">Camera::Listener</a> *listener)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a7e4474862a8153e821e4aa1e5a8b7dbb">createPerspective</a> (float fieldOfView, float aspectRatio, float nearPlane, float farPlane)</td></tr>
@@ -169,6 +175,30 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a6a2db07e6b3830e5a6c8ba07cca0efb3"></a><!-- doxytag: member="gameplay::Camera::addListener" ref="a6a2db07e6b3830e5a6c8ba07cca0efb3" args="(Camera::Listener *listener)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#a6a2db07e6b3830e5a6c8ba07cca0efb3">gameplay::Camera::addListener</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_camera_1_1_listener.html">Camera::Listener</a> *&#160;</td>
+          <td class="paramname"><em>listener</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Adds a camera listener.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listener</td><td>The listener to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a1e168c57a87fb45ed2a0351f69f3e5db"></a><!-- doxytag: member="gameplay::Camera::create" ref="a1e168c57a87fb45ed2a0351f69f3e5db" args="(Properties *properties)" -->
 <div class="memitem">
 <div class="memproto">
@@ -743,6 +773,30 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aec69611d4a33c605a5629e3e2a9813a3"></a><!-- doxytag: member="gameplay::Camera::removeListener" ref="aec69611d4a33c605a5629e3e2a9813a3" args="(Camera::Listener *listener)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#aec69611d4a33c605a5629e3e2a9813a3">gameplay::Camera::removeListener</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_camera_1_1_listener.html">Camera::Listener</a> *&#160;</td>
+          <td class="paramname"><em>listener</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Removes a camera listener.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listener</td><td>The listener to remove. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="aa1aab8a2804c533fd0cf1d222a796c2d"></a><!-- doxytag: member="gameplay::Camera::resetProjectionMatrix" ref="aa1aab8a2804c533fd0cf1d222a796c2d" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -871,7 +925,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Sets a custom projection matrix to be used by the camera.</p>
-<p>Setting a custom projection matrix results in the internally computed projection matrix being completely overriden until the resetProjectionMatrix method is called. A custom projection matrix is normally not neccessary, but can be used for special projection effects, such as setting an oblique view frustum for near plane clipping.</p>
+<p>Setting a custom projection matrix results in the internally computed projection matrix being completely overridden until the resetProjectionMatrix method is called. A custom projection matrix is normally not necessary, but can be used for special projection effects, such as setting an oblique view frustum for near plane clipping.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">matrix</td><td>Custom projection matrix. </td></tr>
@@ -1004,7 +1058,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

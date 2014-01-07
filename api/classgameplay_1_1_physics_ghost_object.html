@@ -120,7 +120,7 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">btCollisionObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_ghost_object.html#a1c68d089ef5fc05135fefb05cdb82aa3">getCollisionObject</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_ghost_object.html#a399de48a5e68057b562b1d95a5121dec">PhysicsGhostObject</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node, const <a class="el" href="structgameplay_1_1_physics_collision_shape_1_1_definition.html">PhysicsCollisionShape::Definition</a> &amp;shape)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_ghost_object.html#a5e9db1882b69868a84b2fafe6c533c32">PhysicsGhostObject</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node, const <a class="el" href="structgameplay_1_1_physics_collision_shape_1_1_definition.html">PhysicsCollisionShape::Definition</a> &amp;shape, int group=PHYSICS_COLLISION_GROUP_DEFAULT, int mask=PHYSICS_COLLISION_MASK_DEFAULT)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_ghost_object.html#a88e6f30a00853d8a402e067f812cec67">~PhysicsGhostObject</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -130,14 +130,16 @@ Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">btPairCachingGhostObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_ghost_object.html#a70a8311409142d29abe33970ad32fe2e">_ghostObject</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines a class for physics ghost objects. </p>
+<div class="textblock"><p>Defines a physics ghost object.</p>
+<p>It is a collision volume that does not participate in the physics simulation but can be used the test against other phyics collision objects.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects</a> </dd></dl>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a399de48a5e68057b562b1d95a5121dec"></a><!-- doxytag: member="gameplay::PhysicsGhostObject::PhysicsGhostObject" ref="a399de48a5e68057b562b1d95a5121dec" args="(Node *node, const PhysicsCollisionShape::Definition &amp;shape)" -->
+<a class="anchor" id="a5e9db1882b69868a84b2fafe6c533c32"></a><!-- doxytag: member="gameplay::PhysicsGhostObject::PhysicsGhostObject" ref="a5e9db1882b69868a84b2fafe6c533c32" args="(Node *node, const PhysicsCollisionShape::Definition &amp;shape, int group=PHYSICS_COLLISION_GROUP_DEFAULT, int mask=PHYSICS_COLLISION_MASK_DEFAULT)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_physics_ghost_object.html#a399de48a5e68057b562b1d95a5121dec">gameplay::PhysicsGhostObject::PhysicsGhostObject</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_physics_ghost_object.html#a5e9db1882b69868a84b2fafe6c533c32">gameplay::PhysicsGhostObject::PhysicsGhostObject</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td>
           <td class="paramname"><em>node</em>, </td>
@@ -146,7 +148,19 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="structgameplay_1_1_physics_collision_shape_1_1_definition.html">PhysicsCollisionShape::Definition</a> &amp;&#160;</td>
-          <td class="paramname"><em>shape</em>&#160;</td>
+          <td class="paramname"><em>shape</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>group</em> = <code>PHYSICS_COLLISION_GROUP_DEFAULT</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mask</em> = <code>PHYSICS_COLLISION_MASK_DEFAULT</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -161,6 +175,8 @@ Protected Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">node</td><td>The node to attach the ghost object to. </td></tr>
     <tr><td class="paramname">shape</td><td>The collision shape definition for the ghost object. </td></tr>
+    <tr><td class="paramname">group</td><td>Group identifier </td></tr>
+    <tr><td class="paramname">mask</td><td>Bitmask field for filtering collisions with this object. </td></tr>
   </table>
   </dd>
 </dl>
@@ -326,7 +342,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

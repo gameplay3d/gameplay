@@ -123,6 +123,11 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#accfd60c7a031b356e4d70ee91972f7d9">setTexture</a> (const char *texturePath, <a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a> textureBlending)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#ada4695a7ade6fdfef2b2926413e2d6ac">setTexture</a> (<a class="el" href="classgameplay_1_1_texture.html">Texture</a> *texture, <a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a> textureBlending)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a2a213d61976d55c08cfef5de8df03f49">getTexture</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a01da336ecd14c54f993bdeb343c32c50">setParticleCountMax</a> (unsigned int max)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#ab41ac83f4ebb65a29ec54cbdd0cdb47b">getParticleCountMax</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a287f4ce20f23a544846812e2e684a347">setEmissionRate</a> (unsigned int rate)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a8987d5135c26dcd3299fb2606f8f8bdd">getEmissionRate</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#ae2c361f40c23e62670341e5455fd3856">start</a> ()</td></tr>
@@ -171,14 +176,22 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a808b3b2ec768132149671fce9d9c08a5">getSpriteFrameRandomOffset</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#abda24773f1c51bdb49e1a8c9e611ec07">setSpriteFrameDuration</a> (long duration)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a68707540f5cb26801063e1d0212846d8">getSpriteFrameDuration</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a05e3f4c05d4b63c6bc1f8a114a9c51a1">getSpriteWidth</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a26c3e13002ba695de0784fc3cc3e8cb0">getSpriteHeight</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a3ef05e6abc632cf5f104050badd02dcd">setSpriteTexCoords</a> (unsigned int frameCount, float *texCoords)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a62bac95c8068152dc139115cb8424f14">setSpriteFrameCoords</a> (unsigned int frameCount, <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *frameCoords)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a749564f33cd00a891ef1194062c9bc17">setSpriteFrameCoords</a> (unsigned int frameCount, int width, int height)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#abb8dfcb2adb63b0940405fbe7bc2a171">getSpriteFrameCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a59137f212ceb7c5f591bd6a0ce7a38d6">getNode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a33307756955a0e069be33c3116afaa33">setOrbit</a> (bool orbitPosition, bool orbitVelocity, bool orbitAcceleration)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a08d8fdda2e52e95aa5e47d83fdb5f321">getOrbitPosition</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#ac33c4018cce8b5cef0e46b100f6448f3">getOrbitVelocity</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a3f5bec2b380c64a80466564e3bee8daa">getOrbitAcceleration</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#aae471f2b01772d47a2333220221daf91">update</a> (float elapsedTime)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#ae683f3d5eba31607f92997dd7692cbb4">draw</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a5a783329f09547dd10daaaed76d52830">draw</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#ad66f71968f51245a3ef90a5538fd1afe">setTextureBlending</a> (<a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a> blending)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a670e0ae988b0264c8374ae2f4fb0f496">getTextureBlending</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a978afc2d53b2ef3332c59daf3bfc3a28">clone</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a0ced7dfcfb5357b96e4a289eef7619e1">create</a> (const char *url)</td></tr>
@@ -187,7 +200,8 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#aaded0a9b392711438ee43a445a899fb5">getTextureBlendingFromString</a> (const char *src)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines a particle emitter that can be made to simulate and render a particle system. Once created, the emitter can be set on a node in order to follow an object or be placed within a scene.</p>
+<div class="textblock"><p>Defines a particle emitter that can be made to simulate and render a particle system.</p>
+<p>Once created, the emitter can be set on a node in order to follow an object or be placed within a scene.</p>
 <p>A <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> has a texture and a maximum number of particles that can be alive at once, both of which are set when the <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> is created and cannot be changed from then on. Particles are rendered as camera-facing billboards using the emitter's texture. The <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>'s texture properties determine whether the texture is treated as a single image, a texture atlas or an animated sprite.</p>
 <p>A <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> also has a number of properties that determine values assigned to individual particles it emits. Scalar properties such as particle begin- and end-size are assigned within a minimum and maximum value; vector properties are assigned within the domain defined by a base vector and a variance vector as follows: The variance vector is multiplied by a random scalar between 1 and -1, and the base vector is added to this result. This allows a <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> to be created which emits particles with properties that are randomized, yet fit within a well-defined range. To make a property deterministic, simply set the minimum to the same value as the maximum for that property or set its variance to the zero vector.</p>
 <h2>Scalar properties:</h2>
@@ -226,7 +240,8 @@ Static Public Member Functions</h2></td></tr>
 <p>Sprite Random Offset: <br/>
  New particles are created with one of the sprite frames in the emitter's texture. If a maximum offset is set, a random frame from 0 to maxOffset will be selected. If sprite animation is disabled and this offset is set to Frame Count, each particle will use one of the sprite frames for its entire lifetime.</p>
 <p>Blend Mode: <br/>
- Sets the blend mode used by this particle emitter. The given blend factors will be set before rendering the particle system and then will be reset to their original values. Accepts the same symbolic constants as glBlendFunc(). </p>
+ Sets the blend mode used by this particle emitter. The given blend factors will be set before rendering the particle system and then will be reset to their original values. Accepts the same symbolic constants as glBlendFunc().</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Particles">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Particles</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a7145dddf0796cfeed62ea0ad94bda7d6"></a><!-- doxytag: member="gameplay::ParticleEmitter::TextureBlending" ref="a7145dddf0796cfeed62ea0ad94bda7d6" args="" -->
 <div class="memitem">
@@ -243,6 +258,24 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a978afc2d53b2ef3332c59daf3bfc3a28"></a><!-- doxytag: member="gameplay::ParticleEmitter::clone" ref="a978afc2d53b2ef3332c59daf3bfc3a28" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="el" href="classgameplay_1_1_particle_emitter.html#a978afc2d53b2ef3332c59daf3bfc3a28">gameplay::ParticleEmitter::clone</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Clones the particle emitter and returns a new emitter.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The new cloned particle emitter. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a0ced7dfcfb5357b96e4a289eef7619e1"></a><!-- doxytag: member="gameplay::ParticleEmitter::create" ref="a0ced7dfcfb5357b96e4a289eef7619e1" args="(const char *url)" -->
 <div class="memitem">
 <div class="memproto">
@@ -335,12 +368,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae683f3d5eba31607f92997dd7692cbb4"></a><!-- doxytag: member="gameplay::ParticleEmitter::draw" ref="ae683f3d5eba31607f92997dd7692cbb4" args="()" -->
+<a class="anchor" id="a5a783329f09547dd10daaaed76d52830"></a><!-- doxytag: member="gameplay::ParticleEmitter::draw" ref="a5a783329f09547dd10daaaed76d52830" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_particle_emitter.html#ae683f3d5eba31607f92997dd7692cbb4">gameplay::ParticleEmitter::draw</a> </td>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_particle_emitter.html#a5a783329f09547dd10daaaed76d52830">gameplay::ParticleEmitter::draw</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -554,6 +587,78 @@ Static Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Gets the node that this emitter is attached to.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The node that this emitter is attached to. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3f5bec2b380c64a80466564e3bee8daa"></a><!-- doxytag: member="gameplay::ParticleEmitter::getOrbitAcceleration" ref="a3f5bec2b380c64a80466564e3bee8daa" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_particle_emitter.html#a3f5bec2b380c64a80466564e3bee8daa">gameplay::ParticleEmitter::getOrbitAcceleration</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether new particle accelerations are rotated by the node's rotation matrix.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if orbiting accelerations, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a08d8fdda2e52e95aa5e47d83fdb5f321"></a><!-- doxytag: member="gameplay::ParticleEmitter::getOrbitPosition" ref="a08d8fdda2e52e95aa5e47d83fdb5f321" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_particle_emitter.html#a08d8fdda2e52e95aa5e47d83fdb5f321">gameplay::ParticleEmitter::getOrbitPosition</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether new particle positions are rotated by the node's rotation matrix.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if orbiting positions, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac33c4018cce8b5cef0e46b100f6448f3"></a><!-- doxytag: member="gameplay::ParticleEmitter::getOrbitVelocity" ref="ac33c4018cce8b5cef0e46b100f6448f3" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_particle_emitter.html#ac33c4018cce8b5cef0e46b100f6448f3">gameplay::ParticleEmitter::getOrbitVelocity</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether new particle velocities are rotated by the node's rotation matrix.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if orbiting velocities, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab41ac83f4ebb65a29ec54cbdd0cdb47b"></a><!-- doxytag: member="gameplay::ParticleEmitter::getParticleCountMax" ref="ab41ac83f4ebb65a29ec54cbdd0cdb47b" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_particle_emitter.html#ab41ac83f4ebb65a29ec54cbdd0cdb47b">gameplay::ParticleEmitter::getParticleCountMax</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the maximum number of particles that can be emitted.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The maximum number of particles that can be emitted. </dd></dl>
 
 </div>
 </div>
@@ -791,6 +896,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="abb8dfcb2adb63b0940405fbe7bc2a171"></a><!-- doxytag: member="gameplay::ParticleEmitter::getSpriteFrameCount" ref="abb8dfcb2adb63b0940405fbe7bc2a171" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_particle_emitter.html#abb8dfcb2adb63b0940405fbe7bc2a171">gameplay::ParticleEmitter::getSpriteFrameCount</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the current number of frames for the particle emitter's sprite.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The current frame count. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a68707540f5cb26801063e1d0212846d8"></a><!-- doxytag: member="gameplay::ParticleEmitter::getSpriteFrameDuration" ref="a68707540f5cb26801063e1d0212846d8" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -823,6 +946,78 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Gets the maximum offset that a random frame from 0 to maxOffset will be selected. </p>
+
+</div>
+</div>
+<a class="anchor" id="a26c3e13002ba695de0784fc3cc3e8cb0"></a><!-- doxytag: member="gameplay::ParticleEmitter::getSpriteHeight" ref="a26c3e13002ba695de0784fc3cc3e8cb0" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_particle_emitter.html#a26c3e13002ba695de0784fc3cc3e8cb0">gameplay::ParticleEmitter::getSpriteHeight</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the height of the first frame this particle emitter's sprite.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The height of the first frame of the sprite. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a05e3f4c05d4b63c6bc1f8a114a9c51a1"></a><!-- doxytag: member="gameplay::ParticleEmitter::getSpriteWidth" ref="a05e3f4c05d4b63c6bc1f8a114a9c51a1" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_particle_emitter.html#a05e3f4c05d4b63c6bc1f8a114a9c51a1">gameplay::ParticleEmitter::getSpriteWidth</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the width of the first frame this particle emitter's sprite.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The width of the first frame of the sprite. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2a213d61976d55c08cfef5de8df03f49"></a><!-- doxytag: member="gameplay::ParticleEmitter::getTexture" ref="a2a213d61976d55c08cfef5de8df03f49" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_texture.html">Texture</a>* <a class="el" href="classgameplay_1_1_particle_emitter.html#a2a213d61976d55c08cfef5de8df03f49">gameplay::ParticleEmitter::getTexture</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the texture currently set for this particle emitter.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The current texture. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a670e0ae988b0264c8374ae2f4fb0f496"></a><!-- doxytag: member="gameplay::ParticleEmitter::getTextureBlending" ref="a670e0ae988b0264c8374ae2f4fb0f496" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a> <a class="el" href="classgameplay_1_1_particle_emitter.html#a670e0ae988b0264c8374ae2f4fb0f496">gameplay::ParticleEmitter::getTextureBlending</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the current texture blend mode for this particle emitter.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The current blend mode. </dd></dl>
 
 </div>
 </div>
@@ -1174,6 +1369,30 @@ Static Public Member Functions</h2></td></tr>
     <tr><td class="paramname">orbitPosition</td><td>Whether to rotate initial particle positions by the node's rotation matrix. </td></tr>
     <tr><td class="paramname">orbitVelocity</td><td>Whether to rotate initial particle velocity vectors by the node's rotation matrix. </td></tr>
     <tr><td class="paramname">orbitAcceleration</td><td>Whether to rotate initial particle acceleration vectors by the node's rotation matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a01da336ecd14c54f993bdeb343c32c50"></a><!-- doxytag: member="gameplay::ParticleEmitter::setParticleCountMax" ref="a01da336ecd14c54f993bdeb343c32c50" args="(unsigned int max)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_particle_emitter.html#a01da336ecd14c54f993bdeb343c32c50">gameplay::ParticleEmitter::setParticleCountMax</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>max</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the maximum number of particles that can be emitted.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">max</td><td>The maximum number of particles that can be emitted. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1557,6 +1776,78 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="accfd60c7a031b356e4d70ee91972f7d9"></a><!-- doxytag: member="gameplay::ParticleEmitter::setTexture" ref="accfd60c7a031b356e4d70ee91972f7d9" args="(const char *texturePath, TextureBlending textureBlending)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_particle_emitter.html#accfd60c7a031b356e4d70ee91972f7d9">gameplay::ParticleEmitter::setTexture</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>texturePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a>&#160;</td>
+          <td class="paramname"><em>textureBlending</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets a new texture for this particle emitter.</p>
+<p>The current texture's reference count is decreased.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">texturePath</td><td>Path to the new texture to set. </td></tr>
+    <tr><td class="paramname">textureBlending</td><td>Blending mode for the new texture. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ada4695a7ade6fdfef2b2926413e2d6ac"></a><!-- doxytag: member="gameplay::ParticleEmitter::setTexture" ref="ada4695a7ade6fdfef2b2926413e2d6ac" args="(Texture *texture, TextureBlending textureBlending)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_particle_emitter.html#accfd60c7a031b356e4d70ee91972f7d9">gameplay::ParticleEmitter::setTexture</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td>
+          <td class="paramname"><em>texture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a>&#160;</td>
+          <td class="paramname"><em>textureBlending</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets a new texture for this particle emitter.</p>
+<p>The reference count of the specified texture is increased, and the current texture's reference count is decreased.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">texture</td><td>The new texture to set. </td></tr>
+    <tr><td class="paramname">textureBlending</td><td>Blending mode for the new texture. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ad66f71968f51245a3ef90a5538fd1afe"></a><!-- doxytag: member="gameplay::ParticleEmitter::setTextureBlending" ref="ad66f71968f51245a3ef90a5538fd1afe" args="(TextureBlending blending)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1571,7 +1862,13 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Sets a TextureBlending enum from a corresponding string. </p>
+<p>Sets the texture blend mode for this particle emitter.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">blending</td><td>The new blend mode. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1688,7 +1985,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

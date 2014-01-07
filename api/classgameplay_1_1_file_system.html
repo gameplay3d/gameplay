@@ -106,6 +106,9 @@ Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a2c2688215938e9f5883b994cce172f3d">StreamMode</a> { <b>READ</b> =  1, 
 <b>WRITE</b> =  2
  }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#ae4f5cab63325b8800eec48e8cfecd821">DialogMode</a> { <b>OPEN</b>, 
+<b>SAVE</b>
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a33f8b1cd5f90435c16871ca5760f6e45">~FileSystem</a> ()</td></tr>
@@ -115,10 +118,11 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a4a7c4dee6ab58c50ce4cf9043f1529ab">getResourcePath</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a136986ea0a1564698c405df64f13632e">loadResourceAliases</a> (const char *aliasFilePath)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a05c6773c471a5378fdda80806df2b220">loadResourceAliases</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a83a243e2b7b02e7efe4207e59f4cfa55">displayFileDialog</a> (size_t dialogMode, const char *title, const char *filterDescription, const char *filterExtensions, const char *initialDirectory)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a738a80f4df479ac37fcfe173adad5e90">resolvePath</a> (const char *path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a697fdbb8456f35f68f6aed8ebacea912">listFiles</a> (const char *dirPath, std::vector&lt; std::string &gt; &amp;files)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a6a2fa61565252c8652bc4b972444d905">fileExists</a> (const char *filePath)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_stream.html">Stream</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a9bb7c1945ac2c840cd541e52ccc11924">open</a> (const char *path, size_t mode=READ)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_stream.html">Stream</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a9eee9d3715de6d12c959911a390d6717">open</a> (const char *path, size_t streamMode=READ)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#ad51e142f9305ac652edd4989197dba87">openFile</a> (const char *filePath, const char *mode)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#af65e3195958242239fcb8db228a9db0c">readAll</a> (const char *filePath, int *fileSize=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a0e8074b04446a8087899d3559e9b0d09">isAbsolutePath</a> (const char *filePath)</td></tr>
@@ -127,8 +131,22 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a2a9e75f6ad418973f51e435a11b4b3d3">getExtension</a> (const char *path)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines a set of functions for interacting with the device filesystem. </p>
+<div class="textblock"><p>Defines a set of functions for interacting with the device file system. </p>
 </div><hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="ae4f5cab63325b8800eec48e8cfecd821"></a><!-- doxytag: member="gameplay::FileSystem::DialogMode" ref="ae4f5cab63325b8800eec48e8cfecd821" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classgameplay_1_1_file_system.html#ae4f5cab63325b8800eec48e8cfecd821">gameplay::FileSystem::DialogMode</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Mode flags for displaying a dialog.</p>
+ 
+</div>
+</div>
 <a class="anchor" id="a2c2688215938e9f5883b994cce172f3d"></a><!-- doxytag: member="gameplay::FileSystem::StreamMode" ref="a2c2688215938e9f5883b994cce172f3d" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -139,7 +157,8 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Mode flags for opening a stream.  
+<p>Mode flags for opening a stream.</p>
+ 
 </div>
 </div>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
@@ -183,6 +202,63 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
+</div>
+</div>
+<a class="anchor" id="a83a243e2b7b02e7efe4207e59f4cfa55"></a><!-- doxytag: member="gameplay::FileSystem::displayFileDialog" ref="a83a243e2b7b02e7efe4207e59f4cfa55" args="(size_t dialogMode, const char *title, const char *filterDescription, const char *filterExtensions, const char *initialDirectory)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string <a class="el" href="classgameplay_1_1_file_system.html#a83a243e2b7b02e7efe4207e59f4cfa55">gameplay::FileSystem::displayFileDialog</a> </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>dialogMode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>title</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filterDescription</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filterExtensions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>initialDirectory</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Displays an open or save dialog using the native platform dialog system.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dialogMode</td><td>The mode of the dialog. (Ex. OPEN or SAVE) </td></tr>
+    <tr><td class="paramname">title</td><td>The title of the dialog. (Ex. Select File or Save File) </td></tr>
+    <tr><td class="paramname">filterDescription</td><td>The file filter description. (Ex. All Files or <a class="el" href="classgameplay_1_1_image.html">Image</a> Files) </td></tr>
+    <tr><td class="paramname">filterExtensions</td><td>The extensions to filter on. (Ex. png;bmp) </td></tr>
+    <tr><td class="paramname">initialDirectory</td><td>The initial directory to start. NULL runs from the executable directory. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The file that is opened or saved, or an empty string if canceled.</dd></dl>
+ 
 </div>
 </div>
 <a class="anchor" id="a6a2fa61565252c8652bc4b972444d905"></a><!-- doxytag: member="gameplay::FileSystem::fileExists" ref="a6a2fa61565252c8652bc4b972444d905" args="(const char *filePath)" -->
@@ -233,7 +309,7 @@ Static Public Member Functions</h2></td></tr>
 </ul>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">The</td><td>file path. May be relative or absolute, forward or back slashes. May be NULL.</td></tr>
+    <tr><td class="paramname">path</td><td>The file path. May be relative or absolute, forward or back slashes. May be NULL.</td></tr>
   </table>
   </dd>
 </dl>
@@ -401,12 +477,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9bb7c1945ac2c840cd541e52ccc11924"></a><!-- doxytag: member="gameplay::FileSystem::open" ref="a9bb7c1945ac2c840cd541e52ccc11924" args="(const char *path, size_t mode=READ)" -->
+<a class="anchor" id="a9eee9d3715de6d12c959911a390d6717"></a><!-- doxytag: member="gameplay::FileSystem::open" ref="a9eee9d3715de6d12c959911a390d6717" args="(const char *path, size_t streamMode=READ)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classgameplay_1_1_stream.html">Stream</a>* <a class="el" href="classgameplay_1_1_file_system.html#a9bb7c1945ac2c840cd541e52ccc11924">gameplay::FileSystem::open</a> </td>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_stream.html">Stream</a>* <a class="el" href="classgameplay_1_1_file_system.html#a9eee9d3715de6d12c959911a390d6717">gameplay::FileSystem::open</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>path</em>, </td>
@@ -415,7 +491,7 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>mode</em> = <code>READ</code>&#160;</td>
+          <td class="paramname"><em>streamMode</em> = <code>READ</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -430,7 +506,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">path</td><td>The path to the resource to be opened, relative to the currently set resource path. </td></tr>
-    <tr><td class="paramname">mode</td><td>The mode used to open the file.</td></tr>
+    <tr><td class="paramname">streamMode</td><td>The stream mode used to open the file.</td></tr>
   </table>
   </dd>
 </dl>
@@ -583,7 +659,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

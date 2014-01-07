@@ -159,7 +159,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html">PhysicsVehicleWheel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#af36bd215bb4b372d466e2197b4df3938">asVehicleWheel</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a285bf86b1589ea8334d5a9912e3d95d9">PhysicsCollisionObject</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#af4f8dbddf11f30f0e17be3bbb8e7b9b4">PhysicsCollisionObject</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node, int group=PHYSICS_COLLISION_GROUP_DEFAULT, int mask=PHYSICS_COLLISION_MASK_DEFAULT)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual btCollisionObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a6b73ee70151c9d46e58620660347aede">getCollisionObject</a> () const =0</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -169,7 +169,8 @@ Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structgameplay_1_1_physics_collision_object_1_1_script_listener.html">ScriptListener</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a1dfa1f422906cfbbaa2a0f48f1e8dbdc">_scriptListeners</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Base class for all gameplay physics objects that support collision events. </p>
+<div class="textblock"><p>Defines the base class for all physics objects that support collision events.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a99aa09f043883dcd33865cd582de463e"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::Type" ref="a99aa09f043883dcd33865cd582de463e" args="" -->
 <div class="memitem">
@@ -225,16 +226,32 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a285bf86b1589ea8334d5a9912e3d95d9"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::PhysicsCollisionObject" ref="a285bf86b1589ea8334d5a9912e3d95d9" args="(Node *node)" -->
+<a class="anchor" id="af4f8dbddf11f30f0e17be3bbb8e7b9b4"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::PhysicsCollisionObject" ref="af4f8dbddf11f30f0e17be3bbb8e7b9b4" args="(Node *node, int group=PHYSICS_COLLISION_GROUP_DEFAULT, int mask=PHYSICS_COLLISION_MASK_DEFAULT)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a285bf86b1589ea8334d5a9912e3d95d9">gameplay::PhysicsCollisionObject::PhysicsCollisionObject</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_physics_collision_object.html#af4f8dbddf11f30f0e17be3bbb8e7b9b4">gameplay::PhysicsCollisionObject::PhysicsCollisionObject</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td><code> [protected]</code></td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>group</em> = <code>PHYSICS_COLLISION_GROUP_DEFAULT</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mask</em> = <code>PHYSICS_COLLISION_MASK_DEFAULT</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -522,7 +539,7 @@ Protected Attributes</h2></td></tr>
 <div class="memdoc">
 <p>Returns the type of the collision object. </p>
 
-<p>Implemented in <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a5bea09a08f4a5bcdbbcad16ce66cf218">gameplay::PhysicsRigidBody</a>, <a class="el" href="classgameplay_1_1_physics_vehicle.html#a787ac4de341777c2c717b70f41fde574">gameplay::PhysicsVehicle</a>, <a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html#a2926421daef459560bab73c76396049c">gameplay::PhysicsVehicleWheel</a>, <a class="el" href="classgameplay_1_1_physics_character.html#a5de393cc5dc5eadd102b2cc9d366ee04">gameplay::PhysicsCharacter</a>, and <a class="el" href="classgameplay_1_1_physics_ghost_object.html#a49ac0020b175c9affe4b18e4ef89ae6b">gameplay::PhysicsGhostObject</a>.</p>
+<p>Implemented in <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a5bea09a08f4a5bcdbbcad16ce66cf218">gameplay::PhysicsRigidBody</a>, <a class="el" href="classgameplay_1_1_physics_character.html#a5de393cc5dc5eadd102b2cc9d366ee04">gameplay::PhysicsCharacter</a>, <a class="el" href="classgameplay_1_1_physics_vehicle.html#a787ac4de341777c2c717b70f41fde574">gameplay::PhysicsVehicle</a>, <a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html#a2926421daef459560bab73c76396049c">gameplay::PhysicsVehicleWheel</a>, and <a class="el" href="classgameplay_1_1_physics_ghost_object.html#a49ac0020b175c9affe4b18e4ef89ae6b">gameplay::PhysicsGhostObject</a>.</p>
 
 </div>
 </div>
@@ -774,7 +791,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

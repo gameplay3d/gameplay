@@ -128,6 +128,7 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#a1b3ff54362215585de0d7fc9af397151">empty</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#ad64a060a02c4aacdab5808ef5104e4fb">intersect</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;r1, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;r2, <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *dst)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#a324ab3b41b7bc4060a7e67a530f665e2">combine</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;r1, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;r2, <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *dst)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -504,6 +505,49 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="ad64a060a02c4aacdab5808ef5104e4fb"></a><!-- doxytag: member="gameplay::Rectangle::intersect" ref="ad64a060a02c4aacdab5808ef5104e4fb" args="(const Rectangle &amp;r1, const Rectangle &amp;r2, Rectangle *dst)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_rectangle.html#ad64a060a02c4aacdab5808ef5104e4fb">gameplay::Rectangle::intersect</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
+          <td class="paramname"><em>r1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
+          <td class="paramname"><em>r2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>dst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Computes the intersection of two rectangles and returns the result.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r1</td><td>The first rectangle. </td></tr>
+    <tr><td class="paramname">r2</td><td>The second rectangle. </td></tr>
+    <tr><td class="paramname">dst</td><td>Populated with the resulting intersection, or <a class="el" href="classgameplay_1_1_rectangle.html#a1b3ff54362215585de0d7fc9af397151">Rectangle.empty</a> if they do not intersect.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the two rectangles intersect, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -891,7 +935,7 @@ Public Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

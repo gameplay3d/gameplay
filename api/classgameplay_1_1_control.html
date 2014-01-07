@@ -109,19 +109,19 @@ Inheritance diagram for gameplay::Control:</div>
  <div class="center">
   <img src="classgameplay_1_1_control.png" usemap="#gameplay::Control_map" alt=""/>
   <map id="gameplay::Control_map" name="gameplay::Control_map">
-<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,163,24"/>
-<area href="classgameplay_1_1_animation_target.html" alt="gameplay::AnimationTarget" shape="rect" coords="173,0,336,24"/>
-<area href="classgameplay_1_1_script_target.html" alt="gameplay::ScriptTarget" shape="rect" coords="346,0,509,24"/>
+<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="86,0,249,24"/>
+<area href="classgameplay_1_1_animation_target.html" alt="gameplay::AnimationTarget" shape="rect" coords="259,0,422,24"/>
+<area href="classgameplay_1_1_script_target.html" alt="gameplay::ScriptTarget" shape="rect" coords="432,0,595,24"/>
 <area href="classgameplay_1_1_container.html" alt="gameplay::Container" shape="rect" coords="0,112,163,136"/>
-<area href="classgameplay_1_1_joystick.html" alt="gameplay::Joystick" shape="rect" coords="173,112,336,136"/>
-<area href="classgameplay_1_1_label.html" alt="gameplay::Label" shape="rect" coords="346,112,509,136"/>
+<area href="classgameplay_1_1_image_control.html" alt="gameplay::ImageControl" shape="rect" coords="173,112,336,136"/>
+<area href="classgameplay_1_1_joystick.html" alt="gameplay::Joystick" shape="rect" coords="346,112,509,136"/>
+<area href="classgameplay_1_1_label.html" alt="gameplay::Label" shape="rect" coords="519,112,682,136"/>
 <area href="classgameplay_1_1_form.html" alt="gameplay::Form" shape="rect" coords="0,168,163,192"/>
-<area href="classgameplay_1_1_button.html" alt="gameplay::Button" shape="rect" coords="173,168,336,192"/>
-<area href="classgameplay_1_1_slider.html" alt="gameplay::Slider" shape="rect" coords="346,168,509,192"/>
-<area href="classgameplay_1_1_text_box.html" alt="gameplay::TextBox" shape="rect" coords="519,168,682,192"/>
-<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="0,224,163,248"/>
-<area href="classgameplay_1_1_image_control.html" alt="gameplay::ImageControl" shape="rect" coords="173,224,336,248"/>
-<area href="classgameplay_1_1_radio_button.html" alt="gameplay::RadioButton" shape="rect" coords="346,224,509,248"/>
+<area href="classgameplay_1_1_button.html" alt="gameplay::Button" shape="rect" coords="346,168,509,192"/>
+<area href="classgameplay_1_1_slider.html" alt="gameplay::Slider" shape="rect" coords="519,168,682,192"/>
+<area href="classgameplay_1_1_text_box.html" alt="gameplay::TextBox" shape="rect" coords="692,168,855,192"/>
+<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="259,224,422,248"/>
+<area href="classgameplay_1_1_radio_button.html" alt="gameplay::RadioButton" shape="rect" coords="432,224,595,248"/>
 </map>
  </div></div>
 
@@ -162,26 +162,41 @@ Public Types</h2></td></tr>
 <b>ALIGN_BOTTOM_RIGHT</b> =  ALIGN_BOTTOM | ALIGN_RIGHT
 <br/>
  }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a> { <a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35aa356e01e627cf35a57cf1f9061117c124">AUTO_SIZE_NONE</a> =  0x00, 
+<a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35aa45918388f2e09663db6ae03a2c9a3f15">AUTO_SIZE_STRETCH</a> =  0x01, 
+<a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35aa1dbc58f3a4566609c17834004a3b7630">AUTO_SIZE_FIT</a> =  0x02
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8e31f6fd1f18ffd5d5766f3993410c0f">getId</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3c1f7dee87df548854e36ddf909e39ee">setPosition</a> (float x, float y)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae09909f17b37e986195d8091482eed77">setSize</a> (float width, float height)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae7281d8ef901f277b72c29ec184a049f">setWidth</a> (float width)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac794ce5a5271ec9cf4d931c09a842167">setHeight</a> (float height)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af0913ff556aba2f03a258fac46e814d8">setBounds</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;bounds)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aea9a349ac83a36d7bea4207b03e80d5b">getBounds</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aed1a08b34ad1a7a0ae9faf5629ec46df">getAbsoluteBounds</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af74739a51e8bd70e77443133665e5416">setId</a> (const char *id)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3b67523de27b0159fa3cb72a03478a1b">getX</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae5fa4837e74350b1dfe92df228afc8a4">setX</a> (float x, bool percentage=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0b6d7439cc781d30307e84f857c85e0b">isXPercentage</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a97bc6f402701bf1bd073b9ffb266e7d3">getY</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a4cc08efe8d182f1bed7557e1b59c1f15">setY</a> (float y, bool percentage=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a87c577f2d6f92e850a979ce8f18660c3">isYPercentage</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a4049decfc54ec35255fe8e22e62a92dc">getWidth</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a01b501386806029530319a6460689067">setWidth</a> (float width, bool percentage=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aa0e51a41446aa0589c4da8b3b2d2ab22">isWidthPercentage</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af51dcb89b1ab5a8e43435eabf66c91fa">getHeight</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a7f2c2115e021bfe25d805d348e0f541e">setHeight</a> (float height, bool percentage=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac57bb6782911dd3a96739fd753cde408">isHeightPercentage</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3c1f7dee87df548854e36ddf909e39ee">setPosition</a> (float x, float y)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a341853aca02ab1745a0408a3da071aaa">setSize</a> (float width, float height)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aea9a349ac83a36d7bea4207b03e80d5b">getBounds</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1a2527de165d45ef51023e67654ebeb8">setBounds</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;bounds)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aed1a08b34ad1a7a0ae9faf5629ec46df">getAbsoluteBounds</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a66b5c444a845354075359ac55cb78eee">getClipBounds</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac9555240a60342004f4ec2867adb7cd0">getClip</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aa8d20f5f9fc3e09f25be6c0079e76bd6">getAutoWidth</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a77ced2afcc8a006e77b1f45373370e95">setAutoWidth</a> (bool autoWidth)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af4205a29b8c0f8b1003ececf18e60b02">setAutoWidth</a> (<a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a> mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3c2b62983de4e61af366e4a97df2dd10">getAutoHeight</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a00bedda61ce975abe25b8d131b700eee">setAutoHeight</a> (bool autoHeight)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#adf6a77e014d00d779b4538468188d4e3">setAutoHeight</a> (<a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a> mode)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac4f1b26a76d0acf6db363c1240f9dc45">setAlignment</a> (<a class="el" href="classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13">Alignment</a> alignment)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13">Alignment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ad8ae42690735608d9c4038c78669b5cb">getAlignment</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aa1ac9b0e910605a154bc98d566252592">setAutoWidth</a> (bool autoWidth)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae720cdfda39ef51e8ffe1e1b85e02d43">getAutoWidth</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a36e3ad4ba2dff80d0dbda16a9c5fc427">setAutoHeight</a> (bool autoHeight)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a98f8b9e329db04c4069396f81bd9319b">getAutoHeight</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a9ebe4727ce4f03615f959f6eaa2d932a">setBorder</a> (float top, float bottom, float left, float right, unsigned char states=<a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">STATE_ALL</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_theme.html#afe0334a54abcc262e810298001caf85f">Theme::Border</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac5ae5d7f68c7e2c48be665e17c71576c">getBorder</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state=<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a>) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab91f629f4411b1f459e69efd9f916461">setSkinRegion</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;region, unsigned char states=<a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">STATE_ALL</a>)</td></tr>
@@ -214,24 +229,31 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aeaacba13163a97891dd450f28c9f9b4a">getTextRightToLeft</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state=<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a>) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1e688847e20467e7d427b5bfc3878b85">setVisible</a> (bool visible)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af727190b510e7ff17a50ace4f69d227b">isVisible</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aab9d48fec0f69367b1b639a1a7b58512">isVisibleInHierarchy</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#adead0de69d5337f996350376c860bae1">setOpacity</a> (float opacity, unsigned char states=<a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">STATE_ALL</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1873f512755b4370312f7cbb32fbf7a4">getOpacity</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state=<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a>) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ad60ad70038971424dec166a0963480d1">setEnabled</a> (bool enabled)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a839d7a178e3905c8e634a6b93e29d7f0">isEnabled</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a66b5c444a845354075359ac55cb78eee">getClipBounds</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac9555240a60342004f4ec2867adb7cd0">getClip</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aa67c24db7ec1dfff9b727a4b8c372ce7">setState</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab9f3ef382bc25f070bf5822fdd9208d1">isEnabledInHierarchy</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#afc44b1d7f9113ad7d6f8c821f275fbf3">getState</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3a5752454a31b4c82953bbf32ca8654c">setConsumeInputEvents</a> (bool consume)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#acb24ede4a2015ec0ff3f63e03591373a">getConsumeInputEvents</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a655dc0c995bda896998f3a08e3c0aa42">setStyle</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#abd45546a7b8f58c9a50478aa3ffee02a">getStyle</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a655dc0c995bda896998f3a08e3c0aa42">setStyle</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme.html">Theme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a2469a0c39f14340ed99ec21ff4dbb425">getTheme</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a48e07df9a4877d666c5cae5d00115530">getZIndex</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac7b612312a3af38cad20e0a20a40b371">setZIndex</a> (int zIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a845cba4a3c91f2704c6c48176d9d3fda">canFocus</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a78fe33755480d2fe89e18c2855d006a7">setCanFocus</a> (bool acceptsFocus)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a09500f6090428a06cf18418ba622a401">hasFocus</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af6ca76ae7b61f7a96661e8f18252aff9">setFocus</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aba60dc716e687b4e2edf3aef64f8162e">getFocusIndex</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab32797889a239b0b9d4ffe70da80a4d1">setFocusIndex</a> (int focusIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a86b7ce720dacec4d5e31c61a102630b7">isContainer</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">getType</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae9597ef3ffa8ffa929fdc3cfdd51963a">getParent</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aec6686870fc560eade8fa4bc9de529bd">isChild</a> (<a class="el" href="classgameplay_1_1_control.html">Control</a> *control) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab5ec9295141292d9a8014dab4b2b0734">getTopLevelForm</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac15ca1b3063f4ad9b0fc1b54a6e2f535">addListener</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *listener, int eventFlags)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0424351446fdc9904b9c9127c67dd095">removeListener</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *listener)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a6d18739bdbd45718c043afb33245093b">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
@@ -239,7 +261,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a62a89ccb93888f7258287b767cfae107">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value, float blendWeight=1.0f)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static const unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">STATE_ALL</a> = <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79">ACTIVE</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a24e103ee69e3bba78e6932b511f1ef21">HOVER</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">STATE_ALL</a> = <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79">ACTIVE</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a24e103ee69e3bba78e6932b511f1ef21">HOVER</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aefc69c44cc549f575b66faee33af06d6">ANIMATE_POSITION</a> = 1</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a87c33d17cf1bd74f0eb64d802c07f228">ANIMATE_POSITION_X</a> = 2</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a82ec35acb4af91d95115e14dcd813243">ANIMATE_POSITION_Y</a> = 3</td></tr>
@@ -258,15 +280,17 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0556a8e97fdca1d40e5bebd895618e29">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad, unsigned int analogIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a4200259d1a58a6392c6cc0e347150e70">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a7946117d99feaffbc186a4b591bdc885">drawBorder</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a6866910ed0370428aae94dd67acff6a5">drawImages</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0c38fc0e79ee94779c0a366b5599dff7">drawText</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aae210d6d79efcc53ac52feb7ec5d5043">draw</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, bool needsClear, bool cleared, float targetHeight)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab2aab797de258880dab8ab61edd2259a">initialize</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1a03db7c756b49c87001a8e08521cfba">startBatch</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *batch)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ad62ecce661c5d61ab719bcc052dd6893">finishBatch</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *batch)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a2375e1c860cc2ee0b93a792ca6689cce">draw</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3c0ddbcb21d2fa0d0236af6da2b23641">drawBorder</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a67c2fadd5033f40517c34c60b1718b28">drawImages</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac80d74f9dc606b0d3f279f8a9fe9f144">drawText</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1c7de615c9b99672573327c5fb342ba7">initialize</a> (const char *typeName, <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a867d58fde43fb1d38614fc8d3b72e4ba">isDirty</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1a0ef2fde6b78c668f30d96e49e4dced">getImage</a> (const char *id, <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1dfdb4c476e4ce7829060f0af2347b85">notifyListeners</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a> eventType)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a09500f6090428a06cf18418ba622a401">hasFocus</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab75157d1cea2f7e1903a20be0555fb7d">controlEvent</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a> evt)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae43388e365a054968f10526daa0a69c4">getState</a> (const char *state)</td></tr>
@@ -274,20 +298,21 @@ Static Protected Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8e38c807b110825f36a77d43ded3d78a">_id</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a08e0c8e34c28edcddc7099281e9b423a">_state</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a83f2f3bea018c203b7ce7cb18f1073b5">_enabled</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac78438f65735e017bad66fd7af3aeea3">_boundsBits</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a2361889c2adbb4d8843d97a65dcc3b6e">_relativeBounds</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a9d4f21435b4eddf02f9fa5661133b47e">_bounds</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1f29392ef492769da99ccbf78a978002">_clipBounds</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a239ea5f672518ac3daf2f5359d899763">_absoluteBounds</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af610e9cad54639c424b90bbf6bd19e75">_absoluteClipBounds</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8f605cb604e2cece5236b0a1f9ad159d">_viewportBounds</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a2b6c46bed23be78fa6f10f27ca5b1f6f">_viewportClipBounds</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a9bdd8e08af2dbce49364d45742eda54d">_clearBounds</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a35ed3285594e18f0233a89ad69c8444c">_dirty</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a636f864fa6dbcd49d19e903f1ea086f2">_consumeInputEvents</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13">Alignment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae7b5d07de4a2e2d8cdb69ea94f6dd360">_alignment</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab8bbf1f6ee2cf1ffa6b54c181c589e05">_isAlignmentSet</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a793a5230d5df640c16b4bd8bf3e3c9b7">_autoWidth</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3e881d2d3994afc23065a362c437e295">_autoHeight</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a20fbfa936298809ae02228f320fe7973">_autoWidth</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a78af3e389d1c8a357a795ef0dc84569a">_autoHeight</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::map<br class="typebreak"/>
 &lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a>, <br class="typebreak"/>
 std::list&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> * &gt; * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a5b4f63049a194f91d70772245e01b98a">_listeners</a></td></tr>
@@ -297,13 +322,15 @@ std::list&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html">C
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a91b4d0f28ac8beab3c30c79e5fd9cf74">_zIndex</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a47d8c92a3d773672106b82ae8c66ef8e">_contactIndex</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a73150749073784d72da95375bb4ebd50">_focusIndex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aa3c10c6defa0b93a6f692b17fd81621f">_canFocus</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a28174c6d21906a5b4a9793b82317631c">_parent</a></td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1c549701ef58bc3cf2df6f8c7c783ede">INVALID_CONTACT_INDEX</a> = -1</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Base class for UI controls. </p>
+<div class="textblock"><p>Defines the base class for all controls.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a81f7bde0bfab996b044e2dc33aff5d13"></a><!-- doxytag: member="gameplay::Control::Alignment" ref="a81f7bde0bfab996b044e2dc33aff5d13" args="" -->
 <div class="memitem">
@@ -316,6 +343,34 @@ Static Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Defines the set of alignments for positioning controls and justifying text. </p>
+
+</div>
+</div>
+<a class="anchor" id="aae0177091358881bbf61caf46f67a35a"></a><!-- doxytag: member="gameplay::Control::AutoSize" ref="aae0177091358881bbf61caf46f67a35a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">gameplay::Control::AutoSize</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Defines supported auto sizing modes for controls. </p>
+<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="aae0177091358881bbf61caf46f67a35aa356e01e627cf35a57cf1f9061117c124"></a><!-- doxytag: member="AUTO_SIZE_NONE" ref="aae0177091358881bbf61caf46f67a35aa356e01e627cf35a57cf1f9061117c124" args="" -->AUTO_SIZE_NONE</em>&nbsp;</td><td>
+<p>No auto sizing is applied. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aae0177091358881bbf61caf46f67a35aa45918388f2e09663db6ae03a2c9a3f15"></a><!-- doxytag: member="AUTO_SIZE_STRETCH" ref="aae0177091358881bbf61caf46f67a35aa45918388f2e09663db6ae03a2c9a3f15" args="" -->AUTO_SIZE_STRETCH</em>&nbsp;</td><td>
+<p>The control's size is stretched to fill the content area of its parent container. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aae0177091358881bbf61caf46f67a35aa1dbc58f3a4566609c17834004a3b7630"></a><!-- doxytag: member="AUTO_SIZE_FIT" ref="aae0177091358881bbf61caf46f67a35aa1dbc58f3a4566609c17834004a3b7630" args="" -->AUTO_SIZE_FIT</em>&nbsp;</td><td>
+<p>The control's size is set to tightly fit its contents.</p>
+<p>Not all controls support this auto sizing mode. </p>
+</td></tr>
+</table>
+</dd>
+</dl>
 
 </div>
 </div>
@@ -335,7 +390,7 @@ Static Protected Attributes</h2></td></tr>
 <p>State of an enabled but inactive control. </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3"></a><!-- doxytag: member="FOCUS" ref="a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3" args="" -->FOCUS</em>&nbsp;</td><td>
-<p>State of a control currently in focus. </p>
+<p>State of a control when it is currently in focus. </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79"></a><!-- doxytag: member="ACTIVE" ref="a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79" args="" -->ACTIVE</em>&nbsp;</td><td>
 <p>State of a control that is currently being acted on, e.g. through touch or mouse-click events. </p>
@@ -421,43 +476,69 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a9128c7978c37299194abe2c55d80bf93">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac317d5e1ce467855d0cc61b316337b30">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a3fab62ffe2814f687e9e21e31f161a9e">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_label.html#a21d473e1749ab7d876c8ebabb96bb375">gameplay::Label</a>, <a class="el" href="classgameplay_1_1_text_box.html#ab45a02444a11fec50d2c8da17bd695b7">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_joystick.html#a29afacaedc89dcf6de0525a417edee8b">gameplay::Joystick</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a9128c7978c37299194abe2c55d80bf93">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac317d5e1ce467855d0cc61b316337b30">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a3fab62ffe2814f687e9e21e31f161a9e">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_label.html#a21d473e1749ab7d876c8ebabb96bb375">gameplay::Label</a>, and <a class="el" href="classgameplay_1_1_joystick.html#a29afacaedc89dcf6de0525a417edee8b">gameplay::Joystick</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aae210d6d79efcc53ac52feb7ec5d5043"></a><!-- doxytag: member="gameplay::Control::draw" ref="aae210d6d79efcc53ac52feb7ec5d5043" args="(SpriteBatch *spriteBatch, const Rectangle &amp;clip, bool needsClear, bool cleared, float targetHeight)" -->
+<a class="anchor" id="a845cba4a3c91f2704c6c48176d9d3fda"></a><!-- doxytag: member="gameplay::Control::canFocus" ref="a845cba4a3c91f2704c6c48176d9d3fda" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#aae210d6d79efcc53ac52feb7ec5d5043">gameplay::Control::draw</a> </td>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a845cba4a3c91f2704c6c48176d9d3fda">gameplay::Control::canFocus</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td>
-          <td class="paramname"><em>spriteBatch</em>, </td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if this control accepts focus.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if this control accepts focus, false if it does not. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab75157d1cea2f7e1903a20be0555fb7d"></a><!-- doxytag: member="gameplay::Control::controlEvent" ref="ab75157d1cea2f7e1903a20be0555fb7d" args="(Control::Listener::EventType evt)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#ab75157d1cea2f7e1903a20be0555fb7d">gameplay::Control::controlEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a>&#160;</td>
+          <td class="paramname"><em>evt</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Called when a control event is fired for this control, before external listeners are notified of the event.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">evt</td><td>The event type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_text_box.html#ae0045c3d1c4722f0d5b83c8f66dbb1c3">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a9c23140d9c24e1176f6793da0da65124">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#af3390f295d03d3750f2240c17f7936c1">gameplay::CheckBox</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2375e1c860cc2ee0b93a792ca6689cce"></a><!-- doxytag: member="gameplay::Control::draw" ref="a2375e1c860cc2ee0b93a792ca6689cce" args="(Form *form, const Rectangle &amp;clip)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual unsigned int <a class="el" href="classgameplay_1_1_control.html#a2375e1c860cc2ee0b93a792ca6689cce">gameplay::Control::draw</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td>
+          <td class="paramname"><em>form</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
-          <td class="paramname"><em>clip</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>needsClear</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>cleared</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>targetHeight</em>&#160;</td>
+          <td class="paramname"><em>clip</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -467,31 +548,30 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Draws a sprite batch for the specified clipping rect.</p>
+<p>Draws the control.</p>
+<p>Implementations of <a class="el" href="classgameplay_1_1_control.html">Control</a> are expected to perform all drawing into a <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>. Batches should not be explicitly started or finished, but instead should be passed to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting and finishing the batch when neccessary.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">spriteBatch</td><td>The sprite batch to use. </td></tr>
-    <tr><td class="paramname">clip</td><td>The clipping rectangle. </td></tr>
-    <tr><td class="paramname">needsClear</td><td>Whether it needs to be cleared. </td></tr>
-    <tr><td class="paramname">cleared</td><td>Whether it was previously cleared </td></tr>
-    <tr><td class="paramname">targetHeight</td><td>The targets height </td></tr>
+    <tr><td class="paramname">form</td><td>The top level form being drawn. </td></tr>
+    <tr><td class="paramname">clip</td><td>The clipping rectangle.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The number of draw calls issued. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ab42f7d5f24b9978527c80f972c851cdf">gameplay::Container</a>, and <a class="el" href="classgameplay_1_1_slider.html#aa0f481fb950736359eacc41005235385">gameplay::Slider</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a04791e8ab39e07511c1c4f877c5b8acf">gameplay::Container</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a7946117d99feaffbc186a4b591bdc885"></a><!-- doxytag: member="gameplay::Control::drawBorder" ref="a7946117d99feaffbc186a4b591bdc885" args="(SpriteBatch *spriteBatch, const Rectangle &amp;clip)" -->
+<a class="anchor" id="a3c0ddbcb21d2fa0d0236af6da2b23641"></a><!-- doxytag: member="gameplay::Control::drawBorder" ref="a3c0ddbcb21d2fa0d0236af6da2b23641" args="(Form *form, const Rectangle &amp;clip)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#a7946117d99feaffbc186a4b591bdc885">gameplay::Control::drawBorder</a> </td>
+          <td class="memname">virtual unsigned int <a class="el" href="classgameplay_1_1_control.html#a3c0ddbcb21d2fa0d0236af6da2b23641">gameplay::Control::drawBorder</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td>
-          <td class="paramname"><em>spriteBatch</em>, </td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td>
+          <td class="paramname"><em>form</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -508,25 +588,27 @@ Static Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Draws the themed border and background of a control.</p>
+<p>Implementations of <a class="el" href="classgameplay_1_1_control.html">Control</a> are expected to perform all drawing into a <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>. Batches should not be explicitly started or finished, but instead should be passed to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting and finishing the batch when neccessary.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">spriteBatch</td><td>The sprite batch containing this control's border images. </td></tr>
-    <tr><td class="paramname">clip</td><td>The clipping rectangle of this control's parent container. </td></tr>
+    <tr><td class="paramname">form</td><td>The top level form being drawn. </td></tr>
+    <tr><td class="paramname">clip</td><td>The clipping rectangle of this control's parent container.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The number of draw calls issued. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a6866910ed0370428aae94dd67acff6a5"></a><!-- doxytag: member="gameplay::Control::drawImages" ref="a6866910ed0370428aae94dd67acff6a5" args="(SpriteBatch *spriteBatch, const Rectangle &amp;clip)" -->
+<a class="anchor" id="a67c2fadd5033f40517c34c60b1718b28"></a><!-- doxytag: member="gameplay::Control::drawImages" ref="a67c2fadd5033f40517c34c60b1718b28" args="(Form *form, const Rectangle &amp;clip)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#a6866910ed0370428aae94dd67acff6a5">gameplay::Control::drawImages</a> </td>
+          <td class="memname">virtual unsigned int <a class="el" href="classgameplay_1_1_control.html#a67c2fadd5033f40517c34c60b1718b28">gameplay::Control::drawImages</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td>
-          <td class="paramname"><em>spriteBatch</em>, </td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td>
+          <td class="paramname"><em>form</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -543,41 +625,91 @@ Static Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Draw the images associated with this control.</p>
+<p>Implementations of <a class="el" href="classgameplay_1_1_control.html">Control</a> are expected to perform all drawing into a <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>. Batches should not be explicitly started or finished, but instead should be passed to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting and finishing the batch when neccessary.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">spriteBatch</td><td>The sprite batch containing this control's icons. </td></tr>
-    <tr><td class="paramname">clip</td><td>The clipping rectangle of this control's parent container. </td></tr>
+    <tr><td class="paramname">form</td><td>The top level form being drawn. </td></tr>
+    <tr><td class="paramname">clip</td><td>The clipping rectangle of this control's parent container.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The number of draw calls issued. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a00981e76ee43f7d3481a38adc39b8d40">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a1b44c932cb97ef676bfff5734d92638c">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_joystick.html#acc5889195d133684a3375e7174a04d8f">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac87db1d15aa3d773b994466d09cb0f7c">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_text_box.html#a5d121ad1ba1a14d8204c61368a09f326">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_image_control.html#aa056caedc0e810e630a951ebc6407dc8">gameplay::ImageControl</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#ae52c617f4bc726bfaf727787cdace1a7">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#a872132f6a4cc61659c27ee7f26a01166">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_joystick.html#ab07e86b9540ce2f92bbe44274a831855">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a5f7e8042c85d39258cfe837fc92553d6">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a4159b2f5c41dc8da180dae03557b6b04">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_image_control.html#affc5539e8451ca8e8711d5478e5290c9">gameplay::ImageControl</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a0c38fc0e79ee94779c0a366b5599dff7"></a><!-- doxytag: member="gameplay::Control::drawText" ref="a0c38fc0e79ee94779c0a366b5599dff7" args="(const Rectangle &amp;clip)" -->
+<a class="anchor" id="ac80d74f9dc606b0d3f279f8a9fe9f144"></a><!-- doxytag: member="gameplay::Control::drawText" ref="ac80d74f9dc606b0d3f279f8a9fe9f144" args="(Form *form, const Rectangle &amp;clip)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#a0c38fc0e79ee94779c0a366b5599dff7">gameplay::Control::drawText</a> </td>
+          <td class="memname">virtual unsigned int <a class="el" href="classgameplay_1_1_control.html#ac80d74f9dc606b0d3f279f8a9fe9f144">gameplay::Control::drawText</a> </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td>
+          <td class="paramname"><em>form</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
-          <td class="paramname"><em>clip</em></td><td>)</td>
-          <td><code> [protected, virtual]</code></td>
+          <td class="paramname"><em>clip</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Draw this control's text.</p>
+<p>Implementations of <a class="el" href="classgameplay_1_1_control.html">Control</a> are expected to perform all drawing into a <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>. Batches should not be explicitly started or finished, but instead should be passed to Control::prepare(Form*, SpriteBatch*). This will handle automatically starting and finishing the batch when neccessary.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">clip</td><td>The clipping rectangle of this control's parent container. </td></tr>
+    <tr><td class="paramname">form</td><td>The top level form being drawn. </td></tr>
+    <tr><td class="paramname">clip</td><td>The clipping rectangle of this control's parent container.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The number of draw calls issued. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#ae9230b460a2761a3493f6bd6ba43a469">gameplay::Slider</a>, and <a class="el" href="classgameplay_1_1_label.html#a83ccd932008b95c7ca74751fb1b1d27b">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a881e3f4db5bf9d5f58f33ed250e2aabf">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#a6d0a7f1e785eb41af62dc15b85e6fa46">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#a3469bf01462756fa3147cb9b3b2a6267">gameplay::Label</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad62ecce661c5d61ab719bcc052dd6893"></a><!-- doxytag: member="gameplay::Control::finishBatch" ref="ad62ecce661c5d61ab719bcc052dd6893" args="(Form *form, SpriteBatch *batch)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#ad62ecce661c5d61ab719bcc052dd6893">gameplay::Control::finishBatch</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td>
+          <td class="paramname"><em>form</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td>
+          <td class="paramname"><em>batch</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Called after a batch has been drawn into and before any other batch is used.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">form</td><td>The form being drawn. </td></tr>
+    <tr><td class="paramname">batch</td><td>The batch that was previously started (via <a class="el" href="classgameplay_1_1_control.html#a1a03db7c756b49c87001a8e08521cfba">Control::startBatch</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -621,7 +753,7 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a8f3a9dfdfe154e926e184f537f84ed20">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#a8a2b476ed271ba4f75375e59265aeefb">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a59dbcaabaac8e8bf243e196106645c23">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a01d79deaeb17aa0f19e65c3ae0d31de6">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_button.html#ae745966cbae30362d58ca0f4249c5dfe">gameplay::Button</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a8a2b476ed271ba4f75375e59265aeefb">gameplay::Slider</a>.</p>
 
 </div>
 </div>
@@ -639,6 +771,7 @@ Static Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Get the absolute bounds of this control, in pixels, including border and padding, before clipping.</p>
+<p>The absolute bounds of a control represents its final computed bounds after all alignment, auto sizing, relative position and sizing has been computed. The returned bounds is in absolute coordinates, relative to the control's top-most parent container (usually its form).</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The absolute bounds of this control. </dd></dl>
 
 </div>
@@ -740,12 +873,12 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a98f8b9e329db04c4069396f81bd9319b"></a><!-- doxytag: member="gameplay::Control::getAutoHeight" ref="a98f8b9e329db04c4069396f81bd9319b" args="() const " -->
+<a class="anchor" id="a3c2b62983de4e61af366e4a97df2dd10"></a><!-- doxytag: member="gameplay::Control::getAutoHeight" ref="a3c2b62983de4e61af366e4a97df2dd10" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a98f8b9e329db04c4069396f81bd9319b">gameplay::Control::getAutoHeight</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a> <a class="el" href="classgameplay_1_1_control.html#a3c2b62983de4e61af366e4a97df2dd10">gameplay::Control::getAutoHeight</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -753,17 +886,17 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get whether this control's height is set to automatically adjust to fit vertically within its parent container.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Whether this control's height is set to automatically adjust. </dd></dl>
+<p>Returns the auto sizing mode for this control's height.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The auto size mode for this control's height. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ae720cdfda39ef51e8ffe1e1b85e02d43"></a><!-- doxytag: member="gameplay::Control::getAutoWidth" ref="ae720cdfda39ef51e8ffe1e1b85e02d43" args="() const " -->
+<a class="anchor" id="aa8d20f5f9fc3e09f25be6c0079e76bd6"></a><!-- doxytag: member="gameplay::Control::getAutoWidth" ref="aa8d20f5f9fc3e09f25be6c0079e76bd6" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#ae720cdfda39ef51e8ffe1e1b85e02d43">gameplay::Control::getAutoWidth</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a> <a class="el" href="classgameplay_1_1_control.html#aa8d20f5f9fc3e09f25be6c0079e76bd6">gameplay::Control::getAutoWidth</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -771,8 +904,8 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get whether this control's width is set to automatically adjust to fit horizontally within its parent container.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Whether this control's width is set to automatically adjust. </dd></dl>
+<p>Returns the auto sizing mode for this control's width.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The auto size mode for this control's width. </dd></dl>
 
 </div>
 </div>
@@ -1023,8 +1156,8 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get the height of this control's bounds.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The height of this control's bounds. </dd></dl>
+<p>Get the height of this control.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The height of this control. </dd></dl>
 
 </div>
 </div>
@@ -1269,6 +1402,24 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae9597ef3ffa8ffa929fdc3cfdd51963a"></a><!-- doxytag: member="gameplay::Control::getParent" ref="ae9597ef3ffa8ffa929fdc3cfdd51963a" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_control.html">Control</a>* <a class="el" href="classgameplay_1_1_control.html#ae9597ef3ffa8ffa929fdc3cfdd51963a">gameplay::Control::getParent</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns this control's parent, or NULL if this control does not have a parent.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>This control's parent. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a5ae026700a0cfa40ffcdb29e50a5a049"></a><!-- doxytag: member="gameplay::Control::getSkinColor" ref="a5ae026700a0cfa40ffcdb29e50a5a049" args="(State state=NORMAL) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1455,6 +1606,41 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2469a0c39f14340ed99ec21ff4dbb425"></a><!-- doxytag: member="gameplay::Control::getTheme" ref="a2469a0c39f14340ed99ec21ff4dbb425" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_theme.html">Theme</a>* <a class="el" href="classgameplay_1_1_control.html#a2469a0c39f14340ed99ec21ff4dbb425">gameplay::Control::getTheme</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the theme for this control. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab5ec9295141292d9a8014dab4b2b0734"></a><!-- doxytag: member="gameplay::Control::getTopLevelForm" ref="ab5ec9295141292d9a8014dab4b2b0734" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_form.html">Form</a>* <a class="el" href="classgameplay_1_1_control.html#ab5ec9295141292d9a8014dab4b2b0734">gameplay::Control::getTopLevelForm</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns this control's top level form, or NULL if this control does not belong to a form.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>this control's form. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="adc74e6fa5d73449369faf239b1fe8bc3"></a><!-- doxytag: member="gameplay::Control::getType" ref="adc74e6fa5d73449369faf239b1fe8bc3" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1471,7 +1657,7 @@ Static Protected Attributes</h2></td></tr>
 <p>Gets the type of the <a class="el" href="classgameplay_1_1_control.html">Control</a> and returns it as a string.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The string of the <a class="el" href="classgameplay_1_1_control.html">Control</a> type, all in lower-case. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_joystick.html#a241fe505e84cda72be29d876b218d398">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_image_control.html#a5baf1490bb084a487941d00f071b9645">gameplay::ImageControl</a>, <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_joystick.html#a241fe505e84cda72be29d876b218d398">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_image_control.html#a5baf1490bb084a487941d00f071b9645">gameplay::ImageControl</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, and <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -1488,8 +1674,8 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get the width of this control's bounds.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The width of this control's bounds. </dd></dl>
+<p>Get the width of this control.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The width of this control. </dd></dl>
 
 </div>
 </div>
@@ -1506,8 +1692,8 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get the x coordinate of this control's bounds.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The x coordinate of this control's bounds. </dd></dl>
+<p>Get the x coordinate of this control.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The x coordinate of this control. </dd></dl>
 
 </div>
 </div>
@@ -1524,8 +1710,8 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get the y coordinate of this control's bounds.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The y coordinate of this control's bounds. </dd></dl>
+<p>Get the y coordinate of this control.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The y coordinate of this control. </dd></dl>
 
 </div>
 </div>
@@ -1555,22 +1741,29 @@ Static Protected Attributes</h2></td></tr>
           <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a09500f6090428a06cf18418ba622a401">gameplay::Control::hasFocus</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const<code> [protected]</code></td>
+          <td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets whether this control is in focus. Note that a control's state can be HOVER while the control is in focus. When the cursor leaves the control, it will return to the FOCUS state. This method will still return true in this case. </p>
+<p>Determines if this control is currently in focus.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the control is currently in focus. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ab2aab797de258880dab8ab61edd2259a"></a><!-- doxytag: member="gameplay::Control::initialize" ref="ab2aab797de258880dab8ab61edd2259a" args="(Theme::Style *style, Properties *properties)" -->
+<a class="anchor" id="a1c7de615c9b99672573327c5fb342ba7"></a><!-- doxytag: member="gameplay::Control::initialize" ref="a1c7de615c9b99672573327c5fb342ba7" args="(const char *typeName, Theme::Style *style, Properties *properties)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#ab2aab797de258880dab8ab61edd2259a">gameplay::Control::initialize</a> </td>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#a1c7de615c9b99672573327c5fb342ba7">gameplay::Control::initialize</a> </td>
           <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>typeName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td>
           <td class="paramname"><em>style</em>, </td>
         </tr>
@@ -1588,16 +1781,42 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Initialize properties common to all Controls from a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object.</p>
+<p>Initializes the control.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">style</td><td>The style to apply to this control. </td></tr>
-    <tr><td class="paramname">properties</td><td>The properties to set on this control. </td></tr>
+    <tr><td class="paramname">typeName</td><td>The type name of the control being initalized. </td></tr>
+    <tr><td class="paramname">style</td><td>The style to apply to this control (optional). </td></tr>
+    <tr><td class="paramname">properties</td><td>The properties to set on this control (optional). </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_joystick.html#a7cc06618945395cf4c74f18203514379">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_image_control.html#ae50f3fab285a26000b066dcff9bb4ec7">gameplay::ImageControl</a>, and <a class="el" href="classgameplay_1_1_label.html#a5a3f16b1307aa392732e1167dc83ff6f">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a4a7a461edc94987114ecd110bd3a0e01">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#aa39dec9fdeb9ae4f3138ea5af7b3b57e">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick.html#ada3766892f6409915d155b72b64672aa">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_text_box.html#a0313ba71e87a51e6104c2b57a77791e3">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#ad90e544db3fb59c6a3c38272fb99dfd0">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_image_control.html#a56fb3a9929b02b899f2ece91942d638c">gameplay::ImageControl</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac8b4f163025cfc3034bed542b2f24d50">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_label.html#a8068a49e620f4c10727a7ce63fa9325f">gameplay::Label</a>, and <a class="el" href="classgameplay_1_1_button.html#a6614121877b676bfeb97cbe29cfdacf3">gameplay::Button</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aec6686870fc560eade8fa4bc9de529bd"></a><!-- doxytag: member="gameplay::Control::isChild" ref="aec6686870fc560eade8fa4bc9de529bd" args="(Control *control) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#aec6686870fc560eade8fa4bc9de529bd">gameplay::Control::isChild</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>control</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if this control is a child (at any level of hierarchy) of the specified control.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">control</td><td>The control to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if this control is a direct or indirect child of the specified control. </dd></dl>
 
 </div>
 </div>
@@ -1659,6 +1878,42 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab9f3ef382bc25f070bf5822fdd9208d1"></a><!-- doxytag: member="gameplay::Control::isEnabledInHierarchy" ref="ab9f3ef382bc25f070bf5822fdd9208d1" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#ab9f3ef382bc25f070bf5822fdd9208d1">gameplay::Control::isEnabledInHierarchy</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if this control is enabled in its hierarchy.</p>
+<p>A control is enabled in its hierarchy if it is enabled and all of its parents are also enabled. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac57bb6782911dd3a96739fd753cde408"></a><!-- doxytag: member="gameplay::Control::isHeightPercentage" ref="ac57bb6782911dd3a96739fd753cde408" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#ac57bb6782911dd3a96739fd753cde408">gameplay::Control::isHeightPercentage</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if the height of this control is computed as a percentage of its parent container.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the height is computed as a percentage of its parent container. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="af727190b510e7ff17a50ace4f69d227b"></a><!-- doxytag: member="gameplay::Control::isVisible" ref="af727190b510e7ff17a50ace4f69d227b" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1674,6 +1929,78 @@ Static Protected Attributes</h2></td></tr>
 <div class="memdoc">
 <p>Get the visibility of a control.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true if the control is visible; false if not visible. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aab9d48fec0f69367b1b639a1a7b58512"></a><!-- doxytag: member="gameplay::Control::isVisibleInHierarchy" ref="aab9d48fec0f69367b1b639a1a7b58512" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#aab9d48fec0f69367b1b639a1a7b58512">gameplay::Control::isVisibleInHierarchy</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if this control is visible in its hierarchy.</p>
+<p>A control is visible in its hierarchy if it is visible and all of its parents are also visible. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa0e51a41446aa0589c4da8b3b2d2ab22"></a><!-- doxytag: member="gameplay::Control::isWidthPercentage" ref="aa0e51a41446aa0589c4da8b3b2d2ab22" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#aa0e51a41446aa0589c4da8b3b2d2ab22">gameplay::Control::isWidthPercentage</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if the width of this control is computed as a percentage of its parent container.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the width is computed as a percentage of its parent container. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0b6d7439cc781d30307e84f857c85e0b"></a><!-- doxytag: member="gameplay::Control::isXPercentage" ref="a0b6d7439cc781d30307e84f857c85e0b" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a0b6d7439cc781d30307e84f857c85e0b">gameplay::Control::isXPercentage</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if the X coordinate of this control computed as a percentage of its parent container.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the X value is computed as a percentage of its parent container. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a87c577f2d6f92e850a979ce8f18660c3"></a><!-- doxytag: member="gameplay::Control::isYPercentage" ref="a87c577f2d6f92e850a979ce8f18660c3" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a87c577f2d6f92e850a979ce8f18660c3">gameplay::Control::isYPercentage</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if the Y coordinate of this control is computed as a percentage of its parent container.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the Y value is computed as a percentage of its parent container. </dd></dl>
 
 </div>
 </div>
@@ -1714,7 +2041,7 @@ Static Protected Attributes</h2></td></tr>
 <dd>
 <a class="el" href="classgameplay_1_1_keyboard.html#a4e04e50db898d22f57e2a6de766ff81b">Keyboard::Key</a> </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a3fa6f23d92572af2221aafa70803949a">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#a0c3d8564baa230a3d14835b2846b486a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#aaf06bf7161c4748afc2dd55c280c04ca">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a804ffd05be38f95f9b5b5a389240defd">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_text_box.html#a054279ea14d4f37068d57b9a4309e9d6">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_button.html#a591996947d6b3fed03fbfe368e91dcde">gameplay::Button</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a0c3d8564baa230a3d14835b2846b486a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#a054279ea14d4f37068d57b9a4309e9d6">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#aaf06bf7161c4748afc2dd55c280c04ca">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#a804ffd05be38f95f9b5b5a389240defd">gameplay::CheckBox</a>.</p>
 
 </div>
 </div>
@@ -1767,7 +2094,7 @@ Static Protected Attributes</h2></td></tr>
 <dl class="return"><dt><b>Returns:</b></dt><dd>True if the mouse event is consumed or false if it is not consumed.</dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a19874e847e653f22fd1f737182f3fcd2">gameplay::Container</a>, and <a class="el" href="classgameplay_1_1_slider.html#a9bcc08d9d3812775096a92bc4fa3a7e0">gameplay::Slider</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a9bcc08d9d3812775096a92bc4fa3a7e0">gameplay::Slider</a>.</p>
 
 </div>
 </div>
@@ -1899,55 +2226,101 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a36e3ad4ba2dff80d0dbda16a9c5fc427"></a><!-- doxytag: member="gameplay::Control::setAutoHeight" ref="a36e3ad4ba2dff80d0dbda16a9c5fc427" args="(bool autoHeight)" -->
+<a class="anchor" id="a00bedda61ce975abe25b8d131b700eee"></a><!-- doxytag: member="gameplay::Control::setAutoHeight" ref="a00bedda61ce975abe25b8d131b700eee" args="(bool autoHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#a36e3ad4ba2dff80d0dbda16a9c5fc427">gameplay::Control::setAutoHeight</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a00bedda61ce975abe25b8d131b700eee">gameplay::Control::setAutoHeight</a> </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>autoHeight</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Set this control to fit vertically within its parent container.</p>
+<p>Enables or disables auto sizing for this control's height.</p>
+<p>This method is a simplified version of <a class="el" href="classgameplay_1_1_control.html#adf6a77e014d00d779b4538468188d4e3">setAutoHeight(AutoSize)</a> left intact for legacy reasons. It enables or disables the AUTO_SIZE_STRETCH mode for the control's height.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">autoHeight</td><td>Whether to size this control to fit vertically within its parent container. </td></tr>
+    <tr><td class="paramname">autoHeight</td><td>True to enable AUTO_SIZE_STRETCH for this control's height. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#affcd586c3e3dfb7f0e7f766cda357302">gameplay::Form</a>.</p>
-
 </div>
 </div>
-<a class="anchor" id="aa1ac9b0e910605a154bc98d566252592"></a><!-- doxytag: member="gameplay::Control::setAutoWidth" ref="aa1ac9b0e910605a154bc98d566252592" args="(bool autoWidth)" -->
+<a class="anchor" id="adf6a77e014d00d779b4538468188d4e3"></a><!-- doxytag: member="gameplay::Control::setAutoHeight" ref="adf6a77e014d00d779b4538468188d4e3" args="(AutoSize mode)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#aa1ac9b0e910605a154bc98d566252592">gameplay::Control::setAutoWidth</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a00bedda61ce975abe25b8d131b700eee">gameplay::Control::setAutoHeight</a> </td>
           <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>autoWidth</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a>&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Set this control to fit horizontally within its parent container.</p>
+<p>Sets the auto size mode for this control's height.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">autoWidth</td><td>Whether to size this control to fit horizontally within its parent container. </td></tr>
+    <tr><td class="paramname">mode</td><td>The new auto size mode for this control's height. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#a114b7be61c46f05865f0e34b2be0bbc8">gameplay::Form</a>.</p>
+</div>
+</div>
+<a class="anchor" id="a77ced2afcc8a006e77b1f45373370e95"></a><!-- doxytag: member="gameplay::Control::setAutoWidth" ref="a77ced2afcc8a006e77b1f45373370e95" args="(bool autoWidth)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a77ced2afcc8a006e77b1f45373370e95">gameplay::Control::setAutoWidth</a> </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>autoWidth</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Enables or disables auto sizing for this control's width.</p>
+<p>This method is a simplified version of <a class="el" href="classgameplay_1_1_control.html#af4205a29b8c0f8b1003ececf18e60b02">setAutoWidth(AutoSize)</a> left intact for legacy reasons. It enables or disables the AUTO_SIZE_STRETCH mode for the control's width.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">autoWidth</td><td>True to enable AUTO_SIZE_STRETCH for this control's width. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="af4205a29b8c0f8b1003ececf18e60b02"></a><!-- doxytag: member="gameplay::Control::setAutoWidth" ref="af4205a29b8c0f8b1003ececf18e60b02" args="(AutoSize mode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a77ced2afcc8a006e77b1f45373370e95">gameplay::Control::setAutoWidth</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a>&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the auto size mode for this control's width.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mode</td><td>The new auto size mode for this control's width. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -2007,21 +2380,22 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af0913ff556aba2f03a258fac46e814d8"></a><!-- doxytag: member="gameplay::Control::setBounds" ref="af0913ff556aba2f03a258fac46e814d8" args="(const Rectangle &amp;bounds)" -->
+<a class="anchor" id="a1a2527de165d45ef51023e67654ebeb8"></a><!-- doxytag: member="gameplay::Control::setBounds" ref="a1a2527de165d45ef51023e67654ebeb8" args="(const Rectangle &amp;bounds)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#af0913ff556aba2f03a258fac46e814d8">gameplay::Control::setBounds</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a1a2527de165d45ef51023e67654ebeb8">gameplay::Control::setBounds</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
           <td class="paramname"><em>bounds</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Set the bounds of this control, relative to its parent container and including its border and padding, before clipping.</p>
+<p>This method sets the local bounds of the control, relative to its container. Setting percetage values is not supported with this method, use setX, setY, setWidth and setHeight instead.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">bounds</td><td>The new bounds to set. </td></tr>
@@ -2029,7 +2403,29 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#aa45423c8be779f56c582c508049d9cd9">gameplay::Form</a>.</p>
+</div>
+</div>
+<a class="anchor" id="a78fe33755480d2fe89e18c2855d006a7"></a><!-- doxytag: member="gameplay::Control::setCanFocus" ref="a78fe33755480d2fe89e18c2855d006a7" args="(bool acceptsFocus)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a78fe33755480d2fe89e18c2855d006a7">gameplay::Control::setCanFocus</a> </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>acceptsFocus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets whether or not the control accepts input focus.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">acceptsFocus</td><td>True if the control should accept input focus, false otherwise. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -2151,6 +2547,27 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af6ca76ae7b61f7a96661e8f18252aff9"></a><!-- doxytag: member="gameplay::Control::setFocus" ref="af6ca76ae7b61f7a96661e8f18252aff9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_control.html#af6ca76ae7b61f7a96661e8f18252aff9">gameplay::Control::setFocus</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets input focus to this control.</p>
+<p>If this control accepts focus (the hasFocus method returns true), input focus is set to this control. If this control is a container, the first focusable control within it gains focus.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if this control or one of its children successfully gained focus, false otherwise. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a099c23e2bc96cce46fe2c385891470ac">gameplay::Container</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ab32797889a239b0b9d4ffe70da80a4d1"></a><!-- doxytag: member="gameplay::Control::setFocusIndex" ref="ab32797889a239b0b9d4ffe70da80a4d1" args="(int focusIndex)" -->
 <div class="memitem">
 <div class="memproto">
@@ -2166,6 +2583,8 @@ Static Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Set this control's focus index.</p>
+<p>Focus indexes control the order in which input focus changes between controls when using the focus change controls such as the TAB key.</p>
+<p>Valid focus indexes should be zero or greater, with a negative number indicating an unset focus index.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">focusIndex</td><td>The new focus index. </td></tr>
@@ -2245,29 +2664,63 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac794ce5a5271ec9cf4d931c09a842167"></a><!-- doxytag: member="gameplay::Control::setHeight" ref="ac794ce5a5271ec9cf4d931c09a842167" args="(float height)" -->
+<a class="anchor" id="a7f2c2115e021bfe25d805d348e0f541e"></a><!-- doxytag: member="gameplay::Control::setHeight" ref="a7f2c2115e021bfe25d805d348e0f541e" args="(float height, bool percentage=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#ac794ce5a5271ec9cf4d931c09a842167">gameplay::Control::setHeight</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a7f2c2115e021bfe25d805d348e0f541e">gameplay::Control::setHeight</a> </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>height</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>percentage</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Set the desired height of the control, including it's border and padding, before clipping.</p>
+<p>If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value between 0-1, where 1 equals the full size of it's parent.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">height</td><td>The height. </td></tr>
+    <tr><td class="paramname">percentage</td><td>True if the value should be interpreted as a percentage (0-1), false if it is regular number. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#afa7e7903fea9b1131c5f30c6ab1799c7">gameplay::Form</a>.</p>
+</div>
+</div>
+<a class="anchor" id="af74739a51e8bd70e77443133665e5416"></a><!-- doxytag: member="gameplay::Control::setId" ref="af74739a51e8bd70e77443133665e5416" args="(const char *id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#af74739a51e8bd70e77443133665e5416">gameplay::Control::setId</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets this control's ID string.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>The new control ID. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -2513,6 +2966,7 @@ Static Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Set the position of this control relative to its parent container.</p>
+<p>This method sets the local position of the control, relative to its container. Setting percetage values is not supported with this method, use setX and setY instead.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The x coordinate. </td></tr>
@@ -2523,12 +2977,12 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae09909f17b37e986195d8091482eed77"></a><!-- doxytag: member="gameplay::Control::setSize" ref="ae09909f17b37e986195d8091482eed77" args="(float width, float height)" -->
+<a class="anchor" id="a341853aca02ab1745a0408a3da071aaa"></a><!-- doxytag: member="gameplay::Control::setSize" ref="a341853aca02ab1745a0408a3da071aaa" args="(float width, float height)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#ae09909f17b37e986195d8091482eed77">gameplay::Control::setSize</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a341853aca02ab1745a0408a3da071aaa">gameplay::Control::setSize</a> </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>width</em>, </td>
@@ -2542,12 +2996,13 @@ Static Protected Attributes</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td><code> [virtual]</code></td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Set the desired size of this control, including its border and padding, before clipping.</p>
+<p>This method sets the size of the control, relative to its container. Setting percetage values is not supported with this method, use setWidth and setHeight instead.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">width</td><td>The width. </td></tr>
@@ -2555,8 +3010,6 @@ Static Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#aa6d0faa4255c19da30cf65e7630dd718">gameplay::Form</a>.</p>
 
 </div>
 </div>
@@ -2624,30 +3077,6 @@ Static Protected Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">region</td><td>The texture region, in pixels. </td></tr>
     <tr><td class="paramname">states</td><td>The states to set this property on. One or more members of the <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">Control::State</a> enum, ORed together. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="aa67c24db7ec1dfff9b727a4b8c372ce7"></a><!-- doxytag: member="gameplay::Control::setState" ref="aa67c24db7ec1dfff9b727a4b8c372ce7" args="(State state)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#aa67c24db7ec1dfff9b727a4b8c372ce7">gameplay::Control::setState</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td>
-          <td class="paramname"><em>state</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Change this control's state.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">state</td><td>The state to switch this control to. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2808,29 +3237,111 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae7281d8ef901f277b72c29ec184a049f"></a><!-- doxytag: member="gameplay::Control::setWidth" ref="ae7281d8ef901f277b72c29ec184a049f" args="(float width)" -->
+<a class="anchor" id="a01b501386806029530319a6460689067"></a><!-- doxytag: member="gameplay::Control::setWidth" ref="a01b501386806029530319a6460689067" args="(float width, bool percentage=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#ae7281d8ef901f277b72c29ec184a049f">gameplay::Control::setWidth</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a01b501386806029530319a6460689067">gameplay::Control::setWidth</a> </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>width</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>percentage</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Set the desired width of the control, including it's border and padding, before clipping.</p>
+<p>If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value between 0-1, where 1 equals the full size of it's parent.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">width</td><td>The width. </td></tr>
+    <tr><td class="paramname">percentage</td><td>True if the value should be interpreted as a percentage (0-1), false if it is regular number. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#a2833db258ab2d6b74772438d53552a38">gameplay::Form</a>.</p>
+</div>
+</div>
+<a class="anchor" id="ae5fa4837e74350b1dfe92df228afc8a4"></a><!-- doxytag: member="gameplay::Control::setX" ref="ae5fa4837e74350b1dfe92df228afc8a4" args="(float x, bool percentage=false)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#ae5fa4837e74350b1dfe92df228afc8a4">gameplay::Control::setX</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>percentage</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the X coordinate for the control.</p>
+<p>If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value between 0-1, where 1 equals the full size of it's parent.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The new X coordinate. </td></tr>
+    <tr><td class="paramname">percentage</td><td>True if the value should be interpreted as a percentage (0-1), false if it is regular number. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a4cc08efe8d182f1bed7557e1b59c1f15"></a><!-- doxytag: member="gameplay::Control::setY" ref="a4cc08efe8d182f1bed7557e1b59c1f15" args="(float y, bool percentage=false)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a4cc08efe8d182f1bed7557e1b59c1f15">gameplay::Control::setY</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>percentage</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the Y coordinate for the control.</p>
+<p>If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value between 0-1, where 1 equals the full size of it's parent.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>The new Y coordinate. </td></tr>
+    <tr><td class="paramname">percentage</td><td>True if the value should be interpreted as a percentage (0-1), false if it is regular number. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -2852,6 +3363,42 @@ Static Protected Attributes</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">zIndex</td><td>The new z-index. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a1a03db7c756b49c87001a8e08521cfba"></a><!-- doxytag: member="gameplay::Control::startBatch" ref="a1a03db7c756b49c87001a8e08521cfba" args="(Form *form, SpriteBatch *batch)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a1a03db7c756b49c87001a8e08521cfba">gameplay::Control::startBatch</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td>
+          <td class="paramname"><em>form</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td>
+          <td class="paramname"><em>batch</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Indicates that a control will begin drawing into the specified batch.</p>
+<p>When drawing is finshed (before any other batch can be drawn into), the finishBatch method should be called.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">form</td><td>The form beign drawn. </td></tr>
+    <tr><td class="paramname">batch</td><td>The sprite batch to be drawn into. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2907,7 +3454,7 @@ Static Protected Attributes</h2></td></tr>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Whether the touch event was consumed by this control.</dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a1eb7f9e877fd66b22d386d3b5ee07c94">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick.html#a3ea3ed50c7d5bb7555c4a67efb5d4a84">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_radio_button.html#af22bc32cf3c51611cf61bb99da51ba89">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a3849a62e5b3895b684592eacd6dd18b2">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_text_box.html#ab4365e628465e070baf404047f74dac4">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_button.html#a29c96c8eb4cefdf71806fbf3d048bb8f">gameplay::Button</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick.html#a3ea3ed50c7d5bb7555c4a67efb5d4a84">gameplay::Joystick</a>, and <a class="el" href="classgameplay_1_1_text_box.html#ab4365e628465e070baf404047f74dac4">gameplay::TextBox</a>.</p>
 
 </div>
 </div>
@@ -2944,7 +3491,7 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a8308d5eb53e115aa12e2a9d45ae3f0f9">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a4b2996e4d19631c34fc4bbeff50dfffa">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a95c22e5a84d40dcede9994be2b943db3">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_text_box.html#ac14dbc09fe764007d75632c707f2ca2b">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a8308d5eb53e115aa12e2a9d45ae3f0f9">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#ac14dbc09fe764007d75632c707f2ca2b">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_form.html#a0e25f651e37c079afaa0737038fc8e2c">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a4b2996e4d19631c34fc4bbeff50dfffa">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a95c22e5a84d40dcede9994be2b943db3">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_image_control.html#a2dfd6f16e34a6f88f787c77fd3e6a766">gameplay::ImageControl</a>, and <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -2991,12 +3538,12 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3e881d2d3994afc23065a362c437e295"></a><!-- doxytag: member="gameplay::Control::_autoHeight" ref="a3e881d2d3994afc23065a362c437e295" args="" -->
+<a class="anchor" id="a78af3e389d1c8a357a795ef0dc84569a"></a><!-- doxytag: member="gameplay::Control::_autoHeight" ref="a78af3e389d1c8a357a795ef0dc84569a" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a3e881d2d3994afc23065a362c437e295">gameplay::Control::_autoHeight</a><code> [protected]</code></td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a> <a class="el" href="classgameplay_1_1_control.html#a78af3e389d1c8a357a795ef0dc84569a">gameplay::Control::_autoHeight</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -3005,12 +3552,12 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a793a5230d5df640c16b4bd8bf3e3c9b7"></a><!-- doxytag: member="gameplay::Control::_autoWidth" ref="a793a5230d5df640c16b4bd8bf3e3c9b7" args="" -->
+<a class="anchor" id="a20fbfa936298809ae02228f320fe7973"></a><!-- doxytag: member="gameplay::Control::_autoWidth" ref="a20fbfa936298809ae02228f320fe7973" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a793a5230d5df640c16b4bd8bf3e3c9b7">gameplay::Control::_autoWidth</a><code> [protected]</code></td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_control.html#aae0177091358881bbf61caf46f67a35a">AutoSize</a> <a class="el" href="classgameplay_1_1_control.html#a20fbfa936298809ae02228f320fe7973">gameplay::Control::_autoWidth</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -3029,21 +3576,35 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Position, relative to parent container's clipping window, and desired size. </p>
+<p>Local bounds, relative to parent container's clipping window, and desired size. </p>
 
 </div>
 </div>
-<a class="anchor" id="a9bdd8e08af2dbce49364d45742eda54d"></a><!-- doxytag: member="gameplay::Control::_clearBounds" ref="a9bdd8e08af2dbce49364d45742eda54d" args="" -->
+<a class="anchor" id="ac78438f65735e017bad66fd7af3aeea3"></a><!-- doxytag: member="gameplay::Control::_boundsBits" ref="ac78438f65735e017bad66fd7af3aeea3" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> <a class="el" href="classgameplay_1_1_control.html#a9bdd8e08af2dbce49364d45742eda54d">gameplay::Control::_clearBounds</a><code> [protected]</code></td>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_control.html#ac78438f65735e017bad66fd7af3aeea3">gameplay::Control::_boundsBits</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Previous frame's absolute clip bounds, to be cleared if necessary. </p>
+<p>Bits indicating whether bounds values are absolute values or percentages. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa3c10c6defa0b93a6f692b17fd81621f"></a><!-- doxytag: member="gameplay::Control::_canFocus" ref="aa3c10c6defa0b93a6f692b17fd81621f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#aa3c10c6defa0b93a6f692b17fd81621f">gameplay::Control::_canFocus</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether or not the control accepts input focus. </p>
 
 </div>
 </div>
@@ -3057,7 +3618,7 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Position, relative to parent container's clipping window, including border and padding, after clipping. </p>
+<p>Local bounds, relative to parent container's clipping window, including border and padding, after clipping. </p>
 
 </div>
 </div>
@@ -3100,6 +3661,20 @@ Static Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>If the control is dirty and need updating. </p>
+
+</div>
+</div>
+<a class="anchor" id="a83f2f3bea018c203b7ce7cb18f1073b5"></a><!-- doxytag: member="gameplay::Control::_enabled" ref="a83f2f3bea018c203b7ce7cb18f1073b5" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a83f2f3bea018c203b7ce7cb18f1073b5">gameplay::Control::_enabled</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether the control is enabled. </p>
 
 </div>
 </div>
@@ -3187,17 +3762,17 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a08e0c8e34c28edcddc7099281e9b423a"></a><!-- doxytag: member="gameplay::Control::_state" ref="a08e0c8e34c28edcddc7099281e9b423a" args="" -->
+<a class="anchor" id="a2361889c2adbb4d8843d97a65dcc3b6e"></a><!-- doxytag: member="gameplay::Control::_relativeBounds" ref="a2361889c2adbb4d8843d97a65dcc3b6e" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> <a class="el" href="classgameplay_1_1_control.html#a08e0c8e34c28edcddc7099281e9b423a">gameplay::Control::_state</a><code> [protected]</code></td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> <a class="el" href="classgameplay_1_1_control.html#a2361889c2adbb4d8843d97a65dcc3b6e">gameplay::Control::_relativeBounds</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Determines overlay used during <a class="el" href="classgameplay_1_1_control.html#aae210d6d79efcc53ac52feb7ec5d5043">draw()</a>. </p>
+<p>Local bounds, relative to parent container's clipping window, possibly stored as percentages (see _boundsBits). </p>
 
 </div>
 </div>
@@ -3388,7 +3963,7 @@ Static Protected Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const unsigned char <a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">gameplay::Control::STATE_ALL</a> = <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79">ACTIVE</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a24e103ee69e3bba78e6932b511f1ef21">HOVER</a><code> [static]</code></td>
+          <td class="memname">const unsigned char <a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">gameplay::Control::STATE_ALL</a> = <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79">ACTIVE</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a24e103ee69e3bba78e6932b511f1ef21">HOVER</a><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -3415,7 +3990,7 @@ Static Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

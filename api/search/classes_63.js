@@ -7,5 +7,6 @@ var searchData=
   ['collisionpair',['CollisionPair',['../classgameplay_1_1_physics_collision_object_1_1_collision_pair.html',1,'gameplay::PhysicsCollisionObject']]],
   ['container',['Container',['../classgameplay_1_1_container.html',1,'gameplay']]],
   ['control',['Control',['../classgameplay_1_1_control.html',1,'gameplay']]],
+  ['controlfactory',['ControlFactory',['../classgameplay_1_1_control_factory.html',1,'gameplay']]],
   ['curve',['Curve',['../classgameplay_1_1_curve.html',1,'gameplay']]]
 ];

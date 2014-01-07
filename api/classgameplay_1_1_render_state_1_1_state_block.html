@@ -118,9 +118,14 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a174fcec28b8503319d4d946fb49cc54f">setBlendDst</a> (<a class="el" href="classgameplay_1_1_render_state.html#ac4da745bdd2aef1c14407a5ac3f75285">Blend</a> blend)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a81330b9196446698426da7243dee26ed">setCullFace</a> (bool enabled)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#aa4f6baa6632cd157e1c0113998214976">setCullFaceSide</a> (<a class="el" href="classgameplay_1_1_render_state.html#af5a647a5c230188335553706ce8cd0ae">CullFaceSide</a> side)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a9515824d4fd6ce1800b2d9a1a39c8bd0">setFrontFace</a> (<a class="el" href="classgameplay_1_1_render_state.html#ac229ec6fafce34cc8943206a60b5fb25">FrontFace</a> winding)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#aff72f5e76318a14b2d57be82bf96a348">setDepthTest</a> (bool enabled)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a15b1a1b7b6879f67917c48a99d855c03">setDepthWrite</a> (bool enabled)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#af0475ad06648ecdc3752511a6749c969">setDepthFunction</a> (<a class="el" href="classgameplay_1_1_render_state.html#a81d6c171617af613da8d1b3a92ddf342">DepthFunction</a> func)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#afae711fc2366024b1b88b0b40bc03d6f">setStencilTest</a> (bool enabled)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a6a309f123d487039888e2f3228f8110d">setStencilWrite</a> (unsigned int mask)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#add9881da3928c75f0be7fdc90c436d55">setStencilFunction</a> (<a class="el" href="classgameplay_1_1_render_state.html#aca1ebcc53b145ec61e89cf79902dfe3f">StencilFunction</a> func, int ref, unsigned int mask)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a736ebe6e17df285b99991000e4559dc5">setStencilOperation</a> (<a class="el" href="classgameplay_1_1_render_state.html#a402b2c5df98658816279368884da9275">StencilOperation</a> sfail, <a class="el" href="classgameplay_1_1_render_state.html#a402b2c5df98658816279368884da9275">StencilOperation</a> dpfail, <a class="el" href="classgameplay_1_1_render_state.html#a402b2c5df98658816279368884da9275">StencilOperation</a> dppass)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#aa8a6436cf020ab69634defac5ef0c768">setState</a> (const char *name, const char *value)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -276,7 +281,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Sets the side of the facets to cull.</p>
-<p>When not explicitly set, the default is to cull back-facing facets. </p>
+<p>When not explicitly set, the default is to cull back-facing facets.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">side</td><td>The side to cull. </td></tr>
@@ -360,6 +365,31 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9515824d4fd6ce1800b2d9a1a39c8bd0"></a><!-- doxytag: member="gameplay::RenderState::StateBlock::setFrontFace" ref="a9515824d4fd6ce1800b2d9a1a39c8bd0" args="(FrontFace winding)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a9515824d4fd6ce1800b2d9a1a39c8bd0">gameplay::RenderState::StateBlock::setFrontFace</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_render_state.html#ac229ec6fafce34cc8943206a60b5fb25">FrontFace</a>&#160;</td>
+          <td class="paramname"><em>winding</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the winding for front facing polygons.</p>
+<p>By default, counter-clockwise wound polygons are considered front facing.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">winding</td><td>The winding for front facing polygons. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="aa8a6436cf020ab69634defac5ef0c768"></a><!-- doxytag: member="gameplay::RenderState::StateBlock::setState" ref="aa8a6436cf020ab69634defac5ef0c768" args="(const char *name, const char *value)" -->
 <div class="memitem">
 <div class="memproto">
@@ -396,6 +426,142 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="add9881da3928c75f0be7fdc90c436d55"></a><!-- doxytag: member="gameplay::RenderState::StateBlock::setStencilFunction" ref="add9881da3928c75f0be7fdc90c436d55" args="(StencilFunction func, int ref, unsigned int mask)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#add9881da3928c75f0be7fdc90c436d55">gameplay::RenderState::StateBlock::setStencilFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_render_state.html#aca1ebcc53b145ec61e89cf79902dfe3f">StencilFunction</a>&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ref</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>mask</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the stencil function.</p>
+<p>By default, the function is set to STENCIL_ALWAYS, the reference value is 0, and the mask is all 1's.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">func</td><td>The stencil function. </td></tr>
+    <tr><td class="paramname">ref</td><td>The stencil reference value. </td></tr>
+    <tr><td class="paramname">mask</td><td>The stencil mask. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a736ebe6e17df285b99991000e4559dc5"></a><!-- doxytag: member="gameplay::RenderState::StateBlock::setStencilOperation" ref="a736ebe6e17df285b99991000e4559dc5" args="(StencilOperation sfail, StencilOperation dpfail, StencilOperation dppass)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a736ebe6e17df285b99991000e4559dc5">gameplay::RenderState::StateBlock::setStencilOperation</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_render_state.html#a402b2c5df98658816279368884da9275">StencilOperation</a>&#160;</td>
+          <td class="paramname"><em>sfail</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_render_state.html#a402b2c5df98658816279368884da9275">StencilOperation</a>&#160;</td>
+          <td class="paramname"><em>dpfail</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_render_state.html#a402b2c5df98658816279368884da9275">StencilOperation</a>&#160;</td>
+          <td class="paramname"><em>dppass</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the stencil operation.</p>
+<p>By default, stencil fail, stencil pass/depth fail, and stencil and depth pass are set to STENCIL_OP_KEEP.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sfail</td><td>The stencil operation if the stencil test fails. </td></tr>
+    <tr><td class="paramname">dpfail</td><td>The stencil operation if the stencil test passes, but the depth test fails. </td></tr>
+    <tr><td class="paramname">dppass</td><td>The stencil operation if both the stencil test and depth test pass. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="afae711fc2366024b1b88b0b40bc03d6f"></a><!-- doxytag: member="gameplay::RenderState::StateBlock::setStencilTest" ref="afae711fc2366024b1b88b0b40bc03d6f" args="(bool enabled)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#afae711fc2366024b1b88b0b40bc03d6f">gameplay::RenderState::StateBlock::setStencilTest</a> </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Toggles stencil testing.</p>
+<p>By default, stencil testing is disabled.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">enabled</td><td>true to enable, false to disable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a6a309f123d487039888e2f3228f8110d"></a><!-- doxytag: member="gameplay::RenderState::StateBlock::setStencilWrite" ref="a6a309f123d487039888e2f3228f8110d" args="(unsigned int mask)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a6a309f123d487039888e2f3228f8110d">gameplay::RenderState::StateBlock::setStencilWrite</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>mask</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the stencil writing mask.</p>
+<p>By default, the stencil writing mask is all 1's.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mask</td><td>Bit mask controlling writing to individual stencil planes. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -414,7 +580,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

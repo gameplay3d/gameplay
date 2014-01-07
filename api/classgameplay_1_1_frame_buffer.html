@@ -127,6 +127,8 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a2f0fbdb518c3357b41340c15c496f501">create</a> (const char *id, unsigned int width, unsigned int height)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a2d4b1f194d1b2e90028ff89320fd34cf">getFrameBuffer</a> (const char *id)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ad370566c9456ae2a278c7e174e33138f">getMaxRenderTargets</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_image.html">Image</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ad2d823badd24c87e3ef5ccc89e5c5cb4">createScreenshot</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ac6b4066a35dd3c38afb7a4c90672a112">getScreenshot</a> (<a class="el" href="classgameplay_1_1_image.html">Image</a> *image)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a6d1ad214098f6796d6c4027b8a432015">bindDefault</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#aa8811bfb4e227afc2a6ece0e73fc8310">getCurrent</a> ()</td></tr>
 </table>
@@ -149,7 +151,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Binds this <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> for off-screen rendering and return you the curently bound one.</p>
+<p>Binds this <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> for off-screen rendering and return you the currently bound one.</p>
 <p>You should keep the return <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> and store it and call <a class="el" href="classgameplay_1_1_frame_buffer.html#ae19ca6c54af5ba88dce456ab88af8ad0">bind()</a> when you rendering is complete.</p>
 <p>@ return The currently bound framebuffer. </p>
 
@@ -241,6 +243,24 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A newly created <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>.  </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad2d823badd24c87e3ef5ccc89e5c5cb4"></a><!-- doxytag: member="gameplay::FrameBuffer::createScreenshot" ref="ad2d823badd24c87e3ef5ccc89e5c5cb4" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_image.html">Image</a>* <a class="el" href="classgameplay_1_1_frame_buffer.html#ad2d823badd24c87e3ef5ccc89e5c5cb4">gameplay::FrameBuffer::createScreenshot</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Records a screenshot of what is stored on the current <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A screenshot of the current framebuffer's content. </dd></dl>
 
 </div>
 </div>
@@ -402,6 +422,31 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac6b4066a35dd3c38afb7a4c90672a112"></a><!-- doxytag: member="gameplay::FrameBuffer::getScreenshot" ref="ac6b4066a35dd3c38afb7a4c90672a112" args="(Image *image)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_frame_buffer.html#ac6b4066a35dd3c38afb7a4c90672a112">gameplay::FrameBuffer::getScreenshot</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_image.html">Image</a> *&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Records a screenshot of what is stored on the current <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> to an <a class="el" href="classgameplay_1_1_image.html">Image</a>.</p>
+<p>The <a class="el" href="classgameplay_1_1_image.html">Image</a> must be the same size as the <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>, otherwise the operation will fail. The <a class="el" href="classgameplay_1_1_image.html">Image</a> must be format RGBA.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td>The <a class="el" href="classgameplay_1_1_image.html">Image</a> to write the current framebuffer's content to. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a7817548cc856398209fe096659ccc7dc"></a><!-- doxytag: member="gameplay::FrameBuffer::getWidth" ref="a7817548cc856398209fe096659ccc7dc" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -433,7 +478,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Determines whether this is the default frame bufffer.</p>
+<p>Determines whether this is the default frame buffer.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true if this is the default frame buffer, false otherwise. </dd></dl>
 
 </div>
@@ -515,7 +560,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

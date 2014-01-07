@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a>  </div>
@@ -101,6 +102,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><a href="classgameplay_1_1_properties-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>Property</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ac50e4923355951650946c9f6dc5b2628">Type</a> { <br/>
@@ -117,15 +121,16 @@ Public Types</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a5c98a5b467182f2a3fd9bb8abac9127e">~Properties</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a47ac0a6d6779c13c1b47ef3686072aab">getNextProperty</a> (char **value=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a93b25b7611e02eeefbf03b4dbaa4cf8b">getNextProperty</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ad71da97b8931140e4a3186eaf78ab0a9">getNextNamespace</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ade9fc061db01646ef889838713c8cead">rewind</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a8666c66a84f29e93522e8d91c65854e6">getNamespace</a> (const char *id, bool searchNames=false) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#af98db4075952ae6970bd8bc2195e4ea3">getNamespace</a> (const char *id, bool searchNames=false, bool recurse=true) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a706ba911036f9fb2649003d3f98f46e5">getNamespace</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ad699906717b398c310932d300034815f">getId</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a7c3020df91523a962369a4a6f8062d51">exists</a> (const char *name) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html#ac50e4923355951650946c9f6dc5b2628">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a739405444022fa7199240ec6b35cf0e2">getType</a> (const char *name=NULL) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a1798681f06e414cc37a377076988f8f8">getString</a> (const char *name=NULL) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a840e3edc6ff207d710aa9ee867a6be37">getString</a> (const char *name=NULL, const char *defaultValue=NULL) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a59d12f5914d9e114b0d5d8026b2c6061">setString</a> (const char *name, const char *value)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#aba692940461f9022286c5462a77c20d5">getBool</a> (const char *name=NULL, bool defaultValue=false) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ac475d236fe4e23192fa19b8d5dbca7e4">getInt</a> (const char *name=NULL) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a87bcd441ca09a77b35e2e7ac91a5cf82">getFloat</a> (const char *name=NULL) const </td></tr>
@@ -138,13 +143,20 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a6abca23de971ae87e57e29ef4f0bfa21">getColor</a> (const char *name, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#af435904c37ba32c1080d76aa23323003">getColor</a> (const char *name, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a47350418a007100337277364bef52bab">getPath</a> (const char *name, std::string *path) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a6ff38c0a1f66d66e7b760d829c379dc4">getVariable</a> (const char *name, const char *defaultValue=NULL) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#ad94f3e38b28083ce435dc0061a703146">setVariable</a> (const char *name, const char *value)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a73bd3ee2ada1ce0455e1b0ff06f3debe">create</a> (const char *url)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a4aa8803fbe36751c8c0f3467613fede9">parseVector2</a> (const char *str, <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *out)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#abd3453c6dd072ba9b73e1d5279aa6549">parseVector3</a> (const char *str, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a0cfe772dfee2616d1796016c77456f8c">parseVector4</a> (const char *str, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *out)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a40cc4d3fb47ee563df3c272c215244dc">parseAxisAngle</a> (const char *str, <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> *out)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a30a5eb21d9c9d1dd523b0ba59b3f352e">parseColor</a> (const char *str, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#aa4ce225f8eddf4374b2582a380e09338">parseColor</a> (const char *str, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *out)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines a utility for loading text files in the GamePlay "properties" files and reading primitive types and GamePlay math classes out of them.</p>
-<p>This class is used by <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>, <a class="el" href="classgameplay_1_1_animation.html">Animation</a> and Materials to create objects of these types from text files.</p>
+<div class="textblock"><p>Defines a properties file for loading text files.</p>
 <p>A properties file has very simple syntax and can contain only namespaces and name/value pairs (the properties of a namespace). The file can have any file extension a user specifies.</p>
 <p>Here's an example of a simple file that uses all the available features of the markup language:</p>
 <div class="fragment"><pre class="fragment">
@@ -186,7 +198,7 @@ Static Public Member Functions</h2></td></tr>
         vector3Property = 1.0, 5.0, 3.55
         colorProperty = 1.0, 0.4, 0.0, 1.0
     }
- </pre></div><p>Retrieving information out of a file like this could be done in two ways. If the available namespaces and name/value pairs are known in advance they can be queried by ID or name. For example, if the namespace "spriteTexture" and its properties are required then they can be retrieved with a call to <a class="el" href="classgameplay_1_1_properties.html#a8666c66a84f29e93522e8d91c65854e6">getNamespace()</a> followed by calls to <a class="el" href="classgameplay_1_1_properties.html#a1798681f06e414cc37a377076988f8f8">getString()</a> and <a class="el" href="classgameplay_1_1_properties.html#ac475d236fe4e23192fa19b8d5dbca7e4">getInt()</a>. A namespace is stored and retrieved as a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object. Reading the spriteTexture properties out of the file above in this way could be done with the following code:</p>
+ </pre></div><p>Retrieving information out of a file like this could be done in two ways. If the available namespaces and name/value pairs are known in advance they can be queried by ID or name. For example, if the namespace "spriteTexture" and its properties are required then they can be retrieved with a call to <a class="el" href="classgameplay_1_1_properties.html#af98db4075952ae6970bd8bc2195e4ea3">getNamespace()</a> followed by calls to <a class="el" href="classgameplay_1_1_properties.html#a840e3edc6ff207d710aa9ee867a6be37">getString()</a> and <a class="el" href="classgameplay_1_1_properties.html#ac475d236fe4e23192fa19b8d5dbca7e4">getInt()</a>. A namespace is stored and retrieved as a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object. Reading the spriteTexture properties out of the file above in this way could be done with the following code:</p>
 <div class="fragment"><pre class="fragment">
     // Create the top-level Properties object.
     Properties* properties = Properties::create("example.properties");
@@ -200,7 +212,7 @@ Static Public Member Functions</h2></td></tr>
  
     // Deleting the top-level Properties object will clean up all nested namespaces.
     SAFE_DELETE(properties);
- </pre></div><p>On the other hand, if the structure of the file is not known in advance its namespaces and name/value pairs can be retrieved one by one using the <a class="el" href="classgameplay_1_1_properties.html#ad71da97b8931140e4a3186eaf78ab0a9">getNextNamespace()</a> and <a class="el" href="classgameplay_1_1_properties.html#a47ac0a6d6779c13c1b47ef3686072aab">getNextProperty()</a> methods. The following method prints the contents of any properties file to the console:</p>
+ </pre></div><p>On the other hand, if the structure of the file is not known in advance its namespaces and name/value pairs can be retrieved one by one using the <a class="el" href="classgameplay_1_1_properties.html#ad71da97b8931140e4a3186eaf78ab0a9">getNextNamespace()</a> and <a class="el" href="classgameplay_1_1_properties.html#a93b25b7611e02eeefbf03b4dbaa4cf8b">getNextProperty()</a> methods. The following method prints the contents of any properties file to the console:</p>
 <div class="fragment"><pre class="fragment">
     void printProperties(Properties* properties)
     {
@@ -280,10 +292,11 @@ Static Public Member Functions</h2></td></tr>
 <p>Creates a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> runtime settings from the specified URL, where the URL is of the format "&lt;file-path&gt;.&lt;extension&gt;#&lt;namespace-id&gt;/&lt;namespace-id&gt;/.../&lt;namespace-id&gt;" (and "#&lt;namespace-id&gt;/&lt;namespace-id&gt;/.../&lt;namespace-id&gt;" is optional).</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">url</td><td>The URL to create the properties from.  </td></tr>
+    <tr><td class="paramname">url</td><td>The URL to create the properties from.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The created <a class="el" href="classgameplay_1_1_properties.html">Properties</a> or NULL if there was an error.  </dd></dl>
 
 </div>
 </div>
@@ -549,12 +562,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8666c66a84f29e93522e8d91c65854e6"></a><!-- doxytag: member="gameplay::Properties::getNamespace" ref="a8666c66a84f29e93522e8d91c65854e6" args="(const char *id, bool searchNames=false) const " -->
+<a class="anchor" id="af98db4075952ae6970bd8bc2195e4ea3"></a><!-- doxytag: member="gameplay::Properties::getNamespace" ref="af98db4075952ae6970bd8bc2195e4ea3" args="(const char *id, bool searchNames=false, bool recurse=true) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_properties.html">Properties</a>* <a class="el" href="classgameplay_1_1_properties.html#a8666c66a84f29e93522e8d91c65854e6">gameplay::Properties::getNamespace</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_properties.html">Properties</a>* <a class="el" href="classgameplay_1_1_properties.html#af98db4075952ae6970bd8bc2195e4ea3">gameplay::Properties::getNamespace</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>id</em>, </td>
@@ -563,7 +576,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>searchNames</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>searchNames</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>recurse</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -573,11 +592,12 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get a specific namespace by ID or name. This method will perform a depth-first search on all namespaces and inner namespaces within this Property.</p>
+<p>Get a specific namespace by ID or name. This method will optionally perform a depth-first search on all namespaces and inner namespaces within this Property.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>The ID or name of the namespace to find. </td></tr>
-    <tr><td class="paramname">searchNames</td><td>If true, namespace names are used in the search, instead of namespace IDs. By default this parameter is false and namespace IDs are searched.</td></tr>
+    <tr><td class="paramname">searchNames</td><td>If true, namespace names are used in the search, instead of namespace IDs. By default this parameter is false and namespace IDs are searched. </td></tr>
+    <tr><td class="paramname">recurse</td><td>If true, perform a depth-first search, otherwise search only the immediate child namespaces.</td></tr>
   </table>
   </dd>
 </dl>
@@ -590,7 +610,7 @@ Static Public Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_properties.html#a8666c66a84f29e93522e8d91c65854e6">gameplay::Properties::getNamespace</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_properties.html#af98db4075952ae6970bd8bc2195e4ea3">gameplay::Properties::getNamespace</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -620,28 +640,22 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a47ac0a6d6779c13c1b47ef3686072aab"></a><!-- doxytag: member="gameplay::Properties::getNextProperty" ref="a47ac0a6d6779c13c1b47ef3686072aab" args="(char **value=NULL)" -->
+<a class="anchor" id="a93b25b7611e02eeefbf03b4dbaa4cf8b"></a><!-- doxytag: member="gameplay::Properties::getNextProperty" ref="a93b25b7611e02eeefbf03b4dbaa4cf8b" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_properties.html#a47ac0a6d6779c13c1b47ef3686072aab">gameplay::Properties::getNextProperty</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_properties.html#a93b25b7611e02eeefbf03b4dbaa4cf8b">gameplay::Properties::getNextProperty</a> </td>
           <td>(</td>
-          <td class="paramtype">char **&#160;</td>
-          <td class="paramname"><em>value</em> = <code>NULL</code></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Get the name of the next property.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">value</td><td>Optional pointer to a const char* to store the value of the next property in.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The name of the next property, or NULL if there are no properties remaining.  </dd></dl>
+<p>If a valid next property is returned, the value of the property can be retrieved using any of the get methods in this class, passing NULL for the property name.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The name of the next property, or NULL if there are no properties remaining. </dd></dl>
 
 </div>
 </div>
@@ -718,16 +732,26 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1798681f06e414cc37a377076988f8f8"></a><!-- doxytag: member="gameplay::Properties::getString" ref="a1798681f06e414cc37a377076988f8f8" args="(const char *name=NULL) const " -->
+<a class="anchor" id="a840e3edc6ff207d710aa9ee867a6be37"></a><!-- doxytag: member="gameplay::Properties::getString" ref="a840e3edc6ff207d710aa9ee867a6be37" args="(const char *name=NULL, const char *defaultValue=NULL) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_properties.html#a1798681f06e414cc37a377076988f8f8">gameplay::Properties::getString</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_properties.html#a840e3edc6ff207d710aa9ee867a6be37">gameplay::Properties::getString</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>name</em> = <code>NULL</code></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>name</em> = <code>NULL</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div>
@@ -735,7 +759,8 @@ Static Public Member Functions</h2></td></tr>
 <p>Get the value of the given property as a string. This can always be retrieved, whatever the intended type of the property.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">name</td><td>The name of the property to interpret, or NULL to return the current property's value.</td></tr>
+    <tr><td class="paramname">name</td><td>The name of the property to interpret, or NULL to return the current property's value. </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the specified property does not exist.</td></tr>
   </table>
   </dd>
 </dl>
@@ -765,6 +790,43 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The type of the property. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6ff38c0a1f66d66e7b760d829c379dc4"></a><!-- doxytag: member="gameplay::Properties::getVariable" ref="a6ff38c0a1f66d66e7b760d829c379dc4" args="(const char *name, const char *defaultValue=NULL) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_properties.html#a6ff38c0a1f66d66e7b760d829c379dc4">gameplay::Properties::getVariable</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the value of a variable that is set in this <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object.</p>
+<p>Variables take on the format ${name} and are inherited from parent Property objects.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the variable to get. </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>Value to return if the variable is not found.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The value of the specified variable, or defaultValue if not found. </dd></dl>
 
 </div>
 </div>
@@ -876,6 +938,227 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a40cc4d3fb47ee563df3c272c215244dc"></a><!-- doxytag: member="gameplay::Properties::parseAxisAngle" ref="a40cc4d3fb47ee563df3c272c215244dc" args="(const char *str, Quaternion *out)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_properties.html#a40cc4d3fb47ee563df3c272c215244dc">gameplay::Properties::parseAxisAngle</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Attempts to parse the specified string as an axis-angle value.</p>
+<p>The specified string is expected to contain four comma-separated values, where the first three values represents the axis and the fourth value represents the angle, in degrees.</p>
+<p>On error, false is returned and the output is set to all zero values.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to parse. </td></tr>
+    <tr><td class="paramname">out</td><td>A <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> populated with the orientation of the axis-angle, if successful.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if a valid axis-angle was parsed, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a30a5eb21d9c9d1dd523b0ba59b3f352e"></a><!-- doxytag: member="gameplay::Properties::parseColor" ref="a30a5eb21d9c9d1dd523b0ba59b3f352e" args="(const char *str, Vector3 *out)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_properties.html#a30a5eb21d9c9d1dd523b0ba59b3f352e">gameplay::Properties::parseColor</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Atempts to parse the specified string as an RGB color value.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to parse. </td></tr>
+    <tr><td class="paramname">out</td><td>The value to populate if successful.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if a valid RGB color was parsed, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa4ce225f8eddf4374b2582a380e09338"></a><!-- doxytag: member="gameplay::Properties::parseColor" ref="aa4ce225f8eddf4374b2582a380e09338" args="(const char *str, Vector4 *out)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_properties.html#a30a5eb21d9c9d1dd523b0ba59b3f352e">gameplay::Properties::parseColor</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Atempts to parse the specified string as an RGBA color value.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to parse. </td></tr>
+    <tr><td class="paramname">out</td><td>The value to populate if successful.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if a valid RGBA color was parsed, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4aa8803fbe36751c8c0f3467613fede9"></a><!-- doxytag: member="gameplay::Properties::parseVector2" ref="a4aa8803fbe36751c8c0f3467613fede9" args="(const char *str, Vector2 *out)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_properties.html#a4aa8803fbe36751c8c0f3467613fede9">gameplay::Properties::parseVector2</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Attempts to parse the specified string as a <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> value.</p>
+<p>On error, false is returned and the output is set to all zero values.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to parse. </td></tr>
+    <tr><td class="paramname">out</td><td>The value to populate if successful.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if a valid <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> was parsed, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abd3453c6dd072ba9b73e1d5279aa6549"></a><!-- doxytag: member="gameplay::Properties::parseVector3" ref="abd3453c6dd072ba9b73e1d5279aa6549" args="(const char *str, Vector3 *out)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_properties.html#abd3453c6dd072ba9b73e1d5279aa6549">gameplay::Properties::parseVector3</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Attempts to parse the specified string as a <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> value.</p>
+<p>On error, false is returned and the output is set to all zero values.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to parse. </td></tr>
+    <tr><td class="paramname">out</td><td>The value to populate if successful.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if a valid <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> was parsed, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0cfe772dfee2616d1796016c77456f8c"></a><!-- doxytag: member="gameplay::Properties::parseVector4" ref="a0cfe772dfee2616d1796016c77456f8c" args="(const char *str, Vector4 *out)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_properties.html#a0cfe772dfee2616d1796016c77456f8c">gameplay::Properties::parseVector4</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Attempts to parse the specified string as a <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> value.</p>
+<p>On error, false is returned and the output is set to all zero values.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to parse. </td></tr>
+    <tr><td class="paramname">out</td><td>The value to populate if successful.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if a valid <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> was parsed, false otherwise. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ade9fc061db01646ef889838713c8cead"></a><!-- doxytag: member="gameplay::Properties::rewind" ref="ade9fc061db01646ef889838713c8cead" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -889,7 +1172,80 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Rewind the <a class="el" href="classgameplay_1_1_properties.html#a47ac0a6d6779c13c1b47ef3686072aab">getNextProperty()</a> and <a class="el" href="classgameplay_1_1_properties.html#ad71da97b8931140e4a3186eaf78ab0a9">getNextNamespace()</a> iterators to the beginning of the file. </p>
+<p>Rewind the <a class="el" href="classgameplay_1_1_properties.html#a93b25b7611e02eeefbf03b4dbaa4cf8b">getNextProperty()</a> and <a class="el" href="classgameplay_1_1_properties.html#ad71da97b8931140e4a3186eaf78ab0a9">getNextNamespace()</a> iterators to the beginning of the file. </p>
+
+</div>
+</div>
+<a class="anchor" id="a59d12f5914d9e114b0d5d8026b2c6061"></a><!-- doxytag: member="gameplay::Properties::setString" ref="a59d12f5914d9e114b0d5d8026b2c6061" args="(const char *name, const char *value)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_properties.html#a59d12f5914d9e114b0d5d8026b2c6061">gameplay::Properties::setString</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the value of the property with the specified name.</p>
+<p>If there is no property in this namespace with the current name, one is added. Otherwise, the value of the first property with the specified name is updated.</p>
+<p>If name is NULL, the value current property (see getNextProperty) is set, unless there is no current property, in which case false is returned.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the property to set. </td></tr>
+    <tr><td class="paramname">value</td><td>The property value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the property was set, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad94f3e38b28083ce435dc0061a703146"></a><!-- doxytag: member="gameplay::Properties::setVariable" ref="ad94f3e38b28083ce435dc0061a703146" args="(const char *name, const char *value)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_properties.html#ad94f3e38b28083ce435dc0061a703146">gameplay::Properties::setVariable</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the value of the specified variable.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the variable to set. </td></tr>
+    <tr><td class="paramname">value</td><td>The value to set. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -911,7 +1267,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

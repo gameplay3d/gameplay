@@ -90,7 +90,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a>  </div>
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::FlowLayout Class Reference</div>  </div>
 </div><!--header-->
@@ -113,13 +114,39 @@ Inheritance diagram for gameplay::FlowLayout:</div>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#a9157f8fb722a45e68a26cff321ddc778">getType</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#abdc3cf0dda6760fb77c0094046d7a604">getHorizontalSpacing</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#a3bcb58611887ca4597877312dc378d7f">getVerticalSpacing</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#a9be13fa0319b54b8f10dc49f56d10d3c">setSpacing</a> (int horizontalSpacing, int verticalSpacing)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#a36e7ffdc54abe900b7c79fa3da53bf93">update</a> (const <a class="el" href="classgameplay_1_1_container.html">Container</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#a5f449ad71cd15a76374e19032f936885">_horizontalSpacing</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_flow_layout.html#ad163ab9e392f58671614ab83fc9b7e17">_verticalSpacing</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines a layout that arranges controls in order, left-to-right, row by row. </p>
+<div class="textblock"><p>Defines a flow layout.</p>
+<p>A flow layout arranges controls in order, left-to-right, row by row and wraps. </p>
 </div><hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="abdc3cf0dda6760fb77c0094046d7a604"></a><!-- doxytag: member="gameplay::FlowLayout::getHorizontalSpacing" ref="abdc3cf0dda6760fb77c0094046d7a604" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_flow_layout.html#abdc3cf0dda6760fb77c0094046d7a604">gameplay::FlowLayout::getHorizontalSpacing</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the horizontal spacing between controls in the layout.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The horizontal spacing between controls. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a9157f8fb722a45e68a26cff321ddc778"></a><!-- doxytag: member="gameplay::FlowLayout::getType" ref="a9157f8fb722a45e68a26cff321ddc778" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -137,6 +164,59 @@ Protected Member Functions</h2></td></tr>
 <dl class="return"><dt><b>Returns:</b></dt><dd><a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7a60afb4b138c8331ad409ee6b0173a54c">Layout::LAYOUT_FLOW</a> </dd></dl>
 
 <p>Implements <a class="el" href="classgameplay_1_1_layout.html#a0a682d326ce75d0551952b72d37491a2">gameplay::Layout</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3bcb58611887ca4597877312dc378d7f"></a><!-- doxytag: member="gameplay::FlowLayout::getVerticalSpacing" ref="a3bcb58611887ca4597877312dc378d7f" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_flow_layout.html#a3bcb58611887ca4597877312dc378d7f">gameplay::FlowLayout::getVerticalSpacing</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the vertical spacing between controls in the layout.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The vertical spacing between controls. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9be13fa0319b54b8f10dc49f56d10d3c"></a><!-- doxytag: member="gameplay::FlowLayout::setSpacing" ref="a9be13fa0319b54b8f10dc49f56d10d3c" args="(int horizontalSpacing, int verticalSpacing)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_flow_layout.html#a9be13fa0319b54b8f10dc49f56d10d3c">gameplay::FlowLayout::setSpacing</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>horizontalSpacing</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verticalSpacing</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the spacing to add between controls in the layout.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">horizontalSpacing</td><td>The horizontal spacing between controls. </td></tr>
+    <tr><td class="paramname">verticalSpacing</td><td>The vertical spacing between controls. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -177,6 +257,35 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a5f449ad71cd15a76374e19032f936885"></a><!-- doxytag: member="gameplay::FlowLayout::_horizontalSpacing" ref="a5f449ad71cd15a76374e19032f936885" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_flow_layout.html#a5f449ad71cd15a76374e19032f936885">gameplay::FlowLayout::_horizontalSpacing</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Horizontal spacing between controls. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad163ab9e392f58671614ab83fc9b7e17"></a><!-- doxytag: member="gameplay::FlowLayout::_verticalSpacing" ref="ad163ab9e392f58671614ab83fc9b7e17" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_flow_layout.html#ad163ab9e392f58671614ab83fc9b7e17">gameplay::FlowLayout::_verticalSpacing</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Vertical spacing between controls. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -195,7 +304,7 @@ Protected Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

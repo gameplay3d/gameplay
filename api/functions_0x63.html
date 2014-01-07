@@ -122,8 +122,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>CAMERA_WORLD_POSITION
 : <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a">gameplay::RenderState</a>
 </li>
+<li>cameraChanged()
+: <a class="el" href="classgameplay_1_1_camera_1_1_listener.html#abf9a71468e5913b97a225c6ca0ff431d">gameplay::Camera::Listener</a>
+, <a class="el" href="classgameplay_1_1_terrain_patch.html#ade32f536e8b65baf12bf525bd82c05a3">gameplay::TerrainPatch</a>
+</li>
 <li>canExit()
 : <a class="el" href="classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5">gameplay::Game</a>
+</li>
+<li>canFocus()
+: <a class="el" href="classgameplay_1_1_control.html#a845cba4a3c91f2704c6c48176d9d3fda">gameplay::Control</a>
 </li>
 <li>canRead()
 : <a class="el" href="classgameplay_1_1_stream.html#a185580ff320a845015a24dff3fd9791e">gameplay::Stream</a>
@@ -176,8 +183,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>ClearFlags
 : <a class="el" href="classgameplay_1_1_game.html#a7866ef6e9e0ee3b812b408a75cc13cdb">gameplay::Game</a>
 </li>
-<li>clearParameter()
-: <a class="el" href="classgameplay_1_1_render_state.html#aea9877f61a99812d725b94bf8dde5db0">gameplay::RenderState</a>
+<li>clearFocus()
+: <a class="el" href="classgameplay_1_1_form.html#a366962023119d2885948ab46d612a9ee">gameplay::Form</a>
 </li>
 <li>clearSelected()
 : <a class="el" href="classgameplay_1_1_radio_button.html#ad258919b6286e77c998e52dfb78b5352">gameplay::RadioButton</a>
@@ -187,6 +194,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>clone()
 : <a class="el" href="classgameplay_1_1_node.html#a208b0372c2bdeae41629e6e53b19cb47">gameplay::Node</a>
+, <a class="el" href="classgameplay_1_1_particle_emitter.html#a978afc2d53b2ef3332c59daf3bfc3a28">gameplay::ParticleEmitter</a>
 </li>
 <li>cloneInto()
 : <a class="el" href="classgameplay_1_1_animation_target.html#a24e4e3876f62ea8ed584bc01b934434e">gameplay::AnimationTarget</a>
@@ -233,38 +241,54 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>Control()
 : <a class="el" href="classgameplay_1_1_control.html#a2eea715e20c37451a094fbe0ff046c24">gameplay::Control</a>
 </li>
+<li>ControlActivator
+: <a class="el" href="classgameplay_1_1_control_factory.html#a2739e92e2b82d8b6601bd9cf965f2861">gameplay::ControlFactory</a>
+</li>
 <li>controlEvent()
-: <a class="el" href="classgameplay_1_1_control_1_1_listener.html#a66f6fda768f03da5a0d766766c75e636">gameplay::Control::Listener</a>
+: <a class="el" href="classgameplay_1_1_text_box.html#ae0045c3d1c4722f0d5b83c8f66dbb1c3">gameplay::TextBox</a>
+, <a class="el" href="classgameplay_1_1_check_box.html#af3390f295d03d3750f2240c17f7936c1">gameplay::CheckBox</a>
+, <a class="el" href="classgameplay_1_1_control_1_1_listener.html#a66f6fda768f03da5a0d766766c75e636">gameplay::Control::Listener</a>
+, <a class="el" href="classgameplay_1_1_control.html#ab75157d1cea2f7e1903a20be0555fb7d">gameplay::Control</a>
+, <a class="el" href="classgameplay_1_1_radio_button.html#a9c23140d9c24e1176f6793da0da65124">gameplay::RadioButton</a>
 </li>
 <li>cookie
 : <a class="el" href="structgameplay_1_1_transform_1_1_transform_listener.html#acd1ac8e425e91459bd3280df11c4a4f3">gameplay::Transform::TransformListener</a>
 </li>
 <li>create()
-: <a class="el" href="classgameplay_1_1_button.html#a89fd260b1ce03446a86fb4e5a51898b4">gameplay::Button</a>
-, <a class="el" href="classgameplay_1_1_camera.html#a1e168c57a87fb45ed2a0351f69f3e5db">gameplay::Camera</a>
-, <a class="el" href="classgameplay_1_1_check_box.html#ab677341620e314ccf2ae62d5ef431f7b">gameplay::CheckBox</a>
-, <a class="el" href="classgameplay_1_1_container.html#a066b893258da03445602d71c9d5b221d">gameplay::Container</a>
-, <a class="el" href="classgameplay_1_1_curve.html#abc8ccd32aef348827098296c50dd45b1">gameplay::Curve</a>
+: <a class="el" href="classgameplay_1_1_texture_1_1_sampler.html#af62fc552f762475c7cd6ecf5d117ab37">gameplay::Texture::Sampler</a>
 , <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html#a527ab5ff569bd9c5381c81c8d08ab7d4">gameplay::VertexAttributeBinding</a>
-, <a class="el" href="classgameplay_1_1_depth_stencil_target.html#af3fe8ee386ea32ff3d1ed697ba3ccdc7">gameplay::DepthStencilTarget</a>
-, <a class="el" href="classgameplay_1_1_theme.html#a1928a33f7390efa40b95c46ba0ea5923">gameplay::Theme</a>
+, <a class="el" href="classgameplay_1_1_texture.html#abd9c85cfbbba9068ed9b50a64288d609">gameplay::Texture</a>
+, <a class="el" href="classgameplay_1_1_a_i_agent.html#a050524bf39b0be568ed2870786d786cf">gameplay::AIAgent</a>
 , <a class="el" href="classgameplay_1_1_texture.html#a22178110f5ec57b0360d11e67f811627">gameplay::Texture</a>
+, <a class="el" href="classgameplay_1_1_theme.html#a1928a33f7390efa40b95c46ba0ea5923">gameplay::Theme</a>
+, <a class="el" href="classgameplay_1_1_texture_1_1_sampler.html#afab865d64e103a3bf438d5e77c6bc853">gameplay::Texture::Sampler</a>
+, <a class="el" href="classgameplay_1_1_a_i_message.html#a63954a6e7294a4bb67ef85c84f6bc064">gameplay::AIMessage</a>
+, <a class="el" href="classgameplay_1_1_a_i_state.html#a02c9debfc16ef2763e5e6c3ed80d2f34">gameplay::AIState</a>
+, <a class="el" href="classgameplay_1_1_audio_source.html#a07bb587d919f7cdc1b0d9a48f5bc94a1">gameplay::AudioSource</a>
+, <a class="el" href="classgameplay_1_1_terrain.html#a768c3c5bddfa732515558059082c7b05">gameplay::Terrain</a>
+, <a class="el" href="classgameplay_1_1_audio_source.html#a7d9edd60d409d95461715fcfb2c111fb">gameplay::AudioSource</a>
+, <a class="el" href="classgameplay_1_1_bundle.html#a90e1e89d3b9a1bdf874d3de525bf476d">gameplay::Bundle</a>
+, <a class="el" href="classgameplay_1_1_button.html#acaaae162f9fc7e3ddf71127defe60ebb">gameplay::Button</a>
+, <a class="el" href="classgameplay_1_1_slider.html#ac9d34d0031d572851434e8d28cab07f4">gameplay::Slider</a>
+, <a class="el" href="classgameplay_1_1_button.html#a250e3c9ba1a58e98560487d4a83cc971">gameplay::Button</a>
+, <a class="el" href="classgameplay_1_1_camera.html#a1e168c57a87fb45ed2a0351f69f3e5db">gameplay::Camera</a>
+, <a class="el" href="classgameplay_1_1_check_box.html#aaa0326d752b86e0bfad0aeea95eb2ec7">gameplay::CheckBox</a>
+, <a class="el" href="classgameplay_1_1_container.html#a916b2be3852062f696ddaae34f4d5a1a">gameplay::Container</a>
+, <a class="el" href="classgameplay_1_1_curve.html#abc8ccd32aef348827098296c50dd45b1">gameplay::Curve</a>
+, <a class="el" href="classgameplay_1_1_properties.html#a73bd3ee2ada1ce0455e1b0ff06f3debe">gameplay::Properties</a>
+, <a class="el" href="classgameplay_1_1_depth_stencil_target.html#af3fe8ee386ea32ff3d1ed697ba3ccdc7">gameplay::DepthStencilTarget</a>
 , <a class="el" href="classgameplay_1_1_font.html#a0a57a9b33b572f8e99724174e2a17c37">gameplay::Font</a>
 , <a class="el" href="classgameplay_1_1_form.html#aab237347cf2d4e60e83ecd56e5ec9fef">gameplay::Form</a>
-, <a class="el" href="classgameplay_1_1_texture.html#abd9c85cfbbba9068ed9b50a64288d609">gameplay::Texture</a>
-, <a class="el" href="classgameplay_1_1_texture_1_1_sampler.html#af62fc552f762475c7cd6ecf5d117ab37">gameplay::Texture::Sampler</a>
+, <a class="el" href="classgameplay_1_1_particle_emitter.html#add002898fa33a0fe99e4e76d5a03faf7">gameplay::ParticleEmitter</a>
 , <a class="el" href="classgameplay_1_1_form.html#adbceb59dadeb425c45db53e0023e8fc5">gameplay::Form</a>
-, <a class="el" href="classgameplay_1_1_text_box.html#a5232963cb6e1b0af4ca6ea437961f48b">gameplay::TextBox</a>
 , <a class="el" href="classgameplay_1_1_frame_buffer.html#a764ae1075cc20dfb1329a2d5c49daa27">gameplay::FrameBuffer</a>
+, <a class="el" href="classgameplay_1_1_mesh_batch.html#a58e905ec12076cef11e58fdcf3a921ff">gameplay::MeshBatch</a>
 , <a class="el" href="classgameplay_1_1_height_field.html#a7ce07f1857053923eaf2c73de7b09d9f">gameplay::HeightField</a>
-, <a class="el" href="classgameplay_1_1_sprite_batch.html#a4749027dd8af231efa9557ab9ddbeaa9">gameplay::SpriteBatch</a>
 , <a class="el" href="classgameplay_1_1_image.html#abc02ce40783cb00a43b75faeb9eb0e28">gameplay::Image</a>
-, <a class="el" href="classgameplay_1_1_image_control.html#a48b090d2c83ab6ac82374532a3332072">gameplay::ImageControl</a>
-, <a class="el" href="classgameplay_1_1_scene.html#ab5c2f1584031bf293e0f02f4f489e84c">gameplay::Scene</a>
+, <a class="el" href="classgameplay_1_1_image_control.html#a77b0d4c75cb85f24be49323c88ed3c60">gameplay::ImageControl</a>
 , <a class="el" href="classgameplay_1_1_joint.html#ad2577426e10c3a85c38e48bd5d35fc7f">gameplay::Joint</a>
-, <a class="el" href="classgameplay_1_1_joystick.html#a0ac4e79760962bac22d9a706b40b8ede">gameplay::Joystick</a>
-, <a class="el" href="classgameplay_1_1_radio_button.html#a6d4743577d90447020b20044068c329c">gameplay::RadioButton</a>
-, <a class="el" href="classgameplay_1_1_label.html#a38c9eb8cfc8afa3e76f13fd8683c6ce1">gameplay::Label</a>
+, <a class="el" href="classgameplay_1_1_joystick.html#a600a9b82252003573006465f59f9ef05">gameplay::Joystick</a>
+, <a class="el" href="classgameplay_1_1_label.html#a412ba0f48bdd1b09c1b9dee0bfd54849">gameplay::Label</a>
 , <a class="el" href="classgameplay_1_1_light.html#a438bd1522c6e4a4281e94026c438d0c7">gameplay::Light</a>
 , <a class="el" href="classgameplay_1_1_material.html#aabe68621b28503f8991769408444e8d4">gameplay::Material</a>
 , <a class="el" href="classgameplay_1_1_mesh_batch.html#a6fd76da50fcb72efd8b015d79a6d0b29">gameplay::MeshBatch</a>
@@ -272,28 +296,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classgameplay_1_1_node.html#a3ac0c1feb94752f95feab7c77e5bd8fe">gameplay::Node</a>
 , <a class="el" href="classgameplay_1_1_particle_emitter.html#a0ced7dfcfb5357b96e4a289eef7619e1">gameplay::ParticleEmitter</a>
 , <a class="el" href="classgameplay_1_1_physics_ghost_object.html#ac292d6a066b2e02a1ac4e6a447ec61cd">gameplay::PhysicsGhostObject</a>
-, <a class="el" href="classgameplay_1_1_platform.html#a60e8f036665c1b3ab0f36f7cfb55622d">gameplay::Platform</a>
-, <a class="el" href="classgameplay_1_1_properties.html#a73bd3ee2ada1ce0455e1b0ff06f3debe">gameplay::Properties</a>
-, <a class="el" href="classgameplay_1_1_radio_button.html#a1845972d801788eacc8922a36c576d57">gameplay::RadioButton</a>
+, <a class="el" href="classgameplay_1_1_platform.html#a665a2091d832c2eca7a29a51228fe9e9">gameplay::Platform</a>
+, <a class="el" href="classgameplay_1_1_radio_button.html#aff1e476c5492ca97ebc81f05c0c21ece">gameplay::RadioButton</a>
 , <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#acff480f17e87da3b84dd42f8ec591b81">gameplay::RenderState::StateBlock</a>
 , <a class="el" href="classgameplay_1_1_render_target.html#aa9a3db3efd4ca99d1f6620a8e5482a31">gameplay::RenderTarget</a>
-, <a class="el" href="classgameplay_1_1_slider.html#acf5f46209988f03a11bcf84274409d8c">gameplay::Slider</a>
+, <a class="el" href="classgameplay_1_1_scene.html#ab5c2f1584031bf293e0f02f4f489e84c">gameplay::Scene</a>
+, <a class="el" href="classgameplay_1_1_slider.html#a7c7fd2f5c564e975b3c9d900b554a34f">gameplay::Slider</a>
 , <a class="el" href="classgameplay_1_1_sprite_batch.html#a0a85ea7ee5976a606a2292305766901c">gameplay::SpriteBatch</a>
 , <a class="el" href="classgameplay_1_1_terrain.html#a63dedd20650320e85abb711123ba0726">gameplay::Terrain</a>
-, <a class="el" href="classgameplay_1_1_a_i_agent.html#a050524bf39b0be568ed2870786d786cf">gameplay::AIAgent</a>
-, <a class="el" href="classgameplay_1_1_terrain.html#a91a191a662bd043748d7145f80525b35">gameplay::Terrain</a>
-, <a class="el" href="classgameplay_1_1_a_i_message.html#a63954a6e7294a4bb67ef85c84f6bc064">gameplay::AIMessage</a>
-, <a class="el" href="classgameplay_1_1_text_box.html#a8a595c015a634c9277411a0bb4a190e4">gameplay::TextBox</a>
-, <a class="el" href="classgameplay_1_1_a_i_state.html#a02c9debfc16ef2763e5e6c3ed80d2f34">gameplay::AIState</a>
-, <a class="el" href="classgameplay_1_1_audio_source.html#a07bb587d919f7cdc1b0d9a48f5bc94a1">gameplay::AudioSource</a>
-, <a class="el" href="classgameplay_1_1_texture.html#a154ece331771656e95c174d20c35bed7">gameplay::Texture</a>
-, <a class="el" href="classgameplay_1_1_audio_source.html#a7d9edd60d409d95461715fcfb2c111fb">gameplay::AudioSource</a>
-, <a class="el" href="classgameplay_1_1_bundle.html#a90e1e89d3b9a1bdf874d3de525bf476d">gameplay::Bundle</a>
-, <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html#abe5c0ebc0e3c4b3ea8e5254a62e3c4a8">gameplay::VertexAttributeBinding</a>
-, <a class="el" href="classgameplay_1_1_button.html#a61ee6eca719e35574b69599f750f614d">gameplay::Button</a>
+, <a class="el" href="classgameplay_1_1_text_box.html#a100054ba7e7f6aafc4bc17454bc6f08e">gameplay::TextBox</a>
 </li>
 <li>createAnimation()
-: <a class="el" href="classgameplay_1_1_animation_target.html#acf1d4b96c618f474826ddfe0a125e216">gameplay::AnimationTarget</a>
+: <a class="el" href="classgameplay_1_1_animation_target.html#a6bd8537d47ad3de32bb0f72ef8748ed6">gameplay::AnimationTarget</a>
 </li>
 <li>createAnimationFromBy()
 : <a class="el" href="classgameplay_1_1_animation_target.html#a00be990fd84631e10ce40e9ca0b84f60">gameplay::AnimationTarget</a>
@@ -314,7 +328,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_animation.html#a12c5352629600bb32d198325c2b15dab">gameplay::Animation</a>
 </li>
 <li>createDirectional()
-: <a class="el" href="classgameplay_1_1_light.html#a3d32bb65d7205b38926d4057e904b975">gameplay::Light</a>
+: <a class="el" href="classgameplay_1_1_light.html#a98574ae789347c65ff226111faa5f013">gameplay::Light</a>
 </li>
 <li>createFileFromAsset()
 : <a class="el" href="classgameplay_1_1_file_system.html#a4e310ae4419c45a6fed11fd34c27c7e1">gameplay::FileSystem</a>
@@ -341,10 +355,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_effect.html#a594c1d54dd2a7c50542fcde03f66884b">gameplay::Effect</a>
 </li>
 <li>createGenericConstraint()
-: <a class="el" href="classgameplay_1_1_physics_controller.html#a0c967138ef39fe7f298e72d5a4c3e418">gameplay::PhysicsController</a>
+: <a class="el" href="classgameplay_1_1_physics_controller.html#ad7ae74b385f8e9718cc37d57a3423583">gameplay::PhysicsController</a>
 </li>
 <li>createHingeConstraint()
 : <a class="el" href="classgameplay_1_1_physics_controller.html#aea8f1cc3f27d12c6c1cd954eb81c9cdc">gameplay::PhysicsController</a>
+</li>
+<li>createLayout()
+: <a class="el" href="classgameplay_1_1_container.html#ac309a2b7fc1dca3b5f26df5b3f45dfeb">gameplay::Container</a>
 </li>
 <li>createLines()
 : <a class="el" href="classgameplay_1_1_mesh.html#ad67aec33949af9e286deefb03cc059ae">gameplay::Mesh</a>
@@ -367,7 +384,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classgameplay_1_1_camera.html#a7e4474862a8153e821e4aa1e5a8b7dbb">gameplay::Camera</a>
 </li>
 <li>createPoint()
-: <a class="el" href="classgameplay_1_1_light.html#a29fbe5fe95878480c3673ca6ef74726e">gameplay::Light</a>
+: <a class="el" href="classgameplay_1_1_light.html#afd74292447b0b402959e2385ee640b3f">gameplay::Light</a>
 </li>
 <li>createQuad()
 : <a class="el" href="classgameplay_1_1_mesh.html#af883079d52ec680999c3d30fb15e77cf">gameplay::Mesh</a>
@@ -393,6 +410,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>createScale()
 : <a class="el" href="classgameplay_1_1_matrix.html#afdcd743baaae0d73e905faf140c4636c">gameplay::Matrix</a>
 </li>
+<li>createScreenshot()
+: <a class="el" href="classgameplay_1_1_frame_buffer.html#ad2d823badd24c87e3ef5ccc89e5c5cb4">gameplay::FrameBuffer</a>
+</li>
 <li>createSocketConstraint()
 : <a class="el" href="classgameplay_1_1_physics_controller.html#a8c1c19e84a2a21f9aa4f6e275cc22057">gameplay::PhysicsController</a>
 </li>
@@ -406,10 +426,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_font.html#a093006c4587bdd79ccf7eec38c8f483a">gameplay::Font</a>
 </li>
 <li>createTranslation()
-: <a class="el" href="classgameplay_1_1_matrix.html#a510caebb471488eb1adbfef1cc2af582">gameplay::Matrix</a>
+: <a class="el" href="classgameplay_1_1_matrix.html#a473df6b4ce9e54cf241cb567c13cdc87">gameplay::Matrix</a>
 </li>
 <li>cross()
-: <a class="el" href="classgameplay_1_1_vector3.html#a4dcf77fcfe5bfa0947698c006806a093">gameplay::Vector3</a>
+: <a class="el" href="classgameplay_1_1_vector3.html#ab6dbfc76978ffefb09012207597bf9f0">gameplay::Vector3</a>
 </li>
 <li>crossFade()
 : <a class="el" href="classgameplay_1_1_animation_clip.html#a1a804917d2545152cb1885463fb53a0d">gameplay::AnimationClip</a>
@@ -448,7 +468,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:55 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

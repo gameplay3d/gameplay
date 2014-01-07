@@ -123,7 +123,7 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vertex_attribute_binding.html#a527ab5ff569bd9c5381c81c8d08ab7d4">create</a> (const <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> &amp;vertexFormat, void *vertexPointer, <a class="el" href="classgameplay_1_1_effect.html">Effect</a> *effect)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Represents a binding between the vertex layout of a <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> and the vertex input attributes of a vertex shader (<a class="el" href="classgameplay_1_1_effect.html">Effect</a>).</p>
+<div class="textblock"><p>Defines a binding between the vertex layout of a <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> and the vertex input attributes of a vertex shader (<a class="el" href="classgameplay_1_1_effect.html">Effect</a>).</p>
 <p>In a perfect world, this class would always be a binding directly between a unique <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> and an <a class="el" href="classgameplay_1_1_effect.html">Effect</a>, where the <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> is simply the definition of the layout of any anonymous vertex buffer. However, the OpenGL mechanism for setting up these bindings is Vertex Array Objects (VAOs). OpenGL requires a separate VAO per vertex buffer object (VBO), rather than per vertex layout definition. Therefore, although we would like to define this binding between a <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> and <a class="el" href="classgameplay_1_1_effect.html">Effect</a>, we are specifying the binding between a <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> and <a class="el" href="classgameplay_1_1_effect.html">Effect</a> to satisfy the OpenGL requirement of one VAO per VBO.</p>
 <p>Note that this class still does provide a binding between a <a class="el" href="classgameplay_1_1_vertex_format.html">VertexFormat</a> and an <a class="el" href="classgameplay_1_1_effect.html">Effect</a>, however this binding is actually a client-side binding and should only be used when writing custom code that use client-side vertex arrays, since it is slower than the server-side VAOs used by OpenGL (when creating a <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> between a <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> and <a class="el" href="classgameplay_1_1_effect.html">Effect</a>). </p>
 </div><hr/><h2>Member Function Documentation</h2>
@@ -260,7 +260,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:55 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

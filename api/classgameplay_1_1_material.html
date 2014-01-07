@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
@@ -110,6 +111,9 @@ Inheritance diagram for gameplay::Material:</div>
 
 <p><a href="classgameplay_1_1_material-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef std::string(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#ae26dd14b942b31270bf519f3714e50e6">PassCallback</a> )(<a class="el" href="classgameplay_1_1_pass.html">Pass</a> *, void *)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a8705383d2960022d1ab000e3020a9609">getTechniqueCount</a> () const </td></tr>
@@ -117,17 +121,35 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_technique.html">Technique</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a759ee8ee9092b0cec63c56d7000a7df7">getTechnique</a> (const char *id) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_technique.html">Technique</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#accf7c560d8d8e4ba6e8afbd35d2f82af">getTechnique</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a1bf2904504de4dffc7410f4645d19b3d">setTechnique</a> (const char *id)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a000fa6d5ca8a27aa69765623179b5731">setNodeBinding</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#aabe68621b28503f8991769408444e8d4">create</a> (const char *url)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#ab1ddd0d535bb945bc7b217071157e7ab">create</a> (const char *url, <a class="el" href="classgameplay_1_1_material.html#ae26dd14b942b31270bf519f3714e50e6">PassCallback</a> callback, void *cookie=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#a420140c4a965e7b0aedfb85b2fc7c880">create</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *materialProperties)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#aff270ebec2ec075f35065b7cd9d5d633">create</a> (<a class="el" href="classgameplay_1_1_effect.html">Effect</a> *effect)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material.html#ad15670331eb706ebed7c2cb79b5724ce">create</a> (const char *vshPath, const char *fshPath, const char *defines=NULL)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a material for an object to be rendered.</p>
-<p>This class encapsulates a set of rendering techniques that can be used to render an object. This class facilitates loading of techniques using specified shaders or material files (.material). When multiple techniques are loaded using a material file, the current technique for an object can be set at runtime. </p>
-</div><hr/><h2>Member Function Documentation</h2>
+<p>This class encapsulates a set of rendering techniques that can be used to render an object. This class facilitates loading of techniques using specified shaders or material files (.material). When multiple techniques are loaded using a material file, the current technique for an object can be set at runtime.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Materials">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Materials</a> </dd></dl>
+</div><hr/><h2>Member Typedef Documentation</h2>
+<a class="anchor" id="ae26dd14b942b31270bf519f3714e50e6"></a><!-- doxytag: member="gameplay::Material::PassCallback" ref="ae26dd14b942b31270bf519f3714e50e6" args=")(Pass *, void *)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::string(* <a class="el" href="classgameplay_1_1_material.html#ae26dd14b942b31270bf519f3714e50e6">gameplay::Material::PassCallback</a>)(<a class="el" href="classgameplay_1_1_pass.html">Pass</a> *, void *)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_pass.html">Pass</a> creation callback function definition. </p>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="aabe68621b28503f8991769408444e8d4"></a><!-- doxytag: member="gameplay::Material::create" ref="aabe68621b28503f8991769408444e8d4" args="(const char *url)" -->
 <div class="memitem">
 <div class="memproto">
@@ -149,7 +171,51 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>A new <a class="el" href="classgameplay_1_1_material.html">Material</a>.  </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A new <a class="el" href="classgameplay_1_1_material.html">Material</a> or NULL if there was an error.  </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab1ddd0d535bb945bc7b217071157e7ab"></a><!-- doxytag: member="gameplay::Material::create" ref="ab1ddd0d535bb945bc7b217071157e7ab" args="(const char *url, PassCallback callback, void *cookie=NULL)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_material.html">Material</a>* <a class="el" href="classgameplay_1_1_material.html#aabe68621b28503f8991769408444e8d4">gameplay::Material::create</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_material.html#ae26dd14b942b31270bf519f3714e50e6">PassCallback</a>&#160;</td>
+          <td class="paramname"><em>callback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>cookie</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates a material from a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> file.</p>
+<p>This overloaded method allows you to pass a function pointer to be called back for each pass that is loaded for the material. The passed in callback receives a pointer to each <a class="el" href="classgameplay_1_1_pass.html">Pass</a> being created and returns a string of optional defines to append to the shaders being compiled for each <a class="el" href="classgameplay_1_1_pass.html">Pass</a>. The function is called during <a class="el" href="classgameplay_1_1_pass.html">Pass</a> creation, prior to compiling the shaders for that <a class="el" href="classgameplay_1_1_pass.html">Pass</a>. MaterialParameters can be safely modified in this callback even though the shader is not yet compiled.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">url</td><td>The URL pointing to the <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object defining the material. </td></tr>
+    <tr><td class="paramname">callback</td><td>Function pointer to be called during <a class="el" href="classgameplay_1_1_pass.html">Pass</a> creation. </td></tr>
+    <tr><td class="paramname">cookie</td><td>Optional custom parameter to be passed to the callback function.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A new <a class="el" href="classgameplay_1_1_material.html">Material</a> or NULL if there was an error.  </dd></dl>
 
 </div>
 </div>
@@ -334,6 +400,26 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a000fa6d5ca8a27aa69765623179b5731"></a><!-- doxytag: member="gameplay::Material::setNodeBinding" ref="a000fa6d5ca8a27aa69765623179b5731" args="(Node *node)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_material.html#a000fa6d5ca8a27aa69765623179b5731">gameplay::Material::setNodeBinding</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_render_state.html#a267bd93726e3dc28f3bd7f9e1383b5cc">RenderState::setNodeBinding</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_render_state.html#a267bd93726e3dc28f3bd7f9e1383b5cc">gameplay::RenderState</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a1bf2904504de4dffc7410f4645d19b3d"></a><!-- doxytag: member="gameplay::Material::setTechnique" ref="a1bf2904504de4dffc7410f4645d19b3d" args="(const char *id)" -->
 <div class="memitem">
 <div class="memproto">
@@ -376,7 +462,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

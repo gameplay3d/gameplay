@@ -80,10 +80,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 This is the complete list of members for <a class="el" href="classgameplay_1_1_vertical_layout.html">gameplay::VerticalLayout</a>, including all inherited members.<table>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_vertical_layout.html#a81c29a553425d75c4dab4e956913d99a">_bottomToTop</a></td><td><a class="el" href="classgameplay_1_1_vertical_layout.html">gameplay::VerticalLayout</a></td><td><code> [protected]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_vertical_layout.html#aba50700993ea8afa2c4ac453b24d57ae">_spacing</a></td><td><a class="el" href="classgameplay_1_1_vertical_layout.html">gameplay::VerticalLayout</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a66e39f63477efb32cc190f6605ef0c74">addRef</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_layout.html#ab1ecfc89a89236d8cd3674376c1711ee">align</a>(Control *control, const Container *container)</td><td><a class="el" href="classgameplay_1_1_layout.html">gameplay::Layout</a></td><td><code> [protected, virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_vertical_layout.html#a526612525a24330d58f591d48cc47726">getBottomToTop</a>()</td><td><a class="el" href="classgameplay_1_1_vertical_layout.html">gameplay::VerticalLayout</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a6f58fd4c48dd9ed3ad2019d88fd1196d">getRefCount</a>() const </td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_vertical_layout.html#ae7dec9fd200ff4e792169a643e00bcfc">getSpacing</a>() const </td><td><a class="el" href="classgameplay_1_1_vertical_layout.html">gameplay::VerticalLayout</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_vertical_layout.html#a37c580360a94ee07d3e1a7bfc5b17574">getType</a>()</td><td><a class="el" href="classgameplay_1_1_vertical_layout.html">gameplay::VerticalLayout</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aeb62aeb50e356bf668bfd3af0ae2d0d9">LAYOUT_ABSOLUTE</a> enum value</td><td><a class="el" href="classgameplay_1_1_layout.html">gameplay::Layout</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7a60afb4b138c8331ad409ee6b0173a54c">LAYOUT_FLOW</a> enum value</td><td><a class="el" href="classgameplay_1_1_layout.html">gameplay::Layout</a></td><td></td></tr>
@@ -92,6 +94,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_v
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a4af6b566116534038e02bfffea72867f">Ref</a>(const Ref &amp;copy)</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b">release</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_vertical_layout.html#a361acab7a30491319de3b8fa62cd3c52">setBottomToTop</a>(bool bottomToTop)</td><td><a class="el" href="classgameplay_1_1_vertical_layout.html">gameplay::VerticalLayout</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_vertical_layout.html#a38cd9a1f95c84bdaccb01b3fed4b4ece">setSpacing</a>(int spacing)</td><td><a class="el" href="classgameplay_1_1_vertical_layout.html">gameplay::VerticalLayout</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_layout.html#a81a2e6d579cb77753952dc319512b211">touchEvent</a>(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)</td><td><a class="el" href="classgameplay_1_1_layout.html">gameplay::Layout</a></td><td><code> [protected, virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Type</a> enum name</td><td><a class="el" href="classgameplay_1_1_layout.html">gameplay::Layout</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_vertical_layout.html#add8537a7c5eeda6e43731db5aff61d58">update</a>(const Container *container, const Vector2 &amp;offset)</td><td><a class="el" href="classgameplay_1_1_vertical_layout.html">gameplay::VerticalLayout</a></td><td><code> [protected, virtual]</code></td></tr>
@@ -116,7 +119,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_v
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:55 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

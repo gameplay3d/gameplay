@@ -121,13 +121,14 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a3980f3ebfa237b8879fb2b088d118b8b">getSkin</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a6135333bffe979a43f9523da2ace64a1">getNode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a40351ed3b48b938582906af0515b3ab4">setNode</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a7929f7632ad8a6bf63af04e98b030e40">draw</a> (bool wireframe=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#af52bb521eea8934e739f3df8ce412897">draw</a> (bool wireframe=false)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#aae4604ba72064041146eced1618d4259">create</a> (<a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *mesh)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines a <a class="el" href="classgameplay_1_1_model.html">Model</a> which is an instance of a <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> that can be drawn with the specified Materials. </p>
+<div class="textblock"><p>Defines a <a class="el" href="classgameplay_1_1_model.html">Model</a> or mesh renderer which is an instance of a <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a>.</p>
+<p>A model has a mesh that can be drawn with the specified materials for each of the mesh parts within it. </p>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="aae4604ba72064041146eced1618d4259"></a><!-- doxytag: member="gameplay::Model::create" ref="aae4604ba72064041146eced1618d4259" args="(Mesh *mesh)" -->
 <div class="memitem">
@@ -146,12 +147,12 @@ Static Public Member Functions</h2></td></tr>
 <p>Creates a new <a class="el" href="classgameplay_1_1_model.html">Model</a>.  
 </div>
 </div>
-<a class="anchor" id="a7929f7632ad8a6bf63af04e98b030e40"></a><!-- doxytag: member="gameplay::Model::draw" ref="a7929f7632ad8a6bf63af04e98b030e40" args="(bool wireframe=false)" -->
+<a class="anchor" id="af52bb521eea8934e739f3df8ce412897"></a><!-- doxytag: member="gameplay::Model::draw" ref="af52bb521eea8934e739f3df8ce412897" args="(bool wireframe=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_model.html#a7929f7632ad8a6bf63af04e98b030e40">gameplay::Model::draw</a> </td>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_model.html#af52bb521eea8934e739f3df8ce412897">gameplay::Model::draw</a> </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>wireframe</em> = <code>false</code></td><td>)</td>
@@ -168,6 +169,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The number of draw calls (mesh parts). </dd></dl>
 
 </div>
 </div>
@@ -464,7 +466,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

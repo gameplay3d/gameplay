@@ -89,13 +89,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::TerrainPatch Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="gameplay::TerrainPatch" -->
+<!-- doxytag: class="gameplay::TerrainPatch" --><!-- doxytag: inherits="gameplay::Camera::Listener" -->
 <p><code>#include &lt;TerrainPatch.h&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for gameplay::TerrainPatch:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classgameplay_1_1_terrain_patch.png" usemap="#gameplay::TerrainPatch_map" alt=""/>
+  <map id="gameplay::TerrainPatch_map" name="gameplay::TerrainPatch_map">
+<area href="classgameplay_1_1_camera_1_1_listener.html" alt="gameplay::Camera::Listener" shape="rect" coords="0,0,167,24"/>
+</map>
+ </div></div>
 
 <p><a href="classgameplay_1_1_terrain_patch-members.html">List of all members.</a></p>
 <table class="memberdecls">
@@ -104,11 +115,128 @@ Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>Layer</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>LayerCompare</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>Level</b></td></tr>
+<tr><td colspan="2"><h2><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain_patch.html#ae866782b66bbec915c78dcd9504d80e8">getMaterialCount</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain_patch.html#a1f1f2d8c6e361b4bd5bc7c70d1ecb0bc">getMaterial</a> (int index=-1) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain_patch.html#a29eb5d5721565dac7a39b260d5bfff01">getBoundingBox</a> (bool worldSpace) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain_patch.html#ade32f536e8b65baf12bf525bd82c05a3">cameraChanged</a> (<a class="el" href="classgameplay_1_1_camera.html">Camera</a> *camera)</td></tr>
+<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain_patch.html#af4a025c7ab81a06b1e16dbfa15d263ae">passCallback</a> (<a class="el" href="classgameplay_1_1_pass.html">Pass</a> *pass, void *cookie)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Represents a single patch for a <a class="el" href="classgameplay_1_1_terrain.html">Terrain</a>.</p>
-<p>This is an internal class used exclusively by <a class="el" href="classgameplay_1_1_terrain.html">Terrain</a>.</p>
- </div></div><!-- contents -->
+<div class="textblock"><p>Defines a single patch for a <a class="el" href="classgameplay_1_1_terrain.html">Terrain</a>. </p>
+</div><hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ade32f536e8b65baf12bf525bd82c05a3"></a><!-- doxytag: member="gameplay::TerrainPatch::cameraChanged" ref="ade32f536e8b65baf12bf525bd82c05a3" args="(Camera *camera)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_terrain_patch.html#ade32f536e8b65baf12bf525bd82c05a3">gameplay::TerrainPatch::cameraChanged</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>camera</em></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_camera_1_1_listener.html">Camera::Listener</a> </dd></dl>
+
+<p>Implements <a class="el" href="classgameplay_1_1_camera_1_1_listener.html#abf9a71468e5913b97a225c6ca0ff431d">gameplay::Camera::Listener</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a29eb5d5721565dac7a39b260d5bfff01"></a><!-- doxytag: member="gameplay::TerrainPatch::getBoundingBox" ref="a29eb5d5721565dac7a39b260d5bfff01" args="(bool worldSpace) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a>&amp; <a class="el" href="classgameplay_1_1_terrain_patch.html#a29eb5d5721565dac7a39b260d5bfff01">gameplay::TerrainPatch::getBoundingBox</a> </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>worldSpace</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the local bounding box for this patch, at the base LOD level. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1f1f2d8c6e361b4bd5bc7c70d1ecb0bc"></a><!-- doxytag: member="gameplay::TerrainPatch::getMaterial" ref="a1f1f2d8c6e361b4bd5bc7c70d1ecb0bc" args="(int index=&#45;1) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_material.html">Material</a>* <a class="el" href="classgameplay_1_1_terrain_patch.html#a1f1f2d8c6e361b4bd5bc7c70d1ecb0bc">gameplay::TerrainPatch::getMaterial</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>-1</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the material for the specified level of detail index or -1 for the current level of detail based on the scene camera.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index for the level of detail to get the material for. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ae866782b66bbec915c78dcd9504d80e8"></a><!-- doxytag: member="gameplay::TerrainPatch::getMaterialCount" ref="ae866782b66bbec915c78dcd9504d80e8" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_terrain_patch.html#ae866782b66bbec915c78dcd9504d80e8">gameplay::TerrainPatch::getMaterialCount</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the number of material for this patch for all level of details.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The number of material for this patch for all level of details. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af4a025c7ab81a06b1e16dbfa15d263ae"></a><!-- doxytag: member="gameplay::TerrainPatch::passCallback" ref="af4a025c7ab81a06b1e16dbfa15d263ae" args="(Pass *pass, void *cookie)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string <a class="el" href="classgameplay_1_1_terrain_patch.html#af4a025c7ab81a06b1e16dbfa15d263ae">gameplay::TerrainPatch::passCallback</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_pass.html">Pass</a> *&#160;</td>
+          <td class="paramname"><em>pass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>cookie</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Internal use only.</p>
+ 
+</div>
+</div>
+</div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -126,7 +254,7 @@ Classes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

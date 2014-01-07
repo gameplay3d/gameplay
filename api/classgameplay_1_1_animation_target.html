@@ -105,21 +105,21 @@ Inheritance diagram for gameplay::AnimationTarget:</div>
  <div class="center">
   <img src="classgameplay_1_1_animation_target.png" usemap="#gameplay::AnimationTarget_map" alt=""/>
   <map id="gameplay::AnimationTarget_map" name="gameplay::AnimationTarget_map">
-<area href="classgameplay_1_1_control.html" alt="gameplay::Control" shape="rect" coords="186,56,362,80"/>
-<area href="classgameplay_1_1_material_parameter.html" alt="gameplay::MaterialParameter" shape="rect" coords="372,56,548,80"/>
-<area href="classgameplay_1_1_transform.html" alt="gameplay::Transform" shape="rect" coords="744,56,920,80"/>
+<area href="classgameplay_1_1_control.html" alt="gameplay::Control" shape="rect" coords="279,56,455,80"/>
+<area href="classgameplay_1_1_material_parameter.html" alt="gameplay::MaterialParameter" shape="rect" coords="465,56,641,80"/>
+<area href="classgameplay_1_1_transform.html" alt="gameplay::Transform" shape="rect" coords="930,56,1106,80"/>
 <area href="classgameplay_1_1_container.html" alt="gameplay::Container" shape="rect" coords="0,112,176,136"/>
-<area href="classgameplay_1_1_joystick.html" alt="gameplay::Joystick" shape="rect" coords="186,112,362,136"/>
-<area href="classgameplay_1_1_label.html" alt="gameplay::Label" shape="rect" coords="372,112,548,136"/>
-<area href="classgameplay_1_1_node.html" alt="gameplay::Node" shape="rect" coords="744,112,920,136"/>
+<area href="classgameplay_1_1_image_control.html" alt="gameplay::ImageControl" shape="rect" coords="186,112,362,136"/>
+<area href="classgameplay_1_1_joystick.html" alt="gameplay::Joystick" shape="rect" coords="372,112,548,136"/>
+<area href="classgameplay_1_1_label.html" alt="gameplay::Label" shape="rect" coords="558,112,734,136"/>
+<area href="classgameplay_1_1_node.html" alt="gameplay::Node" shape="rect" coords="930,112,1106,136"/>
 <area href="classgameplay_1_1_form.html" alt="gameplay::Form" shape="rect" coords="0,168,176,192"/>
-<area href="classgameplay_1_1_button.html" alt="gameplay::Button" shape="rect" coords="186,168,362,192"/>
-<area href="classgameplay_1_1_slider.html" alt="gameplay::Slider" shape="rect" coords="372,168,548,192"/>
-<area href="classgameplay_1_1_text_box.html" alt="gameplay::TextBox" shape="rect" coords="558,168,734,192"/>
-<area href="classgameplay_1_1_joint.html" alt="gameplay::Joint" shape="rect" coords="744,168,920,192"/>
-<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="0,224,176,248"/>
-<area href="classgameplay_1_1_image_control.html" alt="gameplay::ImageControl" shape="rect" coords="186,224,362,248"/>
-<area href="classgameplay_1_1_radio_button.html" alt="gameplay::RadioButton" shape="rect" coords="372,224,548,248"/>
+<area href="classgameplay_1_1_button.html" alt="gameplay::Button" shape="rect" coords="372,168,548,192"/>
+<area href="classgameplay_1_1_slider.html" alt="gameplay::Slider" shape="rect" coords="558,168,734,192"/>
+<area href="classgameplay_1_1_text_box.html" alt="gameplay::TextBox" shape="rect" coords="744,168,920,192"/>
+<area href="classgameplay_1_1_joint.html" alt="gameplay::Joint" shape="rect" coords="930,168,1106,192"/>
+<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="279,224,455,248"/>
+<area href="classgameplay_1_1_radio_button.html" alt="gameplay::RadioButton" shape="rect" coords="465,224,641,248"/>
 </map>
  </div></div>
 
@@ -147,6 +147,7 @@ Protected Types</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a03d383afb9045efee09ec661bceedf80">AnimationTarget</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#ab8cedab6501d1908450814e6071f2155">~AnimationTarget</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a36d1eb07dcd07da53b7b1b142d36c344">getPropertyId</a> (<a class="el" href="classgameplay_1_1_animation_target.html#ac351f3b809938474d6688224a45aebcc">TargetType</a> type, const char *propertyIdStr)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a67ef6f7b9d1761e1e9dc97ebdd2a79e1">addChannel</a> (Animation::Channel *channel)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#ad731be35a3536bd7769fda268fbd6c1a">removeChannel</a> (Animation::Channel *channel)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Animation::Channel *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a462900fcd93cf03982b63efca7afcbf6">getChannel</a> (const char *id) const </td></tr>
@@ -747,6 +748,42 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a36d1eb07dcd07da53b7b1b142d36c344"></a><!-- doxytag: member="gameplay::AnimationTarget::getPropertyId" ref="a36d1eb07dcd07da53b7b1b142d36c344" args="(TargetType type, const char *propertyIdStr)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int <a class="el" href="classgameplay_1_1_animation_target.html#a36d1eb07dcd07da53b7b1b142d36c344">gameplay::AnimationTarget::getPropertyId</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_animation_target.html#ac351f3b809938474d6688224a45aebcc">TargetType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>propertyIdStr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the TargetType's property ID value for the specified property ID string.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The TargetType of the <a class="el" href="classgameplay_1_1_animation_target.html">AnimationTarget</a>. </td></tr>
+    <tr><td class="paramname">propertyIdStr</td><td>The property ID string. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The property ID value for the property ID string; -1 if the propertyIdStr does not exist for the TargetType. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ad731be35a3536bd7769fda268fbd6c1a"></a><!-- doxytag: member="gameplay::AnimationTarget::removeChannel" ref="ad731be35a3536bd7769fda268fbd6c1a" args="(Animation::Channel *channel)" -->
 <div class="memitem">
 <div class="memproto">
@@ -851,7 +888,7 @@ TargetType::TRANSFORM </dd></dl>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:36 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

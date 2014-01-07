@@ -96,16 +96,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <!-- doxytag: class="gameplay::TimeListener" -->
 <p><code>#include &lt;TimeListener.h&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for gameplay::TimeListener:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classgameplay_1_1_time_listener.png" usemap="#gameplay::TimeListener_map" alt=""/>
-  <map id="gameplay::TimeListener_map" name="gameplay::TimeListener_map">
-<area href="classgameplay_1_1_container.html" alt="gameplay::Container" shape="rect" coords="0,56,143,80"/>
-<area href="classgameplay_1_1_form.html" alt="gameplay::Form" shape="rect" coords="0,112,143,136"/>
-</map>
- </div></div>
+
+<p>Inherited by gameplay::Game::ScriptListener, and gameplay::Game::ShutdownListener.</p>
 
 <p><a href="classgameplay_1_1_time_listener-members.html">List of all members.</a></p>
 <table class="memberdecls">
@@ -114,7 +106,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_time_listener.html#ae8c70a337ff59086e98e91f76644ceab">timeEvent</a> (long timeDiff, void *cookie)=0</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>The <a class="el" href="classgameplay_1_1_time_listener.html">TimeListener</a> interface allows a class to be scheduled and called at a later time using <a class="el" href="classgameplay_1_1_game.html#a3b8adb5a096f735bfcfec801f02ea0da">Game::schedule()</a>.  </div><hr/><h2>Member Function Documentation</h2>
+<div class="textblock"><p>Defines a interface to be scheduled and called back at a later time using <a class="el" href="classgameplay_1_1_game.html#a3b8adb5a096f735bfcfec801f02ea0da">Game::schedule()</a>.</p>
+ </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="ae8c70a337ff59086e98e91f76644ceab"></a><!-- doxytag: member="gameplay::TimeListener::timeEvent" ref="ae8c70a337ff59086e98e91f76644ceab" args="(long timeDiff, void *cookie)=0" -->
 <div class="memitem">
 <div class="memproto">
@@ -148,8 +141,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classgameplay_1_1_container.html#ac59c4fc05776e197c56cf1b1812de005">gameplay::Container</a>.</p>
-
 </div>
 </div>
 </div><!-- contents -->
@@ -170,7 +161,7 @@ Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

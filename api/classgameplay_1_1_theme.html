@@ -128,121 +128,17 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme.html#a9e1aca66ba6bb6b71ef275afc70bfdf5">getStyle</a> (const char *id) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme.html#aefee22d10c1b50dbca2de9439a59e57d">getEmptyStyle</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme.html#aea7bc41f3fc10371c1ccd247574aaf73">getSpriteBatch</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_theme.html">Theme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme.html#a1928a33f7390efa40b95c46ba0ea5923">create</a> (const char *url)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_theme.html">Theme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_theme.html#a66e9e5957efe7fb80494e5655cf10655">getDefault</a> ()</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>A theme is created and stored as part of a form and represents its appearance. Once loaded, the appearance properties can be retrieved from their style IDs and set on other UI controls. A <a class="el" href="classgameplay_1_1_theme.html">Theme</a> has one property, 'texture', which points to a texture atlas containing all the images used by the theme. Cursor images, skins, and lists of images used by controls are defined in their own namespaces. The rest of the <a class="el" href="classgameplay_1_1_theme.html">Theme</a> consists of <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Style</a> namespaces. A <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Style</a> describes the border, margin, and padding of a <a class="el" href="classgameplay_1_1_control.html">Control</a>, what images, skins, and cursors are associated with a <a class="el" href="classgameplay_1_1_control.html">Control</a>, and <a class="el" href="classgameplay_1_1_font.html">Font</a> properties to apply to a <a class="el" href="classgameplay_1_1_control.html">Control</a>'s text.</p>
-<p>Below is an explanation of the properties that can be set within themes:</p>
-<div class="fragment"><pre class="fragment">
-    theme
-    {
-        texture = &lt;Path to texture&gt;
-
-        // Describes a single image, to be used as a cursor.
-        cursor &lt;Cursor ID&gt;
-        {
-            region = &lt;x, y, width, height&gt;
-            color = &lt;#ffffffff&gt;
-        }
-
-        // Describes all the images used by a control for one or more states.
-        imageList &lt;ImageList ID&gt;
-        {
-            image checked
-            {
-                region = &lt;x, y, width, height&gt;
-            }
-
-            image unchecked
-            {
-                region = &lt;x, y, width, height&gt;
-                color = &lt;#fffffffff&gt;            // Optionally override image-list color.
-            }
-
-            color = &lt;#fffffffff&gt;    // Default blend color for images that don't specify their own.
-        }
-    
-        // Defines the border and background of a Control.
-        skin &lt;Skin ID&gt;
-        {
-            // The corners and edges of the given region will be used as border sprites.
-            border
-            {
-                top     =   &lt;int&gt;   // Height of top border, top corners.
-                bottom  =   &lt;int&gt;   // Height of bottom border, bottom corners.
-                left    =   &lt;int&gt;   // Width of left border, left corners.
-                right   =   &lt;int&gt;   // Width of right border, right corners.
-            }
-        
-            region  =   &lt;x, y, width, height&gt;   // Total container region including entire border.
-            color   =   &lt;#ffffffff&gt;             // Tint to apply to skin.
-        }
-    
-        style &lt;Style ID&gt;
-        {
-            // Layouts may make use of a style's margin to put space between adjacent controls.
-            margin
-            {
-                top     =   &lt;int&gt;
-                bottom  =   &lt;int&gt;
-                left    =   &lt;int&gt;
-                right   =   &lt;int&gt;        
-            }
-        
-            // Padding is the space between a control's border and its content.
-            padding
-            {
-                top     =   &lt;int&gt;
-                bottom  =   &lt;int&gt;
-                left    =   &lt;int&gt;
-                right   =   &lt;int&gt;        
-            }
-        
-            // Properties used when in control is in the normal state.
-            stateNormal
-            {
-                skin   =   &lt;Skin ID&gt;             // Skin to use for border and background sprites.
-                imageList = &lt;ImageList ID&gt;
-
-                cursor      =   &lt;Cursor ID&gt;                 // Cursor to use when the mouse is over this control.
-                font        =   &lt;Path to font&gt;              // Font to use for rendering text.
-                fontSize    =   &lt;int&gt;                       // Size of text.
-                textColor   =   &lt;#ffffffff&gt;                 // Color of text.
-                alignment   =   &lt;Text alignment constant&gt;   // Member of Font::Justify enum.
-                rightToLeft =   &lt;bool&gt;                      // Whether to draw text from right to left.
-                opacity     =   &lt;float&gt;                     // Opacity to apply to all text/border/icon colors.
-            }
-        
-            // Properties used when in control is in the focus state
-            // If not specified, the 'normal' overlay will be used.
-            stateFocus
-            {
-                skin   =   &lt;Skin ID&gt;             // Skin to use for border and background sprites.
-                ...
-            }
-        
-            // Properties used when in control is in the focus. 
-            // This is when a touch/mouse is down within the control.
-            // If not specified, the 'normal' overlay will be used.
-            stateActive
-            {
-                skin   =   &lt;Skin ID&gt;             // Skin to use for border and background sprites.
-                ...
-            }
-
-            // Properties used when in control is in the focus. 
-            // This is when a touch/mouse is down within the control.
-            // If not specified, the 'normal' overlay will be used.
-            state-disabled
-            {
-                skin   =   &lt;Skin ID&gt;             // Skin to use for border and background sprites.
-                ...        
-            }
-        }
-    }
-</pre></div> </div><hr/><h2>Member Typedef Documentation</h2>
+<div class="textblock"><p>Defines a theme used to represent the look or appearance of controls.</p>
+<p>Once loaded, the appearance properties can be retrieved from their style IDs and set on other UI controls. A <a class="el" href="classgameplay_1_1_theme.html">Theme</a> has one property, 'texture', which points to a texture atlas containing all the images used by the theme. Cursor images, skins, and lists of images used by controls are defined in their own namespaces. The rest of the <a class="el" href="classgameplay_1_1_theme.html">Theme</a> consists of <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Style</a> namespaces. A <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Style</a> describes the border, margin, and padding of a <a class="el" href="classgameplay_1_1_control.html">Control</a>, what images, skins, and cursors are associated with a <a class="el" href="classgameplay_1_1_control.html">Control</a>, and <a class="el" href="classgameplay_1_1_font.html">Font</a> properties to apply to a <a class="el" href="classgameplay_1_1_control.html">Control</a>'s text.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Theme">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Theme</a> </dd></dl>
+</div><hr/><h2>Member Typedef Documentation</h2>
 <a class="anchor" id="afe0334a54abcc262e810298001caf85f"></a><!-- doxytag: member="gameplay::Theme::Border" ref="afe0334a54abcc262e810298001caf85f" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -310,6 +206,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a66e9e5957efe7fb80494e5655cf10655"></a><!-- doxytag: member="gameplay::Theme::getDefault" ref="a66e9e5957efe7fb80494e5655cf10655" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_theme.html">Theme</a>* <a class="el" href="classgameplay_1_1_theme.html#a66e9e5957efe7fb80494e5655cf10655">gameplay::Theme::getDefault</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the default theme.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The default theme. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aefee22d10c1b50dbca2de9439a59e57d"></a><!-- doxytag: member="gameplay::Theme::getEmptyStyle" ref="aefee22d10c1b50dbca2de9439a59e57d" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -325,6 +239,24 @@ Static Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Get the empty style. Used when a control does not specify a style. This is especially useful for containers that are being used only for layout and positioning, and have no background or border themselves. The empty style has no border, background, margin, padding, images, etc.. Any needed properties can be set on the control directly.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The empty style. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aea7bc41f3fc10371c1ccd247574aaf73"></a><!-- doxytag: member="gameplay::Theme::getSpriteBatch" ref="aea7bc41f3fc10371c1ccd247574aaf73" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>* <a class="el" href="classgameplay_1_1_theme.html#aea7bc41f3fc10371c1ccd247574aaf73">gameplay::Theme::getSpriteBatch</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the sprite batch for this theme.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The theme's sprite batch. </dd></dl>
 
 </div>
 </div>
@@ -371,7 +303,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 11:58:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

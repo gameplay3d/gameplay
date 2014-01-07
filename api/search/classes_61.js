@@ -14,5 +14,6 @@ var searchData=
   ['audiobuffer',['AudioBuffer',['../classgameplay_1_1_audio_buffer.html',1,'gameplay']]],
   ['audiocontroller',['AudioController',['../classgameplay_1_1_audio_controller.html',1,'gameplay']]],
   ['audiolistener',['AudioListener',['../classgameplay_1_1_audio_listener.html',1,'gameplay']]],
-  ['audiosource',['AudioSource',['../classgameplay_1_1_audio_source.html',1,'gameplay']]]
+  ['audiosource',['AudioSource',['../classgameplay_1_1_audio_source.html',1,'gameplay']]],
+  ['autobindingresolver',['AutoBindingResolver',['../classgameplay_1_1_render_state_1_1_auto_binding_resolver.html',1,'gameplay::RenderState']]]
 ];
