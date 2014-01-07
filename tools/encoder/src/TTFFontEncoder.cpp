@@ -155,7 +155,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
         return -1;
     }
 
-   std::vector<FontData*> fonts;
+    std::vector<FontData*> fonts;
 
     for (size_t fontIndex = 0, count = fontSizes.size(); fontIndex < count; ++fontIndex)
     {
