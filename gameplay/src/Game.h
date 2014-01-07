@@ -507,7 +507,7 @@ public:
      */
     inline void setMultiSampling(bool enabled);
 
-    /*
+    /**
      * Is multi-sampling enabled.
      *
      * @return true if multi-sampling is enabled.

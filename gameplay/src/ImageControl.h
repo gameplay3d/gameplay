@@ -102,6 +102,16 @@ protected:
 
     virtual ~ImageControl();
 
+    /**
+     * Creates a new ImageControl.
+     * 
+     * @param style The control's custom style.
+     * @param properties A properties object containing a definition of the ImageControl (optional).
+     *
+     * @return The new ImageControl.
+     * @script{create}
+      * 
+      */
     static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     void initialize(const char* typeName, Theme::Style* style, Properties* properties);
@@ -116,6 +126,10 @@ protected:
      */
     void update(const Control* container, const Vector2& offset);
 
+private:
+
+    ImageControl(const ImageControl& copy);
+
     // Source region.
     Rectangle _srcRegion;
     // Destination region.
@@ -128,10 +142,6 @@ protected:
     
     // Calculated UVs.
     Theme::UVs _uvs;
-
-private:
-
-    ImageControl(const ImageControl& copy);
 };
 
 }
