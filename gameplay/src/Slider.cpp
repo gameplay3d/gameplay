@@ -164,43 +164,38 @@ void Slider::updateValue(int x, int y)
 {
     State state = getState();
 
-    // If the point lies within this slider, update the value of the slider accordingly
-    if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-        y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-    {
-        // Horizontal case.
-        const Theme::Border& border = getBorder(state);
-        const Theme::Padding& padding = getPadding();
-        const Rectangle& minCapRegion = _minImage->getRegion();
-        const Rectangle& maxCapRegion = _maxImage->getRegion();
+    // Horizontal case.
+    const Theme::Border& border = getBorder(state);
+    const Theme::Padding& padding = getPadding();
+    const Rectangle& minCapRegion = _minImage->getRegion();
+    const Rectangle& maxCapRegion = _maxImage->getRegion();
+    const Rectangle& markerRegion = _markerImage->getRegion();
 
-        float markerPosition = ((float)x - maxCapRegion.width - border.left - padding.left) /
-            (_bounds.width - border.left - border.right - padding.left - padding.right - minCapRegion.width - maxCapRegion.width);
+    float markerPosition = x / (_viewportBounds.width - markerRegion.width);
             
-        if (markerPosition > 1.0f)
-        {
-            markerPosition = 1.0f;
-        }
-        else if (markerPosition < 0.0f)
-        {
-            markerPosition = 0.0f;
-        }
-
-        float oldValue = _value;
-        _value = (markerPosition * (_max - _min)) + _min;
-        if (_step > 0.0f)
-        {            
-            int numSteps = round(_value / _step);
-            _value = _step * numSteps;
-        }
-
-        // Call the callback if our value changed.
-        if (_value != oldValue)
-        {
-            notifyListeners(Control::Listener::VALUE_CHANGED);
-        }
-        _dirty = true;
+    if (markerPosition > 1.0f)
+    {
+        markerPosition = 1.0f;
     }
+    else if (markerPosition < 0.0f)
+    {
+        markerPosition = 0.0f;
+    }
+
+    float oldValue = _value;
+    _value = (markerPosition * (_max - _min)) + _min;
+    if (_step > 0.0f)
+    {            
+        int numSteps = round(_value / _step);
+        _value = _step * numSteps;
+    }
+
+    // Call the callback if our value changed.
+    if (_value != oldValue)
+    {
+        notifyListeners(Control::Listener::VALUE_CHANGED);
+    }
+    _dirty = true;
 }
 
 bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -424,23 +419,25 @@ unsigned int Slider::drawImages(Form* form, const Rectangle& clip)
     SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
     startBatch(form, batch);
 
-    // Draw order: track, caps, marker.
-    float midY = _viewportBounds.y + (_viewportBounds.height) * 0.5f;
-    Vector2 pos(_viewportBounds.x, midY - trackRegion.height * 0.5f);
-    batch->draw(pos.x, pos.y, _viewportBounds.width, trackRegion.height, track.u1, track.v1, track.u2, track.v2, trackColor, _viewportClipBounds);
+    // Draw track, vertically centered
+    float midY = _viewportBounds.y + _viewportBounds.height * 0.5f;
+    Vector2 pos(_viewportBounds.x + minCapRegion.width, midY - trackRegion.height * 0.5f);
+    batch->draw(pos.x, pos.y, _viewportBounds.width - minCapRegion.width - maxCapRegion.width, trackRegion.height, track.u1, track.v1, track.u2, track.v2, trackColor, _viewportClipBounds);
 
+    // Draw min cap to the left of the track
     pos.y = midY - minCapRegion.height * 0.5f;
-    pos.x -= minCapRegion.width * 0.5f;
+    pos.x = _viewportBounds.x;
     batch->draw(pos.x, pos.y, minCapRegion.width, minCapRegion.height, minCap.u1, minCap.v1, minCap.u2, minCap.v2, minCapColor, _viewportClipBounds);
 
-    pos.x = _viewportBounds.x + _viewportBounds.width - maxCapRegion.width * 0.5f;
+    // Draw max cap to the right of the track
+    pos.x = _viewportBounds.right() - maxCapRegion.width;
     batch->draw(pos.x, pos.y, maxCapRegion.width, maxCapRegion.height, maxCap.u1, maxCap.v1, maxCap.u2, maxCap.v2, maxCapColor, _viewportClipBounds);
 
-    // Percent across.
+    // Draw the marker at the correct position
     float markerPosition = (_value - _min) / (_max - _min);
-    markerPosition *= _viewportBounds.width - minCapRegion.width * 0.5f - maxCapRegion.width * 0.5f - markerRegion.width;
-    pos.x = _viewportBounds.x + minCapRegion.width * 0.5f + markerPosition;
-    pos.y = midY - markerRegion.height / 2.0f;
+    markerPosition *= _viewportBounds.width - markerRegion.width;// -minCapRegion.width * 0.5f - maxCapRegion.width * 0.5f - markerRegion.width;
+    pos.x = _viewportBounds.x + markerPosition;
+    pos.y = midY - markerRegion.height * 0.5f;
     batch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor, _viewportClipBounds);
 
     finishBatch(form, batch);

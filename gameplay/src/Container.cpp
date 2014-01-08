@@ -25,6 +25,8 @@ static const long SCROLL_INERTIA_DELAY = 100L;
 static const float SCROLL_FRICTION_FACTOR = 5.0f;
 // Distance that must be scrolled before isScrolling() will return true, used e.g. to cancel button-click events.
 static const float SCROLL_THRESHOLD = 10.0f;
+// Number of milliseconds to fade auto-hide scrollbars out for
+static const long SCROLLBAR_FADE_TIME = 1500L;
 // If the DPad or joystick is held down, this is the initial delay in milliseconds between focus change events.
 static const float FOCUS_CHANGE_REPEAT_DELAY = 300.0f;
 
@@ -634,7 +636,7 @@ unsigned int Container::draw(Form* form, const Rectangle& clip)
     if (_scroll != SCROLL_NONE && (_scrollBarOpacity > 0.0f))
     {
         // Draw scroll bars.
-        Rectangle clipRegion(_viewportClipBounds);
+        Rectangle clipRegion(_clipBounds);
 
         SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
         startBatch(form, batch);
@@ -658,7 +660,7 @@ unsigned int Container::draw(Form* form, const Rectangle& clip)
 
             clipRegion.width += verticalRegion.width;
 
-            Rectangle bounds(_viewportBounds.x + _viewportBounds.width, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
+            Rectangle bounds(_viewportBounds.right() + (_bounds.right() - _viewportBounds.right())*0.5f - topRegion.width*0.5f, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
             batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
 
             bounds.y += topRegion.height;
@@ -691,7 +693,7 @@ unsigned int Container::draw(Form* form, const Rectangle& clip)
 
             clipRegion.height += horizontalRegion.height;
         
-            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.y + _viewportBounds.height, leftRegion.width, leftRegion.height);
+            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.bottom() + (_bounds.bottom() - _viewportBounds.bottom())*0.5f - leftRegion.height*0.5f, leftRegion.width, leftRegion.height);
             batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
 
             bounds.x += leftRegion.width;
@@ -1159,7 +1161,7 @@ void Container::updateScroll()
         _scrollBarOpacity = 0.99f;
         if (!_scrollBarOpacityClip)
         {
-            Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_SCROLLBAR_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, 500L);
+            Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_SCROLLBAR_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, SCROLLBAR_FADE_TIME);
             _scrollBarOpacityClip = animation->getClip();
         }
         _scrollBarOpacityClip->play();
@@ -1331,12 +1333,11 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             if (_scrollBarVertical)
             {
                 float vWidth = _scrollBarVertical->getRegion().width;
-                Rectangle vBounds(_viewportBounds.right() - _absoluteBounds.x,
+                Rectangle vBounds(_viewportBounds.right() + (_bounds.right() - _viewportBounds.right())*0.5f - vWidth*0.5f,
                                  _scrollBarBounds.y,
                                  vWidth, _scrollBarBounds.height);
 
-                if (x >= vBounds.x &&
-                    x <= vBounds.x + vBounds.width)
+                if (x >= vBounds.x && x <= vBounds.right())
                 {
                     // Then we're within the horizontal bounds of the vertical scrollbar.
                     // We want to either jump up or down, or drag the scrollbar itself.
@@ -1359,11 +1360,10 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             {
                 float hHeight = _scrollBarHorizontal->getRegion().height;
                 Rectangle hBounds(_scrollBarBounds.x,
-                                  _viewportBounds.y + _viewportBounds.height,
+                                  _viewportBounds.bottom() + (_bounds.bottom() - _viewportBounds.bottom())*0.5f - hHeight*0.5f,
                                   _scrollBarBounds.width, hHeight);
 
-                if (y >= hBounds.y &&
-                    y <= hBounds.y + hBounds.height)
+                if (y >= hBounds.y && y <= hBounds.bottom())
                 {
                     // We're within the vertical bounds of the horizontal scrollbar.
                     if (x < hBounds.x)

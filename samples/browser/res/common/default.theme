@@ -2,128 +2,146 @@ theme mainMenu
 {
     texture = res/png/default-theme.png
 
-    // Global color values that affect overal theme color
-    ${tint} = #aabbaaff
-    ${text} = #ffffffff
+    /////////////////////////////////////////////////////////////////////
+    //                    Global theme variables                       //
+    /////////////////////////////////////////////////////////////////////
+
+    ${normalColor} = #ffffffff
+    ${hoverColor} = #ccccccff
+    ${activeColor} = #aaaaaaff
+    ${textColor} = #ffffffff
+    ${font} = res/ui/arial.gpb
+
+    /////////////////////////////////////////////////////////////////////
+    //                        Image lists                              //
+    /////////////////////////////////////////////////////////////////////
 
     imageList normalImages
     {
-        color = ${tint}
+        color = ${normalColor}
 
         image unchecked
         {
-            region = 78, 1, 46, 46
+            region = 83, 3, 34, 34
         }
 
         image checked
         {
-            region = 78, 46, 46, 46
+            region = 83, 37, 34, 34
         }
 
         image unselected
         {
-            region = 127, 1, 46, 46
+            region = 120, 3, 34, 34
         }
 
         image selected
         {
-            region = 127, 46, 46, 46
+            region = 120, 37, 34, 34
         }
 
         image minCap
         {
-            region = 3, 115, 8, 11
-        }
-
-        image maxCap
-        {
-            region = 3, 115, 8, 11
-        }
-
-        image marker
-        {
-            region = 16, 113, 18, 18
+            region = 3, 41, 8, 17
         }
 
         image track
         {
-            region = 42, 119, 26, 6
+            region = 11, 41, 62, 17
+        }
+
+        image maxCap
+        {
+            region = 73, 41, 8, 17
+        }
+
+        image marker
+        {
+            region = 6, 59, 15, 27
         }
 
         image textCaret
         {
-            region = 5, 149, 11, 25
-            color = #C3D9BFff
+            region = 6, 92, 7, 22
         }
 
         image scrollBarTopCap
         {
-            region = 0, 99, 12, 5
+            region = 65, 59, 13, 6
         }
 
         image verticalScrollBar
         {
-            region = 0, 104, 12, 19
+            region = 65, 65, 13, 2
         }
 
         image scrollBarBottomCap
         {
-            region = 0, 138, 12, 5
+            region = 65, 88, 13, 6
         }
 
         image scrollBarLeftCap
         {
-            region = 35, 115, 5, 12
+            region = 25, 59, 6, 13
         }
 
         image horizontalScrollBar
         {
-            region = 43, 115, 19, 12
+            region = 32, 59, 2, 13
         }
 
         image scrollBarRightCap
         {
-            region = 65, 115, 5, 12
+            region = 55, 59, 6, 13
         }
+    }
+
+    imageList hoverImages : normalImages
+    {
+        color = ${hoverColor}
     }
 
     imageList activeImages : normalImages
     {
-        color = ${tint}
+        color = ${activeColor}
 
         image unchecked
         {
-            region = 78, 91, 46, 46
+            region = 83, 37, 34, 34
         }
 
         image checked
         {
-            region = 78, 91, 46, 46
-        }
-
-        image unselected
-        {
-            region = 127, 91, 46, 46
+            region = 83, 37, 34, 34
         }
 
         image selected
         {
-            region = 127, 91, 46, 46
+            region = 120, 37, 34, 34
+        }
+
+        image unselected
+        {
+            region = 120, 37, 34, 34
         }
     }
+
+    /////////////////////////////////////////////////////////////////////
+    //                     Skin definitions                            //
+    /////////////////////////////////////////////////////////////////////
 
     skin FormSkin
     {
         border
         {
-            left = 10
-            right = 10
-            top = 10
-            bottom = 10
+            left = 8
+            right = 8
+            top = 8
+            bottom = 8
         }
 
-        region = 3, 3, 69, 70
-        color = ${tint}
+        region = 4, 4, 32, 32
+        color = ${normalColor}
     }
 
     skin ButtonSkin
@@ -136,24 +154,48 @@ theme mainMenu
             bottom = 12
         }
 
-        //region = 179, 3, 44, 44
-        region = 180, 145, 34, 34
-        color = ${tint}
+        region = 42, 3, 34, 34
+        color = ${normalColor}
     }
 
     skin ButtonSkinHover : ButtonSkin
     {
-        //region = 179, 49, 44, 44
-        region = 180, 182, 34, 34
-        ${tint}
+        color = ${hoverColor}
     }
 
     skin ButtonSkinActive : ButtonSkin
     {
-        //region = 179, 96, 44, 44
-        region = 180, 219, 34, 34
-        ${tint}
+        color = ${activeColor}
     }
+
+    skin TextBoxSkin
+    {
+        border
+        {
+            left = 10
+            right = 10
+            top = 10
+            bottom = 10
+        }
+
+        region = 83, 3, 34, 34
+        color = ${normalColor}
+    }
+
+    skin TextBoxSkinHover : TextBoxSkin
+    {
+        color = ${hoverColor}
+    }
+
+    skin TextBoxSkinActive : TextBoxSkin
+    {
+        color = ${activeColor}
+    }
+
+
+
+
+
 
     skin mainNormal
     {
@@ -260,7 +302,7 @@ theme mainMenu
         {
             skin = underliner
             textColor = #ffffffff
-            font = res/ui/arial.gpb
+            font = ${font}
             fontSize = 16
             textAlignment = ALIGN_BOTTOM_HCENTER
         }
@@ -281,7 +323,7 @@ theme mainMenu
             skin = mainNormal
             imageList = normalImages
 
-            font = res/ui/arial.gpb
+            font = ${font}
             textColor = #ffffffff
             fontSize = 16
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -339,7 +381,7 @@ theme mainMenu
         stateNormal
         {
             imageList = normalImages
-            font = res/ui/arial.gpb
+            font = ${font}
             textColor = #ffffffff
             fontSize = 16
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -361,14 +403,14 @@ theme mainMenu
     {
         stateNormal
         {
-            font = res/ui/arial.gpb
+            font = ${font}
             fontSize = 16
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
-            font = res/ui/arial.gpb
+            font = ${font}
             fontSize = 16
             textAlignment = ALIGN_VCENTER_LEFT
         }
@@ -392,7 +434,7 @@ theme mainMenu
         stateNormal
         {
             textColor = #ffffffff
-            font = res/ui/arial.gpb
+            font = ${font}
             fontSize = 24
             textAlignment = ALIGN_BOTTOM_HCENTER
         }
@@ -403,25 +445,55 @@ theme mainMenu
         }
     }
 
+
+
+
+
+
     style Form
     {
         stateNormal
         {
             skin = FormSkin
+            imageList = normalImages
+        }
+
+        stateHover
+        {
+            imageList = hoverImages
+        }
+
+        stateActive
+        {
+            imageList = activeImages
         }
     }
 
     style Container
     {
+        stateNormal
+        {
+            imageList = normalImages
+        }
+
+        stateHover
+        {
+            imageList = hoverImages
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+        }
     }
 
     style Label
     {
         stateNormal
         {
-            font = res/ui/arial.gpb
+            font = ${font}
             fontSize = 16
-            textColor = #ffffffff
+            textColor = ${textColor}
             textAlignment = ALIGN_VCENTER_LEFT
         }
     }
@@ -437,7 +509,7 @@ theme mainMenu
         stateNormal
         {
             skin = ButtonSkin
-            font = res/ui/arial.gpb
+            font = ${font}
             textColor = #ffffffff
             fontSize = 16
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -459,20 +531,87 @@ theme mainMenu
         }
     }
 
-    style CheckBox : iconNoBorder
+    style CheckBox : Label
+    {
+        stateNormal
+        {
+            imageList = normalImages
+        }
+
+        stateHover
+        {
+            imageList = hoverImages
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+        }
+
+        stateFocus
+        {
+            imageList = hoverImages
+        }
+    }
+
+    style RadioButton : CheckBox
     {
     }
 
-    style RadioButton : iconNoBorder
+    style TextBox
     {
+        stateNormal
+        {
+            skin = TextBoxSkin
+            imageList = normalImages
+            font = ${font}
+            fontSize = 16
+            textColor = ${textColor}
+            textAlignment = ALIGN_VCENTER_LEFT
+        }
+
+        stateHover
+        {
+            skin = TextBoxSkinHover
+        }
+
+        stateActive
+        {
+            skin = TextBoxSkinActive
+            imageList = activeImages
+        }
+
+        stateFocus
+        {
+            skin = TextBoxSkinHover
+        }
     }
 
-    style TextBox : topLeftAlignedEntry
+    style Slider
     {
-    }
+        stateNormal
+        {
+            imageList = normalImages
+            font = ${font}
+            fontSize = 16
+            textColor = ${textColor}
+            textAlignment = ALIGN_TOP_LEFT
+        }
 
-    style Slider : topLeftNoBorder
-    {
+        stateHover
+        {
+            imageList = hoverImages
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+        }
+
+        stateFocus
+        {
+            imageList = hoverImages
+        }
     }
 
     style Image
