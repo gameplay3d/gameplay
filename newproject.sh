@@ -172,16 +172,18 @@ fi
 #############################################
 # Copy Microsoft Visual Studio project files
 #############################################
+gpPathWin=$(echo $gpPath | sed 's*/*\\\\*g')
+
 cp "template/template.vcxproj" "$projPath/$projName.vcxproj"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.vcxproj"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
-aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPathWin*g" "$projPath/$projName.vcxproj"
 
 cp "template/template.vcxproj.filters" "$projPath/$projName.vcxproj.filters"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj.filters"
 
 cp "template/template.vcxproj.user" "$projPath/$projName.vcxproj.user"
-aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj.user"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPathWin*g" "$projPath/$projName.vcxproj.user"
 
 
 #############################################
