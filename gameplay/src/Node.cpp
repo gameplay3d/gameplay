@@ -20,7 +20,7 @@ namespace gameplay
 {
 
 Node::Node(const char* id)
-    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
+    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _active(true),
     _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
@@ -110,12 +110,18 @@ void Node::addChild(Node* child)
         child->_scene->removeNode(child);
     }
 
-    // Order is irrelevant, so add to the beginning of the list.
+    // Add child to the end of the list.
+    // NOTE: This is different than the original behavior which inserted nodes
+    // into the beginning of the list. Although slightly slower to add to the
+    // end of the list, it makes scene traversal and drawing order more
+    // predictable, so I've changed it.
     if (_firstChild)
     {
-        _firstChild->_prevSibling = child;
-        child->_nextSibling = _firstChild;
-        _firstChild = child;
+        Node* n = _firstChild;
+        while (n->_nextSibling)
+            n = n->_nextSibling;
+        n->_nextSibling = child;
+        child->_prevSibling = n;
     }
     else
     {
@@ -286,6 +292,35 @@ void Node::setUserPointer(void* pointer, void (*cleanupCallback)(void*))
     }
 }
 
+void Node::setActive(bool active)
+{
+    if (_active != active)
+    {
+        if (_collisionObject)
+            _collisionObject->setEnabled(active);
+
+        _active = active;
+    }
+}
+
+bool Node::isActive() const
+{
+    return _active;
+}
+
+bool Node::isActiveInHierarchy() const
+{
+    if (!_active)
+       return false;
+   Node* node = _parent;
+   while (node)
+   {
+       if (!node->_active)
+           return false;
+   }
+   return true;
+}
+
 unsigned int Node::getChildCount() const
 {
     return _childCount;
@@ -400,6 +435,15 @@ Node* Node::getRootNode() const
         n = n->getParent();
     }
     return n;
+}
+
+void Node::update(float elapsedTime)
+{
+    for (Node* node = _firstChild; node != NULL; node = node->_nextSibling)
+    {
+        if (node->isActive())
+            node->update(elapsedTime);
+    }
 }
 
 bool Node::isStatic() const
@@ -988,15 +1032,8 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
     Node* copy = cloneSingleNode(context);
     GP_ASSERT(copy);
 
-    // Find our current last child
-    Node* lastChild = NULL;
+    // Add child nodes
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
-    {
-        lastChild = child;
-    }
-
-    // Loop through the nodes backwards because addChild adds the node to the front.
-    for (Node* child = lastChild; child != NULL; child = child->getPreviousSibling())
     {
         Node* childCopy = child->cloneRecursive(context);
         GP_ASSERT(childCopy);
@@ -1037,6 +1074,12 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
         Model* modelClone = model->clone(context);
         node->setModel(modelClone);
         modelClone->release();
+    }
+    if (ParticleEmitter* emitter = getParticleEmitter())
+    {
+        ParticleEmitter* emitterClone = emitter->clone();
+        node->setParticleEmitter(emitterClone);
+        emitterClone->release();
     }
     node->_world = _world;
     node->_bounds = _bounds;
@@ -1105,7 +1148,7 @@ PhysicsCollisionObject* Node::getCollisionObject() const
     return _collisionObject;
 }
 
-PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters)
+PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape, PhysicsRigidBody::Parameters* rigidBodyParameters, int group, int mask)
 {
     SAFE_DELETE(_collisionObject);
 
@@ -1113,13 +1156,13 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
     {
     case PhysicsCollisionObject::RIGID_BODY:
         {
-            _collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+            _collisionObject = new PhysicsRigidBody(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters(), group, mask);
         }
         break;
 
     case PhysicsCollisionObject::GHOST_OBJECT:
         {
-            _collisionObject = new PhysicsGhostObject(this, shape);
+            _collisionObject = new PhysicsGhostObject(this, shape, group, mask);
         }
         break;
 
@@ -1228,21 +1271,6 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     }
 
     return _collisionObject;
-}
-
-unsigned int Node::getNumAdvertisedDescendants() const
-{
-    return (unsigned int)_advertisedDescendants.size();
-}
-
-Node* Node::getAdvertisedDescendant(unsigned int i) const
-{
-    return _advertisedDescendants.at(i);
-}
-
-void Node::addAdvertisedDescendant(Node* node)
-{
-    _advertisedDescendants.push_back(node);
 }
 
 AIAgent* Node::getAgent() const

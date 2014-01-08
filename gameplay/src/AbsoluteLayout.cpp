@@ -47,8 +47,11 @@ void AbsoluteLayout::update(const Container* container, const Vector2& offset)
         Control* control = controls[i];
         GP_ASSERT(control);
 
-        align(control, container);
-        control->update(container, offset);
+        if (control->isVisible())
+        {
+            align(control, container);
+            control->update(container, offset);
+        }
     }
 }
 

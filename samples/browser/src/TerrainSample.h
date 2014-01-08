@@ -6,7 +6,7 @@
 
 using namespace gameplay;
 
-class TerrainSample : public Sample, public Control::Listener
+class TerrainSample : public Sample, public Control::Listener, private RenderState::AutoBindingResolver
 {
 public:
 
@@ -25,6 +25,8 @@ public:
 protected:
 
     void initialize();
+
+    bool intializeLights(Node* node);
 
     void finalize();
 
@@ -45,6 +47,11 @@ private:
         MODE_DROP_BOX
     };
 
+    Vector3 getLightDirection0() const;
+    Vector3 getLightColor0() const;
+
+    bool resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter);
+
 	Font* _font;
 	Scene* _scene;
 	Terrain* _terrain;
@@ -60,6 +67,7 @@ private:
     Node* _sphere;
     Node* _box;
     std::list<Node*> _shapes;
+    Light* _directionalLight;
 
 };
 

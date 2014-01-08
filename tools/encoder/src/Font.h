@@ -42,6 +42,13 @@ public:
         ITALIC = 2,
         BOLD_ITALIC = 4
     };
+
+
+    enum FontFormat
+    {
+        BITMAP = 0,
+        DISTANCE_FIELD = 1
+    };
 };
 
 }

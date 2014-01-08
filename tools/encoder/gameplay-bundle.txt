@@ -97,6 +97,12 @@ enum FontStyle
     BOLD_ITALIC = 4
 }
 
+enum FontFormat
+{
+    BITMAP = 0,
+    DISTANCE_FIELD = 1
+}
+
 enum PrimitiveType
 {
     TRIANGLES = GL_TRIANGLES (4),
@@ -224,3 +230,4 @@ Reference
                 texMapWidth             uint
                 texMapHeight            uint
                 texMap                  byte[]
+                format                  enum FontFormat      @since version [1,3]

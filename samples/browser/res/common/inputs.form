@@ -27,7 +27,7 @@ form inputTestControls
     label restoreMouseLabel
     {
         style = underlined
-        position = 10, 290
+        position = 10, 250
         size = 160, 60
         text = Press space to restore mouse
     }

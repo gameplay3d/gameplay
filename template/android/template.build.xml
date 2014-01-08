@@ -66,6 +66,9 @@
         <copy todir="assets/res">
             <fileset dir="../res" />
         </copy>
+        <copy todir="assets/res/shaders">
+            <fileset dir="../GAMEPLAY_PATH/gameplay/res/shaders" />
+       </copy>
     </target>
 
     <!-- Import the actual build file.

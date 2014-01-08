@@ -105,6 +105,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int
     material->getStateBlock()->setBlend(true);
     material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
+    //material->getStateBlock()->setDepthFunction(RenderState::DEPTH_LEQUAL);
 
     // Bind the texture to the material as a sampler
     Texture::Sampler* sampler = Texture::Sampler::create(texture); // +ref texture
@@ -133,7 +134,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int
 
 	// Bind an ortho projection to the material by default (user can override with setProjectionMatrix)
 	Game* game = Game::getInstance();
-	Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &batch->_projectionMatrix);
+    Matrix::createOrthographicOffCenter(0, game->getViewport().width, game->getViewport().height, 0, 0, 1, &batch->_projectionMatrix);
 	material->getParameter("u_projectionMatrix")->bindValue(batch, &SpriteBatch::getProjectionMatrix);
 	
     return batch;
@@ -142,6 +143,11 @@ SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int
 void SpriteBatch::start()
 {
     _batch->start();
+}
+
+bool SpriteBatch::isStarted() const
+{
+    return _batch->isStarted();
 }
 
 void SpriteBatch::draw(const Rectangle& dst, const Rectangle& src, const Vector4& color)
@@ -298,9 +304,16 @@ void SpriteBatch::draw(float x, float y, float width, float height, float u1, fl
 
 void SpriteBatch::draw(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip)
 {
+    draw(x, y, 0, width, height, u1, v1, u2, v2, color, clip);
+}
+
+void SpriteBatch::draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip)
+{
+    // TODO: Perform software clipping instead of culling the entire sprite.
+
     // Only draw if at least part of the sprite is within the clip region.
     if (clipSprite(clip, x, y, width, height, u1, v1, u2, v2))
-        draw(x, y, 0, width, height, u1, v1, u2, v2, color);
+        draw(x, y, z, width, height, u1, v1, u2, v2, color);
 }
 
 void SpriteBatch::addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, SpriteBatch::SpriteVertex* vertices)
@@ -406,17 +419,19 @@ bool SpriteBatch::clipSprite(const Rectangle& clip, float& x, float& y, float& w
         return false;
     }
 
-    const float uvWidth = u2 - u1;
-    const float uvHeight = v2 - v1;
+    float uvWidth = u2 - u1;
+    float uvHeight = v2 - v1;
 
     // Moving x to the right.
     if (x < clip.x)
     {
         const float percent = (clip.x - x) / width;
         const float dx = clip.x - x;
+        const float du = uvWidth * percent;
         x = clip.x;
         width -= dx;
-        u1 += uvWidth * percent;
+        u1 += du;
+        uvWidth -= du;
     }
 
     // Moving y down.
@@ -424,9 +439,11 @@ bool SpriteBatch::clipSprite(const Rectangle& clip, float& x, float& y, float& w
     {
         const float percent = (clip.y - y) / height;
         const float dy = clip.y - y;
+        const float dv = uvHeight * percent;
         y = clip.y;
         height -= dy;
-        v1 += uvHeight * percent;
+        v1 += dv;
+        uvHeight -= dv;
     }
 
     // Moving width to the left.

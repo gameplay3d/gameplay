@@ -1,20 +1,62 @@
 #include "Base.h"
 #include "Game.h"
 #include "Control.h"
+#include "Form.h"
+#include "Theme.h"
+
+#define BOUNDS_X_PERCENTAGE_BIT 1
+#define BOUNDS_Y_PERCENTAGE_BIT 2
+#define BOUNDS_WIDTH_PERCENTAGE_BIT 4
+#define BOUNDS_HEIGHT_PERCENTAGE_BIT 8
 
 namespace gameplay
 {
 
+static std::string toString(float v)
+{
+    std::ostringstream s;
+    s << v;
+    return s.str();
+}
+
+static float parseCoord(const char* s, bool* isPercentage)
+{
+    const char* p;
+    if ((p = strchr(s, '%')) != NULL)
+    {
+        std::string value(s, (std::string::size_type)(p - s));
+        *isPercentage = true;
+        return (float)(atof(value.c_str()) * 0.01);
+    }
+    *isPercentage = false;
+    return (float)atof(s);
+}
+
+static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percentage, bool* v2Percentage)
+{
+    size_t len = strlen(s);
+    const char* s2 = strchr(s, ',');
+    if (s2 == NULL)
+        return false;
+    std::string v1Str(s, (std::string::size_type)(s2 - s));
+    std::string v2Str(s2 + 1);
+    *v1 = parseCoord(v1Str.c_str(), v1Percentage);
+    *v2 = parseCoord(v2Str.c_str(), v2Percentage);
+    return true;
+}
+
 Control::Control()
-    : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(false), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false), _autoWidth(false), _autoHeight(false), _listeners(NULL), _visible(true),
-    _zIndex(-1), _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _parent(NULL), _styleOverridden(false), _skin(NULL), _previousState(NORMAL)
+    : _id(""), _enabled(true), _boundsBits(0), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false),
+    _autoWidth(AUTO_SIZE_NONE), _autoHeight(AUTO_SIZE_NONE), _style(NULL), _listeners(NULL), _visible(true), _zIndex(-1),
+    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
 
 Control::~Control()
 {
+    Form::verifyRemovedControlState(this);
+
     if (_listeners)
     {
         for (std::map<Control::Listener::EventType, std::list<Control::Listener*>*>::const_iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
@@ -25,113 +67,188 @@ Control::~Control()
         SAFE_DELETE(_listeners);
     }
 
-    if (_styleOverridden)
+    if (_style)
     {
-        SAFE_DELETE(_style);
+        // Release the style's theme since we addRef'd it in initialize()
+        _style->getTheme()->release();
+
+        if (_styleOverridden)
+        {
+            SAFE_DELETE(_style);
+        }
     }
 }
 
-void Control::initialize(Theme::Style* style, Properties* properties)
+static Control::AutoSize parseAutoSize(const char* str)
 {
-    GP_ASSERT(properties);
-    _style = style;
+    if (str == NULL)
+        return Control::AUTO_SIZE_NONE;
+    if (strcmp(str, "AUTO_SIZE_STRETCH") == 0 || strcmp(str, "true") == 0) // left for backwards compatibility
+        return Control::AUTO_SIZE_STRETCH;
+    if (strcmp(str, "AUTO_SIZE_FIT") == 0)
+        return Control::AUTO_SIZE_FIT;
+    return Control::AUTO_SIZE_NONE;
+}
 
-    // Properties not defined by the style.
-    _alignment = getAlignment(properties->getString("alignment"));
-    _autoWidth = properties->getBool("autoWidth");
-    _autoHeight = properties->getBool("autoHeight");
-
-    _consumeInputEvents = properties->getBool("consumeInputEvents", false);
-
-    _visible = properties->getBool("visible", true);
-
-    if (properties->exists("zIndex"))
+void Control::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    // Load our theme style
+    if (properties)
     {
-        _zIndex = properties->getInt("zIndex");
+        // The style passed is in our parent control's style.
+        // Attempt to load our own style from our parent style's theme.
+        const char* styleName = properties->getString("style", typeName);
+        if (style)
+        {
+            // The passed in style is our parent control's style : attempt to load our style from it.
+            _style = style->getTheme()->getStyle(styleName);
+        }
+
+        if (!_style)
+        {
+            // Try loading a style from the default theme
+            _style = Theme::getDefault()->getStyle(styleName);
+        }
     }
     else
     {
-        _zIndex = -1;
+        // No properties passed in - the style passed in was explicity for us.
+        _style = style;
     }
 
-    if (properties->exists("focusIndex"))
+    if (!_style)
     {
-        _focusIndex = properties->getInt("focusIndex");
-    }
-    else
-    {
-        _focusIndex = -1;
+        // Search for a style from the default theme that matches this control's name
+        _style = Theme::getDefault()->getStyle(typeName);
+
+        if (!_style)
+        {
+            // No style was found, use an empty style
+            _style = style ? style->getTheme()->getEmptyStyle() : Theme::getDefault()->getEmptyStyle();
+        }
     }
 
-    Vector2 position;
-    Vector2 size;
-    if (properties->exists("position"))
-    {
-        properties->getVector2("position", &position);
-    }
-    else
-    {
-        position.x = properties->getFloat("x");
-        position.y = properties->getFloat("y");
-    }
-        
-    if (properties->exists("size"))
-    {
-        properties->getVector2("size", &size);
-    }
-    else
-    {
-        size.x = properties->getFloat("width");
-        size.y = properties->getFloat("height");
-    }
-    setBounds(Rectangle(position.x, position.y, size.x, size.y));
+    // Increase the reference count of the style's theme while we hold the style
+    _style->getTheme()->addRef();
 
-    const char* id = properties->getId();
-    if (id)
-        _id = id;
-
-    // Potentially override themed properties for all states.
-    overrideThemedProperties(properties, STATE_ALL);
-
-    // Override themed properties on specific states.
-    Properties* innerSpace = properties->getNextNamespace();
-    while (innerSpace != NULL)
+    if (properties)
     {
-        std::string spaceName(innerSpace->getNamespace());
-        std::transform(spaceName.begin(), spaceName.end(), spaceName.begin(), (int(*)(int))toupper);
-        if (spaceName == "STATENORMAL")
-        {
-            overrideThemedProperties(innerSpace, NORMAL);
-        }
-        else if (spaceName == "STATEFOCUS")
-        {
-            overrideThemedProperties(innerSpace, FOCUS);
-        }
-        else if (spaceName == "STATEACTIVE")
-        {
-            overrideThemedProperties(innerSpace, ACTIVE);
-        }
-        else if (spaceName == "STATEDISABLED")
-        {
-            overrideThemedProperties(innerSpace, DISABLED);
-        }
-        else if (spaceName == "STATEHOVER")
-        {
-            overrideThemedProperties(innerSpace, HOVER);
-        }
-        else if (spaceName == "MARGIN")
-        {
-            setMargin(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
-                innerSpace->getFloat("left"), innerSpace->getFloat("right"));
-        }
-        else if (spaceName == "PADDING")
-        {
-            setPadding(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
-                innerSpace->getFloat("left"), innerSpace->getFloat("right"));
-        }
+		// Properties not defined by the style.
+		const char * alignmentString = properties->getString("alignment");
 
-        innerSpace = properties->getNextNamespace();
-    }
+		_isAlignmentSet = alignmentString != NULL;
+		_alignment = getAlignment(alignmentString);
+
+		_autoWidth = parseAutoSize(properties->getString("autoWidth"));
+		_autoHeight = parseAutoSize(properties->getString("autoHeight"));
+
+		_consumeInputEvents = properties->getBool("consumeInputEvents", true);
+
+		_visible = properties->getBool("visible", true);
+
+		if (properties->exists("zIndex"))
+		{
+			_zIndex = properties->getInt("zIndex");
+		}
+		else
+		{
+			_zIndex = -1;
+		}
+
+		if (properties->exists("canFocus"))
+			_canFocus = properties->getBool("canFocus", false);
+
+		if (properties->exists("focusIndex"))
+		{
+			_focusIndex = properties->getInt("focusIndex");
+		}
+		else
+		{
+			_focusIndex = -1;
+		}
+
+		float bounds[4];
+		bool boundsBits[4];
+		if (properties->exists("position"))
+		{
+			parseCoordPair(properties->getString("position", "0,0"), &bounds[0], &bounds[1], &boundsBits[0], &boundsBits[1]);
+		}
+		else
+		{
+			bounds[0] = parseCoord(properties->getString("x", "0"), &boundsBits[0]);
+			bounds[1] = parseCoord(properties->getString("y", "0"), &boundsBits[1]);
+		}
+
+		if (properties->exists("size"))
+		{
+			parseCoordPair(properties->getString("size", "0,0"), &bounds[2], &bounds[3], &boundsBits[2], &boundsBits[3]);
+		}
+		else
+		{
+			bounds[2] = parseCoord(properties->getString("width", "0"), &boundsBits[2]);
+			bounds[3] = parseCoord(properties->getString("height", "0"), &boundsBits[3]);
+		}
+		setX(bounds[0], boundsBits[0]);
+		setY(bounds[1], boundsBits[1]);
+		setWidth(bounds[2], boundsBits[2]);
+		setHeight(bounds[3], boundsBits[3]);
+
+		const char* id = properties->getId();
+		if (id)
+			_id = id;
+
+		if (properties->exists("enabled"))
+		{
+			setEnabled(properties->getBool("enabled"));
+		}
+
+		// Register script listeners for control events
+		if (properties->exists("listener"))
+			addScriptCallback("controlEvent", properties->getString("listener"));
+
+		// Potentially override themed properties for all states.
+		overrideThemedProperties(properties, STATE_ALL);
+
+		// Override themed properties on specific states.
+		Properties* innerSpace = properties->getNextNamespace();
+		while (innerSpace != NULL)
+		{
+			std::string spaceName(innerSpace->getNamespace());
+			std::transform(spaceName.begin(), spaceName.end(), spaceName.begin(), (int(*)(int))toupper);
+			if (spaceName == "STATENORMAL")
+			{
+				overrideThemedProperties(innerSpace, NORMAL);
+			}
+			else if (spaceName == "STATEFOCUS")
+			{
+				overrideThemedProperties(innerSpace, FOCUS);
+			}
+			else if (spaceName == "STATEACTIVE")
+			{
+				overrideThemedProperties(innerSpace, ACTIVE);
+			}
+			else if (spaceName == "STATEDISABLED")
+			{
+				overrideThemedProperties(innerSpace, DISABLED);
+			}
+			else if (spaceName == "STATEHOVER")
+			{
+				overrideThemedProperties(innerSpace, HOVER);
+			}
+			else if (spaceName == "MARGIN")
+			{
+				setMargin(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
+					innerSpace->getFloat("left"), innerSpace->getFloat("right"));
+			}
+			else if (spaceName == "PADDING")
+			{
+				setPadding(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
+					innerSpace->getFloat("left"), innerSpace->getFloat("right"));
+			}
+
+			innerSpace = properties->getNextNamespace();
+		}
+	}
 }
 
 const char* Control::getId() const
@@ -139,61 +256,9 @@ const char* Control::getId() const
     return _id.c_str();
 }
 
-void Control::setPosition(float x, float y)
+void Control::setId(const char* id)
 {
-    if (x != _bounds.x || y != _bounds.y)
-    {
-        _bounds.x = x;
-        _bounds.y = y;
-        _dirty = true;
-    }
-}
-
-void Control::setSize(float width, float height)
-{
-    if (width != _bounds.width || height != _bounds.height)
-    {
-        _bounds.width = width;
-        _bounds.height = height;
-        _dirty = true;
-    }
-}
-
-void Control::setWidth(float width)
-{
-    if (width != _bounds.width)
-    {
-        _bounds.width = width;
-        _dirty = true;
-    }
-}
-
-void Control::setHeight(float height)
-{
-    if (height != _bounds.height)
-    {
-        _bounds.height = height;
-        _dirty = true;
-    }
-}
-
-void Control::setBounds(const Rectangle& bounds)
-{
-    if (bounds != _bounds)
-    {
-        _bounds.set(bounds);
-        _dirty = true;
-    }
-}
-
-const Rectangle& Control::getBounds() const
-{
-    return _bounds;
-}
-
-const Rectangle& Control::getAbsoluteBounds() const
-{
-    return _absoluteBounds;
+	_id = id ? id : "";
 }
 
 float Control::getX() const
@@ -201,9 +266,55 @@ float Control::getX() const
     return _bounds.x;
 }
 
+void Control::setX(float x, bool percentage)
+{
+    if (_relativeBounds.x != x || percentage != ((_boundsBits & BOUNDS_X_PERCENTAGE_BIT) != 0))
+    {
+        _relativeBounds.x = x;
+        if (percentage)
+        {
+            _boundsBits |= BOUNDS_X_PERCENTAGE_BIT;
+        }
+        else
+        {
+            _boundsBits &= ~BOUNDS_X_PERCENTAGE_BIT;
+            _bounds.x = x;
+        }
+        _dirty = true;
+    }
+}
+
+bool Control::isXPercentage() const
+{
+    return (_boundsBits & BOUNDS_X_PERCENTAGE_BIT) != 0;
+}
+
 float Control::getY() const
 {
     return _bounds.y;
+}
+
+void Control::setY(float y, bool percentage)
+{
+    if (_relativeBounds.y != y || percentage != ((_boundsBits & BOUNDS_Y_PERCENTAGE_BIT) != 0))
+    {
+        _relativeBounds.y = y;
+        if (percentage)
+        {
+            _boundsBits |= BOUNDS_Y_PERCENTAGE_BIT;
+        }
+        else
+        {
+            _boundsBits &= ~BOUNDS_Y_PERCENTAGE_BIT;
+            _bounds.y = y;
+        }
+        _dirty = true;
+    }
+}
+
+bool Control::isYPercentage() const
+{
+    return (_boundsBits & BOUNDS_Y_PERCENTAGE_BIT) != 0;
 }
 
 float Control::getWidth() const
@@ -211,9 +322,95 @@ float Control::getWidth() const
     return _bounds.width;
 }
 
+void Control::setWidth(float width, bool percentage)
+{
+    if (_relativeBounds.width != width || percentage != ((_boundsBits & BOUNDS_WIDTH_PERCENTAGE_BIT) != 0))
+    {
+        _relativeBounds.width = width;
+        if (percentage)
+        {
+            _boundsBits |= BOUNDS_WIDTH_PERCENTAGE_BIT;
+        }
+        else
+        {
+            _boundsBits &= ~BOUNDS_WIDTH_PERCENTAGE_BIT;
+            _bounds.width = width;
+        }
+        _dirty = true;
+    }
+}
+
+bool Control::isWidthPercentage() const
+{
+    return (_boundsBits & BOUNDS_WIDTH_PERCENTAGE_BIT) != 0;
+}
+
 float Control::getHeight() const
 {
     return _bounds.height;
+}
+
+void Control::setHeight(float height, bool percentage)
+{
+    if (_relativeBounds.height != height || percentage != ((_boundsBits & BOUNDS_HEIGHT_PERCENTAGE_BIT) != 0))
+    {
+        _relativeBounds.height = height;
+        if (percentage)
+        {
+            _boundsBits |= BOUNDS_HEIGHT_PERCENTAGE_BIT;
+        }
+        else
+        {
+            _boundsBits &= ~BOUNDS_HEIGHT_PERCENTAGE_BIT;
+            _bounds.height = height;
+        }
+        _dirty = true;
+    }
+}
+
+bool Control::isHeightPercentage() const
+{
+    return (_boundsBits & BOUNDS_HEIGHT_PERCENTAGE_BIT) != 0;
+}
+
+void Control::setPosition(float x, float y)
+{
+    setX(x);
+    setY(y);
+}
+
+void Control::setSize(float width, float height)
+{
+    setWidth(width);
+    setHeight(height);
+}
+
+const Rectangle& Control::getBounds() const
+{
+    return _bounds;
+}
+
+void Control::setBounds(const Rectangle& bounds)
+{
+    setX(bounds.x);
+    setY(bounds.y);
+    setWidth(bounds.width);
+    setHeight(bounds.height);
+}
+
+const Rectangle& Control::getAbsoluteBounds() const
+{
+    return _absoluteBounds;
+}
+
+const Rectangle& Control::getClipBounds() const
+{
+    return _clipBounds;
+}
+
+const Rectangle& Control::getClip() const
+{
+    return _viewportClipBounds;
 }
 
 void Control::setAlignment(Alignment alignment)
@@ -228,45 +425,53 @@ Control::Alignment Control::getAlignment() const
     return _alignment;
 }
 
-void Control::setAutoWidth(bool autoWidth)
-{
-    if (_autoWidth != autoWidth)
-    {
-        _autoWidth = autoWidth;
-        _dirty = true;
-    }
-}
-
-bool Control::getAutoWidth() const
+Control::AutoSize Control::getAutoWidth() const
 {
     return _autoWidth;
 }
 
-void Control::setAutoHeight(bool autoHeight)
+void Control::setAutoWidth(bool autoWidth)
 {
-    if (_autoHeight != autoHeight)
+    setAutoWidth(autoWidth ? AUTO_SIZE_STRETCH : AUTO_SIZE_NONE);
+}
+
+void Control::setAutoWidth(AutoSize mode)
+{
+    if (_autoWidth != mode)
     {
-        _autoHeight = autoHeight;
+        _autoWidth = mode;
         _dirty = true;
     }
 }
 
-bool Control::getAutoHeight() const
+Control::AutoSize Control::getAutoHeight() const
 {
     return _autoHeight;
 }
 
-void Control::setVisible(bool visible)
+void Control::setAutoHeight(bool autoHeight)
 {
-    if (visible && !_visible)
+    setAutoHeight(autoHeight ? AUTO_SIZE_STRETCH : AUTO_SIZE_NONE);
+}
+
+void Control::setAutoHeight(AutoSize mode)
+{
+    if (_autoHeight != mode)
     {
-        _visible = true;
+        _autoHeight = mode;
         _dirty = true;
     }
-    else if (!visible && _visible)
+}
+
+void Control::setVisible(bool visible)
+{
+    if (_visible != visible)
     {
-        _visible = false;
+        _visible = visible;
         _dirty = true;
+
+        if (!_visible)
+            Form::controlDisabled(this);
     }
 }
 
@@ -275,9 +480,41 @@ bool Control::isVisible() const
     return _visible;
 }
 
+bool Control::isVisibleInHierarchy() const
+{
+    if (!_visible)
+        return false;
+
+    if (_parent)
+        return _parent->isVisibleInHierarchy();
+
+    return true;
+}
+
+bool Control::canFocus() const
+{
+    return _canFocus;
+}
+
+void Control::setCanFocus(bool acceptsFocus)
+{
+    _canFocus = acceptsFocus;
+}
+
 bool Control::hasFocus() const
 {
-    return (_state == FOCUS || (_state == HOVER && _previousState == FOCUS));
+    return (Form::_focusControl == this);
+}
+
+bool Control::setFocus()
+{
+    if (Form::_focusControl != this && canFocus())
+    {
+        Form::setFocusControl(this);
+        return true;
+    }
+
+    return false;
 }
 
 void Control::setOpacity(float opacity, unsigned char states)
@@ -303,21 +540,30 @@ float Control::getOpacity(State state) const
 
 void Control::setEnabled(bool enabled)
 {
-	if (enabled && _state == Control::DISABLED)
-	{
-		_state = Control::NORMAL;
+    if (_enabled != enabled)
+    {
+        _enabled = enabled;
         _dirty = true;
-	}
-	else if (!enabled && _state != Control::DISABLED)
-	{
-		_state = Control::DISABLED;
-		_dirty = true;
-	}
+
+        if (!_enabled)
+            Form::controlDisabled(this);
+    }
 }
 
 bool Control::isEnabled() const
 {
-    return _state != DISABLED;
+    return _enabled;
+}
+
+bool Control::isEnabledInHierarchy() const
+{
+    if (!_enabled)
+        return false;
+
+    if (_parent)
+        return _parent->isEnabledInHierarchy();
+
+    return true;
 }
 
 void Control::setBorder(float top, float bottom, float left, float right, unsigned char states)
@@ -625,14 +871,9 @@ bool Control::getTextRightToLeft(State state) const
     return overlay->getTextRightToLeft();
 }
 
-const Rectangle& Control::getClipBounds() const
+Theme::Style* Control::getStyle() const
 {
-    return _clipBounds;
-}
-
-const Rectangle& Control::getClip() const
-{
-    return _viewportClipBounds;
+    return _style;
 }
 
 void Control::setStyle(Theme::Style* style)
@@ -645,27 +886,34 @@ void Control::setStyle(Theme::Style* style)
     _style = style;
 }
 
-Theme::Style* Control::getStyle() const
+Theme* Control::getTheme() const
 {
-    return _style;
-}
-
-void Control::setState(State state)
-{
-    if (getOverlay(_state) != getOverlay(state))
-        _dirty = true;
-
-    _state = state;
+    return _style ? _style->getTheme() : NULL;
 }
 
 Control::State Control::getState() const
 {
-    return _state;
+    if (!_enabled)
+        return DISABLED;
+
+    if (Form::_activeControl == this)
+    {
+        if (Form::_activeControlState == ACTIVE)
+            return ACTIVE;
+        if (Form::_focusControl == this)
+            return FOCUS;
+        return Form::_activeControlState;
+    }
+    
+    if (Form::_focusControl == this)
+        return FOCUS;
+
+    return NORMAL;
 }
 
 Theme::Style::OverlayType Control::getOverlayType() const
 {
-    switch (_state)
+    switch (getState())
     {
     case Control::NORMAL:
         return Theme::Style::OVERLAY_NORMAL;
@@ -703,6 +951,11 @@ void Control::setZIndex(int zIndex)
     {
         _zIndex = zIndex;
         _dirty = true;
+
+        if (_parent)
+        {
+			_parent->sortControls();
+        }
     }
 }
 
@@ -791,133 +1044,24 @@ void Control::addSpecificListener(Control::Listener* listener, Control::Listener
 
 bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch (evt)
-    {
-    case Touch::TOUCH_PRESS:
-        // Controls that don't have an ACTIVE state go to the FOCUS state when pressed.
-        // (Other controls, such as buttons and sliders, become ACTIVE when pressed and go to the FOCUS state on release.)
-        // Labels are never any state other than NORMAL.
-        if (_contactIndex == INVALID_CONTACT_INDEX && x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-        {
-            _contactIndex = (int) contactIndex;
-
-            notifyListeners(Control::Listener::PRESS);
-
-            return _consumeInputEvents;
-        }
-        else
-        {
-            // If this control was in focus, it's not any more.
-            _state = NORMAL;
-        }
-        break;
-            
-    case Touch::TOUCH_MOVE:
-        break;
-
-    case Touch::TOUCH_RELEASE:
-        if (_contactIndex == (int)contactIndex)
-        {
-            _contactIndex = INVALID_CONTACT_INDEX;
-
-            // Always trigger Control::Listener::RELEASE
-            notifyListeners(Control::Listener::RELEASE);
-
-            // Only trigger Control::Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
-            if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-            {
-                // Leave this control in the FOCUS state.
-                notifyListeners(Control::Listener::CLICK);
-            }
-
-            return _consumeInputEvents;
-        }
-        break;
-    }
-
-    return false;
+    return false;// _consumeInputEvents;
 }
 
 bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    return false;
+    return false;// _consumeInputEvents;
 }
 
 bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    // By default, mouse events are either interpreted as touch events or ignored.
-    switch (evt)
-    {
-    case Mouse::MOUSE_PRESS_LEFT_BUTTON:
-        return touchEvent(Touch::TOUCH_PRESS, x, y, 0);
-
-    case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
-        return touchEvent(Touch::TOUCH_RELEASE, x, y, 0);
-
-    case Mouse::MOUSE_MOVE:
-        if (_state != ACTIVE)
-        {
-            if (_state != HOVER &&
-                x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-            {
-                _previousState = _state;
-                setState(HOVER);
-                notifyListeners(Control::Listener::ENTER);
-                return _consumeInputEvents;
-            }
-            else if (_state == HOVER && !(x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                        y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height))
-            {
-                setState(_previousState);
-                notifyListeners(Control::Listener::LEAVE);
-                return _consumeInputEvents;
-            }
-        }
-        return touchEvent(Touch::TOUCH_MOVE, x, y, 0);
-
-    default:
-        break;
-    }
-
+    // Return false instead of _consumeInputEvents to allow handling to be 
+    // routed to touchEvent before consuming.
     return false;
 }
 
 bool Control::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
-    // Default behavior for gamepad events.
-    switch (evt)
-    {
-    case Gamepad::BUTTON_EVENT:
-        if (_state == Control::FOCUS)
-        {
-            if (gamepad->isButtonDown(Gamepad::BUTTON_A) ||
-                gamepad->isButtonDown(Gamepad::BUTTON_X))
-            {
-                notifyListeners(Control::Listener::PRESS);
-                return _consumeInputEvents;
-            }
-        }
-        else if (_state == Control::ACTIVE)
-        {
-            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
-                !gamepad->isButtonDown(Gamepad::BUTTON_X))
-            {
-                notifyListeners(Control::Listener::RELEASE);
-                notifyListeners(Control::Listener::CLICK);
-                return _consumeInputEvents;
-            }
-        }
-        break;
-    case Gamepad::JOYSTICK_EVENT:
-        break;
-    case Gamepad::TRIGGER_EVENT:
-        break;
-    }
-
-    return false;
+    return false;// _consumeInputEvents;
 }
 
 void Control::notifyListeners(Control::Listener::EventType eventType)
@@ -926,6 +1070,8 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
     // If the user calls exit() or otherwise releases this control, we
     // need to keep it alive until the method returns.
     addRef();
+
+    controlEvent(eventType);
 
     if (_listeners)
     {
@@ -946,116 +1092,110 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
     release();
 }
 
-void Control::update(const Control* container, const Vector2& offset)
+void Control::controlEvent(Control::Listener::EventType evt)
 {
-    const Rectangle& clip = container->getClip();
-    const Rectangle& absoluteViewport = container->_viewportBounds;
-
-    _clearBounds.set(_absoluteClipBounds);
-
-    // Calculate the clipped bounds.
-    float x = _bounds.x + offset.x;
-    float y = _bounds.y + offset.y;
-    float width = _bounds.width;
-    float height = _bounds.height;
-
-    float clipX2 = clip.x + clip.width;
-    float x2 = clip.x + x + width;
-    if (x2 > clipX2)
-        width -= x2 - clipX2;
-
-    float clipY2 = clip.y + clip.height;
-    float y2 = clip.y + y + height;
-    if (y2 > clipY2)
-        height -= y2 - clipY2;
-
-    if (x < 0)
-    {
-        width += x;
-        x = -x;
-    }
-    else
-    {
-        x = 0;
-    }
-
-    if (y < 0)
-    {
-        height += y;
-        y = -y;
-    }
-    else
-    {
-        y = 0;
-    }
-
-    _clipBounds.set(x, y, width, height);
-
-    // Calculate the absolute bounds.
-    x = _bounds.x + offset.x + absoluteViewport.x;
-    y = _bounds.y + offset.y + absoluteViewport.y;
-    _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
-
-    // Calculate the absolute viewport bounds.
-    // Absolute bounds minus border and padding.
-    const Theme::Border& border = getBorder(_state);
-    const Theme::Padding& padding = getPadding();
-
-    x += border.left + padding.left;
-    y += border.top + padding.top;
-    width = _bounds.width - border.left - padding.left - border.right - padding.right;
-    height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
-
-    _viewportBounds.set(x, y, width, height);
-
-    // Calculate the clip area.
-    // Absolute bounds, minus border and padding,
-    // clipped to the parent container's clip area.
-    clipX2 = clip.x + clip.width;
-    x2 = x + width;
-    if (x2 > clipX2)
-        width = clipX2 - x;
-
-    clipY2 = clip.y + clip.height;
-    y2 = y + height;
-    if (y2 > clipY2)
-        height = clipY2 - y;
-
-    if (x < clip.x)
-    {
-        float dx = clip.x - x;
-        width -= dx;
-        x = clip.x;
-    }
-
-    if (y < clip.y)
-    {
-        float dy = clip.y - y;
-        height -= dy;
-        y = clip.y;
-    }
- 
-    _viewportClipBounds.set(x, y, width, height);
-
-    width += border.left + padding.left + border.right + padding.right;
-    height += border.top + padding.top + border.bottom + padding.bottom;
-    _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top, max(width, 0.0f), max(height, 0.0f));
-    if (_clearBounds.isEmpty())
-    {
-        _clearBounds.set(_absoluteClipBounds);
-    }
-
-    // Cache themed attributes for performance.
-    _skin = getSkin(_state);
-
-    // Current opacity should be multiplied by that of the parent container.
-    _opacity = getOpacity(_state) * container->_opacity;
 }
 
-void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
+void Control::update(const Control* container, const Vector2& offset)
 {
-    if (!spriteBatch || !_skin || _bounds.width <= 0 || _bounds.height <= 0)
-        return;
+    Game* game = Game::getInstance();
+
+    const Rectangle parentAbsoluteBounds = container ? container->_viewportBounds : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
+    const Rectangle parentAbsoluteClip = container ? container->_viewportClipBounds : parentAbsoluteBounds;
+
+    const Theme::Border& border = getBorder(getState());
+    const Theme::Padding& padding = getPadding();
+
+    // Compute content are padding values
+    float lpadding = border.left + padding.left;
+    float rpadding = border.right + padding.right;
+    float tpadding = border.top + padding.top;
+    float bpadding = border.bottom + padding.bottom;
+    float hpadding = lpadding + rpadding;
+    float vpadding = tpadding + bpadding;
+
+    // Calculate local unclipped bounds.
+    _bounds.set(_relativeBounds);
+    if (isXPercentage())
+        _bounds.x *= parentAbsoluteBounds.width;
+    if (isYPercentage())
+        _bounds.y *= parentAbsoluteBounds.height;
+    if (_autoWidth == AUTO_SIZE_STRETCH)
+        _bounds.width = parentAbsoluteBounds.width;
+    else if (isWidthPercentage())
+        _bounds.width *= parentAbsoluteBounds.width;
+    if (_autoHeight == AUTO_SIZE_STRETCH)
+        _bounds.height = parentAbsoluteBounds.height;
+    else if (isHeightPercentage())
+        _bounds.height *= parentAbsoluteBounds.height;
+
+    // Calculate absolute unclipped bounds
+    _absoluteBounds.set(
+        parentAbsoluteBounds.x + offset.x + _bounds.x,
+        parentAbsoluteBounds.y + offset.y + _bounds.y,
+        _bounds.width,
+        _bounds.height);
+
+    // Calculate absolute clipped bounds
+    Rectangle::intersect(_absoluteBounds, parentAbsoluteClip, &_absoluteClipBounds);
+
+    // Calculate the local clipped bounds
+    _clipBounds.set(
+        max(_absoluteClipBounds.x - _absoluteBounds.x, 0.0f),
+        max(_absoluteClipBounds.y - _absoluteBounds.y, 0.0f),
+        _absoluteClipBounds.width,
+        _absoluteClipBounds.height
+        );
+
+    // Calculate the absolute unclipped viewport bounds (content area, which does not include border and padding)
+    _viewportBounds.set(
+        _absoluteBounds.x + lpadding,
+        _absoluteBounds.y + tpadding,
+        _absoluteBounds.width - hpadding,
+        _absoluteBounds.height - vpadding);
+
+    // Calculate the absolute clipped viewport bounds
+    Rectangle::intersect(_viewportBounds, parentAbsoluteClip, &_viewportClipBounds);
+
+    // Cache themed attributes for performance.
+    _skin = getSkin(getState());
+
+    // Current opacity should be multiplied by that of the parent container.
+    _opacity = getOpacity(getState());
+    if (container)
+        _opacity *= container->_opacity;
+}
+
+void Control::startBatch(Form* form, SpriteBatch* batch)
+{
+    form->startBatch(batch);
+}
+
+void Control::finishBatch(Form* form, SpriteBatch* batch)
+{
+    form->finishBatch(batch);
+}
+
+unsigned int Control::draw(Form* form, const Rectangle& clip)
+{
+    if (!_visible)
+        return 0;
+
+    unsigned int drawCalls = drawBorder(form, clip);
+    drawCalls += drawImages(form, clip);
+    drawCalls += drawText(form, clip);
+    return drawCalls;
+}
+
+unsigned int Control::drawBorder(Form* form, const Rectangle& clip)
+{
+    if (!form || !_skin || _absoluteBounds.width <= 0 || _absoluteBounds.height <= 0)
+        return 0;
+
+    unsigned int drawCalls = 0;
+
+    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+    startBatch(form, batch);
 
     // Get the border and background images for this control's current state.
     const Theme::UVs& topLeft = _skin->getUVs(Theme::Skin::TOP_LEFT);
@@ -1069,78 +1209,88 @@ void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
     const Theme::UVs& bottomRight = _skin->getUVs(Theme::Skin::BOTTOM_RIGHT);
 
     // Calculate screen-space positions.
-    const Theme::Border& border = getBorder(_state);
+    const Theme::Border& border = getBorder(getState());
     const Theme::Padding& padding = getPadding();
     Vector4 skinColor = _skin->getColor();
     skinColor.w *= _opacity;
 
-    float midWidth = _bounds.width - border.left - border.right;
-    float midHeight = _bounds.height - border.top - border.bottom;
+    float midWidth = _absoluteBounds.width - border.left - border.right;
+    float midHeight = _absoluteBounds.height - border.top - border.bottom;
     float midX = _absoluteBounds.x + border.left;
     float midY = _absoluteBounds.y + border.top;
-    float rightX = _absoluteBounds.x + _bounds.width - border.right;
-    float bottomY = _absoluteBounds.y + _bounds.height - border.bottom;
+    float rightX = _absoluteBounds.x + _absoluteBounds.width - border.right;
+    float bottomY = _absoluteBounds.y + _absoluteBounds.height - border.bottom;
 
     // Draw themed border sprites.
     if (!border.left && !border.right && !border.top && !border.bottom)
     {
         // No border, just draw the image.
-        spriteBatch->draw(_absoluteBounds.x, _absoluteBounds.y, _bounds.width, _bounds.height, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        batch->draw(_absoluteBounds.x, _absoluteBounds.y, _absoluteBounds.width, _absoluteBounds.height, center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        ++drawCalls;
     }
     else
     {
         if (border.left && border.top)
-            spriteBatch->draw(_absoluteBounds.x, _absoluteBounds.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x, _absoluteBounds.y, border.left, border.top, topLeft.u1, topLeft.v1, topLeft.u2, topLeft.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.top)
-            spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y, midWidth, border.top, top.u1, top.v1, top.u2, top.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.right && border.top)
-            spriteBatch->draw(rightX, _absoluteBounds.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
+        {
+            batch->draw(rightX, _absoluteBounds.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.left)
-            spriteBatch->draw(_absoluteBounds.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
+            ++drawCalls;
+        }
 
         // Always draw the background.
-        spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _bounds.width - border.left - border.right, _bounds.height - border.top - border.bottom,
+        batch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _absoluteBounds.width - border.left - border.right, _absoluteBounds.height - border.top - border.bottom,
             center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        ++drawCalls;
 
         if (border.right)
-            spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
+        {
+            batch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.bottom && border.left)
-            spriteBatch->draw(_absoluteBounds.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, skinColor, clip);
+        {
+            batch->draw(_absoluteBounds.x, bottomY, border.left, border.bottom, bottomLeft.u1, bottomLeft.v1, bottomLeft.u2, bottomLeft.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.bottom)
-            spriteBatch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, skinColor, clip);
+        {
+            batch->draw(midX, bottomY, midWidth, border.bottom, bottom.u1, bottom.v1, bottom.u2, bottom.v2, skinColor, clip);
+            ++drawCalls;
+        }
         if (border.bottom && border.right)
-            spriteBatch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, skinColor, clip);
-    }
-}
-
-void Control::drawImages(SpriteBatch* spriteBatch, const Rectangle& position)
-{
-}
-
-void Control::drawText(const Rectangle& position)
-{
-}
-
-void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
-{
-    if (needsClear)
-    {
-        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height, _clearBounds.width, _clearBounds.height) );
-        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
-        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
+        {
+            batch->draw(rightX, bottomY, border.right, border.bottom, bottomRight.u1, bottomRight.v1, bottomRight.u2, bottomRight.v2, skinColor, clip);
+            ++drawCalls;
+        }
     }
 
-    if (!_visible)
-        return;
+    finishBatch(form, batch);
 
-    spriteBatch->start();
-    drawBorder(spriteBatch, clip);
-    drawImages(spriteBatch, clip);
-    spriteBatch->finish();
+    return drawCalls;
+}
 
-    drawText(clip);
-    _dirty = false;
+unsigned int Control::drawImages(Form* form, const Rectangle& position)
+{
+    return 0;
+}
+
+unsigned int Control::drawText(Form* form, const Rectangle& position)
+{
+    return 0;
 }
 
 bool Control::isDirty()
@@ -1186,19 +1336,58 @@ Control::State Control::getState(const char* state)
 
 Theme::ThemeImage* Control::getImage(const char* id, State state)
 {
-    Theme::Style::Overlay* overlay = getOverlay(state);
-    GP_ASSERT(overlay);
-    
-    Theme::ImageList* imageList = overlay->getImageList();
-    if (!imageList)
-        return NULL;
+    Theme::ThemeImage* image = NULL;
 
-    return imageList->getImage(id);
+    Theme::Style::Overlay* overlay = getOverlay(state);
+    if (overlay)
+    {
+        Theme::ImageList* imageList = overlay->getImageList();
+        if (imageList)
+            image = imageList->getImage(id);
+    }
+
+    return image ? image : _style->getTheme()->_emptyImage;
 }
 
 const char* Control::getType() const
 {
     return "control";
+}
+
+Control* Control::getParent() const
+{
+    return _parent;
+}
+
+bool Control::isChild(Control* control) const
+{
+    if (!control)
+        return false;
+
+    Control* parent = _parent;
+    while (parent)
+    {
+        if (parent == control)
+            return true;
+        parent = parent->_parent;
+    }
+
+    return false;
+}
+
+Form* Control::getTopLevelForm() const
+{
+    if (_parent)
+        return _parent->getTopLevelForm();
+
+    if (isContainer())
+    {
+        Container* container = static_cast<Container*>(const_cast<Control*>(this));
+        if (container->isForm())
+            return static_cast<Form*>(container);
+    }
+
+    return NULL;
 }
 
 // Implementation of AnimationHandler
@@ -1226,7 +1415,7 @@ void Control::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 {
     GP_ASSERT(value);
 
-    switch(propertyId)
+    switch (propertyId)
     {
     case ANIMATE_POSITION:
         value->setFloat(0, _bounds.x);
@@ -1263,38 +1452,30 @@ void Control::setAnimationPropertyValue(int propertyId, AnimationValue* value, f
     switch(propertyId)
     {
     case ANIMATE_POSITION:
-        _bounds.x = Curve::lerp(blendWeight, _bounds.x, value->getFloat(0));
-        _bounds.y = Curve::lerp(blendWeight, _bounds.y, value->getFloat(1));
-        _dirty = true;
+        setX(Curve::lerp(blendWeight, _bounds.x, value->getFloat(0)), isXPercentage());
+        setY(Curve::lerp(blendWeight, _bounds.y, value->getFloat(1)), isYPercentage());
         break;
     case ANIMATE_POSITION_X:
-        _bounds.x = Curve::lerp(blendWeight, _bounds.x, value->getFloat(0));
-        _dirty = true;
+        setX(Curve::lerp(blendWeight, _bounds.x, value->getFloat(0)), isXPercentage());
         break;
     case ANIMATE_POSITION_Y:
-        _bounds.y = Curve::lerp(blendWeight, _bounds.y, value->getFloat(0));
-        _dirty = true;
+        setY(Curve::lerp(blendWeight, _bounds.y, value->getFloat(0)), isYPercentage());
         break;
     case ANIMATE_SIZE:
-        _bounds.width = Curve::lerp(blendWeight, _bounds.width, value->getFloat(0));
-        _bounds.height = Curve::lerp(blendWeight, _bounds.height, value->getFloat(1));
-        _dirty = true;
+        setWidth(Curve::lerp(blendWeight, _bounds.width, value->getFloat(0)), isWidthPercentage());
+        setHeight(Curve::lerp(blendWeight, _bounds.height, value->getFloat(1)), isHeightPercentage());
         break;
     case ANIMATE_SIZE_WIDTH:
-        _bounds.width = Curve::lerp(blendWeight, _bounds.width, value->getFloat(0));
-        _dirty = true;
+        setWidth(Curve::lerp(blendWeight, _bounds.width, value->getFloat(0)), isWidthPercentage());
         break;
     case ANIMATE_SIZE_HEIGHT:
-        _bounds.height = Curve::lerp(blendWeight, _bounds.height, value->getFloat(0));
-        _dirty = true;
+        setHeight(Curve::lerp(blendWeight, _bounds.height, value->getFloat(0)), isHeightPercentage());
         break;
     case ANIMATE_OPACITY:
         setOpacity(Curve::lerp(blendWeight, _opacity, value->getFloat(0)));
-        _dirty = true;
         break;
     }
 }
-    
 
 Theme::Style::Overlay** Control::getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays)
 {
@@ -1334,33 +1515,39 @@ Theme::Style::Overlay* Control::getOverlay(State state) const
 {
     GP_ASSERT(_style);
 
-    switch(state)
+    Theme::Style::Overlay* overlay = NULL;
+
+    switch (state)
     {
     case Control::NORMAL:
         return _style->getOverlay(Theme::Style::OVERLAY_NORMAL);
+
     case Control::FOCUS:
-        return _style->getOverlay(Theme::Style::OVERLAY_FOCUS);
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_FOCUS);
+        break;
+
     case Control::ACTIVE:
-    {
-        Theme::Style::Overlay* activeOverlay = _style->getOverlay(Theme::Style::OVERLAY_ACTIVE);
-        if (activeOverlay)
-            return activeOverlay;
-        else
-            return getOverlay(_previousState);
-    }
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_ACTIVE);
+        if (!overlay && hasFocus())
+            overlay = _style->getOverlay(Theme::Style::OVERLAY_FOCUS);
+        break;
+
     case Control::DISABLED:
-        return _style->getOverlay(Theme::Style::OVERLAY_DISABLED);
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_DISABLED);
+        break;
+
     case Control::HOVER:
-    {
-        Theme::Style::Overlay* hoverOverlay = _style->getOverlay(Theme::Style::OVERLAY_HOVER);
-        if (hoverOverlay)
-            return hoverOverlay;
-        else
-            return getOverlay(_previousState);
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_HOVER);
+        if (!overlay && hasFocus())
+            overlay = _style->getOverlay(Theme::Style::OVERLAY_FOCUS);
+        break;
     }
-    default:
-        return NULL;
-    }
+
+    // Fall back to normal overlay if more specific state overlay not found
+    if (!overlay)
+        overlay = _style->getOverlay(Theme::Style::OVERLAY_NORMAL);
+
+    return overlay;
 }
 
 void Control::overrideStyle()

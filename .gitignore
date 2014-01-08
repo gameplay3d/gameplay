@@ -31,6 +31,7 @@ Thumbs.db
 /gameplay-docs
 /api/html
 /gameplay-tests
+gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 
 /gameplay/Debug
 /gameplay/DebugMem
@@ -56,12 +57,14 @@ Thumbs.db
 /tools/gameplay-encoder/Release
 /tools/gameplay-encoder/gameplay-encoder.xcodeproj/xcuserdata
 
-/tools/gameplay-luagen/Release
-/tools/gameplay-luagen/Debug
-/tools/gameplay-luagen/gameplay-luagen.xcodeproj/xcuserdata
-/tools/gameplay-luagen/doxygen_entrydb_680.tmp
-/tools/gameplay-luagen/doxygen_objdb_680.tmp
-/tools/gameplay-luagen/xml
+/tools/luagen/Release
+/tools/luagen/Debug
+/tools/luagen/gameplay-luagen.xcodeproj/xcuserdata
+/tools/luagen/doxygen_entrydb_680.tmp
+/tools/luagen/doxygen_objdb_680.tmp
+/tools/luagen/xml
+/tools/luagen/gameplay-luagen.xcodeproj/project.xcworkspace/
+
 
 /samples/browser/Debug
 /samples/browser/DebugMem
@@ -74,6 +77,7 @@ Thumbs.db
 /samples/browser/Device-Profile
 /samples/browser/Device-Release
 /samples/browser/res/shaders
+/samples/browser/res/ui
 /samples/browser/res/logo_powered_white.png
 /samples/browser/android/src
 /samples/browser/android/assets
@@ -101,6 +105,7 @@ Thumbs.db
 /samples/character/Device-Release-QC
 /samples/character/game.config
 /samples/character/res/shaders
+/samples/character/res/ui
 /samples/character/res/logo_powered_white.png
 /samples/character/android/project.properties
 /samples/character/android/proguard.cfg
@@ -115,31 +120,6 @@ Thumbs.db
 /samples/character/res/gamepad.xcf
 /samples/character/sample-character.xcodeproj/xcuserdata
 
-/samples/longboard/Debug
-/samples/longboard/DebugMem
-/samples/longboard/Release
-/samples/longboard/Simulator
-/samples/longboard/Simulator-Coverage
-/samples/longboard/Simulator-Profile
-/samples/longboard/Device-Debug
-/samples/longboard/Device-Coverage
-/samples/longboard/Device-Profile
-/samples/longboard/Device-Release
-/samples/longboard/res/shaders
-/samples/longboard/res/logo_powered_white.png
-/samples/longboard/NUL
-/samples/longboard/android/NUL
-/samples/longboard/android/src
-/samples/longboard/android/assets
-/samples/longboard/android/bin
-/samples/longboard/android/gen
-/samples/longboard/android/libs
-/samples/longboard/android/obj
-/samples/longboard/android/proguard.cfg
-/samples/longboard/android/project.properties
-/samples/longboard/android/local.properties
-/samples/longboard/sample-longboard.xcodeproj/xcuserdata
-
 /samples/lua/Debug
 /samples/lua/DebugMem
 /samples/lua/Release
@@ -151,6 +131,7 @@ Thumbs.db
 /samples/lua/Device-Profile
 /samples/lua/Device-Release
 /samples/lua/res/shaders
+/samples/lua/res/ui
 /samples/lua/res/logo_powered_white.png
 /samples/lua/android/src
 /samples/lua/android/assets
@@ -175,6 +156,7 @@ Thumbs.db
 /samples/mesh/Device-Profile
 /samples/mesh/Device-Release
 /samples/mesh/res/shaders
+/samples/mesh/res/ui
 /samples/mesh/res/logo_powered_white.png
 /samples/mesh/android/src
 /samples/mesh/android/assets
@@ -199,6 +181,7 @@ Thumbs.db
 /samples/particles/Device-Profile
 /samples/particles/Device-Release
 /samples/particles/res/shaders
+/samples/particles/res/ui
 /samples/particles/res/logo_powered_white.png
 /samples/particles/Device-Debug
 /samples/particles/Debug
@@ -228,6 +211,7 @@ Thumbs.db
 /samples/racer/Device-Release-QC
 /samples/racer/game.config
 /samples/racer/res/shaders
+/samples/racer/res/ui
 /samples/racer/res/logo_powered_white.png
 /samples/racer/android/project.properties
 /samples/racer/android/proguard.cfg
@@ -255,6 +239,7 @@ Thumbs.db
 /samples/spaceship/Device-Profile
 /samples/spaceship/Device-Release
 /samples/spaceship/res/shaders
+/samples/spaceship/res/ui
 /samples/spaceship/res/logo_powered_white.png
 /samples/spaceship/android/NUL
 /samples/spaceship/android/project.properties
@@ -268,3 +253,8 @@ Thumbs.db
 /samples/spaceship/android/local.properties
 /samples/spaceship/sample-spaceship.xcodeproj/xcuserdata
 
+/tools/encoder/Debug
+/tools/encoder/Release
+
+/tools/luagen/Debug
+/tools/luagen/Release

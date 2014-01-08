@@ -22,8 +22,8 @@ material sky
     {
         pass
         {
-            vertexShader = res/shaders/textured-unlit.vert
-            fragmentShader = res/shaders/textured-unlit.frag
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
         }
     }
 }

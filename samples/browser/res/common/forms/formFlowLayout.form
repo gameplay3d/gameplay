@@ -1,15 +1,13 @@
 form flowLayout
 {
-    theme = res/common/default.theme
     layout = LAYOUT_FLOW
-    style = basicContainer
     size = 600, 600
     scroll = SCROLL_BOTH
 	consumeInputEvents = true
 
     label label1
     {
-        style = basic
+        style = Button
         size = 200, 200
         text = Flow Layout
     }

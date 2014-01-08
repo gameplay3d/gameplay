@@ -14,12 +14,19 @@
 #define RS_DEPTH_WRITE 16
 #define RS_DEPTH_FUNC 32
 #define RS_CULL_FACE_SIDE 64
+#define RS_STENCIL_TEST 128
+#define RS_STENCIL_WRITE 256
+#define RS_STENCIL_FUNC 512
+#define RS_STENCIL_OP 1024
+#define RS_FRONT_FACE 2048
+
+#define RS_ALL_ONES 0xFFFFFFFF
 
 namespace gameplay
 {
 
 RenderState::StateBlock* RenderState::StateBlock::_defaultState = NULL;
-std::vector<RenderState::ResolveAutoBindingCallback> RenderState::_customAutoBindingResolvers;
+std::vector<RenderState::AutoBindingResolver*> RenderState::_customAutoBindingResolvers;
 
 RenderState::RenderState()
     : _nodeBinding(NULL), _state(NULL), _parent(NULL)
@@ -50,11 +57,6 @@ void RenderState::finalize()
     SAFE_RELEASE(StateBlock::_defaultState);
 }
 
-void RenderState::registerAutoBindingResolver(ResolveAutoBindingCallback callback)
-{
-    _customAutoBindingResolvers.push_back(callback);
-}
-
 MaterialParameter* RenderState::getParameter(const char* name) const
 {
     GP_ASSERT(name);
@@ -78,7 +80,23 @@ MaterialParameter* RenderState::getParameter(const char* name) const
     return param;
 }
 
-void RenderState::clearParameter(const char* name)
+unsigned int RenderState::getParameterCount() const
+{
+    return _parameters.size();
+}
+
+MaterialParameter* RenderState::getParameterByIndex(unsigned int index)
+{
+    return _parameters[index];
+}
+
+void RenderState::addParameter(MaterialParameter* param)
+{
+    _parameters.push_back(param);
+    param->addRef();
+}
+
+void RenderState::removeParameter(const char* name)
 {
     for (size_t i = 0, count = _parameters.size(); i < count; ++i)
     {
@@ -135,12 +153,6 @@ const char* autoBindingToString(RenderState::AutoBinding autoBinding)
 
     case RenderState::SCENE_AMBIENT_COLOR:
         return "SCENE_AMBIENT_COLOR";
-
-    case RenderState::SCENE_LIGHT_COLOR:
-        return "SCENE_LIGHT_COLOR";
-
-    case RenderState::SCENE_LIGHT_DIRECTION:
-        return "SCENE_LIGHT_DIRECTION";
 
     default:
         return "";
@@ -231,16 +243,13 @@ void RenderState::applyAutoBinding(const char* uniformName, const char* autoBind
     bool bound = false;
 
     // First attempt to resolve the binding using custom registered resolvers.
-    if (_customAutoBindingResolvers.size() > 0)
+    for (size_t i = 0, count = _customAutoBindingResolvers.size(); i < count; ++i)
     {
-        for (size_t i = 0, count = _customAutoBindingResolvers.size(); i < count; ++i)
+        if (_customAutoBindingResolvers[i]->resolveAutoBinding(autoBinding, _nodeBinding, param))
         {
-            if (_customAutoBindingResolvers[i](autoBinding, _nodeBinding, param))
-            {
-                // Handled by custom auto binding resolver
-                bound = true;
-                break;
-            }
+            // Handled by custom auto binding resolver
+            bound = true;
+            break;
         }
     }
 
@@ -297,18 +306,10 @@ void RenderState::applyAutoBinding(const char* uniformName, const char* autoBind
         {
             param->bindValue(this, &RenderState::autoBindingGetAmbientColor);
         }
-        else if (strcmp(autoBinding, "SCENE_LIGHT_COLOR") == 0)
-        {
-            param->bindValue(this, &RenderState::autoBindingGetLightColor);
-        }
-        else if (strcmp(autoBinding, "SCENE_LIGHT_DIRECTION") == 0)
-        {
-            param->bindValue(this, &RenderState::autoBindingGetLightDirection);
-        }
         else
         {
             bound = false;
-            GP_WARN("Unsupported auto binding type (%d).", autoBinding);
+            GP_WARN("Unsupported auto binding type (%s).", autoBinding);
         }
     }
 
@@ -390,19 +391,6 @@ const Vector3& RenderState::autoBindingGetAmbientColor() const
     return scene ? scene->getAmbientColor() : Vector3::zero();
 }
 
-const Vector3& RenderState::autoBindingGetLightColor() const
-{
-    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
-    return scene ? scene->getLightColor() : Vector3::one();
-}
-
-const Vector3& RenderState::autoBindingGetLightDirection() const
-{
-    static Vector3 down(0, -1, 0);
-    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
-    return scene ? scene->getLightDirection() : down;
-}
-
 void RenderState::bind(Pass* pass)
 {
     GP_ASSERT(pass);
@@ -458,7 +446,7 @@ RenderState* RenderState::getTopmost(RenderState* below)
         }
         rs = rs->_parent;
     }
-    
+
     return NULL;
 }
 
@@ -501,6 +489,9 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 RenderState::StateBlock::StateBlock()
     : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(true), _depthFunction(RenderState::DEPTH_LESS),
       _blendEnabled(false), _blendSrc(RenderState::BLEND_ONE), _blendDst(RenderState::BLEND_ZERO),
+      _cullFaceSide(CULL_FACE_SIDE_BACK), _frontFace(FRONT_FACE_CCW), _stencilTestEnabled(false), _stencilWrite(RS_ALL_ONES),
+	  _stencilFunction(RenderState::STENCIL_ALWAYS), _stencilFunctionRef(0), _stencilFunctionMask(RS_ALL_ONES),
+	  _stencilOpSfail(RenderState::STENCIL_OP_KEEP), _stencilOpDpfail(RenderState::STENCIL_OP_KEEP), _stencilOpDppass(RenderState::STENCIL_OP_KEEP),
       _bits(0L)
 {
 }
@@ -563,11 +554,16 @@ void RenderState::StateBlock::bindNoRestore()
         GL_ASSERT( glCullFace((GLenum)_cullFaceSide) );
         _defaultState->_cullFaceSide = _cullFaceSide;
     }
+    if ((_bits & RS_FRONT_FACE) && (_frontFace != _defaultState->_frontFace))
+    {
+        GL_ASSERT( glFrontFace((GLenum)_frontFace) );
+        _defaultState->_frontFace = _frontFace;
+    }
     if ((_bits & RS_DEPTH_TEST) && (_depthTestEnabled != _defaultState->_depthTestEnabled))
     {
-        if (_depthTestEnabled) 
+        if (_depthTestEnabled)
             GL_ASSERT( glEnable(GL_DEPTH_TEST) );
-        else 
+        else
             GL_ASSERT( glDisable(GL_DEPTH_TEST) );
         _defaultState->_depthTestEnabled = _depthTestEnabled;
     }
@@ -580,6 +576,37 @@ void RenderState::StateBlock::bindNoRestore()
     {
         GL_ASSERT( glDepthFunc((GLenum)_depthFunction) );
         _defaultState->_depthFunction = _depthFunction;
+    }
+	if ((_bits & RS_STENCIL_TEST) && (_stencilTestEnabled != _defaultState->_stencilTestEnabled))
+    {
+        if (_stencilTestEnabled)
+			GL_ASSERT( glEnable(GL_STENCIL_TEST) );
+        else
+            GL_ASSERT( glDisable(GL_STENCIL_TEST) );
+        _defaultState->_stencilTestEnabled = _stencilTestEnabled;
+    }
+	if ((_bits & RS_STENCIL_WRITE) && (_stencilWrite != _defaultState->_stencilWrite))
+    {
+		GL_ASSERT( glStencilMask(_stencilWrite) );
+        _defaultState->_stencilWrite = _stencilWrite;
+    }
+	if ((_bits & RS_STENCIL_FUNC) && (_stencilFunction != _defaultState->_stencilFunction ||
+										_stencilFunctionRef != _defaultState->_stencilFunctionRef ||
+										_stencilFunctionMask != _defaultState->_stencilFunctionMask))
+    {
+		GL_ASSERT( glStencilFunc((GLenum)_stencilFunction, _stencilFunctionRef, _stencilFunctionMask) );
+        _defaultState->_stencilFunction = _stencilFunction;
+		_defaultState->_stencilFunctionRef = _stencilFunctionRef;
+		_defaultState->_stencilFunctionMask = _stencilFunctionMask;
+    }
+	if ((_bits & RS_STENCIL_OP) && (_stencilOpSfail != _defaultState->_stencilOpSfail ||
+									_stencilOpDpfail != _defaultState->_stencilOpDpfail ||
+									_stencilOpDppass != _defaultState->_stencilOpDppass))
+    {
+		GL_ASSERT( glStencilOp((GLenum)_stencilOpSfail, (GLenum)_stencilOpDpfail, (GLenum)_stencilOpDppass) );
+        _defaultState->_stencilOpSfail = _stencilOpSfail;
+		_defaultState->_stencilOpDpfail = _stencilOpDpfail;
+		_defaultState->_stencilOpDppass = _stencilOpDppass;
     }
 
     _defaultState->_bits |= _bits;
@@ -621,6 +648,12 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
         _defaultState->_bits &= ~RS_CULL_FACE_SIDE;
         _defaultState->_cullFaceSide = RenderState::CULL_FACE_SIDE_BACK;
     }
+    if (!(stateOverrideBits & RS_FRONT_FACE) && (_defaultState->_bits & RS_FRONT_FACE))
+    {
+        GL_ASSERT( glFrontFace((GLenum)GL_CCW) );
+        _defaultState->_bits &= ~RS_FRONT_FACE;
+        _defaultState->_frontFace = RenderState::FRONT_FACE_CCW;
+    }
     if (!(stateOverrideBits & RS_DEPTH_TEST) && (_defaultState->_bits & RS_DEPTH_TEST))
     {
         GL_ASSERT( glDisable(GL_DEPTH_TEST) );
@@ -638,6 +671,34 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
         GL_ASSERT( glDepthFunc((GLenum)GL_LESS) );
         _defaultState->_bits &= ~RS_DEPTH_FUNC;
         _defaultState->_depthFunction = RenderState::DEPTH_LESS;
+    }
+	if (!(stateOverrideBits & RS_STENCIL_TEST) && (_defaultState->_bits & RS_STENCIL_TEST))
+    {
+        GL_ASSERT( glDisable(GL_STENCIL_TEST) );
+        _defaultState->_bits &= ~RS_STENCIL_TEST;
+        _defaultState->_stencilTestEnabled = false;
+    }
+	if (!(stateOverrideBits & RS_STENCIL_WRITE) && (_defaultState->_bits & RS_STENCIL_WRITE))
+    {
+		GL_ASSERT( glStencilMask(RS_ALL_ONES) );
+        _defaultState->_bits &= ~RS_STENCIL_WRITE;
+		_defaultState->_stencilWrite = RS_ALL_ONES;
+    }
+	if (!(stateOverrideBits & RS_STENCIL_FUNC) && (_defaultState->_bits & RS_STENCIL_FUNC))
+    {
+		GL_ASSERT( glStencilFunc((GLenum)RenderState::STENCIL_ALWAYS, 0, RS_ALL_ONES) );
+        _defaultState->_bits &= ~RS_STENCIL_FUNC;
+        _defaultState->_stencilFunction = RenderState::STENCIL_ALWAYS;
+		_defaultState->_stencilFunctionRef = 0;
+		_defaultState->_stencilFunctionMask = RS_ALL_ONES;
+    }
+	if (!(stateOverrideBits & RS_STENCIL_OP) && (_defaultState->_bits & RS_STENCIL_OP))
+    {
+		GL_ASSERT( glStencilOp((GLenum)RenderState::STENCIL_OP_KEEP, (GLenum)RenderState::STENCIL_OP_KEEP, (GLenum)RenderState::STENCIL_OP_KEEP) );
+        _defaultState->_bits &= ~RS_STENCIL_OP;
+        _defaultState->_stencilOpSfail = RenderState::STENCIL_OP_KEEP;
+		_defaultState->_stencilOpDpfail = RenderState::STENCIL_OP_KEEP;
+		_defaultState->_stencilOpDppass = RenderState::STENCIL_OP_KEEP;
     }
 }
 
@@ -668,6 +729,15 @@ void RenderState::StateBlock::cloneInto(StateBlock* state)
     state->_blendSrc = _blendSrc;
     state->_blendDst = _blendDst;
     state->_cullFaceSide = _cullFaceSide;
+    state->_frontFace = _frontFace;
+	state->_stencilTestEnabled = _stencilTestEnabled;
+	state->_stencilWrite = _stencilWrite;
+	state->_stencilFunction = _stencilFunction;
+	state->_stencilFunctionRef = _stencilFunctionRef;
+	state->_stencilFunctionMask = _stencilFunctionMask;
+	state->_stencilOpSfail = _stencilOpSfail;
+	state->_stencilOpDpfail = _stencilOpDpfail;
+	state->_stencilOpDppass = _stencilOpDppass;
     state->_bits = _bits;
 }
 
@@ -685,6 +755,34 @@ static bool parseBoolean(const char* value)
     }
 
     return false;
+}
+
+static int parseInt(const char* value)
+{
+	GP_ASSERT(value);
+
+	int rValue;
+    int scanned = sscanf(value, "%d", &rValue);
+    if (scanned != 1)
+    {
+        GP_ERROR("Error attempting to parse int '%s'. (Will default to 0 if errors are treated as warnings)", value);
+        return 0;
+    }
+    return rValue;
+}
+
+static unsigned int parseUInt(const char* value)
+{
+	GP_ASSERT(value);
+
+	unsigned int rValue;
+    int scanned = sscanf(value, "%u", &rValue);
+    if (scanned != 1)
+    {
+        GP_ERROR("Error attempting to parse unsigned int '%s'. (Will default to 0 if errors are treated as warnings)", value);
+        return 0;
+    }
+    return rValue;
 }
 
 static RenderState::Blend parseBlend(const char* value)
@@ -772,8 +870,86 @@ static RenderState::CullFaceSide parseCullFaceSide(const char* value)
         return RenderState::CULL_FACE_SIDE_FRONT_AND_BACK;
     else
     {
-        GP_ERROR("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings)", value);
+        GP_ERROR("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings.", value);
         return RenderState::CULL_FACE_SIDE_BACK;
+    }
+}
+
+static RenderState::FrontFace parseFrontFace(const char* value)
+{
+    GP_ASSERT(value);
+
+    // Convert string to uppercase for comparison
+    std::string upper(value);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    if (upper == "CCW")
+        return RenderState::FRONT_FACE_CCW;
+    else if (upper == "CW")
+        return RenderState::FRONT_FACE_CW;
+    else
+    {
+        GP_ERROR("Unsupported front face side value (%s). Will default to CCW if errors are treated as warnings.", value);
+        return RenderState::FRONT_FACE_CCW;
+    }
+}
+
+static RenderState::StencilFunction parseStencilFunc(const char* value)
+{
+    GP_ASSERT(value);
+
+    // Convert string to uppercase for comparison
+    std::string upper(value);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    if (upper == "NEVER")
+        return RenderState::STENCIL_NEVER;
+    else if (upper == "LESS")
+        return RenderState::STENCIL_LESS;
+    else if (upper == "EQUAL")
+        return RenderState::STENCIL_EQUAL;
+    else if (upper == "LEQUAL")
+        return RenderState::STENCIL_LEQUAL;
+    else if (upper == "GREATER")
+        return RenderState::STENCIL_GREATER;
+    else if (upper == "NOTEQUAL")
+        return RenderState::STENCIL_NOTEQUAL;
+    else if (upper == "GEQUAL")
+        return RenderState::STENCIL_GEQUAL;
+    else if (upper == "ALWAYS")
+        return RenderState::STENCIL_ALWAYS;
+    else
+    {
+        GP_ERROR("Unsupported stencil function value (%s). Will default to STENCIL_ALWAYS if errors are treated as warnings)", value);
+        return RenderState::STENCIL_ALWAYS;
+    }
+}
+
+static RenderState::StencilOperation parseStencilOp(const char* value)
+{
+    GP_ASSERT(value);
+
+    // Convert string to uppercase for comparison
+    std::string upper(value);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    if (upper == "KEEP")
+        return RenderState::STENCIL_OP_KEEP;
+    else if (upper == "ZERO")
+        return RenderState::STENCIL_OP_ZERO;
+	else if (upper == "REPLACE")
+        return RenderState::STENCIL_OP_REPLACE;
+	else if (upper == "INCR")
+        return RenderState::STENCIL_OP_INCR;
+	else if (upper == "DECR")
+        return RenderState::STENCIL_OP_DECR;
+	else if (upper == "INVERT")
+        return RenderState::STENCIL_OP_INVERT;
+	else if (upper == "INCR_WRAP")
+        return RenderState::STENCIL_OP_INCR_WRAP;
+	else if (upper == "DECR_WRAP")
+        return RenderState::STENCIL_OP_DECR_WRAP;
+    else
+    {
+        GP_ERROR("Unsupported stencil operation value (%s). Will default to STENCIL_OP_KEEP if errors are treated as warnings)", value);
+		return RenderState::STENCIL_OP_KEEP;
     }
 }
 
@@ -801,6 +977,10 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     {
         setCullFaceSide(parseCullFaceSide(value));
     }
+    else if (strcmp(name, "frontFace") == 0)
+    {
+        setFrontFace(parseFrontFace(value));
+    }
     else if (strcmp(name, "depthTest") == 0)
     {
         setDepthTest(parseBoolean(value));
@@ -812,6 +992,38 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     else if (strcmp(name, "depthFunc") == 0)
     {
         setDepthFunction(parseDepthFunc(value));
+    }
+	else if (strcmp(name, "stencilTest") == 0)
+    {
+		setStencilTest(parseBoolean(value));
+    }
+	else if (strcmp(name, "stencilWrite") == 0)
+    {
+		setStencilWrite(parseUInt(value));
+    }
+	else if (strcmp(name, "stencilFunc") == 0)
+    {
+		setStencilFunction(parseStencilFunc(value), _stencilFunctionRef, _stencilFunctionMask);
+    }
+	else if (strcmp(name, "stencilFuncRef") == 0)
+    {
+		setStencilFunction(_stencilFunction, parseInt(value), _stencilFunctionMask);
+    }
+	else if (strcmp(name, "stencilFuncMask") == 0)
+    {
+		setStencilFunction(_stencilFunction, _stencilFunctionRef, parseUInt(value));
+    }
+	else if (strcmp(name, "stencilOpSfail") == 0)
+    {
+		setStencilOperation(parseStencilOp(value), _stencilOpDpfail, _stencilOpDppass);
+    }
+	else if (strcmp(name, "stencilOpDpfail") == 0)
+    {
+		setStencilOperation(_stencilOpSfail, parseStencilOp(value), _stencilOpDppass);
+    }
+	else if (strcmp(name, "stencilOpDppass") == 0)
+    {
+		setStencilOperation(_stencilOpSfail, _stencilOpDpfail, parseStencilOp(value));
     }
     else
     {
@@ -887,6 +1099,20 @@ void RenderState::StateBlock::setCullFaceSide(CullFaceSide side)
     }
 }
 
+void RenderState::StateBlock::setFrontFace(FrontFace winding)
+{
+    _frontFace = winding;
+    if (_frontFace == FRONT_FACE_CCW)
+    {
+        // Default front face
+        _bits &= ~RS_FRONT_FACE;
+    }
+    else
+    {
+        _bits |= RS_FRONT_FACE;
+    }
+}
+
 void RenderState::StateBlock::setDepthTest(bool enabled)
 {
     _depthTestEnabled = enabled;
@@ -925,6 +1151,77 @@ void RenderState::StateBlock::setDepthFunction(DepthFunction func)
     {
         _bits |= RS_DEPTH_FUNC;
     }
+}
+
+void RenderState::StateBlock::setStencilTest(bool enabled)
+{
+	_stencilTestEnabled = enabled;
+	if (!enabled)
+	{
+		_bits &= ~RS_STENCIL_TEST;
+	}
+	else
+	{
+		_bits |= RS_STENCIL_TEST;
+	}
+}
+
+void RenderState::StateBlock::setStencilWrite(unsigned int mask)
+{
+	_stencilWrite = mask;
+	if (mask == RS_ALL_ONES)
+	{
+		// Default stencil write
+		_bits &= ~RS_STENCIL_WRITE;
+	}
+	else
+	{
+		_bits |= RS_STENCIL_WRITE;
+	}
+}
+
+void RenderState::StateBlock::setStencilFunction(StencilFunction func, int ref, unsigned int mask)
+{
+	_stencilFunction = func;
+	_stencilFunctionRef = ref;
+	_stencilFunctionMask = mask;
+	if (func == STENCIL_ALWAYS && ref == 0 && mask == RS_ALL_ONES)
+	{
+		// Default stencil function
+		_bits &= ~RS_STENCIL_FUNC;
+	}
+	else
+	{
+		_bits |= RS_STENCIL_FUNC;
+	}
+}
+
+void RenderState::StateBlock::setStencilOperation(StencilOperation sfail, StencilOperation dpfail, StencilOperation dppass)
+{
+	_stencilOpSfail = sfail;
+	_stencilOpDpfail = dpfail;
+	_stencilOpDppass = dppass;
+	if (sfail == STENCIL_OP_KEEP && dpfail == STENCIL_OP_KEEP && dppass == STENCIL_OP_KEEP)
+	{
+		// Default stencil operation
+		_bits &= ~RS_STENCIL_OP;
+	}
+	else
+	{
+		_bits |= RS_STENCIL_OP;
+	}
+}
+
+RenderState::AutoBindingResolver::AutoBindingResolver()
+{
+    _customAutoBindingResolvers.push_back(this);
+}
+
+RenderState::AutoBindingResolver::~AutoBindingResolver()
+{
+    std::vector<RenderState::AutoBindingResolver*>::iterator itr = std::find(_customAutoBindingResolvers.begin(), _customAutoBindingResolvers.end(), this);
+    if (itr != _customAutoBindingResolvers.end())
+        _customAutoBindingResolvers.erase(itr);
 }
 
 }

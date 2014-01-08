@@ -3,7 +3,6 @@
 
 #include "Base.h"
 #include "Game.h"
-//#include "Gamepad.h"
 #include "Control.h"
 
 namespace gameplay
@@ -156,7 +155,7 @@ void registerConstantString(const std::string& name, const std::string& value, c
  * @script{ignore}
  */
 void registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg* statics,
-    const std::vector<std::string>& scopePath);
+                   const std::vector<std::string>& scopePath);
 
 /**
  * Register a function with Lua.
@@ -900,6 +899,31 @@ private:
      * @param y The y-coordinate of the tap.
      */
     void gestureTapEvent(int x, int y);
+
+	/**
+	 * Gesture callback on Gesture::LONG_TAP events.
+	 *
+	 * @param x The x-coordinate of the long tap.
+	 * @param y The y-coordinate of the long tap.
+	 * @param duration The duration of the long tap in ms.
+	 */
+	void gestureLongTapEvent(int x, int y, float duration);
+
+	/**
+	 * Gesture callback on Gesture::DRAG events.
+	 *
+	 * @param x The x-coordinate of the start of the drag event.
+	 * @param y The y-coordinate of the start of the drag event.
+	 */
+	void gestureDragEvent(int x, int y);
+
+	/**
+	 * Gesture callback on Gesture::DROP events.
+	 *
+	 * @param x The x-coordinate of the drop event.
+	 * @param y The y-coordinate of the drop event.
+	 */
+	void gestureDropEvent(int x, int y);
 
     /**
      * Script gamepad callback on gamepad events.

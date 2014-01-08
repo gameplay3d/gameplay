@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 /**
- * Base class for game objects that require lifecycle management.
+ * Defines the base class for game objects that require lifecycle management.
  *
  * This class provides reference counting support for game objects that
  * contain system resources or data that is normally long lived and
@@ -66,8 +66,8 @@ private:
 
     unsigned int _refCount;
 
-    // Memory leak diagnostic data (only included when GAMEPLAY_MEM_LEAK_DETECTION is defined)
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+    // Memory leak diagnostic data (only included when GP_USE_MEM_LEAK_DETECTION is defined)
+#ifdef GP_USE_MEM_LEAK_DETECTION
     friend class Game;
     static void printLeaks();
     void* __record;

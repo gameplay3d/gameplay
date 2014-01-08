@@ -15,6 +15,11 @@ class PhysicsConstraint;
 
 /**
  * Defines a class for physics rigid bodies.
+ *
+ * A rigid body can receive forces and torque to make your objects react to other collision
+ * objects around it.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsRigidBody : public PhysicsCollisionObject, public Transform::Listener
 {
@@ -396,8 +401,10 @@ private:
      *      a model attached to it prior to creating a rigid body for it.
      * @param shape The rigid body shape construction information.
      * @param parameters The rigid body construction parameters.
+     * @param group Group identifier
+     * @param mask Bitmask field for filtering collisions with this object.
      */
-    PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters);
+    PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Definition& shape, const Parameters& parameters, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Destructor.

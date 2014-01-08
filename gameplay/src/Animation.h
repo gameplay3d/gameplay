@@ -19,6 +19,8 @@ class AnimationClip;
  * Every Animation has the default clip which will run from begin-end time.
  * You can create additional clips to run only parts of an animation and control
  * various runtime characteristics, such as repeat count, etc.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Animation
  */
 class Animation : public Ref
 {
@@ -227,7 +229,7 @@ private:
 
     AnimationController* _controller;       // The AnimationController that this Animation will run on.
     std::string _id;                        // The Animation's ID.
-    unsigned long _duration;              // the length of the animation (in milliseconds).
+    unsigned long _duration;                // the length of the animation (in milliseconds).
     std::vector<Channel*> _channels;        // The channels within this Animation.
     AnimationClip* _defaultClip;            // The Animation's default clip.
     std::vector<AnimationClip*>* _clips;    // All the clips created from this Animation.

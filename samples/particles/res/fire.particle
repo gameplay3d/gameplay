@@ -2,38 +2,48 @@ particle fire
 {
     sprite
     {
-		path = res/fire.png
+        path = fire.png
         width = 256
         height = 256
-	    blending = ADDITIVE
+        blending = ADDITIVE
         animated = false
-		looped = false
+        looped = false
         frameCount = 3
-	    frameRandomOffset = 3
+        frameRandomOffset = 3
         frameDuration = 0
     }
 
     particleCountMax = 5000
     emissionRate = 300
     ellipsoid = true
+    orbitPosition = true
+    orbitVelocity = true
+    orbitAcceleration = false
     sizeStartMin = 1.5
     sizeStartMax = 2
     sizeEndMin = 0.5
-    sizeEndMax = 1.0
+    sizeEndMax = 1
     energyMin = 750
     energyMax = 1000
     colorStart = 1, 0.2, 0, 1
     colorStartVar = 0.25, 0, 0, 0
     colorEnd = 0, 0, 0, 0
+    colorEndVar = 0, 0, 0, 0
     position = 0, 0, 0
     positionVar = 1, 1, 1
-    velocity = 0.0, 10, 0.0
+    velocity = 0, 10, 0
     velocityVar = 4, 6, 4
-    acceleration = 0.0, 2, 0.0
+    acceleration = 0, 2, 0
     accelerationVar = 3, 0.5, 3
     rotationPerParticleSpeedMin = -1.5
     rotationPerParticleSpeedMax = 1.5
-    orbitPosition = true
-    orbitVelocity = true
-    orbitAcceleration = false
+
+    editor
+    {
+        cameraTranslation = 0.22, 2.7, 0
+        cameraZoom = 0, 0, 13.3
+        cameraRotation = 0, 0, 0, 0
+        sizeMax = 5
+        energyMax = 1500
+    }
 }

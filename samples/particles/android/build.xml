@@ -67,6 +67,7 @@
         <copy file="../res/explosion.png" tofile="assets/res/explosion.png"/>
         <copy file="../res/fire.particle" tofile="assets/res/fire.particle"/>
         <copy file="../res/fire.png" tofile="assets/res/fire.png"/>
+        <copy file="../res/grid.material" tofile="assets/res/grid.material"/>
         <copy file="../res/smoke.particle" tofile="assets/res/smoke.particle"/>
         <copy file="../res/smoke.png" tofile="assets/res/smoke.png"/>
         <copy todir="assets/res/shaders">

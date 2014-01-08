@@ -6,7 +6,7 @@ namespace gameplay
 {
 
 /**
- * Keyboard key event and key definitions.
+ * Defines a keyboard key event and key definitions.
  */
 class Keyboard
 {
@@ -14,7 +14,7 @@ class Keyboard
 
 public:
 
-   /**
+    /**
      * The keyboard event.
      */
     enum KeyEvent

@@ -40,9 +40,9 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Light.h"
-#include "Scene.h"
 #include "Node.h"
 #include "Joint.h"
+#include "Scene.h"
 #include "Font.h"
 #include "SpriteBatch.h"
 #include "ParticleEmitter.h"
@@ -52,6 +52,8 @@
 #include "ScreenDisplayer.h"
 #include "HeightField.h"
 #include "Terrain.h"
+#include "TerrainPatch.h"
+
 
 // Audio
 #include "AudioController.h"
@@ -88,9 +90,10 @@
 #include "AIState.h"
 #include "AIStateMachine.h"
 
-// UI
+// Forms UI
 #include "Theme.h"
 #include "Control.h"
+#include "ControlFactory.h"
 #include "Container.h"
 #include "Form.h"
 #include "Label.h"

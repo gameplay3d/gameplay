@@ -73,7 +73,7 @@ private:
     /**
      * Constructor.
      */
-    Pass(const char* id, Technique* technique, Effect* effect);
+    Pass(const char* id, Technique* technique);
 
     /**
      * Hidden copy constructor.
@@ -88,7 +88,7 @@ private:
     /**
      * Creates a new pass for the given shaders.
      */
-    static Pass* create(const char* id, Technique* technique, const char* vshPath, const char* fshPath, const char* defines);
+    bool initialize(const char* vshPath, const char* fshPath, const char* defines);
 
     /**
      * Hidden copy assignment operator.

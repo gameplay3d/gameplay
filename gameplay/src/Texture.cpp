@@ -39,6 +39,11 @@
 #define ATC_RGBA_INTERPOLATED_ALPHA_AMD 0x87EE
 #endif
 
+// ETC1 (OES_compressed_ETC1_RGB8_texture) : All OpenGL ES chipsets
+#ifndef ETC1_RGB8
+#define ETC1_RGB8 0x8D64
+#endif
+
 namespace gameplay
 {
 
@@ -155,13 +160,19 @@ Texture* Texture::create(Image* image, bool generateMipmaps)
     }
 }
 
-Texture* Texture::create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps)
+Texture* Texture::create(Format format, unsigned int width, unsigned int height, const unsigned char* data, bool generateMipmaps)
 {
     // Create and load the texture.
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
     GL_ASSERT( glPixelStorei(GL_UNPACK_ALIGNMENT, 1) );
+#ifndef OPENGL_ES
+    // glGenerateMipmap is new in OpenGL 3.0. For OpenGL 2.0 we must fallback to use glTexParameteri 
+    // with GL_GENERATE_MIPMAP prior to actual texture creation (glTexImage2D)
+    if ( generateMipmaps && glGenerateMipmap == NULL )
+        GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE) );
+#endif
     GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
 
     // Set initial minification filter based on whether or not mipmaping was enabled.
@@ -618,6 +629,10 @@ Texture* Texture::createCompressedDDS(const char* path)
             format = internalFormat = ATC_RGBA_INTERPOLATED_ALPHA_AMD;
             bytesPerBlock = 16;
             break;
+        case ('E'|('T'<<8)|('C'<<16)|('1'<<24)):
+            format = internalFormat = ETC1_RGB8;
+            bytesPerBlock = 8;
+            break;
         default:
             GP_ERROR("Unsupported compressed texture format (%d) for DDS file '%s'.", header.ddspf.dwFourCC, path);
             SAFE_DELETE_ARRAY(mipLevels);
@@ -839,7 +854,8 @@ void Texture::generateMipmaps()
     {
         GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
         GL_ASSERT( glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST) );
-        GL_ASSERT( glGenerateMipmap(GL_TEXTURE_2D) );
+        if( glGenerateMipmap != NULL )
+            GL_ASSERT( glGenerateMipmap(GL_TEXTURE_2D) );
 
         _mipmapped = true;
     }

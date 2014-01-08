@@ -110,7 +110,7 @@ Curve::~Curve()
 }
 
 Curve::Point::Point()
-    : time(0.0f), value(NULL), inValue(NULL), outValue(NULL)
+    : time(0.0f), value(NULL), inValue(NULL), outValue(NULL), type(LINEAR)
 {
 }
 

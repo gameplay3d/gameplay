@@ -21,12 +21,17 @@ namespace gameplay
 class ScriptController;
 
 /**
- * Defines the basic game initialization, logic and platform delegates.
+ * Defines the base class your game will extend for game initialization, logic and platform delegates.
+ *
+ * This represents a running cross-platform game application and provides an abstraction
+ * to most typical platform functionality and events.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Game_Config
  */
 class Game
 {
     friend class Platform;
-	friend class ShutdownListener;
+    friend class ShutdownListener;
 
 public:
     
@@ -264,11 +269,6 @@ public:
      * @return The audio listener for this game.
      */
     AudioListener* getAudioListener();
-
-    /**
-     * Menu callback on menu events for platforms with special menu keys or special platform gestures.
-     */
-    virtual void menuEvent();
     
     /**
      * Shows or hides the virtual keyboard (if supported).
@@ -435,12 +435,37 @@ public:
     virtual void gesturePinchEvent(int x, int y, float scale);
 
     /**
+     * Gesture callback on Gesture::LONG_TAP events.
+     *
+     * @param x The x-coordinate of the long tap.
+     * @param y The y-coordinate of the long tap.
+     * @param duration The duration of the long tap in ms.
+     */
+    virtual void gestureLongTapEvent(int x, int y, float duration);
+
+    /**
      * Gesture callback on Gesture::TAP events.
      *
      * @param x The x-coordinate of the tap.
      * @param y The y-coordinate of the tap.
      */
     virtual void gestureTapEvent(int x, int y);
+
+    /**
+     * Gesture callback on Gesture::DRAG events.
+     *
+     * @param x The x-coordinate of the start of the drag event.
+     * @param y The y-coordinate of the start of the drag event.
+     */
+    virtual void gestureDragEvent(int x, int y);
+
+    /**
+     * Gesture callback on Gesture::DROP events.
+     *
+     * @param x The x-coordinate of the drop event.
+     * @param y The y-coordinate of the drop event.
+     */
+    virtual void gestureDropEvent(int x, int y);
 
     /**
      * Gamepad callback on gamepad events.  Override to receive Gamepad::CONNECTED_EVENT 
@@ -476,18 +501,18 @@ public:
     inline Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
 
     /**
-	 * Sets whether multi-sampling is to be enabled/disabled. Default is disabled.
-	 *
-	 * @param enabled true sets multi-sampling to be enabled, false to be disabled.
-	 */
-	inline void setMultiSampling(bool enabled);
+     * Sets whether multi-sampling is to be enabled/disabled. Default is disabled.
+     *
+     * @param enabled true sets multi-sampling to be enabled, false to be disabled.
+     */
+    inline void setMultiSampling(bool enabled);
 
-	/*
-	 * Is multi-sampling enabled.
-	 *
-	 * @return true if multi-sampling is enabled.
-	 */
-	inline bool isMultiSampling() const;
+    /**
+     * Is multi-sampling enabled.
+     *
+     * @return true if multi-sampling is enabled.
+     */
+    inline bool isMultiSampling() const;
 
     /**
      * Sets multi-touch is to be enabled/disabled. Default is disabled.
@@ -528,7 +553,7 @@ public:
     inline void getAccelerometerValues(float* pitch, float* roll);
 
     /**
-     * Gets raw sensor values, if equipped, allowing a distinction between device acceleration
+     * Gets sensor values (raw), if equipped, allowing a distinction between device acceleration
      * and rotation rate. Returns zeros on platforms with no corresponding support. See also
      * hasAccelerometer() and getAccelerometerValues().
      *
@@ -539,7 +564,7 @@ public:
      * @param gyroY The y-coordinate of the raw gyroscope data.
      * @param gyroZ The z-coordinate of the raw gyroscope data.
      */
-    inline void getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
+    inline void getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
 
     /**
      * Gets the command line arguments.
@@ -665,10 +690,10 @@ private:
         std::string function;
     };
 
-	struct ShutdownListener : public TimeListener
-	{
-		void timeEvent(long timeDiff, void* cookie);
-	};
+    struct ShutdownListener : public TimeListener
+    {
+        void timeEvent(long timeDiff, void* cookie);
+    };
 
     /**
      * TimeEvent represents the event that is sent to TimeListeners as a result of calling Game::schedule().

@@ -6,7 +6,7 @@ namespace gameplay
 {
 
 MaterialParameter::MaterialParameter(const char* name) :
-    _type(MaterialParameter::NONE), _count(1), _dynamic(false), _name(name ? name : ""), _uniform(NULL)
+_type(MaterialParameter::NONE), _count(1), _dynamic(false), _name(name ? name : ""), _uniform(NULL), _loggerDirtyBits(0)
 {
     clearValue();
 }
@@ -458,8 +458,12 @@ void MaterialParameter::bind(Effect* effect)
 
         if (!_uniform)
         {
-            // This parameter was not found in the specified effect, so do nothing.
-            GP_WARN("Warning: Material parameter '%s' not found in effect '%s'.", _name.c_str(), effect->getId());
+            if ((_loggerDirtyBits & UNIFORM_NOT_FOUND) == 0)
+            {
+                // This parameter was not found in the specified effect, so do nothing.
+                GP_WARN("Material parameter for uniform '%s' not found in effect: '%s'.", _name.c_str(), effect->getId());
+                _loggerDirtyBits |= UNIFORM_NOT_FOUND;
+            }
             return;
         }
     }
@@ -497,12 +501,18 @@ void MaterialParameter::bind(Effect* effect)
         effect->setValue(_uniform, _value.samplerArrayValue, _count);
         break;
     case MaterialParameter::METHOD:
-        GP_ASSERT(_value.method);
-        _value.method->setValue(effect);
+        if (_value.method)
+            _value.method->setValue(effect);
         break;
     default:
-        GP_ERROR("Unsupported material parameter type (%d).", _type);
-        break;
+        {
+             if ((_loggerDirtyBits & PARAMETER_VALUE_NOT_SET) == 0)
+             {
+                 GP_WARN("Material parameter value not set for: '%s' in effect: '%s'.", _name.c_str(), effect->getId());
+                 _loggerDirtyBits |= PARAMETER_VALUE_NOT_SET;
+             }
+            break;
+        }
     }
 }
 
@@ -592,7 +602,7 @@ void MaterialParameter::bindValue(Node* node, const char* binding)
     }
     else
     {
-        GP_ERROR("Unsupported material parameter binding '%s'.", binding);
+        GP_WARN("Unsupported material parameter binding '%s'.", binding);
     }
 }
 
@@ -623,7 +633,6 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
                 case VECTOR4:
                     return 4 * _count;
                 default:
-                    GP_ERROR("Unsupported material parameter type (%d).", _type);
                     return 0;
             }
         }
@@ -679,7 +688,6 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                     // Unsupported material parameter types for animation.
                     break;
                 default:
-                    GP_ERROR("Unsupported material parameter type (%d).", _type);
                     break;
             }
         }
@@ -729,7 +737,6 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
                     // Unsupported material parameter types for animation.
                     break;
                 default:
-                    GP_ERROR("Unsupported material parameter type (%d).", _type);
                     break;
             }
         }

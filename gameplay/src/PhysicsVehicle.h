@@ -16,44 +16,8 @@ class PhysicsVehicleWheel;
  * In addition to its own properties defined below, a vehicle has available
  * to it all of the properties of a rigid body such as shape, mass, friction,
  * etc which correspond to the vehicle body:
-
- @verbatim
-    collisionObject <vehicleID>
-    {
-        type           = VEHICLE
-
-        shape          = BOX        // collision shape for vehicle body
-        mass           = <float>    // mass of vehicle body
-        friction       = <float>    // friction of vehicle body
-        restitution    = <float>    // restitution of vehicle body
-        linearDamping  = <float>    // linear damping of vehicle body
-        angularDamping = <float>    // angular damping of vehicle body
-
-        // Vehicle steering, braking, and powertrain
-        steeringGain   = <float>    // steering at full deflection
-        brakingForce   = <float>    // braking force at full braking
-        drivingForce   = <float>    // driving force at full throttle
-
-        // Steering gain reduction with speed (optional)
-        steerdownSpeed = <float>    // steering gain fades to this point
-        steerdownGain  = <float>    // gain value at that point (less than 1)
-
-        // Brake force reduction at high speeds (optional)
-        brakedownStart = <float>    // braking fades above this speed
-        brakedownFull  = <float>    // braking is fully faded at this speed
-
-        // Driving force reduction at high speeds (optional)
-        drivedownStart = <float>    // driving force fades above this speed
-        drivedownFull  = <float>    // driving force is fully faded at this speed
-
-        // Driving force boost at low speeds (optional)
-        boostSpeed     = <float>    // Boost fades to 1 at this point
-        boostGain      = <float>    // Boost at zero speed (greater than 1)
-
-        // Aerodynamic downforce effect (optional)
-        downforce      = <float>    // proportional control of downforce
-    }
- @endverbatim
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsVehicle : public PhysicsCollisionObject
 {

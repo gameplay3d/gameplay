@@ -11,6 +11,7 @@ int lua_MeshBatch_draw(lua_State* state);
 int lua_MeshBatch_finish(lua_State* state);
 int lua_MeshBatch_getCapacity(lua_State* state);
 int lua_MeshBatch_getMaterial(lua_State* state);
+int lua_MeshBatch_isStarted(lua_State* state);
 int lua_MeshBatch_setCapacity(lua_State* state);
 int lua_MeshBatch_start(lua_State* state);
 int lua_MeshBatch_static_create(lua_State* state);

@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 /**
- * Provides a basic logging system for the game.
+ * Defines a class providing a basic logging system for a game.
  *
  * By default, this class logs messages using the gameplay::print function, which
  * is implemented in a platform dependent manner and typically prints to stderr

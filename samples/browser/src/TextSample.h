@@ -29,7 +29,7 @@ private:
 
     Form* _form;
     RenderState::StateBlock* _stateBlock;
-    float _scale;
+    unsigned int _size;
     bool _wrap;
     bool _ignoreClip;
     bool _useViewport;

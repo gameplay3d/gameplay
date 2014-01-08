@@ -25,15 +25,13 @@ protected:
 
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
-    void keyEvent(Keyboard::KeyEvent keyEvent, int key);
-
     void controlEvent(Control* control, EventType evt);
 
 private:
     
     void formChanged();
     
-    void createSampleForm(Theme* theme);
+    void createSampleForm();
     
     Scene* _scene;
     Node* _formNode;

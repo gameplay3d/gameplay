@@ -25,7 +25,7 @@ Node* addQuadModelAndNode(Scene* scene, float x, float y, float width, float hei
 
 Material* setTextureUnlitMaterial(Model* model, const char* texturePath, bool mipmap = true)
 {
-    Material* material = model->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag");
+    Material* material = model->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag");
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
 
     // Load the texture from file.
@@ -49,7 +49,7 @@ TextureSample::TextureSample()
 void TextureSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Create an empty scene.
     _scene = Scene::create();
@@ -113,7 +113,7 @@ void TextureSample::initialize()
     // Mipmapping Off
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/box-diffuse.png", false);
+        setTextureUnlitMaterial(node->getModel(), "res/png/logo.png", false);
         node->setId("mipmap off");
         node->setTranslation(-25.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
@@ -122,7 +122,7 @@ void TextureSample::initialize()
     // Mipmapping On
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/box-diffuse.png");
+        setTextureUnlitMaterial(node->getModel(), "res/png/logo.png");
         node->setId("mipmap on");
         node->setTranslation(-5.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);

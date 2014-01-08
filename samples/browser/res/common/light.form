@@ -1,11 +1,11 @@
 form formLightSelect
 {
     theme = res/common/default.theme
-    layout = LAYOUT_HORIZONTAL
+    layout = LAYOUT_ABSOLUTE
     style = noBorder
-    alignment = ALIGN_TOP_HCENTER
-    autoWidth = true
-    autoHeight = true
+    alignment = ALIGN_TOP_LEFT
+    autoWidth = AUTO_SIZE_FIT
+    autoHeight = AUTO_SIZE_FIT
 
 	container lightingType
     {
@@ -117,8 +117,8 @@ form formLightSelect
 			orientation = HORIZONTAL
             textAlignment = ALIGN_LEFT
 			min = 1
-			max = 500
-			value = 1
+			max = 256
+			value = 64
 			text = Specular
 		}
 		checkbox specularCheckBox

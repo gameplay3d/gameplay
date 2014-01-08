@@ -8,7 +8,9 @@ namespace gameplay
 {
 
 /**
- * Used for displaying screens (i.e. splash or level loading screens).
+ * Defines a helper class for displaying images on screen for a duration of time.
+ *
+ * Ex. A splash or level loading screens.
  */
 class ScreenDisplayer
 {

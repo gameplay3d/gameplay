@@ -213,8 +213,8 @@ theme mainMenu
         {
             skin = underliner
             textColor = #ffffffff
-            font = res/common/arial18.gpb
-            fontSize = 25
+            font = res/ui/arial.gpb
+            fontSize = 16
             textAlignment = ALIGN_BOTTOM_HCENTER
         }
     }
@@ -234,9 +234,9 @@ theme mainMenu
             skin = mainNormal
             imageList = normalImages
 
-            font = res/common/arial18.gpb
+            font = res/ui/arial.gpb
             textColor = #ffffffff
-            fontSize = 18
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 
@@ -289,8 +289,8 @@ theme mainMenu
 
         stateNormal
         {
-            font = res/common/arial18.gpb
-            fontSize = 20
+            font = res/ui/arial.gpb
+            fontSize = 16
         }
 
         stateActive
@@ -312,9 +312,9 @@ theme mainMenu
         stateNormal
         {
             imageList = normalImages
-            font = res/common/arial18.gpb
+            font = res/ui/arial.gpb
             textColor = #ffffffff
-            fontSize = 14
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 		
@@ -334,15 +334,15 @@ theme mainMenu
     {
         stateNormal
         {
-            font = res/common/arial18.gpb
-            fontSize = 20
+            font = res/ui/arial.gpb
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
-            font = res/common/arial18.gpb
-            fontSize = 20
+            font = res/ui/arial.gpb
+            fontSize = 16
             textAlignment = ALIGN_VCENTER_LEFT
         }
     }
@@ -365,8 +365,8 @@ theme mainMenu
         stateNormal
         {
             textColor = #ffffffff
-            font = res/common/arial18.gpb
-            fontSize = 26
+            font = res/ui/arial.gpb
+            fontSize = 24
             textAlignment = ALIGN_BOTTOM_HCENTER
         }
 
@@ -374,5 +374,41 @@ theme mainMenu
         {
             textColor = #C3D9BFff
         }
+    }
+
+    style Form : basicContainer
+    {
+    }
+
+    style Container
+    {
+    }
+
+    style Label : iconNoBorder
+    {
+    }
+
+    style Button : buttonStyle
+    {
+    }
+
+    style CheckBox : iconNoBorder
+    {
+    }
+
+    style RadioButton : iconNoBorder
+    {
+    }
+
+    style TextBox : topLeftAlignedEntry
+    {
+    }
+
+    style Slider : topLeftNoBorder
+    {
+    }
+
+    style Image
+    {
     }
 }

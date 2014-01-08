@@ -22,6 +22,7 @@ void luaRegister_Camera()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"addListener", lua_Camera_addListener},
         {"addRef", lua_Camera_addRef},
         {"getAspectRatio", lua_Camera_getAspectRatio},
         {"getCameraType", lua_Camera_getCameraType},
@@ -41,6 +42,7 @@ void luaRegister_Camera()
         {"pickRay", lua_Camera_pickRay},
         {"project", lua_Camera_project},
         {"release", lua_Camera_release},
+        {"removeListener", lua_Camera_removeListener},
         {"resetProjectionMatrix", lua_Camera_resetProjectionMatrix},
         {"setAspectRatio", lua_Camera_setAspectRatio},
         {"setFarPlane", lua_Camera_setFarPlane},
@@ -102,6 +104,48 @@ int lua_Camera__gc(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Camera_addListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Camera::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<Camera::Listener>(2, "CameraListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Camera::Listener'.");
+                    lua_error(state);
+                }
+
+                Camera* instance = getInstance(state);
+                instance->addListener(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Camera_addListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -902,6 +946,48 @@ int lua_Camera_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Camera_removeListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Camera::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<Camera::Listener>(2, "CameraListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Camera::Listener'.");
+                    lua_error(state);
+                }
+
+                Camera* instance = getInstance(state);
+                instance->removeListener(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Camera_removeListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
