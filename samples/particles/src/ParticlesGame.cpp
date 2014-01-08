@@ -893,6 +893,17 @@ bool ParticlesGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDel
             return true;
         }
         break;
+
+    case Mouse::MOUSE_WHEEL:
+        if (wheelDelta != 0)
+        {
+            Vector3 v = _scene->getActiveCamera()->getNode()->getForwardVector();
+            v.normalize();
+            v.scale((float)(wheelDelta));
+            _scene->getActiveCamera()->getNode()->translate(v);
+            return true;
+        }
+        break;
     }
 
     return true;
