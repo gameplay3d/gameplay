@@ -37,6 +37,8 @@ public:
      * Creates a form from a .form properties file.
      * 
      * @param url The URL pointing to the Properties object defining the form. 
+     * 
+     * @return The new form or NULL if there was an error.
      * @script{create}
      */
     static Form* create(const char* url);

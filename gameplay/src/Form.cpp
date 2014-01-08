@@ -55,20 +55,18 @@ Form* Form::create(const char* url)
 
     // Load Form from .form file.
     Properties* properties = Properties::create(url);
-    Properties* formProperties = NULL;
-    if (properties)
-    {
-        // Check if the Properties is valid and has a valid namespace.
-        formProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
-        if (!formProperties || !(strcmpnocase(formProperties->getNamespace(), "form") == 0))
-        {
-            GP_WARN("Invalid properties file for form: %s", url);
-            SAFE_DELETE(properties);
-        }
-    }
     if (!properties)
     {
         GP_WARN("Failed to load properties file for Form.");
+        return NULL;
+    }
+    // Check if the Properties is valid and has a valid namespace.
+    Properties* formProperties = (strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace();
+    if (!formProperties || !(strcmpnocase(formProperties->getNamespace(), "form") == 0))
+    {
+        GP_WARN("Invalid properties file for form: %s", url);
+        SAFE_DELETE(properties);
+        return NULL;
     }
 
     // Load the form's theme style.
