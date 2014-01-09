@@ -30,7 +30,7 @@
     <author>RIM Canada</author>
 
     <!-- Unique author ID assigned by signing authority. Required if using debug tokens. -->
-    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
+    <!-- <authorId>gYAAgLDcDLxX077jVWRVnDpywiU</authorId> -->
 
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
