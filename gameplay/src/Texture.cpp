@@ -85,7 +85,7 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
         GP_ASSERT(t);
         if (t->_path == path)
         {
-            // If 'generateMipmaps' is true, call Texture::generateMipamps() to force the 
+            // If 'generateMipmaps' is true, call Texture::generateMipamps() to force the
             // texture to generate its mipmap chain if it hasn't already done so.
             if (generateMipmaps)
             {
@@ -168,7 +168,7 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
     GL_ASSERT( glPixelStorei(GL_UNPACK_ALIGNMENT, 1) );
 #ifndef OPENGL_ES
-    // glGenerateMipmap is new in OpenGL 3.0. For OpenGL 2.0 we must fallback to use glTexParameteri 
+    // glGenerateMipmap is new in OpenGL 3.0. For OpenGL 2.0 we must fallback to use glTexParameteri
     // with GL_GENERATE_MIPMAP prior to actual texture creation (glTexImage2D)
     if ( generateMipmaps && glGenerateMipmap == NULL )
         GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE) );
@@ -651,7 +651,7 @@ Texture* Texture::createCompressedDDS(const char* path)
             if (stream->read(level.data, 1, level.size) != (unsigned int)level.size)
             {
                 GP_ERROR("Failed to load dds compressed texture bytes for texture: %s", path);
-                
+
                 // Cleanup mip data.
                 for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
                     SAFE_DELETE_ARRAY(level.data);
@@ -854,7 +854,7 @@ void Texture::generateMipmaps()
     {
         GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
         GL_ASSERT( glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST) );
-        if( glGenerateMipmap != NULL )
+        if (glGenerateMipmap)
             GL_ASSERT( glGenerateMipmap(GL_TEXTURE_2D) );
 
         _mipmapped = true;
