@@ -70,7 +70,7 @@
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\ImageControl.cpp" />
     <ClCompile Include="src\Joint.cpp" />
-    <ClCompile Include="src\Joystick.cpp" />
+    <ClCompile Include="src\JoystickControl.cpp" />
     <ClCompile Include="src\Label.cpp" />
     <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\Light.cpp" />
@@ -142,7 +142,7 @@
     <ClCompile Include="src\lua\lua_ImageControl.cpp" />
     <ClCompile Include="src\lua\lua_ImageFormat.cpp" />
     <ClCompile Include="src\lua\lua_Joint.cpp" />
-    <ClCompile Include="src\lua\lua_Joystick.cpp" />
+    <ClCompile Include="src\lua\lua_JoystickControl.cpp" />
     <ClCompile Include="src\lua\lua_Keyboard.cpp" />
     <ClCompile Include="src\lua\lua_KeyboardKey.cpp" />
     <ClCompile Include="src\lua\lua_KeyboardKeyEvent.cpp" />
@@ -357,7 +357,7 @@
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\ImageControl.h" />
     <ClInclude Include="src\Joint.h" />
-    <ClInclude Include="src\Joystick.h" />
+    <ClInclude Include="src\JoystickControl.h" />
     <ClInclude Include="src\Keyboard.h" />
     <ClInclude Include="src\Label.h" />
     <ClInclude Include="src\Layout.h" />
@@ -430,7 +430,7 @@
     <ClInclude Include="src\lua\lua_ImageControl.h" />
     <ClInclude Include="src\lua\lua_ImageFormat.h" />
     <ClInclude Include="src\lua\lua_Joint.h" />
-    <ClInclude Include="src\lua\lua_Joystick.h" />
+    <ClInclude Include="src\lua\lua_JoystickControl.h" />
     <ClInclude Include="src\lua\lua_Keyboard.h" />
     <ClInclude Include="src\lua\lua_KeyboardKey.h" />
     <ClInclude Include="src\lua\lua_KeyboardKeyEvent.h" />
@@ -626,7 +626,6 @@
     <None Include="src\Image.inl" />
     <None Include="src\MathUtil.inl" />
     <None Include="src\MathUtilNeon.inl" />
-    <None Include="src\Joystick.inl" />
     <None Include="src\Matrix.inl" />
     <None Include="src\MeshBatch.inl" />
     <None Include="src\Plane.inl" />

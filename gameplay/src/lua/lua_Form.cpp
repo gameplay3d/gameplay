@@ -14,7 +14,7 @@
 #include "Form.h"
 #include "Game.h"
 #include "ImageControl.h"
-#include "Joystick.h"
+#include "JoystickControl.h"
 #include "Label.h"
 #include "Layout.h"
 #include "Node.h"

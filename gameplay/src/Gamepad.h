@@ -9,7 +9,7 @@ namespace gameplay
 class Button;
 class Container;
 class Form;
-class Joystick;
+class JoystickControl;
 class Platform;
 
 /**
@@ -243,7 +243,7 @@ private:
     std::string _vendorString;
     std::string _productString;
     Form* _form;
-    Joystick* _uiJoysticks[2];
+    JoystickControl* _uiJoysticks[2];
     Button* _uiButtons[20];
     unsigned int _buttons;
     Vector2 _joysticks[2];
