@@ -14,7 +14,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joint");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joystick");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "JoystickControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Label");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "MaterialParameter");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Node");
@@ -32,7 +32,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Container");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "ImageControl");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Joystick");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "JoystickControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Label");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "RadioButton");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Slider");
@@ -83,7 +83,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Image");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Joint");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Joystick");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "JoystickControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Label");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Layout");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Light");
@@ -122,7 +122,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joint");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joystick");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "JoystickControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Label");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Node");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "PhysicsController");

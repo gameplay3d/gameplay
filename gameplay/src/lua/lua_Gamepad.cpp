@@ -6,7 +6,7 @@
 #include "Form.h"
 #include "Game.h"
 #include "Gamepad.h"
-#include "Joystick.h"
+#include "JoystickControl.h"
 #include "Platform.h"
 #include "lua_GamepadButtonMapping.h"
 

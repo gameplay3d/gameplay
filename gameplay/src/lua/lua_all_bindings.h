@@ -46,7 +46,7 @@
 #include "lua_Image.h"
 #include "lua_ImageControl.h"
 #include "lua_Joint.h"
-#include "lua_Joystick.h"
+#include "lua_JoystickControl.h"
 #include "lua_Keyboard.h"
 #include "lua_Label.h"
 #include "lua_Layout.h"
