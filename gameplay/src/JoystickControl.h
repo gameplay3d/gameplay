@@ -1,5 +1,5 @@
-#ifndef JOYSTICK_H_
-#define JOYSTICK_H_
+#ifndef JOYSTICKCONTROL_H_
+#define JOYSTICKCONTROL_H_
 
 #include "Control.h"
 
@@ -13,7 +13,7 @@ namespace gameplay
  *
  * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
-class Joystick : public Control
+class JoystickControl : public Control
 {
     friend class Container;
     friend class Gamepad;
@@ -22,7 +22,7 @@ class Joystick : public Control
 public:
 
     /**
-     * Creates a new Joystick.
+     * Creates a new Joystick control.
      *
      * @param id The joystick ID.
      * @param style The joystick style.
@@ -30,7 +30,7 @@ public:
      * @return The new joystick.
      * @script{create}
      */
-    static Joystick* create(const char* id, Theme::Style* style = NULL);
+    static JoystickControl* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Add a listener to be notified of specific events affecting
@@ -45,11 +45,11 @@ public:
     void addListener(Control::Listener* listener, int eventFlags);
 
     /**
-     * Retrieves the value (2-dimensional direction) of the joystick.
+     * Gets the value (2-dimensional direction) of the joystick.
      * 
      * @return The value of the joystick.
      */
-    inline const Vector2& getValue() const;
+    const Vector2& getValue() const;
 
     /**
      * Sets the image size of the inner region of the joystick. Does not do anything if there is no
@@ -57,7 +57,7 @@ public:
      * 
      * @param size The size of the inner region of the joystick. (x, y) == (width, height)
      */
-    inline void setInnerRegionSize(const Vector2& size);
+    void setInnerRegionSize(const Vector2& size);
 
     /**
      * Gets the image size of the inner region of the joystick. Returns (0,0) if there is no inner image
@@ -65,7 +65,7 @@ public:
      * 
      * @return The image size of the inner region of the joystick. (x, y) == (width, height)
      */
-    inline const Vector2& getInnerRegionSize() const;
+    const Vector2& getInnerRegionSize() const;
 
     /**
      * Sets the image size of the outer region of the joystick. Does not do anything if there is no
@@ -73,7 +73,7 @@ public:
      * 
      * @param size The size of the outer region of the joystick. (x, y) == (width, height)
      */
-    inline void setOuterRegionSize(const Vector2& size);
+    void setOuterRegionSize(const Vector2& size);
 
     /**
      * Gets the image size of the outer region of the joystick. Returns (0,0) if there is no outer image
@@ -81,7 +81,7 @@ public:
      * 
      * @return The image size of the outer region of the joystick. (x, y) == (width, height)
      */
-    inline const Vector2& getOuterRegionSize() const;
+    const Vector2& getOuterRegionSize() const;
 
     /**
      * Sets whether relative positioning is enabled or not.
@@ -90,43 +90,43 @@ public:
      *
      * @param relative Whether relative positioning should be enabled or not.
      */
-    inline void setRelative(bool relative);
+    void setRelative(bool relative);
 
     /**
-     * Retrieves whether absolute positioning is enabled or not.
+     * Gets whether absolute positioning is enabled or not.
      * 
      * Note: The default behavior is absolute positioning, and not relative.
      *
      * @return <code>true</code> if relative positioning is enabled; <code>false</code> otherwise.
      */
-    inline bool isRelative() const;
-
-    /**
-     * @see Control::getType
-     */
-    const char* getType() const;
+    bool isRelative() const;
 
     /**
      * Gets the index of this joystick across all joysticks on a form.
      *
      * @return The index of this joystick on a form.
      */
-    inline const unsigned int getIndex() const;
+    unsigned int getIndex() const;
+    
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
 protected:
     
     /**
      * Constructor.
      */
-    Joystick();
+    JoystickControl();
 
     /**
      * Destructor.
      */
-    virtual ~Joystick();
+    virtual ~JoystickControl();
 
     /**
-     * Create a joystick with a given style and properties.
+     * Create a joystick control with a given style and properties.
      *
      * @param style The style to apply to this joystick.
      * @param properties A properties object containing a definition of the joystick (optional).
@@ -164,7 +164,7 @@ private:
     /**
      * Copy constructor.
      */
-    Joystick(const Joystick& copy);
+    JoystickControl(const JoystickControl& copy);
 
     float _radius; 
     bool _relative;
@@ -177,7 +177,5 @@ private:
 };
 
 }
-
-#include "Joystick.inl"
 
 #endif

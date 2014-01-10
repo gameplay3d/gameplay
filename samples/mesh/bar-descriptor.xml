@@ -30,7 +30,7 @@
     <author>RIM Canada</author>
 
     <!-- Unique author ID assigned by signing authority. Required if using debug tokens. -->
-    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
+    <!-- <authorId>gYAAgLDcDLxX077jVWRVnDpywiU</authorId> -->
 
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
@@ -46,10 +46,10 @@
     <asset path="res/mesh.scene">res/mesh.scene</asset>
     <asset path="res/mesh.gpb">res/mesh.gpb</asset>
     <asset path="res/mesh.material">res/mesh.material</asset>
+    <asset path="game.config">game.config</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
     <asset path="../../gameplay/res/shaders">res/shaders</asset>
     <asset path="../../gameplay/res/ui">res/ui</asset>
-    <asset path="game.config">game.config</asset>
     
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

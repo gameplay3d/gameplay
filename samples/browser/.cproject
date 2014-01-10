@@ -73,7 +73,6 @@
 									<listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="scoreloopcore"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.objectFiles.782983295" name="Additional Object Files" superClass="com.qnx.qcc.option.linker.objectFiles"/>
 								<inputType id="com.qnx.qcc.inputType.linker.149610709" superClass="com.qnx.qcc.inputType.linker">
@@ -162,7 +161,6 @@
 									<listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="scoreloopcore"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.objectFiles.661413139" name="Additional Object Files" superClass="com.qnx.qcc.option.linker.objectFiles"/>
 								<inputType id="com.qnx.qcc.inputType.linker.1335515313" superClass="com.qnx.qcc.inputType.linker">
@@ -250,7 +248,6 @@
 									<listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="scoreloopcore"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.objectFiles.901324184" name="Additional Object Files" superClass="com.qnx.qcc.option.linker.objectFiles"/>
 								<inputType id="com.qnx.qcc.inputType.linker.1669353763" superClass="com.qnx.qcc.inputType.linker">

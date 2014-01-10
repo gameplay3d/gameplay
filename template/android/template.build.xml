@@ -51,6 +51,15 @@
 
     <target name="-pre-build">
 		<mkdir dir="src"/>
+        <copy todir="assets/res">
+            <fileset dir="../res" />
+        </copy>
+        <copy todir="assets/res/shaders">
+            <fileset dir="../GAMEPLAY_PATH/gameplay/res/shaders" />
+       </copy>
+        <copy todir="assets/res/ui">
+            <fileset dir="../GAMEPLAY_PATH/gameplay/res/ui" />
+       </copy>
     </target>
 	
 <!--
@@ -62,13 +71,6 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
-    	<delete dir="assets/res"/>
-        <copy todir="assets/res">
-            <fileset dir="../res" />
-        </copy>
-        <copy todir="assets/res/shaders">
-            <fileset dir="../GAMEPLAY_PATH/gameplay/res/shaders" />
-       </copy>
     </target>
 
     <!-- Import the actual build file.
