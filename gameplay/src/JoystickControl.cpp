@@ -74,7 +74,7 @@ bool JoystickControl::isRelative() const
     return _relative;
 }
 
-const unsigned int JoystickControl::getIndex() const
+unsigned int JoystickControl::getIndex() const
 {
     return _index;
 }
@@ -349,7 +349,7 @@ unsigned int JoystickControl::drawImages(Form* form, const Rectangle& clip)
 
 const char* JoystickControl::getType() const
 {
-    return "Joystick";
+    return "joystick";
 }
 
 }

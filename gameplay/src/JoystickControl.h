@@ -106,7 +106,7 @@ public:
      *
      * @return The index of this joystick on a form.
      */
-    const unsigned int getIndex() const;
+    unsigned int getIndex() const;
     
     /**
      * @see Control::getType
