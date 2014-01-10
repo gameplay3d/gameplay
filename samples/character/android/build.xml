@@ -46,20 +46,8 @@
 
 <!-- extension targets. Uncomment the ones where you want to do custom work
      in between standard targets -->
-
     <target name="-pre-build">
 		<mkdir dir="src"/>
-    </target>
-	
-<!--
-    <target name="-pre-compile">
-    </target>
-
-    /* This is typically used for code obfuscation.
-       Compiled code location: ${out.classes.absolute.dir}
-       If this is not done in place, override ${out.dex.input.absolute.dir} */
-       -->
-    <target name="-post-compile">
         <copy file="../game.png.config" tofile="assets/game.config"/>
         <copy file="../res/design/backboard.png" tofile="assets/res/png/backboard.png"/>
         <copy file="../res/design/basketball.png" tofile="assets/res/png/basketball.png"/>
@@ -94,15 +82,28 @@
         <copy file="../res/design/windowledge.png" tofile="assets/res/png/windowledge.png"/>
         <copy file="../res/design/wood.png" tofile="assets/res/png/wood.png"/>
         <copy file="../res/design/woodn.png" tofile="assets/res/png/woodn.png"/>
+        <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
         <copy todir="assets/res/common">
             <fileset dir="../res/common"/>
         </copy>
         <copy todir="assets/res/shaders">
             <fileset dir="../../../gameplay/res/shaders"/>
         </copy>
-        <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
+         <copy todir="assets/res/ui">
+            <fileset dir="../../../gameplay/res/ui"/>
+        </copy>
+    </target>
+	
+<!--
+    <target name="-pre-compile">
     </target>
 
+    /* This is typically used for code obfuscation.
+       Compiled code location: ${out.classes.absolute.dir}
+       If this is not done in place, override ${out.dex.input.absolute.dir} */
+       -->
+    <target name="-post-compile">
+    </target>
 
     <!-- Import the actual build file.
 

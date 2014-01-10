@@ -74,7 +74,6 @@
 									<listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="scoreloopcore"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.149610709" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -151,7 +150,7 @@
 									<listOptionValue builtIn="false" value="EGL"/>
 									<listOptionValue builtIn="false" value="screen"/>
 									<listOptionValue builtIn="false" value="m"/>
-									<listOptionValue builtIn="false" value="png16"/>
+									<listOptionValue builtIn="false" value="png"/>
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="gestures"/>
@@ -161,7 +160,6 @@
 									<listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="scoreloopcore"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1335515313" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -239,7 +237,7 @@
 									<listOptionValue builtIn="false" value="EGL"/>
 									<listOptionValue builtIn="false" value="screen"/>
 									<listOptionValue builtIn="false" value="m"/>
-									<listOptionValue builtIn="false" value="png16"/>
+									<listOptionValue builtIn="false" value="png"/>
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
 									<listOptionValue builtIn="false" value="gestures"/>
@@ -249,7 +247,6 @@
 									<listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="scoreloopcore"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1669353763" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
