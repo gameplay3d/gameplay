@@ -234,8 +234,6 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("TEXT_CHANGED", "TEXT_CHANGED", scopePath);
         gameplay::ScriptUtil::registerConstantString("MIDDLE_CLICK", "MIDDLE_CLICK", scopePath);
         gameplay::ScriptUtil::registerConstantString("RIGHT_CLICK", "RIGHT_CLICK", scopePath);
-        gameplay::ScriptUtil::registerConstantString("ENTER", "ENTER", scopePath);
-        gameplay::ScriptUtil::registerConstantString("LEAVE", "LEAVE", scopePath);
         gameplay::ScriptUtil::registerConstantString("FOCUS_GAINED", "FOCUS_GAINED", scopePath);
         gameplay::ScriptUtil::registerConstantString("FOCUS_LOST", "FOCUS_LOST", scopePath);
     }
