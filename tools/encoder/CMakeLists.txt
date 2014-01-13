@@ -8,7 +8,7 @@ include_directories(
 )
 
 add_definitions(-D_DEBUG)
-add_definitions(-D__linux__ -DNO_BOOST -DNO_ZAE -DUSE_FBX)
+add_definitions(-D__linux__ -DUSE_FBX)
 
 link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
