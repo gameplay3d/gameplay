@@ -28,7 +28,6 @@
 		421090FA1829A5AE00761E40 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421090F91829A5AE00761E40 /* GameKit.framework */; };
 		421090FC1829A5BF00761E40 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421090FB1829A5BF00761E40 /* GameKit.framework */; };
 		421539CA16ADC583001308A3 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 421539C916ADC583001308A3 /* libgameplay.a */; };
-		421539CD16ADC592001308A3 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 421539CC16ADC592001308A3 /* libgameplay.a */; };
 		424CC03C161FCBDD00577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC03B161FCBDD00577827 /* IOKit.framework */; };
 		428F7BDE15CB131A009ED24C /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 428F7BDD15CB131A009ED24C /* game.config */; };
 		42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C932C01491A0DB0098216A /* Cocoa.framework */; };
@@ -42,7 +41,32 @@
 		5B61611614CCC24C0073B857 /* TemplateGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* TemplateGame.cpp */; };
 		5B61612614CCC24C0073B857 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
 		5B61612714CCC24C0073B857 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
+		BDBFA8611883491700342B78 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDBFA85E188347B000342B78 /* libgameplay.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BDBFA85B188347B000342B78 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4234D99A14686C52003031B3;
+			remoteInfo = "gameplay-macosx";
+		};
+		BDBFA85D188347B000342B78 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5B04C5CA14BFCFE100EB0071;
+			remoteInfo = "gameplay-ios";
+		};
+		BDBFA85F1883490A00342B78 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B04C52B14BFCFE100EB0071;
+			remoteInfo = "gameplay-ios";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		42049B5216ADBB61005DD1F9 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
@@ -111,7 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				421539CD16ADC592001308A3 /* libgameplay.a in Frameworks */,
+				BDBFA8611883491700342B78 /* libgameplay.a in Frameworks */,
 				42049B6116ADBC0F005DD1F9 /* libbullet.a in Frameworks */,
 				42049B7316ADBCAB005DD1F9 /* liblua.a in Frameworks */,
 				42049B7116ADBC8B005DD1F9 /* libpng.a in Frameworks */,
@@ -220,6 +244,15 @@
 			name = GamePlay;
 			sourceTree = "<group>";
 		};
+		BDBFA857188347B000342B78 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BDBFA85C188347B000342B78 /* libgameplay.a */,
+				BDBFA85E188347B000342B78 /* libgameplay.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F1F49B8516AD8C22008715A2 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
@@ -281,6 +314,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BDBFA8601883490A00342B78 /* PBXTargetDependency */,
 			);
 			name = "TEMPLATE_PROJECT-ios";
 			productName = TEMPLATE_PROJECT;
@@ -305,6 +339,12 @@
 			mainGroup = 42C932B11491A0DB0098216A;
 			productRefGroup = 42C932BD1491A0DB0098216A /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = BDBFA857188347B000342B78 /* Products */;
+					ProjectRef = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				42C932BB1491A0DB0098216A /* TEMPLATE_PROJECT-macosx */,
@@ -312,6 +352,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		BDBFA85C188347B000342B78 /* libgameplay.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libgameplay.a;
+			remoteRef = BDBFA85B188347B000342B78 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BDBFA85E188347B000342B78 /* libgameplay.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libgameplay.a;
+			remoteRef = BDBFA85D188347B000342B78 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		42C932BA1491A0DB0098216A /* Resources */ = {
@@ -383,6 +440,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BDBFA8601883490A00342B78 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "gameplay-ios";
+			targetProxy = BDBFA85F1883490A00342B78 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		42C932D81491A0DB0098216A /* Debug */ = {
@@ -460,7 +525,6 @@
 					"GAMEPLAY_PATH/external-deps/lua/lib/macosx",
 					"GAMEPLAY_PATH/external-deps/png/lib/macosx",
 					"GAMEPLAY_PATH/external-deps/oggvorbis/lib/macosx",
-					"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -491,7 +555,6 @@
 					"GAMEPLAY_PATH/external-deps/lua/lib/macosx",
 					"GAMEPLAY_PATH/external-deps/png/lib/macosx",
 					"GAMEPLAY_PATH/external-deps/oggvorbis/lib/macosx",
-					"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -503,7 +566,7 @@
 		5B61612A14CCC24C0073B857 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -525,7 +588,6 @@
 					"\"GAMEPLAY_PATH/external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 					"\"GAMEPLAY_PATH/external-deps/png/lib/ios/$(CURRENT_ARCH)\"",
 					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
-					"\"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug-iphoneos\"",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -538,7 +600,7 @@
 		5B61612B14CCC24C0073B857 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -560,7 +622,6 @@
 					"GAMEPLAY_PATH/external-deps/lua/lib/ios/$(CURRENT_ARCH)",
 					"GAMEPLAY_PATH/external-deps/png/lib/ios/$(CURRENT_ARCH)",
 					"GAMEPLAY_PATH/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)",
-					"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug-iphoneos",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
