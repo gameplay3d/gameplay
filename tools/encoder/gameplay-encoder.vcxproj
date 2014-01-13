@@ -160,14 +160,14 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=2;USE_FBX;WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2/include;../../external-deps/freetype2/include;../../external-deps/png/include;../../external-deps/zlib/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2.1/include;../../external-deps/freetype2/include;../../external-deps/png/include;../../external-deps/zlib/include</AdditionalIncludeDirectories>
       <DisableLanguageExtensions>
       </DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2/lib/vs2012/x86/debug;../../external-deps/freetype2/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2.1/lib/vs2012/x86/debug;../../external-deps/freetype2/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>libfbxsdk-md.lib;freetype245.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -185,7 +185,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;USE_FBX;WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2/include;../../external-deps/freetype2/include;../../external-deps/png/include;../../external-deps/zlib/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2.1/include;../../external-deps/freetype2/include;../../external-deps/png/include;../../external-deps/zlib/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -193,7 +193,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>libfbxsdk-md.lib;freetype245.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2/lib/vs2012/x86/release;../../external-deps/freetype2/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2.1/lib/vs2012/x86/release;../../external-deps/freetype2/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
