@@ -1,8 +1,7 @@
 form gamepadForm
 {
     theme = res/common/gamepad.theme
-    autoWidth = true
-    autoHeight = true
+    size = 100%, 100%
 
     container left
     {
@@ -12,7 +11,7 @@ form gamepadForm
         
         joystick
         {
-        index = 0
+            index = 0
             style = joystickStyle
             size = 256, 256
             alignment = ALIGN_VCENTER_HCENTER

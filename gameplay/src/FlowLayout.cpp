@@ -76,8 +76,6 @@ void FlowLayout::update(const Container* container, const Vector2& offset)
         if (!control->isVisible())
             continue;
 
-        //align(control, container);
-
         const Rectangle& bounds = control->getBounds();
         const Theme::Margin& margin = control->getMargin();
 
@@ -94,7 +92,7 @@ void FlowLayout::update(const Container* container, const Vector2& offset)
         yPosition = rowY + margin.top;
 
         control->setPosition(xPosition, yPosition);
-        control->update(container, offset);
+        control->updateBounds(offset);
 
         xPosition += bounds.width + margin.right + _horizontalSpacing;
 

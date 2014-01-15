@@ -11,7 +11,8 @@ static const float MOVE_FRACTION = 0.005f;
 
 Slider::Slider() : _min(0.0f), _max(0.0f), _step(0.0f), _value(0.0f), _delta(0.0f), _minImage(NULL),
     _maxImage(NULL), _trackImage(NULL), _markerImage(NULL), _valueTextVisible(false),
-    _valueTextAlignment(Font::ALIGN_BOTTOM_HCENTER), _valueTextPrecision(0), _valueText(""), _gamepadValue(0.0f)
+    _valueTextAlignment(Font::ALIGN_BOTTOM_HCENTER), _valueTextPrecision(0), _valueText(""), 
+    _trackHeight(0.0f), _gamepadValue(0.0f)
 {
     _canFocus = true;
 }
@@ -57,10 +58,6 @@ void Slider::initialize(const char* typeName, Theme::Style* style, Properties* p
 
 void Slider::setMin(float min)
 {
-    if (_min != _min)
-    {
-        _dirty = true;
-    }
     _min = min;
 }
 
@@ -71,10 +68,6 @@ float Slider::getMin() const
 
 void Slider::setMax(float max)
 {
-    if (max != _max)
-    {
-        _dirty = true;
-    }
     _max = max;
 }
 
@@ -102,19 +95,16 @@ void Slider::setValue(float value)
 {
     float oldValue = _value;
     _value = MATH_CLAMP(value, _min, _max);
-    if (_value != value)
-    {
-        _dirty = true;
-    }
 }
 
 void Slider::setValueTextVisible(bool valueTextVisible)
 {
     if (valueTextVisible != _valueTextVisible)
     {
-        _dirty = true;
+        _valueTextVisible = valueTextVisible;
+        if (_autoSize & AUTO_SIZE_HEIGHT)
+            setDirty(DIRTY_BOUNDS);
     }
-    _valueTextVisible = valueTextVisible;
 }
 
 bool Slider::isValueTextVisible() const
@@ -124,10 +114,6 @@ bool Slider::isValueTextVisible() const
 
 void Slider::setValueTextAlignment(Font::Justify alignment)
 {
-    if (alignment != _valueTextAlignment)
-    {
-        _dirty = true;
-    }
     _valueTextAlignment = alignment;
 }
 
@@ -138,10 +124,6 @@ Font::Justify Slider::getValueTextAlignment() const
 
 void Slider::setValueTextPrecision(unsigned int precision)
 {
-    if (precision != _valueTextPrecision)
-    {
-        _dirty = true;
-    }
     _valueTextPrecision = precision;
 }
 
@@ -195,7 +177,6 @@ void Slider::updateValue(int x, int y)
     {
         notifyListeners(Control::Listener::VALUE_CHANGED);
     }
-    _dirty = true;
 }
 
 bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -257,7 +238,6 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
-                _dirty = true;
                 return true;
             }
             break;
@@ -284,7 +264,6 @@ bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned 
                 gamepad->getJoystickValues(analogIndex, &joy);
                 _gamepadValue = _value;
                 _delta = joy.x;
-                _dirty = true;
                 return true;
             }
             break;
@@ -310,7 +289,6 @@ bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
             {
                 _value = std::max(_value - (_max - _min) * MOVE_FRACTION, _min);
             }
-            _dirty = true;
             return true;
 
         case Keyboard::KEY_RIGHT_ARROW:
@@ -322,7 +300,6 @@ bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
             {
                 _value = std::min(_value + (_max - _min) * MOVE_FRACTION, _max);
             }
-            _dirty = true;
             return true;
         }
         break;
@@ -331,9 +308,9 @@ bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
     return Control::keyEvent(evt, key);
 }
 
-void Slider::update(const Control* container, const Vector2& offset)
+void Slider::updateBounds(const Vector2& offset)
 {
-    Label::update(container, offset);
+    Label::updateBounds(offset);
 
     Control::State state = getState();
 
@@ -373,16 +350,19 @@ void Slider::update(const Control* container, const Vector2& offset)
         }
     }
 
-    if (_autoHeight == Control::AUTO_SIZE_FIT)
+    // Compute height of track (max of track, min/max and marker
+    _trackHeight = _minImage->getRegion().height;
+    _trackHeight = std::max(_trackHeight, _maxImage->getRegion().height);
+    _trackHeight = std::max(_trackHeight, _markerImage->getRegion().height);
+    _trackHeight = std::max(_trackHeight, _trackImage->getRegion().height);
+
+    if (_autoSize & AUTO_SIZE_HEIGHT)
     {
-        float height = _minImage->getRegion().height;
-        height = std::max(height, _maxImage->getRegion().height);
-        height = std::max(height, _markerImage->getRegion().height);
-        height = std::max(height, _trackImage->getRegion().height);
-        height += _bounds.height;
-        if (_valueTextVisible && _font)
+        float height = _bounds.height + _trackHeight;
+        if (_valueTextVisible)
             height += getFontSize(state);
         setHeight(height);
+        _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_HEIGHT);
     }
 }
 
@@ -411,6 +391,8 @@ unsigned int Slider::drawImages(Form* form, const Rectangle& clip)
     Vector4 markerColor = _markerImage->getColor();
     Vector4 trackColor = _trackImage->getColor();
 
+    Control::State state = getState();
+
     minCapColor.w *= _opacity;
     maxCapColor.w *= _opacity;
     markerColor.w *= _opacity;
@@ -419,8 +401,62 @@ unsigned int Slider::drawImages(Form* form, const Rectangle& clip)
     SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
     startBatch(form, batch);
 
-    // Draw track, vertically centered
-    float midY = _viewportBounds.y + _viewportBounds.height * 0.5f;
+    // Compute area to draw the slider track
+    unsigned int fontSize = getFontSize(state);
+    float startY, endY;
+    if (_text.length() > 0)
+    {
+        if (_valueTextVisible)
+        {
+            // Both label and value text are visible.
+            // Draw slider in the middle.
+            startY = fontSize;
+            endY = _viewportBounds.height - fontSize;
+        }
+        else
+        {
+            // Only label is visible
+            if (getTextAlignment(state) & ALIGN_BOTTOM)
+            {
+                // Draw slider above label
+                startY = 0;
+                endY = _viewportBounds.height - fontSize;
+            }
+            else
+            {
+                // Draw slider below label
+                startY = fontSize;
+                endY = _viewportBounds.height;
+            }
+        }
+    }
+    else if (_valueTextVisible)
+    {
+        // Only value text is visible.
+        if (_valueTextAlignment & ALIGN_BOTTOM)
+        {
+            // Draw slider above value text
+            startY = 0;
+            endY = _viewportBounds.height - fontSize;
+        }
+        else
+        {
+            // Draw slider below value text
+            startY = fontSize;
+            endY = _viewportBounds.height;
+        }
+    }
+    else
+    {
+        // Only the slider track is visible
+        startY = 0;
+        endY = _viewportBounds.height;
+    }
+
+    // Compute midpoint of track location
+    float midY = _viewportBounds.y + startY + (endY - startY) * 0.5f;
+
+    // Draw track below the slider text
     Vector2 pos(_viewportBounds.x + minCapRegion.width, midY - trackRegion.height * 0.5f);
     batch->draw(pos.x, pos.y, _viewportBounds.width - minCapRegion.width - maxCapRegion.width, trackRegion.height, track.u1, track.v1, track.u2, track.v2, trackColor, _viewportClipBounds);
 
@@ -435,7 +471,7 @@ unsigned int Slider::drawImages(Form* form, const Rectangle& clip)
 
     // Draw the marker at the correct position
     float markerPosition = (_value - _min) / (_max - _min);
-    markerPosition *= _viewportBounds.width - markerRegion.width;// -minCapRegion.width * 0.5f - maxCapRegion.width * 0.5f - markerRegion.width;
+    markerPosition *= _viewportBounds.width - markerRegion.width;
     pos.x = _viewportBounds.x + markerPosition;
     pos.y = midY - markerRegion.height * 0.5f;
     batch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor, _viewportClipBounds);

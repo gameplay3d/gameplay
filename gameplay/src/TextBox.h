@@ -166,13 +166,9 @@ protected:
     void controlEvent(Control::Listener::EventType evt);
 
     /**
-     * Called when a control's properties change.  Updates this control's internal rendering
-     * properties, such as its text viewport.
-     *
-     * @param container This control's parent container.
-     * @param offset Positioning offset to add to the control's position.
+     * @see Control::updateBounds
      */
-    void update(const Control* container, const Vector2& offset);
+    void updateBounds(const Vector2& offset);
 
     /**
      * @see Control::drawImages

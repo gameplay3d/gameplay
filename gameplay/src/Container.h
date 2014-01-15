@@ -305,13 +305,9 @@ protected:
     void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
-     * Updates each control within this container,
-     * and positions them according to the container's layout.
-     *
-     * @param container This container's parent container.
-     * @param offset The offset.
+     * @see Control::updateBounds
      */
-    virtual void update(const Control* container, const Vector2& offset);
+    void updateBounds(const Vector2& offset);
 
     /**
      * Gets a Layout::Type enum from a matching string.
@@ -328,13 +324,6 @@ protected:
      * @return The new Layout.
      */
     static Layout* createLayout(Layout::Type type);
-
-    /**
-     * Returns whether this container or any of its controls have been modified and require an update.
-     * 
-     * @return true if this container or any of its controls have been modified and require an update.
-     */
-    virtual bool isDirty();
 
     /**
      * Adds controls nested within a properties object to this container.

@@ -190,8 +190,8 @@ void Container::setLayout(Layout::Type type)
 		SAFE_RELEASE(_layout);
 
 		_layout = createLayout(type);
+        setDirty(Control::DIRTY_BOUNDS);
 		_layout->update(this, _scrollPosition);
-		_dirty = true;
 	}
 }
 
@@ -365,11 +365,18 @@ void Container::setScroll(Scroll scroll)
     if (scroll != _scroll)
     {
         _scroll = scroll;
-        _dirty = true;
 
-        // Scrollable containers can be focused (to allow scrolling)
-        if (_scroll != SCROLL_NONE)
+        if (_scroll == SCROLL_NONE)
+        {
+            _scrollPosition.set(0, 0);
+        }
+        else
+        {
+            // Scrollable containers can be focused (to allow scrolling)
             _canFocus = true;
+        }
+
+        setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -383,7 +390,7 @@ void Container::setScrollBarsAutoHide(bool autoHide)
     if (autoHide != _scrollBarsAutoHide)
     {
         _scrollBarsAutoHide = autoHide;
-        _dirty = true;
+        setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -496,10 +503,9 @@ void Container::setActiveControl(Control* control)
     }
 }
 
-void Container::update(const Control* container, const Vector2& offset)
+void Container::updateBounds(const Vector2& offset)
 {
-    // Update this container's viewport.
-    Control::update(container, offset);
+    Control::updateBounds(offset);
 
     Control::State state = getState();
 
@@ -529,23 +535,17 @@ void Container::update(const Control* container, const Vector2& offset)
     }
 
     GP_ASSERT(_layout);
-    if (_scroll != SCROLL_NONE)
-    {
-        updateScroll();
-    }
-    else
-    {
-        _layout->update(this, Vector2::zero());
-    }
+    updateScroll();
+    _layout->update(this, _scrollPosition);
 
     // Handle automatically sizing based on our children
-    if (_autoWidth == Control::AUTO_SIZE_FIT || _autoHeight == Control::AUTO_SIZE_FIT)
+    if (_autoSize != AUTO_SIZE_NONE)
     {
         Vector2 oldSize(_bounds.width, _bounds.height);
         bool sizeChanged = false;
         bool relayout = false;
 
-        if (_autoWidth == Control::AUTO_SIZE_FIT)
+        if (_autoSize & AUTO_SIZE_WIDTH)
         {
             // Size ourself to tightly fit the width of our children
             float width = 0;
@@ -554,9 +554,8 @@ void Container::update(const Control* container, const Vector2& offset)
                 Control* ctrl = *it;
                 if (ctrl->isXPercentage() || ctrl->isWidthPercentage())
                 {
-                    // We (this control's parent) are resizing and our child's layout
-                    // depends on our size, so we need to dirty it
-                    ctrl->_dirty = true;
+                    // Our child's layout depends on our size, so we need to dirty it
+                    ctrl->setDirty(DIRTY_BOUNDS);
                     relayout = _allowRelayout;
                 }
                 else
@@ -570,11 +569,12 @@ void Container::update(const Control* container, const Vector2& offset)
             if (width != oldSize.x)
             {
                 setWidth(width);
+                _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_WIDTH);
                 sizeChanged = true;
             }
         }
 
-        if (_autoHeight == Control::AUTO_SIZE_FIT)
+        if (_autoSize & AUTO_SIZE_HEIGHT)
         {
             // Size ourself to tightly fit the height of our children
             float height = 0;
@@ -583,9 +583,8 @@ void Container::update(const Control* container, const Vector2& offset)
                 Control* ctrl = *it;
                 if (ctrl->isYPercentage() || ctrl->isHeightPercentage())
                 {
-                    // We (this control's parent) are resizing and our child's layout
-                    // depends on our size, so we need to dirty it
-                    ctrl->_dirty = true;
+                    // Our child's layout depends on our size, so we need to dirty it
+                    ctrl->setDirty(DIRTY_BOUNDS);
                     relayout = _allowRelayout;
                 }
                 else
@@ -599,6 +598,7 @@ void Container::update(const Control* container, const Vector2& offset)
             if (height != oldSize.y)
             {
                 setHeight(height);
+                _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_HEIGHT);
                 sizeChanged = true;
             }
         }
@@ -608,7 +608,7 @@ void Container::update(const Control* container, const Vector2& offset)
             // Our size changed and as a result we need to force another layout.
             // Prevent infinitely recursive layouts by disabling relayout for the next call.
             _allowRelayout = false;
-            update(container, offset);
+            updateBounds(offset);
             _allowRelayout = true;
         }
     }
@@ -636,7 +636,7 @@ unsigned int Container::draw(Form* form, const Rectangle& clip)
     if (_scroll != SCROLL_NONE && (_scrollBarOpacity > 0.0f))
     {
         // Draw scroll bars.
-        Rectangle clipRegion(_clipBounds);
+        Rectangle clipRegion(_absoluteClipBounds);
 
         SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
         startBatch(form, batch);
@@ -660,7 +660,7 @@ unsigned int Container::draw(Form* form, const Rectangle& clip)
 
             clipRegion.width += verticalRegion.width;
 
-            Rectangle bounds(_viewportBounds.right() + (_bounds.right() - _viewportBounds.right())*0.5f - topRegion.width*0.5f, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
+            Rectangle bounds(_viewportBounds.right() + (_absoluteBounds.right() - _viewportBounds.right())*0.5f - topRegion.width*0.5f, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
             batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
 
             bounds.y += topRegion.height;
@@ -693,7 +693,7 @@ unsigned int Container::draw(Form* form, const Rectangle& clip)
 
             clipRegion.height += horizontalRegion.height;
         
-            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.bottom() + (_bounds.bottom() - _viewportBounds.bottom())*0.5f - leftRegion.height*0.5f, leftRegion.width, leftRegion.height);
+            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.bottom() + (_absoluteBounds.bottom() - _viewportBounds.bottom())*0.5f - leftRegion.height*0.5f, leftRegion.width, leftRegion.height);
             batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
 
             bounds.x += leftRegion.width;
@@ -711,28 +711,6 @@ unsigned int Container::draw(Form* form, const Rectangle& clip)
     }
 
     return drawCalls;
-}
-
-bool Container::isDirty()
-{
-    if (_dirty)
-    {
-        return true;
-    }
-    else
-    {
-        std::vector<Control*>::const_iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
-        {
-            GP_ASSERT(*it);
-            if ((*it)->isDirty())
-            {
-                return true;
-            }
-        }
-    }
-
-    return false;
 }
 
 static bool canReceiveFocus(Control* control)
@@ -973,7 +951,7 @@ void Container::startScrolling(float x, float y, bool resetTime)
     _scrollingVelocity.set(-x, y);
     _scrolling = true;
     _scrollBarOpacity = 1.0f;
-    _dirty = true;
+    setDirty(DIRTY_BOUNDS);
 
     if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
     {
@@ -991,7 +969,7 @@ void Container::stopScrolling()
 {
     _scrollingVelocity.set(0, 0);
     _scrolling = false;
-    _dirty = true;
+    setDirty(DIRTY_BOUNDS);
 
     if (_parent)
         _parent->stopScrolling();
@@ -1047,11 +1025,8 @@ Layout* Container::createLayout(Layout::Type type)
 
 void Container::updateScroll()
 {
-    if (!_initializedWithScroll)
-    {
-        _initializedWithScroll = true;
-        _layout->update(this, _scrollPosition);
-    }
+    if (_scroll == SCROLL_NONE)
+        return;
 
     Control::State state = getState();
 
@@ -1166,9 +1141,6 @@ void Container::updateScroll()
         }
         _scrollBarOpacityClip->play();
     }
-
-    // Position controls within scroll area.
-    _layout->update(this, _scrollPosition);
 }
 
 void Container::sortControls()
@@ -1199,7 +1171,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
                 _scrollBarOpacityClip = NULL;
             }
             _scrollBarOpacity = 1.0f;
-            _dirty = true;
+            setDirty(DIRTY_BOUNDS);
             return false;
         }
         break;
@@ -1262,7 +1234,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
                 _scrollingStartTimeY = gameTime;
 
             _scrollingLastTime = gameTime;
-            _dirty = true;
+            setDirty(DIRTY_BOUNDS);
             return _consumeInputEvents;
         }
         break;
@@ -1278,7 +1250,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
             {
                 _scrollingVelocity.set(0, 0);
                 _scrollingMouseVertically = _scrollingMouseHorizontally = false;
-                _dirty = true;
+                setDirty(DIRTY_BOUNDS);
                 return _consumeInputEvents;
             }
 
@@ -1315,7 +1287,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
             }
 
             _scrollingMouseVertically = _scrollingMouseHorizontally = false;
-            _dirty = true;
+            setDirty(DIRTY_BOUNDS);
             return _consumeInputEvents;
         }
         break;
@@ -1333,9 +1305,13 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             if (_scrollBarVertical)
             {
                 float vWidth = _scrollBarVertical->getRegion().width;
-                Rectangle vBounds(_viewportBounds.right() + (_bounds.right() - _viewportBounds.right())*0.5f - vWidth*0.5f,
-                                 _scrollBarBounds.y,
-                                 vWidth, _scrollBarBounds.height);
+                float rightPadding = _absoluteBounds.right() - _viewportBounds.right();
+                float topPadding = _viewportBounds.y - _absoluteBounds.y;
+                float localVpRight = _bounds.width - rightPadding;
+                Rectangle vBounds(
+                    localVpRight + rightPadding*0.5f - vWidth*0.5f,
+                    topPadding + _scrollBarBounds.y,
+                    vWidth, _scrollBarBounds.height);
 
                 if (x >= vBounds.x && x <= vBounds.right())
                 {
@@ -1345,7 +1321,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
                     {
                         _scrollPosition.y += _totalHeight / 5.0f;
                     }
-                    else if (y > vBounds.y + vBounds.height)
+                    else if (y > vBounds.bottom())
                     {
                         _scrollPosition.y -= _totalHeight / 5.0f;
                     }
@@ -1359,9 +1335,13 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             if (_scrollBarHorizontal)
             {
                 float hHeight = _scrollBarHorizontal->getRegion().height;
-                Rectangle hBounds(_scrollBarBounds.x,
-                                  _viewportBounds.bottom() + (_bounds.bottom() - _viewportBounds.bottom())*0.5f - hHeight*0.5f,
-                                  _scrollBarBounds.width, hHeight);
+                float bottomPadding = _absoluteBounds.bottom() - _viewportBounds.bottom();
+                float leftPadding = _viewportBounds.x - _absoluteBounds.x;
+                float localVpBottom = _bounds.height - bottomPadding;
+                Rectangle hBounds(
+                    leftPadding + _scrollBarBounds.x,
+                    localVpBottom + bottomPadding*0.5f - hHeight*0.5f,
+                    _scrollBarBounds.width, hHeight);
 
                 if (y >= hBounds.y && y <= hBounds.bottom())
                 {
@@ -1400,7 +1380,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
                 _scrollBarOpacityClip = NULL;
             }
             _scrollBarOpacity = 1.0f;
-            _dirty = true;
+            setDirty(DIRTY_BOUNDS);
             return _consumeInputEvents;
         }
     }
@@ -1509,7 +1489,6 @@ void Container::setAnimationPropertyValue(int propertyId, AnimationValue* value,
     {
     case ANIMATE_SCROLLBAR_OPACITY:
         _scrollBarOpacity = Curve::lerp(blendWeight, _opacity, value->getFloat(0));
-        _dirty = true;
         break;
     default:
         Control::setAnimationPropertyValue(propertyId, value, blendWeight);

@@ -69,14 +69,6 @@ protected:
     virtual void update(const Container* container, const Vector2& offset) = 0;
 
     /**
-     * Align a control within a container.
-     *
-     * @param control The control to align.
-     * @param container The container to align the control within.
-     */
-    virtual void align(Control* control, const Container* container);
-
-    /**
      * Touch callback on touch events.  Coordinates are given relative to the container's
      * content area.
      *

@@ -1912,69 +1912,69 @@ Font::Justify Font::getJustify(const char* justify)
         return Font::ALIGN_TOP_LEFT;
     }
 
-    if (strcmp(justify, "ALIGN_LEFT") == 0)
+    if (strcmpnocase(justify, "ALIGN_LEFT") == 0)
     {
         return Font::ALIGN_LEFT;
     }
-    else if (strcmp(justify, "ALIGN_HCENTER") == 0)
+    else if (strcmpnocase(justify, "ALIGN_HCENTER") == 0)
     {
         return Font::ALIGN_HCENTER;
     }
-    else if (strcmp(justify, "ALIGN_RIGHT") == 0)
+    else if (strcmpnocase(justify, "ALIGN_RIGHT") == 0)
     {
         return Font::ALIGN_RIGHT;
     }
-    else if (strcmp(justify, "ALIGN_TOP") == 0)
+    else if (strcmpnocase(justify, "ALIGN_TOP") == 0)
     {
         return Font::ALIGN_TOP;
     }
-    else if (strcmp(justify, "ALIGN_VCENTER") == 0)
+    else if (strcmpnocase(justify, "ALIGN_VCENTER") == 0)
     {
         return Font::ALIGN_VCENTER;
     }
-    else if (strcmp(justify, "ALIGN_BOTTOM") == 0)
+    else if (strcmpnocase(justify, "ALIGN_BOTTOM") == 0)
     {
         return Font::ALIGN_BOTTOM;
     }
-    else if (strcmp(justify, "ALIGN_TOP_LEFT") == 0)
+    else if (strcmpnocase(justify, "ALIGN_TOP_LEFT") == 0)
     {
         return Font::ALIGN_TOP_LEFT;
     }
-    else if (strcmp(justify, "ALIGN_VCENTER_LEFT") == 0)
+    else if (strcmpnocase(justify, "ALIGN_VCENTER_LEFT") == 0)
     {
         return Font::ALIGN_VCENTER_LEFT;
     }
-    else if (strcmp(justify, "ALIGN_BOTTOM_LEFT") == 0)
+    else if (strcmpnocase(justify, "ALIGN_BOTTOM_LEFT") == 0)
     {
         return Font::ALIGN_BOTTOM_LEFT;
     }
-    else if (strcmp(justify, "ALIGN_TOP_HCENTER") == 0)
+    else if (strcmpnocase(justify, "ALIGN_TOP_HCENTER") == 0)
     {
         return Font::ALIGN_TOP_HCENTER;
     }
-    else if (strcmp(justify, "ALIGN_VCENTER_HCENTER") == 0)
+    else if (strcmpnocase(justify, "ALIGN_VCENTER_HCENTER") == 0)
     {
         return Font::ALIGN_VCENTER_HCENTER;
     }
-    else if (strcmp(justify, "ALIGN_BOTTOM_HCENTER") == 0)
+    else if (strcmpnocase(justify, "ALIGN_BOTTOM_HCENTER") == 0)
     {
         return Font::ALIGN_BOTTOM_HCENTER;
     }
-    else if (strcmp(justify, "ALIGN_TOP_RIGHT") == 0)
+    else if (strcmpnocase(justify, "ALIGN_TOP_RIGHT") == 0)
     {
         return Font::ALIGN_TOP_RIGHT;
     }
-    else if (strcmp(justify, "ALIGN_VCENTER_RIGHT") == 0)
+    else if (strcmpnocase(justify, "ALIGN_VCENTER_RIGHT") == 0)
     {
         return Font::ALIGN_VCENTER_RIGHT;
     }
-    else if (strcmp(justify, "ALIGN_BOTTOM_RIGHT") == 0)
+    else if (strcmpnocase(justify, "ALIGN_BOTTOM_RIGHT") == 0)
     {
         return Font::ALIGN_BOTTOM_RIGHT;
     }
     else
     {
-        GP_ERROR("Failed to get corresponding font justification for unsupported value '%s'.", justify);
+        GP_WARN("Invalid alignment string: '%s'. Defaulting to ALIGN_TOP_LEFT.", justify);
     }
 
     // Default.

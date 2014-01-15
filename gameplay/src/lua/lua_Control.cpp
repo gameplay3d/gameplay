@@ -39,8 +39,7 @@ void luaRegister_Control()
         {"getAnimation", lua_Control_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Control_getAnimationPropertyComponentCount},
         {"getAnimationPropertyValue", lua_Control_getAnimationPropertyValue},
-        {"getAutoHeight", lua_Control_getAutoHeight},
-        {"getAutoWidth", lua_Control_getAutoWidth},
+        {"getAutoSize", lua_Control_getAutoSize},
         {"getBorder", lua_Control_getBorder},
         {"getBounds", lua_Control_getBounds},
         {"getClip", lua_Control_getClip},
@@ -92,8 +91,7 @@ void luaRegister_Control()
         {"removeScriptCallback", lua_Control_removeScriptCallback},
         {"setAlignment", lua_Control_setAlignment},
         {"setAnimationPropertyValue", lua_Control_setAnimationPropertyValue},
-        {"setAutoHeight", lua_Control_setAutoHeight},
-        {"setAutoWidth", lua_Control_setAutoWidth},
+        {"setAutoSize", lua_Control_setAutoSize},
         {"setBorder", lua_Control_setBorder},
         {"setBounds", lua_Control_setBounds},
         {"setCanFocus", lua_Control_setCanFocus},
@@ -968,7 +966,7 @@ int lua_Control_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_Control_getAutoHeight(lua_State* state)
+int lua_Control_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -981,7 +979,7 @@ int lua_Control_getAutoHeight(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Control* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoHeight();
+                Control::AutoSize result = instance->getAutoSize();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
@@ -989,42 +987,7 @@ int lua_Control_getAutoHeight(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_Control_getAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Control_getAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Control* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoWidth();
-
-                // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Control_getAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Control_getAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3336,7 +3299,7 @@ int lua_Control_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_Control_setAutoHeight(lua_State* state)
+int lua_Control_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3346,91 +3309,19 @@ int lua_Control_setAutoHeight(lua_State* state)
     {
         case 2:
         {
-            do
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+                // Get parameter 1 off the stack.
+                Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
 
-                    Control* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
+                Control* instance = getInstance(state);
+                instance->setAutoSize(param1);
+                
+                return 0;
+            }
 
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    Control* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_Control_setAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Control_setAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
-
-                    Control* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    Control* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_Control_setAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Control_setAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

@@ -92,13 +92,9 @@ protected:
     void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
-     * Called when a label's properties change. Updates this label's internal rendering
-     * properties, such as its text viewport.
-     *
-     * @param container This label's parent container.
-     * @param offset The scroll offset of this label's parent container.
+     * @see Control::updateBounds
      */
-    void update(const Control* container, const Vector2& offset);
+    void updateBounds(const Vector2& offset);
 
     /**
      * @see Control::drawText

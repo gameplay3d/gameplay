@@ -62,7 +62,8 @@ void Label::setText(const char* text)
     if (strcmp(text, _text.c_str()) != 0)
     {
         _text = text;
-        _dirty = true;
+        if (_autoSize != AUTO_SIZE_NONE)
+            setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -71,9 +72,9 @@ const char* Label::getText()
     return _text.c_str();
 }
 
-void Label::update(const Control* container, const Vector2& offset)
+void Label::updateBounds(const Vector2& offset)
 {
-    Control::update(container, offset);
+    Control::updateBounds(offset);
 
     _textBounds.set((int)_viewportBounds.x, (int)_viewportBounds.y, _viewportBounds.width, _viewportBounds.height);
 
@@ -83,14 +84,20 @@ void Label::update(const Control* container, const Vector2& offset)
     _textColor.w *= _opacity;
 
     Font* font = getFont(state);
-    if ((_autoWidth == Control::AUTO_SIZE_FIT || _autoHeight == Control::AUTO_SIZE_FIT) && font)
+    if (_autoSize != AUTO_SIZE_NONE && font)
     {
         unsigned int w, h;
         font->measureText(_text.c_str(), getFontSize(state), &w, &h);
-        if (_autoWidth == Control::AUTO_SIZE_FIT)
+        if (_autoSize & AUTO_SIZE_WIDTH)
+        {
             setWidth(w + getBorder(state).left + getBorder(state).right + getPadding().left + getPadding().right);
-        if (_autoHeight == Control::AUTO_SIZE_FIT)
+            _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_WIDTH);
+        }
+        if (_autoSize & AUTO_SIZE_HEIGHT)
+        {
             setHeight(h + getBorder(state).top + getBorder(state).bottom + getPadding().top + getPadding().bottom);
+            _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_HEIGHT);
+        }
     }
 }
 

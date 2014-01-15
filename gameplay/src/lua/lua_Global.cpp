@@ -218,8 +218,9 @@ void luaRegister_lua_Global()
         std::vector<std::string> scopePath;
         scopePath.push_back("Control");
         gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_NONE", "AUTO_SIZE_NONE", scopePath);
-        gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_STRETCH", "AUTO_SIZE_STRETCH", scopePath);
-        gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_FIT", "AUTO_SIZE_FIT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_WIDTH", "AUTO_SIZE_WIDTH", scopePath);
+        gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_HEIGHT", "AUTO_SIZE_HEIGHT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_BOTH", "AUTO_SIZE_BOTH", scopePath);
     }
 
     // Register enumeration Control::Listener::EventType.

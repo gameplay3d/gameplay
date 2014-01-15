@@ -104,16 +104,19 @@ public:
         AUTO_SIZE_NONE = 0x00,
 
         /**
-         * The control's size is stretched to fill the content area of its parent container.
+         * The control's width is set to tightly fit its contents.
          */
-        AUTO_SIZE_STRETCH = 0x01,
+        AUTO_SIZE_WIDTH = 0x01,
 
         /**
-         * The control's size is set to tightly fit its contents.
-         *
-         * Not all controls support this auto sizing mode.
+        * The control's height is set to tightly fit its contents.
+        */
+        AUTO_SIZE_HEIGHT = 0x02,
+
+        /**
+         * The control's width and height are set to tightly fit its contents.
          */
-        AUTO_SIZE_FIT = 0x02
+        AUTO_SIZE_BOTH = (AUTO_SIZE_WIDTH | AUTO_SIZE_HEIGHT)
     };
 
     /**
@@ -428,52 +431,18 @@ public:
     const Rectangle& getClip() const;
 
     /**
-     * Returns the auto sizing mode for this control's width.
+     * Returns the auto sizing mode for this control.
      *
-     * @return The auto size mode for this control's width.
+     * @return The auto size mode for this control.
      */
-    AutoSize getAutoWidth() const;
+    AutoSize getAutoSize() const;
 
     /**
-     * Enables or disables auto sizing for this control's width.
+     * Sets the auto size mode for this control.
      *
-     * This method is a simplified version of setAutoWidth(AutoSize) left intact for legacy reasons.
-     * It enables or disables the AUTO_SIZE_STRETCH mode for the control's width.
-     *
-     * @param autoWidth True to enable AUTO_SIZE_STRETCH for this control's width.
+     * @param mode The new auto size mode for this control.
      */
-    void setAutoWidth(bool autoWidth);
-
-    /**
-     * Sets the auto size mode for this control's width.
-     *
-     * @param mode The new auto size mode for this control's width.
-     */
-    void setAutoWidth(AutoSize mode);
-
-    /**
-     * Returns the auto sizing mode for this control's height.
-     *
-     * @return The auto size mode for this control's height.
-     */
-    AutoSize getAutoHeight() const;
-
-    /**
-     * Enables or disables auto sizing for this control's height.
-     *
-     * This method is a simplified version of setAutoHeight(AutoSize) left intact for legacy reasons.
-     * It enables or disables the AUTO_SIZE_STRETCH mode for the control's height.
-     *
-     * @param autoHeight True to enable AUTO_SIZE_STRETCH for this control's height.
-     */
-    void setAutoHeight(bool autoHeight);
-
-    /**
-     * Sets the auto size mode for this control's height.
-     *
-     * @param mode The new auto size mode for this control's height.
-     */
-    void setAutoHeight(AutoSize mode);
+    void setAutoSize(AutoSize mode);
 
     /**
      * Set the alignment of this control within its parent container.
@@ -1013,6 +982,11 @@ protected:
     static const int INVALID_CONTACT_INDEX = -1;
 
     /**
+     * Indicates that the bounds of the control are dirty.
+     */
+    static const int DIRTY_BOUNDS = 1;
+
+    /**
      * Constructor.
      */
     Control();
@@ -1086,13 +1060,11 @@ protected:
     virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
-     * Called when a control's properties change.  Updates this control's internal rendering
-     * properties, such as its text viewport.
+     * Updates the bounds for this control and its children.
      *
-     * @param container This control's parent container.
-     * @param offset Positioning offset to add to the control's position.
+     * @param offset Positioning offset to add to the control's position (most often used for scrolling).
      */
-    virtual void update(const Control* container, const Vector2& offset);
+    virtual void updateBounds(const Vector2& offset);
 
     /**
      * Indicates that a control will begin drawing into the specified batch.
@@ -1183,13 +1155,6 @@ protected:
     virtual void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
-     * Returns whether this control has been modified and requires an update.
-     *
-     * @return Whether this control has been modified and requires an update.
-     */
-    virtual bool isDirty();
-
-    /**
      * Get a Control::State enum from a matching string.
      *
      * @param state The string to match.
@@ -1222,6 +1187,22 @@ protected:
      * @param evt The event type.
      */
     virtual void controlEvent(Control::Listener::EventType evt);
+
+    /**
+     * Sets dirty bits for the control.
+     *
+     * Valid bits are any of the "DIRTY_xxx" constants from the Control class.
+     *
+     * @param bits Dirty bits to set.
+     */
+    void setDirty(int bits);
+
+    /**
+     * Determines if the specified bit is dirty.
+     *
+     * @param bit The bit to check.
+     */
+    bool isDirty(int bit) const;
 
     /**
      * Gets the Alignment by string.
@@ -1282,10 +1263,10 @@ protected:
     Rectangle _viewportClipBounds;
 
     /**
-     * If the control is dirty and need updating.
+     * Control dirty bits.
      */
-    bool _dirty;
-    
+    int _dirtyBits;
+
     /**
      * Flag for whether the Control consumes input events.
      */
@@ -1295,26 +1276,15 @@ protected:
      * The Control's Alignment
      */
     Alignment _alignment;
-
-    /**
-     * Whether the Control's alignment has been set programmatically.
-     */
-    bool _isAlignmentSet;
     
     /**
-     * Whether the Control's width is auto-sized.
+     * The Control's auto size mode.
      */
-    AutoSize _autoWidth;
-    
-    /**
-     * Whether the Control's height is auto-sized.
-     */
-    AutoSize _autoHeight;
+    AutoSize _autoSize;
     
     /**
      * Listeners map of EventType's to a list of Listeners.
      */
-    //std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
     std::map<Control::Listener::EventType, std::list<Control::Listener*>*>* _listeners;
     
     /**
@@ -1363,6 +1333,8 @@ private:
      * Constructor.
      */    
     Control(const Control& copy);
+
+    AutoSize Control::parseAutoSize(const char* str);
 
     Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
 

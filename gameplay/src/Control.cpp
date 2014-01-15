@@ -46,8 +46,8 @@ static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percenta
 }
 
 Control::Control()
-    : _id(""), _enabled(true), _boundsBits(0), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false),
-    _autoWidth(AUTO_SIZE_NONE), _autoHeight(AUTO_SIZE_NONE), _style(NULL), _listeners(NULL), _visible(true), _zIndex(-1),
+    : _id(""), _enabled(true), _boundsBits(0), _dirtyBits(DIRTY_BOUNDS), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT),
+    _autoSize(AUTO_SIZE_BOTH), _style(NULL), _listeners(NULL), _visible(true), _zIndex(-1),
     _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
@@ -79,15 +79,19 @@ Control::~Control()
     }
 }
 
-static Control::AutoSize parseAutoSize(const char* str)
+Control::AutoSize Control::parseAutoSize(const char* str)
 {
     if (str == NULL)
-        return Control::AUTO_SIZE_NONE;
-    if (strcmp(str, "AUTO_SIZE_STRETCH") == 0 || strcmp(str, "true") == 0) // left for backwards compatibility
-        return Control::AUTO_SIZE_STRETCH;
-    if (strcmp(str, "AUTO_SIZE_FIT") == 0)
-        return Control::AUTO_SIZE_FIT;
-    return Control::AUTO_SIZE_NONE;
+        return _autoSize;
+
+    if (strcmpnocase(str, "AUTO_SIZE_WIDTH") == 0 )
+        return AUTO_SIZE_WIDTH;
+    if (strcmpnocase(str, "AUTO_SIZE_HEIGHT") == 0)
+        return AUTO_SIZE_HEIGHT;
+    if (strcmpnocase(str, "AUTO_SIZE_BOTH") == 0)
+        return AUTO_SIZE_BOTH;
+
+    return _autoSize;
 }
 
 void Control::initialize(const char* typeName, Theme::Style* style, Properties* properties)
@@ -106,8 +110,8 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 
         if (!_style)
         {
-            // Try loading a style from the default theme
-            _style = Theme::getDefault()->getStyle(styleName);
+            // Use an empty style from our parent's theme
+            _style = style->getTheme()->getEmptyStyle();
         }
     }
     else
@@ -134,13 +138,9 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
     if (properties)
     {
 		// Properties not defined by the style.
-		const char * alignmentString = properties->getString("alignment");
+		const char* alignmentString = properties->getString("alignment");
 
-		_isAlignmentSet = alignmentString != NULL;
 		_alignment = getAlignment(alignmentString);
-
-		_autoWidth = parseAutoSize(properties->getString("autoWidth"));
-		_autoHeight = parseAutoSize(properties->getString("autoHeight"));
 
 		_consumeInputEvents = properties->getBool("consumeInputEvents", true);
 
@@ -167,31 +167,60 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 			_focusIndex = -1;
 		}
 
-		float bounds[4];
-		bool boundsBits[4];
-		if (properties->exists("position"))
-		{
-			parseCoordPair(properties->getString("position", "0,0"), &bounds[0], &bounds[1], &boundsBits[0], &boundsBits[1]);
+		float bounds[2];
+		bool boundsBits[2];
+        const char* position = properties->getString("position");
+        if (position && parseCoordPair(position, &bounds[0], &bounds[1], &boundsBits[0], &boundsBits[1]))
+        {
+            setX(bounds[0], boundsBits[0]);
+            setY(bounds[1], boundsBits[1]);
 		}
 		else
 		{
-			bounds[0] = parseCoord(properties->getString("x", "0"), &boundsBits[0]);
-			bounds[1] = parseCoord(properties->getString("y", "0"), &boundsBits[1]);
+            if (properties->exists("x"))
+            {
+                bounds[0] = parseCoord(properties->getString("x", "0"), &boundsBits[0]);
+                setX(bounds[0], boundsBits[0]);
+            }
+            if (properties->exists("y"))
+            {
+                bounds[1] = parseCoord(properties->getString("y", "0"), &boundsBits[1]);
+                setY(bounds[1], boundsBits[1]);
+            }
 		}
 
-		if (properties->exists("size"))
-		{
-			parseCoordPair(properties->getString("size", "0,0"), &bounds[2], &bounds[3], &boundsBits[2], &boundsBits[3]);
-		}
+        // If there is an explicitly specified size, width or height, unset the corresponding autoSize bit
+        const char* size = properties->getString("size");
+        if (size && parseCoordPair(size, &bounds[0], &bounds[1], &boundsBits[0], &boundsBits[1]))
+        {
+            setWidth(bounds[0], boundsBits[0]);
+            setHeight(bounds[1], boundsBits[1]);
+        }
 		else
 		{
-			bounds[2] = parseCoord(properties->getString("width", "0"), &boundsBits[2]);
-			bounds[3] = parseCoord(properties->getString("height", "0"), &boundsBits[3]);
+            const char* width = properties->getString("width");
+            if (width)
+            {
+                bounds[0] = parseCoord(width, &boundsBits[0]);
+                setWidth(bounds[0], boundsBits[0]);
+            }
+            const char* height = properties->getString("height");
+            if (height)
+            {
+                bounds[1] = parseCoord(height, &boundsBits[1]);
+                setHeight(bounds[1], boundsBits[1]);
+            }
 		}
-		setX(bounds[0], boundsBits[0]);
-		setY(bounds[1], boundsBits[1]);
-		setWidth(bounds[2], boundsBits[2]);
-		setHeight(bounds[3], boundsBits[3]);
+
+        // Backwards Compatibility: Support deprecated autoWidth and autoHeight properties,
+        // which resolve to width=100% and height=100%.
+        if (properties->getBool("autoWidth"))
+            setWidth(1.0f, true);
+        if (properties->getBool("autoHeight"))
+            setHeight(1.0f, true);
+
+        // Parse the auto-size mode for the control (this overrides explicit sizes and legacy autoWidth/autoHeight)
+        _autoSize = parseAutoSize(properties->getString("autoSize"));
 
 		const char* id = properties->getId();
 		if (id)
@@ -280,7 +309,7 @@ void Control::setX(float x, bool percentage)
             _boundsBits &= ~BOUNDS_X_PERCENTAGE_BIT;
             _bounds.x = x;
         }
-        _dirty = true;
+        setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -308,7 +337,7 @@ void Control::setY(float y, bool percentage)
             _boundsBits &= ~BOUNDS_Y_PERCENTAGE_BIT;
             _bounds.y = y;
         }
-        _dirty = true;
+        setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -324,6 +353,8 @@ float Control::getWidth() const
 
 void Control::setWidth(float width, bool percentage)
 {
+    _autoSize = (AutoSize)(_autoSize & ~AUTO_SIZE_WIDTH);
+
     if (_relativeBounds.width != width || percentage != ((_boundsBits & BOUNDS_WIDTH_PERCENTAGE_BIT) != 0))
     {
         _relativeBounds.width = width;
@@ -336,7 +367,7 @@ void Control::setWidth(float width, bool percentage)
             _boundsBits &= ~BOUNDS_WIDTH_PERCENTAGE_BIT;
             _bounds.width = width;
         }
-        _dirty = true;
+        setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -352,6 +383,8 @@ float Control::getHeight() const
 
 void Control::setHeight(float height, bool percentage)
 {
+    _autoSize = (AutoSize)(_autoSize & ~AUTO_SIZE_HEIGHT);
+
     if (_relativeBounds.height != height || percentage != ((_boundsBits & BOUNDS_HEIGHT_PERCENTAGE_BIT) != 0))
     {
         _relativeBounds.height = height;
@@ -364,7 +397,7 @@ void Control::setHeight(float height, bool percentage)
             _boundsBits &= ~BOUNDS_HEIGHT_PERCENTAGE_BIT;
             _bounds.height = height;
         }
-        _dirty = true;
+        setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -415,9 +448,11 @@ const Rectangle& Control::getClip() const
 
 void Control::setAlignment(Alignment alignment)
 {
-    _alignment = alignment;
-    _isAlignmentSet = true;
-    _dirty = true;
+    if (_alignment != alignment)
+    {
+        _alignment = alignment;
+        setDirty(DIRTY_BOUNDS);
+    }
 }
 
 Control::Alignment Control::getAlignment() const
@@ -425,41 +460,17 @@ Control::Alignment Control::getAlignment() const
     return _alignment;
 }
 
-Control::AutoSize Control::getAutoWidth() const
+Control::AutoSize Control::getAutoSize() const
 {
-    return _autoWidth;
+    return _autoSize;
 }
 
-void Control::setAutoWidth(bool autoWidth)
+void Control::setAutoSize(AutoSize mode)
 {
-    setAutoWidth(autoWidth ? AUTO_SIZE_STRETCH : AUTO_SIZE_NONE);
-}
-
-void Control::setAutoWidth(AutoSize mode)
-{
-    if (_autoWidth != mode)
+    if (_autoSize != mode)
     {
-        _autoWidth = mode;
-        _dirty = true;
-    }
-}
-
-Control::AutoSize Control::getAutoHeight() const
-{
-    return _autoHeight;
-}
-
-void Control::setAutoHeight(bool autoHeight)
-{
-    setAutoHeight(autoHeight ? AUTO_SIZE_STRETCH : AUTO_SIZE_NONE);
-}
-
-void Control::setAutoHeight(AutoSize mode)
-{
-    if (_autoHeight != mode)
-    {
-        _autoHeight = mode;
-        _dirty = true;
+        _autoSize = mode;
+        setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -468,7 +479,6 @@ void Control::setVisible(bool visible)
     if (_visible != visible)
     {
         _visible = visible;
-        _dirty = true;
 
         if (!_visible)
             Form::controlDisabled(this);
@@ -525,10 +535,9 @@ void Control::setOpacity(float opacity, unsigned char states)
 
     for (int i = 0; i < Theme::Style::OVERLAY_MAX; ++i)
     {
-        if( overlays[i] )
+        if (overlays[i])
             overlays[i]->setOpacity(opacity);
     }
-    _dirty = true;
 }
 
 float Control::getOpacity(State state) const
@@ -543,7 +552,6 @@ void Control::setEnabled(bool enabled)
     if (_enabled != enabled)
     {
         _enabled = enabled;
-        _dirty = true;
 
         if (!_enabled)
             Form::controlDisabled(this);
@@ -574,11 +582,11 @@ void Control::setBorder(float top, float bottom, float left, float right, unsign
 
     for (int i = 0; i < Theme::Style::OVERLAY_MAX; ++i)
     {
-        if( overlays[i] )
+        if (overlays[i])
             overlays[i]->setBorder(top, bottom, left, right);
     }
 
-    _dirty = true;
+    setDirty(DIRTY_BOUNDS);
 }
 
 const Theme::Border& Control::getBorder(State state) const
@@ -599,7 +607,6 @@ void Control::setSkinRegion(const Rectangle& region, unsigned char states)
         if( overlays[i] )
             overlays[i]->setSkinRegion(region, _style->_tw, _style->_th);
     }
-    _dirty = true;
 }
 
 const Rectangle& Control::getSkinRegion(State state) const
@@ -620,8 +627,6 @@ void Control::setSkinColor(const Vector4& color, unsigned char states)
         if( overlays[i] )
             overlays[i]->setSkinColor(color);
     }
-
-    _dirty = true;
 }
 
 const Vector4& Control::getSkinColor(State state) const
@@ -636,7 +641,7 @@ void Control::setMargin(float top, float bottom, float left, float right)
     GP_ASSERT(_style);
     overrideStyle();
     _style->setMargin(top, bottom, left, right);
-    _dirty = true;
+    setDirty(DIRTY_BOUNDS);
 }
 
 const Theme::Margin& Control::getMargin() const
@@ -650,7 +655,7 @@ void Control::setPadding(float top, float bottom, float left, float right)
     GP_ASSERT(_style);
     overrideStyle();
     _style->setPadding(top, bottom, left, right);
-    _dirty = true;
+    setDirty(DIRTY_BOUNDS);
 }
     
 const Theme::Padding& Control::getPadding() const
@@ -670,8 +675,6 @@ void Control::setImageRegion(const char* id, const Rectangle& region, unsigned c
         if( overlays[i] )
             overlays[i]->setImageRegion(id, region, _style->_tw, _style->_th);
     }
-
-    _dirty = true;
 }
 
 const Rectangle& Control::getImageRegion(const char* id, State state) const
@@ -692,8 +695,6 @@ void Control::setImageColor(const char* id, const Vector4& color, unsigned char 
         if( overlays[i] )
             overlays[i]->setImageColor(id, color);
     }
-
-    _dirty = true;
 }
 
 const Vector4& Control::getImageColor(const char* id, State state) const
@@ -721,8 +722,6 @@ void Control::setCursorRegion(const Rectangle& region, unsigned char states)
         if( overlays[i] )
             overlays[i]->setCursorRegion(region, _style->_tw, _style->_th);
     }
-
-    _dirty = true;
 }
 
 const Rectangle& Control::getCursorRegion(State state) const
@@ -743,8 +742,6 @@ void Control::setCursorColor(const Vector4& color, unsigned char states)
         if( overlays[i] )
             overlays[i]->setCursorColor(color);
     }
-
-    _dirty = true;
 }
 
 const Vector4& Control::getCursorColor(State state)
@@ -773,7 +770,8 @@ void Control::setFont(Font* font, unsigned char states)
             overlays[i]->setFont(font);
     }
 
-    _dirty = true;
+    if (_autoSize != AUTO_SIZE_NONE)
+        setDirty(DIRTY_BOUNDS);
 }
 
 Font* Control::getFont(State state) const
@@ -795,7 +793,8 @@ void Control::setFontSize(unsigned int fontSize, unsigned char states)
             overlays[i]->setFontSize(fontSize);
     }
 
-    _dirty = true;
+    if (_autoSize != AUTO_SIZE_NONE)
+        setDirty(DIRTY_BOUNDS);
 }
 
 unsigned int Control::getFontSize(State state) const
@@ -816,8 +815,6 @@ void Control::setTextColor(const Vector4& color, unsigned char states)
         if( overlays[i] )
             overlays[i]->setTextColor(color);
     }
-
-    _dirty = true;
 }
 
 const Vector4& Control::getTextColor(State state) const
@@ -838,8 +835,6 @@ void Control::setTextAlignment(Font::Justify alignment, unsigned char states)
         if( overlays[i] )
             overlays[i]->setTextAlignment(alignment);
     }
-
-    _dirty = true;
 }
 
 Font::Justify Control::getTextAlignment(State state) const
@@ -860,8 +855,6 @@ void Control::setTextRightToLeft(bool rightToLeft, unsigned char states)
         if( overlays[i] )
             overlays[i]->setTextRightToLeft(rightToLeft);
     }
-
-    _dirty = true;
 }
 
 bool Control::getTextRightToLeft(State state) const
@@ -880,10 +873,9 @@ void Control::setStyle(Theme::Style* style)
 {
     if (style != _style)
     {
-        _dirty = true;
+        _style = style;
+        setDirty(DIRTY_BOUNDS);
     }
-
-    _style = style;
 }
 
 Theme* Control::getTheme() const
@@ -904,7 +896,7 @@ Control::State Control::getState() const
             return FOCUS;
         return Form::_activeControlState;
     }
-    
+
     if (Form::_focusControl == this)
         return FOCUS;
 
@@ -950,7 +942,6 @@ void Control::setZIndex(int zIndex)
     if (zIndex != _zIndex)
     {
         _zIndex = zIndex;
-        _dirty = true;
 
         if (_parent)
         {
@@ -1044,12 +1035,12 @@ void Control::addSpecificListener(Control::Listener* listener, Control::Listener
 
 bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    return false;// _consumeInputEvents;
+    return false;
 }
 
 bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    return false;// _consumeInputEvents;
+    return false;
 }
 
 bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
@@ -1061,7 +1052,7 @@ bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 bool Control::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
-    return false;// _consumeInputEvents;
+    return false;
 }
 
 void Control::notifyListeners(Control::Listener::EventType eventType)
@@ -1096,17 +1087,42 @@ void Control::controlEvent(Control::Listener::EventType evt)
 {
 }
 
-void Control::update(const Control* container, const Vector2& offset)
+void Control::setDirty(int bits)
+{
+    _dirtyBits |= bits;
+
+    // Propogate dirty bits to parent if needed
+    if (_parent)
+    {
+        if (bits & DIRTY_BOUNDS)
+        {
+            // If our parent's size depends on children size, mark it dirty
+            if (_parent->_autoSize != AUTO_SIZE_NONE)
+            {
+                _parent->setDirty(DIRTY_BOUNDS);
+            }
+        }
+    }
+}
+
+bool Control::isDirty(int bit) const
+{
+    return (_dirtyBits & bit) == bit;
+}
+
+void Control::updateBounds(const Vector2& offset)
 {
     Game* game = Game::getInstance();
 
-    const Rectangle parentAbsoluteBounds = container ? container->_viewportBounds : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
-    const Rectangle parentAbsoluteClip = container ? container->_viewportClipBounds : parentAbsoluteBounds;
+    // Store old bounds so we can determine if our bounds change as a result of this layout
+    Rectangle oldBounds(_bounds);
 
+    const Rectangle parentAbsoluteBounds = _parent ? _parent->_viewportBounds : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
+    const Rectangle parentAbsoluteClip = _parent ? _parent->_viewportClipBounds : parentAbsoluteBounds;
+
+    // Compute content area padding values
     const Theme::Border& border = getBorder(getState());
     const Theme::Padding& padding = getPadding();
-
-    // Compute content are padding values
     float lpadding = border.left + padding.left;
     float rpadding = border.right + padding.right;
     float tpadding = border.top + padding.top;
@@ -1114,19 +1130,66 @@ void Control::update(const Control* container, const Vector2& offset)
     float hpadding = lpadding + rpadding;
     float vpadding = tpadding + bpadding;
 
+    // Apply control alignment first
+    if (_alignment != Control::ALIGN_TOP_LEFT)
+    {
+        const Theme::Margin& margin = _style->getMargin();
+        const Rectangle& parentBounds = _parent ? _parent->getBounds() : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
+        const Theme::Border& parentBorder = _parent ? _parent->getBorder(_parent->getState()) : Theme::Border::empty();
+        const Theme::Padding& parentPadding = _parent ? _parent->getPadding() : Theme::Padding::empty();
+
+        float clipWidth, clipHeight;
+        if (_parent && (_parent->getScroll() != Container::SCROLL_NONE))
+        {
+            const Rectangle& verticalScrollBarBounds = _parent->getImageRegion("verticalScrollBar", _parent->getState());
+            const Rectangle& horizontalScrollBarBounds = _parent->getImageRegion("horizontalScrollBar", _parent->getState());
+            clipWidth = parentBounds.width - parentBorder.left - parentBorder.right - parentPadding.left - parentPadding.right - verticalScrollBarBounds.width;
+            clipHeight = parentBounds.height - parentBorder.top - parentBorder.bottom - parentPadding.top - parentPadding.bottom - horizontalScrollBarBounds.height;
+        }
+        else
+        {
+            clipWidth = parentBounds.width - parentBorder.left - parentBorder.right - parentPadding.left - parentPadding.right;
+            clipHeight = parentBounds.height - parentBorder.top - parentBorder.bottom - parentPadding.top - parentPadding.bottom;
+        }
+
+        // Vertical alignment
+        if ((_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
+        {
+            setY(clipHeight - _bounds.height - margin.bottom);
+        }
+        else if ((_alignment & Control::ALIGN_VCENTER) == Control::ALIGN_VCENTER)
+        {
+            setY(clipHeight * 0.5f - _bounds.height * 0.5f);
+        }
+        else if ((_alignment & Control::ALIGN_TOP) == Control::ALIGN_TOP)
+        {
+            setY(margin.top);
+        }
+
+        // Horizontal alignment
+        if ((_alignment & Control::ALIGN_RIGHT) == Control::ALIGN_RIGHT)
+        {
+            setX(clipWidth - _bounds.width - margin.right);
+        }
+        else if ((_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
+        {
+            setX(clipWidth * 0.5f - _bounds.width * 0.5f);
+        }
+        else if ((_alignment & Control::ALIGN_LEFT) == Control::ALIGN_LEFT)
+        {
+            setX(margin.left);
+        }
+    }
+
     // Calculate local unclipped bounds.
     _bounds.set(_relativeBounds);
     if (isXPercentage())
         _bounds.x *= parentAbsoluteBounds.width;
     if (isYPercentage())
         _bounds.y *= parentAbsoluteBounds.height;
-    if (_autoWidth == AUTO_SIZE_STRETCH)
-        _bounds.width = parentAbsoluteBounds.width;
-    else if (isWidthPercentage())
+    if (isWidthPercentage())
         _bounds.width *= parentAbsoluteBounds.width;
-    if (_autoHeight == AUTO_SIZE_STRETCH)
-        _bounds.height = parentAbsoluteBounds.height;
-    else if (isHeightPercentage())
+    if (isHeightPercentage())
         _bounds.height *= parentAbsoluteBounds.height;
 
     // Calculate absolute unclipped bounds
@@ -1162,8 +1225,20 @@ void Control::update(const Control* container, const Vector2& offset)
 
     // Current opacity should be multiplied by that of the parent container.
     _opacity = getOpacity(getState());
-    if (container)
-        _opacity *= container->_opacity;
+    if (_parent)
+        _opacity *= _parent->_opacity;
+
+    // Clear our dirty bounds bit
+    _dirtyBits &= ~DIRTY_BOUNDS;
+
+    // If our bounds have changed and our parent's size depends on ours,
+    // then dirty our parent bounds it's recomputed on the next layout pass
+    bool boundsChanged = _bounds != oldBounds;
+    if (boundsChanged && _parent && _parent->_autoSize != AUTO_SIZE_NONE && 
+        !((_boundsBits & BOUNDS_WIDTH_PERCENTAGE_BIT) && (_boundsBits & BOUNDS_HEIGHT_PERCENTAGE_BIT)))
+    {
+        _parent->setDirty(DIRTY_BOUNDS);
+    }
 }
 
 void Control::startBatch(Form* form, SpriteBatch* batch)
@@ -1291,11 +1366,6 @@ unsigned int Control::drawImages(Form* form, const Rectangle& position)
 unsigned int Control::drawText(Form* form, const Rectangle& position)
 {
     return 0;
-}
-
-bool Control::isDirty()
-{
-    return _dirty;
 }
 
 bool Control::isContainer() const
@@ -1636,7 +1706,8 @@ void Control::setImageList(Theme::ImageList* imageList, unsigned char states)
             overlays[i]->setImageList(imageList);
     }
 
-    _dirty = true;
+    if (_autoSize != AUTO_SIZE_NONE)
+        setDirty(DIRTY_BOUNDS);
 }
 
 void Control::setCursor(Theme::ThemeImage* cursor, unsigned char states)
@@ -1650,8 +1721,6 @@ void Control::setCursor(Theme::ThemeImage* cursor, unsigned char states)
         if( overlays[i] )
             overlays[i]->setCursor(cursor);
     }
-
-    _dirty = true;
 }
 
 void Control::setSkin(Theme::Skin* skin, unsigned char states)
@@ -1666,7 +1735,8 @@ void Control::setSkin(Theme::Skin* skin, unsigned char states)
             overlays[i]->setSkin(skin);
     }
 
-    _dirty = true;
+    if (_autoSize != AUTO_SIZE_NONE)
+        setDirty(DIRTY_BOUNDS);
 }
 
 Theme::Skin* Control::getSkin(State state)

@@ -233,13 +233,9 @@ protected:
     unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
-     * Called when a slider's properties change. Updates this slider's internal rendering
-     * properties, such as its text viewport.
-     *
-     * @param container This slider's parent container.
-     * @param offset The scroll offset of this slider's parent container.
+     * @see Control::updateBounds
      */
-    void update(const Control* container, const Vector2& offset);
+    void updateBounds(const Vector2& offset);
 
     /**
      * The minimum value for the Slider.
@@ -314,6 +310,8 @@ private:
      * The text displayed by this slider if set to display its value.
      */
     std::string _valueText;
+
+    float _trackHeight;
 
     float _gamepadValue;
 };

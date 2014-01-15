@@ -75,7 +75,7 @@ ParticleEmitter* ParticleEmitter::create(const char* url)
         GP_ERROR("Failed to create particle emitter from file.");
         return NULL;
     }
-
+    
     ParticleEmitter* particle = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
     SAFE_DELETE(properties);
 
