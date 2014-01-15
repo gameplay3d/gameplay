@@ -146,14 +146,12 @@ void ImageControl::updateBounds(const Vector2& offset)
     {
         if (_autoSize & AUTO_SIZE_WIDTH)
         {
-            setWidth(_batch->getSampler()->getTexture()->getWidth());
-            _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_WIDTH);
+            setWidthInternal(_batch->getSampler()->getTexture()->getWidth());
         }
 
         if (_autoSize & AUTO_SIZE_HEIGHT)
         {
-            setHeight(_batch->getSampler()->getTexture()->getWidth());
-            _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_HEIGHT);
+            setHeightInternal(_batch->getSampler()->getTexture()->getWidth());
         }
     }
 }

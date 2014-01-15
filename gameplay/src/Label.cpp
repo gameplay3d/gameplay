@@ -90,13 +90,11 @@ void Label::updateBounds(const Vector2& offset)
         font->measureText(_text.c_str(), getFontSize(state), &w, &h);
         if (_autoSize & AUTO_SIZE_WIDTH)
         {
-            setWidth(w + getBorder(state).left + getBorder(state).right + getPadding().left + getPadding().right);
-            _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_WIDTH);
+            setWidthInternal(w + getBorder(state).left + getBorder(state).right + getPadding().left + getPadding().right);
         }
         if (_autoSize & AUTO_SIZE_HEIGHT)
         {
-            setHeight(h + getBorder(state).top + getBorder(state).bottom + getPadding().top + getPadding().bottom);
-            _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_HEIGHT);
+            setHeightInternal(h + getBorder(state).top + getBorder(state).bottom + getPadding().top + getPadding().bottom);
         }
     }
 }

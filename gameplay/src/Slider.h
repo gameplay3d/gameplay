@@ -233,6 +233,11 @@ protected:
     unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
+     * @see Control::update
+     */
+    void update(float elapsedTime);
+
+    /**
      * @see Control::updateBounds
      */
     void updateBounds(const Vector2& offset);

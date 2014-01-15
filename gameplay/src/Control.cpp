@@ -137,6 +137,10 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 
     if (properties)
     {
+        const char* id = properties->getId();
+        if (id)
+            _id = id;
+
 		// Properties not defined by the style.
 		const char* alignmentString = properties->getString("alignment");
 
@@ -222,10 +226,6 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
         // Parse the auto-size mode for the control (this overrides explicit sizes and legacy autoWidth/autoHeight)
         _autoSize = parseAutoSize(properties->getString("autoSize"));
 
-		const char* id = properties->getId();
-		if (id)
-			_id = id;
-
 		if (properties->exists("enabled"))
 		{
 			setEnabled(properties->getBool("enabled"));
@@ -299,17 +299,22 @@ void Control::setX(float x, bool percentage)
 {
     if (_relativeBounds.x != x || percentage != ((_boundsBits & BOUNDS_X_PERCENTAGE_BIT) != 0))
     {
-        _relativeBounds.x = x;
-        if (percentage)
-        {
-            _boundsBits |= BOUNDS_X_PERCENTAGE_BIT;
-        }
-        else
-        {
-            _boundsBits &= ~BOUNDS_X_PERCENTAGE_BIT;
-            _bounds.x = x;
-        }
+        setXInternal(x, percentage);
         setDirty(DIRTY_BOUNDS);
+    }
+}
+
+void Control::setXInternal(float x, bool percentage)
+{
+    _relativeBounds.x = x;
+    if (percentage)
+    {
+        _boundsBits |= BOUNDS_X_PERCENTAGE_BIT;
+    }
+    else
+    {
+        _boundsBits &= ~BOUNDS_X_PERCENTAGE_BIT;
+        _bounds.x = x;
     }
 }
 
@@ -327,17 +332,22 @@ void Control::setY(float y, bool percentage)
 {
     if (_relativeBounds.y != y || percentage != ((_boundsBits & BOUNDS_Y_PERCENTAGE_BIT) != 0))
     {
-        _relativeBounds.y = y;
-        if (percentage)
-        {
-            _boundsBits |= BOUNDS_Y_PERCENTAGE_BIT;
-        }
-        else
-        {
-            _boundsBits &= ~BOUNDS_Y_PERCENTAGE_BIT;
-            _bounds.y = y;
-        }
+        setYInternal(y, percentage);
         setDirty(DIRTY_BOUNDS);
+    }
+}
+
+void Control::setYInternal(float y, bool percentage)
+{
+    _relativeBounds.y = y;
+    if (percentage)
+    {
+        _boundsBits |= BOUNDS_Y_PERCENTAGE_BIT;
+    }
+    else
+    {
+        _boundsBits &= ~BOUNDS_Y_PERCENTAGE_BIT;
+        _bounds.y = y;
     }
 }
 
@@ -357,17 +367,22 @@ void Control::setWidth(float width, bool percentage)
 
     if (_relativeBounds.width != width || percentage != ((_boundsBits & BOUNDS_WIDTH_PERCENTAGE_BIT) != 0))
     {
-        _relativeBounds.width = width;
-        if (percentage)
-        {
-            _boundsBits |= BOUNDS_WIDTH_PERCENTAGE_BIT;
-        }
-        else
-        {
-            _boundsBits &= ~BOUNDS_WIDTH_PERCENTAGE_BIT;
-            _bounds.width = width;
-        }
+        setWidthInternal(width, percentage);
         setDirty(DIRTY_BOUNDS);
+    }
+}
+
+void Control::setWidthInternal(float width, bool percentage)
+{
+    _relativeBounds.width = width;
+    if (percentage)
+    {
+        _boundsBits |= BOUNDS_WIDTH_PERCENTAGE_BIT;
+    }
+    else
+    {
+        _boundsBits &= ~BOUNDS_WIDTH_PERCENTAGE_BIT;
+        _bounds.width = width;
     }
 }
 
@@ -387,17 +402,22 @@ void Control::setHeight(float height, bool percentage)
 
     if (_relativeBounds.height != height || percentage != ((_boundsBits & BOUNDS_HEIGHT_PERCENTAGE_BIT) != 0))
     {
-        _relativeBounds.height = height;
-        if (percentage)
-        {
-            _boundsBits |= BOUNDS_HEIGHT_PERCENTAGE_BIT;
-        }
-        else
-        {
-            _boundsBits &= ~BOUNDS_HEIGHT_PERCENTAGE_BIT;
-            _bounds.height = height;
-        }
+        setHeightInternal(height, percentage);
         setDirty(DIRTY_BOUNDS);
+    }
+}
+
+void Control::setHeightInternal(float height, bool percentage)
+{
+    _relativeBounds.height = height;
+    if (percentage)
+    {
+        _boundsBits |= BOUNDS_HEIGHT_PERCENTAGE_BIT;
+    }
+    else
+    {
+        _boundsBits &= ~BOUNDS_HEIGHT_PERCENTAGE_BIT;
+        _bounds.height = height;
     }
 }
 
@@ -480,7 +500,9 @@ void Control::setVisible(bool visible)
     {
         _visible = visible;
 
-        if (!_visible)
+        if (_visible)
+            setDirty(DIRTY_BOUNDS);
+        else
             Form::controlDisabled(this);
     }
 }
@@ -538,6 +560,10 @@ void Control::setOpacity(float opacity, unsigned char states)
         if (overlays[i])
             overlays[i]->setOpacity(opacity);
     }
+
+    // Opacity is currently pre-multiplied in updateBounds, so we need to 
+    // dirty our bounds when it changes.
+    setDirty(DIRTY_BOUNDS);
 }
 
 float Control::getOpacity(State state) const
@@ -555,6 +581,10 @@ void Control::setEnabled(bool enabled)
 
         if (!_enabled)
             Form::controlDisabled(this);
+
+        // The enabled flag modifies control state which can be themed, so we need to assume
+        // that the bounds may change as a result of this.
+        setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -1091,16 +1121,15 @@ void Control::setDirty(int bits)
 {
     _dirtyBits |= bits;
 
-    // Propogate dirty bits to parent if needed
-    if (_parent)
+    if (bits & DIRTY_BOUNDS)
     {
-        if (bits & DIRTY_BOUNDS)
+        // When a container's bounds are dirty, all children controls also need
+        // to be dirtied so that their absolute bounds are updated correctly.
+        if (isContainer())
         {
-            // If our parent's size depends on children size, mark it dirty
-            if (_parent->_autoSize != AUTO_SIZE_NONE)
-            {
-                _parent->setDirty(DIRTY_BOUNDS);
-            }
+            Container* container = static_cast<Container*>(this);
+            for (unsigned int i = 0, count = container->getControlCount(); i < count; ++i)
+                container->getControl(i)->setDirty(DIRTY_BOUNDS);
         }
     }
 }
@@ -1110,12 +1139,16 @@ bool Control::isDirty(int bit) const
     return (_dirtyBits & bit) == bit;
 }
 
+void Control::update(float elapsedTime)
+{
+}
+
 void Control::updateBounds(const Vector2& offset)
 {
-    Game* game = Game::getInstance();
+    // Clear our dirty bounds bit
+    _dirtyBits &= ~DIRTY_BOUNDS;
 
-    // Store old bounds so we can determine if our bounds change as a result of this layout
-    Rectangle oldBounds(_bounds);
+    Game* game = Game::getInstance();
 
     const Rectangle parentAbsoluteBounds = _parent ? _parent->_viewportBounds : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
     const Rectangle parentAbsoluteClip = _parent ? _parent->_viewportClipBounds : parentAbsoluteBounds;
@@ -1155,29 +1188,29 @@ void Control::updateBounds(const Vector2& offset)
         // Vertical alignment
         if ((_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
         {
-            setY(clipHeight - _bounds.height - margin.bottom);
+            setYInternal(clipHeight - _bounds.height - margin.bottom);
         }
         else if ((_alignment & Control::ALIGN_VCENTER) == Control::ALIGN_VCENTER)
         {
-            setY(clipHeight * 0.5f - _bounds.height * 0.5f);
+            setYInternal(clipHeight * 0.5f - _bounds.height * 0.5f);
         }
         else if ((_alignment & Control::ALIGN_TOP) == Control::ALIGN_TOP)
         {
-            setY(margin.top);
+            setYInternal(margin.top);
         }
 
         // Horizontal alignment
         if ((_alignment & Control::ALIGN_RIGHT) == Control::ALIGN_RIGHT)
         {
-            setX(clipWidth - _bounds.width - margin.right);
+            setXInternal(clipWidth - _bounds.width - margin.right);
         }
         else if ((_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
         {
-            setX(clipWidth * 0.5f - _bounds.width * 0.5f);
+            setXInternal(clipWidth * 0.5f - _bounds.width * 0.5f);
         }
         else if ((_alignment & Control::ALIGN_LEFT) == Control::ALIGN_LEFT)
         {
-            setX(margin.left);
+            setXInternal(margin.left);
         }
     }
 
@@ -1227,18 +1260,6 @@ void Control::updateBounds(const Vector2& offset)
     _opacity = getOpacity(getState());
     if (_parent)
         _opacity *= _parent->_opacity;
-
-    // Clear our dirty bounds bit
-    _dirtyBits &= ~DIRTY_BOUNDS;
-
-    // If our bounds have changed and our parent's size depends on ours,
-    // then dirty our parent bounds it's recomputed on the next layout pass
-    bool boundsChanged = _bounds != oldBounds;
-    if (boundsChanged && _parent && _parent->_autoSize != AUTO_SIZE_NONE && 
-        !((_boundsBits & BOUNDS_WIDTH_PERCENTAGE_BIT) && (_boundsBits & BOUNDS_HEIGHT_PERCENTAGE_BIT)))
-    {
-        _parent->setDirty(DIRTY_BOUNDS);
-    }
 }
 
 void Control::startBatch(Form* form, SpriteBatch* batch)

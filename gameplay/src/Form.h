@@ -102,9 +102,14 @@ public:
     void setNode(Node* node);
 
     /**
-     * Updates each control within this form, and positions them according to its layout.
+     * @see Control::update
      */
     void update(float elapsedTime);
+
+    /**
+    * @see Control::updateBounds
+    */
+    void updateBounds(const Vector2& offset);
 
     /**
      * Draws this form.

@@ -54,6 +54,9 @@ void Slider::initialize(const char* typeName, Theme::Style* style, Properties* p
             _valueTextAlignment = Font::getJustify(properties->getString("valueTextAlignment"));
         }
     }
+
+    // Force value text to be updated
+    setValue(_value);
 }
 
 void Slider::setMin(float min)
@@ -93,8 +96,21 @@ float Slider::getValue() const
 
 void Slider::setValue(float value)
 {
-    float oldValue = _value;
-    _value = MATH_CLAMP(value, _min, _max);
+    value = MATH_CLAMP(value, _min, _max);
+
+    if (value != _value)
+    {
+        _value = value;
+        notifyListeners(Control::Listener::VALUE_CHANGED);
+    }
+
+    // Always update value text if it's visible
+    if (_valueTextVisible)
+    {
+        char s[32];
+        sprintf(s, "%.*f", _valueTextPrecision, _value);
+        _valueText = s;
+    }
 }
 
 void Slider::setValueTextVisible(bool valueTextVisible)
@@ -164,19 +180,14 @@ void Slider::updateValue(int x, int y)
         markerPosition = 0.0f;
     }
 
-    float oldValue = _value;
-    _value = (markerPosition * (_max - _min)) + _min;
+    float value = (markerPosition * (_max - _min)) + _min;
     if (_step > 0.0f)
     {            
-        int numSteps = round(_value / _step);
-        _value = _step * numSteps;
+        int numSteps = round(value / _step);
+        value = _step * numSteps;
     }
 
-    // Call the callback if our value changed.
-    if (_value != oldValue)
-    {
-        notifyListeners(Control::Listener::VALUE_CHANGED);
-    }
+    setValue(value);
 }
 
 bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -219,25 +230,15 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
             if (hasFocus() && !isScrollable(_parent))
             {
                 float total = _max - _min;
-                float oldValue = _value;
-                _value += (total * SCROLLWHEEL_FRACTION) * wheelDelta;
-            
-                if (_value > _max)
-                    _value = _max;
-                else if (_value < _min)
-                    _value = _min;
+                float value = _value + (total * SCROLLWHEEL_FRACTION) * wheelDelta;
 
                 if (_step > 0.0f)
                 {            
-                    int numSteps = round(_value / _step);
-                    _value = _step * numSteps;
+                    int numSteps = round(value / _step);
+                    value = _step * numSteps;
                 }
 
-                if (_value != oldValue)
-                {
-                    notifyListeners(Control::Listener::VALUE_CHANGED);
-                }
-
+                setValue(value);
                 return true;
             }
             break;
@@ -283,22 +284,22 @@ bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_LEFT_ARROW:
             if (_step > 0.0f)
             {
-                _value = std::max(_value - _step, _min);
+                setValue(std::max(_value - _step, _min));
             }
             else
             {
-                _value = std::max(_value - (_max - _min) * MOVE_FRACTION, _min);
+                setValue(std::max(_value - (_max - _min) * MOVE_FRACTION, _min));
             }
             return true;
 
         case Keyboard::KEY_RIGHT_ARROW:
             if (_step > 0.0f)
             {
-                _value = std::min(_value + _step, _max);
+                setValue(std::min(_value + _step, _max));
             }
             else
             {
-                _value = std::min(_value + (_max - _min) * MOVE_FRACTION, _max);
+                setValue(std::min(_value + (_max - _min) * MOVE_FRACTION, _max));
             }
             return true;
         }
@@ -306,6 +307,27 @@ bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
     }
 
     return Control::keyEvent(evt, key);
+}
+
+void Slider::update(float elapsedTime)
+{
+    Label::update(elapsedTime);
+
+    if (_delta != 0.0f)
+    {
+        float total = _max - _min;
+
+        if (_step > 0.0f)
+        {
+            _gamepadValue += (total * MOVE_FRACTION) * _delta;
+            int numSteps = round(_gamepadValue / _step);
+            setValue(_step * numSteps);
+        }
+        else
+        {
+            setValue(_value + (total * MOVE_FRACTION) * _delta);
+        }
+    }
 }
 
 void Slider::updateBounds(const Vector2& offset)
@@ -319,37 +341,6 @@ void Slider::updateBounds(const Vector2& offset)
     _markerImage = getImage("marker", state);
     _trackImage = getImage("track", state);
 
-    char s[32];
-    sprintf(s, "%.*f", _valueTextPrecision, _value);
-    _valueText = s;
-
-    if (_delta != 0.0f)
-    {
-        float oldValue = _value;
-        float total = _max - _min;
-
-        if (_step > 0.0f)
-        {
-            _gamepadValue += (total * MOVE_FRACTION) * _delta;
-            int numSteps = round(_gamepadValue / _step);
-            _value = _step * numSteps;
-        }
-        else
-        {
-            _value += (total * MOVE_FRACTION) * _delta;
-        }
-
-        if (_value > _max)
-            _value = _max;
-        else if (_value < _min)
-            _value = _min;
-
-        if (_value != oldValue)
-        {
-            notifyListeners(Control::Listener::VALUE_CHANGED);
-        }
-    }
-
     // Compute height of track (max of track, min/max and marker
     _trackHeight = _minImage->getRegion().height;
     _trackHeight = std::max(_trackHeight, _maxImage->getRegion().height);
@@ -361,8 +352,7 @@ void Slider::updateBounds(const Vector2& offset)
         float height = _bounds.height + _trackHeight;
         if (_valueTextVisible)
             height += getFontSize(state);
-        setHeight(height);
-        _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_HEIGHT);
+        setHeightInternal(height);
     }
 }
 

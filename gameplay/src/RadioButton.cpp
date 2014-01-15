@@ -154,15 +154,13 @@ void RadioButton::updateBounds(const Vector2& offset)
         // Text-only width was already measured in Label::update - append image
         const Theme::Border& border = getBorder(state);
         const Theme::Border& padding = getPadding();
-        setHeight(std::max(_bounds.height, size.y + border.top + border.bottom + padding.top + padding.bottom));
-        _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_HEIGHT);
+        setHeightInternal(std::max(_bounds.height, size.y + border.top + border.bottom + padding.top + padding.bottom));
     }
 
     if (_autoSize & AUTO_SIZE_WIDTH)
     {
         // Text-only width was already measured in Label::update - append image
-        setWidth(_viewportBounds.height + 5 + _bounds.width);
-        _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_WIDTH);
+        setWidthInternal(_viewportBounds.height + 5 + _bounds.width);
     }
 
     _textBounds.x += _viewportBounds.height + 5;

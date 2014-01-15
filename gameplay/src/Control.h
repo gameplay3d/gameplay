@@ -27,10 +27,6 @@ class Control : public Ref, public AnimationTarget, public ScriptTarget
 {
     friend class Form;
     friend class Container;
-    friend class Layout;
-    friend class AbsoluteLayout;
-    friend class VerticalLayout;
-    friend class FlowLayout;
 
 public:
 
@@ -312,7 +308,9 @@ public:
      * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
      * between 0-1, where 1 equals the full size of it's parent.
      *
-     * @param width The width.
+     * Explicitly setting the width of a control clears the AUTO_SIZE_WIDTH bit, if set.
+     *
+     * @param width The new width.
      * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
      */
     void setWidth(float width, bool percentage = false);
@@ -337,7 +335,9 @@ public:
      * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
      * between 0-1, where 1 equals the full size of it's parent.
      *
-     * @param height The height.
+     * Explicitly setting the height of a control clears the AUTO_SIZE_HEIGHT bit, if set.
+     *
+     * @param height The new height.
      * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
      */
     void setHeight(float height, bool percentage = false);
@@ -368,8 +368,10 @@ public:
      * Setting percetage values is not supported with this method, use setWidth
      * and setHeight instead.
      *
-     * @param width The width.
-     * @param height The height.
+     * Explicitly setting the size of a control clears the AutoSize bits, if set.
+     *
+     * @param width The new width.
+     * @param height The new height.
      */
     void setSize(float width, float height);
 
@@ -388,6 +390,8 @@ public:
      * This method sets the local bounds of the control, relative to its container.
      * Setting percetage values is not supported with this method, use setX,
      * setY, setWidth and setHeight instead.
+     *
+     * Explicitly setting the bounds of a control clears the AutoSize bits, if set.
      *
      * @param bounds The new bounds to set.
      */
@@ -992,6 +996,52 @@ protected:
     Control& operator=(const Control&);
 
     /**
+     * Internal method for setting the X position of the control.
+     *
+     * This method is meant for internal use by the Control or descendent classes
+     * who need to modify the position of the control during bounds computation.
+     *
+     * @see setX(float, bool)
+     */
+    void setXInternal(float x, bool percentage = false);
+
+    /**
+     * Internal method for setting the Y position of the control.
+     *
+     * This method is meant for internal use by the Control or descendent classes
+     * who need to modify the position of the control during bounds computation.
+     *
+     * @see setY(float, bool)
+     */
+    void setYInternal(float x, bool percentage = false);
+
+    /**
+     * Internal method for setting the width of the control.
+     *
+     * The width of the control is set without modifying the existing AutoSize
+     * rules for the control.
+     *
+     * This method is meant for internal use by the Control or descendent classes
+     * who need to modify the size of the control during bounds computation.
+     *
+     * @see setWidth(float, bool)
+     */
+    void setWidthInternal(float width, bool percentage = false);
+
+    /**
+     * Internal method for setting the height of the control.
+     *
+     * The height of the control is set without modifying the existing AutoSize
+     * rules for the control.
+     *
+     * This method is meant for internal use by the Control or descendent classes
+     * who need to modify the size of the control during bounds computation.
+     *
+     * @see setHeight(float, bool)
+     */
+    void setHeightInternal(float height, bool percentage = false);
+
+    /**
      * Get the overlay type corresponding to this control's current state.
      *
      * @return The overlay type corresponding to this control's current state.
@@ -1050,7 +1100,20 @@ protected:
     virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
+     * Called each frame to update this control and its children.
+     *
+     * Any logic that must be performed every frame should be implemented here,
+     * such as custom animation or interpolation that depends on time.
+     * Layout logic should not be implemented here, but in updateBounds instead.
+     *
+     * @param elapsedTime Time since last frame.
+     */
+    virtual void update(float elapsedTime);
+
+    /**
      * Updates the bounds for this control and its children.
+     *
+     * Child controls that need to customize their bounds calculation should override this method.
      *
      * @param offset Positioning offset to add to the control's position (most often used for scrolling).
      */

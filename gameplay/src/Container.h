@@ -305,9 +305,19 @@ protected:
     void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
+     * @see Control::update
+     */
+    void update(float elapsedTime);
+
+    /**
      * @see Control::updateBounds
      */
     void updateBounds(const Vector2& offset);
+
+    /**
+     * Updates the bounds for this container's child controls.
+     */
+    void updateChildBounds();
 
     /**
      * Gets a Layout::Type enum from a matching string.
@@ -553,7 +563,6 @@ private:
     bool _contactIndices[MAX_CONTACT_INDICES];
     bool _initializedWithScroll;
     bool _scrollWheelRequiresFocus;
-    bool _allowRelayout;
 };
 
 }

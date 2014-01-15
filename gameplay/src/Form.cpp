@@ -119,6 +119,10 @@ void Form::initialize(const char* typeName, Theme::Style* style, Properties* pro
     Container::initialize(typeName, style, properties);
 
     __forms.push_back(this);
+
+    // After creation, update our bounds once so code that runs immediately after form
+    // creation has access to up-to-date bounds.
+    updateBounds(Vector2::zero());
 }
 
 Form* Form::getForm(const char* id)
@@ -181,11 +185,19 @@ static unsigned int nextPowerOfTwo(unsigned int v)
 
 void Form::update(float elapsedTime)
 {
+    Container::update(elapsedTime);
+
+    // Update our bounds if needed
+    updateBounds(Vector2::zero());
+}
+
+void Form::updateBounds(const Vector2& offset)
+{
     // Two pass bounds update:
     // 1. First pass computes child/leaf control sizes.
     // 2. Second pass fits parent sizes to that of the children (and does relative sizing of children)
-    updateBounds(Vector2::zero());
-    //updateBounds(Vector2::zero());
+    Container::updateBounds(offset);
+    Container::updateBounds(offset);
 }
 
 void Form::startBatch(SpriteBatch* batch)

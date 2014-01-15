@@ -52,7 +52,7 @@ void FlowLayout::setSpacing(int horizontalSpacing, int verticalSpacing)
     _verticalSpacing = verticalSpacing;
 }
 
-void FlowLayout::update(const Container* container, const Vector2& offset)
+void FlowLayout::update(const Container* container)
 {
     GP_ASSERT(container);
     const Rectangle& containerBounds = container->getBounds();
@@ -92,7 +92,6 @@ void FlowLayout::update(const Container* container, const Vector2& offset)
         yPosition = rowY + margin.top;
 
         control->setPosition(xPosition, yPosition);
-        control->updateBounds(offset);
 
         xPosition += bounds.width + margin.right + _horizontalSpacing;
 

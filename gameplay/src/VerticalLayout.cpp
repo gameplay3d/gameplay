@@ -42,7 +42,7 @@ void VerticalLayout::setSpacing(int spacing)
     _spacing = spacing;
 }
 
-void VerticalLayout::update(const Container* container, const Vector2& offset)
+void VerticalLayout::update(const Container* container)
 {
     GP_ASSERT(container);
 
@@ -81,7 +81,6 @@ void VerticalLayout::update(const Container* container, const Vector2& offset)
             yPosition += margin.top;
 
             control->setPosition(margin.left, yPosition);
-            control->updateBounds(offset);
 
             yPosition += bounds.height + margin.bottom + _spacing;
         }

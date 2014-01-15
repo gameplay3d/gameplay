@@ -57,7 +57,7 @@ Container::Container()
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
       _scrollBarOpacityClip(NULL), _zIndexDefault(0),
       _selectButtonDown(false), _lastFrameTime(0), _totalWidth(0), _totalHeight(0),
-      _initializedWithScroll(false), _scrollWheelRequiresFocus(false), _allowRelayout(true)
+      _initializedWithScroll(false), _scrollWheelRequiresFocus(false)
 {
 	clearContacts();
 }
@@ -128,7 +128,6 @@ void Container::initialize(const char* typeName, Theme::Style* style, Properties
 			_scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
 
 		addControls(properties);
-		_layout->update(this, _scrollPosition);
 
 		const char* activeControl = properties->getString("activeControl");
 		if (activeControl)
@@ -191,7 +190,6 @@ void Container::setLayout(Layout::Type type)
 
 		_layout = createLayout(type);
         setDirty(Control::DIRTY_BOUNDS);
-		_layout->update(this, _scrollPosition);
 	}
 }
 
@@ -503,8 +501,27 @@ void Container::setActiveControl(Control* control)
     }
 }
 
+void Container::update(float elapsedTime)
+{
+    Control::update(elapsedTime);
+
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
+    {
+        _controls[i]->update(elapsedTime);
+    }
+}
+
 void Container::updateBounds(const Vector2& offset)
 {
+    if ((_dirtyBits & DIRTY_BOUNDS) == 0)
+    {
+        // We're not dirty, but our children might be.
+        updateChildBounds();
+        return;
+    }
+
+    Rectangle oldAbsoluteBounds(_absoluteBounds);
+
     Control::updateBounds(offset);
 
     Control::State state = getState();
@@ -534,31 +551,27 @@ void Container::updateBounds(const Vector2& offset)
         _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
     }
 
-    GP_ASSERT(_layout);
+    // Update scroll position and scrollbars
     updateScroll();
-    _layout->update(this, _scrollPosition);
+
+    // Update layout
+    GP_ASSERT(_layout);
+    _layout->update(this);
+
+    // Update bounds of our children
+    updateChildBounds();
 
     // Handle automatically sizing based on our children
     if (_autoSize != AUTO_SIZE_NONE)
     {
-        Vector2 oldSize(_bounds.width, _bounds.height);
-        bool sizeChanged = false;
-        bool relayout = false;
-
         if (_autoSize & AUTO_SIZE_WIDTH)
         {
             // Size ourself to tightly fit the width of our children
             float width = 0;
-            for (std::vector<Control*>::const_iterator it = _controls.begin(); it < _controls.end(); ++it)
+            for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
-                Control* ctrl = *it;
-                if (ctrl->isXPercentage() || ctrl->isWidthPercentage())
-                {
-                    // Our child's layout depends on our size, so we need to dirty it
-                    ctrl->setDirty(DIRTY_BOUNDS);
-                    relayout = _allowRelayout;
-                }
-                else
+                Control* ctrl = _controls[i];
+                if (!ctrl->isXPercentage() && !ctrl->isWidthPercentage())
                 {
                     float w = ctrl->getX() + ctrl->getWidth();
                     if (width < w)
@@ -566,28 +579,17 @@ void Container::updateBounds(const Vector2& offset)
                 }
             }
             width += getBorder(state).left + getBorder(state).right + getPadding().left + getPadding().right;
-            if (width != oldSize.x)
-            {
-                setWidth(width);
-                _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_WIDTH);
-                sizeChanged = true;
-            }
+            setWidthInternal(width);
         }
 
         if (_autoSize & AUTO_SIZE_HEIGHT)
         {
             // Size ourself to tightly fit the height of our children
             float height = 0;
-            for (std::vector<Control*>::const_iterator it = _controls.begin(); it < _controls.end(); ++it)
+            for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
-                Control* ctrl = *it;
-                if (ctrl->isYPercentage() || ctrl->isHeightPercentage())
-                {
-                    // Our child's layout depends on our size, so we need to dirty it
-                    ctrl->setDirty(DIRTY_BOUNDS);
-                    relayout = _allowRelayout;
-                }
-                else
+                Control* ctrl = _controls[i];
+                if (!ctrl->isYPercentage() && !ctrl->isHeightPercentage())
                 {
                     float h = ctrl->getY() + ctrl->getHeight();
                     if (height < h)
@@ -595,21 +597,42 @@ void Container::updateBounds(const Vector2& offset)
                 }
             }
             height += getBorder(state).top + getBorder(state).bottom + getPadding().top + getPadding().bottom;
-            if (height != oldSize.y)
-            {
-                setHeight(height);
-                _autoSize = (AutoSize)(_autoSize | AUTO_SIZE_HEIGHT);
-                sizeChanged = true;
-            }
+            setHeightInternal(height);
         }
+    }
 
-        if (sizeChanged && relayout)
+    // If our bounds have changed, dirty our entire child hierarchy since at a minimum their absolute bounds
+    // will need to be recomputed to be properly offset from our new bounds.
+    if (_absoluteBounds != oldAbsoluteBounds)
+    {
+        setDirty(DIRTY_BOUNDS);
+    }
+}
+
+void Container::updateChildBounds()
+{
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
+    {
+        Control* ctrl = _controls[i];
+        GP_ASSERT(ctrl);
+
+        if (ctrl->isVisible() && (ctrl->isContainer() || ctrl->_dirtyBits & DIRTY_BOUNDS))
         {
-            // Our size changed and as a result we need to force another layout.
-            // Prevent infinitely recursive layouts by disabling relayout for the next call.
-            _allowRelayout = false;
-            updateBounds(offset);
-            _allowRelayout = true;
+            Rectangle oldBounds(ctrl->_absoluteBounds);
+
+            ctrl->updateBounds(_scrollPosition);
+
+            // If the child bounds have changed, dirty our bounds and all of our
+            // parent bounds so that our layout and/or bounds are recomputed.
+            if (ctrl->_absoluteBounds != oldBounds)
+            {
+                Control* parent = this;
+                while (parent)
+                {
+                    parent->setDirty(DIRTY_BOUNDS);
+                    parent = parent->_parent;
+                }
+            }
         }
     }
 }
@@ -1045,9 +1068,9 @@ void Container::updateScroll()
     // Calculate total width and height.
     _totalWidth = _totalHeight = 0.0f;
     std::vector<Control*> controls = getControls();
-    for (size_t i = 0, controlsCount = controls.size(); i < controlsCount; i++)
+    for (size_t i = 0, count = controls.size(); i < count; ++i)
     {
-        Control* control = controls.at(i);
+        Control* control = _controls[i];
 
         const Rectangle& bounds = control->getBounds();
         const Theme::Margin& margin = control->getMargin();
@@ -1090,6 +1113,8 @@ void Container::updateScroll()
             if (fabs(_scrollingVelocity.y) < 100.0f)
                 _scrollingVelocity.y = 0.0f;
         }
+
+        setDirty(DIRTY_BOUNDS);
     }
 
     // Stop scrolling when the far edge is reached.
@@ -1177,7 +1202,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         break;
 
     case Touch::TOUCH_MOVE:
-        if (_scrolling && _contactIndex == (int) contactIndex)
+        if (_scrolling && _contactIndex == (int)contactIndex)
         {
             double gameTime = Game::getAbsoluteTime();
 
@@ -1235,7 +1260,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
 
             _scrollingLastTime = gameTime;
             setDirty(DIRTY_BOUNDS);
-            return _consumeInputEvents;
+            return false;
         }
         break;
 
@@ -1250,8 +1275,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
             {
                 _scrollingVelocity.set(0, 0);
                 _scrollingMouseVertically = _scrollingMouseHorizontally = false;
-                setDirty(DIRTY_BOUNDS);
-                return _consumeInputEvents;
+                return false;
             }
 
             int dx = _scrollingLastX - _scrollingFirstX;
@@ -1288,7 +1312,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
 
             _scrollingMouseVertically = _scrollingMouseHorizontally = false;
             setDirty(DIRTY_BOUNDS);
-            return _consumeInputEvents;
+            return false;
         }
         break;
     }
@@ -1347,11 +1371,17 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
                 {
                     // We're within the vertical bounds of the horizontal scrollbar.
                     if (x < hBounds.x)
+                    {
                         _scrollPosition.x += _totalWidth / 5.0f;
+                    }
                     else if (x > hBounds.x + hBounds.width)
+                    {
                         _scrollPosition.x -= _totalWidth / 5.0f;
+                    }
                     else
+                    {
                         _scrollingMouseHorizontally = true;
+                    }
                 }
             }
 
@@ -1381,7 +1411,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             }
             _scrollBarOpacity = 1.0f;
             setDirty(DIRTY_BOUNDS);
-            return _consumeInputEvents;
+            return false;
         }
     }
 
