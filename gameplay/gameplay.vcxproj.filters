@@ -300,9 +300,6 @@
     <ClCompile Include="src\Joint.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Joystick.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Label.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -547,9 +544,6 @@
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Joint.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_Joystick.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Keyboard.cpp">
@@ -879,6 +873,12 @@
     <ClCompile Include="src\lua\lua_CameraListener.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\JoystickControl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_JoystickControl.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Plane.h">
@@ -1157,9 +1157,6 @@
     <ClInclude Include="src\Joint.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Joystick.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Keyboard.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1407,9 +1404,6 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Joint.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_Joystick.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Keyboard.h">
@@ -1739,6 +1733,12 @@
     <ClInclude Include="src\lua\lua_CameraListener.h">
       <Filter>src\lua</Filter>
     </ClInclude>
+    <ClInclude Include="src\JoystickControl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_JoystickControl.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ScriptController.inl">
@@ -1754,9 +1754,6 @@
       <Filter>src</Filter>
     </None>
     <None Include="src\Image.inl">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\Joystick.inl">
       <Filter>src</Filter>
     </None>
     <None Include="src\MathUtil.inl">

@@ -10,7 +10,7 @@
 #include "RadioButton.h"
 #include "Slider.h"
 #include "TextBox.h"
-#include "Joystick.h"
+#include "JoystickControl.h"
 #include "ImageControl.h"
 #include "Form.h"
 #include "Game.h"

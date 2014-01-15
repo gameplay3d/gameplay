@@ -9,7 +9,7 @@ const float INPUT_SENSITIVITY = 0.05f;
 const float PANNING_SENSITIVITY = 0.01f;
 const float ROTATE_SENSITIVITY = 0.25f;
 const Vector4 BACKGROUND_COLOR = Vector4::zero();
-const float INITIAL_ZOOM = 6.0f;
+const float ZOOM_DEFAULT = 6.0f;
 
 ParticlesGame::ParticlesGame() : _scene(NULL), _panning(false), _rotating(false), _zooming(false)
 {
@@ -124,7 +124,7 @@ void ParticlesGame::initialize()
     _cameraParent->addChild(cameraNode);
     Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 1000.0f);
     cameraNode->setCamera(camera);
-    cameraNode->setTranslation(0.0f, 0.0f, INITIAL_ZOOM);
+    cameraNode->setTranslation(0.0f, 0.0f, ZOOM_DEFAULT);
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
 

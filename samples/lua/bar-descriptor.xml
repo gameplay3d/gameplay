@@ -30,7 +30,7 @@
     <author>RIM Canada</author>
 
     <!-- Unique author ID assigned by signing authority. Required if using debug tokens. -->
-    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
+    <!-- <authorId>gYAAgLDcDLxX077jVWRVnDpywiU</authorId> -->
 
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
@@ -43,15 +43,15 @@
 
     <asset path="icon.png">icon.png</asset>
     <asset path="game.config">game.config</asset>
-   	<asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
-    <asset path="../../gameplay/res/shaders">res/shaders</asset>
-    <asset path="../../gameplay/res/ui">res/ui</asset>
     <asset path="res/ai.lua">res/ai.lua</asset>
     <asset path="res/game.lua">res/game.lua</asset>
     <asset path="res/lua.gpb">res/lua.gpb</asset>
     <asset path="res/lua.material">res/lua.material</asset>
     <asset path="res/lua.scene">res/lua.scene</asset>
     <asset path="res/lua-logo.png">res/lua-logo.png</asset>
+    <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
+    <asset path="../../gameplay/res/shaders">res/shaders</asset>
+    <asset path="../../gameplay/res/ui">res/ui</asset>
 
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

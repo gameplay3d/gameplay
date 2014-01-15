@@ -7,7 +7,7 @@
 #include "Container.h"
 #include "Slider.h"
 #include "TextBox.h"
-#include "Joystick.h"
+#include "JoystickControl.h"
 #include "ImageControl.h"
 
 namespace gameplay
@@ -85,7 +85,7 @@ void ControlFactory::registerStandardControls()
     registerCustomControl("CONTAINER", &Container::create);
     registerCustomControl("SLIDER", &Slider::create);
     registerCustomControl("TEXTBOX", &TextBox::create);
-    registerCustomControl("JOYSTICK", &Joystick::create);
+    registerCustomControl("JOYSTICK", &JoystickControl::create);
     registerCustomControl("IMAGE", &ImageControl::create);
 }
 

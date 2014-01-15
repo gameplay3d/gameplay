@@ -90,9 +90,8 @@ set(GAMEPLAY_SRC
     src/ImageControl.h
     src/Joint.cpp
     src/Joint.h
-    src/Joystick.cpp
-    src/Joystick.h
-    src/Joystick.inl
+    src/JoystickControl.cpp
+    src/JoystickControl.h
     src/Label.cpp
     src/Label.h
     src/Layout.cpp
@@ -367,8 +366,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_ImageFormat.h
     src/lua/lua_Joint.cpp
     src/lua/lua_Joint.h
-    src/lua/lua_Joystick.cpp
-    src/lua/lua_Joystick.h
+    src/lua/lua_JoystickControl.cpp
+    src/lua/lua_JoystickControl.h
     src/lua/lua_Keyboard.cpp
     src/lua/lua_Keyboard.h
     src/lua/lua_KeyboardKey.cpp

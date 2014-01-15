@@ -44,7 +44,7 @@ LOCAL_SRC_FILES := \
     Image.cpp \
     ImageControl.cpp \
     Joint.cpp \
-    Joystick.cpp \
+    JoystickControl.cpp \
     Label.cpp \
     Layout.cpp \
     Light.cpp \
@@ -174,7 +174,7 @@ LOCAL_SRC_FILES := \
     lua/lua_ImageControl.cpp \
     lua/lua_ImageFormat.cpp \
     lua/lua_Joint.cpp \
-    lua/lua_Joystick.cpp \
+    lua/lua_JoystickControl.cpp \
     lua/lua_Keyboard.cpp \
     lua/lua_KeyboardKey.cpp \
     lua/lua_KeyboardKeyEvent.cpp \

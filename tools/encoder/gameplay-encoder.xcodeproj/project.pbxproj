@@ -85,7 +85,7 @@
 		422BF0851804C16E0028D009 /* libm.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libm.dylib; path = ../../../../../../usr/lib/libm.dylib; sourceTree = "<group>"; };
 		422BF0871804C1E40028D009 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = ../../../../../../usr/lib/libbz2.dylib; sourceTree = "<group>"; };
 		422BF08F1804C5230028D009 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "../../../../../../usr/lib/libstdc++.dylib"; sourceTree = "<group>"; };
-		422BF0911804C7060028D009 /* libfbxsdk-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk-static.a"; path = "../../../../../../Applications/Autodesk/FBX SDK/2014.2/lib/gcc4/ub/release/libfbxsdk-static.a"; sourceTree = "<group>"; };
+		422BF0911804C7060028D009 /* libfbxsdk-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk-static.a"; path = "../../../../../../Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/release/libfbxsdk-static.a"; sourceTree = "<group>"; };
 		42475CE6147208A000610A6A /* gameplay-encoder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gameplay-encoder"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4251B128152D044B002F6199 /* Curve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Curve.cpp; path = src/Curve.cpp; sourceTree = SOURCE_ROOT; };
 		4251B129152D044B002F6199 /* Curve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Curve.h; path = src/Curve.h; sourceTree = SOURCE_ROOT; };
@@ -495,13 +495,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"/Applications/Autodesk/FBX SDK/2014.2/include\"",
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/include\"",
 					"../../external-deps/png/include",
 					"../../external-deps/freetype2/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				LIBRARY_SEARCH_PATHS = (
-					"\"/Applications/Autodesk/FBX SDK/2014.2/lib/gcc4/ub/release\"",
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/release\"",
 					"../../external-deps/png/lib/macosx",
 					"../../external-deps/freetype2/lib/macosx",
 				);
@@ -543,13 +543,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"/Applications/Autodesk/FBX SDK/2014.2/include\"",
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/include\"",
 					"../../external-deps/png/include",
 					"../../external-deps/freetype2/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				LIBRARY_SEARCH_PATHS = (
-					"\"/Applications/Autodesk/FBX SDK/2014.2/lib/gcc4/ub/release\"",
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/release\"",
 					"../../external-deps/png/lib/macosx",
 					"../../external-deps/freetype2/lib/macosx",
 				);
@@ -578,8 +578,8 @@
 					"$(inherited)",
 					"../../external-deps/freetype2/lib/macosx",
 					"../../external-deps/png/lib/macosx",
-					"/Applications/Autodesk/FBX\\ SDK/2014.2/lib/gcc4/ub/release",
-					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2/lib/gcc4/ub/release",
+					"/Applications/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
+					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -603,8 +603,8 @@
 					"../../external-deps/freetype2/lib/macosx",
 					"../../external-deps/png/lib/macosx",
 					/Applications/Autodesk/FBX,
-					SDK/2014.2/lib/gcc4/ub/release,
-					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2/lib/gcc4/ub/release",
+					SDK/2014.2.1/lib/gcc4/ub/release,
+					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
