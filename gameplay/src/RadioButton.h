@@ -118,9 +118,14 @@ protected:
     void controlEvent(Control::Listener::EventType evt);
 
     /**
+     * @see Control::updateState
+     */
+    void updateState(State state);
+
+    /**
      * @see Control::updateBounds
      */
-    void updateBounds(const Vector2& offset);
+    bool updateBounds(const Vector2& offset);
 
     /**
      * @see Control::drawImages

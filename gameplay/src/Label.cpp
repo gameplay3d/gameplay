@@ -57,11 +57,9 @@ void Label::addListener(Control::Listener* listener, int eventFlags)
     
 void Label::setText(const char* text)
 {
-    assert(text);
-
-    if (strcmp(text, _text.c_str()) != 0)
+    if ((text == NULL && _text.length() > 0) || strcmp(text, _text.c_str()) != 0)
     {
-        _text = text;
+        _text = text ? text : "";
         if (_autoSize != AUTO_SIZE_NONE)
             setDirty(DIRTY_BOUNDS);
     }
@@ -72,22 +70,39 @@ const char* Label::getText()
     return _text.c_str();
 }
 
-void Label::updateBounds(const Vector2& offset)
+void Label::update(float elapsedTime)
 {
-    Control::updateBounds(offset);
+    Control::update(elapsedTime);
+
+    // Update text opacity each frame since opacity is updated in Control::update.
+    _textColor = getTextColor(getState());
+    _textColor.w *= _opacity;
+}
+
+void Label::updateState(State state)
+{
+    Control::updateState(state);
+
+    _font = getFont(state);
+}
+
+bool Label::updateBounds(const Vector2& offset)
+{
+    bool changed = Control::updateBounds(offset);
+
+    // Measure bounds based only on normal state so that bounds updates are not always required on state changes.
+    // This is a trade-off for functionality vs performance, but changing the size of UI controls on hover/focus/etc
+    // is a pretty bad practice so we'll prioritize performance here.
+    Control::State state = NORMAL;
 
     _textBounds.set((int)_viewportBounds.x, (int)_viewportBounds.y, _viewportBounds.width, _viewportBounds.height);
 
-    Control::State state = getState();
-    _font = getFont(state);
-    _textColor = getTextColor(state);
-    _textColor.w *= _opacity;
+    Rectangle oldBounds(_bounds);
 
-    Font* font = getFont(state);
-    if (_autoSize != AUTO_SIZE_NONE && font)
+    if (_autoSize != AUTO_SIZE_NONE && _font)
     {
         unsigned int w, h;
-        font->measureText(_text.c_str(), getFontSize(state), &w, &h);
+        _font->measureText(_text.c_str(), getFontSize(state), &w, &h);
         if (_autoSize & AUTO_SIZE_WIDTH)
         {
             setWidthInternal(w + getBorder(state).left + getBorder(state).right + getPadding().left + getPadding().right);
@@ -97,6 +112,10 @@ void Label::updateBounds(const Vector2& offset)
             setHeightInternal(h + getBorder(state).top + getBorder(state).bottom + getPadding().top + getPadding().bottom);
         }
     }
+
+    changed = changed || (_bounds != oldBounds);
+
+    return changed;
 }
 
 unsigned int Label::drawText(Form* form, const Rectangle& clip)

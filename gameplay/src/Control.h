@@ -981,6 +981,11 @@ protected:
     static const int DIRTY_BOUNDS = 1;
 
     /**
+     * Indicates that the state of the control is dirty.
+     */
+    static const int DIRTY_STATE = 2;
+
+    /**
      * Constructor.
      */
     Control();
@@ -1111,13 +1116,26 @@ protected:
     virtual void update(float elapsedTime);
 
     /**
+     * Called when the state of the control has been updated.
+     *
+     * When the state of a control is updated (for example, a control becomes active, focused,
+     * hovered, disabled, etc), this method is called to allow implementations to update
+     * internal data related to control state.
+     *
+     * @param The new control state.
+     */
+    virtual void updateState(State state);
+
+    /**
      * Updates the bounds for this control and its children.
      *
      * Child controls that need to customize their bounds calculation should override this method.
      *
      * @param offset Positioning offset to add to the control's position (most often used for scrolling).
+     *
+     * @return True if the bounds were updated, or false if there was no change.
      */
-    virtual void updateBounds(const Vector2& offset);
+    virtual bool updateBounds(const Vector2& offset);
 
     /**
      * Indicates that a control will begin drawing into the specified batch.

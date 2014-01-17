@@ -310,14 +310,27 @@ protected:
     void update(float elapsedTime);
 
     /**
+     * @see Control::updateState
+     */
+    void updateState(State state);
+
+    /**
      * @see Control::updateBounds
      */
-    void updateBounds(const Vector2& offset);
+    bool updateBounds(const Vector2& offset);
 
     /**
      * Updates the bounds for this container's child controls.
      */
     void updateChildBounds();
+
+    /**
+     * Sets the specified dirty bits for all children within this container.
+     *
+     * @param bits The bits to set.
+     * @param recursive If true, set the bits recursively on all children and their children.
+     */
+    void setChildrenDirty(int bits, bool recursive);
 
     /**
      * Gets a Layout::Type enum from a matching string.
@@ -563,6 +576,7 @@ private:
     bool _contactIndices[MAX_CONTACT_INDICES];
     bool _initializedWithScroll;
     bool _scrollWheelRequiresFocus;
+    bool _inRelayout;
 };
 
 }

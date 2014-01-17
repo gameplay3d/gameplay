@@ -124,7 +124,7 @@ protected:
     /**
      * @see Control::updateBounds
      */
-    void updateBounds(const Vector2& offset);
+    bool updateBounds(const Vector2& offset);
 
 private:
 

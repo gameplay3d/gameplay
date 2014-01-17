@@ -238,9 +238,14 @@ protected:
     void update(float elapsedTime);
 
     /**
+     * @see Control::updateState
+     */
+    void updateState(State state);
+
+    /**
      * @see Control::updateBounds
      */
-    void updateBounds(const Vector2& offset);
+    bool updateBounds(const Vector2& offset);
 
     /**
      * The minimum value for the Slider.

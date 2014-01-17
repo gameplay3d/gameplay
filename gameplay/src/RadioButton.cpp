@@ -73,7 +73,7 @@ void RadioButton::setSelected(bool selected)
     if (selected != _selected)
     {
         _selected = selected;
-        setDirty(DIRTY_BOUNDS);
+        setDirty(DIRTY_STATE);
         notifyListeners(Control::Listener::VALUE_CHANGED);
     }
 }
@@ -131,23 +131,33 @@ void RadioButton::controlEvent(Control::Listener::EventType evt)
     }
 }
 
-void RadioButton::updateBounds(const Vector2& offset)
+void RadioButton::updateState(State state)
 {
-    Label::updateBounds(offset);
+    Label::updateState(state);
+
+    _image = getImage(_selected ? "selected" : "unselected", state);
+}
+
+bool RadioButton::updateBounds(const Vector2& offset)
+{
+    bool changed = Label::updateBounds(offset);
     
-    Control::State state = getState();
+    // Compute bounds based on normal state only
+    Control::State state = NORMAL;
 
     Vector2 size;
     if (_selected)
     {
-        const Rectangle& selectedRegion = getImageRegion("selected", getState());
+        const Rectangle& selectedRegion = getImageRegion("selected", state);
         size.set(selectedRegion.width, selectedRegion.height);
     }
     else
     {
-        const Rectangle& unselectedRegion = getImageRegion("unselected", getState());
+        const Rectangle& unselectedRegion = getImageRegion("unselected", state);
         size.set(unselectedRegion.width, unselectedRegion.height);
     }
+
+    Rectangle oldBounds(_bounds);
 
     if (_autoSize & AUTO_SIZE_HEIGHT)
     {
@@ -163,9 +173,11 @@ void RadioButton::updateBounds(const Vector2& offset)
         setWidthInternal(_viewportBounds.height + 5 + _bounds.width);
     }
 
+    changed = changed || (_bounds != oldBounds);
+
     _textBounds.x += _viewportBounds.height + 5;
 
-    _image = getImage(_selected ? "selected" : "unselected", getState());
+    return changed;
 }
 
 unsigned int RadioButton::drawImages(Form* form, const Rectangle& clip)

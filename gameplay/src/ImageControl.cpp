@@ -138,9 +138,11 @@ unsigned int ImageControl::drawImages(Form* form, const Rectangle& clip)
     return 1;
 }
 
-void ImageControl::updateBounds(const Vector2& offset)
+bool ImageControl::updateBounds(const Vector2& offset)
 {
-    Control::updateBounds(offset);
+    bool changed = Control::updateBounds(offset);
+
+    Rectangle oldBounds(_bounds);
 
     if (_batch)
     {
@@ -154,6 +156,10 @@ void ImageControl::updateBounds(const Vector2& offset)
             setHeightInternal(_batch->getSampler()->getTexture()->getWidth());
         }
     }
+
+    changed = changed || (_bounds != oldBounds);
+
+    return changed;
 }
 
 }

@@ -107,9 +107,9 @@ public:
     void update(float elapsedTime);
 
     /**
-    * @see Control::updateBounds
-    */
-    void updateBounds(const Vector2& offset);
+     * @see Control::updtaeBounds
+     */
+    bool updateBounds(const Vector2& offset);
 
     /**
      * Draws this form.

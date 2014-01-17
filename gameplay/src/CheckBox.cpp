@@ -49,7 +49,7 @@ void CheckBox::setChecked(bool checked)
     if (_checked != checked)
     {
         _checked = checked;
-        setDirty(DIRTY_BOUNDS);
+        setDirty(DIRTY_STATE);
         notifyListeners(Control::Listener::VALUE_CHANGED);
     }
 }
@@ -87,11 +87,19 @@ void CheckBox::controlEvent(Control::Listener::EventType evt)
     }
 }
 
-void CheckBox::updateBounds(const Vector2& offset)
+void CheckBox::updateState(State state)
 {
-    Label::updateBounds(offset);
+    Label::updateState(state);
 
-    Control::State state = getState();
+    _image = getImage(_checked ? "checked" : "unchecked", state);
+}
+
+bool CheckBox::updateBounds(const Vector2& offset)
+{
+    bool changed = Label::updateBounds(offset);
+
+    // Update bounds based on normal state only
+    Control::State state = NORMAL;
 
     Vector2 size;
     if (_checked)
@@ -104,6 +112,8 @@ void CheckBox::updateBounds(const Vector2& offset)
         const Rectangle& unselectedRegion = getImageRegion("unchecked", state);
         size.set(unselectedRegion.width, unselectedRegion.height);
     }
+
+    Rectangle oldBounds(_bounds);
 
     if (_autoSize & AUTO_SIZE_HEIGHT)
     {
@@ -119,16 +129,11 @@ void CheckBox::updateBounds(const Vector2& offset)
         setWidthInternal(_viewportBounds.height + 5 + _bounds.width);
     }
 
+    changed = changed || (_bounds != oldBounds);
+
     _textBounds.x += _viewportBounds.height + 5;
-    
-    if (_checked)
-    {
-        _image = getImage("checked", state);
-    }
-    else
-    {
-        _image = getImage("unchecked", state);
-    }
+
+    return changed;
 }
 
 unsigned int CheckBox::drawImages(Form* form, const Rectangle& clip)

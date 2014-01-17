@@ -191,13 +191,20 @@ void Form::update(float elapsedTime)
     updateBounds(Vector2::zero());
 }
 
-void Form::updateBounds(const Vector2& offset)
+bool Form::updateBounds(const Vector2& offset)
 {
-    // Two pass bounds update:
-    // 1. First pass computes child/leaf control sizes.
-    // 2. Second pass fits parent sizes to that of the children (and does relative sizing of children)
-    Container::updateBounds(offset);
-    Container::updateBounds(offset);
+    // Do a two-pass bounds update:
+    //  1. First pass updates leaf controls
+    //  2. Second pass updates parent controls that depend on child sizes
+    // Note: We could have updateBounds return a boolean indicating whether anything
+    // was dirtied as a result of the update (so we can optionally skip the second pass).
+    if (Container::updateBounds(offset))
+    {
+        Container::updateBounds(offset);
+        return true;
+    }
+
+    return false;
 }
 
 void Form::startBatch(SpriteBatch* batch)
@@ -406,11 +413,11 @@ Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
             if (_activeControl != ctrl || _activeControlState != Control::ACTIVE)
             {
                 if (_activeControl)
-                    _activeControl->setDirty(Control::DIRTY_BOUNDS);
+                    _activeControl->setDirty(Control::DIRTY_STATE);
 
                 _activeControl = ctrl;
                 _activeControlState = Control::ACTIVE;
-                _activeControl->setDirty(Control::DIRTY_BOUNDS);
+                _activeControl->setDirty(Control::DIRTY_STATE);
             }
 
             ctrl->notifyListeners(Control::Listener::PRESS);
@@ -431,7 +438,7 @@ Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
             screenToForm(ctrl, &newX, &newY);
 
             // No longer any active control
-            _activeControl->setDirty(Control::DIRTY_BOUNDS);
+            _activeControl->setDirty(Control::DIRTY_STATE);
             _activeControl = NULL;
             _activeControlState = Control::NORMAL;
         }
@@ -446,18 +453,18 @@ Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
                 if (_activeControl != ctrl || _activeControlState != Control::HOVER)
                 {
                     if (_activeControl)
-                        _activeControl->setDirty(Control::DIRTY_BOUNDS);
+                        _activeControl->setDirty(Control::DIRTY_STATE);
 
                     _activeControl = ctrl;
                     _activeControlState = Control::HOVER;
-                    _activeControl->setDirty(Control::DIRTY_BOUNDS);
+                    _activeControl->setDirty(Control::DIRTY_STATE);
                 }
             }
             else
             {
                 // No longer any active control
                 if (_activeControl)
-                    _activeControl->setDirty(Control::DIRTY_BOUNDS);
+                    _activeControl->setDirty(Control::DIRTY_STATE);
 
                 _activeControl = NULL;
                 _activeControlState = Control::NORMAL;
@@ -509,18 +516,18 @@ Control* Form::handlePointerMove(int* x, int* y)
             if (_activeControl != ctrl || _activeControlState != Control::HOVER)
             {
                 if (_activeControl)
-                    _activeControl->setDirty(Control::DIRTY_BOUNDS);
+                    _activeControl->setDirty(Control::DIRTY_STATE);
 
                 _activeControl = ctrl;
                 _activeControlState = Control::HOVER;
-                _activeControl->setDirty(Control::DIRTY_BOUNDS);
+                _activeControl->setDirty(Control::DIRTY_STATE);
             }
         }
         else
         {
             // No active/hover control
             if (_activeControl)
-                _activeControl->setDirty(Control::DIRTY_BOUNDS);
+                _activeControl->setDirty(Control::DIRTY_STATE);
 
             _activeControl = NULL;
             _activeControlState = Control::NORMAL;
@@ -922,7 +929,7 @@ void Form::resizeEventInternal(unsigned int width, unsigned int height)
         if (form)
         {
             // Dirty the form
-            form->setDirty(Control::DIRTY_BOUNDS);
+            form->setDirty(Control::DIRTY_STATE);
         }
     }
 }
@@ -997,14 +1004,14 @@ void Form::setFocusControl(Control* control)
     // Deactivate the old focus control
     if (oldFocus)
     {
-        oldFocus->setDirty(Control::DIRTY_BOUNDS);
+        oldFocus->setDirty(Control::DIRTY_STATE);
         oldFocus->notifyListeners(Control::Listener::FOCUS_LOST);
     }
 
     // Activate the new focus control
     if (_focusControl)
     {
-        _focusControl->setDirty(Control::DIRTY_BOUNDS);
+        _focusControl->setDirty(Control::DIRTY_STATE);
         _focusControl->notifyListeners(Control::Listener::FOCUS_GAINED);
 
         // Set the activeControl property of the control's parent container

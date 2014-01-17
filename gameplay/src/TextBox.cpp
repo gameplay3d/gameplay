@@ -306,11 +306,10 @@ void TextBox::controlEvent(Control::Listener::EventType evt)
     }
 }
 
-void TextBox::updateBounds(const Vector2& offset)
+void TextBox::updateState(State state)
 {
-    Label::updateBounds(offset);
+    Label::updateState(state);
 
-    Control::State state = getState();
     _fontSize = getFontSize(state);
     _caretImage = getImage("textCaret", state);
 }

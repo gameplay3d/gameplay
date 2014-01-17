@@ -330,22 +330,29 @@ void Slider::update(float elapsedTime)
     }
 }
 
-void Slider::updateBounds(const Vector2& offset)
+void Slider::updateState(State state)
 {
-    Label::updateBounds(offset);
-
-    Control::State state = getState();
+    Label::updateState(state);
 
     _minImage = getImage("minCap", state);
     _maxImage = getImage("maxCap", state);
     _markerImage = getImage("marker", state);
     _trackImage = getImage("track", state);
+}
+
+bool Slider::updateBounds(const Vector2& offset)
+{
+    bool changed = Label::updateBounds(offset);
+
+    Control::State state = getState();
 
     // Compute height of track (max of track, min/max and marker
     _trackHeight = _minImage->getRegion().height;
     _trackHeight = std::max(_trackHeight, _maxImage->getRegion().height);
     _trackHeight = std::max(_trackHeight, _markerImage->getRegion().height);
     _trackHeight = std::max(_trackHeight, _trackImage->getRegion().height);
+
+    Rectangle oldBounds(_bounds);
 
     if (_autoSize & AUTO_SIZE_HEIGHT)
     {
@@ -354,6 +361,10 @@ void Slider::updateBounds(const Vector2& offset)
             height += getFontSize(state);
         setHeightInternal(height);
     }
+
+    changed = changed || (_bounds != oldBounds);
+
+    return changed;
 }
 
 unsigned int Slider::drawImages(Form* form, const Rectangle& clip)
