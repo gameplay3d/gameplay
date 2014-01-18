@@ -225,12 +225,17 @@ void Game::pause()
         _state = PAUSED;
         _pausedTimeLast = Platform::getAbsoluteTime();
         _animationController->pause();
-        _audioController->pause();
         _physicsController->pause();
         _aiController->pause();
     }
 
     ++_pausedCount;
+}
+
+void Game::background()
+{
+    if (_audioController)
+        _audioController->pause();
 }
 
 void Game::resume()
@@ -253,6 +258,12 @@ void Game::resume()
             _aiController->resume();
         }
     }
+}
+
+void Game::foreground()
+{
+    if (_audioController)
+        _audioController->resume();
 }
 
 void Game::exit()

@@ -1093,10 +1093,12 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
             if (__initialized)
             {
                 Game::getInstance()->resume();
+                Game::getInstance()->foreground();
             }
             __suspended = false;
             break;
         case APP_CMD_PAUSE:
+            Game::getInstance()->background();
             Game::getInstance()->pause();
             __suspended = true;
             break;

@@ -448,8 +448,10 @@ int getUnicode(int key);
         displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
         [displayLink setFrameInterval:swapInterval];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        if (game)
+        if (game) {
             game->resume();
+            game->foreground();
+        }
         updating = TRUE;
     }
 }
@@ -458,8 +460,10 @@ int getUnicode(int key);
 {
     if (updating)
     {
-        if (game)
+        if (game) {
+            game->background();
             game->pause();
+        }
         [displayLink invalidate];
         displayLink = nil;
         updating = FALSE;
