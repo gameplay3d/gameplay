@@ -1311,12 +1311,14 @@ int Platform::enterMessagePump()
                         if (!__screenFullscreen)
                             __screenFullscreen = true;
                         _game->resume();
+                        _game->foreground();
                         suspended = false;
                         break;
                     case NAVIGATOR_WINDOW_THUMBNAIL:
                     case NAVIGATOR_WINDOW_INVISIBLE:
                         if (__screenFullscreen && !suspended)
                         {
+                            _game->background();
                             _game->pause();
                             suspended = true;
                         }

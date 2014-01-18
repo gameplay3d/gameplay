@@ -139,9 +139,21 @@ public:
     void pause();
 
     /**
+     * Called to release resources like audio when the application goes to
+     * background.
+     */
+    void background();
+
+    /**
      * Resumes the game after being paused.
      */
     void resume();
+
+    /**
+     * Called to claim back resources like audio when the application comes back
+     * to foreground.
+     */
+    void foreground();
 
     /**
      * Exits the game.
