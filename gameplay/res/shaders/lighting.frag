@@ -74,9 +74,9 @@ vec3 getLitPixel()
         vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection[i]);
 
         #if defined(BUMPED)
-            vec3 spotLightDirection = normalize(v_spotLightDirection[i] * 2.0f);
+            vec3 spotLightDirection = normalize(v_spotLightDirection[i] * 2.0);
         #else
-            vec3 spotLightDirection = normalize(u_spotLightDirection[i] * 2.0f);
+            vec3 spotLightDirection = normalize(u_spotLightDirection[i] * 2.0);
         #endif
 
         // "-lightDirection" is used because light direction points in opposite direction to spot direction.
