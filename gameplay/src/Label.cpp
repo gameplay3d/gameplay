@@ -86,36 +86,33 @@ void Label::updateState(State state)
     _font = getFont(state);
 }
 
-bool Label::updateBounds(const Vector2& offset)
+void Label::updateBounds()
 {
-    bool changed = Control::updateBounds(offset);
-
-    // Measure bounds based only on normal state so that bounds updates are not always required on state changes.
-    // This is a trade-off for functionality vs performance, but changing the size of UI controls on hover/focus/etc
-    // is a pretty bad practice so we'll prioritize performance here.
-    Control::State state = NORMAL;
-
-    _textBounds.set((int)_viewportBounds.x, (int)_viewportBounds.y, _viewportBounds.width, _viewportBounds.height);
-
-    Rectangle oldBounds(_bounds);
+    Control::updateBounds();
 
     if (_autoSize != AUTO_SIZE_NONE && _font)
     {
+        // Measure bounds based only on normal state so that bounds updates are not always required on state changes.
+        // This is a trade-off for functionality vs performance, but changing the size of UI controls on hover/focus/etc
+        // is a pretty bad practice so we'll prioritize performance here.
         unsigned int w, h;
-        _font->measureText(_text.c_str(), getFontSize(state), &w, &h);
+        _font->measureText(_text.c_str(), getFontSize(NORMAL), &w, &h);
         if (_autoSize & AUTO_SIZE_WIDTH)
         {
-            setWidthInternal(w + getBorder(state).left + getBorder(state).right + getPadding().left + getPadding().right);
+            setWidthInternal(w + getBorder(NORMAL).left + getBorder(NORMAL).right + getPadding().left + getPadding().right);
         }
         if (_autoSize & AUTO_SIZE_HEIGHT)
         {
-            setHeightInternal(h + getBorder(state).top + getBorder(state).bottom + getPadding().top + getPadding().bottom);
+            setHeightInternal(h + getBorder(NORMAL).top + getBorder(NORMAL).bottom + getPadding().top + getPadding().bottom);
         }
     }
+}
 
-    changed = changed || (_bounds != oldBounds);
+void Label::updateAbsoluteBounds(const Vector2& offset)
+{
+    Control::updateAbsoluteBounds(offset);
 
-    return changed;
+    _textBounds.set((int)_viewportBounds.x, (int)_viewportBounds.y, _viewportBounds.width, _viewportBounds.height);
 }
 
 unsigned int Label::drawText(Form* form, const Rectangle& clip)

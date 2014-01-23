@@ -1127,15 +1127,18 @@ protected:
     virtual void updateState(State state);
 
     /**
-     * Updates the bounds for this control and its children.
+     * Updates the local bounds for this control and its children.
      *
      * Child controls that need to customize their bounds calculation should override this method.
-     *
-     * @param offset Positioning offset to add to the control's position (most often used for scrolling).
-     *
-     * @return True if the bounds were updated, or false if there was no change.
      */
-    virtual bool updateBounds(const Vector2& offset);
+    virtual void updateBounds();
+
+    /**
+     * Updates the absolute bounds for this control and its children.
+     *
+     * @param offset Offset to add to the control's position (most often used for scrolling).
+     */
+    virtual void updateAbsoluteBounds(const Vector2& offset);
 
     /**
      * Indicates that a control will begin drawing into the specified batch.
@@ -1404,6 +1407,8 @@ private:
      * Constructor.
      */    
     Control(const Control& copy);
+
+    bool updateBoundsInternal(const Vector2& offset);
 
     AutoSize Control::parseAutoSize(const char* str);
 

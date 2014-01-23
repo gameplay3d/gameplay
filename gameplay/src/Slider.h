@@ -245,7 +245,7 @@ protected:
     /**
      * @see Control::updateBounds
      */
-    bool updateBounds(const Vector2& offset);
+    void updateBounds();
 
     /**
      * The minimum value for the Slider.

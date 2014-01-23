@@ -1145,7 +1145,7 @@ void Control::updateState(State state)
     _skin = getSkin(state);
 }
 
-bool Control::updateBounds(const Vector2& offset)
+bool Control::updateBoundsInternal(const Vector2& offset)
 {
     // If our state is currently dirty, update it here so that any rendering state objects needed
     // for bounds computation are accessible.
@@ -1156,13 +1156,45 @@ bool Control::updateBounds(const Vector2& offset)
         _dirtyBits &= ~DIRTY_STATE;
     }
 
-    // Clear dirty bounds bit
+    // Clear our dirty bounds bit
+    bool dirtyBounds = (_dirtyBits & DIRTY_BOUNDS) != 0;
     _dirtyBits &= ~DIRTY_BOUNDS;
 
+    // If we are a container, always update child bounds first
+    bool changed = false;
+    if (isContainer())
+        changed = static_cast<Container*>(this)->updateChildBounds();
+
+    if (dirtyBounds)
+    {
+        // Store old bounds so we can determine if they change
+        Rectangle oldAbsoluteBounds(_absoluteBounds);
+        Rectangle oldAbsoluteClipBounds(_absoluteClipBounds);
+        Rectangle oldViewportBounds(_viewportBounds);
+        Rectangle oldViewportClipBounds(_viewportClipBounds);
+
+        updateBounds();
+        updateAbsoluteBounds(offset);
+
+        if (_absoluteBounds != oldAbsoluteBounds ||
+            _absoluteClipBounds != oldAbsoluteClipBounds ||
+            _viewportBounds != oldViewportBounds ||
+            _viewportClipBounds != oldViewportClipBounds)
+        {
+            if (isContainer())
+                static_cast<Container*>(this)->setChildrenDirty(DIRTY_BOUNDS, true);
+            changed = true;
+        }
+    }
+
+    return changed;
+}
+
+void Control::updateBounds()
+{
     Game* game = Game::getInstance();
 
     const Rectangle parentAbsoluteBounds = _parent ? _parent->_viewportBounds : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
-    const Rectangle parentAbsoluteClip = _parent ? _parent->_viewportClipBounds : parentAbsoluteBounds;
 
     // Calculate local unclipped bounds.
     _bounds.set(_relativeBounds);
@@ -1225,9 +1257,17 @@ bool Control::updateBounds(const Vector2& offset)
             _bounds.x = margin.left;
         }
     }
+}
+
+void Control::updateAbsoluteBounds(const Vector2& offset)
+{
+    Game* game = Game::getInstance();
+
+    const Rectangle parentAbsoluteBounds = _parent ? _parent->_viewportBounds : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
+    const Rectangle parentAbsoluteClip = _parent ? _parent->_viewportClipBounds : parentAbsoluteBounds;
 
     // Compute content area padding values
-    const Theme::Border& border = getBorder(state);
+    const Theme::Border& border = getBorder(NORMAL);
     const Theme::Padding& padding = getPadding();
     float lpadding = border.left + padding.left;
     float rpadding = border.right + padding.right;
@@ -1236,22 +1276,15 @@ bool Control::updateBounds(const Vector2& offset)
     float hpadding = lpadding + rpadding;
     float vpadding = tpadding + bpadding;
 
-    Rectangle temp;
-    bool changed = false;
-
     // Calculate absolute unclipped bounds
-    temp.set(
+    _absoluteBounds.set(
         parentAbsoluteBounds.x + offset.x + _bounds.x,
         parentAbsoluteBounds.y + offset.y + _bounds.y,
         _bounds.width,
         _bounds.height);
-    changed = temp != _absoluteBounds;
-    _absoluteBounds = temp;
 
     // Calculate absolute clipped bounds
-    Rectangle::intersect(_absoluteBounds, parentAbsoluteClip, &temp);
-    changed = changed || (temp != _absoluteClipBounds);
-    _absoluteClipBounds = temp;
+    Rectangle::intersect(_absoluteBounds, parentAbsoluteClip, &_absoluteClipBounds);
 
     // Calculate the local clipped bounds
     _clipBounds.set(
@@ -1262,20 +1295,14 @@ bool Control::updateBounds(const Vector2& offset)
         );
 
     // Calculate the absolute unclipped viewport bounds (content area, which does not include border and padding)
-    temp.set(
+    _viewportBounds.set(
         _absoluteBounds.x + lpadding,
         _absoluteBounds.y + tpadding,
         _absoluteBounds.width - hpadding,
         _absoluteBounds.height - vpadding);
-    changed = changed || (temp != _viewportBounds);
-    _viewportBounds = temp;
 
     // Calculate the absolute clipped viewport bounds
-    Rectangle::intersect(_viewportBounds, parentAbsoluteClip, &temp);
-    changed = changed || (temp != _viewportClipBounds);
-    _viewportClipBounds = temp;
-
-    return true;
+    Rectangle::intersect(_viewportBounds, parentAbsoluteClip, &_viewportClipBounds);
 }
 
 void Control::startBatch(Form* form, SpriteBatch* batch)

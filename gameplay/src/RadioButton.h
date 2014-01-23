@@ -125,7 +125,12 @@ protected:
     /**
      * @see Control::updateBounds
      */
-    bool updateBounds(const Vector2& offset);
+    void updateBounds();
+
+    /**
+     * @see Control::updateAbsoluteBounds
+     */
+    void updateAbsoluteBounds(const Vector2& offset);
 
     /**
      * @see Control::drawImages

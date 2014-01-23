@@ -138,31 +138,26 @@ void RadioButton::updateState(State state)
     _image = getImage(_selected ? "selected" : "unselected", state);
 }
 
-bool RadioButton::updateBounds(const Vector2& offset)
+void RadioButton::updateBounds()
 {
-    bool changed = Label::updateBounds(offset);
-    
-    // Compute bounds based on normal state only
-    Control::State state = NORMAL;
+    Label::updateBounds();
 
     Vector2 size;
     if (_selected)
     {
-        const Rectangle& selectedRegion = getImageRegion("selected", state);
+        const Rectangle& selectedRegion = getImageRegion("selected", NORMAL);
         size.set(selectedRegion.width, selectedRegion.height);
     }
     else
     {
-        const Rectangle& unselectedRegion = getImageRegion("unselected", state);
+        const Rectangle& unselectedRegion = getImageRegion("unselected", NORMAL);
         size.set(unselectedRegion.width, unselectedRegion.height);
     }
-
-    Rectangle oldBounds(_bounds);
 
     if (_autoSize & AUTO_SIZE_HEIGHT)
     {
         // Text-only width was already measured in Label::update - append image
-        const Theme::Border& border = getBorder(state);
+        const Theme::Border& border = getBorder(NORMAL);
         const Theme::Border& padding = getPadding();
         setHeightInternal(std::max(_bounds.height, size.y + border.top + border.bottom + padding.top + padding.bottom));
     }
@@ -170,14 +165,15 @@ bool RadioButton::updateBounds(const Vector2& offset)
     if (_autoSize & AUTO_SIZE_WIDTH)
     {
         // Text-only width was already measured in Label::update - append image
-        setWidthInternal(_viewportBounds.height + 5 + _bounds.width);
+        setWidthInternal(_bounds.height + 5 + _bounds.width);
     }
+}
 
-    changed = changed || (_bounds != oldBounds);
+void RadioButton::updateAbsoluteBounds(const Vector2& offset)
+{
+    Label::updateAbsoluteBounds(offset);
 
-    _textBounds.x += _viewportBounds.height + 5;
-
-    return changed;
+    _textBounds.x += _bounds.height + 5;
 }
 
 unsigned int RadioButton::drawImages(Form* form, const Rectangle& clip)

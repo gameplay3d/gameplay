@@ -340,11 +340,9 @@ void Slider::updateState(State state)
     _trackImage = getImage("track", state);
 }
 
-bool Slider::updateBounds(const Vector2& offset)
+void Slider::updateBounds()
 {
-    bool changed = Label::updateBounds(offset);
-
-    Control::State state = getState();
+    Label::updateBounds();
 
     // Compute height of track (max of track, min/max and marker
     _trackHeight = _minImage->getRegion().height;
@@ -352,19 +350,13 @@ bool Slider::updateBounds(const Vector2& offset)
     _trackHeight = std::max(_trackHeight, _markerImage->getRegion().height);
     _trackHeight = std::max(_trackHeight, _trackImage->getRegion().height);
 
-    Rectangle oldBounds(_bounds);
-
     if (_autoSize & AUTO_SIZE_HEIGHT)
     {
         float height = _bounds.height + _trackHeight;
         if (_valueTextVisible)
-            height += getFontSize(state);
+            height += getFontSize(NORMAL);
         setHeightInternal(height);
     }
-
-    changed = changed || (_bounds != oldBounds);
-
-    return changed;
 }
 
 unsigned int Slider::drawImages(Form* form, const Rectangle& clip)

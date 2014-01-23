@@ -138,12 +138,8 @@ unsigned int ImageControl::drawImages(Form* form, const Rectangle& clip)
     return 1;
 }
 
-bool ImageControl::updateBounds(const Vector2& offset)
+void ImageControl::updateBounds()
 {
-    bool changed = Control::updateBounds(offset);
-
-    Rectangle oldBounds(_bounds);
-
     if (_batch)
     {
         if (_autoSize & AUTO_SIZE_WIDTH)
@@ -157,9 +153,7 @@ bool ImageControl::updateBounds(const Vector2& offset)
         }
     }
 
-    changed = changed || (_bounds != oldBounds);
-
-    return changed;
+    Control::updateBounds();
 }
 
 }

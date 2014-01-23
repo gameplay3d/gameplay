@@ -107,11 +107,6 @@ public:
     void update(float elapsedTime);
 
     /**
-     * @see Control::updtaeBounds
-     */
-    bool updateBounds(const Vector2& offset);
-
-    /**
      * Draws this form.
      *
      * @return The nubmer of draw calls issued to draw the form.

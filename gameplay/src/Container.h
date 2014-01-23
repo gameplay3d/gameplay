@@ -317,12 +317,17 @@ protected:
     /**
      * @see Control::updateBounds
      */
-    bool updateBounds(const Vector2& offset);
+    void updateBounds();
+
+    /**
+     * @see Control::updateAbsoluteBounds
+     */
+    void updateAbsoluteBounds(const Vector2& offset);
 
     /**
      * Updates the bounds for this container's child controls.
      */
-    void updateChildBounds();
+    bool updateChildBounds();
 
     /**
      * Sets the specified dirty bits for all children within this container.
@@ -576,7 +581,6 @@ private:
     bool _contactIndices[MAX_CONTACT_INDICES];
     bool _initializedWithScroll;
     bool _scrollWheelRequiresFocus;
-    bool _inRelayout;
 };
 
 }
