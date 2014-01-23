@@ -1410,7 +1410,7 @@ private:
 
     bool updateBoundsInternal(const Vector2& offset);
 
-    AutoSize Control::parseAutoSize(const char* str);
+    AutoSize parseAutoSize(const char* str);
 
     Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
 
