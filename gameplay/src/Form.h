@@ -102,7 +102,7 @@ public:
     void setNode(Node* node);
 
     /**
-     * Updates each control within this form, and positions them according to its layout.
+     * @see Control::update
      */
     void update(float elapsedTime);
 
@@ -136,13 +136,6 @@ public:
      * @param enabled True to enable batching (default), false otherwise.
      */
     void setBatchingEnabled(bool enabled);
-
-protected:
-
-    /**
-     * @see Control::update
-     */
-    void update(const Control* container, const Vector2& offset);
 
 private:
     
@@ -217,11 +210,6 @@ private:
     static void resizeEventInternal(unsigned int width, unsigned int height);
 
     /**
-     * Called to update internal framebuffer when forms are attached to a node.
-     */
-    void updateFrameBuffer();
-
-    /**
      * Called during drawing to prepare a sprite batch for being drawn into for this form.
      */
     void startBatch(SpriteBatch* batch);
@@ -267,8 +255,6 @@ private:
     static bool pollGamepad(Gamepad* gamepad);
 
     Node* _node;                        // Node for transforming this Form in world-space.
-    FrameBuffer* _frameBuffer;          // FrameBuffer for offscreen drawing of forms that are attached to a Node
-    Model* _model;                      // Model used to render form in 3D when attached to a Node
     Matrix _projectionMatrix;           // Projection matrix to be set on SpriteBatch objects when rendering the form
     std::vector<SpriteBatch*> _batches;
     bool _batched;

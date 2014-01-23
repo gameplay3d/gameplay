@@ -620,6 +620,7 @@
     <None Include="res\shaders\terrain.vert" />
     <None Include="res\shaders\textured.frag" />
     <None Include="res\shaders\textured.vert" />
+    <None Include="res\ui\default.theme" />
     <None Include="src\BoundingBox.inl" />
     <None Include="src\BoundingSphere.inl" />
     <None Include="src\Game.inl" />
@@ -642,6 +643,9 @@
     <None Include="src\PhysicsGenericConstraint.inl" />
     <None Include="src\PhysicsRigidBody.inl" />
     <None Include="src\PhysicsSpringConstraint.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\ui\default-theme.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1032BA4B-57EB-4348-9E03-29DD63E80E4A}</ProjectGuid>

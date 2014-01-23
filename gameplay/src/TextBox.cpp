@@ -70,14 +70,12 @@ bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         if (state == ACTIVE)
         {
             setCaretLocation(x, y);
-            _dirty = true;
         }
         break;
     case Touch::TOUCH_MOVE:
         if (state == ACTIVE)
         {
             setCaretLocation(x, y);
-            _dirty = true;
         }
         break;
     }
@@ -149,13 +147,11 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                 case Keyboard::KEY_HOME:
                 {
                     _caretLocation = 0;
-                    _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_END:
                 {
                     _caretLocation = _text.length();
-                    _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_DELETE:
@@ -172,7 +168,6 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                             newCaretLocation = _caretLocation + 1;
                         }
                         _text.erase(_caretLocation, newCaretLocation - _caretLocation);
-                        _dirty = true;
                         notifyListeners(Control::Listener::TEXT_CHANGED);
                     }
                     break;
@@ -195,7 +190,6 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                             --_caretLocation;
                         }
                     }
-                    _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_RIGHT_ARROW:
@@ -211,7 +205,6 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                             ++_caretLocation;
                         }
                     }
-                    _dirty = true;
                     break;
                 }
                 case Keyboard::KEY_UP_ARROW:
@@ -239,7 +232,6 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         }
                         _text.erase(newCaretLocation, _caretLocation - newCaretLocation);
                         _caretLocation = newCaretLocation;
-                        _dirty = true;
                         notifyListeners(Control::Listener::TEXT_CHANGED);
                     }
                     break;
@@ -273,7 +265,6 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                             ++_caretLocation;
                         }
 
-                        _dirty = true;
                         notifyListeners(Control::Listener::TEXT_CHANGED);
                     }
                     break;
@@ -315,11 +306,10 @@ void TextBox::controlEvent(Control::Listener::EventType evt)
     }
 }
 
-void TextBox::update(const Control* container, const Vector2& offset)
+void TextBox::updateState(State state)
 {
-    Label::update(container, offset);
+    Label::updateState(state);
 
-    Control::State state = getState();
     _fontSize = getFontSize(state);
     _caretImage = getImage("textCaret", state);
 }

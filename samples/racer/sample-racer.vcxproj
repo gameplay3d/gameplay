@@ -191,6 +191,12 @@ copy .\game.dxt.config .\game.config</Command>
       <Message>Copying game.config...</Message>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res
+copy .\game.dxt.config .\game.config</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <ClCompile>
@@ -247,6 +253,12 @@ copy .\game.dxt.config .\game.config</Command>
       <Message>Copying game.config...</Message>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res
+copy .\game.dxt.config .\game.config</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -303,6 +315,12 @@ copy .\game.dxt.config .\game.config</Command>
       <Message>Copying game.config...</Message>
       <Outputs>game.config.dummy</Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res
+copy .\game.dxt.config .\game.config</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="bar-descriptor.xml">

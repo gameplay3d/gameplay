@@ -18,7 +18,7 @@ ParticlesGame::ParticlesGame() : _scene(NULL), _panning(false), _rotating(false)
 void ParticlesGame::addGrid(unsigned int lineCount)
 {
     float z = -1;
-
+    
     // There needs to be an odd number of lines
     lineCount |= 1;
     const unsigned int pointCount = lineCount * 4;
@@ -824,7 +824,7 @@ void ParticlesGame::render(float elapsedTime)
     _form->draw();
 
     // Draw the framerate and number of live particles.
-    drawFrameRate(_font, Vector4(1, 1, 1, 1), 170, 40, getFrameRate());
+    drawFrameRate(_font, Vector4(1, 1, 1, 1), 205, 40, getFrameRate());
 }
 
 bool ParticlesGame::drawScene(Node* node, void* cookie)
@@ -1158,19 +1158,20 @@ void ParticlesGame::updateTexture()
 
 void ParticlesGame::updateImageControl()
 {
-    ((ImageControl*)_form->getControl("sprite"))->setImage(_particleEmitter->getTexture()->getPath());
+    ImageControl* img = (ImageControl*)_form->getControl("sprite");
+    img->setImage(_particleEmitter->getTexture()->getPath());
 
     // Resize the image control so keep it to scale
     int w = _particleEmitter->getTexture()->getWidth();
     int h = _particleEmitter->getTexture()->getHeight();
     int max = w > h ? w : h;
-    if (max > 140)
+    if (max > 120)
     {
-        float ratio = 140.0f / max;
+        float ratio = 120.0f / max;
         w *= ratio;
         h *= ratio;
     }
-    ((ImageControl*)_form->getControl("sprite"))->setSize(w, h);
+    img->setSize(w, h);
     _form->getControl("image")->setHeight(h + _form->getControl("imageSettings")->getHeight() + 50);
 
     ((TextBox*)_form->getControl("frameCount"))->setText(toString(_particleEmitter->getSpriteFrameCount()).c_str());

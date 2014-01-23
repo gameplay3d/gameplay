@@ -53,9 +53,8 @@ protected:
      * Update the controls contained by the specified container.
      *
      * @param container The container to update.
-     * @param offset The offset position.
      */
-    void update(const Container* container, const Vector2& offset);
+    void update(const Container* container);
 
     /**
      * Horizontal spacing between controls.

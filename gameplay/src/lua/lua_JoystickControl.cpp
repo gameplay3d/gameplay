@@ -40,8 +40,7 @@ void luaRegister_JoystickControl()
         {"getAnimation", lua_JoystickControl_getAnimation},
         {"getAnimationPropertyComponentCount", lua_JoystickControl_getAnimationPropertyComponentCount},
         {"getAnimationPropertyValue", lua_JoystickControl_getAnimationPropertyValue},
-        {"getAutoHeight", lua_JoystickControl_getAutoHeight},
-        {"getAutoWidth", lua_JoystickControl_getAutoWidth},
+        {"getAutoSize", lua_JoystickControl_getAutoSize},
         {"getBorder", lua_JoystickControl_getBorder},
         {"getBounds", lua_JoystickControl_getBounds},
         {"getClip", lua_JoystickControl_getClip},
@@ -98,8 +97,7 @@ void luaRegister_JoystickControl()
         {"removeScriptCallback", lua_JoystickControl_removeScriptCallback},
         {"setAlignment", lua_JoystickControl_setAlignment},
         {"setAnimationPropertyValue", lua_JoystickControl_setAnimationPropertyValue},
-        {"setAutoHeight", lua_JoystickControl_setAutoHeight},
-        {"setAutoWidth", lua_JoystickControl_setAutoWidth},
+        {"setAutoSize", lua_JoystickControl_setAutoSize},
         {"setBorder", lua_JoystickControl_setBorder},
         {"setBounds", lua_JoystickControl_setBounds},
         {"setCanFocus", lua_JoystickControl_setCanFocus},
@@ -978,7 +976,7 @@ int lua_JoystickControl_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getAutoHeight(lua_State* state)
+int lua_JoystickControl_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -991,7 +989,7 @@ int lua_JoystickControl_getAutoHeight(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 JoystickControl* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoHeight();
+                Control::AutoSize result = instance->getAutoSize();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
@@ -999,42 +997,7 @@ int lua_JoystickControl_getAutoHeight(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_JoystickControl_getAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_JoystickControl_getAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                JoystickControl* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoWidth();
-
-                // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_JoystickControl_getAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_JoystickControl_getAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3548,7 +3511,7 @@ int lua_JoystickControl_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setAutoHeight(lua_State* state)
+int lua_JoystickControl_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3558,91 +3521,19 @@ int lua_JoystickControl_setAutoHeight(lua_State* state)
     {
         case 2:
         {
-            do
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+                // Get parameter 1 off the stack.
+                Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
 
-                    JoystickControl* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
+                JoystickControl* instance = getInstance(state);
+                instance->setAutoSize(param1);
+                
+                return 0;
+            }
 
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    JoystickControl* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_JoystickControl_setAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_JoystickControl_setAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
-
-                    JoystickControl* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    JoystickControl* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_JoystickControl_setAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_JoystickControl_setAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

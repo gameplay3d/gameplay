@@ -3,11 +3,10 @@ form verticalLayout
     layout = LAYOUT_VERTICAL
     size = 600, 600
     scroll = SCROLL_BOTH
-	consumeInputEvents = true
 
     label label2
     {
-        style = Button
+        style = Panel
         size = 200, 200
         text = Vertical Layout
     }

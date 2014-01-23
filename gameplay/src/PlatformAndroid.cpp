@@ -1019,7 +1019,11 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
     {
         int32_t action = AKeyEvent_getAction(event);
         int32_t keycode = AKeyEvent_getKeyCode(event);
-        int32_t metastate = AKeyEvent_getMetaState(event); 
+        int32_t metastate = AKeyEvent_getMetaState(event);
+
+        //Don't consume volume up/down events.
+        if (keycode == AKEYCODE_VOLUME_DOWN || keycode == AKEYCODE_VOLUME_UP)
+            return 0;
 
         switch(action)
         {
