@@ -183,6 +183,10 @@ xcopy GAMEPLAY_PATH\gameplay\res\ui res\ui\* /s /y /d</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy GAMEPLAY_PATH\gameplay\res\ui res\ui\* /s /y /d</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <ClCompile>
@@ -243,6 +247,10 @@ xcopy GAMEPLAY_PATH\gameplay\res\ui res\ui\* /s /y /d</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy GAMEPLAY_PATH\gameplay\res\ui res\ui\* /s /y /d</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -303,6 +311,10 @@ xcopy GAMEPLAY_PATH\gameplay\res\ui res\ui\* /s /y /d</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy GAMEPLAY_PATH\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy GAMEPLAY_PATH\gameplay\res\ui res\ui\* /s /y /d</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="bar-descriptor.xml">
