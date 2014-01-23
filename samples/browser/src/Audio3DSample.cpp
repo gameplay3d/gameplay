@@ -326,7 +326,7 @@ void Audio3DSample::drawDebugText(int x, int y)
 void Audio3DSample::drawVector3(const char* str, const Vector3& vector, int x, int y)
 {
     char buffer[255];
-    sprintf(buffer, "%s: (%f, %f, %f)", str, vector.x, vector.y, vector.z);
+    sprintf(buffer, "%s: (%.3f, %.3f, %.3f)", str, vector.x, vector.y, vector.z);
     _font->drawText(buffer, x, y, Vector4::one(), 22);
 }
 
