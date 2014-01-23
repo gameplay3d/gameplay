@@ -1,17 +1,12 @@
 form physicsScene
 {
-    theme = res/common/default.theme
     layout = LAYOUT_VERTICAL
-    style = noBorder
     width = 200
-    height = 200
     alignment = ALIGN_BOTTOM_LEFT
 
     button shapeButton
     {
-        style = buttonStyle
-        autoWidth = true
-        height = 40
+        width = 100%
         text = Sphere
     }
     

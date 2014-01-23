@@ -33,9 +33,8 @@ protected:
      * It simply calls update() on any control that is dirty.
      *
      * @param container The container to update.
-     * @param offset The layout offset.
      */
-    void update(const Container* container, const Vector2& offset);
+    void update(const Container* container);
 
 private:
     

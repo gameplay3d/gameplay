@@ -2,34 +2,31 @@ form basicControls
 {
     layout = LAYOUT_ABSOLUTE
     size = 600, 600
-	consumeInputEvents = true
     batchingEnabled = false
-    	
+
 	label title
 	{
-		position = 185, 0
-		size = 200, 50
-		text = This is a label.
+		position = 185, 10
+		text = Title Label
+        fontSize = 32
 	}
 		
 	button testButton
 	{
-		position = 20, 80
-		size = 200, 100
-		text = This is a button with a hover state.
+		position = 20, 110
+		text = This is a button
 	}
 
 	checkbox testCheckbox
 	{
 		position = 20, 220
-		size = 200, 40
 		text = This is a checkbox.
 	}
 	
 	slider testSlider
 	{
-		position = 25, 315
-		size = 190, 60
+        position = 25, 315
+		width = 190
 		orientation = HORIZONTAL
 		min = -100
 		max = 100
@@ -37,47 +34,39 @@ form basicControls
 		//step = 5
 		text = This is a slider.
 		valueTextVisible = true
-		consumeInputEvents = true
 	}
 
     label textBoxLabel
     {
-        //style = iconNoBorder
-        position = 25, 400
+        position = 25, 390
         size = 200, 60
-        text = Label:
+        text = This is a label:
     }
 
     textBox testTextBox
     {
-        position = 20, 450
+        position = 20, 430
         size = 250, 80
         text = This is a text box.
-		consumeInputEvents = true
     }
 
     textBox testPasswordTextBox
     {
-        position = 20, 540
-        size = 250, 40
+        position = 20, 520
+        width = 250
         text = PASSWORD
-        consumeInputEvents = true
         inputMode = PASSWORD
     }
 
 	container radioButtonContainer
 	{
 		layout = LAYOUT_VERTICAL
-		position = 330, 75
-		autoWidth = AUTO_SIZE_FIT
-        autoHeight = AUTO_SIZE_FIT
+		position = 330, 100
 
 		radioButton choice1
 		{
 			text = Radio button 1.
 			group = testRadio
-            autoWidth = AUTO_SIZE_FIT
-            autoHeight = AUTO_SIZE_FIT
 			selected = true
 		}
 
@@ -95,22 +84,27 @@ form basicControls
 	
 	image testImage
 	{
-		position = 300, 250
-        autoWidth = AUTO_SIZE_FIT
-        autoHeight = AUTO_SIZE_FIT
+        alignment = ALIGN_BOTTOM_RIGHT
 		path = res/png/logo.png
 	}
 
-	button alignedButton
+    container testPanel
     {
-		margin
+        style = Panel
+
+        margin
 		{
-			right = 50
-			bottom = 100
+			right = 75
+			bottom = 170
 		}
 
         alignment = ALIGN_BOTTOM_RIGHT
-        size = 200, 100
-        text = Alignment: bottom-right. Right margin: 50. Bottom margin: 100.
+
+	    label
+        {
+            size = 200, 100
+            text = Style: Panel         Alignment: bottom-right   Right margin: 50           Bottom margin: 100
+            textAlignment = ALIGN_VCENTER_HCENTER
+        }
     }
 }

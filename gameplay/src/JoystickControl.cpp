@@ -221,7 +221,6 @@ bool JoystickControl::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned i
                 if (_value != value)
                 {
                     _value.set(value);
-                    _dirty = true;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
@@ -256,7 +255,6 @@ bool JoystickControl::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned i
                 if (_value != value)
                 {
                     _value.set(value);
-                    _dirty = true;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
@@ -277,7 +275,6 @@ bool JoystickControl::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned i
                 if (_value != value)
                 {
                     _value.set(value);
-                    _dirty = true;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 

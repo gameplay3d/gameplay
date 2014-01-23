@@ -122,9 +122,9 @@ protected:
     unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
-     * @see Control#update(const Control*, const Vector2&)
+     * @see Control::updateBounds
      */
-    void update(const Control* container, const Vector2& offset);
+    void updateBounds();
 
 private:
 

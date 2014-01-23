@@ -21,8 +21,6 @@ static const float GAMEPAD_FOCUS_REPEAT_DELAY = 300.0f;
 #define FORM_VSH "res/shaders/sprite.vert"
 #define FORM_FSH "res/shaders/sprite.frag"
 
-//#define GAMEPLAY_FORMS_USE_FRAMEBUFFER
-
 namespace gameplay
 {
 
@@ -32,15 +30,12 @@ Control* Form::_activeControl = NULL;
 Control::State Form::_activeControlState = Control::NORMAL;
 static bool _shiftKeyDown = false;
 
-Form::Form() : _node(NULL), _frameBuffer(NULL), _model(NULL), _batched(true)
+Form::Form() : _node(NULL), _batched(true)
 {
 }
 
 Form::~Form()
 {
-    SAFE_RELEASE(_model);
-    SAFE_RELEASE(_frameBuffer);
-
     // Remove this Form from the global list.
     std::vector<Form*>::iterator it = std::find(__forms.begin(), __forms.end(), this);
     if (it != __forms.end())
@@ -78,15 +73,20 @@ Form* Form::create(const char* url)
         if (formProperties->getPath("theme", &themeFile))
         {
             theme = Theme::create(themeFile.c_str());
-            if (theme)
-            {
-                // Load the form's style
-                const char* styleName = formProperties->getString("style", "Form");
-                style = theme->getStyle(styleName);
-                if (!style)
-                    style = theme->getEmptyStyle();
-            }
         }
+    }
+    if (!theme)
+    {
+        theme = Theme::getDefault();
+    }
+
+    if (theme)
+    {
+        // Load the form's style
+        const char* styleName = formProperties->getString("style", "Form");
+        style = theme->getStyle(styleName);
+        if (!style)
+            style = theme->getEmptyStyle();
     }
 
     form->_batched = formProperties->getBool("batchingEnabled", true);
@@ -95,7 +95,10 @@ Form* Form::create(const char* url)
     form->initialize("Form", style, formProperties);
 
     // Release the theme: its lifetime is controlled by addRef() and release() calls in initialize (above) and ~Control.
-    SAFE_RELEASE(theme);
+    if (theme != Theme::getDefault())
+    {
+        SAFE_RELEASE(theme);
+    }
 
     SAFE_DELETE(properties);
 
@@ -116,6 +119,11 @@ void Form::initialize(const char* typeName, Theme::Style* style, Properties* pro
     Container::initialize(typeName, style, properties);
 
     __forms.push_back(this);
+
+    // After creation, update our bounds once so code that runs immediately after form
+    // creation has access to up-to-date bounds.
+    if (updateBoundsInternal(Vector2::zero()))
+        updateBoundsInternal(Vector2::zero());
 }
 
 Form* Form::getForm(const char* id)
@@ -157,8 +165,6 @@ void Form::setNode(Node* node)
     if (_node != node)
     {
         _node = node;
-
-        updateFrameBuffer();
     }
 }
 
@@ -178,99 +184,15 @@ static unsigned int nextPowerOfTwo(unsigned int v)
     return v;
 }
 
-void Form::updateFrameBuffer()
-{
-    SAFE_RELEASE(_model);
-    SAFE_RELEASE(_frameBuffer);
-
-#ifdef GAMEPLAY_FORMS_USE_FRAMEBUFFER
-
-    if (_node && _absoluteClipBounds.width > 0 && _absoluteClipBounds.height > 0)
-    {
-        // Create an offscreen buffer to draw our form into
-        unsigned int width = nextPowerOfTwo(_absoluteClipBounds.width);
-        unsigned int height = nextPowerOfTwo(_absoluteClipBounds.height);
-
-        _frameBuffer = FrameBuffer::create(_id.c_str(), width, height);
-
-        // Create a model (quad) to draw our offscreen buffer onto
-        float x2 = _absoluteClipBounds.width;
-        float y2 = _absoluteClipBounds.height;
-        float u2 = x2 / width;
-        float v1 = y2 / height;
-        float vertices[] =
-        {
-            0, y2, 0, 0, v1, 1, 1, 1, 1,
-            0, 0, 0, 0, 0, 1, 1, 1, 1,
-            x2, y2, 0, u2, v1, 1, 1, 1, 1,
-            x2, 0, 0, u2, 0, 1, 1, 1, 1
-        };
-        VertexFormat::Element elements[] =
-        {
-            VertexFormat::Element(VertexFormat::POSITION, 3),
-            VertexFormat::Element(VertexFormat::TEXCOORD0, 2),
-            VertexFormat::Element(VertexFormat::COLOR, 4)
-        };
-        Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 3), 4, false);
-        GP_ASSERT(mesh);
-        mesh->setPrimitiveType(Mesh::TRIANGLE_STRIP);
-        mesh->setVertexData(vertices, 0, 4);
-
-        _model = Model::create(mesh);
-        SAFE_RELEASE(mesh);
-
-        Material* material = _model->setMaterial(FORM_VSH, FORM_FSH);
-        material->getParameter("u_projectionMatrix")->bindValue(this, &Form::getProjectionMatrix);
-
-        Texture::Sampler* sampler = Texture::Sampler::create(_frameBuffer->getRenderTarget()->getTexture());
-        sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
-        material->getParameter("u_texture")->setSampler(sampler);
-        sampler->release();
-
-        material->getStateBlock()->setDepthWrite(true);
-        material->getStateBlock()->setBlend(true);
-        material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
-        material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
-    }
-
-#endif
-}
-
 void Form::update(float elapsedTime)
 {
-    update(NULL, Vector2::zero());
+    Container::update(elapsedTime);
 
-    Control::State state = getState();
-
-    // Cache themed attributes for performance.
-    _skin = getSkin(state);
-    _opacity = getOpacity(state);
-
-    GP_ASSERT(_layout);
-    if (_scroll != SCROLL_NONE)
-    {
-        updateScroll();
-    }
-    else
-    {
-        _layout->update(this, Vector2::zero());
-    }
-}
-
-void Form::update(const Control* container, const Vector2& offset)
-{
-    // Store previous absolute bounds
-    Rectangle oldAbsoluteClipBounds = _absoluteClipBounds;
-
-    Container::update(container, offset);
-
-    _layout->align(this, NULL);
-
-    if (_absoluteClipBounds != oldAbsoluteClipBounds)
-    {
-        if (_node)
-            updateFrameBuffer();
-    }
+    // Do a two-pass bounds update:
+    //  1. First pass updates leaf controls
+    //  2. Second pass updates parent controls that depend on child sizes
+    if (updateBoundsInternal(Vector2::zero()))
+        updateBoundsInternal(Vector2::zero());
 }
 
 void Form::startBatch(SpriteBatch* batch)
@@ -307,40 +229,24 @@ unsigned int Form::draw()
     Game* game = Game::getInstance();
     Rectangle viewport = game->getViewport();
 
-    FrameBuffer* oldFrameBuffer = NULL;
-    if (_frameBuffer)
+    // If we're drawing in 2D (i.e. not attached to a node), we need to clear the depth buffer
+    if (_node)
     {
-        // Update the viewport
-        game->setViewport(Rectangle(0, 0, _absoluteClipBounds.width, _absoluteClipBounds.height));
-
-        // Bind the offscreen buffer and clear its color and depth.
-        oldFrameBuffer = _frameBuffer->bind();
-        Game::getInstance()->clear(Game::CLEAR_COLOR_DEPTH, Vector4::zero(), 1, 0);
-
-        // Setup an ortho matrix the maps to the size of the form
-        Matrix::createOrthographicOffCenter(0, _absoluteClipBounds.width, _absoluteClipBounds.height, 0, 0, 1, &_projectionMatrix);
+        // Drawing in 3D.
+        // Setup a projection matrix for drawing the form via the node's world transform.
+        Matrix world(_node->getWorldMatrix());
+        world.scale(1, -1, 1);
+        world.translate(0, -_absoluteClipBounds.height, 0);
+        Matrix::multiply(_node->getViewProjectionMatrix(), world, &_projectionMatrix);
     }
     else
     {
-        // If we're drawing in 2D (i.e. not attached to a node), we need to clear the depth buffer
-        if (_node)
-        {
-            // Drawing in 3D.
-            // Setup a projection matrix for drawing the form via the node's world transform.
-            Matrix world(_node->getWorldMatrix());
-            world.scale(1, -1, 1);
-            world.translate(0, -_absoluteClipBounds.height, 0);
-            Matrix::multiply(_node->getViewProjectionMatrix(), world, &_projectionMatrix);
-        }
-        else
-        {
-            // Drawing in 2D, so we need to clear the depth buffer
-            Game::getInstance()->clear(Game::CLEAR_DEPTH, Vector4::zero(), 1, 0);
+        // Drawing in 2D, so we need to clear the depth buffer
+        Game::getInstance()->clear(Game::CLEAR_DEPTH, Vector4::zero(), 1, 0);
 
-            // Setup an ortho matrix that maps to the current viewport
-            const Rectangle& viewport = Game::getInstance()->getViewport();
-            Matrix::createOrthographicOffCenter(0, viewport.width, viewport.height, 0, 0, 1, &_projectionMatrix);
-        }
+        // Setup an ortho matrix that maps to the current viewport
+        const Rectangle& viewport = Game::getInstance()->getViewport();
+        Matrix::createOrthographicOffCenter(0, viewport.width, viewport.height, 0, 0, 1, &_projectionMatrix);
     }
 
     // Draw the form
@@ -354,21 +260,6 @@ unsigned int Form::draw()
             _batches[i]->finish();
         _batches.clear();
         drawCalls = batchCount;
-    }
-
-    // If the form was drawn into an offscreen buffer, we need to now draw that buffer
-    // using the WVP matrix of the node we're attached to.
-    if (oldFrameBuffer)
-    {
-        game->setViewport(viewport);
-        oldFrameBuffer->bind();
-
-        if (_model)
-        {
-            _projectionMatrix = _node->getWorldViewProjectionMatrix();
-            _model->draw();
-            ++drawCalls;
-        }
     }
 
     return drawCalls;
@@ -510,11 +401,11 @@ Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
             if (_activeControl != ctrl || _activeControlState != Control::ACTIVE)
             {
                 if (_activeControl)
-                    _activeControl->_dirty = true;
+                    _activeControl->setDirty(Control::DIRTY_STATE);
 
                 _activeControl = ctrl;
                 _activeControlState = Control::ACTIVE;
-                _activeControl->_dirty = true;
+                _activeControl->setDirty(Control::DIRTY_STATE);
             }
 
             ctrl->notifyListeners(Control::Listener::PRESS);
@@ -535,7 +426,7 @@ Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
             screenToForm(ctrl, &newX, &newY);
 
             // No longer any active control
-            _activeControl->_dirty = true;
+            _activeControl->setDirty(Control::DIRTY_STATE);
             _activeControl = NULL;
             _activeControlState = Control::NORMAL;
         }
@@ -550,18 +441,18 @@ Control* Form::handlePointerPressRelease(int* x, int* y, bool pressed)
                 if (_activeControl != ctrl || _activeControlState != Control::HOVER)
                 {
                     if (_activeControl)
-                        _activeControl->_dirty = true;
+                        _activeControl->setDirty(Control::DIRTY_STATE);
 
                     _activeControl = ctrl;
                     _activeControlState = Control::HOVER;
-                    _activeControl->_dirty = true;
+                    _activeControl->setDirty(Control::DIRTY_STATE);
                 }
             }
             else
             {
                 // No longer any active control
                 if (_activeControl)
-                    _activeControl->_dirty = true;
+                    _activeControl->setDirty(Control::DIRTY_STATE);
 
                 _activeControl = NULL;
                 _activeControlState = Control::NORMAL;
@@ -613,18 +504,18 @@ Control* Form::handlePointerMove(int* x, int* y)
             if (_activeControl != ctrl || _activeControlState != Control::HOVER)
             {
                 if (_activeControl)
-                    _activeControl->_dirty = true;
+                    _activeControl->setDirty(Control::DIRTY_STATE);
 
                 _activeControl = ctrl;
                 _activeControlState = Control::HOVER;
-                _activeControl->_dirty = true;
+                _activeControl->setDirty(Control::DIRTY_STATE);
             }
         }
         else
         {
             // No active/hover control
             if (_activeControl)
-                _activeControl->_dirty = true;
+                _activeControl->setDirty(Control::DIRTY_STATE);
 
             _activeControl = NULL;
             _activeControlState = Control::NORMAL;
@@ -1026,7 +917,7 @@ void Form::resizeEventInternal(unsigned int width, unsigned int height)
         if (form)
         {
             // Dirty the form
-            form->_dirty = true;
+            form->setDirty(Control::DIRTY_STATE);
         }
     }
 }
@@ -1101,14 +992,14 @@ void Form::setFocusControl(Control* control)
     // Deactivate the old focus control
     if (oldFocus)
     {
-        oldFocus->_dirty = true;
+        oldFocus->setDirty(Control::DIRTY_STATE);
         oldFocus->notifyListeners(Control::Listener::FOCUS_LOST);
     }
 
     // Activate the new focus control
     if (_focusControl)
     {
-        _focusControl->_dirty = true;
+        _focusControl->setDirty(Control::DIRTY_STATE);
         _focusControl->notifyListeners(Control::Listener::FOCUS_GAINED);
 
         // Set the activeControl property of the control's parent container
