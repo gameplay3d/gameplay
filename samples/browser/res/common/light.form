@@ -1,59 +1,43 @@
 form formLightSelect
 {
-    theme = res/common/default.theme
-    layout = LAYOUT_ABSOLUTE
-    style = noBorder
+    layout = LAYOUT_VERTICAL
     alignment = ALIGN_TOP_LEFT
-    autoWidth = AUTO_SIZE_FIT
-    autoHeight = AUTO_SIZE_FIT
+    style = Empty
 
 	container lightingType
     {
-		style = basic
         layout = LAYOUT_VERTICAL
         position = 0, 20
-        size = 230, 210
+        width = 230
+        style = Form
 		
         label
         {
-            style = iconNoBorder
-            size = 210, 20
             textAlignment = ALIGN_TOP_HCENTER
             text = Type
+            fontSize = 18
         }
         
 		radioButton noLighting
 		{
-			style = iconNoBorder
-			imageSize = 35, 35
-			size = 200, 40
 			text = No Light
 			value = true
 		}
 
 	    radioButton directional
 		{
-			style = iconNoBorder
-			imageSize = 35, 35
-			size = 200, 40
 			text = Directional Light
 			value = false
 		}
 
 		radioButton spot
 		{
-			style = iconNoBorder
-			imageSize = 35, 35
-			size = 200, 40
 			text = Spot Light
 			value = false
 		}
 
 		radioButton point
 		{
-			style = iconNoBorder
-			imageSize = 35, 35
-			size = 200, 40
 			text = Point Light
 			value = false
 		}
@@ -61,23 +45,21 @@ form formLightSelect
 
 	container lightProperties
     {
-		style = basic
         layout = LAYOUT_VERTICAL
-        position = 0, 230
-        size = 230, 380
+        width = 230
+        style = Form
     
         label
         {
-            style = iconNoBorder
-            size = 210, 20
             textAlignment = ALIGN_TOP_HCENTER
             text = Properties
+            fontSize = 18
         }
         
 		slider redSlider
 		{
-			style = iconNoBorder
-			size = 210, 60
+            height = 55
+            width = 100%
 			orientation = HORIZONTAL
             textAlignment = ALIGN_LEFT
 			min = 0
@@ -88,8 +70,8 @@ form formLightSelect
 	
 		slider greenSlider
 		{
-			style = iconNoBorder
-			size = 210, 60
+			height = 55
+            width = 100%
 			orientation = HORIZONTAL
             textAlignment = ALIGN_LEFT
 			min = 0
@@ -100,8 +82,8 @@ form formLightSelect
 
 		slider blueSlider
 		{
-			style = iconNoBorder
-			size = 210, 60
+			height = 55
+            width = 100%
 			orientation = HORIZONTAL
             textAlignment = ALIGN_LEFT
 			min = 0
@@ -112,8 +94,8 @@ form formLightSelect
 
 		slider specularSlider
 		{
-			style = iconNoBorder
-			size = 210, 60
+			height = 55
+            width = 100%
 			orientation = HORIZONTAL
             textAlignment = ALIGN_LEFT
 			min = 1
@@ -121,20 +103,15 @@ form formLightSelect
 			value = 64
 			text = Specular
 		}
+
 		checkbox specularCheckBox
 		{
-			style = iconNoBorder
-			imageSize = 35, 35
-			size = 200, 40
 			text = Enable Specular
 			value = false
 		}
 
 		checkbox bumpedCheckBox
 		{
-			style = iconNoBorder
-			imageSize = 35, 35
-			size = 200, 40
 			text = Enable BumpMapping
 			value = false
 		}

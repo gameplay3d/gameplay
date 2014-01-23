@@ -57,12 +57,11 @@ void Label::addListener(Control::Listener* listener, int eventFlags)
     
 void Label::setText(const char* text)
 {
-    assert(text);
-
-    if (strcmp(text, _text.c_str()) != 0)
+    if ((text == NULL && _text.length() > 0) || strcmp(text, _text.c_str()) != 0)
     {
-        _text = text;
-        _dirty = true;
+        _text = text ? text : "";
+        if (_autoSize != AUTO_SIZE_NONE)
+            setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -71,27 +70,49 @@ const char* Label::getText()
     return _text.c_str();
 }
 
-void Label::update(const Control* container, const Vector2& offset)
+void Label::update(float elapsedTime)
 {
-    Control::update(container, offset);
+    Control::update(elapsedTime);
+
+    // Update text opacity each frame since opacity is updated in Control::update.
+    _textColor = getTextColor(getState());
+    _textColor.w *= _opacity;
+}
+
+void Label::updateState(State state)
+{
+    Control::updateState(state);
+
+    _font = getFont(state);
+}
+
+void Label::updateBounds()
+{
+    Control::updateBounds();
+
+    if (_autoSize != AUTO_SIZE_NONE && _font)
+    {
+        // Measure bounds based only on normal state so that bounds updates are not always required on state changes.
+        // This is a trade-off for functionality vs performance, but changing the size of UI controls on hover/focus/etc
+        // is a pretty bad practice so we'll prioritize performance here.
+        unsigned int w, h;
+        _font->measureText(_text.c_str(), getFontSize(NORMAL), &w, &h);
+        if (_autoSize & AUTO_SIZE_WIDTH)
+        {
+            setWidthInternal(w + getBorder(NORMAL).left + getBorder(NORMAL).right + getPadding().left + getPadding().right);
+        }
+        if (_autoSize & AUTO_SIZE_HEIGHT)
+        {
+            setHeightInternal(h + getBorder(NORMAL).top + getBorder(NORMAL).bottom + getPadding().top + getPadding().bottom);
+        }
+    }
+}
+
+void Label::updateAbsoluteBounds(const Vector2& offset)
+{
+    Control::updateAbsoluteBounds(offset);
 
     _textBounds.set((int)_viewportBounds.x, (int)_viewportBounds.y, _viewportBounds.width, _viewportBounds.height);
-
-    Control::State state = getState();
-    _font = getFont(state);
-    _textColor = getTextColor(state);
-    _textColor.w *= _opacity;
-
-    Font* font = getFont(state);
-    if ((_autoWidth == Control::AUTO_SIZE_FIT || _autoHeight == Control::AUTO_SIZE_FIT) && font)
-    {
-        unsigned int w, h;
-        font->measureText(_text.c_str(), getFontSize(state), &w, &h);
-        if (_autoWidth == Control::AUTO_SIZE_FIT)
-            setWidth(w + getBorder(state).left + getBorder(state).right + getPadding().left + getPadding().right);
-        if (_autoHeight == Control::AUTO_SIZE_FIT)
-            setHeight(h + getBorder(state).top + getBorder(state).bottom + getPadding().top + getPadding().bottom);
-    }
 }
 
 unsigned int Label::drawText(Form* form, const Rectangle& clip)

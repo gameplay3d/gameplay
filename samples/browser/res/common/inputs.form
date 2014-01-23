@@ -1,24 +1,18 @@
 form inputTestControls
 {
-    theme = res/common/default.theme
     width = 200
     height = 350
     alignment = ALIGN_TOP_RIGHT
-    consumeInputEvents = false
 
-    // Show/hide keyboard
     button showKeyboardButton
     {
-        style = buttonStyle
         position = 10, 60
         size = 160, 100
         text = Show virtual keyboard
     }
 
-    // Capture mouse
     button captureMouseButton
     {
-        style = buttonStyle
         position = 10, 180
         size = 160, 100
         text = Capture mouse
@@ -26,7 +20,6 @@ form inputTestControls
     
     label restoreMouseLabel
     {
-        style = underlined
         position = 10, 250
         size = 160, 60
         text = Press space to restore mouse

@@ -1,10 +1,7 @@
 form terrainForm
 {
-    theme = res/common/default.theme
-
-    style = Container
-    autoWidth = true
-    autoHeight = true
+    style = Empty
+    size = 100%, 100%
     consumeInputEvents = false
 
     padding
@@ -19,7 +16,7 @@ form terrainForm
     {
         style = Form
         width = 230
-        height = 395
+        height = 310
         consumeInputEvents = false
 
         padding
@@ -28,31 +25,26 @@ form terrainForm
             left = -5
         }
 
-        button plusButton
+        label plusButton
         {
-            style = plus
-            width = 40
-            height = 40
+            x = 12
             visible = false
+            text = +
+            fontSize = 44
         }
 
-        button minusButton
+        label minusButton : plusButton
         {
-            style = minus
-            width = 40
-            height = 40
+            visible = true
+            text = -
         }
 
         container settings
         {
-            autoWidth = true
-            autoHeight = true
             consumeInputEvents = false
 
             checkbox wireframe
 		    {
-			    imageSize = 35, 35
-			    size = 200, 40
                 position = 10, 50
 			    text = Wireframe (1)
                 textAlignment = ALIGN_VCENTER_LEFT
@@ -100,9 +92,8 @@ form terrainForm
     container physicsSettings
     {
         style = Form
-        position = 0, 395
+        position = 0, 310
         width = 230
-        height = 165
         layout = LAYOUT_VERTICAL
         consumeInputEvents = false
 
@@ -116,9 +107,8 @@ form terrainForm
 
         button dropSphere
         {
-            autoWidth = true
+            width = 100%
             text = Drop Sphere
-            height = 45
         }
 
         button dropBox : dropSphere
@@ -144,8 +134,7 @@ form terrainForm
         label message
         {
             consumeInputEvents = false
-            autoWidth = true
-            autoHeight = true
+            size = 100%, 100%
             font = res/ui/arial.gpb
             fontSize = 24
             textAlignment = ALIGN_VCENTER_HCENTER

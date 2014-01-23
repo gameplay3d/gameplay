@@ -16,6 +16,9 @@
     <Filter Include="res\materials">
       <UniqueIdentifier>{b5f23c37-1023-4796-ba7b-b45aa30d67b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\ui">
+      <UniqueIdentifier>{eb377577-593a-469f-9361-b6950a99e431}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Plane.cpp">
@@ -1816,6 +1819,9 @@
     <None Include="res\materials\terrain.material">
       <Filter>res\materials</Filter>
     </None>
+    <None Include="res\ui\default.theme">
+      <Filter>res\ui</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\PhysicsFixedConstraint.inl">
@@ -1851,5 +1857,10 @@
     <None Include="src\PhysicsConstraint.inl">
       <Filter>src</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\ui\default-theme.png">
+      <Filter>res\ui</Filter>
+    </Image>
   </ItemGroup>
 </Project>

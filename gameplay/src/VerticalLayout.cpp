@@ -42,7 +42,7 @@ void VerticalLayout::setSpacing(int spacing)
     _spacing = spacing;
 }
 
-void VerticalLayout::update(const Container* container, const Vector2& offset)
+void VerticalLayout::update(const Container* container)
 {
     GP_ASSERT(container);
 
@@ -75,15 +75,12 @@ void VerticalLayout::update(const Container* container, const Vector2& offset)
 
         if (control->isVisible())
         {
-            align(control, container);
-
             const Rectangle& bounds = control->getBounds();
             const Theme::Margin& margin = control->getMargin();
 
             yPosition += margin.top;
 
             control->setPosition(margin.left, yPosition);
-            control->update(container, offset);
 
             yPosition += bounds.height + margin.bottom + _spacing;
         }

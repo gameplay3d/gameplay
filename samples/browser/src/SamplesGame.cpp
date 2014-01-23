@@ -28,15 +28,13 @@ void SamplesGame::initialize()
 
     // Create the selection form
     _sampleSelectForm = Form::create("sampleSelect", NULL, Layout::LAYOUT_VERTICAL);
-    _sampleSelectForm->setWidth(200);
-    _sampleSelectForm->setAutoHeight(Control::AUTO_SIZE_STRETCH);
+    _sampleSelectForm->setWidth(220);
+    _sampleSelectForm->setHeight(1, true);
     _sampleSelectForm->setScroll(Container::SCROLL_VERTICAL);
     const size_t size = _samples->size();
     for (size_t i = 0; i < size; ++i)
     {
 		Label* categoryLabel = Label::create((*_categories)[i].c_str());
-        categoryLabel->setAutoWidth(Control::AUTO_SIZE_FIT);
-        categoryLabel->setAutoHeight(Control::AUTO_SIZE_FIT);
         categoryLabel->setFontSize(22);
         categoryLabel->setText((*_categories)[i].c_str());
         _sampleSelectForm->addControl(categoryLabel);
@@ -49,7 +47,7 @@ void SamplesGame::initialize()
             SampleRecord sampleRecord = list[j];
 			Button* sampleButton = Button::create(sampleRecord.title.c_str());
             sampleButton->setText(sampleRecord.title.c_str());
-            sampleButton->setAutoWidth(Control::AUTO_SIZE_STRETCH);
+            sampleButton->setWidth(1, true);
             sampleButton->setHeight(50);
             sampleButton->addListener(this, Control::Listener::CLICK);
             _sampleSelectForm->addControl(sampleButton);

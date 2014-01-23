@@ -4,11 +4,10 @@ form scrolling
     size = 600, 600
     scroll = SCROLL_BOTH
     scrollBarsAutoHide = true
-	consumeInputEvents = true
 
     label label1
     {
-        style = Button
+        style = Panel
         width = 4000
         height = 200
         text = Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!  Label!

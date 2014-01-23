@@ -66,7 +66,9 @@ void ImageControl::setImage(const char* path)
     _tw = 1.0f / texture->getWidth();
     _th = 1.0f / texture->getHeight();
     texture->release();
-    _dirty = true;
+
+    if (_autoSize != AUTO_SIZE_NONE)
+        setDirty(DIRTY_BOUNDS);
 }
 
 void ImageControl::setRegionSrc(float x, float y, float width, float height)
@@ -77,13 +79,11 @@ void ImageControl::setRegionSrc(float x, float y, float width, float height)
     _uvs.u2 = (x + width) * _tw;
     _uvs.v1 = 1.0f - (y * _th);
     _uvs.v2 = 1.0f - ((y + height) * _th);
-    _dirty = true;
 }
 
 void ImageControl::setRegionSrc(const Rectangle& region)
 {
     setRegionSrc(region.x, region.y, region.width, region.height);
-    _dirty = true;
 }
 
 const Rectangle& ImageControl::getRegionSrc() const
@@ -94,13 +94,11 @@ const Rectangle& ImageControl::getRegionSrc() const
 void ImageControl::setRegionDst(float x, float y, float width, float height)
 {
     _dstRegion.set(x, y, width, height);
-    _dirty = true;
 }
 
 void ImageControl::setRegionDst(const Rectangle& region)
 {
     setRegionDst(region.x, region.y, region.width, region.height);
-    _dirty = true;
 }
 
 const Rectangle& ImageControl::getRegionDst() const
@@ -140,22 +138,22 @@ unsigned int ImageControl::drawImages(Form* form, const Rectangle& clip)
     return 1;
 }
 
-void ImageControl::update(const Control* container, const Vector2& offset)
+void ImageControl::updateBounds()
 {
-    Control::update(container, offset);
-
     if (_batch)
     {
-        if (_autoWidth == Control::AUTO_SIZE_FIT)
+        if (_autoSize & AUTO_SIZE_WIDTH)
         {
-            setWidth(_batch->getSampler()->getTexture()->getWidth());
+            setWidthInternal(_batch->getSampler()->getTexture()->getWidth());
         }
 
-        if (_autoHeight == Control::AUTO_SIZE_FIT)
+        if (_autoSize & AUTO_SIZE_HEIGHT)
         {
-            setHeight(_batch->getSampler()->getTexture()->getWidth());
+            setHeightInternal(_batch->getSampler()->getTexture()->getWidth());
         }
     }
+
+    Control::updateBounds();
 }
 
 }

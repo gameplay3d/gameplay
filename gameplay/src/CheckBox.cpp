@@ -35,7 +35,6 @@ void CheckBox::initialize(const char* typeName, Theme::Style* style, Properties*
 
     if (properties)
     {
-        properties->getVector2("imageSize", &_imageSize);
         _checked = properties->getBool("checked");
     }
 }
@@ -50,20 +49,9 @@ void CheckBox::setChecked(bool checked)
     if (_checked != checked)
     {
         _checked = checked;
-        _dirty = true;
+        setDirty(DIRTY_STATE);
         notifyListeners(Control::Listener::VALUE_CHANGED);
     }
-}
-
-void CheckBox::setImageSize(float width, float height)
-{
-    _imageSize.set(width, height);
-    _dirty = true;
-}
-
-const Vector2& CheckBox::getImageSize() const
-{
-    return _imageSize;
 }
 
 void CheckBox::addListener(Control::Listener* listener, int eventFlags)
@@ -99,53 +87,49 @@ void CheckBox::controlEvent(Control::Listener::EventType evt)
     }
 }
 
-void CheckBox::update(const Control* container, const Vector2& offset)
+void CheckBox::updateState(State state)
 {
-    Label::update(container, offset);
+    Label::updateState(state);
 
-    Control::State state = getState();
+    _image = getImage(_checked ? "checked" : "unchecked", state);
+}
+
+void CheckBox::updateBounds()
+{
+    Label::updateBounds();
 
     Vector2 size;
-    if (_imageSize.isZero())
-    {
-        if (_checked)
-        {
-            const Rectangle& selectedRegion = getImageRegion("checked", state);
-            size.set(selectedRegion.width, selectedRegion.height);
-        }
-        else
-        {
-            const Rectangle& unselectedRegion = getImageRegion("unchecked", state);
-            size.set(unselectedRegion.width, unselectedRegion.height);
-        }
-    }
-    else
-    {
-        size.set(_imageSize);
-    }
-    
-    if (_autoWidth == Control::AUTO_SIZE_FIT)
-    {
-        // Text-only width was already measured in Label::update - append image
-        setWidth(size.x + _bounds.width + 5);
-    }
-
-    if (_autoHeight == Control::AUTO_SIZE_FIT)
-    {
-        // Text-only width was already measured in Label::update - append image
-        setHeight(std::max(getHeight(), size.y));
-    }
-
-    _textBounds.x += size.x + 5;
-    
     if (_checked)
     {
-        _image = getImage("checked", state);
+        const Rectangle& selectedRegion = getImageRegion("checked", NORMAL);
+        size.set(selectedRegion.width, selectedRegion.height);
     }
     else
     {
-        _image = getImage("unchecked", state);
+        const Rectangle& unselectedRegion = getImageRegion("unchecked", NORMAL);
+        size.set(unselectedRegion.width, unselectedRegion.height);
     }
+
+    if (_autoSize & AUTO_SIZE_HEIGHT)
+    {
+        // Text-only width was already measured in Label::update - append image
+        const Theme::Border& border = getBorder(NORMAL);
+        const Theme::Border& padding = getPadding();
+        setHeightInternal(std::max(_bounds.height, size.y + border.top + border.bottom + padding.top + padding.bottom));
+    }
+
+    if (_autoSize & AUTO_SIZE_WIDTH)
+    {
+        // Text-only width was already measured in Label::update - append image
+        setWidthInternal(_bounds.height + 5 + _bounds.width);
+    }
+}
+
+void CheckBox::updateAbsoluteBounds(const Vector2& offset)
+{
+    Label::updateAbsoluteBounds(offset);
+
+    _textBounds.x += _bounds.height + 5;
 }
 
 unsigned int CheckBox::drawImages(Form* form, const Rectangle& clip)
@@ -161,21 +145,11 @@ unsigned int CheckBox::drawImages(Form* form, const Rectangle& clip)
     Vector4 color = _image->getColor();
     color.w *= _opacity;
 
-    Vector2 size;
-    if (_imageSize.isZero())
-    {
-        size.set(region.width, region.height);
-    }
-    else
-    {
-        size.set(_imageSize);
-    }
-
-    Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
+    Vector2 pos(_viewportBounds.x, _viewportBounds.y);
 
     SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
     startBatch(form, batch);
-    batch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    batch->draw(pos.x, pos.y, _viewportBounds.height, _viewportBounds.height, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
     finishBatch(form, batch);
 
     return 1;
