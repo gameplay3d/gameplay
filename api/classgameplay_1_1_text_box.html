@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>TextBox Class Reference</title>
+<title>gameplay: Main Page</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -143,7 +143,7 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#ab4365e628465e070baf404047f74dac4">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#a054279ea14d4f37068d57b9a4309e9d6">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#ae0045c3d1c4722f0d5b83c8f66dbb1c3">controlEvent</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a> evt)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#ac14dbc09fe764007d75632c707f2ca2b">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#ac6a58c7487e791aa43d661fe3af0d1b5">updateState</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#a872132f6a4cc61659c27ee7f26a01166">drawImages</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#a6d0a7f1e785eb41af62dc15b85e6fa46">drawText</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#abb5642309253d6c8c53a235c2f1878da">getDisplayedText</a> () const </td></tr>
@@ -718,40 +718,23 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac14dbc09fe764007d75632c707f2ca2b"></a><!-- doxytag: member="gameplay::TextBox::update" ref="ac14dbc09fe764007d75632c707f2ca2b" args="(const Control *container, const Vector2 &amp;offset)" -->
+<a class="anchor" id="ac6a58c7487e791aa43d661fe3af0d1b5"></a><!-- doxytag: member="gameplay::TextBox::updateState" ref="ac6a58c7487e791aa43d661fe3af0d1b5" args="(State state)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_text_box.html#ac14dbc09fe764007d75632c707f2ca2b">gameplay::TextBox::update</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_text_box.html#ac6a58c7487e791aa43d661fe3af0d1b5">gameplay::TextBox::updateState</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
-          <td class="paramname"><em>container</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
-          <td class="paramname"><em>offset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected, virtual]</code></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Called when a control's properties change. Updates this control's internal rendering properties, such as its text viewport.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">container</td><td>This control's parent container. </td></tr>
-    <tr><td class="paramname">offset</td><td>Positioning offset to add to the control's position. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#ac9f2fe41ef26e82071598aa3ac4ce4d3">Control::updateState</a> </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a7f5d8e9e23883e0166fabaf1c0780729">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -886,7 +869,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 27 2014 14:57:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

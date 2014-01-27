@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>Form Class Reference</title>
+<title>gameplay: Main Page</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -90,8 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Form Class Reference</div>  </div>
 </div><!--header-->
@@ -131,9 +130,6 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a6ea0539287a787e9829a380f9cfcb6a6">getActiveControl</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a2c884dd8390d0b6a7943aed7ebc7f9f0">getFocusControl</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a366962023119d2885948ab46d612a9ee">clearFocus</a> ()</td></tr>
-<tr><td colspan="2"><h2><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a0e25f651e37c079afaa0737038fc8e2c">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a form that is a root container that contains zero or more controls.</p>
@@ -174,10 +170,11 @@ Protected Member Functions</h2></td></tr>
 <p>Creates a form from a .form properties file.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">url</td><td>The URL pointing to the <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object defining the form.  </td></tr>
+    <tr><td class="paramname">url</td><td>The URL pointing to the <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object defining the form.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The new form or NULL if there was an error.  </dd></dl>
 
 </div>
 </div>
@@ -421,42 +418,14 @@ Protected Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>elapsedTime</em></td><td>)</td>
-          <td></td>
+          <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Updates each control within this form, and positions them according to its layout. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a445f119ac18af8d663e07b655812f95a">Control::update</a> </dd></dl>
 
-</div>
-</div>
-<a class="anchor" id="a0e25f651e37c079afaa0737038fc8e2c"></a><!-- doxytag: member="gameplay::Form::update" ref="a0e25f651e37c079afaa0737038fc8e2c" args="(const Control *container, const Vector2 &amp;offset)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_form.html#a0a6bdd50ceecb5f41566d92aa6735af4">gameplay::Form::update</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
-          <td class="paramname"><em>container</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
-          <td class="paramname"><em>offset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected, virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a4200259d1a58a6392c6cc0e347150e70">Control::update</a> </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_container.html#a8308d5eb53e115aa12e2a9d45ae3f0f9">gameplay::Container</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_container.html#a4cdae346a437708ab4d17ea5db15bc7c">gameplay::Container</a>.</p>
 
 </div>
 </div>
@@ -478,7 +447,7 @@ Protected Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 27 2014 14:57:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

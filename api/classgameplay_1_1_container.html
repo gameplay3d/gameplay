@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>Container Class Reference</title>
+<title>gameplay: Main Page</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -173,8 +173,12 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#aaf65bba3cf3e0fe59407bc092a083f74">Container</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ac0681d3fa8e9df40a745418f99e1f7ea">~Container</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a4a7a461edc94987114ecd110bd3a0e01">initialize</a> (const char *typeName, <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a8308d5eb53e115aa12e2a9d45ae3f0f9">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a3300a429936475ce7943427b5f0ea86d">isDirty</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a4cdae346a437708ab4d17ea5db15bc7c">update</a> (float elapsedTime)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a8dbd4b7e3fb1fecf84da79bb79d38990">updateState</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ad0524c933dae0f9b2ef46b2a80996db6">updateBounds</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a12b1033ab2e19c4dff4f2f765a7c39c7">updateAbsoluteBounds</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a4ee16aa22154148d086aeb7d506719f2">updateChildBounds</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#af7af48cce7a0926a437cbb25d2e31225">setChildrenDirty</a> (int bits, bool recursive)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a4916b6121a710bdec896d091ba35a5d2">addControls</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a04791e8ab39e07511c1c4f877c5b8acf">draw</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ab8a1534d05b3d8e6dc443c50c29ef6da">updateScroll</a> ()</td></tr>
@@ -898,26 +902,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3300a429936475ce7943427b5f0ea86d"></a><!-- doxytag: member="gameplay::Container::isDirty" ref="a3300a429936475ce7943427b5f0ea86d" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_container.html#a3300a429936475ce7943427b5f0ea86d">gameplay::Container::isDirty</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td><code> [protected, virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns whether this container or any of its controls have been modified and require an update.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>true if this container or any of its controls have been modified and require an update. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a867d58fde43fb1d38614fc8d3b72e4ba">gameplay::Control</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="a709d2d05d1a34f355a31b3490c062f2f"></a><!-- doxytag: member="gameplay::Container::isForm" ref="a709d2d05d1a34f355a31b3490c062f2f" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1155,6 +1139,41 @@ Protected Attributes</h2></td></tr>
 <dl class="see"><dt><b>See also:</b></dt><dd>AnimationTarget::setAnimationProperty </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a62a89ccb93888f7258287b767cfae107">gameplay::Control</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af7af48cce7a0926a437cbb25d2e31225"></a><!-- doxytag: member="gameplay::Container::setChildrenDirty" ref="af7af48cce7a0926a437cbb25d2e31225" args="(int bits, bool recursive)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_container.html#af7af48cce7a0926a437cbb25d2e31225">gameplay::Container::setChildrenDirty</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bits</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>recursive</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the specified dirty bits for all children within this container.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bits</td><td>The bits to set. </td></tr>
+    <tr><td class="paramname">recursive</td><td>If true, set the bits recursively on all children and their children. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1412,42 +1431,81 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8308d5eb53e115aa12e2a9d45ae3f0f9"></a><!-- doxytag: member="gameplay::Container::update" ref="a8308d5eb53e115aa12e2a9d45ae3f0f9" args="(const Control *container, const Vector2 &amp;offset)" -->
+<a class="anchor" id="a4cdae346a437708ab4d17ea5db15bc7c"></a><!-- doxytag: member="gameplay::Container::update" ref="a4cdae346a437708ab4d17ea5db15bc7c" args="(float elapsedTime)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_container.html#a8308d5eb53e115aa12e2a9d45ae3f0f9">gameplay::Container::update</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_container.html#a4cdae346a437708ab4d17ea5db15bc7c">gameplay::Container::update</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
-          <td class="paramname"><em>container</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
-          <td class="paramname"><em>offset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected, virtual]</code></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Updates each control within this container, and positions them according to the container's layout.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">container</td><td>This container's parent container. </td></tr>
-    <tr><td class="paramname">offset</td><td>The offset. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a445f119ac18af8d663e07b655812f95a">Control::update</a> </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a4200259d1a58a6392c6cc0e347150e70">gameplay::Control</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a445f119ac18af8d663e07b655812f95a">gameplay::Control</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#a0e25f651e37c079afaa0737038fc8e2c">gameplay::Form</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#a0a6bdd50ceecb5f41566d92aa6735af4">gameplay::Form</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a12b1033ab2e19c4dff4f2f765a7c39c7"></a><!-- doxytag: member="gameplay::Container::updateAbsoluteBounds" ref="a12b1033ab2e19c4dff4f2f765a7c39c7" args="(const Vector2 &amp;offset)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_container.html#a12b1033ab2e19c4dff4f2f765a7c39c7">gameplay::Container::updateAbsoluteBounds</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a3dce8f933d7ad495179a390a8622b0a3">Control::updateAbsoluteBounds</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a3dce8f933d7ad495179a390a8622b0a3">gameplay::Control</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad0524c933dae0f9b2ef46b2a80996db6"></a><!-- doxytag: member="gameplay::Container::updateBounds" ref="ad0524c933dae0f9b2ef46b2a80996db6" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_container.html#ad0524c933dae0f9b2ef46b2a80996db6">gameplay::Container::updateBounds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a3d33ab72db5cf776844da3f79f8e4f65">Control::updateBounds</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a3d33ab72db5cf776844da3f79f8e4f65">gameplay::Control</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4ee16aa22154148d086aeb7d506719f2"></a><!-- doxytag: member="gameplay::Container::updateChildBounds" ref="a4ee16aa22154148d086aeb7d506719f2" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_container.html#a4ee16aa22154148d086aeb7d506719f2">gameplay::Container::updateChildBounds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Updates the bounds for this container's child controls. </p>
 
 </div>
 </div>
@@ -1465,6 +1523,26 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Update scroll position and velocity. </p>
+
+</div>
+</div>
+<a class="anchor" id="a8dbd4b7e3fb1fecf84da79bb79d38990"></a><!-- doxytag: member="gameplay::Container::updateState" ref="a8dbd4b7e3fb1fecf84da79bb79d38990" args="(State state)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_container.html#a8dbd4b7e3fb1fecf84da79bb79d38990">gameplay::Container::updateState</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#ac9f2fe41ef26e82071598aa3ac4ce4d3">Control::updateState</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ac9f2fe41ef26e82071598aa3ac4ce4d3">gameplay::Control</a>.</p>
 
 </div>
 </div>
@@ -1935,7 +2013,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 11:58:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 27 2014 14:57:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

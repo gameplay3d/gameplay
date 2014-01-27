@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>Slider Class Reference</title>
+<title>gameplay: Main Page</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -148,7 +148,9 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a0c3d8564baa230a3d14835b2846b486a">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#ae52c617f4bc726bfaf727787cdace1a7">drawImages</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a881e3f4db5bf9d5f58f33ed250e2aabf">drawText</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a783324cf9cbb71eb5561646bad140a6b">update</a> (float elapsedTime)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#aacf477b1d38eb94a1731c787ce72074b">updateState</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#adfd33b559b74457df3bd64c5e2e40fd3">updateBounds</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#ac9d34d0031d572851434e8d28cab07f4">create</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties=NULL)</td></tr>
@@ -905,40 +907,62 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acdcedfbf56339bd486682c5b0b9a157a"></a><!-- doxytag: member="gameplay::Slider::update" ref="acdcedfbf56339bd486682c5b0b9a157a" args="(const Control *container, const Vector2 &amp;offset)" -->
+<a class="anchor" id="a783324cf9cbb71eb5561646bad140a6b"></a><!-- doxytag: member="gameplay::Slider::update" ref="a783324cf9cbb71eb5561646bad140a6b" args="(float elapsedTime)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">gameplay::Slider::update</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_slider.html#a783324cf9cbb71eb5561646bad140a6b">gameplay::Slider::update</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
-          <td class="paramname"><em>container</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
-          <td class="paramname"><em>offset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected, virtual]</code></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Called when a slider's properties change. Updates this slider's internal rendering properties, such as its text viewport.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">container</td><td>This slider's parent container. </td></tr>
-    <tr><td class="paramname">offset</td><td>The scroll offset of this slider's parent container. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a445f119ac18af8d663e07b655812f95a">Control::update</a> </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a15744c8d31bcb3b9795e3caec3fcfb86">gameplay::Label</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adfd33b559b74457df3bd64c5e2e40fd3"></a><!-- doxytag: member="gameplay::Slider::updateBounds" ref="adfd33b559b74457df3bd64c5e2e40fd3" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_slider.html#adfd33b559b74457df3bd64c5e2e40fd3">gameplay::Slider::updateBounds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a3d33ab72db5cf776844da3f79f8e4f65">Control::updateBounds</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#aa3c05408a28d9832e7b33b576cac2402">gameplay::Label</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aacf477b1d38eb94a1731c787ce72074b"></a><!-- doxytag: member="gameplay::Slider::updateState" ref="aacf477b1d38eb94a1731c787ce72074b" args="(State state)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_slider.html#aacf477b1d38eb94a1731c787ce72074b">gameplay::Slider::updateState</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#ac9f2fe41ef26e82071598aa3ac4ce4d3">Control::updateState</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a7f5d8e9e23883e0166fabaf1c0780729">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -1129,7 +1153,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 27 2014 14:57:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

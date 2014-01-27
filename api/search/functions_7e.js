@@ -16,7 +16,7 @@ var searchData=
   ['_7egame',['~Game',['../classgameplay_1_1_game.html#ab43f875eeb2925735fc61bef481d4f59',1,'gameplay::Game']]],
   ['_7ehitfilter',['~HitFilter',['../classgameplay_1_1_physics_controller_1_1_hit_filter.html#a5598898fa57e9efdce355dcd3152e5f2',1,'gameplay::PhysicsController::HitFilter']]],
   ['_7ejoint',['~Joint',['../classgameplay_1_1_joint.html#a2674828f81b269f3e346c4af4b2384e1',1,'gameplay::Joint']]],
-  ['_7ejoystick',['~Joystick',['../classgameplay_1_1_joystick.html#a745ccc06b85f3320f946812c2481a62b',1,'gameplay::Joystick']]],
+  ['_7ejoystickcontrol',['~JoystickControl',['../classgameplay_1_1_joystick_control.html#a36a1555d9727afc0c7d3c00dcbac1e59',1,'gameplay::JoystickControl']]],
   ['_7elabel',['~Label',['../classgameplay_1_1_label.html#acafa49ff387be2696f7803f91c9792b6',1,'gameplay::Label']]],
   ['_7elight',['~Light',['../classgameplay_1_1_light.html#ab257cab5e79c3b6902cc797d70f3be55',1,'gameplay::Light']]],
   ['_7elistener',['~Listener',['../classgameplay_1_1_a_i_agent_1_1_listener.html#a77dd14a2c722025b2595aa5a05437a14',1,'gameplay::AIAgent::Listener::~Listener()'],['../classgameplay_1_1_a_i_state_1_1_listener.html#a521e07b893c7cc10dd814ac4bd4fb5a4',1,'gameplay::AIState::Listener::~Listener()'],['../classgameplay_1_1_physics_controller_1_1_listener.html#a5dba37931e3b5b204154cd2219297eaf',1,'gameplay::PhysicsController::Listener::~Listener()']]],

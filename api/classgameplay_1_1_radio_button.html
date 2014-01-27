@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>RadioButton Class Reference</title>
+<title>gameplay: Main Page</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -121,8 +121,6 @@ Inheritance diagram for gameplay::RadioButton:</div>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a05e65aaba195e4818e57c85f6f96a4c5">isSelected</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a37139f76272e431acab0af42976fc9f1">setSelected</a> (bool selected)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#aa536bb4cadedc4fbfb2ee70b9797e80f">setImageSize</a> (float width, float height)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a900f0030355da1335c41677dd95bbaa9">getImageSize</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a3fab62ffe2814f687e9e21e31f161a9e">addListener</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *listener, int eventFlags)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a913c8b8b80b3d06d8fa9c2ed61794e77">setGroupId</a> (const char *groupId)</td></tr>
@@ -137,7 +135,9 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#ad90e544db3fb59c6a3c38272fb99dfd0">initialize</a> (const char *typeName, <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#aaf06bf7161c4748afc2dd55c280c04ca">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a9c23140d9c24e1176f6793da0da65124">controlEvent</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a> evt)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a4b2996e4d19631c34fc4bbeff50dfffa">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#add7b61c1438d31ca547a9a65c73655d3">updateState</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a3d149d020e25a74e322c3ace7aaa3092">updateBounds</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a6cc5444038a9b8bc754a32729844862d">updateAbsoluteBounds</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a5f7e8042c85d39258cfe837fc92553d6">drawImages</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -147,7 +147,6 @@ Static Protected Member Functions</h2></td></tr>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#adaaf56b9918e3a88e7a7713338e9f3ed">_groupId</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#aff60c0b6ada733737058c29d05047b0a">_selected</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#afcfdd88f16d2a2093b13fc3a6e08438b">_imageSize</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_radio_button.html#a6648000e1f5f49c92fd93746abf99bda">_image</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
@@ -395,24 +394,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a900f0030355da1335c41677dd95bbaa9"></a><!-- doxytag: member="gameplay::RadioButton::getImageSize" ref="a900f0030355da1335c41677dd95bbaa9" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; <a class="el" href="classgameplay_1_1_radio_button.html#a900f0030355da1335c41677dd95bbaa9">gameplay::RadioButton::getImageSize</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Get the size at which the radio button icon will be drawn.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The size of the radio button icon. </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a6d5db6a5dc96eff2c7ebb2139c17abb0"></a><!-- doxytag: member="gameplay::RadioButton::getType" ref="a6d5db6a5dc96eff2c7ebb2139c17abb0" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -542,41 +523,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa536bb4cadedc4fbfb2ee70b9797e80f"></a><!-- doxytag: member="gameplay::RadioButton::setImageSize" ref="aa536bb4cadedc4fbfb2ee70b9797e80f" args="(float width, float height)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_radio_button.html#aa536bb4cadedc4fbfb2ee70b9797e80f">gameplay::RadioButton::setImageSize</a> </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>width</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>height</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Set the size to draw the radio button icon.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">width</td><td>The width to draw the radio button icon. </td></tr>
-    <tr><td class="paramname">height</td><td>The height to draw the radio button icon. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="a37139f76272e431acab0af42976fc9f1"></a><!-- doxytag: member="gameplay::RadioButton::setSelected" ref="a37139f76272e431acab0af42976fc9f1" args="(bool selected)" -->
 <div class="memitem">
 <div class="memproto">
@@ -595,40 +541,62 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4b2996e4d19631c34fc4bbeff50dfffa"></a><!-- doxytag: member="gameplay::RadioButton::update" ref="a4b2996e4d19631c34fc4bbeff50dfffa" args="(const Control *container, const Vector2 &amp;offset)" -->
+<a class="anchor" id="a6cc5444038a9b8bc754a32729844862d"></a><!-- doxytag: member="gameplay::RadioButton::updateAbsoluteBounds" ref="a6cc5444038a9b8bc754a32729844862d" args="(const Vector2 &amp;offset)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_radio_button.html#a4b2996e4d19631c34fc4bbeff50dfffa">gameplay::RadioButton::update</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_radio_button.html#a6cc5444038a9b8bc754a32729844862d">gameplay::RadioButton::updateAbsoluteBounds</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
-          <td class="paramname"><em>container</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
-          <td class="paramname"><em>offset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected, virtual]</code></td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Called when a control's properties change. Updates this control's internal rendering properties, such as its text viewport.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">container</td><td>This control's parent container. </td></tr>
-    <tr><td class="paramname">offset</td><td>Positioning offset to add to the control's position. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a3dce8f933d7ad495179a390a8622b0a3">Control::updateAbsoluteBounds</a> </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a94b07f80e6e14272a31ddf64b8d74a58">gameplay::Label</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3d149d020e25a74e322c3ace7aaa3092"></a><!-- doxytag: member="gameplay::RadioButton::updateBounds" ref="a3d149d020e25a74e322c3ace7aaa3092" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_radio_button.html#a3d149d020e25a74e322c3ace7aaa3092">gameplay::RadioButton::updateBounds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a3d33ab72db5cf776844da3f79f8e4f65">Control::updateBounds</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#aa3c05408a28d9832e7b33b576cac2402">gameplay::Label</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="add7b61c1438d31ca547a9a65c73655d3"></a><!-- doxytag: member="gameplay::RadioButton::updateState" ref="add7b61c1438d31ca547a9a65c73655d3" args="(State state)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_radio_button.html#add7b61c1438d31ca547a9a65c73655d3">gameplay::RadioButton::updateState</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#ac9f2fe41ef26e82071598aa3ac4ce4d3">Control::updateState</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a7f5d8e9e23883e0166fabaf1c0780729">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -657,21 +625,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>The ThemeImage to use for the <a class="el" href="classgameplay_1_1_radio_button.html">RadioButton</a>. </p>
-
-</div>
-</div>
-<a class="anchor" id="afcfdd88f16d2a2093b13fc3a6e08438b"></a><!-- doxytag: member="gameplay::RadioButton::_imageSize" ref="afcfdd88f16d2a2093b13fc3a6e08438b" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> <a class="el" href="classgameplay_1_1_radio_button.html#afcfdd88f16d2a2093b13fc3a6e08438b">gameplay::RadioButton::_imageSize</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>The size at which the <a class="el" href="classgameplay_1_1_radio_button.html">RadioButton</a>'s icon will be drawn. </p>
+<p>The theme image for the radio button. </p>
 
 </div>
 </div>
@@ -707,7 +661,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 11:58:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 27 2014 14:57:41 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

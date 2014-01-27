@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>Label Class Reference</title>
+<title>gameplay: Main Page</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -134,7 +134,10 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a1b85fc1bebe9cd82da2f5b8891fbd452">Label</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#acafa49ff387be2696f7803f91c9792b6">~Label</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a8068a49e620f4c10727a7ce63fa9325f">initialize</a> (const char *typeName, <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a15744c8d31bcb3b9795e3caec3fcfb86">update</a> (float elapsedTime)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a7f5d8e9e23883e0166fabaf1c0780729">updateState</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#aa3c05408a28d9832e7b33b576cac2402">updateBounds</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a94b07f80e6e14272a31ddf64b8d74a58">updateAbsoluteBounds</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a3469bf01462756fa3147cb9b3b2a6267">drawText</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -368,7 +371,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">gameplay::Control</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>.</p>
 
 </div>
 </div>
@@ -434,42 +437,90 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7c87574c9c392287b870c94a32aac75a"></a><!-- doxytag: member="gameplay::Label::update" ref="a7c87574c9c392287b870c94a32aac75a" args="(const Control *container, const Vector2 &amp;offset)" -->
+<a class="anchor" id="a15744c8d31bcb3b9795e3caec3fcfb86"></a><!-- doxytag: member="gameplay::Label::update" ref="a15744c8d31bcb3b9795e3caec3fcfb86" args="(float elapsedTime)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label::update</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_label.html#a15744c8d31bcb3b9795e3caec3fcfb86">gameplay::Label::update</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td>
-          <td class="paramname"><em>container</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
-          <td class="paramname"><em>offset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected, virtual]</code></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Called when a label's properties change. Updates this label's internal rendering properties, such as its text viewport.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">container</td><td>This label's parent container. </td></tr>
-    <tr><td class="paramname">offset</td><td>The scroll offset of this label's parent container. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a445f119ac18af8d663e07b655812f95a">Control::update</a> </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a4200259d1a58a6392c6cc0e347150e70">gameplay::Control</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a445f119ac18af8d663e07b655812f95a">gameplay::Control</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#ac14dbc09fe764007d75632c707f2ca2b">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a4b2996e4d19631c34fc4bbeff50dfffa">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#a95c22e5a84d40dcede9994be2b943db3">gameplay::CheckBox</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a783324cf9cbb71eb5561646bad140a6b">gameplay::Slider</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a94b07f80e6e14272a31ddf64b8d74a58"></a><!-- doxytag: member="gameplay::Label::updateAbsoluteBounds" ref="a94b07f80e6e14272a31ddf64b8d74a58" args="(const Vector2 &amp;offset)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_label.html#a94b07f80e6e14272a31ddf64b8d74a58">gameplay::Label::updateAbsoluteBounds</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a3dce8f933d7ad495179a390a8622b0a3">Control::updateAbsoluteBounds</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a3dce8f933d7ad495179a390a8622b0a3">gameplay::Control</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a6cc5444038a9b8bc754a32729844862d">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#ac6b18307dccf63986573db1b4c991d4d">gameplay::CheckBox</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa3c05408a28d9832e7b33b576cac2402"></a><!-- doxytag: member="gameplay::Label::updateBounds" ref="aa3c05408a28d9832e7b33b576cac2402" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_label.html#aa3c05408a28d9832e7b33b576cac2402">gameplay::Label::updateBounds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a3d33ab72db5cf776844da3f79f8e4f65">Control::updateBounds</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a3d33ab72db5cf776844da3f79f8e4f65">gameplay::Control</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#adfd33b559b74457df3bd64c5e2e40fd3">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a3d149d020e25a74e322c3ace7aaa3092">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#a3090b1936a7af6ff14f49513e9723548">gameplay::CheckBox</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7f5d8e9e23883e0166fabaf1c0780729"></a><!-- doxytag: member="gameplay::Label::updateState" ref="a7f5d8e9e23883e0166fabaf1c0780729" args="(State state)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_label.html#a7f5d8e9e23883e0166fabaf1c0780729">gameplay::Label::updateState</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#ac9f2fe41ef26e82071598aa3ac4ce4d3">Control::updateState</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ac9f2fe41ef26e82071598aa3ac4ce4d3">gameplay::Control</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#aacf477b1d38eb94a1731c787ce72074b">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#ac6a58c7487e791aa43d661fe3af0d1b5">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#add7b61c1438d31ca547a9a65c73655d3">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#ab705eb4d24fd0fbc2f0ec296b5d33960">gameplay::CheckBox</a>.</p>
 
 </div>
 </div>
@@ -548,7 +599,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 11:58:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 27 2014 14:57:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
