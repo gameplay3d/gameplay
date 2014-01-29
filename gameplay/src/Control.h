@@ -1122,7 +1122,7 @@ protected:
      * hovered, disabled, etc), this method is called to allow implementations to update
      * internal data related to control state.
      *
-     * @param The new control state.
+     * @param state The new control state.
      */
     virtual void updateState(State state);
 
