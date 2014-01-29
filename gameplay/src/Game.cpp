@@ -257,14 +257,13 @@ void Game::resume()
 
 void Game::exit()
 {
-    // Only perform a full/clean shutdown if FORCE_CLEAN_SHUTDOWN or
-    // GP_USE_MEM_LEAK_DETECTION is defined. Every modern OS is able to
-    // handle reclaiming process memory hundreds of times faster than it
-    // would take us to go through every pointer in the engine and release
-    // them nicely. For large games, shutdown can end up taking long time,
+    // Only perform a full/clean shutdown if GP_USE_MEM_LEAK_DETECTION is defined.
+	// Every modern OS is able to handle reclaiming process memory hundreds of times
+	// faster than it would take us to go through every pointer in the engine and
+	// release them nicely. For large games, shutdown can end up taking long time,
     // so we'll just call ::exit(0) to force an instant shutdown.
 
-#if defined FORCE_CLEAN_SHUTDOWN || defined GP_USE_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 
     // Schedule a call to shutdown rather than calling it right away.
 	// This handles the case of shutting down the script system from
