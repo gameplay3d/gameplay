@@ -1,4 +1,22 @@
+<!--
+  - Overall Android native build script (for convenience)
+  -
+  - If new GamePlay samples are added please keep this list
+  - in sync.
+ -->
 <project name="GamePlay-Android" default="all" basedir=".">
+
+  <fail message="OS not supported (must be Windows, MacOS X, or Linux)">
+    <condition>
+      <not>
+        <or>
+          <os family="unix"/> <!-- includes MacOS X -->
+          <os family="windows"/>
+        </or>
+      </not>
+    </condition>
+  </fail>
+
   <macrodef name="build-native">
     <attribute name="location"/>
     <sequential>
