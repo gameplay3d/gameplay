@@ -69,14 +69,20 @@ public:
     static Form* getForm(const char* id);
     
     /**
-    * Returns the single currently active control within the UI system.
-    *
-    * @return The currently active control, or NULL if no controls are currently active.
-    */
-    static Control* getActiveControl();
+     * Returns the currently active control within the UI system.
+     *
+     * An active control is a control that is currently pressed or hovered over. On a multi-touch
+     * system, it is possible for several controls to be active at once (one for each touch point).
+     * However, only a single control can have focus at once.
+     *
+     * @param touchIndex Optional touch point index to retrieve the active control for.
+     *
+     * @return The currently active control, or NULL if no controls are currently active.
+     */
+    static Control* getActiveControl(unsigned int touchIndex = 0);
 
     /**
-     * Returns the single current control that is in focus.
+     * Returns the current control that is in focus.
      *
      * @return The current control in focus, or NULL if no controls are in focus.
      */
@@ -234,13 +240,13 @@ private:
 
     static bool pointerEventInternal(bool mouse, int evt, int x, int y, int param);
 
-    static Control* findInputControl(int* x, int* y, bool focus);
+    static Control* findInputControl(int* x, int* y, bool focus, unsigned int contactIndex);
 
-    static Control* findInputControl(Control* control, int x, int y, bool focus);
+    static Control* findInputControl(Control* control, int x, int y, bool focus, unsigned int contactIndex);
 
-    static Control* handlePointerPressRelease(int* x, int* y, bool pressed);
+    static Control* handlePointerPressRelease(int* x, int* y, bool pressed, unsigned int contactIndex);
 
-    static Control* handlePointerMove(int* x, int* y);
+    static Control* handlePointerMove(int* x, int* y, unsigned int contactIndex);
 
     static bool screenToForm(Control* ctrl, int* x, int* y);
 
@@ -258,9 +264,6 @@ private:
     Matrix _projectionMatrix;           // Projection matrix to be set on SpriteBatch objects when rendering the form
     std::vector<SpriteBatch*> _batches;
     bool _batched;
-    static Control* _focusControl;
-    static Control* _activeControl;
-    static Control::State _activeControlState;
 };
 
 }
