@@ -346,7 +346,11 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_CLOSE:
+#ifdef GP_USE_MEM_LEAK_DETECTION
+		DestroyWindow(__hwnd);
+#else
         exit(0);
+#endif
         return 0;
 
     case WM_DESTROY:
