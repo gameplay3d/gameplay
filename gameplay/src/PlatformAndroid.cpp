@@ -541,7 +541,7 @@ static Keyboard::Key getKey(int keycode, int metastate)
         case AKEYCODE_ENTER:
             return Keyboard::KEY_RETURN;
         case AKEYCODE_DEL:
-            return Keyboard::KEY_DELETE;
+            return Keyboard::KEY_BACKSPACE;
         case AKEYCODE_GRAVE:
             return Keyboard::KEY_GRAVE;
         case AKEYCODE_MINUS:
