@@ -46,9 +46,9 @@ static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percenta
 }
 
 Control::Control()
-    : _id(""), _enabled(true), _boundsBits(0), _dirtyBits(DIRTY_BOUNDS | DIRTY_STATE), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT),
+    : _id(""), _boundsBits(0), _dirtyBits(DIRTY_BOUNDS | DIRTY_STATE), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT),
     _autoSize(AUTO_SIZE_BOTH), _style(NULL), _listeners(NULL), _visible(true), _zIndex(-1),
-    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _parent(NULL), _styleOverridden(false), _skin(NULL)
+    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _state(NORMAL), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
@@ -535,12 +535,12 @@ void Control::setCanFocus(bool acceptsFocus)
 
 bool Control::hasFocus() const
 {
-    return (Form::_focusControl == this);
+    return (Form::getFocusControl() == this);
 }
 
 bool Control::setFocus()
 {
-    if (Form::_focusControl != this && canFocus())
+    if (Form::getFocusControl() != this && canFocus())
     {
         Form::setFocusControl(this);
         return true;
@@ -571,12 +571,12 @@ float Control::getOpacity(State state) const
 
 void Control::setEnabled(bool enabled)
 {
-    if (_enabled != enabled)
+    if (enabled != isEnabled())
     {
-        _enabled = enabled;
-
-        if (!_enabled)
+        if (!enabled)
             Form::controlDisabled(this);
+
+        _state = enabled ? NORMAL : DISABLED;
 
         setDirty(DIRTY_STATE);
     }
@@ -584,12 +584,12 @@ void Control::setEnabled(bool enabled)
 
 bool Control::isEnabled() const
 {
-    return _enabled;
+    return (_state != DISABLED);
 }
 
 bool Control::isEnabledInHierarchy() const
 {
-    if (!_enabled)
+    if (!isEnabled())
         return false;
 
     if (_parent)
@@ -909,22 +909,13 @@ Theme* Control::getTheme() const
 
 Control::State Control::getState() const
 {
-    if (!_enabled)
-        return DISABLED;
-
-    if (Form::_activeControl == this)
+    if (_state == HOVER)
     {
-        if (Form::_activeControlState == ACTIVE)
-            return ACTIVE;
-        if (Form::_focusControl == this)
-            return FOCUS;
-        return Form::_activeControlState;
+        // Focus state takes priority over hover
+        return (Form::getFocusControl() == this ? FOCUS : HOVER);
     }
 
-    if (Form::_focusControl == this)
-        return FOCUS;
-
-    return NORMAL;
+    return _state;
 }
 
 Theme::Style::OverlayType Control::getOverlayType() const

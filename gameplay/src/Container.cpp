@@ -463,7 +463,7 @@ void Container::setScrollWheelRequiresFocus(bool required)
 bool Container::setFocus()
 {
     // If this container (or one of its children) already has focus, do nothing
-    if (Form::_focusControl && (Form::_focusControl == this || Form::_focusControl->isChild(this)))
+    if (Form::getFocusControl() && (Form::getFocusControl() == this || Form::getFocusControl()->isChild(this)))
         return true;
 
     // First try to set focus to our active control
@@ -496,7 +496,7 @@ void Container::setActiveControl(Control* control)
         _activeControl = control;
 
         // If a control within this container currently has focus, switch focus to the new active control
-        if (Form::_focusControl && Form::_focusControl != control && Form::_focusControl->isChild(this))
+        if (Form::getFocusControl() && Form::getFocusControl() != control && Form::getFocusControl()->isChild(this))
             Form::setFocusControl(control);
     }
 }
@@ -788,20 +788,21 @@ bool Container::moveFocus(Direction direction)
 bool Container::moveFocusNextPrevious(Direction direction)
 {
     // Get the current control that has focus (either directly or indirectly) within this container
+    Control* currentFocus = Form::getFocusControl();
     Control* current = NULL;
-    if (Form::_focusControl && Form::_focusControl->isChild(this))
+    if (currentFocus && currentFocus->isChild(this))
     {
-        if (Form::_focusControl->_parent == this)
+        if (currentFocus->_parent == this)
         {
             // Currently focused control is a direct child of us
-            current = Form::_focusControl;
+            current = currentFocus;
         }
         else
         {
             // Currently focused control is a child of one of our child containers
             for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
-                if (Form::_focusControl->isChild(_controls[i]))
+                if (currentFocus->isChild(_controls[i]))
                 {
                     current = _controls[i];
                     break;
@@ -891,7 +892,7 @@ bool Container::moveFocusNextPrevious(Direction direction)
 
 bool Container::moveFocusDirectional(Direction direction)
 {
-	Control* startControl = Form::_focusControl;
+	Control* startControl = Form::getFocusControl();
 	if (startControl == NULL)
 		return false;
 

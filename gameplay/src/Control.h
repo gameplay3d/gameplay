@@ -1122,7 +1122,7 @@ protected:
      * hovered, disabled, etc), this method is called to allow implementations to update
      * internal data related to control state.
      *
-     * @param The new control state.
+     * @param state The new control state.
      */
     virtual void updateState(State state);
 
@@ -1292,11 +1292,6 @@ protected:
     std::string _id;
 
     /**
-     * Whether the control is enabled.
-     */
-    bool _enabled;
-
-    /**
      * Bits indicating whether bounds values are absolute values or percentages.
      */
     int _boundsBits;
@@ -1395,6 +1390,11 @@ protected:
      * Whether or not the control accepts input focus.
      */
     bool _canFocus;
+
+    /**
+     * This control's current state.
+     */
+    State _state;
 
     /**
      * The control's parent container.
