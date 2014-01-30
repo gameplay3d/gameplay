@@ -1028,7 +1028,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
         switch(action)
         {
             case AKEY_EVENT_ACTION_DOWN:
-                Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, getKey(keycode, metastate));
+                gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey(keycode, metastate));
                 if (int character = getUnicode(keycode, metastate))
                     gameplay::Platform::keyEventInternal(Keyboard::KEY_CHAR, character);
                 break;
