@@ -326,6 +326,10 @@ copy .\game.dxt.config .\game.config</Command>
     <None Include="bar-descriptor.xml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="game.atc.config" />
+    <None Include="game.dxt.config" />
+    <None Include="game.png.config" />
+    <None Include="game.pvr.config" />
     <None Include="icon.png" />
     <None Include="res\common\background_track.ogg" />
     <None Include="res\common\engine_loop.ogg" />
@@ -369,6 +373,11 @@ copy .\game.dxt.config .\game.config</Command>
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\common\braking.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\gameplay\gameplay.vcxproj">
+      <Project>{1032ba4b-57eb-4348-9e03-29dd63e80e4a}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

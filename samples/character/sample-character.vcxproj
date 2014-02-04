@@ -336,12 +336,15 @@ copy .\game.dxt.config .\game.config</Command>
     <None Include="bar-descriptor.xml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="game.atc.config" />
     <None Include="game.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="game.dxt.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="game.png.config" />
+    <None Include="game.pvrtc.config" />
     <None Include="icon.png" />
     <None Include="res\common\arial.gpb" />
     <None Include="res\common\boy.animation" />
@@ -376,6 +379,11 @@ copy .\game.dxt.config .\game.config</Command>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\logo_powered_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\gameplay\gameplay.vcxproj">
+      <Project>{1032ba4b-57eb-4348-9e03-29dd63e80e4a}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

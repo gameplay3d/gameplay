@@ -91,6 +91,9 @@
     <None Include="res\shaders\textured.vert">
       <Filter>res\shaders</Filter>
     </None>
+    <None Include="game.atc.config" />
+    <None Include="game.png.config" />
+    <None Include="game.pvrtc.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CharacterGame.cpp">
