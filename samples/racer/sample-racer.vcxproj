@@ -374,6 +374,11 @@ copy .\game.dxt.config .\game.config</Command>
   <ItemGroup>
     <Media Include="res\common\braking.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\gameplay\gameplay.vcxproj">
+      <Project>{1032ba4b-57eb-4348-9e03-29dd63e80e4a}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
