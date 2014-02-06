@@ -39,10 +39,11 @@ public:
      * "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>" and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
      * 
      * @param url The relative location on disk of the sound file or a URL specifying a Properties object defining an audio source.
+     * @param streamed Use streaming.
      * @return The newly created audio source, or NULL if an audio source cannot be created.
      * @script{create}
      */
-    static AudioSource* create(const char* url);
+    static AudioSource* create(const char* url, bool streamed = false);
 
     /**
      * Create an audio source from the given properties object.
@@ -91,6 +92,13 @@ public:
      * @return true if the audio source is looped, false if not.
      */
     bool isLooped() const;
+
+    /**
+     * Determines whether the audio source is streamed or not.
+     *
+     * @return true if the audio source is streamed, false if not.
+     */
+    bool isStreamed() const;
 
     /**
      * Sets the state of the audio source to be looping or not.
@@ -192,6 +200,8 @@ private:
      * @return The newly created audio source.
      */
     AudioSource* clone(NodeCloneContext &context) const;
+
+    bool streamDataIfNeeded();
 
     ALuint _alSource;
     AudioBuffer* _buffer;

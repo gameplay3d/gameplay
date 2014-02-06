@@ -13,6 +13,9 @@
     <Filter Include="src\lua">
       <UniqueIdentifier>{21cf31c6-9c10-44cb-a864-d46a0e7bfe5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\tthread">
+      <UniqueIdentifier>{93291734-7357-4f60-bce7-742917f85360}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp">
@@ -852,6 +855,9 @@
     <ClCompile Include="src\lua\lua_RenderStateCullFaceSide.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\tthread\tinythread.cpp">
+      <Filter>src\tthread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1690,6 +1696,12 @@
     </ClInclude>
     <ClInclude Include="src\lua\lua_RenderStateCullFaceSide.h">
       <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tthread\fast_mutex.h">
+      <Filter>src\tthread</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tthread\tinythread.h">
+      <Filter>src\tthread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -324,6 +324,7 @@
     <ClCompile Include="src\Theme.cpp" />
     <ClCompile Include="src\ThemeStyle.cpp" />
     <ClCompile Include="src\Transform.cpp" />
+    <ClCompile Include="src\tthread\tinythread.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
     <ClCompile Include="src\Vector4.cpp" />
@@ -605,6 +606,8 @@
     <ClInclude Include="src\TimeListener.h" />
     <ClInclude Include="src\Touch.h" />
     <ClInclude Include="src\Transform.h" />
+    <ClInclude Include="src\tthread\fast_mutex.h" />
+    <ClInclude Include="src\tthread\tinythread.h" />
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\Vector4.h" />

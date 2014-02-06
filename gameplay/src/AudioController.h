@@ -1,6 +1,13 @@
 #ifndef AUDIOCONTROLLER_H_
 #define AUDIOCONTROLLER_H_
 
+
+namespace tthread
+{
+    class thread;
+    class mutex;
+}
+
 namespace gameplay
 {
 
@@ -55,10 +62,21 @@ private:
     void update(float elapsedTime);
 
 
+    void addPlayingSource(AudioSource* source);
+    void removePlayingSource(AudioSource* source);
+
+    static void streamingThreadProc(void* arg);
+
+
     ALCdevice* _alcDevice;
     ALCcontext* _alcContext;
     std::set<AudioSource*> _playingSources;
+    std::set<AudioSource*> _streamedSources;
     AudioSource* _pausingSource;
+
+    static std::auto_ptr< tthread::thread > _streamingThread;
+    static tthread::mutex _streamingQueueMutex;
+    static bool _streamingThreadActive;
 };
 
 }
