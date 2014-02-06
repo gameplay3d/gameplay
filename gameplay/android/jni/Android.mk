@@ -275,10 +275,11 @@ LOCAL_SRC_FILES := \
     lua/lua_VertexFormat.cpp \
     lua/lua_VertexFormatElement.cpp \
     lua/lua_VertexFormatUsage.cpp \
-    lua/lua_VerticalLayout.cpp
+    lua/lua_VerticalLayout.cpp \
+    tthread/tinythread.cpp
 
     
-LOCAL_CFLAGS := -D__ANDROID__ -I"../../external-deps/lua/include" -I"../../external-deps/bullet/include" -I"../../external-deps/libpng/include" -I"../../external-deps/oggvorbis/include" -I"../../external-deps/openal/include"
+LOCAL_CFLAGS := -D__ANDROID__ -fexceptions -I"../../external-deps/lua/include" -I"../../external-deps/bullet/include" -I"../../external-deps/libpng/include" -I"../../external-deps/oggvorbis/include" -I"../../external-deps/openal/include"
 LOCAL_STATIC_LIBRARIES := android_native_app_glue
 
 include $(BUILD_STATIC_LIBRARY)

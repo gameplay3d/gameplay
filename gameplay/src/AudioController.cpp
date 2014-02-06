@@ -169,7 +169,7 @@ void AudioController::streamingThreadProc(void* arg)
         std::for_each(
             _this->_streamedSources.begin(),
             _this->_streamedSources.end(),
-            std::mem_fn(&AudioSource::streamDataIfNeeded));
+            std::mem_fun(&AudioSource::streamDataIfNeeded));
         
         _streamingQueueMutex.unlock();
 
