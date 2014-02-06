@@ -1161,6 +1161,11 @@
 		C054CBE8172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */ = {isa = PBXBuildFile; fileRef = C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */; };
 		DD1FF47216DBD8F9000B42EF /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD1FF47116DBD8F9000B42EF /* Platform.cpp */; };
 		DD1FF47316DBD8F9000B42EF /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD1FF47116DBD8F9000B42EF /* Platform.cpp */; };
+		EB309C1718A3D46D00826B52 /* fast_mutex.h in Headers */ = {isa = PBXBuildFile; fileRef = EB309C1418A3D46D00826B52 /* fast_mutex.h */; };
+		EB309C1818A3D46D00826B52 /* tinythread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB309C1518A3D46D00826B52 /* tinythread.cpp */; };
+		EB309C1918A3D46D00826B52 /* tinythread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB309C1518A3D46D00826B52 /* tinythread.cpp */; };
+		EB309C1A18A3D46D00826B52 /* tinythread.h in Headers */ = {isa = PBXBuildFile; fileRef = EB309C1618A3D46D00826B52 /* tinythread.h */; };
+
 		F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
 		F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
 		F18024A51627000D001BFF87 /* gameplay-main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* gameplay-main-ios.mm */; };
@@ -1773,6 +1778,10 @@
 		C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_RenderStateCullFaceSide.cpp; sourceTree = "<group>"; };
 		C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_RenderStateCullFaceSide.h; sourceTree = "<group>"; };
 		DD1FF47116DBD8F9000B42EF /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Platform.cpp; path = src/Platform.cpp; sourceTree = SOURCE_ROOT; };
+		EB309C1418A3D46D00826B52 /* fast_mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fast_mutex.h; path = src/tthread/fast_mutex.h; sourceTree = SOURCE_ROOT; };
+		EB309C1518A3D46D00826B52 /* tinythread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinythread.cpp; path = src/tthread/tinythread.cpp; sourceTree = SOURCE_ROOT; };
+		EB309C1618A3D46D00826B52 /* tinythread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinythread.h; path = src/tthread/tinythread.h; sourceTree = SOURCE_ROOT; };
+
 		F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MathUtil.cpp; path = src/MathUtil.cpp; sourceTree = SOURCE_ROOT; };
 		F18024A31627000D001BFF87 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
 		F18024A41627000D001BFF87 /* gameplay-main-macosx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-macosx.mm"; path = "src/gameplay-main-macosx.mm"; sourceTree = SOURCE_ROOT; };
@@ -1831,6 +1840,8 @@
 		4234D9A314686C52003031B3 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				EB309C1318A3D44400826B52 /* tthread */,
+
 				42BCD31E15EFD0F300C0E076 /* lua */,
 				5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */,
 				5BD52635150F822A004C9099 /* AbsoluteLayout.h */,
@@ -2494,6 +2505,17 @@
 			name = MacOSX;
 			sourceTree = "<group>";
 		};
+		EB309C1318A3D44400826B52 /* tthread */ = {
+			isa = PBXGroup;
+			children = (
+				EB309C1418A3D46D00826B52 /* fast_mutex.h */,
+				EB309C1518A3D46D00826B52 /* tinythread.cpp */,
+				EB309C1618A3D46D00826B52 /* tinythread.h */,
+			);
+			name = tthread;
+			sourceTree = "<group>";
+		};
+
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2505,12 +2527,14 @@
 				42CD0E49147D8FF60000361E /* AnimationClip.h in Headers */,
 				42CD0E4B147D8FF60000361E /* AnimationController.h in Headers */,
 				42CD0E4D147D8FF60000361E /* AnimationTarget.h in Headers */,
+				EB309C1A18A3D46D00826B52 /* tinythread.h in Headers */,
 				42CD0E4F147D8FF60000361E /* AnimationValue.h in Headers */,
 				42CD0E51147D8FF60000361E /* AudioBuffer.h in Headers */,
 				42CD0E53147D8FF60000361E /* AudioController.h in Headers */,
 				42CD0E55147D8FF60000361E /* AudioListener.h in Headers */,
 				42CD0E57147D8FF60000361E /* AudioSource.h in Headers */,
 				42CD0E58147D8FF60000361E /* Base.h in Headers */,
+				EB309C1718A3D46D00826B52 /* fast_mutex.h in Headers */,
 				42CD0E5A147D8FF60000361E /* BoundingBox.h in Headers */,
 				42CD0E5C147D8FF60000361E /* BoundingSphere.h in Headers */,
 				42CD0E5E147D8FF60000361E /* Camera.h in Headers */,
@@ -3484,6 +3508,8 @@
 				42A5031716E8F08900F0246C /* lua_ImageControl.cpp in Sources */,
 				42A5031D16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */,
 				C054CBE5172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */,
+				EB309C1818A3D46D00826B52 /* tinythread.cpp in Sources */,
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3723,6 +3749,7 @@
 				42BCD68115EFD0F300C0E076 /* lua_TextureSampler.cpp in Sources */,
 				42BCD68515EFD0F300C0E076 /* lua_TextureWrap.cpp in Sources */,
 				42BCD68915EFD0F300C0E076 /* lua_Theme.cpp in Sources */,
+				EB309C1918A3D46D00826B52 /* tinythread.cpp in Sources */,
 				42BCD68D15EFD0F300C0E076 /* lua_ThemeSideRegions.cpp in Sources */,
 				42BCD69115EFD0F300C0E076 /* lua_ThemeStyle.cpp in Sources */,
 				42BCD69515EFD0F300C0E076 /* lua_ThemeThemeImage.cpp in Sources */,
