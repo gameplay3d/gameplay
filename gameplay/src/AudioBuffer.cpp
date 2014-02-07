@@ -107,7 +107,8 @@ AudioBuffer* AudioBuffer::create(const char* path, bool streamed)
         if (AL_LAST_ERROR())
         {
             GP_ERROR("Failed to create OpenAL buffer; alGenBuffers error: %d", AL_LAST_ERROR());
-            AL_CHECK( alDeleteBuffers(1, &alBuffer[i]) );
+            while (i>=0)
+                AL_CHECK( alDeleteBuffers(1, &alBuffer[i--]) );
             return NULL;
         }
     }
