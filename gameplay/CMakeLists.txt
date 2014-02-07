@@ -227,6 +227,9 @@ set(GAMEPLAY_SRC
     src/VertexFormat.h
     src/VerticalLayout.cpp
     src/VerticalLayout.h
+    src/tthread/tinythread.cpp
+    src/tthread/tinythread.h
+    src/tthread/fast_mutex.h
 )
 
 set(GAMEPLAY_LUA
