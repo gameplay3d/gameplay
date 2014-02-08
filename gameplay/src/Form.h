@@ -5,11 +5,11 @@
 #include "Container.h"
 #include "Mesh.h"
 #include "Node.h"
-#include "FrameBuffer.h"
 #include "Touch.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Gamepad.h"
+#include "FrameBuffer.h"
 
 namespace gameplay
 {
@@ -17,59 +17,42 @@ namespace gameplay
 class Theme;
 
 /**
- * Top-level container of UI controls.  The following properties are available for forms:
-
- @verbatim
-    form <formID>
-    {
-        // Form properties.
-        theme       = <Path to .theme File> // See Theme.h.
-        layout      = <Layout::Type>        // A value from the Layout::Type enum.  e.g.: LAYOUT_VERTICAL
-        style       = <styleID>             // A style from the referenced theme.
-        position   = <x, y>                // Position of the form on-screen, measured in pixels.
-        alignment  = <Control::Alignment>  // Note: 'position' will be ignored.
-        autoWidth  = <bool>                // Will result in a form the width of the display.
-        autoHeight = <bool>                // Will result in a form the height of the display.
-        size       = <width, height>       // Size of the form, measured in pixels.
-        width      = <width>               // Can be used in place of 'size', e.g. with 'autoHeight = true'
-        height     = <height>              // Can be used in place of 'size', e.g. with 'autoWidth = true'
-        consumeEvents = <bool>             // Whether the form propagates input events to the Game's input event handler. Default is false
-      
-        // All the nested controls within this form.
-        container { }
-        label { }
-        textBox { }
-        button { }
-        checkBox { }
-        radioButton { }
-        slider { }
-    }
- @endverbatim
+ * Defines a form that is a root container that contains zero or more controls.
+ *
+ * This can also be attached on a scene Node to support 3D forms.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Form : public Container
 {
     friend class Platform;
     friend class Game;
     friend class Gamepad;
+    friend class Control;
+    friend class Container;
 
 public:
 
     /**
-     * Creates a form using the data from the Properties object defined at the specified URL, 
-     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
-     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * Creates a form from a .form properties file.
      * 
      * @param url The URL pointing to the Properties object defining the form. 
+     * 
+     * @return The new form or NULL if there was an error.
      * @script{create}
      */
     static Form* create(const char* url);
 
     /**
      * Create a new Form.
+	 *
+	 * The specified style defines the visual style for the form. If NULL is passed
+	 * for the style, the default UI theme is used. All controls attached to this
+	 * form will inherit the theme that contains the form's style.
      *
      * @param id The Form's ID.
-     * @param style The Form's style.
-     * @param layoutType The form's layout type.
+     * @param style The Form's custom style (optional - may be NULL).
+	 * @param layoutType The form's layout type (optional).
      *
      * @return The new Form.
      * @script{create}
@@ -86,81 +69,79 @@ public:
     static Form* getForm(const char* id);
     
     /**
-     * Gets the theme for the form.
+     * Returns the currently active control within the UI system.
      *
-     * @return The theme for the form.
+     * An active control is a control that is currently pressed or hovered over. On a multi-touch
+     * system, it is possible for several controls to be active at once (one for each touch point).
+     * However, only a single control can have focus at once.
+     *
+     * @param touchIndex Optional touch point index to retrieve the active control for.
+     *
+     * @return The currently active control, or NULL if no controls are currently active.
      */
-    Theme* getTheme() const;
+    static Control* getActiveControl(unsigned int touchIndex = 0);
 
     /**
-     * Set the desired size of this form.
+     * Returns the current control that is in focus.
      *
-     * @param width The width.
-     * @param height The height.
+     * @return The current control in focus, or NULL if no controls are in focus.
      */
-    virtual void setSize(float width, float height);
+    static Control* getFocusControl();
 
     /**
-     * Set the bounds of this form.
-     *
-     * @param bounds The new bounds to set.
+     * Removes focus from any currently focused UI control.
      */
-    virtual void setBounds(const Rectangle& bounds);
-
-    /** 
-     * Set the desired width of the form.
-     *
-     * @param width The width.
-     */
-    virtual void setWidth(float width);
-
-    /** 
-     * Set the desired height of the form.
-     *
-     * @param height The height.
-     */
-    virtual void setHeight(float height);
+    static void clearFocus();
 
     /**
-     * Set this form's width to that of the display.
-     *
-     * @param autoWidth Whether to set this form's width to that of the display.
+     * @see Container#isForm()
      */
-    virtual void setAutoWidth(bool autoWidth);
-
-    /**
-     * Set this form's height to that of the display.
-     *
-     * @param autoHeight Whether to set this form's height to that of the display.
-     */
-    virtual void setAutoHeight(bool autoHeight);
+    bool isForm() const;
 
     /**
      * Attach this form to a node.
      *
      * A form can be drawn as part of the 3-dimensional world if it is attached to a node.
-     * The form's contents will be rendered into a framebuffer which will be used to texture a quad.
-     * This quad will be given the same dimensions as the form and must be transformed appropriately.
-     * Alternatively, a quad can be set explicitly on a form with the setQuad() methods.
      *
      * @param node The node to attach this form to.
      */
     void setNode(Node* node);
 
     /**
-     * Updates each control within this form, and positions them according to its layout.
+     * @see Control::update
      */
     void update(float elapsedTime);
 
     /**
      * Draws this form.
+     *
+     * @return The nubmer of draw calls issued to draw the form.
      */
-    void draw();
+    unsigned int draw();
 
     /**
      * @see Control::getType
      */
     const char* getType() const;
+
+    /**
+     * Determines whether batching is enabled for this form.
+     *
+     * @return True if batching is enabled for this form, false otherwise.
+     */
+    bool isBatchingEnabled() const;
+
+    /**
+     * Turns batching on or off for this form.
+     *
+     * By default, forms enable batching as a way to optimize performance. However, on certain
+     * complex forms that contain multiple layers of overlapping text and transparent controls,
+     * batching may cause some visual artifacts due alpha blending issues. In these cases,
+     * turning batching off usually fixes the issue at a slight performance cost.
+     *
+     * @param enabled True to enable batching (default), false otherwise.
+     */
+    void setBatchingEnabled(bool enabled);
 
 private:
     
@@ -180,16 +161,16 @@ private:
     virtual ~Form();
 
     /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
+
+    /**
      * Initialize a quad for this form in order to draw it in 3D.
      *
      * @param mesh The mesh to create a model from.
      */
     void initializeQuad(Mesh* mesh);
-
-    /**
-     * Update this form's bounds.
-     */
-    void updateBounds();
 
     /**
      * Updates all visible, enabled forms.
@@ -224,16 +205,25 @@ private:
      *
      * @see Control::gamepadEvent
      */
-    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+    static bool gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
-     * Get the next highest power of two of an integer.  Used when creating framebuffers.
+     * Fired by the platform when the game window resizes.
      *
-     * @param x The number to start with.
-     *
-     * @return The next highest power of two after x, or x if it is already a power of two.
+     * @param width The new window width.
+     * @param height The new window height.
      */
-    static unsigned int nextPowerOfTwo(unsigned int x);
+    static void resizeEventInternal(unsigned int width, unsigned int height);
+
+    /**
+     * Called during drawing to prepare a sprite batch for being drawn into for this form.
+     */
+    void startBatch(SpriteBatch* batch);
+
+    /**
+     * Called during drawing to signal completion of drawing into a batch.
+     */
+    void finishBatch(SpriteBatch* batch);
 
     /**
      * Unproject a point (from a mouse or touch event) into the scene and then project it onto the form.
@@ -246,17 +236,34 @@ private:
      */
     bool projectPoint(int x, int y, Vector3* point);
 
-    Theme* _theme;                      // The Theme applied to this Form.
-    FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad. 
-    SpriteBatch* _spriteBatch;
+    const Matrix& getProjectionMatrix() const;
+
+    static bool pointerEventInternal(bool mouse, int evt, int x, int y, int param);
+
+    static Control* findInputControl(int* x, int* y, bool focus, unsigned int contactIndex);
+
+    static Control* findInputControl(Control* control, int x, int y, bool focus, unsigned int contactIndex);
+
+    static Control* handlePointerPressRelease(int* x, int* y, bool pressed, unsigned int contactIndex);
+
+    static Control* handlePointerMove(int* x, int* y, unsigned int contactIndex);
+
+    static bool screenToForm(Control* ctrl, int* x, int* y);
+
+    static void verifyRemovedControlState(Control* control);
+
+    static void controlDisabled(Control* control);
+
+    static void setFocusControl(Control* control);
+
+    static void pollGamepads();
+
+    static bool pollGamepad(Gamepad* gamepad);
+
     Node* _node;                        // Node for transforming this Form in world-space.
-    Model* _nodeQuad;                   // Quad for rendering this Form in 3d space.
-    Material* _nodeMaterial;            // Material for rendering this Form in 3d space.
-    float _u2;
-    float _v1;
-    Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
-    Matrix _defaultProjectionMatrix;
-    bool _isGamepad;
+    Matrix _projectionMatrix;           // Projection matrix to be set on SpriteBatch objects when rendering the form
+    std::vector<SpriteBatch*> _batches;
+    bool _batched;
 };
 
 }

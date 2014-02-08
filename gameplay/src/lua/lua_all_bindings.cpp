@@ -29,6 +29,7 @@ void lua_RegisterAllBindings()
     luaRegister_Bundle();
     luaRegister_Button();
     luaRegister_Camera();
+    luaRegister_CameraListener();
     luaRegister_CheckBox();
     luaRegister_Container();
     luaRegister_Control();
@@ -50,7 +51,7 @@ void lua_RegisterAllBindings()
     luaRegister_Image();
     luaRegister_ImageControl();
     luaRegister_Joint();
-    luaRegister_Joystick();
+    luaRegister_JoystickControl();
     luaRegister_Keyboard();
     luaRegister_Label();
     luaRegister_Layout();
@@ -110,7 +111,7 @@ void lua_RegisterAllBindings()
     luaRegister_SpriteBatch();
     luaRegister_Technique();
     luaRegister_Terrain();
-    luaRegister_TerrainListener();
+    luaRegister_TerrainPatch();
     luaRegister_TextBox();
     luaRegister_Texture();
     luaRegister_TextureSampler();

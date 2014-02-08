@@ -1,20 +1,14 @@
 form formSelect
 {
-    theme = res/common/default.theme
     layout = LAYOUT_VERTICAL
-    style = basicContainer
     alignment = ALIGN_TOP_LEFT
-    width = 200
-    autoHeight = true
-	consumeInputEvents = true
+    width = 220
+	consumeInputEvents = false
 
 	radioButton form0
 	{
-		style = basic
 		text = Basic Controls
 		group = formSelection
-		size = 180, 60
-		textAlignment = ALIGN_VCENTER_HCENTER
 		selected = true
 	}
 

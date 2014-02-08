@@ -2,9 +2,7 @@
 <qnx xmlns="http://www.qnx.com/schemas/application/1.0">
 
 <!-- BlackBerry OS application descriptor file.
-
     Specifies parameters for identifying, installing, and launching native applications on BlackBerry OS.
-
 -->
 
     <!-- A universally unique application identifier. Must be unique across all BlackBerry OS applications.
@@ -45,34 +43,20 @@
 
     <asset path="icon.png">icon.png</asset>
     <asset path="res">res</asset>
+    <asset path="GAMEPLAY_PATH/gameplay/res/shaders">res/shaders</asset>
+    <asset path="GAMEPLAY_PATH/gameplay/res/ui">res/ui</asset>
 
-    <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
+    <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/TEMPLATE_PROJECT" entry="true" type="Qnx/Elf">TEMPLATE_PROJECT</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.release.693953760" name="Device-Release">
+    <configuration name="Device-Release">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Release/TEMPLATE_PROJECT" entry="true" type="Qnx/Elf">TEMPLATE_PROJECT</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.1278883794" name="Device-Profile">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Profile/TEMPLATE_PROJECT" entry="true" type="Qnx/Elf">TEMPLATE_PROJECT</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.357266346" name="Device-Coverage">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Coverage/TEMPLATE_PROJECT" entry="true" type="Qnx/Elf">TEMPLATE_PROJECT</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.debug.882133523" name="Simulator">
+    <configuration name="Simulator">
         <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/TEMPLATE_PROJECT" entry="true" type="Qnx/Elf">TEMPLATE_PROJECT</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.400335078" name="Simulator-Profile">
-       <platformArchitecture>x86</platformArchitecture> 
-       <asset path="Simulator-Profile/TEMPLATE_PROJECT" entry="true" type="Qnx/Elf">TEMPLATE_PROJECT</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.48235134" name="Simulator-Coverage">
-       <platformArchitecture>x86</platformArchitecture>
-       <asset path="Simulator-Coverage/TEMPLATE_PROJECT" entry="true" type="Qnx/Elf">TEMPLATE_PROJECT</asset>
     </configuration>
 
     <!-- The icon for the application, which should be 114x114. -->
@@ -80,11 +64,8 @@
         <image>icon.png</image>
     </icon>
 
-    <!-- The splash screen that will appear when your application is launching. Should be 1280x768. -->
+    <!-- The splash screen that will appear when your application is launching. Should be 1280x720. -->
     <!-- <splashscreen></splashscreen> -->
-
-    <!-- Request permission to execute native code.  Required for native applications. -->
-    <action system="true">run_native</action>
 
     <!-- The permissions requested by your application. -->
     <!--  <action>access_shared</action> -->

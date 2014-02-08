@@ -16,26 +16,27 @@ CheckBox::~CheckBox()
 
 CheckBox* CheckBox::create(const char* id, Theme::Style* style)
 {
-    GP_ASSERT(style);
-
-    CheckBox* checkBox = new CheckBox();
-    if (id)
-        checkBox->_id = id;
-    checkBox->setStyle(style);
-
-    return checkBox;
+    CheckBox* cb = new CheckBox();
+    cb->_id = id ? id : "";
+    cb->initialize("CheckBox", style, NULL);
+    return cb;
 }
 
-CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
+Control* CheckBox::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
+    CheckBox* cb = new CheckBox();
+    cb->initialize("CheckBox", style, properties);
+    return cb;
+}
 
-    CheckBox* checkBox = new CheckBox();
-    checkBox->initialize(style, properties);
-    properties->getVector2("imageSize", &checkBox->_imageSize);
-    checkBox->_checked = properties->getBool("checked");
+void CheckBox::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Button::initialize(typeName, style, properties);
 
-    return checkBox;
+    if (properties)
+    {
+        _checked = properties->getBool("checked");
+    }
 }
 
 bool CheckBox::isChecked()
@@ -48,19 +49,9 @@ void CheckBox::setChecked(bool checked)
     if (_checked != checked)
     {
         _checked = checked;
-        _dirty = true;
+        setDirty(DIRTY_STATE);
         notifyListeners(Control::Listener::VALUE_CHANGED);
     }
-}
-
-void CheckBox::setImageSize(float width, float height)
-{
-    _imageSize.set(width, height);
-}
-
-const Vector2& CheckBox::getImageSize() const
-{
-    return _imageSize;
 }
 
 void CheckBox::addListener(Control::Listener* listener, int eventFlags)
@@ -74,120 +65,94 @@ void CheckBox::addListener(Control::Listener* listener, int eventFlags)
     Control::addListener(listener, eventFlags);
 }
 
-bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    switch (evt)
-    {
-    case Touch::TOUCH_RELEASE:
-        if (_contactIndex == (int) contactIndex && _state == Control::ACTIVE)
-        {
-            if (!_parent->isScrolling() &&
-                x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-            {
-                _checked = !_checked;
-                notifyListeners(Control::Listener::VALUE_CHANGED);
-            }
-        }
-        break;
-    }
-    return Button::touchEvent(evt, x, y, contactIndex);
-}
-
-bool CheckBox::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
-{
-    switch (evt)
-    {
-    case Gamepad::BUTTON_EVENT:
-        if (_state == Control::ACTIVE)
-        {
-            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
-                !gamepad->isButtonDown(Gamepad::BUTTON_X))
-            {
-                _checked = !_checked;
-                notifyListeners(Control::Listener::VALUE_CHANGED);   
-            }
-        }
-        break;
-    }
-
-    return Button::gamepadEvent(evt, gamepad, analogIndex);
-}
-
 bool CheckBox::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    if (_state == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN)
+    if (getState() == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN)
     {
-        _checked = !_checked;
-        notifyListeners(Control::Listener::VALUE_CHANGED);
+        setChecked( !_checked );
     }
 
     return Button::keyEvent(evt, key);
 }
 
-void CheckBox::update(const Control* container, const Vector2& offset)
+void CheckBox::controlEvent(Control::Listener::EventType evt)
 {
-    Label::update(container, offset);
+    Button::controlEvent(evt);
 
-    Vector2 size;
-    if (_imageSize.isZero())
+    switch (evt)
     {
-        if (_checked)
-        {
-            const Rectangle& selectedRegion = getImageRegion("checked", _state);
-            size.set(selectedRegion.width, selectedRegion.height);
-        }
-        else
-        {
-            const Rectangle& unselectedRegion = getImageRegion("unchecked", _state);
-            size.set(unselectedRegion.width, unselectedRegion.height);
-        }
-    }
-    else
-    {
-        size.set(_imageSize);
-    }
-    float iconWidth = size.x;
-
-    _textBounds.x += iconWidth + 5;
-    _textBounds.width -= iconWidth + 5;
-
-    if (_checked)
-    {
-        _image = getImage("checked", _state);
-    }
-    else
-    {
-        _image = getImage("unchecked", _state);
+    case Control::Listener::CLICK:
+        setChecked( !_checked );
+        break;
     }
 }
 
-void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
+void CheckBox::updateState(State state)
 {
-    GP_ASSERT(spriteBatch);
-    GP_ASSERT(_image);
+    Label::updateState(state);
+
+    _image = getImage(_checked ? "checked" : "unchecked", state);
+}
+
+void CheckBox::updateBounds()
+{
+    Label::updateBounds();
+
+    Vector2 size;
+    if (_checked)
+    {
+        const Rectangle& selectedRegion = getImageRegion("checked", NORMAL);
+        size.set(selectedRegion.width, selectedRegion.height);
+    }
+    else
+    {
+        const Rectangle& unselectedRegion = getImageRegion("unchecked", NORMAL);
+        size.set(unselectedRegion.width, unselectedRegion.height);
+    }
+
+    if (_autoSize & AUTO_SIZE_HEIGHT)
+    {
+        // Text-only width was already measured in Label::update - append image
+        const Theme::Border& border = getBorder(NORMAL);
+        const Theme::Border& padding = getPadding();
+        setHeightInternal(std::max(_bounds.height, size.y + border.top + border.bottom + padding.top + padding.bottom));
+    }
+
+    if (_autoSize & AUTO_SIZE_WIDTH)
+    {
+        // Text-only width was already measured in Label::update - append image
+        setWidthInternal(_bounds.height + 5 + _bounds.width);
+    }
+}
+
+void CheckBox::updateAbsoluteBounds(const Vector2& offset)
+{
+    Label::updateAbsoluteBounds(offset);
+
+    _textBounds.x += _bounds.height + 5;
+}
+
+unsigned int CheckBox::drawImages(Form* form, const Rectangle& clip)
+{
+    if (!_image)
+        return 0;
 
     // Left, v-center.
     // TODO: Set an alignment for icons.
-    
+
     const Rectangle& region = _image->getRegion();
     const Theme::UVs& uvs = _image->getUVs();
     Vector4 color = _image->getColor();
     color.w *= _opacity;
 
-    Vector2 size;
-    if (_imageSize.isZero())
-    {
-        size.set(region.width, region.height);
-    }
-    else
-    {
-        size.set(_imageSize);
-    }
+    Vector2 pos(_viewportBounds.x, _viewportBounds.y);
 
-    Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
+    SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+    startBatch(form, batch);
+    batch->draw(pos.x, pos.y, _viewportBounds.height, _viewportBounds.height, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    finishBatch(form, batch);
 
-    spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    return 1;
 }
 
 const char* CheckBox::getType() const

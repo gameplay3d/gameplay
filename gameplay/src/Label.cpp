@@ -14,43 +14,31 @@ Label::~Label()
 
 Label* Label::create(const char* id, Theme::Style* style)
 {
-    GP_ASSERT(style);
-
     Label* label = new Label();
-    if (id)
-        label->_id = id;
-    label->setStyle(style);
-
-    // Labels don't consume input events by default like other controls.
-    label->_consumeInputEvents = false;
-
-    // Ensure that labels cannot receive focus.
-    label->_focusIndex = -2;
-
+    label->_id = id ? id : "";
+    label->initialize("Label", style, NULL);
     return label;
 }
 
-Label* Label::create(Theme::Style* style, Properties* properties)
+Control* Label::create(Theme::Style* style, Properties* properties)
 {
     Label* label = new Label();
-    label->initialize(style, properties);
-
-    label->_consumeInputEvents = false;
-    label->_focusIndex = -2;
-
+	label->initialize("Label", style, properties);
     return label;
 }
 
-void Label::initialize(Theme::Style* style, Properties* properties)
+void Label::initialize(const char* typeName, Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
+    Control::initialize(typeName, style, properties);
 
-    Control::initialize(style, properties);
-    const char* text = properties->getString("text");
-    if (text)
-    {
-        _text = text;
-    }
+	if (properties)
+	{
+		const char* text = properties->getString("text");
+		if (text)
+		{
+			_text = text;
+		}
+	}
 }
 
 void Label::addListener(Control::Listener* listener, int eventFlags)
@@ -69,12 +57,11 @@ void Label::addListener(Control::Listener* listener, int eventFlags)
     
 void Label::setText(const char* text)
 {
-    assert(text);
-
-    if (strcmp(text, _text.c_str()) != 0)
+    if ((text == NULL && _text.length() > 0) || strcmp(text, _text.c_str()) != 0)
     {
-        _text = text;
-        _dirty = true;
+        _text = text ? text : "";
+        if (_autoSize != AUTO_SIZE_NONE)
+            setDirty(DIRTY_BOUNDS);
     }
 }
 
@@ -83,29 +70,68 @@ const char* Label::getText()
     return _text.c_str();
 }
 
-void Label::update(const Control* container, const Vector2& offset)
+void Label::update(float elapsedTime)
 {
-    Control::update(container, offset);
+    Control::update(elapsedTime);
 
-    _textBounds.set(_viewportBounds);
-
-    _font = getFont(_state);
-    _textColor = getTextColor(_state);
+    // Update text opacity each frame since opacity is updated in Control::update.
+    _textColor = getTextColor(getState());
     _textColor.w *= _opacity;
 }
 
-void Label::drawText(const Rectangle& clip)
+void Label::updateState(State state)
 {
-    if (_text.size() <= 0)
-        return;
+    Control::updateState(state);
 
-    // Draw the text.
-    if (_font)
+    _font = getFont(state);
+}
+
+void Label::updateBounds()
+{
+    Control::updateBounds();
+
+    if (_autoSize != AUTO_SIZE_NONE && _font)
     {
-        _font->start();
-        _font->drawText(_text.c_str(), _textBounds, _textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_viewportClipBounds);
-        _font->finish();
+        // Measure bounds based only on normal state so that bounds updates are not always required on state changes.
+        // This is a trade-off for functionality vs performance, but changing the size of UI controls on hover/focus/etc
+        // is a pretty bad practice so we'll prioritize performance here.
+        unsigned int w, h;
+        _font->measureText(_text.c_str(), getFontSize(NORMAL), &w, &h);
+        if (_autoSize & AUTO_SIZE_WIDTH)
+        {
+            setWidthInternal(w + getBorder(NORMAL).left + getBorder(NORMAL).right + getPadding().left + getPadding().right);
+        }
+        if (_autoSize & AUTO_SIZE_HEIGHT)
+        {
+            setHeightInternal(h + getBorder(NORMAL).top + getBorder(NORMAL).bottom + getPadding().top + getPadding().bottom);
+        }
     }
+}
+
+void Label::updateAbsoluteBounds(const Vector2& offset)
+{
+    Control::updateAbsoluteBounds(offset);
+
+    _textBounds.set((int)_viewportBounds.x, (int)_viewportBounds.y, _viewportBounds.width, _viewportBounds.height);
+}
+
+unsigned int Label::drawText(Form* form, const Rectangle& clip)
+{
+    // Draw the text.
+    if (_text.size() > 0 && _font)
+    {
+        Control::State state = getState();
+        unsigned int fontSize = getFontSize(state);
+
+        SpriteBatch* batch = _font->getSpriteBatch(fontSize);
+        startBatch(form, batch);
+        _font->drawText(_text.c_str(), _textBounds, _textColor, fontSize, getTextAlignment(state), true, getTextRightToLeft(state), &_viewportClipBounds);
+        finishBatch(form, batch);
+
+        return 1;
+    }
+
+    return 0;
 }
 
 const char* Label::getType() const

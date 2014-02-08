@@ -10,57 +10,62 @@ namespace gameplay
 {
 
 /**
- * An editable text label.  Tap or click within the text box to bring up the
- * virtual keyboard.
+ * Defines a text control. 
  *
  * Listeners can listen for a TEXT_CHANGED event, and then query the text box
  * for the last keypress it received.
+ * On mobile device you can tap or click within the text box to
+ * bring up the virtual keyboard.
  *
- * The following properties are available for text boxes:
-
- @verbatim
-    textBox <labelID>
-    {
-         style       = <styleID>
-         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-         position    = <x, y>
-         autoWidth   = <bool>
-         autoHeight  = <bool>
-         size        = <width, height>
-         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
-         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         text        = <string>
-    }
- @endverbatim
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class TextBox : public Label
 {
     friend class Container;
+    friend class ControlFactory;
 
 public:
 
     /**
-     * Create a new text box control.
-     *
-     * @param id The control's ID.
-     * @param style The control's style.
-     *
-     * @return The new text box.
-     * @script{create}
+     * Input modes. Default is Text.
      */
-    static TextBox* create(const char* id, Theme::Style* style);
+    enum InputMode
+    {
+        /**
+         * Text: Text is displayed directly.
+         */
+        TEXT = 0x01,
+
+        /**
+         * Password: Text is replaced by _passwordChar, which is '*' by default.
+         */
+        PASSWORD = 0x02
+    };
 
     /**
-     * Add a listener to be notified of specific events affecting
-     * this control.  Event types can be OR'ed together.
-     * E.g. To listen to touch-press and touch-release events,
-     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
-     * as the second parameter.
+     * Creates a new TextBox.
      *
-     * @param listener The listener to add.
-     * @param eventFlags The events to listen for.
+     * @param id The textbox ID.
+     * @param style The textbox style (optional).
+     *
+     * @return The new textbox.
+     * @script{create}
      */
-    virtual void addListener(Control::Listener* listener, int eventFlags);
+    static TextBox* create(const char* id, Theme::Style* style = NULL);
+
+    /**
+     * Returns the current location of the caret with the text of this TextBox.
+     *
+     * @return The current caret location.
+     */
+    unsigned int getCaretLocation() const;
+
+    /**
+     * Sets the location of the caret within this text box.
+     *
+     * @param index The new location of the caret within the text of this TextBox.
+     */
+    void setCaretLocation(unsigned int index);
 
     /**
      * Get the last key pressed within this text box.
@@ -73,6 +78,34 @@ public:
      * @see Control::getType
      */
     const char* getType() const;
+
+    /**
+     * Set the character displayed in password mode.
+     *
+     * @param character Character to display in password mode.
+     */
+    void setPasswordChar(char character);
+
+    /**
+     * Get the character displayed in password mode.
+     *
+     * @return The character displayed in password mode.
+     */
+    char getPasswordChar() const;
+
+    /**
+     * Set the input mode.
+     *
+     * @param inputMode Input mode to set.
+     */
+    void setInputMode(InputMode inputMode);
+
+    /**
+     * Get the input mode.
+     *
+     * @return The input mode.
+     */
+    InputMode getInputMode() const;
 
 protected:
 
@@ -90,11 +123,16 @@ protected:
      * Create a text box with a given style and properties.
      *
      * @param style The style to apply to this text box.
-     * @param properties The properties to set on this text box.
+     * @param properties A properties object containing a definition of the text box (optional).
      *
      * @return The new text box.
      */
-    static TextBox* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -123,26 +161,45 @@ protected:
     bool keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
-     * Called when a control's properties change.  Updates this control's internal rendering
-     * properties, such as its text viewport.
-     *
-     * @param container This control's parent container.
-     * @param offset Positioning offset to add to the control's position.
+     * @see Control#controlEvent
      */
-    void update(const Control* container, const Vector2& offset);
+    void controlEvent(Control::Listener::EventType evt);
 
     /**
-     * Draw the images associated with this control.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The clipping rectangle of this control's parent container.
+     * @see Control::updateState
      */
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    void updateState(State state);
 
     /**
-     * The current position of the TextBox's caret.
+     * @see Control::drawImages
      */
-    Vector2 _caretLocation;
+    unsigned int drawImages(Form* form, const Rectangle& clip);
+
+    /**
+     * @see Control::drawText
+     */
+    unsigned int drawText(Form* form, const Rectangle& clip);
+
+    /**
+     * Gets an InputMode by string.
+     *
+     * @param inputMode The string representation of the InputMode type.
+     * @return The InputMode enum value corresponding to the given string.
+     */
+    static InputMode getInputMode(const char* inputMode);
+
+    /**
+     * Get the text which should be displayed, depending on
+     * _inputMode.
+     *
+     * @return The text to be displayed.
+     */
+    std::string getDisplayedText() const;
+
+    /**
+     * The current location of the TextBox's caret.
+     */
+    unsigned int _caretLocation;
 
     /**
      * The previous position of the TextBox's caret.
@@ -164,6 +221,21 @@ protected:
      */
     Theme::ThemeImage* _caretImage;
 
+    /**
+     * The character displayed in password mode.
+     */
+    char _passwordChar;
+
+    /**
+     * The mode used to display the typed text.
+     */
+    InputMode _inputMode;
+
+    /**
+     * Indicate if the CTRL key is currently pressed.
+     */
+    bool _ctrlPressed;
+
 private:
 
     /**
@@ -172,6 +244,8 @@ private:
     TextBox(const TextBox& copy);
 
     void setCaretLocation(int x, int y);
+
+    void getCaretLocation(Vector2* p);
 };
 
 }

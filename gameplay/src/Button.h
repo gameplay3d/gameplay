@@ -11,43 +11,28 @@ namespace gameplay
 {
 
 /**
- * Defines a button UI control. This is essentially a label that can have a callback method set on it.
+ * Defines a button control. 
  *
- * The following properties are available for buttons:
-
- @verbatim
-    button <buttonID>
-    {
-         style       = <styleID>
-         alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
-         position    = <x, y>
-         autoWidth   = <bool>
-         autoHeight  = <bool>
-         size        = <width, height>
-         width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
-         height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         text        = <string>
-         consumeEvents = <bool>  // Whether the button propagates input events to the Game's input event handler. Default is true.
-    }
- @endverbatim
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Button : public Label
 {
     friend class Container;
     friend class Gamepad;
+    friend class ControlFactory;
 
 public:
 
     /**
-     * Create a new button control.
+     * Creates a new Button.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The button ID.
+     * @param style The button style (optional).
      *
      * @return The new button.
      * @script{create}
      */
-    static Button* create(const char* id, Theme::Style* style);
+    static Button* create(const char* id, Theme::Style* style = NULL);
 
 protected:
 
@@ -65,40 +50,16 @@ protected:
      * Create a button with a given style and properties.
      *
      * @param style The style to apply to this button.
-     * @param properties The properties to set on this button.
+     * @param properties A properties object containing a definition of the button (optional).
      *
      * @return The new button.
      */
-    static Button* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
 
     /**
-     * Touch callback on touch events.  Controls return true if they consume the touch event.
-     *
-     * @param evt The touch event that occurred.
-     * @param x The x position of the touch in pixels. Left edge is zero.
-     * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
-     *
-     * @return Whether the touch event was consumed by the control.
-     *
-     * @see Touch::TouchEvent
+     * @see Control::initialize
      */
-    bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-
-    /**
-     * Gamepad callback on gamepad events.
-     *
-     * @see Control::gamepadEvent
-     */
-    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
-
-    /**
-     * Keyboard callback on key events.
-     *
-     * @see Keyboard::KeyEvent
-     * @see Keyboard::Key
-     */
-    virtual bool keyEvent(Keyboard::KeyEvent evt, int key);
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * @see Control::getType

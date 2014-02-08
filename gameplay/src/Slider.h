@@ -11,41 +11,29 @@ namespace gameplay
 {
 
 /**
- * A slider consists of a marker that can slide along a track between two end-caps.
- * The following properties are available for sliders:
-
- @verbatim
-    slider
-    {
-        style       = <styleID>                 // A Style from the Theme.
-        position    = <x, y>                    // Position of the Control on-screen, measured in pixels.
-        size        = <width, height>           // Size of the Control, measured in pixels.
-        min         = <float>                   // The value of the left- / bottom-most point on the slider.
-        max         = <float>                   // The value of the right- / top-most point on the slider.
-        value       = <float>                   // The default position of the marker.
-        step        = <float>                   // If greater than 0, force the marker to snap to discrete multiples of 'step'.
-        text        = <string>                  // Text to display above, below or alongside the slider (depending on the style).
-        consumeEvents = <bool>                  // Whether the slider propagates input events to the Game's input event handler. Default is true.
-        // TODO: orientation = <HORIZONTAL or VERTICAL>  // Determines whether a slider is stretched along its width or its height
-    }
- @endverbatim
+ * Defines a slider control.
+ *
+ * A slider consists of a marker (grabber) that can slide along a track between two end-caps.
+ * 
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Slider : public Label
 {
     friend class Container;
+    friend class ControlFactory;
 
 public:
 
     /**
-     * Create a new slider control.
+     * Creates a new Slider.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The slider ID.
+     * @param style The slider style (optional).
      *
      * @return The new slider.
      * @script{create}
      */
-    static Slider* create(const char* id, Theme::Style* style);
+    static Slider* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Set the minimum value that can be set on this slider.
@@ -180,11 +168,16 @@ protected:
      * Create a slider with a given style and properties.
      *
      * @param style The style to apply to this slider.
-     * @param properties The properties to set on this slider.
+     * @param properties A properties object containing a definition of the slider (optional).
      *
      * @return The new slider.
      */
-    static Slider* create(Theme::Style* style, Properties* properties);
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
+
+    /**
+     * @see Control::initialize
+     */
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
      * Touch callback on touch events.  Controls return true if they consume the touch event.
@@ -230,34 +223,29 @@ protected:
     bool keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
-     * Slider overrides draw() so that it can avoid resetting the _dirty flag
-     * when a joystick is being used to change its value.
+     * @see Control::drawImages
      */
-    void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
+    unsigned int drawImages(Form* form, const Rectangle& clip);
 
     /**
-     * Draw the images associated with this control.
-     *
-     * @param spriteBatch The sprite batch containing this control's icons.
-     * @param clip The clipping rectangle of this control's parent container.
+     * @see Control::drawText
      */
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    unsigned int drawText(Form* form, const Rectangle& clip);
 
     /**
-     * Draw this slider's text.
-     *
-     * @param clip The clipping rectangle of this slider's parent container.
+     * @see Control::update
      */
-    void drawText(const Rectangle& clip);
+    void update(float elapsedTime);
 
     /**
-     * Called when a slider's properties change. Updates this slider's internal rendering
-     * properties, such as its text viewport.
-     *
-     * @param container This slider's parent container.
-     * @param offset The scroll offset of this slider's parent container.
+     * @see Control::updateState
      */
-    void update(const Control* container, const Vector2& offset);
+    void updateState(State state);
+
+    /**
+     * @see Control::updateBounds
+     */
+    void updateBounds();
 
     /**
      * The minimum value for the Slider.
@@ -283,26 +271,6 @@ protected:
      * When a gamepad is in use, this stores how much to move the slider's value.
      */
     float _delta;
-
-    /**
-     * The X coordinate of the first touch event in a sequence.
-     */
-    float _originalX;
-
-    /**
-     * The Slider's original value at the start of a sequence of touch events.
-     */
-    float _originalValue;
-
-    /**
-     * The Slider's original setting of _consumeInputEvents at the start of a sequence of touch events.
-     */
-    bool _originalConsumeInputEvents;
-
-    /**
-     * Whether the Slider's current movement has been cancelled, e.g. because the user is scrolling the parent container.
-     */
-    bool _moveCancelled;
 
     /**
      * The image for the minimum slider value.
@@ -339,24 +307,23 @@ protected:
      */
     unsigned int _valueTextPrecision;
 
-    /**
-     * The text displayed by this slider if set to display its value.
-     */
-    std::string _valueText;
-
-    // Used by gamepads to toggle Slider state between FOCUS and ACTIVE.
-    bool _selectButtonDown;
-
-    bool _directionButtonDown;
-
-    float _gamepadValue;
-
 private:
 
     /**
      * Constructor.
      */
     Slider(const Slider& copy);
+
+    void updateValue(int x, int y);
+
+    /**
+     * The text displayed by this slider if set to display its value.
+     */
+    std::string _valueText;
+
+    float _trackHeight;
+
+    float _gamepadValue;
 };
 
 }

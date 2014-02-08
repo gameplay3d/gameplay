@@ -23,6 +23,17 @@ scene terrainSampleScene
         translate = 0,25000,0
     }
 
+    node directionalLight
+    {
+        light
+        {
+            type = DIRECTIONAL
+            color = 1,1,1
+        }
+
+        rotate = 1,0,0, -45
+    }
+
 	node camera
 	{
 		camera
@@ -43,8 +54,6 @@ scene terrainSampleScene
 
 	// Basic scene lighting properties
 	ambientColor = 0.2, 0.2, 0.2
-	lightColor = 1, 1, 1
-	lightDirection = -1, -0.75, -0.75
 
 	// Set active camera
 	activeCamera = camera

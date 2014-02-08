@@ -9,11 +9,12 @@
 #define PARTICLE_COUNT_MAX                       100
 #define PARTICLE_EMISSION_RATE                   10
 #define PARTICLE_EMISSION_RATE_TIME_INTERVAL     1000.0f / (float)PARTICLE_EMISSION_RATE
+#define PARTICLE_UPDATE_RATE_MAX                 8
 
 namespace gameplay
 {
 
-ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountMax) :
+ParticleEmitter::ParticleEmitter(unsigned int particleCountMax) :
     _particleCountMax(particleCountMax), _particleCount(0), _particles(NULL),
     _emissionRate(PARTICLE_EMISSION_RATE), _started(false), _ellipsoid(false),
     _sizeStartMin(1.0f), _sizeStartMax(1.0f), _sizeEndMin(1.0f), _sizeEndMax(1.0f),
@@ -25,18 +26,13 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
     _rotationPerParticleSpeedMin(0.0f), _rotationPerParticleSpeedMax(0.0f),
     _rotationSpeedMin(0.0f), _rotationSpeedMax(0.0f),
     _rotationAxis(Vector3::zero()), _rotation(Matrix::identity()),
-    _spriteBatch(batch), _spriteTextureBlending(BLEND_TRANSPARENT),  _spriteTextureWidth(0), _spriteTextureHeight(0), _spriteTextureWidthRatio(0), _spriteTextureHeightRatio(0), _spriteTextureCoords(NULL),
+    _spriteBatch(NULL), _spriteTextureBlending(BLEND_TRANSPARENT),  _spriteTextureWidth(0), _spriteTextureHeight(0), _spriteTextureWidthRatio(0), _spriteTextureHeightRatio(0), _spriteTextureCoords(NULL),
     _spriteAnimated(false),  _spriteLooped(false), _spriteFrameCount(1), _spriteFrameRandomOffset(0),_spriteFrameDuration(0L), _spriteFrameDurationSecs(0.0f), _spritePercentPerFrame(0.0f),
     _node(NULL), _orbitPosition(false), _orbitVelocity(false), _orbitAcceleration(false),
-    _timePerEmission(PARTICLE_EMISSION_RATE_TIME_INTERVAL), _timeRunning(0)
+    _timePerEmission(PARTICLE_EMISSION_RATE_TIME_INTERVAL), _emitTime(0), _lastUpdated(0)
 {
     GP_ASSERT(particleCountMax);
     _particles = new Particle[particleCountMax];
-
-    GP_ASSERT(_spriteBatch);
-    GP_ASSERT(_spriteBatch->getStateBlock());
-    _spriteBatch->getStateBlock()->setDepthWrite(false);
-    _spriteBatch->getStateBlock()->setDepthTest(true);
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -48,7 +44,7 @@ ParticleEmitter::~ParticleEmitter()
 
 ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlending textureBlending, unsigned int particleCountMax)
 {
-    Texture* texture = Texture::create(textureFile, false);
+    Texture* texture = Texture::create(textureFile, true);
 
     if (!texture)
     {
@@ -58,23 +54,15 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     GP_ASSERT(texture->getWidth());
     GP_ASSERT(texture->getHeight());
 
-    // Use default SpriteBatch material.
-    SpriteBatch* batch =  SpriteBatch::create(texture, NULL, particleCountMax);
-    texture->release(); // batch owns the texture.
-    GP_ASSERT(batch);
+    return ParticleEmitter::create(texture, textureBlending, particleCountMax);
+}
 
-    ParticleEmitter* emitter = new ParticleEmitter(batch, particleCountMax);
+ParticleEmitter* ParticleEmitter::create(Texture* texture, TextureBlending textureBlending,  unsigned int particleCountMax)
+{
+    ParticleEmitter* emitter = new ParticleEmitter(particleCountMax);
     GP_ASSERT(emitter);
 
-    // By default assume only one frame which uses the entire texture.
-    emitter->setTextureBlending(textureBlending);
-    emitter->_spriteTextureWidth = texture->getWidth();
-    emitter->_spriteTextureHeight = texture->getHeight();
-    emitter->_spriteTextureWidthRatio = 1.0f / (float)texture->getWidth();
-    emitter->_spriteTextureHeightRatio = 1.0f / (float)texture->getHeight();
-
-    Rectangle texCoord((float)texture->getWidth(), (float)texture->getHeight());
-    emitter->setSpriteFrameCoords(1, &texCoord);
+    emitter->setTexture(texture, textureBlending);
 
     return emitter;
 }
@@ -87,7 +75,7 @@ ParticleEmitter* ParticleEmitter::create(const char* url)
         GP_ERROR("Failed to create particle emitter from file.");
         return NULL;
     }
-
+    
     ParticleEmitter* particle = create((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
     SAFE_DELETE(properties);
 
@@ -212,6 +200,61 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
     return emitter;
 }
 
+void ParticleEmitter::setTexture(const char* texturePath, TextureBlending textureBlending)
+{
+    Texture* texture = Texture::create(texturePath, true);
+    if (texture)
+    {
+        setTexture(texture, textureBlending);
+        texture->release();
+    }
+    else
+    {
+        GP_WARN("Failed set new texture on particle emitter: %s", texturePath);
+    }
+}
+
+void ParticleEmitter::setTexture(Texture* texture, TextureBlending textureBlending)
+{
+    // Create new batch before releasing old one, in case the same texture
+    // is used for both (so it's not released before passing to the new batch).
+    SpriteBatch* batch =  SpriteBatch::create(texture, NULL, _particleCountMax);
+    batch->getSampler()->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
+
+    // Free existing batch
+    SAFE_DELETE(_spriteBatch);
+
+    _spriteBatch = batch;
+    _spriteBatch->getStateBlock()->setDepthWrite(false);
+    _spriteBatch->getStateBlock()->setDepthTest(true);
+
+    setTextureBlending(textureBlending);
+    _spriteTextureWidth = texture->getWidth();
+    _spriteTextureHeight = texture->getHeight();
+    _spriteTextureWidthRatio = 1.0f / (float)texture->getWidth();
+    _spriteTextureHeightRatio = 1.0f / (float)texture->getHeight();
+
+    // By default assume only one frame which uses the entire texture.
+    Rectangle texCoord((float)texture->getWidth(), (float)texture->getHeight());
+    setSpriteFrameCoords(1, &texCoord);
+}
+
+Texture* ParticleEmitter::getTexture() const
+{
+    Texture::Sampler* sampler = _spriteBatch ? _spriteBatch->getSampler() : NULL;
+    return sampler? sampler->getTexture() : NULL;
+}
+
+void ParticleEmitter::setParticleCountMax(unsigned int max)
+{
+    _particleCountMax = max;
+}
+
+unsigned int ParticleEmitter::getParticleCountMax() const
+{
+    return _particleCountMax;
+}
+
 unsigned int ParticleEmitter::getEmissionRate() const
 {
     return _emissionRate;
@@ -227,6 +270,7 @@ void ParticleEmitter::setEmissionRate(unsigned int rate)
 void ParticleEmitter::start()
 {
     _started = true;
+    _lastUpdated = 0;
 }
 
 void ParticleEmitter::stop()
@@ -247,18 +291,7 @@ bool ParticleEmitter::isActive() const
     if (!_node)
         return false;
 
-    GP_ASSERT(_particles);
-    bool active = false;
-    for (unsigned int i = 0; i < _particleCount; i++)
-    {
-        if (_particles[i]._energy > 0)
-        {
-            active = true;
-            break;
-        }
-    }
-
-    return active;
+    return (_particleCount > 0);
 }
 
 void ParticleEmitter::emitOnce(unsigned int particleCount)
@@ -285,7 +318,6 @@ void ParticleEmitter::emitOnce(unsigned int particleCount)
     for (unsigned int i = 0; i < particleCount; i++)
     {
         Particle* p = &_particles[_particleCount];
-        p->_visible = true;
 
         generateColor(_colorStart, _colorStartVar, &p->_colorStart);
         generateColor(_colorEnd, _colorEndVar, &p->_colorEnd);
@@ -553,6 +585,13 @@ void ParticleEmitter::setTextureBlending(TextureBlending textureBlending)
             GP_ERROR("Unsupported texture blending mode (%d).", textureBlending);
             break;
     }
+
+    _spriteTextureBlending = textureBlending;
+}
+
+ParticleEmitter::TextureBlending ParticleEmitter::getTextureBlending() const
+{
+    return _spriteTextureBlending;
 }
 
 void ParticleEmitter::setSpriteAnimated(bool animated)
@@ -597,6 +636,16 @@ long ParticleEmitter::getSpriteFrameDuration() const
     return _spriteFrameDuration;
 }
 
+unsigned int ParticleEmitter::getSpriteWidth() const
+{
+    return (unsigned int)fabs(_spriteTextureWidth * (_spriteTextureCoords[2] - _spriteTextureCoords[0]));
+}
+
+unsigned int ParticleEmitter::getSpriteHeight() const
+{
+    return (unsigned int)fabs(_spriteTextureHeight * (_spriteTextureCoords[3] - _spriteTextureCoords[1]));
+}
+
 void ParticleEmitter::setSpriteTexCoords(unsigned int frameCount, float* texCoords)
 {
     GP_ASSERT(frameCount);
@@ -636,8 +685,6 @@ void ParticleEmitter::setSpriteFrameCoords(unsigned int frameCount, int width, i
     GP_ASSERT(width);
     GP_ASSERT(height);
 
-    int x;
-    int y;
     Rectangle* frameCoords = new Rectangle[frameCount];
     unsigned int cols = _spriteTextureWidth / width;
     unsigned int rows = _spriteTextureHeight / height;
@@ -645,10 +692,10 @@ void ParticleEmitter::setSpriteFrameCoords(unsigned int frameCount, int width, i
     unsigned int n = 0;
     for (unsigned int i = 0; i < rows; ++i)
     {
-        y = i * height;
+        int y = i * height;
         for (unsigned int j = 0; j < cols; ++j)
         {
-            x = j * width;
+            int x = j * width;
             frameCoords[i*cols + j] = Rectangle(x, y, width, height);
             if (++n == frameCount)
             {
@@ -667,6 +714,11 @@ void ParticleEmitter::setSpriteFrameCoords(unsigned int frameCount, int width, i
     SAFE_DELETE_ARRAY(frameCoords);
 }
 
+unsigned int ParticleEmitter::getSpriteFrameCount() const
+{
+    return _spriteFrameCount;
+}
+
 Node* ParticleEmitter::getNode() const
 {
     return _node;
@@ -683,6 +735,21 @@ void ParticleEmitter::setOrbit(bool orbitPosition, bool orbitVelocity, bool orbi
     _orbitPosition = orbitPosition;
     _orbitVelocity = orbitVelocity;
     _orbitAcceleration = orbitAcceleration;
+}
+
+bool ParticleEmitter::getOrbitPosition() const
+{
+    return _orbitPosition;
+}
+
+bool ParticleEmitter::getOrbitVelocity() const
+{
+    return _orbitVelocity;
+}
+
+bool ParticleEmitter::getOrbitAcceleration() const
+{
+    return _orbitAcceleration;
 }
 
 long ParticleEmitter::generateScalar(long min, long max)
@@ -792,41 +859,46 @@ ParticleEmitter::TextureBlending ParticleEmitter::getTextureBlendingFromString(c
 void ParticleEmitter::update(float elapsedTime)
 {
     if (!isActive())
-    {
         return;
-    }
 
-    // Calculate the time passed since last update.
-    float elapsedSecs = elapsedTime * 0.001f;
+    // Cap particle updates at a maximum rate. This saves processing
+    // and also improves precision since updating with very small
+    // time increments is more lossy.
+    static double runningTime = 0;
+    runningTime += elapsedTime;
+    if (runningTime < PARTICLE_UPDATE_RATE_MAX)
+        return;    
+
+    float elapsedMs = runningTime;
+    runningTime = 0;
+
+    float elapsedSecs = elapsedMs * 0.001f;
 
     if (_started && _emissionRate)
     {
         // Calculate how much time has passed since we last emitted particles.
-        _timeRunning += elapsedTime;
+        _emitTime += elapsedMs; //+= elapsedTime;
 
         // How many particles should we emit this frame?
         GP_ASSERT(_timePerEmission);
-        unsigned int emitCount = (unsigned int)(_timeRunning / _timePerEmission);
+        unsigned int emitCount = (unsigned int)(_emitTime / _timePerEmission);
 
         if (emitCount)
         {
             if ((int)_timePerEmission > 0)
             {
-                _timeRunning = fmod(_timeRunning, (double)_timePerEmission);
+                _emitTime = fmod((double)_emitTime, (double)_timePerEmission);
             }
             emitOnce(emitCount);
         }
     }
-
-    GP_ASSERT(_node && _node->getScene() && _node->getScene()->getActiveCamera());
-    const Frustum& frustum = _node->getScene()->getActiveCamera()->getFrustum();
 
     // Now update all currently living particles.
     GP_ASSERT(_particles);
     for (unsigned int particlesIndex = 0; particlesIndex < _particleCount; ++particlesIndex)
     {
         Particle* p = &_particles[particlesIndex];
-        p->_energy -= elapsedTime;
+        p->_energy -= elapsedMs;
 
         if (p->_energy > 0L)
         {
@@ -846,12 +918,6 @@ void ParticleEmitter::update(float elapsedTime)
             p->_position.x += p->_velocity.x * elapsedSecs;
             p->_position.y += p->_velocity.y * elapsedSecs;
             p->_position.z += p->_velocity.z * elapsedSecs;
-
-            if (!frustum.intersects(p->_position))
-            {
-                p->_visible = false;
-                continue;
-            }
 
             p->_angle += p->_rotationPerParticleSpeed * elapsedSecs;
 
@@ -913,12 +979,10 @@ void ParticleEmitter::update(float elapsedTime)
     }
 }
 
-void ParticleEmitter::draw()
+unsigned int ParticleEmitter::draw()
 {
     if (!isActive())
-    {
-        return;
-    }
+        return 0;
 
     if (_particleCount > 0)
     {
@@ -951,17 +1015,57 @@ void ParticleEmitter::draw()
         {
             Particle* p = &_particles[i];
 
-            if (p->_visible)
-            {
-                _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
-                                   _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
-                                   p->_color, pivot, p->_angle);
-            }
+            _spriteBatch->draw(p->_position, right, up, p->_size, p->_size,
+                                _spriteTextureCoords[p->_frame * 4], _spriteTextureCoords[p->_frame * 4 + 1], _spriteTextureCoords[p->_frame * 4 + 2], _spriteTextureCoords[p->_frame * 4 + 3],
+                                p->_color, pivot, p->_angle);
         }
 
         // Render.
         _spriteBatch->finish();
     }
+    return 1;
+}
+
+ParticleEmitter* ParticleEmitter::clone()
+{
+    // Create a clone of this emitter
+    ParticleEmitter* emitter = ParticleEmitter::create(_spriteBatch->getSampler()->getTexture(), _spriteTextureBlending, _particleCountMax);
+
+    // Copy all properties to the clone
+    emitter->setEmissionRate(_emissionRate);
+    emitter->_ellipsoid = _ellipsoid;
+    emitter->_sizeStartMin = _sizeStartMin;
+    emitter->_sizeStartMax = _sizeStartMax;
+    emitter->_sizeEndMin = _sizeEndMin;
+    emitter->_sizeEndMax = _sizeEndMax;
+    emitter->_energyMin = _energyMin;
+    emitter->_energyMax = _energyMax;
+    emitter->_colorStart = _colorStart;
+    emitter->_colorStartVar = _colorStartVar;
+    emitter->_colorEnd = _colorEnd;
+    emitter->_colorEndVar = _colorEndVar;
+    emitter->_position = _position;
+    emitter->_positionVar = _positionVar;
+    emitter->_velocity = _velocity;
+    emitter->_velocityVar = _velocityVar;
+    emitter->_acceleration = _acceleration;
+    emitter->_accelerationVar = _accelerationVar;
+    emitter->_rotationPerParticleSpeedMin = _rotationPerParticleSpeedMin;
+    emitter->_rotationPerParticleSpeedMax = _rotationPerParticleSpeedMax;
+    emitter->_rotationSpeedMin = _rotationSpeedMin;
+    emitter->_rotationSpeedMax = _rotationSpeedMax;
+    emitter->_rotationAxis = _rotationAxis;
+    emitter->_rotationAxisVar = _rotationAxisVar;
+    emitter->setSpriteTexCoords(_spriteFrameCount, _spriteTextureCoords);
+    emitter->_spriteAnimated = _spriteAnimated;
+    emitter->_spriteLooped = _spriteLooped;
+    emitter->_spriteFrameRandomOffset = _spriteFrameRandomOffset;
+    emitter->setSpriteFrameDuration(_spriteFrameDuration);
+    emitter->_orbitPosition = _orbitPosition;
+    emitter->_orbitVelocity = _orbitVelocity;
+    emitter->_orbitAcceleration = _orbitAcceleration;
+
+    return emitter;
 }
 
 }

@@ -53,6 +53,16 @@ Pass* Technique::getPass(const char* id) const
     return NULL;
 }
 
+void Technique::setNodeBinding(Node* node)
+{
+    RenderState::setNodeBinding(node);
+
+    for (size_t i = 0, count = _passes.size(); i < count; ++i)
+    {
+        _passes[i]->setNodeBinding(node);
+    }
+}
+
 Technique* Technique::clone(Material* material, NodeCloneContext &context) const
 {
     Technique* technique = new Technique(getId(), material);

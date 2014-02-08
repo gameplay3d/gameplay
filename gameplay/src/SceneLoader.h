@@ -11,7 +11,8 @@ namespace gameplay
 {
 
 /**
- * Helper class for loading scenes from .scene files.
+ * Defines an internal helper class for loading scenes from .scene files.
+ *
  * @script{ignore}
  */
 class SceneLoader
@@ -59,10 +60,11 @@ private:
             URL = 1024
         };
 
-        SceneNodeProperty(Type type, const std::string& url, int index);
+        SceneNodeProperty(Type type, const std::string& value, int index, bool isUrl);
 
         Type _type;
-        std::string _url;
+        std::string _value;
+        bool _isUrl;
         int _index;
     };
 
@@ -72,28 +74,40 @@ private:
 
         const char* _nodeID;
         bool _exactMatch;
-        std::vector<Node*> _nodes;
+        Properties* _namespace;
+        std::vector<Node*> _nodes; // list of nodes sharing properties defined in this SceneNode
+        std::vector<SceneNode> _children; // list of unique child nodes
         std::vector<SceneNodeProperty> _properties;
         std::map<std::string, std::string> _tags;
     };
 
+    SceneLoader();
+
     Scene* loadInternal(const char* url);
+
+    void applyTags(SceneNode& sceneNode);
 
     void addSceneAnimation(const char* animationID, const char* targetID, const char* url);
 
-    void addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* url = NULL, int index = 0);
+    void addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* value = NULL, bool supportsUrl = false, int index = 0);
 
-    void applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags);
+    void applyNodeProperties(const Properties* sceneProperties, unsigned int typeFlags);
 
-    void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp, const Scene* scene);
+    void applyNodeProperties(SceneNode& sceneNode, const Properties* sceneProperties, unsigned int typeFlags);
 
-    void applyNodeUrls(Scene* scene);
+    void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp);
+
+    void applyNodeUrls();
+
+    void applyNodeUrls(SceneNode& sceneNode, Node* parent);
 
     void buildReferenceTables(Properties* sceneProperties);
 
+    void parseNode(Properties* ns, SceneNode* parent, const std::string& path);
+
     void calculateNodesWithMeshRigidBodies(const Properties* sceneProperties);
 
-    void createAnimations(const Scene* scene);
+    void createAnimations();
 
     PhysicsConstraint* loadGenericConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
 
@@ -101,7 +115,7 @@ private:
 
     Scene* loadMainSceneData(const Properties* sceneProperties);
 
-    void loadPhysics(Properties* physics, Scene* scene);
+    void loadPhysics(Properties* physics);
 
     void loadReferencedFiles();
 
@@ -109,12 +123,13 @@ private:
 
     PhysicsConstraint* loadSpringConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
 
-    std::map<std::string, Properties*> _propertiesFromFile;      // Holds the properties object for a given file.
-    std::map<std::string, Properties*> _properties;              // Holds the properties object for a given URL.
-    std::vector<SceneAnimation> _animations;                     // Holds the animations declared in the .scene file.
-    std::vector<SceneNode> _sceneNodes;                          // Holds all the nodes+properties declared in the .scene file.
-    std::string _gpbPath;                                        // The path of the main GPB for the scene being loaded.
-    std::string _path;                                           // The path of the scene file being loaded.
+    std::map<std::string, Properties*> _propertiesFromFile; // Holds the properties object for a given file.
+    std::map<std::string, Properties*> _properties;         // Holds the properties object for a given URL.
+    std::vector<SceneAnimation> _animations;                // Holds the animations declared in the .scene file.
+    std::vector<SceneNode> _sceneNodes;                     // Holds all the nodes+properties declared in the .scene file.
+    std::string _gpbPath;                                   // The path of the main GPB for the scene being loaded.
+    std::string _path;                                      // The path of the scene file being loaded.
+    Scene* _scene;                                          // The scene being loaded
 };
 
 /**

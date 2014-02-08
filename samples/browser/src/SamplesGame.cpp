@@ -16,7 +16,7 @@ SamplesGame::SamplesGame()
 
 void SamplesGame::initialize()
 {
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     for (size_t i = 0; i < _categories->size(); ++i)
     {
@@ -26,30 +26,17 @@ void SamplesGame::initialize()
     // Load camera script
     getScriptController()->loadScript("res/common/camera.lua");
 
-    // Construct a form for selecting which sample to run.
-    Theme* theme = Theme::create("res/common/default.theme");
-    Theme::Style* formStyle = theme->getStyle("basicContainer");
-    Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
-    Theme::Style* titleStyle = theme->getStyle("title");
-
-    // Note: this calls addRef() on formStyle's Theme, which we created above.
-    _sampleSelectForm = Form::create("sampleSelect", formStyle, Layout::LAYOUT_VERTICAL);
-    theme->release();   // So we can release it once we're done creating forms with it.
-
-    _sampleSelectForm->setAutoHeight(true);
-    _sampleSelectForm->setWidth(200.0f);
+    // Create the selection form
+    _sampleSelectForm = Form::create("sampleSelect", NULL, Layout::LAYOUT_VERTICAL);
+    _sampleSelectForm->setWidth(220);
+    _sampleSelectForm->setHeight(1, true);
     _sampleSelectForm->setScroll(Container::SCROLL_VERTICAL);
-    _sampleSelectForm->setConsumeInputEvents(true);
-
     const size_t size = _samples->size();
     for (size_t i = 0; i < size; ++i)
     {
-        Label* categoryLabel = Label::create((*_categories)[i].c_str(), titleStyle);
-        categoryLabel->setAutoWidth(true);
-        categoryLabel->setTextAlignment(Font::ALIGN_BOTTOM_LEFT);
-        categoryLabel->setHeight(40);
+		Label* categoryLabel = Label::create((*_categories)[i].c_str());
+        categoryLabel->setFontSize(22);
         categoryLabel->setText((*_categories)[i].c_str());
-        categoryLabel->setConsumeInputEvents(false);
         _sampleSelectForm->addControl(categoryLabel);
         categoryLabel->release();
 
@@ -58,17 +45,16 @@ void SamplesGame::initialize()
         for (size_t j = 0; j < listSize; ++j)
         {
             SampleRecord sampleRecord = list[j];
-            Button* sampleButton = Button::create(sampleRecord.title.c_str(), buttonStyle);
+			Button* sampleButton = Button::create(sampleRecord.title.c_str());
             sampleButton->setText(sampleRecord.title.c_str());
-            sampleButton->setAutoWidth(true);
-            sampleButton->setHeight(60);      // Tall enough to touch easily on a BB10 device.
-            sampleButton->setConsumeInputEvents(false);   // This lets the user scroll the container if they swipe starting from a button.
+            sampleButton->setWidth(1, true);
+            sampleButton->setHeight(50);
             sampleButton->addListener(this, Control::Listener::CLICK);
             _sampleSelectForm->addControl(sampleButton);
             sampleButton->release();
         }
     }
-    _sampleSelectForm->setState(Control::FOCUS);
+    _sampleSelectForm->setFocus();
 
     // Disable virtual gamepads.
     unsigned int gamepadCount = getGamepadCount();
@@ -206,6 +192,24 @@ void SamplesGame::gestureTapEvent(int x, int y)
         _activeSample->gestureTapEvent(x, y);
 }
 
+void SamplesGame::gestureLongTapEvent(int x, int y, float duration)
+{
+	if (_activeSample)
+		_activeSample->gestureLongTapEvent(x, y, duration);
+}
+
+void SamplesGame::gestureDragEvent(int x, int y)
+{
+	if (_activeSample)
+		_activeSample->gestureDragEvent(x, y);
+}
+
+void SamplesGame::gestureDropEvent(int x, int y)
+{
+	if (_activeSample)
+		_activeSample->gestureDropEvent(x, y);
+}
+
 void SamplesGame::controlEvent(Control* control, EventType evt)
 {
     const size_t size = _samples->size();
@@ -257,7 +261,7 @@ void SamplesGame::exitActiveSample()
         SAFE_DELETE(_activeSample);
 
         _sampleSelectForm->setEnabled(true);
-        _sampleSelectForm->setState(Control::FOCUS);
+        _sampleSelectForm->setFocus();
     }
 
     // Reset some game options

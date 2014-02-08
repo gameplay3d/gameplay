@@ -4,7 +4,7 @@
 #include "Button.h"
 #include "Platform.h"
 #include "Form.h"
-#include "Joystick.h"
+#include "JoystickControl.h"
 
 namespace gameplay
 {
@@ -19,7 +19,6 @@ Gamepad::Gamepad(const char* formPath)
     _form = Form::create(formPath);
     GP_ASSERT(_form);
     _form->setConsumeInputEvents(false);
-    _form->_isGamepad = true;
     _vendorString = "None";
     _productString = "Virtual";
 
@@ -140,7 +139,7 @@ void Gamepad::bindGamepadControls(Container* container)
         }
         else if (std::strcmp("joystick", control->getType()) == 0)
         {
-            Joystick* joystick = (Joystick*)control;
+            JoystickControl* joystick = (JoystickControl*)control;
             joystick->setConsumeInputEvents(true);
             _uiJoysticks[joystick->getIndex()] = joystick;
             _joystickCount++;
@@ -149,6 +148,7 @@ void Gamepad::bindGamepadControls(Container* container)
         {
             Button* button = (Button*)control;
             button->setConsumeInputEvents(true);
+            button->setCanFocus(false);
             _uiButtons[button->getDataBinding()] = button;
             _buttonCount++;
         }
@@ -336,7 +336,7 @@ void Gamepad::getJoystickValues(unsigned int joystickId, Vector2* outValue) cons
 
     if (_form)
     {
-        Joystick* joystick = _uiJoysticks[joystickId];
+        JoystickControl* joystick = _uiJoysticks[joystickId];
         if (joystick)
         {
             const Vector2& value = joystick->getValue();

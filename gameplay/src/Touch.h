@@ -5,11 +5,16 @@ namespace gameplay
 {
 
 /**
- * Touch event
+ * Defines a touch screen event.
  */
 class Touch
 {
 public:
+
+    /**
+     * Maximum simultaneous touch points supported.
+     */
+    static const unsigned int MAX_TOUCH_POINTS = 10;
 
     /**
      * The touch event type.

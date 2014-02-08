@@ -1,44 +1,49 @@
 particle explosion
 {
-    // Sprite properties.
     sprite
     {
-        path = res/explosion.png
+        path = explosion.png
         width = 64
         height = 64
-        frameCount = 16
-        frameDuration = 25
-        frameRandomOffset = 4
-        looped = false
-        animated = true
         blending = ADDITIVE
+        animated = true
+        looped = false
+        frameCount = 16
+        frameRandomOffset = 4
+        frameDuration = 25
     }
-    
-    // Emitter
+
     particleCountMax = 5000
     emissionRate = 50
+    ellipsoid = false
     orbitPosition = false
     orbitVelocity = false
     orbitAcceleration = false
-    ellipsoid = false
-
-    // Scalar properties.
     sizeStartMin = 5
     sizeStartMax = 5
     sizeEndMin = 5
     sizeEndMax = 5
     energyMin = 1000
     energyMax = 1200
+    colorStart = 1, 1, 1, 0.5
+    colorStartVar = 0, 0, 0, 0
+    colorEnd = 1, 1, 1, 0
+    colorEndVar = 0, 0, 0, 0
+    position = 0, 0, 0
+    positionVar = 2, 2, 2
+    velocity = 0, 0, 0
+    velocityVar = 6, 6, 6
+    acceleration = 0, 0, 0
+    accelerationVar = 0, 0, 0
     rotationPerParticleSpeedMin = -0.5
     rotationPerParticleSpeedMax = 0.5
 
-    // Vector properties.
-    colorStart = 1, 1, 1, 0.5
-    colorEnd = 1, 1, 1, 0
-    position = 0, 0, 0
-    positionVar = 2, 2, 2
-    velocity = 0, 0, 0.0
-    velocityVar = 6.0, 6.0, 6.0
-    acceleration = 0.0, 0.0, 0.0
-    accelerationVar = 0.0, 0.0, 0.0
+    editor
+    {
+        cameraTranslation = 0, 0, 0
+        cameraZoom = 0, 0, 19
+        cameraRotation = 0, 0, 0, 0
+        sizeMax = 5
+        energyMax = 1500
+    }
 }

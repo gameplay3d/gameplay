@@ -67,7 +67,7 @@ CreateSceneSample::CreateSceneSample()
 void CreateSceneSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Create a new empty scene.
     _scene = Scene::create();
@@ -88,7 +88,7 @@ void CreateSceneSample::initialize()
     cameraNode->rotateX(MATH_DEG_TO_RAD(-11.25f));
 
     // Create a white light.
-    Light* light = Light::createDirectional(1.0f, 1.0f, 1.0f);
+    Light* light = Light::createDirectional(0.75f, 0.75f, 0.75f);
     Node* lightNode = _scene->addNode("light");
     lightNode->setLight(light);
     // Release the light because the node now holds a reference to it.
@@ -102,22 +102,21 @@ void CreateSceneSample::initialize()
     SAFE_RELEASE(cubeMesh);
 
     // Create the material for the cube model and assign it to the first mesh part.
-    Material* material = cubeModel->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", 0);
+    Material* material = cubeModel->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "DIRECTIONAL_LIGHT_COUNT 1");
 
     // These parameters are normally set in a .material file but this example sets them programmatically.
     // Bind the uniform "u_worldViewProjectionMatrix" to use the WORLD_VIEW_PROJECTION_MATRIX from the scene's active camera and the node that the model belongs to.
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
     material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
-
-    // Bind the light's direction to the material.
-    material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
-    // Bind the light's color to the material.
-    material->getParameter("u_lightColor")->setValue(lightNode->getLight()->getColor());
     // Set the ambient color of the material.
-    material->getParameter("u_ambientColor")->setValue(Vector3(1, 1, 1));
+    material->getParameter("u_ambientColor")->setValue(Vector3(0.2f, 0.2f, 0.2f));
+
+    // Bind the light's color and direction to the material.
+    material->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
+    material->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorWorld);
 
     // Load the texture from file.
-    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/png/box-diffuse.png", true);
+    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/png/crate.png", true);
     sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
     material->getStateBlock()->setCullFace(true);
     material->getStateBlock()->setDepthTest(true);
@@ -138,7 +137,7 @@ void CreateSceneSample::finalize()
 void CreateSceneSample::update(float elapsedTime)
 {
     // Rotate the directional light.
-    _cubeNode->rotateY(elapsedTime * 0.002 * MATH_PI);
+    _cubeNode->rotateY(elapsedTime * 0.001 * MATH_PI);
 }
 
 void CreateSceneSample::render(float elapsedTime)

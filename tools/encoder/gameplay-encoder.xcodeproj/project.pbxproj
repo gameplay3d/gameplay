@@ -10,9 +10,16 @@
 		4228A3FF1620A5A300955433 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4228A3FE1620A5A300955433 /* Cocoa.framework */; };
 		4228A4011620A5EC00955433 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4228A4001620A5EC00955433 /* SystemConfiguration.framework */; };
 		4228A4031620A63F00955433 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4228A4021620A63F00955433 /* libiconv.dylib */; };
+		422BF0861804C16E0028D009 /* libm.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 422BF0851804C16E0028D009 /* libm.dylib */; };
+		422BF0881804C1E40028D009 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 422BF0871804C1E40028D009 /* libbz2.dylib */; };
+		422BF0901804C5230028D009 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 422BF08F1804C5230028D009 /* libstdc++.dylib */; };
+		422BF0921804C7060028D009 /* libfbxsdk-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 422BF0911804C7060028D009 /* libfbxsdk-static.a */; };
 		4251B12C152D044B002F6199 /* Curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4251B128152D044B002F6199 /* Curve.cpp */; };
+		4262783C180491D60015672B /* edtaa3func.c in Sources */ = {isa = PBXBuildFile; fileRef = 4262783A180491D60015672B /* edtaa3func.c */; };
 		42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */; };
 		4283905914896E6C00E2B2F5 /* BoundingVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4283905714896E6C00E2B2F5 /* BoundingVolume.cpp */; };
+		42C0CE9C1804829E006B2F23 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C0CE9B1804829E006B2F23 /* libpng.a */; };
+		42C0CE9E180482B8006B2F23 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C0CE9D180482B8006B2F23 /* libfreetype.a */; };
 		42C8EE0A14724CD700E43619 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDB714724CD700E43619 /* Animation.cpp */; };
 		42C8EE0B14724CD700E43619 /* AnimationChannel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDB914724CD700E43619 /* AnimationChannel.cpp */; };
 		42C8EE0C14724CD700E43619 /* Animations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBB14724CD700E43619 /* Animations.cpp */; };
@@ -49,16 +56,13 @@
 		42C8EE3114724CD700E43619 /* Vector4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EE0414724CD700E43619 /* Vector4.cpp */; };
 		42C8EE3214724CD700E43619 /* Vertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EE0614724CD700E43619 /* Vertex.cpp */; };
 		42C8EE3314724CD700E43619 /* VertexElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EE0814724CD700E43619 /* VertexElement.cpp */; };
-		42C8EE351472B60100E43619 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C8EE341472B60100E43619 /* libfreetype.a */; };
 		42C8EE371472D7E700E43619 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C8EE361472D7E700E43619 /* libxml2.dylib */; };
 		42C8EE391472DAA300E43619 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C8EE381472DAA300E43619 /* libz.dylib */; };
-		42C8EE3B1472DAAE00E43619 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C8EE3A1472DAAE00E43619 /* libbz2.dylib */; };
-		42D277591472EFA700D867A4 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277571472EFA700D867A4 /* libpcre.a */; };
-		42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277581472EFA700D867A4 /* libpcrecpp.a */; };
-		5BCD0643152CFC3C0071FAB5 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCD0642152CFC3C0071FAB5 /* libpng.a */; };
-		9F92DB1016CB0F29003B2974 /* libfbxsdk-2013.3-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F92DB0F16CB0F29003B2974 /* libfbxsdk-2013.3-static.a */; };
 		B661733F16A61CE40083A307 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661733D16A61CE40083A307 /* Image.cpp */; };
 		B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */; };
+		C076C905174F6D2E00645678 /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C8FF174F6D2E00645678 /* Constants.cpp */; };
+		C076C906174F6D2E00645678 /* FBXUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C901174F6D2E00645678 /* FBXUtil.cpp */; };
+		C076C907174F6D2E00645678 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C903174F6D2E00645678 /* Sampler.cpp */; };
 		F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F18DCD0315D554B800DB35DB /* Heightmap.cpp */; };
 /* End PBXBuildFile section */
 
@@ -77,13 +81,18 @@
 /* Begin PBXFileReference section */
 		4228A3FE1620A5A300955433 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4228A4001620A5EC00955433 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		4228A4021620A63F00955433 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = ../../../../../usr/lib/libiconv.dylib; sourceTree = "<group>"; };
+		4228A4021620A63F00955433 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<group>"; };
+		422BF0851804C16E0028D009 /* libm.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libm.dylib; path = ../../../../../../usr/lib/libm.dylib; sourceTree = "<group>"; };
+		422BF0871804C1E40028D009 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = ../../../../../../usr/lib/libbz2.dylib; sourceTree = "<group>"; };
+		422BF08F1804C5230028D009 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "../../../../../../usr/lib/libstdc++.dylib"; sourceTree = "<group>"; };
+		422BF0911804C7060028D009 /* libfbxsdk-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk-static.a"; path = "../../../../../../Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/release/libfbxsdk-static.a"; sourceTree = "<group>"; };
 		42475CE6147208A000610A6A /* gameplay-encoder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gameplay-encoder"; sourceTree = BUILT_PRODUCTS_DIR; };
-		42475D7B14720ECE00610A6A /* libdom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdom.a; path = "../external-deps/collada-dom/lib/macosx/libdom.a"; sourceTree = "<group>"; };
 		4251B128152D044B002F6199 /* Curve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Curve.cpp; path = src/Curve.cpp; sourceTree = SOURCE_ROOT; };
 		4251B129152D044B002F6199 /* Curve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Curve.h; path = src/Curve.h; sourceTree = SOURCE_ROOT; };
 		4251B12A152D044B002F6199 /* Curve.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Curve.inl; path = src/Curve.inl; sourceTree = SOURCE_ROOT; };
 		4251B12B152D044B002F6199 /* Quaternion.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Quaternion.inl; path = src/Quaternion.inl; sourceTree = SOURCE_ROOT; };
+		4262783A180491D60015672B /* edtaa3func.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = edtaa3func.c; path = src/edtaa3func.c; sourceTree = SOURCE_ROOT; };
+		4262783B180491D60015672B /* edtaa3func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = edtaa3func.h; path = src/edtaa3func.h; sourceTree = SOURCE_ROOT; };
 		4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FBXSceneEncoder.cpp; path = src/FBXSceneEncoder.cpp; sourceTree = SOURCE_ROOT; };
 		4278341F148D6F7500A6E27F /* FBXSceneEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBXSceneEncoder.h; path = src/FBXSceneEncoder.h; sourceTree = SOURCE_ROOT; };
 		42783420148D6F7500A6E27F /* Vector2.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Vector2.inl; path = src/Vector2.inl; sourceTree = SOURCE_ROOT; };
@@ -91,6 +100,8 @@
 		42783422148D6F7500A6E27F /* Vector4.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Vector4.inl; path = src/Vector4.inl; sourceTree = SOURCE_ROOT; };
 		4283905714896E6C00E2B2F5 /* BoundingVolume.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoundingVolume.cpp; path = src/BoundingVolume.cpp; sourceTree = SOURCE_ROOT; };
 		4283905814896E6C00E2B2F5 /* BoundingVolume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BoundingVolume.h; path = src/BoundingVolume.h; sourceTree = SOURCE_ROOT; };
+		42C0CE9B1804829E006B2F23 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/png/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		42C0CE9D180482B8006B2F23 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "../../external-deps/freetype2/lib/macosx/libfreetype.a"; sourceTree = "<group>"; };
 		42C8EDB714724CD700E43619 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Animation.cpp; path = src/Animation.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDB814724CD700E43619 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animation.h; path = src/Animation.h; sourceTree = SOURCE_ROOT; };
 		42C8EDB914724CD700E43619 /* AnimationChannel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AnimationChannel.cpp; path = src/AnimationChannel.cpp; sourceTree = SOURCE_ROOT; };
@@ -162,18 +173,18 @@
 		42C8EE0714724CD700E43619 /* Vertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vertex.h; path = src/Vertex.h; sourceTree = SOURCE_ROOT; };
 		42C8EE0814724CD700E43619 /* VertexElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexElement.cpp; path = src/VertexElement.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EE0914724CD700E43619 /* VertexElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexElement.h; path = src/VertexElement.h; sourceTree = SOURCE_ROOT; };
-		42C8EE341472B60100E43619 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "../external-deps/freetype2/lib/macosx/libfreetype.a"; sourceTree = "<group>"; };
 		42C8EE361472D7E700E43619 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		42C8EE381472DAA300E43619 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		42C8EE3A1472DAAE00E43619 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
-		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
-		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
-		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
-		9F92DB0F16CB0F29003B2974 /* libfbxsdk-2013.3-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk-2013.3-static.a"; path = "../../../../../Applications/Autodesk/FBX SDK/2013.3/lib/gcc4/ub/libfbxsdk-2013.3-static.a"; sourceTree = "<group>"; };
 		B661733D16A61CE40083A307 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = src/Image.cpp; sourceTree = SOURCE_ROOT; };
 		B661733E16A61CE40083A307 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = src/Image.h; sourceTree = SOURCE_ROOT; };
 		B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalMapGenerator.cpp; path = src/NormalMapGenerator.cpp; sourceTree = SOURCE_ROOT; };
 		B661734216A61CFA0083A307 /* NormalMapGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NormalMapGenerator.h; path = src/NormalMapGenerator.h; sourceTree = SOURCE_ROOT; };
+		C076C8FF174F6D2E00645678 /* Constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Constants.cpp; path = src/Constants.cpp; sourceTree = SOURCE_ROOT; };
+		C076C900174F6D2E00645678 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = src/Constants.h; sourceTree = SOURCE_ROOT; };
+		C076C901174F6D2E00645678 /* FBXUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FBXUtil.cpp; path = src/FBXUtil.cpp; sourceTree = SOURCE_ROOT; };
+		C076C902174F6D2E00645678 /* FBXUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBXUtil.h; path = src/FBXUtil.h; sourceTree = SOURCE_ROOT; };
+		C076C903174F6D2E00645678 /* Sampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sampler.cpp; path = src/Sampler.cpp; sourceTree = SOURCE_ROOT; };
+		C076C904174F6D2E00645678 /* Sampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sampler.h; path = src/Sampler.h; sourceTree = SOURCE_ROOT; };
 		F18DCD0315D554B800DB35DB /* Heightmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Heightmap.cpp; path = src/Heightmap.cpp; sourceTree = SOURCE_ROOT; };
 		F18DCD0415D554B800DB35DB /* Heightmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Heightmap.h; path = src/Heightmap.h; sourceTree = SOURCE_ROOT; };
 		F18DCD0515D554B800DB35DB /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thread.h; path = src/Thread.h; sourceTree = SOURCE_ROOT; };
@@ -184,15 +195,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F92DB1016CB0F29003B2974 /* libfbxsdk-2013.3-static.a in Frameworks */,
-				42D277591472EFA700D867A4 /* libpcre.a in Frameworks */,
-				42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */,
-				42C8EE351472B60100E43619 /* libfreetype.a in Frameworks */,
-				42C8EE3B1472DAAE00E43619 /* libbz2.dylib in Frameworks */,
 				42C8EE391472DAA300E43619 /* libz.dylib in Frameworks */,
 				42C8EE371472D7E700E43619 /* libxml2.dylib in Frameworks */,
-				5BCD0643152CFC3C0071FAB5 /* libpng.a in Frameworks */,
+				42C0CE9C1804829E006B2F23 /* libpng.a in Frameworks */,
 				4228A3FF1620A5A300955433 /* Cocoa.framework in Frameworks */,
+				422BF0901804C5230028D009 /* libstdc++.dylib in Frameworks */,
+				422BF0921804C7060028D009 /* libfbxsdk-static.a in Frameworks */,
+				422BF0881804C1E40028D009 /* libbz2.dylib in Frameworks */,
+				422BF0861804C16E0028D009 /* libm.dylib in Frameworks */,
+				42C0CE9E180482B8006B2F23 /* libfreetype.a in Frameworks */,
 				4228A4011620A5EC00955433 /* SystemConfiguration.framework in Frameworks */,
 				4228A4031620A63F00955433 /* libiconv.dylib in Frameworks */,
 			);
@@ -213,7 +224,6 @@
 		42475CDB147208A000610A6A = {
 			isa = PBXGroup;
 			children = (
-				9F92DB0F16CB0F29003B2974 /* libfbxsdk-2013.3-static.a */,
 				42475CE9147208A000610A6A /* src */,
 				427D4F44147DC9080076760E /* Libraries */,
 				4228A3FD1620A58000955433 /* Frameworks */,
@@ -247,15 +257,21 @@
 				4283905814896E6C00E2B2F5 /* BoundingVolume.h */,
 				42C8EDBF14724CD700E43619 /* Camera.cpp */,
 				42C8EDC014724CD700E43619 /* Camera.h */,
+				C076C8FF174F6D2E00645678 /* Constants.cpp */,
+				C076C900174F6D2E00645678 /* Constants.h */,
 				4251B128152D044B002F6199 /* Curve.cpp */,
 				4251B129152D044B002F6199 /* Curve.h */,
 				4251B12A152D044B002F6199 /* Curve.inl */,
+				4262783A180491D60015672B /* edtaa3func.c */,
+				4262783B180491D60015672B /* edtaa3func.h */,
 				42C8EDCB14724CD700E43619 /* Effect.cpp */,
 				42C8EDCC14724CD700E43619 /* Effect.h */,
 				42C8EDCD14724CD700E43619 /* EncoderArguments.cpp */,
 				42C8EDCE14724CD700E43619 /* EncoderArguments.h */,
 				4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */,
 				4278341F148D6F7500A6E27F /* FBXSceneEncoder.h */,
+				C076C901174F6D2E00645678 /* FBXUtil.cpp */,
+				C076C902174F6D2E00645678 /* FBXUtil.h */,
 				42C8EDCF14724CD700E43619 /* FileIO.cpp */,
 				42C8EDD014724CD700E43619 /* FileIO.h */,
 				42C8EDD114724CD700E43619 /* Font.cpp */,
@@ -300,6 +316,8 @@
 				42C8EDF514724CD700E43619 /* Reference.h */,
 				42C8EDF614724CD700E43619 /* ReferenceTable.cpp */,
 				42C8EDF714724CD700E43619 /* ReferenceTable.h */,
+				C076C903174F6D2E00645678 /* Sampler.cpp */,
+				C076C904174F6D2E00645678 /* Sampler.h */,
 				42C8EDF814724CD700E43619 /* Scene.cpp */,
 				42C8EDF914724CD700E43619 /* Scene.h */,
 				42C8EDFA14724CD700E43619 /* StringUtil.cpp */,
@@ -329,15 +347,15 @@
 		427D4F44147DC9080076760E /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				5BCD0642152CFC3C0071FAB5 /* libpng.a */,
-				42D277571472EFA700D867A4 /* libpcre.a */,
-				42D277581472EFA700D867A4 /* libpcrecpp.a */,
-				42C8EE3A1472DAAE00E43619 /* libbz2.dylib */,
+				42C0CE9D180482B8006B2F23 /* libfreetype.a */,
+				42C0CE9B1804829E006B2F23 /* libpng.a */,
+				422BF0851804C16E0028D009 /* libm.dylib */,
+				422BF0871804C1E40028D009 /* libbz2.dylib */,
+				422BF08F1804C5230028D009 /* libstdc++.dylib */,
 				42C8EE381472DAA300E43619 /* libz.dylib */,
 				42C8EE361472D7E700E43619 /* libxml2.dylib */,
-				42C8EE341472B60100E43619 /* libfreetype.a */,
-				42475D7B14720ECE00610A6A /* libdom.a */,
 				4228A4021620A63F00955433 /* libiconv.dylib */,
+				422BF0911804C7060028D009 /* libfbxsdk-static.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -368,7 +386,7 @@
 		42475CDD147208A000610A6A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = 42475CE0147208A000610A6A /* Build configuration list for PBXProject "gameplay-encoder" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -419,6 +437,7 @@
 				42C8EE2814724CD700E43619 /* Quaternion.cpp in Sources */,
 				42C8EE2914724CD700E43619 /* Reference.cpp in Sources */,
 				42C8EE2A14724CD700E43619 /* ReferenceTable.cpp in Sources */,
+				4262783C180491D60015672B /* edtaa3func.c in Sources */,
 				42C8EE2B14724CD700E43619 /* Scene.cpp in Sources */,
 				42C8EE2C14724CD700E43619 /* StringUtil.cpp in Sources */,
 				42C8EE2D14724CD700E43619 /* Transform.cpp in Sources */,
@@ -434,6 +453,9 @@
 				F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */,
 				B661733F16A61CE40083A307 /* Image.cpp in Sources */,
 				B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */,
+				C076C905174F6D2E00645678 /* Constants.cpp in Sources */,
+				C076C906174F6D2E00645678 /* FBXUtil.cpp in Sources */,
+				C076C907174F6D2E00645678 /* Sampler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,15 +467,21 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					DOM_INCLUDE_LIBXML,
-					NO_BOOST,
-					NO_ZAE,
 					"DEBUG=1",
 					USE_FBX,
 				);
@@ -462,18 +490,27 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"../external-deps/freetype/include",
-					"../external-deps/libpng/include",
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/include\"",
+					"../../external-deps/png/include",
+					"../../external-deps/freetype2/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				LIBRARY_SEARCH_PATHS = (
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/release\"",
+					"../../external-deps/png/lib/macosx",
+					"../../external-deps/freetype2/lib/macosx",
+				);
+				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ./external-deps/libpng/include";
 				WARNING_CFLAGS = "";
 			};
 			name = Debug;
@@ -483,31 +520,44 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					DOM_INCLUDE_LIBXML,
-					NO_BOOST,
-					NO_ZAE,
-					USE_FBX,
-				);
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = USE_FBX;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"../external-deps/freetype/include",
-					"../external-deps/libpng/include",
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/include\"",
+					"../../external-deps/png/include",
+					"../../external-deps/freetype2/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				LIBRARY_SEARCH_PATHS = (
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/release\"",
+					"../../external-deps/png/lib/macosx",
+					"../../external-deps/freetype2/lib/macosx",
+				);
+				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ./external-deps/libpng/include";
 				WARNING_CFLAGS = "";
 			};
 			name = Release;
@@ -515,7 +565,6 @@
 		42475CF1147208A100610A6A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -524,29 +573,22 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = (
-					"../external-deps/freetype2/include",
-					"../external-deps/libpng/include",
-					"\"/Applications/Autodesk/FBX SDK/2013.3/include\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2013.3/lib/gcc4/ub\"",
+					"../../external-deps/freetype2/lib/macosx",
+					"../../external-deps/png/lib/macosx",
+					"/Applications/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
+					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/libpng/include";
 			};
 			name = Debug;
 		};
 		42475CF2147208A100610A6A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -555,22 +597,17 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = (
-					"../external-deps/freetype2/include",
-					"../external-deps/libpng/include",
-					"\"/Applications/Autodesk/FBX SDK/2013.3/include\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2013.3/lib/gcc4/ub\"",
+					"../../external-deps/freetype2/lib/macosx",
+					"../../external-deps/png/lib/macosx",
+					/Applications/Autodesk/FBX,
+					SDK/2014.2.1/lib/gcc4/ub/release,
+					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/libpng/include";
 			};
 			name = Release;
 		};

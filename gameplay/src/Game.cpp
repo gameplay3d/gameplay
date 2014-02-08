@@ -5,6 +5,8 @@
 #include "FileSystem.h"
 #include "FrameBuffer.h"
 #include "SceneLoader.h"
+#include "ControlFactory.h"
+#include "Theme.h"
 
 /** @script{ignore} */
 GLenum __gl_error_code = GL_NO_ERROR;
@@ -20,7 +22,7 @@ double Game::_pausedTimeTotal = 0.0;
 
 Game::Game()
     : _initialized(false), _state(UNINITIALIZED), _pausedCount(0),
-      _frameLastFPS(0), _frameCount(0), _frameRate(0),
+      _frameLastFPS(0), _frameCount(0), _frameRate(0), _width(0), _height(0),
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL),
       _physicsController(NULL), _aiController(NULL), _audioListener(NULL),
@@ -38,7 +40,7 @@ Game::~Game()
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
     SAFE_DELETE(_timeEvents);
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
     Ref::printLeaks();
     printMemoryLeaks();
 #endif
@@ -193,6 +195,10 @@ void Game::shutdown()
         SAFE_DELETE(_physicsController);
         _aiController->finalize();
         SAFE_DELETE(_aiController);
+        
+        ControlFactory::finalize();
+
+        Theme::finalize();
 
         // Note: we do not clean up the script controller here
         // because users can call Game::exit() from a script.
@@ -251,14 +257,13 @@ void Game::resume()
 
 void Game::exit()
 {
-    // Only perform a full/clean shutdown if FORCE_CLEAN_SHUTDOWN or
-    // GAMEPLAY_MEM_LEAK_DETECTION is defined. Every modern OS is able to
-    // handle reclaiming process memory hundreds of times faster than it
-    // would take us to go through every pointer in the engine and release
-    // them nicely. For large games, shutdown can end up taking long time,
+    // Only perform a full/clean shutdown if GP_USE_MEM_LEAK_DETECTION is defined.
+	// Every modern OS is able to handle reclaiming process memory hundreds of times
+	// faster than it would take us to go through every pointer in the engine and
+	// release them nicely. For large games, shutdown can end up taking long time,
     // so we'll just call ::exit(0) to force an instant shutdown.
 
-#if defined FORCE_CLEAN_SHUTDOWN || defined GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 
     // Schedule a call to shutdown rather than calling it right away.
 	// This handles the case of shutting down the script system from
@@ -456,10 +461,6 @@ AudioListener* Game::getAudioListener()
     return _audioListener;
 }
 
-void Game::menuEvent()
-{
-}
-
 void Game::keyEvent(Keyboard::KeyEvent evt, int key)
 {
 }
@@ -506,6 +507,18 @@ void Game::gesturePinchEvent(int x, int y, float scale)
 }
 
 void Game::gestureTapEvent(int x, int y)
+{
+}
+
+void Game::gestureLongTapEvent(int x, int y, float duration)
+{
+}
+
+void Game::gestureDragEvent(int x, int y)
+{
+}
+
+void Game::gestureDropEvent(int x, int y)
 {
 }
 

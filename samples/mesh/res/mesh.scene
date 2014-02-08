@@ -1,0 +1,9 @@
+scene
+{
+    path = res/mesh.gpb
+    
+    node duck
+    {
+        material = res/mesh.material#duck
+    }
+}

@@ -8,7 +8,9 @@ namespace gameplay
 {
 
 /**
- * Vertical layout: Controls are placed next to one another vertically until
+ * Defines a vertical layout.
+ *
+ * Controls are placed next to one another vertically until
  * the bottom-most edge of the container is reached.
  */
 class VerticalLayout : public Layout
@@ -40,6 +42,20 @@ public:
      */
     Layout::Type getType();
 
+    /**
+     * Returns the vertical spacing between controls in the layout.
+     *
+     * @return The vertical spacing between controls.
+     */
+    int getSpacing() const;
+
+    /**
+     * Sets the vertical spacing to add between controls in the layout.
+     *
+     * @param spacing The vertical spacing between controls.
+     */
+    void setSpacing(int spacing);
+
 protected:
 
     /**
@@ -59,15 +75,19 @@ protected:
      * the bottom-most edge of the container is reached.
      *
      * @param container The container to update.
-     * @param offset Positioning offset to add to the control's position.
      */
-    void update(const Container* container, const Vector2& offset);
+    void update(const Container* container);
 
     /**
      * Flag determining whether this layout will start laying out controls from the bottom of the container.
      * The default is 'false' meaning controls will start at the top.
      */
     bool _bottomToTop;
+
+    /**
+     * Spacing between controls in the layout.
+     */
+    int _spacing;
 
 private:
 

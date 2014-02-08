@@ -6,6 +6,7 @@ namespace gameplay
 
 // Lua bindings for Camera.
 int lua_Camera__gc(lua_State* state);
+int lua_Camera_addListener(lua_State* state);
 int lua_Camera_addRef(lua_State* state);
 int lua_Camera_getAspectRatio(lua_State* state);
 int lua_Camera_getCameraType(lua_State* state);
@@ -25,6 +26,7 @@ int lua_Camera_getZoomY(lua_State* state);
 int lua_Camera_pickRay(lua_State* state);
 int lua_Camera_project(lua_State* state);
 int lua_Camera_release(lua_State* state);
+int lua_Camera_removeListener(lua_State* state);
 int lua_Camera_resetProjectionMatrix(lua_State* state);
 int lua_Camera_setAspectRatio(lua_State* state);
 int lua_Camera_setFarPlane(lua_State* state);

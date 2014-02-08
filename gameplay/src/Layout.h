@@ -12,10 +12,12 @@ class Container;
 class Control;
 
 /**
- * The layout interface for UI containers.
+ * Defines the layout for containers.
  *
- * Implementations of this interface are responsible for positioning, resizing
- * and then calling update on all the controls within a container.
+ * Implementations are responsible for positioning, resizing and
+ * calling update on all the controls within a container.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Layout : public Ref
 {
@@ -23,6 +25,7 @@ class Layout : public Ref
     friend class Form;
 
 public:
+
     /**
      * Layout types available to containers.
      */
@@ -61,17 +64,8 @@ protected:
      * Position, resize, and update the controls within a container.
      *
      * @param container The container to update.
-     * @param offset The update offset.
      */
-    virtual void update(const Container* container, const Vector2& offset) = 0;
-
-    /**
-     * Align a control within a container.
-     *
-     * @param control The control to align.
-     * @param container The container to align the control within.
-     */
-    virtual void align(Control* control, const Container* container);
+    virtual void update(const Container* container) = 0;
 
     /**
      * Touch callback on touch events.  Coordinates are given relative to the container's
@@ -85,6 +79,7 @@ protected:
      * @see Touch::TouchEvent
      */
     virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
 };
 
 }

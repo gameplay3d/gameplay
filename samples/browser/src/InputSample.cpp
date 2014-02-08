@@ -21,7 +21,7 @@ void InputSample::initialize()
     setMultiTouch(true);
 
     // Load font
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
     assert(_font);
 
     // Reuse part of the gamepad texture as the crosshair in this sample.
@@ -58,7 +58,7 @@ void InputSample::initialize()
     _formNode = Node::create("Form");
     _formNodeParent->addChild(_formNode);
     Theme* theme = _inputSampleControls->getTheme();
-    Form* form = Form::create("testForm", theme->getStyle("basicContainer"));
+    Form* form = Form::create("testForm", theme->getStyle("basicContainer"), Layout::LAYOUT_ABSOLUTE);
     form->setSize(225, 100);
     Label* label = Label::create("sensorLabel", theme->getStyle("iconNoBorder"));
     label->setPosition(25, 15);
@@ -71,6 +71,7 @@ void InputSample::initialize()
     _formNodeParent->setTranslation(_formNodeRestPosition);
     _formNode->setTranslation(-0.2f, -0.2f, 0);
     _formNode->setForm(form);
+    form->release();
 }
 
 void InputSample::finalize()
@@ -93,7 +94,7 @@ void InputSample::update(float elapsedTime)
     if (hasAccelerometer())
     {
         Vector3 accelRaw, gyroRaw;
-        getRawSensorValues(&accelRaw.x, &accelRaw.y, &accelRaw.z, &gyroRaw.x, &gyroRaw.y, &gyroRaw.z);
+        getSensorValues(&accelRaw.x, &accelRaw.y, &accelRaw.z, &gyroRaw.x, &gyroRaw.y, &gyroRaw.z);
 
         // Adjust for landscape mode
         float temp = accelRaw.x;

@@ -5,41 +5,6 @@
     ADD_SAMPLE("Graphics", "Sprite Batch", SpriteBatchSample, 8);
 #endif
 
-/**
- * Creates a triangle mesh with vertex colors.
- */
-static Mesh* createTriangleMesh()
-{
-    // Calculate the vertices of the equilateral triangle.
-    float a = 0.5f;        // length of the side
-    Vector2 p1(0.0f,       a / sqrtf(3.0f));
-    Vector2 p2(-a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
-    Vector2 p3( a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
-
-    // Create 3 vertices.
-    // Each vertex has position (x, y, z) and color (red, green, blue)
-    float vertices[] =
-    {
-        p1.x, p1.y, 0.0f,     1.0f, 0.0f, 0.0f,
-        p2.x, p2.y, 0.0f,     0.0f, 1.0f, 0.0f, 
-        p3.x, p3.y, 0.0f,     0.0f, 0.0f, 1.0f,
-    };
-    unsigned int vertexCount = 3;
-    VertexFormat::Element elements[] =
-    {
-        VertexFormat::Element(VertexFormat::POSITION, 3),
-        VertexFormat::Element(VertexFormat::COLOR, 3)
-    };
-    Mesh* mesh = Mesh::createMesh(VertexFormat(elements, 2), vertexCount, false);
-    if (mesh == NULL)
-    {
-        GP_ERROR("Failed to create mesh.");
-        return NULL;
-    }
-    mesh->setPrimitiveType(Mesh::TRIANGLES);
-    mesh->setVertexData(vertices, 0, vertexCount);
-    return mesh;
-}
 
 SpriteBatchSample::SpriteBatchSample()
     : _font(NULL), _spriteBatch(NULL)
@@ -49,13 +14,13 @@ SpriteBatchSample::SpriteBatchSample()
 void SpriteBatchSample::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Create an orthographic projection matrix.
     float width = getWidth() / (float)getHeight();
     float height = 1.0f;
     Matrix::createOrthographic(width, height, -1.0f, 1.0f, &_worldViewProjectionMatrix);
-    _spriteBatch = SpriteBatch::create("res/png/box-diffuse.png");
+    _spriteBatch = SpriteBatch::create("res/png/logo.png");
 }
 
 void SpriteBatchSample::finalize()

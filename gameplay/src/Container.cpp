@@ -10,9 +10,11 @@
 #include "RadioButton.h"
 #include "Slider.h"
 #include "TextBox.h"
-#include "Joystick.h"
+#include "JoystickControl.h"
 #include "ImageControl.h"
+#include "Form.h"
 #include "Game.h"
+#include "ControlFactory.h"
 
 namespace gameplay
 {
@@ -23,10 +25,8 @@ static const long SCROLL_INERTIA_DELAY = 100L;
 static const float SCROLL_FRICTION_FACTOR = 5.0f;
 // Distance that must be scrolled before isScrolling() will return true, used e.g. to cancel button-click events.
 static const float SCROLL_THRESHOLD = 10.0f;
-// Distance a joystick must be pushed in order to trigger focus-change and/or scrolling.
-static const float JOYSTICK_THRESHOLD = 0.75f;
-// Scroll speed when using a DPad -- max scroll speed when using a joystick.
-static const float GAMEPAD_SCROLL_SPEED = 500.0f;
+// Number of milliseconds to fade auto-hide scrollbars out for
+static const long SCROLLBAR_FADE_TIME = 1500L;
 // If the DPad or joystick is held down, this is the initial delay in milliseconds between focus change events.
 static const float FOCUS_CHANGE_REPEAT_DELAY = 300.0f;
 
@@ -46,7 +46,7 @@ void Container::clearContacts()
 }
 
 Container::Container()
-    : _layout(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
+    : _layout(NULL), _activeControl(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
       _scroll(SCROLL_NONE), _scrollBarBounds(Rectangle::empty()), _scrollPosition(Vector2::zero()),
       _scrollBarsAutoHide(false), _scrollBarOpacity(1.0f), _scrolling(false),
@@ -55,11 +55,8 @@ Container::Container()
       _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f), _scrollWheelSpeed(400.0f),
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
-      _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0),
-      _focusPressed(0), _selectButtonDown(false),
-      _lastFrameTime(0), _focusChangeRepeat(false),
-      _focusChangeStartTime(0), _focusChangeRepeatDelay(FOCUS_CHANGE_REPEAT_DELAY), _focusChangeCount(0),
-      _totalWidth(0), _totalHeight(0),
+      _scrollBarOpacityClip(NULL), _zIndexDefault(0),
+      _selectButtonDown(false), _lastFrameTime(0), _totalWidth(0), _totalHeight(0),
       _initializedWithScroll(false), _scrollWheelRequiresFocus(false)
 {
 	clearContacts();
@@ -75,131 +72,95 @@ Container::~Container()
     SAFE_RELEASE(_layout);
 }
 
-Container* Container::create(const char* id, Theme::Style* style, Layout::Type layoutType)
+Container* Container::create(const char* id, Theme::Style* style, Layout::Type layout)
 {
-    GP_ASSERT(style);
-
-    Container* container = Container::create(layoutType);
-    if (id)
-        container->_id = id;
-    container->_style = style;
-    return container;
-}
-
-Container* Container::create(Layout::Type type)
-{
-    Layout* layout = NULL;
-    switch (type)
-    {
-    case Layout::LAYOUT_ABSOLUTE:
-        layout = AbsoluteLayout::create();
-        break;
-    case Layout::LAYOUT_FLOW:
-        layout = FlowLayout::create();
-        break;
-    case Layout::LAYOUT_VERTICAL:
-        layout = VerticalLayout::create();
-        break;
-    }
-
     Container* container = new Container();
-    container->_layout = layout;
-
+    container->_id = id ? id : "";
+    container->_layout = createLayout(layout);
+    container->initialize("Container", style, NULL);
     return container;
 }
 
-Container* Container::create(Theme::Style* style, Properties* properties, Theme* theme)
+Control* Container::create(Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(properties);
-
-    const char* layoutString = properties->getString("layout");
-    Container* container = Container::create(getLayoutType(layoutString));
-    container->initialize(style, properties);
-    container->_scroll = getScroll(properties->getString("scroll"));
-    container->_scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
-    if (container->_scrollBarsAutoHide)
-    {
-        container->_scrollBarOpacity = 0.0f;
-    }
-    
-    container->_scrollWheelRequiresFocus = properties->getBool("scrollWheelRequiresFocus");
-    if (properties->exists("scrollingFriction"))
-        container->_scrollingFriction = properties->getFloat("scrollingFriction");
-    if (properties->exists("scrollWheelSpeed"))
-        container->_scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
-
-    container->addControls(theme, properties);
-    container->_layout->update(container, container->_scrollPosition);
-
+    Container* container = new Container();
+    container->initialize("Container", style, properties);
     return container;
 }
 
-void Container::addControls(Theme* theme, Properties* properties)
+void Container::initialize(const char* typeName, Theme::Style* style, Properties* properties)
 {
-    GP_ASSERT(theme);
+    Control::initialize(typeName, style, properties);
+
+	if (properties)
+	{
+		// Parse layout
+		Properties* layoutNS = properties->getNamespace("layout", true, false);
+		if (layoutNS)
+		{
+			_layout = createLayout(getLayoutType(layoutNS->getString("type")));
+			switch (_layout->getType())
+			{
+			case Layout::LAYOUT_FLOW:
+				static_cast<FlowLayout*>(_layout)->setSpacing(layoutNS->getInt("horizontalSpacing"), layoutNS->getInt("verticalSpacing"));
+				break;
+			case Layout::LAYOUT_VERTICAL:
+				static_cast<VerticalLayout*>(_layout)->setSpacing(layoutNS->getInt("spacing"));
+				break;
+			}
+		}
+		else
+		{
+			_layout = createLayout(getLayoutType(properties->getString("layout")));
+		}
+
+		setScroll(getScroll(properties->getString("scroll")));
+		_scrollBarsAutoHide = properties->getBool("scrollBarsAutoHide");
+		if (_scrollBarsAutoHide)
+		{
+			_scrollBarOpacity = 0.0f;
+		}
+
+		_scrollWheelRequiresFocus = properties->getBool("scrollWheelRequiresFocus");
+		if (properties->exists("scrollingFriction"))
+			_scrollingFriction = properties->getFloat("scrollingFriction");
+		if (properties->exists("scrollWheelSpeed"))
+			_scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
+
+		addControls(properties);
+
+		const char* activeControl = properties->getString("activeControl");
+		if (activeControl)
+		{
+			for (size_t i = 0, count = _controls.size(); i < count; ++i)
+			{
+				if (_controls[i]->_id == activeControl)
+				{
+					_activeControl = _controls[i];
+					break;
+				}
+			}
+		}
+	}
+
+    // Create a default layout if one does not yet exist
+    if (_layout == NULL)
+        _layout = createLayout(Layout::LAYOUT_ABSOLUTE);
+}
+
+void Container::addControls(Properties* properties)
+{
     GP_ASSERT(properties);
 
     // Add all the controls to this container.
     Properties* controlSpace = properties->getNextNamespace();
     while (controlSpace != NULL)
     {
-        Control* control = NULL;
+        const char* controlName = controlSpace->getNamespace();
 
-        const char* controlStyleName = controlSpace->getString("style");
-        Theme::Style* controlStyle = NULL;
-        if (controlStyleName)
-        {
-            controlStyle = theme->getStyle(controlStyleName);
-        }
-        else
-        {
-            controlStyle = theme->getEmptyStyle();
-        }
-
-        std::string controlName(controlSpace->getNamespace());
-        std::transform(controlName.begin(), controlName.end(), controlName.begin(), (int(*)(int))toupper);
-        if (controlName == "LABEL")
-        {
-            control = Label::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "BUTTON")
-        {
-            control = Button::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CHECKBOX")
-        {
-            control = CheckBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "RADIOBUTTON")
-        {
-            control = RadioButton::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "CONTAINER")
-        {
-            control = Container::create(controlStyle, controlSpace, theme);
-        }
-        else if (controlName == "SLIDER")
-        {
-            control = Slider::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "TEXTBOX")
-        {
-            control = TextBox::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "JOYSTICK")
-        {
-            control = Joystick::create(controlStyle, controlSpace);
-        }
-        else if (controlName == "IMAGE")
-        {
-            control = ImageControl::create(controlStyle, controlSpace);
-        }
-        else
-        {
-            // Ignore - not a valid control name.
-            // This used to fail, but I see no reason to hard fail here (this also fixes not being able
-            // to set padding on containers).
-        }
+        // Pass our own style into the creation of the child control.
+        // The child control's style will be looked up using the passed in style's theme.
+        Control* control = ControlFactory::getInstance()->createControl(controlName, _style, controlSpace);
 
         // Add the new control to the form.
         if (control)
@@ -221,10 +182,22 @@ Layout* Container::getLayout()
     return _layout;
 }
 
+void Container::setLayout(Layout::Type type)
+{
+	if (_layout == NULL || _layout->getType() != type)
+	{
+		SAFE_RELEASE(_layout);
+
+		_layout = createLayout(type);
+        setDirty(Control::DIRTY_BOUNDS);
+	}
+}
+
 unsigned int Container::addControl(Control* control)
 {
-    GP_ASSERT(control);
+	GP_ASSERT(control);
 
+    // Remove the control from its current parent
     if (control->_parent && control->_parent != this)
     {
         control->_parent->removeControl(control);
@@ -237,12 +210,15 @@ unsigned int Container::addControl(Control* control)
 
     if (control->getFocusIndex() == -1)
     {
-        control->setFocusIndex(_focusIndexDefault++);
+        // Find the current largest focus index
+        int maxFocusIndex = 0;
+        for (size_t i = 0, count = _controls.size(); i < count; ++i)
+        {
+            if (_controls[i]->_focusIndex > maxFocusIndex)
+                maxFocusIndex = _controls[i]->_focusIndex;
+        }
+        control->setFocusIndex(maxFocusIndex + 1);
     }
-
-    int focusIndex = control->getFocusIndex();
-    if (focusIndex > _focusIndexMax)
-        _focusIndexMax = focusIndex;
 
     if (control->_parent != this)
     {
@@ -295,24 +271,28 @@ void Container::removeControl(unsigned int index)
     GP_ASSERT(index < _controls.size());
 
     std::vector<Control*>::iterator it = _controls.begin() + index;
-    _controls.erase(it);
     Control* control = *it;
+    _controls.erase(it);
     control->_parent = NULL;
+
+    if (_activeControl == control)
+        _activeControl = NULL;
+
+    Form::verifyRemovedControlState(control);
+
     SAFE_RELEASE(control);
 }
 
 void Container::removeControl(const char* id)
 {
     GP_ASSERT(id);
-    std::vector<Control*>::iterator it;
-    for (it = _controls.begin(); it < _controls.end(); it++)
+
+    for (size_t i = 0, size = _controls.size(); i < size; ++i)
     {
-        Control* c = *it;
+        Control* c = _controls[i];
         if (strcmp(id, c->getId()) == 0)
         {
-            c->_parent = NULL;
-            SAFE_RELEASE(c);
-            _controls.erase(it);
+            removeControl((unsigned int)i);
             return;
         }
     }
@@ -321,14 +301,13 @@ void Container::removeControl(const char* id)
 void Container::removeControl(Control* control)
 {
     GP_ASSERT(control);
-    std::vector<Control*>::iterator it;
-    for (it = _controls.begin(); it < _controls.end(); it++)
+
+    for (size_t i = 0, size = _controls.size(); i < size; ++i)
     {
-        if (*it == control)
+        Control* c = _controls[i];
+        if (c == control)
         {
-            control->_parent = NULL;
-            SAFE_RELEASE(control);
-            _controls.erase(it);
+            removeControl((unsigned int)i);
             return;
         }
     }
@@ -336,8 +315,8 @@ void Container::removeControl(Control* control)
 
 Control* Container::getControl(unsigned int index) const
 {
-    std::vector<Control*>::const_iterator it = _controls.begin() + index;
-    return *it;
+    GP_ASSERT(index < _controls.size());
+    return _controls[index];
 }
 
 Control* Container::getControl(const char* id) const
@@ -364,9 +343,19 @@ Control* Container::getControl(const char* id) const
     return NULL;
 }
 
+unsigned int Container::getControlCount() const
+{
+    return (unsigned int)_controls.size();
+}
+
 const std::vector<Control*>& Container::getControls() const
 {
     return _controls;
+}
+
+bool Container::isForm() const
+{
+    return false;
 }
 
 void Container::setScroll(Scroll scroll)
@@ -374,7 +363,18 @@ void Container::setScroll(Scroll scroll)
     if (scroll != _scroll)
     {
         _scroll = scroll;
-        _dirty = true;
+
+        if (_scroll == SCROLL_NONE)
+        {
+            _scrollPosition.set(0, 0);
+        }
+        else
+        {
+            // Scrollable containers can be focused (to allow scrolling)
+            _canFocus = true;
+        }
+
+        setDirty(DIRTY_BOUNDS | DIRTY_STATE);
     }
 }
 
@@ -388,7 +388,7 @@ void Container::setScrollBarsAutoHide(bool autoHide)
     if (autoHide != _scrollBarsAutoHide)
     {
         _scrollBarsAutoHide = autoHide;
-        _dirty = true;
+        setDirty(DIRTY_BOUNDS | DIRTY_STATE);
     }
 }
 
@@ -399,12 +399,27 @@ bool Container::isScrollBarsAutoHide() const
 
 bool Container::isScrolling() const
 {
+    if (_scrolling &&
+        (abs(_scrollingLastX - _scrollingVeryFirstX) > SCROLL_THRESHOLD ||
+        abs(_scrollingLastY - _scrollingVeryFirstY) > SCROLL_THRESHOLD))
+    {
+        return true;
+    }
+
     if (_parent && _parent->isScrolling())
         return true;
 
-    return (_scrolling &&
-            (abs(_scrollingLastX - _scrollingVeryFirstX) > SCROLL_THRESHOLD ||
-             abs(_scrollingLastY - _scrollingVeryFirstY) > SCROLL_THRESHOLD));
+    return false;
+}
+
+const Vector2& Container::getScrollPosition() const
+{
+    return _scrollPosition;
+}
+
+void Container::setScrollPosition(const Vector2& scrollPosition)
+{
+    _scrollPosition = scrollPosition;
 }
 
 Animation* Container::getAnimation(const char* id) const
@@ -445,88 +460,218 @@ void Container::setScrollWheelRequiresFocus(bool required)
     _scrollWheelRequiresFocus = required;
 }
 
-void Container::update(const Control* container, const Vector2& offset)
+bool Container::setFocus()
 {
-    // Update this container's viewport.
-    Control::update(container, offset);
+    // If this container (or one of its children) already has focus, do nothing
+    if (Form::getFocusControl() && (Form::getFocusControl() == this || Form::getFocusControl()->isChild(this)))
+        return true;
+
+    // First try to set focus to our active control
+    if (_activeControl)
+    {
+        if (_activeControl->setFocus())
+            return true;
+    }
+
+    // Try to set focus to one of our children
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
+    {
+        if (_controls[i]->setFocus())
+            return true;
+    }
+
+    // Lastly, try to set focus to ourself if none of our children will accept it
+    return Control::setFocus();
+}
+
+Control* Container::getActiveControl() const
+{
+    return _activeControl;
+}
+
+void Container::setActiveControl(Control* control)
+{
+    if (std::find(_controls.begin(), _controls.end(), control) != _controls.end())
+    {
+        _activeControl = control;
+
+        // If a control within this container currently has focus, switch focus to the new active control
+        if (Form::getFocusControl() && Form::getFocusControl() != control && Form::getFocusControl()->isChild(this))
+            Form::setFocusControl(control);
+    }
+}
+
+void Container::setChildrenDirty(int bits, bool recursive)
+{
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
+    {
+        Control* ctrl = _controls[i];
+        ctrl->setDirty(bits);
+        if (recursive && ctrl->isContainer())
+            static_cast<Container*>(ctrl)->setChildrenDirty(bits, true);
+    }
+}
+
+void Container::update(float elapsedTime)
+{
+    Control::update(elapsedTime);
+
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
+        _controls[i]->update(elapsedTime);
+}
+
+void Container::updateState(State state)
+{
+    Control::updateState(state);
 
     // Get scrollbar images and diminish clipping bounds to make room for scrollbars.
     if ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
     {
-        _scrollBarLeftCap = getImage("scrollBarLeftCap", _state);
-        _scrollBarHorizontal = getImage("horizontalScrollBar", _state);
-        _scrollBarRightCap = getImage("scrollBarRightCap", _state);
+        _scrollBarLeftCap = getImage("scrollBarLeftCap", state);
+        _scrollBarHorizontal = getImage("horizontalScrollBar", state);
+        _scrollBarRightCap = getImage("scrollBarRightCap", state);
+    }
 
+    if ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL)
+    {
+        _scrollBarTopCap = getImage("scrollBarTopCap", state);
+        _scrollBarVertical = getImage("verticalScrollBar", state);
+        _scrollBarBottomCap = getImage("scrollBarBottomCap", state);
+    }
+}
+
+void Container::updateBounds()
+{
+    // Compute total bounds of container
+    Control::updateBounds();
+
+    // Handle automatically sizing based on our children
+    if (_autoSize != AUTO_SIZE_NONE)
+    {
+        if (_autoSize & AUTO_SIZE_WIDTH)
+        {
+            // Size ourself to tightly fit the width of our children
+            float width = 0;
+            for (size_t i = 0, count = _controls.size(); i < count; ++i)
+            {
+                Control* ctrl = _controls[i];
+                if (!ctrl->isXPercentage() && !ctrl->isWidthPercentage())
+                {
+                    float w = ctrl->getX() + ctrl->getWidth();
+                    if (width < w)
+                        width = w;
+                }
+            }
+            width += getBorder(NORMAL).left + getBorder(NORMAL).right + getPadding().left + getPadding().right;
+            setWidthInternal(width);
+        }
+
+        if (_autoSize & AUTO_SIZE_HEIGHT)
+        {
+            // Size ourself to tightly fit the height of our children
+            float height = 0;
+            for (size_t i = 0, count = _controls.size(); i < count; ++i)
+            {
+                Control* ctrl = _controls[i];
+                if (!ctrl->isYPercentage() && !ctrl->isHeightPercentage())
+                {
+                    float h = ctrl->getY() + ctrl->getHeight();
+                    if (height < h)
+                        height = h;
+                }
+            }
+            height += getBorder(NORMAL).top + getBorder(NORMAL).bottom + getPadding().top + getPadding().bottom;
+            setHeightInternal(height);
+        }
+    }
+
+    // Update layout to position children correctly within us
+    GP_ASSERT(_layout);
+    _layout->update(this);
+}
+
+void Container::updateAbsoluteBounds(const Vector2& offset)
+{
+    Control::updateAbsoluteBounds(offset);
+
+    // Get scrollbar images and diminish clipping bounds to make room for scrollbars.
+    if ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
+    {
         GP_ASSERT(_scrollBarLeftCap && _scrollBarHorizontal && _scrollBarRightCap);
-
+        _viewportBounds.height -= _scrollBarHorizontal->getRegion().height;
         _viewportClipBounds.height -= _scrollBarHorizontal->getRegion().height;
     }
 
     if ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL)
     {
-        _scrollBarTopCap = getImage("scrollBarTopCap", _state);
-        _scrollBarVertical = getImage("verticalScrollBar", _state);
-        _scrollBarBottomCap = getImage("scrollBarBottomCap", _state);
-
         GP_ASSERT(_scrollBarTopCap && _scrollBarVertical && _scrollBarBottomCap);
-        
+        _viewportBounds.width -= _scrollBarVertical->getRegion().width;
         _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
     }
 
-    GP_ASSERT(_layout);
-    if (_scroll != SCROLL_NONE)
-    {
-        updateScroll();
-    }
-    else
-    {
-        _layout->update(this, Vector2::zero());
-    }
+    // Update scroll position and scrollbars after updating absolute bounds since
+    // computation relies on up-to-date absolute bounds information.
+    updateScroll();
 }
 
-void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
+bool Container::updateChildBounds()
 {
-    if (needsClear)
-    {
-        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        float clearY = targetHeight - _clearBounds.y - _clearBounds.height;
-        GL_ASSERT( glScissor(_clearBounds.x, clearY, _clearBounds.width, _clearBounds.height) );
-        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
-        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
-        needsClear = false;
-        cleared = true;
-    }
-    else if (!cleared)
-    {
-        needsClear = true;
-    }
+    bool result = false;
 
-    if (!_visible)
-        return;
-
-    spriteBatch->start();
-    Control::drawBorder(spriteBatch, clip);
-    spriteBatch->finish();
-
-    std::vector<Control*>::const_iterator it;
-    Rectangle boundsUnion = Rectangle::empty();
-    for (it = _controls.begin(); it < _controls.end(); it++)
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
     {
-        Control* control = *it;
-        GP_ASSERT(control);
-        if (!needsClear || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
+        Control* ctrl = _controls[i];
+        GP_ASSERT(ctrl);
+
+        if (ctrl->isVisible())
         {
-            control->draw(spriteBatch, _viewportClipBounds, needsClear, cleared, targetHeight);
-            Rectangle::combine(control->_clearBounds, boundsUnion, &boundsUnion);
+            bool changed = ctrl->updateBoundsInternal(_scrollPosition);
+
+            // If the child bounds have changed, dirty our bounds and all of our
+            // parent bounds so that our layout and/or bounds are recomputed.
+            if (changed)
+            {
+                Control* parent = this;
+                while (parent && parent->_autoSize != AUTO_SIZE_NONE)
+                {
+                    parent->setDirty(DIRTY_BOUNDS);
+                    parent = parent->_parent;
+                }
+            }
+
+            result = result || changed;
         }
     }
 
+    return result;
+}
+
+unsigned int Container::draw(Form* form, const Rectangle& clip)
+{
+    if (!_visible)
+        return 0;
+
+    // Draw container skin
+    unsigned int drawCalls = Control::draw(form, clip);
+
+    // Draw child controls
+    for (size_t i = 0, count = _controls.size(); i < count; ++i)
+    {
+        Control* control = _controls[i];
+        if (control && control->_absoluteClipBounds.intersects(_absoluteClipBounds))
+        {
+            drawCalls += control->draw(form, _viewportClipBounds);
+        }
+    }
+
+    // Draw scrollbars
     if (_scroll != SCROLL_NONE && (_scrollBarOpacity > 0.0f))
     {
         // Draw scroll bars.
-        Rectangle clipRegion(_viewportClipBounds);
+        Rectangle clipRegion(_absoluteClipBounds);
 
-        spriteBatch->start();
+        SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+        startBatch(form, batch);
 
         if (_scrollBarBounds.height > 0 && ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
         {
@@ -547,16 +692,18 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
             clipRegion.width += verticalRegion.width;
 
-            Rectangle bounds(_viewportBounds.x + _viewportBounds.width - verticalRegion.width, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
+            Rectangle bounds(_viewportBounds.right() + (_absoluteBounds.right() - _viewportBounds.right())*0.5f - topRegion.width*0.5f, _viewportBounds.y + _scrollBarBounds.y, topRegion.width, topRegion.height);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, topUVs.u1, topUVs.v1, topUVs.u2, topUVs.v2, topColor, clipRegion);
 
             bounds.y += topRegion.height;
             bounds.height = _scrollBarBounds.height - topRegion.height - bottomRegion.height;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, verticalUVs.u1, verticalUVs.v1, verticalUVs.u2, verticalUVs.v2, verticalColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, verticalUVs.u1, verticalUVs.v1, verticalUVs.u2, verticalUVs.v2, verticalColor, clipRegion);
 
             bounds.y += bounds.height;
             bounds.height = bottomRegion.height;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
+
+            drawCalls += 3;
         }
 
         if (_scrollBarBounds.width > 0 && ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL))
@@ -578,429 +725,258 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
             clipRegion.height += horizontalRegion.height;
         
-            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.y + _viewportBounds.height - horizontalRegion.height, leftRegion.width, leftRegion.height);
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
+            Rectangle bounds(_viewportBounds.x + _scrollBarBounds.x, _viewportBounds.bottom() + (_absoluteBounds.bottom() - _viewportBounds.bottom())*0.5f - leftRegion.height*0.5f, leftRegion.width, leftRegion.height);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, leftUVs.u1, leftUVs.v1, leftUVs.u2, leftUVs.v2, leftColor, clipRegion);
 
             bounds.x += leftRegion.width;
             bounds.width = _scrollBarBounds.width - leftRegion.width - rightRegion.width;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, horizontalUVs.u1, horizontalUVs.v1, horizontalUVs.u2, horizontalUVs.v2, horizontalColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, horizontalUVs.u1, horizontalUVs.v1, horizontalUVs.u2, horizontalUVs.v2, horizontalColor, clipRegion);
 
             bounds.x += bounds.width;
             bounds.width = rightRegion.width;
-            spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, rightUVs.u1, rightUVs.v1, rightUVs.u2, rightUVs.v2, rightColor, clipRegion);
+            batch->draw(bounds.x, bounds.y, bounds.width, bounds.height, rightUVs.u1, rightUVs.v1, rightUVs.u2, rightUVs.v2, rightColor, clipRegion);
+
+            drawCalls += 3;
         }
 
-        spriteBatch->finish();
+        finishBatch(form, batch);
+    }
 
-        if (_scrollingVelocity.isZero())
-        {
-            _dirty = false;
-        }
-    }
-    else
-    {
-        _dirty = false;
-    }
+    return drawCalls;
 }
 
-bool Container::isDirty()
+static bool canReceiveFocus(Control* control)
 {
-    if (_dirty)
-    {
+    if (control->getFocusIndex() < 0 || !(control->isEnabled() && control->isVisible()))
+        return false;
+
+    if (control->canFocus())
         return true;
-    }
-    else
+
+    if (control->isContainer())
     {
-        std::vector<Control*>::const_iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
+        Container* container = static_cast<Container*>(control);
+        for (unsigned int i = 0, count = (unsigned int)container->getControlCount(); i < count; ++i)
         {
-            GP_ASSERT(*it);
-            if ((*it)->isDirty())
-            {
+            if (canReceiveFocus(container->getControl(i)))
                 return true;
-            }
         }
     }
 
     return false;
 }
 
-bool Container::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+bool Container::moveFocus(Direction direction)
 {
-    return pointerEvent(false, evt, x, y, (int)contactIndex);
+	switch (direction)
+	{
+	case NEXT:
+	case PREVIOUS:
+		return moveFocusNextPrevious(direction);
+
+	case UP:
+	case DOWN:
+	case LEFT:
+	case RIGHT:
+		return moveFocusDirectional(direction);
+
+	default:
+		return false;
+	}
 }
 
-bool Container::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+bool Container::moveFocusNextPrevious(Direction direction)
 {
-    return pointerEvent(true, evt, x, y, wheelDelta);
-}
-
-bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
-{
-    // This event may run untrusted code by notifying listeners of events.
-    // If the user calls exit() or otherwise releases this container, we
-    // need to keep it alive until the method returns.
-    addRef();
-
-    bool eventConsumed = false;
-
-    std::vector<Control*>::const_iterator it;
-    for (it = _controls.begin(); it < _controls.end(); it++)
+    // Get the current control that has focus (either directly or indirectly) within this container
+    Control* currentFocus = Form::getFocusControl();
+    Control* current = NULL;
+    if (currentFocus && currentFocus->isChild(this))
     {
-        Control* control = *it;
-        GP_ASSERT(control);
-        if (!control->isEnabled() || !control->isVisible())
+        if (currentFocus->_parent == this)
         {
-            continue;
+            // Currently focused control is a direct child of us
+            current = currentFocus;
         }
-
-        if ((control->hasFocus() || control->getState() == ACTIVE) && control->keyEvent(evt, key))
+        else
         {
-            eventConsumed |= true;
-            break;
-        }
-    }
-
-    switch (evt)
-    {
-        case Keyboard::KEY_PRESS:
-        {
-            if (!eventConsumed)
+            // Currently focused control is a child of one of our child containers
+            for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
-                switch (key)
+                if (currentFocus->isChild(_controls[i]))
                 {
-                case Keyboard::KEY_TAB:
-                    _focusPressed |= NEXT;
-                    if (moveFocus(NEXT))
-                        eventConsumed |= true;
-                    break;
-                case Keyboard::KEY_UP_ARROW:
-                    _focusPressed |= UP;
-                    if (moveFocus(UP))
-                        eventConsumed |= true;
-                    break;
-                case Keyboard::KEY_DOWN_ARROW:
-                    _focusPressed |= DOWN;
-                    if (moveFocus(DOWN))
-                        eventConsumed |= true;
-                    break;
-                case Keyboard::KEY_LEFT_ARROW:
-                    _focusPressed |= LEFT;
-                    if (moveFocus(LEFT))
-                        eventConsumed |= true;
-                    break;
-                case Keyboard::KEY_RIGHT_ARROW:
-                    _focusPressed |= RIGHT;
-                    if (moveFocus(RIGHT))
-                        eventConsumed |= true;
+                    current = _controls[i];
                     break;
                 }
-            }
-            break;
-        }
-        case Keyboard::KEY_RELEASE:
-        {
-            switch (key)
-            {
-            case Keyboard::KEY_TAB:
-                _focusPressed &= ~NEXT;
-                eventConsumed |= true;
-                break;
-            case Keyboard::KEY_UP_ARROW:
-                _focusPressed &= ~UP;
-                eventConsumed |= true;
-                break;
-            case Keyboard::KEY_DOWN_ARROW:
-                _focusPressed &= ~DOWN;
-                eventConsumed |= true;
-                break;
-            case Keyboard::KEY_LEFT_ARROW:
-                _focusPressed &= ~LEFT;
-                eventConsumed |= true;
-                break;
-            case Keyboard::KEY_RIGHT_ARROW:
-                _focusPressed &= ~RIGHT;
-                eventConsumed |= true;
-                break;
-            }
-            break;
-        }
-    }
-
-    release();
-    return eventConsumed;
-}
-
-void Container::guaranteeFocus(Control* inFocus)
-{
-    std::vector<Control*>::const_iterator it;
-    for (it = _controls.begin(); it < _controls.end(); it++)
-    {
-        Control* control = *it;
-        GP_ASSERT(control);
-        if (control == inFocus)
-            continue;
-
-        if (control->isContainer())
-        {
-            ((Container*)control)->guaranteeFocus(inFocus);
-        }
-        else if (control->hasFocus())
-        {
-            control->setState(NORMAL);
-            return;
-        }
-    }
-}
-
-bool Container::moveFocus(Direction direction, Control* outsideControl)
-{
-    _direction = direction;
-
-    Control* start = outsideControl;
-    if (!start)
-    {
-        std::vector<Control*>::const_iterator it;
-        for (it = _controls.begin(); it < _controls.end(); it++)
-        {
-            Control* control = *it;
-            GP_ASSERT(control);
-            if (control->hasFocus())
-            {
-                start = control;
-                break;
             }
         }
     }
 
-    int focusIndex = 0;
-    Control* next = NULL;
-    if (start)
+    Control* nextCtrl = NULL;
+    int nextIndex = direction == NEXT ? INT_MAX : INT_MIN;
+    bool moveFirst = false;
+
+    if (current)
     {
-        const Rectangle& startBounds = start->getAbsoluteBounds();
-        Vector2 vStart, vNext;
-        float distance = FLT_MAX;
-        start->setState(Control::NORMAL);
+        // There is a control inside us that currently has focus, so find the next control that
+        // should receive focus.
+        int focusableControlCount = 0; // track the number of valid focusable controls in this container
 
-        switch(direction)
+        for (size_t i = 0, count = _controls.size(); i < count; ++i)
         {
-        case UP:
-            vStart.set(startBounds.x + startBounds.width * 0.5f,
-                        startBounds.y);
-            break;
-        case DOWN:
-            vStart.set(startBounds.x + startBounds.width * 0.5f,
-                        startBounds.bottom());
-            break;
-        case LEFT:
-            vStart.set(startBounds.x,
-                        startBounds.y + startBounds.height * 0.5f);
-            break;
-        case RIGHT:
-            vStart.set(startBounds.right(),
-                        startBounds.y + startBounds.height * 0.5f);
-            break;
-        case NEXT:
-            break;
-        }
+            Control* ctrl = _controls[i];
+            if (!canReceiveFocus(ctrl))
+                continue;
 
-        if (direction != NEXT)
-        {
-            std::vector<Control*>::const_iterator itt;
-            for (itt = _controls.begin(); itt < _controls.end(); itt++)
+            if ((direction == NEXT && ctrl->_focusIndex > current->_focusIndex && ctrl->_focusIndex < nextIndex) ||
+                (direction == PREVIOUS && ctrl->_focusIndex < current->_focusIndex && ctrl->_focusIndex > nextIndex))
             {
-                Control* nextControl = *itt;
-
-                if (nextControl == start || nextControl->getFocusIndex() < 0 ||
-                    !nextControl->isEnabled() || !nextControl->isVisible())
-                {
-                    // Control is not focusable.
-                    continue;
-                }
-
-                const Rectangle& nextBounds = nextControl->getAbsoluteBounds();
-                switch(direction)
-                {
-                case UP:
-                    vNext.set(nextBounds.x + nextBounds.width * 0.5f,
-                              nextBounds.bottom());
-                    if (vNext.y > vStart.y) continue;
-                    break;
-                case DOWN:
-                    vNext.set(nextBounds.x + nextBounds.width * 0.5f,
-                              nextBounds.y);
-                    if (vNext.y < vStart.y) continue;
-                    break;
-                case LEFT:
-                    vNext.set(nextBounds.right(),
-                              nextBounds.y + nextBounds.height * 0.5f);
-                    if (vNext.x > vStart.x) continue;
-                    break;
-                case RIGHT:
-                    vNext.set(nextBounds.x,
-                              nextBounds.y + nextBounds.height * 0.5f);
-                    if (vNext.x < vStart.x) continue;
-                    break;
-                }
-
-                float nextDistance = vStart.distance(vNext);
-                if (abs(nextDistance) < distance)
-                {
-                    distance = nextDistance;
-                    next = nextControl;
-                }
+                nextCtrl = ctrl;
+                nextIndex = ctrl->_focusIndex;
             }
+
+            ++focusableControlCount;
         }
 
-        if (!next)
+        if (nextCtrl)
         {
-            // Check for controls in the given direction in our parent container.
-            if (direction != NEXT && !outsideControl && _parent && _parent->moveFocus(direction, start))
-            {
-                setState(NORMAL);
-                _focusChangeRepeat = false;
-                _focusPressed = 0;
+            if (nextCtrl->isContainer() && static_cast<Container*>(nextCtrl)->moveFocus(direction))
                 return true;
-            }
-            
-            // No control is in the given direction.  Move to the next control in the focus order.
-            int focusDelta;
-            switch(direction)
-            {
-            case UP:
-            case LEFT:
-                focusDelta = -1;
-                break;
-            case DOWN:
-            case RIGHT:
-            case NEXT:
-                focusDelta = 1;
-                break;
-            }
-
-            // Find the index to search for.
-            if (outsideControl)
-            {
-                focusIndex = outsideControl->_parent->getFocusIndex() + focusDelta;
-            }
-            else
-            {
-                focusIndex = start->getFocusIndex() + focusDelta;
-            }
-
-            if (focusIndex > _focusIndexMax)
-            {
-                if (direction == NEXT && !outsideControl && _parent && _parent->moveFocus(direction, start))
-                {
-                    setState(NORMAL);
-                    _focusChangeRepeat = false;
-                    _focusPressed = 0;
-                    return true;
-                }
-
-                focusIndex = 0;
-            }
-            else if (focusIndex < 0)
-            {
-                focusIndex = _focusIndexMax;
-            }
-        }
-    }
-
-    if (!next)
-    {
-        std::vector<Control*>::const_iterator itt;
-        for (itt = _controls.begin(); itt < _controls.end(); itt++)
-        {
-            Control* nextControl = *itt;
-            if (nextControl->getFocusIndex() == focusIndex)
-            {
-                next = nextControl;
-                break;
-            }
-        }
-    }
-
-    // If we haven't found next by now, then there are no focusable controls in this container.
-    if (next)
-    {
-        next->setState(Control::FOCUS);
-        _dirty = true;
-
-        if (next->isContainer())
-        {
-            if ((direction == NEXT && ((Container*)next)->moveFocus(direction)) ||
-                ((Container*)next)->moveFocus(direction, start))
-            {
-                _focusChangeRepeat = false;
-                _focusPressed = 0;
+            if (nextCtrl->setFocus())
                 return true;
+        }
+
+        // Search up into our parent container for a focus move
+        if (_parent && _parent->moveFocus(direction))
+            return true;
+
+        // We didn't find a control to move to, so we must be the first or last focusable control in our parent.
+        // Wrap focus to the other side of the container.
+        if (focusableControlCount > 1)
+        {
+            moveFirst = true;
+        }
+    }
+    else
+    {
+        moveFirst = true;
+    }
+
+    if (moveFirst)
+    {
+        nextIndex = direction == NEXT ? INT_MAX : INT_MIN;
+        nextCtrl = NULL;
+        for (size_t i = 0, count = _controls.size(); i < count; ++i)
+        {
+            Control* ctrl = _controls[i];
+            if (!canReceiveFocus(ctrl))
+                continue;
+            if ((direction == NEXT && ctrl->_focusIndex < nextIndex) ||
+                (direction == PREVIOUS && ctrl->_focusIndex > nextIndex))
+            {
+                nextCtrl = ctrl;
+                nextIndex = ctrl->_focusIndex;
             }
         }
 
-        // If the next control is not fully visible, scroll the container so that it is.
-        const Rectangle& bounds = next->getBounds();
-        if (bounds.x < _scrollPosition.x)
+        if (nextCtrl)
         {
-            // Control is to the left of the scrolled viewport.
-            _scrollPosition.x = -bounds.x;
+            if (nextCtrl->isContainer() && static_cast<Container*>(nextCtrl)->moveFocus(direction))
+                return true;
+            if (nextCtrl->setFocus())
+                return true;
         }
-        else if (bounds.x + bounds.width > _scrollPosition.x + _viewportBounds.width)
-        {
-            // Control is off to the right.
-            _scrollPosition.x = -(bounds.x + bounds.width - _viewportBounds.width);
-        }
-
-        if (bounds.y < _viewportBounds.y - _scrollPosition.y)
-        {
-            // Control is above the viewport.
-            _scrollPosition.y = -bounds.y;
-        }
-        else if (bounds.y + bounds.height > _viewportBounds.height - _scrollPosition.y)
-        {
-            // Control is below the viewport.
-            _scrollPosition.y = -(bounds.y + bounds.height - _viewportBounds.height);
-        }
-
-        if (outsideControl && outsideControl->_parent)
-        {
-            _focusPressed = outsideControl->_parent->_focusPressed;
-            _focusChangeCount = outsideControl->_parent->_focusChangeCount;
-            _focusChangeRepeatDelay = outsideControl->_parent->_focusChangeRepeatDelay;
-            outsideControl->_parent->guaranteeFocus(next);
-        }
-
-        _focusChangeStartTime = Game::getAbsoluteTime();
-        _focusChangeRepeat = true;
-        addRef();
-        Game::getInstance()->schedule(_focusChangeRepeatDelay, this);
-
-        return true;
     }
 
     return false;
 }
 
-void Container::timeEvent(long timeDiff, void* cookie)
+bool Container::moveFocusDirectional(Direction direction)
 {
-    double time = Game::getAbsoluteTime();
-    if (_focusChangeRepeat && hasFocus() && _focusPressed &&
-        abs(time - timeDiff - _focusChangeRepeatDelay - _focusChangeStartTime) < 50)
-    {
-        ++_focusChangeCount;
-        if (_focusChangeCount == 5)
-        {
-            _focusChangeRepeatDelay *= 0.5;
-        }
-        moveFocus(_direction);
-    }
-    else
-    {
-        _focusChangeCount = 0;
-        _focusChangeRepeatDelay = FOCUS_CHANGE_REPEAT_DELAY;
-    }
+	Control* startControl = Form::getFocusControl();
+	if (startControl == NULL)
+		return false;
 
-    release();
+	const Rectangle& startBounds = startControl->_absoluteBounds;
+
+	Control* next = NULL;
+	Vector2 vStart, vNext;
+	float distance = FLT_MAX;
+
+	switch (direction)
+	{
+	case UP:
+		vStart.set(startBounds.x + startBounds.width * 0.5f, startBounds.y);
+		break;
+	case DOWN:
+		vStart.set(startBounds.x + startBounds.width * 0.5f, startBounds.bottom());
+		break;
+	case LEFT:
+		vStart.set(startBounds.x, startBounds.y + startBounds.height * 0.5f);
+		break;
+	case RIGHT:
+		vStart.set(startBounds.right(), startBounds.y + startBounds.height * 0.5f);
+		break;
+	}
+
+	for (size_t i = 0, count = _controls.size(); i < count; ++i)
+	{
+		Control* ctrl = _controls[i];
+		if (!canReceiveFocus(ctrl))
+			continue;
+
+		const Rectangle& nextBounds = ctrl->getAbsoluteBounds();
+		switch (direction)
+		{
+		case UP:
+			vNext.set(nextBounds.x + nextBounds.width * 0.5f, nextBounds.bottom());
+			if (vNext.y > vStart.y)
+				continue;
+			break;
+		case DOWN:
+			vNext.set(nextBounds.x + nextBounds.width * 0.5f, nextBounds.y);
+			if (vNext.y < vStart.y)
+				continue;
+			break;
+		case LEFT:
+			vNext.set(nextBounds.right(), nextBounds.y + nextBounds.height * 0.5f);
+			if (vNext.x > vStart.x)
+				continue;
+			break;
+		case RIGHT:
+			vNext.set(nextBounds.x, nextBounds.y + nextBounds.height * 0.5f);
+			if (vNext.x < vStart.x)
+				continue;
+			break;
+		}
+
+		float nextDistance = vStart.distance(vNext);
+		if (std::fabs(nextDistance) < distance)
+		{
+			distance = nextDistance;
+			next = ctrl;
+		}
+	}
+
+	if (next)
+	{
+		// If this control is a container, try to move focus to the first control within it
+		if (next->isContainer())
+		{
+			if (static_cast<Container*>(next)->moveFocusDirectional(direction))
+				return true;
+		}
+
+		if (next->setFocus())
+			return true;
+	}
+	else
+	{
+		// If no control was found, try searching in our parent container
+		if (_parent && _parent->moveFocusDirectional(direction))
+			return true;
+	}
+
+    return false;
 }
 
 void Container::startScrolling(float x, float y, bool resetTime)
@@ -1008,7 +984,7 @@ void Container::startScrolling(float x, float y, bool resetTime)
     _scrollingVelocity.set(-x, y);
     _scrolling = true;
     _scrollBarOpacity = 1.0f;
-    _dirty = true;
+    setDirty(DIRTY_BOUNDS);
 
     if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
     {
@@ -1018,7 +994,7 @@ void Container::startScrolling(float x, float y, bool resetTime)
 
     if (resetTime)
     {
-        _lastFrameTime = Game::getGameTime();
+        _lastFrameTime = Game::getAbsoluteTime();
     }
 }
 
@@ -1026,223 +1002,10 @@ void Container::stopScrolling()
 {
     _scrollingVelocity.set(0, 0);
     _scrolling = false;
-    _dirty = true;
-}
+    setDirty(DIRTY_BOUNDS);
 
-bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
-{
-    addRef();
-
-    bool eventConsumed = false;
-
-    // Pass the event to any control that is active or in focus.
-    std::vector<Control*>::const_iterator it;
-    for (it = _controls.begin(); it < _controls.end(); it++)
-    {
-        Control* control = *it;
-        GP_ASSERT(control);
-        if (control->hasFocus() || control->getState() == Control::ACTIVE)
-        {
-            eventConsumed |= control->gamepadEvent(evt, gamepad, analogIndex);
-            break;
-        }
-    }
-
-    // First check if a selection button is down.
-    if (!_selectButtonDown)
-    {
-        if (gamepad->isButtonDown(Gamepad::BUTTON_A) ||
-            gamepad->isButtonDown(Gamepad::BUTTON_X))
-        {
-            _selectButtonDown = true;
-            _focusChangeRepeat = false;
-            eventConsumed |= _consumeInputEvents;
-        }
-    }
-    else
-    {
-        if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
-            !gamepad->isButtonDown(Gamepad::BUTTON_X))
-        {
-            _selectButtonDown = false;
-        }
-    }
-
-    Vector2 joystick;
-    gamepad->getJoystickValues(analogIndex, &joystick);
-
-    // Don't allow focus changes or scrolling while a selection button is down.
-    if (!_selectButtonDown && !eventConsumed)
-    {
-        switch (evt)
-        {
-            case Gamepad::BUTTON_EVENT:
-            {
-                // Shift focus forward or backward when the DPad is used.
-                if (!(_focusPressed & DOWN) &&
-                    gamepad->isButtonDown(Gamepad::BUTTON_DOWN))
-                {
-                    _focusPressed |= DOWN;
-                    eventConsumed = true;
-                    if (moveFocus(DOWN))
-                        break;
-                    else
-                        startScrolling(0, -GAMEPAD_SCROLL_SPEED);
-                }
-                    
-                if (!(_focusPressed & RIGHT) &&
-                    gamepad->isButtonDown(Gamepad::BUTTON_RIGHT))
-                {
-                    _focusPressed |= RIGHT;
-                    eventConsumed = true;
-                    if (moveFocus(RIGHT))
-                        break;
-                    else
-                        startScrolling(GAMEPAD_SCROLL_SPEED, 0);
-                }
-
-                if (!(_focusPressed & UP) &&
-                    gamepad->isButtonDown(Gamepad::BUTTON_UP))
-                {
-                    _focusPressed |= UP;
-                    eventConsumed = true;
-                    if (moveFocus(UP))
-                        break;
-                    else
-                        startScrolling(0, GAMEPAD_SCROLL_SPEED);
-                }
-
-                if (!(_focusPressed & LEFT) &&
-                    gamepad->isButtonDown(Gamepad::BUTTON_LEFT))
-                {
-                    _focusPressed |= LEFT;
-                    eventConsumed = true;
-                    if (moveFocus(LEFT))
-                        break;
-                    else
-                        startScrolling(-GAMEPAD_SCROLL_SPEED, 0);
-                }
-                break;
-            }
-            case Gamepad::JOYSTICK_EVENT:
-            {
-                switch (analogIndex)
-                {
-                case 0:
-                    // The left analog stick can be used in the same way as the DPad.
-                    eventConsumed = true;
-                    if (!(_focusPressed & RIGHT) &&
-                        joystick.x > JOYSTICK_THRESHOLD)
-                    {
-                        _focusPressed |= RIGHT;
-                        if (moveFocus(RIGHT))
-                            break;
-                        else
-                            startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, 0);
-                    }
-
-                    if (!(_focusPressed & DOWN) &&
-                        joystick.y < -JOYSTICK_THRESHOLD)
-                    {
-                        _focusPressed |= DOWN;
-                        if (moveFocus(DOWN))
-                            break;
-                        else
-                            startScrolling(0, GAMEPAD_SCROLL_SPEED * joystick.y);
-                    }
-
-                    if (!(_focusPressed & LEFT) &&
-                        joystick.x < -JOYSTICK_THRESHOLD)
-                    {
-                        _focusPressed |= LEFT;
-                        if (moveFocus(LEFT))
-                            break;
-                        else
-                            startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, 0);
-                    }
-                        
-                    if (!(_focusPressed & UP) &&
-                        joystick.y > JOYSTICK_THRESHOLD)
-                    {
-                        _focusPressed |= UP;
-                        if (moveFocus(UP))
-                            break;
-                        else
-                            startScrolling(0, GAMEPAD_SCROLL_SPEED * joystick.y);
-                    }
-                    break;
-
-                case 1:
-                    // The right analog stick can be used to scroll.
-                    if (_scroll != SCROLL_NONE)
-                    {
-                        if (_scrolling)
-                        {
-                            if (joystick.isZero())
-                            {
-                                stopScrolling();
-                            }
-                            else
-                            {
-                                startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, GAMEPAD_SCROLL_SPEED * joystick.y, false);
-                            }
-                        }
-                        else
-                        {
-                            startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, GAMEPAD_SCROLL_SPEED * joystick.y);
-                        }
-                        release();
-                        return _consumeInputEvents;
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    if ((evt == Gamepad::BUTTON_EVENT || evt == Gamepad::JOYSTICK_EVENT) &&
-        analogIndex == 0)
-    {
-        if ((_focusPressed & DOWN) &&
-            !gamepad->isButtonDown(Gamepad::BUTTON_DOWN) &&
-            joystick.y > -JOYSTICK_THRESHOLD)
-        {
-            _focusPressed &= ~DOWN;
-            eventConsumed = true;
-        }
-
-        if ((_focusPressed & RIGHT) &&
-            !gamepad->isButtonDown(Gamepad::BUTTON_RIGHT) &&
-            joystick.x < JOYSTICK_THRESHOLD)
-        {
-            _focusPressed &= ~RIGHT;
-            eventConsumed = true;
-        }
-    
-        if ((_focusPressed & UP) &&
-            !gamepad->isButtonDown(Gamepad::BUTTON_UP) &&
-            joystick.y < JOYSTICK_THRESHOLD)
-        {
-            _focusPressed &= ~UP;
-            eventConsumed = true;
-        }
-
-        if ((_focusPressed & LEFT) &&
-            !gamepad->isButtonDown(Gamepad::BUTTON_LEFT) &&
-            joystick.x > -JOYSTICK_THRESHOLD)
-        {
-            _focusPressed &= ~LEFT;
-            eventConsumed = true;
-        }
-    }
-
-    if (!_focusPressed && _scrolling)
-    {
-        stopScrolling();
-    }
-
-    release();
-    return eventConsumed;
+    if (_parent)
+        _parent->stopScrolling();
 }
 
 bool Container::isContainer() const
@@ -1278,52 +1041,69 @@ Layout::Type Container::getLayoutType(const char* layoutString)
     }
 }
 
+Layout* Container::createLayout(Layout::Type type)
+{
+    switch (type)
+    {
+    case Layout::LAYOUT_ABSOLUTE:
+        return AbsoluteLayout::create();
+    case Layout::LAYOUT_FLOW:
+        return FlowLayout::create();
+    case Layout::LAYOUT_VERTICAL:
+        return VerticalLayout::create();
+    default:
+        return AbsoluteLayout::create();
+    }
+}
+
 void Container::updateScroll()
 {
-    if (!_initializedWithScroll)
-    {
-        _initializedWithScroll = true;
-        _layout->update(this, _scrollPosition);
-    }
+    if (_scroll == SCROLL_NONE)
+        return;
+
+    Control::State state = getState();
 
     // Update time.
     if (!_lastFrameTime)
     {
-        _lastFrameTime = Game::getGameTime();
+        _lastFrameTime = Game::getAbsoluteTime();
     }
-    double frameTime = Game::getGameTime();
+    double frameTime = Game::getAbsoluteTime();
     float elapsedTime = (float)(frameTime - _lastFrameTime);
     _lastFrameTime = frameTime;
 
-    const Theme::Border& containerBorder = getBorder(_state);
+    const Theme::Border& containerBorder = getBorder(state);
     const Theme::Padding& containerPadding = getPadding();
 
     // Calculate total width and height.
+    _totalWidth = _totalHeight = 0.0f;
     std::vector<Control*> controls = getControls();
-    for (size_t i = 0, controlsCount = controls.size(); i < controlsCount; i++)
+    for (size_t i = 0, count = controls.size(); i < count; ++i)
     {
-        Control* control = controls.at(i);
+        Control* control = _controls[i];
 
         const Rectangle& bounds = control->getBounds();
         const Theme::Margin& margin = control->getMargin();
 
-        float newWidth = bounds.x + bounds.width;
+        float newWidth = bounds.x + bounds.width + margin.right;
         if (newWidth > _totalWidth)
         {
             _totalWidth = newWidth;
         }
 
-        float newHeight = bounds.y + bounds.height;
+        float newHeight = bounds.y + bounds.height + margin.bottom;
         if (newHeight > _totalHeight)
         {
             _totalHeight = newHeight;
         }
     }
 
-    float vWidth = getImageRegion("verticalScrollBar", _state).width;
-    float hHeight = getImageRegion("horizontalScrollBar", _state).height;
-    float clipWidth = _bounds.width - containerBorder.left - containerBorder.right - containerPadding.left - containerPadding.right - vWidth;
-    float clipHeight = _bounds.height - containerBorder.top - containerBorder.bottom - containerPadding.top - containerPadding.bottom - hHeight;
+    float vWidth = getImageRegion("verticalScrollBar", state).width;
+    float hHeight = getImageRegion("horizontalScrollBar", state).height;
+    float clipWidth = _absoluteBounds.width - containerBorder.left - containerBorder.right - containerPadding.left - containerPadding.right - vWidth;
+    float clipHeight = _absoluteBounds.height - containerBorder.top - containerBorder.bottom - containerPadding.top - containerPadding.bottom - hHeight;
+
+    bool dirty = false;
 
     // Apply and dampen inertia.
     if (!_scrollingVelocity.isZero())
@@ -1345,6 +1125,8 @@ void Container::updateScroll()
             if (fabs(_scrollingVelocity.y) < 100.0f)
                 _scrollingVelocity.y = 0.0f;
         }
+
+        dirty = true;
     }
 
     // Stop scrolling when the far edge is reached.
@@ -1352,24 +1134,28 @@ void Container::updateScroll()
     {
         _scrollPosition.x = -(_totalWidth - clipWidth);
         _scrollingVelocity.x = 0;
+        dirty = true;
     }
     
     if (-_scrollPosition.y > _totalHeight - clipHeight)
     {
         _scrollPosition.y = -(_totalHeight - clipHeight);
         _scrollingVelocity.y = 0;
+        dirty = true;
     }
 
     if (_scrollPosition.x > 0)
     {
         _scrollPosition.x = 0;
         _scrollingVelocity.x = 0;
+        dirty = true;
     }
 
     if (_scrollPosition.y > 0)
     {
         _scrollPosition.y = 0;
         _scrollingVelocity.y = 0;
+        dirty = true;
     }
 
     float scrollWidth = 0;
@@ -1391,14 +1177,19 @@ void Container::updateScroll()
         _scrollBarOpacity = 0.99f;
         if (!_scrollBarOpacityClip)
         {
-            Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_SCROLLBAR_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, 500L);
+            Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_SCROLLBAR_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, SCROLLBAR_FADE_TIME);
             _scrollBarOpacityClip = animation->getClip();
         }
         _scrollBarOpacityClip->play();
     }
 
-    // Position controls within scroll area.
-    _layout->update(this, _scrollPosition);
+    // When scroll position is updated, we need to recompute bounds since children
+    // absolute bounds offset will need to be updated.
+    if (dirty)
+    {
+        setDirty(DIRTY_BOUNDS);
+        setChildrenDirty(DIRTY_BOUNDS, true);
+    }
 }
 
 void Container::sortControls()
@@ -1411,12 +1202,13 @@ void Container::sortControls()
 
 bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    switch(evt)
+    switch (evt)
     {
     case Touch::TOUCH_PRESS:
         if (_contactIndex == INVALID_CONTACT_INDEX)
         {
-            _contactIndex = (int) contactIndex;
+            bool dirty = !_scrollingVelocity.isZero();
+            _contactIndex = (int)contactIndex;
             _scrollingLastX = _scrollingFirstX = _scrollingVeryFirstX = x;
             _scrollingLastY = _scrollingFirstY = _scrollingVeryFirstY = y;
             _scrollingVelocity.set(0, 0);
@@ -1429,12 +1221,14 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
                 _scrollBarOpacityClip = NULL;
             }
             _scrollBarOpacity = 1.0f;
-            _dirty = true;
-            return _consumeInputEvents;
+            if (dirty)
+                setDirty(DIRTY_BOUNDS);
+            return false;
         }
         break;
+
     case Touch::TOUCH_MOVE:
-        if (_scrolling && _contactIndex == (int) contactIndex)
+        if (_scrolling && _contactIndex == (int)contactIndex)
         {
             double gameTime = Game::getAbsoluteTime();
 
@@ -1491,8 +1285,9 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
                 _scrollingStartTimeY = gameTime;
 
             _scrollingLastTime = gameTime;
-            _dirty = true;
-            return _consumeInputEvents;
+            setDirty(DIRTY_BOUNDS);
+            setChildrenDirty(DIRTY_BOUNDS, true);
+            return false;
         }
         break;
 
@@ -1507,8 +1302,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
             {
                 _scrollingVelocity.set(0, 0);
                 _scrollingMouseVertically = _scrollingMouseHorizontally = false;
-                _dirty = true;
-                return _consumeInputEvents;
+                return false;
             }
 
             int dx = _scrollingLastX - _scrollingFirstX;
@@ -1544,8 +1338,8 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
             }
 
             _scrollingMouseVertically = _scrollingMouseHorizontally = false;
-            _dirty = true;
-            return _consumeInputEvents;
+            setDirty(DIRTY_BOUNDS);
+            return false;
         }
         break;
     }
@@ -1555,29 +1349,35 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
 
 bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    switch(evt)
+    switch (evt)
     {
         case Mouse::MOUSE_PRESS_LEFT_BUTTON:
         {
+            bool dirty = false;
             if (_scrollBarVertical)
             {
                 float vWidth = _scrollBarVertical->getRegion().width;
-                Rectangle vBounds(_viewportBounds.x + _viewportBounds.width - vWidth,
-                                 _scrollBarBounds.y,
-                                 vWidth, _scrollBarBounds.height);
+                float rightPadding = _absoluteBounds.right() - _viewportBounds.right();
+                float topPadding = _viewportBounds.y - _absoluteBounds.y;
+                float localVpRight = _bounds.width - rightPadding;
+                Rectangle vBounds(
+                    localVpRight + rightPadding*0.5f - vWidth*0.5f,
+                    topPadding + _scrollBarBounds.y,
+                    vWidth, _scrollBarBounds.height);
 
-                if (x + _viewportBounds.x >= vBounds.x &&
-                    x + _viewportBounds.x <= vBounds.x + vBounds.width)
+                if (x >= vBounds.x && x <= vBounds.right())
                 {
                     // Then we're within the horizontal bounds of the vertical scrollbar.
                     // We want to either jump up or down, or drag the scrollbar itself.
                     if (y < vBounds.y)
                     {
                         _scrollPosition.y += _totalHeight / 5.0f;
+                        dirty = true;
                     }
-                    else if (y > vBounds.y + vBounds.height)
+                    else if (y > vBounds.bottom())
                     {
                         _scrollPosition.y -= _totalHeight / 5.0f;
+                        dirty = true;
                     }
                     else
                     {
@@ -1585,25 +1385,42 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
                     }
                 }
             }
-            
+
             if (_scrollBarHorizontal)
             {
                 float hHeight = _scrollBarHorizontal->getRegion().height;
-                Rectangle hBounds(_scrollBarBounds.x,
-                                  _viewportBounds.y + _viewportBounds.height - hHeight,
-                                  _scrollBarBounds.width, hHeight);
-            
-                if (y + _viewportBounds.y >= hBounds.y &&
-                         y + _viewportBounds.y <= hBounds.y + hBounds.height)
+                float bottomPadding = _absoluteBounds.bottom() - _viewportBounds.bottom();
+                float leftPadding = _viewportBounds.x - _absoluteBounds.x;
+                float localVpBottom = _bounds.height - bottomPadding;
+                Rectangle hBounds(
+                    leftPadding + _scrollBarBounds.x,
+                    localVpBottom + bottomPadding*0.5f - hHeight*0.5f,
+                    _scrollBarBounds.width, hHeight);
+
+                if (y >= hBounds.y && y <= hBounds.bottom())
                 {
                     // We're within the vertical bounds of the horizontal scrollbar.
                     if (x < hBounds.x)
+                    {
                         _scrollPosition.x += _totalWidth / 5.0f;
+                        dirty = true;
+                    }
                     else if (x > hBounds.x + hBounds.width)
+                    {
                         _scrollPosition.x -= _totalWidth / 5.0f;
+                        dirty = true;
+                    }
                     else
+                    {
                         _scrollingMouseHorizontally = true;
+                    }
                 }
+            }
+
+            if (dirty)
+            {
+                setDirty(DIRTY_BOUNDS);
+                setChildrenDirty(DIRTY_BOUNDS, true);
             }
 
             return touchEventScroll(Touch::TOUCH_PRESS, x, y, 0);
@@ -1616,27 +1433,24 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             return touchEventScroll(Touch::TOUCH_RELEASE, x, y, 0);
 
         case Mouse::MOUSE_WHEEL:
-            if ((_state == HOVER && (!_scrollWheelRequiresFocus || _previousState == FOCUS)) ||
-                _state == FOCUS && _scrollWheelRequiresFocus)
+        {
+            if (_scrollingVelocity.isZero())
             {
-                if (_scrollingVelocity.isZero())
-                {
-                    _lastFrameTime = Game::getGameTime();
-                }
-                _scrolling = _scrollingMouseVertically = _scrollingMouseHorizontally = false;
-
-                _scrollingVelocity.y += _scrollWheelSpeed * wheelDelta;
-
-                if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
-                {
-                    _scrollBarOpacityClip->stop();
-                    _scrollBarOpacityClip = NULL;
-                }
-                _scrollBarOpacity = 1.0f;
-                _dirty = true;
-                return _consumeInputEvents;
+                _lastFrameTime = Game::getAbsoluteTime();
             }
-            break;
+            _scrolling = _scrollingMouseVertically = _scrollingMouseHorizontally = false;
+
+            _scrollingVelocity.y += _scrollWheelSpeed * wheelDelta;
+
+            if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
+            {
+                _scrollBarOpacityClip->stop();
+                _scrollBarOpacityClip = NULL;
+            }
+            _scrollBarOpacity = 1.0f;
+            setDirty(DIRTY_BOUNDS);
+            return false;
+        }
     }
 
     return false;
@@ -1650,160 +1464,6 @@ bool Container::inContact()
 			return true;
 	}
 	return false;
-}
-
-bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
-{
-    if (!isEnabled() || !isVisible())
-    {
-        return false;
-    }
-
-    // This event may run untrusted code by notifying listeners of events.
-    // If the user calls exit() or otherwise releases this container, we
-    // need to keep it alive until the method returns.
-    addRef();
-
-    bool eventConsumed = false;
-    const Theme::Border& border = getBorder(_state);
-    const Theme::Padding& padding = getPadding();
-    float xPos = border.left + padding.left;
-    float yPos = border.top + padding.top;
-
-    Vector2* offset = NULL;
-    if (_scroll != SCROLL_NONE)
-    {
-        offset = &_scrollPosition;
-    }
-
-    std::vector<Control*>::const_iterator it;
-    for (it = _controls.begin(); it < _controls.end(); it++)
-    {
-        Control* control = *it;
-        GP_ASSERT(control);
-        if (!control->isEnabled() || !control->isVisible())
-        {
-            continue;
-        }
-
-        const Rectangle& bounds = control->getBounds();
-        float boundsX = bounds.x;
-        float boundsY = bounds.y;
-        if (offset)
-        {
-            boundsX += offset->x;
-            boundsY += offset->y;
-        }
-
-        Control::State currentState = control->getState();
-        if ((currentState != Control::NORMAL) ||
-            ((evt == Touch::TOUCH_PRESS ||
-              evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
-              evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
-              evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
-              evt == Mouse::MOUSE_MOVE ||
-              evt == Mouse::MOUSE_WHEEL) &&
-                x >= xPos + boundsX &&
-                x <= xPos + boundsX + bounds.width &&
-                y >= yPos + boundsY &&
-                y <= yPos + boundsY + bounds.height))
-        {
-            // Pass on the event's clip relative to the control.
-            if (mouse)
-                eventConsumed |= control->mouseEvent((Mouse::MouseEvent)evt, x - xPos - boundsX, y - yPos - boundsY, data);
-            else
-                eventConsumed |= control->touchEvent((Touch::TouchEvent)evt, x - xPos - boundsX, y - yPos - boundsY, (unsigned int)data);
-        }
-    }
-
-    if (!isEnabled() || !isVisible())
-    {
-        _contactIndex = INVALID_CONTACT_INDEX;
-        clearContacts();
-        _scrolling = false;
-        _scrollingMouseVertically = _scrollingMouseHorizontally = false;
-
-        release();
-        return (_consumeInputEvents | eventConsumed);
-    }
-
-    bool withinClipBounds = (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                             y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height);
-    switch (evt)
-    {
-    case Touch::TOUCH_PRESS:
-        if (withinClipBounds)
-        {
-            setState(Control::ACTIVE);
-        }
-        else if (!inContact())
-        {
-            setState(Control::NORMAL);
-            _contactIndex = INVALID_CONTACT_INDEX;
-            release();
-            return false;
-        }
-        if (!mouse)
-        	_contactIndices[data] = true;
-        break;
-    case Mouse::MOUSE_MOVE:
-        if (_state != ACTIVE)
-        {
-            if (_state != HOVER && withinClipBounds)
-            {
-                _previousState = _state;
-                setState(HOVER);
-                notifyListeners(Control::Listener::ENTER);
-            }
-            else if (_state == HOVER && !withinClipBounds)
-            {
-                setState(_previousState);
-                notifyListeners(Control::Listener::LEAVE);
-            }
-            else if (_state != HOVER)
-            {
-                release();
-                return false;
-            }
-        }
-        break;
-    case Mouse::MOUSE_WHEEL:
-        if (!withinClipBounds && !_scrollWheelRequiresFocus)
-        {
-            release();
-            return false;
-        }
-        break;
-    case Touch::TOUCH_RELEASE:
-    	if (!mouse)
-    		_contactIndices[data] = false;
-
-    	if (!inContact())
-        {
-			if (_state == ACTIVE && withinClipBounds)
-			{
-				setState(FOCUS);
-			}
-			else
-			{
-				setState(NORMAL);
-			}
-        }
-        break;
-    }
-
-    if (!eventConsumed && _scroll != SCROLL_NONE &&
-        (evt != Touch::TOUCH_PRESS || withinClipBounds))
-    {
-        if ((mouse && mouseEventScroll((Mouse::MouseEvent)evt, x - xPos, y - yPos, data)) ||
-            (!mouse && touchEventScroll((Touch::TouchEvent)evt, x - xPos, y - yPos, (unsigned int)data)))
-        {
-            eventConsumed = true;
-        }
-    }
-
-    release();
-    return (_consumeInputEvents | eventConsumed);
 }
 
 Container::Scroll Container::getScroll(const char* scroll)
@@ -1897,7 +1557,6 @@ void Container::setAnimationPropertyValue(int propertyId, AnimationValue* value,
     {
     case ANIMATE_SCROLLBAR_OPACITY:
         _scrollBarOpacity = Curve::lerp(blendWeight, _opacity, value->getFloat(0));
-        _dirty = true;
         break;
     default:
         Control::setAnimationPropertyValue(propertyId, value, blendWeight);

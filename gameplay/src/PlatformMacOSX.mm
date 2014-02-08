@@ -13,6 +13,7 @@
 #import <OpenGL/OpenGL.h>
 #import <mach/mach_time.h>
 #import <Foundation/Foundation.h>
+#import <GameKit/GameKit.h>
 
 // These should probably be moved to a platform common file
 #define SONY_USB_VENDOR_ID              0x054c
@@ -48,7 +49,6 @@ static bool __shiftDown = false;
 static char* __title = NULL;
 static bool __fullscreen = false;
 static bool __resizable = false;
-static void* __attachToWindow = NULL;
 static bool __mouseCaptured = false;
 static bool __mouseCapturedFirstPass = false;
 static CGPoint __mouseCapturePoint;
@@ -749,7 +749,11 @@ double getMachTimeInMilliseconds()
 {
     [gameLock lock];
     NSSize size = [ [ _window contentView ] frame ].size;
-    gameplay::Platform::resizeEventInternal((unsigned int)size.width, (unsigned int)size.height);
+    __width = size.width;
+    __height = size.height;
+    gameplay::Platform::resizeEventInternal((unsigned int)__width, (unsigned int)__height);
+
+    
     [gameLock unlock];
 }
 
@@ -1000,11 +1004,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 }
 
-- (void)mouseMoved:(NSEvent*) event 
+// helper function to handle mouse capture
+bool getMousePointForEvent(NSPoint& point, NSEvent* event)
 {
-    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    
-    float y;
     if (__mouseCaptured)
     {
         if (__mouseCapturedFirstPass)
@@ -1012,36 +1014,61 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
             // Discard the first mouseMoved event following transition into capture
             // since it contains bogus x,y data.
             __mouseCapturedFirstPass = false;
-            return;
+            return false;
         }
-
+        
         point.x = [event deltaX];
         point.y = [event deltaY];
-
+        
         NSWindow* window = __view.window;
         NSRect rect = window.frame;
         CGPoint centerPoint;
         centerPoint.x = rect.origin.x + (rect.size.width / 2);
         centerPoint.y = rect.origin.y + (rect.size.height / 2);
         CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
-        y = point.y;
     }
     else
     {
-        y = __height - point.y;
+        point.y = __height - point.y;
     }
+
+    return true;
+}
+
+- (void)mouseMoved:(NSEvent*) event
+{
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     
+    if (!getMousePointForEvent(point, event))
+    {
+        return;
+    }
+
     [__view->gameLock lock];
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, point.y, 0);
     [__view->gameLock unlock];
 }
 
 - (void) mouseDragged: (NSEvent*) event
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    if (__leftMouseDown && !__mouseCaptured)
+    if (__leftMouseDown)
     {
-        [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
+        if (__mouseCaptured)
+        {
+            if (!getMousePointForEvent(point, event))
+            {
+                return;
+            }
+            
+            [__view->gameLock lock];
+            gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, point.y, 0);
+            [__view->gameLock unlock];
+        }
+        else
+        {
+            [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
+        }
     }
 }
 
@@ -1069,10 +1096,15 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     
+    if (!getMousePointForEvent(point, event))
+    {
+        return;
+    }
+    
     // In right-mouse case, whether __rightMouseDown is true or false
     // this should not matter, mouse move is still occuring
     [__view->gameLock lock];
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, point.y, 0);
     [__view->gameLock unlock];
 }
 
@@ -1554,14 +1586,22 @@ int getUnicode(int key)
 @end
 
 @interface FullscreenWindow : NSWindow
-{ 
+{
 }
+
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController;
 @end
 
 @implementation FullscreenWindow
 - (BOOL)canBecomeKeyWindow
 {
     return YES;
+}
+
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController
+{
+    GKDialogController *sdc = [GKDialogController sharedDialogController];
+    [sdc dismiss: self];
 }
 @end
 
@@ -1576,6 +1616,11 @@ extern void print(const char* format, ...)
     va_start(argptr, format);
     vfprintf(stderr, format, argptr);
     va_end(argptr);
+}
+
+extern int strcmpnocase(const char* s1, const char* s2)
+{
+    return strcasecmp(s1, s2);
 }
     
 Platform::Platform(Game* game)
@@ -1623,9 +1668,8 @@ Platform::~Platform()
 }
 
     
-Platform* Platform::create(Game* game, void* attachToWindow)
+Platform* Platform::create(Game* game)
 {
-    __attachToWindow = attachToWindow;
     Platform* platform = new Platform(game);
     
     return platform;
@@ -1813,7 +1857,7 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     *roll = 0;
 }
 
-void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
     if (accelX)
     {
@@ -2287,6 +2331,98 @@ bool Platform::launchURL(const char *url)
     const OSStatus err = LSOpenCFURLRef(urlRef, 0);
     CFRelease(urlRef);
     return (err == noErr);
+}
+
+NSString* getAbsolutePath(const char* path)
+{
+    NSString* bundlePathStr = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/Contents/Resources"];
+    if (path == NULL )
+        return bundlePathStr;
+    
+    NSString* absPath = [NSString stringWithUTF8String:path];
+    if ([absPath length] == 0)
+        return @"";
+    
+    if ([absPath hasPrefix:@"/"])
+    {
+        absPath = [NSString stringWithUTF8String:path];
+    }
+    else
+    {
+        absPath = bundlePathStr;
+        absPath = [absPath stringByAppendingString:@"/"];
+        absPath = [absPath stringByAppendingString:[NSString stringWithUTF8String:path]];
+    }
+    return absPath;
+}
+
+std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
+{
+    std::string filename = "";
+    
+    if (mode == FileSystem::OPEN)
+    {
+        NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+        
+        [openPanel setCanChooseFiles:TRUE];
+        [openPanel setCanChooseDirectories:FALSE];
+        [openPanel setAllowsMultipleSelection:FALSE];
+
+        // Title
+        NSString* titleStr = [NSString stringWithUTF8String:title];
+        [openPanel setTitle:titleStr];
+        
+        // Filter ext.
+        NSString* ext = [NSString stringWithUTF8String:filterExtensions];
+        NSArray* fileTypes = [NSArray arrayWithObjects: ext, nil];
+        [openPanel setAllowedFileTypes:fileTypes];
+        
+        // Set the initial directory
+        NSString* absPath = getAbsolutePath(initialDirectory);
+        NSURL* url = [NSURL fileURLWithPath:absPath];
+        [openPanel setDirectoryURL:url];
+        
+        // Show the open dialog
+        if ([openPanel runModal] == NSOKButton)
+        {
+            NSURL* selectedFileName = [openPanel URL];
+            NSString* urlStr = [selectedFileName absoluteString];
+            filename = std::string([urlStr UTF8String]);
+            const std::string fileProtocol = std::string("file://localhost");
+            filename.replace(filename.find(fileProtocol), fileProtocol.size(), "");
+        }
+    }
+    else
+    {
+        NSSavePanel* savePanel = [NSSavePanel savePanel];
+        [savePanel setCanCreateDirectories:TRUE];
+        [savePanel setCanSelectHiddenExtension:TRUE];
+        // Title
+        NSString* titleStr = [NSString stringWithUTF8String:title];
+        [savePanel setTitle:titleStr];
+        
+        // Filter ext.
+        NSString* ext = [NSString stringWithUTF8String:filterExtensions];
+        NSArray* fileTypes = [NSArray arrayWithObjects: ext, nil];
+        [savePanel setAllowedFileTypes:fileTypes];
+        
+        // Set the initial directory
+        NSString* absPath = getAbsolutePath(initialDirectory);
+        NSURL* url = [NSURL fileURLWithPath:absPath];
+        [savePanel setDirectoryURL:url];
+        
+        // Show the save dialog
+        if ([savePanel runModal] == NSOKButton)
+        {
+            NSURL* selectedFileName = [savePanel URL];
+            NSString* urlStr = [selectedFileName absoluteString];
+            filename = std::string([urlStr UTF8String]);
+            const std::string fileProtocol = std::string("file://localhost");
+            filename.replace(filename.find(fileProtocol), fileProtocol.size(), "");
+        }
+    }
+    
+    return filename;
 }
 
 #endif

@@ -4,13 +4,8 @@
     ADD_SAMPLE("Input", "Gamepads", GamepadSample, 3);
 #endif
 
-GamepadSample::GamepadSample() : _gamepad(NULL)
+GamepadSample::GamepadSample() : _font(NULL), _gamepad(NULL)
 {
-}
-
-void GamepadSample::finalize()
-{
-    SAFE_RELEASE(_font);
 }
 
 void GamepadSample::initialize()
@@ -23,8 +18,13 @@ void GamepadSample::initialize()
     if (_gamepad && _gamepad->isVirtual())
         _gamepad->getForm()->setEnabled(true);
 
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
     _status = "Looking for gamepads...";
+}
+
+void GamepadSample::finalize()
+{
+    SAFE_RELEASE(_font);
 }
 
 void GamepadSample::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned int player)
@@ -73,7 +73,7 @@ void GamepadSample::render(float elapsedTime)
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 
     _font->start();
-    _font->drawText(_status.c_str(), 5, 25, Vector4::one());
+    _font->drawText(_status.c_str(), 7, 27, Vector4::one(), 22);
     _font->finish();
 
 

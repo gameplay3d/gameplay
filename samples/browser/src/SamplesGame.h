@@ -49,7 +49,13 @@ public:
     
     void gestureTapEvent(int x, int y);
 
-    void controlEvent(Control* control, EventType evt);
+	void gestureLongTapEvent(int x, int y, float duration);
+
+	void gestureDragEvent(int x, int y);
+
+	void gestureDropEvent(int x, int y);
+
+	void controlEvent(Control* control, EventType evt);
 
     void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
 

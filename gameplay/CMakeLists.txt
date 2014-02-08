@@ -1,3 +1,4 @@
+
 set(GAMEPLAY_SRC
     src/AbsoluteLayout.cpp
     src/AbsoluteLayout.h
@@ -48,6 +49,8 @@ set(GAMEPLAY_SRC
     src/Container.h
     src/Control.cpp
     src/Control.h
+    src/ControlFactory.h
+    src/ControlFactory.cpp
     src/Curve.cpp
     src/Curve.h
     src/DebugNew.cpp
@@ -87,9 +90,8 @@ set(GAMEPLAY_SRC
     src/ImageControl.h
     src/Joint.cpp
     src/Joint.h
-    src/Joystick.cpp
-    src/Joystick.h
-    src/Joystick.inl
+    src/JoystickControl.cpp
+    src/JoystickControl.h
     src/Label.cpp
     src/Label.h
     src/Layout.cpp
@@ -284,6 +286,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_Button.h
     src/lua/lua_Camera.cpp
     src/lua/lua_Camera.h
+    src/lua/lua_CameraListener.h
+    src/lua/lua_CameraListener.cpp
     src/lua/lua_CameraType.cpp
     src/lua/lua_CameraType.h
     src/lua/lua_CheckBox.cpp
@@ -296,6 +300,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_Control.h
     src/lua/lua_ControlAlignment.cpp
     src/lua/lua_ControlAlignment.h
+    src/lua/lua_ControlAutoSize.cpp
+    src/lua/lua_ControlAutoSize.h
     src/lua/lua_ControlListener.cpp
     src/lua/lua_ControlListener.h
     src/lua/lua_ControlListenerEventType.cpp
@@ -318,6 +324,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_FlowLayout.h
     src/lua/lua_Font.cpp
     src/lua/lua_Font.h
+    src/lua/lua_FontFormat.cpp
+    src/lua/lua_FontFormat.h
     src/lua/lua_FontJustify.cpp
     src/lua/lua_FontJustify.h
     src/lua/lua_FontStyle.cpp
@@ -358,8 +366,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_ImageFormat.h
     src/lua/lua_Joint.cpp
     src/lua/lua_Joint.h
-    src/lua/lua_Joystick.cpp
-    src/lua/lua_Joystick.h
+    src/lua/lua_JoystickControl.cpp
+    src/lua/lua_JoystickControl.h
     src/lua/lua_Keyboard.cpp
     src/lua/lua_Keyboard.h
     src/lua/lua_KeyboardKey.cpp
@@ -495,14 +503,18 @@ set(GAMEPLAY_LUA
     src/lua/lua_RenderStateCullFaceSide.cpp
     src/lua/lua_RenderStateDepthFunction.cpp
     src/lua/lua_RenderStateDepthFunction.h
+    src/lua/lua_RenderStateFrontFace.cpp
+    src/lua/lua_RenderStateFrontFace.h
     src/lua/lua_RenderStateStateBlock.cpp
     src/lua/lua_RenderStateStateBlock.h
+    src/lua/lua_RenderStateStencilFunction.cpp
+    src/lua/lua_RenderStateStencilFunction.h
+    src/lua/lua_RenderStateStencilOperation.cpp
+    src/lua/lua_RenderStateStencilOperation.h
     src/lua/lua_RenderTarget.cpp
     src/lua/lua_RenderTarget.h
     src/lua/lua_Scene.cpp
     src/lua/lua_Scene.h
-    src/lua/lua_SceneDebugFlags.cpp
-    src/lua/lua_SceneDebugFlags.h
     src/lua/lua_ScreenDisplayer.cpp
     src/lua/lua_ScreenDisplayer.h
     src/lua/lua_ScriptController.cpp
@@ -519,10 +531,12 @@ set(GAMEPLAY_LUA
     src/lua/lua_Terrain.h
     src/lua/lua_TerrainFlags.cpp
     src/lua/lua_TerrainFlags.h
-    src/lua/lua_TerrainListener.cpp
-    src/lua/lua_TerrainListener.h
+    src/lua/lua_TerrainPatch.cpp
+    src/lua/lua_TerrainPatch.h
     src/lua/lua_TextBox.cpp
     src/lua/lua_TextBox.h
+    src/lua/lua_TextBoxInputMode.cpp
+    src/lua/lua_TextBoxInputMode.h
     src/lua/lua_Texture.cpp
     src/lua/lua_Texture.h
     src/lua/lua_TextureFilter.cpp
@@ -579,44 +593,49 @@ set(GAMEPLAY_RES
 )
 
 set(GAMEPLAY_RES_SHADERS
-    res/shaders/colored-unlit.frag
-    res/shaders/colored-unlit.vert
     res/shaders/colored.frag
     res/shaders/colored.vert
-    res/shaders/textured-bumped.frag
-    res/shaders/textured-bumped.vert
-    res/shaders/textured-unlit.frag
-    res/shaders/textured-unlit.vert
-    res/shaders/textured.frag
-    res/shaders/textured.vert
+    res/shaders/font.frag
+    res/shaders/font.vert
+    res/shaders/form.frag
+    res/shaders/form.vert
+    res/shaders/lighting.frag
+    res/shaders/lighting.vert
+    res/shaders/skinning.vert
+    res/shaders/skinning-none.vert
+    res/shaders/sprite.frag
+    res/shaders/sprite.vert
     res/shaders/terrain.frag
     res/shaders/terrain.vert
+    res/shaders/textured.frag
+    res/shaders/textured.vert
 )
 
-set(GAMEPLAY_RES_SHADERS_LIB
-    res/shaders/lib/attributes-skinning.vert
-    res/shaders/lib/attributes.vert
-    res/shaders/lib/lighting-directional.frag
-    res/shaders/lib/lighting-directional.vert
-    res/shaders/lib/lighting-point.frag
-    res/shaders/lib/lighting-point.vert
-    res/shaders/lib/lighting-spot.frag
-    res/shaders/lib/lighting-spot.vert
-    res/shaders/lib/lighting.frag
+set(GAMEPLAY_RES_SHADERS
+    res/ui/arial.gpb
+    res/ui/default.png
+    res/ui/default.theme
 )
 
 include_directories( 
     src
     ../external-deps/lua/include
     ../external-deps/bullet/include
-    ../external-deps/libpng/include
+    ../external-deps/png/include
     ../external-deps/zlib/include
     ../external-deps/oggvorbis/include
     ../external-deps/openal/include
     ../external-deps/glew/include
 )
 
+IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
+include_directories(${GTK2_INCLUDE_DIRS})
+add_definitions(${GTK2_CFLAGS_OTHER})
 add_definitions(-D__linux__)
+ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+
 add_definitions(-lstdc++)
 
 add_library(gameplay STATIC
@@ -631,7 +650,7 @@ set_target_properties(gameplay PROPERTIES
 )
 
 source_group(lua FILES ${GAMEPLAY_LUA})
-source_group(res FILES ${GAMEPLAY_RES} ${GAMEPLAY_RES} ${GAMEPLAY_RES_SHADERS} ${GAMEPLAY_RES_SHADERS_LIB})
+source_group(res FILES ${GAMEPLAY_RES} ${GAMEPLAY_RES} ${GAMEPLAY_RES_SHADERS} ${GAMEPLAY_RES_UI})
 source_group(src FILES ${GAMEPLAY_SRC})
 
 

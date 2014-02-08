@@ -6,6 +6,7 @@ namespace gameplay
 
 void luaRegister_lua_Global()
 {
+    gameplay::ScriptUtil::registerFunction("strcmpnocase", lua__strcmpnocase);
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "CheckBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Container");
@@ -13,7 +14,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joint");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joystick");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "JoystickControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Label");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "MaterialParameter");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Node");
@@ -22,22 +23,22 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "TextBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Transform");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "CheckBox");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "RadioButton");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Camera::Listener", "AudioListener");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Camera::Listener", "TerrainPatch");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Container", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "CheckBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Container");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "ImageControl");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Joystick");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "JoystickControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Label");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "RadioButton");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Slider");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "TextBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "CheckBox");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "RadioButton");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "Slider");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "TextBox");
@@ -82,7 +83,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Image");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Joint");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Joystick");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "JoystickControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Label");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Layout");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Light");
@@ -121,7 +122,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joint");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joystick");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "JoystickControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Label");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Node");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "PhysicsController");
@@ -131,7 +132,6 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Transform");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform", "Joint");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform", "Node");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "AudioListener");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "AudioSource");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "Camera");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "MeshSkin");
@@ -213,6 +213,16 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("ALIGN_BOTTOM_RIGHT", "ALIGN_BOTTOM_RIGHT", scopePath);
     }
 
+    // Register enumeration Control::AutoSize.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Control");
+        gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_NONE", "AUTO_SIZE_NONE", scopePath);
+        gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_WIDTH", "AUTO_SIZE_WIDTH", scopePath);
+        gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_HEIGHT", "AUTO_SIZE_HEIGHT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("AUTO_SIZE_BOTH", "AUTO_SIZE_BOTH", scopePath);
+    }
+
     // Register enumeration Control::Listener::EventType.
     {
         std::vector<std::string> scopePath;
@@ -225,8 +235,8 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("TEXT_CHANGED", "TEXT_CHANGED", scopePath);
         gameplay::ScriptUtil::registerConstantString("MIDDLE_CLICK", "MIDDLE_CLICK", scopePath);
         gameplay::ScriptUtil::registerConstantString("RIGHT_CLICK", "RIGHT_CLICK", scopePath);
-        gameplay::ScriptUtil::registerConstantString("ENTER", "ENTER", scopePath);
-        gameplay::ScriptUtil::registerConstantString("LEAVE", "LEAVE", scopePath);
+        gameplay::ScriptUtil::registerConstantString("FOCUS_GAINED", "FOCUS_GAINED", scopePath);
+        gameplay::ScriptUtil::registerConstantString("FOCUS_LOST", "FOCUS_LOST", scopePath);
     }
 
     // Register enumeration Control::State.
@@ -299,6 +309,14 @@ void luaRegister_lua_Global()
         scopePath.push_back("DepthStencilTarget");
         gameplay::ScriptUtil::registerConstantString("DEPTH", "DEPTH", scopePath);
         gameplay::ScriptUtil::registerConstantString("DEPTH_STENCIL", "DEPTH_STENCIL", scopePath);
+    }
+
+    // Register enumeration Font::Format.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Font");
+        gameplay::ScriptUtil::registerConstantString("BITMAP", "BITMAP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("DISTANCE_FIELD", "DISTANCE_FIELD", scopePath);
     }
 
     // Register enumeration Font::Justify.
@@ -398,6 +416,9 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("GESTURE_TAP", "GESTURE_TAP", scopePath);
         gameplay::ScriptUtil::registerConstantString("GESTURE_SWIPE", "GESTURE_SWIPE", scopePath);
         gameplay::ScriptUtil::registerConstantString("GESTURE_PINCH", "GESTURE_PINCH", scopePath);
+        gameplay::ScriptUtil::registerConstantString("GESTURE_LONG_TAP", "GESTURE_LONG_TAP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("GESTURE_DRAG", "GESTURE_DRAG", scopePath);
+        gameplay::ScriptUtil::registerConstantString("GESTURE_DROP", "GESTURE_DROP", scopePath);
         gameplay::ScriptUtil::registerConstantString("GESTURE_ANY_SUPPORTED", "GESTURE_ANY_SUPPORTED", scopePath);
     }
 
@@ -731,8 +752,6 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("CAMERA_VIEW_POSITION", "CAMERA_VIEW_POSITION", scopePath);
         gameplay::ScriptUtil::registerConstantString("MATRIX_PALETTE", "MATRIX_PALETTE", scopePath);
         gameplay::ScriptUtil::registerConstantString("SCENE_AMBIENT_COLOR", "SCENE_AMBIENT_COLOR", scopePath);
-        gameplay::ScriptUtil::registerConstantString("SCENE_LIGHT_COLOR", "SCENE_LIGHT_COLOR", scopePath);
-        gameplay::ScriptUtil::registerConstantString("SCENE_LIGHT_DIRECTION", "SCENE_LIGHT_DIRECTION", scopePath);
     }
 
     // Register enumeration RenderState::Blend.
@@ -777,12 +796,40 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("DEPTH_ALWAYS", "DEPTH_ALWAYS", scopePath);
     }
 
-    // Register enumeration Scene::DebugFlags.
+    // Register enumeration RenderState::FrontFace.
     {
         std::vector<std::string> scopePath;
-        scopePath.push_back("Scene");
-        gameplay::ScriptUtil::registerConstantString("DEBUG_BOXES", "DEBUG_BOXES", scopePath);
-        gameplay::ScriptUtil::registerConstantString("DEBUG_SPHERES", "DEBUG_SPHERES", scopePath);
+        scopePath.push_back("RenderState");
+        gameplay::ScriptUtil::registerConstantString("FRONT_FACE_CW", "FRONT_FACE_CW", scopePath);
+        gameplay::ScriptUtil::registerConstantString("FRONT_FACE_CCW", "FRONT_FACE_CCW", scopePath);
+    }
+
+    // Register enumeration RenderState::StencilFunction.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("RenderState");
+        gameplay::ScriptUtil::registerConstantString("STENCIL_NEVER", "STENCIL_NEVER", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_ALWAYS", "STENCIL_ALWAYS", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_LESS", "STENCIL_LESS", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_LEQUAL", "STENCIL_LEQUAL", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_EQUAL", "STENCIL_EQUAL", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_GREATER", "STENCIL_GREATER", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_GEQUAL", "STENCIL_GEQUAL", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_NOTEQUAL", "STENCIL_NOTEQUAL", scopePath);
+    }
+
+    // Register enumeration RenderState::StencilOperation.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("RenderState");
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_KEEP", "STENCIL_OP_KEEP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_ZERO", "STENCIL_OP_ZERO", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_REPLACE", "STENCIL_OP_REPLACE", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_INCR", "STENCIL_OP_INCR", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_DECR", "STENCIL_OP_DECR", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_INVERT", "STENCIL_OP_INVERT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_INCR_WRAP", "STENCIL_OP_INCR_WRAP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("STENCIL_OP_DECR_WRAP", "STENCIL_OP_DECR_WRAP", scopePath);
     }
 
     // Register enumeration Terrain::Flags.
@@ -792,6 +839,14 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("DEBUG_PATCHES", "DEBUG_PATCHES", scopePath);
         gameplay::ScriptUtil::registerConstantString("FRUSTUM_CULLING", "FRUSTUM_CULLING", scopePath);
         gameplay::ScriptUtil::registerConstantString("LEVEL_OF_DETAIL", "LEVEL_OF_DETAIL", scopePath);
+    }
+
+    // Register enumeration TextBox::InputMode.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("TextBox");
+        gameplay::ScriptUtil::registerConstantString("TEXT", "TEXT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("PASSWORD", "PASSWORD", scopePath);
     }
 
     // Register enumeration Texture::Filter.
@@ -855,6 +910,47 @@ void luaRegister_lua_Global()
     }
 }
 
+int lua__strcmpnocase(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(2, false);
+
+                int result = strcmpnocase(param1, param2);
+
+                // Push the return value onto the stack.
+                lua_pushinteger(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua__strcmpnocase - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 static const char* enumStringEmpty = "";
 
 const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
@@ -871,6 +967,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_ContainerScroll((Container::Scroll)value);
     if (enumname == "Control::Alignment")
         return lua_stringFromEnum_ControlAlignment((Control::Alignment)value);
+    if (enumname == "Control::AutoSize")
+        return lua_stringFromEnum_ControlAutoSize((Control::AutoSize)value);
     if (enumname == "Control::Listener::EventType")
         return lua_stringFromEnum_ControlListenerEventType((Control::Listener::EventType)value);
     if (enumname == "Control::State")
@@ -879,6 +977,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_CurveInterpolationType((Curve::InterpolationType)value);
     if (enumname == "DepthStencilTarget::Format")
         return lua_stringFromEnum_DepthStencilTargetFormat((DepthStencilTarget::Format)value);
+    if (enumname == "Font::Format")
+        return lua_stringFromEnum_FontFormat((Font::Format)value);
     if (enumname == "Font::Justify")
         return lua_stringFromEnum_FontJustify((Font::Justify)value);
     if (enumname == "Font::Style")
@@ -933,10 +1033,16 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_RenderStateCullFaceSide((RenderState::CullFaceSide)value);
     if (enumname == "RenderState::DepthFunction")
         return lua_stringFromEnum_RenderStateDepthFunction((RenderState::DepthFunction)value);
-    if (enumname == "Scene::DebugFlags")
-        return lua_stringFromEnum_SceneDebugFlags((Scene::DebugFlags)value);
+    if (enumname == "RenderState::FrontFace")
+        return lua_stringFromEnum_RenderStateFrontFace((RenderState::FrontFace)value);
+    if (enumname == "RenderState::StencilFunction")
+        return lua_stringFromEnum_RenderStateStencilFunction((RenderState::StencilFunction)value);
+    if (enumname == "RenderState::StencilOperation")
+        return lua_stringFromEnum_RenderStateStencilOperation((RenderState::StencilOperation)value);
     if (enumname == "Terrain::Flags")
         return lua_stringFromEnum_TerrainFlags((Terrain::Flags)value);
+    if (enumname == "TextBox::InputMode")
+        return lua_stringFromEnum_TextBoxInputMode((TextBox::InputMode)value);
     if (enumname == "Texture::Filter")
         return lua_stringFromEnum_TextureFilter((Texture::Filter)value);
     if (enumname == "Texture::Format")

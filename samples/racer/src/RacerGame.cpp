@@ -40,7 +40,7 @@ void RacerGame::initialize()
 {
     setMultiTouch(true);
 
-    _font = Font::create("res/common/arial40.gpb");
+    _font = Font::create("res/ui/arial.gpb");
 
     // Display the gameplay splash screen during loading, for at least 1 second.
     displayScreen(this, &RacerGame::drawSplash, NULL, 1000L);
@@ -63,7 +63,7 @@ void RacerGame::initialize()
     static_cast<Button*>(_overlay->getControl("menuButton"))->addListener(this, Listener::CLICK);
 
     // Load the scene
-    _scene = Scene::load("res/common/game.scene");
+    _scene = Scene::load("res/common/racer.scene");
 
     // Set the aspect ratio for the scene's camera to match the current resolution
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
@@ -72,7 +72,7 @@ void RacerGame::initialize()
     _scene->visit(this, &RacerGame::initializeScene);
 
     // Load and initialize game script
-    getScriptController()->loadScript("res/common/game.lua");
+    getScriptController()->loadScript("res/common/racer.lua");
     getScriptController()->executeFunction<void>("setScene", "<Scene>", _scene);
 
     Node* carNode = _scene->findNode("carbody");
@@ -114,11 +114,12 @@ bool RacerGame::initializeScene(Node* node)
     if (model)
     {
         Material* material = model->getMaterial();
-        if (material && material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_lightDirection"))
+
+        if (material && material->getTechnique()->getPassByIndex(0)->getEffect()->getUniform("u_directionalLightDirection"))
         {
             material->getParameter("u_ambientColor")->setValue(_scene->getAmbientColor());
-            material->getParameter("u_lightColor")->setValue(lightNode->getLight()->getColor());
-            material->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
+            material->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
+            material->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());
         }
     }
 
@@ -574,7 +575,7 @@ void RacerGame::menuEvent()
         static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Resume");
         pause();
         _menu->setEnabled(true);
-        _menu->setState(Control::FOCUS);
+        //_menu->setState(Control::FOCUS);
     }
     else
     {

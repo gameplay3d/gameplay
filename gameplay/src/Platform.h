@@ -7,6 +7,7 @@
 #include "Touch.h"
 #include "Gesture.h"
 #include "Gamepad.h"
+#include "FileSystem.h"
 
 namespace gameplay
 {
@@ -15,9 +16,8 @@ class Game;
 
 /**
  * Defines a platform abstraction.
- * 
- * This class has only a few public methods for creating a platform 
  *
+ * This class has only a few public methods for creating a platform
  */
 class Platform
 {
@@ -26,6 +26,7 @@ public:
     friend class Game;
     friend class Gamepad;
     friend class ScreenDisplayer;
+    friend class FileSystem;
 
     /**
      * Destructor.
@@ -36,19 +37,18 @@ public:
      * Creates a platform for the specified game which it will interact with.
      *
      * @param game The game to create a platform for.
-     * @param attachToWindow The native window handle to optionally attach to.
-     * 
+     *
      * @return The created platform interface.
      * @script{ignore}
      */
-    static Platform* create(Game* game, void* attachToWindow = NULL);
+    static Platform* create(Game* game);
 
     /**
      * Begins processing the platform messages.
      *
      * This method handles all OS window messages and drives the game loop.
      * It normally does not return until the application is closed.
-     * 
+     *
      * If a attachToWindow is passed to Platform::create the message pump will instead attach
      * to or allow the attachToWindow to drive the game loop on the platform.
      *
@@ -62,9 +62,9 @@ public:
     static void swapBuffers();
 
 private:
-    
+
     /**
-     * This method informs the platform that the game is shutting down 
+     * This method informs the platform that the game is shutting down
      * and anything platform specific should be shutdown as well or halted
      * This function is called automatically when the game shutdown function is called
      */
@@ -77,17 +77,17 @@ private:
      * @return whether a programmatic exit is allowed on this platform.
      */
     static bool canExit();
-    
+
     /**
      * Gets the display width.
-     * 
+     *
      * @return The display width.
      */
     static unsigned int getDisplayWidth();
-    
+
     /**
      * Gets the display height.
-     * 
+     *
      * @return The display height.
      */
     static unsigned int getDisplayHeight();
@@ -108,7 +108,7 @@ private:
 
     /**
      * Gets whether vertical sync is enabled for the game display.
-     * 
+     *
      * @return true if vsync is enabled; false if not.
      */
     static bool isVsync();
@@ -156,7 +156,7 @@ private:
      * Whether the platform has mouse support.
      */
     static bool hasMouse();
-    
+
     /**
      * Enables or disabled mouse capture.
      *
@@ -211,14 +211,14 @@ private:
      * accelerometer data with data from other sensors as well, such as the gyros.
      * This method is best used to obtain an indication of device orientation; it
      * does not necessarily distinguish between acceleration and rotation rate.
-     * 
+     *
      * @param pitch The accelerometer pitch. Zero if hasAccelerometer() returns false.
      * @param roll The accelerometer roll. Zero if hasAccelerometer() returns false.
      */
     static void getAccelerometerValues(float* pitch, float* roll);
 
     /**
-     * Gets raw sensor values, if equipped, allowing a distinction between device acceleration
+     * Gets sensor values (raw), if equipped, allowing a distinction between device acceleration
      * and rotation rate. Returns zeros on platforms with no corresponding support. See also
      * hasAccelerometer() and getAccelerometerValues().
      *
@@ -229,16 +229,16 @@ private:
      * @param gyroY The y-coordinate of the raw gyroscope data.
      * @param gyroZ The z-coordinate of the raw gyroscope data.
      */
-    static void getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
+    static void getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
 
     /**
      * Gets the command line arguments.
-     * 
+     *
      * @param argc The number of command line arguments.
      * @param argv The array of command line arguments.
      */
     static void getArguments(int* argc, char*** argv);
-    
+
     /**
      * Shows or hides the virtual keyboard (if supported).
      *
@@ -342,6 +342,27 @@ public:
      *
      * @script{ignore}
      */
+	static void gestureLongTapEventInternal(int x, int y, float duration);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+	static void gestureDragEventInternal(int x, int y);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+	static void gestureDropEventInternal(int x, int y);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
     static void resizeEventInternal(unsigned int width, unsigned int height);
 
     /**
@@ -357,7 +378,7 @@ public:
      * @script{ignore}
      */
     static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                              unsigned int vendorId, unsigned int productId, 
+                                              unsigned int vendorId, unsigned int productId,
                                               const char* vendorString, const char* productString);
 
     /**
@@ -368,7 +389,7 @@ public:
     static void gamepadEventDisconnectedInternal(GamepadHandle handle);
 
     /**
-     * Internal metehod used by Gamepad that polls the platform for the updated Gamepad
+     * Internal method used by Gamepad that polls the platform for the updated Gamepad
      * states such as joysticks, buttons and trigger values.
      *
      * @param gamepad The gamepad to be returned with the latest polled values populated.
@@ -376,7 +397,21 @@ public:
      */
     static void pollGamepadState(Gamepad* gamepad);
 
-   /**
+    /**
+     * Displays an open or save dialog using the native platform dialog system.
+     *
+     * @param mode The mode of the dialog. (Ex. OPEN or SAVE)
+     * @param title The title of the dialog. (Ex. Select File or Save File)
+     * @param filterDescription The file filter description. (Ex. Image Files)
+     * @param filterExtensions The semi-colon delimited list of filtered file extensions. (Ex. png;jpg;bmp)
+     * @param initialDirectory The initial directory to open or save files from. (Ex. "res") If NULL this will use the executable directory.
+     * @return The file that is opened or saved, or an empty string if canceled.
+     *
+     * @script{ignore}
+     */
+    static std::string displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory);
+
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}

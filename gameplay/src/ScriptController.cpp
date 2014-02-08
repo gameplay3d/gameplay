@@ -22,6 +22,7 @@
     /* Get the size of the array. */ \
     lua_len(sc->_lua, index); \
     int size = luaL_checkint(sc->_lua, -1); \
+    lua_pop(sc->_lua, 1); \
     if (size <= 0) \
         return LuaArray<type>((type*)NULL); \
     \
@@ -430,11 +431,19 @@ void ScriptController::loadScript(const char* path, bool forceReload)
     std::set<std::string>::iterator iter = _loadedScripts.find(path);
     if (iter == _loadedScripts.end() || forceReload)
     {
+        bool success = false;
+        if (iter == _loadedScripts.end())
+            _loadedScripts.insert(path); // insert before loading script to prevent load recursion
+
 #ifdef __ANDROID__
         const char* scriptContents = FileSystem::readAll(path);
         if (luaL_dostring(_lua, scriptContents))
         {
             GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
+        }
+        else
+        {
+            success = true;
         }
         SAFE_DELETE_ARRAY(scriptContents);
 #else
@@ -448,10 +457,15 @@ void ScriptController::loadScript(const char* path, bool forceReload)
         {
             GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
         }
-#endif
-        if (iter == _loadedScripts.end())
+        else
         {
-            _loadedScripts.insert(path);
+            success = true;
+        }
+#endif
+        if (!success && (iter == _loadedScripts.end()))
+        {
+            iter = _loadedScripts.find(path);
+            _loadedScripts.erase(iter);
         }
     }
 }
@@ -462,11 +476,10 @@ std::string ScriptController::loadUrl(const char* url)
     std::string id;
     splitURL(url, &file, &id);
 
-    // Make sure the function isn't empty.
     if (id.size() <= 0)
     {
-        GP_ERROR("Got an empty function name when parsing function url '%s'.", url);
-        return std::string();
+        // The url does not reference a script - only a function
+        return file;
     }
 
     // Ensure the script is loaded.
@@ -858,6 +871,18 @@ void ScriptController::gestureTapEvent(int x, int y)
     std::vector<std::string>& list = _callbacks[GESTURE_TAP_EVENT];
     for (size_t i = 0; i < list.size(); ++i)
         executeFunction<void>(list[i].c_str(), "ii", x, y);
+}
+
+void ScriptController::gestureLongTapEvent(int x, int y, float duration)
+{
+}
+
+void ScriptController::gestureDragEvent(int x, int y)
+{
+}
+
+void ScriptController::gestureDropEvent(int x, int y)
+{
 }
 
 void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)

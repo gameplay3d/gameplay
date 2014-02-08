@@ -17,23 +17,21 @@ void MeshGame::initialize()
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
 
-    // Load font
-    _font = Font::create("res/arial40.gpb");
+    // Load the font
+    _font = Font::create("res/ui/arial.gpb");
 
-    // Load mesh/scene from file
-    _scene = Scene::load("res/duck.gpb");
+    // Load the scene from file
+    _scene = Scene::load("res/mesh.scene");
 
     // Get the duck node
     _modelNode = _scene->findNode("duck");
-
-    // Bind the material to the model
-    _modelNode->getModel()->setMaterial("res/duck.material");
 
     // Find the light node
     Node* lightNode = _scene->findNode("directionalLight1");
 
     // Bind the light node's direction into duck's material.
-    _modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
+    _modelNode->getModel()->getMaterial()->getParameter("u_directionalLightColor[0]")->setValue(lightNode->getLight()->getColor());
+    _modelNode->getModel()->getMaterial()->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorView);
 
     // Update the aspect ratio for our scene's camera to match the current device resolution
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
@@ -216,7 +214,7 @@ Model* MeshGame::createGridModel(unsigned int lineCount)
     mesh->setVertexData(&vertices[0], 0, pointCount);
 
     Model* model = Model::create(mesh);
-    model->setMaterial("res/grid.material");
+    model->setMaterial("res/mesh.material#grid");
     SAFE_RELEASE(mesh);
     return model;
 }

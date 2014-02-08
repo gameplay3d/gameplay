@@ -14,8 +14,13 @@ class PhysicsGhostObject;
 class PhysicsVehicle;
 class PhysicsVehicleWheel;
 
+#define PHYSICS_COLLISION_GROUP_DEFAULT btBroadphaseProxy::DefaultFilter
+#define PHYSICS_COLLISION_MASK_DEFAULT btBroadphaseProxy::AllFilter
+
 /**
- * Base class for all gameplay physics objects that support collision events.
+ * Defines the base class for all physics objects that support collision events.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsCollisionObject
 {
@@ -327,7 +332,7 @@ protected:
     /**
      * Constructor.
      */
-    PhysicsCollisionObject(Node* node);
+    PhysicsCollisionObject(Node* node, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Returns the Bullet Physics collision object.
@@ -415,6 +420,12 @@ private:
      * The PhysicsCollisionObject's motion state.
      */
     PhysicsMotionState* _motionState;
+
+    /**
+     * Group identifier and the bitmask for collision filtering.
+     */
+    int _group;
+    int _mask;
 };
 
 }

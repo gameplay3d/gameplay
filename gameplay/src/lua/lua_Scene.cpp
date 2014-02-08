@@ -22,24 +22,22 @@ void luaRegister_Scene()
         {"addNode", lua_Scene_addNode},
         {"addRef", lua_Scene_addRef},
         {"bindAudioListenerToCamera", lua_Scene_bindAudioListenerToCamera},
-        {"drawDebug", lua_Scene_drawDebug},
         {"findNode", lua_Scene_findNode},
         {"getActiveCamera", lua_Scene_getActiveCamera},
         {"getAmbientColor", lua_Scene_getAmbientColor},
         {"getFirstNode", lua_Scene_getFirstNode},
         {"getId", lua_Scene_getId},
-        {"getLightColor", lua_Scene_getLightColor},
-        {"getLightDirection", lua_Scene_getLightDirection},
+        {"getNext", lua_Scene_getNext},
         {"getNodeCount", lua_Scene_getNodeCount},
         {"getRefCount", lua_Scene_getRefCount},
         {"release", lua_Scene_release},
         {"removeAllNodes", lua_Scene_removeAllNodes},
         {"removeNode", lua_Scene_removeNode},
+        {"reset", lua_Scene_reset},
         {"setActiveCamera", lua_Scene_setActiveCamera},
         {"setAmbientColor", lua_Scene_setAmbientColor},
         {"setId", lua_Scene_setId},
-        {"setLightColor", lua_Scene_setLightColor},
-        {"setLightDirection", lua_Scene_setLightDirection},
+        {"update", lua_Scene_update},
         {"visit", lua_Scene_visit},
         {NULL, NULL}
     };
@@ -253,42 +251,6 @@ int lua_Scene_bindAudioListenerToCamera(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Scene_bindAudioListenerToCamera - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Scene_drawDebug(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
-
-                Scene* instance = getInstance(state);
-                instance->drawDebug(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Scene_drawDebug - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -589,7 +551,7 @@ int lua_Scene_getId(lua_State* state)
     return 0;
 }
 
-int lua_Scene_getLightColor(lua_State* state)
+int lua_Scene_getNext(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -602,13 +564,13 @@ int lua_Scene_getLightColor(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Scene* instance = getInstance(state);
-                void* returnPtr = (void*)&(instance->getLightColor());
+                void* returnPtr = (void*)instance->getNext();
                 if (returnPtr)
                 {
                     gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
-                    luaL_getmetatable(state, "Vector3");
+                    luaL_getmetatable(state, "Node");
                     lua_setmetatable(state, -2);
                 }
                 else
@@ -619,51 +581,7 @@ int lua_Scene_getLightColor(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_Scene_getLightColor - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Scene_getLightDirection(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Scene* instance = getInstance(state);
-                void* returnPtr = (void*)&(instance->getLightDirection());
-                if (returnPtr)
-                {
-                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Vector3");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Scene_getLightDirection - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Scene_getNext - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -853,6 +771,38 @@ int lua_Scene_removeNode(lua_State* state)
     return 0;
 }
 
+int lua_Scene_reset(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Scene* instance = getInstance(state);
+                instance->reset();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Scene_reset - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Scene_setActiveCamera(lua_State* state)
 {
     // Get the number of parameters.
@@ -962,92 +912,6 @@ int lua_Scene_setId(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Scene_setId - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Scene_setLightColor(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 4:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
-
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 4);
-
-                Scene* instance = getInstance(state);
-                instance->setLightColor(param1, param2, param3);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Scene_setLightColor - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 4).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Scene_setLightDirection(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
-                if (!param1Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
-                    lua_error(state);
-                }
-
-                Scene* instance = getInstance(state);
-                instance->setLightDirection(*param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Scene_setLightDirection - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1230,6 +1094,42 @@ int lua_Scene_static_load(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Scene_update(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Scene* instance = getInstance(state);
+                instance->update(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Scene_update - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

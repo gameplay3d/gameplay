@@ -34,7 +34,7 @@ void FBXSceneEncoder::write(const string& filepath, const EncoderArguments& argu
     if (!importer->Initialize(filepath.c_str(), -1, sdkManager->GetIOSettings()))
     {
         LOG(1, "Call to FbxImporter::Initialize() failed.\n");
-        LOG(1, "Error returned: %s\n\n", importer->GetLastErrorString());
+        LOG(1, "Error returned: %s\n\n", importer->GetStatus().GetErrorString());
         exit(-1);
     }
     
@@ -442,10 +442,10 @@ void FBXSceneEncoder::loadAnimationLayer(FbxAnimLayer* fbxAnimLayer, FbxNode* fb
 
 void FBXSceneEncoder::loadAnimations(FbxScene* fbxScene, const EncoderArguments& arguments)
 {
-    FbxAnimEvaluator* evaluator = fbxScene->GetEvaluator();
+    FbxAnimEvaluator* evaluator = fbxScene->GetAnimationEvaluator();
     if (!evaluator)
         return;
-    FbxAnimStack* animStack = evaluator->GetContext();
+    FbxAnimStack* animStack = fbxScene->GetCurrentAnimationStack();
     if (!animStack)
         return;
 
@@ -607,24 +607,13 @@ static string getBaseMaterialName(Material* material)
     ostringstream baseName;
     if (material->isTextured())
     {
-        baseName << "Textured";
+        baseName << "textured";
     }
     else
     {
-        baseName << "Colored";
+        baseName << "colored";
     }
 
-    if (material->isLit())
-    {
-        if (material->isSpecular())
-        {
-            baseName << "Specular";
-        }
-    }
-    else
-    {
-        baseName << "Unlit";
-    }
     return baseName.str();
 }
 
@@ -660,40 +649,12 @@ Material* FBXSceneEncoder::createBaseMaterial(const string& baseMaterialName, Ma
     baseMaterial->setUniform("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
     baseMaterial->setRenderState("cullFace", "true");
     baseMaterial->setRenderState("depthTest", "true");
-    if (childMaterial->isLit())
-    {
-        baseMaterial->setLit(true);
-        baseMaterial->setUniform("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
-        // Always use directional light
-        baseMaterial->setUniform("u_lightDirection", "SCENE_LIGHT_DIRECTION");
-        baseMaterial->setUniform("u_lightColor", "SCENE_LIGHT_COLOR");
 
-        if (childMaterial->isSpecular())
-        {
-            baseMaterial->addDefine(SPECULAR);
-            baseMaterial->setUniform("u_cameraPosition", "CAMERA_WORLD_POSITION");
-        }
-    }
     if (childMaterial->isTextured())
     {
-        if (childMaterial->isLit())
-        {
-            if (childMaterial->isBumped())
-            {
-                baseMaterial->setVertexShader("res/shaders/textured-bumped.vert");
-                baseMaterial->setFragmentShader("res/shaders/textured-bumped.frag");
-            }
-            else
-            {
-                baseMaterial->setVertexShader("res/shaders/textured.vert");
-                baseMaterial->setFragmentShader("res/shaders/textured.frag");
-            }
-        }
-        else
-        {
-            baseMaterial->setVertexShader("res/shaders/textured-unlit.vert");
-            baseMaterial->setFragmentShader("res/shaders/textured-unlit.frag");
-        }
+		baseMaterial->setVertexShader("res/shaders/textured.vert");
+        baseMaterial->setFragmentShader("res/shaders/textured.frag");
+
         Sampler* sampler = baseMaterial->createSampler(u_diffuseTexture);
         sampler->set("mipmap", "true");
         sampler->set("wrapS", CLAMP);
@@ -703,16 +664,19 @@ Material* FBXSceneEncoder::createBaseMaterial(const string& baseMaterialName, Ma
     }
     else
     {
-        if (childMaterial->isLit())
+		baseMaterial->setVertexShader("res/shaders/colored.vert");
+        baseMaterial->setFragmentShader("res/shaders/colored.frag");
+    }
+
+	if (childMaterial->isLit())
+    {
+        baseMaterial->setLit(true);
+		childMaterial->setUniform("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
+
+        if (childMaterial->isSpecular())
         {
-            baseMaterial->setVertexShader("res/shaders/colored.vert");
-            baseMaterial->setFragmentShader("res/shaders/colored.frag");
-        }
-        else
-        {
-            baseMaterial->setVertexShader("res/shaders/colored-unlit.vert");
-            baseMaterial->setFragmentShader("res/shaders/colored-unlit.frag");
-        }
+            childMaterial->setUniform("u_cameraPosition", "CAMERA_WORLD_POSITION");
+        }		
     }
     assert(baseMaterial);
     return baseMaterial;
@@ -806,74 +770,66 @@ void FBXSceneEncoder::loadLight(FbxNode* fbxNode, Node* node)
     FbxDouble3 color = fbxLight->Color.Get();
     light->setColor((float)color[0], (float)color[1], (float)color[2]);
     
+    float range;
+    if( fbxLight->EnableFarAttenuation.Get() ) {
+        // If FarAttenuation is enabled, that gives us range directly
+        range = (float)fbxLight->FarAttenuationEnd.Get();
+    } else {
+        // Otherwise, we need to fit a decay type to calculate range
+        // For each attenuation type, the range at which the intensity falls to 1/100 can be computed as:
+        //
+        // Linear:      1/100 = I/(a*r)     =>    r = 100*I/a
+        // Quadratic:   1/100 = I/(a*r^2)   =>    r = sqrt(100*I/a)
+        // Cubic:       1/100 = I/(a*r^3)   =>    r = pow(100*I/a,1/3.0)
+        float attenuation = fbxLight->DecayStart.Get();
+        float intensity = fbxLight->Intensity.Get()/100.0f;
+        switch( fbxLight->DecayType.Get() ) {
+            case FbxLight::eLinear:
+                range = 100.0f*intensity/attenuation;
+                break;
+            case FbxLight::eQuadratic:
+                range = 10.0f*sqrtf(intensity/attenuation);
+                break;
+            case FbxLight::eCubic:
+                range = pow(100.0f*intensity/attenuation,1/3.0);
+                break;
+            case FbxLight::eNone:
+                // We don't support no attenuation; set range to 1.0f by default
+                range = 1.0f;
+                break;
+        }
+    }
+    
     switch (fbxLight->LightType.Get())
     {
-    case FbxLight::ePoint:
-    {
-        FbxLight::EDecayType decayType = fbxLight->DecayType.Get();
-        switch (decayType)
+        case FbxLight::ePoint:
         {
-        case FbxLight::eNone:
-            // FBX does not support ambients lights so ambient lights are converted 
-            // to point lights with no decay and visibility set to false.
-            if (fbxNode->GetVisibility())
-            {
-                light->setPointLight();
-            }
-            else
-            {
+            FbxLight::EDecayType decayType = fbxLight->DecayType.Get();
+            if( decayType == FbxLight::eNone && !fbxNode->GetVisibility() )
                 light->setAmbientLight();
+            else {
+                light->setPointLight();
+                light->setRange(range);
             }
-            break;
-        case FbxLight::eLinear:
-            light->setPointLight();
-            light->setLinearAttenuation((float)fbxLight->DecayStart.Get());
-            break;
-        case FbxLight::eQuadratic:
-            light->setPointLight();
-            light->setQuadraticAttenuation((float)fbxLight->DecayStart.Get());
-            break;
-        case FbxLight::eCubic:
-        default:
-            // Not supported..
-            break;
         }
-        break;
-    }
-    case FbxLight::eDirectional:
-    {
-        light->setDirectionalLight();
-        break;
-    }
-    case FbxLight::eSpot:
-    {
-        light->setSpotLight();
-
-        FbxLight::EDecayType decayType = fbxLight->DecayType.Get();
-        switch (decayType)
+        case FbxLight::eDirectional:
         {
-        case FbxLight::eNone:
-            // No decay.
-            break;
-        case FbxLight::eLinear:
-            light->setLinearAttenuation((float)fbxLight->DecayStart.Get());
-            break;
-        case FbxLight::eQuadratic:
-            light->setQuadraticAttenuation((float)fbxLight->DecayStart.Get());
-            break;
-        case FbxLight::eCubic:
-            // Not supported..
+            light->setDirectionalLight();
             break;
         }
-
-        light->setFalloffAngle(MATH_DEG_TO_RAD((float)fbxLight->OuterAngle.Get())); // fall off angle
-        break;
-    }
-    default:
-    {
-        LOG(2, "Warning: Unknown light type in node.\n");
-        return;
-    }
+        case FbxLight::eSpot:
+        {
+            light->setSpotLight();
+            light->setInnerAngle(MATH_DEG_TO_RAD((float)fbxLight->InnerAngle.Get()));
+            light->setOuterAngle(MATH_DEG_TO_RAD((float)fbxLight->OuterAngle.Get()));
+            light->setRange(range);
+            break;
+        }
+        default:
+        {
+            LOG(2, "Warning: Unknown light type in node.\n");
+            return;
+        }
     }
 
     _gamePlayFile.addLight(light);
@@ -989,7 +945,6 @@ void FBXSceneEncoder::loadMaterialTextures(FbxSurfaceMaterial* fbxMaterial, Mate
                 FbxLayeredTexture *layeredTexture = fbxProperty.GetSrcObject<FbxLayeredTexture>(j);
                 if (layeredTexture)
                 {
-                    //DisplayInt("    Layered Texture: ", j);
                     FbxLayeredTexture *layeredTexture = fbxProperty.GetSrcObject<FbxLayeredTexture>(j);
                     int lNbTextures = layeredTexture->GetSrcObjectCount<FbxTexture>();
                     for (int k = 0; k<lNbTextures; ++k)
@@ -997,22 +952,13 @@ void FBXSceneEncoder::loadMaterialTextures(FbxSurfaceMaterial* fbxMaterial, Mate
                         FbxTexture* fbxTexture = layeredTexture->GetSrcObject<FbxTexture>(k);
                         if (fbxTexture)
                         {
-                            /*
-                            if (pDisplayHeader){
-                                DisplayInt("    Textures connected to Material ", pMaterialIndex);
-                                pDisplayHeader = false;
-                            }
-                            */
 
-                            //NOTE the blend mode is ALWAYS on the LayeredTexture and NOT the one on the texture.
-                            //Why is that?  because one texture can be shared on different layered textures and might
-                            //have different blend modes.
+                            // NOTE the blend mode is ALWAYS on the LayeredTexture and NOT the one on the texture.
+                            // Why is that?  because one texture can be shared on different layered textures and might
+                            // have different blend modes.
 
                             FbxLayeredTexture::EBlendMode lBlendMode;
                             layeredTexture->GetTextureBlendMode(k, lBlendMode);
-                            //DisplayString("    Textures for ", pProperty.GetName());
-                            //DisplayInt("        Texture ", k);
-                            //DisplayTextureInfo(fbxTexture, (int) lBlendMode);
                         }
 
                     }
@@ -1039,19 +985,12 @@ void FBXSceneEncoder::loadMaterialFileTexture(FbxFileTexture* fileTexture, Mater
         if (!material->getSampler("u_diffuseTexture"))
             sampler = material->createSampler("u_diffuseTexture");
     }
-    else if (textureUse == FbxTexture::eBumpNormalMap)
-    {
-        if (!material->getSampler("u_normalmapTexture"))
-            sampler = material->createSampler("u_normalmapTexture");
-    }
     if (sampler)
     {
         sampler->set("absolutePath", fileTexture->GetFileName());
         sampler->set("relativePath", fileTexture->GetRelativeFileName());
         sampler->set("wrapS", fileTexture->GetWrapModeU() == FbxTexture::eClamp ? CLAMP : REPEAT);
         sampler->set("wrapT", fileTexture->GetWrapModeV() == FbxTexture::eClamp ? CLAMP : REPEAT);
-        //sampler->set(MIN_FILTER, LINEAR_MIPMAP_LINEAR);
-        //sampler->set(MAG_FILTER, LINEAR);
 
         if (textureUse == FbxTexture::eStandard)
         {
@@ -1108,7 +1047,7 @@ void FBXSceneEncoder::loadMaterialUniforms(FbxSurfaceMaterial* fbxMaterial, Mate
     if (fbxMaterial->GetClassId().Is(FbxSurfacePhong::ClassId))
     {
         FbxSurfacePhong* phong = FbxCast<FbxSurfacePhong>(fbxMaterial);
-        //FbxDouble specularFactor = phong->SpecularFactor.Get();
+
         if (material->isLit())
         {
             FbxDouble shininess = phong->Shininess.Get();
@@ -1120,9 +1059,6 @@ void FBXSceneEncoder::loadMaterialUniforms(FbxSurfaceMaterial* fbxMaterial, Mate
                 material->addDefine(SPECULAR);
             }
         }
-        //
-        //((FbxSurfacePhong *) fbxMaterial)->GetAmbientColor();
-        //((FbxSurfacePhong *) fbxMaterial)->GetDiffuseColor();
     }
 }
 

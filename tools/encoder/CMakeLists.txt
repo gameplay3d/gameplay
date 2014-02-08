@@ -1,33 +1,33 @@
 
 include_directories( 
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/include
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/include
+    ${CMAKE_SOURCE_DIR}/external-deps/png/include
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/include
     /usr/include/fbxsdk
     /usr/include
 )
 
 add_definitions(-D_DEBUG)
-add_definitions(-D__linux__ -DNO_BOOST -DNO_ZAE -DUSE_FBX)
+add_definitions(-D__linux__ -DUSE_FBX)
 
 link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/png/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
-    /usr/lib/gcc4/${ARCH_DIR}
+    /usr/lib/gcc4/${ARCH_DIR}/release
     /usr/lib
 )
 
 set(APP_LIBRARIES
     dl
-    fbxsdk-2013.3-static
+    fbxsdk
     png
     z   
     freetype
     pthread
 ) 
 
-add_definitions(-lstdc++ -ldl -lfbxsdk-2013.3-static -lpng -lz -lfreetype -lpthread)
+add_definitions(-lstdc++ -ldl -lfbxsdk -lpng -lz -lfreetype -lpthread)
 
 set( APP_NAME gameplay-encoder )
 
@@ -49,6 +49,8 @@ set(APP_SRC
     src/Curve.cpp
     src/Curve.h
     src/Curve.inl
+    src/edtaa3func.c
+    src/edtaa3func.h
     src/Effect.cpp
     src/Effect.h
     src/EncoderArguments.cpp

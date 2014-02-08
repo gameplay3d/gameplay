@@ -11,13 +11,11 @@ class AIAgent;
 class AIStateMachine;
 
 /**
- * Represents a single state in an AIStateMachine.
+ * Defines a single state in an AIStateMachine.
  *
  * An AIState encapsulates a state and unit of work within an AI
  * state machine. Events can be programmed or scripted when the
  * state is entered, exited and each frame/tick in its update event.
- *
- * 
  */
 class AIState : public Ref, public ScriptTarget
 {

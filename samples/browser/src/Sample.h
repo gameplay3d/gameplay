@@ -61,7 +61,7 @@ public:
     bool isMultiTouch() const;
     bool hasAccelerometer() const;
     void getAccelerometerValues(float* pitch, float* roll);
-    void getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
+    void getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
     void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
 	void enableScriptCamera(bool enable);
     void setScriptCameraSpeed(float normal, float fast);
@@ -72,7 +72,10 @@ public:
     virtual void gestureSwipeEvent(int x, int y, int direction);
     virtual void gesturePinchEvent(int x, int y, float scale);
     virtual void gestureTapEvent(int x, int y);
-    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    virtual void gestureLongTapEvent(int x, int y, float duration);
+    virtual void gestureDragEvent(int x, int y);
+	virtual void gestureDropEvent(int x, int y);
+	virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
     unsigned int getGamepadCount() const;
     Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
 

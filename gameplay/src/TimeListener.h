@@ -5,7 +5,8 @@ namespace gameplay
 {
 
 /**
- * The TimeListener interface allows a class to be scheduled and called at a later time using Game::schedule().
+ * Defines a interface to be scheduled and called back at a later time using Game::schedule().
+ *
  * @script{ignore}
  */
 class TimeListener

@@ -4,8 +4,14 @@
 namespace gameplay
 {
 
-TextBox::TextBox() : _lastKeypress(0), _fontSize(0), _caretImage(NULL)
+static bool space(char c)
 {
+    return isspace(c);
+}
+
+TextBox::TextBox() : _caretLocation(0), _lastKeypress(0), _fontSize(0), _caretImage(NULL), _passwordChar('*'), _inputMode(TEXT), _ctrlPressed(false)
+{
+    _canFocus = true;
 }
 
 TextBox::~TextBox()
@@ -14,22 +20,27 @@ TextBox::~TextBox()
 
 TextBox* TextBox::create(const char* id, Theme::Style* style)
 {
-    GP_ASSERT(style);
-
     TextBox* textBox = new TextBox();
-    if (id)
-        textBox->_id = id;
-    textBox->setStyle(style);
-
+    textBox->_id = id ? id : "";
+    textBox->initialize("TextBox", style, NULL);
     return textBox;
 }
 
-TextBox* TextBox::create(Theme::Style* style, Properties* properties)
+Control* TextBox::create(Theme::Style* style, Properties* properties)
 {
     TextBox* textBox = new TextBox();
-    textBox->initialize(style, properties);
-
+    textBox->initialize("TextBox", style, properties);
     return textBox;
+}
+
+void TextBox::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+{
+    Label::initialize(typeName, style, properties);
+
+	if (properties)
+	{
+		_inputMode = getInputMode(properties->getString("inputMode"));
+	}
 }
 
 int TextBox::getLastKeypress()
@@ -37,70 +48,87 @@ int TextBox::getLastKeypress()
     return _lastKeypress;
 }
 
-void TextBox::addListener(Control::Listener* listener, int eventFlags)
+unsigned int TextBox::getCaretLocation() const
 {
-    if ((eventFlags & Control::Listener::VALUE_CHANGED) == Control::Listener::VALUE_CHANGED)
-    {
-        GP_ERROR("VALUE_CHANGED event is not applicable to TextBox.");
-    }
+    return _caretLocation;
+}
 
-    Control::addListener(listener, eventFlags);
+void TextBox::setCaretLocation(unsigned int index)
+{
+    _caretLocation = index;
+    if (_caretLocation > _text.length())
+        _caretLocation = (unsigned int)_text.length();
 }
 
 bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{   
+{
+    State state = getState();
+
     switch (evt)
     {
     case Touch::TOUCH_PRESS: 
-        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        if (state == ACTIVE)
         {
-            _contactIndex = (int) contactIndex;
-
-            if (_state == NORMAL)
-                Game::getInstance()->displayKeyboard(true);
-
             setCaretLocation(x, y);
-
-            _state = ACTIVE;
-            _dirty = true;
-        }
-        else
-        {
-            _contactIndex = INVALID_CONTACT_INDEX;
-            _state = NORMAL;
-            Game::getInstance()->displayKeyboard(false);
-            _dirty = true;
-            return false;
         }
         break;
     case Touch::TOUCH_MOVE:
-        if (_state == ACTIVE &&
-            x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        if (state == ACTIVE)
         {
             setCaretLocation(x, y);
-            _dirty = true;
         }
-        break;
-    case Touch::TOUCH_RELEASE:
-        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-        {
-            setCaretLocation(x, y);
-            _state = FOCUS;
-        }
-        else
-        {
-            _state = NORMAL;
-            Game::getInstance()->displayKeyboard(false);
-        }
-        _contactIndex = INVALID_CONTACT_INDEX;
-        _dirty = true;
         break;
     }
 
-    return _consumeInputEvents;
+    return Label::touchEvent(evt, x, y, contactIndex);
+}
+
+static bool isWhitespace(char c)
+{
+    switch (c)
+    {
+    case ' ':
+    case '\t':
+    case '\r':
+    case '\n':
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+static unsigned int findNextWord(const std::string& text, unsigned int from, bool backwards)
+{
+    int pos = (int)from;
+    if (backwards)
+    {
+        if (pos > 0)
+        {
+            // Moving backwards: skip all consecutive whitespace characters
+            while (pos > 0 && isWhitespace(text.at(pos-1)))
+                --pos;
+            // Now search back to the first whitespace character
+            while (pos > 0 && !isWhitespace(text.at(pos-1)))
+                --pos;
+        }
+    }
+    else
+    {
+        const int len = (const int)text.length();
+        if (pos < len)
+        {
+            // Moving forward: skip all consecutive non-whitespace characters
+            ++pos;
+            while (pos < len && !isWhitespace(text.at(pos)))
+                ++pos;
+            // Now search for the first non-whitespace character
+            while (pos < len && isWhitespace(text.at(pos)))
+                ++pos;
+        }
+    }
+
+    return (unsigned int)pos;
 }
 
 bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -111,110 +139,101 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
         {
             switch (key)
             {
+                case Keyboard::KEY_CTRL:
+                {
+                    _ctrlPressed = true;
+                    break;
+                }
                 case Keyboard::KEY_HOME:
                 {
-                    // TODO: Move cursor to beginning of line.
-                    // This only works for left alignment...
-                        
-                    //_caretLocation.x = _viewportClipBounds.x;
-                    //_dirty = true;
+                    _caretLocation = 0;
                     break;
                 }
                 case Keyboard::KEY_END:
                 {
-                    // TODO: Move cursor to end of line.
+                    _caretLocation = _text.length();
                     break;
                 }
                 case Keyboard::KEY_DELETE:
                 {
-                    Font* font = getFont(_state);
-                    GP_ASSERT(font);
-                    unsigned int fontSize = getFontSize(_state);
-                    Font::Justify textAlignment = getTextAlignment(_state);
-                    bool rightToLeft = getTextRightToLeft(_state);
-
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
-                        textAlignment, true, rightToLeft);
-                        
-                    _text.erase(textIndex, 1);
-                    font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
-                        textAlignment, true, rightToLeft);
-                    _dirty = true;
-                    notifyListeners(Control::Listener::TEXT_CHANGED);
+                    if (_caretLocation < _text.length())
+                    {
+                        int newCaretLocation;
+                        if (_ctrlPressed)
+                        {
+                            newCaretLocation = findNextWord(getDisplayedText(), _caretLocation, false);
+                        }
+                        else
+                        {
+                            newCaretLocation = _caretLocation + 1;
+                        }
+                        _text.erase(_caretLocation, newCaretLocation - _caretLocation);
+                        notifyListeners(Control::Listener::TEXT_CHANGED);
+                    }
                     break;
                 }
                 case Keyboard::KEY_TAB:
                 {
                     // Allow tab to move the focus forward.
                     return false;
-                    break;
                 }
                 case Keyboard::KEY_LEFT_ARROW:
                 {
-                    Font* font = getFont(_state);
-                    GP_ASSERT(font);
-                    unsigned int fontSize = getFontSize(_state);
-                    Font::Justify textAlignment = getTextAlignment(_state);
-                    bool rightToLeft = getTextRightToLeft(_state);
-
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
-                        textAlignment, true, rightToLeft);
-                    font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex - 1,
-                        textAlignment, true, rightToLeft);
-                    _dirty = true;
+                    if (_caretLocation > 0)
+                    {
+                        if (_ctrlPressed)
+                        {
+                            _caretLocation = findNextWord(getDisplayedText(), _caretLocation, true);
+                        }
+                        else
+                        {
+                            --_caretLocation;
+                        }
+                    }
                     break;
                 }
                 case Keyboard::KEY_RIGHT_ARROW:
                 {
-                    Font* font = getFont(_state);
-                    GP_ASSERT(font);
-                    unsigned int fontSize = getFontSize(_state);
-                    Font::Justify textAlignment = getTextAlignment(_state);
-                    bool rightToLeft = getTextRightToLeft(_state);
-
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
-                        textAlignment, true, rightToLeft);
-                    font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex + 1,
-                        textAlignment, true, rightToLeft);
-                    _dirty = true;
+                    if (_caretLocation < _text.length())
+                    {
+                        if (_ctrlPressed)
+                        {
+                            _caretLocation = findNextWord(getDisplayedText(), _caretLocation, false);
+                        }
+                        else
+                        {
+                            ++_caretLocation;
+                        }
+                    }
                     break;
                 }
                 case Keyboard::KEY_UP_ARROW:
                 {
-                    Font* font = getFont(_state);
-                    GP_ASSERT(font);
-                    unsigned int fontSize = getFontSize(_state);
-                    Font::Justify textAlignment = getTextAlignment(_state);
-                    bool rightToLeft = getTextRightToLeft(_state);
-                    _prevCaretLocation.set(_caretLocation);
-                    _caretLocation.y -= fontSize;
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
-                        textAlignment, true, rightToLeft);
-                    if (textIndex == -1)
-                    {
-                        _caretLocation.set(_prevCaretLocation);
-                    }
-
-                    _dirty = true;
+                    // TODO: Support multiline
                     break;
                 }
                 case Keyboard::KEY_DOWN_ARROW:
                 {
-                    Font* font = getFont(_state);
-                    GP_ASSERT(font);
-                    unsigned int fontSize = getFontSize(_state);
-                    Font::Justify textAlignment = getTextAlignment(_state);
-                    bool rightToLeft = getTextRightToLeft(_state);
-                    _prevCaretLocation.set(_caretLocation);
-                    _caretLocation.y += fontSize;
-                    int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
-                        textAlignment, true, rightToLeft);
-                    if (textIndex == -1)
+                    // TODO: Support multiline
+                    break;
+                }
+                case Keyboard::KEY_BACKSPACE:
+                {
+                    if (_caretLocation > 0)
                     {
-                        _caretLocation.set(_prevCaretLocation);
+                        int newCaretLocation;
+                        if (_ctrlPressed)
+                        {
+                            newCaretLocation = findNextWord(getDisplayedText(), _caretLocation, true);
+                        }
+                        else
+                        {
+                            newCaretLocation = _caretLocation - 1;
+                        }
+                        _text.erase(newCaretLocation, _caretLocation - newCaretLocation);
+                        _caretLocation = newCaretLocation;
+                        notifyListeners(Control::Listener::TEXT_CHANGED);
                     }
-
-                    _dirty = true;
                     break;
                 }
             }
@@ -223,196 +242,266 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
 
         case Keyboard::KEY_CHAR:
         {
-            Font* font = getFont(_state);
-            GP_ASSERT(font);
-            unsigned int fontSize = getFontSize(_state);
-            Font::Justify textAlignment = getTextAlignment(_state);
-            bool rightToLeft = getTextRightToLeft(_state);
-
-            int textIndex = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
-                textAlignment, true, rightToLeft);
-            if (textIndex == -1)
-            {
-                textIndex = 0;
-                font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, 0,
-                    textAlignment, true, rightToLeft);
-            }
-
             switch (key)
             {
-                case Keyboard::KEY_BACKSPACE:
-                {
-                    if (textIndex > 0)
-                    {
-                        --textIndex;
-                        _text.erase(textIndex, 1);
-                        font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
-                            textAlignment, true, rightToLeft);
-
-                        _dirty = true;
-                    }
-                    break;
-                }
                 case Keyboard::KEY_RETURN:
-                    // TODO: Handle line-break insertion correctly.
+                    // TODO: Support multi-line
                     break;
                 case Keyboard::KEY_ESCAPE:
+                    break;
+                case Keyboard::KEY_BACKSPACE:
                     break;
                 case Keyboard::KEY_TAB:
                     // Allow tab to move the focus forward.
                     return false;
-                    break;
                 default:
                 {
-                    // Insert character into string.
-                    _text.insert(textIndex, 1, (char)key);
-
-                    // Get new location of caret.
-                    font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex + 1,
-                        textAlignment, true, rightToLeft);
-
-                    if (key == ' ')
+                    // Insert character into string, only if our font supports this character
+                    if (_font && _font->isCharacterSupported(key))
                     {
-                        // If a space was entered, check that caret is still within bounds.
-                        if (_caretLocation.x >= _textBounds.x + _textBounds.width ||
-                            _caretLocation.y >= _textBounds.y + _textBounds.height)
+                        if (_caretLocation <= _text.length())
                         {
-                            // If not, undo the character insertion.
-                            _text.erase(textIndex, 1);
-                            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
-                                textAlignment, true, rightToLeft);
-
-                            // No need to check again.
-                            break;
+                            _text.insert(_caretLocation, 1, (char)key);
+                            ++_caretLocation;
                         }
-                    }
 
-                    // Always check that the text still fits within the clip region.
-                    Rectangle textBounds;
-                    font->measureText(_text.c_str(), _textBounds, fontSize, &textBounds, textAlignment, true, true);
-                    if (textBounds.x < _textBounds.x || textBounds.y < _textBounds.y ||
-                        textBounds.width >= _textBounds.width || textBounds.height >= _textBounds.height)
-                    {
-                        // If not, undo the character insertion.
-                        _text.erase(textIndex, 1);
-                        font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
-                            textAlignment, true, rightToLeft);
-
-                        // TextBox is not dirty.
-                        break;
+                        notifyListeners(Control::Listener::TEXT_CHANGED);
                     }
-                
-                    _dirty = true;
                     break;
                 }
             
                 break;
             }
-
-            notifyListeners(Control::Listener::TEXT_CHANGED);
             break;
         }
         case Keyboard::KEY_RELEASE:
-            return false;
+            switch (key)
+            {
+                case Keyboard::KEY_CTRL:
+                {
+                    _ctrlPressed = false;
+                    break;
+                }
+            }
     }
 
     _lastKeypress = key;
 
-    return _consumeInputEvents;
+    return Label::keyEvent(evt, key);
 }
 
-void TextBox::update(const Control* container, const Vector2& offset)
+void TextBox::controlEvent(Control::Listener::EventType evt)
 {
-    Label::update(container, offset);
+    Label::controlEvent(evt);
 
-    _fontSize = getFontSize(_state);
-    _caretImage = getImage("textCaret", _state);
+    switch (evt)
+    {
+    case Control::Listener::FOCUS_GAINED:
+        Game::getInstance()->displayKeyboard(true);
+        break;
+
+    case Control::Listener::FOCUS_LOST:
+        Game::getInstance()->displayKeyboard(false);
+        break;
+    }
 }
 
-void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
+void TextBox::updateState(State state)
 {
-    if (_caretImage && (_state == ACTIVE || hasFocus()))
+    Label::updateState(state);
+
+    _fontSize = getFontSize(state);
+    _caretImage = getImage("textCaret", state);
+}
+
+unsigned int TextBox::drawImages(Form* form, const Rectangle& clip)
+{
+    Control::State state = getState();
+
+    if (_caretImage && (state == ACTIVE || hasFocus()))
     {
         // Draw the cursor at its current location.
         const Rectangle& region = _caretImage->getRegion();
         if (!region.isEmpty())
         {
-            GP_ASSERT(spriteBatch);
-            const Theme::UVs uvs = _caretImage->getUVs();
+            const Theme::UVs& uvs = _caretImage->getUVs();
             Vector4 color = _caretImage->getColor();
             color.w *= _opacity;
 
-            spriteBatch->draw(_caretLocation.x - (region.width / 2.0f), _caretLocation.y, region.width, _fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+            float caretWidth = region.width * _fontSize / region.height;
+
+            Font* font = getFont(state);
+            unsigned int fontSize = getFontSize(state);
+            Vector2 point;
+            font->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, fontSize, &point, _caretLocation, 
+                 getTextAlignment(state), true, getTextRightToLeft(state));
+
+            SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
+            startBatch(form, batch);
+            batch->draw(point.x - caretWidth * 0.5f, point.y, caretWidth, fontSize, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+            finishBatch(form, batch);
+
+            return 1;
         }
     }
 
-    _dirty = false;
+    return 0;
+}
+
+unsigned int TextBox::drawText(Form* form, const Rectangle& clip)
+{
+    if (_text.size() <= 0)
+        return 0;
+
+    // Draw the text.
+    if (_font)
+    {
+        Control::State state = getState();
+        const std::string displayedText = getDisplayedText();
+        unsigned int fontSize = getFontSize(state);
+
+        SpriteBatch* batch = _font->getSpriteBatch(fontSize);
+        startBatch(form, batch);
+        _font->drawText(displayedText.c_str(), _textBounds, _textColor, fontSize, getTextAlignment(state), true, getTextRightToLeft(state), &_viewportClipBounds);
+        finishBatch(form, batch);
+
+        return 1;
+    }
+
+    return 0;
 }
 
 void TextBox::setCaretLocation(int x, int y)
 {
+    Control::State state = getState();
+
+    Vector2 point(x + _absoluteBounds.x, y + _absoluteBounds.y);
+
     // Get index into string and cursor location from the latest touch location.
-    _prevCaretLocation.set(_caretLocation);
-    _caretLocation.set(x + _absoluteBounds.x,
-                       y + _absoluteBounds.y);
+    Font* font = getFont(state);
+    unsigned int fontSize = getFontSize(state);
+    Font::Justify textAlignment = getTextAlignment(state);
+    bool rightToLeft = getTextRightToLeft(state);
+    const std::string displayedText = getDisplayedText();
 
-    Font* font = getFont(_state);
-    unsigned int fontSize = getFontSize(_state);
-    Font::Justify textAlignment = getTextAlignment(_state);
-    bool rightToLeft = getTextRightToLeft(_state);
-
-    int index = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+    int index = font->getIndexAtLocation(displayedText.c_str(), _textBounds, fontSize, point, &point,
             textAlignment, true, rightToLeft);
 
     if (index == -1)
     {
         // Attempt to find the nearest valid caret location.
         Rectangle textBounds;
-        font->measureText(_text.c_str(), _textBounds, fontSize, &textBounds, textAlignment, true, true);
+        font->measureText(displayedText.c_str(), _textBounds, fontSize, &textBounds, textAlignment, true, true);
 
-        if (_caretLocation.x > textBounds.x + textBounds.width &&
-            _caretLocation.y > textBounds.y + textBounds.height)
+        if (point.x > textBounds.x + textBounds.width &&
+            point.y > textBounds.y + textBounds.height)
         {
-            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, (unsigned int)_text.length(),
+            font->getLocationAtIndex(displayedText.c_str(), _textBounds, fontSize, &point, (unsigned int)_text.length(),
                 textAlignment, true, rightToLeft);
             return;
         }
 
-        if (_caretLocation.x < textBounds.x)
+        if (point.x < textBounds.x)
         {
-            _caretLocation.x = textBounds.x;
+            point.x = textBounds.x;
         }
-        else if (_caretLocation.x > textBounds.x + textBounds.width)
+        else if (point.x > textBounds.x + textBounds.width)
         {
-            _caretLocation.x = textBounds.x + textBounds.width;
+            point.x = textBounds.x + textBounds.width;
         }
 
-        if (_caretLocation.y < textBounds.y)
+        if (point.y < textBounds.y)
         {
-            _caretLocation.y = textBounds.y;
+            point.y = textBounds.y;
         }
-        else if (_caretLocation.y > textBounds.y + textBounds.height)
+        else if (point.y > textBounds.y + textBounds.height)
         {
-            Font* font = getFont(_state);
+            Font* font = getFont(state);
             GP_ASSERT(font);
-            unsigned int fontSize = getFontSize(_state);
-            _caretLocation.y = textBounds.y + textBounds.height - fontSize;
+            unsigned int fontSize = getFontSize(state);
+            point.y = textBounds.y + textBounds.height - fontSize;
         }
 
-        index = font->getIndexAtLocation(_text.c_str(), _textBounds, fontSize, _caretLocation, &_caretLocation,
+        index = font->getIndexAtLocation(displayedText.c_str(), _textBounds, fontSize, point, &point,
             textAlignment, true, rightToLeft);
-
-        if (index == -1)
-        {
-            // We failed to find a valid location; just put the caret back to where it was.
-            _caretLocation.set(_prevCaretLocation);
-        }
     }
+
+    if (index != -1)
+        _caretLocation = index;
+}
+
+void TextBox::getCaretLocation(Vector2* p)
+{
+    GP_ASSERT(p);
+
+    State state = getState();
+    getFont(state)->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, getFontSize(state), p, _caretLocation, getTextAlignment(state), true, getTextRightToLeft(state));
 }
 
 const char* TextBox::getType() const
 {
     return "textBox";
+}
+
+void TextBox::setPasswordChar(char character)
+{
+    _passwordChar = character;
+}
+
+char TextBox::getPasswordChar() const
+{
+    return _passwordChar;
+}
+
+void TextBox::setInputMode(InputMode inputMode)
+{
+    _inputMode = inputMode;
+}
+
+TextBox::InputMode TextBox::getInputMode() const
+{
+    return _inputMode;
+}
+
+TextBox::InputMode TextBox::getInputMode(const char* inputMode)
+{
+    if (!inputMode)
+    {
+        return TextBox::TEXT;
+    }
+
+    if (strcmp(inputMode, "TEXT") == 0)
+    {
+        return TextBox::TEXT;
+    }
+    else if (strcmp(inputMode, "PASSWORD") == 0)
+    {
+        return TextBox::PASSWORD;
+    }
+    else
+    {
+        GP_ERROR("Failed to get corresponding textbox inputmode for unsupported value '%s'.", inputMode);
+    }
+
+    // Default.
+    return TextBox::TEXT;
+}
+
+std::string TextBox::getDisplayedText() const
+{
+    std::string displayedText;
+    switch (_inputMode) {
+        case PASSWORD:
+            displayedText.insert((size_t)0, _text.length(), _passwordChar);
+            break;
+
+        case TEXT:
+        default:
+            displayedText = _text;
+            break;
+    }
+
+    return displayedText;
 }
 
 }

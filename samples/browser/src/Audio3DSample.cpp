@@ -24,20 +24,22 @@ Audio3DSample::Audio3DSample()
 void Audio3DSample::initialize()
 {
     setMultiTouch(true);
-    _font = Font::create("res/common/arial18.gpb");
+    _font = Font::create("res/ui/arial.gpb");
     // Load game scene from file
     _scene = Scene::load("res/common/box.gpb");
 
     // Get light node
     Node* lightNode = _scene->findNode("directionalLight1");
     Light* light = lightNode->getLight();
+    lightNode->setRotation(Vector3(1, 0, 0), -MATH_DEG_TO_RAD(45));
 
     // Initialize box model
     Node* boxNode = _scene->findNode("box");
     Model* boxModel = boxNode->getModel();
-    Material* boxMaterial = boxModel->setMaterial("res/common/box.material");
-    boxMaterial->getParameter("u_lightColor")->setValue(light->getColor());
-    boxMaterial->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
+    Material* boxMaterial = boxModel->setMaterial("res/common/box.material#lambert1");
+
+    boxMaterial->getParameter("u_directionalLightColor[0]")->setValue(light->getColor());
+    boxMaterial->getParameter("u_directionalLightDirection[0]")->setValue(lightNode->getForwardVectorView());
 
     // Remove the cube from the scene but keep a reference to it.
     _cubeNode = boxNode;
@@ -149,7 +151,7 @@ void Audio3DSample::render(float elapsedTime)
     // Visit all the nodes in the scene for drawing
     _scene->visit(this, &Audio3DSample::drawScene);
 
-    drawDebugText(0, _font->getSize());
+    drawDebugText(5, _font->getSize());
 
     _gamepad->draw();
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
@@ -315,17 +317,17 @@ void Audio3DSample::drawDebugText(int x, int y)
     static const int V_SPACE = 16;
     AudioListener* audioListener = AudioListener::getInstance();
     drawVector3("Position", audioListener->getPosition(), x, y);
-    drawVector3("Forward", audioListener->getOrientationForward(), x, y+=V_SPACE);
-    drawVector3("Orientation", audioListener->getOrientationUp(), x, y+=V_SPACE);
-    drawVector3("Velocity", audioListener->getVelocity(), x, y+=V_SPACE);
+    drawVector3("Forward", audioListener->getOrientationForward(), x, y+=_font->getSize());
+    drawVector3("Orientation", audioListener->getOrientationUp(), x, y+=_font->getSize());
+    drawVector3("Velocity", audioListener->getVelocity(), x, y+=_font->getSize());
     _font->finish();
 }
 
-void Audio3DSample::drawVector3(const char* str, const Vector3 vector, int x, int y)
+void Audio3DSample::drawVector3(const char* str, const Vector3& vector, int x, int y)
 {
     char buffer[255];
-    sprintf(buffer, "%s: (%f, %f, %f)", str, vector.x, vector.y, vector.z);
-    _font->drawText(buffer, x, y, Vector4::one(), _font->getSize());
+    sprintf(buffer, "%s: (%.3f, %.3f, %.3f)", str, vector.x, vector.y, vector.z);
+    _font->drawText(buffer, x, y, Vector4::one(), 22);
 }
 
 void Audio3DSample::loadGrid(Scene* scene)

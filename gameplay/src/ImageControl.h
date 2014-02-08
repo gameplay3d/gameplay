@@ -1,7 +1,7 @@
 #ifndef IMAGECONTROL_H_
 #define IMAGECONTROL_H_
 
-#include "Button.h"
+#include "Control.h"
 #include "Theme.h"
 #include "Image.h"
 #include "SpriteBatch.h"
@@ -11,44 +11,29 @@ namespace gameplay
 {
 
 /**
- * An ImageControl allows forms to display images from arbitrary files not specified in the theme.
+ * Defines an image control.
  *
- * The following properties are available for image controls:
-
- @verbatim
-     image <control ID>
-     {
-         style          = <styleID>
-         alignment      = <Control::Alignment constant> // Note: 'position' will be ignored.
-         position       = <x, y>
-         autoWidth      = <bool>
-         autoHeight     = <bool>
-         size           = <width, height>
-         width          = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
-         height         = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
-         consumeEvents  = <bool>    // Whether the label propagates input events to the Game's input event handler. Default is true.
-         path           = <string>  // Path to image or texture atlas.
-         srcRegion      = <x, y, width, height>  // Region within file to create UVs from.
-         dstRegion      = <x, y, width, height>  // Region of control's viewport to draw into.
-     }
- @endverbatim
+ * This allows forms to display seperate images from arbitrary files not specified in the theme.
+ *
+ * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
-class ImageControl : public Button
+class ImageControl : public Control
 {
     friend class Container;
+    friend class ControlFactory;
 
 public:
 
     /**
-     * Create a new ImageControl.
+     * Creates a new ImageControl.
      *
-     * @param id The control's ID.
-     * @param style The control's style.
+     * @param id The image control ID.
+     * @param style The image control style (optional).
      *
-     * @return The new ImageControl.
+     * @return The new image control.
      * @script{create}
      */
-    static ImageControl* create(const char* id, Theme::Style* style);
+    static ImageControl* create(const char* id, Theme::Style* style = NULL);
 
     /**
      * Set the path of the image for this ImageControl to display.
@@ -93,7 +78,7 @@ public:
      * @param height The height of the destination region.
      */
     void setRegionDst(float x, float y, float width, float height);
-    
+
     /**
      * Sets the destination region of this ImageControl.  This is the region
      * within the control's viewport to draw the image.
@@ -114,31 +99,49 @@ public:
 protected:
 
     ImageControl();
-    
+
     virtual ~ImageControl();
 
-    static ImageControl* create(Theme::Style* style, Properties* properties);
+    /**
+     * Creates a new ImageControl.
+     * 
+     * @param style The control's custom style.
+     * @param properties A properties object containing a definition of the ImageControl (optional).
+     *
+     * @return The new ImageControl.
+     * @script{create}
+      * 
+      */
+    static Control* create(Theme::Style* style, Properties* properties = NULL);
 
-    virtual void initialize(Theme::Style* style, Properties* properties);
+    void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
-    void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
+    /**
+     * @see Control::drawImages
+     */
+    unsigned int drawImages(Form* form, const Rectangle& clip);
+
+    /**
+     * @see Control::updateBounds
+     */
+    void updateBounds();
+
+private:
+
+    ImageControl(const ImageControl& copy);
 
     // Source region.
     Rectangle _srcRegion;
     // Destination region.
     Rectangle _dstRegion;
     SpriteBatch* _batch;
-    
+
     // One over texture width and height, for use when calculating UVs from a new source region.
     float _tw;
     float _th;
     
     // Calculated UVs.
     Theme::UVs _uvs;
-
-private:
-
-    ImageControl(const ImageControl& copy);
 };
 
 }

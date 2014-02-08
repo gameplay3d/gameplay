@@ -132,9 +132,12 @@ int lua_Model_draw(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Model* instance = getInstance(state);
-                instance->draw();
-                
-                return 0;
+                unsigned int result = instance->draw();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
             }
 
             lua_pushstring(state, "lua_Model_draw - Failed to match the given parameters to a valid function signature.");
@@ -150,9 +153,12 @@ int lua_Model_draw(lua_State* state)
                 bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 Model* instance = getInstance(state);
-                instance->draw(param1);
-                
-                return 0;
+                unsigned int result = instance->draw(param1);
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
             }
 
             lua_pushstring(state, "lua_Model_draw - Failed to match the given parameters to a valid function signature.");

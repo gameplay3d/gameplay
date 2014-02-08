@@ -426,6 +426,11 @@ extern void print(const char* format, ...)
     va_end(argptr);
 }
 
+extern int strcmpnocase(const char* s1, const char* s2)
+{
+    return strcasecmp(s1, s2);
+}
+
 EGLenum checkErrorEGL(const char* msg)
 {
     GP_ASSERT(msg);
@@ -500,7 +505,7 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
     }
 }
 
-#ifdef USE_BLACKBERRY_GAMEPAD
+#ifdef GP_USE_GAMEPAD
 
 static const char* __vendorStrings[] =
 {
@@ -600,7 +605,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
             screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_ANALOG1, analog);
             break;
         }
-        
+
         // So far we've tested two gamepads with analog sticks on BlackBerry:
         // the SteelSeries FREE, and the iControlPad.
         // Both return values between -128 and +127, with the y axis starting from
@@ -689,7 +694,7 @@ Platform::~Platform()
     }
 }
 
-Platform* Platform::create(Game* game, void* attachToWindow)
+Platform* Platform::create(Game* game)
 {
     FileSystem::setResourcePath("./app/native/");
     Platform* platform = new Platform(game);
@@ -791,6 +796,14 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         perror("screen_create_window");
         goto error;
     }
+
+    // Window group
+	rc = screen_create_window_group(__screenWindow, "windowgroup");
+	if (rc)
+	{
+		perror("screen_create_window_group failed");
+		goto error;
+	}
 
     // Set/get any window properties.
     rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_FORMAT, &screenFormat);
@@ -990,7 +1003,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress("glIsVertexArrayOES");
     }
 
- #ifdef USE_BLACKBERRY_GAMEPAD
+ #ifdef GP_USE_GAMEPAD
 
     screen_device_t* screenDevs;
 
@@ -1000,7 +1013,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     screenDevs = (screen_device_t*)calloc(count, sizeof(screen_device_t));
     screen_get_context_property_pv(__screenContext, SCREEN_PROPERTY_DEVICES, (void**)screenDevs);
 
-	for (int i = 0; i < count; i++) 
+	for (int i = 0; i < count; i++)
     {
 	    int type;
         screen_get_device_property_iv(screenDevs[i], SCREEN_PROPERTY_TYPE, &type);
@@ -1077,7 +1090,7 @@ int Platform::enterMessagePump()
     while (true)
     {
         bps_event_t* event = NULL;
-        
+
         while (true)
         {
             rc = bps_get_event(&event, 1);
@@ -1085,6 +1098,12 @@ int Platform::enterMessagePump()
 
             if (event == NULL)
                 break;
+
+#ifdef GP_USE_SOCIAL
+            // if the social controller needs to deal with the event do that here
+            if (Game::getInstance()->getSocialController()->handleEvent(event))
+            	break;
+#endif
 
             domain = bps_event_get_domain(event);
 
@@ -1241,7 +1260,7 @@ int Platform::enterMessagePump()
                         }
                         break;
                     }
-#ifdef USE_BLACKBERRY_GAMEPAD
+#ifdef GP_USE_GAMEPAD
                     case SCREEN_EVENT_DEVICE:
                     {
                         // A device was attached or removed.
@@ -1283,9 +1302,6 @@ int Platform::enterMessagePump()
             {
                 switch (bps_event_get_code(event))
                 {
-                case NAVIGATOR_SWIPE_DOWN:
-                    _game->menuEvent();
-                    break;
                 case NAVIGATOR_WINDOW_STATE:
                 {
                     navigator_window_state_t state = navigator_event_get_window_state(event);
@@ -1435,8 +1451,7 @@ void Platform::setMultiSampling(bool enabled)
         return;
     }
 
-    //todo
-
+    // TODO:
     __multiSampling = enabled;
 }
 
@@ -1501,7 +1516,7 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     }
 }
 
-void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
 	if (accelX)
 	{
@@ -1638,6 +1653,11 @@ bool Platform::launchURL(const char* url)
         return false;
 
     return navigator_invoke(url, NULL) == BPS_SUCCESS;
+}
+
+std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
+{
+    return "";
 }
 
 }

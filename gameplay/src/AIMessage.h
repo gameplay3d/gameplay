@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 /**
- * Defines a simple, flexible message structure used for passing messages through
+ * Defines a simple message structure used for passing messages through
  * the AI system.
  *
  * Messages can store an arbitrary number of parameters. For the sake of simplicity,

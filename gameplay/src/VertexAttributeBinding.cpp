@@ -140,8 +140,8 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
 
     // Call setVertexAttribPointer for each vertex element.
     std::string name;
-    unsigned int offset = 0;
-    for (unsigned int i = 0, count = vertexFormat.getElementCount(); i < count; ++i)
+    size_t offset = 0;
+    for (size_t i = 0, count = vertexFormat.getElementCount(); i < count; ++i)
     {
         const VertexFormat::Element& e = vertexFormat.getElement(i);
         gameplay::VertexAttribute attrib;
@@ -174,14 +174,6 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
             if ((attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME)) != -1)
                 break;
 
-            /*// Try adding a "0" after the texcoord attrib name (flexible name for this case).
-            if (attrib == -1)
-            {
-                name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME;
-                name += '0';
-                attrib = effect->getVertexAttribute(name.c_str());
-            }
-            break;*/
         case VertexFormat::TEXCOORD1:
         case VertexFormat::TEXCOORD2:
         case VertexFormat::TEXCOORD3:

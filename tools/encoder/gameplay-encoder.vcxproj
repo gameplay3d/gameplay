@@ -18,6 +18,7 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Constants.cpp" />
     <ClCompile Include="src\Curve.cpp" />
+    <ClCompile Include="src\edtaa3func.c" />
     <ClCompile Include="src\EncoderArguments.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FBXSceneEncoder.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Constants.h" />
     <ClInclude Include="src\Curve.h" />
+    <ClInclude Include="src\edtaa3func.h" />
     <ClInclude Include="src\EncoderArguments.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FBXSceneEncoder.h" />
@@ -122,12 +124,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -155,16 +159,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;USE_FBX;WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/include;../../external-deps/freetype2/include;../../external-deps/libpng/include;../../external-deps/zlib/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=2;USE_FBX;WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2.1/include;../../external-deps/freetype2/include;../../external-deps/png/include;../../external-deps/zlib/include</AdditionalIncludeDirectories>
       <DisableLanguageExtensions>
       </DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/lib/vs2010/x86;../../external-deps/freetype2/lib/windows/x86;../../external-deps/libpng/lib/windows/x86;../../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fbxsdk-2013.3-md.lib;freetype245.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2.1/lib/vs2012/x86/debug;../../external-deps/freetype2/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfbxsdk-md.lib;freetype245.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
@@ -180,16 +184,16 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;USE_FBX;WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/include;../../external-deps/freetype2/include;../../external-deps/libpng/include;../../external-deps/zlib/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;USE_FBX;WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2.1/include;../../external-deps/freetype2/include;../../external-deps/png/include;../../external-deps/zlib/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>fbxsdk-2013.3-md.lib;freetype245.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/lib/vs2010/x86;../../external-deps/freetype2/lib/windows/x86;../../external-deps/libpng/lib/windows/x86;../../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfbxsdk-md.lib;freetype245.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2014.2.1/lib/vs2012/x86/release;../../external-deps/freetype2/lib/windows/x86;../../external-deps/png/lib/windows/x86;../../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>

@@ -10,7 +10,11 @@ class MeshSkin;
 class Bundle;
 
 /**
- * Defines a basic hierarchical structure of transformation spaces.
+ * Defines a joint node.
+ *
+ * This represent a joint in a skeleton that is hierarchially part of
+ * a MeshSkin. This allows the vertices in the mesh to be blended and 
+ * animated using the sum of the blend weight that must add up to 1.0.
  */
 class Joint : public Node
 {

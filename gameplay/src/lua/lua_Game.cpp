@@ -2,12 +2,14 @@
 #include "ScriptController.h"
 #include "lua_Game.h"
 #include "Base.h"
+#include "ControlFactory.h"
 #include "FileSystem.h"
 #include "FrameBuffer.h"
 #include "Game.h"
 #include "Platform.h"
 #include "RenderState.h"
 #include "SceneLoader.h"
+#include "Theme.h"
 #include "lua_GameClearFlags.h"
 #include "lua_GameState.h"
 #include "lua_GamepadGamepadEvent.h"
@@ -29,6 +31,9 @@ void luaRegister_Game()
         {"exit", lua_Game_exit},
         {"frame", lua_Game_frame},
         {"gamepadEvent", lua_Game_gamepadEvent},
+        {"gestureDragEvent", lua_Game_gestureDragEvent},
+        {"gestureDropEvent", lua_Game_gestureDropEvent},
+        {"gestureLongTapEvent", lua_Game_gestureLongTapEvent},
         {"gesturePinchEvent", lua_Game_gesturePinchEvent},
         {"gestureSwipeEvent", lua_Game_gestureSwipeEvent},
         {"gestureTapEvent", lua_Game_gestureTapEvent},
@@ -44,8 +49,8 @@ void luaRegister_Game()
         {"getGamepadCount", lua_Game_getGamepadCount},
         {"getHeight", lua_Game_getHeight},
         {"getPhysicsController", lua_Game_getPhysicsController},
-        {"getRawSensorValues", lua_Game_getRawSensorValues},
         {"getScriptController", lua_Game_getScriptController},
+        {"getSensorValues", lua_Game_getSensorValues},
         {"getState", lua_Game_getState},
         {"getViewport", lua_Game_getViewport},
         {"getWidth", lua_Game_getWidth},
@@ -60,7 +65,6 @@ void luaRegister_Game()
         {"isMultiTouch", lua_Game_isMultiTouch},
         {"keyEvent", lua_Game_keyEvent},
         {"launchURL", lua_Game_launchURL},
-        {"menuEvent", lua_Game_menuEvent},
         {"mouseEvent", lua_Game_mouseEvent},
         {"pause", lua_Game_pause},
         {"registerGesture", lua_Game_registerGesture},
@@ -409,6 +413,130 @@ int lua_Game_gamepadEvent(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_gestureDragEvent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                Game* instance = getInstance(state);
+                instance->gestureDragEvent(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Game_gestureDragEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_gestureDropEvent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                Game* instance = getInstance(state);
+                instance->gestureDropEvent(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Game_gestureDropEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_gestureLongTapEvent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                Game* instance = getInstance(state);
+                instance->gestureLongTapEvent(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Game_gestureLongTapEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
             lua_error(state);
             break;
         }
@@ -1070,62 +1198,6 @@ int lua_Game_getPhysicsController(lua_State* state)
     return 0;
 }
 
-int lua_Game_getRawSensorValues(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 7:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA))
-            {
-                // Get parameter 1 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param1 = gameplay::ScriptUtil::getFloatPointer(2);
-
-                // Get parameter 2 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param2 = gameplay::ScriptUtil::getFloatPointer(3);
-
-                // Get parameter 3 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param3 = gameplay::ScriptUtil::getFloatPointer(4);
-
-                // Get parameter 4 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
-
-                // Get parameter 5 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param5 = gameplay::ScriptUtil::getFloatPointer(6);
-
-                // Get parameter 6 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param6 = gameplay::ScriptUtil::getFloatPointer(7);
-
-                Game* instance = getInstance(state);
-                instance->getRawSensorValues(param1, param2, param3, param4, param5, param6);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Game_getRawSensorValues - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 7).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Game_getScriptController(lua_State* state)
 {
     // Get the number of parameters.
@@ -1163,6 +1235,62 @@ int lua_Game_getScriptController(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_getSensorValues(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 7:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
+                (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA) &&
+                (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
+                (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
+                (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
+                (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA))
+            {
+                // Get parameter 1 off the stack.
+                gameplay::ScriptUtil::LuaArray<float> param1 = gameplay::ScriptUtil::getFloatPointer(2);
+
+                // Get parameter 2 off the stack.
+                gameplay::ScriptUtil::LuaArray<float> param2 = gameplay::ScriptUtil::getFloatPointer(3);
+
+                // Get parameter 3 off the stack.
+                gameplay::ScriptUtil::LuaArray<float> param3 = gameplay::ScriptUtil::getFloatPointer(4);
+
+                // Get parameter 4 off the stack.
+                gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
+
+                // Get parameter 5 off the stack.
+                gameplay::ScriptUtil::LuaArray<float> param5 = gameplay::ScriptUtil::getFloatPointer(6);
+
+                // Get parameter 6 off the stack.
+                gameplay::ScriptUtil::LuaArray<float> param6 = gameplay::ScriptUtil::getFloatPointer(7);
+
+                Game* instance = getInstance(state);
+                instance->getSensorValues(param1, param2, param3, param4, param5, param6);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Game_getSensorValues - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 7).");
             lua_error(state);
             break;
         }
@@ -1679,38 +1807,6 @@ int lua_Game_launchURL(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Game_menuEvent(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Game* instance = getInstance(state);
-                instance->menuEvent();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Game_menuEvent - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

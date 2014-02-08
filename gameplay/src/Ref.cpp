@@ -5,7 +5,7 @@
 namespace gameplay
 {
 
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 void* trackRef(Ref* ref);
 void untrackRef(Ref* ref, void* record);
 #endif
@@ -13,7 +13,7 @@ void untrackRef(Ref* ref, void* record);
 Ref::Ref() :
     _refCount(1)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
     __record = trackRef(this);
 #endif
 }
@@ -21,7 +21,7 @@ Ref::Ref() :
 Ref::Ref(const Ref& copy) :
     _refCount(1)
 {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
     __record = trackRef(this);
 #endif
 }
@@ -39,7 +39,7 @@ void Ref::release()
 {
     if ((--_refCount) <= 0)
     {
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
         untrackRef(this, __record);
 #endif
         delete this;
@@ -51,7 +51,7 @@ unsigned int Ref::getRefCount() const
     return _refCount;
 }
 
-#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#ifdef GP_USE_MEM_LEAK_DETECTION
 
 struct RefAllocationRecord
 {
