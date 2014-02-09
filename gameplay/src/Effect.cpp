@@ -483,7 +483,7 @@ Uniform* Effect::getUniform(const char* name) const
     if (uniformLocation > -1)
 	{
 		// Check for array uniforms ("u_directionalLightColor[0]" -> "u_directionalLightColor")
-		char* parentname = new char[strlen(name)];
+		char* parentname = new char[strlen(name)+1];
 		strcpy(parentname, name);
 		if (strtok(parentname, "[") != NULL) {
 			std::map<std::string, Uniform*>::const_iterator itr = _uniforms.find(parentname);
@@ -498,9 +498,11 @@ Uniform* Effect::getUniform(const char* name) const
 				uniform->_type = puniform->getType();
 				_uniforms[name] = uniform;
 
+				delete parentname;
 				return uniform;
 			}
 		}
+		delete parentname;
     }
 
 	// No uniform variable found - return NULL
