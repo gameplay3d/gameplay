@@ -197,55 +197,51 @@ unsigned int Container::addControl(Control* control)
 {
 	GP_ASSERT(control);
 
-    // Remove the control from its current parent
-    if (control->_parent && control->_parent != this)
-    {
-        control->_parent->removeControl(control);
-    }
+	if( control->_parent == this )
+	{
+		// Control is already in this container.
+		// Do nothing but determine and return control's index.
+		const size_t size = _controls.size();
+		for( size_t i = 0; i < size; ++i ) {
+			Control* c = _controls[ i ];
+			if( c == control ) {
+				return (unsigned int)i;
+			}
+		}
 
-    if (control->getZIndex() == -1)
-    {
-        control->setZIndex(_zIndexDefault++);
-    }
+		// Should never reach this.
+		GP_ASSERT( false );
+		return 0;
+	}
 
-    if (control->getFocusIndex() == -1)
-    {
-        // Find the current largest focus index
-        int maxFocusIndex = 0;
-        for (size_t i = 0, count = _controls.size(); i < count; ++i)
-        {
-            if (_controls[i]->_focusIndex > maxFocusIndex)
-                maxFocusIndex = _controls[i]->_focusIndex;
-        }
-        control->setFocusIndex(maxFocusIndex + 1);
-    }
+	if( control->getZIndex() == -1 ) {
+		control->setZIndex( _zIndexDefault++ );
+	}
 
-    if (control->_parent != this)
-    {
-        _controls.push_back(control);
-        control->addRef();
-        control->_parent = this;
-        sortControls();
-        return (unsigned int)(_controls.size() - 1);
-    }
-    else
-    {
-        // Control is already in this container.
-        // Do nothing but determine and return control's index.
-        const size_t size = _controls.size();
-        for (size_t i = 0; i < size; ++i)
-        {
-            Control* c = _controls[i];
-            if (c == control)
-            {
-                return (unsigned int)i;
-            }
-        }
+	if( control->getFocusIndex() == -1 ) {
+		// Find the current largest focus index
+		int maxFocusIndex = 0;
+		for( size_t i = 0, count = _controls.size(); i < count; ++i ) {
+			if( _controls[ i ]->_focusIndex > maxFocusIndex )
+				maxFocusIndex = _controls[ i ]->_focusIndex;
+		}
+		control->setFocusIndex( maxFocusIndex + 1 );
+	}
 
-        // Should never reach this.
-        GP_ASSERT(false);
-        return 0;
-    }
+	_controls.push_back( control );
+	control->addRef();
+
+	// Remove the control from its current parent
+	if( control->_parent )
+	{
+		control->_parent->removeControl( control );
+	}
+
+	control->_parent = this;
+
+	sortControls();
+
+	return (unsigned int)( _controls.size() - 1 );
 }
 
 void Container::insertControl(Control* control, unsigned int index)
