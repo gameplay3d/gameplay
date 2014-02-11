@@ -8,6 +8,7 @@ namespace gameplay
 int lua_Game__gc(lua_State* state);
 int lua_Game_canExit(lua_State* state);
 int lua_Game_clear(lua_State* state);
+int lua_Game_clearSchedule(lua_State* state);
 int lua_Game_displayKeyboard(lua_State* state);
 int lua_Game_exit(lua_State* state);
 int lua_Game_frame(lua_State* state);

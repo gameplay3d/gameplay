@@ -599,6 +599,11 @@ public:
     void schedule(float timeOffset, const char* function);
 
     /**
+     * Clears all scheduled time events.
+     */
+    void clearSchedule();
+
+    /**
      * Opens an URL in an external browser, if available.
      *
      * @param url URL to be opened.
