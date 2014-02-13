@@ -760,8 +760,10 @@ bool initializeGL(WindowCreationParams* params)
     }
 
     // Vertical sync.
-	if (wglSwapIntervalEXT) wglSwapIntervalEXT(__vsync ? 1 : 0);
-	else __vsync = false;
+    if (wglSwapIntervalEXT) 
+        wglSwapIntervalEXT(__vsync ? 1 : 0);
+    else 
+        __vsync = false;
 
     // Some old graphics cards support EXT_framebuffer_object instead of ARB_framebuffer_object.
     // Patch ARB_framebuffer_object functions to EXT_framebuffer_object ones since semantic is same.
@@ -1075,8 +1077,11 @@ bool Platform::isVsync()
 void Platform::setVsync(bool enable)
 {
 	__vsync = enable;
-	if (wglSwapIntervalEXT) wglSwapIntervalEXT(enable ? 1 : 0);
-	else __vsync = false;
+
+	if (wglSwapIntervalEXT) 
+        wglSwapIntervalEXT(__vsync ? 1 : 0);
+    else 
+        __vsync = false;
 }
 
 void Platform::swapBuffers()
