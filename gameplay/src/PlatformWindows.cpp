@@ -1076,9 +1076,9 @@ bool Platform::isVsync()
 
 void Platform::setVsync(bool enable)
 {
-	__vsync = enable;
+    __vsync = enable;
 
-	if (wglSwapIntervalEXT) 
+    if (wglSwapIntervalEXT) 
         wglSwapIntervalEXT(__vsync ? 1 : 0);
     else 
         __vsync = false;
