@@ -74,9 +74,9 @@ private:
     std::set<AudioSource*> _streamedSources;
     AudioSource* _pausingSource;
 
-    static std::auto_ptr< tthread::thread > _streamingThread;
-    static tthread::mutex _streamingQueueMutex;
-    static bool _streamingThreadActive;
+    std::auto_ptr< tthread::thread > _streamingThread;
+    std::auto_ptr< tthread::mutex > _streamingQueueMutex;
+    bool _streamingThreadActive;
 };
 
 }
