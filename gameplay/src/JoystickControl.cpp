@@ -1,14 +1,14 @@
 #include "Base.h"
-#include "Joystick.h"
+#include "JoystickControl.h"
 
 namespace gameplay
 {
 
-Joystick::Joystick() : _radius(1.0f), _relative(true), _innerSize(NULL), _outerSize(NULL), _index(0)
+JoystickControl::JoystickControl() : _radius(1.0f), _relative(true), _innerSize(NULL), _outerSize(NULL), _index(0)
 {
 }
 
-Joystick::~Joystick()
+JoystickControl::~JoystickControl()
 {
     if (_innerSize)
         SAFE_DELETE(_innerSize);
@@ -16,28 +16,77 @@ Joystick::~Joystick()
         SAFE_DELETE(_outerSize);
 }
 
-Joystick* Joystick::create(const char* id, Theme::Style* style)
+JoystickControl* JoystickControl::create(const char* id, Theme::Style* style)
 {
-    Joystick* joystick = new Joystick();
-    joystick->_id = id ? id : "";
-    joystick->initialize("Joystick", style, NULL);
-    return joystick;
+    JoystickControl* joystickControl = new JoystickControl();
+    joystickControl->_id = id ? id : "";
+    joystickControl->initialize("Joystick", style, NULL);
+    return joystickControl;
 }
 
-Control* Joystick::create(Theme::Style* style, Properties* properties)
+Control* JoystickControl::create(Theme::Style* style, Properties* properties)
 {
-    Joystick* joystick = new Joystick();
-    joystick->initialize("Joystick", style, properties);
-    return joystick;
+    JoystickControl* joystickControl = new JoystickControl();
+    joystickControl->initialize("Joystick", style, properties);
+    return joystickControl;
 }
 
-void Joystick::initialize(const char* typeName, Theme::Style* style, Properties* properties)
+const Vector2& JoystickControl::getValue() const
+{
+    return _value;
+}
+
+void JoystickControl::setInnerRegionSize(const Vector2& size)
+{
+    if (_innerSize)
+        _innerSize->set(size);
+}
+
+const Vector2& JoystickControl::getInnerRegionSize() const
+{
+    if (_innerSize)
+        return *_innerSize;
+    else
+        return Vector2::zero();
+}
+
+void JoystickControl::setOuterRegionSize(const Vector2& size)
+{
+    if (_outerSize)
+        _outerSize->set(size);
+}
+
+const Vector2& JoystickControl::getOuterRegionSize() const
+{
+    if (_outerSize)
+        return *_outerSize;
+    else
+        return Vector2::zero();
+}
+
+void JoystickControl::setRelative(bool relative)
+{
+    _relative = relative;
+}
+
+bool JoystickControl::isRelative() const
+{
+    return _relative;
+}
+
+unsigned int JoystickControl::getIndex() const
+{
+    return _index;
+}
+
+
+void JoystickControl::initialize(const char* typeName, Theme::Style* style, Properties* properties)
 {
     Control::initialize(typeName, style, properties);
 
 	if (!properties)
 	{
-		GP_WARN("Joystick creation without properties object is unsupported.");
+		GP_WARN("JoystickControl creation without properties object is unsupported.");
 		return;
 	}
 
@@ -45,7 +94,7 @@ void Joystick::initialize(const char* typeName, Theme::Style* style, Properties*
 
 	if (!properties->exists("radius"))
 	{
-		GP_WARN("Joystick: required attribute 'radius' is missing.");
+		GP_WARN("JoystickControl: required attribute 'radius' is missing.");
 	}
 	else
 	{
@@ -114,7 +163,7 @@ void Joystick::initialize(const char* typeName, Theme::Style* style, Properties*
 	_index = properties->getInt("index");
 }
 
-void Joystick::addListener(Control::Listener* listener, int eventFlags)
+void JoystickControl::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
     {
@@ -124,7 +173,7 @@ void Joystick::addListener(Control::Listener* listener, int eventFlags)
     Control::addListener(listener, eventFlags);
 }
 
-bool Joystick::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+bool JoystickControl::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     switch (evt)
     {
@@ -172,7 +221,6 @@ bool Joystick::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
                 if (_value != value)
                 {
                     _value.set(value);
-                    _dirty = true;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
@@ -207,7 +255,6 @@ bool Joystick::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
                 if (_value != value)
                 {
                     _value.set(value);
-                    _dirty = true;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
@@ -228,7 +275,6 @@ bool Joystick::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
                 if (_value != value)
                 {
                     _value.set(value);
-                    _dirty = true;
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
@@ -241,13 +287,13 @@ bool Joystick::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     return Control::touchEvent(evt, x, y, contactIndex);
 }
 
-unsigned int Joystick::drawImages(Form* form, const Rectangle& clip)
+unsigned int JoystickControl::drawImages(Form* form, const Rectangle& clip)
 {
     Control::State state = getState();
 
     unsigned int drawCalls = 0;
 
-    // If the joystick is not absolute, then only draw if it is active.
+    // If the JoystickControl is not absolute, then only draw if it is active.
     if (!_relative || (_relative && state == ACTIVE))
     {
         if (!_relative)
@@ -298,7 +344,7 @@ unsigned int Joystick::drawImages(Form* form, const Rectangle& clip)
     return drawCalls;
 }
 
-const char* Joystick::getType() const
+const char* JoystickControl::getType() const
 {
     return "joystick";
 }

@@ -69,12 +69,14 @@
         <copy todir="assets/res/png">
             <fileset dir="../res/png"/>
         </copy>
-		
+        <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
 		<copy todir="assets/res/shaders">
             <fileset dir="../../../gameplay/res/shaders"/>
         </copy>
+		<copy todir="assets/res/ui">
+            <fileset dir="../../../gameplay/res/ui"/>
+        </copy>
 		
-		<copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>
 
     <!-- Import the actual build file.

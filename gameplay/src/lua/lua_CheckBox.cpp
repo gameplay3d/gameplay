@@ -43,8 +43,7 @@ void luaRegister_CheckBox()
         {"getAnimation", lua_CheckBox_getAnimation},
         {"getAnimationPropertyComponentCount", lua_CheckBox_getAnimationPropertyComponentCount},
         {"getAnimationPropertyValue", lua_CheckBox_getAnimationPropertyValue},
-        {"getAutoHeight", lua_CheckBox_getAutoHeight},
-        {"getAutoWidth", lua_CheckBox_getAutoWidth},
+        {"getAutoSize", lua_CheckBox_getAutoSize},
         {"getBorder", lua_CheckBox_getBorder},
         {"getBounds", lua_CheckBox_getBounds},
         {"getClip", lua_CheckBox_getClip},
@@ -60,7 +59,6 @@ void luaRegister_CheckBox()
         {"getId", lua_CheckBox_getId},
         {"getImageColor", lua_CheckBox_getImageColor},
         {"getImageRegion", lua_CheckBox_getImageRegion},
-        {"getImageSize", lua_CheckBox_getImageSize},
         {"getImageUVs", lua_CheckBox_getImageUVs},
         {"getMargin", lua_CheckBox_getMargin},
         {"getOpacity", lua_CheckBox_getOpacity},
@@ -99,8 +97,7 @@ void luaRegister_CheckBox()
         {"removeScriptCallback", lua_CheckBox_removeScriptCallback},
         {"setAlignment", lua_CheckBox_setAlignment},
         {"setAnimationPropertyValue", lua_CheckBox_setAnimationPropertyValue},
-        {"setAutoHeight", lua_CheckBox_setAutoHeight},
-        {"setAutoWidth", lua_CheckBox_setAutoWidth},
+        {"setAutoSize", lua_CheckBox_setAutoSize},
         {"setBorder", lua_CheckBox_setBorder},
         {"setBounds", lua_CheckBox_setBounds},
         {"setCanFocus", lua_CheckBox_setCanFocus},
@@ -117,7 +114,6 @@ void luaRegister_CheckBox()
         {"setId", lua_CheckBox_setId},
         {"setImageColor", lua_CheckBox_setImageColor},
         {"setImageRegion", lua_CheckBox_setImageRegion},
-        {"setImageSize", lua_CheckBox_setImageSize},
         {"setMargin", lua_CheckBox_setMargin},
         {"setOpacity", lua_CheckBox_setOpacity},
         {"setPadding", lua_CheckBox_setPadding},
@@ -979,7 +975,7 @@ int lua_CheckBox_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_CheckBox_getAutoHeight(lua_State* state)
+int lua_CheckBox_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -992,7 +988,7 @@ int lua_CheckBox_getAutoHeight(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 CheckBox* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoHeight();
+                Control::AutoSize result = instance->getAutoSize();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
@@ -1000,42 +996,7 @@ int lua_CheckBox_getAutoHeight(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_CheckBox_getAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_CheckBox_getAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                CheckBox* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoWidth();
-
-                // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_CheckBox_getAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_CheckBox_getAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1766,50 +1727,6 @@ int lua_CheckBox_getImageRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_CheckBox_getImageSize(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                CheckBox* instance = getInstance(state);
-                void* returnPtr = (void*)&(instance->getImageSize());
-                if (returnPtr)
-                {
-                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Vector2");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_CheckBox_getImageSize - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -3461,7 +3378,7 @@ int lua_CheckBox_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_CheckBox_setAutoHeight(lua_State* state)
+int lua_CheckBox_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3471,91 +3388,19 @@ int lua_CheckBox_setAutoHeight(lua_State* state)
     {
         case 2:
         {
-            do
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+                // Get parameter 1 off the stack.
+                Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
 
-                    CheckBox* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
+                CheckBox* instance = getInstance(state);
+                instance->setAutoSize(param1);
+                
+                return 0;
+            }
 
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    CheckBox* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_CheckBox_setAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_CheckBox_setAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
-
-                    CheckBox* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    CheckBox* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_CheckBox_setAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_CheckBox_setAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4371,46 +4216,6 @@ int lua_CheckBox_setImageRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_CheckBox_setImageSize(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
-
-                CheckBox* instance = getInstance(state);
-                instance->setImageSize(param1, param2);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_CheckBox_setImageSize - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

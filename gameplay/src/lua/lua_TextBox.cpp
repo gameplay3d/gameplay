@@ -42,8 +42,7 @@ void luaRegister_TextBox()
         {"getAnimation", lua_TextBox_getAnimation},
         {"getAnimationPropertyComponentCount", lua_TextBox_getAnimationPropertyComponentCount},
         {"getAnimationPropertyValue", lua_TextBox_getAnimationPropertyValue},
-        {"getAutoHeight", lua_TextBox_getAutoHeight},
-        {"getAutoWidth", lua_TextBox_getAutoWidth},
+        {"getAutoSize", lua_TextBox_getAutoSize},
         {"getBorder", lua_TextBox_getBorder},
         {"getBounds", lua_TextBox_getBounds},
         {"getCaretLocation", lua_TextBox_getCaretLocation},
@@ -100,8 +99,7 @@ void luaRegister_TextBox()
         {"removeScriptCallback", lua_TextBox_removeScriptCallback},
         {"setAlignment", lua_TextBox_setAlignment},
         {"setAnimationPropertyValue", lua_TextBox_setAnimationPropertyValue},
-        {"setAutoHeight", lua_TextBox_setAutoHeight},
-        {"setAutoWidth", lua_TextBox_setAutoWidth},
+        {"setAutoSize", lua_TextBox_setAutoSize},
         {"setBorder", lua_TextBox_setBorder},
         {"setBounds", lua_TextBox_setBounds},
         {"setCanFocus", lua_TextBox_setCanFocus},
@@ -981,7 +979,7 @@ int lua_TextBox_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_TextBox_getAutoHeight(lua_State* state)
+int lua_TextBox_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -994,7 +992,7 @@ int lua_TextBox_getAutoHeight(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 TextBox* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoHeight();
+                Control::AutoSize result = instance->getAutoSize();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
@@ -1002,42 +1000,7 @@ int lua_TextBox_getAutoHeight(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_TextBox_getAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_TextBox_getAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                TextBox* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoWidth();
-
-                // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_TextBox_getAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_TextBox_getAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3524,7 +3487,7 @@ int lua_TextBox_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_TextBox_setAutoHeight(lua_State* state)
+int lua_TextBox_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3534,91 +3497,19 @@ int lua_TextBox_setAutoHeight(lua_State* state)
     {
         case 2:
         {
-            do
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+                // Get parameter 1 off the stack.
+                Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
 
-                    TextBox* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
+                TextBox* instance = getInstance(state);
+                instance->setAutoSize(param1);
+                
+                return 0;
+            }
 
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    TextBox* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_TextBox_setAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_TextBox_setAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
-
-                    TextBox* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    TextBox* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_TextBox_setAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_TextBox_setAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

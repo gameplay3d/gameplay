@@ -90,7 +90,7 @@
 #include "AIState.h"
 #include "AIStateMachine.h"
 
-// Forms UI
+// UI
 #include "Theme.h"
 #include "Control.h"
 #include "ControlFactory.h"
@@ -103,7 +103,7 @@
 #include "RadioButton.h"
 #include "Slider.h"
 #include "ImageControl.h"
-#include "Joystick.h"
+#include "JoystickControl.h"
 #include "Layout.h"
 #include "AbsoluteLayout.h"
 #include "VerticalLayout.h"

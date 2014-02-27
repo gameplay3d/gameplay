@@ -541,7 +541,7 @@ static Keyboard::Key getKey(int keycode, int metastate)
         case AKEYCODE_ENTER:
             return Keyboard::KEY_RETURN;
         case AKEYCODE_DEL:
-            return Keyboard::KEY_DELETE;
+            return Keyboard::KEY_BACKSPACE;
         case AKEYCODE_GRAVE:
             return Keyboard::KEY_GRAVE;
         case AKEYCODE_MINUS:
@@ -1019,12 +1019,16 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
     {
         int32_t action = AKeyEvent_getAction(event);
         int32_t keycode = AKeyEvent_getKeyCode(event);
-        int32_t metastate = AKeyEvent_getMetaState(event); 
+        int32_t metastate = AKeyEvent_getMetaState(event);
+
+        //Don't consume volume up/down events.
+        if (keycode == AKEYCODE_VOLUME_DOWN || keycode == AKEYCODE_VOLUME_UP)
+            return 0;
 
         switch(action)
         {
             case AKEY_EVENT_ACTION_DOWN:
-                Game::getInstance()->keyEvent(Keyboard::KEY_PRESS, getKey(keycode, metastate));
+                gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey(keycode, metastate));
                 if (int character = getUnicode(keycode, metastate))
                     gameplay::Platform::keyEventInternal(Keyboard::KEY_CHAR, character);
                 break;

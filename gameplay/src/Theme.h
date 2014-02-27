@@ -302,6 +302,11 @@ private:
          */
         const Theme::Border& getBorder() const;
 
+        /**
+         * Gets the skin region within the theme texture.
+         *
+         * @return The skin region.
+         */
         const Rectangle& getRegion() const;
 
         /**

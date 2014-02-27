@@ -1,46 +1,38 @@
 form particleEditor
 {
-    theme = res/editor.theme
-    autoWidth = true
-    autoHeight = true
-    consumeInputEvents = false
+    ${leftWidth} = 195
 
-	// Vsync checkbox
+    size = 100%, 100%
+    consumeInputEvents = false
+    style = Empty
+
 	checkBox vsync
 	{
-		style = iconNoBorder
-		size = 100, 35
-		position = 165, 5
-		imageSize = 30, 30
+		position = 200, 5
 		text = VSYNC
 		checked = true
+        fontSize = 18
 	}
- 
+
     container leftSide
     {
-        style = noBorder
         layout = LAYOUT_VERTICAL
-        width = 160
-        autoHeight = true
+        width = ${leftWidth}
 
         container saveLoad
         {
-            style = basic
-            size = 160, 100
+            style = Form
+            width = 100%
             layout = LAYOUT_VERTICAL
 
 	        button save
 	        {
-		        style = buttonStyle
-                width = 140
-		        height = 40
-                x = 100
+                width = 100%
 		        text = Save
 	        }
 
             button load : save
 	        {
-                x = 200
 		        text = Load
 	        }
         }
@@ -48,37 +40,37 @@ form particleEditor
         // Image settings
         container image
         {
-	        style = basic
-	        size = 160, 200
-	        layout = LAYOUT_VERTICAL
+            style = Form
+            width = 100%
+
+	        layout
+            {
+                type = LAYOUT_VERTICAL
+                spacing = 5
+            }
 
             label
             {
-                style = title
-                size = 150, 30
                 text = Image
+                fontSize = 18
             }
 
 	        image sprite
 	        {
-		        style = image
 		        path = res/fire.png
-		        size = 140, 140
+		        size = 120, 120
 	        }
 
             container imageSettings
             {
-                style = noBorder
-                size = 160, 230
+                width = 100%
 		        layout = LAYOUT_VERTICAL
 
                 radioButton additive
                 {
-                    style = radio
                     text = Additive
                     group = blendMode
-                    size = 140, 25
-                    imageSize = 25, 25
+                    height = 25
                     selected = true
                 }
 
@@ -102,75 +94,61 @@ form particleEditor
 
                 container
                 {
-                    style = noBorder
-                    autoWidth = true
-                    height = 30
+                    width = 100%
 
                     label
                     {
-                        style = noBorder
                         text = Frame Count:
-                        size = 100, 26
+                        alignment = ALIGN_VCENTER_LEFT
                     }
 
                     textBox frameCount
                     {
-                        style = textBox
                         text = 1
-                        size = 45, 22
-                        position = 100, 0
+                        size = 60, 32
+                        position = 110, 0
                     }
                 }
 
                 container
                 {
-                    style = noBorder
-                    autoWidth = true
-                    height = 30
+                    width = 100%
 
                     label
                     {
-                        style = noBorder
                         text = Frame Width:
-                        size = 100, 26
+                        alignment = ALIGN_VCENTER_LEFT
                     }
 
                     textBox frameWidth
                     {
-                        style = textBox
                         text = 1
-                        size = 45, 22
-                        position = 100, 0
+                        size = 60, 32
+                        position = 110, 0
                     }
                 }
 
                 container
                 {
-                    style = noBorder
-                    autoWidth = true
-                    height = 30
+                    width = 100%
 
                     label
                     {
-                        style = noBorder
                         text = Frame Height:
-                        size = 100, 26
+                        alignment = ALIGN_VCENTER_LEFT
                     }
 
                     textBox frameHeight
                     {
-                        style = textBox
                         text = 1
-                        size = 45, 22
-                        position = 100, 0
+                        size = 60, 32
+                        position = 110, 0
                     }
                 }
 
                 button updateFrames
                 {
-			        style = buttonStyle
-			        width = 140
-			        height = 40
+			        width = 100%
 			        text = Update
                 }
             }
@@ -179,24 +157,26 @@ form particleEditor
         // Emission settings
         container emission
         {
-	        style = basic
+            style = Form
 	        layout = LAYOUT_VERTICAL
-	        size = 160, 200
+	        width = ${leftWidth}
 
 	        // Burst emission
 	        button emit
 	        {
-		        style = buttonStyle
-		        position = 0, 50
-		        size = 140, 40
+                width = 100%
 		        text = Emit
 	        }
+
+            label spacer
+            {
+                size = 5,5
+            }
 
 	        // Emission rate
 	        slider emissionRate
 	        {
-		        style = noBorder
-		        size = 140, 50
+                width = 100%
 		        orientation = HORIZONTAL
 		        min = 1
 		        max = 500
@@ -220,9 +200,6 @@ form particleEditor
 	        // Start / Stop Emitter
 	        checkBox started
 	        {
-		        style = iconNoBorder
-		        size = 140, 40
-		        imageSize = 35, 35
 		        text = Running
 		        checked = true
 	        }
@@ -230,19 +207,16 @@ form particleEditor
 
         button reset
 	    {
-		    style = buttonStyle
-            width = 160
-		    height = 40
+            width = ${leftWidth}
 		    text = Reset
 	    }
     }
 
     container particleProperties
     {
-        style = particleProps
+        style = Form
         alignment = ALIGN_TOP_RIGHT
-        width = 210
-        autoHeight = true
+        size = 210, 100%
         layout = LAYOUT_VERTICAL
         scroll = SCROLL_VERTICAL
         scrollBarsAutoHide = false
@@ -250,15 +224,17 @@ form particleEditor
         // Particle Size
         label titleSize
         {
-            style = title
-            size = 150, 30
+            padding
+            {
+                bottom = 5
+            }
             text = Particle Size
+            fontSize = 18
         }
 
         slider startMin
         {
-            style = noBorder
-            size = 150, 50
+            width = 100%
             orientation = HORIZONTAL
             min = 0
             max = 10
@@ -294,8 +270,7 @@ form particleEditor
 
         slider energyMin
         {
-            style = noBorder
-            size = 150, 50
+            width = 100%
             orientation = HORIZONTAL
             min = 0
             max = 5000
@@ -320,8 +295,7 @@ form particleEditor
 
         slider startRed
         {
-            style = noBorder
-            size = 150, 50
+            width = 100%
             orientation = HORIZONTAL
             min = 0
             max = 1
@@ -577,21 +551,19 @@ form particleEditor
 	// Camera Zoom
 	container zoom
 	{
-		style = noBorder
-		size = 160, 50
         alignment = ALIGN_BOTTOM_HCENTER
 
 		button zoomIn
 		{
-			style = buttonStyle
-			size = 80, 50
-			text = Zoom  In
+			width = 60
+			text = +
+            fontSize = 30
 		}
 
 		button zoomOut : zoomIn
 		{
-			position = 80, 0
-			text = Zoom Out
+            x = 60
+			text = -
 		}
 	}
 }

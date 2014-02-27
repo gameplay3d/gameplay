@@ -64,17 +64,8 @@ protected:
      * Position, resize, and update the controls within a container.
      *
      * @param container The container to update.
-     * @param offset The update offset.
      */
-    virtual void update(const Container* container, const Vector2& offset) = 0;
-
-    /**
-     * Align a control within a container.
-     *
-     * @param control The control to align.
-     * @param container The container to align the control within.
-     */
-    virtual void align(Control* control, const Container* container);
+    virtual void update(const Container* container) = 0;
 
     /**
      * Touch callback on touch events.  Coordinates are given relative to the container's
@@ -88,6 +79,7 @@ protected:
      * @see Touch::TouchEvent
      */
     virtual bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
 };
 
 }

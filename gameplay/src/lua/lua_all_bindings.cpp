@@ -51,7 +51,7 @@ void lua_RegisterAllBindings()
     luaRegister_Image();
     luaRegister_ImageControl();
     luaRegister_Joint();
-    luaRegister_Joystick();
+    luaRegister_JoystickControl();
     luaRegister_Keyboard();
     luaRegister_Label();
     luaRegister_Layout();

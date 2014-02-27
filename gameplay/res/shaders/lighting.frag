@@ -46,9 +46,9 @@ vec3 getLitPixel()
     for (int i = 0; i < DIRECTIONAL_LIGHT_COUNT; ++i)
     {
         #if defined(BUMPED)
-        vec3 lightDirection = normalize(v_directionalLightDirection[i]);
+        vec3 lightDirection = normalize(v_directionalLightDirection[i] * 2.0);
         #else
-        vec3 lightDirection = normalize(u_directionalLightDirection[i]);
+        vec3 lightDirection = normalize(u_directionalLightDirection[i] * 2.0);
         #endif 
         combinedColor += computeLighting(normalVector, -lightDirection, u_directionalLightColor[i], 1.0);
     }
@@ -73,11 +73,10 @@ vec3 getLitPixel()
         float attenuation = clamp(1.0 - dot(ldir, ldir), 0.0, 1.0);
         vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection[i]);
 
-        // TODO: Let app normalize this! Need Node::getForwardVectorViewNorm
         #if defined(BUMPED)
-            vec3 spotLightDirection = normalize(v_spotLightDirection[i]);
+            vec3 spotLightDirection = normalize(v_spotLightDirection[i] * 2.0);
         #else
-            vec3 spotLightDirection = normalize(u_spotLightDirection[i]);
+            vec3 spotLightDirection = normalize(u_spotLightDirection[i] * 2.0);
         #endif
 
         // "-lightDirection" is used because light direction points in opposite direction to spot direction.

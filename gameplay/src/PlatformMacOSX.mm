@@ -749,7 +749,11 @@ double getMachTimeInMilliseconds()
 {
     [gameLock lock];
     NSSize size = [ [ _window contentView ] frame ].size;
-    gameplay::Platform::resizeEventInternal((unsigned int)size.width, (unsigned int)size.height);
+    __width = size.width;
+    __height = size.height;
+    gameplay::Platform::resizeEventInternal((unsigned int)__width, (unsigned int)__height);
+
+    
     [gameLock unlock];
 }
 

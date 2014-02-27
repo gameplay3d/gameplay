@@ -43,8 +43,7 @@ void luaRegister_RadioButton()
         {"getAnimation", lua_RadioButton_getAnimation},
         {"getAnimationPropertyComponentCount", lua_RadioButton_getAnimationPropertyComponentCount},
         {"getAnimationPropertyValue", lua_RadioButton_getAnimationPropertyValue},
-        {"getAutoHeight", lua_RadioButton_getAutoHeight},
-        {"getAutoWidth", lua_RadioButton_getAutoWidth},
+        {"getAutoSize", lua_RadioButton_getAutoSize},
         {"getBorder", lua_RadioButton_getBorder},
         {"getBounds", lua_RadioButton_getBounds},
         {"getClip", lua_RadioButton_getClip},
@@ -61,7 +60,6 @@ void luaRegister_RadioButton()
         {"getId", lua_RadioButton_getId},
         {"getImageColor", lua_RadioButton_getImageColor},
         {"getImageRegion", lua_RadioButton_getImageRegion},
-        {"getImageSize", lua_RadioButton_getImageSize},
         {"getImageUVs", lua_RadioButton_getImageUVs},
         {"getMargin", lua_RadioButton_getMargin},
         {"getOpacity", lua_RadioButton_getOpacity},
@@ -100,8 +98,7 @@ void luaRegister_RadioButton()
         {"removeScriptCallback", lua_RadioButton_removeScriptCallback},
         {"setAlignment", lua_RadioButton_setAlignment},
         {"setAnimationPropertyValue", lua_RadioButton_setAnimationPropertyValue},
-        {"setAutoHeight", lua_RadioButton_setAutoHeight},
-        {"setAutoWidth", lua_RadioButton_setAutoWidth},
+        {"setAutoSize", lua_RadioButton_setAutoSize},
         {"setBorder", lua_RadioButton_setBorder},
         {"setBounds", lua_RadioButton_setBounds},
         {"setCanFocus", lua_RadioButton_setCanFocus},
@@ -118,7 +115,6 @@ void luaRegister_RadioButton()
         {"setId", lua_RadioButton_setId},
         {"setImageColor", lua_RadioButton_setImageColor},
         {"setImageRegion", lua_RadioButton_setImageRegion},
-        {"setImageSize", lua_RadioButton_setImageSize},
         {"setMargin", lua_RadioButton_setMargin},
         {"setOpacity", lua_RadioButton_setOpacity},
         {"setPadding", lua_RadioButton_setPadding},
@@ -981,7 +977,7 @@ int lua_RadioButton_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getAutoHeight(lua_State* state)
+int lua_RadioButton_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -994,7 +990,7 @@ int lua_RadioButton_getAutoHeight(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 RadioButton* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoHeight();
+                Control::AutoSize result = instance->getAutoSize();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
@@ -1002,42 +998,7 @@ int lua_RadioButton_getAutoHeight(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_RadioButton_getAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_RadioButton_getAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                RadioButton* instance = getInstance(state);
-                Control::AutoSize result = instance->getAutoWidth();
-
-                // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_RadioButton_getAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_RadioButton_getAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1803,50 +1764,6 @@ int lua_RadioButton_getImageRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_RadioButton_getImageSize(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                RadioButton* instance = getInstance(state);
-                void* returnPtr = (void*)&(instance->getImageSize());
-                if (returnPtr)
-                {
-                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Vector2");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_RadioButton_getImageSize - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -3498,7 +3415,7 @@ int lua_RadioButton_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setAutoHeight(lua_State* state)
+int lua_RadioButton_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3508,91 +3425,19 @@ int lua_RadioButton_setAutoHeight(lua_State* state)
     {
         case 2:
         {
-            do
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+                // Get parameter 1 off the stack.
+                Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
 
-                    RadioButton* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
+                RadioButton* instance = getInstance(state);
+                instance->setAutoSize(param1);
+                
+                return 0;
+            }
 
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    RadioButton* instance = getInstance(state);
-                    instance->setAutoHeight(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_RadioButton_setAutoHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_RadioButton_setAutoWidth(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    lua_type(state, 2) == LUA_TBOOLEAN)
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
-
-                    RadioButton* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
-
-                    RadioButton* instance = getInstance(state);
-                    instance->setAutoWidth(param1);
-                    
-                    return 0;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua_RadioButton_setAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_RadioButton_setAutoSize - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4408,46 +4253,6 @@ int lua_RadioButton_setImageRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_RadioButton_setImageSize(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
-
-                RadioButton* instance = getInstance(state);
-                instance->setImageSize(param1, param2);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_RadioButton_setImageSize - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

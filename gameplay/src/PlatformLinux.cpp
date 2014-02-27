@@ -1240,9 +1240,14 @@ int Platform::enterMessagePump()
                                 break;
                             case 4:
                             case 5:
-                                gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL,
-                                        evt.xbutton.x, evt.xbutton.y,
-                                        evt.xbutton.button == Button4 ? 1 : -1);
+                                int wheelDelta;
+                                if (evt.xbutton.button == Button4)
+                                    wheelDelta = 1;
+                                else if (evt.xbutton.button == Button5)
+                                    wheelDelta = -1;
+                                else
+                                    wheelDelta = 0;
+                                gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL, evt.xbutton.x, evt.xbutton.y, wheelDelta);
                                 break;
                             default:
                                 break;
@@ -1282,13 +1287,11 @@ int Platform::enterMessagePump()
                     {
                         int x = evt.xmotion.x;
                         int y = evt.xmotion.y;
-
                         if (__mouseCaptured)
                         {
                             if (x == __mouseCapturePointX && y == __mouseCapturePointY)
                             {
-                                // Discard the first MotionNotify following capture
-                                // since it contains bogus x,y data.
+                                // Discard the first MotionNotify following capture since it contains bogus x,y data.
                                 break;
                             }
 

@@ -46,8 +46,6 @@ void RadioButton::initialize(const char* typeName, Theme::Style* style, Properti
 
     if (properties)
     {
-        properties->getVector2("imageSize", &_imageSize);
-
         if (properties->getBool("selected"))
         {
             RadioButton::clearSelected(_groupId);
@@ -75,20 +73,9 @@ void RadioButton::setSelected(bool selected)
     if (selected != _selected)
     {
         _selected = selected;
-        _dirty = true;
+        setDirty(DIRTY_STATE);
         notifyListeners(Control::Listener::VALUE_CHANGED);
     }
-}
-
-void RadioButton::setImageSize(float width, float height)
-{
-    _imageSize.set(width, height);
-    _dirty = true;
-}
-
-const Vector2& RadioButton::getImageSize() const
-{
-    return _imageSize;
 }
 
 void RadioButton::addListener(Control::Listener* listener, int eventFlags)
@@ -110,9 +97,7 @@ void RadioButton::clearSelected(const std::string& groupId)
         GP_ASSERT(radioButton);
         if (groupId == radioButton->_groupId)
         {
-            radioButton->_selected = false;
-            radioButton->_dirty = true;
-            radioButton->notifyListeners(Control::Listener::VALUE_CHANGED);
+            radioButton->setSelected(false);
         }
     }
 }
@@ -146,51 +131,49 @@ void RadioButton::controlEvent(Control::Listener::EventType evt)
     }
 }
 
-void RadioButton::update(const Control* container, const Vector2& offset)
+void RadioButton::updateState(State state)
 {
-    Label::update(container, offset);
+    Label::updateState(state);
+
+    _image = getImage(_selected ? "selected" : "unselected", state);
+}
+
+void RadioButton::updateBounds()
+{
+    Label::updateBounds();
 
     Vector2 size;
-    if (_imageSize.isZero())
-    {
-        if (_selected)
-        {
-            const Rectangle& selectedRegion = getImageRegion("selected", getState());
-            size.set(selectedRegion.width, selectedRegion.height);
-        }
-        else
-        {
-            const Rectangle& unselectedRegion = getImageRegion("unselected", getState());
-            size.set(unselectedRegion.width, unselectedRegion.height);
-        }
-    }
-    else
-    {
-        size.set(_imageSize);
-    }
-
-    if (_autoWidth == Control::AUTO_SIZE_FIT)
-    {
-        // Text-only width was already measured in Label::update - append image
-        setWidth(size.x + _bounds.width + 5);
-    }
-
-    if (_autoHeight == Control::AUTO_SIZE_FIT)
-    {
-        // Text-only width was already measured in Label::update - append image
-        setHeight(std::max(getHeight(), size.y));
-    }
-
-    _textBounds.x += size.x + 5;
-    
     if (_selected)
     {
-        _image = getImage("selected", getState());
+        const Rectangle& selectedRegion = getImageRegion("selected", NORMAL);
+        size.set(selectedRegion.width, selectedRegion.height);
     }
     else
     {
-        _image = getImage("unselected", getState());
+        const Rectangle& unselectedRegion = getImageRegion("unselected", NORMAL);
+        size.set(unselectedRegion.width, unselectedRegion.height);
     }
+
+    if (_autoSize & AUTO_SIZE_HEIGHT)
+    {
+        // Text-only width was already measured in Label::update - append image
+        const Theme::Border& border = getBorder(NORMAL);
+        const Theme::Border& padding = getPadding();
+        setHeightInternal(std::max(_bounds.height, size.y + border.top + border.bottom + padding.top + padding.bottom));
+    }
+
+    if (_autoSize & AUTO_SIZE_WIDTH)
+    {
+        // Text-only width was already measured in Label::update - append image
+        setWidthInternal(_bounds.height + 5 + _bounds.width);
+    }
+}
+
+void RadioButton::updateAbsoluteBounds(const Vector2& offset)
+{
+    Label::updateAbsoluteBounds(offset);
+
+    _textBounds.x += _bounds.height + 5;
 }
 
 unsigned int RadioButton::drawImages(Form* form, const Rectangle& clip)
@@ -205,21 +188,11 @@ unsigned int RadioButton::drawImages(Form* form, const Rectangle& clip)
     Vector4 color = _image->getColor();
     color.w *= _opacity;
 
-    Vector2 size;
-    if (_imageSize.isZero())
-    {
-        size.set(region.width, region.height);
-    }
-    else
-    {
-        size.set(_imageSize);
-    }
-
-    Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
+    Vector2 pos(_viewportBounds.x, _viewportBounds.y);
 
     SpriteBatch* batch = _style->getTheme()->getSpriteBatch();
     startBatch(form, batch);
-    batch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+    batch->draw(pos.x, pos.y, _viewportBounds.height, _viewportBounds.height, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
     finishBatch(form, batch);
 
     return 1;

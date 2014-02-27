@@ -346,7 +346,11 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_CLOSE:
+#ifdef GP_USE_MEM_LEAK_DETECTION
+		DestroyWindow(__hwnd);
+#else
         exit(0);
+#endif
         return 0;
 
     case WM_DESTROY:
@@ -756,7 +760,10 @@ bool initializeGL(WindowCreationParams* params)
     }
 
     // Vertical sync.
-    wglSwapIntervalEXT(__vsync ? 1 : 0);
+    if (wglSwapIntervalEXT) 
+        wglSwapIntervalEXT(__vsync ? 1 : 0);
+    else 
+        __vsync = false;
 
     // Some old graphics cards support EXT_framebuffer_object instead of ARB_framebuffer_object.
     // Patch ARB_framebuffer_object functions to EXT_framebuffer_object ones since semantic is same.
@@ -1069,8 +1076,12 @@ bool Platform::isVsync()
 
 void Platform::setVsync(bool enable)
 {
-     wglSwapIntervalEXT(enable ? 1 : 0);
     __vsync = enable;
+
+    if (wglSwapIntervalEXT) 
+        wglSwapIntervalEXT(__vsync ? 1 : 0);
+    else 
+        __vsync = false;
 }
 
 void Platform::swapBuffers()

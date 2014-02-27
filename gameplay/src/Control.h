@@ -27,10 +27,6 @@ class Control : public Ref, public AnimationTarget, public ScriptTarget
 {
     friend class Form;
     friend class Container;
-    friend class Layout;
-    friend class AbsoluteLayout;
-    friend class VerticalLayout;
-    friend class FlowLayout;
 
 public:
 
@@ -104,16 +100,19 @@ public:
         AUTO_SIZE_NONE = 0x00,
 
         /**
-         * The control's size is stretched to fill the content area of its parent container.
+         * The control's width is set to tightly fit its contents.
          */
-        AUTO_SIZE_STRETCH = 0x01,
+        AUTO_SIZE_WIDTH = 0x01,
 
         /**
-         * The control's size is set to tightly fit its contents.
-         *
-         * Not all controls support this auto sizing mode.
+        * The control's height is set to tightly fit its contents.
+        */
+        AUTO_SIZE_HEIGHT = 0x02,
+
+        /**
+         * The control's width and height are set to tightly fit its contents.
          */
-        AUTO_SIZE_FIT = 0x02
+        AUTO_SIZE_BOTH = (AUTO_SIZE_WIDTH | AUTO_SIZE_HEIGHT)
     };
 
     /**
@@ -165,16 +164,6 @@ public:
              * Event triggered when a control is clicked with the right mouse button.
              */
             RIGHT_CLICK     = 0x40,
-
-            /**
-             * Event triggered when a mouse cursor enters a control.
-             */
-            ENTER           = 0x80,
-
-            /**
-             * Event triggered when a mouse cursor leaves a control.
-             */
-            LEAVE           = 0x100,
 
             /**
              * Event triggered when a control gains focus.
@@ -319,7 +308,9 @@ public:
      * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
      * between 0-1, where 1 equals the full size of it's parent.
      *
-     * @param width The width.
+     * Explicitly setting the width of a control clears the AUTO_SIZE_WIDTH bit, if set.
+     *
+     * @param width The new width.
      * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
      */
     void setWidth(float width, bool percentage = false);
@@ -344,7 +335,9 @@ public:
      * If the value is passed as a percentage of its parent container's clip region, it is interpreted as a value
      * between 0-1, where 1 equals the full size of it's parent.
      *
-     * @param height The height.
+     * Explicitly setting the height of a control clears the AUTO_SIZE_HEIGHT bit, if set.
+     *
+     * @param height The new height.
      * @param percentage True if the value should be interpreted as a percentage (0-1), false if it is regular number.
      */
     void setHeight(float height, bool percentage = false);
@@ -375,8 +368,10 @@ public:
      * Setting percetage values is not supported with this method, use setWidth
      * and setHeight instead.
      *
-     * @param width The width.
-     * @param height The height.
+     * Explicitly setting the size of a control clears the AutoSize bits, if set.
+     *
+     * @param width The new width.
+     * @param height The new height.
      */
     void setSize(float width, float height);
 
@@ -395,6 +390,8 @@ public:
      * This method sets the local bounds of the control, relative to its container.
      * Setting percetage values is not supported with this method, use setX,
      * setY, setWidth and setHeight instead.
+     *
+     * Explicitly setting the bounds of a control clears the AutoSize bits, if set.
      *
      * @param bounds The new bounds to set.
      */
@@ -428,52 +425,18 @@ public:
     const Rectangle& getClip() const;
 
     /**
-     * Returns the auto sizing mode for this control's width.
+     * Returns the auto sizing mode for this control.
      *
-     * @return The auto size mode for this control's width.
+     * @return The auto size mode for this control.
      */
-    AutoSize getAutoWidth() const;
+    AutoSize getAutoSize() const;
 
     /**
-     * Enables or disables auto sizing for this control's width.
+     * Sets the auto size mode for this control.
      *
-     * This method is a simplified version of setAutoWidth(AutoSize) left intact for legacy reasons.
-     * It enables or disables the AUTO_SIZE_STRETCH mode for the control's width.
-     *
-     * @param autoWidth True to enable AUTO_SIZE_STRETCH for this control's width.
+     * @param mode The new auto size mode for this control.
      */
-    void setAutoWidth(bool autoWidth);
-
-    /**
-     * Sets the auto size mode for this control's width.
-     *
-     * @param mode The new auto size mode for this control's width.
-     */
-    void setAutoWidth(AutoSize mode);
-
-    /**
-     * Returns the auto sizing mode for this control's height.
-     *
-     * @return The auto size mode for this control's height.
-     */
-    AutoSize getAutoHeight() const;
-
-    /**
-     * Enables or disables auto sizing for this control's height.
-     *
-     * This method is a simplified version of setAutoHeight(AutoSize) left intact for legacy reasons.
-     * It enables or disables the AUTO_SIZE_STRETCH mode for the control's height.
-     *
-     * @param autoHeight True to enable AUTO_SIZE_STRETCH for this control's height.
-     */
-    void setAutoHeight(bool autoHeight);
-
-    /**
-     * Sets the auto size mode for this control's height.
-     *
-     * @param mode The new auto size mode for this control's height.
-     */
-    void setAutoHeight(AutoSize mode);
+    void setAutoSize(AutoSize mode);
 
     /**
      * Set the alignment of this control within its parent container.
@@ -1013,6 +976,16 @@ protected:
     static const int INVALID_CONTACT_INDEX = -1;
 
     /**
+     * Indicates that the bounds of the control are dirty.
+     */
+    static const int DIRTY_BOUNDS = 1;
+
+    /**
+     * Indicates that the state of the control is dirty.
+     */
+    static const int DIRTY_STATE = 2;
+
+    /**
      * Constructor.
      */
     Control();
@@ -1026,6 +999,52 @@ protected:
      * Hidden copy assignment operator.
      */
     Control& operator=(const Control&);
+
+    /**
+     * Internal method for setting the X position of the control.
+     *
+     * This method is meant for internal use by the Control or descendent classes
+     * who need to modify the position of the control during bounds computation.
+     *
+     * @see setX(float, bool)
+     */
+    void setXInternal(float x, bool percentage = false);
+
+    /**
+     * Internal method for setting the Y position of the control.
+     *
+     * This method is meant for internal use by the Control or descendent classes
+     * who need to modify the position of the control during bounds computation.
+     *
+     * @see setY(float, bool)
+     */
+    void setYInternal(float x, bool percentage = false);
+
+    /**
+     * Internal method for setting the width of the control.
+     *
+     * The width of the control is set without modifying the existing AutoSize
+     * rules for the control.
+     *
+     * This method is meant for internal use by the Control or descendent classes
+     * who need to modify the size of the control during bounds computation.
+     *
+     * @see setWidth(float, bool)
+     */
+    void setWidthInternal(float width, bool percentage = false);
+
+    /**
+     * Internal method for setting the height of the control.
+     *
+     * The height of the control is set without modifying the existing AutoSize
+     * rules for the control.
+     *
+     * This method is meant for internal use by the Control or descendent classes
+     * who need to modify the size of the control during bounds computation.
+     *
+     * @see setHeight(float, bool)
+     */
+    void setHeightInternal(float height, bool percentage = false);
 
     /**
      * Get the overlay type corresponding to this control's current state.
@@ -1086,13 +1105,40 @@ protected:
     virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
-     * Called when a control's properties change.  Updates this control's internal rendering
-     * properties, such as its text viewport.
+     * Called each frame to update this control and its children.
      *
-     * @param container This control's parent container.
-     * @param offset Positioning offset to add to the control's position.
+     * Any logic that must be performed every frame should be implemented here,
+     * such as custom animation or interpolation that depends on time.
+     * Layout logic should not be implemented here, but in updateBounds instead.
+     *
+     * @param elapsedTime Time since last frame.
      */
-    virtual void update(const Control* container, const Vector2& offset);
+    virtual void update(float elapsedTime);
+
+    /**
+     * Called when the state of the control has been updated.
+     *
+     * When the state of a control is updated (for example, a control becomes active, focused,
+     * hovered, disabled, etc), this method is called to allow implementations to update
+     * internal data related to control state.
+     *
+     * @param state The new control state.
+     */
+    virtual void updateState(State state);
+
+    /**
+     * Updates the local bounds for this control and its children.
+     *
+     * Child controls that need to customize their bounds calculation should override this method.
+     */
+    virtual void updateBounds();
+
+    /**
+     * Updates the absolute bounds for this control and its children.
+     *
+     * @param offset Offset to add to the control's position (most often used for scrolling).
+     */
+    virtual void updateAbsoluteBounds(const Vector2& offset);
 
     /**
      * Indicates that a control will begin drawing into the specified batch.
@@ -1183,13 +1229,6 @@ protected:
     virtual void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
-     * Returns whether this control has been modified and requires an update.
-     *
-     * @return Whether this control has been modified and requires an update.
-     */
-    virtual bool isDirty();
-
-    /**
      * Get a Control::State enum from a matching string.
      *
      * @param state The string to match.
@@ -1224,6 +1263,22 @@ protected:
     virtual void controlEvent(Control::Listener::EventType evt);
 
     /**
+     * Sets dirty bits for the control.
+     *
+     * Valid bits are any of the "DIRTY_xxx" constants from the Control class.
+     *
+     * @param bits Dirty bits to set.
+     */
+    void setDirty(int bits);
+
+    /**
+     * Determines if the specified bit is dirty.
+     *
+     * @param bit The bit to check.
+     */
+    bool isDirty(int bit) const;
+
+    /**
      * Gets the Alignment by string.
      *
      * @param alignment The string representation of the Alignment type.
@@ -1235,11 +1290,6 @@ protected:
      * The Control's ID.
      */ 
     std::string _id;
-
-    /**
-     * Whether the control is enabled.
-     */
-    bool _enabled;
 
     /**
      * Bits indicating whether bounds values are absolute values or percentages.
@@ -1282,10 +1332,10 @@ protected:
     Rectangle _viewportClipBounds;
 
     /**
-     * If the control is dirty and need updating.
+     * Control dirty bits.
      */
-    bool _dirty;
-    
+    int _dirtyBits;
+
     /**
      * Flag for whether the Control consumes input events.
      */
@@ -1295,26 +1345,15 @@ protected:
      * The Control's Alignment
      */
     Alignment _alignment;
-
-    /**
-     * Whether the Control's alignment has been set programmatically.
-     */
-    bool _isAlignmentSet;
     
     /**
-     * Whether the Control's width is auto-sized.
+     * The Control's auto size mode.
      */
-    AutoSize _autoWidth;
-    
-    /**
-     * Whether the Control's height is auto-sized.
-     */
-    AutoSize _autoHeight;
+    AutoSize _autoSize;
     
     /**
      * Listeners map of EventType's to a list of Listeners.
      */
-    //std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
     std::map<Control::Listener::EventType, std::list<Control::Listener*>*>* _listeners;
     
     /**
@@ -1353,6 +1392,11 @@ protected:
     bool _canFocus;
 
     /**
+     * This control's current state.
+     */
+    State _state;
+
+    /**
      * The control's parent container.
      */
     Container* _parent;
@@ -1363,6 +1407,10 @@ private:
      * Constructor.
      */    
     Control(const Control& copy);
+
+    bool updateBoundsInternal(const Vector2& offset);
+
+    AutoSize parseAutoSize(const char* str);
 
     Theme::Style::Overlay** getOverlays(unsigned char overlayTypes, Theme::Style::Overlay** overlays);
 

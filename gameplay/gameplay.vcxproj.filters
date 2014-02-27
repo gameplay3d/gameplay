@@ -16,6 +16,9 @@
     <Filter Include="res\materials">
       <UniqueIdentifier>{b5f23c37-1023-4796-ba7b-b45aa30d67b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\ui">
+      <UniqueIdentifier>{eb377577-593a-469f-9361-b6950a99e431}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Plane.cpp">
@@ -297,9 +300,6 @@
     <ClCompile Include="src\Joint.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Joystick.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Label.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -544,9 +544,6 @@
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Joint.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_Joystick.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Keyboard.cpp">
@@ -876,6 +873,12 @@
     <ClCompile Include="src\lua\lua_CameraListener.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\JoystickControl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_JoystickControl.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
     <ClCompile Include="src\lua\lua_TextureCubeFace.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
@@ -1160,9 +1163,6 @@
     <ClInclude Include="src\Joint.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Joystick.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Keyboard.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1410,9 +1410,6 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Joint.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_Joystick.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Keyboard.h">
@@ -1742,6 +1739,12 @@
     <ClInclude Include="src\lua\lua_CameraListener.h">
       <Filter>src\lua</Filter>
     </ClInclude>
+    <ClInclude Include="src\JoystickControl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_JoystickControl.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
     <ClInclude Include="src\lua\lua_TextureCubeFace.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1763,9 +1766,6 @@
       <Filter>src</Filter>
     </None>
     <None Include="src\Image.inl">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\Joystick.inl">
       <Filter>src</Filter>
     </None>
     <None Include="src\MathUtil.inl">
@@ -1831,6 +1831,9 @@
     <None Include="res\materials\terrain.material">
       <Filter>res\materials</Filter>
     </None>
+    <None Include="res\ui\default.theme">
+      <Filter>res\ui</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\PhysicsFixedConstraint.inl">
@@ -1866,5 +1869,10 @@
     <None Include="src\PhysicsConstraint.inl">
       <Filter>src</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\ui\default-theme.png">
+      <Filter>res\ui</Filter>
+    </Image>
   </ItemGroup>
 </Project>

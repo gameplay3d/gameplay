@@ -37,6 +37,8 @@ public:
      * Creates a form from a .form properties file.
      * 
      * @param url The URL pointing to the Properties object defining the form. 
+     * 
+     * @return The new form or NULL if there was an error.
      * @script{create}
      */
     static Form* create(const char* url);
@@ -67,14 +69,20 @@ public:
     static Form* getForm(const char* id);
     
     /**
-    * Returns the single currently active control within the UI system.
-    *
-    * @return The currently active control, or NULL if no controls are currently active.
-    */
-    static Control* getActiveControl();
+     * Returns the currently active control within the UI system.
+     *
+     * An active control is a control that is currently pressed or hovered over. On a multi-touch
+     * system, it is possible for several controls to be active at once (one for each touch point).
+     * However, only a single control can have focus at once.
+     *
+     * @param touchIndex Optional touch point index to retrieve the active control for.
+     *
+     * @return The currently active control, or NULL if no controls are currently active.
+     */
+    static Control* getActiveControl(unsigned int touchIndex = 0);
 
     /**
-     * Returns the single current control that is in focus.
+     * Returns the current control that is in focus.
      *
      * @return The current control in focus, or NULL if no controls are in focus.
      */
@@ -100,7 +108,7 @@ public:
     void setNode(Node* node);
 
     /**
-     * Updates each control within this form, and positions them according to its layout.
+     * @see Control::update
      */
     void update(float elapsedTime);
 
@@ -134,13 +142,6 @@ public:
      * @param enabled True to enable batching (default), false otherwise.
      */
     void setBatchingEnabled(bool enabled);
-
-protected:
-
-    /**
-     * @see Control::update
-     */
-    void update(const Control* container, const Vector2& offset);
 
 private:
     
@@ -215,11 +216,6 @@ private:
     static void resizeEventInternal(unsigned int width, unsigned int height);
 
     /**
-     * Called to update internal framebuffer when forms are attached to a node.
-     */
-    void updateFrameBuffer();
-
-    /**
      * Called during drawing to prepare a sprite batch for being drawn into for this form.
      */
     void startBatch(SpriteBatch* batch);
@@ -244,13 +240,13 @@ private:
 
     static bool pointerEventInternal(bool mouse, int evt, int x, int y, int param);
 
-    static Control* findInputControl(int* x, int* y, bool focus);
+    static Control* findInputControl(int* x, int* y, bool focus, unsigned int contactIndex);
 
-    static Control* findInputControl(Control* control, int x, int y, bool focus);
+    static Control* findInputControl(Control* control, int x, int y, bool focus, unsigned int contactIndex);
 
-    static Control* handlePointerPressRelease(int* x, int* y, bool pressed);
+    static Control* handlePointerPressRelease(int* x, int* y, bool pressed, unsigned int contactIndex);
 
-    static Control* handlePointerMove(int* x, int* y);
+    static Control* handlePointerMove(int* x, int* y, unsigned int contactIndex);
 
     static bool screenToForm(Control* ctrl, int* x, int* y);
 
@@ -265,14 +261,9 @@ private:
     static bool pollGamepad(Gamepad* gamepad);
 
     Node* _node;                        // Node for transforming this Form in world-space.
-    FrameBuffer* _frameBuffer;          // FrameBuffer for offscreen drawing of forms that are attached to a Node
-    Model* _model;                      // Model used to render form in 3D when attached to a Node
     Matrix _projectionMatrix;           // Projection matrix to be set on SpriteBatch objects when rendering the form
     std::vector<SpriteBatch*> _batches;
     bool _batched;
-    static Control* _focusControl;
-    static Control* _activeControl;
-    static Control::State _activeControlState;
 };
 
 }

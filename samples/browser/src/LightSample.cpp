@@ -181,7 +181,7 @@ void LightSample::render(float elapsedTime)
 
     _form->draw();
 
-    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
+    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 235, 2, getFrameRate());
 }
 
 void LightSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)

@@ -1,15 +1,15 @@
-form VIRTUAL GAMEPAD
+form gamepad
 {
     theme = res/common/gamepad.theme
-    autoWidth = true
-    autoHeight = true
+
+    size = 100%, 100%
 
     container left
     {
         alignment = ALIGN_BOTTOM_LEFT
         size = 300, 300
         consumeEvents = false
-        
+
         joystick
         {
             index = 0

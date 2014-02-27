@@ -1,0 +1,474 @@
+theme mainMenu
+{
+    texture = default-theme.png
+
+    /////////////////////////////////////////////////////////////////////
+    //                    Global theme variables                       //
+    /////////////////////////////////////////////////////////////////////
+
+    ${normalColor} = #ffffffff
+    ${hoverColor} = #eeeeeeff
+    ${activeColor} = #aaaaaaff
+    ${focusColor} = ${normalColor}
+    ${textColor} = #ffffffff
+    ${font} = arial.gpb
+    ${fontSize} = 16
+    ${disabledOpacity} = 0.5
+
+    /////////////////////////////////////////////////////////////////////
+    //                        Image lists                              //
+    /////////////////////////////////////////////////////////////////////
+
+    imageList normalImages
+    {
+        color = ${normalColor}
+
+        image unchecked
+        {
+            region = 83, 3, 34, 34
+        }
+
+        image checked
+        {
+            region = 83, 37, 34, 34
+        }
+
+        image unselected
+        {
+            region = 120, 3, 34, 34
+        }
+
+        image selected
+        {
+            region = 120, 37, 34, 34
+        }
+
+        image minCap
+        {
+            region = 3, 41, 8, 17
+        }
+
+        image track
+        {
+            region = 11, 41, 62, 17
+        }
+
+        image maxCap
+        {
+            region = 73, 41, 8, 17
+        }
+
+        image marker
+        {
+            region = 6, 59, 15, 27
+        }
+
+        image textCaret
+        {
+            region = 6, 92, 7, 22
+        }
+
+        image scrollBarTopCap
+        {
+            region = 65, 59, 13, 6
+        }
+
+        image verticalScrollBar
+        {
+            region = 65, 65, 13, 2
+        }
+
+        image scrollBarBottomCap
+        {
+            region = 65, 88, 13, 6
+        }
+
+        image scrollBarLeftCap
+        {
+            region = 25, 59, 6, 13
+        }
+
+        image horizontalScrollBar
+        {
+            region = 32, 59, 2, 13
+        }
+
+        image scrollBarRightCap
+        {
+            region = 55, 59, 6, 13
+        }
+    }
+
+    imageList hoverImages : normalImages
+    {
+        color = ${hoverColor}
+
+        image textCaret
+        {
+            color = ${normalColor}
+            region = 6, 92, 7, 22
+        }
+    }
+
+    imageList activeImages : normalImages
+    {
+        color = ${activeColor}
+
+        image unchecked
+        {
+            region = 83, 37, 34, 34
+        }
+
+        image checked
+        {
+            region = 83, 37, 34, 34
+        }
+
+        image selected
+        {
+            region = 120, 37, 34, 34
+        }
+
+        image unselected
+        {
+            region = 120, 37, 34, 34
+        }
+
+        image textCaret
+        {
+            color = ${normalColor}
+            region = 6, 92, 7, 22
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    //                     Skin definitions                            //
+    /////////////////////////////////////////////////////////////////////
+
+    skin FormSkin
+    {
+        border
+        {
+            left = 8
+            right = 8
+            top = 8
+            bottom = 8
+        }
+
+        region = 4, 4, 32, 32
+        color = ${normalColor}
+    }
+
+    skin ButtonSkin
+    {
+        border
+        {
+            left = 12
+            right = 12
+            top = 12
+            bottom = 12
+        }
+
+        region = 42, 3, 34, 34
+        color = ${normalColor}
+    }
+
+    skin ButtonSkinHover : ButtonSkin
+    {
+        color = ${hoverColor}
+    }
+
+    skin ButtonSkinActive : ButtonSkin
+    {
+        color = ${activeColor}
+    }
+
+    skin ButtonSkinFocus : ButtonSkin
+    {
+        color = ${focusColor}
+    }
+
+    skin TextBoxSkin
+    {
+        border
+        {
+            left = 8
+            right = 8
+            top = 8
+            bottom = 8
+        }
+
+        region = 159, 3, 34, 34
+        color = ${normalColor}
+    }
+
+    skin TextBoxSkinHover : TextBoxSkin
+    {
+        color = ${hoverColor}
+    }
+
+    skin TextBoxSkinActive : TextBoxSkin
+    {
+        color = ${normalColor}
+    }
+
+    skin PanelSkin
+    {
+        border
+        {
+            left = 10
+            right = 10
+            top = 10
+            bottom = 10
+        }
+
+        region = 83, 3, 34, 34
+        color = ${normalColor}
+    }
+
+    style Form
+    {
+        padding
+        {
+            left = 2
+            right = 2
+            top = 2
+            bottom = 2
+        }
+
+        stateNormal
+        {
+            skin = FormSkin
+            imageList = normalImages
+        }
+
+        stateHover
+        {
+            imageList = hoverImages
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+        }
+
+        stateDisabled
+        {
+            opacity = ${disabledOpacity}
+        }
+    }
+
+    style Container
+    {
+        stateNormal
+        {
+            imageList = normalImages
+        }
+
+        stateHover
+        {
+            imageList = hoverImages
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+        }
+
+        stateDisabled
+        {
+            opacity = ${disabledOpacity}
+        }
+    }
+
+    style Label
+    {
+        stateNormal
+        {
+            font = ${font}
+            fontSize = ${fontSize}
+            textColor = ${textColor}
+            textAlignment = ALIGN_VCENTER_LEFT
+        }
+
+        stateDisabled
+        {
+            opacity = ${disabledOpacity}
+        }
+    }
+
+    style Button
+    {
+        padding
+        {
+            left = 8
+            right = 8
+            top = 4
+            bottom = 4
+        }
+
+        stateNormal
+        {
+            skin = ButtonSkin
+            font = ${font}
+            textColor = ${textColor}
+            fontSize = ${fontSize}
+            textAlignment = ALIGN_VCENTER_HCENTER
+        }
+
+        stateHover
+        {
+            skin = ButtonSkinHover
+        }
+
+        stateActive
+        {
+            skin = ButtonSkinActive
+        }
+
+        stateFocus
+        {
+            skin = ButtonSkinFocus
+        }
+
+        stateDisabled
+        {
+            opacity = ${disabledOpacity}
+        }
+    }
+
+    style CheckBox : Label
+    {
+        stateNormal
+        {
+            imageList = normalImages
+        }
+
+        stateHover
+        {
+            imageList = hoverImages
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+        }
+
+        stateFocus
+        {
+            imageList = hoverImages
+        }
+    }
+
+    style RadioButton : CheckBox
+    {
+    }
+
+    style TextBox
+    {
+        stateNormal
+        {
+            skin = TextBoxSkin
+            imageList = normalImages
+            font = ${font}
+            fontSize = ${fontSize}
+            textColor = ${textColor}
+            textAlignment = ALIGN_TOP_LEFT
+        }
+
+        stateHover
+        {
+            skin = TextBoxSkinHover
+        }
+
+        stateActive
+        {
+            skin = TextBoxSkinActive
+            imageList = activeImages
+        }
+
+        stateFocus
+        {
+            skin = TextBoxSkinHover
+        }
+
+        stateDisabled
+        {
+            opacity = ${disabledOpacity}
+        }
+    }
+
+    style Slider
+    {
+        stateNormal
+        {
+            imageList = normalImages
+            font = ${font}
+            fontSize = ${fontSize}
+            textColor = ${textColor}
+            textAlignment = ALIGN_TOP_LEFT
+        }
+
+        stateHover
+        {
+            imageList = hoverImages
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+        }
+
+        stateFocus
+        {
+            imageList = hoverImages
+        }
+
+        stateDisabled
+        {
+            opacity = ${disabledOpacity}
+        }
+    }
+
+    style Image
+    {
+        stateDisabled
+        {
+            opacity = ${disabledOpacity}
+        }
+    }
+
+    // Empty style that has no skin
+    style Empty
+    {
+    }
+
+    // Style that can be used as a background for a container
+    style Panel
+    {
+        stateNormal
+        {
+            skin = PanelSkin
+            font = ${font}
+            fontSize = ${fontSize}
+            textColor = ${textColor}
+            textAlignment = ALIGN_VCENTER_HCENTER
+            imageList = normalImages
+        }
+
+        stateHover
+        {
+            imageList = hoverImages
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+        }
+
+        stateDisabled
+        {
+            opacity = ${disabledOpacity}
+        }
+    }
+}
