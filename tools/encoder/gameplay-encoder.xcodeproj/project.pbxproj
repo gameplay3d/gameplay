@@ -13,7 +13,7 @@
 		422BF0861804C16E0028D009 /* libm.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 422BF0851804C16E0028D009 /* libm.dylib */; };
 		422BF0881804C1E40028D009 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 422BF0871804C1E40028D009 /* libbz2.dylib */; };
 		422BF0901804C5230028D009 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 422BF08F1804C5230028D009 /* libstdc++.dylib */; };
-		422BF0921804C7060028D009 /* libfbxsdk-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 422BF0911804C7060028D009 /* libfbxsdk-static.a */; };
+		422BF0921804C7060028D009 /* libfbxsdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 422BF0911804C7060028D009 /* libfbxsdk.a */; };
 		4251B12C152D044B002F6199 /* Curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4251B128152D044B002F6199 /* Curve.cpp */; };
 		4262783C180491D60015672B /* edtaa3func.c in Sources */ = {isa = PBXBuildFile; fileRef = 4262783A180491D60015672B /* edtaa3func.c */; };
 		42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */; };
@@ -85,7 +85,7 @@
 		422BF0851804C16E0028D009 /* libm.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libm.dylib; path = ../../../../../../usr/lib/libm.dylib; sourceTree = "<group>"; };
 		422BF0871804C1E40028D009 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = ../../../../../../usr/lib/libbz2.dylib; sourceTree = "<group>"; };
 		422BF08F1804C5230028D009 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "../../../../../../usr/lib/libstdc++.dylib"; sourceTree = "<group>"; };
-		422BF0911804C7060028D009 /* libfbxsdk-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk-static.a"; path = "../../../../../../Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/release/libfbxsdk-static.a"; sourceTree = "<group>"; };
+		422BF0911804C7060028D009 /* libfbxsdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk.a"; path = "../../../../../../Applications/Autodesk/FBX SDK/2014.2.1/lib/clang/ub/release/libfbxsdk.a"; sourceTree = "<group>"; };
 		42475CE6147208A000610A6A /* gameplay-encoder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gameplay-encoder"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4251B128152D044B002F6199 /* Curve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Curve.cpp; path = src/Curve.cpp; sourceTree = SOURCE_ROOT; };
 		4251B129152D044B002F6199 /* Curve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Curve.h; path = src/Curve.h; sourceTree = SOURCE_ROOT; };
@@ -200,7 +200,7 @@
 				42C0CE9C1804829E006B2F23 /* libpng.a in Frameworks */,
 				4228A3FF1620A5A300955433 /* Cocoa.framework in Frameworks */,
 				422BF0901804C5230028D009 /* libstdc++.dylib in Frameworks */,
-				422BF0921804C7060028D009 /* libfbxsdk-static.a in Frameworks */,
+				422BF0921804C7060028D009 /* libfbxsdk.a in Frameworks */,
 				422BF0881804C1E40028D009 /* libbz2.dylib in Frameworks */,
 				422BF0861804C16E0028D009 /* libm.dylib in Frameworks */,
 				42C0CE9E180482B8006B2F23 /* libfreetype.a in Frameworks */,
@@ -355,7 +355,7 @@
 				42C8EE381472DAA300E43619 /* libz.dylib */,
 				42C8EE361472D7E700E43619 /* libxml2.dylib */,
 				4228A4021620A63F00955433 /* libiconv.dylib */,
-				422BF0911804C7060028D009 /* libfbxsdk-static.a */,
+				422BF0911804C7060028D009 /* libfbxsdk.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -501,7 +501,7 @@
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				LIBRARY_SEARCH_PATHS = (
-					"\"/Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/release\"",
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/lib/clang/ub/release\"",
 					"../../external-deps/png/lib/macosx",
 					"../../external-deps/freetype2/lib/macosx",
 				);
@@ -549,7 +549,7 @@
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				LIBRARY_SEARCH_PATHS = (
-					"\"/Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/release\"",
+					"\"/Applications/Autodesk/FBX SDK/2014.2.1/lib/clang/ub/release\"",
 					"../../external-deps/png/lib/macosx",
 					"../../external-deps/freetype2/lib/macosx",
 				);
@@ -578,8 +578,8 @@
 					"$(inherited)",
 					"../../external-deps/freetype2/lib/macosx",
 					"../../external-deps/png/lib/macosx",
-					"/Applications/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
-					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
+					"/Applications/Autodesk/FBX\\ SDK/2014.2.1/lib/clang/ub/release",
+					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2.1/lib/clang/ub/release",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -603,8 +603,8 @@
 					"../../external-deps/freetype2/lib/macosx",
 					"../../external-deps/png/lib/macosx",
 					/Applications/Autodesk/FBX,
-					SDK/2014.2.1/lib/gcc4/ub/release,
-					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
+					SDK/2014.2.1/lib/clang/ub/release,
+					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2.1/lib/clang/ub/release",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";

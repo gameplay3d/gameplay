@@ -43,6 +43,8 @@
 		5B04C5E114BFE1A200EB0071 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42A3C5DD146C96640091C1E4 /* res */; };
 		5B04C5E214BFE1A200EB0071 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CCD4B3146D914B00353661 /* icon.png */; };
 		6212DAB21829D99A006213DD /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6212DAB11829D999006213DD /* GameKit.framework */; };
+		A14611AB18CA39D1000D75B4 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A14611A918CA39D1000D75B4 /* AppDelegate.mm */; };
+		A14A48AD18CA672E00A95BC0 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A14A48AC18CA672E00A95BC0 /* Credits.rtf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +85,9 @@
 		42F68AA61469CDE100E0E3C4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B04C5E614BFE1A200EB0071 /* sample-mesh-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-mesh-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6212DAB11829D999006213DD /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		A14611A818CA39D1000D75B4 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = src/AppDelegate.h; sourceTree = SOURCE_ROOT; };
+		A14611A918CA39D1000D75B4 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = src/AppDelegate.mm; sourceTree = SOURCE_ROOT; };
+		A14A48AC18CA672E00A95BC0 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +138,7 @@
 		4217005314697FF100A45C02 = {
 			isa = PBXGroup;
 			children = (
+				A14A48AC18CA672E00A95BC0 /* Credits.rtf */,
 				42F237A516AD9D720019CAC9 /* Default-568h@2x.png */,
 				42F68AA31469CC3000E0E3C4 /* sample-mesh-macosx.plist */,
 				42458CB514C3AB1600EFFB61 /* sample-mesh-ios.plist */,
@@ -158,6 +164,8 @@
 		4217006814697FF100A45C02 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				A14611A818CA39D1000D75B4 /* AppDelegate.h */,
+				A14611A918CA39D1000D75B4 /* AppDelegate.mm */,
 				42BBCD32146C89F900D2A5F8 /* MeshGame.cpp */,
 				42BBCD33146C89F900D2A5F8 /* MeshGame.h */,
 			);
@@ -311,6 +319,7 @@
 				42CCD4B4146D914B00353661 /* icon.png in Resources */,
 				42B7027815B0B278002BB8C3 /* game.config in Resources */,
 				42A3C5DE146C96640091C1E4 /* res in Resources */,
+				A14A48AD18CA672E00A95BC0 /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42BBCD34146C89F900D2A5F8 /* MeshGame.cpp in Sources */,
+				A14611AB18CA39D1000D75B4 /* AppDelegate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

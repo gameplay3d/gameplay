@@ -14,6 +14,7 @@
 #import <mach/mach_time.h>
 #import <Foundation/Foundation.h>
 #import <GameKit/GameKit.h>
+#import <AvailabilityMacros.h>
 
 // These should probably be moved to a platform common file
 #define SONY_USB_VENDOR_ID              0x054c
@@ -64,7 +65,6 @@ static IOHIDManagerRef __hidManagerRef = NULL;
 HIDGamepad *gamepadForLocationID(NSNumber *locationID);
 HIDGamepad *gamepadForLocationIDValue(unsigned int locationIDValue);
 HIDGamepad *gamepadForGameHandle(int gameHandle);
-
 
 // IOHid Helper Functions
 CFMutableDictionaryRef IOHIDCreateDeviceMatchingDictionary(UInt32 inUsagePage, UInt32 inUsage);
@@ -968,7 +968,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void)resumeDisplayRenderer 
 {
     [gameLock lock];
-    CVDisplayLinkStop(displayLink);
+    CVDisplayLinkStart(displayLink);
     [gameLock unlock]; 
 }
 
@@ -1680,11 +1680,21 @@ int Platform::enterMessagePump()
     NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
     NSString* path = [bundlePath stringByAppendingString:@"/Contents/Resources/"];
     FileSystem::setResourcePath([path cStringUsingEncoding:NSASCIIStringEncoding]);
-    
+
+    const char* appDelegateClass = 0;
+
     // Read window settings from config.
     if (_game->getConfig())
     {
-        Properties* config = _game->getConfig()->getNamespace("window", true);
+        Properties* config = 0;
+        config = _game->getConfig()->getNamespace("app", true);
+        if (config)
+        {
+            // Determine the NSApplication delegate class
+            appDelegateClass = config->getString("delegateClass");
+        }
+
+        config = _game->getConfig()->getNamespace("window", true);
         if (config)
         {
             // Read window title.
@@ -1717,6 +1727,18 @@ int Platform::enterMessagePump()
     NSRect screenBounds = [[NSScreen mainScreen] frame];
     NSRect viewBounds = NSMakeRect(0, 0, __width, __height);
     
+    id appDelegate = nil;
+    if (appDelegateClass != 0 && *appDelegateClass != 0)
+    {
+        appDelegate = [[NSClassFromString([NSString stringWithUTF8String:appDelegateClass]) alloc] init];
+        if (appDelegate == nil)
+        {
+            GP_ERROR("Failed to create application delegate class: exiting.");
+            return EXIT_FAILURE;
+        }
+        [app setDelegate:appDelegate];
+    }
+
     __view = [[View alloc] initWithFrame:viewBounds];
     if (__view == NULL)
     {
@@ -1751,8 +1773,12 @@ int Platform::enterMessagePump()
     [window setContentView:__view];
     [window setDelegate:__view];
     [__view release];
-    
+
+    [pool drain];
+
     [app run];
+
+    [appDelegate release];
     
     [pool release];
     return EXIT_SUCCESS;
@@ -1765,7 +1791,9 @@ void Platform::signalShutdown()
     // Don't perform terminate right away, enqueue to give game object
     // a chance to cleanup
     NSApplication* app = [NSApplication sharedApplication];
-    [app performSelectorOnMainThread:@selector(terminate:) withObject:nil waitUntilDone:NO];
+    [app performSelectorOnMainThread:@selector(terminate:)
+                          withObject:nil
+                       waitUntilDone:NO];
 }
 
 bool Platform::canExit()
