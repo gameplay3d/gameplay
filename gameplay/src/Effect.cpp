@@ -498,11 +498,11 @@ Uniform* Effect::getUniform(const char* name) const
 				uniform->_type = puniform->getType();
 				_uniforms[name] = uniform;
 
-				delete parentname;
+				delete []parentname;
 				return uniform;
 			}
 		}
-		delete parentname;
+		delete []parentname;
     }
 
 	// No uniform variable found - return NULL

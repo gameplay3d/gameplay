@@ -414,7 +414,7 @@ double getMachTimeInMilliseconds()
     uint32_t vendorID = [self vendorID];
     uint32_t productID = [self productID];
     
-    CFArrayRef elements = IOHIDDeviceCopyMatchingElements([self rawDevice], NULL, kIOHIDOptionsTypeNone);
+    CFRef<CFArrayRef> elements(IOHIDDeviceCopyMatchingElements([self rawDevice], NULL, kIOHIDOptionsTypeNone));
     for(int i = 0; i < CFArrayGetCount(elements); i++)
     {
         IOHIDElementRef hidElement = (IOHIDElementRef)CFArrayGetValueAtIndex(elements, i);
@@ -2274,7 +2274,7 @@ int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key)
 
 static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void* inSender, IOHIDDeviceRef device)
 {
-    CFNumberRef locID = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDLocationIDKey));
+    CFRef<CFNumberRef> locID = static_cast<CFNumberRef>(IOHIDDeviceGetProperty(device, CFRef<CFStringRef>(CFSTR(kIOHIDLocationIDKey))));
     if(locID)
     {
         HIDGamepad* gamepad = [[HIDGamepad alloc] initWithDevice: device];

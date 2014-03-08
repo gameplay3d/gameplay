@@ -57,7 +57,7 @@ void Label::addListener(Control::Listener* listener, int eventFlags)
     
 void Label::setText(const char* text)
 {
-    if ((text == NULL && _text.length() > 0) || strcmp(text, _text.c_str()) != 0)
+    if ((text == NULL && _text.length() > 0) || (text != NULL && strcmp(text, _text.c_str()) != 0))
     {
         _text = text ? text : "";
         if (_autoSize != AUTO_SIZE_NONE)
