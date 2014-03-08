@@ -1,13 +1,13 @@
 #ifdef __APPLE__
 
-#include "Base.h"
-#include "Platform.h"
-#include "FileSystem.h"
-#include "Game.h"
-#include "Form.h"
-#include "ScriptController.h"
-#include <unistd.h>
-#include <IOKit/hid/IOHIDLib.h>
+#import "Base.h"
+#import "Platform.h"
+#import "FileSystem.h"
+#import "Game.h"
+#import "Form.h"
+#import "ScriptController.h"
+#import <unistd.h>
+#import <IOKit/hid/IOHIDLib.h>
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
 #import <OpenGL/OpenGL.h>
@@ -58,7 +58,7 @@ static View* __view = NULL;
 
 static NSMutableDictionary *__activeGamepads = NULL;
 static NSMutableArray *__gamepads = NULL;
-static IOHIDManagerRef __hidManagerRef = NULL;
+static CFRef<IOHIDManagerRef> __hidManagerRef;
 
 // Gamepad Helper Function
 HIDGamepad *gamepadForLocationID(NSNumber *locationID);
@@ -75,6 +75,7 @@ int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key);
 static void hidDeviceDiscoveredCallback(void *inContext, IOReturn inResult, void *inSender, IOHIDDeviceRef inIOHIDDeviceRef);
 static void hidDeviceRemovalCallback(void *inContext, IOReturn inResult, void *inSender, IOHIDDeviceRef inIOHIDDeviceRef);
 static void hidDeviceValueAvailableCallback(void *inContext, IOReturn inResult,  void *inSender);
+
 
 double getMachTimeInMilliseconds()
 {
@@ -1632,20 +1633,22 @@ Platform::Platform(Game* game)
     IOHIDManagerRegisterDeviceMatchingCallback(__hidManagerRef, hidDeviceDiscoveredCallback, NULL);
     IOHIDManagerRegisterDeviceRemovalCallback(__hidManagerRef, hidDeviceRemovalCallback, NULL);
     
-    CFMutableArrayRef matching = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+    CFRef<CFMutableArrayRef> matching(CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks));
     if (matching)
     {
-        CFDictionaryRef matchingJoystick = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
-        CFDictionaryRef matchingGamepad = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
+        CFRef<CFMutableDictionaryRef> matchingJoystick(IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick));
+        CFRef<CFMutableDictionaryRef> matchingGamepad(IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad));
         
-        if (matchingJoystick && matchingGamepad)
+        if (matchingJoystick)
         {
             CFArrayAppendValue(matching, matchingJoystick);
-            CFRelease(matchingJoystick);
-            CFArrayAppendValue(matching, matchingGamepad);
-            CFRelease(matchingGamepad);
-            IOHIDManagerSetDeviceMatchingMultiple(__hidManagerRef, matching);
         }
+        if (matchingGamepad)
+        {
+            CFArrayAppendValue(matching, matchingGamepad);
+        }
+
+        IOHIDManagerSetDeviceMatchingMultiple(__hidManagerRef, matching);
     }
     
     IOHIDManagerScheduleWithRunLoop(__hidManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
@@ -1659,8 +1662,7 @@ Platform::~Platform()
     IOHIDManagerUnscheduleFromRunLoop(__hidManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     IOHIDManagerClose(__hidManagerRef, kIOHIDOptionsTypeNone);
     
-    CFRelease(__hidManagerRef);
-    __hidManagerRef = NULL;
+    __hidManagerRef.release();
     [__activeGamepads release];
     __activeGamepads = NULL;
     [__gamepads release];
@@ -2215,21 +2217,19 @@ CFMutableDictionaryRef IOHIDCreateDeviceMatchingDictionary(UInt32 inUsagePage, U
         if (inUsagePage) 
         {
             // Add key for device type to refine the matching dictionary.
-            CFNumberRef pageCFNumberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &inUsagePage);
-            if (pageCFNumberRef) 
+            CFRef<CFNumberRef> page = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &inUsagePage);
+            if (page)
             {
-                CFDictionarySetValue(result, CFSTR( kIOHIDDeviceUsagePageKey ), pageCFNumberRef);
-                CFRelease(pageCFNumberRef);
-                
+                CFDictionarySetValue(result, CFRef<CFStringRef>(CFSTR(kIOHIDDeviceUsagePageKey)), page);
+
                 // note: the usage is only valid if the usage page is also defined
                 if (inUsage) 
                 {
-                    CFNumberRef usageCFNumberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &inUsage);
-                    if (usageCFNumberRef) 
+                    CFRef<CFNumberRef> usage = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &inUsage);
+                    if (usage)
                     {
-                        CFDictionarySetValue(result, CFSTR(kIOHIDDeviceUsageKey), usageCFNumberRef);
-                        CFRelease(usageCFNumberRef);
-                    } 
+                        CFDictionarySetValue(result, CFRef<CFStringRef>(CFSTR(kIOHIDDeviceUsageKey)), usage);
+                    }
                     else 
                     {
                         fprintf(stderr, "%s: CFNumberCreate( usage ) failed.", __PRETTY_FUNCTION__);
@@ -2309,10 +2309,9 @@ static void hidDeviceValueAvailableCallback(void* inContext, IOReturn inResult, 
     HIDGamepad* d = (HIDGamepad*)inContext;
     do
     {
-        IOHIDValueRef valueRef = IOHIDQueueCopyNextValueWithTimeout( ( IOHIDQueueRef ) inSender, 0. );
-        if (!valueRef) break;
-        [d hidValueAvailable:valueRef];
-        CFRelease(valueRef); // Don't forget to release our HID value reference
+        CFRef<IOHIDValueRef> value(IOHIDQueueCopyNextValueWithTimeout( ( IOHIDQueueRef ) inSender, 0. ));
+        if (!value) break;
+        [d hidValueAvailable:value];
     } while (1);
 }
 
@@ -2321,15 +2320,14 @@ bool Platform::launchURL(const char *url)
     if (url == NULL || *url == '\0')
         return false;
 
-    CFURLRef urlRef = CFURLCreateWithBytes(
+    CFRef<CFURLRef> urlRef(CFURLCreateWithBytes(
         NULL,
         (UInt8*)url,
         strlen(url),
         kCFStringEncodingASCII,
         NULL
-    );
+    ));
     const OSStatus err = LSOpenCFURLRef(urlRef, 0);
-    CFRelease(urlRef);
     return (err == noErr);
 }
 

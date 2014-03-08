@@ -54,6 +54,7 @@ using std::atoi;
 
 namespace gameplay
 {
+
 /**
  * Print logging (implemented per platform).
  * @script{ignore}
@@ -356,3 +357,36 @@ extern ALenum __al_error_code;
 #define AL_LAST_ERROR() __al_error_code
 
 #endif
+
+#if defined(__APPLE__) && defined(__cplusplus) && defined(__OBJC__) && !defined(CFREF_DEFINED)
+
+#define CFREF_DEFINED 1
+
+#import <CoreFoundation/CFBase.h>
+
+namespace gameplay
+{
+
+//
+// Simple RAII-style class for Core Foundation types.
+//
+template <typename T> class CFRef
+{
+public:
+    CFRef() : _ref(0) { }
+    CFRef(T ref) : _ref(ref) { } // No retain!
+    CFRef(const CFRef<T>& other) : _ref(0) { retain(other); }
+    ~CFRef() { release(); }
+    operator T() const { return _ref; }
+    operator bool() const { return _ref != 0; }
+    CFRef<T>& operator =(T ref) { release(); _ref = ref; return *this; } // No retain!
+    CFRef<T>& operator =(const CFRef<T>& other) { retain(other); return *this; }
+    void retain(const CFRef<T>& other) { release(); if (other) { _ref = static_cast<T>(CFRetain(other._ref)); } }
+    void release() { if (_ref) { CFRelease(_ref); _ref = 0; } }
+private:
+    T _ref;
+};
+
+} // namespace gameplay
+
+#endif // __APPLE__ && __cplusplus && __OBJC__ && !CFREF_DEFINED

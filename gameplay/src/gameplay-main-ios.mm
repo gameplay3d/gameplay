@@ -1,7 +1,7 @@
 #ifdef __APPLE__
 
 #import <Foundation/Foundation.h>
-#include "gameplay.h"
+#import "gameplay.h"
 
 using namespace gameplay;
 
