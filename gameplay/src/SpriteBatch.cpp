@@ -40,7 +40,7 @@ SpriteBatch::~SpriteBatch()
             __spriteEffect->release();
             __spriteEffect = NULL;
         }
-        else
+        else if (__spriteEffect)
         {
             __spriteEffect->release();
         }

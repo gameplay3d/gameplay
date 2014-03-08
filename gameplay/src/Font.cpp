@@ -1983,7 +1983,7 @@ Font::Justify Font::getJustify(const char* justify)
 
 Font::Text::Text(const char* text) : _text(text ? text : ""), _vertexCount(0), _vertices(NULL), _indexCount(0), _indices(NULL), _font(NULL)
 {
-    const size_t length = strlen(text);
+    const size_t length = _text.length();
     _vertices = new SpriteBatch::SpriteVertex[length * 4];
     _indices = new unsigned short[((length - 1) * 6) + 4];
 }
