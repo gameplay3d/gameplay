@@ -171,7 +171,7 @@ void AudioController::streamingThreadProc(void* arg)
         
         _this->_streamingQueueMutex->unlock();
 
-        tthread::this_thread::sleep_for(tthread::chrono::milliseconds(100));
+        tthread::this_thread::sleep_for(tthread::chrono::milliseconds(50));
     }
 }
 
