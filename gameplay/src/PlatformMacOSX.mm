@@ -741,7 +741,6 @@ double getMachTimeInMilliseconds()
 {
     [gameLock lock];
     _game->exit();
-    _game->frame(); // make sure shutdown is called properly
     [gameLock unlock];
     [[NSApplication sharedApplication] terminate:self];
 }
@@ -956,7 +955,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
     _game->exit();
-    _game->frame(); // make sure shutdown is called properly
     
     [gameLock unlock];
 
