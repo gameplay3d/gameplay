@@ -548,6 +548,12 @@ void Game::schedule(float timeOffset, const char* function)
     schedule(timeOffset, listener, NULL);
 }
 
+void Game::clearSchedule()
+{
+    SAFE_DELETE(_timeEvents);
+    _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
+}
+
 void Game::fireTimeEvents(double frameTime)
 {
     while (_timeEvents->size() > 0)
