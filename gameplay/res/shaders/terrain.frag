@@ -133,7 +133,7 @@ void main()
 
     #else
 
-    gl_FragColor.rgb = _baseColor;
+    gl_FragColor.rgb = _baseColor.rgb;
 
     #endif
 }
