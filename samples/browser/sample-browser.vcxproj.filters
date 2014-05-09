@@ -125,6 +125,12 @@
     <None Include="res\common\constraints.scene">
       <Filter>res\common</Filter>
     </None>
+    <None Include="res\common\cubeenv.gpb">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\cubeenv.material">
+      <Filter>res\common</Filter>
+    </None>
     <None Include="res\common\default.theme">
       <Filter>res\common</Filter>
     </None>
@@ -189,6 +195,12 @@
       <Filter>res\shaders</Filter>
     </None>
     <None Include="res\shaders\colored.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\cubemap.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\cubemap.vert">
       <Filter>res\shaders</Filter>
     </None>
     <None Include="res\shaders\font.frag">
