@@ -237,11 +237,12 @@ void splitString(const char* str, std::vector<std::string>* tokens)
 void EncoderArguments::printUsage() const
 {
     LOG(1, "Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n" \
+    "Encoder version: " ENCODER_VERSION "\n\n" \
     "Supported file extensions:\n" \
-    "  .fbx\t(FBX)\n" \
-    "  .ttf\t(TrueType Font)\n" \
+    "  .fbx\t(FBX scenes)\n" \
+    "  .ttf\t(TrueType fonts)\n" \
     "\n" \
-    "General Options:\n" \
+    "General options:\n" \
     "  -v <verbosity>\tVerbosity level (0-4).\n" \
     "\n" \
     "FBX file options:\n" \
@@ -270,28 +271,25 @@ void EncoderArguments::printUsage() const
         "\t\tMultiple -h arguments can be supplied to generate more than one \n" \
         "\t\theightmap. For 24-bit packed height data use -hp instead of -h.\n" \
     "\n" \
-    "Normal map generation options:\n" \
+    "Normal map options:\n" \
         "  -n\t\tGenerate normal map (requires input file of type PNG or RAW)\n" \
-        "  -s\t\tSize/resolution of the input heightmap image \n" \
-        "    \t\t(required for RAW files)\n" \
+        "  -s\t\tSize/resolution of the input heightmap image (required for RAW files)\n" \
         "  -w <size>\tSpecifies the size of an input terrain heightmap file in world\n" \
         "\t\tunits, along the X, Y and Z axes. <size> should be three \n" \
-        "\t\tcomma-separated numbers in the format \"X,Y,Z\". The Y value \n" \
-        "\t\trepresents the maximum possible height value of a full \n" \
-        "\t\tintensity heightmap pixel.\n" \
+        "\t\tcomma-separated numbers in the format \"X,Y,Z\".  \n" \
+        "\t\tThe Y value represents the maximum possible height value of a  \n" \
+        "\t\tfull intensity heightmap pixel.\n" \
         "\n" \
-        "  Normal map generation can be used to create object-space normal maps from \n" \
-        "  heightmap images. Heightmaps must be in either PNG format (where the \n" \
-        "  intensity of each pixel represents a height value), or in RAW format \n" \
-        "  (8 or 16-bit), which is a common headerless format supported by most \n" \
-        "  terrain generation tools.\n" \
+        "  \t\tNormal map generation can be used to create object-space normal maps from \n" \
+        "  \t\theightmap images. Heightmaps must be in either PNG format (where the \n" \
+        "  \t\tintensity of each pixel represents a height value), or in RAW format \n" \
+        "  \t\t(8 or 16-bit), which is a common headerless format supported by most \n" \
+        "  \t\tterrain generation tools.\n" \
     "\n" \
     "TTF file options:\n" \
     "  -s <sizes>\tComma-separated list of font sizes (in pixels).\n" \
     "  -p\t\tOutput font preview.\n" \
-    "  -f Format of font. -f:b (BITMAP), -f:d (DISTANCE_FIELD).\n" \
-    "\n" \
-    "Encoder version: " ENCODER_VERSION "\n" \
+    "  -f\t\tFormat of font. -f:b (BITMAP), -f:d (DISTANCE_FIELD).\n" \
     "\n");
     exit(8);
 }

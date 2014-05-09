@@ -81,7 +81,7 @@ void TextureCubeSample::createCubeMap()
 	SAFE_RELEASE(cam);
 }
 
-Material* createDefaultMaterial(Properties* prop, Node* lightNode)
+Material* setupLights(Properties* prop, Node* lightNode)
 {
 	Light* light = lightNode->getLight();
 
@@ -95,19 +95,20 @@ Material* createDefaultMaterial(Properties* prop, Node* lightNode)
 
 bool TextureCubeSample::initMaterials(Node* node, Properties* prop)
 {
-    // If the node visited contains a model, draw it
+    // If the node visited contains a model, setup materials for it
     Model* model = node->getModel();
     if (model)
     {
+		Node* lightNode = node->getScene()->findNode("light_node");
 		Properties* p = prop->getNamespace(node->getId());
 		Material* m;
 		if(p)
 		{
-			m = Material::create(p);
+			m = setupLights(p, lightNode);
 		}
 		else
 		{
-			m = createDefaultMaterial(prop->getNamespace("default"), node->getScene()->findNode("light_node"));
+			m = setupLights(prop->getNamespace("default"), lightNode);
 		}
 		model->setMaterial(m);
 		SAFE_RELEASE(m);

@@ -36,7 +36,7 @@ Material* Material::create(const char* url, PassCallback callback, void* cookie)
     Properties* properties = Properties::create(url);
     if (properties == NULL)
     {
-        GP_WARN("Failed to create material from file.");
+        GP_WARN("Failed to create material from file: %s", url);
         return NULL;
     }
 

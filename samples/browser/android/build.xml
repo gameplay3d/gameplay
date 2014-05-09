@@ -48,6 +48,20 @@
 
     <target name="-pre-build">
 		<mkdir dir="src"/>
+	    <copy file="../game.config" tofile="assets/game.config"/>
+        <copy todir="assets/res/common">
+            <fileset dir="../res/common"/>
+        </copy>
+		<copy todir="assets/res/png">
+            <fileset dir="../res/png"/>
+        </copy>
+        <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
+		<copy todir="assets/res/shaders">
+            <fileset dir="../../../gameplay/res/shaders"/>
+        </copy>
+        <copy todir="assets/res/ui">
+            <fileset dir="../../../gameplay/res/ui"/>
+        </copy>
     </target>
 	
 <!--
@@ -59,19 +73,6 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
-	    <copy file="../game.config" tofile="assets/game.config"/>
-        <copy todir="assets/res/common">
-            <fileset dir="../res/common"/>
-        </copy>
-		<copy todir="assets/res/png">
-            <fileset dir="../res/png"/>
-        </copy>
-		<copy todir="assets/res/shaders">
-            <fileset dir="../../../gameplay/res/shaders"/>
-        </copy>
-        <copy todir="assets/res/ui">
-            <fileset dir="../../../gameplay/res/ui"/>
-        </copy>
     </target>
 
     <!-- Import the actual build file.

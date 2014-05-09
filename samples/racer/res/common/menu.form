@@ -1,59 +1,46 @@
-form menu
+form pauseMenu
 {
-    theme = res/common/menu.theme
-    width = 320
-    height = 180
     alignment = ALIGN_VCENTER_HCENTER
-    style = basic
 
-    // Controls
     container controlsContainer
     {
-        style = noBorder
-        autoWidth = true
-        height = 60
+        width = 100%
 
         label controlsLabel
         {
-            style = title
-            autoWidth = true
+            size = 100%, 30
 			textAlignment =  ALIGN_LEFT
-            height = 30
             text = Controls
+            fontSize = 22
         }
 
         radioButton useGamepad
         {
-            style = iconNoBorder
             group = controls
-            position = 0, 25
-            size = 150, 40
-            imageSize = 35, 35
+            position = 0, 35
+            width = 150
             selected = true
             text = Gamepad
         }
 
         radioButton useTilt : useGamepad
         {
-            position = 150, 25
+            position = 150, 35
             text = Tilt
             selected = false
         }
     }
 
-    // Reset
     button newGameButton
     {
-        style = buttonStyle
-        position = 0, 100
+        position = 0, 90
         size = 150, 50
         text = New Game
     }
 
-    // Exit
     button quitGameButton : newGameButton
     {
-        position = 150, 100
+        position = 150, 90
         text = Quit Game
     }
 }

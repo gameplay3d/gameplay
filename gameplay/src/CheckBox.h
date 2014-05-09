@@ -49,21 +49,6 @@ public:
     void setChecked(bool checked);
 
     /**
-     * Set the size to draw the checkbox icon.
-     *
-     * @param width The width to draw the checkbox icon.
-     * @param height The height to draw the checkbox icon.
-     */
-    void setImageSize(float width, float height);
-
-    /**
-     * Get the size at which the checkbox icon will be drawn.
-     *
-     * @return The size of the checkbox icon.
-     */
-    const Vector2& getImageSize() const;
-
-    /**
      * @see Control::getType
      */
     const char* getType() const;
@@ -121,13 +106,19 @@ protected:
     void controlEvent(Control::Listener::EventType evt);
 
     /**
-     * Called when a control's properties change.  Updates this control's internal rendering
-     * properties, such as its text viewport.
-     *
-     * @param container This control's parent container.
-     * @param offset The position offset.
+     * @see Control::updateState
      */
-    void update(const Control* container, const Vector2& offset);
+    void updateState(State state);
+
+    /**
+     * @see Control::updateBounds
+     */
+    void updateBounds();
+
+    /**
+     * @see Control::updateAbsoluteBounds
+     */
+    void updateAbsoluteBounds(const Vector2& offset);
 
     /**
      * @see Control::drawImages
@@ -138,11 +129,6 @@ protected:
      * Whether this checkbox is currently checked.
      */
     bool _checked;
-
-    /**
-     * The size to draw the checkbox icon, if different from its size in the texture.
-     */
-    Vector2 _imageSize;
 
     /**
      * The Theme::ThemeImage to display for the checkbox.

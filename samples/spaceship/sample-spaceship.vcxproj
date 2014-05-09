@@ -152,7 +152,7 @@
     </CustomBuildStep>
     <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-      xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
 copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -184,6 +184,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <ClCompile>
@@ -216,8 +221,8 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </CustomBuildStep>
     <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-      xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
-      copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
@@ -249,6 +254,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -283,8 +293,8 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </CustomBuildStep>
     <PreBuildEvent>
       <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-      xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
-      copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -318,6 +328,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Outputs>
       </Outputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
+xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
+copy ..\..\gameplay\res\logo_powered_white.png res</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="bar-descriptor.xml" />

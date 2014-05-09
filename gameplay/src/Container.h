@@ -305,13 +305,37 @@ protected:
     void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
-     * Updates each control within this container,
-     * and positions them according to the container's layout.
-     *
-     * @param container This container's parent container.
-     * @param offset The offset.
+     * @see Control::update
      */
-    virtual void update(const Control* container, const Vector2& offset);
+    void update(float elapsedTime);
+
+    /**
+     * @see Control::updateState
+     */
+    void updateState(State state);
+
+    /**
+     * @see Control::updateBounds
+     */
+    void updateBounds();
+
+    /**
+     * @see Control::updateAbsoluteBounds
+     */
+    void updateAbsoluteBounds(const Vector2& offset);
+
+    /**
+     * Updates the bounds for this container's child controls.
+     */
+    bool updateChildBounds();
+
+    /**
+     * Sets the specified dirty bits for all children within this container.
+     *
+     * @param bits The bits to set.
+     * @param recursive If true, set the bits recursively on all children and their children.
+     */
+    void setChildrenDirty(int bits, bool recursive);
 
     /**
      * Gets a Layout::Type enum from a matching string.
@@ -328,13 +352,6 @@ protected:
      * @return The new Layout.
      */
     static Layout* createLayout(Layout::Type type);
-
-    /**
-     * Returns whether this container or any of its controls have been modified and require an update.
-     * 
-     * @return true if this container or any of its controls have been modified and require an update.
-     */
-    virtual bool isDirty();
 
     /**
      * Adds controls nested within a properties object to this container.
@@ -564,7 +581,6 @@ private:
     bool _contactIndices[MAX_CONTACT_INDICES];
     bool _initializedWithScroll;
     bool _scrollWheelRequiresFocus;
-    bool _allowRelayout;
 };
 
 }

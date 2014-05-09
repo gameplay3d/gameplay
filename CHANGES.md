@@ -1,7 +1,7 @@
 ## v2.0.0
 
 - Adds support for Visual Studio 2013.
-- Adds support for iOS 7, MacOS X 10.8 and XCode 5.
+- Adds support for iOS 7, MacOS X 10.9 and XCode 5.
 - Adds support for BlackBerry NDK 10.2.
 - Adds support for CollisionObject group mask filtering.
 - Adds support in shaders for mulitple lights using shader defines.
@@ -23,18 +23,20 @@
 - Adds new gestures for Long Tap, Drag and Drop.
 - Adds support for Android pinch gestures.
 - Adds version number to encoder output files.
+- Adds support for variables like ${my_variable} in any Properties file formats.
 - Fixes to specular and bumped shader for spot lights.
 - Fixes to UI rendering quality from FrameBuffer usage which is no longer used.
 - Fixes to Texbox focus related issues.
 - Fixes to Label clipping and Labels to automatically re-size around their text.
 - Fixes in Camera related to invalid project() and setActiveCamera() issues.
-- Fixes for Linux VSYNC and Mouse capture.
+- Fixes for Linux VSYNC and mouse capture and mouse wheel values.
 - Fixes various logging and warning problems and annoyances.
 - Fixes bitmap font rendering quality in gameplay-encoder and Font class.
 - Fixes Mesh CollisionShape's.
 - Fixes for destroying CollisionObject that does not notify CollisionListener.
 - Fixes to PhysicsVehicle where wheels detach and may collide with body.
 - Fixes to encoder spotlight for properly extracting inner and outer angle from FBX.
+- Fixes encoder computed Light falloff attenuation values.
 - Fixes to invalid assertion in AnimationClip.
 - Fixes for FrameBuffer width/height goeing out of date.
 - Fixes for incorrect RenderState Type specifier.
@@ -43,7 +45,6 @@
 - Fixes related to disable and non-visible controls not receiving input.
 - Fixes to Bundle, Font, Properties and SceneLoader to use GP_WARN and improve locations of errors.
 - Fixes to encoder related to Material generation.
-
 
 ## v1.7.0
 

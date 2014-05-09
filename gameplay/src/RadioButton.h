@@ -28,7 +28,7 @@ public:
      * Creates a new RadioButton.
      *
      * @param id The radio button ID.
-     * @param id The radio button style (optional).
+     * @param style The radio button style (optional).
      *
      * @return The new radio button.
      * @script{create}
@@ -46,21 +46,6 @@ public:
      * Sets whether this radio button is currently selected.
      */
     void setSelected(bool selected);
-
-    /**
-     * Set the size to draw the radio button icon.
-     *
-     * @param width The width to draw the radio button icon.
-     * @param height The height to draw the radio button icon.
-     */
-    void setImageSize(float width, float height);
-
-    /**
-     * Get the size at which the radio button icon will be drawn.
-     *
-     * @return The size of the radio button icon.
-     */
-    const Vector2& getImageSize() const;
 
     /**
      * @see Control::getType
@@ -133,13 +118,19 @@ protected:
     void controlEvent(Control::Listener::EventType evt);
 
     /**
-     * Called when a control's properties change.  Updates this control's internal rendering
-     * properties, such as its text viewport.
-     *
-     * @param container This control's parent container.
-     * @param offset Positioning offset to add to the control's position.
+     * @see Control::updateState
      */
-    void update(const Control* container, const Vector2& offset);
+    void updateState(State state);
+
+    /**
+     * @see Control::updateBounds
+     */
+    void updateBounds();
+
+    /**
+     * @see Control::updateAbsoluteBounds
+     */
+    void updateAbsoluteBounds(const Vector2& offset);
 
     /**
      * @see Control::drawImages
@@ -162,15 +153,10 @@ protected:
      * Whether the RadioButton is currently selected.
      */
     bool _selected;
-    
-    /**
-     * The size at which the RadioButton's icon will be drawn.
-     */
-    Vector2 _imageSize;
 
     /**
-     * The ThemeImage to use for the RadioButton.
-     */ 
+     * The theme image for the radio button.
+     */
     Theme::ThemeImage* _image;
 
 private:

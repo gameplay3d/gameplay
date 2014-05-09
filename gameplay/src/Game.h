@@ -507,7 +507,7 @@ public:
      */
     inline void setMultiSampling(bool enabled);
 
-    /*
+    /**
      * Is multi-sampling enabled.
      *
      * @return true if multi-sampling is enabled.
@@ -597,6 +597,11 @@ public:
      * @param function The Lua script function that will receive the event.
      */
     void schedule(float timeOffset, const char* function);
+
+    /**
+     * Clears all scheduled time events.
+     */
+    void clearSchedule();
 
     /**
      * Opens an URL in an external browser, if available.

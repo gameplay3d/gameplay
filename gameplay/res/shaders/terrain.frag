@@ -1,8 +1,8 @@
 #ifdef OPENGL_ES
-#ifdef OPENGL_ES_MEDIUMP
-precision mediump float;
-#else
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
 #endif
 #endif
 
@@ -133,7 +133,7 @@ void main()
 
     #else
 
-    gl_FragColor.rgb = _baseColor;
+    gl_FragColor.rgb = _baseColor.rgb;
 
     #endif
 }

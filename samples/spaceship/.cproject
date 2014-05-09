@@ -73,7 +73,6 @@
 									<listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="scoreloopcore"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1645280653" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -161,7 +160,6 @@
 									<listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="scoreloopcore"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.534133606" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -250,7 +248,6 @@
 									<listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="scoreloopcore"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1805822171" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

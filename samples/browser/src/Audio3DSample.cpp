@@ -151,7 +151,7 @@ void Audio3DSample::render(float elapsedTime)
     // Visit all the nodes in the scene for drawing
     _scene->visit(this, &Audio3DSample::drawScene);
 
-    drawDebugText(0, _font->getSize());
+    drawDebugText(5, _font->getSize());
 
     _gamepad->draw();
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
@@ -326,8 +326,8 @@ void Audio3DSample::drawDebugText(int x, int y)
 void Audio3DSample::drawVector3(const char* str, const Vector3& vector, int x, int y)
 {
     char buffer[255];
-    sprintf(buffer, "%s: (%f, %f, %f)", str, vector.x, vector.y, vector.z);
-    _font->drawText(buffer, x, y, Vector4::one(), _font->getSize());
+    sprintf(buffer, "%s: (%.3f, %.3f, %.3f)", str, vector.x, vector.y, vector.z);
+    _font->drawText(buffer, x, y, Vector4::one(), 22);
 }
 
 void Audio3DSample::loadGrid(Scene* scene)

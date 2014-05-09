@@ -9,7 +9,7 @@ const float INPUT_SENSITIVITY = 0.05f;
 const float PANNING_SENSITIVITY = 0.01f;
 const float ROTATE_SENSITIVITY = 0.25f;
 const Vector4 BACKGROUND_COLOR = Vector4::zero();
-const float INITIAL_ZOOM = 6.0f;
+const float ZOOM_DEFAULT = 6.0f;
 
 ParticlesGame::ParticlesGame() : _scene(NULL), _panning(false), _rotating(false), _zooming(false)
 {
@@ -18,7 +18,7 @@ ParticlesGame::ParticlesGame() : _scene(NULL), _panning(false), _rotating(false)
 void ParticlesGame::addGrid(unsigned int lineCount)
 {
     float z = -1;
-
+    
     // There needs to be an odd number of lines
     lineCount |= 1;
     const unsigned int pointCount = lineCount * 4;
@@ -124,7 +124,7 @@ void ParticlesGame::initialize()
     _cameraParent->addChild(cameraNode);
     Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 1000.0f);
     cameraNode->setCamera(camera);
-    cameraNode->setTranslation(0.0f, 0.0f, INITIAL_ZOOM);
+    cameraNode->setTranslation(0.0f, 0.0f, ZOOM_DEFAULT);
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
 
@@ -645,12 +645,6 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         {
             emitter->setRotation(emitter->getRotationSpeedMin(), _rotationSpeedMax->getValue(), emitter->getRotationAxis(), emitter->getRotationAxisVariance());
         }
-        else if (control == _burstSize)
-        {
-            char txt[25];
-            sprintf(txt, "Burst Size\n\n%.0f", _burstSize->getValue());
-            _burstSize->setText(txt);
-        }
         else if (control == _started)
         {
             if (_started->isChecked())
@@ -830,7 +824,7 @@ void ParticlesGame::render(float elapsedTime)
     _form->draw();
 
     // Draw the framerate and number of live particles.
-    drawFrameRate(_font, Vector4(1, 1, 1, 1), 170, 40, getFrameRate());
+    drawFrameRate(_font, Vector4(1, 1, 1, 1), 205, 40, getFrameRate());
 }
 
 bool ParticlesGame::drawScene(Node* node, void* cookie)
@@ -889,6 +883,17 @@ bool ParticlesGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDel
             Vector3 v = _scene->getActiveCamera()->getNode()->getForwardVector();
             v.normalize();
             v.scale((float)(x-y) * INPUT_SENSITIVITY);
+            _scene->getActiveCamera()->getNode()->translate(v);
+            return true;
+        }
+        break;
+
+    case Mouse::MOUSE_WHEEL:
+        if (wheelDelta != 0)
+        {
+            Vector3 v = _scene->getActiveCamera()->getNode()->getForwardVector();
+            v.normalize();
+            v.scale((float)(wheelDelta));
             _scene->getActiveCamera()->getNode()->translate(v);
             return true;
         }
@@ -1063,10 +1068,6 @@ void ParticlesGame::emitterChanged()
 
     _emissionRate->setValue(emitter->getEmissionRate());
 
-    char txt[25];
-    sprintf(txt, "Burst Size\n\n%.0f", _burstSize->getValue());
-    _burstSize->setText(txt);
-
     const Vector3& posVar = emitter->getPositionVariance();
     _posVarX->setValue(posVar.x);
     _posVarY->setValue(posVar.y);
@@ -1157,19 +1158,20 @@ void ParticlesGame::updateTexture()
 
 void ParticlesGame::updateImageControl()
 {
-    ((ImageControl*)_form->getControl("sprite"))->setImage(_particleEmitter->getTexture()->getPath());
+    ImageControl* img = (ImageControl*)_form->getControl("sprite");
+    img->setImage(_particleEmitter->getTexture()->getPath());
 
     // Resize the image control so keep it to scale
     int w = _particleEmitter->getTexture()->getWidth();
     int h = _particleEmitter->getTexture()->getHeight();
     int max = w > h ? w : h;
-    if (max > 140)
+    if (max > 120)
     {
-        float ratio = 140.0f / max;
+        float ratio = 120.0f / max;
         w *= ratio;
         h *= ratio;
     }
-    ((ImageControl*)_form->getControl("sprite"))->setSize(w, h);
+    img->setSize(w, h);
     _form->getControl("image")->setHeight(h + _form->getControl("imageSettings")->getHeight() + 50);
 
     ((TextBox*)_form->getControl("frameCount"))->setText(toString(_particleEmitter->getSpriteFrameCount()).c_str());

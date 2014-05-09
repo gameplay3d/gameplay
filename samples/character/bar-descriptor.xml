@@ -30,7 +30,7 @@
     <author>RIM Canada</author>
 
     <!-- Unique author ID assigned by signing authority. Required if using debug tokens. -->
-    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
+    <!-- <authorId>gYAAgLDcDLxX077jVWRVnDpywiU</authorId> -->
 
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
@@ -42,11 +42,7 @@
     <category>core.games</category>
     
     <asset path="icon.png">icon.png</asset>
-    <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
-    <asset path="../../gameplay/res/shaders">res/shaders</asset>
-    <asset path="../../gameplay/res/ui">res/ui</asset>
     <asset path="res/common">res/common</asset>
-
     <asset path="res/design/backboard.png">res/png/backboard.png</asset>
     <asset path="res/design/basketball.png">res/png/basketball.png</asset>
     <asset path="res/design/basketballnet.png">res/png/basketballnet.png</asset>
@@ -80,7 +76,10 @@
     <asset path="res/design/wood.png">res/png/wood.png</asset>
     <asset path="res/design/woodn.png">res/png/woodn.png</asset>
     <asset path="game.png.config">game.config</asset>
-   
+    <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
+    <asset path="../../gameplay/res/shaders">res/shaders</asset>
+    <asset path="../../gameplay/res/ui">res/ui</asset>
+    
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>

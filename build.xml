@@ -1,0 +1,60 @@
+<!-- Android build script -->
+<project name="gameplay" default="all" basedir=".">
+
+  <fail message="OS not supported. Supported platforms: Windows, MacOS X or Linux.">
+    <condition>
+      <not>
+        <or>
+          <os family="unix"/>
+          <os family="windows"/>
+        </or>
+      </not>
+    </condition>
+  </fail>
+
+  <macrodef name="build-native">
+    <attribute name="location"/>
+    <sequential>
+
+      <exec osfamily="unix" dir="@{location}/android" executable="android">
+        <arg value="update"/>
+        <arg value="project"/>
+        <arg value="-t"/>
+        <arg value="1"/>
+        <arg value="-p"/>
+        <arg value="."/>
+        <arg value="-s"/>
+      </exec>
+      <exec osfamily="unix" dir="@{location}/android" executable="ndk-build"/>
+
+      <exec osfamily="windows" dir="@{location}/android" executable="cmd">
+        <arg value="/c"/>
+        <arg value="android.bat"/>
+        <arg value="update"/>
+        <arg value="project"/>
+        <arg value="-t"/>
+        <arg value="1"/>
+        <arg value="-p"/>
+        <arg value="."/>
+        <arg value="-s"/>
+      </exec>
+      <exec osfamily="windows" dir="@{location}/android" executable="cmd">
+        <arg value="/c"/>
+        <arg value="ndk-build"/>
+      </exec>
+      
+    </sequential>
+  </macrodef>
+
+  <target name="all">
+    <build-native location="gameplay"/>
+    <build-native location="samples/browser"/>
+    <build-native location="samples/character"/>
+    <build-native location="samples/lua"/>
+    <build-native location="samples/mesh"/>
+    <build-native location="samples/particles"/>
+    <build-native location="samples/racer"/>
+    <build-native location="samples/spaceship"/>
+  </target>
+  
+</project>

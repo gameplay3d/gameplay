@@ -218,7 +218,7 @@ public:
      * - "image.png" will return ""
      * - "c:\foo\bar\image.png" will return "c:/foo/bar/"
      * 
-     * @param The file path. May be relative or absolute, forward or back slashes. May be NULL.
+     * @param path The file path. May be relative or absolute, forward or back slashes. May be NULL.
      * 
      * @return The directory name with the trailing '/'. Returns "" if path is NULL or the path does not contain a directory.
      */

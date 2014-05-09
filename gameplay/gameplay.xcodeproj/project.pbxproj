@@ -141,8 +141,6 @@
 		420BBD131817416F00C7B720 /* lua_ImageFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB261817416E00C7B720 /* lua_ImageFormat.cpp */; };
 		420BBD161817416F00C7B720 /* lua_Joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB281817416E00C7B720 /* lua_Joint.cpp */; };
 		420BBD171817416F00C7B720 /* lua_Joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB281817416E00C7B720 /* lua_Joint.cpp */; };
-		420BBD1A1817416F00C7B720 /* lua_Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB2A1817416E00C7B720 /* lua_Joystick.cpp */; };
-		420BBD1B1817416F00C7B720 /* lua_Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB2A1817416E00C7B720 /* lua_Joystick.cpp */; };
 		420BBD1E1817416F00C7B720 /* lua_Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB2C1817416E00C7B720 /* lua_Keyboard.cpp */; };
 		420BBD1F1817416F00C7B720 /* lua_Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB2C1817416E00C7B720 /* lua_Keyboard.cpp */; };
 		420BBD221817416F00C7B720 /* lua_KeyboardKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB2E1817416E00C7B720 /* lua_KeyboardKey.cpp */; };
@@ -362,6 +360,10 @@
 		42252DD01828145B00EE234B /* lua_TerrainPatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42252DCA1828145B00EE234B /* lua_TerrainPatch.cpp */; };
 		42252DD11828145B00EE234B /* lua_TerrainPatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42252DCA1828145B00EE234B /* lua_TerrainPatch.cpp */; };
 		4234D99E14686C52003031B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4234D99D14686C52003031B3 /* Cocoa.framework */; };
+		426F8317187F72A700640CBA /* JoystickControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426F8315187F72A700640CBA /* JoystickControl.cpp */; };
+		426F8318187F72A700640CBA /* JoystickControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426F8315187F72A700640CBA /* JoystickControl.cpp */; };
+		426F831B187F72DF00640CBA /* lua_JoystickControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426F8319187F72DF00640CBA /* lua_JoystickControl.cpp */; };
+		426F831C187F72DF00640CBA /* lua_JoystickControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426F8319187F72DF00640CBA /* lua_JoystickControl.cpp */; };
 		42CC556C1809A4EF00AAD8AD /* AbsoluteLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC52F71809A4EB00AAD8AD /* AbsoluteLayout.cpp */; };
 		42CC556D1809A4EF00AAD8AD /* AbsoluteLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC52F71809A4EB00AAD8AD /* AbsoluteLayout.cpp */; };
 		42CC55701809A4EF00AAD8AD /* AIAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC52F91809A4EB00AAD8AD /* AIAgent.cpp */; };
@@ -450,8 +452,6 @@
 		42CC56131809A4EF00AAD8AD /* ImageControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC534E1809A4EC00AAD8AD /* ImageControl.cpp */; };
 		42CC56161809A4EF00AAD8AD /* Joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53501809A4EC00AAD8AD /* Joint.cpp */; };
 		42CC56171809A4EF00AAD8AD /* Joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53501809A4EC00AAD8AD /* Joint.cpp */; };
-		42CC561A1809A4EF00AAD8AD /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53521809A4EC00AAD8AD /* Joystick.cpp */; };
-		42CC561B1809A4EF00AAD8AD /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53521809A4EC00AAD8AD /* Joystick.cpp */; };
 		42CC56201809A4EF00AAD8AD /* Label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53561809A4EC00AAD8AD /* Label.cpp */; };
 		42CC56211809A4EF00AAD8AD /* Label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53561809A4EC00AAD8AD /* Label.cpp */; };
 		42CC56241809A4EF00AAD8AD /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53581809A4EC00AAD8AD /* Layout.cpp */; };
@@ -734,8 +734,6 @@
 		420BBB271817416E00C7B720 /* lua_ImageFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_ImageFormat.h; sourceTree = "<group>"; };
 		420BBB281817416E00C7B720 /* lua_Joint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Joint.cpp; sourceTree = "<group>"; };
 		420BBB291817416E00C7B720 /* lua_Joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Joint.h; sourceTree = "<group>"; };
-		420BBB2A1817416E00C7B720 /* lua_Joystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Joystick.cpp; sourceTree = "<group>"; };
-		420BBB2B1817416E00C7B720 /* lua_Joystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Joystick.h; sourceTree = "<group>"; };
 		420BBB2C1817416E00C7B720 /* lua_Keyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Keyboard.cpp; sourceTree = "<group>"; };
 		420BBB2D1817416E00C7B720 /* lua_Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Keyboard.h; sourceTree = "<group>"; };
 		420BBB2E1817416E00C7B720 /* lua_KeyboardKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_KeyboardKey.cpp; sourceTree = "<group>"; };
@@ -956,6 +954,10 @@
 		42252DCB1828145B00EE234B /* lua_TerrainPatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_TerrainPatch.h; sourceTree = "<group>"; };
 		4234D99A14686C52003031B3 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4234D99D14686C52003031B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		426F8315187F72A700640CBA /* JoystickControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JoystickControl.cpp; path = src/JoystickControl.cpp; sourceTree = SOURCE_ROOT; };
+		426F8316187F72A700640CBA /* JoystickControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JoystickControl.h; path = src/JoystickControl.h; sourceTree = SOURCE_ROOT; };
+		426F8319187F72DF00640CBA /* lua_JoystickControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_JoystickControl.cpp; sourceTree = "<group>"; };
+		426F831A187F72DF00640CBA /* lua_JoystickControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_JoystickControl.h; sourceTree = "<group>"; };
 		42B701F615B08177002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
 		42B701F815B081B6002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/ios/armv7s/liblua.a"; sourceTree = "<group>"; };
 		42CC52F71809A4EB00AAD8AD /* AbsoluteLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbsoluteLayout.cpp; path = src/AbsoluteLayout.cpp; sourceTree = SOURCE_ROOT; };
@@ -1049,9 +1051,6 @@
 		42CC534F1809A4EC00AAD8AD /* ImageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageControl.h; path = src/ImageControl.h; sourceTree = SOURCE_ROOT; };
 		42CC53501809A4EC00AAD8AD /* Joint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Joint.cpp; path = src/Joint.cpp; sourceTree = SOURCE_ROOT; };
 		42CC53511809A4EC00AAD8AD /* Joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Joint.h; path = src/Joint.h; sourceTree = SOURCE_ROOT; };
-		42CC53521809A4EC00AAD8AD /* Joystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Joystick.cpp; path = src/Joystick.cpp; sourceTree = SOURCE_ROOT; };
-		42CC53531809A4EC00AAD8AD /* Joystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Joystick.h; path = src/Joystick.h; sourceTree = SOURCE_ROOT; };
-		42CC53541809A4EC00AAD8AD /* Joystick.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Joystick.inl; path = src/Joystick.inl; sourceTree = SOURCE_ROOT; };
 		42CC53551809A4EC00AAD8AD /* Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Keyboard.h; path = src/Keyboard.h; sourceTree = SOURCE_ROOT; };
 		42CC53561809A4EC00AAD8AD /* Label.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Label.cpp; path = src/Label.cpp; sourceTree = SOURCE_ROOT; };
 		42CC53571809A4EC00AAD8AD /* Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Label.h; path = src/Label.h; sourceTree = SOURCE_ROOT; };
@@ -1396,8 +1395,8 @@
 				420BBB271817416E00C7B720 /* lua_ImageFormat.h */,
 				420BBB281817416E00C7B720 /* lua_Joint.cpp */,
 				420BBB291817416E00C7B720 /* lua_Joint.h */,
-				420BBB2A1817416E00C7B720 /* lua_Joystick.cpp */,
-				420BBB2B1817416E00C7B720 /* lua_Joystick.h */,
+				426F8319187F72DF00640CBA /* lua_JoystickControl.cpp */,
+				426F831A187F72DF00640CBA /* lua_JoystickControl.h */,
 				420BBB2C1817416E00C7B720 /* lua_Keyboard.cpp */,
 				420BBB2D1817416E00C7B720 /* lua_Keyboard.h */,
 				420BBB2E1817416E00C7B720 /* lua_KeyboardKey.cpp */,
@@ -1736,9 +1735,8 @@
 				42CC534F1809A4EC00AAD8AD /* ImageControl.h */,
 				42CC53501809A4EC00AAD8AD /* Joint.cpp */,
 				42CC53511809A4EC00AAD8AD /* Joint.h */,
-				42CC53521809A4EC00AAD8AD /* Joystick.cpp */,
-				42CC53531809A4EC00AAD8AD /* Joystick.h */,
-				42CC53541809A4EC00AAD8AD /* Joystick.inl */,
+				426F8315187F72A700640CBA /* JoystickControl.cpp */,
+				426F8316187F72A700640CBA /* JoystickControl.h */,
 				42CC53551809A4EC00AAD8AD /* Keyboard.h */,
 				42CC53561809A4EC00AAD8AD /* Label.cpp */,
 				42CC53571809A4EC00AAD8AD /* Label.h */,
@@ -2056,6 +2054,7 @@
 				42CC598E1809A4EF00AAD8AD /* Rectangle.cpp in Sources */,
 				42CC55DE1809A4EF00AAD8AD /* FlowLayout.cpp in Sources */,
 				420BBE861817416F00C7B720 /* lua_TextureFormat.cpp in Sources */,
+				426F831B187F72DF00640CBA /* lua_JoystickControl.cpp in Sources */,
 				42CC59F61809A4EF00AAD8AD /* Texture.cpp in Sources */,
 				42CC55CA1809A4EF00AAD8AD /* Curve.cpp in Sources */,
 				420BBDAE1817416F00C7B720 /* lua_PhysicsCollisionShapeDefinition.cpp in Sources */,
@@ -2115,12 +2114,12 @@
 				420BBD0E1817416F00C7B720 /* lua_ImageControl.cpp in Sources */,
 				420BBE9E1817416F00C7B720 /* lua_ThemeThemeImage.cpp in Sources */,
 				420BBE6E1817416F00C7B720 /* lua_TerrainFlags.cpp in Sources */,
+				426F8317187F72A700640CBA /* JoystickControl.cpp in Sources */,
 				42CC5A1E1809A4EF00AAD8AD /* VerticalLayout.cpp in Sources */,
 				42252DD01828145B00EE234B /* lua_TerrainPatch.cpp in Sources */,
 				420BBCB21817416F00C7B720 /* lua_DepthStencilTargetFormat.cpp in Sources */,
 				420BBCAE1817416F00C7B720 /* lua_DepthStencilTarget.cpp in Sources */,
 				42CC59821809A4EF00AAD8AD /* Quaternion.cpp in Sources */,
-				42CC561A1809A4EF00AAD8AD /* Joystick.cpp in Sources */,
 				42CC59E01809A4EF00AAD8AD /* SpriteBatch.cpp in Sources */,
 				420BBE021817416F00C7B720 /* lua_PropertiesType.cpp in Sources */,
 				420BBD221817416F00C7B720 /* lua_KeyboardKey.cpp in Sources */,
@@ -2194,7 +2193,6 @@
 				420BBC2E1817416F00C7B720 /* lua_AIStateListener.cpp in Sources */,
 				420BBD0A1817416F00C7B720 /* lua_Image.cpp in Sources */,
 				420BBD1E1817416F00C7B720 /* lua_Keyboard.cpp in Sources */,
-				420BBD1A1817416F00C7B720 /* lua_Joystick.cpp in Sources */,
 				42CC592A1809A4EF00AAD8AD /* ParticleEmitter.cpp in Sources */,
 				420BBC461817416F00C7B720 /* lua_AnimationClipListenerEventType.cpp in Sources */,
 				42CC55FC1809A4EF00AAD8AD /* gameplay-main-blackberry.cpp in Sources */,
@@ -2351,6 +2349,7 @@
 				42CC598F1809A4EF00AAD8AD /* Rectangle.cpp in Sources */,
 				42CC55DF1809A4EF00AAD8AD /* FlowLayout.cpp in Sources */,
 				420BBE871817416F00C7B720 /* lua_TextureFormat.cpp in Sources */,
+				426F831C187F72DF00640CBA /* lua_JoystickControl.cpp in Sources */,
 				42CC59F71809A4EF00AAD8AD /* Texture.cpp in Sources */,
 				42CC55CB1809A4EF00AAD8AD /* Curve.cpp in Sources */,
 				420BBDAF1817416F00C7B720 /* lua_PhysicsCollisionShapeDefinition.cpp in Sources */,
@@ -2410,13 +2409,13 @@
 				420BBD0F1817416F00C7B720 /* lua_ImageControl.cpp in Sources */,
 				420BBE9F1817416F00C7B720 /* lua_ThemeThemeImage.cpp in Sources */,
 				420BBE6F1817416F00C7B720 /* lua_TerrainFlags.cpp in Sources */,
+				426F8318187F72A700640CBA /* JoystickControl.cpp in Sources */,
 				42CC59011809A4EF00AAD8AD /* Material.cpp in Sources */,
 				42252DD11828145B00EE234B /* lua_TerrainPatch.cpp in Sources */,
 				420BBCB31817416F00C7B720 /* lua_DepthStencilTargetFormat.cpp in Sources */,
 				420BBCAF1817416F00C7B720 /* lua_DepthStencilTarget.cpp in Sources */,
 				42CC5A1F1809A4EF00AAD8AD /* VerticalLayout.cpp in Sources */,
 				42CC59831809A4EF00AAD8AD /* Quaternion.cpp in Sources */,
-				42CC561B1809A4EF00AAD8AD /* Joystick.cpp in Sources */,
 				42CC59E11809A4EF00AAD8AD /* SpriteBatch.cpp in Sources */,
 				420BBE031817416F00C7B720 /* lua_PropertiesType.cpp in Sources */,
 				420BBD231817416F00C7B720 /* lua_KeyboardKey.cpp in Sources */,
@@ -2490,7 +2489,6 @@
 				420BBC2F1817416F00C7B720 /* lua_AIStateListener.cpp in Sources */,
 				420BBD0B1817416F00C7B720 /* lua_Image.cpp in Sources */,
 				420BBD1F1817416F00C7B720 /* lua_Keyboard.cpp in Sources */,
-				420BBD1B1817416F00C7B720 /* lua_Joystick.cpp in Sources */,
 				420BBC471817416F00C7B720 /* lua_AnimationClipListenerEventType.cpp in Sources */,
 				42CC592B1809A4EF00AAD8AD /* ParticleEmitter.cpp in Sources */,
 				42CC55FD1809A4EF00AAD8AD /* gameplay-main-blackberry.cpp in Sources */,
@@ -2811,6 +2809,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = gameplay;

@@ -442,10 +442,10 @@ void FBXSceneEncoder::loadAnimationLayer(FbxAnimLayer* fbxAnimLayer, FbxNode* fb
 
 void FBXSceneEncoder::loadAnimations(FbxScene* fbxScene, const EncoderArguments& arguments)
 {
-    FbxAnimEvaluator* evaluator = fbxScene->GetEvaluator();
+    FbxAnimEvaluator* evaluator = fbxScene->GetAnimationEvaluator();
     if (!evaluator)
         return;
-    FbxAnimStack* animStack = evaluator->GetContext();
+    FbxAnimStack* animStack = fbxScene->GetCurrentAnimationStack();
     if (!animStack)
         return;
 
