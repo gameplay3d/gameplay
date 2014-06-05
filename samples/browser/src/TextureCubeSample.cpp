@@ -65,13 +65,12 @@ void TextureCubeSample::createCubeMap()
 	// Setup rendertargets
 	_fBuffer = FrameBuffer::create("cube_camera_framebuffer", tex->getWidth(), tex->getHeight());
 	_rTargets = new RenderTarget*[6];
-	char buffer[256];
+	char rendTargetName[128] = {'\0'};
 	for(unsigned int i = 0; i < 6; i++)
 	{
-		std::string rendTargetName = "cube_camera_rendertarget_";
-		rendTargetName += itoa(i, buffer, 10);
+		sprintf(rendTargetName, "cube_camera_rendertarget_%d", i);
 		Texture* face = tex->getFaceTexture((Texture::CubeFace)i);
-		_rTargets[i] = RenderTarget::create(rendTargetName.c_str(), face);
+		_rTargets[i] = RenderTarget::create(rendTargetName, face);
 		SAFE_RELEASE(face);
 	}
 
