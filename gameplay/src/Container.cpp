@@ -425,6 +425,7 @@ const Vector2& Container::getScrollPosition() const
 void Container::setScrollPosition(const Vector2& scrollPosition)
 {
     _scrollPosition = scrollPosition;
+    setChildrenDirty(DIRTY_BOUNDS, true);
 }
 
 Animation* Container::getAnimation(const char* id) const
