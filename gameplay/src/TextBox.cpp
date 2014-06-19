@@ -4,11 +4,6 @@
 namespace gameplay
 {
 
-static bool space(char c)
-{
-    return isspace(c);
-}
-
 TextBox::TextBox() : _caretLocation(0), _lastKeypress(0), _fontSize(0), _caretImage(NULL), _passwordChar('*'), _inputMode(TEXT), _ctrlPressed(false)
 {
     _canFocus = true;
@@ -31,6 +26,16 @@ Control* TextBox::create(Theme::Style* style, Properties* properties)
     TextBox* textBox = new TextBox();
     textBox->initialize("TextBox", style, properties);
     return textBox;
+}
+
+void TextBox::addListener(Control::Listener* listener, int eventFlags)
+{
+    if ((eventFlags & Control::Listener::VALUE_CHANGED) == Control::Listener::VALUE_CHANGED)
+    {
+        GP_ERROR("VALUE_CHANGED event is not applicable to this control.");
+    }
+
+    Control::addListener(listener, eventFlags);
 }
 
 void TextBox::initialize(const char* typeName, Theme::Style* style, Properties* properties)
@@ -62,22 +67,18 @@ void TextBox::setCaretLocation(unsigned int index)
 
 bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    State state = getState();
-
-    switch (evt)
-    {
-    case Touch::TOUCH_PRESS: 
-        if (state == ACTIVE)
+    if (getState() == ACTIVE) {
+        switch (evt)
         {
+        case Touch::TOUCH_PRESS:
             setCaretLocation(x, y);
-        }
-        break;
-    case Touch::TOUCH_MOVE:
-        if (state == ACTIVE)
-        {
+            break;
+        case Touch::TOUCH_MOVE:
             setCaretLocation(x, y);
+            break;
+        default:
+            break;
         }
-        break;
     }
 
     return Label::touchEvent(evt, x, y, contactIndex);
@@ -302,6 +303,8 @@ void TextBox::controlEvent(Control::Listener::EventType evt)
 
     case Control::Listener::FOCUS_LOST:
         Game::getInstance()->displayKeyboard(false);
+        break;
+    default:
         break;
     }
 }
