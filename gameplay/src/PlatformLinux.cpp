@@ -1313,6 +1313,12 @@ int Platform::enterMessagePump()
                     }
                     break;
 
+                case ConfigureNotify:
+                    {
+                        gameplay::Platform::resizeEventInternal(evt.xconfigure.width, evt.xconfigure.height);
+                    }
+                    break;
+
                 default:
                     break;
             }
