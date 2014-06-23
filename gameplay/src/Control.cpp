@@ -909,10 +909,10 @@ Theme* Control::getTheme() const
 
 Control::State Control::getState() const
 {
-    if (_state == HOVER)
+    if (Form::getFocusControl() == this)
     {
-        // Focus state takes priority over hover
-        return (Form::getFocusControl() == this ? FOCUS : HOVER);
+        // Active is the only state that overrides focus state
+        return _state == ACTIVE ? ACTIVE : FOCUS;
     }
 
     return _state;
