@@ -969,7 +969,7 @@ void Form::resizeEventInternal(unsigned int width, unsigned int height)
         if (form)
         {
             // Dirty the form
-            form->setDirty(Control::DIRTY_STATE);
+            form->setDirty(Control::DIRTY_BOUNDS | Control::DIRTY_STATE);
         }
     }
 }

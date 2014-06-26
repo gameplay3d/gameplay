@@ -226,6 +226,18 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
         // Parse the auto-size mode for the control (this overrides explicit sizes and legacy autoWidth/autoHeight)
         _autoSize = parseAutoSize(properties->getString("autoSize"));
 
+        // If there is are simple padding or margin variables, parse them
+        if (properties->exists("padding"))
+        {
+            float pad = properties->getFloat("padding");
+            setPadding(pad, pad, pad, pad);
+        }
+        if (properties->exists("margin"))
+        {
+            float margin = properties->getFloat("margin");
+            setPadding(margin, margin, margin, margin);
+        }
+
 		if (properties->exists("enabled"))
 		{
 			setEnabled(properties->getBool("enabled"));
