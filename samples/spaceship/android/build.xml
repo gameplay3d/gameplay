@@ -48,7 +48,7 @@
      in between standard targets -->
 
     <target name="-pre-build">
-		<mkdir dir="src"/>
+	<mkdir dir="src"/>
     </target>
 	
 <!--
@@ -63,10 +63,6 @@
         <copy file="../res/airstrip.gpb" tofile="assets/res/airstrip.gpb"/>
         <copy file="../res/background.ogg" tofile="assets/res/background.ogg"/>
         <copy file="../res/background.png" tofile="assets/res/background.png"/>
-		<copy file="../res/challenge.form" tofile="assets/res/challenge.form"/>
-        <copy file="../res/menu.form" tofile="assets/res/menu.form"/>
-		<copy file="../res/menu.theme" tofile="assets/res/menu.theme"/>
-		<copy file="../res/menuAtlas.png" tofile="assets/res/menuAtlas.png"/>
         <copy file="../res/propulsion_glow.png" tofile="assets/res/propulsion_glow.png"/>
         <copy file="../res/spaceship.gpb" tofile="assets/res/spaceship.gpb"/>
         <copy file="../res/spaceship.wav" tofile="assets/res/spaceship.wav"/>
