@@ -1,3 +1,8 @@
+## v3.0.0
+
+- Adds support for MacOSX 64-bit.
+
+
 ## v2.0.0
 
 - Adds support for Visual Studio 2013.

@@ -738,8 +738,6 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
             __shiftKeyDown = false;
         break;
     }
-    if (key == Keyboard::KEY_ESCAPE)
-        return false;
 
     // Handle focus changing
     if (__focusControl)
@@ -971,7 +969,7 @@ void Form::resizeEventInternal(unsigned int width, unsigned int height)
         if (form)
         {
             // Dirty the form
-            form->setDirty(Control::DIRTY_STATE);
+            form->setDirty(Control::DIRTY_BOUNDS | Control::DIRTY_STATE);
         }
     }
 }
