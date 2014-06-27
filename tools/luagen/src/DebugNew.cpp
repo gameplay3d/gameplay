@@ -132,13 +132,13 @@ void* debugAlloc(std::size_t size, const char* file, int line)
         memset(&stackFrame, 0, sizeof(STACKFRAME64));
 
         // Initialize the stack frame based on the machine architecture.
-#ifdef _M_IX86
-        static const DWORD machineType = IMAGE_FILE_MACHINE_I386;
-        stackFrame.AddrPC.Offset = context.Eip;
+#ifdef _M_X64
+        static const DWORD machineType = IMAGE_FILE_MACHINE_IA64;
+        stackFrame.AddrPC.Offset = context.Rip;
         stackFrame.AddrPC.Mode = AddrModeFlat;
-        stackFrame.AddrFrame.Offset = context.Ebp;
+        stackFrame.AddrFrame.Offset = context.Rbp;
         stackFrame.AddrFrame.Mode = AddrModeFlat;
-        stackFrame.AddrStack.Offset = context.Esp;
+        stackFrame.AddrStack.Offset = context.Rsp;
         stackFrame.AddrStack.Mode = AddrModeFlat;
 #else
 #error "Machine architecture not supported!"
