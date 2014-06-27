@@ -1,8 +1,8 @@
 ## gameplay-encoder
 Command-line tool for encoding games assets like true-type fonts and 3D scene files
 into a simple binary-based bundle file format for the gameplay 3D game framework runtime. 
-The 'bin' folder contains pre-built 62-bit versions of the gameplay-encoder executables for 
-Windows 7, MacOS X and Linux Ubuntu 14.04 with support built-in support for:
+The 'bin' folder contains pre-built 64-bit versions of the gameplay-encoder executables for 
+Windows 7, MacOS X and Linux Ubuntu with support built-in support for:
 
 ## TrueType Font
 TrueType Fonts represent a standard in defining outline fonts and has become the 

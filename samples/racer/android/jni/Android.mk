@@ -5,7 +5,7 @@ PNG_PATH := $(call my-dir)/../../../../external-deps/png/lib/android/arm
 ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
 LUA_PATH := $(call my-dir)/../../../../external-deps/lua/lib/android/arm
 BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
-VORBIS_PATH := $(call my-dir)/../../../../external-deps/oggvorbis/lib/android/arm
+OGGVORBIS_PATH := $(call my-dir)/../../../../external-deps/oggvorbis/lib/android/arm
 OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
 
 # gameplay
@@ -36,15 +36,36 @@ LOCAL_MODULE    := liblua
 LOCAL_SRC_FILES := liblua.a
 include $(PREBUILT_STATIC_LIBRARY)
 
-# libbullet
+# libLinearMath
 LOCAL_PATH := $(BULLET_PATH)
 include $(CLEAR_VARS)
-LOCAL_MODULE    := libbullet
-LOCAL_SRC_FILES := libbullet.a
+LOCAL_MODULE    := libLinearMath
+LOCAL_SRC_FILES := libLinearMath.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+# libBulletCollision
+LOCAL_PATH := $(BULLET_PATH)
+include $(CLEAR_VARS)
+LOCAL_MODULE    := libBulletCollision
+LOCAL_SRC_FILES := libBulletCollision.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+# libBulletDynamics
+LOCAL_PATH := $(BULLET_PATH)
+include $(CLEAR_VARS)
+LOCAL_MODULE    := libBulletDynamics
+LOCAL_SRC_FILES := libBulletDynamics.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+# libogg
+LOCAL_PATH := $(OGGVORBIS_PATH)
+include $(CLEAR_VARS)
+LOCAL_MODULE    := libogg
+LOCAL_SRC_FILES := libogg.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 # libvorbis
-LOCAL_PATH := $(VORBIS_PATH)
+LOCAL_PATH := $(OGGVORBIS_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libvorbis
 LOCAL_SRC_FILES := libvorbis.a
@@ -66,7 +87,7 @@ LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp RacerGame.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../external-deps/lua/include" -I"../../../external-deps/bullet/include" -I"../../../external-deps/png/include" -I"../../../external-deps/oggvorbis/include" -I"../../../external-deps/openal/include" -I"../../../gameplay/src"
-LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib liblua libbullet libvorbis libOpenAL
+LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib liblua libBulletDynamics libBulletCollision libLinearMath libvorbis libogg libOpenAL
 
 include $(BUILD_SHARED_LIBRARY)
 $(call import-module,android/native_app_glue)
