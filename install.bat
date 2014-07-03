@@ -7,7 +7,7 @@ REM
 REM Helps prevent repo bloat due to large binary files
 REM
 
-set prefix=https://github.com/blackberry/GamePlay/releases/download/v2.0.0
+set prefix=https://github.com/blackberry/GamePlay/releases/download/v3.0.0
 
 set filename=gameplay-deps
 

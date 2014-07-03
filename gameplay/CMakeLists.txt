@@ -623,7 +623,8 @@ include_directories(
     ../external-deps/bullet/include
     ../external-deps/png/include
     ../external-deps/zlib/include
-    ../external-deps/oggvorbis/include
+    ../external-deps/ogg/include
+    ../external-deps/vorbis/include
     ../external-deps/openal/include
     ../external-deps/glew/include
 )

@@ -12,13 +12,6 @@
 namespace gameplay
 {
 
-static std::string toString(float v)
-{
-    std::ostringstream s;
-    s << v;
-    return s.str();
-}
-
 static float parseCoord(const char* s, bool* isPercentage)
 {
     const char* p;
@@ -47,7 +40,7 @@ static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percenta
 
 Control::Control()
     : _id(""), _boundsBits(0), _dirtyBits(DIRTY_BOUNDS | DIRTY_STATE), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT),
-    _autoSize(AUTO_SIZE_BOTH), _style(NULL), _listeners(NULL), _visible(true), _zIndex(-1),
+    _autoSize(AUTO_SIZE_BOTH), _listeners(NULL), _style(NULL), _visible(true), _opacity(0.0f), _zIndex(-1),
     _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _state(NORMAL), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
@@ -693,7 +686,7 @@ void Control::setPadding(float top, float bottom, float left, float right)
     _style->setPadding(top, bottom, left, right);
     setDirty(DIRTY_BOUNDS);
 }
-    
+
 const Theme::Padding& Control::getPadding() const
 {
     GP_ASSERT(_style);
@@ -786,7 +779,7 @@ const Vector4& Control::getCursorColor(State state)
     GP_ASSERT(overlay);
     return overlay->getCursorColor();
 }
-    
+
 const Theme::UVs& Control::getCursorUVs(State state)
 {
     Theme::Style::Overlay* overlay = getOverlay(state);
@@ -953,7 +946,7 @@ void Control::setConsumeInputEvents(bool consume)
 {
     _consumeInputEvents = consume;
 }
-    
+
 bool Control::getConsumeInputEvents()
 {
     return _consumeInputEvents;
@@ -1072,7 +1065,7 @@ bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
 
 bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    // Return false instead of _consumeInputEvents to allow handling to be 
+    // Return false instead of _consumeInputEvents to allow handling to be
     // routed to touchEvent before consuming.
     return false;
 }

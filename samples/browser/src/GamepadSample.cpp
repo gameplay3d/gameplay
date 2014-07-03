@@ -4,7 +4,7 @@
     ADD_SAMPLE("Input", "Gamepads", GamepadSample, 3);
 #endif
 
-GamepadSample::GamepadSample() : _font(NULL), _gamepad(NULL)
+GamepadSample::GamepadSample() : _gamepad(NULL), _font(NULL)
 {
 }
 
@@ -30,8 +30,8 @@ void GamepadSample::finalize()
 void GamepadSample::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned int player)
 {
     char s[128];
-    sprintf(s, "Player: %d - VendorID: %d, %s, Product ID: %d, %s\nButtons: ", 
-                player, 
+    sprintf(s, "Player: %d - VendorID: %d, %s, Product ID: %d, %s\nButtons: ",
+                player,
                 gamepad->getVendorId(), gamepad->getVendorString(),
                 gamepad->getProductId(), gamepad->getProductString());
     _status += s;
