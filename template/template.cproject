@@ -28,7 +28,6 @@
 								<option id="com.qnx.qcc.option.compiler.defines.2033387229" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								    <listOptionValue builtIn="false" value="GP_USE_GAMEPAD"/>
-								    <listOptionValue builtIn="false" value="GP_USE_SOCIAL"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1368017357" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
@@ -75,12 +74,12 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
-                                    					<listOptionValue builtIn="false" value="lua"/>
-									<listOptionValue builtIn="false" value=“BulletDynamics”/>
-									<listOptionValue builtIn="false" value=“BulletCollision”/>
-									<listOptionValue builtIn="false" value=“LinearMath”/>
+                                    <listOptionValue builtIn="false" value="lua"/>
+									<listOptionValue builtIn="false" value="BulletDynamics"/>
+									<listOptionValue builtIn="false" value="BulletCollision"/>
+									<listOptionValue builtIn="false" value="LinearMath"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value=“ogg”/>
+									<listOptionValue builtIn="false" value="ogg"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.149610709" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -122,7 +121,6 @@
 								<option id="com.qnx.qcc.option.compiler.defines.679430995" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								    <listOptionValue builtIn="false" value="GP_USE_GAMEPAD"/>
-								    <listOptionValue builtIn="false" value="GP_USE_SOCIAL"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1438345058" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
@@ -154,7 +152,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/blackberry/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/ogg/lib/blackberry/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/vorbis/lib/blackberry/arm&quot;"/>
-
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.380839761" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -168,12 +165,12 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
-                                    					<listOptionValue builtIn="false" value="lua"/>
-									<listOptionValue builtIn="false" value=“BulletDynamics”/>
-									<listOptionValue builtIn="false" value=“BulletCollision”/>
-									<listOptionValue builtIn="false" value=“LinearMath”/>
+                                    <listOptionValue builtIn="false" value="lua"/>
+									<listOptionValue builtIn="false" value="BulletDynamics"/>
+									<listOptionValue builtIn="false" value="BulletCollision"/>
+									<listOptionValue builtIn="false" value="LinearMath"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value=“ogg”/>
+									<listOptionValue builtIn="false" value="ogg"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1335515313" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -214,7 +211,6 @@
 								<option id="com.qnx.qcc.option.compiler.defines.1669819974" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								    <listOptionValue builtIn="false" value="GP_USE_GAMEPAD"/>
-								    <listOptionValue builtIn="false" value="GP_USE_SOCIAL"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.456477750" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
@@ -261,12 +257,12 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
-                                    					<listOptionValue builtIn="false" value="lua"/>
-									<listOptionValue builtIn="false" value=“BulletDynamics”/>
-									<listOptionValue builtIn="false" value=“BulletCollision”/>
-									<listOptionValue builtIn="false" value=“LinearMath”/>
+                                    <listOptionValue builtIn="false" value="lua"/>
+									<listOptionValue builtIn="false" value="BulletDynamics"/>
+									<listOptionValue builtIn="false" value="BulletCollision"/>
+									<listOptionValue builtIn="false" value="LinearMath"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value=“ogg”/>
+									<listOptionValue builtIn="false" value="ogg"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1669353763" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
