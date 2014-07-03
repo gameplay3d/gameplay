@@ -1,24 +1,12 @@
-# Copyright (C) 2010 The Android Open Source Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 SAMPLE_PATH := $(call my-dir)/../../src
+
+# external-deps
 PNG_PATH := ../GAMEPLAY_PATH/external-deps/png/lib/android/arm
 ZLIB_PATH := ../GAMEPLAY_PATH/external-deps/zlib/lib/android/arm
 LUA_PATH := ../GAMEPLAY_PATH/external-deps/lua/lib/android/arm
 BULLET_PATH := ../GAMEPLAY_PATH/external-deps/bullet/lib/android/arm
-OGGVORBIS_PATH := ../GAMEPLAY_PATH/external-deps/oggvorbis/lib/android/arm
+OGG_PATH := ../GAMEPLAY_PATH/external-deps/ogg/lib/android/arm
+VORBIS_PATH := ../GAMEPLAY_PATH/external-deps/vorbis/lib/android/arm
 OPENAL_PATH := ../GAMEPLAY_PATH/external-deps/openal/lib/android/arm
 
 # gameplay
@@ -35,11 +23,11 @@ LOCAL_MODULE    := libpng
 LOCAL_SRC_FILES := libpng.a
 include $(PREBUILT_STATIC_LIBRARY)
 
-# libzlib
+# libz
 LOCAL_PATH := $(ZLIB_PATH)
 include $(CLEAR_VARS)
-LOCAL_MODULE    := libzlib
-LOCAL_SRC_FILES := libzlib.a
+LOCAL_MODULE    := libz
+LOCAL_SRC_FILES := libz.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 # liblua
@@ -71,14 +59,14 @@ LOCAL_SRC_FILES := libBulletDynamics.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 # libogg
-LOCAL_PATH := $(OGGVORBIS_PATH)
+LOCAL_PATH := $(OGG_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libogg
 LOCAL_SRC_FILES := libogg.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 # libvorbis
-LOCAL_PATH := $(OGGVORBIS_PATH)
+LOCAL_PATH := $(VORBIS_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libvorbis
 LOCAL_SRC_FILES := libvorbis.a
@@ -98,9 +86,9 @@ LOCAL_MODULE    := TEMPLATE_PROJECT
 LOCAL_SRC_FILES := ../GAMEPLAY_PATH/gameplay/src/gameplay-main-android.cpp TemplateGame.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
-LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../GAMEPLAY_PATH/external-deps/lua/include" -I"../GAMEPLAY_PATH/external-deps/bullet/include" -I"../GAMEPLAY_PATH/external-deps/png/include" -I"../GAMEPLAY_PATH/external-deps/oggvorbis/include" -I"../GAMEPLAY_PATH/external-deps/openal/include" -I"../GAMEPLAY_PATH/gameplay/src"
+LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../GAMEPLAY_PATH/external-deps/lua/include" -I"../GAMEPLAY_PATH/external-deps/bullet/include" -I"../GAMEPLAY_PATH/external-deps/png/include" -I"../GAMEPLAY_PATH/external-deps/ogg/include" -I"../GAMEPLAY_PATH/external-deps/vorbis/include" -I"../GAMEPLAY_PATH/external-deps/openal/include" -I"../GAMEPLAY_PATH/gameplay/src"
 
-LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib liblua libBulletDynamics libBulletCollision libLinearMath libvorbis libogg libOpenAL
+LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libz liblua libBulletDynamics libBulletCollision libLinearMath libvorbis libogg libOpenAL
 
 include $(BUILD_SHARED_LIBRARY)
 $(call import-module,android/native_app_glue)

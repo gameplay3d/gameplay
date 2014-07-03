@@ -5,7 +5,8 @@ PNG_PATH := $(call my-dir)/../../../../external-deps/png/lib/android/arm
 ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
 LUA_PATH := $(call my-dir)/../../../../external-deps/lua/lib/android/arm
 BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
-OGGVORBIS_PATH := $(call my-dir)/../../../../external-deps/oggvorbis/lib/android/arm
+OGG_PATH := $(call my-dir)/../../../../external-deps/ogg/lib/android/arm
+VORBIS_PATH := $(call my-dir)/../../../../external-deps/vorbis/lib/android/arm
 OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
 
 # gameplay
@@ -22,11 +23,11 @@ LOCAL_MODULE    := libpng
 LOCAL_SRC_FILES := libpng.a
 include $(PREBUILT_STATIC_LIBRARY)
 
-# libzlib
+# libz
 LOCAL_PATH := $(ZLIB_PATH)
 include $(CLEAR_VARS)
-LOCAL_MODULE    := libzlib
-LOCAL_SRC_FILES := libzlib.a
+LOCAL_MODULE    := libz
+LOCAL_SRC_FILES := libz.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 # liblua
@@ -58,14 +59,14 @@ LOCAL_SRC_FILES := libBulletDynamics.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 # libogg
-LOCAL_PATH := $(OGGVORBIS_PATH)
+LOCAL_PATH := $(OGG_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libogg
 LOCAL_SRC_FILES := libogg.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 # libvorbis
-LOCAL_PATH := $(OGGVORBIS_PATH)
+LOCAL_PATH := $(VORBIS_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libvorbis
 LOCAL_SRC_FILES := libvorbis.a
@@ -97,19 +98,19 @@ LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp \
     InputSample.cpp \
     LightSample.cpp \
     LoadSceneSample.cpp \
-	MeshBatchSample.cpp \
+    MeshBatchSample.cpp \
     MeshPrimitiveSample.cpp \
-	PhysicsCollisionObjectSample.cpp \
+    PhysicsCollisionObjectSample.cpp \
     PostProcessSample.cpp \
-	SpriteBatchSample.cpp \
-	TerrainSample.cpp \
+    SpriteBatchSample.cpp \
+    TerrainSample.cpp \
     TextSample.cpp \
     TextureSample.cpp \
-	TriangleSample.cpp
+    TriangleSample.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
-LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../external-deps/lua/include" -I"../../../external-deps/bullet/include" -I"../../../external-deps/png/include" -I"../../../external-deps/oggvorbis/include" -I"../../../external-deps/openal/include" -I"../../../gameplay/src"
-LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib liblua libBulletDynamics libBulletCollision libLinearMath libvorbis libogg libOpenAL
+LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../external-deps/lua/include" -I"../../../external-deps/bullet/include" -I"../../../external-deps/png/include" -I"../../../external-deps/ogg/include" -I"../../../external-deps/vorbis/include" -I"../../../external-deps/openal/include" -I"../../../gameplay/src"
+LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libz liblua libBulletDynamics libBulletCollision libLinearMath libvorbis libogg libOpenAL
 
 include $(BUILD_SHARED_LIBRARY)
 $(call import-module,android/native_app_glue)

@@ -1203,8 +1203,8 @@
 		42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VerticalLayout.cpp; path = src/VerticalLayout.cpp; sourceTree = SOURCE_ROOT; };
 		42CC55681809A4EE00AAD8AD /* VerticalLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerticalLayout.h; path = src/VerticalLayout.h; sourceTree = SOURCE_ROOT; };
 		42CCD555146EC1EB00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/png/lib/macosx/x64/libpng.a"; sourceTree = "<group>"; };
-		42CD0DA7147D8EA80000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/oggvorbis/lib/macosx/x64/libogg.a"; sourceTree = "<group>"; };
-		42CD0DA8147D8EA80000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/macosx/x64/libvorbis.a"; sourceTree = "<group>"; };
+		42CD0DA7147D8EA80000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/ogg/lib/macosx/x64/libogg.a"; sourceTree = "<group>"; };
+		42CD0DA8147D8EA80000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/vorbis/lib/macosx/x64/libvorbis.a"; sourceTree = "<group>"; };
 		42DFAB4F16AD8ECD0000F342 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		42FA645D1953DDD600337ABC /* libBulletCollision.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision.a; path = "../external-deps/bullet/lib/macosx/x64/libBulletCollision.a"; sourceTree = "<group>"; };
 		42FA645E1953DDD600337ABC /* libBulletDynamics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics.a; path = "../external-deps/bullet/lib/macosx/x64/libBulletDynamics.a"; sourceTree = "<group>"; };
@@ -1216,8 +1216,8 @@
 		5B2BC7611512514D00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5B2BC7631512516B00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		5B5DB92F14C25B94007755DB /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/png/lib/ios/armv7s/libpng.a"; sourceTree = "<group>"; };
-		5B5DB93114C25BA5007755DB /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/oggvorbis/lib/ios/armv7s/libogg.a"; sourceTree = "<group>"; };
-		5B5DB93214C25BA5007755DB /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/ios/armv7s/libvorbis.a"; sourceTree = "<group>"; };
+		5B5DB93114C25BA5007755DB /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/ogg/lib/ios/armv7s/libogg.a"; sourceTree = "<group>"; };
+		5B5DB93214C25BA5007755DB /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/vorbis/lib/ios/armv7s/libvorbis.a"; sourceTree = "<group>"; };
 		5BC4E7D4150F8C3C00CBE1C0 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		6290E04918223DCC00A28FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		6290E04B18223DDD00A28FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
@@ -2674,7 +2674,8 @@
 					"../external-deps/bullet/include",
 					"../external-deps/lua/include",
 					"../external-deps/png/include",
-					"../external-deps/oggvorbis/include",
+					"../external-deps/ogg/include",
+					"../external-deps/vorbis/include",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -2715,7 +2716,8 @@
 					"../external-deps/bullet/include",
 					"../external-deps/lua/include",
 					"../external-deps/png/include",
-					"../external-deps/oggvorbis/include",
+					"../external-deps/ogg/include",
+					"../external-deps/vorbis/include",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -2759,7 +2761,8 @@
 					"../external-deps/bullet/include",
 					"../external-deps/lua/include",
 					"../external-deps/png/include",
-					"../external-deps/oggvorbis/include",
+					"../external-deps/ogg/include",
+					"../external-deps/vorbis/include",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LINK_WITH_STANDARD_LIBRARIES = NO;
@@ -2808,7 +2811,8 @@
 					"../external-deps/bullet/include",
 					"../external-deps/lua/include",
 					"../external-deps/png/include",
-					"../external-deps/oggvorbis/include",
+					"../external-deps/ogg/include",
+					"../external-deps/vorbis/include",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LINK_WITH_STANDARD_LIBRARIES = NO;

@@ -30,7 +30,8 @@
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/ogg/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/vorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.qccoptions.1968057343" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
@@ -94,7 +95,8 @@
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/ogg/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/vorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.ccoptions.1122311163" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList">
@@ -154,7 +156,8 @@
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/ogg/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/vorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.ccoptions.1432778691" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions"/>
