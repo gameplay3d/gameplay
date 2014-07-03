@@ -814,6 +814,7 @@ void FBXSceneEncoder::loadLight(FbxNode* fbxNode, Node* node)
                 light->setPointLight();
                 light->setRange(range);
             }
+            break;
         }
         case FbxLight::eDirectional:
         {
