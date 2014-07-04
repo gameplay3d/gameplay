@@ -576,18 +576,17 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"../../external-deps/png/include",
+					"../../external-deps/freetype2/include",
+					"\"/Applications/Autodesk/FBX SDK/2015.1/include\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"../../external-deps/freetype2/lib/macosx/x64",
 					"../../external-deps/png/lib/macosx/x64",
-					/Applications/Autodesk/FBX,
-					SDK/2015.1/lib/clang/release,
-					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2015.1/lib/clang/release",
-					"$(SYSTEM_APPS_DIR)/Autodesk/FBX",
-					SDK/2015.1/lib/clang/release,
-					"/Users/setaylor/Code/GamePlay/external-deps/freetype2/lib/macosx/x64",
-					"/Users/setaylor/Code/GamePlay/external-deps/png/lib/macosx/x64",
+					"\"/Applications/Autodesk/FBX SDK/2015.1/lib/clang/debug\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -607,18 +606,17 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"../../external-deps/png/include",
+					"../../external-deps/freetype2/include",
+					"\"/Applications/Autodesk/FBX SDK/2015.1/include\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../external-deps/freetype2/lib/macosx",
-					"../../external-deps/png/lib/macosx",
-					/Applications/Autodesk/FBX,
-					SDK/2014.2.1/lib/gcc4/ub/release,
-					"$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2014.2.1/lib/gcc4/ub/release",
-					"$(SYSTEM_APPS_DIR)/Autodesk/FBX",
-					SDK/2015.1/lib/clang/release,
-					"/Users/setaylor/Code/GamePlay/external-deps/freetype2/lib/macosx/x64",
-					"/Users/setaylor/Code/GamePlay/external-deps/png/lib/macosx/x64",
+					"../../external-deps/freetype2/lib/macosx/x64",
+					"../../external-deps/png/lib/macosx/x64",
+					"\"/Applications/Autodesk/FBX SDK/2015.1/lib/clang/release\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
