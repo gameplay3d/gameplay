@@ -30,9 +30,6 @@
             <fileset dir="../../../gameplay/res/ui"/>
         </copy>
     </target>
-    
-    <target name="-post-compile">
-    </target>
 
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
