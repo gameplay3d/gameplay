@@ -973,8 +973,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
 											scale = ((float) currentDistancePointer0) / ((float) lastDistancePointer0);
 										else
 											scale = ((float) currentDistancePointer1) / ((float) lastDistancePointer1);
-										if (currentDistancePointer0 >= lastDistancePointer0 && currentDistancePointer1 >= lastDistancePointer1 ||
-											currentDistancePointer0 <= lastDistancePointer0 && currentDistancePointer1 <= lastDistancePointer1)
+										if (((currentDistancePointer0 >= lastDistancePointer0) && (currentDistancePointer1 >= lastDistancePointer1)) ||
+											((currentDistancePointer0 <= lastDistancePointer0) && (currentDistancePointer1 <= lastDistancePointer1)))
 										{
 											gameplay::Platform::gesturePinchEventInternal(__gesturePinchCentroid.first, __gesturePinchCentroid.second, scale);	
 											gestureDetected = true;
@@ -993,9 +993,9 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                             		int delta = sqrt(pow(static_cast<float>(x - __pointer0.x), 2) +
 													pow(static_cast<float>(y - __pointer0.y), 2));
                             
-                            		if (__gestureDraging || __gestureEventsProcessed.test(Gesture::GESTURE_DRAG) && 
-                                 		gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time >= GESTURE_DRAG_START_DURATION_MIN &&
-                                		delta >= GESTURE_DRAG_DISTANCE_MIN)
+                            		if ((__gestureDraging || __gestureEventsProcessed.test(Gesture::GESTURE_DRAG)) &&
+                                 		(gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time >= GESTURE_DRAG_START_DURATION_MIN) &&
+                                		(delta >= GESTURE_DRAG_DISTANCE_MIN))
                             		{
                                 		gameplay::Platform::gestureDragEventInternal(x, y);
                                 		__gestureDraging = true;
@@ -1277,6 +1277,7 @@ int Platform::enterMessagePump()
         // Display the keyboard.
         gameplay::displayKeyboard(__state, __displayKeyboard);
     }
+    return 0;
 }
 
 void Platform::signalShutdown() 
