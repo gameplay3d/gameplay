@@ -284,7 +284,7 @@ LOCAL_SRC_FILES := \
     lua/lua_VertexFormatUsage.cpp \
     lua/lua_VerticalLayout.cpp
 
-LOCAL_CPPFLAGS += -std=c++11
+LOCAL_CPPFLAGS += -std=c++11 -Wno-switch-enum -Wno-switch
 LOCAL_ARM_MODE := arm
 LOCAL_CFLAGS := -D__ANDROID__ -I"../../external-deps/lua/include" -I"../../external-deps/bullet/include" -I"../../external-deps/png/include" -I"../../external-deps/ogg/include" -I"../../external-deps/vorbis/include" -I"../../external-deps/openal/include"
 LOCAL_STATIC_LIBRARIES := android_native_app_glue
