@@ -48,6 +48,7 @@ set(GAMEPLAY_LIBRARIES
     gobject-2.0
 ) 
 
+add_definitions(-std=c++11)
 add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletCollision -lBulletDynamics -lLinearMath -lopenal -LGLEW -lGL -lrt -ldl -lX11 -lpthread -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0)
 
 add_subdirectory(browser)
