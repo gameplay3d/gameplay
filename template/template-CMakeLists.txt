@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.7)
+cmake_minimum_required(VERSION 2.8)
 PROJECT(TEMPLATE_PROJECT)
 
 set(GAME_NAME TEMPLATE_PROJECT)
