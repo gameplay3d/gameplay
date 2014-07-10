@@ -195,12 +195,8 @@ AIMessage::Parameter::~Parameter()
 
 void AIMessage::Parameter::clear()
 {
-    switch (type)
-    {
-    case AIMessage::STRING:
+    if (type == AIMessage::STRING)
         SAFE_DELETE_ARRAY(stringValue);
-        break;
-    }
 
     type = AIMessage::UNDEFINED;
 }

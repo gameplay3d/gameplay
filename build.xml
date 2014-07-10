@@ -1,5 +1,5 @@
 <!-- Android build script -->
-<project name="gameplay" default="all" basedir=".">
+<project name="gameplay" default="build" basedir=".">
 
   <fail message="OS not supported. Supported platforms: Windows, MacOS X or Linux.">
     <condition>
@@ -41,12 +41,13 @@
       <exec osfamily="windows" dir="@{location}/android" executable="cmd">
         <arg value="/c"/>
         <arg value="ndk-build"/>
-      </exec>
+      </exec> 
       
     </sequential>
   </macrodef>
 
-  <target name="all">
+    
+  <target name="build">
     <build-native location="gameplay"/>
     <build-native location="samples/browser"/>
     <build-native location="samples/character"/>
