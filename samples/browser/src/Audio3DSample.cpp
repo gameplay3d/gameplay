@@ -173,6 +173,7 @@ void Audio3DSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
+    {
         if (x < 75 && y < 50)
         {
             // Toggle Vsync if the user touches the top left corner
@@ -181,10 +182,13 @@ void Audio3DSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
         _prevX = x;
         _prevY = y;
         break;
+    }
     case Touch::TOUCH_RELEASE:
+    {
         _prevX = 0;
         _prevY = 0;
         break;
+     }
     case Touch::TOUCH_MOVE:
     {
         int deltaX = x - _prevX;

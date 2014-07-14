@@ -154,7 +154,7 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::Definition::create(Node
     // Load the defined properties.
     properties->rewind();
     const char* name;
-    while (name = properties->getNextProperty())
+    while ((name = properties->getNextProperty()))
     {
         if (strcmp(name, "shape") == 0)
         {

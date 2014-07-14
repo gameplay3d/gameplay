@@ -78,6 +78,8 @@ bool AIAgent::processMessage(AIMessage* message)
             }
         }
         break;
+    case AIMessage::MESSAGE_TYPE_CUSTOM:
+        break;
     }
 
     // Dispatch message to registered listener.

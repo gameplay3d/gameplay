@@ -1,3 +1,13 @@
+## v3.0.0
+
+- Adds support for MacOSX 64-bit.
+- Adds support for iOS 7.1.
+- Adds updates to FBX SDK 2015.1.
+- Adds support for Bullet Physics 2.82
+- Adds gameplay-encoder support for Visual Studio 2013.
+- Adds support for C++11.
+- Fixes Android to build with arm instead of thumb.
+
 ## v2.0.0
 
 - Adds support for Visual Studio 2013.

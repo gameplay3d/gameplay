@@ -4,7 +4,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/lua/include
     ${CMAKE_SOURCE_DIR}/external-deps/bullet/include
     ${CMAKE_SOURCE_DIR}/external-deps/png/include
-    ${CMAKE_SOURCE_DIR}/external-deps/oggvorbis/include
+    ${CMAKE_SOURCE_DIR}/external-deps/ogg/include
+    ${CMAKE_SOURCE_DIR}/external-deps/vorbis/include
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/include
     ${CMAKE_SOURCE_DIR}/external-deps/openal/include
     ${CMAKE_SOURCE_DIR}/external-deps/glew/include
@@ -17,7 +18,8 @@ link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/png/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/bullet/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/oggvorbis/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/ogg/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/vorbis/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/openal/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/glew/lib/linux/${ARCH_DIR}
 )
@@ -46,6 +48,7 @@ set(GAMEPLAY_LIBRARIES
     gobject-2.0
 ) 
 
+add_definitions(-std=c++11)
 add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletCollision -lBulletDynamics -lLinearMath -lopenal -LGLEW -lGL -lrt -ldl -lX11 -lpthread -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0)
 
 set( GAME_NAME sample-browser)

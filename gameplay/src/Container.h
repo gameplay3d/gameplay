@@ -38,6 +38,19 @@ public:
     };
 
     /**
+     * Defines supported focus chagne directions.
+     */
+    enum Direction
+    {
+        UP = 0x01,
+        DOWN = 0x02,
+        LEFT = 0x04,
+        RIGHT = 0x08,
+        NEXT = 0x10,
+        PREVIOUS = 0x20
+    };
+
+    /**
      * Creates a new container.
      *
      * @param id The container ID.
@@ -244,6 +257,15 @@ public:
      * @see Control::setFocus
      */
     bool setFocus();
+
+    /**
+     * Attempts to switch focus to a child of this container in the specified direction.
+     *
+     * @param direction The direction for focus change.
+     *
+     * @return True on success, false if there are no controls to focus on.
+     */
+    bool moveFocus(Direction direction);
 
     /**
      * Returns the currently active control for this container.
@@ -546,21 +568,7 @@ private:
      */
     Container(const Container& copy);
 
-    enum Direction
-    {
-        UP = 0x01,
-        DOWN = 0x02,
-        LEFT = 0x04,
-        RIGHT = 0x08,
-        NEXT = 0x10,
-        PREVIOUS = 0x20
-    };
-
     static const int MAX_CONTACT_INDICES = 10;
-
-    // Returns true on success; false if there are no controls to focus on,
-    // in which case scrolling can be initiated.
-    bool moveFocus(Direction direction);
 
 	bool moveFocusNextPrevious(Direction direction);
 	bool moveFocusDirectional(Direction direction);

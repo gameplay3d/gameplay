@@ -1036,11 +1036,14 @@ void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSI
     unsigned int numJS = gpInfo.numberOfJS;
     unsigned int numTR = gpInfo.numberOfTriggers;
 
+    // Ignore accelerometer devices that register themselves as joysticks. Ensure they have at least 2 buttons.s
+    if (btnsNum < 2)
+        return;
 
     Platform::gamepadEventConnectedInternal(handle,btnsNum,numJS,numTR,vendorId,productId,"",name);
-
     ConnectedGamepadDevInfo info = {devId,handle,gpInfo}; 
     __connectedGamepads.push_back(info);
+    
 }
 
 static float normalizeJoystickAxis(int axisValue, int deadZone, bool zeroToOne)
@@ -1310,6 +1313,12 @@ int Platform::enterMessagePump()
                                 gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0, true);
                             }
                         }
+                    }
+                    break;
+
+                case ConfigureNotify:
+                    {
+                        gameplay::Platform::resizeEventInternal(evt.xconfigure.width, evt.xconfigure.height);
                     }
                     break;
 

@@ -9,7 +9,7 @@ add_definitions(-D__linux__)
 
 link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/lua/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/tinyxml2/lib/linux
+    ${CMAKE_SOURCE_DIR}/external-deps/tinyxml2/lib/linux/${ARCH_DIR}
     /usr/lib
 )
 

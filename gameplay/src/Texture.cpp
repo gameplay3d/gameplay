@@ -987,7 +987,7 @@ void Texture::generateMipmaps()
 		}
 		GL_ASSERT( glBindTexture(target, _handle) );
 		GL_ASSERT( glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST) );
-		if( glGenerateMipmap != NULL )
+		if( std::addressof(glGenerateMipmap) )
             GL_ASSERT( glGenerateMipmap(target) );
 
         _mipmapped = true;

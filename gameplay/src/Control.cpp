@@ -12,13 +12,6 @@
 namespace gameplay
 {
 
-static std::string toString(float v)
-{
-    std::ostringstream s;
-    s << v;
-    return s.str();
-}
-
 static float parseCoord(const char* s, bool* isPercentage)
 {
     const char* p;
@@ -47,7 +40,7 @@ static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percenta
 
 Control::Control()
     : _id(""), _boundsBits(0), _dirtyBits(DIRTY_BOUNDS | DIRTY_STATE), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT),
-    _autoSize(AUTO_SIZE_BOTH), _style(NULL), _listeners(NULL), _visible(true), _zIndex(-1),
+    _autoSize(AUTO_SIZE_BOTH), _listeners(NULL), _style(NULL), _visible(true), _opacity(0.0f), _zIndex(-1),
     _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _state(NORMAL), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
@@ -225,6 +218,18 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 
         // Parse the auto-size mode for the control (this overrides explicit sizes and legacy autoWidth/autoHeight)
         _autoSize = parseAutoSize(properties->getString("autoSize"));
+
+        // If there is are simple padding or margin variables, parse them
+        if (properties->exists("padding"))
+        {
+            float pad = properties->getFloat("padding");
+            setPadding(pad, pad, pad, pad);
+        }
+        if (properties->exists("margin"))
+        {
+            float margin = properties->getFloat("margin");
+            setPadding(margin, margin, margin, margin);
+        }
 
 		if (properties->exists("enabled"))
 		{
@@ -681,7 +686,7 @@ void Control::setPadding(float top, float bottom, float left, float right)
     _style->setPadding(top, bottom, left, right);
     setDirty(DIRTY_BOUNDS);
 }
-    
+
 const Theme::Padding& Control::getPadding() const
 {
     GP_ASSERT(_style);
@@ -774,7 +779,7 @@ const Vector4& Control::getCursorColor(State state)
     GP_ASSERT(overlay);
     return overlay->getCursorColor();
 }
-    
+
 const Theme::UVs& Control::getCursorUVs(State state)
 {
     Theme::Style::Overlay* overlay = getOverlay(state);
@@ -909,10 +914,10 @@ Theme* Control::getTheme() const
 
 Control::State Control::getState() const
 {
-    if (_state == HOVER)
+    if (Form::getFocusControl() == this)
     {
-        // Focus state takes priority over hover
-        return (Form::getFocusControl() == this ? FOCUS : HOVER);
+        // Active is the only state that overrides focus state
+        return _state == ACTIVE ? ACTIVE : FOCUS;
     }
 
     return _state;
@@ -941,7 +946,7 @@ void Control::setConsumeInputEvents(bool consume)
 {
     _consumeInputEvents = consume;
 }
-    
+
 bool Control::getConsumeInputEvents()
 {
     return _consumeInputEvents;
@@ -1060,7 +1065,7 @@ bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
 
 bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    // Return false instead of _consumeInputEvents to allow handling to be 
+    // Return false instead of _consumeInputEvents to allow handling to be
     // routed to touchEvent before consuming.
     return false;
 }

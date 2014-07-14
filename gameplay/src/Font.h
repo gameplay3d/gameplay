@@ -94,7 +94,7 @@ public:
          * Hidden copy assignment operator.
          */
         Text& operator=(const Text&);
-        
+
         std::string _text;
         unsigned int _vertexCount;
         SpriteBatch::SpriteVertex* _vertices;
@@ -116,7 +116,7 @@ public:
      *
      * @param path The path to a bundle file containing a font resource.
      * @param id An optional ID of the font resource within the bundle (NULL for the first/only resource).
-     * 
+     *
      * @return The specified Font or NULL if there was an error.
      * @script{create}
      */
@@ -170,7 +170,7 @@ public:
 
     /**
      * Draws the specified text in a solid color, with a scaling factor.
-     * 
+     *
      * @param text The text to draw.
      * @param x The viewport x position to draw text at.
      * @param y The viewport y position to draw text at.
@@ -196,7 +196,7 @@ public:
      * @param rightToLeft Whether to draw text from right to left.
      * @param clip A region to clip text within after applying justification to the viewport area.
      */
-    void drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0, 
+    void drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size = 0,
                   Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
 
     /**
@@ -292,7 +292,7 @@ public:
 
     /**
      * Gets the sprite batch used to draw this Font.
-     * 
+     *
      * @param size The font size to be drawn.
      *
      * @return The SpriteBatch that most closely matches the requested font size.
@@ -302,9 +302,9 @@ public:
     /**
      * Gets the Justify value from the given string.
      * Returns ALIGN_TOP_LEFT if the string is unrecognized.
-     * 
+     *
      * @param justify The string such as "ALIGN_HCENTER" or "ALIGN_VCENTER_RIGHT".
-     * 
+     *
      * @return The Justify value.
      */
     static Justify getJustify(const char* justify);
@@ -366,7 +366,7 @@ private:
      * @param glyphCount The number of items in the glyph array.
      * @param texture A texture map containing rendered glyphs.
      * @param format The format of the font (bitmap or distance fields)
-     * 
+     *
      * @return The new Font or NULL if there was an error.
      */
     static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture, Font::Format format);
