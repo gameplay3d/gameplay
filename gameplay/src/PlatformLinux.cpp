@@ -1255,7 +1255,7 @@ int Platform::enterMessagePump()
                             int wheelDelta;
                             if (evt.xbutton.button == 4)
                                 wheelDelta = 1;
-                            else if (evt.xbutton.button == Button5)
+                            else if (evt.xbutton.button == 5)
                                 wheelDelta = -1;
                             else
                                 wheelDelta = 0;
