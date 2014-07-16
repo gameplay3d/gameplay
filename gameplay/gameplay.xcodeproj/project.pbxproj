@@ -436,8 +436,6 @@
 		42CC55F71809A4EF00AAD8AD /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC533F1809A4EB00AAD8AD /* Gamepad.cpp */; };
 		42CC55FA1809A4EF00AAD8AD /* gameplay-main-android.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53411809A4EB00AAD8AD /* gameplay-main-android.cpp */; };
 		42CC55FB1809A4EF00AAD8AD /* gameplay-main-android.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53411809A4EB00AAD8AD /* gameplay-main-android.cpp */; };
-		42CC55FC1809A4EF00AAD8AD /* gameplay-main-blackberry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53421809A4EB00AAD8AD /* gameplay-main-blackberry.cpp */; };
-		42CC55FD1809A4EF00AAD8AD /* gameplay-main-blackberry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53421809A4EB00AAD8AD /* gameplay-main-blackberry.cpp */; };
 		42CC55FF1809A4EF00AAD8AD /* gameplay-main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53431809A4EB00AAD8AD /* gameplay-main-ios.mm */; };
 		42CC56001809A4EF00AAD8AD /* gameplay-main-linux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53441809A4EB00AAD8AD /* gameplay-main-linux.cpp */; };
 		42CC56011809A4EF00AAD8AD /* gameplay-main-linux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC53441809A4EB00AAD8AD /* gameplay-main-linux.cpp */; };
@@ -518,8 +516,6 @@
 		42CC596F1809A4EF00AAD8AD /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55081809A4ED00AAD8AD /* Platform.cpp */; };
 		42CC59721809A4EF00AAD8AD /* PlatformAndroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC550A1809A4ED00AAD8AD /* PlatformAndroid.cpp */; };
 		42CC59731809A4EF00AAD8AD /* PlatformAndroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC550A1809A4ED00AAD8AD /* PlatformAndroid.cpp */; };
-		42CC59741809A4EF00AAD8AD /* PlatformBlackBerry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC550B1809A4ED00AAD8AD /* PlatformBlackBerry.cpp */; };
-		42CC59751809A4EF00AAD8AD /* PlatformBlackBerry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC550B1809A4ED00AAD8AD /* PlatformBlackBerry.cpp */; };
 		42CC59771809A4EF00AAD8AD /* PlatformiOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42CC550C1809A4ED00AAD8AD /* PlatformiOS.mm */; };
 		42CC59781809A4EF00AAD8AD /* PlatformLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC550D1809A4ED00AAD8AD /* PlatformLinux.cpp */; };
 		42CC59791809A4EF00AAD8AD /* PlatformLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC550D1809A4ED00AAD8AD /* PlatformLinux.cpp */; };
@@ -1037,7 +1033,6 @@
 		42CC533F1809A4EB00AAD8AD /* Gamepad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gamepad.cpp; path = src/Gamepad.cpp; sourceTree = SOURCE_ROOT; };
 		42CC53401809A4EB00AAD8AD /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gamepad.h; path = src/Gamepad.h; sourceTree = SOURCE_ROOT; };
 		42CC53411809A4EB00AAD8AD /* gameplay-main-android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-android.cpp"; path = "src/gameplay-main-android.cpp"; sourceTree = SOURCE_ROOT; };
-		42CC53421809A4EB00AAD8AD /* gameplay-main-blackberry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-blackberry.cpp"; path = "src/gameplay-main-blackberry.cpp"; sourceTree = SOURCE_ROOT; };
 		42CC53431809A4EB00AAD8AD /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
 		42CC53441809A4EB00AAD8AD /* gameplay-main-linux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-linux.cpp"; path = "src/gameplay-main-linux.cpp"; sourceTree = SOURCE_ROOT; };
 		42CC53451809A4EB00AAD8AD /* gameplay-main-macosx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-macosx.mm"; path = "src/gameplay-main-macosx.mm"; sourceTree = SOURCE_ROOT; };
@@ -1130,7 +1125,6 @@
 		42CC55081809A4ED00AAD8AD /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Platform.cpp; path = src/Platform.cpp; sourceTree = SOURCE_ROOT; };
 		42CC55091809A4ED00AAD8AD /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = src/Platform.h; sourceTree = SOURCE_ROOT; };
 		42CC550A1809A4ED00AAD8AD /* PlatformAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformAndroid.cpp; path = src/PlatformAndroid.cpp; sourceTree = SOURCE_ROOT; };
-		42CC550B1809A4ED00AAD8AD /* PlatformBlackBerry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformBlackBerry.cpp; path = src/PlatformBlackBerry.cpp; sourceTree = SOURCE_ROOT; };
 		42CC550C1809A4ED00AAD8AD /* PlatformiOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformiOS.mm; path = src/PlatformiOS.mm; sourceTree = SOURCE_ROOT; };
 		42CC550D1809A4ED00AAD8AD /* PlatformLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformLinux.cpp; path = src/PlatformLinux.cpp; sourceTree = SOURCE_ROOT; };
 		42CC550E1809A4ED00AAD8AD /* PlatformMacOSX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformMacOSX.mm; path = src/PlatformMacOSX.mm; sourceTree = SOURCE_ROOT; };
@@ -1721,7 +1715,6 @@
 				42CC533F1809A4EB00AAD8AD /* Gamepad.cpp */,
 				42CC53401809A4EB00AAD8AD /* Gamepad.h */,
 				42CC53411809A4EB00AAD8AD /* gameplay-main-android.cpp */,
-				42CC53421809A4EB00AAD8AD /* gameplay-main-blackberry.cpp */,
 				42CC53431809A4EB00AAD8AD /* gameplay-main-ios.mm */,
 				42CC53441809A4EB00AAD8AD /* gameplay-main-linux.cpp */,
 				42CC53451809A4EB00AAD8AD /* gameplay-main-macosx.mm */,
@@ -1816,7 +1809,6 @@
 				42CC55081809A4ED00AAD8AD /* Platform.cpp */,
 				42CC55091809A4ED00AAD8AD /* Platform.h */,
 				42CC550A1809A4ED00AAD8AD /* PlatformAndroid.cpp */,
-				42CC550B1809A4ED00AAD8AD /* PlatformBlackBerry.cpp */,
 				42CC550C1809A4ED00AAD8AD /* PlatformiOS.mm */,
 				42CC550D1809A4ED00AAD8AD /* PlatformLinux.cpp */,
 				42CC550E1809A4ED00AAD8AD /* PlatformMacOSX.mm */,
@@ -2109,7 +2101,6 @@
 				42CC55941809A4EF00AAD8AD /* AnimationValue.cpp in Sources */,
 				42CC5A0E1809A4EF00AAD8AD /* Vector3.cpp in Sources */,
 				420BBCC61817416F00C7B720 /* lua_FontFormat.cpp in Sources */,
-				42CC59741809A4EF00AAD8AD /* PlatformBlackBerry.cpp in Sources */,
 				42CC55BA1809A4EF00AAD8AD /* Camera.cpp in Sources */,
 				42CC59201809A4EF00AAD8AD /* Model.cpp in Sources */,
 				420BBC161817416F00C7B720 /* lua_AIAgent.cpp in Sources */,
@@ -2201,7 +2192,6 @@
 				420BBD1E1817416F00C7B720 /* lua_Keyboard.cpp in Sources */,
 				42CC592A1809A4EF00AAD8AD /* ParticleEmitter.cpp in Sources */,
 				420BBC461817416F00C7B720 /* lua_AnimationClipListenerEventType.cpp in Sources */,
-				42CC55FC1809A4EF00AAD8AD /* gameplay-main-blackberry.cpp in Sources */,
 				42CC560A1809A4EF00AAD8AD /* HeightField.cpp in Sources */,
 				420BBE321817416F00C7B720 /* lua_RenderStateStateBlock.cpp in Sources */,
 				420BBC3E1817416F00C7B720 /* lua_AnimationClip.cpp in Sources */,
@@ -2405,7 +2395,6 @@
 				42CC55951809A4EF00AAD8AD /* AnimationValue.cpp in Sources */,
 				420BBCC71817416F00C7B720 /* lua_FontFormat.cpp in Sources */,
 				42CC5A0F1809A4EF00AAD8AD /* Vector3.cpp in Sources */,
-				42CC59751809A4EF00AAD8AD /* PlatformBlackBerry.cpp in Sources */,
 				42CC55BB1809A4EF00AAD8AD /* Camera.cpp in Sources */,
 				420BBC171817416F00C7B720 /* lua_AIAgent.cpp in Sources */,
 				42CC59211809A4EF00AAD8AD /* Model.cpp in Sources */,
@@ -2497,7 +2486,6 @@
 				420BBD1F1817416F00C7B720 /* lua_Keyboard.cpp in Sources */,
 				420BBC471817416F00C7B720 /* lua_AnimationClipListenerEventType.cpp in Sources */,
 				42CC592B1809A4EF00AAD8AD /* ParticleEmitter.cpp in Sources */,
-				42CC55FD1809A4EF00AAD8AD /* gameplay-main-blackberry.cpp in Sources */,
 				420BBE331817416F00C7B720 /* lua_RenderStateStateBlock.cpp in Sources */,
 				420BBC3F1817416F00C7B720 /* lua_AnimationClip.cpp in Sources */,
 				42CC560B1809A4EF00AAD8AD /* HeightField.cpp in Sources */,
