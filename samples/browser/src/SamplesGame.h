@@ -35,6 +35,8 @@ public:
      */
     SamplesGame();
 
+    void resizeEvent(unsigned int width, unsigned int height);
+    
 	void keyEvent(Keyboard::KeyEvent evt, int key);
 
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);

@@ -116,6 +116,11 @@ void SamplesGame::render(float elapsedTime)
     _sampleSelectForm->draw();
 }
 
+void SamplesGame::resizeEvent(unsigned int width, unsigned int height)
+{
+    setViewport(gameplay::Rectangle(width, height));
+}
+
 void SamplesGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (_activeSample)

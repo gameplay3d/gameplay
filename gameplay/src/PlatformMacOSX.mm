@@ -745,14 +745,19 @@ double getMachTimeInMilliseconds()
     [[NSApplication sharedApplication] terminate:self];
 }
 
-- (void)windowDidResize:(NSNotification*)notification
+- (void)reshape
 {
     [gameLock lock];
+    
     NSSize size = [ [ _window contentView ] frame ].size;
     __width = size.width;
     __height = size.height;
+    CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
+    GLint dim[2] = {__width, __height};
+    CGLSetParameter(cglContext, kCGLCPSurfaceBackingSize, dim);
+    CGLEnable(cglContext, kCGLCESurfaceBackingSize);
+    
     gameplay::Platform::resizeEventInternal((unsigned int)__width, (unsigned int)__height);
-
     
     [gameLock unlock];
 }
