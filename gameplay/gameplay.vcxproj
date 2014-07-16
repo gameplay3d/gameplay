@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DebugMem|x64">
@@ -51,7 +51,6 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gamepad.cpp" />
     <ClCompile Include="src\gameplay-main-android.cpp" />
-    <ClCompile Include="src\gameplay-main-blackberry.cpp" />
     <ClCompile Include="src\gameplay-main-linux.cpp" />
     <ClCompile Include="src\gameplay-main-windows.cpp" />
     <ClCompile Include="src\HeightField.cpp" />
@@ -269,7 +268,6 @@
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Platform.cpp" />
     <ClCompile Include="src\PlatformAndroid.cpp" />
-    <ClCompile Include="src\PlatformBlackBerry.cpp" />
     <ClCompile Include="src\PlatformLinux.cpp" />
     <ClCompile Include="src\PlatformWindows.cpp" />
     <ClCompile Include="src\Properties.cpp" />
