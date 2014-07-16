@@ -175,23 +175,22 @@ extern int strcmpnocase(const char* s1, const char* s2);
     #define NOMINMAX
 #endif
 
-// Audio (OpenAL/Vorbis)
-#ifdef __QNX__
-#include <AL/al.h>
-#include <AL/alc.h>
-#elif __ANDROID__
-#include <AL/al.h>
-#include <AL/alc.h>
+// Audio (OpenAL)
+#ifdef WIN32
+    #include <al.h>
+    #include <alc.h>
 #elif __linux__
-#include <AL/al.h>
-#include <AL/alc.h>
-#elif WIN32
-#include <al.h>
-#include <alc.h>
+    #include <AL/al.h>
+    #include <AL/alc.h>
 #elif __APPLE__
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
+    #include <OpenAL/al.h>
+    #include <OpenAL/alc.h>
+#elif __ANDROID__
+    #include <AL/al.h>
+    #include <AL/alc.h>
 #endif
+
+// Compressed Media
 #include <vorbis/vorbisfile.h>
 
 // Image
@@ -204,42 +203,15 @@ using std::va_list;
 #define WINDOW_VSYNC        1
 
 // Graphics (OpenGL)
-#ifdef __QNX__
-    #include <EGL/egl.h>
-    #include <GLES2/gl2.h>
-    #include <GLES2/gl2ext.h>
-    #include <screen/screen.h>
-    extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
-    extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
-    extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
-    extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
-    #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
-    #define glClearDepth glClearDepthf
-    #define OPENGL_ES
-    #define USE_PVRTC
-    #ifdef __arm__
-        #define USE_NEON
-    #endif
-#elif __ANDROID__
-    #include <EGL/egl.h>
-    #include <GLES2/gl2.h>
-    #include <GLES2/gl2ext.h>
-    extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
-    extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
-    extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
-    extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
-    #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
-    #define glClearDepth glClearDepthf
-    #define OPENGL_ES
-#elif WIN32
-    #define WIN32_LEAN_AND_MEAN
-    #define GLEW_STATIC
-    #include <GL/glew.h>
-    #define USE_VAO
+#ifdef WIN32
+        #define WIN32_LEAN_AND_MEAN
+        #define GLEW_STATIC
+        #include <GL/glew.h>
+        #define GP_USE_VAO
 #elif __linux__
         #define GLEW_STATIC
         #include <GL/glew.h>
-        #define USE_VAO
+        #define GP_USE_VAO
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
@@ -252,10 +224,7 @@ using std::va_list;
         #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
-        #define USE_VAO
-        #ifdef __arm__
-            #define USE_NEON
-        #endif
+        #define GP_USE_VAO
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
         #include <OpenGL/glext.h>
@@ -263,10 +232,21 @@ using std::va_list;
         #define glDeleteVertexArrays glDeleteVertexArraysAPPLE
         #define glGenVertexArrays glGenVertexArraysAPPLE
         #define glIsVertexArray glIsVertexArrayAPPLE
-        #define USE_VAO
+        #define GP_USE_VAO
     #else
         #error "Unsupported Apple Device"
     #endif
+#elif __ANDROID__
+        #include <EGL/egl.h>
+        #include <GLES2/gl2.h>
+        #include <GLES2/gl2ext.h>
+        extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
+        extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
+        extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
+        extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+        #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
+        #define glClearDepth glClearDepthf
+        #define OPENGL_ES
 #endif
 
 // Graphics (GLSL)
@@ -296,13 +276,8 @@ typedef GLuint FrameBufferHandle;
 typedef GLuint RenderBufferHandle;
 
 /** Gamepad handle definitions vary by platform. */
-#if defined(__QNX__) && defined(GP_USE_GAMEPAD)
-    typedef screen_device_t GamepadHandle;
-#elif defined(WIN32)
-    typedef unsigned long GamepadHandle;
-#else
-    typedef unsigned int GamepadHandle;
-#endif
+typedef unsigned long GamepadHandle;
+
 }
 
 /**
