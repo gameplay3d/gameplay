@@ -412,7 +412,7 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     GP_ASSERT(filePath);
 
     // Open file for reading.
-    std::auto_ptr<Stream> stream(open(filePath));
+    std::unique_ptr<Stream> stream(open(filePath));
     if (stream.get() == NULL)
     {
         GP_ERROR("Failed to load file: %s", filePath);

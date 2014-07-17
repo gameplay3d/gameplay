@@ -80,7 +80,7 @@ Properties* Properties::create(const char* url)
     std::vector<std::string> namespacePath;
     calculateNamespacePath(urlString, fileString, namespacePath);
 
-    std::auto_ptr<Stream> stream(FileSystem::open(fileString.c_str()));
+    std::unique_ptr<Stream> stream(FileSystem::open(fileString.c_str()));
     if (stream.get() == NULL)
     {
         GP_WARN("Failed to open file '%s'.", fileString.c_str());

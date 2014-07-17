@@ -32,7 +32,7 @@ RacerGame game;
 
 RacerGame::RacerGame()
     : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _upsetTimer(0),
-      _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL)
+    _backgroundMusic(NULL), _engineSound(NULL), _brakingSound(NULL)
 {
 }
 
@@ -83,12 +83,12 @@ void RacerGame::initialize()
     }
 
     // Create audio tracks
-    _backgroundSound = AudioSource::create("res/common/background_track.ogg");
-    if (_backgroundSound)
+    _backgroundMusic = AudioSource::create("res/common/background_track.ogg", true);
+    if (_backgroundMusic)
     {
-        _backgroundSound->setLooped(true);
-        _backgroundSound->play();
-        _backgroundSound->setGain(0.3f);
+        _backgroundMusic->setLooped(true);
+        _backgroundMusic->play();
+        _backgroundMusic->setGain(0.3f);
     }
 
     _engineSound = AudioSource::create("res/common/engine_loop.ogg");
@@ -99,7 +99,7 @@ void RacerGame::initialize()
         _engineSound->setGain(0.7f);
     }
 
-    _brakingSound = AudioSource::create("res/common/braking.wav");
+    _brakingSound = AudioSource::create("res/common/braking.wav", true);
     _brakingSound->setLooped(false);
     _brakingSound->setGain(0.5f);
 
@@ -128,7 +128,7 @@ bool RacerGame::initializeScene(Node* node)
 
 void RacerGame::finalize()
 {
-    SAFE_RELEASE(_backgroundSound);
+    SAFE_RELEASE(_backgroundMusic);
     SAFE_RELEASE(_engineSound);
     SAFE_RELEASE(_brakingSound);
     SAFE_RELEASE(_scene);
