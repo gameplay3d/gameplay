@@ -94,10 +94,10 @@ void SpaceshipGame::initialize()
     initializeSpaceship();
     initializeEnvironment();
 
-    // Create a background audio track
-    _backgroundSound = AudioSource::create("res/background.ogg");
-    if (_backgroundSound)
-        _backgroundSound->setLooped(true);
+    // Create a background music audio track.
+    _backgroundMusic = AudioSource::create("res/background.ogg", true);
+    if (_backgroundMusic)
+        _backgroundMusic->setLooped(true);
 
     // Create font
     _font = Font::create("res/airstrip.gpb");
@@ -223,7 +223,7 @@ void SpaceshipGame::initializeMaterial(Material* material, bool lighting, bool s
 
 void SpaceshipGame::finalize()
 {
-    SAFE_RELEASE(_backgroundSound);
+    SAFE_RELEASE(_backgroundMusic);
     SAFE_RELEASE(_spaceshipSound);
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_stateBlock);
@@ -239,16 +239,16 @@ void SpaceshipGame::update(float elapsedTime)
     {
         _time += t;
 
-        // Play the background track
-        if (_backgroundSound->getState() != AudioSource::PLAYING)
-            _backgroundSound->play();
+        // Play the background music track
+        if (_backgroundMusic->getState() != AudioSource::PLAYING)
+            _backgroundMusic->play();
     }
     else
     {
-        // Stop the background track
-        if (_backgroundSound->getState() == AudioSource::PLAYING || _backgroundSound->getState() == AudioSource::PAUSED)
+        // Stop the background music track
+        if (_backgroundMusic->getState() == AudioSource::PLAYING || _backgroundMusic->getState() == AudioSource::PAUSED)
 		{
-            _backgroundSound->stop();
+            _backgroundMusic->stop();
         	_throttle = 0.0f;
 		}
     }

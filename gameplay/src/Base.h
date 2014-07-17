@@ -28,6 +28,9 @@
 #include <functional>
 #include <bitset>
 #include <typeinfo>
+#include <thread>
+#include <mutex>
+#include <chrono>
 #include "Logger.h"
 
 // Bring common functions from C into global namespace
