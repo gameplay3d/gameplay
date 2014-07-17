@@ -179,7 +179,10 @@ extern int strcmpnocase(const char* s1, const char* s2);
 #endif
 
 // Audio (OpenAL)
-#ifdef WIN32
+#ifdef __ANDROID__
+    #include <AL/al.h>
+    #include <AL/alc.h>
+#elif WIN32
     #include <al.h>
     #include <alc.h>
 #elif __linux__
@@ -188,9 +191,6 @@ extern int strcmpnocase(const char* s1, const char* s2);
 #elif __APPLE__
     #include <OpenAL/al.h>
     #include <OpenAL/alc.h>
-#elif __ANDROID__
-    #include <AL/al.h>
-    #include <AL/alc.h>
 #endif
 
 // Compressed Media
@@ -206,7 +206,18 @@ using std::va_list;
 #define WINDOW_VSYNC        1
 
 // Graphics (OpenGL)
-#ifdef WIN32
+#ifdef __ANDROID__
+    #include <EGL/egl.h>
+    #include <GLES2/gl2.h>
+    #include <GLES2/gl2ext.h>
+    extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
+    extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
+    extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
+    extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
+    #define glClearDepth glClearDepthf
+    #define OPENGL_ES
+#elif WIN32
         #define WIN32_LEAN_AND_MEAN
         #define GLEW_STATIC
         #include <GL/glew.h>
@@ -239,17 +250,6 @@ using std::va_list;
     #else
         #error "Unsupported Apple Device"
     #endif
-#elif __ANDROID__
-        #include <EGL/egl.h>
-        #include <GLES2/gl2.h>
-        #include <GLES2/gl2ext.h>
-        extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
-        extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
-        extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
-        extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
-        #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
-        #define glClearDepth glClearDepthf
-        #define OPENGL_ES
 #endif
 
 // Graphics (GLSL)

@@ -19,7 +19,7 @@ Image* Image::create(const char* path)
     GP_ASSERT(path);
 
     // Open the file.
-    std::auto_ptr<Stream> stream(FileSystem::open(path));
+    std::unique_ptr<Stream> stream(FileSystem::open(path));
     if (stream.get() == NULL || !stream->canRead())
     {
         GP_ERROR("Failed to open image file '%s'.", path);
