@@ -14,22 +14,20 @@ class ScriptTarget
 public:
 
     /**
-     * Adds the given Lua script function as a callback for the given event.
-     * 
-     * @param eventName The name of the event.
-     * @param function The name of the Lua script function to call when the event is fired; can either be
-     *  just the name of a function (if the function's script file has already been loaded), or can be
-     *  a URL of the form scriptFile.lua#functionName.
+     * Attaches a script to this object.
+     *
+     * @param path Path to the script.
+     * @return The ID of the successfully loaded script, or zero if unsuccessful.
      */
-    virtual void addScriptCallback(const std::string& eventName, const std::string& function);
+    int addScript(const char* path);
 
     /**
-     * Removes the given Lua script function as a callback for the given event.
-     * 
-     * @param eventName The name of the event.
-     * @param function The name of the Lua script function.
+     * Removes a previously attached script from this object.
+     *
+     * @param path The same path that was used to load the script.
+     * @return True if a script is successfully removed, false otherwise.
      */
-    virtual void removeScriptCallback(const std::string& eventName, const std::string& function);
+    bool removeScript(const char* path);
 
 protected:
 
@@ -44,13 +42,13 @@ protected:
     virtual ~ScriptTarget();
 
     /**
-     * Adds the given event with the given Lua script parameter string ({@link ScriptController::executeFunction})
+     * Registers the given event with the given script parameter string ({@link ScriptController::executeFunction})
      * as a supported event for this script target.
      * 
      * @param eventName The name of the event.
      * @param argsString The argument string for the event.
      */
-    void addScriptEvent(const std::string& eventName, const char* argsString = NULL);
+    void registerScriptEvent(const std::string& eventName, const char* argsString = NULL);
 
     /**
      * Fires the event with the given event name and the given arguments.
@@ -59,20 +57,35 @@ protected:
      */
     template<typename T> T fireScriptEvent(const char* eventName, ...);
 
+    /** Stores an attached script. */
+    struct Script
+    {
+        int id;
+        std::string path;
+        Script* next;
+        Script* prev;
+        Script() : id(0), next(NULL), prev(NULL) { }
+    };
+
     /** Used to store a script callbacks for given event. */
     struct Callback
     {
         /** Constructor. */
         Callback(const std::string& string);
 
-        /** Holds the Lua script callback function. */
+        /** The script that this callback belongs to. */
+        Script* scriptId;
+
+        /** Holds the script callback function. */
         std::string function;
     };
 
-    /** Holds the supported events for this script target. */
+    /** Holds the registered events for this script target. */
     std::map<std::string, std::string> _events;
     /** Holds the callbacks for this script target's events. */
     std::map<std::string, std::vector<Callback>*> _callbacks;
+    /** Holds the list of scripts referenced by this ScriptTarget. */
+    Script* _scripts;
 };
 
 template<typename T> T ScriptTarget::fireScriptEvent(const char* eventName, ...)

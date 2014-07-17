@@ -352,20 +352,70 @@ public:
 
     /**
      * Loads the given script file and executes its global code.
+     *
+     * The script is loaded into the global script environment, where any
+     * non-local functions and variables in the script will override those
+     * in the global environment.
+     *
+     * Scripts loaded into the global environment cannot be explicitly unloaded.
+     * Once all data within the script is no longer referenced, it will be
+     * garbage collected through normal means.
      * 
      * @param path The path to the script.
      * @param forceReload Whether the script should be reloaded if it has already been loaded.
      */
-    void loadScript(const char* path, bool forceReload = false);
+    bool loadScript(const char* path, bool forceReload = false);
+
+    /**
+     * Loads the given script into its own isolated environment and executes its code.
+     *
+     * The script is loaded into a new isolated script environment that is separate from
+     * the global environment. Non-local functions and variables do not overlap with
+     * those in the global table. However, the script does still have access to functions
+     * and variables in the global table (unless they are re-declared in the script).
+     *
+     * Since this function installs the script into an isolated envrionment, the 
+     * script is guaranteed to be newly loaded (even if the same script was previously
+     * loaded) and any global code within it is executed.
+     *
+     * The script may later be unloaded by calling unloadScript(int).
+     *
+     * @param path The path of the script.
+     * @return A unique ID for the script, which may be passed to unloadScript(int),
+     *      or -1 if the script could not be loaded.
+     */
+    int loadScriptIsolated(const char* path);
+
+    /**
+     * Attempts to unload an isolated script with the given ID.
+     *
+     * Unloading a script causes the non-global data within the script to be
+     * released such that a reference is no longer held to it. It will then
+     * be garbage collected at some point in the future. If the script stored
+     * any data in the global environment or if any other code still references
+     * data from the script, that data will not be freed.
+     *
+     * @param id The unique ID of the isolated script, as returned from loadScriptIsolated(const char*).
+     */
+    bool unloadScript(int id);
 
     /**
      * Given a URL, loads the referenced file and returns the referenced function name.
      * 
      * @param url The url to load.
-     * 
+     * @param scriptId Optional integer pointer that is populated with 
      * @return The function that the URL references.
      */
-    std::string loadUrl(const char* url);
+    std::string loadUrl(const char* url, int* scriptId = NULL);
+
+    /**
+     * Parses the given url into a separate script filename and function name.
+     *
+     * @param url Url to parse.
+     * @param script Populated with the path of the script, or an empty string if the URL does not include a script.
+     * @param function Populated with the function name.
+     */
+    void parseUrl(const char* url, std::string* script, std::string* function);
 
     /**
      * Registers the given script callback.
@@ -392,7 +442,7 @@ public:
     void unregisterCallback(const char* callback, const char* function);
 
     /**
-     * Calls the specified no-parameter Lua function.
+     * Calls the specified no-parameter global Lua function.
      * 
      * @param func The name of the function to call.
      * 
@@ -401,7 +451,7 @@ public:
     template<typename T> T executeFunction(const char* func);
 
     /**
-     * Calls the specified Lua function using the given parameters.
+     * Calls the specified global Lua function using the given parameters.
      * 
      * @param func The name of the function to call.
      * @param args The argument signature of the function. Of the form 'xxx', where each 'x' is a parameter type and must be one of:
@@ -426,7 +476,7 @@ public:
     template<typename T> T executeFunction(const char* func, const char* args, ...);
 
     /**
-     * Calls the specified Lua function using the given parameters.
+     * Calls the specified global Lua function using the given parameters.
      * 
      * @param func The name of the function to call.
      * @param args The argument signature of the function. Of the form 'xxx', where each 'x' is a parameter type and must be one of:
@@ -446,10 +496,11 @@ public:
      *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @param list The variable argument list containing the function's parameters.
-     * 
+     * @param script Optional ID for the script environment of the function to execute, or zero for the default/global environment.
+     *
      * @return The return value of the executed Lua function.
      */
-    template<typename T> T executeFunction(const char* func, const char* args, va_list* list);
+    template<typename T> T executeFunction(const char* func, const char* args, va_list* list, int script = 0);
 
     /**
      * Gets the global boolean script variable with the given name.
@@ -956,8 +1007,9 @@ private:
      *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @param list The variable argument list.
+     * @param script Optional ID for the script environment of the function to execute, or zero for the default/global environment.
      */
-    void executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list);
+    void executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list, int script = 0);
 
     /**
      * Converts the given string to a valid script callback enumeration value
@@ -1023,6 +1075,7 @@ private:
     std::map<std::string, std::vector<std::string> > _hierarchy;
     std::vector<std::string> _callbacks[CALLBACK_COUNT];
     std::set<std::string> _loadedScripts;
+    std::map<int, std::string> _environments;
     std::vector<luaStringEnumConversionFunction> _stringFromEnum;
 };
 
@@ -1081,31 +1134,31 @@ template<> double ScriptController::executeFunction<double>(const char* func, co
 template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, ...);
 
 /** Template specialization. */
-template<> void ScriptController::executeFunction<void>(const char* func, const char* args, va_list* list);
+template<> void ScriptController::executeFunction<void>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> char ScriptController::executeFunction<char>(const char* func, const char* args, va_list* list);
+template<> char ScriptController::executeFunction<char>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> short ScriptController::executeFunction<short>(const char* func, const char* args, va_list* list);
+template<> short ScriptController::executeFunction<short>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> int ScriptController::executeFunction<int>(const char* func, const char* args, va_list* list);
+template<> int ScriptController::executeFunction<int>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> long ScriptController::executeFunction<long>(const char* func, const char* args, va_list* list);
+template<> long ScriptController::executeFunction<long>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, va_list* list);
+template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, va_list* list);
+template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, va_list* list);
+template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, va_list* list);
+template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> float ScriptController::executeFunction<float>(const char* func, const char* args, va_list* list);
+template<> float ScriptController::executeFunction<float>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> double ScriptController::executeFunction<double>(const char* func, const char* args, va_list* list);
+template<> double ScriptController::executeFunction<double>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
-template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, va_list* list);
+template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, va_list* list, int script);
 
 }
 

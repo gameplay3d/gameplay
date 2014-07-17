@@ -7,7 +7,7 @@ namespace gameplay
 
 extern void splitURL(const std::string& url, std::string* file, std::string* id);
 
-ScriptTarget::ScriptTarget()
+ScriptTarget::ScriptTarget() : _scripts(NULL)
 {
 }
 
@@ -17,6 +17,17 @@ ScriptTarget::~ScriptTarget()
     for (; iter != _callbacks.end(); iter++)
     {
         SAFE_DELETE(iter->second);
+    }
+
+    // Free scripts
+    Script* script = _scripts;
+    while (script)
+    {
+        Game::getInstance()->getScriptController()->unloadScript(script->id);
+        script->id = 0;
+        Script* tmp = script;
+        script = script->next;
+        SAFE_DELETE(script);
     }
 }
 
@@ -87,8 +98,33 @@ template<> bool ScriptTarget::fireScriptEvent<bool>(const char* eventName, ...)
     return false;
 }
 
-void ScriptTarget::addScriptCallback(const std::string& eventName, const std::string& function)
+int ScriptTarget::addScript(const char* path)
 {
+    // Load the script into an isolated environment
+    ScriptController* sc = Game::getInstance()->getScriptController();
+    int id = sc->loadScriptIsolated(path);
+    if (id <= 0)
+        return id;
+
+    // Attach the script
+    Script* script = new Script;
+    script->id = id;
+    script->path = path;
+    if (_scripts)
+    {
+        Script* last = _scripts;
+        while (last->next)
+            last = last->next;
+        last->next = script;
+        script->prev = last;
+    }
+    else
+    {
+        _scripts = script;
+    }
+
+    // Inspect the loaded script for supported event functions
+
     std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(eventName);
     if (iter != _callbacks.end())
     {
