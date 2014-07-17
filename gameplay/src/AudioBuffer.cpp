@@ -9,7 +9,7 @@ namespace gameplay
 static std::vector<AudioBuffer*> __buffers;
 
 // Callbacks for loading an ogg file using Stream
-static size_t readStream(void *ptr, size_t size, size_t nmemb, void *datasource)
+static size_t readStream(void* ptr, size_t size, size_t nmemb, void* datasource)
 {
     GP_ASSERT(datasource);
     Stream* stream = reinterpret_cast<Stream*>(datasource);
@@ -31,7 +31,7 @@ static int closeStream(void *datasource)
     return 0;
 }
 
-static long tellStream(void *datasource)
+static long tellStream(void* datasource)
 {
     GP_ASSERT(datasource);
     Stream* stream = reinterpret_cast<Stream*>(datasource);
@@ -182,7 +182,7 @@ cleanup:
     return NULL;
 }
 
-bool AudioBuffer::loadWav(Stream* stream, ALuint buffer, bool streamed, AudioStreamStateWav* streamingState)
+bool AudioBuffer::loadWav(Stream* stream, ALuint buffer, bool streamed, AudioStreamStateWav* streamState)
 {
     GP_ASSERT(stream);
 
@@ -316,10 +316,10 @@ bool AudioBuffer::loadWav(Stream* stream, ALuint buffer, bool streamed, AudioStr
             if (streamed)
             {
                 // Save streaming state for later use.
-                streamingState->dataStart = stream->position();
-                streamingState->dataSize = dataSize;
-                streamingState->format = format;
-                streamingState->frequency = frequency;
+                streamState->dataStart = stream->position();
+                streamState->dataSize = dataSize;
+                streamState->format = format;
+                streamState->frequency = frequency;
             
                 // Limit data size to STREAMING_BUFFER_SIZE.
                 if (dataSize > STREAMING_BUFFER_SIZE)
