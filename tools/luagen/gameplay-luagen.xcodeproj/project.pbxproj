@@ -12,7 +12,7 @@
 		42B7F6FF15B06EFE002BB8C3 /* FunctionBinding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7F6F715B06EFE002BB8C3 /* FunctionBinding.cpp */; };
 		42B7F70015B06EFE002BB8C3 /* Generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7F6F915B06EFE002BB8C3 /* Generator.cpp */; };
 		42B7F70115B06EFE002BB8C3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7F6FB15B06EFE002BB8C3 /* main.cpp */; };
-		42B7F71215B06F67002BB8C3 /* libtinyxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B7F71115B06F67002BB8C3 /* libtinyxml2.a */; };
+		42F71562195CB2760010141C /* libtinyxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F71561195CB2760010141C /* libtinyxml2.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,7 +41,7 @@
 		42B7F6FA15B06EFE002BB8C3 /* Generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Generator.h; path = src/Generator.h; sourceTree = SOURCE_ROOT; };
 		42B7F6FB15B06EFE002BB8C3 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		42B7F6FC15B06EFE002BB8C3 /* TypedefBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TypedefBinding.h; path = src/TypedefBinding.h; sourceTree = SOURCE_ROOT; };
-		42B7F71115B06F67002BB8C3 /* libtinyxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtinyxml2.a; path = "../external-deps/tinyxml2/lib/macosx/libtinyxml2.a"; sourceTree = "<group>"; };
+		42F71561195CB2760010141C /* libtinyxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtinyxml2.a; path = "../../external-deps/tinyxml2/lib/macosx/x64/libtinyxml2.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42B7F71215B06F67002BB8C3 /* libtinyxml2.a in Frameworks */,
+				42F71562195CB2760010141C /* libtinyxml2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +96,7 @@
 		42B7F70B15B06F3A002BB8C3 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				42B7F71115B06F67002BB8C3 /* libtinyxml2.a */,
+				42F71561195CB2760010141C /* libtinyxml2.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -202,7 +202,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -210,24 +210,30 @@
 		42B7F6EB15B06E85002BB8C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				HEADER_SEARCH_PATHS = "../../external-deps/tinyxml2/include";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../external-deps/tinyxml2/lib/macosx",
+					"../../external-deps/tinyxml2/lib/macosx/x64",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
 		42B7F6EC15B06E85002BB8C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				HEADER_SEARCH_PATHS = "../../external-deps/tinyxml2/include";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../external-deps/tinyxml2/lib/macosx",
+					"../../external-deps/tinyxml2/lib/macosx/x64",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};

@@ -24,9 +24,6 @@
     <ClCompile Include="src\Plane.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlatformBlackBerry.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\PlatformWindows.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -277,9 +274,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\gameplay-main-android.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gameplay-main-blackberry.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\gameplay-main-linux.cpp">

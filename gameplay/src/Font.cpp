@@ -123,7 +123,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
 
     // Create batch for the font.
     SpriteBatch* batch = SpriteBatch::create(texture, __fontEffect, 128);
-    
+
     // Release __fontEffect since the SpriteBatch keeps a reference to it
     SAFE_RELEASE(__fontEffect);
 
@@ -340,7 +340,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         {
             char c = token[i];
             int glyphIndex = c - 32; // HACK for ASCII
-        
+
             if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
@@ -381,7 +381,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
                             // by duplicating the previous and next vertices.
                             batch->_indices[batch->_indexCount] = batch->_indices[batch->_indexCount - 1];
                             batch->_indices[batch->_indexCount + 1] = batch->_vertexCount;
-            
+
                             // Loop through all indices and insert them, their their value offset by
                             // 'vertexCount' so that they are relative to the first newly insertted vertex
                             for (unsigned int i = 0; i < 4; ++i)
@@ -406,7 +406,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
                 if (token == lineStart)
                 {
                     token += lineLength;
-                    
+
                     // Now handle delimiters going forwards.
                     if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
                     {
@@ -435,7 +435,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
             if (rightToLeft)
             {
                 token = lineStart + lineLength;
-                
+
                 if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
                 {
                     break;
@@ -467,7 +467,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
 
 Font* Font::findClosestSize(int size)
 {
-    if (size == _size)
+    if (size == (int)_size)
         return this;
 
     int diff = abs(size - (int)_size);
@@ -628,7 +628,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                     if (getFormat() == DISTANCE_FIELD )
                     {
                         if (_cutoffParam == NULL)
-                            _cutoffParam = _batch->getMaterial()->getParameter("u_cutoff");    
+                            _cutoffParam = _batch->getMaterial()->getParameter("u_cutoff");
                         // TODO: Fix me so that smaller font are much smoother
                         _cutoffParam->setVector2(Vector2(1.0, 1.0));
                     }
@@ -642,7 +642,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
 
         if (rightToLeft)
         {
-            cursor += length;   
+            cursor += length;
         }
         else
         {
@@ -773,7 +773,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         {
             char c = token[i];
             int glyphIndex = c - 32; // HACK for ASCII
-        
+
             if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
@@ -817,7 +817,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                 if (token == lineStart)
                 {
                     token += lineLength;
-                    
+
                     // Now handle delimiters going forwards.
                     if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
                     {
@@ -846,7 +846,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             if (rightToLeft)
             {
                 token = lineStart + lineLength;
-                
+
                 if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
                 {
                     break;
@@ -865,7 +865,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                 size_t tokenLength = strcspn(token, "\n");
 
                 if (tokenLength > 0)
-                {                
+                {
                     // Get first token of next line.
                     token += tokenLength;
                 }
@@ -1114,14 +1114,14 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
                     emptyLines.push_back(true);
                     lines.push_back(Vector2(FLT_MAX, 0));
                 }
-                
+
                 token++;
             }
 
             // Measure the next line.
             unsigned int tokenLength = (unsigned int)strcspn(token, "\n");
             lineWidth = getTokenWidth(token, tokenLength, size, scale);
-            
+
             // Determine horizontal position and width.
             int xPos = clip.x;
             int hWhitespace = clip.width - lineWidth;
@@ -1175,7 +1175,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
     {
         y += vWhitespace;
     }
-    
+
     int clippedTop = 0;
     int clippedBottom = 0;
     if (!ignoreClip)
@@ -1526,7 +1526,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
     }
 
     const char* token = text;
-    
+
     int iteration = 1;
     unsigned int lineLength;
     unsigned int currentLineLength = 0;
@@ -1622,7 +1622,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
         {
             char c = token[i];
             int glyphIndex = c - 32; // HACK for ASCII
-        
+
             if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
@@ -1657,7 +1657,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
                 if (token == lineStart)
                 {
                     token += lineLength;
-                    
+
                     // Now handle delimiters going forwards.
                     if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
                     {
@@ -1688,7 +1688,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
             if (rightToLeft)
             {
                 token = lineStart + lineLength;
-                
+
                 if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
                 {
                     break;
@@ -1707,7 +1707,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
                 unsigned int tokenLength = (unsigned int)strcspn(token, "\n");
 
                 if (tokenLength > 0)
-                {                
+                {
                     // Get first token of next line.
                     token += tokenLength;
                     charIndex += tokenLength;
@@ -1726,7 +1726,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
         outLocation->y = yPos;
         return charIndex;
     }
-    
+
     return -1;
 }
 

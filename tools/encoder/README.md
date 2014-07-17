@@ -1,7 +1,7 @@
 ## gameplay-encoder
 Command-line tool for encoding games assets like true-type fonts and 3D scene files
 into a simple binary-based bundle file format for the gameplay 3D game framework runtime. 
-The 'bin' folder contains pre-built 32-bit versions of the gameplay-encoder executables for 
+The 'bin' folder contains pre-built 64-bit versions of the gameplay-encoder executables for 
 Windows 7, MacOS X and Linux Ubuntu with support built-in support for:
 
 ## TrueType Font
@@ -11,19 +11,14 @@ them into a texture mapped base representation using a texture atlas and 8-bit a
 representation.
 
 ## FBX Scene
-Autodesk® FBX® asset exchange technology facilitates higher-fidelity data exchange 
-between several Autodesk content creation packages
+Autodesk® FBX® asset exchange technology facilitates higher-fidelity data exchange between several Autodesk content creation packages
 Autodesk® Maya®, Autodesk® 3ds Max®, Autodesk® MotionBuilder®, Autodesk® Mudbox®, and Autodesk® Softimage®
-For more information goto "http://www.autodesk.com/fbx".
+For more information goto: "http://www.autodesk.com/fbx".
 
 ## Running gameplay-encoder
 Simply execute the gameplay-encoder command-line executable:
 
 `Usage: gameplay-encoder [options] <file(s)>`
-
-Note: On Linux Ubuntu (64-bit), you must first install the required 32-bit libs via:
-
-`sudo apt-get install ia32-libs`
 
 ## Building gameplay-encoder
 

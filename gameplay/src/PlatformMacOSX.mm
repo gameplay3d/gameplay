@@ -745,14 +745,19 @@ double getMachTimeInMilliseconds()
     [[NSApplication sharedApplication] terminate:self];
 }
 
-- (void)windowDidResize:(NSNotification*)notification
+- (void)reshape
 {
     [gameLock lock];
+    
     NSSize size = [ [ _window contentView ] frame ].size;
     __width = size.width;
     __height = size.height;
+    CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
+    GLint dim[2] = {__width, __height};
+    CGLSetParameter(cglContext, kCGLCPSurfaceBackingSize, dim);
+    CGLEnable(cglContext, kCGLCESurfaceBackingSize);
+    
     gameplay::Platform::resizeEventInternal((unsigned int)__width, (unsigned int)__height);
-
     
     [gameLock unlock];
 }
@@ -844,8 +849,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSOpenGLPixelFormatAttribute windowedAttrs[] = 
     {
         NSOpenGLPFAMultisample,
-        NSOpenGLPFASampleBuffers, samples ? 1 : 0,
-        NSOpenGLPFASamples, samples,
+        NSOpenGLPFASampleBuffers, static_cast<NSOpenGLPixelFormatAttribute>(samples ? 1 : 0),
+        NSOpenGLPFASamples, static_cast<NSOpenGLPixelFormatAttribute>(samples),
         NSOpenGLPFAAccelerated,
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAColorSize, 32,
@@ -857,8 +862,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSOpenGLPixelFormatAttribute fullscreenAttrs[] = 
     {
         NSOpenGLPFAMultisample,
-        NSOpenGLPFASampleBuffers, samples ? 1 : 0,
-        NSOpenGLPFASamples, samples,
+        NSOpenGLPFASampleBuffers, static_cast<NSOpenGLPixelFormatAttribute>(samples ? 1 : 0),
+        NSOpenGLPFASamples, static_cast<NSOpenGLPixelFormatAttribute>(samples),
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAScreenMask, (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
         NSOpenGLPFAFullScreen,
