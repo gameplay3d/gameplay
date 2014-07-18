@@ -43,10 +43,11 @@ public:
      * "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>" and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
      * 
      * @param url The relative location on disk of the sound file or a URL specifying a Properties object defining an audio source.
+     * @param streamed Don't read the entire audio buffer first before playing, instead play immediately from a stream that is read on demand.
      * @return The newly created audio source, or NULL if an audio source cannot be created.
      * @script{create}
      */
-    static AudioSource* create(const char* url);
+    static AudioSource* create(const char* url, bool streamed = false);
 
     /**
      * Create an audio source from the given properties object.
@@ -88,6 +89,13 @@ public:
      * @return PLAYING if the source is playing, STOPPED if the source is stopped, PAUSED if the source is paused and INITIAL otherwise.
      */
     AudioSource::State getState() const;
+
+    /**
+     * Determines whether the audio source is streaming or not.
+     *
+     * @return true if the audio source is streaming, false if not.
+     */
+    bool isStreamed() const;
 
     /**
      * Determines whether the audio source is looped or not.
@@ -196,6 +204,8 @@ private:
      * @return The newly created audio source.
      */
     AudioSource* clone(NodeCloneContext &context) const;
+
+    bool streamDataIfNeeded();
 
     ALuint _alSource;
     AudioBuffer* _buffer;
