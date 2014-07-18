@@ -6,39 +6,47 @@
 namespace gameplay
 {
 
+// Setup scripting
+GP_SCRIPT_EVENTS();
+GP_SCRIPT_EVENT(transformChanged, "<Transform>");
+
 int Transform::_suspendTransformChanged(0);
 std::vector<Transform*> Transform::_transformsChanged;
 
 Transform::Transform()
     : _matrixDirtyBits(0), _listeners(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     _targetType = AnimationTarget::TRANSFORM;
     _scale.set(Vector3::one());
-    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
     : _matrixDirtyBits(0), _listeners(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
-    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Matrix& rotation, const Vector3& translation)
     : _matrixDirtyBits(0), _listeners(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
-    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Transform& copy)
     : _matrixDirtyBits(0), _listeners(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     _targetType = AnimationTarget::TRANSFORM;
     set(copy);
-    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::~Transform()
@@ -991,7 +999,7 @@ void Transform::transformChanged()
             l.listener->transformChanged(this, l.cookie);
         }
     }
-    fireScriptEvent<void>("transformChanged", this);
+    fireScriptEvent<void>(SCRIPT_EVENT_transformChanged, this);
 }
 
 void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const

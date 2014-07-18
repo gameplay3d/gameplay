@@ -6,6 +6,7 @@ namespace gameplay
 
 void luaRegister_lua_Global()
 {
+    gameplay::ScriptUtil::registerFunction("GP_SCRIPT_EVENTS", lua___init);
     gameplay::ScriptUtil::registerFunction("strcmpnocase", lua__strcmpnocase);
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "CheckBox");
@@ -180,6 +181,18 @@ void luaRegister_lua_Global()
         scopePath.push_back("Camera");
         gameplay::ScriptUtil::registerConstantString("PERSPECTIVE", "PERSPECTIVE", scopePath);
         gameplay::ScriptUtil::registerConstantString("ORTHOGRAPHIC", "ORTHOGRAPHIC", scopePath);
+    }
+
+    // Register enumeration Container::Direction.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Container");
+        gameplay::ScriptUtil::registerConstantString("UP", "UP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("DOWN", "DOWN", scopePath);
+        gameplay::ScriptUtil::registerConstantString("LEFT", "LEFT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("RIGHT", "RIGHT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("NEXT", "NEXT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("PREVIOUS", "PREVIOUS", scopePath);
     }
 
     // Register enumeration Container::Scroll.
@@ -910,6 +923,111 @@ void luaRegister_lua_Global()
     }
 }
 
+int lua___init(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            void* returnPtr = (void*)GP_SCRIPT_EVENTS();
+            if (returnPtr)
+            {
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "GP_SCRIPT_EVENTS");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
+        case 2:
+        {
+            do
+            {
+                if (lua_type(state, 1) == LUA_TNONE &&
+                    lua_type(state, 2) == LUA_TNONE)
+                {
+                    // Get parameter 1 off the stack.
+                    GP_WARN("Attempting to get parameter 1 with unrecognized type update as an unsigned integer.");
+                    update param1 = (update)luaL_checkunsigned(state, 1);
+
+                    // Get parameter 2 off the stack.
+                    GP_WARN("Attempting to get parameter 2 with unrecognized type "f" as an unsigned integer.");
+                    "f" param2 = ("f")luaL_checkunsigned(state, 2);
+
+                    void* returnPtr = (void*)GP_SCRIPT_EVENT(param1, param2);
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "GP_SCRIPT_EVENT");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
+            {
+                if (lua_type(state, 1) == LUA_TNONE &&
+                    lua_type(state, 2) == LUA_TNONE)
+                {
+                    // Get parameter 1 off the stack.
+                    GP_WARN("Attempting to get parameter 1 with unrecognized type transformChanged as an unsigned integer.");
+                    transformChanged param1 = (transformChanged)luaL_checkunsigned(state, 1);
+
+                    // Get parameter 2 off the stack.
+                    GP_WARN("Attempting to get parameter 2 with unrecognized type "<Transform>" as an unsigned integer.");
+                    "<Transform>" param2 = ("<Transform>")luaL_checkunsigned(state, 2);
+
+                    void* returnPtr = (void*)GP_SCRIPT_EVENT(param1, param2);
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "GP_SCRIPT_EVENT");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua___init - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0 or 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua__strcmpnocase(lua_State* state)
 {
     // Get the number of parameters.
@@ -963,6 +1081,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_AudioSourceState((AudioSource::State)value);
     if (enumname == "Camera::Type")
         return lua_stringFromEnum_CameraType((Camera::Type)value);
+    if (enumname == "Container::Direction")
+        return lua_stringFromEnum_ContainerDirection((Container::Direction)value);
     if (enumname == "Container::Scroll")
         return lua_stringFromEnum_ContainerScroll((Container::Scroll)value);
     if (enumname == "Control::Alignment")

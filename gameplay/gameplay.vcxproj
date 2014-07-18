@@ -93,6 +93,7 @@
     <ClCompile Include="src\lua\lua_CameraType.cpp" />
     <ClCompile Include="src\lua\lua_CheckBox.cpp" />
     <ClCompile Include="src\lua\lua_Container.cpp" />
+    <ClCompile Include="src\lua\lua_ContainerDirection.cpp" />
     <ClCompile Include="src\lua\lua_ContainerScroll.cpp" />
     <ClCompile Include="src\lua\lua_Control.cpp" />
     <ClCompile Include="src\lua\lua_ControlAlignment.cpp" />
@@ -207,6 +208,7 @@
     <ClCompile Include="src\lua\lua_ScreenDisplayer.cpp" />
     <ClCompile Include="src\lua\lua_ScriptController.cpp" />
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp" />
+    <ClCompile Include="src\lua\lua_ScriptTargetEventRegistryEvent.cpp" />
     <ClCompile Include="src\lua\lua_Slider.cpp" />
     <ClCompile Include="src\lua\lua_SpriteBatch.cpp" />
     <ClCompile Include="src\lua\lua_Technique.cpp" />
@@ -380,6 +382,7 @@
     <ClInclude Include="src\lua\lua_CameraType.h" />
     <ClInclude Include="src\lua\lua_CheckBox.h" />
     <ClInclude Include="src\lua\lua_Container.h" />
+    <ClInclude Include="src\lua\lua_ContainerDirection.h" />
     <ClInclude Include="src\lua\lua_ContainerScroll.h" />
     <ClInclude Include="src\lua\lua_Control.h" />
     <ClInclude Include="src\lua\lua_ControlAlignment.h" />
@@ -494,6 +497,7 @@
     <ClInclude Include="src\lua\lua_ScreenDisplayer.h" />
     <ClInclude Include="src\lua\lua_ScriptController.h" />
     <ClInclude Include="src\lua\lua_ScriptTarget.h" />
+    <ClInclude Include="src\lua\lua_ScriptTargetEventRegistryEvent.h" />
     <ClInclude Include="src\lua\lua_Slider.h" />
     <ClInclude Include="src\lua\lua_SpriteBatch.h" />
     <ClInclude Include="src\lua\lua_Technique.h" />

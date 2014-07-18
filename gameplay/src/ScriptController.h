@@ -397,7 +397,7 @@ public:
      *
      * @param id The unique ID of the isolated script, as returned from loadScriptIsolated(const char*).
      */
-    bool unloadScript(int id);
+    void unloadScript(int id);
 
     /**
      * Given a URL, loads the referenced file and returns the referenced function name.
@@ -414,6 +414,8 @@ public:
      * @param url Url to parse.
      * @param script Populated with the path of the script, or an empty string if the URL does not include a script.
      * @param function Populated with the function name.
+     *
+     * @script{ignore}
      */
     void parseUrl(const char* url, std::string* script, std::string* function);
 
@@ -447,6 +449,8 @@ public:
      * @param func The name of the function to call.
      * 
      * @return The return value of the executed Lua function.
+     *
+     * @script{ignore}
      */
     template<typename T> T executeFunction(const char* func);
 
@@ -472,6 +476,8 @@ public:
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * 
      * @return The return value of the executed Lua function.
+     *
+     * @script{ignore}
      */
     template<typename T> T executeFunction(const char* func, const char* args, ...);
 
@@ -499,6 +505,8 @@ public:
      * @param script Optional ID for the script environment of the function to execute, or zero for the default/global environment.
      *
      * @return The return value of the executed Lua function.
+     *
+     * @script{ignore}
      */
     template<typename T> T executeFunction(const char* func, const char* args, va_list* list, int script = 0);
 
@@ -507,143 +515,159 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a bool.
-     * 
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
+     *
      * @return The global boolean script variable.
      * 
      * @script{ignore}
      */
-    bool getBool(const char* name, bool defaultValue = false);
+    bool getBool(const char* name, bool defaultValue = false, int script = 0);
 
     /**
      * Gets the global char script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global char script variable.
      * 
      * @script{ignore}
      */
-    char getChar(const char* name, char defaultValue = 0);
+    char getChar(const char* name, char defaultValue = 0, int script = 0);
 
     /**
      * Gets the global short script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global short script variable.
      * 
      * @script{ignore}
      */
-    short getShort(const char* name, short defaultValue = 0);
+    short getShort(const char* name, short defaultValue = 0, int script = 0);
 
     /**
      * Gets the global int script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global int script variable.
      * 
      * @script{ignore}
      */
-    int getInt(const char* name, int defaultValue = 0);
+    int getInt(const char* name, int defaultValue = 0, int script = 0);
 
     /**
      * Gets the global long script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global long script variable.
      * 
      * @script{ignore}
      */
-    long getLong(const char* name, long defaultValue = 0);
+    long getLong(const char* name, long defaultValue = 0, int script = 0);
 
     /**
      * Gets the global unsigned char script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global unsigned char script variable.
      * 
      * @script{ignore}
      */
-    unsigned char getUnsignedChar(const char* name, unsigned char defaultValue = 0);
+    unsigned char getUnsignedChar(const char* name, unsigned char defaultValue = 0, int script = 0);
 
     /**
      * Gets the global unsigned short script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global unsigned short script variable.
      * 
      * @script{ignore}
      */
-    unsigned short getUnsignedShort(const char* name, unsigned short defaultValue = 0);
+    unsigned short getUnsignedShort(const char* name, unsigned short defaultValue = 0, int script = 0);
 
     /**
      * Gets the global unsigned int script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global unsigned int script variable.
      * 
      * @script{ignore}
      */
-    unsigned int getUnsignedInt(const char* name, unsigned int defaultValue = 0);
+    unsigned int getUnsignedInt(const char* name, unsigned int defaultValue = 0, int script = 0);
 
     /**
      * Gets the global unsigned long script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global unsigned long script variable.
      * 
      * @script{ignore}
      */
-    unsigned long getUnsignedLong(const char* name, unsigned long defaultValue = 0);
+    unsigned long getUnsignedLong(const char* name, unsigned long defaultValue = 0, int script = 0);
 
     /**
      * Gets the global float script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global float script variable.
      * 
      * @script{ignore}
      */
-    float getFloat(const char* name, float defaultValue = 0);
+    float getFloat(const char* name, float defaultValue = 0, int script = 0);
 
     /**
      * Gets the global double script variable with the given name.
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The global double script variable.
      * 
      * @script{ignore}
      */
-    double getDouble(const char* name, double defaultValue = 0);
+    double getDouble(const char* name, double defaultValue = 0, int script = 0);
 
     /**
      * Gets the global string variable with the given name.
-     * 
+     *
+     * The returned character string is temporary and is not gauranteed to live forever, therefore you
+     * should not store a pointer to the returned value. If long-term access to the returned string is
+     * required, it should be copied into another string for storage.
+     *
      * @param name The name of the variable.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @return The string variable or NULL if the variable is not a string.
      * 
      * @script{ignore}
      */
-    const char* getString(const char* name);
+    const char* getString(const char* name, int script = 0);
 
     /**
      * Gets the global pointer script variable of the given type with the given name.
@@ -662,120 +686,132 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The boolean value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setBool(const char* name, bool v);
+    void setBool(const char* name, bool v, int script = 0);
 
     /**
      * Sets the global char script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The char value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setChar(const char* name, char v);
+    void setChar(const char* name, char v, int script = 0);
 
     /**
      * Sets the global short script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The short value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setShort(const char* name, short v);
+    void setShort(const char* name, short v, int script = 0);
 
     /**
      * Sets the global int script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The int value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setInt(const char* name, int v);
+    void setInt(const char* name, int v, int script = 0);
 
     /**
      * Sets the global long script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The long value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setLong(const char* name, long v);
+    void setLong(const char* name, long v, int script = 0);
 
     /**
      * Gets the global unsigned char script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The unsigned char value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setUnsignedChar(const char* name, unsigned char v);
+    void setUnsignedChar(const char* name, unsigned char v, int script = 0);
 
     /**
      * Sets the global unsigned short script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The unsigned short value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setUnsignedShort(const char* name, unsigned short v);
+    void setUnsignedShort(const char* name, unsigned short v, int script = 0);
 
     /**
      * Sets the global unsigned int script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The unsigned int value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setUnsignedInt(const char* name, unsigned int v);
+    void setUnsignedInt(const char* name, unsigned int v, int script = 0);
 
     /**
      * Sets the global unsigned long script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The unsigned long value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setUnsignedLong(const char* name, unsigned long v);
+    void setUnsignedLong(const char* name, unsigned long v, int script = 0);
 
     /**
      * Sets the global float script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The float value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setFloat(const char* name, float v);
+    void setFloat(const char* name, float v, int script = 0);
 
     /**
      * Sets the global double script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The double value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setDouble(const char* name, double v);
+    void setDouble(const char* name, double v, int script = 0);
 
     /**
      * Sets the global string script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The string value.
+     * @param script Optional ID for the script environment to use, or zero for the default/global environment.
      * 
      * @script{ignore}
      */
-    void setString(const char* name, const char* v);
+    void setString(const char* name, const char* v, int script = 0);
 
     /**
      * Sets the global pointer script variable of the given type with the given name to the given value.

@@ -5,6 +5,7 @@
 #include "lua_AnimationClipListenerEventType.h"
 #include "lua_AudioSourceState.h"
 #include "lua_CameraType.h"
+#include "lua_ContainerDirection.h"
 #include "lua_ContainerScroll.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
@@ -55,6 +56,7 @@ namespace gameplay
 {
 
 // Lua bindings for global functions.
+int lua___init(lua_State* state);
 int lua__strcmpnocase(lua_State* state);
 
 // Global enum to string conversion function (used to pass enums to Lua from C++).

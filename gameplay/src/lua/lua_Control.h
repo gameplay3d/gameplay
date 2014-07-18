@@ -8,7 +8,7 @@ namespace gameplay
 int lua_Control__gc(lua_State* state);
 int lua_Control_addListener(lua_State* state);
 int lua_Control_addRef(lua_State* state);
-int lua_Control_addScriptCallback(lua_State* state);
+int lua_Control_addScript(lua_State* state);
 int lua_Control_canFocus(lua_State* state);
 int lua_Control_createAnimation(lua_State* state);
 int lua_Control_createAnimationFromBy(lua_State* state);
@@ -68,7 +68,7 @@ int lua_Control_isXPercentage(lua_State* state);
 int lua_Control_isYPercentage(lua_State* state);
 int lua_Control_release(lua_State* state);
 int lua_Control_removeListener(lua_State* state);
-int lua_Control_removeScriptCallback(lua_State* state);
+int lua_Control_removeScript(lua_State* state);
 int lua_Control_setAlignment(lua_State* state);
 int lua_Control_setAnimationPropertyValue(lua_State* state);
 int lua_Control_setAutoSize(lua_State* state);

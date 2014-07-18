@@ -8,7 +8,7 @@ namespace gameplay
 int lua_CheckBox__gc(lua_State* state);
 int lua_CheckBox_addListener(lua_State* state);
 int lua_CheckBox_addRef(lua_State* state);
-int lua_CheckBox_addScriptCallback(lua_State* state);
+int lua_CheckBox_addScript(lua_State* state);
 int lua_CheckBox_canFocus(lua_State* state);
 int lua_CheckBox_createAnimation(lua_State* state);
 int lua_CheckBox_createAnimationFromBy(lua_State* state);
@@ -70,7 +70,7 @@ int lua_CheckBox_isXPercentage(lua_State* state);
 int lua_CheckBox_isYPercentage(lua_State* state);
 int lua_CheckBox_release(lua_State* state);
 int lua_CheckBox_removeListener(lua_State* state);
-int lua_CheckBox_removeScriptCallback(lua_State* state);
+int lua_CheckBox_removeScript(lua_State* state);
 int lua_CheckBox_setAlignment(lua_State* state);
 int lua_CheckBox_setAnimationPropertyValue(lua_State* state);
 int lua_CheckBox_setAutoSize(lua_State* state);

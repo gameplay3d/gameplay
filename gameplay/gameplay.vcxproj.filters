@@ -873,6 +873,12 @@
     <ClCompile Include="src\lua\lua_JoystickControl.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\lua\lua_ScriptTargetEventRegistryEvent.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_ContainerDirection.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Plane.h">
@@ -1731,6 +1737,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_JoystickControl.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ScriptTargetEventRegistryEvent.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ContainerDirection.h">
       <Filter>src\lua</Filter>
     </ClInclude>
   </ItemGroup>

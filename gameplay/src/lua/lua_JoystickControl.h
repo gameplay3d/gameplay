@@ -8,7 +8,7 @@ namespace gameplay
 int lua_JoystickControl__gc(lua_State* state);
 int lua_JoystickControl_addListener(lua_State* state);
 int lua_JoystickControl_addRef(lua_State* state);
-int lua_JoystickControl_addScriptCallback(lua_State* state);
+int lua_JoystickControl_addScript(lua_State* state);
 int lua_JoystickControl_canFocus(lua_State* state);
 int lua_JoystickControl_createAnimation(lua_State* state);
 int lua_JoystickControl_createAnimationFromBy(lua_State* state);
@@ -73,7 +73,7 @@ int lua_JoystickControl_isXPercentage(lua_State* state);
 int lua_JoystickControl_isYPercentage(lua_State* state);
 int lua_JoystickControl_release(lua_State* state);
 int lua_JoystickControl_removeListener(lua_State* state);
-int lua_JoystickControl_removeScriptCallback(lua_State* state);
+int lua_JoystickControl_removeScript(lua_State* state);
 int lua_JoystickControl_setAlignment(lua_State* state);
 int lua_JoystickControl_setAnimationPropertyValue(lua_State* state);
 int lua_JoystickControl_setAutoSize(lua_State* state);

@@ -8,7 +8,7 @@ namespace gameplay
 int lua_Button__gc(lua_State* state);
 int lua_Button_addListener(lua_State* state);
 int lua_Button_addRef(lua_State* state);
-int lua_Button_addScriptCallback(lua_State* state);
+int lua_Button_addScript(lua_State* state);
 int lua_Button_canFocus(lua_State* state);
 int lua_Button_createAnimation(lua_State* state);
 int lua_Button_createAnimationFromBy(lua_State* state);
@@ -68,7 +68,7 @@ int lua_Button_isXPercentage(lua_State* state);
 int lua_Button_isYPercentage(lua_State* state);
 int lua_Button_release(lua_State* state);
 int lua_Button_removeListener(lua_State* state);
-int lua_Button_removeScriptCallback(lua_State* state);
+int lua_Button_removeScript(lua_State* state);
 int lua_Button_setAlignment(lua_State* state);
 int lua_Button_setAnimationPropertyValue(lua_State* state);
 int lua_Button_setAutoSize(lua_State* state);

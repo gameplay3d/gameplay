@@ -30,7 +30,7 @@ void luaRegister_Slider()
     {
         {"addListener", lua_Slider_addListener},
         {"addRef", lua_Slider_addRef},
-        {"addScriptCallback", lua_Slider_addScriptCallback},
+        {"addScript", lua_Slider_addScript},
         {"canFocus", lua_Slider_canFocus},
         {"createAnimation", lua_Slider_createAnimation},
         {"createAnimationFromBy", lua_Slider_createAnimationFromBy},
@@ -98,7 +98,7 @@ void luaRegister_Slider()
         {"isYPercentage", lua_Slider_isYPercentage},
         {"release", lua_Slider_release},
         {"removeListener", lua_Slider_removeListener},
-        {"removeScriptCallback", lua_Slider_removeScriptCallback},
+        {"removeScript", lua_Slider_removeScript},
         {"setAlignment", lua_Slider_setAlignment},
         {"setAnimationPropertyValue", lua_Slider_setAnimationPropertyValue},
         {"setAutoSize", lua_Slider_setAutoSize},
@@ -283,7 +283,7 @@ int lua_Slider_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Slider_addScriptCallback(lua_State* state)
+int lua_Slider_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -291,31 +291,30 @@ int lua_Slider_addScriptCallback(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 3:
+        case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = gameplay::ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = gameplay::ScriptUtil::getString(3, true);
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 Slider* instance = getInstance(state);
-                instance->addScriptCallback(param1, param2);
-                
-                return 0;
+                int result = instance->addScript(param1);
+
+                // Push the return value onto the stack.
+                lua_pushinteger(state, result);
+
+                return 1;
             }
 
-            lua_pushstring(state, "lua_Slider_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Slider_addScript - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3444,7 +3443,7 @@ int lua_Slider_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_Slider_removeScriptCallback(lua_State* state)
+int lua_Slider_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3452,31 +3451,30 @@ int lua_Slider_removeScriptCallback(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 3:
+        case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = gameplay::ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = gameplay::ScriptUtil::getString(3, true);
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 Slider* instance = getInstance(state);
-                instance->removeScriptCallback(param1, param2);
-                
-                return 0;
+                bool result = instance->removeScript(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
             }
 
-            lua_pushstring(state, "lua_Slider_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Slider_removeScript - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

@@ -8,7 +8,7 @@ namespace gameplay
 int lua_Label__gc(lua_State* state);
 int lua_Label_addListener(lua_State* state);
 int lua_Label_addRef(lua_State* state);
-int lua_Label_addScriptCallback(lua_State* state);
+int lua_Label_addScript(lua_State* state);
 int lua_Label_canFocus(lua_State* state);
 int lua_Label_createAnimation(lua_State* state);
 int lua_Label_createAnimationFromBy(lua_State* state);
@@ -69,7 +69,7 @@ int lua_Label_isXPercentage(lua_State* state);
 int lua_Label_isYPercentage(lua_State* state);
 int lua_Label_release(lua_State* state);
 int lua_Label_removeListener(lua_State* state);
-int lua_Label_removeScriptCallback(lua_State* state);
+int lua_Label_removeScript(lua_State* state);
 int lua_Label_setAlignment(lua_State* state);
 int lua_Label_setAnimationPropertyValue(lua_State* state);
 int lua_Label_setAutoSize(lua_State* state);

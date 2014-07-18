@@ -5,8 +5,8 @@ namespace gameplay
 {
 
 // Lua bindings for ScriptTarget.
-int lua_ScriptTarget_addScriptCallback(lua_State* state);
-int lua_ScriptTarget_removeScriptCallback(lua_State* state);
+int lua_ScriptTarget_addScript(lua_State* state);
+int lua_ScriptTarget_removeScript(lua_State* state);
 
 void luaRegister_ScriptTarget();
 

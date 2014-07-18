@@ -8,7 +8,7 @@ namespace gameplay
 int lua_RadioButton__gc(lua_State* state);
 int lua_RadioButton_addListener(lua_State* state);
 int lua_RadioButton_addRef(lua_State* state);
-int lua_RadioButton_addScriptCallback(lua_State* state);
+int lua_RadioButton_addScript(lua_State* state);
 int lua_RadioButton_canFocus(lua_State* state);
 int lua_RadioButton_createAnimation(lua_State* state);
 int lua_RadioButton_createAnimationFromBy(lua_State* state);
@@ -71,7 +71,7 @@ int lua_RadioButton_isXPercentage(lua_State* state);
 int lua_RadioButton_isYPercentage(lua_State* state);
 int lua_RadioButton_release(lua_State* state);
 int lua_RadioButton_removeListener(lua_State* state);
-int lua_RadioButton_removeScriptCallback(lua_State* state);
+int lua_RadioButton_removeScript(lua_State* state);
 int lua_RadioButton_setAlignment(lua_State* state);
 int lua_RadioButton_setAnimationPropertyValue(lua_State* state);
 int lua_RadioButton_setAutoSize(lua_State* state);

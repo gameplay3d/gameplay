@@ -29,7 +29,7 @@ void luaRegister_ImageControl()
     {
         {"addListener", lua_ImageControl_addListener},
         {"addRef", lua_ImageControl_addRef},
-        {"addScriptCallback", lua_ImageControl_addScriptCallback},
+        {"addScript", lua_ImageControl_addScript},
         {"canFocus", lua_ImageControl_canFocus},
         {"createAnimation", lua_ImageControl_createAnimation},
         {"createAnimationFromBy", lua_ImageControl_createAnimationFromBy},
@@ -91,7 +91,7 @@ void luaRegister_ImageControl()
         {"isYPercentage", lua_ImageControl_isYPercentage},
         {"release", lua_ImageControl_release},
         {"removeListener", lua_ImageControl_removeListener},
-        {"removeScriptCallback", lua_ImageControl_removeScriptCallback},
+        {"removeScript", lua_ImageControl_removeScript},
         {"setAlignment", lua_ImageControl_setAlignment},
         {"setAnimationPropertyValue", lua_ImageControl_setAnimationPropertyValue},
         {"setAutoSize", lua_ImageControl_setAutoSize},
@@ -271,7 +271,7 @@ int lua_ImageControl_addRef(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_addScriptCallback(lua_State* state)
+int lua_ImageControl_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -279,31 +279,30 @@ int lua_ImageControl_addScriptCallback(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 3:
+        case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = gameplay::ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = gameplay::ScriptUtil::getString(3, true);
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 ImageControl* instance = getInstance(state);
-                instance->addScriptCallback(param1, param2);
-                
-                return 0;
+                int result = instance->addScript(param1);
+
+                // Push the return value onto the stack.
+                lua_pushinteger(state, result);
+
+                return 1;
             }
 
-            lua_pushstring(state, "lua_ImageControl_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_ImageControl_addScript - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3240,7 +3239,7 @@ int lua_ImageControl_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_removeScriptCallback(lua_State* state)
+int lua_ImageControl_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3248,31 +3247,30 @@ int lua_ImageControl_removeScriptCallback(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 3:
+        case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = gameplay::ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = gameplay::ScriptUtil::getString(3, true);
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 ImageControl* instance = getInstance(state);
-                instance->removeScriptCallback(param1, param2);
-                
-                return 0;
+                bool result = instance->removeScript(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
             }
 
-            lua_pushstring(state, "lua_ImageControl_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_ImageControl_removeScript - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

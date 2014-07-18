@@ -237,8 +237,8 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 		}
 
 		// Register script listeners for control events
-		if (properties->exists("listener"))
-			addScriptCallback("controlEvent", properties->getString("listener"));
+		if (properties->exists("script"))
+			addScript(properties->getString("script"));
 
 		// Potentially override themed properties for all states.
 		overrideThemedProperties(properties, STATE_ALL);

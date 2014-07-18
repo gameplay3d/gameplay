@@ -13,8 +13,10 @@ void luaRegister_ScriptController()
     const luaL_Reg lua_members[] = 
     {
         {"loadScript", lua_ScriptController_loadScript},
+        {"loadScriptIsolated", lua_ScriptController_loadScriptIsolated},
         {"loadUrl", lua_ScriptController_loadUrl},
         {"registerCallback", lua_ScriptController_registerCallback},
+        {"unloadScript", lua_ScriptController_unloadScript},
         {"unregisterCallback", lua_ScriptController_unregisterCallback},
         {NULL, NULL}
     };
@@ -52,9 +54,12 @@ int lua_ScriptController_loadScript(lua_State* state)
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 ScriptController* instance = getInstance(state);
-                instance->loadScript(param1);
-                
-                return 0;
+                bool result = instance->loadScript(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
             }
 
             lua_pushstring(state, "lua_ScriptController_loadScript - Failed to match the given parameters to a valid function signature.");
@@ -74,9 +79,12 @@ int lua_ScriptController_loadScript(lua_State* state)
                 bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
 
                 ScriptController* instance = getInstance(state);
-                instance->loadScript(param1, param2);
-                
-                return 0;
+                bool result = instance->loadScript(param1, param2);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
             }
 
             lua_pushstring(state, "lua_ScriptController_loadScript - Failed to match the given parameters to a valid function signature.");
@@ -86,6 +94,45 @@ int lua_ScriptController_loadScript(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ScriptController_loadScriptIsolated(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                ScriptController* instance = getInstance(state);
+                int result = instance->loadScriptIsolated(param1);
+
+                // Push the return value onto the stack.
+                lua_pushinteger(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ScriptController_loadScriptIsolated - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -122,9 +169,34 @@ int lua_ScriptController_loadUrl(lua_State* state)
             lua_error(state);
             break;
         }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                gameplay::ScriptUtil::LuaArray<int> param2 = gameplay::ScriptUtil::getIntPointer(3);
+
+                ScriptController* instance = getInstance(state);
+                std::string result = instance->loadUrl(param1, param2);
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result.c_str());
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ScriptController_loadUrl - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
             lua_error(state);
             break;
         }
@@ -225,6 +297,42 @@ int lua_ScriptController_static_print(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ScriptController_unloadScript(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                ScriptController* instance = getInstance(state);
+                instance->unloadScript(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_ScriptController_unloadScript - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

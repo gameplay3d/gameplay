@@ -26,6 +26,7 @@
 #include "TextBox.h"
 #include "Theme.h"
 #include "VerticalLayout.h"
+#include "lua_ContainerDirection.h"
 #include "lua_ContainerScroll.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
@@ -45,7 +46,7 @@ void luaRegister_Container()
         {"addControl", lua_Container_addControl},
         {"addListener", lua_Container_addListener},
         {"addRef", lua_Container_addRef},
-        {"addScriptCallback", lua_Container_addScriptCallback},
+        {"addScript", lua_Container_addScript},
         {"canFocus", lua_Container_canFocus},
         {"createAnimation", lua_Container_createAnimation},
         {"createAnimationFromBy", lua_Container_createAnimationFromBy},
@@ -116,10 +117,11 @@ void luaRegister_Container()
         {"isWidthPercentage", lua_Container_isWidthPercentage},
         {"isXPercentage", lua_Container_isXPercentage},
         {"isYPercentage", lua_Container_isYPercentage},
+        {"moveFocus", lua_Container_moveFocus},
         {"release", lua_Container_release},
         {"removeControl", lua_Container_removeControl},
         {"removeListener", lua_Container_removeListener},
-        {"removeScriptCallback", lua_Container_removeScriptCallback},
+        {"removeScript", lua_Container_removeScript},
         {"setActiveControl", lua_Container_setActiveControl},
         {"setAlignment", lua_Container_setAlignment},
         {"setAnimationPropertyValue", lua_Container_setAnimationPropertyValue},
@@ -351,7 +353,7 @@ int lua_Container_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Container_addScriptCallback(lua_State* state)
+int lua_Container_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -359,31 +361,30 @@ int lua_Container_addScriptCallback(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 3:
+        case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = gameplay::ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = gameplay::ScriptUtil::getString(3, true);
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 Container* instance = getInstance(state);
-                instance->addScriptCallback(param1, param2);
-                
-                return 0;
+                int result = instance->addScript(param1);
+
+                // Push the return value onto the stack.
+                lua_pushinteger(state, result);
+
+                return 1;
             }
 
-            lua_pushstring(state, "lua_Container_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Container_addScript - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3694,6 +3695,45 @@ int lua_Container_isYPercentage(lua_State* state)
     return 0;
 }
 
+int lua_Container_moveFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Container::Direction param1 = (Container::Direction)lua_enumFromString_ContainerDirection(luaL_checkstring(state, 2));
+
+                Container* instance = getInstance(state);
+                bool result = instance->moveFocus(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_moveFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -3840,7 +3880,7 @@ int lua_Container_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_Container_removeScriptCallback(lua_State* state)
+int lua_Container_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3848,31 +3888,30 @@ int lua_Container_removeScriptCallback(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 3:
+        case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = gameplay::ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = gameplay::ScriptUtil::getString(3, true);
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 Container* instance = getInstance(state);
-                instance->removeScriptCallback(param1, param2);
-                
-                return 0;
+                bool result = instance->removeScript(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
             }
 
-            lua_pushstring(state, "lua_Container_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Container_removeScript - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

@@ -10,7 +10,7 @@ AIAgent::AIAgent()
 {
     _stateMachine = new AIStateMachine(this);
 
-    addScriptEvent("message", "<AIMessage>");
+    registerScriptEvent("message", "<AIMessage>");
 }
 
 AIAgent::~AIAgent()

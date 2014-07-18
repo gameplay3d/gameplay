@@ -8,7 +8,7 @@ namespace gameplay
 int lua_Slider__gc(lua_State* state);
 int lua_Slider_addListener(lua_State* state);
 int lua_Slider_addRef(lua_State* state);
-int lua_Slider_addScriptCallback(lua_State* state);
+int lua_Slider_addScript(lua_State* state);
 int lua_Slider_canFocus(lua_State* state);
 int lua_Slider_createAnimation(lua_State* state);
 int lua_Slider_createAnimationFromBy(lua_State* state);
@@ -76,7 +76,7 @@ int lua_Slider_isXPercentage(lua_State* state);
 int lua_Slider_isYPercentage(lua_State* state);
 int lua_Slider_release(lua_State* state);
 int lua_Slider_removeListener(lua_State* state);
-int lua_Slider_removeScriptCallback(lua_State* state);
+int lua_Slider_removeScript(lua_State* state);
 int lua_Slider_setAlignment(lua_State* state);
 int lua_Slider_setAnimationPropertyValue(lua_State* state);
 int lua_Slider_setAutoSize(lua_State* state);

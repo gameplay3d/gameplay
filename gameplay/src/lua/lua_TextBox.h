@@ -8,7 +8,7 @@ namespace gameplay
 int lua_TextBox__gc(lua_State* state);
 int lua_TextBox_addListener(lua_State* state);
 int lua_TextBox_addRef(lua_State* state);
-int lua_TextBox_addScriptCallback(lua_State* state);
+int lua_TextBox_addScript(lua_State* state);
 int lua_TextBox_canFocus(lua_State* state);
 int lua_TextBox_createAnimation(lua_State* state);
 int lua_TextBox_createAnimationFromBy(lua_State* state);
@@ -73,7 +73,7 @@ int lua_TextBox_isXPercentage(lua_State* state);
 int lua_TextBox_isYPercentage(lua_State* state);
 int lua_TextBox_release(lua_State* state);
 int lua_TextBox_removeListener(lua_State* state);
-int lua_TextBox_removeScriptCallback(lua_State* state);
+int lua_TextBox_removeScript(lua_State* state);
 int lua_TextBox_setAlignment(lua_State* state);
 int lua_TextBox_setAnimationPropertyValue(lua_State* state);
 int lua_TextBox_setAutoSize(lua_State* state);

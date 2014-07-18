@@ -19,11 +19,16 @@
 namespace gameplay
 {
 
+GP_SCRIPT_EVENTS();
+GP_SCRIPT_EVENT(update, "f");
+
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _active(true),
     _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     if (id)
     {
         _id = id;
@@ -444,6 +449,8 @@ void Node::update(float elapsedTime)
         if (node->isActive())
             node->update(elapsedTime);
     }
+
+    fireScriptEvent<void>(SCRIPT_EVENT_update, elapsedTime);
 }
 
 bool Node::isStatic() const

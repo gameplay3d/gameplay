@@ -42,9 +42,9 @@
     \
     return arr
 
-#define PUSH_NESTED_VARIABLE(name, defaultValue) \
+#define PUSH_NESTED_VARIABLE(name, defaultValue, script) \
     int top = lua_gettop(_lua); \
-    if (!getNestedVariable(_lua, (name))) \
+    if (!getNestedVariable(_lua, name, script)) \
     { \
         lua_settop(_lua, top); \
         return (defaultValue); \
@@ -53,28 +53,42 @@
 #define POP_NESTED_VARIABLE() \
     lua_settop(_lua, top)
 
+namespace gameplay
+{
+
+extern void splitURL(const std::string& url, std::string* file, std::string* id);
+
 /**
- * Pushes onto the stack, the value of the global 'name' or the nested table value if 'name' is a '.' separated 
+ * Pushes onto the stack, the value of the variable 'name' or the nested table value if 'name' is a '.' separated 
  * list of tables of the form "A.B.C.D", where A, B and C are tables and D is a variable name in the table C.
- * 
- * If 'name' does not contain any '.' then it is assumed to be the name of a global variable.
  * 
  * This function will not restore the stack if there is an error.
  * 
  * @param lua  The Lua state.
- * @param name The name of a global variable or a '.' separated list of nested tables ending with a variable name.
+ * @param name The name of a variable or a '.' separated list of nested tables ending with a variable name.
  *             The name value may be in the format "A.B.C.D" where A is a table and B, C are child tables.
  *             D is any type, which will be accessed by the calling function.
+ * @param script Optional ID of the script environment to query the variable from (or zero for the global environment).
  * 
- * @return True if the tables were pushed on the stack or the global variable was pushed. Returns false on error.
+ * @return True if the tables were pushed on the stack or the variable was pushed. Returns false on error.
  */
-static bool getNestedVariable(lua_State* lua, const char* name)
+static bool getNestedVariable(lua_State* lua, const char* name, int script = 0)
 {
     if (strchr(name, '.') == NULL)
     {
-        lua_getglobal(lua, name);
+        // Just a field name, no nested tables
+        if (script)
+        {
+            lua_rawgeti(lua, LUA_REGISTRYINDEX, script);
+            lua_getfield(lua, -1, name);
+        }
+        else
+        {
+            lua_getglobal(lua, name);
+        }
         return true;
     }
+
     static std::string str;
     // Copy the input string to a std::string so we can modify it because 
     // some of the Lua functions require NULL terminated c-strings.
@@ -89,12 +103,23 @@ static bool getNestedVariable(lua_State* lua, const char* name)
     }
     ++end;
     *(end - 1) = '\0';
-    lua_getglobal(lua, start);
+
+    if (script)
+    {
+        lua_rawgeti(lua, LUA_REGISTRYINDEX, script);
+        lua_getfield(lua, -1, start);
+    }
+    else
+    {
+        lua_getglobal(lua, start);
+    }
     *(end - 1) = '.';
+
     if (!lua_istable(lua, -1))
     {
         return false;
     }
+
     // Push the nested tables
     for (;;)
     {
@@ -127,11 +152,6 @@ static bool getNestedVariable(lua_State* lua, const char* name)
     }
     return false;
 }
-
-namespace gameplay
-{
-
-extern void splitURL(const std::string& url, std::string* file, std::string* id);
 
 void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions)
 {
@@ -521,9 +541,13 @@ int ScriptController::loadScriptIsolated(const char* path)
     return id;
 }
 
-bool ScriptController::unloadScript(int id)
+void ScriptController::unloadScript(int id)
 {
-    // TODO
+    // Release the reference to the environment table
+    luaL_unref(_lua, LUA_REGISTRYINDEX, id);
+
+    // TODO: What else do we need to clean up?
+    // Can we test this with manual GC and breaking on gameplay object constructors that were delcared local (even global??) to the script?
 }
 
 std::string ScriptController::loadUrl(const char* url, int* scriptId)
@@ -566,172 +590,284 @@ void ScriptController::parseUrl(const char* url, std::string* script, std::strin
     }
 }
 
-bool ScriptController::getBool(const char* name, bool defaultValue)
+bool ScriptController::getBool(const char* name, bool defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     bool b = lua_isboolean(_lua, -1) ? ScriptUtil::luaCheckBool(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return b;
 }
 
-char ScriptController::getChar(const char* name, char defaultValue)
+char ScriptController::getChar(const char* name, char defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     char c = lua_isnumber(_lua, -1) ?  (char)luaL_checkint(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return c;
 }
 
-short ScriptController::getShort(const char* name, short defaultValue)
+short ScriptController::getShort(const char* name, short defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     short n = lua_isnumber(_lua, -1) ? (short)luaL_checkint(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return n;
 }
 
-int ScriptController::getInt(const char* name, int defaultValue)
+int ScriptController::getInt(const char* name, int defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     int n = lua_isnumber(_lua, -1) ? luaL_checkint(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return n;
 }
 
-long ScriptController::getLong(const char* name, long defaultValue)
+long ScriptController::getLong(const char* name, long defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     long n = lua_isnumber(_lua, -1) ? luaL_checklong(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return n;
 }
 
-unsigned char ScriptController::getUnsignedChar(const char* name, unsigned char defaultValue)
+unsigned char ScriptController::getUnsignedChar(const char* name, unsigned char defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     unsigned char c = lua_isnumber(_lua, -1) ? (unsigned char)luaL_checkunsigned(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return c;
 }
 
-unsigned short ScriptController::getUnsignedShort(const char* name, unsigned short defaultValue)
+unsigned short ScriptController::getUnsignedShort(const char* name, unsigned short defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     unsigned short n = lua_isnumber(_lua, -1) ? (unsigned short)luaL_checkunsigned(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return n;
 }
 
-unsigned int ScriptController::getUnsignedInt(const char* name, unsigned int defaultValue)
+unsigned int ScriptController::getUnsignedInt(const char* name, unsigned int defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     unsigned int n = lua_isnumber(_lua, -1) ? (unsigned int)luaL_checkunsigned(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return n;
 }
 
-unsigned long ScriptController::getUnsignedLong(const char* name, unsigned long defaultValue)
+unsigned long ScriptController::getUnsignedLong(const char* name, unsigned long defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     unsigned long n = lua_isnumber(_lua, -1) ? (unsigned long)luaL_checkunsigned(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return n;
 }
 
-float ScriptController::getFloat(const char* name, float defaultValue)
+float ScriptController::getFloat(const char* name, float defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     float f = lua_isnumber(_lua, -1) ? (float)luaL_checknumber(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return f;
 }
 
-double ScriptController::getDouble(const char* name, double defaultValue)
+double ScriptController::getDouble(const char* name, double defaultValue, int script)
 {
-    PUSH_NESTED_VARIABLE(name, defaultValue);
+    PUSH_NESTED_VARIABLE(name, defaultValue, script);
     double n = lua_isnumber(_lua, -1) ? (double)luaL_checknumber(_lua, -1) : defaultValue;
     POP_NESTED_VARIABLE();
     return n;
 }
 
-const char* ScriptController::getString(const char* name)
+const char* ScriptController::getString(const char* name, int script)
 {
-    PUSH_NESTED_VARIABLE(name, NULL);
+    PUSH_NESTED_VARIABLE(name, NULL, script);
     const char* s = lua_isstring(_lua, -1) ? luaL_checkstring(_lua, -1) : NULL;
     POP_NESTED_VARIABLE();
     return s;
 }
 
-void ScriptController::setBool(const char* name, bool v)
+void ScriptController::setBool(const char* name, bool v, int script)
 {
-    lua_pushboolean(_lua, v);
-    lua_setglobal(_lua, name);
+    // TODO: Support setting variables in nested tables. Should just need to execute code similar to
+    // that in getNestedVariable, except we only need to push the parent tables onto the stack,
+    // NOT the actual field/variable (since we're going to set it).
+
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushboolean(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushboolean(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setChar(const char* name, char v)
+void ScriptController::setChar(const char* name, char v, int script)
 {
-    lua_pushinteger(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushinteger(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushinteger(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setShort(const char* name, short v)
+void ScriptController::setShort(const char* name, short v, int script)
 {
-    lua_pushinteger(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushinteger(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushinteger(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setInt(const char* name, int v)
+void ScriptController::setInt(const char* name, int v, int script)
 {
-    lua_pushinteger(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushinteger(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushinteger(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setLong(const char* name, long v)
+void ScriptController::setLong(const char* name, long v, int script)
 {
-    lua_pushinteger(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushinteger(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushinteger(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setUnsignedChar(const char* name, unsigned char v)
+void ScriptController::setUnsignedChar(const char* name, unsigned char v, int script)
 {
-    lua_pushunsigned(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushunsigned(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushunsigned(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setUnsignedShort(const char* name, unsigned short v)
+void ScriptController::setUnsignedShort(const char* name, unsigned short v, int script)
 {
-    lua_pushunsigned(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushunsigned(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushunsigned(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setUnsignedInt(const char* name, unsigned int v)
+void ScriptController::setUnsignedInt(const char* name, unsigned int v, int script)
 {
-    lua_pushunsigned(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushunsigned(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushunsigned(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setUnsignedLong(const char* name, unsigned long v)
+void ScriptController::setUnsignedLong(const char* name, unsigned long v, int script)
 {
-    lua_pushunsigned(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushunsigned(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushunsigned(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setFloat(const char* name, float v)
+void ScriptController::setFloat(const char* name, float v, int script)
 {
-    lua_pushnumber(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushnumber(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushnumber(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setDouble(const char* name, double v)
+void ScriptController::setDouble(const char* name, double v, int script)
 {
-    lua_pushnumber(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushnumber(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushnumber(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
-void ScriptController::setString(const char* name, const char* v)
+void ScriptController::setString(const char* name, const char* v, int script)
 {
-    lua_pushstring(_lua, v);
-    lua_setglobal(_lua, name);
+    if (script)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
+        lua_pushstring(_lua, v);
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
+        lua_pushstring(_lua, v);
+        lua_setglobal(_lua, name);
+    }
 }
 
 void ScriptController::print(const char* str)
@@ -979,14 +1115,7 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
         return;
     }
 
-    // If this function is being executed for a specific (non-global) script environment,
-    // push the script environment table ref onto the stack
-    if (script > 0)
-    {
-        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script);
-    }
-
-    if (!getNestedVariable(_lua, func))
+    if (!getNestedVariable(_lua, func, script))
     {
         GP_WARN("Failed to call function '%s'", func);
         return;
@@ -1219,7 +1348,7 @@ int ScriptController::convert(lua_State* state)
 
 #define SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(type, checkfunc) \
     int top = lua_gettop(_lua); \
-    executeFunctionHelper(1, func, args, list); \
+    executeFunctionHelper(1, func, args, list, script); \
     type value = (type)checkfunc(_lua, -1); \
     lua_pop(_lua, -1); \
     lua_settop(_lua, top); \
@@ -1384,73 +1513,73 @@ template<> void ScriptController::executeFunction<void>(const char* func, const 
 /** Template specialization. */
 template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(bool, ScriptUtil::luaCheckBool, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(bool, ScriptUtil::luaCheckBool);
 }
 
 /** Template specialization. */
 template<> char ScriptController::executeFunction<char>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(char, luaL_checkint, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(char, luaL_checkint);
 }
 
 /** Template specialization. */
 template<> short ScriptController::executeFunction<short>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(short, luaL_checkint, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(short, luaL_checkint);
 }
 
 /** Template specialization. */
 template<> int ScriptController::executeFunction<int>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(int, luaL_checkint, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(int, luaL_checkint);
 }
 
 /** Template specialization. */
 template<> long ScriptController::executeFunction<long>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(long, luaL_checklong, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(long, luaL_checklong);
 }
 
 /** Template specialization. */
 template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned char, luaL_checkunsigned, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned char, luaL_checkunsigned);
 }
 
 /** Template specialization. */
 template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned short, luaL_checkunsigned, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned short, luaL_checkunsigned);
 }
 
 /** Template specialization. */
 template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned int, luaL_checkunsigned, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned int, luaL_checkunsigned);
 }
 
 /** Template specialization. */
 template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned long, luaL_checkunsigned, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned long, luaL_checkunsigned);
 }
 
 /** Template specialization. */
 template<> float ScriptController::executeFunction<float>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(float, luaL_checknumber, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(float, luaL_checknumber);
 }
 
 /** Template specialization. */
 template<> double ScriptController::executeFunction<double>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(double, luaL_checknumber, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(double, luaL_checknumber);
 }
 
 /** Template specialization. */
 template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, va_list* list, int script)
 {
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(std::string, luaL_checkstring, script);
+    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(std::string, luaL_checkstring);
 }
 
 }

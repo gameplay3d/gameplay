@@ -290,9 +290,9 @@ template<typename T> T ScriptController::executeFunction(const char* func, const
     return value;
 }
 
-template<typename T> T ScriptController::executeFunction(const char* func, const char* args, va_list* list)
+template<typename T> T ScriptController::executeFunction(const char* func, const char* args, va_list* list, int script)
 {
-    executeFunctionHelper(1, func, args, list);
+    executeFunctionHelper(1, func, args, list, script);
 
     T value = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
     lua_pop(_lua, -1);
