@@ -77,7 +77,6 @@ set(GAMEPLAY_SRC
     src/Gamepad.cpp
     src/Gamepad.h
     src/gameplay-main-android.cpp
-    src/gameplay-main-blackberry.cpp
     src/gameplay-main-linux.cpp
     src/gameplay-main-windows.cpp
     src/Gesture.h
@@ -162,7 +161,6 @@ set(GAMEPLAY_SRC
     src/Platform.h
     src/Platform.cpp
     src/PlatformAndroid.cpp
-    src/PlatformBlackBerry.cpp
     src/PlatformLinux.cpp
     src/PlatformWindows.cpp
     src/Properties.cpp

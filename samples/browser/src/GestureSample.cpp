@@ -4,7 +4,7 @@
 #include <sstream>
 
 // Linux and windows don't support gestures right now
-#if defined(__ANDROID__) || defined(__APPLE__) || defined(__QNX__)
+#if defined(__ANDROID__) || defined(__APPLE__) 
 #if defined(ADD_SAMPLE)
     ADD_SAMPLE("Input", "Gestures", GestureSample, 2);
 #endif

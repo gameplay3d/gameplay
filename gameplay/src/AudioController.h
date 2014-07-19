@@ -54,11 +54,21 @@ private:
      */
     void update(float elapsedTime);
 
+    void addPlayingSource(AudioSource* source);
+    
+    void removePlayingSource(AudioSource* source);
+
+    static void streamingThreadProc(void* arg);
 
     ALCdevice* _alcDevice;
     ALCcontext* _alcContext;
     std::set<AudioSource*> _playingSources;
+    std::set<AudioSource*> _streamingSources;
     AudioSource* _pausingSource;
+
+    bool _streamingThreadActive;
+    std::unique_ptr<std::thread> _streamingThread;
+    std::unique_ptr<std::mutex> _streamingMutex;
 };
 
 }
