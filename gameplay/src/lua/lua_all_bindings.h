@@ -102,7 +102,6 @@
 #include "lua_ScreenDisplayer.h"
 #include "lua_ScriptController.h"
 #include "lua_ScriptTarget.h"
-#include "lua_ScriptTargetEventRegistryEvent.h"
 #include "lua_Slider.h"
 #include "lua_SpriteBatch.h"
 #include "lua_Technique.h"

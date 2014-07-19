@@ -505,7 +505,7 @@ int ScriptController::loadScriptIsolated(const char* path)
     }
     fullPath.append(path);
 
-    // Load the script chunk, but don't execute it yet: S: 1
+    // Load the script chunk, but don't execute it yet [chunk]
     if (luaL_loadfile(_lua, fullPath.c_str()))
     {
         GP_WARN("Failed to load script with error: '%s'.", lua_tostring(_lua, -1));
@@ -513,23 +513,26 @@ int ScriptController::loadScriptIsolated(const char* path)
     }
 
     // Create a new table as an environment for the new script
-    lua_newtable(_lua); // new ENV for script: S: 21
+    lua_newtable(_lua); // new ENV for script [chunk, env]
 
-    // Store a ref to the table in the registry (this pops the table)
+    // Store a ref to the table in the registry (this pops the table) [chunk]
     int id = luaL_ref(_lua, LUA_REGISTRYINDEX);
 
-    // Create a metatable that forwards missed lookups to global table _G
-    lua_newtable(_lua); // metatable: S: 321
-    lua_getglobal(_lua, "_G"); // pushes _G, which will be the __index metatable entry: S: 4321
+    // Put the env table back on top of the stack
+    lua_rawgeti(_lua, LUA_REGISTRYINDEX, id); // [chunk, env]
 
-    // Set the __index property of the metatable to _G (pops _G)
-    lua_setfield(_lua, -2, "__index"); // metatable on top: S: 321
+    // Create a metatable that forwards missed lookups to global table _G
+    lua_newtable(_lua); // metatable [chunk, env, meta]
+    lua_getglobal(_lua, "_G"); // pushes _G, which will be the __index metatable entry [chunk, env, meta, _G]
+
+    // Set the __index property of the metatable to _G
+    lua_setfield(_lua, -2, "__index"); // metatable on top [chunk, env, meta]
 
     // Set the metatable for our new environment table
-    lua_setmetatable(_lua, -2); // S: 21
+    lua_setmetatable(_lua, -2); // [chunk, env]
 
     // Set the first upvalue (_ENV) for our chunk to the new environment table
-    lua_setupvalue(_lua, 1, 1); // S: 1
+    lua_setupvalue(_lua, 1, 1); // [chunk]
 
     // Finally, execute the code for our chunk that is now in its own environment
     if (lua_pcall(_lua, 0, LUA_MULTRET, 0))

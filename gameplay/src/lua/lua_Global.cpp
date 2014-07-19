@@ -6,7 +6,6 @@ namespace gameplay
 
 void luaRegister_lua_Global()
 {
-    gameplay::ScriptUtil::registerFunction("GP_SCRIPT_EVENTS", lua___init);
     gameplay::ScriptUtil::registerFunction("strcmpnocase", lua__strcmpnocase);
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "CheckBox");
@@ -921,111 +920,6 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("TEXCOORD6", "TEXCOORD6", scopePath);
         gameplay::ScriptUtil::registerConstantString("TEXCOORD7", "TEXCOORD7", scopePath);
     }
-}
-
-int lua___init(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 0:
-        {
-            void* returnPtr = (void*)GP_SCRIPT_EVENTS();
-            if (returnPtr)
-            {
-                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                object->instance = returnPtr;
-                object->owns = false;
-                luaL_getmetatable(state, "GP_SCRIPT_EVENTS");
-                lua_setmetatable(state, -2);
-            }
-            else
-            {
-                lua_pushnil(state);
-            }
-
-            return 1;
-            break;
-        }
-        case 2:
-        {
-            do
-            {
-                if (lua_type(state, 1) == LUA_TNONE &&
-                    lua_type(state, 2) == LUA_TNONE)
-                {
-                    // Get parameter 1 off the stack.
-                    GP_WARN("Attempting to get parameter 1 with unrecognized type update as an unsigned integer.");
-                    update param1 = (update)luaL_checkunsigned(state, 1);
-
-                    // Get parameter 2 off the stack.
-                    GP_WARN("Attempting to get parameter 2 with unrecognized type "f" as an unsigned integer.");
-                    "f" param2 = ("f")luaL_checkunsigned(state, 2);
-
-                    void* returnPtr = (void*)GP_SCRIPT_EVENT(param1, param2);
-                    if (returnPtr)
-                    {
-                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                        object->instance = returnPtr;
-                        object->owns = false;
-                        luaL_getmetatable(state, "GP_SCRIPT_EVENT");
-                        lua_setmetatable(state, -2);
-                    }
-                    else
-                    {
-                        lua_pushnil(state);
-                    }
-
-                    return 1;
-                }
-            } while (0);
-
-            do
-            {
-                if (lua_type(state, 1) == LUA_TNONE &&
-                    lua_type(state, 2) == LUA_TNONE)
-                {
-                    // Get parameter 1 off the stack.
-                    GP_WARN("Attempting to get parameter 1 with unrecognized type transformChanged as an unsigned integer.");
-                    transformChanged param1 = (transformChanged)luaL_checkunsigned(state, 1);
-
-                    // Get parameter 2 off the stack.
-                    GP_WARN("Attempting to get parameter 2 with unrecognized type "<Transform>" as an unsigned integer.");
-                    "<Transform>" param2 = ("<Transform>")luaL_checkunsigned(state, 2);
-
-                    void* returnPtr = (void*)GP_SCRIPT_EVENT(param1, param2);
-                    if (returnPtr)
-                    {
-                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                        object->instance = returnPtr;
-                        object->owns = false;
-                        luaL_getmetatable(state, "GP_SCRIPT_EVENT");
-                        lua_setmetatable(state, -2);
-                    }
-                    else
-                    {
-                        lua_pushnil(state);
-                    }
-
-                    return 1;
-                }
-            } while (0);
-
-            lua_pushstring(state, "lua___init - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 0 or 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
 }
 
 int lua__strcmpnocase(lua_State* state)

@@ -16,11 +16,13 @@
 #define NODE_DIRTY_BOUNDS 2
 #define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS)
 
+/** @script{ignore} */
+GP_SCRIPT_EVENTS();
+/** @script{ignore} */
+GP_SCRIPT_EVENT(update, "f");
+
 namespace gameplay
 {
-
-GP_SCRIPT_EVENTS();
-GP_SCRIPT_EVENT(update, "f");
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _active(true),

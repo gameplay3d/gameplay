@@ -124,6 +124,22 @@ bool ScriptTarget::removeScript(const char* path)
     return false;
 }
 
+bool ScriptTarget::hasScriptListener(const EventRegistry::Event* evt) const
+{
+    Script* script = _scripts;
+    while (script)
+    {
+        // Does this script have a callback implemented for the given event?
+        std::vector<std::string>& callbacks = script->eventCallbacks;
+        std::vector<std::string>::iterator itr = std::find(callbacks.begin(), callbacks.end(), evt->name);
+        if (itr != callbacks.end())
+            return true;
+        script = script->next;
+    }
+
+    return false;
+}
+
 template<> void ScriptTarget::fireScriptEvent<void>(const EventRegistry::Event* evt, ...)
 {
     GP_ASSERT(evt);

@@ -3,12 +3,13 @@
 #include "Game.h"
 #include "Node.h"
 
+/** @script{ignore} */
+GP_SCRIPT_EVENTS();
+/** @script{ignore} */
+GP_SCRIPT_EVENT(transformChanged, "<Transform>");
+
 namespace gameplay
 {
-
-// Setup scripting
-GP_SCRIPT_EVENTS();
-GP_SCRIPT_EVENT(transformChanged, "<Transform>");
 
 int Transform::_suspendTransformChanged(0);
 std::vector<Transform*> Transform::_transformsChanged;

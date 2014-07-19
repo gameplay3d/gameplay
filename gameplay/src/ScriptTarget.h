@@ -13,6 +13,8 @@ namespace gameplay
  *
  * It is recommended that these macros be used at the top of the source file that
  * contains the implemtation of a ScriptTarget child class.
+ *
+ * @script{ignore}
  */
 #define GP_SCRIPT_EVENTS() \
     static gameplay::ScriptTarget::EventRegistry __eventRegistry
@@ -32,6 +34,8 @@ namespace gameplay
  * @param eventArgs Parmeters for this script event.
  *
  * @see ScriptController::executeFunction
+ *
+ * @script{ignore}
  */
 #define GP_SCRIPT_EVENT(eventName, eventArgs) \
     static const gameplay::ScriptTarget::EventRegistry::Event* SCRIPT_EVENT_ ## eventName = __eventRegistry.addEvent(#eventName, eventArgs)
@@ -42,6 +46,8 @@ namespace gameplay
  * This macro should be called in the constructor of a ScriptTarget
  * child class implementation. It requires that GP_SCRIPT_EVENT
  * macros be defined (normally at the top of the compilation unit).
+ *
+ * @script{ignore}
  */
 #define GP_REGISTER_SCRIPT_EVENTS() \
     ScriptTarget::registerEvents(&__eventRegistry)
@@ -67,6 +73,8 @@ public:
 
         /**
          * Defines a single script event.
+         *
+         * @script{ignore}
          */
         struct Event
         {
@@ -141,6 +149,16 @@ public:
      * @return True if a script is successfully removed, false otherwise.
      */
     bool removeScript(const char* path);
+
+    /**
+     * Determines if there is a script installed that is listening for the given script
+     * event (i.e. has a function callback defined for the given event).
+     *
+     * @param evt The script event to check.
+     *
+     * @return True if there is a listener for the specified event, false otherwise.
+     */
+    bool hasScriptListener(const EventRegistry::Event* evt) const;
 
 protected:
 

@@ -2,15 +2,18 @@
 #include "AIAgent.h"
 #include "Node.h"
 
+GP_SCRIPT_EVENTS();
+GP_SCRIPT_EVENT(message, "<AIMessage>");
+
 namespace gameplay
 {
 
 AIAgent::AIAgent()
     : _stateMachine(NULL), _node(NULL), _enabled(true), _listener(NULL), _next(NULL)
 {
-    _stateMachine = new AIStateMachine(this);
+    GP_REGISTER_SCRIPT_EVENTS();
 
-    registerScriptEvent("message", "<AIMessage>");
+    _stateMachine = new AIStateMachine(this);
 }
 
 AIAgent::~AIAgent()
@@ -86,7 +89,7 @@ bool AIAgent::processMessage(AIMessage* message)
     if (_listener && _listener->messageReceived(message))
         return true;
     
-    if (fireScriptEvent<bool>("message", message))
+    if (fireScriptEvent<bool>(SCRIPT_EVENT_message, message))
         return true;
     
     return false;
