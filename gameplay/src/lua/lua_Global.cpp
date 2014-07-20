@@ -182,6 +182,18 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("ORTHOGRAPHIC", "ORTHOGRAPHIC", scopePath);
     }
 
+    // Register enumeration Container::Direction.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Container");
+        gameplay::ScriptUtil::registerConstantString("UP", "UP", scopePath);
+        gameplay::ScriptUtil::registerConstantString("DOWN", "DOWN", scopePath);
+        gameplay::ScriptUtil::registerConstantString("LEFT", "LEFT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("RIGHT", "RIGHT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("NEXT", "NEXT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("PREVIOUS", "PREVIOUS", scopePath);
+    }
+
     // Register enumeration Container::Scroll.
     {
         std::vector<std::string> scopePath;
@@ -963,6 +975,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_AudioSourceState((AudioSource::State)value);
     if (enumname == "Camera::Type")
         return lua_stringFromEnum_CameraType((Camera::Type)value);
+    if (enumname == "Container::Direction")
+        return lua_stringFromEnum_ContainerDirection((Container::Direction)value);
     if (enumname == "Container::Scroll")
         return lua_stringFromEnum_ContainerScroll((Container::Scroll)value);
     if (enumname == "Control::Alignment")

@@ -14,6 +14,7 @@ int lua_AudioSource_getRefCount(lua_State* state);
 int lua_AudioSource_getState(lua_State* state);
 int lua_AudioSource_getVelocity(lua_State* state);
 int lua_AudioSource_isLooped(lua_State* state);
+int lua_AudioSource_isStreamed(lua_State* state);
 int lua_AudioSource_pause(lua_State* state);
 int lua_AudioSource_play(lua_State* state);
 int lua_AudioSource_release(lua_State* state);

@@ -27,6 +27,7 @@
 #include "TextBox.h"
 #include "Theme.h"
 #include "VerticalLayout.h"
+#include "lua_ContainerDirection.h"
 #include "lua_ContainerScroll.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
@@ -119,6 +120,7 @@ void luaRegister_Form()
         {"isWidthPercentage", lua_Form_isWidthPercentage},
         {"isXPercentage", lua_Form_isXPercentage},
         {"isYPercentage", lua_Form_isYPercentage},
+        {"moveFocus", lua_Form_moveFocus},
         {"release", lua_Form_release},
         {"removeControl", lua_Form_removeControl},
         {"removeListener", lua_Form_removeListener},
@@ -3774,6 +3776,45 @@ int lua_Form_isYPercentage(lua_State* state)
     return 0;
 }
 
+int lua_Form_moveFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Container::Direction param1 = (Container::Direction)lua_enumFromString_ContainerDirection(luaL_checkstring(state, 2));
+
+                Form* instance = getInstance(state);
+                bool result = instance->moveFocus(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_moveFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -6426,9 +6467,37 @@ int lua_Form_static_getActiveControl(lua_State* state)
             return 1;
             break;
         }
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 1);
+
+                void* returnPtr = (void*)Form::getActiveControl(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_static_getActiveControl - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
             lua_error(state);
             break;
         }

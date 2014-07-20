@@ -82,6 +82,7 @@ int lua_Form_isVisibleInHierarchy(lua_State* state);
 int lua_Form_isWidthPercentage(lua_State* state);
 int lua_Form_isXPercentage(lua_State* state);
 int lua_Form_isYPercentage(lua_State* state);
+int lua_Form_moveFocus(lua_State* state);
 int lua_Form_release(lua_State* state);
 int lua_Form_removeControl(lua_State* state);
 int lua_Form_removeListener(lua_State* state);
