@@ -56,7 +56,7 @@ AnimationClip::~AnimationClip()
         {
             ListenerEvent* lEvt = **_listenerItr;
             SAFE_DELETE(lEvt);
-            ++*_listenerItr;
+			++(*_listenerItr);
         }
         SAFE_DELETE(_listeners);
     }
@@ -309,15 +309,65 @@ void AnimationClip::addListener(AnimationClip::Listener* listener, unsigned long
                 {
                     float currentTime = fmodf(_elapsedTime, (float)_duration);
                     GP_ASSERT(**_listenerItr || *_listenerItr == _listeners->end());
-                    if ((_speed >= 0.0f && currentTime < eventTime && (*_listenerItr == _listeners->end() || eventTime < (**_listenerItr)->_eventTime)) || 
-                        (_speed <= 0 && currentTime > eventTime && (*_listenerItr == _listeners->begin() || eventTime > (**_listenerItr)->_eventTime)))
-                        *_listenerItr = itr;
+					if ((_speed >= 0.0f && currentTime < eventTime && (*_listenerItr == _listeners->end() || eventTime < (**_listenerItr)->_eventTime)) ||
+						(_speed <= 0 && currentTime > eventTime && (*_listenerItr == _listeners->begin() || eventTime > (**_listenerItr)->_eventTime)))
+					{
+						*_listenerItr = itr;
+					}
                 }
                 return;
             }
         }
         _listeners->push_back(listenerEvent);
     }
+}
+
+void AnimationClip::removeListener(AnimationClip::Listener* listener, unsigned long eventTime)
+{
+	if (_listeners)
+	{
+		GP_ASSERT(listener);
+		std::list<ListenerEvent*>::iterator iter = std::find_if(_listeners->begin(), _listeners->end(), [&](ListenerEvent* lst){ return lst->_eventTime == eventTime && lst->_listener == listener; });
+		if (iter != _listeners->end())
+		{
+			if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
+			{
+				float currentTime = fmodf(_elapsedTime, (float)_duration);
+				GP_ASSERT(**_listenerItr || *_listenerItr == _listeners->end());
+
+				// We the listener has not been triggered yet, then check if it is next to be triggered, remove it, and update the iterator
+				if (((_speed >= 0.0f && currentTime < eventTime) || (_speed <= 0 && currentTime > eventTime)) &&
+					*iter == **_listenerItr)
+				{
+					*_listenerItr = _listeners->erase(iter);
+					return;
+				}
+			}
+			_listeners->erase(iter);
+		}
+	}
+}
+
+bool AnimationClip::hasListener(AnimationClip::Listener* listener, unsigned long eventTime, bool triggedValid) const
+{
+	if (_listeners)
+	{
+		GP_ASSERT(listener);
+		GP_ASSERT(eventTime < _activeDuration);
+		std::list<ListenerEvent*>::iterator iter = std::find_if(_listeners->begin(), _listeners->end(), [&](ListenerEvent* lst){ return lst->_eventTime == eventTime && lst->_listener == listener; });
+		if (iter != _listeners->end())
+		{
+			// If we don't care if the listener was triggered already, then we can exit.
+			// Otherwise, we need to check the time to determine if it's past the trigger time yet.
+			if (triggedValid || !isClipStateBitSet(CLIP_IS_PLAYING_BIT))
+			{
+				return true;
+			}
+			float currentTime = fmodf(_elapsedTime, (float)_duration);
+			return (_speed >= 0.0f && currentTime < eventTime) || (_speed <= 0 && currentTime > eventTime);
+		}
+	}
+	return false;
 }
 
 void AnimationClip::addBeginListener(AnimationClip::Listener* listener)
@@ -329,6 +379,29 @@ void AnimationClip::addBeginListener(AnimationClip::Listener* listener)
     _beginListeners->push_back(listener);
 }
 
+void AnimationClip::removeBeginListener(AnimationClip::Listener* listener)
+{
+	if (_beginListeners)
+	{
+		GP_ASSERT(listener);
+		std::vector<Listener*>::iterator iter = std::find(_beginListeners->begin(), _beginListeners->end(), listener);
+		if (iter != _beginListeners->end())
+		{
+			_beginListeners->erase(iter);
+		}
+	}
+}
+
+bool AnimationClip::hasBeginListener(AnimationClip::Listener* listener) const
+{
+	if (_beginListeners)
+	{
+		GP_ASSERT(listener);
+		return std::find(_beginListeners->begin(), _beginListeners->end(), listener) != _beginListeners->end();
+	}
+	return false;
+}
+
 void AnimationClip::addEndListener(AnimationClip::Listener* listener)
 {
     if (!_endListeners)
@@ -336,6 +409,29 @@ void AnimationClip::addEndListener(AnimationClip::Listener* listener)
 
     GP_ASSERT(listener);
     _endListeners->push_back(listener);
+}
+
+void AnimationClip::removeEndListener(AnimationClip::Listener* listener)
+{
+	if (_endListeners)
+	{
+		GP_ASSERT(listener);
+		std::vector<Listener*>::iterator iter = std::find(_endListeners->begin(), _endListeners->end(), listener);
+		if (iter != _endListeners->end())
+		{
+			_endListeners->erase(iter);
+		}
+	}
+}
+
+bool AnimationClip::hasEndListener(AnimationClip::Listener* listener) const
+{
+	if (_endListeners)
+	{
+		GP_ASSERT(listener);
+		return std::find(_endListeners->begin(), _endListeners->end(), listener) != _endListeners->end();
+	}
+	return false;
 }
 
 void AnimationClip::addBeginListener(const char* function)
@@ -348,6 +444,37 @@ void AnimationClip::addBeginListener(const char* function)
     addBeginListener(listener);
 }
 
+void AnimationClip::removeBeginListener(const char* function)
+{
+	if (_scriptListeners)
+	{
+		std::string functionRef = Game::getInstance()->getScriptController()->loadUrl(function);
+		std::vector<ScriptListener*>::iterator iter = std::find_if(_scriptListeners->begin(), _scriptListeners->end(), [&](ScriptListener* listener){ return listener->function == functionRef; });
+		if (iter != _scriptListeners->end())
+		{
+			ScriptListener* listener = *iter;
+
+			removeBeginListener(listener);
+			_scriptListeners->erase(iter);
+			SAFE_DELETE(listener);
+		}
+	}
+}
+
+bool AnimationClip::hasBeginListener(const char* function) const
+{
+	if (_scriptListeners)
+	{
+		std::string functionRef = Game::getInstance()->getScriptController()->loadUrl(function);
+		std::vector<ScriptListener*>::iterator iter = std::find_if(_scriptListeners->begin(), _scriptListeners->end(), [&](ScriptListener* listener){ return listener->function == functionRef; });
+		if (iter != _scriptListeners->end())
+		{
+			return hasBeginListener(*iter);
+		}
+	}
+	return false;
+}
+
 void AnimationClip::addEndListener(const char* function)
 {
     if (!_scriptListeners)
@@ -358,6 +485,37 @@ void AnimationClip::addEndListener(const char* function)
     addEndListener(listener);
 }
 
+void AnimationClip::removeEndListener(const char* function)
+{
+	if (_scriptListeners)
+	{
+		std::string functionRef = Game::getInstance()->getScriptController()->loadUrl(function);
+		std::vector<ScriptListener*>::iterator iter = std::find_if(_scriptListeners->begin(), _scriptListeners->end(), [&](ScriptListener* listener){ return listener->function == functionRef; });
+		if (iter != _scriptListeners->end())
+		{
+			ScriptListener* listener = *iter;
+
+			removeEndListener(listener);
+			_scriptListeners->erase(iter);
+			SAFE_DELETE(listener);
+		}
+	}
+}
+
+bool AnimationClip::hasEndListener(const char* function) const
+{
+	if (_scriptListeners)
+	{
+		std::string functionRef = Game::getInstance()->getScriptController()->loadUrl(function);
+		std::vector<ScriptListener*>::iterator iter = std::find_if(_scriptListeners->begin(), _scriptListeners->end(), [&](ScriptListener* listener){ return listener->function == functionRef; });
+		if (iter != _scriptListeners->end())
+		{
+			return hasEndListener(*iter);
+		}
+	}
+	return false;
+}
+
 void AnimationClip::addListener(const char* function, unsigned long eventTime)
 {
     if (!_scriptListeners)
@@ -366,6 +524,39 @@ void AnimationClip::addListener(const char* function, unsigned long eventTime)
     ScriptListener* listener = new ScriptListener(function);
     _scriptListeners->push_back(listener);
     addListener(listener, eventTime);
+}
+
+void AnimationClip::removeListener(const char* function, unsigned long eventTime)
+{
+	if (_scriptListeners)
+	{
+		GP_ASSERT(eventTime < _activeDuration); // Do this check here, before we modify any state
+		std::string functionRef = Game::getInstance()->getScriptController()->loadUrl(function);
+		std::vector<ScriptListener*>::iterator iter = std::find_if(_scriptListeners->begin(), _scriptListeners->end(), [&](ScriptListener* listener){ return listener->function == functionRef; });
+		if (iter != _scriptListeners->end())
+		{
+			ScriptListener* listener = *iter;
+
+			removeListener(listener, eventTime);
+			_scriptListeners->erase(iter);
+			SAFE_DELETE(listener);
+		}
+	}
+}
+
+bool AnimationClip::hasListener(const char* function, unsigned long eventTime, bool triggedValid) const
+{
+	if (_scriptListeners)
+	{
+		GP_ASSERT(eventTime < _activeDuration);
+		std::string functionRef = Game::getInstance()->getScriptController()->loadUrl(function);
+		std::vector<ScriptListener*>::iterator iter = std::find_if(_scriptListeners->begin(), _scriptListeners->end(), [&](ScriptListener* listener){ return listener->function == functionRef; });
+		if (iter != _scriptListeners->end())
+		{
+			return hasListener(*iter, eventTime, triggedValid);
+		}
+	}
+	return false;
 }
 
 bool AnimationClip::update(float elapsedTime)
@@ -443,7 +634,7 @@ bool AnimationClip::update(float elapsedTime)
                 GP_ASSERT((**_listenerItr)->_listener);
 
                 (**_listenerItr)->_listener->animationEvent(this, Listener::TIME);
-                ++*_listenerItr;
+                ++(*_listenerItr);
             }
         }
         else
@@ -455,7 +646,7 @@ bool AnimationClip::update(float elapsedTime)
                 GP_ASSERT((**_listenerItr)->_listener);
 
                 (**_listenerItr)->_listener->animationEvent(this, Listener::TIME);
-                --*_listenerItr;
+                --(*_listenerItr);
             }
         }
     }

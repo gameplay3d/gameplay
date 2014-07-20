@@ -35,10 +35,16 @@ void luaRegister_AnimationClip()
         {"getRepeatCount", lua_AnimationClip_getRepeatCount},
         {"getSpeed", lua_AnimationClip_getSpeed},
         {"getStartTime", lua_AnimationClip_getStartTime},
+        {"hasBeginListener", lua_AnimationClip_hasBeginListener},
+        {"hasEndListener", lua_AnimationClip_hasEndListener},
+        {"hasListener", lua_AnimationClip_hasListener},
         {"isPlaying", lua_AnimationClip_isPlaying},
         {"pause", lua_AnimationClip_pause},
         {"play", lua_AnimationClip_play},
         {"release", lua_AnimationClip_release},
+        {"removeBeginListener", lua_AnimationClip_removeBeginListener},
+        {"removeEndListener", lua_AnimationClip_removeEndListener},
+        {"removeListener", lua_AnimationClip_removeListener},
         {"setActiveDuration", lua_AnimationClip_setActiveDuration},
         {"setBlendWeight", lua_AnimationClip_setBlendWeight},
         {"setLoopBlendTime", lua_AnimationClip_setLoopBlendTime},
@@ -788,6 +794,264 @@ int lua_AnimationClip_getStartTime(lua_State* state)
     return 0;
 }
 
+int lua_AnimationClip_hasBeginListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    AnimationClip* instance = getInstance(state);
+                    bool result = instance->hasBeginListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    AnimationClip* instance = getInstance(state);
+                    bool result = instance->hasBeginListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_hasBeginListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AnimationClip_hasEndListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    AnimationClip* instance = getInstance(state);
+                    bool result = instance->hasEndListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    AnimationClip* instance = getInstance(state);
+                    bool result = instance->hasEndListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_hasEndListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AnimationClip_hasListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
+
+                    AnimationClip* instance = getInstance(state);
+                    bool result = instance->hasListener(param1, param2);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    // Get parameter 2 off the stack.
+                    unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
+
+                    AnimationClip* instance = getInstance(state);
+                    bool result = instance->hasListener(param1, param2);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_hasListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        case 4:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
+
+                    // Get parameter 3 off the stack.
+                    bool param3 = gameplay::ScriptUtil::luaCheckBool(state, 4);
+
+                    AnimationClip* instance = getInstance(state);
+                    bool result = instance->hasListener(param1, param2, param3);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    // Get parameter 2 off the stack.
+                    unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
+
+                    // Get parameter 3 off the stack.
+                    bool param3 = gameplay::ScriptUtil::luaCheckBool(state, 4);
+
+                    AnimationClip* instance = getInstance(state);
+                    bool result = instance->hasListener(param1, param2, param3);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_hasListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_AnimationClip_isPlaying(lua_State* state)
 {
     // Get the number of parameters.
@@ -912,6 +1176,185 @@ int lua_AnimationClip_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AnimationClip_removeBeginListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    AnimationClip* instance = getInstance(state);
+                    instance->removeBeginListener(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    AnimationClip* instance = getInstance(state);
+                    instance->removeBeginListener(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_removeBeginListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AnimationClip_removeEndListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    AnimationClip* instance = getInstance(state);
+                    instance->removeEndListener(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    AnimationClip* instance = getInstance(state);
+                    instance->removeEndListener(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_removeEndListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AnimationClip_removeListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
+
+                    AnimationClip* instance = getInstance(state);
+                    instance->removeListener(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    // Get parameter 2 off the stack.
+                    unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
+
+                    AnimationClip* instance = getInstance(state);
+                    instance->removeListener(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_removeListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
