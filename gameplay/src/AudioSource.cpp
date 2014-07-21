@@ -30,13 +30,14 @@ AudioSource::~AudioSource()
 {
     if (_alSource)
     {
-        if (getState() == PLAYING || getState() == STOPPED)
-        {
-            // Remove the source from the controller's set of currently playing sources.
-            AudioController* audioController = Game::getInstance()->getAudioController();
-            GP_ASSERT(audioController);
-            audioController->removePlayingSource(this);
-        }
+        // Remove the source from the controller's set of currently playing sources
+        // regardless of the source's state. E.g. when the AudioController::pause is called
+        // all sources are paused but still remain in controller's set of currently 
+        // playing sources. When the source is deleted afterwards, it should be removed
+        // from controller's set regardless of its playing state.
+        AudioController* audioController = Game::getInstance()->getAudioController();
+        GP_ASSERT(audioController);
+        audioController->removePlayingSource(this);
 
         AL_CHECK(alDeleteSources(1, &_alSource));
         _alSource = 0;
