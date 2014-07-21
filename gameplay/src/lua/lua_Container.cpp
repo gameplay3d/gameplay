@@ -26,6 +26,7 @@
 #include "TextBox.h"
 #include "Theme.h"
 #include "VerticalLayout.h"
+#include "lua_ContainerDirection.h"
 #include "lua_ContainerScroll.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"
@@ -116,6 +117,7 @@ void luaRegister_Container()
         {"isWidthPercentage", lua_Container_isWidthPercentage},
         {"isXPercentage", lua_Container_isXPercentage},
         {"isYPercentage", lua_Container_isYPercentage},
+        {"moveFocus", lua_Container_moveFocus},
         {"release", lua_Container_release},
         {"removeControl", lua_Container_removeControl},
         {"removeListener", lua_Container_removeListener},
@@ -3687,6 +3689,45 @@ int lua_Container_isYPercentage(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_moveFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Container::Direction param1 = (Container::Direction)lua_enumFromString_ContainerDirection(luaL_checkstring(state, 2));
+
+                Container* instance = getInstance(state);
+                bool result = instance->moveFocus(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_moveFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

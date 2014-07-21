@@ -80,6 +80,7 @@ int lua_Container_isVisibleInHierarchy(lua_State* state);
 int lua_Container_isWidthPercentage(lua_State* state);
 int lua_Container_isXPercentage(lua_State* state);
 int lua_Container_isYPercentage(lua_State* state);
+int lua_Container_moveFocus(lua_State* state);
 int lua_Container_release(lua_State* state);
 int lua_Container_removeControl(lua_State* state);
 int lua_Container_removeListener(lua_State* state);
