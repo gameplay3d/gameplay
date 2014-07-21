@@ -10,6 +10,7 @@ int lua_JoystickControl_addListener(lua_State* state);
 int lua_JoystickControl_addRef(lua_State* state);
 int lua_JoystickControl_addScript(lua_State* state);
 int lua_JoystickControl_canFocus(lua_State* state);
+int lua_JoystickControl_clearScripts(lua_State* state);
 int lua_JoystickControl_createAnimation(lua_State* state);
 int lua_JoystickControl_createAnimationFromBy(lua_State* state);
 int lua_JoystickControl_createAnimationFromTo(lua_State* state);

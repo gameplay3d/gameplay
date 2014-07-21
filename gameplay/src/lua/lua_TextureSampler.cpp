@@ -7,9 +7,6 @@
 #include "Image.h"
 #include "Ref.h"
 #include "Texture.h"
-#include "lua_TextureFilter.h"
-#include "lua_TextureFormat.h"
-#include "lua_TextureWrap.h"
 
 namespace gameplay
 {
@@ -269,14 +266,14 @@ int lua_TextureSampler_setFilterMode(lua_State* state)
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Texture::Filter param1 = (Texture::Filter)lua_enumFromString_TextureFilter(luaL_checkstring(state, 2));
+                Texture::Filter param1 = (Texture::Filter)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                Texture::Filter param2 = (Texture::Filter)lua_enumFromString_TextureFilter(luaL_checkstring(state, 3));
+                Texture::Filter param2 = (Texture::Filter)luaL_checkint(state, 3);
 
                 Texture::Sampler* instance = getInstance(state);
                 instance->setFilterMode(param1, param2);
@@ -309,14 +306,14 @@ int lua_TextureSampler_setWrapMode(lua_State* state)
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Texture::Wrap param1 = (Texture::Wrap)lua_enumFromString_TextureWrap(luaL_checkstring(state, 2));
+                Texture::Wrap param1 = (Texture::Wrap)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                Texture::Wrap param2 = (Texture::Wrap)lua_enumFromString_TextureWrap(luaL_checkstring(state, 3));
+                Texture::Wrap param2 = (Texture::Wrap)luaL_checkint(state, 3);
 
                 Texture::Sampler* instance = getInstance(state);
                 instance->setWrapMode(param1, param2);

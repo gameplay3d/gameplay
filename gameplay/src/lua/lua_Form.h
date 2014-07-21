@@ -11,6 +11,7 @@ int lua_Form_addListener(lua_State* state);
 int lua_Form_addRef(lua_State* state);
 int lua_Form_addScript(lua_State* state);
 int lua_Form_canFocus(lua_State* state);
+int lua_Form_clearScripts(lua_State* state);
 int lua_Form_createAnimation(lua_State* state);
 int lua_Form_createAnimationFromBy(lua_State* state);
 int lua_Form_createAnimationFromTo(lua_State* state);

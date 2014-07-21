@@ -26,15 +26,6 @@
 #include "TextBox.h"
 #include "Theme.h"
 #include "VerticalLayout.h"
-#include "lua_ContainerDirection.h"
-#include "lua_ContainerScroll.h"
-#include "lua_ControlAlignment.h"
-#include "lua_ControlAutoSize.h"
-#include "lua_ControlListenerEventType.h"
-#include "lua_ControlState.h"
-#include "lua_CurveInterpolationType.h"
-#include "lua_FontJustify.h"
-#include "lua_LayoutType.h"
 
 namespace gameplay
 {
@@ -48,6 +39,7 @@ void luaRegister_Container()
         {"addRef", lua_Container_addRef},
         {"addScript", lua_Container_addScript},
         {"canFocus", lua_Container_canFocus},
+        {"clearScripts", lua_Container_clearScripts},
         {"createAnimation", lua_Container_createAnimation},
         {"createAnimationFromBy", lua_Container_createAnimationFromBy},
         {"createAnimationFromTo", lua_Container_createAnimationFromTo},
@@ -427,6 +419,38 @@ int lua_Container_canFocus(lua_State* state)
     return 0;
 }
 
+int lua_Container_clearScripts(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                instance->clearScripts();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_clearScripts - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
@@ -516,7 +540,7 @@ int lua_Container_createAnimation(lua_State* state)
                     lua_type(state, 4) == LUA_TNUMBER &&
                     (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                    (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
+                    lua_type(state, 7) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -534,7 +558,7 @@ int lua_Container_createAnimation(lua_State* state)
                     gameplay::ScriptUtil::LuaArray<float> param5 = gameplay::ScriptUtil::getFloatPointer(6);
 
                     // Get parameter 6 off the stack.
-                    Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
+                    Curve::InterpolationType param6 = (Curve::InterpolationType)luaL_checkint(state, 7);
 
                     Container* instance = getInstance(state);
                     void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
@@ -571,7 +595,7 @@ int lua_Container_createAnimation(lua_State* state)
                     (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
-                    (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
+                    lua_type(state, 9) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -595,7 +619,7 @@ int lua_Container_createAnimation(lua_State* state)
                     gameplay::ScriptUtil::LuaArray<float> param7 = gameplay::ScriptUtil::getFloatPointer(8);
 
                     // Get parameter 8 off the stack.
-                    Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
+                    Curve::InterpolationType param8 = (Curve::InterpolationType)luaL_checkint(state, 9);
 
                     Container* instance = getInstance(state);
                     void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
@@ -645,7 +669,7 @@ int lua_Container_createAnimationFromBy(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -661,7 +685,7 @@ int lua_Container_createAnimationFromBy(lua_State* state)
                 gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
+                Curve::InterpolationType param5 = (Curve::InterpolationType)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
@@ -713,7 +737,7 @@ int lua_Container_createAnimationFromTo(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -729,7 +753,7 @@ int lua_Container_createAnimationFromTo(lua_State* state)
                 gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
+                Curve::InterpolationType param5 = (Curve::InterpolationType)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
@@ -920,7 +944,7 @@ int lua_Container_getAlignment(lua_State* state)
                 Control::Alignment result = instance->getAlignment();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAlignment(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -1114,7 +1138,7 @@ int lua_Container_getAutoSize(lua_State* state)
                 Control::AutoSize result = instance->getAutoSize();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -1170,10 +1194,10 @@ int lua_Container_getBorder(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getBorder(param1));
@@ -1498,10 +1522,10 @@ int lua_Container_getCursorColor(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getCursorColor(param1));
@@ -1546,10 +1570,10 @@ int lua_Container_getCursorRegion(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getCursorRegion(param1));
@@ -1594,10 +1618,10 @@ int lua_Container_getCursorUVs(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getCursorUVs(param1));
@@ -1703,10 +1727,10 @@ int lua_Container_getFont(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getFont(param1);
@@ -1768,10 +1792,10 @@ int lua_Container_getFontSize(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 unsigned int result = instance->getFontSize(param1);
@@ -1878,13 +1902,13 @@ int lua_Container_getImageColor(lua_State* state)
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
+                Control::State param2 = (Control::State)luaL_checkint(state, 3);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getImageColor(param1, param2));
@@ -1930,13 +1954,13 @@ int lua_Container_getImageRegion(lua_State* state)
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
+                Control::State param2 = (Control::State)luaL_checkint(state, 3);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getImageRegion(param1, param2));
@@ -1982,13 +2006,13 @@ int lua_Container_getImageUVs(lua_State* state)
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
+                Control::State param2 = (Control::State)luaL_checkint(state, 3);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getImageUVs(param1, param2));
@@ -2138,10 +2162,10 @@ int lua_Container_getOpacity(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 float result = instance->getOpacity(param1);
@@ -2305,7 +2329,7 @@ int lua_Container_getScroll(lua_State* state)
                 Container::Scroll result = instance->getScroll();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ContainerScroll(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -2510,10 +2534,10 @@ int lua_Container_getSkinColor(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getSkinColor(param1));
@@ -2584,10 +2608,10 @@ int lua_Container_getSkinRegion(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getSkinRegion(param1));
@@ -2637,7 +2661,7 @@ int lua_Container_getState(lua_State* state)
                 Control::State result = instance->getState();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlState(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -2716,7 +2740,7 @@ int lua_Container_getTextAlignment(lua_State* state)
                 Font::Justify result = instance->getTextAlignment();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_FontJustify(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -2728,16 +2752,16 @@ int lua_Container_getTextAlignment(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 Font::Justify result = instance->getTextAlignment(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_FontJustify(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -2793,10 +2817,10 @@ int lua_Container_getTextColor(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getTextColor(param1));
@@ -2858,10 +2882,10 @@ int lua_Container_getTextRightToLeft(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 bool result = instance->getTextRightToLeft(param1);
@@ -3706,10 +3730,10 @@ int lua_Container_moveFocus(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Container::Direction param1 = (Container::Direction)lua_enumFromString_ContainerDirection(luaL_checkstring(state, 2));
+                Container::Direction param1 = (Container::Direction)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 bool result = instance->moveFocus(param1);
@@ -3972,10 +3996,10 @@ int lua_Container_setAlignment(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::Alignment param1 = (Control::Alignment)lua_enumFromString_ControlAlignment(luaL_checkstring(state, 2));
+                Control::Alignment param1 = (Control::Alignment)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 instance->setAlignment(param1);
@@ -4086,10 +4110,10 @@ int lua_Container_setAutoSize(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
+                Control::AutoSize param1 = (Control::AutoSize)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 instance->setAutoSize(param1);
@@ -4895,10 +4919,10 @@ int lua_Container_setLayout(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Layout::Type param1 = (Layout::Type)lua_enumFromString_LayoutType(luaL_checkstring(state, 2));
+                Layout::Type param1 = (Layout::Type)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 instance->setLayout(param1);
@@ -5125,10 +5149,10 @@ int lua_Container_setScroll(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Container::Scroll param1 = (Container::Scroll)lua_enumFromString_ContainerScroll(luaL_checkstring(state, 2));
+                Container::Scroll param1 = (Container::Scroll)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 instance->setScroll(param1);
@@ -5569,10 +5593,10 @@ int lua_Container_setTextAlignment(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Font::Justify param1 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 2));
+                Font::Justify param1 = (Font::Justify)luaL_checkint(state, 2);
 
                 Container* instance = getInstance(state);
                 instance->setTextAlignment(param1);
@@ -5587,11 +5611,11 @@ int lua_Container_setTextAlignment(lua_State* state)
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Font::Justify param1 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 2));
+                Font::Justify param1 = (Font::Justify)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -6204,7 +6228,7 @@ int lua_Container_static_create(lua_State* state)
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(1, false);
@@ -6219,7 +6243,7 @@ int lua_Container_static_create(lua_State* state)
                 }
 
                 // Get parameter 3 off the stack.
-                Layout::Type param3 = (Layout::Type)lua_enumFromString_LayoutType(luaL_checkstring(state, 3));
+                Layout::Type param3 = (Layout::Type)luaL_checkint(state, 3);
 
                 void* returnPtr = (void*)Container::create(param1, param2, param3);
                 if (returnPtr)

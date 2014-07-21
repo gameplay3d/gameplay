@@ -20,9 +20,6 @@
 #include "ScriptTarget.h"
 #include "Terrain.h"
 #include "Transform.h"
-#include "lua_CurveInterpolationType.h"
-#include "lua_NodeType.h"
-#include "lua_PhysicsCollisionObjectType.h"
 
 namespace gameplay
 {
@@ -35,6 +32,7 @@ void luaRegister_Joint()
         {"addListener", lua_Joint_addListener},
         {"addRef", lua_Joint_addRef},
         {"addScript", lua_Joint_addScript},
+        {"clearScripts", lua_Joint_clearScripts},
         {"clone", lua_Joint_clone},
         {"createAnimation", lua_Joint_createAnimation},
         {"createAnimationFromBy", lua_Joint_createAnimationFromBy},
@@ -408,6 +406,38 @@ int lua_Joint_addScript(lua_State* state)
     return 0;
 }
 
+int lua_Joint_clearScripts(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joint* instance = getInstance(state);
+                instance->clearScripts();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Joint_clearScripts - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joint_clone(lua_State* state)
 {
     // Get the number of parameters.
@@ -541,7 +571,7 @@ int lua_Joint_createAnimation(lua_State* state)
                     lua_type(state, 4) == LUA_TNUMBER &&
                     (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                    (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
+                    lua_type(state, 7) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -559,7 +589,7 @@ int lua_Joint_createAnimation(lua_State* state)
                     gameplay::ScriptUtil::LuaArray<float> param5 = gameplay::ScriptUtil::getFloatPointer(6);
 
                     // Get parameter 6 off the stack.
-                    Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
+                    Curve::InterpolationType param6 = (Curve::InterpolationType)luaL_checkint(state, 7);
 
                     Joint* instance = getInstance(state);
                     void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
@@ -596,7 +626,7 @@ int lua_Joint_createAnimation(lua_State* state)
                     (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
-                    (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
+                    lua_type(state, 9) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -620,7 +650,7 @@ int lua_Joint_createAnimation(lua_State* state)
                     gameplay::ScriptUtil::LuaArray<float> param7 = gameplay::ScriptUtil::getFloatPointer(8);
 
                     // Get parameter 8 off the stack.
-                    Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
+                    Curve::InterpolationType param8 = (Curve::InterpolationType)luaL_checkint(state, 9);
 
                     Joint* instance = getInstance(state);
                     void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
@@ -670,7 +700,7 @@ int lua_Joint_createAnimationFromBy(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -686,7 +716,7 @@ int lua_Joint_createAnimationFromBy(lua_State* state)
                 gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
+                Curve::InterpolationType param5 = (Curve::InterpolationType)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
@@ -738,7 +768,7 @@ int lua_Joint_createAnimationFromTo(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -754,7 +784,7 @@ int lua_Joint_createAnimationFromTo(lua_State* state)
                 gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
+                Curve::InterpolationType param5 = (Curve::InterpolationType)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
@@ -3417,7 +3447,7 @@ int lua_Joint_getType(lua_State* state)
                 Node::Type result = instance->getType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_NodeType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -4932,10 +4962,10 @@ int lua_Joint_setCollisionObject(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                    lua_type(state, 2) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
+                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)luaL_checkint(state, 2);
 
                     Joint* instance = getInstance(state);
                     void* returnPtr = (void*)instance->setCollisionObject(param1);
@@ -5022,11 +5052,11 @@ int lua_Joint_setCollisionObject(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
+                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)luaL_checkint(state, 2);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -5062,12 +5092,12 @@ int lua_Joint_setCollisionObject(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
+                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)luaL_checkint(state, 2);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -5109,13 +5139,13 @@ int lua_Joint_setCollisionObject(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
                     lua_type(state, 5) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
+                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)luaL_checkint(state, 2);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -5160,14 +5190,14 @@ int lua_Joint_setCollisionObject(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
                     lua_type(state, 5) == LUA_TNUMBER &&
                     lua_type(state, 6) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
+                    PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)luaL_checkint(state, 2);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;

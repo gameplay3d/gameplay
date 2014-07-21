@@ -8,7 +8,6 @@
 #include "MaterialParameter.h"
 #include "Node.h"
 #include "Ref.h"
-#include "lua_CurveInterpolationType.h"
 
 namespace gameplay
 {
@@ -269,7 +268,7 @@ int lua_MaterialParameter_createAnimation(lua_State* state)
                     lua_type(state, 4) == LUA_TNUMBER &&
                     (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                    (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
+                    lua_type(state, 7) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -287,7 +286,7 @@ int lua_MaterialParameter_createAnimation(lua_State* state)
                     gameplay::ScriptUtil::LuaArray<float> param5 = gameplay::ScriptUtil::getFloatPointer(6);
 
                     // Get parameter 6 off the stack.
-                    Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
+                    Curve::InterpolationType param6 = (Curve::InterpolationType)luaL_checkint(state, 7);
 
                     MaterialParameter* instance = getInstance(state);
                     void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
@@ -324,7 +323,7 @@ int lua_MaterialParameter_createAnimation(lua_State* state)
                     (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
-                    (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
+                    lua_type(state, 9) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -348,7 +347,7 @@ int lua_MaterialParameter_createAnimation(lua_State* state)
                     gameplay::ScriptUtil::LuaArray<float> param7 = gameplay::ScriptUtil::getFloatPointer(8);
 
                     // Get parameter 8 off the stack.
-                    Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
+                    Curve::InterpolationType param8 = (Curve::InterpolationType)luaL_checkint(state, 9);
 
                     MaterialParameter* instance = getInstance(state);
                     void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
@@ -398,7 +397,7 @@ int lua_MaterialParameter_createAnimationFromBy(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -414,7 +413,7 @@ int lua_MaterialParameter_createAnimationFromBy(lua_State* state)
                 gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
+                Curve::InterpolationType param5 = (Curve::InterpolationType)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
@@ -466,7 +465,7 @@ int lua_MaterialParameter_createAnimationFromTo(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -482,7 +481,7 @@ int lua_MaterialParameter_createAnimationFromTo(lua_State* state)
                 gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
+                Curve::InterpolationType param5 = (Curve::InterpolationType)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);

@@ -10,13 +10,6 @@
 #include "RenderState.h"
 #include "Scene.h"
 #include "Technique.h"
-#include "lua_RenderStateAutoBinding.h"
-#include "lua_RenderStateBlend.h"
-#include "lua_RenderStateCullFaceSide.h"
-#include "lua_RenderStateDepthFunction.h"
-#include "lua_RenderStateFrontFace.h"
-#include "lua_RenderStateStencilFunction.h"
-#include "lua_RenderStateStencilOperation.h"
 
 namespace gameplay
 {
@@ -668,13 +661,13 @@ int lua_Technique_setParameterAutoBinding(lua_State* state)
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                    lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
-                    RenderState::AutoBinding param2 = (RenderState::AutoBinding)lua_enumFromString_RenderStateAutoBinding(luaL_checkstring(state, 3));
+                    RenderState::AutoBinding param2 = (RenderState::AutoBinding)luaL_checkint(state, 3);
 
                     Technique* instance = getInstance(state);
                     instance->setParameterAutoBinding(param1, param2);

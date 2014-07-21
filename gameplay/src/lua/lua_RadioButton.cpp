@@ -16,12 +16,6 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Theme.h"
-#include "lua_ControlAlignment.h"
-#include "lua_ControlAutoSize.h"
-#include "lua_ControlListenerEventType.h"
-#include "lua_ControlState.h"
-#include "lua_CurveInterpolationType.h"
-#include "lua_FontJustify.h"
 
 namespace gameplay
 {
@@ -34,6 +28,7 @@ void luaRegister_RadioButton()
         {"addRef", lua_RadioButton_addRef},
         {"addScript", lua_RadioButton_addScript},
         {"canFocus", lua_RadioButton_canFocus},
+        {"clearScripts", lua_RadioButton_clearScripts},
         {"createAnimation", lua_RadioButton_createAnimation},
         {"createAnimationFromBy", lua_RadioButton_createAnimationFromBy},
         {"createAnimationFromTo", lua_RadioButton_createAnimationFromTo},
@@ -349,6 +344,38 @@ int lua_RadioButton_canFocus(lua_State* state)
     return 0;
 }
 
+int lua_RadioButton_clearScripts(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                RadioButton* instance = getInstance(state);
+                instance->clearScripts();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RadioButton_clearScripts - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_RadioButton_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
@@ -438,7 +465,7 @@ int lua_RadioButton_createAnimation(lua_State* state)
                     lua_type(state, 4) == LUA_TNUMBER &&
                     (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                    (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
+                    lua_type(state, 7) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -456,7 +483,7 @@ int lua_RadioButton_createAnimation(lua_State* state)
                     gameplay::ScriptUtil::LuaArray<float> param5 = gameplay::ScriptUtil::getFloatPointer(6);
 
                     // Get parameter 6 off the stack.
-                    Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
+                    Curve::InterpolationType param6 = (Curve::InterpolationType)luaL_checkint(state, 7);
 
                     RadioButton* instance = getInstance(state);
                     void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
@@ -493,7 +520,7 @@ int lua_RadioButton_createAnimation(lua_State* state)
                     (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
                     (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
-                    (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
+                    lua_type(state, 9) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -517,7 +544,7 @@ int lua_RadioButton_createAnimation(lua_State* state)
                     gameplay::ScriptUtil::LuaArray<float> param7 = gameplay::ScriptUtil::getFloatPointer(8);
 
                     // Get parameter 8 off the stack.
-                    Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
+                    Curve::InterpolationType param8 = (Curve::InterpolationType)luaL_checkint(state, 9);
 
                     RadioButton* instance = getInstance(state);
                     void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
@@ -567,7 +594,7 @@ int lua_RadioButton_createAnimationFromBy(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -583,7 +610,7 @@ int lua_RadioButton_createAnimationFromBy(lua_State* state)
                 gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
+                Curve::InterpolationType param5 = (Curve::InterpolationType)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
@@ -635,7 +662,7 @@ int lua_RadioButton_createAnimationFromTo(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -651,7 +678,7 @@ int lua_RadioButton_createAnimationFromTo(lua_State* state)
                 gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
+                Curve::InterpolationType param5 = (Curve::InterpolationType)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
@@ -798,7 +825,7 @@ int lua_RadioButton_getAlignment(lua_State* state)
                 Control::Alignment result = instance->getAlignment();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAlignment(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -992,7 +1019,7 @@ int lua_RadioButton_getAutoSize(lua_State* state)
                 Control::AutoSize result = instance->getAutoSize();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAutoSize(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -1048,10 +1075,10 @@ int lua_RadioButton_getBorder(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getBorder(param1));
@@ -1263,10 +1290,10 @@ int lua_RadioButton_getCursorColor(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getCursorColor(param1));
@@ -1311,10 +1338,10 @@ int lua_RadioButton_getCursorRegion(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getCursorRegion(param1));
@@ -1359,10 +1386,10 @@ int lua_RadioButton_getCursorUVs(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getCursorUVs(param1));
@@ -1468,10 +1495,10 @@ int lua_RadioButton_getFont(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getFont(param1);
@@ -1533,10 +1560,10 @@ int lua_RadioButton_getFontSize(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 unsigned int result = instance->getFontSize(param1);
@@ -1678,13 +1705,13 @@ int lua_RadioButton_getImageColor(lua_State* state)
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
+                Control::State param2 = (Control::State)luaL_checkint(state, 3);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getImageColor(param1, param2));
@@ -1730,13 +1757,13 @@ int lua_RadioButton_getImageRegion(lua_State* state)
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
+                Control::State param2 = (Control::State)luaL_checkint(state, 3);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getImageRegion(param1, param2));
@@ -1782,13 +1809,13 @@ int lua_RadioButton_getImageUVs(lua_State* state)
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
+                Control::State param2 = (Control::State)luaL_checkint(state, 3);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getImageUVs(param1, param2));
@@ -1894,10 +1921,10 @@ int lua_RadioButton_getOpacity(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 float result = instance->getOpacity(param1);
@@ -2082,10 +2109,10 @@ int lua_RadioButton_getSkinColor(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getSkinColor(param1));
@@ -2156,10 +2183,10 @@ int lua_RadioButton_getSkinRegion(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getSkinRegion(param1));
@@ -2209,7 +2236,7 @@ int lua_RadioButton_getState(lua_State* state)
                 Control::State result = instance->getState();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlState(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -2323,7 +2350,7 @@ int lua_RadioButton_getTextAlignment(lua_State* state)
                 Font::Justify result = instance->getTextAlignment();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_FontJustify(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -2335,16 +2362,16 @@ int lua_RadioButton_getTextAlignment(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 Font::Justify result = instance->getTextAlignment(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_FontJustify(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -2400,10 +2427,10 @@ int lua_RadioButton_getTextColor(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getTextColor(param1));
@@ -2465,10 +2492,10 @@ int lua_RadioButton_getTextRightToLeft(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
+                Control::State param1 = (Control::State)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 bool result = instance->getTextRightToLeft(param1);
@@ -3310,10 +3337,10 @@ int lua_RadioButton_setAlignment(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::Alignment param1 = (Control::Alignment)lua_enumFromString_ControlAlignment(luaL_checkstring(state, 2));
+                Control::Alignment param1 = (Control::Alignment)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 instance->setAlignment(param1);
@@ -3424,10 +3451,10 @@ int lua_RadioButton_setAutoSize(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::AutoSize param1 = (Control::AutoSize)lua_enumFromString_ControlAutoSize(luaL_checkstring(state, 2));
+                Control::AutoSize param1 = (Control::AutoSize)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 instance->setAutoSize(param1);
@@ -4757,10 +4784,10 @@ int lua_RadioButton_setTextAlignment(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Font::Justify param1 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 2));
+                Font::Justify param1 = (Font::Justify)luaL_checkint(state, 2);
 
                 RadioButton* instance = getInstance(state);
                 instance->setTextAlignment(param1);
@@ -4775,11 +4802,11 @@ int lua_RadioButton_setTextAlignment(lua_State* state)
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Font::Justify param1 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 2));
+                Font::Justify param1 = (Font::Justify)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);

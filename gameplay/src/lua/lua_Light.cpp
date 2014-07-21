@@ -6,7 +6,6 @@
 #include "Light.h"
 #include "Node.h"
 #include "Ref.h"
-#include "lua_LightType.h"
 
 namespace gameplay
 {
@@ -253,7 +252,7 @@ int lua_Light_getLightType(lua_State* state)
                 Light::Type result = instance->getLightType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_LightType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

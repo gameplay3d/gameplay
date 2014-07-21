@@ -10,6 +10,7 @@ int lua_Slider_addListener(lua_State* state);
 int lua_Slider_addRef(lua_State* state);
 int lua_Slider_addScript(lua_State* state);
 int lua_Slider_canFocus(lua_State* state);
+int lua_Slider_clearScripts(lua_State* state);
 int lua_Slider_createAnimation(lua_State* state);
 int lua_Slider_createAnimationFromBy(lua_State* state);
 int lua_Slider_createAnimationFromTo(lua_State* state);

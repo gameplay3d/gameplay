@@ -13,8 +13,6 @@
 #include "Terrain.h"
 #include "TerrainPatch.h"
 #include "Transform.h"
-#include "lua_CurveInterpolationType.h"
-#include "lua_TerrainFlags.h"
 
 namespace gameplay
 {
@@ -439,10 +437,10 @@ int lua_Terrain_isFlagSet(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Terrain::Flags param1 = (Terrain::Flags)lua_enumFromString_TerrainFlags(luaL_checkstring(state, 2));
+                Terrain::Flags param1 = (Terrain::Flags)luaL_checkint(state, 2);
 
                 Terrain* instance = getInstance(state);
                 bool result = instance->isFlagSet(param1);
@@ -510,11 +508,11 @@ int lua_Terrain_setFlag(lua_State* state)
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                Terrain::Flags param1 = (Terrain::Flags)lua_enumFromString_TerrainFlags(luaL_checkstring(state, 2));
+                Terrain::Flags param1 = (Terrain::Flags)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
                 bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);

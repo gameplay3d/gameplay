@@ -18,6 +18,7 @@ void luaRegister_AIState()
     {
         {"addRef", lua_AIState_addRef},
         {"addScript", lua_AIState_addScript},
+        {"clearScripts", lua_AIState_clearScripts},
         {"getId", lua_AIState_getId},
         {"getRefCount", lua_AIState_getRefCount},
         {"release", lua_AIState_release},
@@ -144,6 +145,38 @@ int lua_AIState_addScript(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AIState_clearScripts(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                AIState* instance = getInstance(state);
+                instance->clearScripts();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_AIState_clearScripts - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

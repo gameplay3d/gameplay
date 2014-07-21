@@ -7,9 +7,6 @@
 #include "Image.h"
 #include "Ref.h"
 #include "Texture.h"
-#include "lua_TextureFilter.h"
-#include "lua_TextureFormat.h"
-#include "lua_TextureWrap.h"
 
 namespace gameplay
 {
@@ -166,7 +163,7 @@ int lua_Texture_getFormat(lua_State* state)
                 Texture::Format result = instance->getFormat();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_TextureFormat(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -651,13 +648,13 @@ int lua_Texture_static_create(lua_State* state)
         {
             do
             {
-                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                if (lua_type(state, 1) == LUA_TNUMBER &&
                     lua_type(state, 2) == LUA_TNUMBER &&
                     lua_type(state, 3) == LUA_TNUMBER &&
                     (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA))
                 {
                     // Get parameter 1 off the stack.
-                    Texture::Format param1 = (Texture::Format)lua_enumFromString_TextureFormat(luaL_checkstring(state, 1));
+                    Texture::Format param1 = (Texture::Format)luaL_checkint(state, 1);
 
                     // Get parameter 2 off the stack.
                     unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -691,7 +688,7 @@ int lua_Texture_static_create(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                     lua_type(state, 2) == LUA_TNUMBER &&
                     lua_type(state, 3) == LUA_TNUMBER &&
-                    (lua_type(state, 4) == LUA_TSTRING || lua_type(state, 4) == LUA_TNIL))
+                    lua_type(state, 4) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
@@ -706,7 +703,7 @@ int lua_Texture_static_create(lua_State* state)
                     int param3 = (int)luaL_checkint(state, 3);
 
                     // Get parameter 4 off the stack.
-                    Texture::Format param4 = (Texture::Format)lua_enumFromString_TextureFormat(luaL_checkstring(state, 4));
+                    Texture::Format param4 = (Texture::Format)luaL_checkint(state, 4);
 
                     void* returnPtr = (void*)Texture::create(*param1, param2, param3, param4);
                     if (returnPtr)
@@ -734,14 +731,14 @@ int lua_Texture_static_create(lua_State* state)
         {
             do
             {
-                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                if (lua_type(state, 1) == LUA_TNUMBER &&
                     lua_type(state, 2) == LUA_TNUMBER &&
                     lua_type(state, 3) == LUA_TNUMBER &&
                     (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                     lua_type(state, 5) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    Texture::Format param1 = (Texture::Format)lua_enumFromString_TextureFormat(luaL_checkstring(state, 1));
+                    Texture::Format param1 = (Texture::Format)luaL_checkint(state, 1);
 
                     // Get parameter 2 off the stack.
                     unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);

@@ -3,7 +3,6 @@
 #include "lua_AIMessage.h"
 #include "AIMessage.h"
 #include "Base.h"
-#include "lua_AIMessageParameterType.h"
 
 namespace gameplay
 {
@@ -334,7 +333,7 @@ int lua_AIMessage_getParameterType(lua_State* state)
                 AIMessage::ParameterType result = instance->getParameterType(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_AIMessageParameterType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

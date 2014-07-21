@@ -10,6 +10,7 @@ int lua_TextBox_addListener(lua_State* state);
 int lua_TextBox_addRef(lua_State* state);
 int lua_TextBox_addScript(lua_State* state);
 int lua_TextBox_canFocus(lua_State* state);
+int lua_TextBox_clearScripts(lua_State* state);
 int lua_TextBox_createAnimation(lua_State* state);
 int lua_TextBox_createAnimationFromBy(lua_State* state);
 int lua_TextBox_createAnimationFromTo(lua_State* state);

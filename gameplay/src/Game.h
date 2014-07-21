@@ -60,6 +60,11 @@ public:
     };
 
     /**
+     * Constructor.
+     */
+    Game();
+
+    /**
      * Destructor.
      */
     virtual ~Game();
@@ -615,19 +620,14 @@ public:
 protected:
 
     /**
-     * Constructor.
-     */
-    Game();
-
-    /**
      * Initialize callback that is called just before the first frame when the game starts.
      */
-    virtual void initialize() = 0;
+    virtual void initialize();
 
     /**
      * Finalize callback that is called when the game on exits.
      */
-    virtual void finalize() = 0;
+    virtual void finalize();
 
     /**
      * Update callback for handling update routines.
@@ -637,7 +637,7 @@ protected:
      *
      * @param elapsedTime The elapsed game time.
      */
-    virtual void update(float elapsedTime) = 0;
+    virtual void update(float elapsedTime);
 
     /**
      * Render callback for handling rendering routines.
@@ -647,7 +647,7 @@ protected:
      *
      * @param elapsedTime The elapsed game time.
      */
-    virtual void render(float elapsedTime) = 0;
+    virtual void render(float elapsedTime);
 
     /**
      * Renders a single frame once and then swaps it to the display.
@@ -748,6 +748,18 @@ private:
      */
     void loadGamepads();
 
+    void keyEventInternal(Keyboard::KeyEvent evt, int key);
+    void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+    void resizeEventInternal(unsigned int width, unsigned int height);
+    void gestureSwipeEventInternal(int x, int y, int direction);
+    void gesturePinchEventInternal(int x, int y, float scale);
+    void gestureTapEventInternal(int x, int y);
+    void gestureLongTapEventInternal(int x, int y, float duration);
+    void gestureDragEventInternal(int x, int y);
+    void gestureDropEventInternal(int x, int y);
+    void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
     unsigned int _pausedCount;                  // Number of times pause() has been called.
@@ -771,6 +783,7 @@ private:
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
     ScriptController* _scriptController;            // Controls the scripting engine.
     std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.
+    ScriptTarget* _scriptTarget;                // Script target for the game
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 

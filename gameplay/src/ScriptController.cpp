@@ -268,6 +268,39 @@ void ScriptUtil::registerConstantString(const std::string& name, const std::stri
     }
 }
 
+void ScriptUtil::registerEnumValue(int enumValue, const std::string& enumValueString, const std::vector<std::string>& scopePath)
+{
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
+    // If the constant is within a scope, get the correct parent 
+    // table on the stack before setting its value.
+    if (!scopePath.empty())
+    {
+        lua_getglobal(sc->_lua, scopePath[0].c_str());
+        for (unsigned int i = 1; i < scopePath.size(); i++)
+        {
+            lua_pushstring(sc->_lua, scopePath[i].c_str());
+            lua_gettable(sc->_lua, -2);
+        }
+
+        // Add the enum value to the parent table.
+        lua_pushnumber(sc->_lua, enumValue);
+        lua_setfield(sc->_lua, -2, enumValueString.c_str());
+
+        // Pop all the parent tables off the stack.
+        int size = (int)scopePath.size();
+        lua_pop(sc->_lua, size);
+    }
+    else
+    {
+        // TODO: Currently unsupported (we don't parse for this yet).
+        // If the constant is global, add it to the global table.
+        lua_pushnumber(sc->_lua, enumValue);
+        lua_pushvalue(sc->_lua, -1);
+        lua_setglobal(sc->_lua, enumValueString.c_str());
+    }
+}
+
 void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, 
     lua_CFunction deleteFunction, const luaL_Reg* statics,  const std::vector<std::string>& scopePath)
 {
@@ -363,11 +396,6 @@ void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunc
 void ScriptUtil::setGlobalHierarchyPair(const std::string& base, const std::string& derived)
 {
     Game::getInstance()->getScriptController()->_hierarchy[base].push_back(derived);
-}
-
-void ScriptUtil::addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum)
-{
-    Game::getInstance()->getScriptController()->_stringFromEnum.push_back(stringFromEnum);
 }
 
 ScriptUtil::LuaArray<bool> ScriptUtil::getBoolPointer(int index)
@@ -873,6 +901,17 @@ void ScriptController::setString(const char* name, const char* v, int script)
     }
 }
 
+bool ScriptController::functionExists(const char* name, int script) const
+{
+    PUSH_NESTED_VARIABLE(name, false, script);
+
+    bool result = lua_isfunction(_lua, -1) ? true : false;
+
+    POP_NESTED_VARIABLE();
+
+    return result;
+}
+
 void ScriptController::print(const char* str)
 {
     gameplay::print("%s", str);
@@ -986,125 +1025,19 @@ void ScriptController::initialize()
     }
 }
 
-void ScriptController::initializeGame()
-{
-    std::vector<std::string>& list = _callbacks[INITIALIZE];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str());
-}
-
 void ScriptController::finalize()
 {
     if (_lua)
 	{
+        // Perform a full garbage collection cycle.
+        // Note that this does NOT free any global variables declared in scripts, since 
+        // they are stored in the global state and are still referenced. Only after 
+        // closing the state (lua_close) will those variables be released.
+        lua_gc(_lua, LUA_GCCOLLECT, 0);
+
         lua_close(_lua);
 		_lua = NULL;
 	}
-}
-
-void ScriptController::finalizeGame()
-{
-    std::vector<std::string> finalizeCallbacks = _callbacks[FINALIZE]; // no & : makes a copy of the vector
-
-	// Remove any registered callbacks so they don't get called after shutdown
-	for (unsigned int i = 0; i < CALLBACK_COUNT; i++)
-        _callbacks[i].clear();
-
-	// Fire script finalize callbacks
-    for (size_t i = 0; i < finalizeCallbacks.size(); ++i)
-        executeFunction<void>(finalizeCallbacks[i].c_str());
-
-    // Perform a full garbage collection cycle.
-	// Note that this does NOT free any global variables declared in scripts, since 
-	// they are stored in the global state and are still referenced. Only after 
-	// closing the state (lua_close) will those variables be released.
-    lua_gc(_lua, LUA_GCCOLLECT, 0);
-}
-
-void ScriptController::update(float elapsedTime)
-{
-    std::vector<std::string>& list = _callbacks[UPDATE];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "f", elapsedTime);
-}
-
-void ScriptController::render(float elapsedTime)
-{
-    std::vector<std::string>& list = _callbacks[RENDER];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "f", elapsedTime);
-}
-
-void ScriptController::resizeEvent(unsigned int width, unsigned int height)
-{
-    std::vector<std::string>& list = _callbacks[RESIZE_EVENT];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "uiui", width, height);
-}
-
-void ScriptController::keyEvent(Keyboard::KeyEvent evt, int key)
-{
-    std::vector<std::string>& list = _callbacks[KEY_EVENT];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "[Keyboard::KeyEvent][Keyboard::Key]", evt, key);
-}
-
-void ScriptController::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    std::vector<std::string>& list = _callbacks[TOUCH_EVENT];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "[Touch::TouchEvent]iiui", evt, x, y, contactIndex);
-}
-
-bool ScriptController::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
-{
-    std::vector<std::string>& list = _callbacks[MOUSE_EVENT];
-    for (size_t i = 0; i < list.size(); ++i)
-    {
-        if (executeFunction<bool>(list[i].c_str(), "[Mouse::MouseEvent]iii", evt, x, y, wheelDelta))
-            return true;
-    }
-    return false;
-}
-
-void ScriptController::gestureSwipeEvent(int x, int y, int direction)
-{
-    std::vector<std::string>& list = _callbacks[GESTURE_SWIPE_EVENT];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "iii", x, y, direction);
-}
-
-void ScriptController::gesturePinchEvent(int x, int y, float scale)
-{
-    std::vector<std::string>& list = _callbacks[GESTURE_PINCH_EVENT];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "iif", x, y, scale);
-}
-
-void ScriptController::gestureTapEvent(int x, int y)
-{
-    std::vector<std::string>& list = _callbacks[GESTURE_TAP_EVENT];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "ii", x, y);
-}
-
-void ScriptController::gestureLongTapEvent(int x, int y, float duration)
-{
-}
-
-void ScriptController::gestureDragEvent(int x, int y)
-{
-}
-
-void ScriptController::gestureDropEvent(int x, int y)
-{
-}
-
-void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
-{
-    std::vector<std::string>& list = _callbacks[GAMEPAD_EVENT];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "[Gamepad::GamepadEvent]<Gamepad>", evt, gamepad);
 }
 
 void ScriptController::executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list, int script)
@@ -1117,6 +1050,13 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
         GP_ERROR("Lua function name must be non-null.");
         return;
     }
+
+    // If script was not specified (or is 0/global) and we are currently executing another function,
+    // call this function in the previous call's environment (stored in _envStack).
+    // This allows gameplay script callbacks (such as Scene.visit) to work locally when called
+    // from an sandboxed script.
+    if (script == 0 && !_envStack.empty())
+        script = _envStack.back();
 
     if (!getNestedVariable(_lua, func, script))
     {
@@ -1176,14 +1116,8 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
                 // Skip past the closing ']' (the semi-colon here is intentional-do not remove).
                 while (*sig++ != ']');
 
-                unsigned int value = va_arg(*list, int);
-                std::string enumStr = "";
-                for (unsigned int i = 0; enumStr.size() == 0 && i < _stringFromEnum.size(); i++)
-                {
-                    enumStr = (*_stringFromEnum[i])(type, value);
-                }
-
-                lua_pushstring(_lua, enumStr.c_str());
+                // We simply push enums as the integer values they represent
+                lua_pushnumber(_lua, va_arg(*list, int));
                 break;
             }
             // Object references/pointers (Lua userdata).
@@ -1230,68 +1164,13 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
         }
     }
 
+    _envStack.push_back(script);
+
     // Perform the function call.
     if (lua_pcall(_lua, argumentCount, resultCount, 0) != 0)
         GP_WARN("Failed to call function '%s' with error '%s'.", func, lua_tostring(_lua, -1));
-}
 
-void ScriptController::registerCallback(const char* callback, const char* function)
-{
-    ScriptCallback scb = toCallback(callback);
-    if (scb < INVALID_CALLBACK)
-    {
-        _callbacks[scb].push_back(function);
-    }
-    else
-    {
-        GP_WARN("Invalid script callback function specified: %s", callback);
-    }
-}
-
-void ScriptController::unregisterCallback(const char* callback, const char* function)
-{
-    ScriptCallback scb = toCallback(callback);
-    if (scb < INVALID_CALLBACK)
-    {
-        std::vector<std::string>& list = _callbacks[scb];
-        std::vector<std::string>::iterator itr = std::find(list.begin(), list.end(), std::string(function));
-        if (itr != list.end())
-            list.erase(itr);
-    }
-    else
-    {
-        GP_WARN("Invalid script callback function specified: %s", callback);
-    }
-}
-
-ScriptController::ScriptCallback ScriptController::toCallback(const char* name)
-{
-    if (strcmp(name, "initialize") == 0)
-        return ScriptController::INITIALIZE;
-    else if (strcmp(name, "update") == 0)
-        return ScriptController::UPDATE;
-    else if (strcmp(name, "render") == 0)
-        return ScriptController::RENDER;
-    else if (strcmp(name, "finalize") == 0)
-        return ScriptController::FINALIZE;
-    else if (strcmp(name, "resizeEvent") == 0)
-        return ScriptController::RESIZE_EVENT;
-    else if (strcmp(name, "keyEvent") == 0)
-        return ScriptController::KEY_EVENT;
-    else if (strcmp(name, "touchEvent") == 0)
-        return ScriptController::TOUCH_EVENT;
-    else if (strcmp(name, "mouseEvent") == 0)
-        return ScriptController::MOUSE_EVENT;
-    else if (strcmp(name, "gestureSwipeEvent") == 0)
-        return ScriptController::GESTURE_SWIPE_EVENT;
-    else if (strcmp(name, "gesturePinchEvent") == 0)
-        return ScriptController::GESTURE_PINCH_EVENT;
-    else if (strcmp(name, "gestureTapEvent") == 0)
-        return ScriptController::GESTURE_TAP_EVENT;
-    else if (strcmp(name, "gamepadEvent") == 0)
-        return ScriptController::GAMEPAD_EVENT;
-    else
-        return ScriptController::INVALID_CALLBACK;
+    _envStack.pop_back();
 }
 
 int ScriptController::convert(lua_State* state)

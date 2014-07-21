@@ -1,24 +1,4 @@
-#include "LuaGame.h"
+#include "gameplay.h"
 
 // Declare our game instance
-LuaGame game;
-
-LuaGame::LuaGame()
-{
-}
-
-void LuaGame::initialize()
-{
-}
-
-void LuaGame::finalize()
-{
-}
-
-void LuaGame::update(float elapsedTime)
-{
-}
-
-void LuaGame::render(float elapsedTime)
-{
-}
+gameplay::Game game;

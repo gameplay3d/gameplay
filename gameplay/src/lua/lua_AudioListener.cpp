@@ -7,7 +7,6 @@
 #include "Game.h"
 #include "Node.h"
 #include "PhysicsController.h"
-#include "lua_CameraType.h"
 
 namespace gameplay
 {

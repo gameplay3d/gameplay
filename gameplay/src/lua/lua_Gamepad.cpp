@@ -8,7 +8,6 @@
 #include "Gamepad.h"
 #include "JoystickControl.h"
 #include "Platform.h"
-#include "lua_GamepadButtonMapping.h"
 
 namespace gameplay
 {
@@ -463,10 +462,10 @@ int lua_Gamepad_isButtonDown(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Gamepad::ButtonMapping param1 = (Gamepad::ButtonMapping)lua_enumFromString_GamepadButtonMapping(luaL_checkstring(state, 2));
+                Gamepad::ButtonMapping param1 = (Gamepad::ButtonMapping)luaL_checkint(state, 2);
 
                 Gamepad* instance = getInstance(state);
                 bool result = instance->isButtonDown(param1);

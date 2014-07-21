@@ -57,6 +57,8 @@ namespace gameplay
  */
 class ScriptTarget
 {
+    friend class Game;
+
 public:
 
     /**
@@ -69,6 +71,7 @@ public:
      */
     class EventRegistry
     {
+        friend class ScriptTarget;
     public:
 
         /**
@@ -102,6 +105,11 @@ public:
         EventRegistry();
 
         /**
+         * Destructor.
+         */
+        ~EventRegistry();
+
+        /**
          * Adds a registered event to the registry.
          *
          * @param name The name of the script event.
@@ -131,7 +139,7 @@ public:
 
     private:
 
-        std::vector<Event> _events;
+        std::vector<Event*> _events;
     };
 
     /**
@@ -151,16 +159,44 @@ public:
     bool removeScript(const char* path);
 
     /**
+     *  Removes all scripts from this object.
+     */
+    void clearScripts();
+
+    /**
      * Determines if there is a script installed that is listening for the given script
      * event (i.e. has a function callback defined for the given event).
      *
      * @param evt The script event to check.
      *
      * @return True if there is a listener for the specified event, false otherwise.
+     *
+     * @script{ignore}
      */
     bool hasScriptListener(const EventRegistry::Event* evt) const;
 
 protected:
+
+    /**
+     * Stores an attached script.
+     */
+    struct Script
+    {
+        // The ID of the script
+        int id;
+
+        // The path the script was loaded from
+        std::string path;
+
+        // Event callback functions available to be called for this script
+        std::vector<const EventRegistry::Event*> eventCallbacks;
+
+        // Linked list info
+        Script* next;
+        Script* prev;
+
+        Script() : id(0), next(NULL), prev(NULL) { }
+    };
 
     /**
      * Constructor.
@@ -171,6 +207,11 @@ protected:
      * Destructor.
      */
     virtual ~ScriptTarget();
+
+    /**
+     * Removes the specified script.
+     */
+    void removeScript(Script* script);
 
     /**
      * Registers a set of supported script events and event arguments for this ScriptTarget. 
@@ -200,25 +241,6 @@ protected:
      *      script event argument definition).
      */
     template<typename T> T fireScriptEvent(const EventRegistry::Event* evt, ...);
-
-    /** Stores an attached script. */
-    struct Script
-    {
-        // The ID of the script
-        int id;
-
-        // The path the script was loaded from
-        std::string path;
-
-        // Event callback functions available to be called for this script
-        std::vector<std::string> eventCallbacks;
-
-        // Linked list info
-        Script* next;
-        Script* prev;
-
-        Script() : id(0), next(NULL), prev(NULL) { }
-    };
 
     /** Holds the registered events for this script target. */
     std::vector<EventRegistry*>* _events;

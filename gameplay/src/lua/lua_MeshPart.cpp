@@ -3,8 +3,6 @@
 #include "lua_MeshPart.h"
 #include "Base.h"
 #include "MeshPart.h"
-#include "lua_MeshIndexFormat.h"
-#include "lua_MeshPrimitiveType.h"
 
 namespace gameplay
 {
@@ -167,7 +165,7 @@ int lua_MeshPart_getIndexFormat(lua_State* state)
                 Mesh::IndexFormat result = instance->getIndexFormat();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_MeshIndexFormat(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -237,7 +235,7 @@ int lua_MeshPart_getPrimitiveType(lua_State* state)
                 Mesh::PrimitiveType result = instance->getPrimitiveType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_MeshPrimitiveType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

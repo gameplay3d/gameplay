@@ -10,6 +10,7 @@ int lua_RadioButton_addListener(lua_State* state);
 int lua_RadioButton_addRef(lua_State* state);
 int lua_RadioButton_addScript(lua_State* state);
 int lua_RadioButton_canFocus(lua_State* state);
+int lua_RadioButton_clearScripts(lua_State* state);
 int lua_RadioButton_createAnimation(lua_State* state);
 int lua_RadioButton_createAnimationFromBy(lua_State* state);
 int lua_RadioButton_createAnimationFromTo(lua_State* state);

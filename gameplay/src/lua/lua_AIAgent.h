@@ -8,6 +8,7 @@ namespace gameplay
 int lua_AIAgent__gc(lua_State* state);
 int lua_AIAgent_addRef(lua_State* state);
 int lua_AIAgent_addScript(lua_State* state);
+int lua_AIAgent_clearScripts(lua_State* state);
 int lua_AIAgent_getId(lua_State* state);
 int lua_AIAgent_getNode(lua_State* state);
 int lua_AIAgent_getRefCount(lua_State* state);

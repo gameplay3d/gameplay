@@ -19,9 +19,6 @@
 #include "ScriptTarget.h"
 #include "Terrain.h"
 #include "Transform.h"
-#include "lua_CurveInterpolationType.h"
-#include "lua_NodeType.h"
-#include "lua_PhysicsCollisionObjectType.h"
 
 namespace gameplay
 {

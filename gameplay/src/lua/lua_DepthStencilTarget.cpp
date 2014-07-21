@@ -5,7 +5,6 @@
 #include "DepthStencilTarget.h"
 #include "Game.h"
 #include "Ref.h"
-#include "lua_DepthStencilTargetFormat.h"
 
 namespace gameplay
 {
@@ -128,7 +127,7 @@ int lua_DepthStencilTarget_getFormat(lua_State* state)
                 DepthStencilTarget::Format result = instance->getFormat();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_DepthStencilTargetFormat(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -365,7 +364,7 @@ int lua_DepthStencilTarget_static_create(lua_State* state)
         case 4:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
@@ -373,7 +372,7 @@ int lua_DepthStencilTarget_static_create(lua_State* state)
                 const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                DepthStencilTarget::Format param2 = (DepthStencilTarget::Format)lua_enumFromString_DepthStencilTargetFormat(luaL_checkstring(state, 2));
+                DepthStencilTarget::Format param2 = (DepthStencilTarget::Format)luaL_checkint(state, 2);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);

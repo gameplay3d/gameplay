@@ -11,6 +11,7 @@ int lua_Container_addListener(lua_State* state);
 int lua_Container_addRef(lua_State* state);
 int lua_Container_addScript(lua_State* state);
 int lua_Container_canFocus(lua_State* state);
+int lua_Container_clearScripts(lua_State* state);
 int lua_Container_createAnimation(lua_State* state);
 int lua_Container_createAnimationFromBy(lua_State* state);
 int lua_Container_createAnimationFromTo(lua_State* state);

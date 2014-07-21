@@ -13,8 +13,6 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Transform.h"
-#include "lua_AudioSourceState.h"
-#include "lua_CurveInterpolationType.h"
 
 namespace gameplay
 {
@@ -296,7 +294,7 @@ int lua_AudioSource_getState(lua_State* state)
                 AudioSource::State result = instance->getState();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_AudioSourceState(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

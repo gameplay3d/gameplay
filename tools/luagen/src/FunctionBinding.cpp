@@ -548,9 +548,11 @@ static inline void outputLuaTypeCheck(ostream& o, int index, const FunctionBindi
         }
         break;
     case FunctionBinding::Param::TYPE_STRING:
-    case FunctionBinding::Param::TYPE_ENUM:
         o << "(lua_type(state, " << index << ") == LUA_TSTRING || ";
         o << "lua_type(state, " << index << ") == LUA_TNIL)";
+        break;
+    case FunctionBinding::Param::TYPE_ENUM:
+        o << "lua_type(state, " << index << ") == LUA_TNUMBER";
         break;
     case FunctionBinding::Param::TYPE_OBJECT:
         o << "(lua_type(state, " << index << ") == LUA_TUSERDATA || ";
@@ -804,7 +806,7 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
         break;
     case FunctionBinding::Param::TYPE_ENUM:
         indent(o, indentLevel);
-        o << p << " param" << i+1 << " = (" << p << ")lua_enumFromString_" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "(luaL_checkstring(state, " << paramIndex << "));\n";
+        o << p << " param" << i+1 << " = (" << p << ")luaL_checkint(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_UNRECOGNIZED:
         // Attempt to retrieve the unrecognized type as an unsigned integer.
@@ -978,7 +980,7 @@ static inline void outputReturnValue(ostream& o, const FunctionBinding& b, int i
         o << "lua_pushnumber(state, result);\n";
         break;
     case FunctionBinding::Param::TYPE_ENUM:
-        o << "lua_pushstring(state, lua_stringFromEnum_" << Generator::getInstance()->getUniqueNameFromRef(b.returnParam.info) << "(result));\n";
+        o << "lua_pushnumber(state, (int)result);\n";
         break;
     case FunctionBinding::Param::TYPE_STRING:
         if (b.returnParam.info == "string")

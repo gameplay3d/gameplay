@@ -3,7 +3,6 @@
 #include "lua_VertexFormatElement.h"
 #include "Base.h"
 #include "VertexFormat.h"
-#include "lua_VertexFormatUsage.h"
 
 namespace gameplay
 {
@@ -99,11 +98,11 @@ int lua_VertexFormatElement__init(lua_State* state)
         {
             do
             {
-                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                if (lua_type(state, 1) == LUA_TNUMBER &&
                     lua_type(state, 2) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    VertexFormat::Usage param1 = (VertexFormat::Usage)lua_enumFromString_VertexFormatUsage(luaL_checkstring(state, 1));
+                    VertexFormat::Usage param1 = (VertexFormat::Usage)luaL_checkint(state, 1);
 
                     // Get parameter 2 off the stack.
                     unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -182,7 +181,7 @@ int lua_VertexFormatElement_usage(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        VertexFormat::Usage param2 = (VertexFormat::Usage)lua_enumFromString_VertexFormatUsage(luaL_checkstring(state, 2));
+        VertexFormat::Usage param2 = (VertexFormat::Usage)luaL_checkint(state, 2);
 
         instance->usage = param2;
         return 0;
@@ -192,7 +191,7 @@ int lua_VertexFormatElement_usage(lua_State* state)
         VertexFormat::Usage result = instance->usage;
 
         // Push the return value onto the stack.
-        lua_pushstring(state, lua_stringFromEnum_VertexFormatUsage(result));
+        lua_pushnumber(state, (int)result);
 
         return 1;
     }

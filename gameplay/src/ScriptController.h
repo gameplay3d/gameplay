@@ -8,9 +8,6 @@
 namespace gameplay
 {
 
-/** Function pointer typedef for string-from-enum conversion functions. */
-typedef const char* (*luaStringEnumConversionFunction)(std::string&, unsigned int);
-
 /**
  * Functions and structures used by the generated Lua script bindings.
  */
@@ -143,6 +140,17 @@ void registerConstantNumber(const std::string& name, double value, const std::ve
 void registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath);
 
 /**
+ * Registers the given enum value as valid for the given scope path.
+ *
+ * @param enumValue The enumeration value, expressed as an integer.
+ * @param enumValueString The string representation of the enum value (what the user would use from Lua).
+ * @param scopePath The list of containing classes, going inward from the most outer class.
+ *
+ * @script{ignore}
+ */
+void registerEnumValue(int enumValue, const std::string& enumValueString, const std::vector<std::string>& scopePath);
+
+/**
  * Registers the given class type with Lua.
  * 
  * @param name The name of the class from within Lua.
@@ -176,15 +184,6 @@ void registerFunction(const char* luaFunction, lua_CFunction cppFunction);
  * @script{ignore}
  */
 void setGlobalHierarchyPair(const std::string& base, const std::string& derived);
-
-/**
- * Adds the given function as a string-from-enumerated value conversion function.
- * 
- * @param stringFromEnum The pointer to the string-from-enum conversion function.
- * 
- * @script{ignore}
- */
-void addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum);
 
 /**
  * Gets a pointer to a bool (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -418,30 +417,6 @@ public:
      * @script{ignore}
      */
     void parseUrl(const char* url, std::string* script, std::string* function);
-
-    /**
-     * Registers the given script callback.
-     *
-     * The 'callback' parameter must be one of the supported global callback
-     * event functions. The following strings are accepted: initialize, finalize,
-     * update, render, resizeEvent, keyEvent, touchEvent, mouseEvent, gamepadEvent.
-     * Signatures for the registered script function must match that of the
-     * corresponding signatures of these events on the Game class.
-     *
-     * @param callback The script callback to register for.
-     * @param function The name of the script function to register.
-     */
-    void registerCallback(const char* callback, const char* function);
-
-    /**
-     * Unregisters the given script callback.
-     *
-     * @param callback The script callback to unregister for.
-     * @param function The name of the script function to unregister.
-     *
-     * @see registerCallback(const char*, const char*)
-     */
-    void unregisterCallback(const char* callback, const char* function);
 
     /**
      * Calls the specified no-parameter global Lua function.
@@ -825,6 +800,16 @@ public:
     template<typename T>void setObjectPointer(const char* type, const char* name, T* v);
 
     /**
+     * Determines if there exists a function with the specified name in the given script environment.
+     *
+     * @param name The name of the function to check.
+     * @param script Optional ID of the script environment to inspect, or zero to inspect the global environment.
+     *
+     * @return True if the specified function exists, false otherwise.
+     */
+    bool functionExists(const char* name, int script = 0) const;
+
+    /**
      * Prints the string to the platform's output stream or log file.
      * Used for overriding Lua's print function.
      * 
@@ -844,27 +829,6 @@ public:
 private:
 
     /**
-     * Represents a callback function that can be registered for.
-     */
-    enum ScriptCallback
-    {
-        INITIALIZE = 0,
-        UPDATE,
-        RENDER,
-        FINALIZE,
-        RESIZE_EVENT,
-        KEY_EVENT,
-        MOUSE_EVENT,
-        TOUCH_EVENT,
-        GESTURE_SWIPE_EVENT,
-        GESTURE_PINCH_EVENT,
-        GESTURE_TAP_EVENT,
-        GAMEPAD_EVENT,
-        CALLBACK_COUNT,
-        INVALID_CALLBACK = CALLBACK_COUNT
-    };
-
-    /**
      * Constructor.
      */
     ScriptController();
@@ -880,145 +844,14 @@ private:
     ~ScriptController();
 
     /**
-     * Callback for when the controller is initialized.
+     * Called to initialize the script controller.
      */
     void initialize();
 
-    /**
-     * Initializes the game using the appropriate callback script (if it was specified).
-     */
-    void initializeGame();
-
     /*
-     * Callback for when the controller is finalized.
+     * Called to finalize the script controller.
      */
     void finalize();
-
-    /**
-     * Finalizes the game using the appropriate callback script (if it was specified).
-     */
-    void finalizeGame();
-    
-    /**
-     * Callback for when the controller receives a frame update event.
-     */
-    void update(float elapsedTime);
-
-    /**
-     * Renders the game using the appropriate callback script (if it was specified).
-     */
-    void render(float elapsedTime);
-
-    /**
-     * Script callback for game resize events.
-     *
-     * @param width The new width of the game window content area.
-     * @param height The new height of the game window content area.
-     */
-    void resizeEvent(unsigned int width, unsigned int height);
-
-    /**
-     * Script keyboard callback on key events.
-     *
-     * @param evt The key event that occurred.
-     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
-     *            If evt is KEY_CHAR then key is the unicode value of the character.
-     * 
-     * @see Keyboard::KeyEvent
-     * @see Keyboard::Key
-     */
-    void keyEvent(Keyboard::KeyEvent evt, int key);
-
-    /**
-     * Script touch callback on touch events.
-     *
-     * @param evt The touch event that occurred.
-     * @param x The x position of the touch in pixels. Left edge is zero.
-     * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
-     *
-     * @see Touch::TouchEvent
-     */
-    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-
-    /**
-     * Script mouse callback on mouse events. If the game does not consume the mouse move event or left mouse click event
-     * then it is interpreted as a touch event instead.
-     *
-     * @param evt The mouse event that occurred.
-     * @param x The x position of the mouse in pixels. Left edge is zero.
-     * @param y The y position of the mouse in pixels. Top edge is zero.
-     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
-     *
-     * @return True if the mouse event is consumed or false if it is not consumed.
-     *
-     * @see Mouse::MouseEvent
-     */
-    bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
-
-    /**
-     * Script callback for Gesture::SWIPE events.
-     *
-     * @param x The x-coordinate of the start of the swipe.
-     * @param y The y-coordinate of the start of the swipe.
-     * @param direction The direction of the swipe
-     *
-     * @see Gesture::SWIPE_DIRECTION_UP
-     * @see Gesture::SWIPE_DIRECTION_DOWN
-     * @see Gesture::SWIPE_DIRECTION_LEFT
-     * @see Gesture::SWIPE_DIRECTION_RIGHT
-     */
-    void gestureSwipeEvent(int x, int y, int direction);
-
-    /**
-     * Script callback for Gesture::PINCH events.
-     *
-     * @param x The centroid x-coordinate of the pinch.
-     * @param y The centroid y-coordinate of the pinch.
-     * @param scale The scale of the pinch.
-     */
-    void gesturePinchEvent(int x, int y, float scale);
-
-    /**
-     * Script callback for Gesture::TAP events.
-     *
-     * @param x The x-coordinate of the tap.
-     * @param y The y-coordinate of the tap.
-     */
-    void gestureTapEvent(int x, int y);
-
-	/**
-	 * Gesture callback on Gesture::LONG_TAP events.
-	 *
-	 * @param x The x-coordinate of the long tap.
-	 * @param y The y-coordinate of the long tap.
-	 * @param duration The duration of the long tap in ms.
-	 */
-	void gestureLongTapEvent(int x, int y, float duration);
-
-	/**
-	 * Gesture callback on Gesture::DRAG events.
-	 *
-	 * @param x The x-coordinate of the start of the drag event.
-	 * @param y The y-coordinate of the start of the drag event.
-	 */
-	void gestureDragEvent(int x, int y);
-
-	/**
-	 * Gesture callback on Gesture::DROP events.
-	 *
-	 * @param x The x-coordinate of the drop event.
-	 * @param y The y-coordinate of the drop event.
-	 */
-	void gestureDropEvent(int x, int y);
-
-    /**
-     * Script gamepad callback on gamepad events.
-     *
-     * @param evt The gamepad event that occurred.
-     * @param gamepad the gamepad the event occurred on
-     */
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
 
     /**
      * Calls the specified Lua function using the given parameters.
@@ -1046,16 +879,6 @@ private:
      * @param script Optional ID for the script environment of the function to execute, or zero for the default/global environment.
      */
     void executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list, int script = 0);
-
-    /**
-     * Converts the given string to a valid script callback enumeration value
-     * or to ScriptController::INVALID_CALLBACK if there is no valid conversion.
-     * 
-     * @param name The name of the callback.
-     * 
-     * @return The corresponding callback enumeration value.
-     */
-    static ScriptController::ScriptCallback toCallback(const char* name);
 
     /**
      * Converts a Gameplay userdata value to the type with the given class name.
@@ -1088,11 +911,11 @@ private:
     friend void ScriptUtil::registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath);
     friend void ScriptUtil::registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath);
     friend void ScriptUtil::registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath);
+    friend void ScriptUtil::registerEnumValue(int enumValue, const std::string& enumValueString, const std::vector<std::string>& scopePath);
     friend void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction,
         lua_CFunction deleteFunction, const luaL_Reg* statics, const std::vector<std::string>& scopePath);
     friend void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunction);
     friend void ScriptUtil::setGlobalHierarchyPair(const std::string& base, const std::string& derived);
-    friend void ScriptUtil::addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum);
     friend ScriptUtil::LuaArray<bool> ScriptUtil::getBoolPointer(int index);
     friend ScriptUtil::LuaArray<short> ScriptUtil::getShortPointer(int index);
     friend ScriptUtil::LuaArray<int> ScriptUtil::getIntPointer(int index);
@@ -1109,10 +932,9 @@ private:
     lua_State* _lua;
     unsigned int _returnCount;
     std::map<std::string, std::vector<std::string> > _hierarchy;
-    std::vector<std::string> _callbacks[CALLBACK_COUNT];
     std::set<std::string> _loadedScripts;
     std::map<int, std::string> _environments;
-    std::vector<luaStringEnumConversionFunction> _stringFromEnum;
+    std::vector<int> _envStack;
 };
 
 /** Template specialization. */

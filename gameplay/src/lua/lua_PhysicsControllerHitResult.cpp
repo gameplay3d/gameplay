@@ -11,7 +11,6 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Terrain.h"
-#include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay
 {

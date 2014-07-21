@@ -10,7 +10,6 @@
 #include "PhysicsCollisionShape.h"
 #include "Properties.h"
 #include "Ref.h"
-#include "lua_PhysicsCollisionShapeType.h"
 
 namespace gameplay
 {
@@ -167,7 +166,7 @@ int lua_PhysicsCollisionShape_getType(lua_State* state)
                 PhysicsCollisionShape::Type result = instance->getType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_PhysicsCollisionShapeType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

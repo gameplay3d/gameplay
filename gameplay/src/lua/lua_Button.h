@@ -10,6 +10,7 @@ int lua_Button_addListener(lua_State* state);
 int lua_Button_addRef(lua_State* state);
 int lua_Button_addScript(lua_State* state);
 int lua_Button_canFocus(lua_State* state);
+int lua_Button_clearScripts(lua_State* state);
 int lua_Button_createAnimation(lua_State* state);
 int lua_Button_createAnimationFromBy(lua_State* state);
 int lua_Button_createAnimationFromTo(lua_State* state);

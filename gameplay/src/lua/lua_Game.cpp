@@ -10,13 +10,6 @@
 #include "RenderState.h"
 #include "SceneLoader.h"
 #include "Theme.h"
-#include "lua_GameClearFlags.h"
-#include "lua_GameState.h"
-#include "lua_GamepadGamepadEvent.h"
-#include "lua_GestureGestureEvent.h"
-#include "lua_KeyboardKeyEvent.h"
-#include "lua_MouseMouseEvent.h"
-#include "lua_TouchTouchEvent.h"
 
 namespace gameplay
 {
@@ -189,13 +182,13 @@ int lua_Game_clear(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TNUMBER &&
                     lua_type(state, 5) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    Game::ClearFlags param1 = (Game::ClearFlags)lua_enumFromString_GameClearFlags(luaL_checkstring(state, 2));
+                    Game::ClearFlags param1 = (Game::ClearFlags)luaL_checkint(state, 2);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -225,7 +218,7 @@ int lua_Game_clear(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     lua_type(state, 3) == LUA_TNUMBER &&
                     lua_type(state, 4) == LUA_TNUMBER &&
                     lua_type(state, 5) == LUA_TNUMBER &&
@@ -234,7 +227,7 @@ int lua_Game_clear(lua_State* state)
                     lua_type(state, 8) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    Game::ClearFlags param1 = (Game::ClearFlags)lua_enumFromString_GameClearFlags(luaL_checkstring(state, 2));
+                    Game::ClearFlags param1 = (Game::ClearFlags)luaL_checkint(state, 2);
 
                     // Get parameter 2 off the stack.
                     float param2 = (float)luaL_checknumber(state, 3);
@@ -418,11 +411,11 @@ int lua_Game_gamepadEvent(lua_State* state)
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Gamepad::GamepadEvent param1 = (Gamepad::GamepadEvent)lua_enumFromString_GamepadGamepadEvent(luaL_checkstring(state, 2));
+                Gamepad::GamepadEvent param1 = (Gamepad::GamepadEvent)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -1347,7 +1340,7 @@ int lua_Game_getState(lua_State* state)
                 Game::State result = instance->getState();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_GameState(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -1561,10 +1554,10 @@ int lua_Game_isGestureRegistered(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 2));
+                Gesture::GestureEvent param1 = (Gesture::GestureEvent)luaL_checkint(state, 2);
 
                 Game* instance = getInstance(state);
                 bool result = instance->isGestureRegistered(param1);
@@ -1600,10 +1593,10 @@ int lua_Game_isGestureSupported(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 2));
+                Gesture::GestureEvent param1 = (Gesture::GestureEvent)luaL_checkint(state, 2);
 
                 Game* instance = getInstance(state);
                 bool result = instance->isGestureSupported(param1);
@@ -1779,11 +1772,11 @@ int lua_Game_keyEvent(lua_State* state)
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Keyboard::KeyEvent param1 = (Keyboard::KeyEvent)lua_enumFromString_KeyboardKeyEvent(luaL_checkstring(state, 2));
+                Keyboard::KeyEvent param1 = (Keyboard::KeyEvent)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -1858,13 +1851,13 @@ int lua_Game_mouseEvent(lua_State* state)
         case 5:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Mouse::MouseEvent param1 = (Mouse::MouseEvent)lua_enumFromString_MouseMouseEvent(luaL_checkstring(state, 2));
+                Mouse::MouseEvent param1 = (Mouse::MouseEvent)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -1941,10 +1934,10 @@ int lua_Game_registerGesture(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 2));
+                Gesture::GestureEvent param1 = (Gesture::GestureEvent)luaL_checkint(state, 2);
 
                 Game* instance = getInstance(state);
                 instance->registerGesture(param1);
@@ -2465,13 +2458,13 @@ int lua_Game_touchEvent(lua_State* state)
         case 5:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Touch::TouchEvent param1 = (Touch::TouchEvent)lua_enumFromString_TouchTouchEvent(luaL_checkstring(state, 2));
+                Touch::TouchEvent param1 = (Touch::TouchEvent)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -2513,10 +2506,10 @@ int lua_Game_unregisterGesture(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 2));
+                Gesture::GestureEvent param1 = (Gesture::GestureEvent)luaL_checkint(state, 2);
 
                 Game* instance = getInstance(state);
                 instance->unregisterGesture(param1);

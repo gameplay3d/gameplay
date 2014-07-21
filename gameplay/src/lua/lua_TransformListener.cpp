@@ -9,7 +9,6 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Transform.h"
-#include "lua_CurveInterpolationType.h"
 
 namespace gameplay
 {

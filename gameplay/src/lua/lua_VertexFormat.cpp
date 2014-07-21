@@ -3,7 +3,6 @@
 #include "lua_VertexFormat.h"
 #include "Base.h"
 #include "VertexFormat.h"
-#include "lua_VertexFormatUsage.h"
 
 namespace gameplay
 {
@@ -256,10 +255,10 @@ int lua_VertexFormat_static_toString(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            if (lua_type(state, 1) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                VertexFormat::Usage param1 = (VertexFormat::Usage)lua_enumFromString_VertexFormatUsage(luaL_checkstring(state, 1));
+                VertexFormat::Usage param1 = (VertexFormat::Usage)luaL_checkint(state, 1);
 
                 const char* result = VertexFormat::toString(param1);
 

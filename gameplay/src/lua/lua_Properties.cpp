@@ -5,7 +5,6 @@
 #include "FileSystem.h"
 #include "Properties.h"
 #include "Quaternion.h"
-#include "lua_PropertiesType.h"
 
 namespace gameplay
 {
@@ -917,7 +916,7 @@ int lua_Properties_getType(lua_State* state)
                 Properties::Type result = instance->getType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_PropertiesType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -938,7 +937,7 @@ int lua_Properties_getType(lua_State* state)
                 Properties::Type result = instance->getType(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_PropertiesType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

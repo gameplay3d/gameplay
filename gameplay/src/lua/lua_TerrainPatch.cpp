@@ -10,7 +10,6 @@
 #include "Scene.h"
 #include "Terrain.h"
 #include "TerrainPatch.h"
-#include "lua_CameraType.h"
 
 namespace gameplay
 {

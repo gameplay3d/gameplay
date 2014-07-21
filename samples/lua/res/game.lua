@@ -31,8 +31,7 @@ function initialize()
     local model = createGridModel()
     _scene:addNode("grid"):setModel(model)
 
-    -- Load the AI script
-    game:getScriptController():loadScript("res/ai.lua")
+    dofile("res/ai.lua")
 
     ScreenDisplayer.finish()
 end

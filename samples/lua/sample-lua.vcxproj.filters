@@ -36,11 +36,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\LuaGame.h">
-      <Filter>src</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\LuaGame.cpp">
       <Filter>src</Filter>
     </ClCompile>

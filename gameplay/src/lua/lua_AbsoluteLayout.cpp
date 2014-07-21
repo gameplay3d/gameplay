@@ -8,7 +8,6 @@
 #include "Game.h"
 #include "Layout.h"
 #include "Ref.h"
-#include "lua_LayoutType.h"
 
 namespace gameplay
 {
@@ -157,7 +156,7 @@ int lua_AbsoluteLayout_getType(lua_State* state)
                 Layout::Type result = instance->getType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_LayoutType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

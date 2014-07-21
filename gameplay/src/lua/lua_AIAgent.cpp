@@ -18,6 +18,7 @@ void luaRegister_AIAgent()
     {
         {"addRef", lua_AIAgent_addRef},
         {"addScript", lua_AIAgent_addScript},
+        {"clearScripts", lua_AIAgent_clearScripts},
         {"getId", lua_AIAgent_getId},
         {"getNode", lua_AIAgent_getNode},
         {"getRefCount", lua_AIAgent_getRefCount},
@@ -148,6 +149,38 @@ int lua_AIAgent_addScript(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AIAgent_clearScripts(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                AIAgent* instance = getInstance(state);
+                instance->clearScripts();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_AIAgent_clearScripts - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

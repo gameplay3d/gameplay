@@ -7,8 +7,6 @@
 #include "Font.h"
 #include "Game.h"
 #include "Ref.h"
-#include "lua_FontFormat.h"
-#include "lua_FontJustify.h"
 
 namespace gameplay
 {
@@ -243,7 +241,7 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                 lua_type(state, 5) == LUA_TNUMBER &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
+                lua_type(state, 6) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -270,7 +268,7 @@ int lua_Font_createText(lua_State* state)
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
                 // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                 Font* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createText(param1, *param2, *param3, param4, param5);
@@ -301,7 +299,7 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                 lua_type(state, 5) == LUA_TNUMBER &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -329,7 +327,7 @@ int lua_Font_createText(lua_State* state)
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
                 // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 bool param6 = gameplay::ScriptUtil::luaCheckBool(state, 7);
@@ -363,7 +361,7 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                 lua_type(state, 5) == LUA_TNUMBER &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TBOOLEAN &&
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
@@ -392,7 +390,7 @@ int lua_Font_createText(lua_State* state)
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
                 // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 bool param6 = gameplay::ScriptUtil::luaCheckBool(state, 7);
@@ -429,7 +427,7 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                 lua_type(state, 5) == LUA_TNUMBER &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                lua_type(state, 6) == LUA_TNUMBER &&
                 lua_type(state, 7) == LUA_TBOOLEAN &&
                 lua_type(state, 8) == LUA_TBOOLEAN &&
                 (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
@@ -459,7 +457,7 @@ int lua_Font_createText(lua_State* state)
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
                 // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                 // Get parameter 6 off the stack.
                 bool param6 = gameplay::ScriptUtil::luaCheckBool(state, 7);
@@ -687,7 +685,7 @@ int lua_Font_drawText(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                     lua_type(state, 5) == LUA_TNUMBER &&
-                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
+                    lua_type(state, 6) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -708,7 +706,7 @@ int lua_Font_drawText(lua_State* state)
                     unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
                     // Get parameter 5 off the stack.
-                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                     Font* instance = getInstance(state);
                     instance->drawText(param1, *param2, *param3, param4, param5);
@@ -768,7 +766,7 @@ int lua_Font_drawText(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                     lua_type(state, 5) == LUA_TNUMBER &&
-                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
                     lua_type(state, 7) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
@@ -790,7 +788,7 @@ int lua_Font_drawText(lua_State* state)
                     unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
                     // Get parameter 5 off the stack.
-                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                     // Get parameter 6 off the stack.
                     bool param6 = gameplay::ScriptUtil::luaCheckBool(state, 7);
@@ -854,7 +852,7 @@ int lua_Font_drawText(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                     lua_type(state, 5) == LUA_TNUMBER &&
-                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
                     lua_type(state, 7) == LUA_TBOOLEAN &&
                     lua_type(state, 8) == LUA_TBOOLEAN)
                 {
@@ -877,7 +875,7 @@ int lua_Font_drawText(lua_State* state)
                     unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
                     // Get parameter 5 off the stack.
-                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                     // Get parameter 6 off the stack.
                     bool param6 = gameplay::ScriptUtil::luaCheckBool(state, 7);
@@ -948,7 +946,7 @@ int lua_Font_drawText(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                     lua_type(state, 5) == LUA_TNUMBER &&
-                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
                     lua_type(state, 7) == LUA_TBOOLEAN &&
                     lua_type(state, 8) == LUA_TBOOLEAN &&
                     (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
@@ -972,7 +970,7 @@ int lua_Font_drawText(lua_State* state)
                     unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
                     // Get parameter 5 off the stack.
-                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                     // Get parameter 6 off the stack.
                     bool param6 = gameplay::ScriptUtil::luaCheckBool(state, 7);
@@ -1143,7 +1141,7 @@ int lua_Font_getFormat(lua_State* state)
                 Font::Format result = instance->getFormat();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_FontFormat(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -1233,7 +1231,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL) &&
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TNIL) &&
-                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
+                lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -1269,7 +1267,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 }
 
                 // Get parameter 6 off the stack.
-                Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
+                Font::Justify param6 = (Font::Justify)luaL_checkint(state, 7);
 
                 Font* instance = getInstance(state);
                 int result = instance->getIndexAtLocation(param1, *param2, param3, *param4, param5, param6);
@@ -1292,7 +1290,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL) &&
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TNIL) &&
-                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL) &&
+                lua_type(state, 7) == LUA_TNUMBER &&
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -1329,7 +1327,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 }
 
                 // Get parameter 6 off the stack.
-                Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
+                Font::Justify param6 = (Font::Justify)luaL_checkint(state, 7);
 
                 // Get parameter 7 off the stack.
                 bool param7 = gameplay::ScriptUtil::luaCheckBool(state, 8);
@@ -1355,7 +1353,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL) &&
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TNIL) &&
-                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL) &&
+                lua_type(state, 7) == LUA_TNUMBER &&
                 lua_type(state, 8) == LUA_TBOOLEAN &&
                 lua_type(state, 9) == LUA_TBOOLEAN)
             {
@@ -1393,7 +1391,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 }
 
                 // Get parameter 6 off the stack.
-                Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
+                Font::Justify param6 = (Font::Justify)luaL_checkint(state, 7);
 
                 // Get parameter 7 off the stack.
                 bool param7 = gameplay::ScriptUtil::luaCheckBool(state, 8);
@@ -1486,7 +1484,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
                 lua_type(state, 6) == LUA_TNUMBER &&
-                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
+                lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -1516,7 +1514,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
 
                 // Get parameter 6 off the stack.
-                Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
+                Font::Justify param6 = (Font::Justify)luaL_checkint(state, 7);
 
                 Font* instance = getInstance(state);
                 instance->getLocationAtIndex(param1, *param2, param3, param4, param5, param6);
@@ -1536,7 +1534,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
                 lua_type(state, 6) == LUA_TNUMBER &&
-                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL) &&
+                lua_type(state, 7) == LUA_TNUMBER &&
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -1567,7 +1565,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
 
                 // Get parameter 6 off the stack.
-                Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
+                Font::Justify param6 = (Font::Justify)luaL_checkint(state, 7);
 
                 // Get parameter 7 off the stack.
                 bool param7 = gameplay::ScriptUtil::luaCheckBool(state, 8);
@@ -1590,7 +1588,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
                 lua_type(state, 6) == LUA_TNUMBER &&
-                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL) &&
+                lua_type(state, 7) == LUA_TNUMBER &&
                 lua_type(state, 8) == LUA_TBOOLEAN &&
                 lua_type(state, 9) == LUA_TBOOLEAN)
             {
@@ -1622,7 +1620,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
 
                 // Get parameter 6 off the stack.
-                Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
+                Font::Justify param6 = (Font::Justify)luaL_checkint(state, 7);
 
                 // Get parameter 7 off the stack.
                 bool param7 = gameplay::ScriptUtil::luaCheckBool(state, 8);
@@ -1946,7 +1944,7 @@ int lua_Font_measureText(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TNUMBER &&
                     (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
-                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
+                    lua_type(state, 6) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -1967,7 +1965,7 @@ int lua_Font_measureText(lua_State* state)
                         break;
 
                     // Get parameter 5 off the stack.
-                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                     Font* instance = getInstance(state);
                     instance->measureText(param1, *param2, param3, param4, param5);
@@ -1989,7 +1987,7 @@ int lua_Font_measureText(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TNUMBER &&
                     (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
-                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
                     lua_type(state, 7) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
@@ -2011,7 +2009,7 @@ int lua_Font_measureText(lua_State* state)
                         break;
 
                     // Get parameter 5 off the stack.
-                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                     // Get parameter 6 off the stack.
                     bool param6 = gameplay::ScriptUtil::luaCheckBool(state, 7);
@@ -2036,7 +2034,7 @@ int lua_Font_measureText(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TNUMBER &&
                     (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
-                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
                     lua_type(state, 7) == LUA_TBOOLEAN &&
                     lua_type(state, 8) == LUA_TBOOLEAN)
                 {
@@ -2059,7 +2057,7 @@ int lua_Font_measureText(lua_State* state)
                         break;
 
                     // Get parameter 5 off the stack.
-                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    Font::Justify param5 = (Font::Justify)luaL_checkint(state, 6);
 
                     // Get parameter 6 off the stack.
                     bool param6 = gameplay::ScriptUtil::luaCheckBool(state, 7);
@@ -2284,7 +2282,7 @@ int lua_Font_static_getJustify(lua_State* state)
                 Font::Justify result = Font::getJustify(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_FontJustify(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

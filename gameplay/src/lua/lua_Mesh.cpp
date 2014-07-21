@@ -9,8 +9,6 @@
 #include "MeshPart.h"
 #include "Model.h"
 #include "Ref.h"
-#include "lua_MeshIndexFormat.h"
-#include "lua_MeshPrimitiveType.h"
 
 namespace gameplay
 {
@@ -110,15 +108,15 @@ int lua_Mesh_addPart(lua_State* state)
         case 4:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Mesh::PrimitiveType param1 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+                Mesh::PrimitiveType param1 = (Mesh::PrimitiveType)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                Mesh::IndexFormat param2 = (Mesh::IndexFormat)lua_enumFromString_MeshIndexFormat(luaL_checkstring(state, 3));
+                Mesh::IndexFormat param2 = (Mesh::IndexFormat)luaL_checkint(state, 3);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -148,16 +146,16 @@ int lua_Mesh_addPart(lua_State* state)
         case 5:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
                 lua_type(state, 5) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                Mesh::PrimitiveType param1 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+                Mesh::PrimitiveType param1 = (Mesh::PrimitiveType)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                Mesh::IndexFormat param2 = (Mesh::IndexFormat)lua_enumFromString_MeshIndexFormat(luaL_checkstring(state, 3));
+                Mesh::IndexFormat param2 = (Mesh::IndexFormat)luaL_checkint(state, 3);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -416,7 +414,7 @@ int lua_Mesh_getPrimitiveType(lua_State* state)
                 Mesh::PrimitiveType result = instance->getPrimitiveType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_MeshPrimitiveType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -825,10 +823,10 @@ int lua_Mesh_setPrimitiveType(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Mesh::PrimitiveType param1 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+                Mesh::PrimitiveType param1 = (Mesh::PrimitiveType)luaL_checkint(state, 2);
 
                 Mesh* instance = getInstance(state);
                 instance->setPrimitiveType(param1);

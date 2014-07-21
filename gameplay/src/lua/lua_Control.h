@@ -10,6 +10,7 @@ int lua_Control_addListener(lua_State* state);
 int lua_Control_addRef(lua_State* state);
 int lua_Control_addScript(lua_State* state);
 int lua_Control_canFocus(lua_State* state);
+int lua_Control_clearScripts(lua_State* state);
 int lua_Control_createAnimation(lua_State* state);
 int lua_Control_createAnimationFromBy(lua_State* state);
 int lua_Control_createAnimationFromTo(lua_State* state);

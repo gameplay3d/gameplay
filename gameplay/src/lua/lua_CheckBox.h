@@ -10,6 +10,7 @@ int lua_CheckBox_addListener(lua_State* state);
 int lua_CheckBox_addRef(lua_State* state);
 int lua_CheckBox_addScript(lua_State* state);
 int lua_CheckBox_canFocus(lua_State* state);
+int lua_CheckBox_clearScripts(lua_State* state);
 int lua_CheckBox_createAnimation(lua_State* state);
 int lua_CheckBox_createAnimationFromBy(lua_State* state);
 int lua_CheckBox_createAnimationFromTo(lua_State* state);

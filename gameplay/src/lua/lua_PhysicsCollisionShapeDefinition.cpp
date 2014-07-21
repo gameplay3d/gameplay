@@ -10,7 +10,6 @@
 #include "PhysicsCollisionShape.h"
 #include "Properties.h"
 #include "Ref.h"
-#include "lua_PhysicsCollisionShapeType.h"
 
 namespace gameplay
 {

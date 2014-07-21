@@ -10,6 +10,7 @@ int lua_ImageControl_addListener(lua_State* state);
 int lua_ImageControl_addRef(lua_State* state);
 int lua_ImageControl_addScript(lua_State* state);
 int lua_ImageControl_canFocus(lua_State* state);
+int lua_ImageControl_clearScripts(lua_State* state);
 int lua_ImageControl_createAnimation(lua_State* state);
 int lua_ImageControl_createAnimationFromBy(lua_State* state);
 int lua_ImageControl_createAnimationFromTo(lua_State* state);

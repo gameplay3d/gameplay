@@ -13,9 +13,6 @@
 #include "PhysicsVehicle.h"
 #include "PhysicsVehicleWheel.h"
 #include "ScriptController.h"
-#include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"
-#include "lua_PhysicsCollisionObjectType.h"
-#include "lua_PhysicsCollisionShapeType.h"
 
 namespace gameplay
 {
@@ -999,7 +996,7 @@ int lua_PhysicsVehicle_getShapeType(lua_State* state)
                 PhysicsCollisionShape::Type result = instance->getShapeType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_PhysicsCollisionShapeType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -1209,7 +1206,7 @@ int lua_PhysicsVehicle_getType(lua_State* state)
                 PhysicsCollisionObject::Type result = instance->getType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_PhysicsCollisionObjectType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

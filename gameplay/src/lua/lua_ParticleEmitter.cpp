@@ -9,7 +9,6 @@
 #include "Quaternion.h"
 #include "Ref.h"
 #include "Scene.h"
-#include "lua_ParticleEmitterTextureBlending.h"
 
 namespace gameplay
 {
@@ -1607,7 +1606,7 @@ int lua_ParticleEmitter_getTextureBlending(lua_State* state)
                 ParticleEmitter::TextureBlending result = instance->getTextureBlending();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ParticleEmitterTextureBlending(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -2710,13 +2709,13 @@ int lua_ParticleEmitter_setTexture(lua_State* state)
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                    lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
-                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 3));
+                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)luaL_checkint(state, 3);
 
                     ParticleEmitter* instance = getInstance(state);
                     instance->setTexture(param1, param2);
@@ -2729,7 +2728,7 @@ int lua_ParticleEmitter_setTexture(lua_State* state)
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                     (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                    lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
@@ -2738,7 +2737,7 @@ int lua_ParticleEmitter_setTexture(lua_State* state)
                         break;
 
                     // Get parameter 2 off the stack.
-                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 3));
+                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)luaL_checkint(state, 3);
 
                     ParticleEmitter* instance = getInstance(state);
                     instance->setTexture(param1, param2);
@@ -2772,10 +2771,10 @@ int lua_ParticleEmitter_setTextureBlending(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ParticleEmitter::TextureBlending param1 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 2));
+                ParticleEmitter::TextureBlending param1 = (ParticleEmitter::TextureBlending)luaL_checkint(state, 2);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setTextureBlending(param1);
@@ -2953,14 +2952,14 @@ int lua_ParticleEmitter_static_create(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     // Get parameter 2 off the stack.
-                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 2));
+                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)luaL_checkint(state, 2);
 
                     // Get parameter 3 off the stack.
                     unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
@@ -3015,7 +3014,7 @@ int lua_ParticleEmitter_static_getTextureBlendingFromString(lua_State* state)
                 ParticleEmitter::TextureBlending result = ParticleEmitter::getTextureBlendingFromString(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ParticleEmitterTextureBlending(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

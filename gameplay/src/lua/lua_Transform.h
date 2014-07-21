@@ -9,6 +9,7 @@ int lua_Transform__gc(lua_State* state);
 int lua_Transform__init(lua_State* state);
 int lua_Transform_addListener(lua_State* state);
 int lua_Transform_addScript(lua_State* state);
+int lua_Transform_clearScripts(lua_State* state);
 int lua_Transform_createAnimation(lua_State* state);
 int lua_Transform_createAnimationFromBy(lua_State* state);
 int lua_Transform_createAnimationFromTo(lua_State* state);

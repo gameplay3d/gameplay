@@ -7,6 +7,7 @@ namespace gameplay
 // Lua bindings for PhysicsController.
 int lua_PhysicsController_addScript(lua_State* state);
 int lua_PhysicsController_addStatusListener(lua_State* state);
+int lua_PhysicsController_clearScripts(lua_State* state);
 int lua_PhysicsController_createFixedConstraint(lua_State* state);
 int lua_PhysicsController_createGenericConstraint(lua_State* state);
 int lua_PhysicsController_createHingeConstraint(lua_State* state);

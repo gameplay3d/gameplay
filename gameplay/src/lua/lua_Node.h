@@ -10,6 +10,7 @@ int lua_Node_addChild(lua_State* state);
 int lua_Node_addListener(lua_State* state);
 int lua_Node_addRef(lua_State* state);
 int lua_Node_addScript(lua_State* state);
+int lua_Node_clearScripts(lua_State* state);
 int lua_Node_clone(lua_State* state);
 int lua_Node_createAnimation(lua_State* state);
 int lua_Node_createAnimationFromBy(lua_State* state);

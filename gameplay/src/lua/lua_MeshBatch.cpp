@@ -4,7 +4,6 @@
 #include "Base.h"
 #include "Material.h"
 #include "MeshBatch.h"
-#include "lua_MeshPrimitiveType.h"
 
 namespace gameplay
 {
@@ -433,7 +432,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TBOOLEAN)
                 {
@@ -444,7 +443,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                         break;
 
                     // Get parameter 2 off the stack.
-                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)luaL_checkint(state, 2);
 
                     // Get parameter 3 off the stack.
                     const char* param3 = gameplay::ScriptUtil::getString(3, false);
@@ -473,7 +472,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TBOOLEAN)
                 {
@@ -484,7 +483,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                         break;
 
                     // Get parameter 2 off the stack.
-                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)luaL_checkint(state, 2);
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
@@ -522,7 +521,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TBOOLEAN &&
                     lua_type(state, 5) == LUA_TNUMBER)
@@ -534,7 +533,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                         break;
 
                     // Get parameter 2 off the stack.
-                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)luaL_checkint(state, 2);
 
                     // Get parameter 3 off the stack.
                     const char* param3 = gameplay::ScriptUtil::getString(3, false);
@@ -566,7 +565,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TBOOLEAN &&
                     lua_type(state, 5) == LUA_TNUMBER)
@@ -578,7 +577,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                         break;
 
                     // Get parameter 2 off the stack.
-                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)luaL_checkint(state, 2);
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
@@ -619,7 +618,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TBOOLEAN &&
                     lua_type(state, 5) == LUA_TNUMBER &&
@@ -632,7 +631,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                         break;
 
                     // Get parameter 2 off the stack.
-                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)luaL_checkint(state, 2);
 
                     // Get parameter 3 off the stack.
                     const char* param3 = gameplay::ScriptUtil::getString(3, false);
@@ -667,7 +666,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             do
             {
                 if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
                     lua_type(state, 4) == LUA_TBOOLEAN &&
                     lua_type(state, 5) == LUA_TNUMBER &&
@@ -680,7 +679,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                         break;
 
                     // Get parameter 2 off the stack.
-                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)luaL_checkint(state, 2);
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;

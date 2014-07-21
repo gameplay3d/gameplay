@@ -11,7 +11,6 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Terrain.h"
-#include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay
 {
@@ -48,10 +47,10 @@ int lua_PhysicsControllerListener_statusEvent(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                PhysicsController::Listener::EventType param1 = (PhysicsController::Listener::EventType)lua_enumFromString_PhysicsControllerListenerEventType(luaL_checkstring(state, 2));
+                PhysicsController::Listener::EventType param1 = (PhysicsController::Listener::EventType)luaL_checkint(state, 2);
 
                 PhysicsController::Listener* instance = getInstance(state);
                 instance->statusEvent(param1);

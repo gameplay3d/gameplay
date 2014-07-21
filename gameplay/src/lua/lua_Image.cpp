@@ -6,7 +6,6 @@
 #include "Game.h"
 #include "Image.h"
 #include "Ref.h"
-#include "lua_ImageFormat.h"
 
 namespace gameplay
 {
@@ -126,7 +125,7 @@ int lua_Image_getFormat(lua_State* state)
                 Image::Format result = instance->getFormat();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ImageFormat(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }
@@ -327,7 +326,7 @@ int lua_Image_static_create(lua_State* state)
             {
                 if (lua_type(state, 1) == LUA_TNUMBER &&
                     lua_type(state, 2) == LUA_TNUMBER &&
-                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                    lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
                     unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 1);
@@ -336,7 +335,7 @@ int lua_Image_static_create(lua_State* state)
                     unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
 
                     // Get parameter 3 off the stack.
-                    Image::Format param3 = (Image::Format)lua_enumFromString_ImageFormat(luaL_checkstring(state, 3));
+                    Image::Format param3 = (Image::Format)luaL_checkint(state, 3);
 
                     void* returnPtr = (void*)Image::create(param1, param2, param3);
                     if (returnPtr)
@@ -366,7 +365,7 @@ int lua_Image_static_create(lua_State* state)
             {
                 if (lua_type(state, 1) == LUA_TNUMBER &&
                     lua_type(state, 2) == LUA_TNUMBER &&
-                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
                     (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA))
                 {
                     // Get parameter 1 off the stack.
@@ -376,7 +375,7 @@ int lua_Image_static_create(lua_State* state)
                     unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
 
                     // Get parameter 3 off the stack.
-                    Image::Format param3 = (Image::Format)lua_enumFromString_ImageFormat(luaL_checkstring(state, 3));
+                    Image::Format param3 = (Image::Format)luaL_checkint(state, 3);
 
                     // Get parameter 4 off the stack.
                     gameplay::ScriptUtil::LuaArray<unsigned char> param4 = gameplay::ScriptUtil::getUnsignedCharPointer(4);

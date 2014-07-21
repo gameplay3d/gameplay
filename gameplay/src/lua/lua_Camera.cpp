@@ -12,8 +12,6 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Transform.h"
-#include "lua_CameraType.h"
-#include "lua_CurveInterpolationType.h"
 
 namespace gameplay
 {
@@ -236,7 +234,7 @@ int lua_Camera_getCameraType(lua_State* state)
                 Camera::Type result = instance->getCameraType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_CameraType(result));
+                lua_pushnumber(state, (int)result);
 
                 return 1;
             }

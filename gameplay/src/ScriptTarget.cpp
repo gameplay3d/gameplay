@@ -5,22 +5,34 @@
 namespace gameplay
 {
 
+// TODO: Handle reloading scripts and then case where EventRegistries have events added AFTER a script has been loaded (i.e. need to reload callbacks for the script).
+// TODO: Should eventCallbacks store a vector of Event pointers instead of std::string (so we only have to do pointer comparisons instead of string comparisons)? What if Events are destroyed?
+// TODO: Should isolated scripts be cached (not currently), or a new script loaded for every ScriptTarget instance?
+
 ScriptTarget::EventRegistry::EventRegistry()
 {
+}
+
+ScriptTarget::EventRegistry::~EventRegistry()
+{
+    for (size_t i = 0, count = _events.size(); i < count; ++i)
+    {
+        SAFE_DELETE(_events[i]);
+    }
 }
 
 const ScriptTarget::EventRegistry::Event* ScriptTarget::EventRegistry::addEvent(const char* name, const char* args)
 {
     GP_ASSERT(name);
 
-    Event evt;
-    evt.name = name;
-    evt.args = args ? args : "";
-    evt.registry = this;
+    Event* evt = new Event;
+    evt->name = name;
+    evt->args = args ? args : "";
+    evt->registry = this;
 
     _events.push_back(evt);
 
-    return &_events.back();
+    return evt;
 }
 
 unsigned int ScriptTarget::EventRegistry::getEventCount() const
@@ -32,7 +44,7 @@ const ScriptTarget::EventRegistry::Event* ScriptTarget::EventRegistry::getEvent(
 {
     GP_ASSERT(index < _events.size());
 
-    return &_events[index];
+    return _events[index];
 }
 
 ScriptTarget::ScriptTarget() : _scripts(NULL), _events(NULL)
@@ -45,7 +57,15 @@ ScriptTarget::~ScriptTarget()
     Script* script = _scripts;
     while (script)
     {
-        Game::getInstance()->getScriptController()->unloadScript(script->id);
+        // The Game class is itself a ScriptTarget, so we need to protect against
+        // this destructor being called after the Game's destructor, when the
+        // ScriptController has already been destroyed.
+        Game* game = Game::getInstance();
+        if (game)
+        {
+            ScriptController* sc = game->getScriptController();
+            sc->unloadScript(script->id);
+        }
         script->id = 0;
         Script* tmp = script;
         script = script->next;
@@ -91,7 +111,23 @@ int ScriptTarget::addScript(const char* path)
         _scripts = script;
     }
 
-    // TODO: Inspect the loaded script for supported event functions
+    // Inspect the loaded script for supported event functions.
+    // TODO: We'll need to re-load eventCallbacks when EventRegistries change for this ScriptObject.
+    if (_events)
+    {
+        for (size_t i = 0, registryCount = _events->size(); i < registryCount; ++i)
+        {
+            std::vector<EventRegistry::Event*>& events = (*_events)[i]->_events;
+            for (size_t j = 0, eventCount = events.size(); j < eventCount; ++j)
+            {
+                EventRegistry::Event* event = events[j];
+                if (sc->functionExists(event->name.c_str(), id))
+                {
+                    script->eventCallbacks.push_back(event);
+                }
+            }
+        }
+    }
 
     return script->id;
 }
@@ -103,18 +139,7 @@ bool ScriptTarget::removeScript(const char* path)
     {
         if (script->path == path)
         {
-            // Link out this script
-            Script* next = script->next;
-            if (script->prev)
-                script->prev->next = script->next;
-            if (script->next)
-                script->next->prev = script->prev;
-            
-            // Unload the script
-            Game::getInstance()->getScriptController()->unloadScript(script->id);
-
-            // Free the script object
-            SAFE_DELETE(script);
+            removeScript(script);
 
             return true;
         }
@@ -124,16 +149,47 @@ bool ScriptTarget::removeScript(const char* path)
     return false;
 }
 
+void ScriptTarget::removeScript(Script* script)
+{
+    GP_ASSERT(script);
+
+    // Link out this script
+    Script* next = script->next;
+    if (script->prev)
+        script->prev->next = script->next;
+    if (script->next)
+        script->next->prev = script->prev;
+
+    // Unload the script
+    Game::getInstance()->getScriptController()->unloadScript(script->id);
+
+    // Free the script object
+    SAFE_DELETE(script);
+}
+
+void ScriptTarget::clearScripts()
+{
+    while (_scripts)
+    {
+        removeScript(_scripts);
+    }
+}
+
 bool ScriptTarget::hasScriptListener(const EventRegistry::Event* evt) const
 {
     Script* script = _scripts;
     while (script)
     {
         // Does this script have a callback implemented for the given event?
-        std::vector<std::string>& callbacks = script->eventCallbacks;
-        std::vector<std::string>::iterator itr = std::find(callbacks.begin(), callbacks.end(), evt->name);
-        if (itr != callbacks.end())
-            return true;
+        std::vector<const EventRegistry::Event*>& callbacks = script->eventCallbacks;
+        for (size_t i = 0, count = callbacks.size(); i < count; ++i)
+        {
+            if (callbacks[i] == evt)
+                return true;
+        }
+        //std::vector<std::string>::iterator itr = std::find(callbacks.begin(), callbacks.end(), evt->name);
+        //if (itr != callbacks.end())
+            //return true;
         script = script->next;
     }
 
@@ -152,12 +208,22 @@ template<> void ScriptTarget::fireScriptEvent<void>(const EventRegistry::Event* 
     while (script)
     {
         // Is there a callback in this script for this event?
+        std::vector<const EventRegistry::Event*>& callbacks = script->eventCallbacks;
+        for (size_t i = 0, count = callbacks.size(); i < count; ++i)
+        {
+            if (callbacks[i] == evt)
+            {
+                Game::getInstance()->getScriptController()->executeFunction<void>(evt->name.c_str(), evt->args.c_str(), &list, script->id);
+            }
+        }
+        /*
         std::vector<std::string>& callbacks = script->eventCallbacks;
         std::vector<std::string>::iterator itr = std::find(callbacks.begin(), callbacks.end(), evt->name);
         if (itr != callbacks.end())
         {
             Game::getInstance()->getScriptController()->executeFunction<void>(itr->c_str(), evt->args.c_str(), &list, script->id);
         }
+        */
 
         script = script->next;
     }
@@ -175,6 +241,20 @@ template<> bool ScriptTarget::fireScriptEvent<bool>(const EventRegistry::Event* 
     while (script)
     {
         // Is there a callback in this script for this event?
+        std::vector<const EventRegistry::Event*>& callbacks = script->eventCallbacks;
+        for (size_t i = 0, count = callbacks.size(); i < count; ++i)
+        {
+            if (callbacks[i] == evt)
+            {
+                // Call the script function
+                if (Game::getInstance()->getScriptController()->executeFunction<bool>(evt->name.c_str(), evt->args.c_str(), &list, script->id))
+                {
+                    va_end(list);
+                    return true;
+                }
+            }
+        }
+        /*
         std::vector<std::string>& callbacks = script->eventCallbacks;
         std::vector<std::string>::iterator itr = std::find(callbacks.begin(), callbacks.end(), evt->name);
         if (itr != callbacks.end())
@@ -186,6 +266,7 @@ template<> bool ScriptTarget::fireScriptEvent<bool>(const EventRegistry::Event* 
                 return true;
             }
         }
+        */
 
         script = script->next;
     }

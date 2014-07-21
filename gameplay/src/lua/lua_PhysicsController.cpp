@@ -11,7 +11,6 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Terrain.h"
-#include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay
 {
@@ -22,6 +21,7 @@ void luaRegister_PhysicsController()
     {
         {"addScript", lua_PhysicsController_addScript},
         {"addStatusListener", lua_PhysicsController_addStatusListener},
+        {"clearScripts", lua_PhysicsController_clearScripts},
         {"createFixedConstraint", lua_PhysicsController_createFixedConstraint},
         {"createGenericConstraint", lua_PhysicsController_createGenericConstraint},
         {"createHingeConstraint", lua_PhysicsController_createHingeConstraint},
@@ -123,6 +123,38 @@ int lua_PhysicsController_addStatusListener(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsController_clearScripts(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsController* instance = getInstance(state);
+                instance->clearScripts();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_PhysicsController_clearScripts - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

@@ -10,6 +10,7 @@ int lua_Label_addListener(lua_State* state);
 int lua_Label_addRef(lua_State* state);
 int lua_Label_addScript(lua_State* state);
 int lua_Label_canFocus(lua_State* state);
+int lua_Label_clearScripts(lua_State* state);
 int lua_Label_createAnimation(lua_State* state);
 int lua_Label_createAnimationFromBy(lua_State* state);
 int lua_Label_createAnimationFromTo(lua_State* state);
