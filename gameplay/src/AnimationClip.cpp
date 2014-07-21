@@ -348,28 +348,6 @@ void AnimationClip::removeListener(AnimationClip::Listener* listener, unsigned l
 	}
 }
 
-bool AnimationClip::hasListener(AnimationClip::Listener* listener, unsigned long eventTime, bool triggedValid) const
-{
-	if (_listeners)
-	{
-		GP_ASSERT(listener);
-		GP_ASSERT(eventTime < _activeDuration);
-		std::list<ListenerEvent*>::iterator iter = std::find_if(_listeners->begin(), _listeners->end(), [&](ListenerEvent* lst){ return lst->_eventTime == eventTime && lst->_listener == listener; });
-		if (iter != _listeners->end())
-		{
-			// If we don't care if the listener was triggered already, then we can exit.
-			// Otherwise, we need to check the time to determine if it's past the trigger time yet.
-			if (triggedValid || !isClipStateBitSet(CLIP_IS_PLAYING_BIT))
-			{
-				return true;
-			}
-			float currentTime = fmodf(_elapsedTime, (float)_duration);
-			return (_speed >= 0.0f && currentTime < eventTime) || (_speed <= 0 && currentTime > eventTime);
-		}
-	}
-	return false;
-}
-
 void AnimationClip::addBeginListener(AnimationClip::Listener* listener)
 {
     if (!_beginListeners)
@@ -392,16 +370,6 @@ void AnimationClip::removeBeginListener(AnimationClip::Listener* listener)
 	}
 }
 
-bool AnimationClip::hasBeginListener(AnimationClip::Listener* listener) const
-{
-	if (_beginListeners)
-	{
-		GP_ASSERT(listener);
-		return std::find(_beginListeners->begin(), _beginListeners->end(), listener) != _beginListeners->end();
-	}
-	return false;
-}
-
 void AnimationClip::addEndListener(AnimationClip::Listener* listener)
 {
     if (!_endListeners)
@@ -422,16 +390,6 @@ void AnimationClip::removeEndListener(AnimationClip::Listener* listener)
 			_endListeners->erase(iter);
 		}
 	}
-}
-
-bool AnimationClip::hasEndListener(AnimationClip::Listener* listener) const
-{
-	if (_endListeners)
-	{
-		GP_ASSERT(listener);
-		return std::find(_endListeners->begin(), _endListeners->end(), listener) != _endListeners->end();
-	}
-	return false;
 }
 
 void AnimationClip::addBeginListener(const char* function)
@@ -461,20 +419,6 @@ void AnimationClip::removeBeginListener(const char* function)
 	}
 }
 
-bool AnimationClip::hasBeginListener(const char* function) const
-{
-	if (_scriptListeners)
-	{
-		std::string functionRef = Game::getInstance()->getScriptController()->loadUrl(function);
-		std::vector<ScriptListener*>::iterator iter = std::find_if(_scriptListeners->begin(), _scriptListeners->end(), [&](ScriptListener* listener){ return listener->function == functionRef; });
-		if (iter != _scriptListeners->end())
-		{
-			return hasBeginListener(*iter);
-		}
-	}
-	return false;
-}
-
 void AnimationClip::addEndListener(const char* function)
 {
     if (!_scriptListeners)
@@ -500,20 +444,6 @@ void AnimationClip::removeEndListener(const char* function)
 			SAFE_DELETE(listener);
 		}
 	}
-}
-
-bool AnimationClip::hasEndListener(const char* function) const
-{
-	if (_scriptListeners)
-	{
-		std::string functionRef = Game::getInstance()->getScriptController()->loadUrl(function);
-		std::vector<ScriptListener*>::iterator iter = std::find_if(_scriptListeners->begin(), _scriptListeners->end(), [&](ScriptListener* listener){ return listener->function == functionRef; });
-		if (iter != _scriptListeners->end())
-		{
-			return hasEndListener(*iter);
-		}
-	}
-	return false;
 }
 
 void AnimationClip::addListener(const char* function, unsigned long eventTime)
@@ -542,21 +472,6 @@ void AnimationClip::removeListener(const char* function, unsigned long eventTime
 			SAFE_DELETE(listener);
 		}
 	}
-}
-
-bool AnimationClip::hasListener(const char* function, unsigned long eventTime, bool triggedValid) const
-{
-	if (_scriptListeners)
-	{
-		GP_ASSERT(eventTime < _activeDuration);
-		std::string functionRef = Game::getInstance()->getScriptController()->loadUrl(function);
-		std::vector<ScriptListener*>::iterator iter = std::find_if(_scriptListeners->begin(), _scriptListeners->end(), [&](ScriptListener* listener){ return listener->function == functionRef; });
-		if (iter != _scriptListeners->end())
-		{
-			return hasListener(*iter, eventTime, triggedValid);
-		}
-	}
-	return false;
 }
 
 bool AnimationClip::update(float elapsedTime)

@@ -238,15 +238,6 @@ public:
 	 */
 	void removeBeginListener(AnimationClip::Listener* listener);
 
-	/**
-	 * Determine if a animation begin listener is registered to be called.
-	 *
-	 * @param listener The listener to lookup.
-	 *
-	 * @return true if the listener is registered to be called, false if it is not registered.
-	 */
-	bool hasBeginListener(AnimationClip::Listener* listener) const;
-
     /**
      * Adds an animation end listener.
      *
@@ -260,15 +251,6 @@ public:
 	 * @param listener The listener to be removed.
 	 */
 	void removeEndListener(AnimationClip::Listener* listener);
-
-	/**
-	 * Determine if a animation end listener is registered to be called.
-	 *
-	 * @param listener The listener to lookup.
-	 *
-	 * @return true if the listener is registered to be called, false if it is not registered.
-	 */
-	bool hasEndListener(AnimationClip::Listener* listener) const;
 
     /**
      * Adds an animation listener to be called back at the specified eventTime during the playback 
@@ -289,17 +271,6 @@ public:
 	 */
 	void removeListener(AnimationClip::Listener* listener, unsigned long eventTime);
 
-	/**
-	 * Determine if a animation listener is registered to be called.
-	 *
-	 * @param listener The listener to lookup.
-	 * @param eventTime The time of the listener to lookup.
-	 * @param triggedValid Return true if the listener is registered, even if it has already been called.
-	 *
-	 * @return true if the listener is registered to be called, false if it is not registered.
-	 */
-	bool hasListener(AnimationClip::Listener* listener, unsigned long eventTime, bool triggedValid = true) const;
-
     /**
      * Adds an animation begin listener.
      * 
@@ -316,15 +287,6 @@ public:
 	 */
 	void removeBeginListener(const char* function);
 
-	/**
-	 * Determine if a animation begin listener is registered to be called.
-	 *
-	 * @param function The Lua script function to lookup.
-	 *
-	 * @return true if the listener is registered to be called, false if it is not registered.
-	 */
-	bool hasBeginListener(const char* function) const;
-
     /**
      * Adds an animation end listener.
      * 
@@ -340,15 +302,6 @@ public:
 	 * @param function The Lua script function to remove.
 	 */
 	void removeEndListener(const char* function);
-
-	/**
-	 * Determine if a animation end listener is registered to be called.
-	 *
-	 * @param function The Lua script function to lookup.
-	 *
-	 * @return true if the listener is registered to be called, false if it is not registered.
-	 */
-	bool hasEndListener(const char* function) const;
 
     /**
      * Adds an animation listener to be called back at the specified eventTime during the playback 
@@ -370,17 +323,6 @@ public:
 	 * @param eventTime The time of the listener to be removed.
 	 */
 	void removeListener(const char* function, unsigned long eventTime);
-
-	/**
-	 * Determine if a animation listener is registered to be called.
-	 *
-	 * @param function The Lua script function to lookup.
-	 * @param eventTime The time of the listener to lookup.
-	 * @param triggedValid Return true if the listener is registered, even if it has already been called.
-	 *
-	 * @return true if the listener is registered to be called, false if it is not registered.
-	 */
-	bool hasListener(const char* function, unsigned long eventTime, bool triggedValid = true) const;
 
 private:
     
