@@ -37,6 +37,9 @@ AudioSource::~AudioSource()
             GP_ASSERT(audioController);
             audioController->removePlayingSource(this);
         }
+
+        AL_CHECK(alDeleteSources(1, &_alSource));
+        _alSource = 0;
     }
     SAFE_RELEASE(_buffer);
 }
