@@ -770,7 +770,7 @@ int getUnicode(int key);
 - (void)handleTapGesture:(UITapGestureRecognizer*)sender
 {
     CGPoint location = [sender locationInView:self];
-    gameplay::Platform::gestureTapEventInternal(location.x, location.y);
+    gameplay::Platform::gestureTapEventInternal(location.x * WINDOW_SCALE, location.y * WINDOW_SCALE);
 }
 
 - (void)handleLongTapGesture:(UILongPressGestureRecognizer*)sender
@@ -790,7 +790,7 @@ int getUnicode(int key);
         
         gettimeofday(&time, NULL);
         currentTimeStamp = (time.tv_sec * 1000) + (time.tv_usec / 1000);
-        gameplay::Platform::gestureLongTapEventInternal(location.x, location.y, currentTimeStamp - __gestureLongTapStartTimestamp);
+        gameplay::Platform::gestureLongTapEventInternal(location.x * WINDOW_SCALE, location.y * WINDOW_SCALE, currentTimeStamp - __gestureLongTapStartTimestamp);
     }
 }
 
@@ -798,7 +798,7 @@ int getUnicode(int key);
 {
     CGFloat factor = [sender scale];
     CGPoint location = [sender locationInView:self];
-    gameplay::Platform::gesturePinchEventInternal(location.x, location.y, factor);
+    gameplay::Platform::gesturePinchEventInternal(location.x * WINDOW_SCALE, location.y * WINDOW_SCALE, factor);
 }
 
 - (void)handleSwipeGesture:(UISwipeGestureRecognizer*)sender
@@ -820,7 +820,7 @@ int getUnicode(int key);
             gameplayDirection = Gesture::SWIPE_DIRECTION_DOWN;
             break;
     }
-    gameplay::Platform::gestureSwipeEventInternal(location.x, location.y, gameplayDirection);
+    gameplay::Platform::gestureSwipeEventInternal(location.x * WINDOW_SCALE, location.y * WINDOW_SCALE, gameplayDirection);
 }
 
 - (void)handleLongPressGestures:(UILongPressGestureRecognizer*)sender
@@ -838,7 +838,7 @@ int getUnicode(int key);
     if (sender.state == UIGestureRecognizerStateChanged)
     {
         if (__gestureDraging)
-            gameplay::Platform::gestureDragEventInternal(location.x, location.y);
+            gameplay::Platform::gestureDragEventInternal(location.x * WINDOW_SCALE, location.y * WINDOW_SCALE);
         else
         {
             float delta = sqrt(pow(__gestureLongPressStartPosition.x - location.x, 2) + pow(__gestureLongPressStartPosition.y - location.y, 2));
@@ -846,7 +846,7 @@ int getUnicode(int key);
             if (delta >= GESTURE_LONG_PRESS_DISTANCE_MIN)
             {
                 __gestureDraging = true;
-                gameplay::Platform::gestureDragEventInternal(__gestureLongPressStartPosition.x, __gestureLongPressStartPosition.y);
+                gameplay::Platform::gestureDragEventInternal(__gestureLongPressStartPosition.x * WINDOW_SCALE, __gestureLongPressStartPosition.y * WINDOW_SCALE);
             }
         }
     }
@@ -854,7 +854,7 @@ int getUnicode(int key);
     {
         if (__gestureDraging)
         {
-            gameplay::Platform::gestureDropEventInternal(location.x, location.y);
+            gameplay::Platform::gestureDropEventInternal(location.x * WINDOW_SCALE, location.y * WINDOW_SCALE);
             __gestureDraging = false;
         }
         else
@@ -864,12 +864,12 @@ int getUnicode(int key);
         
             gettimeofday(&time, NULL);
             currentTimeStamp = (time.tv_sec * 1000) + (time.tv_usec / 1000);
-            gameplay::Platform::gestureLongTapEventInternal(location.x, location.y, currentTimeStamp - __gestureLongTapStartTimestamp);
+            gameplay::Platform::gestureLongTapEventInternal(location.x * WINDOW_SCALE, location.y * WINDOW_SCALE, currentTimeStamp - __gestureLongTapStartTimestamp);
         }
     }
     if ((sender.state == UIGestureRecognizerStateCancelled || sender.state == UIGestureRecognizerStateFailed) && __gestureDraging)
     {
-        gameplay::Platform::gestureDropEventInternal(location.x, location.y);
+        gameplay::Platform::gestureDropEventInternal(location.x * WINDOW_SCALE, location.y * WINDOW_SCALE);
         __gestureDraging = false;
     }
 }

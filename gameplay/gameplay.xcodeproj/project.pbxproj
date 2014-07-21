@@ -586,6 +586,8 @@
 		5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7611512514D00D176CD /* QuartzCore.framework */; };
 		6290E04A18223DCC00A28FB9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6290E04918223DCC00A28FB9 /* GameKit.framework */; };
 		6290E04C18223DDD00A28FB9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6290E04B18223DDD00A28FB9 /* GameKit.framework */; };
+		8BA1B8BF197C3212009FF517 /* lua_ContainerDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BA1B8BD197C3212009FF517 /* lua_ContainerDirection.cpp */; };
+		8BA1B8C0197C3212009FF517 /* lua_ContainerDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BA1B8BD197C3212009FF517 /* lua_ContainerDirection.cpp */; };
 		BD2636E516CF5B7400CFE15F /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */; };
 		BD2636E616CF5B7400CFE15F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636E016CF5B7400CFE15F /* Foundation.framework */; };
 		BD2636E716CF5B7400CFE15F /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636E116CF5B7400CFE15F /* OpenAL.framework */; };
@@ -1215,6 +1217,8 @@
 		5BC4E7D4150F8C3C00CBE1C0 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		6290E04918223DCC00A28FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		6290E04B18223DDD00A28FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		8BA1B8BD197C3212009FF517 /* lua_ContainerDirection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_ContainerDirection.cpp; sourceTree = "<group>"; };
+		8BA1B8BE197C3212009FF517 /* lua_ContainerDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_ContainerDirection.h; sourceTree = "<group>"; };
 		BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E016CF5B7400CFE15F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E116CF5B7400CFE15F /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
@@ -1319,6 +1323,8 @@
 				420BBADF1817416D00C7B720 /* lua_CheckBox.h */,
 				420BBAE01817416D00C7B720 /* lua_Container.cpp */,
 				420BBAE11817416D00C7B720 /* lua_Container.h */,
+				8BA1B8BD197C3212009FF517 /* lua_ContainerDirection.cpp */,
+				8BA1B8BE197C3212009FF517 /* lua_ContainerDirection.h */,
 				420BBAE21817416D00C7B720 /* lua_ContainerScroll.cpp */,
 				420BBAE31817416D00C7B720 /* lua_ContainerScroll.h */,
 				420BBAE41817416D00C7B720 /* lua_Control.cpp */,
@@ -2160,6 +2166,7 @@
 				42CC5A121809A4EF00AAD8AD /* Vector4.cpp in Sources */,
 				420BBE661817416F00C7B720 /* lua_Technique.cpp in Sources */,
 				420BBE5A1817416F00C7B720 /* lua_ScriptTarget.cpp in Sources */,
+				8BA1B8BF197C3212009FF517 /* lua_ContainerDirection.cpp in Sources */,
 				420BBD361817416F00C7B720 /* lua_Light.cpp in Sources */,
 				42CC59BA1809A4EF00AAD8AD /* Slider.cpp in Sources */,
 				420BBC5E1817416F00C7B720 /* lua_AudioListener.cpp in Sources */,
@@ -2453,6 +2460,7 @@
 				42CC5A0B1809A4EF00AAD8AD /* Vector2.cpp in Sources */,
 				420BBE671817416F00C7B720 /* lua_Technique.cpp in Sources */,
 				420BBE5B1817416F00C7B720 /* lua_ScriptTarget.cpp in Sources */,
+				8BA1B8C0197C3212009FF517 /* lua_ContainerDirection.cpp in Sources */,
 				420BBD371817416F00C7B720 /* lua_Light.cpp in Sources */,
 				42CC55A11809A4EF00AAD8AD /* AudioListener.cpp in Sources */,
 				42CC5A131809A4EF00AAD8AD /* Vector4.cpp in Sources */,
