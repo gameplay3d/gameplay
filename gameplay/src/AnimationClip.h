@@ -232,11 +232,25 @@ public:
     void addBeginListener(AnimationClip::Listener* listener);
 
     /**
+     * Removes an animation begin listener.
+     *
+     * @param listener The listener to be removed.
+     */
+    void removeBeginListener(AnimationClip::Listener* listener);
+
+    /**
      * Adds an animation end listener.
      *
      * @param listener The listener to be called when an AnimationClip ends.
      */
     void addEndListener(AnimationClip::Listener* listener);
+
+    /**
+     * Removes an animation end listener.
+     *
+     * @param listener The listener to be removed.
+     */
+    void removeEndListener(AnimationClip::Listener* listener);
 
     /**
      * Adds an animation listener to be called back at the specified eventTime during the playback 
@@ -250,6 +264,14 @@ public:
     void addListener(AnimationClip::Listener* listener, unsigned long eventTime);
 
     /**
+     * Removes an animation listener assigned to the specified eventTime.
+     *
+     * @param listener The listener to be removed with the specified time.
+     * @param eventTime The time of the listener to be removed.
+     */
+    void removeListener(AnimationClip::Listener* listener, unsigned long eventTime);
+
+    /**
      * Adds an animation begin listener.
      * 
      * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
@@ -259,6 +281,13 @@ public:
     void addBeginListener(const char* function);
 
     /**
+     * Removes an animation begin listener.
+     *
+     * @param function The Lua script function to remove.
+     */
+    void removeBeginListener(const char* function);
+
+    /**
      * Adds an animation end listener.
      * 
      * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
@@ -266,6 +295,13 @@ public:
      * @param function The Lua script function to be called when an AnimationClip ends.
      */
     void addEndListener(const char* function);
+
+    /**
+     * Removes an animation end listener.
+     *
+     * @param function The Lua script function to remove.
+     */
+    void removeEndListener(const char* function);
 
     /**
      * Adds an animation listener to be called back at the specified eventTime during the playback 
@@ -279,6 +315,14 @@ public:
      *      Must be between 0 and the duration of the AnimationClip.
      */
     void addListener(const char* function, unsigned long eventTime);
+
+    /**
+     * Removes an animation listener assigned to the specified eventTime.
+     *
+     * @param function The Lua script function to remove with the specified time.
+     * @param eventTime The time of the listener to be removed.
+     */
+    void removeListener(const char* function, unsigned long eventTime);
 
 private:
     
