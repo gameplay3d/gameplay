@@ -726,8 +726,8 @@
     <ClCompile Include="src\lua\lua_JoystickControl.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_ContainerDirection.cpp">
-      <Filter>src\lua</Filter>
+    <ClCompile Include="src\Script.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1442,8 +1442,8 @@
     <ClInclude Include="src\lua\lua_JoystickControl.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_ContainerDirection.h">
-      <Filter>src\lua</Filter>
+    <ClInclude Include="src\Script.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

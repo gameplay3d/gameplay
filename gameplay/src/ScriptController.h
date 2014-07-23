@@ -1,343 +1,12 @@
 #ifndef SCRIPTCONTROLLER_H_
 #define SCRIPTCONTROLLER_H_
 
-#include "Base.h"
+#include "Script.h"
 #include "Game.h"
 #include "Control.h"
 
 namespace gameplay
 {
-
-/**
- * Functions and structures used by the generated Lua script bindings.
- */
-namespace ScriptUtil
-{
-
-/**
- * Represents a C++ object from within Lua.
- * 
- * @script{ignore}
- */
-struct LuaObject
-{
-    /** The actual object instance. */
-    void* instance;
-    /** Whether object is owned by Lua. */
-    bool owns;
-};
-
-/**
- * Stores a Lua parameter of an array/pointer type that is passed from Lua to C.
- * Handles automatic cleanup of any temporary memory associated with the array.
- * 
- * @script{ignore}
- */
-template <typename T>
-class LuaArray
-{
-public:
-
-    /**
-     * Creates a LuaArray to store a single pointer value.
-     */
-    LuaArray(T* param);
-
-    /**
-     * Allocates a LuaArray to store an array of values.
-     *
-     * Individual items in the array can be set using the 
-     * set(unsigned int, const T&) method.
-     * 
-     * @param count Number of elements to store in the parameter.
-     */
-    LuaArray(int count);
-
-    /**
-     * Copy constructor.
-     */
-    LuaArray(const LuaArray<T>& copy);
-
-    /**
-     * Destructor.
-     */
-    ~LuaArray();
-
-    /**
-     * Assignment operator.
-     */
-    LuaArray<T>& operator = (const LuaArray<T>& p);
-
-    /**
-     * Copies the value of the object pointed to by itemPtr into the specified
-     * index of this LuaArray's array.
-     */
-    void set(unsigned int index, const T* itemPtr);
-
-    /**
-     * Conversion operator from LuaArray to T*.
-     */
-    operator T* () const;
-
-    /**
-     * Overloads [] operator to get/set item value at index.
-     */
-    T& operator[] (int index);
-
-private:
-
-    struct Data
-    {
-        Data() : value(NULL), refCount(0) { }
-        T* value;
-        int refCount;
-    };
-
-    Data* _data;
-};
-
-/**
- * Registers the given library with Lua.
- * 
- * @param name The name of the library from within Lua.
- * @param functions The library function mapping (Lua function names to C++ functions).
- * 
- * @script{ignore}
- */
-void registerLibrary(const char* name, const luaL_Reg* functions);
-
-/**
- * Registers the given boolean constant as valid for the given scope path.
- * 
- * @param name The name of the constant (what the user would use from Lua).
- * @param value The constant's value.
- * @param scopePath The list of containing classes, going inward from the most outer class.
- * 
- * @script{ignore}
- */
-void registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath);
-
-/**
- * Registers the given number constant as valid for the given scope path.
- * 
- * @param name The name of the constant (what the user would use from Lua).
- * @param value The constant's value.
- * @param scopePath The list of containing classes, going inward from the most outer class.
- * 
- * @script{ignore}
- */
-void registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath);
-
-/**
- * Registers the given string constant as valid for the given scope path.
- * 
- * @param name The name of the constant (what the user would use from Lua).
- * @param value The constant's value.
- * @param scopePath The list of containing classes, going inward from the most outer class.
- * 
- * @script{ignore}
- */
-void registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath);
-
-/**
- * Registers the given enum value as valid for the given scope path.
- *
- * @param enumValue The enumeration value, expressed as an integer.
- * @param enumValueString The string representation of the enum value (what the user would use from Lua).
- * @param scopePath The list of containing classes, going inward from the most outer class.
- *
- * @script{ignore}
- */
-void registerEnumValue(int enumValue, const std::string& enumValueString, const std::vector<std::string>& scopePath);
-
-/**
- * Registers the given class type with Lua.
- * 
- * @param name The name of the class from within Lua.
- * @param members The library function mapping for all the member functions (Lua function names to C++ functions).
- * @param newFunction The function to call that creates an instance of the class.
- * @param deleteFunction The function to call that destroys an instance of the class.
- * @param statics The library function mapping for all the static functions (Lua function names to C++ functions).
- * @param scopePath For an inner class, this is a list of its containing classes, going inward from the most outer class.
- * 
- * @script{ignore}
- */
-void registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg* statics,
-                   const std::vector<std::string>& scopePath);
-
-/**
- * Register a function with Lua.
- * 
- * @param luaFunction The name of the function from within Lua.
- * @param cppFunction The C++ function pointer.
- * 
- * @script{ignore}
- */
-void registerFunction(const char* luaFunction, lua_CFunction cppFunction);
-
-/**
- * Sets an inheritance pair within the global inheritance hierarchy (base, derived).
- * 
- * @param base The base class of the inheritance pair.
- * @param derived The derived class of the inheritance pair.
- * 
- * @script{ignore}
- */
-void setGlobalHierarchyPair(const std::string& base, const std::string& derived);
-
-/**
- * Gets a pointer to a bool (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<bool> getBoolPointer(int index);
-
-/**
- * Gets a pointer to a short (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<short> getShortPointer(int index);
-
-/**
- * Gets a pointer to an int (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<int> getIntPointer(int index);
-
-/**
- * Gets a pointer to a long (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<long> getLongPointer(int index);
-
-/**
- * Gets a pointer to an unsigned char (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<unsigned char> getUnsignedCharPointer(int index);
-
-/**
- * Gets a pointer to an unsigned short (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<unsigned short> getUnsignedShortPointer(int index);
-
-/**
- * Gets a pointer to an unsigned int (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<unsigned int> getUnsignedIntPointer(int index);
-
-/**
- * Gets a pointer to an unsigned long (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<unsigned long> getUnsignedLongPointer(int index);
-
-/**
- * Gets a pointer to a float (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<float> getFloatPointer(int index);
-
-/**
- * Gets a pointer to a double (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
- * 
- * @param index The stack index.
- * 
- * @return The pointer.
- * 
- * @script{ignore}
- */
-LuaArray<double> getDoublePointer(int index);
-
-/**
- * Gets an object pointer of the given type for the given stack index.
- * 
- * @param type The type of object pointer to retrieve.
- * @param index The stack index.
- * @param nonNull Whether the pointer must be non-null (e.g. if the parameter we 
- *      are retrieving is actually a reference or by-value parameter).
- * @param success An out parameter that is set to true if the Lua parameter was successfully
- *      converted to a valid object, or false if it was unable to perform a valid conversion.
- * 
- * @return The object pointer or <code>NULL</code> if the data at the stack index
- *      is not an object or if the object is not derived from the given type.
- * 
- * @script{ignore}
- */
-template <typename T>
-LuaArray<T> getObjectPointer(int index, const char* type, bool nonNull, bool* success);
-
-/**
- * Gets a string for the given stack index.
- * 
- * @param index The stack index.
- * @param isStdString Whether the string being retrieved is a std::string object or not.
- * 
- * @return The string or <code>NULL</code>.
- * 
- * @script{ignore}
- */
-const char* getString(int index, bool isStdString);
-
-/**
- * Checks that the parameter at the given stack position is a boolean and returns it.
- * 
- * @param state The Lua state.
- * @param n The stack index.
- * 
- * @return The boolean (if successful; otherwise it logs an error).
- * 
- * @script{ignore}
- */
-bool luaCheckBool(lua_State* state, int n);
-
-}
 
 /**
  * Controls and manages all scripts.
@@ -346,77 +15,28 @@ class ScriptController
 {
     friend class Game;
     friend class Platform;
+    friend class ScriptUtil;
 
 public:
 
     /**
-     * Loads the given script file and executes its global code.
+     * Loads the given script file and executes its code (if it is not
+     * alreay loaded).
      *
-     * The script is loaded into the global script environment, where any
-     * non-local functions and variables in the script will override those
-     * in the global environment.
-     *
-     * Scripts loaded into the global environment cannot be explicitly unloaded.
-     * Once all data within the script is no longer referenced, it will be
-     * garbage collected through normal means.
+     * The script is loaded into an environment that is defined by the scope 
+     * parameter. If the script scope is GLOBAL or PRIVATE_SHARED and if the
+     * forceReload parameter is false, a previously-loaded script object may
+     * be returned. PRIVATE_INSTANCE scope always results in a new script being
+     * loaded and executed.
      * 
      * @param path The path to the script.
-     * @param forceReload Whether the script should be reloaded if it has already been loaded.
+     * @param scope The scope for the script to be executed in.
+     * @param forceReload Whether the script should be reloaded if it has already been loaded
+     *      (applicable for GLOBAL and PRIVATE_SHARED scripts only).
+     *
+     * @return The loaded script, or NULL if the script could not be loaded.
      */
-    bool loadScript(const char* path, bool forceReload = false);
-
-    /**
-     * Loads the given script into its own isolated environment and executes its code.
-     *
-     * The script is loaded into a new isolated script environment that is separate from
-     * the global environment. Non-local functions and variables do not overlap with
-     * those in the global table. However, the script does still have access to functions
-     * and variables in the global table (unless they are re-declared in the script).
-     *
-     * Since this function installs the script into an isolated envrionment, the 
-     * script is guaranteed to be newly loaded (even if the same script was previously
-     * loaded) and any global code within it is executed.
-     *
-     * The script may later be unloaded by calling unloadScript(int).
-     *
-     * @param path The path of the script.
-     * @return A unique ID for the script, which may be passed to unloadScript(int),
-     *      or -1 if the script could not be loaded.
-     */
-    int loadScriptIsolated(const char* path);
-
-    /**
-     * Attempts to unload an isolated script with the given ID.
-     *
-     * Unloading a script causes the non-global data within the script to be
-     * released such that a reference is no longer held to it. It will then
-     * be garbage collected at some point in the future. If the script stored
-     * any data in the global environment or if any other code still references
-     * data from the script, that data will not be freed.
-     *
-     * @param id The unique ID of the isolated script, as returned from loadScriptIsolated(const char*).
-     */
-    void unloadScript(int id);
-
-    /**
-     * Given a URL, loads the referenced file and returns the referenced function name.
-     * 
-     * @param url The url to load.
-     * @param scriptId Optional integer pointer that is populated with 
-     * @return The function that the URL references.
-     */
-    std::string loadUrl(const char* url, int* scriptId = NULL);
-
-    /**
-     * Parses the given url into a separate script filename and function name.
-     *
-     * @param url Url to parse.
-     * @param script Populated with the path of the script, or an empty string if the URL does not include a script.
-     * @param function Populated with the function name.
-     *
-     * @script{ignore}
-     */
-    void parseUrl(const char* url, std::string* script, std::string* function);
+    Script* loadScript(const char* path, Script::Scope scope = Script::GLOBAL, bool forceReload = false);
 
     /**
      * Calls the specified no-parameter global Lua function.
@@ -854,6 +474,19 @@ private:
     void finalize();
 
     /**
+     * Attempts to unload a script with the given ID.
+     *
+     * Unloading a script causes the non-global data within the script to be
+     * released such that a reference is no longer held to it. It will then
+     * be garbage collected at some point in the future. If the script stored
+     * any data in the global environment or if any other code still references
+     * data from the script, that data will not be freed.
+     *
+     * @param id The ID of the script environment.
+     */
+    void unloadScript(int id);
+
+    /**
      * Calls the specified Lua function using the given parameters.
      * 
      * @param resultCount The expected number of returned values.
@@ -905,29 +538,6 @@ private:
      * @script{ignore}
      */
     static int convert(lua_State* state);
-
-    // Friend functions (used by Lua script bindings).
-    friend void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions);
-    friend void ScriptUtil::registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath);
-    friend void ScriptUtil::registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath);
-    friend void ScriptUtil::registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath);
-    friend void ScriptUtil::registerEnumValue(int enumValue, const std::string& enumValueString, const std::vector<std::string>& scopePath);
-    friend void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction,
-        lua_CFunction deleteFunction, const luaL_Reg* statics, const std::vector<std::string>& scopePath);
-    friend void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunction);
-    friend void ScriptUtil::setGlobalHierarchyPair(const std::string& base, const std::string& derived);
-    friend ScriptUtil::LuaArray<bool> ScriptUtil::getBoolPointer(int index);
-    friend ScriptUtil::LuaArray<short> ScriptUtil::getShortPointer(int index);
-    friend ScriptUtil::LuaArray<int> ScriptUtil::getIntPointer(int index);
-    friend ScriptUtil::LuaArray<long> ScriptUtil::getLongPointer(int index);
-    friend ScriptUtil::LuaArray<unsigned char> ScriptUtil::getUnsignedCharPointer(int index);
-    friend ScriptUtil::LuaArray<unsigned short> ScriptUtil::getUnsignedShortPointer(int index);
-    friend ScriptUtil::LuaArray<unsigned int> ScriptUtil::getUnsignedIntPointer(int index);
-    friend ScriptUtil::LuaArray<unsigned long> ScriptUtil::getUnsignedLongPointer(int index);
-    friend ScriptUtil::LuaArray<float> ScriptUtil::getFloatPointer(int index);
-    friend ScriptUtil::LuaArray<double> ScriptUtil::getDoublePointer(int index);
-    template<typename T> friend ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type, bool nonNull, bool* success);
-    friend const char* ScriptUtil::getString(int index, bool isStdString);
 
     lua_State* _lua;
     unsigned int _returnCount;
@@ -1017,6 +627,301 @@ template<> float ScriptController::executeFunction<float>(const char* func, cons
 template<> double ScriptController::executeFunction<double>(const char* func, const char* args, va_list* list, int script);
 /** Template specialization. */
 template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, va_list* list, int script);
+
+/**
+ * Functions and structures used by the generated Lua script bindings.
+ *
+ * This class is used internally by the generated script bindings and is not intended
+ * to be used directly.
+ *
+ * @script{ignore}
+ */
+class ScriptUtil
+{
+public:
+
+    /**
+     * Represents a C++ object from within Lua.
+     * 
+     * @script{ignore}
+     */
+    struct LuaObject
+    {
+        /** The actual object instance. */
+        void* instance;
+        /** Whether object is owned by Lua. */
+        bool owns;
+    };
+
+    /**
+     * Stores a Lua parameter of an array/pointer type that is passed from Lua to C.
+     * Handles automatic cleanup of any temporary memory associated with the array.
+     * 
+     * @script{ignore}
+     */
+    template <typename T>
+    class LuaArray
+    {
+    public:
+
+        /**
+         * Creates a LuaArray to store a single pointer value.
+         */
+        LuaArray(T* param);
+
+        /**
+         * Allocates a LuaArray to store an array of values.
+         *
+         * Individual items in the array can be set using the 
+         * set(unsigned int, const T&) method.
+         * 
+         * @param count Number of elements to store in the parameter.
+         */
+        LuaArray(int count);
+
+        /**
+         * Copy constructor.
+         */
+        LuaArray(const LuaArray<T>& copy);
+
+        /**
+         * Destructor.
+         */
+        ~LuaArray();
+
+        /**
+         * Assignment operator.
+         */
+        LuaArray<T>& operator = (const LuaArray<T>& p);
+
+        /**
+         * Copies the value of the object pointed to by itemPtr into the specified
+         * index of this LuaArray's array.
+         */
+        void set(unsigned int index, const T* itemPtr);
+
+        /**
+         * Conversion operator from LuaArray to T*.
+         */
+        operator T* () const;
+
+        /**
+         * Overloads [] operator to get/set item value at index.
+         */
+        T& operator[] (int index);
+
+    private:
+
+        struct Data
+        {
+            Data() : value(NULL), refCount(0) { }
+            T* value;
+            int refCount;
+        };
+
+        Data* _data;
+    };
+
+    /**
+     * Registers the given library with Lua.
+     * 
+     * @param name The name of the library from within Lua.
+     * @param functions The library function mapping (Lua function names to C++ functions).
+     */
+    static void registerLibrary(const char* name, const luaL_Reg* functions);
+
+    /**
+     * Registers the given boolean constant as valid for the given scope path.
+     * 
+     * @param name The name of the constant (what the user would use from Lua).
+     * @param value The constant's value.
+     * @param scopePath The list of containing classes, going inward from the most outer class.
+     */
+    static void registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath);
+
+    /**
+     * Registers the given number constant as valid for the given scope path.
+     * 
+     * @param name The name of the constant (what the user would use from Lua).
+     * @param value The constant's value.
+     * @param scopePath The list of containing classes, going inward from the most outer class.
+     */
+    static void registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath);
+
+    /**
+     * Registers the given string constant as valid for the given scope path.
+     * 
+     * @param name The name of the constant (what the user would use from Lua).
+     * @param value The constant's value.
+     * @param scopePath The list of containing classes, going inward from the most outer class.
+     */
+    static void registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath);
+
+    /**
+     * Registers the given enum value as valid for the given scope path.
+     *
+     * @param enumValue The enumeration value, expressed as an integer.
+     * @param enumValueString The string representation of the enum value (what the user would use from Lua).
+     * @param scopePath The list of containing classes, going inward from the most outer class.
+     */
+    static void registerEnumValue(int enumValue, const std::string& enumValueString, const std::vector<std::string>& scopePath);
+
+    /**
+     * Registers the given class type with Lua.
+     * 
+     * @param name The name of the class from within Lua.
+     * @param members The library function mapping for all the member functions (Lua function names to C++ functions).
+     * @param newFunction The function to call that creates an instance of the class.
+     * @param deleteFunction The function to call that destroys an instance of the class.
+     * @param statics The library function mapping for all the static functions (Lua function names to C++ functions).
+     * @param scopePath For an inner class, this is a list of its containing classes, going inward from the most outer class.
+     */
+    static void registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg* statics,
+                       const std::vector<std::string>& scopePath);
+
+    /**
+     * Register a function with Lua.
+     * 
+     * @param luaFunction The name of the function from within Lua.
+     * @param cppFunction The C++ function pointer.
+     */
+    static void registerFunction(const char* luaFunction, lua_CFunction cppFunction);
+
+    /**
+     * Sets an inheritance pair within the global inheritance hierarchy (base, derived).
+     * 
+     * @param base The base class of the inheritance pair.
+     * @param derived The derived class of the inheritance pair.
+     */
+    static void setGlobalHierarchyPair(const std::string& base, const std::string& derived);
+
+    /**
+     * Gets a pointer to a bool (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<bool> getBoolPointer(int index);
+
+    /**
+     * Gets a pointer to a short (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<short> getShortPointer(int index);
+
+    /**
+     * Gets a pointer to an int (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<int> getIntPointer(int index);
+
+    /**
+     * Gets a pointer to a long (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<long> getLongPointer(int index);
+
+    /**
+     * Gets a pointer to an unsigned char (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<unsigned char> getUnsignedCharPointer(int index);
+
+    /**
+     * Gets a pointer to an unsigned short (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<unsigned short> getUnsignedShortPointer(int index);
+
+    /**
+     * Gets a pointer to an unsigned int (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<unsigned int> getUnsignedIntPointer(int index);
+
+    /**
+     * Gets a pointer to an unsigned long (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<unsigned long> getUnsignedLongPointer(int index);
+
+    /**
+     * Gets a pointer to a float (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<float> getFloatPointer(int index);
+
+    /**
+     * Gets a pointer to a double (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
+     * 
+     * @param index The stack index.
+     * 
+     * @return The pointer.
+     */
+    static LuaArray<double> getDoublePointer(int index);
+
+    /**
+     * Gets an object pointer of the given type for the given stack index.
+     * 
+     * @param type The type of object pointer to retrieve.
+     * @param index The stack index.
+     * @param nonNull Whether the pointer must be non-null (e.g. if the parameter we 
+     *      are retrieving is actually a reference or by-value parameter).
+     * @param success An out parameter that is set to true if the Lua parameter was successfully
+     *      converted to a valid object, or false if it was unable to perform a valid conversion.
+     * 
+     * @return The object pointer or <code>NULL</code> if the data at the stack index
+     *      is not an object or if the object is not derived from the given type.
+     */
+    template <typename T>
+    static LuaArray<T> getObjectPointer(int index, const char* type, bool nonNull, bool* success);
+
+    /**
+     * Gets a string for the given stack index.
+     * 
+     * @param index The stack index.
+     * @param isStdString Whether the string being retrieved is a std::string object or not.
+     * 
+     * @return The string or <code>NULL</code>.
+     */
+    static const char* getString(int index, bool isStdString);
+
+    /**
+     * Checks that the parameter at the given stack position is a boolean and returns it.
+     * 
+     * @param state The Lua state.
+     * @param n The stack index.
+     * 
+     * @return The boolean (if successful; otherwise it logs an error).
+     */
+    static bool luaCheckBool(lua_State* state, int n);
+
+};
 
 }
 

@@ -232,6 +232,7 @@
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneLoader.cpp" />
     <ClCompile Include="src\ScreenDisplayer.cpp" />
+    <ClCompile Include="src\Script.cpp" />
     <ClCompile Include="src\ScriptController.cpp" />
     <ClCompile Include="src\ScriptTarget.cpp" />
     <ClCompile Include="src\Slider.cpp" />
@@ -468,6 +469,7 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
     <ClInclude Include="src\ScreenDisplayer.h" />
+    <ClInclude Include="src\Script.h" />
     <ClInclude Include="src\ScriptController.h" />
     <ClInclude Include="src\ScriptTarget.h" />
     <ClInclude Include="src\Slider.h" />

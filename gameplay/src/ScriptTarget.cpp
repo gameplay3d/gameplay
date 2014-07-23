@@ -9,6 +9,8 @@ namespace gameplay
 // TODO: Should eventCallbacks store a vector of Event pointers instead of std::string (so we only have to do pointer comparisons instead of string comparisons)? What if Events are destroyed?
 // TODO: Should isolated scripts be cached (not currently), or a new script loaded for every ScriptTarget instance?
 
+extern void splitURL(const std::string& url, std::string* file, std::string* id);
+
 ScriptTarget::EventRegistry::EventRegistry()
 {
 }
@@ -86,7 +88,7 @@ void ScriptTarget::registerEvents(EventRegistry* registry)
     _events->push_back(registry);
 }
 
-int ScriptTarget::addScript(const char* path)
+void ScriptTarget::addScript(const char* path, Script::Scope scope)
 {
     // Load the script into an isolated environment
     ScriptController* sc = Game::getInstance()->getScriptController();
@@ -165,6 +167,33 @@ void ScriptTarget::removeScript(Script* script)
 
     // Free the script object
     SAFE_DELETE(script);
+
+    // TODO: Remove callbacks
+}
+
+
+void ScriptTarget::addScriptCallback(const char* eventName, const char* function)
+{
+    std::string script, func;
+    splitURL(function, &script, &func);
+    if (func.length() == 0)
+    {
+        // The url doesn't reference a script, only a function
+        func = script;
+        script = "";
+    }
+
+    // Ensure the script is loaded
+    if (script.length() > 0)
+    {
+        if (!Game::getInstance()->getScriptController()->loadScript(script.c_str()))
+            return "";
+    }
+}
+
+void ScriptTarget::removeScriptCallback(const char* eventName, const char* function)
+{
+    // TODO
 }
 
 void ScriptTarget::clearScripts()

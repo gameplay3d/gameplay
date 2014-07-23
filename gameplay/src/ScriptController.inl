@@ -21,7 +21,7 @@ ScriptUtil::LuaArray<T>::LuaArray(int count)
     // Allocate a chunk of memory to store 'count' number of T.
     // Use new instead of malloc since we track memory allocations
     // int DebugMem configurations.
-    _data->value = (T*)new unsigned char[sizeof(T) * count];
+    _data->value = (T*)new unsigned char[sizeof(T)* count];
 
     // Positive ref count means we automatically cleanup memory
     _data->refCount = 1;

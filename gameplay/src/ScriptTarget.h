@@ -146,9 +146,9 @@ public:
      * Attaches a script to this object.
      *
      * @param path Path to the script.
-     * @return The ID of the successfully loaded script, or zero if unsuccessful.
+     * @return A pointer to the successfully loaded script, or NULL if unsuccessful.
      */
-    int addScript(const char* path);
+    Script* addScript(const char* path);
 
     /**
      * Removes a previously attached script from this object.
@@ -159,7 +159,25 @@ public:
     bool removeScript(const char* path);
 
     /**
-     *  Removes all scripts from this object.
+     * Adds the given global script function as a callback for the given event.
+     * 
+     * @param eventName The name of the event.
+     * @param function The name of the script function to call when the event is fired; can either be
+     *  just the name of a function (if the function's script file has already been loaded), or can be
+     *  a URL of the form scriptFile.lua#functionName.
+     */
+    void addScriptCallback(const char* eventName, const char* function);
+
+    /**
+     * Removes the given script function as a callback for the given event.
+     * 
+     * @param eventName The name of the event.
+     * @param function The name of the script function.
+     */
+    void removeScriptCallback(const char* eventName, const char* function);
+
+    /**
+     *  Removes all scripts and callbacks from this object.
      */
     void clearScripts();
 
@@ -178,24 +196,24 @@ public:
 protected:
 
     /**
-     * Stores an attached script.
+     * Stores a registered script callback.
      */
-    struct Script
+    struct Callback
     {
-        // The ID of the script
-        int id;
+        // The script the callback belongs to
+        Script* script;
 
-        // The path the script was loaded from
-        std::string path;
+        // The function within the script to call
+        std::string function;
 
-        // Event callback functions available to be called for this script
-        std::vector<const EventRegistry::Event*> eventCallbacks;
+        // The script event this callback is for
+        const EventRegistry::Event* event;
 
         // Linked list info
-        Script* next;
-        Script* prev;
+        Callback* next;
+        Callback* prev;
 
-        Script() : id(0), next(NULL), prev(NULL) { }
+        Callback() : script(NULL), event(NULL), next(NULL), prev(NULL) { }
     };
 
     /**

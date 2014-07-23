@@ -153,329 +153,15 @@ static bool getNestedVariable(lua_State* lua, const char* name, int script = 0)
     return false;
 }
 
-void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions)
-{
-    ScriptController* sc = Game::getInstance()->getScriptController();
-    lua_newtable(sc->_lua);
-
-    // Go through the list of functions and add them to the table.
-    const luaL_Reg* iter = functions;
-    for (; iter && iter->name; iter++)
-    {
-        lua_pushcfunction(sc->_lua, iter->func);
-        lua_setfield(sc->_lua, -2, iter->name);
-    }
-
-    lua_setglobal(sc->_lua, name);
-}
-
-void ScriptUtil::registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath)
-{
-    ScriptController* sc = Game::getInstance()->getScriptController();
-
-    // If the constant is within a scope, get the correct parent 
-    // table on the stack before setting its value.
-    if (!scopePath.empty())
-    {
-        lua_getglobal(sc->_lua, scopePath[0].c_str());
-        for (unsigned int i = 1; i < scopePath.size(); i++)
-        {
-            lua_pushstring(sc->_lua, scopePath[i].c_str());
-            lua_gettable(sc->_lua, -2);
-        }
-        
-        // Add the constant to the parent table.
-        lua_pushboolean(sc->_lua, value);
-        lua_setfield(sc->_lua, -2, name.c_str());
-
-        // Pop all the parent tables off the stack.
-        int size = (int)scopePath.size();
-        lua_pop(sc->_lua, size);
-    }
-    else
-    {
-        // TODO: Currently unsupported (we don't parse for this yet).
-        // If the constant is global, add it to the global table.
-        lua_pushboolean(sc->_lua, value);
-        lua_pushvalue(sc->_lua, -1);
-        lua_setglobal(sc->_lua, name.c_str());
-    }
-}
-
-void ScriptUtil::registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath)
-{
-    ScriptController* sc = Game::getInstance()->getScriptController();
-
-    // If the constant is within a scope, get the correct parent 
-    // table on the stack before setting its value.
-    if (!scopePath.empty())
-    {
-        lua_getglobal(sc->_lua, scopePath[0].c_str());
-        for (unsigned int i = 1; i < scopePath.size(); i++)
-        {
-            lua_pushstring(sc->_lua, scopePath[i].c_str());
-            lua_gettable(sc->_lua, -2);
-        }
-        
-        // Add the constant to the parent table.
-        lua_pushnumber(sc->_lua, value);
-        lua_setfield(sc->_lua, -2, name.c_str());
-
-        // Pop all the parent tables off the stack.
-        int size = (int)scopePath.size();
-        lua_pop(sc->_lua, size);
-    }
-    else
-    {
-        // TODO: Currently unsupported (we don't parse for this yet).
-        // If the constant is global, add it to the global table.
-        lua_pushnumber(sc->_lua, value);
-        lua_pushvalue(sc->_lua, -1);
-        lua_setglobal(sc->_lua, name.c_str());
-    }
-}
-
-void ScriptUtil::registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath)
-{
-    ScriptController* sc = Game::getInstance()->getScriptController();
-
-    // If the constant is within a scope, get the correct parent 
-    // table on the stack before setting its value.
-    if (!scopePath.empty())
-    {
-        lua_getglobal(sc->_lua, scopePath[0].c_str());
-        for (unsigned int i = 1; i < scopePath.size(); i++)
-        {
-            lua_pushstring(sc->_lua, scopePath[i].c_str());
-            lua_gettable(sc->_lua, -2);
-        }
-        
-        // Add the constant to the parent table.
-        lua_pushstring(sc->_lua, value.c_str());
-        lua_setfield(sc->_lua, -2, name.c_str());
-
-        // Pop all the parent tables off the stack.
-        int size = (int)scopePath.size();
-        lua_pop(sc->_lua, size);
-    }
-    else
-    {
-        // TODO: Currently unsupported (we don't parse for this yet).
-        // If the constant is global, add it to the global table.
-        lua_pushstring(sc->_lua, value.c_str());
-        lua_pushvalue(sc->_lua, -1);
-        lua_setglobal(sc->_lua, name.c_str());
-    }
-}
-
-void ScriptUtil::registerEnumValue(int enumValue, const std::string& enumValueString, const std::vector<std::string>& scopePath)
-{
-    ScriptController* sc = Game::getInstance()->getScriptController();
-
-    // If the constant is within a scope, get the correct parent 
-    // table on the stack before setting its value.
-    if (!scopePath.empty())
-    {
-        lua_getglobal(sc->_lua, scopePath[0].c_str());
-        for (unsigned int i = 1; i < scopePath.size(); i++)
-        {
-            lua_pushstring(sc->_lua, scopePath[i].c_str());
-            lua_gettable(sc->_lua, -2);
-        }
-
-        // Add the enum value to the parent table.
-        lua_pushnumber(sc->_lua, enumValue);
-        lua_setfield(sc->_lua, -2, enumValueString.c_str());
-
-        // Pop all the parent tables off the stack.
-        int size = (int)scopePath.size();
-        lua_pop(sc->_lua, size);
-    }
-    else
-    {
-        // TODO: Currently unsupported (we don't parse for this yet).
-        // If the constant is global, add it to the global table.
-        lua_pushnumber(sc->_lua, enumValue);
-        lua_pushvalue(sc->_lua, -1);
-        lua_setglobal(sc->_lua, enumValueString.c_str());
-    }
-}
-
-void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, 
-    lua_CFunction deleteFunction, const luaL_Reg* statics,  const std::vector<std::string>& scopePath)
-{
-    ScriptController* sc = Game::getInstance()->getScriptController();
-
-    // If the type is an inner type, get the correct parent 
-    // table on the stack before creating the table for the class.
-    if (!scopePath.empty())
-    {
-        std::string tablename = name;
-
-        // Strip off the scope path part of the name.
-        lua_getglobal(sc->_lua, scopePath[0].c_str());
-        std::size_t index = tablename.find(scopePath[0]);
-        if (index != std::string::npos)
-            tablename = tablename.substr(index + scopePath[0].size());
-        
-        for (unsigned int i = 1; i < scopePath.size(); i++)
-        {
-            lua_pushstring(sc->_lua, scopePath[i].c_str());
-            lua_gettable(sc->_lua, -2);
-
-            index = tablename.find(scopePath[i]);
-            if (index != std::string::npos)
-                tablename = tablename.substr(index + scopePath[i].size());
-        }
-
-        lua_pushstring(sc->_lua, tablename.c_str());
-        lua_newtable(sc->_lua);
-    }
-    else
-    {
-        // If the type is not an inner type, set it as a global table.
-        lua_newtable(sc->_lua);
-        lua_pushvalue(sc->_lua, -1);
-        lua_setglobal(sc->_lua, name);
-    }
-    
-    // Create the metatable and populate it with the member functions.
-    lua_pushliteral(sc->_lua, "__metatable");
-    luaL_newmetatable(sc->_lua, name);
-    if (members)
-        luaL_setfuncs(sc->_lua, members, 0);
-    lua_pushstring(sc->_lua, "__index");
-    lua_pushvalue(sc->_lua, -2);
-    lua_settable(sc->_lua, -3);
-
-    // Add the delete function if it was specified.
-    if (deleteFunction)
-    {
-        lua_pushstring(sc->_lua, "__gc");
-        lua_pushcfunction(sc->_lua, deleteFunction);
-        lua_settable(sc->_lua, -3);
-    }
-
-    // Set the metatable on the main table.
-    lua_settable(sc->_lua, -3);
-    
-    // Populate the main table with the static functions.
-    if (statics)
-        luaL_setfuncs(sc->_lua, statics, 0);
-
-    // Set the new function(s) for the class.
-    if (newFunction)
-    {
-        lua_pushliteral(sc->_lua, "new");
-        lua_pushcfunction(sc->_lua, newFunction);
-        lua_settable(sc->_lua, -3);
-    }
-
-    // Set the table we just created within the correct parent table.
-    if (!scopePath.empty())
-    {
-        lua_settable(sc->_lua, -3);
-
-        // Pop all the parent tables off the stack.
-        int size = (int)scopePath.size();
-        lua_pop(sc->_lua, size);
-    }
-    else
-    {
-        // Pop the main table off the stack.
-        lua_pop(sc->_lua, 1);
-    }
-}
-
-void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunction)
-{
-    lua_pushcfunction(Game::getInstance()->getScriptController()->_lua, cppFunction);
-    lua_setglobal(Game::getInstance()->getScriptController()->_lua, luaFunction);
-}
-
-void ScriptUtil::setGlobalHierarchyPair(const std::string& base, const std::string& derived)
-{
-    Game::getInstance()->getScriptController()->_hierarchy[base].push_back(derived);
-}
-
-ScriptUtil::LuaArray<bool> ScriptUtil::getBoolPointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(bool, luaCheckBool);
-}
-
-ScriptUtil::LuaArray<short> ScriptUtil::getShortPointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(short, (short)luaL_checkint);
-}
-
-ScriptUtil::LuaArray<int> ScriptUtil::getIntPointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(int, (int)luaL_checkint);
-}
-
-ScriptUtil::LuaArray<long> ScriptUtil::getLongPointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(long, (long)luaL_checkint);
-}
-
-ScriptUtil::LuaArray<unsigned char> ScriptUtil::getUnsignedCharPointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(unsigned char, (unsigned char)luaL_checkunsigned);
-}
-
-ScriptUtil::LuaArray<unsigned short> ScriptUtil::getUnsignedShortPointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(unsigned short, (unsigned short)luaL_checkunsigned);
-}
-
-ScriptUtil::LuaArray<unsigned int> ScriptUtil::getUnsignedIntPointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(unsigned int, (unsigned int)luaL_checkunsigned);
-}
-
-ScriptUtil::LuaArray<unsigned long> ScriptUtil::getUnsignedLongPointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(unsigned long, (unsigned long)luaL_checkunsigned);
-}
-
-ScriptUtil::LuaArray<float> ScriptUtil::getFloatPointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(float, (float)luaL_checknumber);
-}
-
-ScriptUtil::LuaArray<double> ScriptUtil::getDoublePointer(int index)
-{
-    GENERATE_LUA_GET_POINTER(double, (double)luaL_checknumber);
-}
-
-const char* ScriptUtil::getString(int index, bool isStdString)
-{
-    if (lua_type(Game::getInstance()->getScriptController()->_lua, index) == LUA_TSTRING)
-        return luaL_checkstring(Game::getInstance()->getScriptController()->_lua, index);
-    else if (lua_type(Game::getInstance()->getScriptController()->_lua, index) == LUA_TNIL && !isStdString)
-        return NULL;
-    else
-    {
-        GP_ERROR("Invalid string parameter (index = %d).", index);
-        return NULL;
-    }
-}
-
-bool ScriptUtil::luaCheckBool(lua_State* state, int n)
-{
-    if (!lua_isboolean(state, n))
-    {
-        const char* msg = lua_pushfstring(state, "%s expected, got %s", lua_typename(state, LUA_TBOOLEAN), luaL_typename(state, n));
-        luaL_argerror(state, n, msg);
-        return false;
-    }
-    return (lua_toboolean(state, n) != 0);
-}
-
-
-bool ScriptController::loadScript(const char* path, bool forceReload)
+Script* ScriptController::loadScript(const char* path, Script::Scope scope, bool forceReload)
 {
     GP_ASSERT(path);
+
+    if (scope == Script::GLOBAL || scope == Script::PRIVATE_SHARED)
+    {
+        // Check if a script with the same path is already loaded 
+    }
+
     std::set<std::string>::iterator iter = _loadedScripts.find(path);
     if (iter == _loadedScripts.end() || forceReload)
     {
@@ -579,46 +265,6 @@ void ScriptController::unloadScript(int id)
 
     // TODO: What else do we need to clean up?
     // Can we test this with manual GC and breaking on gameplay object constructors that were delcared local (even global??) to the script?
-}
-
-std::string ScriptController::loadUrl(const char* url, int* scriptId)
-{
-    GP_ASSERT(url);
-
-    int sid = 0;
-
-    bool isolated = url[0] == '+';
-
-    std::string script;
-    std::string func;
-    parseUrl(isolated ? url + 1 : url, &script, &func);
-
-    // Ensure the script is loaded
-    if (script.length() > 0)
-    {
-        if (isolated)
-            sid = Game::getInstance()->getScriptController()->loadScriptIsolated(script.c_str());
-        else
-            sid = Game::getInstance()->getScriptController()->loadScript(script.c_str()) ? 0 : -1;
-    }
-
-    if (scriptId)
-        *scriptId = sid;
-
-    // Return the function name.
-    return func;
-}
-
-void ScriptController::parseUrl(const char* url, std::string* script, std::string* function)
-{
-    std::string p1, p2;
-    splitURL(url, &p1, &p2);
-    if (function->length() == 0)
-    {
-        // The url doesn't reference a script, only a function
-        *function = *script;
-        *script = "";
-    }
 }
 
 bool ScriptController::getBool(const char* name, bool defaultValue, int script)
@@ -1462,6 +1108,325 @@ template<> double ScriptController::executeFunction<double>(const char* func, co
 template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, va_list* list, int script)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(std::string, luaL_checkstring);
+}
+
+void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions)
+{
+    ScriptController* sc = Game::getInstance()->getScriptController();
+    lua_newtable(sc->_lua);
+
+    // Go through the list of functions and add them to the table.
+    const luaL_Reg* iter = functions;
+    for (; iter && iter->name; iter++)
+    {
+        lua_pushcfunction(sc->_lua, iter->func);
+        lua_setfield(sc->_lua, -2, iter->name);
+    }
+
+    lua_setglobal(sc->_lua, name);
+}
+
+void ScriptUtil::registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath)
+{
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
+    // If the constant is within a scope, get the correct parent 
+    // table on the stack before setting its value.
+    if (!scopePath.empty())
+    {
+        lua_getglobal(sc->_lua, scopePath[0].c_str());
+        for (unsigned int i = 1; i < scopePath.size(); i++)
+        {
+            lua_pushstring(sc->_lua, scopePath[i].c_str());
+            lua_gettable(sc->_lua, -2);
+        }
+
+        // Add the constant to the parent table.
+        lua_pushboolean(sc->_lua, value);
+        lua_setfield(sc->_lua, -2, name.c_str());
+
+        // Pop all the parent tables off the stack.
+        int size = (int)scopePath.size();
+        lua_pop(sc->_lua, size);
+    }
+    else
+    {
+        // TODO: Currently unsupported (we don't parse for this yet).
+        // If the constant is global, add it to the global table.
+        lua_pushboolean(sc->_lua, value);
+        lua_pushvalue(sc->_lua, -1);
+        lua_setglobal(sc->_lua, name.c_str());
+    }
+}
+
+void ScriptUtil::registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath)
+{
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
+    // If the constant is within a scope, get the correct parent 
+    // table on the stack before setting its value.
+    if (!scopePath.empty())
+    {
+        lua_getglobal(sc->_lua, scopePath[0].c_str());
+        for (unsigned int i = 1; i < scopePath.size(); i++)
+        {
+            lua_pushstring(sc->_lua, scopePath[i].c_str());
+            lua_gettable(sc->_lua, -2);
+        }
+
+        // Add the constant to the parent table.
+        lua_pushnumber(sc->_lua, value);
+        lua_setfield(sc->_lua, -2, name.c_str());
+
+        // Pop all the parent tables off the stack.
+        int size = (int)scopePath.size();
+        lua_pop(sc->_lua, size);
+    }
+    else
+    {
+        // TODO: Currently unsupported (we don't parse for this yet).
+        // If the constant is global, add it to the global table.
+        lua_pushnumber(sc->_lua, value);
+        lua_pushvalue(sc->_lua, -1);
+        lua_setglobal(sc->_lua, name.c_str());
+    }
+}
+
+void ScriptUtil::registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath)
+{
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
+    // If the constant is within a scope, get the correct parent 
+    // table on the stack before setting its value.
+    if (!scopePath.empty())
+    {
+        lua_getglobal(sc->_lua, scopePath[0].c_str());
+        for (unsigned int i = 1; i < scopePath.size(); i++)
+        {
+            lua_pushstring(sc->_lua, scopePath[i].c_str());
+            lua_gettable(sc->_lua, -2);
+        }
+
+        // Add the constant to the parent table.
+        lua_pushstring(sc->_lua, value.c_str());
+        lua_setfield(sc->_lua, -2, name.c_str());
+
+        // Pop all the parent tables off the stack.
+        int size = (int)scopePath.size();
+        lua_pop(sc->_lua, size);
+    }
+    else
+    {
+        // TODO: Currently unsupported (we don't parse for this yet).
+        // If the constant is global, add it to the global table.
+        lua_pushstring(sc->_lua, value.c_str());
+        lua_pushvalue(sc->_lua, -1);
+        lua_setglobal(sc->_lua, name.c_str());
+    }
+}
+
+void ScriptUtil::registerEnumValue(int enumValue, const std::string& enumValueString, const std::vector<std::string>& scopePath)
+{
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
+    // If the constant is within a scope, get the correct parent 
+    // table on the stack before setting its value.
+    if (!scopePath.empty())
+    {
+        lua_getglobal(sc->_lua, scopePath[0].c_str());
+        for (unsigned int i = 1; i < scopePath.size(); i++)
+        {
+            lua_pushstring(sc->_lua, scopePath[i].c_str());
+            lua_gettable(sc->_lua, -2);
+        }
+
+        // Add the enum value to the parent table.
+        lua_pushnumber(sc->_lua, enumValue);
+        lua_setfield(sc->_lua, -2, enumValueString.c_str());
+
+        // Pop all the parent tables off the stack.
+        int size = (int)scopePath.size();
+        lua_pop(sc->_lua, size);
+    }
+    else
+    {
+        // TODO: Currently unsupported (we don't parse for this yet).
+        // If the constant is global, add it to the global table.
+        lua_pushnumber(sc->_lua, enumValue);
+        lua_pushvalue(sc->_lua, -1);
+        lua_setglobal(sc->_lua, enumValueString.c_str());
+    }
+}
+
+void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction,
+    lua_CFunction deleteFunction, const luaL_Reg* statics, const std::vector<std::string>& scopePath)
+{
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
+    // If the type is an inner type, get the correct parent 
+    // table on the stack before creating the table for the class.
+    if (!scopePath.empty())
+    {
+        std::string tablename = name;
+
+        // Strip off the scope path part of the name.
+        lua_getglobal(sc->_lua, scopePath[0].c_str());
+        std::size_t index = tablename.find(scopePath[0]);
+        if (index != std::string::npos)
+            tablename = tablename.substr(index + scopePath[0].size());
+
+        for (unsigned int i = 1; i < scopePath.size(); i++)
+        {
+            lua_pushstring(sc->_lua, scopePath[i].c_str());
+            lua_gettable(sc->_lua, -2);
+
+            index = tablename.find(scopePath[i]);
+            if (index != std::string::npos)
+                tablename = tablename.substr(index + scopePath[i].size());
+        }
+
+        lua_pushstring(sc->_lua, tablename.c_str());
+        lua_newtable(sc->_lua);
+    }
+    else
+    {
+        // If the type is not an inner type, set it as a global table.
+        lua_newtable(sc->_lua);
+        lua_pushvalue(sc->_lua, -1);
+        lua_setglobal(sc->_lua, name);
+    }
+
+    // Create the metatable and populate it with the member functions.
+    lua_pushliteral(sc->_lua, "__metatable");
+    luaL_newmetatable(sc->_lua, name);
+    if (members)
+        luaL_setfuncs(sc->_lua, members, 0);
+    lua_pushstring(sc->_lua, "__index");
+    lua_pushvalue(sc->_lua, -2);
+    lua_settable(sc->_lua, -3);
+
+    // Add the delete function if it was specified.
+    if (deleteFunction)
+    {
+        lua_pushstring(sc->_lua, "__gc");
+        lua_pushcfunction(sc->_lua, deleteFunction);
+        lua_settable(sc->_lua, -3);
+    }
+
+    // Set the metatable on the main table.
+    lua_settable(sc->_lua, -3);
+
+    // Populate the main table with the static functions.
+    if (statics)
+        luaL_setfuncs(sc->_lua, statics, 0);
+
+    // Set the new function(s) for the class.
+    if (newFunction)
+    {
+        lua_pushliteral(sc->_lua, "new");
+        lua_pushcfunction(sc->_lua, newFunction);
+        lua_settable(sc->_lua, -3);
+    }
+
+    // Set the table we just created within the correct parent table.
+    if (!scopePath.empty())
+    {
+        lua_settable(sc->_lua, -3);
+
+        // Pop all the parent tables off the stack.
+        int size = (int)scopePath.size();
+        lua_pop(sc->_lua, size);
+    }
+    else
+    {
+        // Pop the main table off the stack.
+        lua_pop(sc->_lua, 1);
+    }
+}
+
+void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunction)
+{
+    lua_pushcfunction(Game::getInstance()->getScriptController()->_lua, cppFunction);
+    lua_setglobal(Game::getInstance()->getScriptController()->_lua, luaFunction);
+}
+
+void ScriptUtil::setGlobalHierarchyPair(const std::string& base, const std::string& derived)
+{
+    Game::getInstance()->getScriptController()->_hierarchy[base].push_back(derived);
+}
+
+ScriptUtil::LuaArray<bool> ScriptUtil::getBoolPointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(bool, luaCheckBool);
+}
+
+ScriptUtil::LuaArray<short> ScriptUtil::getShortPointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(short, (short)luaL_checkint);
+}
+
+ScriptUtil::LuaArray<int> ScriptUtil::getIntPointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(int, (int)luaL_checkint);
+}
+
+ScriptUtil::LuaArray<long> ScriptUtil::getLongPointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(long, (long)luaL_checkint);
+}
+
+ScriptUtil::LuaArray<unsigned char> ScriptUtil::getUnsignedCharPointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(unsigned char, (unsigned char)luaL_checkunsigned);
+}
+
+ScriptUtil::LuaArray<unsigned short> ScriptUtil::getUnsignedShortPointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(unsigned short, (unsigned short)luaL_checkunsigned);
+}
+
+ScriptUtil::LuaArray<unsigned int> ScriptUtil::getUnsignedIntPointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(unsigned int, (unsigned int)luaL_checkunsigned);
+}
+
+ScriptUtil::LuaArray<unsigned long> ScriptUtil::getUnsignedLongPointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(unsigned long, (unsigned long)luaL_checkunsigned);
+}
+
+ScriptUtil::LuaArray<float> ScriptUtil::getFloatPointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(float, (float)luaL_checknumber);
+}
+
+ScriptUtil::LuaArray<double> ScriptUtil::getDoublePointer(int index)
+{
+    GENERATE_LUA_GET_POINTER(double, (double)luaL_checknumber);
+}
+
+const char* ScriptUtil::getString(int index, bool isStdString)
+{
+    if (lua_type(Game::getInstance()->getScriptController()->_lua, index) == LUA_TSTRING)
+        return luaL_checkstring(Game::getInstance()->getScriptController()->_lua, index);
+    else if (lua_type(Game::getInstance()->getScriptController()->_lua, index) == LUA_TNIL && !isStdString)
+        return NULL;
+    else
+    {
+        GP_ERROR("Invalid string parameter (index = %d).", index);
+        return NULL;
+    }
+}
+
+bool ScriptUtil::luaCheckBool(lua_State* state, int n)
+{
+    if (!lua_isboolean(state, n))
+    {
+        const char* msg = lua_pushfstring(state, "%s expected, got %s", lua_typename(state, LUA_TBOOLEAN), luaL_typename(state, n));
+        luaL_argerror(state, n, msg);
+        return false;
+    }
+    return (lua_toboolean(state, n) != 0);
 }
 
 }
