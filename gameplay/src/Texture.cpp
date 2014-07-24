@@ -60,20 +60,20 @@ Texture::~Texture()
 {
     if (_handle)
     {
-		if (_cubeFace == NOT_A_FACE)
-			GL_ASSERT( glDeleteTextures(1, &_handle) );
+        if (_cubeFace == NOT_A_FACE)
+            GL_ASSERT( glDeleteTextures(1, &_handle) );
         _handle = 0;
     }
 
-	if (_cubeFaces)
-	{
-		for(unsigned int i = 0; i < 6; i++)
-		{
-			GP_ASSERT( _cubeFaces[i]->getRefCount() == 1 );
-			SAFE_RELEASE(_cubeFaces[i]);
-		}
-		SAFE_DELETE_ARRAY(_cubeFaces);
-	}
+    if (_cubeFaces)
+    {
+        for(unsigned int i = 0; i < 6; i++)
+        {
+            GP_ASSERT( _cubeFaces[i]->getRefCount() == 1 );
+            SAFE_RELEASE(_cubeFaces[i]);
+        }
+        SAFE_DELETE_ARRAY(_cubeFaces);
+    }
 
     // Remove ourself from the texture cache.
     if (_cached)
@@ -174,9 +174,9 @@ Texture* Texture::create(Image* image, bool generateMipmaps)
 
 Texture* Texture::create(Format format, unsigned int width, unsigned int height, const unsigned char* data, bool generateMipmaps, Texture::Type type)
 {
-	GP_ASSERT( type == Texture::TEX_2D || type == Texture::TEX_CUBE );
+    GP_ASSERT( type == Texture::TEX_2D || type == Texture::TEX_CUBE );
 
-	GLenum target = type == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP;
+    GLenum target = type == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP;
 
     // Create the texture.
     GLuint textureId;
@@ -190,40 +190,40 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
         GL_ASSERT( glTexParameteri(target, GL_GENERATE_MIPMAP, GL_TRUE) );
 #endif
 
-	// Load the texture
-	if (type == Texture::TEX_2D)
-	{
-		// Texture 2D
-		GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
-	}
-	else
-	{
-		// Get texture size
-		unsigned int textureSize = width * height;
-		switch (format)
-		{
-			case Texture::RGB:
-				textureSize *= 3;
-				break;
-			case Texture::RGBA:
-				textureSize *= 4;
-				break;
-			case Texture::ALPHA:
-				break;
-			case Texture::UNKNOWN:
-				if (data)
-				{
-					GP_ERROR("Failed to determine texture size because format is UNKNOWN.");
-				}
-				break;
-		}
-		// Texture Cube
-		for (unsigned int i = 0; i < 6; i++)
-		{
-			const unsigned char* texturePtr = (data == NULL) ? NULL : &data[i * textureSize];
-			GL_ASSERT( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, texturePtr) );
-		}
-	}
+    // Load the texture
+    if (type == Texture::TEX_2D)
+    {
+        // Texture 2D
+        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
+    }
+    else
+    {
+        // Get texture size
+        unsigned int textureSize = width * height;
+        switch (format)
+        {
+            case Texture::RGB:
+                textureSize *= 3;
+                break;
+            case Texture::RGBA:
+                textureSize *= 4;
+                break;
+            case Texture::ALPHA:
+                break;
+            case Texture::UNKNOWN:
+                if (data)
+                {
+                    GP_ERROR("Failed to determine texture size because format is UNKNOWN.");
+                }
+                break;
+        }
+        // Texture Cube
+        for (unsigned int i = 0; i < 6; i++)
+        {
+            const unsigned char* texturePtr = (data == NULL) ? NULL : &data[i * textureSize];
+            GL_ASSERT( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, texturePtr) );
+        }
+    }
 
     // Set initial minification filter based on whether or not mipmaping was enabled.
     Filter minFilter = generateMipmaps ? NEAREST_MIPMAP_LINEAR : LINEAR;
@@ -232,7 +232,7 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     Texture* texture = new Texture();
     texture->_handle = textureId;
     texture->_format = format;
-	texture->_type = type;
+    texture->_type = type;
     texture->_width = width;
     texture->_height = height;
     texture->_minFilter = minFilter;
@@ -242,7 +242,7 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     }
 
     // Restore the texture id
-	GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
+    GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
 
     return texture;
 }
@@ -254,23 +254,23 @@ Texture* Texture::create(TextureHandle handle, int width, int height, Format for
     Texture* texture = new Texture();
     texture->_handle = handle;
     texture->_format = format;
-	if (glIsTexture(handle))
-	{
-		// There is no real way to query for texture type, but an error will be returned if a cube texture is bound to a 2D texture... so check for that
-		glBindTexture(GL_TEXTURE_2D, handle);
-		if (glGetError() == GL_NO_ERROR)
-		{
-			texture->_type = TEX_2D;
-		}
-		else
-		{
-			//For now, it's either or. But if 3D textures and others are added, it might be useful to simply test a bunch of bindings and seeing which one doesn't error out
-			texture->_type = TEX_CUBE;
-		}
+    if (glIsTexture(handle))
+    {
+        // There is no real way to query for texture type, but an error will be returned if a cube texture is bound to a 2D texture... so check for that
+        glBindTexture(GL_TEXTURE_2D, handle);
+        if (glGetError() == GL_NO_ERROR)
+        {
+            texture->_type = TEX_2D;
+        }
+        else
+        {
+            //For now, it's either or. But if 3D textures and others are added, it might be useful to simply test a bunch of bindings and seeing which one doesn't error out
+            texture->_type = TEX_CUBE;
+        }
 
-		// Restore the texture id
-		GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
-	}
+        // Restore the texture id
+        GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
+    }
     texture->_width = width;
     texture->_height = height;
 
@@ -361,7 +361,7 @@ Texture* Texture::createCompressedPVRTC(const char* path)
 
     Texture* texture = new Texture();
     texture->_handle = textureId;
-	texture->_type = TEX_2D;
+    texture->_type = TEX_2D;
     texture->_width = width;
     texture->_height = height;
     texture->_mipmapped = mipMapCount > 1;
@@ -385,8 +385,8 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     // Free data.
     SAFE_DELETE_ARRAY(data);
 
-	// Restore the texture id
-	GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
+    // Restore the texture id
+    GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
 
     return texture;
 }
@@ -658,9 +658,53 @@ Texture* Texture::createCompressedDDS(const char* path)
         header.dwMipMapCount = 1;
     }
 
+    unsigned int facecount = 1;
+    GLenum faces[6] = { GL_TEXTURE_2D };
+    GLenum target = GL_TEXTURE_2D;
+    if ((header.dwCaps2 & 0x200/*DDSCAPS2_CUBEMAP*/) != 0)
+    {
+        // Is a cubemap texture. (possibly simplify to just changing facecount to 6?)
+        if ((header.dwCaps2 & 0x400/*DDSCAPS2_CUBEMAP_POSITIVEX*/) == 0)
+        {
+            // Reset count if missing a face
+            facecount = 0;
+        }
+        else
+        {
+            faces[0] = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+        }
+        if ((header.dwCaps2 & 0x800/*DDSCAPS2_CUBEMAP_NEGATIVEX*/) != 0)
+        {
+            faces[facecount++] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X;
+        }
+        if ((header.dwCaps2 & 0x1000/*DDSCAPS2_CUBEMAP_POSITIVEY*/) != 0)
+        {
+            faces[facecount++] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y;
+        }
+        if ((header.dwCaps2 & 0x2000/*DDSCAPS2_CUBEMAP_NEGATIVEY*/) != 0)
+        {
+            faces[facecount++] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y;
+        }
+        if ((header.dwCaps2 & 0x4000/*DDSCAPS2_CUBEMAP_POSITIVEZ*/) != 0)
+        {
+            faces[facecount++] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z;
+        }
+        if ((header.dwCaps2 & 0x8000/*DDSCAPS2_CUBEMAP_NEGATIVEZ*/) != 0)
+        {
+            faces[facecount++] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
+        }
+        target = GL_TEXTURE_CUBE_MAP;
+    }
+    else if ((header.dwCaps2 & 0x200000/*DDSCAPS2_VOLUME*/) != 0)
+    {
+        // Volume textures unsupported.
+        GP_ERROR("Failed to create texture from DDS file '%s': volume textures are unsupported.", path);
+        return NULL;
+    }
+
     // Allocate mip level structures.
-    dds_mip_level* mipLevels = new dds_mip_level[header.dwMipMapCount];
-    memset(mipLevels, 0, sizeof(dds_mip_level) * header.dwMipMapCount);
+    dds_mip_level* mipLevels = new dds_mip_level[header.dwMipMapCount * facecount];
+    memset(mipLevels, 0, sizeof(dds_mip_level) * header.dwMipMapCount * facecount);
 
     GLenum format = 0;
     GLenum internalFormat = 0;
@@ -711,28 +755,32 @@ Texture* Texture::createCompressedDDS(const char* path)
             return NULL;
         }
 
-        for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+        for (unsigned int face = 0; face < facecount; ++face)
         {
-            dds_mip_level& level = mipLevels[i];
-
-            level.width = width;
-            level.height = height;
-            level.size =  std::max(1, (width+3) >> 2) * std::max(1, (height+3) >> 2) * bytesPerBlock;
-            level.data = new GLubyte[level.size];
-
-            if (stream->read(level.data, 1, level.size) != (unsigned int)level.size)
+            for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
             {
-                GP_ERROR("Failed to load dds compressed texture bytes for texture: %s", path);
+                dds_mip_level& level = mipLevels[i + face * header.dwMipMapCount];
 
-                // Cleanup mip data.
-                for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
-                    SAFE_DELETE_ARRAY(level.data);
-                SAFE_DELETE_ARRAY(mipLevels);
-                return texture;
+                level.width = width;
+                level.height = height;
+                level.size = std::max(1, (width + 3) >> 2) * std::max(1, (height + 3) >> 2) * bytesPerBlock;
+                level.data = new GLubyte[level.size];
+
+                if (stream->read(level.data, 1, level.size) != (unsigned int)level.size)
+                {
+                    GP_ERROR("Failed to load dds compressed texture bytes for texture: %s", path);
+
+                    // Cleanup mip data.
+                    for (unsigned int face = 0; face < facecount; ++face)
+                        for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+                            SAFE_DELETE_ARRAY(mipLevels[i + face * header.dwMipMapCount].data);
+                    SAFE_DELETE_ARRAY(mipLevels);
+                    return texture;
+                }
+
+                width = std::max(1, width >> 1);
+                height = std::max(1, height >> 1);
             }
-
-            width  = std::max(1, width >> 1);
-            height = std::max(1, height >> 1);
         }
     }
     else if (header.ddspf.dwFlags & 0x40/*DDPF_RGB*/)
@@ -782,28 +830,32 @@ Texture* Texture::createCompressedDDS(const char* path)
         }
 
         // Read data.
-        for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+        for (unsigned int face = 0; face < facecount; ++face)
         {
-            dds_mip_level& level = mipLevels[i];
-
-            level.width = width;
-            level.height = height;
-            level.size =  width * height * (header.ddspf.dwRGBBitCount >> 3);
-            level.data = new GLubyte[level.size];
-
-            if (stream->read(level.data, 1, level.size) != (unsigned int)level.size)
+            for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
             {
-                GP_ERROR("Failed to load bytes for RGB dds texture: %s", path);
+                dds_mip_level& level = mipLevels[i + face * header.dwMipMapCount];
 
-                // Cleanup mip data.
-                for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
-                    SAFE_DELETE_ARRAY(level.data);
-                SAFE_DELETE_ARRAY(mipLevels);
-                return texture;
+                level.width = width;
+                level.height = height;
+                level.size = width * height * (header.ddspf.dwRGBBitCount >> 3);
+                level.data = new GLubyte[level.size];
+
+                if (stream->read(level.data, 1, level.size) != (unsigned int)level.size)
+                {
+                    GP_ERROR("Failed to load bytes for RGB dds texture: %s", path);
+
+                    // Cleanup mip data.
+                    for (unsigned int face = 0; face < facecount; ++face)
+                        for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+                            SAFE_DELETE_ARRAY(mipLevels[i + face * header.dwMipMapCount].data);
+                    SAFE_DELETE_ARRAY(mipLevels);
+                    return texture;
+                }
+
+                width = std::max(1, width >> 1);
+                height = std::max(1, height >> 1);
             }
-
-            width  = std::max(1, width >> 1);
-            height = std::max(1, height >> 1);
         }
 
         // Perform color conversion.
@@ -818,27 +870,33 @@ Texture* Texture::createCompressedDDS(const char* path)
             GLubyte *pixel, r, g, b, a;
             if (format == GL_RGB)
             {
-                for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+                for (unsigned int face = 0; face < facecount; ++face)
                 {
-                    dds_mip_level& level = mipLevels[i];
-                    for (int j = 0; j < level.size; j += 3)
+                    for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
                     {
-                        pixel = &level.data[j];
-                        r = pixel[ridx]; g = pixel[gidx]; b = pixel[bidx];
-                        pixel[0] = r; pixel[1] = g; pixel[2] = b;
+                        dds_mip_level& level = mipLevels[i + face * header.dwMipMapCount];
+                        for (int j = 0; j < level.size; j += 3)
+                        {
+                            pixel = &level.data[j];
+                            r = pixel[ridx]; g = pixel[gidx]; b = pixel[bidx];
+                            pixel[0] = r; pixel[1] = g; pixel[2] = b;
+                        }
                     }
                 }
             }
             else if (format == GL_RGBA)
             {
-                for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+                for (unsigned int face = 0; face < facecount; ++face)
                 {
-                    dds_mip_level& level = mipLevels[i];
-                    for (int j = 0; j < level.size; j += 4)
+                    for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
                     {
-                        pixel = &level.data[j];
-                        r = pixel[ridx]; g = pixel[gidx]; b = pixel[bidx]; a = pixel[aidx];
-                        pixel[0] = r; pixel[1] = g; pixel[2] = b; pixel[3] = a;
+                        dds_mip_level& level = mipLevels[i + face * header.dwMipMapCount];
+                        for (int j = 0; j < level.size; j += 4)
+                        {
+                            pixel = &level.data[j];
+                            r = pixel[ridx]; g = pixel[gidx]; b = pixel[bidx]; a = pixel[aidx];
+                            pixel[0] = r; pixel[1] = g; pixel[2] = b; pixel[3] = a;
+                        }
                     }
                 }
             }
@@ -858,15 +916,15 @@ Texture* Texture::createCompressedDDS(const char* path)
     // Generate GL texture.
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
-    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
+    GL_ASSERT( glBindTexture(target, textureId) );
 
     Filter minFilter = header.dwMipMapCount > 1 ? NEAREST_MIPMAP_LINEAR : LINEAR;
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter ) );
+    GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter ) );
 
     // Create gameplay texture.
     texture = new Texture();
     texture->_handle = textureId;
-	texture->_type = TEX_2D;
+    texture->_type = target == GL_TEXTURE_2D ? TEX_2D : TEX_CUBE;
     texture->_width = header.dwWidth;
     texture->_height = header.dwHeight;
     texture->_compressed = compressed;
@@ -874,27 +932,31 @@ Texture* Texture::createCompressedDDS(const char* path)
     texture->_minFilter = minFilter;
 
     // Load texture data.
-    for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+    for (unsigned int face = 0; face < facecount; ++face)
     {
-        dds_mip_level& level = mipLevels[i];
-        if (compressed)
+        GLenum texImageTarget = faces[face];
+        for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
         {
-            GL_ASSERT( glCompressedTexImage2D(GL_TEXTURE_2D, i, format, level.width, level.height, 0, level.size, level.data) );
-        }
-        else
-        {
-            GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, i, internalFormat, level.width, level.height, 0, format, GL_UNSIGNED_BYTE, level.data) );
-        }
+            dds_mip_level& level = mipLevels[i + face * header.dwMipMapCount];
+            if (compressed)
+            {
+                GL_ASSERT(glCompressedTexImage2D(texImageTarget, i, format, level.width, level.height, 0, level.size, level.data));
+            }
+            else
+            {
+                GL_ASSERT(glTexImage2D(texImageTarget, i, internalFormat, level.width, level.height, 0, format, GL_UNSIGNED_BYTE, level.data));
+            }
 
-        // Clean up the texture data.
-        SAFE_DELETE_ARRAY(level.data);
+            // Clean up the texture data.
+            SAFE_DELETE_ARRAY(level.data);
+        }
     }
 
     // Clean up mip levels structure.
     SAFE_DELETE_ARRAY(mipLevels);
 
-	// Restore the texture id
-	GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
+    // Restore the texture id
+    GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
 
     return texture;
 }
@@ -906,12 +968,12 @@ Texture::Format Texture::getFormat() const
 
 Texture::Type Texture::getType() const
 {
-	return _type;
+    return _type;
 }
 
 Texture::CubeFace Texture::getFace() const
 {
-	return _cubeFace;
+    return _cubeFace;
 }
 
 const char* Texture::getPath() const
@@ -936,74 +998,74 @@ TextureHandle Texture::getHandle() const
 
 Texture* Texture::getFaceTexture(Texture::CubeFace face)
 {
-	GP_ASSERT( _type == Texture::TEX_CUBE );
-	GP_ASSERT( face >= Texture::POS_X && face <= Texture::NEG_Z );
+    GP_ASSERT( _type == Texture::TEX_CUBE );
+    GP_ASSERT( face >= Texture::POS_X && face <= Texture::NEG_Z );
 
-	if (!_cubeFaces)
-	{
-		_cubeFaces = new Texture*[6];
-		memset(_cubeFaces, 0, sizeof(Texture*) * 6);
-	}
-	if (!_cubeFaces[face])
-	{
-		Texture* tFace = new Texture();
-		_cubeFaces[face] = tFace;
+    if (!_cubeFaces)
+    {
+        _cubeFaces = new Texture*[6];
+        memset(_cubeFaces, 0, sizeof(Texture*) * 6);
+    }
+    if (!_cubeFaces[face])
+    {
+        Texture* tFace = new Texture();
+        _cubeFaces[face] = tFace;
 
-		tFace->_handle = _handle;
-		tFace->_format = _format;
-		tFace->_type = TEX_2D;
-		tFace->_width = _width;
-		tFace->_height = _height;
-		tFace->_mipmapped = _mipmapped;
-		tFace->_compressed = _compressed;
-		tFace->_minFilter = _minFilter;
-		tFace->_cubeFace = face;
-	}
-	_cubeFaces[face]->addRef();
-	return _cubeFaces[face];
+        tFace->_handle = _handle;
+        tFace->_format = _format;
+        tFace->_type = TEX_2D;
+        tFace->_width = _width;
+        tFace->_height = _height;
+        tFace->_mipmapped = _mipmapped;
+        tFace->_compressed = _compressed;
+        tFace->_minFilter = _minFilter;
+        tFace->_cubeFace = face;
+    }
+    _cubeFaces[face]->addRef();
+    return _cubeFaces[face];
 }
 
 void Texture::generateMipmaps()
 {
     if (!_mipmapped)
     {
-		GLenum target = 0;
-		if (_type == Texture::TEX_2D && _cubeFace != Texture::NOT_A_FACE)
-		{
-			//We don't want to mipmap a a face of a cube map
-			return;
-		}
-		switch (_type)
-		{
-			case Texture::TEX_2D:
-				target = GL_TEXTURE_2D;
-				break;
-			case Texture::TEX_CUBE:
-				target = GL_TEXTURE_CUBE_MAP;
-				break;
-			default:
-				target = 0; //Will probably cause error
-				break;
-		}
-		GL_ASSERT( glBindTexture(target, _handle) );
-		GL_ASSERT( glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST) );
-		if( std::addressof(glGenerateMipmap) )
+        GLenum target = 0;
+        if (_type == Texture::TEX_2D && _cubeFace != Texture::NOT_A_FACE)
+        {
+            //We don't want to mipmap a a face of a cube map
+            return;
+        }
+        switch (_type)
+        {
+            case Texture::TEX_2D:
+                target = GL_TEXTURE_2D;
+                break;
+            case Texture::TEX_CUBE:
+                target = GL_TEXTURE_CUBE_MAP;
+                break;
+            default:
+                target = 0; //Will probably cause error
+                break;
+        }
+        GL_ASSERT( glBindTexture(target, _handle) );
+        GL_ASSERT( glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST) );
+        if( std::addressof(glGenerateMipmap) )
             GL_ASSERT( glGenerateMipmap(target) );
 
         _mipmapped = true;
 
-		if (_cubeFaces)
-		{
-			//Make sure to set all faces to mipmapped
-			for(unsigned int i = 0; i < 6; i++)
-			{
-				if (_cubeFaces[i])
-					_cubeFaces[i]->_mipmapped = true;
-			}
-		}
+        if (_cubeFaces)
+        {
+            //Make sure to set all faces to mipmapped
+            for(unsigned int i = 0; i < 6; i++)
+            {
+                if (_cubeFaces[i])
+                    _cubeFaces[i]->_mipmapped = true;
+            }
+        }
 
-		// Restore the texture id
-		GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
+        // Restore the texture id
+        GL_ASSERT( glBindTexture(__currentTextureType == Texture::TEX_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, __currentTextureId) );
     }
 }
 
@@ -1033,8 +1095,8 @@ Texture::Sampler::~Sampler()
 Texture::Sampler* Texture::Sampler::create(Texture* texture)
 {
     GP_ASSERT( texture );
-	GP_ASSERT( texture->_type == Texture::TEX_2D || texture->_type == Texture::TEX_CUBE );
-	GP_ASSERT( texture->_cubeFace == Texture::NOT_A_FACE );
+    GP_ASSERT( texture->_type == Texture::TEX_2D || texture->_type == Texture::TEX_CUBE );
+    GP_ASSERT( texture->_cubeFace == Texture::NOT_A_FACE );
     texture->addRef();
     return new Sampler(texture);
 }
@@ -1049,7 +1111,7 @@ void Texture::Sampler::setWrapMode(Wrap wrapS, Wrap wrapT, Wrap wrapR)
 {
     _wrapS = wrapS;
     _wrapT = wrapT;
-	_wrapR = wrapR;
+    _wrapR = wrapR;
 }
 
 void Texture::Sampler::setFilterMode(Filter minificationFilter, Filter magnificationFilter)
@@ -1067,13 +1129,13 @@ void Texture::Sampler::bind()
 {
     GP_ASSERT( _texture );
 
-	GLenum target = _texture->_type == Texture::TEX_2D && _texture->_cubeFace == Texture::NOT_A_FACE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP;
-	if (__currentTextureId != _texture->_handle)
-	{
-		GL_ASSERT( glBindTexture(target, _texture->_handle) );
-		__currentTextureId = _texture->_handle;
-		__currentTextureType = _texture->_type;
-	}
+    GLenum target = _texture->_type == Texture::TEX_2D && _texture->_cubeFace == Texture::NOT_A_FACE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP;
+    if (__currentTextureId != _texture->_handle)
+    {
+        GL_ASSERT( glBindTexture(target, _texture->_handle) );
+        __currentTextureId = _texture->_handle;
+        __currentTextureType = _texture->_type;
+    }
 
     if (_texture->_minFilter != _minFilter)
     {
@@ -1100,11 +1162,11 @@ void Texture::Sampler::bind()
     }
 
 #if defined(GL_TEXTURE_WRAP_R)
-	if (_texture->_wrapR != _wrapR)
+    if (_texture->_wrapR != _wrapR)
     {
         _texture->_wrapR = _wrapR;
-		if (target == GL_TEXTURE_CUBE_MAP) //We don't want to run this on something that we know will fail
-			GL_ASSERT( glTexParameteri(target, GL_TEXTURE_WRAP_R, (GLenum)_wrapR) );
+        if (target == GL_TEXTURE_CUBE_MAP) // We don't want to run this on something that we know will fail
+            GL_ASSERT( glTexParameteri(target, GL_TEXTURE_WRAP_R, (GLenum)_wrapR) );
     }
 #endif
 }
