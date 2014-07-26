@@ -292,6 +292,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_CheckBox.h
     src/lua/lua_Container.cpp
     src/lua/lua_Container.h
+    src/lua/lua_ContainerDirection.cpp
+    src/lua/lua_ContainerDirection.h
     src/lua/lua_ContainerScroll.cpp
     src/lua/lua_ContainerScroll.h
     src/lua/lua_Control.cpp

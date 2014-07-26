@@ -12,7 +12,11 @@ void luaRegister_Touch()
     {
         {NULL, NULL}
     };
-    const luaL_Reg* lua_statics = NULL;
+    const luaL_Reg lua_statics[] = 
+    {
+        {"MAX_TOUCH_POINTS", lua_Touch_static_MAX_TOUCH_POINTS},
+        {NULL, NULL}
+    };
     std::vector<std::string> scopePath;
 
     gameplay::ScriptUtil::registerClass("Touch", lua_members, NULL, lua_Touch__gc, lua_statics, scopePath);
@@ -61,6 +65,23 @@ int lua_Touch__gc(lua_State* state)
         }
     }
     return 0;
+}
+
+int lua_Touch_static_MAX_TOUCH_POINTS(lua_State* state)
+{
+    // Validate the number of parameters.
+    if (lua_gettop(state) > 0)
+    {
+        lua_pushstring(state, "Invalid number of parameters (expected 0).");
+        lua_error(state);
+    }
+
+    unsigned int result = Touch::MAX_TOUCH_POINTS;
+
+    // Push the return value onto the stack.
+    lua_pushunsigned(state, result);
+
+    return 1;
 }
 
 }

@@ -5,6 +5,7 @@
 #include "lua_AnimationClipListenerEventType.h"
 #include "lua_AudioSourceState.h"
 #include "lua_CameraType.h"
+#include "lua_ContainerDirection.h"
 #include "lua_ContainerScroll.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlAutoSize.h"

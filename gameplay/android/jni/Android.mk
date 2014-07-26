@@ -138,6 +138,7 @@ LOCAL_SRC_FILES := \
     lua/lua_CameraType.cpp \
     lua/lua_CheckBox.cpp \
     lua/lua_Container.cpp \
+    lua/lua_ContainerDirection.cpp \
     lua/lua_ContainerScroll.cpp \
     lua/lua_Control.cpp \
     lua/lua_ControlAlignment.cpp \

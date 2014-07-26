@@ -31,6 +31,7 @@ void luaRegister_AudioSource()
         {"getState", lua_AudioSource_getState},
         {"getVelocity", lua_AudioSource_getVelocity},
         {"isLooped", lua_AudioSource_isLooped},
+        {"isStreamed", lua_AudioSource_isStreamed},
         {"pause", lua_AudioSource_pause},
         {"play", lua_AudioSource_play},
         {"release", lua_AudioSource_release},
@@ -380,6 +381,41 @@ int lua_AudioSource_isLooped(lua_State* state)
             }
 
             lua_pushstring(state, "lua_AudioSource_isLooped - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AudioSource_isStreamed(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                AudioSource* instance = getInstance(state);
+                bool result = instance->isStreamed();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_AudioSource_isStreamed - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -799,9 +835,44 @@ int lua_AudioSource_static_create(lua_State* state)
             lua_error(state);
             break;
         }
+        case 2:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                    // Get parameter 2 off the stack.
+                    bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                    void* returnPtr = (void*)AudioSource::create(param1, param2);
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "AudioSource");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AudioSource_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
             lua_error(state);
             break;
         }
