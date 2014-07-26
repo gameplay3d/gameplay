@@ -259,10 +259,10 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale,
     BoundingBox& bounds = terrain->_boundingBox;
 
     if (normalMapPath)
-	{
-		terrain->_normalMap = Texture::Sampler::create(normalMapPath, true);
-		GP_ASSERT( terrain->_normalMap->getTexture()->getType() == Texture::TEX_2D );
-	}
+    {
+        terrain->_normalMap = Texture::Sampler::create(normalMapPath, true);
+        GP_ASSERT( terrain->_normalMap->getTexture()->getType() == Texture::TEX_2D );
+    }
 
     float halfWidth = (width - 1) * 0.5f;
     float halfHeight = (height - 1) * 0.5f;

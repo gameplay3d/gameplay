@@ -383,12 +383,12 @@ int TerrainPatch::addSampler(const char* path)
     if (!texture)
         return -1;
 
-	// Textures should only be 2D
-	if (texture->getType() != Texture::TEX_2D)
-	{
-		SAFE_RELEASE(texture);
-		return -1;
-	}
+    // Textures should only be 2D
+    if (texture->getType() != Texture::TEX_2D)
+    {
+        SAFE_RELEASE(texture);
+        return -1;
+    }
 
     int firstAvailableIndex = -1;
     for (size_t i = 0, count = _samplers.size(); i < count; ++i)
