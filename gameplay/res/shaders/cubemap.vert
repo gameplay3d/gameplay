@@ -11,7 +11,7 @@
 #define LIGHTING
 #endif
 #ifdef BUMPED
-#undef BUMPED
+#undef BUMPED // Bump mapping isn't supported right now
 #endif
 #ifndef SPECULAR
 #define SPECULAR
@@ -32,11 +32,11 @@ attribute vec3 a_normal;
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;
 
-uniform mat4 u_normalMatrix;
+uniform mat4 u_inverseTransposeWorldViewMatrix;
 uniform mat4 u_worldViewMatrix;
 uniform vec3 u_cameraPosition;
 
-uniform mat4 u_normalReflectionMatrix;
+uniform mat4 u_inverseTransposeWorldMatrix;
 uniform mat4 u_worldMatrix;
 uniform vec3 u_cameraWorldPosition;
 
@@ -92,12 +92,12 @@ void main()
     vec4 position = getPosition();
     gl_Position = u_worldViewProjectionMatrix * position;
 
+    v_normalReflectionVector = normalize((u_inverseTransposeWorldMatrix * vec4(a_normal.xyz, 0)).xyz);
+    v_cameraReflectionDirection = u_cameraWorldPosition - (u_worldMatrix * position).xyz;
+
     vec3 normal = getNormal();
     // Transform the normal to view space.
-    v_normalVector = normalize((u_normalMatrix * vec4(a_normal.xyz, 0)).xyz);
-
-	v_normalReflectionVector = normalize((u_normalReflectionMatrix * vec4(a_normal.xyz, 0)).xyz);
-	v_cameraReflectionDirection = u_cameraWorldPosition - (u_worldMatrix * position).xyz;
+    v_normalVector = normalize((u_inverseTransposeWorldViewMatrix * vec4(a_normal.xyz, 0)).xyz);
 
     applyLight(position);
 }

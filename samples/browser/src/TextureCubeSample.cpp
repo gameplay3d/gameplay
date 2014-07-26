@@ -58,7 +58,7 @@ void TextureCubeSample::createCubeMap()
     mat->getParameter("u_cameraPosition")->bindValue(_scene->getActiveCamera()->getNode(), &Node::getTranslationView);
     mat->getParameter("u_cameraWorldPosition")->bindValue(_scene->getActiveCamera()->getNode(), &Node::getTranslationWorld);
 
-    Texture* tex = Texture::create(Texture::RGB, 1024, 1024, NULL, false, Texture::TEX_CUBE);
+    Texture* tex = Texture::create(Texture::RGB, 128, 128, NULL, false, Texture::TEX_CUBE);
     Texture::Sampler* texSamp = Texture::Sampler::create(tex);
 
     mat->getParameter("u_cubeTexture")->setValue(texSamp);
