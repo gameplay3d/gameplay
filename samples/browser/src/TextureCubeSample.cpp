@@ -56,6 +56,7 @@ void TextureCubeSample::createCubeMap()
     // Setup sphere materials
     Material* mat = _scene->findNode("almighty_sphere")->getModel()->getMaterial();
     mat->getParameter("u_cameraPosition")->bindValue(_scene->getActiveCamera()->getNode(), &Node::getTranslationView);
+    mat->getParameter("u_cameraWorldPosition")->bindValue(_scene->getActiveCamera()->getNode(), &Node::getTranslationWorld);
 
     Texture* tex = Texture::create(Texture::RGB, 1024, 1024, NULL, false, Texture::TEX_CUBE);
     Texture::Sampler* texSamp = Texture::Sampler::create(tex);
@@ -156,24 +157,28 @@ void TextureCubeSample::render(float elapsedTime)
 
         //Setup camera
         cubeCameraNode->setRotation(Quaternion::identity());
-        switch((Texture::CubeFace)i)
+        switch ((Texture::CubeFace)i)
         {
             case Texture::POS_X:
-                cubeCameraNode->rotateY(MATH_DEG_TO_RAD(-90));
+                cubeCameraNode->rotateY(MATH_DEG_TO_RAD(90));
+                cubeCameraNode->rotateX(MATH_DEG_TO_RAD(180));
                 break;
             case Texture::NEG_X:
-                cubeCameraNode->rotateY(MATH_DEG_TO_RAD(90));
+                cubeCameraNode->rotateY(MATH_DEG_TO_RAD(-90));
+                cubeCameraNode->rotateX(MATH_DEG_TO_RAD(180));
                 break;
             case Texture::POS_Y:
-                cubeCameraNode->rotateX(MATH_DEG_TO_RAD(-90));
-                break;
-            case Texture::NEG_Y:
                 cubeCameraNode->rotateX(MATH_DEG_TO_RAD(90));
                 break;
+            case Texture::NEG_Y:
+                cubeCameraNode->rotateX(MATH_DEG_TO_RAD(-90));
+                break;
             case Texture::POS_Z:
+                cubeCameraNode->rotateX(MATH_DEG_TO_RAD(180));
                 break;
             case Texture::NEG_Z:
                 cubeCameraNode->rotateY(MATH_DEG_TO_RAD(180));
+                cubeCameraNode->rotateX(MATH_DEG_TO_RAD(180));
                 break;
         }
 

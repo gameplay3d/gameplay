@@ -70,8 +70,10 @@ vec4 _baseColor;
 ///////////////////////////////////////////////////////////
 // Varyings
 varying vec3 v_normalVector;
+varying vec3 v_normalReflectionVector;
 
 varying vec3 v_cameraDirection;
+varying vec3 v_cameraReflectionDirection;
 
 #if defined(LIGHTING)
 
@@ -89,9 +91,9 @@ varying vec3 v_vertexToSpotLightDirection[SPOT_LIGHT_COUNT];
 
 void main()
 {
-    vec3 N = normalize(v_normalVector);
-    vec3 E = normalize(v_cameraDirection);
-    vec3 R = reflect(E, N);
+    vec3 N = normalize(v_normalReflectionVector);
+    vec3 E = normalize(v_cameraReflectionDirection);
+    vec3 R = reflect(-E, N);
 
     _baseColor = textureCube(u_cubeTexture, R);
 

@@ -105,7 +105,9 @@ material almighty_sphere
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_normalMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            u_worldViewMatrix = WORLD_VIEW_MATRIX
+			u_worldViewMatrix = WORLD_VIEW_MATRIX
+			u_normalReflectionMatrix = INVERSE_TRANSPOSE_WORLD_MATRIX
+			u_worldMatrix = WORLD_MATRIX
             u_ambientColor = SCENE_AMBIENT_COLOR
 
             // render state

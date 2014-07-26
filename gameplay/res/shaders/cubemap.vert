@@ -31,9 +31,14 @@ attribute vec3 a_normal;
 ///////////////////////////////////////////////////////////
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;
+
 uniform mat4 u_normalMatrix;
 uniform mat4 u_worldViewMatrix;
 uniform vec3 u_cameraPosition;
+
+uniform mat4 u_normalReflectionMatrix;
+uniform mat4 u_worldMatrix;
+uniform vec3 u_cameraWorldPosition;
 
 #if defined(SKINNING)
 uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];
@@ -54,6 +59,9 @@ uniform vec3 u_spotLightPosition[SPOT_LIGHT_COUNT];
 // Varyings
 varying vec3 v_normalVector;
 varying vec3 v_cameraDirection;
+
+varying vec3 v_normalReflectionVector;
+varying vec3 v_cameraReflectionDirection;
 
 #if defined(LIGHTING)
 
@@ -87,6 +95,9 @@ void main()
     vec3 normal = getNormal();
     // Transform the normal to view space.
     v_normalVector = normalize((u_normalMatrix * vec4(a_normal.xyz, 0)).xyz);
+
+	v_normalReflectionVector = normalize((u_normalReflectionMatrix * vec4(a_normal.xyz, 0)).xyz);
+	v_cameraReflectionDirection = u_cameraWorldPosition - (u_worldMatrix * position).xyz;
 
     applyLight(position);
 }
