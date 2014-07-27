@@ -1,7 +1,9 @@
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
+#include <functional>
 #include "Vector2.h"
+#include "Rectangle.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Touch.h"
@@ -42,6 +44,15 @@ public:
      * @script{ignore}
      */
     static Platform* create(Game* game);
+    
+    /**
+     * Maps a rectangle from the system windowing pixel to OpenGL pixels
+     *
+     * @param r The rectangle to transform
+     *
+     * @return The transformed rectangle
+     */
+    static Rectangle mapToGLPixels(const Rectangle &r);
 
     /**
      * Begins processing the platform messages.
@@ -421,6 +432,8 @@ public:
 private:
 
     Game* _game;                // The game this platform is interfacing with.
+    
+    static std::function<Rectangle(const Rectangle &)> trFct;
 };
 
 }
