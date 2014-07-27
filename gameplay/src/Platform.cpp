@@ -118,5 +118,11 @@ void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
 {
     Gamepad::remove(handle);
 }
-
+    
+Rectangle Platform::mapToGLPixels(const Rectangle &r) {
+    return trFct(r);
+}
+    
+std::function<Rectangle(const Rectangle &)> Platform::trFct =
+    [](const Rectangle &rectangle) { return rectangle; };
 }

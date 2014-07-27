@@ -753,7 +753,9 @@ double getMachTimeInMilliseconds()
     __width = size.width;
     __height = size.height;
     CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
-    GLint dim[2] = {__width, __height};
+//    GLint dim[2] = {__width, __height};
+    NSRect backingBounds = [self convertRectToBacking:[self bounds]];
+    GLint dim[2] = { (GLint)backingBounds.size.width, (GLint)backingBounds.size.height };
     CGLSetParameter(cglContext, kCGLCPSurfaceBackingSize, dim);
     CGLEnable(cglContext, kCGLCESurfaceBackingSize);
     
@@ -948,7 +950,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] CGLPixelFormatObj];
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
     
-    GLint dim[2] = {__width, __height};
+//    GLint dim[2] = {__width, __height};
+//    [self setWantsBestResolutionOpenGLSurface:YES];
+    NSRect backingBounds = [self convertRectToBacking:[self bounds]];
+    GLint dim[2] = { (GLint)backingBounds.size.width, (GLint)backingBounds.size.height };
     CGLSetParameter(cglContext, kCGLCPSurfaceBackingSize, dim);
     CGLEnable(cglContext, kCGLCESurfaceBackingSize);
     
@@ -1656,6 +1661,23 @@ Platform::Platform(Game* game)
     IOHIDManagerScheduleWithRunLoop(__hidManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     IOReturn kr = IOHIDManagerOpen(__hidManagerRef, kIOHIDOptionsTypeNone);
     assert(kr == 0);
+    
+    trFct = [](const Rectangle &rectangle) -> Rectangle {
+        if(__view == nullptr)
+            return rectangle;
+        NSRect rect;
+        rect.origin.x = rectangle.x;
+        rect.origin.y = rectangle.y;
+        rect.size.width = rectangle.width;
+        rect.size.height = rectangle.height;
+        rect = [__view convertRectToBacking: rect];
+        Rectangle result;
+        result.x = rect.origin.x;
+        result.y = rect.origin.y;
+        result.width = rect.size.width;
+        result.height = rect.size.height;
+        return result;
+    };
 }
 
     

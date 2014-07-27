@@ -398,8 +398,9 @@ void Game::updateOnce()
     _scriptController->update(elapsedTime);
 }
 
-void Game::setViewport(const Rectangle& viewport)
+void Game::setViewport(const Rectangle& vp)
 {
+    Rectangle viewport = Platform::mapToGLPixels(vp);
     _viewport = viewport;
     glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height);
 }
