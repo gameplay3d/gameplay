@@ -417,7 +417,14 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
         // Glyphs.
         unsigned int glyphSetSize = END_INDEX - START_INDEX;
         writeUint(gpbFp, glyphSetSize);
-        fwrite(&font->glyphArray, sizeof(TTFGlyph), glyphSetSize, gpbFp);
+        for (unsigned int j = 0; j < glyphSetSize; j++)
+        {
+            writeUint(gpbFp, font->glyphArray[j].index);
+            writeUint(gpbFp, font->glyphArray[j].width);
+            fwrite(&font->glyphArray[j].bearingX, sizeof(int), 1, gpbFp);
+            writeUint(gpbFp, font->glyphArray[j].advance);
+            fwrite(&font->glyphArray[j].uvCoords, sizeof(float), 4, gpbFp);
+        }
 
         // Image dimensions
         unsigned int imageSize = font->imageWidth * font->imageHeight;
