@@ -558,7 +558,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 switch (delimiter)
                 {
                 case ' ':
-                    xPos += size >> 1;
+                    xPos += _glyphs[0].advance;
                     break;
                 case '\r':
                 case '\n':
@@ -566,7 +566,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                     xPos = x;
                     break;
                 case '\t':
-                    xPos += (size >> 1)*4;
+                    xPos += _glyphs[0].advance * 4;
                     break;
                 case 0:
                     done = true;
@@ -609,7 +609,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
             switch (c)
             {
             case ' ':
-                xPos += size >> 1;
+                xPos += _glyphs[0].advance;
                 break;
             case '\r':
             case '\n':
@@ -617,7 +617,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                 xPos = x;
                 break;
             case '\t':
-                xPos += (size >> 1)*4;
+                xPos += _glyphs[0].advance * 4;
                 break;
             default:
                 int index = c - 32; // HACK for ASCII
@@ -995,7 +995,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
                 switch (delimiter)
                 {
                     case ' ':
-                        delimWidth += size >> 1;
+                        delimWidth += _glyphs[0].advance;
                         break;
                     case '\r':
                     case '\n':
@@ -1031,7 +1031,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
                         delimWidth = 0;
                         break;
                     case '\t':
-                        delimWidth += (size >> 1)*4;
+                        delimWidth += _glyphs[0].advance * 4;
                         break;
                     case 0:
                         reachedEOF = true;
@@ -1331,7 +1331,7 @@ void Font::getMeasurementInfo(const char* text, const Rectangle& area, unsigned 
                     switch (delimiter)
                     {
                         case ' ':
-                            delimWidth += size >> 1;
+                            delimWidth += _glyphs[0].advance;
                             lineLength++;
                             break;
                         case '\r':
@@ -1348,7 +1348,7 @@ void Font::getMeasurementInfo(const char* text, const Rectangle& area, unsigned 
                             delimWidth = 0;
                             break;
                         case '\t':
-                            delimWidth += (size >> 1)*4;
+                            delimWidth += _glyphs[0].advance * 4;
                             lineLength++;
                             break;
                         case 0:
@@ -1748,10 +1748,10 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigne
         switch (c)
         {
         case ' ':
-            tokenWidth += size >> 1;
+            tokenWidth += _glyphs[0].advance;
             break;
         case '\t':
-            tokenWidth += (size >> 1)*4;
+            tokenWidth += _glyphs[0].advance * 4;
             break;
         default:
             int glyphIndex = c - 32;
@@ -1822,7 +1822,7 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
         switch (delimiter)
         {
             case ' ':
-                *xPos += size >> 1;
+                *xPos += _glyphs[0].advance;
                 (*lineLength)++;
                 if (charIndex)
                 {
@@ -1854,7 +1854,7 @@ int Font::handleDelimiters(const char** token, const unsigned int size, const in
                 }
                 break;
             case '\t':
-                *xPos += (size >> 1)*4;
+                *xPos += _glyphs[0].advance * 4;
                 (*lineLength)++;
                 if (charIndex)
                 {
