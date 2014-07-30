@@ -361,6 +361,8 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
 
             glyphArray[i].index = ascii;
             glyphArray[i].width = advance - GLYPH_PADDING;
+            glyphArray[i].bearingX = slot->metrics.horiBearingX >> 6;
+            glyphArray[i].advance = slot->metrics.horiAdvance >> 6;
 
             // Generate UV coords.
             glyphArray[i].uvCoords[0] = (float)penX / (float)imageWidth;

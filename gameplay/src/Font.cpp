@@ -16,7 +16,7 @@ static std::vector<Font*> __fontCache;
 static Effect* __fontEffect = NULL;
 
 Font::Font() :
-    _format(BITMAP), _style(PLAIN), _size(0), _spacing(0.125f), _glyphs(NULL), _glyphCount(0), _texture(NULL), _batch(NULL), _cutoffParam(NULL)
+    _format(BITMAP), _style(PLAIN), _size(0), _spacing(0.0f), _glyphs(NULL), _glyphCount(0), _texture(NULL), _batch(NULL), _cutoffParam(NULL)
 {
 }
 
@@ -345,7 +345,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
             {
                 Glyph& g = _glyphs[glyphIndex];
 
-                if (xPos + (int)(g.width*scale) > area.x + area.width)
+                if (xPos + (int)(g.advance*scale) > area.x + area.width)
                 {
                     // Truncate this line and go on to the next one.
                     truncated = true;
@@ -358,11 +358,11 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
                     {
                         if (clip)
                         {
-                            _batch->addSprite(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, *clip, &batch->_vertices[batch->_vertexCount]);
+                            _batch->addSprite(xPos + (int)(g.bearingX * scale), yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, *clip, &batch->_vertices[batch->_vertexCount]);
                         }
                         else
                         {
-                            _batch->addSprite(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, &batch->_vertices[batch->_vertexCount]);
+                            _batch->addSprite(xPos + (int)(g.bearingX * scale), yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, &batch->_vertices[batch->_vertexCount]);
                         }
 
                         if (batch->_vertexCount == 0)
@@ -395,7 +395,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
 
                     }
                 }
-                xPos += (int)(g.width)*scale + spacing;
+                xPos += (int)(g.advance)*scale + spacing;
             }
         }
 
@@ -632,8 +632,8 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
                         // TODO: Fix me so that smaller font are much smoother
                         _cutoffParam->setVector2(Vector2(1.0, 1.0));
                     }
-                    _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
-                    xPos += floor(g.width * scale + spacing);
+                    _batch->draw(xPos + (int)(g.bearingX * scale), yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
+                    xPos += floor(g.advance * scale + spacing);
                     break;
                 }
                 break;
@@ -778,7 +778,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             {
                 Glyph& g = _glyphs[glyphIndex];
 
-                if (xPos + (int)(g.width*scale) > area.x + area.width)
+                if (xPos + (int)(g.advance*scale) > area.x + area.width)
                 {
                     // Truncate this line and go on to the next one.
                     truncated = true;
@@ -798,15 +798,15 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                         }
                         if (clip)
                         {
-                            _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, *clip);
+                            _batch->draw(xPos + (int)(g.bearingX * scale), yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, *clip);
                         }
                         else
                         {
-                            _batch->draw(xPos, yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
+                            _batch->draw(xPos + (int)(g.bearingX * scale), yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color);
                         }
                     }
                 }
-                xPos += (int)(g.width)*scale + spacing;
+                xPos += (int)(g.advance)*scale + spacing;
             }
         }
 
@@ -1627,7 +1627,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
             {
                 Glyph& g = _glyphs[glyphIndex];
 
-                if (xPos + (int)(g.width*scale) > area.x + area.width)
+                if (xPos + (int)(g.advance*scale) > area.x + area.width)
                 {
                     // Truncate this line and go on to the next one.
                     truncated = true;
@@ -1645,7 +1645,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
                     return charIndex;
                 }
 
-                xPos += floor(g.width*scale + spacing);
+                xPos += floor(g.advance*scale + spacing);
                 charIndex++;
             }
         }
@@ -1758,7 +1758,7 @@ unsigned int Font::getTokenWidth(const char* token, unsigned int length, unsigne
             if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
             {
                 Glyph& g = _glyphs[glyphIndex];
-                tokenWidth += floor(g.width * scale + spacing);
+                tokenWidth += floor(g.advance * scale + spacing);
             }
             break;
         }

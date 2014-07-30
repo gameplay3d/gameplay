@@ -264,15 +264,14 @@ public:
     float getCharacterSpacing() const;
 
     /**
-     * Sets the fixed character spacing for this font.
+     * Sets the additional character spacing for this font.
      *
-     * Character spacing is the fixed amount of space that is inserted between characters. This is a simplified
-     * type of kerning and does not take adjacent characters into consideration. Character spacing is defined
+     * Character spacing is the additional amount of space that is inserted between characters. Character spacing is defined
      * as a floating point value that is interpreted as a percentage of size used to draw the font. For example,
      * a value of 0.1 would cause a spacing of 10% of the font size to be inserted between adjacent characters.
      * For a font size of 20, this would equate to 2 pixels of extra space between characters.
      *
-     * The default character spacing for fonts is 0.125.
+     * The default additional character spacing for fonts is 0.0.
      *
      * @param spacing New fixed character spacing, expressed as a percentage of font size.
      */
@@ -326,6 +325,16 @@ private:
          * Glyph width (in pixels).
          */
         unsigned int width;
+
+        /**
+         * Glyph left side bearing (in pixels).
+         */
+        int bearingX;
+
+        /**
+         * Glyph horizontal advance (in pixels).
+         */
+        unsigned int advance;
 
         /**
          * Glyph texture coordinates.
