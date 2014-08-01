@@ -556,7 +556,7 @@ void Container::updateBounds()
             for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
                 Control* ctrl = _controls[i];
-                if (ctrl->isVisible() && !ctrl->isWidthPercentage())
+                if (ctrl->isVisible() && !ctrl->isXPercentage() && !ctrl->isWidthPercentage())
                 {
                     float w = ctrl->getWidth();
                     if (!ctrl->isXPercentage())
@@ -576,7 +576,7 @@ void Container::updateBounds()
             for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
                 Control* ctrl = _controls[i];
-                if (ctrl->isVisible() && !ctrl->isHeightPercentage())
+                if (ctrl->isVisible() && !ctrl->isYPercentage() && !ctrl->isHeightPercentage())
                 {
                     float h = ctrl->getHeight();
                     if (!ctrl->isYPercentage())
