@@ -509,6 +509,14 @@ void Control::setVisible(bool visible)
             Form::controlDisabled(this);
 
         setDirty(DIRTY_BOUNDS);
+
+        // force to update parent boundaries when child is hidden
+        Control* parent = _parent;
+        while (parent && (parent->_autoSize != AUTO_SIZE_NONE || static_cast<Container *>(parent)->getLayout()->getType() != Layout::LAYOUT_ABSOLUTE))
+        {
+            parent->setDirty(DIRTY_BOUNDS);
+            parent = parent->_parent;
+        }
     }
 }
 
