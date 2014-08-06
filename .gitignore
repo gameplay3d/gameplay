@@ -8,6 +8,22 @@ ehthumbs.db
 Icon?
 Thumbs.db
 /.metadata
+
+# Xcode noise
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
+xcuserdata
+*.moved-aside
+DerivedData
+
 /169.254.0.1
 /usb
 /ipch
@@ -31,7 +47,6 @@ Thumbs.db
 /gameplay-docs
 /api/html
 /gameplay-tests
-gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 
 /gameplay/Debug
 /gameplay/DebugMem
@@ -50,20 +65,15 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay/android/local.properties
 /gameplay/android/project.properties
 /gameplay/android/obj
-/gameplay.xcworkspace/xcuserdata
-/gameplay/gameplay.xcodeproj/xcuserdata
 
 /tools/gameplay-encoder/Debug
 /tools/gameplay-encoder/Release
-/tools/gameplay-encoder/gameplay-encoder.xcodeproj/xcuserdata
 
 /tools/luagen/Release
 /tools/luagen/Debug
-/tools/luagen/gameplay-luagen.xcodeproj/xcuserdata
 /tools/luagen/doxygen_entrydb_680.tmp
 /tools/luagen/doxygen_objdb_680.tmp
 /tools/luagen/xml
-/tools/luagen/gameplay-luagen.xcodeproj/project.xcworkspace/
 
 
 /samples/browser/Debug
@@ -76,8 +86,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/browser/Device-Coverage
 /samples/browser/Device-Profile
 /samples/browser/Device-Release
-/samples/browser/res/shaders
-/samples/browser/res/ui
 /samples/browser/res/logo_powered_white.png
 /samples/browser/android/src
 /samples/browser/android/assets
@@ -89,7 +97,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/browser/android/local.properties
 /samples/browser/android/proguard-project.txt
 /samples/browser/android/project.properties
-/samples/browser/sample-browser.xcodeproj/xcuserdata
 
 /samples/character/Debug
 /samples/character/DebugMem
@@ -119,7 +126,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/character/android/obj
 /samples/character/android/NUL
 /samples/character/res/gamepad.xcf
-/samples/character/sample-character.xcodeproj/xcuserdata
 
 /samples/lua/Debug
 /samples/lua/DebugMem
@@ -145,7 +151,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/lua/android/proguard-project.txt
 /samples/lua/android/proguard.cfg
 /samples/lua/android/project.properties
-/samples/lua/sample-lua.xcodeproj/xcuserdata
 
 /samples/mesh/Debug
 /samples/mesh/DebugMem
@@ -171,7 +176,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/mesh/android/proguard-project.txt
 /samples/mesh/android/proguard.cfg
 /samples/mesh/android/project.properties
-/samples/mesh/sample-mesh.xcodeproj/xcuserdata
 
 /samples/particles/Debug
 /samples/particles/DebugMem
@@ -199,7 +203,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/particles/android/proguard-project.txt
 /samples/particles/android/proguard.cfg
 /samples/particles/android/project.properties
-/samples/particles/sample-particles.xcodeproj/xcuserdata
 
 /samples/racer/Debug
 /samples/racer/DebugMem
@@ -228,7 +231,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/racer/android/proguard-project.txt
 /samples/racer/android/proguard.cfg
 /samples/racer/android/project.properties
-/samples/racer/sample-racer.xcodeproj/xcuserdata
 
 /samples/spaceship/Debug
 /samples/spaceship/DebugMem
@@ -254,7 +256,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/spaceship/android/proguard.cfg
 /samples/spaceship/android/proguard-project.txt
 /samples/spaceship/android/project.properties
-/samples/spaceship/sample-spaceship.xcodeproj/xcuserdata
 
 /tools/encoder/windows
 /tools/luagen/windows

@@ -152,22 +152,23 @@ public:
      */
     FrameBuffer* bind();
 
-	/**
-	 * Records a screenshot of what is stored on the current FrameBuffer.
-	 *
-	 * @return A screenshot of the current framebuffer's content.
-	 */
-	static Image* createScreenshot();
+    /**
+     * Records a screenshot of what is stored on the current FrameBuffer.
+     *
+     * @param format The format the Image should be in.
+     * @return A screenshot of the current framebuffer's content.
+     */
+    static Image* createScreenshot(Image::Format format = Image::RGBA);
 
-	/**
-	 * Records a screenshot of what is stored on the current FrameBuffer to an Image.
-	 *
-	 * The Image must be the same size as the FrameBuffer, otherwise the operation will fail.
-	 * The Image must be format RGBA.
-	 *
-	 * @param image The Image to write the current framebuffer's content to.
-	 */
-	static void getScreenshot(Image* image);
+    /**
+     * Records a screenshot of what is stored on the current FrameBuffer to an Image.
+     *
+     * The Image must be the same size as the FrameBuffer, otherwise the operation will fail.
+     * The Image must be format RGBA.
+     *
+     * @param image The Image to write the current framebuffer's content to.
+     */
+    static void getScreenshot(Image* image);
 
     /**
      * Binds the default FrameBuffer for rendering to the display.

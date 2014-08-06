@@ -97,6 +97,8 @@ set(GAME_SRC
     src/TextSample.h
     src/TextureSample.cpp
     src/TextureSample.h
+    src/TextureCubeSample.cpp
+    src/TextureCubeSample.h
     src/TriangleSample.cpp
     src/TriangleSample.h
 )
