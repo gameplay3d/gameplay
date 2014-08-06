@@ -169,7 +169,7 @@ void Slider::updateValue(int x, int y)
     const Rectangle& maxCapRegion = _maxImage->getRegion();
     const Rectangle& markerRegion = _markerImage->getRegion();
 
-    float markerPosition = x / (_viewportBounds.width - markerRegion.width);
+    float markerPosition = (x - markerRegion.width * 0.5f) / (_viewportBounds.width - markerRegion.width);
             
     if (markerPosition > 1.0f)
     {
