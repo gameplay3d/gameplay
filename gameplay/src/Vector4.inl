@@ -63,10 +63,7 @@ inline bool Vector4::operator<(const Vector4& v) const
         {
             if (z == v.z)
             {
-                if (w == v.w)
-                {
-                    return w < v.w;
-                }
+                return w < v.w;
             }
             return z < v.z;
         }
