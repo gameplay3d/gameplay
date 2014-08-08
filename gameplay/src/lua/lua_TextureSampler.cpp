@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "lua_TextureFilter.h"
 #include "lua_TextureFormat.h"
+#include "lua_TextureType.h"
 #include "lua_TextureWrap.h"
 
 namespace gameplay
@@ -328,9 +329,35 @@ int lua_TextureSampler_setWrapMode(lua_State* state)
             lua_error(state);
             break;
         }
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 4) == LUA_TSTRING || lua_type(state, 4) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Texture::Wrap param1 = (Texture::Wrap)lua_enumFromString_TextureWrap(luaL_checkstring(state, 2));
+
+                // Get parameter 2 off the stack.
+                Texture::Wrap param2 = (Texture::Wrap)lua_enumFromString_TextureWrap(luaL_checkstring(state, 3));
+
+                // Get parameter 3 off the stack.
+                Texture::Wrap param3 = (Texture::Wrap)lua_enumFromString_TextureWrap(luaL_checkstring(state, 4));
+
+                Texture::Sampler* instance = getInstance(state);
+                instance->setWrapMode(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TextureSampler_setWrapMode - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
             lua_error(state);
             break;
         }

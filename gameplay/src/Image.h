@@ -20,8 +20,8 @@ public:
      */
     enum Format
     {
-        RGB,
-        RGBA
+        RGB  = GL_RGB,
+        RGBA = GL_RGBA
     };
 
     /**

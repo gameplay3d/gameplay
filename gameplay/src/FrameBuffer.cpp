@@ -155,6 +155,21 @@ unsigned int FrameBuffer::getMaxRenderTargets()
 
 void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 {
+    GP_ASSERT(!target || (target->getTexture() && target->getTexture()->getType() == Texture::TEXTURE_2D));
+
+    setRenderTarget(target, index, GL_TEXTURE_2D);
+}
+
+void FrameBuffer::setRenderTarget(RenderTarget* target, Texture::CubeFace face, unsigned int index)
+{
+    GL_ASSERT(face >= Texture::POS_X && face <= Texture::NEG_Z);
+    GP_ASSERT(!target || (target->getTexture() && target->getTexture()->getType() == Texture::TEXTURE_CUBE));
+
+    setRenderTarget(target, index, GL_TEXTURE_CUBE_MAP_POSITIVE_X + face);
+}
+
+void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index, GLenum textureTarget)
+{
     GP_ASSERT(index < _maxRenderTargets);
     GP_ASSERT(_renderTargets);
 
@@ -173,17 +188,16 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 
     if (target)
     {
-        GP_ASSERT( _renderTargets[index]->getTexture() );
-
         ++_renderTargetCount;
 
         // This FrameBuffer now references the RenderTarget.
         target->addRef();
 
         // Now set this target as the color attachment corresponding to index.
-        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
+        GL_ASSERT(glBindFramebuffer(GL_FRAMEBUFFER, _handle));
+        Texture* texture = _renderTargets[index]->getTexture();
         GLenum attachment = GL_COLOR_ATTACHMENT0 + index;
-        GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, _renderTargets[index]->getTexture()->getHandle(), 0) );
+        GL_ASSERT(glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, texture->getHandle(), 0));
         GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
         {
@@ -191,7 +205,7 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
         }
 
         // Restore the FBO binding
-        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _currentFrameBuffer->_handle) );
+        GL_ASSERT(glBindFramebuffer(GL_FRAMEBUFFER, _currentFrameBuffer->_handle));
     }
 }
 
@@ -271,22 +285,21 @@ FrameBuffer* FrameBuffer::bind()
 
 void FrameBuffer::getScreenshot(Image* image)
 {
-	GP_ASSERT(image);
-	GP_ASSERT(image->getFormat() == Image::RGBA);
+    GP_ASSERT( image );
 
-	unsigned int width = _currentFrameBuffer->getWidth();
-	unsigned int height = _currentFrameBuffer->getHeight();
+    unsigned int width = _currentFrameBuffer->getWidth();
+    unsigned int height = _currentFrameBuffer->getHeight();
 
-	if (image->getWidth() == width && image->getHeight() == height)
-		GL_ASSERT( glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, image->getData()) );
+    if (image->getWidth() == width && image->getHeight() == height)
+        GL_ASSERT( glReadPixels(0, 0, width, height, (GLenum)image->getFormat(), GL_UNSIGNED_BYTE, image->getData()) );
 }
 
-Image* FrameBuffer::createScreenshot()
+Image* FrameBuffer::createScreenshot(Image::Format format)
 {
-	Image* screenshot = Image::create(_currentFrameBuffer->getWidth(), _currentFrameBuffer->getHeight(), Image::RGBA, NULL);
-	getScreenshot(screenshot);
+    Image* screenshot = Image::create(_currentFrameBuffer->getWidth(), _currentFrameBuffer->getHeight(), format, NULL);
+    getScreenshot(screenshot);
 
-	return screenshot;
+    return screenshot;
 }
 
 FrameBuffer* FrameBuffer::bindDefault()

@@ -588,6 +588,10 @@
 		6290E04C18223DDD00A28FB9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6290E04B18223DDD00A28FB9 /* GameKit.framework */; };
 		8BA1B8BF197C3212009FF517 /* lua_ContainerDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BA1B8BD197C3212009FF517 /* lua_ContainerDirection.cpp */; };
 		8BA1B8C0197C3212009FF517 /* lua_ContainerDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BA1B8BD197C3212009FF517 /* lua_ContainerDirection.cpp */; };
+		8C974D86193F709700FF9730 /* lua_TextureCubeFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C974D82193F709700FF9730 /* lua_TextureCubeFace.cpp */; };
+		8C974D87193F709700FF9730 /* lua_TextureCubeFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C974D82193F709700FF9730 /* lua_TextureCubeFace.cpp */; };
+		8C974D88193F709700FF9730 /* lua_TextureType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C974D84193F709700FF9730 /* lua_TextureType.cpp */; };
+		8C974D89193F709700FF9730 /* lua_TextureType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C974D84193F709700FF9730 /* lua_TextureType.cpp */; };
 		BD2636E516CF5B7400CFE15F /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */; };
 		BD2636E616CF5B7400CFE15F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636E016CF5B7400CFE15F /* Foundation.framework */; };
 		BD2636E716CF5B7400CFE15F /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636E116CF5B7400CFE15F /* OpenAL.framework */; };
@@ -1219,6 +1223,10 @@
 		6290E04B18223DDD00A28FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		8BA1B8BD197C3212009FF517 /* lua_ContainerDirection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_ContainerDirection.cpp; sourceTree = "<group>"; };
 		8BA1B8BE197C3212009FF517 /* lua_ContainerDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_ContainerDirection.h; sourceTree = "<group>"; };
+		8C974D82193F709700FF9730 /* lua_TextureCubeFace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_TextureCubeFace.cpp; sourceTree = "<group>"; };
+		8C974D83193F709700FF9730 /* lua_TextureCubeFace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_TextureCubeFace.h; sourceTree = "<group>"; };
+		8C974D84193F709700FF9730 /* lua_TextureType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_TextureType.cpp; sourceTree = "<group>"; };
+		8C974D85193F709700FF9730 /* lua_TextureType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_TextureType.h; sourceTree = "<group>"; };
 		BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E016CF5B7400CFE15F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E116CF5B7400CFE15F /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
@@ -1571,6 +1579,10 @@
 				420BBBDB1817416E00C7B720 /* lua_TextBoxInputMode.h */,
 				420BBBDC1817416E00C7B720 /* lua_Texture.cpp */,
 				420BBBDD1817416E00C7B720 /* lua_Texture.h */,
+				8C974D82193F709700FF9730 /* lua_TextureCubeFace.cpp */,
+				8C974D83193F709700FF9730 /* lua_TextureCubeFace.h */,
+				8C974D84193F709700FF9730 /* lua_TextureType.cpp */,
+				8C974D85193F709700FF9730 /* lua_TextureType.h */,
 				420BBBDE1817416E00C7B720 /* lua_TextureFilter.cpp */,
 				420BBBDF1817416E00C7B720 /* lua_TextureFilter.h */,
 				420BBBE01817416E00C7B720 /* lua_TextureFormat.cpp */,
@@ -2107,6 +2119,7 @@
 				42CC55941809A4EF00AAD8AD /* AnimationValue.cpp in Sources */,
 				42CC5A0E1809A4EF00AAD8AD /* Vector3.cpp in Sources */,
 				420BBCC61817416F00C7B720 /* lua_FontFormat.cpp in Sources */,
+				8C974D88193F709700FF9730 /* lua_TextureType.cpp in Sources */,
 				42CC55BA1809A4EF00AAD8AD /* Camera.cpp in Sources */,
 				42CC59201809A4EF00AAD8AD /* Model.cpp in Sources */,
 				420BBC161817416F00C7B720 /* lua_AIAgent.cpp in Sources */,
@@ -2233,6 +2246,7 @@
 				420BBC0E1817416F00C7B720 /* ControlFactory.cpp in Sources */,
 				420BBD021817416F00C7B720 /* lua_Global.cpp in Sources */,
 				42CC55741809A4EF00AAD8AD /* AIController.cpp in Sources */,
+				8C974D86193F709700FF9730 /* lua_TextureCubeFace.cpp in Sources */,
 				420BBC9A1817416F00C7B720 /* lua_ControlListener.cpp in Sources */,
 				42CC59361809A4EF00AAD8AD /* PhysicsCollisionObject.cpp in Sources */,
 				420BBCFA1817416F00C7B720 /* lua_Gesture.cpp in Sources */,
@@ -2402,6 +2416,7 @@
 				42CC55951809A4EF00AAD8AD /* AnimationValue.cpp in Sources */,
 				420BBCC71817416F00C7B720 /* lua_FontFormat.cpp in Sources */,
 				42CC5A0F1809A4EF00AAD8AD /* Vector3.cpp in Sources */,
+				8C974D89193F709700FF9730 /* lua_TextureType.cpp in Sources */,
 				42CC55BB1809A4EF00AAD8AD /* Camera.cpp in Sources */,
 				420BBC171817416F00C7B720 /* lua_AIAgent.cpp in Sources */,
 				42CC59211809A4EF00AAD8AD /* Model.cpp in Sources */,
@@ -2527,6 +2542,7 @@
 				420BBC0F1817416F00C7B720 /* ControlFactory.cpp in Sources */,
 				420BBD031817416F00C7B720 /* lua_Global.cpp in Sources */,
 				42CC55751809A4EF00AAD8AD /* AIController.cpp in Sources */,
+				8C974D87193F709700FF9730 /* lua_TextureCubeFace.cpp in Sources */,
 				420BBC9B1817416F00C7B720 /* lua_ControlListener.cpp in Sources */,
 				42CC59371809A4EF00AAD8AD /* PhysicsCollisionObject.cpp in Sources */,
 				420BBCFB1817416F00C7B720 /* lua_Gesture.cpp in Sources */,

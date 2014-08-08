@@ -13,6 +13,7 @@ int lua_Texture_getHandle(lua_State* state);
 int lua_Texture_getHeight(lua_State* state);
 int lua_Texture_getPath(lua_State* state);
 int lua_Texture_getRefCount(lua_State* state);
+int lua_Texture_getType(lua_State* state);
 int lua_Texture_getWidth(lua_State* state);
 int lua_Texture_isCompressed(lua_State* state);
 int lua_Texture_isMipmapped(lua_State* state);

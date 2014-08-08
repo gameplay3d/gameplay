@@ -110,7 +110,7 @@ Image* Image::create(const char* path)
 Image* Image::create(unsigned int width, unsigned int height, Image::Format format, unsigned char* data)
 {
 	GP_ASSERT(width > 0 && height > 0);
-	GP_ASSERT(format >= RGB && format <= RGBA);
+	GP_ASSERT(format == RGB || format == RGBA);
 
 	unsigned int pixelSize = 0;
 	switch(format)

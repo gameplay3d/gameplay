@@ -217,9 +217,11 @@
     <ClCompile Include="src\lua\lua_TextBox.cpp" />
     <ClCompile Include="src\lua\lua_TextBoxInputMode.cpp" />
     <ClCompile Include="src\lua\lua_Texture.cpp" />
+    <ClCompile Include="src\lua\lua_TextureCubeFace.cpp" />
     <ClCompile Include="src\lua\lua_TextureFilter.cpp" />
     <ClCompile Include="src\lua\lua_TextureFormat.cpp" />
     <ClCompile Include="src\lua\lua_TextureSampler.cpp" />
+    <ClCompile Include="src\lua\lua_TextureType.cpp" />
     <ClCompile Include="src\lua\lua_TextureWrap.cpp" />
     <ClCompile Include="src\lua\lua_Theme.cpp" />
     <ClCompile Include="src\lua\lua_ThemeSideRegions.cpp" />
@@ -505,9 +507,11 @@
     <ClInclude Include="src\lua\lua_TextBox.h" />
     <ClInclude Include="src\lua\lua_TextBoxInputMode.h" />
     <ClInclude Include="src\lua\lua_Texture.h" />
+    <ClInclude Include="src\lua\lua_TextureCubeFace.h" />
     <ClInclude Include="src\lua\lua_TextureFilter.h" />
     <ClInclude Include="src\lua\lua_TextureFormat.h" />
     <ClInclude Include="src\lua\lua_TextureSampler.h" />
+    <ClInclude Include="src\lua\lua_TextureType.h" />
     <ClInclude Include="src\lua\lua_TextureWrap.h" />
     <ClInclude Include="src\lua\lua_Theme.h" />
     <ClInclude Include="src\lua\lua_ThemeSideRegions.h" />
