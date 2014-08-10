@@ -18,6 +18,9 @@ precision mediump float;
 #if (DIRECTIONAL_LIGHT_COUNT > 0) || (POINT_LIGHT_COUNT > 0) || (SPOT_LIGHT_COUNT > 0)
 #define LIGHTING
 #endif
+#if defined(CUBEMAP_REFLECTION)
+#define CUBEMAP
+#endif
 
 ///////////////////////////////////////////////////////////
 // Uniforms
@@ -55,6 +58,14 @@ uniform float u_specularExponent;
 
 #endif
 
+#if defined(CUBEMAP)
+uniform samplerCube u_cubemapTexture;
+#if !defined(CUBEMAP_MIX)
+uniform float u_cubemapMix;
+#define CUBEMAP_MIX u_cubemapMix;
+#endif
+#endif
+
 #if defined(MODULATE_COLOR)
 uniform vec4 u_modulateColor;
 #endif
@@ -73,9 +84,11 @@ vec4 _baseColor;
 varying vec3 v_color;
 #endif
 
-#if defined(LIGHTING)
+#if defined(LIGHTING) || defined(CUBEMAP)
 
+#if defined(LIGHTING)
 varying vec3 v_normalVector;
+#endif
 
 #if (POINT_LIGHT_COUNT > 0)
 varying vec3 v_vertexToPointLightDirection[POINT_LIGHT_COUNT];
@@ -89,6 +102,11 @@ varying vec3 v_vertexToSpotLightDirection[SPOT_LIGHT_COUNT];
 varying vec3 v_cameraDirection; 
 #endif
 
+#if defined(CUBEMAP)
+varying vec3 v_normalWorldVector;
+varying vec3 v_cameraWorldDirection;
+#endif
+
 #include "lighting.frag"
 
 #endif
@@ -96,7 +114,6 @@ varying vec3 v_cameraDirection;
 
 void main()
 {
-    
     #if defined(LIGHTING)
 
     #if defined(VERTEX_COLOR)
@@ -123,6 +140,14 @@ void main()
 	vec4 lightColor = texture2D(u_lightmapTexture, v_texCoord1);
 	gl_FragColor.rgb *= lightColor.rgb;
 	#endif
+
+    #if defined(CUBEMAP)
+    vec3 cubemapNormal = normalize(v_normalWorldVector);
+    vec3 cubemapCameraDirection = normalize(v_cameraWorldDirection);
+    vec3 cubemapDirection = reflect(-cubemapCameraDirection, cubemapNormal);
+    
+    gl_FragColor = mix(gl_FragColor, textureCube(u_cubemapTexture, cubemapDirection), CUBEMAP_MIX);
+    #endif
 
 	#if defined(MODULATE_COLOR)
     gl_FragColor *= u_modulateColor;

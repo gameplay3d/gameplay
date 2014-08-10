@@ -2,7 +2,7 @@
 vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, float attenuation)
 {
     float diffuse = max(dot(normalVector, lightDirection), 0.0);
-     vec3 diffuseColor = lightColor * _baseColor.rgb * diffuse * attenuation;
+    vec3 diffuseColor = lightColor * _baseColor.rgb * diffuse * attenuation;
 
     #if defined(SPECULAR)
 
@@ -26,7 +26,7 @@ vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, fl
     #endif
 }
 
-vec3 getLitPixel()
+vec3 getNormal()
 {
     #if defined(BUMPED)
     
@@ -37,6 +37,13 @@ vec3 getLitPixel()
     vec3 normalVector = normalize(v_normalVector);
     
     #endif
+
+    return normalVector;
+}
+
+vec3 getLitPixel()
+{
+    vec3 normalVector = getNormal();
     
     vec3 ambientColor = _baseColor.rgb * u_ambientColor;
     vec3 combinedColor = ambientColor;
