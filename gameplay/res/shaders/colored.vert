@@ -10,7 +10,7 @@
 #if (DIRECTIONAL_LIGHT_COUNT > 0) || (POINT_LIGHT_COUNT > 0) || (SPOT_LIGHT_COUNT > 0)
 #define LIGHTING
 #endif
-#if defined(CUBEMAP_REFLECTION)
+#if defined(CUBEMAP_REFLECTION) || defined(CUBEMAP_REFRACTION)
 #define CUBEMAP
 #endif
 

@@ -18,7 +18,7 @@ precision mediump float;
 #if (DIRECTIONAL_LIGHT_COUNT > 0) || (POINT_LIGHT_COUNT > 0) || (SPOT_LIGHT_COUNT > 0)
 #define LIGHTING
 #endif
-#if defined(CUBEMAP_REFLECTION)
+#if defined(CUBEMAP_REFLECTION) || defined(CUBEMAP_REFRACTION)
 #define CUBEMAP
 #endif
 
@@ -60,10 +60,14 @@ uniform float u_specularExponent;
 
 #if defined(CUBEMAP)
 uniform samplerCube u_cubemapTexture;
-#if !defined(CUBEMAP_MIX)
-uniform float u_cubemapMix;
-#define CUBEMAP_MIX u_cubemapMix;
+
+#if defined(CUBEMAP_REFRACTION)
+uniform float u_cubemapRefract;
 #endif
+#if defined(CUBEMAP_MIX)
+uniform float u_cubemapMix;
+#endif
+
 #endif
 
 #if defined(MODULATE_COLOR)
@@ -114,13 +118,22 @@ varying vec3 v_cameraWorldDirection;
 
 void main()
 {
+    #if defined(CUBEMAP)
+    vec3 cubemapNormal = normalize(v_normalWorldVector);
+    #endif
+
     #if defined(LIGHTING)
 
     #if defined(VERTEX_COLOR)
 	_baseColor.rgb = v_color;
+    _baseColor.a = 1.0;
     #else
     _baseColor = u_diffuseColor;
 	#endif
+
+    #if defined(CUBEMAP)
+    _baseColor = applyCubemapColor(cubemapNormal, _baseColor);
+    #endif
     
     gl_FragColor.a = _baseColor.a;
     gl_FragColor.rgb = getLitPixel();
@@ -133,6 +146,10 @@ void main()
     #else
     gl_FragColor = u_diffuseColor;
     #endif
+
+    #if defined(CUBEMAP)
+    gl_FragColor = applyCubemapColor(cubemapNormal, gl_FragColor);
+    #endif
     
     #endif
 
@@ -140,14 +157,6 @@ void main()
 	vec4 lightColor = texture2D(u_lightmapTexture, v_texCoord1);
 	gl_FragColor.rgb *= lightColor.rgb;
 	#endif
-
-    #if defined(CUBEMAP)
-    vec3 cubemapNormal = normalize(v_normalWorldVector);
-    vec3 cubemapCameraDirection = normalize(v_cameraWorldDirection);
-    vec3 cubemapDirection = reflect(-cubemapCameraDirection, cubemapNormal);
-    
-    gl_FragColor = mix(gl_FragColor, textureCube(u_cubemapTexture, cubemapDirection), CUBEMAP_MIX);
-    #endif
 
 	#if defined(MODULATE_COLOR)
     gl_FragColor *= u_modulateColor;

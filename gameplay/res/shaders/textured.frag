@@ -18,7 +18,7 @@ precision mediump float;
 #if (DIRECTIONAL_LIGHT_COUNT > 0) || (POINT_LIGHT_COUNT > 0) || (SPOT_LIGHT_COUNT > 0)
 #define LIGHTING
 #endif
-#if defined(CUBEMAP_REFLECTION)
+#if defined(CUBEMAP_REFLECTION) || defined(CUBEMAP_REFRACTION)
 #define CUBEMAP
 #endif
 
@@ -69,10 +69,14 @@ uniform float u_specularExponent;
 
 #if defined(CUBEMAP)
 uniform samplerCube u_cubemapTexture;
-#if !defined(CUBEMAP_MIX)
-uniform float u_cubemapMix;
-#define CUBEMAP_MIX u_cubemapMix;
+
+#if defined(CUBEMAP_REFRACTION)
+uniform float u_cubemapRefract;
 #endif
+#if defined(CUBEMAP_MIX)
+uniform float u_cubemapMix;
+#endif
+
 #endif
 
 #if defined(MODULATE_COLOR)
@@ -135,7 +139,25 @@ varying vec3 v_cameraWorldDirection;
 
 void main()
 {
+    #if defined(CUBEMAP)
+    #if defined(BUMPED)
+    vec3 cubemapNormal = getNormal();
+    #else
+    vec3 cubemapNormal = normalize(v_normalWorldVector);
+    #endif
+    #endif
+
+    #if defined(CUBEMAP)
+
+    #if defined(CUBEMAP_SOURCE)
+    _baseColor = combineCubemapColor(texture2D(u_diffuseTexture, v_texCoord).rgb, getCubemapColor(cubemapNormal));
+    #else
+    _baseColor = applyCubemapColor(cubemapNormal, texture2D(u_diffuseTexture, v_texCoord));
+    #endif
+
+    #else
     _baseColor = texture2D(u_diffuseTexture, v_texCoord);
+    #endif
  
     gl_FragColor.a = _baseColor.a;
 
@@ -145,7 +167,6 @@ void main()
     #endif
 
     #if defined(LIGHTING)
-
     gl_FragColor.rgb = getLitPixel();
     #else
     gl_FragColor.rgb = _baseColor.rgb;
@@ -155,19 +176,6 @@ void main()
 	vec4 lightColor = texture2D(u_lightmapTexture, v_texCoord1);
 	gl_FragColor.rgb *= lightColor.rgb;
 	#endif
-
-    #if defined(CUBEMAP)
-    #if defined(BUMPED)
-    vec3 cubemapNormal = getNormal();
-    #else
-    vec3 cubemapNormal = normalize(v_normalWorldVector);
-    #endif
-
-    vec3 cubemapCameraDirection = normalize(v_cameraWorldDirection);
-    vec3 cubemapDirection = reflect(-cubemapCameraDirection, cubemapNormal);
-    
-    gl_FragColor = mix(gl_FragColor, textureCube(u_cubemapTexture, cubemapDirection), CUBEMAP_MIX);
-    #endif
 
     #if defined(MODULATE_COLOR)
     gl_FragColor *= u_modulateColor;

@@ -97,3 +97,38 @@ vec3 getLitPixel()
 
     return combinedColor;
 }
+
+#if defined(CUBEMAP)
+
+vec4 getCubemapColor(vec3 normal)
+{
+    vec3 cubemapCameraDirection = normalize(v_cameraWorldDirection);
+
+    #if defined(CUBEMAP_REFLECTION)
+    vec3 cubemapDirection = reflect(-cubemapCameraDirection, normal);
+    #elif defined(CUBEMAP_REFRACTION)
+    vec3 cubemapDirection = refract(cubemapCameraDirection, normal, u_cubemapRefract);
+    #else
+    vec3 cubemapDirection = cubemapCameraDirection;
+    #endif
+
+    return textureCube(u_cubemapTexture, cubemapDirection);
+}
+
+vec4 combineCubemapColor(vec3 cubeColor, vec4 baseColor)
+{
+    #if defined(CUBEMAP_MIX)
+    baseColor.rgb = mix(baseColor.rgb, cubeColor, u_cubemapMix);
+    #else
+    baseColor.rgb *= cubeColor.rgb;
+    #endif
+
+    return baseColor;
+}
+
+vec4 applyCubemapColor(vec3 normal, vec4 baseColor)
+{
+    return combineCubemapColor(getCubemapColor(normal).rgb, baseColor);
+}
+
+#endif
