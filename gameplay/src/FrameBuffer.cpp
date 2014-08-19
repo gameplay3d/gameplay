@@ -157,6 +157,10 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 {
     GP_ASSERT(!target || (target->getTexture() && target->getTexture()->getType() == Texture::TEXTURE_2D));
 
+	// No change
+	if (_renderTargets[index] == target)
+		return;
+
     setRenderTarget(target, index, GL_TEXTURE_2D);
 }
 
@@ -172,10 +176,6 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index, GLen
 {
     GP_ASSERT(index < _maxRenderTargets);
     GP_ASSERT(_renderTargets);
-
-    // No change
-    if (_renderTargets[index] == target)
-        return;
 
     // Release our reference to the current RenderTarget at this index.
     if (_renderTargets[index])

@@ -29,12 +29,15 @@ protected:
 
 private:
 
-    bool drawScene(Node* node);
+    bool drawScene(Node* node, Node* ignore);
+    Material* setCubemapUnlitMaterial(Model* model, Node* camera);
 
     Font* _font;
     Scene* _scene;
     float _zOffset;
     std::list<Font::Text*> _text;
+    FrameBuffer* _fBuffer;
+    RenderTarget* _rTarget;
 };
 
 #endif

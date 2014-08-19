@@ -1,4 +1,6 @@
 
+#if defined(LIGHTING)
+
 vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, float attenuation)
 {
     float diffuse = max(dot(normalVector, lightDirection), 0.0);
@@ -97,6 +99,8 @@ vec3 getLitPixel()
 
     return combinedColor;
 }
+
+#endif
 
 #if defined(CUBEMAP)
 

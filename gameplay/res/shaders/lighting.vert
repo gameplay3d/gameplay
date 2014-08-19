@@ -40,7 +40,7 @@ void applyLight(vec4 position, mat3 tangentSpaceTransformMatrix)
 #if defined(CUBEMAP)
 void applyCubemap(vec4 position, mat3 tangentWorldSpaceTransformMatrix)
 {
-    v_cameraWorldDirection = tangentWorldSpaceTransformMatrix * (u_cameraWorldPosition - (u_worldMatrix - position).xyz);
+    v_cameraWorldDirection = tangentWorldSpaceTransformMatrix * (u_cameraWorldPosition - (u_worldMatrix * position).xyz);
 }
 #endif
 
@@ -71,7 +71,7 @@ void applyLight(vec4 position)
 	v_cameraDirection = u_cameraPosition - positionWorldViewSpace.xyz;
     #endif
     #if defined(CUBEMAP)
-    v_cameraWorldDirection = u_cameraWorldPosition - (u_worldMatrix - position).xyz;
+    v_cameraWorldDirection = u_cameraWorldPosition - (u_worldMatrix * position).xyz;
     #endif
 }
 
