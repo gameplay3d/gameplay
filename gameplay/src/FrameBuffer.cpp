@@ -157,9 +157,9 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 {
     GP_ASSERT(!target || (target->getTexture() && target->getTexture()->getType() == Texture::TEXTURE_2D));
 
-	// No change
-	if (_renderTargets[index] == target)
-		return;
+    // No change
+    if (_renderTargets[index] == target)
+        return;
 
     setRenderTarget(target, index, GL_TEXTURE_2D);
 }
@@ -194,10 +194,9 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index, GLen
         target->addRef();
 
         // Now set this target as the color attachment corresponding to index.
-        GL_ASSERT(glBindFramebuffer(GL_FRAMEBUFFER, _handle));
-        Texture* texture = _renderTargets[index]->getTexture();
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
         GLenum attachment = GL_COLOR_ATTACHMENT0 + index;
-        GL_ASSERT(glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, texture->getHandle(), 0));
+        GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0) );
         GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
         {
@@ -205,7 +204,7 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index, GLen
         }
 
         // Restore the FBO binding
-        GL_ASSERT(glBindFramebuffer(GL_FRAMEBUFFER, _currentFrameBuffer->_handle));
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _currentFrameBuffer->_handle) );
     }
 }
 

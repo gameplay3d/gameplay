@@ -31,6 +31,7 @@ void luaRegister_Texture()
         {"isCompressed", lua_Texture_isCompressed},
         {"isMipmapped", lua_Texture_isMipmapped},
         {"release", lua_Texture_release},
+        {"setData", lua_Texture_setData},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -501,6 +502,42 @@ int lua_Texture_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Texture_setData(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
+            {
+                // Get parameter 1 off the stack.
+                gameplay::ScriptUtil::LuaArray<unsigned char> param1 = gameplay::ScriptUtil::getUnsignedCharPointer(2);
+
+                Texture* instance = getInstance(state);
+                instance->setData(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Texture_setData - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
