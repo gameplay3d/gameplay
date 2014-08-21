@@ -54,7 +54,9 @@ ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlendin
     GP_ASSERT(texture->getWidth());
     GP_ASSERT(texture->getHeight());
 
-    return ParticleEmitter::create(texture, textureBlending, particleCountMax);
+    ParticleEmitter* emitter =  ParticleEmitter::create(texture, textureBlending, particleCountMax);
+    SAFE_RELEASE(texture);
+    return emitter;
 }
 
 ParticleEmitter* ParticleEmitter::create(Texture* texture, TextureBlending textureBlending,  unsigned int particleCountMax)
