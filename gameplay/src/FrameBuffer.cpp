@@ -166,7 +166,7 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 
 void FrameBuffer::setRenderTarget(RenderTarget* target, Texture::CubeFace face, unsigned int index)
 {
-    GL_ASSERT(face >= Texture::POS_X && face <= Texture::NEG_Z);
+    GL_ASSERT(face >= Texture::POSITIVE_X && face <= Texture::NEGATIVE_Z);
     GP_ASSERT(!target || (target->getTexture() && target->getTexture()->getType() == Texture::TEXTURE_CUBE));
 
     setRenderTarget(target, index, GL_TEXTURE_CUBE_MAP_POSITIVE_X + face);
@@ -289,8 +289,10 @@ void FrameBuffer::getScreenshot(Image* image)
     unsigned int width = _currentFrameBuffer->getWidth();
     unsigned int height = _currentFrameBuffer->getHeight();
 
-    if (image->getWidth() == width && image->getHeight() == height)
-        GL_ASSERT( glReadPixels(0, 0, width, height, (GLenum)image->getFormat(), GL_UNSIGNED_BYTE, image->getData()) );
+	if (image->getWidth() == width && image->getHeight() == height) {
+		GLenum format = image->getFormat() == Image::RGB ? GL_RGB : GL_RGBA;
+        GL_ASSERT( glReadPixels(0, 0, width, height, format, GL_UNSIGNED_BYTE, image->getData()) );
+	}
 }
 
 Image* FrameBuffer::createScreenshot(Image::Format format)

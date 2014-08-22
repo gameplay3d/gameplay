@@ -326,24 +326,24 @@ void TextureSample::render(float elapsedTime)
         torusCamera->setRotation(Quaternion::identity());
         switch (face)
         {
-            case Texture::POS_X:
+            case Texture::POSITIVE_X:
                 torusCamera->rotateY(MATH_DEG_TO_RAD(90));
                 torusCamera->rotateX(MATH_DEG_TO_RAD(180));
                 break;
-            case Texture::NEG_X:
+            case Texture::NEGATIVE_X:
                 torusCamera->rotateY(MATH_DEG_TO_RAD(-90));
                 torusCamera->rotateX(MATH_DEG_TO_RAD(180));
                 break;
-            case Texture::POS_Y:
+            case Texture::POSITIVE_Y:
                 torusCamera->rotateX(MATH_DEG_TO_RAD(90));
                 break;
-            case Texture::NEG_Y:
+            case Texture::NEGATIVE_Y:
                 torusCamera->rotateX(MATH_DEG_TO_RAD(-90));
                 break;
-            case Texture::POS_Z:
+            case Texture::POSITIVE_Z:
                 torusCamera->rotateX(MATH_DEG_TO_RAD(180));
                 break;
-            case Texture::NEG_Z:
+            case Texture::NEGATIVE_Z:
                 torusCamera->rotateY(MATH_DEG_TO_RAD(180));
                 torusCamera->rotateX(MATH_DEG_TO_RAD(180));
                 break;

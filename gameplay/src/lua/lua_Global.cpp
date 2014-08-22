@@ -865,12 +865,12 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Texture");
-        gameplay::ScriptUtil::registerConstantString("POS_X", "POS_X", scopePath);
-        gameplay::ScriptUtil::registerConstantString("NEG_X", "NEG_X", scopePath);
-        gameplay::ScriptUtil::registerConstantString("POS_Y", "POS_Y", scopePath);
-        gameplay::ScriptUtil::registerConstantString("NEG_Y", "NEG_Y", scopePath);
-        gameplay::ScriptUtil::registerConstantString("POS_Z", "POS_Z", scopePath);
-        gameplay::ScriptUtil::registerConstantString("NEG_Z", "NEG_Z", scopePath);
+        gameplay::ScriptUtil::registerConstantString("POSITIVE_X", "POSITIVE_X", scopePath);
+        gameplay::ScriptUtil::registerConstantString("NEGATIVE_X", "NEGATIVE_X", scopePath);
+        gameplay::ScriptUtil::registerConstantString("POSITIVE_Y", "POSITIVE_Y", scopePath);
+        gameplay::ScriptUtil::registerConstantString("NEGATIVE_Y", "NEGATIVE_Y", scopePath);
+        gameplay::ScriptUtil::registerConstantString("POSITIVE_Z", "POSITIVE_Z", scopePath);
+        gameplay::ScriptUtil::registerConstantString("NEGATIVE_Z", "NEGATIVE_Z", scopePath);
     }
 
     // Register enumeration Texture::Filter.

@@ -6,44 +6,44 @@ namespace gameplay
 
 static const char* enumStringEmpty = "";
 
-static const char* luaEnumString_TextureCubeFace_POS_X = "POS_X";
-static const char* luaEnumString_TextureCubeFace_NEG_X = "NEG_X";
-static const char* luaEnumString_TextureCubeFace_POS_Y = "POS_Y";
-static const char* luaEnumString_TextureCubeFace_NEG_Y = "NEG_Y";
-static const char* luaEnumString_TextureCubeFace_POS_Z = "POS_Z";
-static const char* luaEnumString_TextureCubeFace_NEG_Z = "NEG_Z";
+static const char* luaEnumString_TextureCubeFace_POSITIVE_X = "POSITIVE_X";
+static const char* luaEnumString_TextureCubeFace_NEGATIVE_X = "NEGATIVE_X";
+static const char* luaEnumString_TextureCubeFace_POSITIVE_Y = "POSITIVE_Y";
+static const char* luaEnumString_TextureCubeFace_NEGATIVE_Y = "NEGATIVE_Y";
+static const char* luaEnumString_TextureCubeFace_POSITIVE_Z = "POSITIVE_Z";
+static const char* luaEnumString_TextureCubeFace_NEGATIVE_Z = "NEGATIVE_Z";
 
 Texture::CubeFace lua_enumFromString_TextureCubeFace(const char* s)
 {
-    if (strcmp(s, luaEnumString_TextureCubeFace_POS_X) == 0)
-        return Texture::POS_X;
-    if (strcmp(s, luaEnumString_TextureCubeFace_NEG_X) == 0)
-        return Texture::NEG_X;
-    if (strcmp(s, luaEnumString_TextureCubeFace_POS_Y) == 0)
-        return Texture::POS_Y;
-    if (strcmp(s, luaEnumString_TextureCubeFace_NEG_Y) == 0)
-        return Texture::NEG_Y;
-    if (strcmp(s, luaEnumString_TextureCubeFace_POS_Z) == 0)
-        return Texture::POS_Z;
-    if (strcmp(s, luaEnumString_TextureCubeFace_NEG_Z) == 0)
-        return Texture::NEG_Z;
-    return Texture::POS_X;
+    if (strcmp(s, luaEnumString_TextureCubeFace_POSITIVE_X) == 0)
+        return Texture::POSITIVE_X;
+    if (strcmp(s, luaEnumString_TextureCubeFace_NEGATIVE_X) == 0)
+        return Texture::NEGATIVE_X;
+    if (strcmp(s, luaEnumString_TextureCubeFace_POSITIVE_Y) == 0)
+        return Texture::POSITIVE_Y;
+    if (strcmp(s, luaEnumString_TextureCubeFace_NEGATIVE_Y) == 0)
+        return Texture::NEGATIVE_Y;
+    if (strcmp(s, luaEnumString_TextureCubeFace_POSITIVE_Z) == 0)
+        return Texture::POSITIVE_Z;
+    if (strcmp(s, luaEnumString_TextureCubeFace_NEGATIVE_Z) == 0)
+        return Texture::NEGATIVE_Z;
+    return Texture::POSITIVE_X;
 }
 
 const char* lua_stringFromEnum_TextureCubeFace(Texture::CubeFace e)
 {
-    if (e == Texture::POS_X)
-        return luaEnumString_TextureCubeFace_POS_X;
-    if (e == Texture::NEG_X)
-        return luaEnumString_TextureCubeFace_NEG_X;
-    if (e == Texture::POS_Y)
-        return luaEnumString_TextureCubeFace_POS_Y;
-    if (e == Texture::NEG_Y)
-        return luaEnumString_TextureCubeFace_NEG_Y;
-    if (e == Texture::POS_Z)
-        return luaEnumString_TextureCubeFace_POS_Z;
-    if (e == Texture::NEG_Z)
-        return luaEnumString_TextureCubeFace_NEG_Z;
+    if (e == Texture::POSITIVE_X)
+        return luaEnumString_TextureCubeFace_POSITIVE_X;
+    if (e == Texture::NEGATIVE_X)
+        return luaEnumString_TextureCubeFace_NEGATIVE_X;
+    if (e == Texture::POSITIVE_Y)
+        return luaEnumString_TextureCubeFace_POSITIVE_Y;
+    if (e == Texture::NEGATIVE_Y)
+        return luaEnumString_TextureCubeFace_NEGATIVE_Y;
+    if (e == Texture::POSITIVE_Z)
+        return luaEnumString_TextureCubeFace_POSITIVE_Z;
+    if (e == Texture::NEGATIVE_Z)
+        return luaEnumString_TextureCubeFace_NEGATIVE_Z;
     return enumStringEmpty;
 }
 

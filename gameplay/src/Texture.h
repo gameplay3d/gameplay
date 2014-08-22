@@ -66,12 +66,12 @@ public:
      */
     enum CubeFace
     {
-        POS_X,
-        NEG_X,
-        POS_Y,
-        NEG_Y,
-        POS_Z,
-        NEG_Z
+        POSITIVE_X,
+        NEGATIVE_X,
+        POSITIVE_Y,
+        NEGATIVE_Y,
+        POSITIVE_Z,
+        NEGATIVE_Z
     };
     
     /**

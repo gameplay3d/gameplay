@@ -152,8 +152,9 @@ Texture* Texture::create(Image* image, bool generateMipmaps)
     switch (image->getFormat())
     {
     case Image::RGB:
+        return create(Texture::RGB, image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
     case Image::RGBA:
-        return create((Texture::Format)image->getFormat(), image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
+        return create(Texture::RGBA, image->getWidth(), image->getHeight(), image->getData(), generateMipmaps);
     default:
         GP_ERROR("Unsupported image format (%d).", image->getFormat());
         return NULL;
