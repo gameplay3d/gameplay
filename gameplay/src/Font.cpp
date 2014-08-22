@@ -351,7 +351,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
                     truncated = true;
                     break;
                 }
-                else if (xPos >= area.x)
+                else if (xPos >= (int)area.x)
                 {
                     // Draw this character.
                     if (draw)
@@ -784,7 +784,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                     truncated = true;
                     break;
                 }
-                else if (xPos >= area.x)
+                else if (xPos >= (int)area.x)
                 {
                     // Draw this character.
                     if (draw)
