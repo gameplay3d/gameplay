@@ -18,15 +18,16 @@ precision mediump float;
 #if (DIRECTIONAL_LIGHT_COUNT > 0) || (POINT_LIGHT_COUNT > 0) || (SPOT_LIGHT_COUNT > 0)
 #define LIGHTING
 #endif
-#if defined(CUBEMAP_REFLECTION) || defined(CUBEMAP_REFRACTION)
-#define CUBEMAP
-#endif
 
 ///////////////////////////////////////////////////////////
 // Uniforms
 uniform vec3 u_ambientColor;
 
+#if defined(CUBEMAP)
+uniform samplerCube u_diffuseTexture;
+#else
 uniform sampler2D u_diffuseTexture;
+#endif
 
 #if defined(LIGHTMAP)
 uniform sampler2D u_lightmapTexture;
@@ -67,16 +68,8 @@ uniform float u_specularExponent;
 
 #endif
 
-#if defined(CUBEMAP)
-uniform samplerCube u_cubemapTexture;
-
-#if defined(CUBEMAP_REFRACTION)
-uniform float u_cubemapRefract;
-#endif
-#if defined(CUBEMAP_MIX)
-uniform float u_cubemapMix;
-#endif
-
+#if defined(REFRACTION)
+uniform float u_refractionIndex;
 #endif
 
 #if defined(MODULATE_COLOR)
@@ -145,16 +138,8 @@ void main()
     #else
     vec3 cubemapNormal = normalize(v_normalWorldVector);
     #endif
-    #endif
 
-    #if defined(CUBEMAP)
-
-    #if defined(CUBEMAP_SOURCE)
-    _baseColor = combineCubemapColor(texture2D(u_diffuseTexture, v_texCoord).rgb, getCubemapColor(cubemapNormal));
-    #else
-    _baseColor = applyCubemapColor(cubemapNormal, texture2D(u_diffuseTexture, v_texCoord));
-    #endif
-
+    _baseColor = getCubemapColor(cubemapNormal);
     #else
     _baseColor = texture2D(u_diffuseTexture, v_texCoord);
     #endif

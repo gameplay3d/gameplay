@@ -18,9 +18,6 @@ precision mediump float;
 #if (DIRECTIONAL_LIGHT_COUNT > 0) || (POINT_LIGHT_COUNT > 0) || (SPOT_LIGHT_COUNT > 0)
 #define LIGHTING
 #endif
-#if defined(CUBEMAP_REFLECTION) || defined(CUBEMAP_REFRACTION)
-#define CUBEMAP
-#endif
 
 ///////////////////////////////////////////////////////////
 // Uniforms
@@ -59,15 +56,11 @@ uniform float u_specularExponent;
 #endif
 
 #if defined(CUBEMAP)
-uniform samplerCube u_cubemapTexture;
-
-#if defined(CUBEMAP_REFRACTION)
-uniform float u_cubemapRefract;
-#endif
-#if defined(CUBEMAP_MIX)
-uniform float u_cubemapMix;
+uniform samplerCube u_diffuseTexture;
 #endif
 
+#if defined(REFRACTION)
+uniform float u_refractionIndex;
 #endif
 
 #if defined(MODULATE_COLOR)
@@ -132,7 +125,7 @@ void main()
 	#endif
 
     #if defined(CUBEMAP)
-    _baseColor = applyCubemapColor(cubemapNormal, _baseColor);
+    _baseColor.rgb *= getCubemapColor(cubemapNormal).rgb;
     #endif
     
     gl_FragColor.a = _baseColor.a;
@@ -148,7 +141,7 @@ void main()
     #endif
 
     #if defined(CUBEMAP)
-    gl_FragColor = applyCubemapColor(cubemapNormal, gl_FragColor);
+    gl_FragColor.rgb *= getCubemapColor(cubemapNormal).rgb;
     #endif
     
     #endif

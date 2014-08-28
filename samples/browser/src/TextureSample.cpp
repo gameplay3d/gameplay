@@ -141,10 +141,9 @@ Material* setTextureUnlitMaterial(Model* model, const char* texturePath, bool mi
 
 Material* TextureSample::setCubemapUnlitMaterial(Model* model, Node* camera)
 {
-    // Colored shader params
-    Material* material = model->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "CUBEMAP_REFLECTION");
+    // Textured shader params
+    Material* material = model->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "CUBEMAP;REFLECTION");
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
-    material->getParameter("u_diffuseColor")->setVector4(Vector4::one());
 
     // Color cubemap params
     material->setParameterAutoBinding("u_inverseTransposeWorldMatrix", "INVERSE_TRANSPOSE_WORLD_MATRIX");
@@ -154,7 +153,7 @@ Material* TextureSample::setCubemapUnlitMaterial(Model* model, Node* camera)
     Texture* tex = Texture::create(Texture::RGB, 128, 128, NULL, false, Texture::TEXTURE_CUBE);
     Texture::Sampler* texSampler = Texture::Sampler::create(tex);
 
-    material->getParameter("u_cubemapTexture")->setValue(texSampler);
+    material->getParameter("u_diffuseTexture")->setValue(texSampler);
 
     _fBuffer = FrameBuffer::create("cubemap_framebuffer", tex->getWidth(), tex->getHeight());
     _rTarget = RenderTarget::create("cubemap_rendertarget", tex);
