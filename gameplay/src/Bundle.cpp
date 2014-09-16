@@ -28,7 +28,7 @@
 #define BUNDLE_MAX_STRING_LENGTH        5000
 
 #define BUNDLE_VERSION_MAJOR_FONT_FORMAT  1
-#define BUNDLE_VERSION_MINOR_FONT_FORMAT  4
+#define BUNDLE_VERSION_MINOR_FONT_FORMAT  5
 
 namespace gameplay
 {
@@ -1698,11 +1698,47 @@ Font* Bundle::loadFont(const char* id)
         }
 
         Font::Glyph* glyphs = new Font::Glyph[glyphCount];
-        if (_stream->read(glyphs, sizeof(Font::Glyph), glyphCount) != glyphCount)
+        for (unsigned j = 0; j < glyphCount; j++)
         {
-            GP_ERROR("Failed to read glyphs for font '%s'.", id);
-            SAFE_DELETE_ARRAY(glyphs);
-            return NULL;
+            if (_stream->read(&glyphs[j].code, 4, 1) != 1)
+            {
+                GP_ERROR("Failed to read glyph #%d code for font '%s'.", j, id);
+                SAFE_DELETE_ARRAY(glyphs);
+                return NULL;
+            }
+            if (_stream->read(&glyphs[j].width, 4, 1) != 1)
+            {
+                GP_ERROR("Failed to read glyph #%d width for font '%s'.", j, id);
+                SAFE_DELETE_ARRAY(glyphs);
+                return NULL;
+            }
+            if (getVersionMajor() >= 1 && getVersionMinor() >= 5)
+            {
+                if (_stream->read(&glyphs[j].bearingX, 4, 1) != 1)
+                {
+                    GP_ERROR("Failed to read glyph #%d bearingX for font '%s'.", j, id);
+                    SAFE_DELETE_ARRAY(glyphs);
+                    return NULL;
+                }
+                if (_stream->read(&glyphs[j].advance, 4, 1) != 1)
+                {
+                    GP_ERROR("Failed to read glyph #%d advance for font '%s'.", j, id);
+                    SAFE_DELETE_ARRAY(glyphs);
+                    return NULL;
+                }
+            }
+            else
+            {
+                // Fallback values for older GBP format.
+                glyphs[j].bearingX = 0;
+                glyphs[j].advance = glyphs[j].width;
+            }
+            if (_stream->read(&glyphs[j].uvs, 4, 4) != 4)
+            {
+                GP_ERROR("Failed to read glyph #%d uvs for font '%s'.", j, id);
+                SAFE_DELETE_ARRAY(glyphs);
+                return NULL;
+            }
         }
 
         // Read texture attributes.
