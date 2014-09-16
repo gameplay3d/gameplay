@@ -729,6 +729,15 @@
     <ClCompile Include="src\Script.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\lua\lua_Script.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_ScriptTargetEvent.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_ScriptTargetEventRegistry.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Plane.h">
@@ -1444,6 +1453,15 @@
     </ClInclude>
     <ClInclude Include="src\Script.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_Script.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ScriptTargetEvent.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ScriptTargetEventRegistry.h">
+      <Filter>src\lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -32,6 +32,7 @@ void luaRegister_Joint()
         {"addListener", lua_Joint_addListener},
         {"addRef", lua_Joint_addRef},
         {"addScript", lua_Joint_addScript},
+        {"addScriptCallback", lua_Joint_addScriptCallback},
         {"clearScripts", lua_Joint_clearScripts},
         {"clone", lua_Joint_clone},
         {"createAnimation", lua_Joint_createAnimation},
@@ -98,6 +99,7 @@ void luaRegister_Joint()
         {"getWorldMatrix", lua_Joint_getWorldMatrix},
         {"getWorldViewMatrix", lua_Joint_getWorldViewMatrix},
         {"getWorldViewProjectionMatrix", lua_Joint_getWorldViewProjectionMatrix},
+        {"hasScriptListener", lua_Joint_hasScriptListener},
         {"hasTag", lua_Joint_hasTag},
         {"isActive", lua_Joint_isActive},
         {"isActiveInHierarchy", lua_Joint_isActiveInHierarchy},
@@ -107,6 +109,7 @@ void luaRegister_Joint()
         {"removeChild", lua_Joint_removeChild},
         {"removeListener", lua_Joint_removeListener},
         {"removeScript", lua_Joint_removeScript},
+        {"removeScriptCallback", lua_Joint_removeScriptCallback},
         {"rotate", lua_Joint_rotate},
         {"rotateX", lua_Joint_rotateX},
         {"rotateY", lua_Joint_rotateY},
@@ -375,19 +378,32 @@ int lua_Joint_addScript(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 2:
+        case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
-                Joint* instance = getInstance(state);
-                int result = instance->addScript(param1);
+                // Get parameter 2 off the stack.
+                Script::Scope param2 = (Script::Scope)luaL_checkint(state, 3);
 
-                // Push the return value onto the stack.
-                lua_pushinteger(state, result);
+                Joint* instance = getInstance(state);
+                void* returnPtr = (void*)instance->addScript(param1, param2);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Script");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -398,7 +414,47 @@ int lua_Joint_addScript(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_addScriptCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
+
+                Joint* instance = getInstance(state);
+                instance->addScriptCallback(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Joint_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -3801,6 +3857,69 @@ int lua_Joint_getWorldViewProjectionMatrix(lua_State* state)
     return 0;
 }
 
+int lua_Joint_hasScriptListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    Joint* instance = getInstance(state);
+                    bool result = instance->hasScriptListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<ScriptTarget::Event> param1 = gameplay::ScriptUtil::getObjectPointer<ScriptTarget::Event>(2, "ScriptTargetEvent", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    Joint* instance = getInstance(state);
+                    bool result = instance->hasScriptListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Joint_hasScriptListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joint_hasTag(lua_State* state)
 {
     // Get the number of parameters.
@@ -4101,16 +4220,20 @@ int lua_Joint_removeScript(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 2:
+        case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
+                // Get parameter 2 off the stack.
+                Script::Scope param2 = (Script::Scope)luaL_checkint(state, 3);
+
                 Joint* instance = getInstance(state);
-                bool result = instance->removeScript(param1);
+                bool result = instance->removeScript(param1, param2);
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -4124,7 +4247,47 @@ int lua_Joint_removeScript(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_removeScriptCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
+
+                Joint* instance = getInstance(state);
+                instance->removeScriptCallback(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Joint_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

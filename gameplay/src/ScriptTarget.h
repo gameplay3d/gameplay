@@ -1,56 +1,96 @@
 #ifndef SCRIPTTARGET_H_
 #define SCRIPTTARGET_H_
 
-#include "Base.h"
+#include "Script.h"
 
 namespace gameplay
 {
 
 /**
- * Signals the start of script event declarations for a ScriptTarget implementation.
+ * Macro to indidate the start of script event definitions for a class.
  *
- * This macro should be followed by one or more calls to GP_SCRIPT_EVENT.
- *
- * It is recommended that these macros be used at the top of the source file that
- * contains the implemtation of a ScriptTarget child class.
+ * This macro should be used at the top of a class declaration. The class
+ * should extend ScriptTarget and the lines immediately following this
+ * macro should be one or more GP_SCRIPT_EVENT macros, followed by
+ * exactly one GP_SCRIPT_EVENTS_END macro.
  *
  * @script{ignore}
  */
-#define GP_SCRIPT_EVENTS() \
-    static gameplay::ScriptTarget::EventRegistry __eventRegistry
+#define GP_SCRIPT_EVENTS_START() \
+public: \
+    class ScriptEvents { \
+    public: \
+        static ScriptEvents* getInstance() \
+        { \
+            static ScriptEvents instance; \
+            return &instance; \
+        } \
+        ScriptTarget::EventRegistry* getRegistry() \
+        { \
+            static ScriptTarget::EventRegistry registry; \
+            return &registry; \
+        }
 
 /**
- * Defines a script event of the given name and adds it to the event registry for
- * the current scope.
+ * Macro to define a single supported script event for a class.
  *
- * A call to GP_SCRIPT_EVENT_START must exist before any calls to GP_SCRIPT_EVENT
- * are made. This macro will define a constant in the current code scope that is
- * named SCRIPT_EVENT_eventName, which should be used when calling 
- * ScriptTarget::fireScriptEvent from a ScriptTarget child class.  For this reason,
- * these macros should exist outside the definition of the class, preferably at
- * the top of the source file.
+ * This macro should follow exactly one prior GP_SCRIPT_EVENTS_START macro
+ * and zero or more other GP_SCRIPT_EVENT macros.
  *
- * @param eventName Name of the event (no quotes).
- * @param eventArgs Parmeters for this script event.
- *
- * @see ScriptController::executeFunction
+ * @param eventName The name of the script event.
+ * @param eventArgs A string of arguments to be passed to the script event, using
+ *      the format specified in ScriptController::executeFunction.
  *
  * @script{ignore}
  */
 #define GP_SCRIPT_EVENT(eventName, eventArgs) \
-    static const gameplay::ScriptTarget::EventRegistry::Event* SCRIPT_EVENT_ ## eventName = __eventRegistry.addEvent(#eventName, eventArgs)
+        struct SCRIPT_EVENT_ ## eventName \
+        { \
+            SCRIPT_EVENT_ ## eventName() \
+            { \
+                getEvent(); \
+            } \
+            static const ScriptTarget::Event* getEvent() \
+            { \
+                static const ScriptTarget::Event* event = ScriptEvents::getInstance()->getRegistry()->addEvent(#eventName, eventArgs); \
+                return event; \
+            } \
+        }; \
+        SCRIPT_EVENT_ ## eventName eventName;
+
+/**
+ * Macro to indiate the end of a series of script event defintions.
+ *
+ * @script{ignore}
+ */
+#define GP_SCRIPT_EVENTS_END() \
+    private: \
+        ScriptEvents() { } \
+    };
+
+/**
+ * Macro used to retrieve a script event object the given class name.
+ *
+ * @param eventClass The C++ class that contains the specified script event.
+ * @param eventName The name of the registered script event to retrieve.
+ *
+ * @script{ignore}
+ */
+#define GP_GET_SCRIPT_EVENT(eventClass, eventName) \
+    eventClass ## ::ScriptEvents::getInstance()-> ## eventName ## .getEvent()
+
 
 /**
  * Registers the defined script events for a ScriptTarget.
  *
- * This macro should be called in the constructor of a ScriptTarget
- * child class implementation. It requires that GP_SCRIPT_EVENT
- * macros be defined (normally at the top of the compilation unit).
+ * This macro should be called at the beginning of all constructors of a
+ * ScriptTarget child class that contains one or more script event 
+ * declarations (via the GP_SCRIPT_EVENT macro).
  *
  * @script{ignore}
  */
 #define GP_REGISTER_SCRIPT_EVENTS() \
-    ScriptTarget::registerEvents(&__eventRegistry)
+    ScriptTarget::registerEvents(ScriptEvents::getInstance()->getRegistry())
 
 /**
  * Defines an interface for supporting script callbacks.
@@ -62,42 +102,55 @@ class ScriptTarget
 public:
 
     /**
+     * Defines a single script event.
+     */
+    class Event
+    {
+        friend class ScriptTarget;
+
+    public:
+
+        /**
+         * Returns the name of this event.
+         *
+         * @return The event name.
+         */
+        const char* getName() const;
+
+        /**
+         * Returns the argument string for this event.
+         *
+         * @return The argument string.
+         */
+        const char* getArgs() const;
+
+    private:
+
+        /**
+         * The event name.
+         */
+        std::string name;
+
+        /**
+         * The event arguments.
+         *
+         * @see ScriptController::executeFunction
+         */
+        std::string args;
+
+    };
+
+    /**
      * Script event registry that defines the supported script events
      * for a ScriptTarget.
      *
      * This class should generally only be used via the GP_REGISTER_SCRIPT_EVENTS macro.
-     *
-     * @script{ignore}
      */
     class EventRegistry
     {
         friend class ScriptTarget;
+
     public:
-
-        /**
-         * Defines a single script event.
-         *
-         * @script{ignore}
-         */
-        struct Event
-        {
-            /**
-             * The event name.
-             */
-            std::string name;
-
-            /**
-             * The event arguments.
-             *
-             * @see ScriptController::executeFunction
-             */
-            std::string args;
-
-            /**
-             * The EventRegistry this event belongs to.
-             */
-            EventRegistry* registry;
-        };
 
         /**
          * Creates an empty event registry.
@@ -137,6 +190,15 @@ public:
          */
         const Event* getEvent(unsigned int index) const;
 
+        /**
+         * Returns the event that matches the given name.
+         *
+         * @param name The name of the event to search for.
+         *
+         * @return The matching event, or NULL if no such event exists.
+         */
+        const Event* getEvent(const char* name) const;
+
     private:
 
         std::vector<Event*> _events;
@@ -146,17 +208,21 @@ public:
      * Attaches a script to this object.
      *
      * @param path Path to the script.
+     * @param scope The scope for the script.
+     *
      * @return A pointer to the successfully loaded script, or NULL if unsuccessful.
      */
-    Script* addScript(const char* path);
+    Script* addScript(const char* path, Script::Scope scope);
 
     /**
      * Removes a previously attached script from this object.
      *
-     * @param path The same path that was used to load the script.
+     * @param path The same path that was used to load the script being removed.
+     * @param scope The same scope that was used to load the script being removed.
+     *
      * @return True if a script is successfully removed, false otherwise.
      */
-    bool removeScript(const char* path);
+    bool removeScript(const char* path, Script::Scope scope);
 
     /**
      * Adds the given global script function as a callback for the given event.
@@ -185,35 +251,75 @@ public:
      * Determines if there is a script installed that is listening for the given script
      * event (i.e. has a function callback defined for the given event).
      *
-     * @param evt The script event to check.
+     * @param eventName The script event to check.
      *
      * @return True if there is a listener for the specified event, false otherwise.
+     */
+    bool hasScriptListener(const char* eventName) const;
+
+    /**
+     * Determines if there is a script installed that is listening for the given script
+     * event (i.e. has a function callback defined for the given event).
+     *
+     * @param event The script event to check.
+     *
+     * @return True if there is a listener for the specified event, false otherwise.
+     */
+    bool hasScriptListener(const Event* event) const;
+
+    /**
+     * Fires the specified script event, passing the specified arguments.
+     *
+     * The only supported return types are void and boolean. When a boolean
+     * return type is used and there are multiple scripts registered for the
+     * given script event, event delegation will stop at the first script
+     * that returns a value of true.
+     * 
+     * @param event The script event to fire, which was returned from EventRegistry::addEvent.
+     * @param ... Optional list of arguments to pass to the script event (should match the
+     *      script event argument definition).
      *
      * @script{ignore}
      */
-    bool hasScriptListener(const EventRegistry::Event* evt) const;
+    template<typename T> T fireScriptEvent(const Event* event, ...);
 
 protected:
 
     /**
-     * Stores a registered script callback.
+     * Stores an EventRegistry entry for a ScriptTarget.
      */
-    struct Callback
+    struct RegistryEntry
     {
-        // The script the callback belongs to
+        EventRegistry* registry;
+        RegistryEntry* next;
+        RegistryEntry* prev;
+
+        RegistryEntry(EventRegistry* registry) : registry(registry), next(NULL), prev(NULL) { }
+    };
+
+    /**
+     * Stores a Script that is registered for a ScriptTarget.
+     */
+    struct ScriptEntry
+    {
+        Script* script;
+        ScriptEntry* next;
+        ScriptEntry* prev;
+        ScriptEntry(Script* script) : script(script), next(NULL), prev(NULL) { }
+    };
+
+    /**
+     * Stores a single registered script callback function.
+     */
+    struct CallbackFunction
+    {
+        // The script the callback belongs to (or NULL if the callback is a global function)
         Script* script;
 
         // The function within the script to call
         std::string function;
 
-        // The script event this callback is for
-        const EventRegistry::Event* event;
-
-        // Linked list info
-        Callback* next;
-        Callback* prev;
-
-        Callback() : script(NULL), event(NULL), next(NULL), prev(NULL) { }
+        CallbackFunction(Script* script, const char* function) : script(script), function(function) { }
     };
 
     /**
@@ -229,7 +335,7 @@ protected:
     /**
      * Removes the specified script.
      */
-    void removeScript(Script* script);
+    void removeScript(ScriptEntry* se);
 
     /**
      * Registers a set of supported script events and event arguments for this ScriptTarget. 
@@ -246,35 +352,23 @@ protected:
      */
     void registerEvents(EventRegistry* registry);
 
-    /**
-     * Fires the specified script event, passing the specified arguments.
-     *
-     * The only supported return types are void and boolean. When a boolean
-     * return type is used and there are multiple scripts registered for the
-     * given script event, event delegation will stop at the first script
-     * that returns a value of true.
-     * 
-     * @param evt The script event to fire, which was returned from EventRegistry::addEvent.
-     * @param ... Optional list of arguments to pass to the script event (should match the
-     *      script event argument definition).
-     */
-    template<typename T> T fireScriptEvent(const EventRegistry::Event* evt, ...);
-
-    /** Holds the registered events for this script target. */
-    std::vector<EventRegistry*>* _events;
+    /** Holds the event registries for this script target. */
+    RegistryEntry* _scriptRegistries;
     /** Holds the list of scripts referenced by this ScriptTarget. */
-    Script* _scripts;
+    ScriptEntry* _scripts;
+    /** Holds the list of callback functions registered for this ScriptTarget. */
+    std::map<const Event*, std::vector<CallbackFunction>>* _scriptCallbacks;
 };
 
-template<typename T> T ScriptTarget::fireScriptEvent(const EventRegistry::Event* evt, ...)
+template<typename T> T ScriptTarget::fireScriptEvent(const Event* evt, ...)
 {
     GP_ERROR("Unsupported return type for template function ScriptTarget::fireScriptEvent.");
 }
 
 /** Template specialization. */
-template<> void ScriptTarget::fireScriptEvent<void>(const EventRegistry::Event* evt, ...);
+template<> void ScriptTarget::fireScriptEvent<void>(const Event* event, ...);
 /** Template specialization. */
-template<> bool ScriptTarget::fireScriptEvent<bool>(const EventRegistry::Event* evt, ...);
+template<> bool ScriptTarget::fireScriptEvent<bool>(const Event* event, ...);
 
 }
 

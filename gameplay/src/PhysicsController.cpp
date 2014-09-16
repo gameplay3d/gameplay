@@ -19,11 +19,6 @@
 // The initial capacity of the Bullet debug drawer's vertex batch.
 #define INITIAL_CAPACITY 280
 
-/** @script{ignore} */
-GP_SCRIPT_EVENTS();
-/** @script{ignore} */
-GP_SCRIPT_EVENT(statusEvent, "[PhysicsController::Listener::EventType]");
-
 namespace gameplay
 {
 
@@ -489,7 +484,7 @@ void PhysicsController::update(float elapsedTime)
     _world->stepSimulation(elapsedTime * 0.001f, 10);
 
     // If we have status listeners, then check if our status has changed.
-    if (_listeners || hasScriptListener(SCRIPT_EVENT_statusEvent))
+    if (_listeners || hasScriptListener(GP_GET_SCRIPT_EVENT(PhysicsController, statusEvent)))
     {
         Listener::EventType oldStatus = _status;
 
@@ -534,7 +529,7 @@ void PhysicsController::update(float elapsedTime)
                 }
             }
 
-            fireScriptEvent<void>(SCRIPT_EVENT_statusEvent, _status);
+            fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(PhysicsController, statusEvent), _status);
         }
     }
 

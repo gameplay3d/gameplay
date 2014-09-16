@@ -13,39 +13,6 @@ GLenum __gl_error_code = GL_NO_ERROR;
 /** @script{ignore} */
 ALenum __al_error_code = AL_NO_ERROR;
 
-/** @script{ignore} */
-GP_SCRIPT_EVENTS();
-/** @script{ignore} */
-GP_SCRIPT_EVENT(initialize, "");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(finalize, "");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(update, "f");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(render, "f");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(resizeEvent, "ii");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(keyEvent, "[Keyboard::KeyEvent]i");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(touchEvent, "[Touch::TouchEvent]iiui");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(mouseEvent, "[Mouse::MouseEvent]iii");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(gestureSwipeEvent, "iii");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(gesturePinchEvent, "iif");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(gestureTapEvent, "ii");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(gestureLongTapevent, "iif");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(gestureDragEvent, "ii");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(gestureDropEvent, "ii");
-/** @script{ignore} */
-GP_SCRIPT_EVENT(gamepadEvent, "[Gamepad::GamepadEvent]<Gamepad>");
-
 namespace gameplay
 {
 
@@ -59,7 +26,27 @@ double Game::_pausedTimeTotal = 0.0;
 class GameScriptTarget : public ScriptTarget
 {
     friend class Game;
+
+    GP_SCRIPT_EVENTS_START();
+    GP_SCRIPT_EVENT(initialize, "");
+    GP_SCRIPT_EVENT(finalize, "");
+    GP_SCRIPT_EVENT(update, "f");
+    GP_SCRIPT_EVENT(render, "f");
+    GP_SCRIPT_EVENT(resizeEvent, "ii");
+    GP_SCRIPT_EVENT(keyEvent, "[Keyboard::KeyEvent]i");
+    GP_SCRIPT_EVENT(touchEvent, "[Touch::TouchEvent]iiui");
+    GP_SCRIPT_EVENT(mouseEvent, "[Mouse::MouseEvent]iii");
+    GP_SCRIPT_EVENT(gestureSwipeEvent, "iii");
+    GP_SCRIPT_EVENT(gesturePinchEvent, "iif");
+    GP_SCRIPT_EVENT(gestureTapEvent, "ii");
+    GP_SCRIPT_EVENT(gestureLongTapevent, "iif");
+    GP_SCRIPT_EVENT(gestureDragEvent, "ii");
+    GP_SCRIPT_EVENT(gestureDropEvent, "ii");
+    GP_SCRIPT_EVENT(gamepadEvent, "[Gamepad::GamepadEvent]<Gamepad>");
+    GP_SCRIPT_EVENTS_END();
+
 public:
+
     GameScriptTarget()
     {
         GP_REGISTER_SCRIPT_EVENTS();
@@ -72,7 +59,7 @@ Game::Game()
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL),
       _physicsController(NULL), _aiController(NULL), _audioListener(NULL),
-      _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL), _scriptTarget(NULL)
+      _timeEvents(NULL), _scriptController(NULL), _scriptTarget(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
 
@@ -98,6 +85,7 @@ Game::~Game()
 
 Game* Game::getInstance()
 {
+    GP_ASSERT(__gameInstance);
     return __gameInstance;
 }
 
@@ -195,7 +183,7 @@ bool Game::startup()
         if (script)
         {
             _scriptTarget = new GameScriptTarget();
-            _scriptTarget->addScript(script);
+            _scriptTarget->addScript(script, Script::GLOBAL);
         }
     }
 
@@ -221,20 +209,12 @@ void Game::shutdown()
 
         // Call script finalize
         if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_finalize);
+            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, finalize));
 
         // Destroy script target so no more script events are fired
         SAFE_DELETE(_scriptTarget);
 
 		// Shutdown scripting system first so that any objects allocated in script are released before our subsystems are released
-		if (_scriptListeners)
-		{
-			for (size_t i = 0; i < _scriptListeners->size(); i++)
-			{
-				SAFE_DELETE((*_scriptListeners)[i]);
-			}
-			SAFE_DELETE(_scriptListeners);
-		}
 		_scriptController->finalize();
 
         unsigned int gamepadCount = Gamepad::getGamepadCount();
@@ -346,7 +326,7 @@ void Game::frame()
         // Perform lazy first time initialization
         initialize();
         if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_initialize);
+            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, initialize));
         _initialized = true;
 
         // Fire first game resize event
@@ -390,7 +370,7 @@ void Game::frame()
 
         // Run script update.
         if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_update, elapsedTime);
+            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, update), elapsedTime);
 
         // Audio Rendering.
         _audioController->update(elapsedTime);
@@ -400,7 +380,7 @@ void Game::frame()
 
         // Run script render.
         if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_render, elapsedTime);
+            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, render), elapsedTime);
 
         // Update FPS.
         ++_frameCount;
@@ -424,14 +404,14 @@ void Game::frame()
 
         // Script update.
         if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_update, 0);
+            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, update), 0);
 
         // Graphics Rendering.
         render(0);
 
         // Script render.
         if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_render, 0);
+            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, render), 0);
     }
 }
 
@@ -460,7 +440,7 @@ void Game::updateOnce()
     _aiController->update(elapsedTime);
     _audioController->update(elapsedTime);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_update, elapsedTime);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, update), elapsedTime);
 }
 
 void Game::setViewport(const Rectangle& viewport)
@@ -606,14 +586,14 @@ void Game::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
     keyEvent(evt, key);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_keyEvent, evt, key);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, keyEvent), evt, key);
 }
 
 void Game::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     touchEvent(evt, x, y, contactIndex);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_touchEvent, evt, x, y, contactIndex);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, touchEvent), evt, x, y, contactIndex);
 }
 
 bool Game::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
@@ -622,7 +602,7 @@ bool Game::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
         return true;
 
     if (_scriptTarget)
-        return _scriptTarget->fireScriptEvent<bool>(SCRIPT_EVENT_mouseEvent, evt, x, y, wheelDelta);
+        return _scriptTarget->fireScriptEvent<bool>(GP_GET_SCRIPT_EVENT(GameScriptTarget, mouseEvent), evt, x, y, wheelDelta);
 
     return false;
 }
@@ -636,7 +616,7 @@ void Game::resizeEventInternal(unsigned int width, unsigned int height)
         _height = height;
         resizeEvent(width, height);
         if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_resizeEvent, width, height);
+            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, resizeEvent), width, height);
     }
 }
 
@@ -644,49 +624,49 @@ void Game::gestureSwipeEventInternal(int x, int y, int direction)
 {
     gestureSwipeEvent(x, y, direction);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_gestureSwipeEvent, x, y, direction);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureSwipeEvent), x, y, direction);
 }
 
 void Game::gesturePinchEventInternal(int x, int y, float scale)
 {
     gesturePinchEvent(x, y, scale);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_gesturePinchEvent, x, y, scale);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gesturePinchEvent), x, y, scale);
 }
 
 void Game::gestureTapEventInternal(int x, int y)
 {
     gestureTapEvent(x, y);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_gestureTapEvent, x, y);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureTapEvent), x, y);
 }
 
 void Game::gestureLongTapEventInternal(int x, int y, float duration)
 {
     gestureLongTapEvent(x, y, duration);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_gestureLongTapevent, x, y, duration);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureLongTapevent), x, y, duration);
 }
 
 void Game::gestureDragEventInternal(int x, int y)
 {
     gestureDragEvent(x, y);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_gestureDragEvent, x, y);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureDragEvent), x, y);
 }
 
 void Game::gestureDropEventInternal(int x, int y)
 {
     gestureDropEvent(x, y);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_gestureDropEvent, x, y);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureDropEvent), x, y);
 }
 
 void Game::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     gamepadEvent(evt, gamepad);
     if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(SCRIPT_EVENT_gamepadEvent, evt, gamepad);
+        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gamepadEvent), evt, gamepad);
 }
 
 void Game::getArguments(int* argc, char*** argv) const
@@ -703,12 +683,7 @@ void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)
 
 void Game::schedule(float timeOffset, const char* function)
 {
-    if (!_scriptListeners)
-        _scriptListeners = new std::vector<ScriptListener*>();
-
-    ScriptListener* listener = new ScriptListener(function);
-    _scriptListeners->push_back(listener);
-    schedule(timeOffset, listener, NULL);
+    getScriptController()->schedule(timeOffset, function);
 }
 
 void Game::clearSchedule()
@@ -732,16 +707,6 @@ void Game::fireTimeEvents(double frameTime)
         }
         _timeEvents->pop();
     }
-}
-
-Game::ScriptListener::ScriptListener(const char* url)
-{
-    function = Game::getInstance()->getScriptController()->loadUrl(url);
-}
-
-void Game::ScriptListener::timeEvent(long timeDiff, void* cookie)
-{
-    Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), "l", timeDiff);
 }
 
 Game::TimeEvent::TimeEvent(double time, TimeListener* timeListener, void* cookie)

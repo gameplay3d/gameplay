@@ -86,7 +86,7 @@ void luaRegister_Game()
     };
     std::vector<std::string> scopePath;
 
-    gameplay::ScriptUtil::registerClass("Game", lua_members, NULL, lua_Game__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("Game", lua_members, lua_Game__init, lua_Game__gc, lua_statics, scopePath);
 }
 
 static Game* getInstance(lua_State* state)
@@ -127,6 +127,43 @@ int lua_Game__gc(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game__init(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            void* returnPtr = (void*)new Game();
+            if (returnPtr)
+            {
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "Game");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }

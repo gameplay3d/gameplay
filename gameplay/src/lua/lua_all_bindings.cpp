@@ -105,8 +105,11 @@ void lua_RegisterAllBindings()
     luaRegister_RenderTarget();
     luaRegister_Scene();
     luaRegister_ScreenDisplayer();
+    luaRegister_Script();
     luaRegister_ScriptController();
     luaRegister_ScriptTarget();
+    luaRegister_ScriptTargetEvent();
+    luaRegister_ScriptTargetEventRegistry();
     luaRegister_Slider();
     luaRegister_SpriteBatch();
     luaRegister_Technique();

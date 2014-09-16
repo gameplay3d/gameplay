@@ -39,6 +39,7 @@ void luaRegister_Form()
         {"addListener", lua_Form_addListener},
         {"addRef", lua_Form_addRef},
         {"addScript", lua_Form_addScript},
+        {"addScriptCallback", lua_Form_addScriptCallback},
         {"canFocus", lua_Form_canFocus},
         {"clearScripts", lua_Form_clearScripts},
         {"createAnimation", lua_Form_createAnimation},
@@ -97,6 +98,7 @@ void luaRegister_Form()
         {"getY", lua_Form_getY},
         {"getZIndex", lua_Form_getZIndex},
         {"hasFocus", lua_Form_hasFocus},
+        {"hasScriptListener", lua_Form_hasScriptListener},
         {"insertControl", lua_Form_insertControl},
         {"isBatchingEnabled", lua_Form_isBatchingEnabled},
         {"isChild", lua_Form_isChild},
@@ -117,6 +119,7 @@ void luaRegister_Form()
         {"removeControl", lua_Form_removeControl},
         {"removeListener", lua_Form_removeListener},
         {"removeScript", lua_Form_removeScript},
+        {"removeScriptCallback", lua_Form_removeScriptCallback},
         {"setActiveControl", lua_Form_setActiveControl},
         {"setAlignment", lua_Form_setAlignment},
         {"setAnimationPropertyValue", lua_Form_setAnimationPropertyValue},
@@ -363,19 +366,32 @@ int lua_Form_addScript(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 2:
+        case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
-                Form* instance = getInstance(state);
-                int result = instance->addScript(param1);
+                // Get parameter 2 off the stack.
+                Script::Scope param2 = (Script::Scope)luaL_checkint(state, 3);
 
-                // Push the return value onto the stack.
-                lua_pushinteger(state, result);
+                Form* instance = getInstance(state);
+                void* returnPtr = (void*)instance->addScript(param1, param2);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Script");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -386,7 +402,47 @@ int lua_Form_addScript(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_addScriptCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
+
+                Form* instance = getInstance(state);
+                instance->addScriptCallback(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -3253,6 +3309,69 @@ int lua_Form_hasFocus(lua_State* state)
     return 0;
 }
 
+int lua_Form_hasScriptListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    Form* instance = getInstance(state);
+                    bool result = instance->hasScriptListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<ScriptTarget::Event> param1 = gameplay::ScriptUtil::getObjectPointer<ScriptTarget::Event>(2, "ScriptTargetEvent", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    Form* instance = getInstance(state);
+                    bool result = instance->hasScriptListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Form_hasScriptListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_insertControl(lua_State* state)
 {
     // Get the number of parameters.
@@ -3992,16 +4111,20 @@ int lua_Form_removeScript(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 2:
+        case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
+                // Get parameter 2 off the stack.
+                Script::Scope param2 = (Script::Scope)luaL_checkint(state, 3);
+
                 Form* instance = getInstance(state);
-                bool result = instance->removeScript(param1);
+                bool result = instance->removeScript(param1, param2);
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -4015,7 +4138,47 @@ int lua_Form_removeScript(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_removeScriptCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
+
+                Form* instance = getInstance(state);
+                instance->removeScriptCallback(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

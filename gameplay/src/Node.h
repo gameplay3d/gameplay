@@ -2,6 +2,7 @@
 #define NODE_H_
 
 #include "Transform.h"
+#include "ScriptTarget.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
@@ -36,6 +37,14 @@ class Node : public Transform, public Ref
     friend class Bundle;
     friend class MeshSkin;
     friend class Light;
+
+    GP_SCRIPT_EVENTS_START();
+    GP_SCRIPT_EVENT(update, "<Node>f");
+    GP_SCRIPT_EVENT(messageReceived, "<Node><AIMessage>");
+    GP_SCRIPT_EVENT(stateEnter, "<Node><AIState>");
+    GP_SCRIPT_EVENT(stateExit, "<Node><AIState>");
+    GP_SCRIPT_EVENT(stateUpdate, "<Node><AIState>f");
+    GP_SCRIPT_EVENTS_END();
 
 public:
 
@@ -828,7 +837,7 @@ protected:
     /**
      * Pointer to the AI agent attached to the Node.
      */
-    AIAgent* _agent;
+    mutable AIAgent* _agent;
 
     /**
      * World Matrix representation of the Node.

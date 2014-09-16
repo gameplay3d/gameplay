@@ -6,11 +6,9 @@ namespace gameplay
 
 // Lua bindings for ScriptController.
 int lua_ScriptController_functionExists(lua_State* state);
+int lua_ScriptController_getCurrentScript(lua_State* state);
 int lua_ScriptController_loadScript(lua_State* state);
-int lua_ScriptController_loadScriptIsolated(lua_State* state);
-int lua_ScriptController_loadUrl(lua_State* state);
 int lua_ScriptController_static_print(lua_State* state);
-int lua_ScriptController_unloadScript(lua_State* state);
 
 void luaRegister_ScriptController();
 

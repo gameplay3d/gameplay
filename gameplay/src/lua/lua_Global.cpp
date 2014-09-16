@@ -26,6 +26,7 @@
 #include "PhysicsController.h"
 #include "Properties.h"
 #include "RenderState.h"
+#include "Script.h"
 #include "Terrain.h"
 #include "TextBox.h"
 #include "Texture.h"
@@ -131,6 +132,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "RenderState::StateBlock");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "RenderTarget");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Scene");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Script");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Slider");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Technique");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Terrain");
@@ -144,8 +146,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("RenderState", "Material");
     gameplay::ScriptUtil::setGlobalHierarchyPair("RenderState", "Pass");
     gameplay::ScriptUtil::setGlobalHierarchyPair("RenderState", "Technique");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "AIAgent");
-    gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "AIState");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "AnimationClip");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "CheckBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Container");
@@ -873,6 +874,15 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerEnumValue(RenderState::STENCIL_OP_INVERT, "STENCIL_OP_INVERT", scopePath);
         gameplay::ScriptUtil::registerEnumValue(RenderState::STENCIL_OP_INCR_WRAP, "STENCIL_OP_INCR_WRAP", scopePath);
         gameplay::ScriptUtil::registerEnumValue(RenderState::STENCIL_OP_DECR_WRAP, "STENCIL_OP_DECR_WRAP", scopePath);
+    }
+
+    // Register enumeration Script::Scope.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Script");
+        gameplay::ScriptUtil::registerEnumValue(Script::GLOBAL, "GLOBAL", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Script::PRIVATE_SHARED, "PRIVATE_SHARED", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Script::PRIVATE_INSTANCE, "PRIVATE_INSTANCE", scopePath);
     }
 
     // Register enumeration Terrain::Flags.

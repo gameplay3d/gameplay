@@ -272,7 +272,12 @@ ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type
 
 template<typename T> T ScriptController::executeFunction(const char* func)
 {
-    executeFunctionHelper(1, func, NULL, NULL);
+    return executeFunction<T>((Script*)NULL, func);
+}
+
+template<typename T> T ScriptController::executeFunction(Script* script, const char* func)
+{
+    executeFunctionHelper(1, func, NULL, NULL, script);
     T value = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
     lua_pop(_lua, -1);
     return value;
@@ -282,15 +287,26 @@ template<typename T> T ScriptController::executeFunction(const char* func, const
 {
     va_list list;
     va_start(list, args);
-    executeFunctionHelper(1, func, args, &list);
-
-    T value = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
-    lua_pop(_lua, -1);
+    T value = executeFunction<T>((Script*)NULL, func, args, list);
     va_end(list);
     return value;
 }
 
-template<typename T> T ScriptController::executeFunction(const char* func, const char* args, va_list* list, int script)
+template<typename T> T ScriptController::executeFunction(Script* script, const char* func, const char* args, ...)
+{
+    va_list list;
+    va_start(list, args);
+    T value = executeFunction<T>(script, func, args, list);
+    va_end(list);
+    return value;
+}
+
+template<typename T> T ScriptController::executeFunction(const char* func, const char* args, va_list* list)
+{
+    return executeFunctionHelper((Script*)NULL, func, args, list);
+}
+
+template<typename T> T ScriptController::executeFunction(Script* script, const char* func, const char* args, va_list* list)
 {
     executeFunctionHelper(1, func, args, list, script);
 

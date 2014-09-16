@@ -24,6 +24,7 @@ void luaRegister_JoystickControl()
         {"addListener", lua_JoystickControl_addListener},
         {"addRef", lua_JoystickControl_addRef},
         {"addScript", lua_JoystickControl_addScript},
+        {"addScriptCallback", lua_JoystickControl_addScriptCallback},
         {"canFocus", lua_JoystickControl_canFocus},
         {"clearScripts", lua_JoystickControl_clearScripts},
         {"createAnimation", lua_JoystickControl_createAnimation},
@@ -76,6 +77,7 @@ void luaRegister_JoystickControl()
         {"getY", lua_JoystickControl_getY},
         {"getZIndex", lua_JoystickControl_getZIndex},
         {"hasFocus", lua_JoystickControl_hasFocus},
+        {"hasScriptListener", lua_JoystickControl_hasScriptListener},
         {"isChild", lua_JoystickControl_isChild},
         {"isContainer", lua_JoystickControl_isContainer},
         {"isEnabled", lua_JoystickControl_isEnabled},
@@ -90,6 +92,7 @@ void luaRegister_JoystickControl()
         {"release", lua_JoystickControl_release},
         {"removeListener", lua_JoystickControl_removeListener},
         {"removeScript", lua_JoystickControl_removeScript},
+        {"removeScriptCallback", lua_JoystickControl_removeScriptCallback},
         {"setAlignment", lua_JoystickControl_setAlignment},
         {"setAnimationPropertyValue", lua_JoystickControl_setAnimationPropertyValue},
         {"setAutoSize", lua_JoystickControl_setAutoSize},
@@ -277,19 +280,32 @@ int lua_JoystickControl_addScript(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 2:
+        case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
-                JoystickControl* instance = getInstance(state);
-                int result = instance->addScript(param1);
+                // Get parameter 2 off the stack.
+                Script::Scope param2 = (Script::Scope)luaL_checkint(state, 3);
 
-                // Push the return value onto the stack.
-                lua_pushinteger(state, result);
+                JoystickControl* instance = getInstance(state);
+                void* returnPtr = (void*)instance->addScript(param1, param2);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Script");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -300,7 +316,47 @@ int lua_JoystickControl_addScript(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_JoystickControl_addScriptCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
+
+                JoystickControl* instance = getInstance(state);
+                instance->addScriptCallback(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_JoystickControl_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -2914,6 +2970,69 @@ int lua_JoystickControl_hasFocus(lua_State* state)
     return 0;
 }
 
+int lua_JoystickControl_hasScriptListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                    JoystickControl* instance = getInstance(state);
+                    bool result = instance->hasScriptListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<ScriptTarget::Event> param1 = gameplay::ScriptUtil::getObjectPointer<ScriptTarget::Event>(2, "ScriptTargetEvent", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    JoystickControl* instance = getInstance(state);
+                    bool result = instance->hasScriptListener(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_JoystickControl_hasScriptListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_JoystickControl_isChild(lua_State* state)
 {
     // Get the number of parameters.
@@ -3391,16 +3510,20 @@ int lua_JoystickControl_removeScript(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 2:
+        case 3:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
+                // Get parameter 2 off the stack.
+                Script::Scope param2 = (Script::Scope)luaL_checkint(state, 3);
+
                 JoystickControl* instance = getInstance(state);
-                bool result = instance->removeScript(param1);
+                bool result = instance->removeScript(param1, param2);
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -3414,7 +3537,47 @@ int lua_JoystickControl_removeScript(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_JoystickControl_removeScriptCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
+
+                JoystickControl* instance = getInstance(state);
+                instance->removeScriptCallback(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_JoystickControl_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

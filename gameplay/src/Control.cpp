@@ -9,11 +9,6 @@
 #define BOUNDS_WIDTH_PERCENTAGE_BIT 4
 #define BOUNDS_HEIGHT_PERCENTAGE_BIT 8
 
-/** @script{ignore} */
-GP_SCRIPT_EVENTS();
-/** @script{ignore} */
-GP_SCRIPT_EVENT(controlEvent, "<Control>[Control::Listener::EventType]");
-
 namespace gameplay
 {
 
@@ -243,7 +238,7 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 
 		// Register script listeners for control events
 		if (properties->exists("script"))
-			addScript(properties->getString("script"));
+			addScript(properties->getString("script"), Script::PRIVATE_INSTANCE);
 
 		// Potentially override themed properties for all states.
 		overrideThemedProperties(properties, STATE_ALL);
@@ -1103,7 +1098,7 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
         }
     }
 
-    fireScriptEvent<void>(SCRIPT_EVENT_controlEvent, this, eventType);
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Control, controlEvent), this, eventType);
 
     release();
 }

@@ -595,11 +595,12 @@ public:
      * Schedules a time event to be sent to the given TimeListener a given number of game milliseconds from now.
      * Game time stops while the game is paused. A time offset of zero will fire the time event in the next frame.
      * 
-     * Note: the given Lua function must take a single floating point number, which is the difference between the
-     * current game time and the target time (see TimeListener::timeEvent).
+     * The given script function must take a single floating point number, which is the difference between the
+     * current game time and the target time (see TimeListener::timeEvent). The function will be executed
+     * in the context of the script envionrment that the schedule function was called from.
      * 
      * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
-     * @param function The Lua script function that will receive the event.
+     * @param function The script function that will receive the event.
      */
     void schedule(float timeOffset, const char* function);
 
@@ -659,7 +660,7 @@ protected:
 
     /**
      * Renders a single frame once and then swaps it to the display.
-     * This calls the given Lua function, which should take no parameters and return nothing (void).
+     * This calls the given script function, which should take no parameters and return nothing (void).
      *
      * This is useful for rendering splash screens.
      */
@@ -675,25 +676,6 @@ protected:
     void updateOnce();
 
 private:
-
-    /**
-     * Allows time listener interaction from Lua scripts.
-     */
-    struct ScriptListener : public TimeListener
-    {
-        /**
-         * Constructor.
-         */
-        ScriptListener(const char* url);
-
-        /**
-         * @see TimeListener#timeEvent(long, void*)
-         */
-        void timeEvent(long timeDiff, void* cookie);
-
-        /** Holds the name of the Lua script function to call back. */
-        std::string function;
-    };
 
     struct ShutdownListener : public TimeListener
     {
@@ -782,7 +764,6 @@ private:
     AudioListener* _audioListener;              // The audio listener in 3D space.
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
     ScriptController* _scriptController;            // Controls the scripting engine.
-    std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.
     ScriptTarget* _scriptTarget;                // Script target for the game
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.

@@ -67,7 +67,49 @@ public:
         PRIVATE_INSTANCE
     };
 
-protected:
+    /**
+     * Returns the path from which this Script was loaded.
+     *
+     * @return The script's path.
+     */
+    const char* getPath() const;
+
+    /**
+     * Returns the scope of this script.
+     *
+     * @return The scope of this script.
+     */
+    Scope getScope() const;
+
+    /**
+     * Determines if a function with the given name exists in the script.
+     *
+     * @param name Name of the function.
+     *
+     * @return True if the function exists, false otherwise.
+     */
+    bool functionExists(const char* name) const;
+
+    /** 
+     * Reloads this script.
+     *
+     * The code in the script will be reloaded and any functions and variables will be overwritten
+     * into the script's envrionment.
+     *
+     * If the script is GLOBAL in scope, it will simply be re-run, replacing any existing global 
+     * variables and functions. If the script has changed, any previous variables or functions that
+     * do not exist in the updated script will remain in the global environment.
+     *
+     * @return True if the script is successfully reloaded, false otherwise.
+     */
+    bool reload();
+
+private:
+
+    /**
+     * Constructor.
+     */
+    Script();
 
     /**
      * Copy constructor (hidden).
@@ -78,8 +120,6 @@ protected:
      * Destructor.
      */
     ~Script();
-
-private:
 
     std::string _path;
     Scope _scope;

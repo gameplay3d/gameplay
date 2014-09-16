@@ -16,11 +16,6 @@
 #define NODE_DIRTY_BOUNDS 2
 #define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS)
 
-/** @script{ignore} */
-GP_SCRIPT_EVENTS();
-/** @script{ignore} */
-GP_SCRIPT_EVENT(update, "f");
-
 namespace gameplay
 {
 
@@ -452,7 +447,7 @@ void Node::update(float elapsedTime)
             node->update(elapsedTime);
     }
 
-    fireScriptEvent<void>(SCRIPT_EVENT_update, elapsedTime);
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, update), this, elapsedTime);
 }
 
 bool Node::isStatic() const
@@ -1284,6 +1279,16 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
 
 AIAgent* Node::getAgent() const
 {
+    // Lazily create a new Agent for this Node if we don't have one yet.
+    // Basically, all Nodes by default can have an Agent, we just won't
+    // waste the memory unless they request one.
+    if (!_agent)
+    {
+        _agent = AIAgent::create();
+        _agent->_node = const_cast<Node*>(this);
+        Game::getInstance()->getAIController()->addAgent(_agent);
+    }
+
     return _agent;
 }
 

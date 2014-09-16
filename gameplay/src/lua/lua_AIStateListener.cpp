@@ -1,13 +1,13 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_AIStateListener.h"
+#include "AIAgent.h"
 #include "AIState.h"
 #include "AIStateMachine.h"
 #include "Base.h"
 #include "Game.h"
+#include "Node.h"
 #include "Ref.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
 
 namespace gameplay
 {

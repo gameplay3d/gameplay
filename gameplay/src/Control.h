@@ -28,6 +28,10 @@ class Control : public Ref, public AnimationTarget, public ScriptTarget
     friend class Form;
     friend class Container;
 
+    GP_SCRIPT_EVENTS_START();
+    GP_SCRIPT_EVENT(controlEvent, "<Control>[Control::Listener::EventType]");
+    GP_SCRIPT_EVENTS_END();
+
 public:
 
     /**

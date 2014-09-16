@@ -6,8 +6,6 @@
 #include "Game.h"
 #include "Node.h"
 #include "Ref.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
 
 namespace gameplay
 {
@@ -17,15 +15,12 @@ void luaRegister_AIAgent()
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_AIAgent_addRef},
-        {"addScript", lua_AIAgent_addScript},
-        {"clearScripts", lua_AIAgent_clearScripts},
         {"getId", lua_AIAgent_getId},
         {"getNode", lua_AIAgent_getNode},
         {"getRefCount", lua_AIAgent_getRefCount},
         {"getStateMachine", lua_AIAgent_getStateMachine},
         {"isEnabled", lua_AIAgent_isEnabled},
         {"release", lua_AIAgent_release},
-        {"removeScript", lua_AIAgent_removeScript},
         {"setEnabled", lua_AIAgent_setEnabled},
         {"setListener", lua_AIAgent_setListener},
         {NULL, NULL}
@@ -104,77 +99,6 @@ int lua_AIAgent_addRef(lua_State* state)
             }
 
             lua_pushstring(state, "lua_AIAgent_addRef - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_AIAgent_addScript(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = gameplay::ScriptUtil::getString(2, false);
-
-                AIAgent* instance = getInstance(state);
-                int result = instance->addScript(param1);
-
-                // Push the return value onto the stack.
-                lua_pushinteger(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_AIAgent_addScript - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_AIAgent_clearScripts(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                AIAgent* instance = getInstance(state);
-                instance->clearScripts();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_AIAgent_clearScripts - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -406,45 +330,6 @@ int lua_AIAgent_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_AIAgent_removeScript(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = gameplay::ScriptUtil::getString(2, false);
-
-                AIAgent* instance = getInstance(state);
-                bool result = instance->removeScript(param1);
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_AIAgent_removeScript - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

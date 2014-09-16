@@ -6,6 +6,7 @@ namespace gameplay
 
 // Lua bindings for Game.
 int lua_Game__gc(lua_State* state);
+int lua_Game__init(lua_State* state);
 int lua_Game_canExit(lua_State* state);
 int lua_Game_clear(lua_State* state);
 int lua_Game_clearSchedule(lua_State* state);

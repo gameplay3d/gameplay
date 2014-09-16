@@ -3,11 +3,6 @@
 #include "Game.h"
 #include "Node.h"
 
-/** @script{ignore} */
-GP_SCRIPT_EVENTS();
-/** @script{ignore} */
-GP_SCRIPT_EVENT(transformChanged, "<Transform>");
-
 namespace gameplay
 {
 
@@ -1000,7 +995,7 @@ void Transform::transformChanged()
             l.listener->transformChanged(this, l.cookie);
         }
     }
-    fireScriptEvent<void>(SCRIPT_EVENT_transformChanged, this);
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Transform, transformChanged), this);
 }
 
 void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const

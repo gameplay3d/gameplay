@@ -91,7 +91,8 @@ Scene* SceneLoader::loadInternal(const char* url)
         SceneNodeProperty::CAMERA |
         SceneNodeProperty::ROTATE |
         SceneNodeProperty::SCALE |
-        SceneNodeProperty::TRANSLATE);
+        SceneNodeProperty::TRANSLATE |
+        SceneNodeProperty::SCRIPT);
     applyNodeProperties(sceneProperties, SceneNodeProperty::COLLISION_OBJECT);
 
     // Apply node tags
@@ -377,7 +378,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
     }
     else
     {
-        // Handle scale, rotate and translate.
+        // Handle simple types (scale, rotate, translate, script, etc)
         switch (snp._type)
         {
         case SceneNodeProperty::TRANSLATE:
@@ -401,6 +402,9 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 node->scale(s);
             break;
         }
+        case SceneNodeProperty::SCRIPT:
+            node->addScript(snp._value.c_str(), Script::PRIVATE_INSTANCE);
+            break;
         default:
             GP_ERROR("Unsupported node property type (%d).", snp._type);
             break;
@@ -779,6 +783,10 @@ void SceneLoader::parseNode(Properties* ns, SceneNode* parent, const std::string
         else if (strcmp(name, "scale") == 0)
         {
             addSceneNodeProperty(sceneNode, SceneNodeProperty::SCALE, ns->getString());
+        }
+        else if (strcmp(name, "script") == 0)
+        {
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::SCRIPT, ns->getString());
         }
         else
         {
