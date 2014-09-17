@@ -40,7 +40,7 @@ void AIState::enter(AIStateMachine* stateMachine)
 
     Node* node = stateMachine->_agent->_node;
     if (node)
-        node->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, stateEnter), node, this);
+        node->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, stateEnter), dynamic_cast<void*>(node), this);
 }
 
 void AIState::exit(AIStateMachine* stateMachine)
@@ -50,7 +50,7 @@ void AIState::exit(AIStateMachine* stateMachine)
 
     Node* node = stateMachine->_agent->_node;
     if (node)
-        node->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, stateExit), node, this);
+        node->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, stateExit), dynamic_cast<void*>(node), this);
 }
 
 void AIState::update(AIStateMachine* stateMachine, float elapsedTime)
@@ -60,7 +60,7 @@ void AIState::update(AIStateMachine* stateMachine, float elapsedTime)
 
     Node* node = stateMachine->_agent->_node;
     if (node)
-        node->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, stateUpdate), node, this, elapsedTime);
+        node->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, stateUpdate), dynamic_cast<void*>(node), this, elapsedTime);
 }
 
 AIState::Listener::~Listener()

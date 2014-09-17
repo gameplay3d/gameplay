@@ -47,6 +47,11 @@ PhysicsController::~PhysicsController()
     SAFE_DELETE(_listeners);
 }
 
+const char* PhysicsController::getTypeName() const
+{
+    return "PhysicsController";
+}
+
 void PhysicsController::addStatusListener(Listener* listener)
 {
     GP_ASSERT(listener);

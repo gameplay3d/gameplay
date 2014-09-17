@@ -285,6 +285,11 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 	}
 }
 
+const char* Control::getTypeName() const
+{
+    return "Control";
+}
+
 const char* Control::getId() const
 {
     return _id.c_str();
@@ -1106,7 +1111,7 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
         }
     }
 
-    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Control, controlEvent), this, eventType);
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Control, controlEvent), dynamic_cast<void*>(this), eventType);
 
     release();
 }
@@ -1485,11 +1490,6 @@ Theme::ThemeImage* Control::getImage(const char* id, State state)
     }
 
     return image ? image : _style->getTheme()->_emptyImage;
-}
-
-const char* Control::getType() const
-{
-    return "control";
 }
 
 Control* Control::getParent() const

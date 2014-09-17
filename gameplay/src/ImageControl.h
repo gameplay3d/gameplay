@@ -36,6 +36,16 @@ public:
     static ImageControl* create(const char* id, Theme::Style* style = NULL);
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "ImageControl"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Set the path of the image for this ImageControl to display.
      *
      * @param path The path to the image.
@@ -93,8 +103,6 @@ public:
      * @return The destination region of this ImageControl.
      */
     const Rectangle& getRegionDst() const;
-
-    const char* getType() const;
 
 protected:
 

@@ -177,6 +177,14 @@ public:
     virtual ~Transform();
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * @return The type name of this class: "Transform"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Gets the matrix corresponding to this transform.
      *
      * The matrix returned from this method is mathematically equivalent

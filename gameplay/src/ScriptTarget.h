@@ -94,6 +94,16 @@ public: \
 
 /**
  * Defines an interface for supporting script callbacks.
+ *
+ * Classes that extend ScriptTarget can expose script events using the GP_SCRIPT_EVENT macros.
+ * Custom events should be registered using these macros at the top of the class definition.
+ * Events can be fired by calling the ScriptTarget::fireScriptEvent method, passing the 
+ * registered ScriptTarget::Event object and any required parameters.
+ *
+ * In addition to script events that are explicitly defined by a custom ScriptTarget class,
+ * all ScriptTarget scripts that execute within a non-global scope also implicitly
+ * support an "attached" event. This event is called immediately after such a script is 
+ * attached to a ScriptTarget and it takes a single parameter: the ScriptTarget object.
  */
 class ScriptTarget
 {
@@ -205,14 +215,28 @@ public:
     };
 
     /**
+     * Implemented by child classes to return the type name identifier for
+     * the class that extends ScriptTarget.
+     *
+     * @return A string describing the type name of the ScriptTarget child
+     *      class, as it is defined in the lua bindings (i.e. "Node").
+     */
+    virtual const char* getTypeName() const = 0;
+
+    /**
      * Attaches a script to this object.
      *
+     * By default, scripts are added using the PRIVATE_INSTANCE scope, which
+     * loads scripts into their own private script environment, allowing
+     * variables with the same name to be used without trampling on other 
+     * scripts.
+     *
      * @param path Path to the script.
-     * @param scope The scope for the script.
+     * @param scope Optional scope for the script (default is PRIVATE_INSTANCE).
      *
      * @return A pointer to the successfully loaded script, or NULL if unsuccessful.
      */
-    Script* addScript(const char* path, Script::Scope scope);
+    Script* addScript(const char* path, Script::Scope scope = Script::PRIVATE_INSTANCE);
 
     /**
      * Removes a previously attached script from this object.

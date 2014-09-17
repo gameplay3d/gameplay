@@ -53,6 +53,16 @@ public:
     static TextBox* create(const char* id, Theme::Style* style = NULL);
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "TextBox"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Returns the current location of the caret with the text of this TextBox.
      *
      * @return The current caret location.
@@ -72,11 +82,6 @@ public:
      * @return The last key pressed within this text box.
      */
     int getLastKeypress();
-
-    /**
-     * @see Control::getType
-     */
-    const char* getType() const;
 
     /**
      * Set the character displayed in password mode.

@@ -72,6 +72,11 @@ Node* Node::create(const char* id)
     return new Node(id);
 }
 
+const char* Node::getTypeName() const
+{
+    return "Node";
+}
+
 const char* Node::getId() const
 {
     return _id.c_str();
@@ -447,7 +452,7 @@ void Node::update(float elapsedTime)
             node->update(elapsedTime);
     }
 
-    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, update), this, elapsedTime);
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, update), dynamic_cast<void*>(this), elapsedTime);
 }
 
 bool Node::isStatic() const

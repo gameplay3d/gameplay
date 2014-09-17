@@ -1631,6 +1631,25 @@ void Generator::getAllDerived(set<string>& derived, string classname)
     }
 }
 
+bool Generator::hasDerivedClasses(string classname)
+{
+    map<string, ClassBinding>::iterator itr = _classes.find(classname);
+    if (itr != _classes.end())
+    {
+        for (size_t i = 0, count = itr->second.derived.size(); i < count; i++)
+        {
+            // If the derived class is not in the ref ID table, then it
+            // is a hidden (protected, private, etc.) class, so don't include it.
+            if (_refIds.find(itr->second.derived[i]) != _refIds.end())
+            {
+                return true; // has at least one public derived class
+            }
+        }
+    }
+
+    return false;
+}
+
 void Generator::getIncludes(XMLElement* e, string filename)
 {
     filename.replace(filename.find(".cpp"), 4, ".h");

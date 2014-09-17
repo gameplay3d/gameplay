@@ -80,7 +80,8 @@ static bool getNestedVariable(lua_State* lua, const char* name, int env = 0)
         if (env)
         {
             lua_rawgeti(lua, LUA_REGISTRYINDEX, env);
-            lua_getfield(lua, -1, name);
+            lua_pushstring(lua, name);
+            lua_rawget(lua, -2);
         }
         else
         {
@@ -107,7 +108,8 @@ static bool getNestedVariable(lua_State* lua, const char* name, int env = 0)
     if (env)
     {
         lua_rawgeti(lua, LUA_REGISTRYINDEX, env);
-        lua_getfield(lua, -1, start);
+        lua_pushstring(lua, name);
+        lua_rawget(lua, -2);
     }
     else
     {
@@ -399,6 +401,14 @@ const char* ScriptController::getString(const char* name, Script* script)
     return s;
 }
 
+void* ScriptController::getObjectPointer(const char* type, const char* name, Script* script)
+{
+    PUSH_NESTED_VARIABLE(name, NULL, script);
+    void* userData = lua_isuserdata(_lua, -1) ? luaL_checkudata(_lua, -1, type) : NULL;
+    POP_NESTED_VARIABLE();
+    return ((ScriptUtil::LuaObject*)userData)->instance;
+}
+
 void ScriptController::setBool(const char* name, bool v, Script* script)
 {
     // TODO: Support setting variables in nested tables. Should just need to execute code similar to
@@ -579,6 +589,30 @@ void ScriptController::setString(const char* name, const char* v, Script* script
     else
     {
         lua_pushstring(_lua, v);
+        lua_setglobal(_lua, name);
+    }
+}
+
+void ScriptController::setObjectPointer(const char* type, const char* name, void* v, Script* script)
+{
+    if (script && script->_env)
+    {
+        lua_rawgeti(_lua, LUA_REGISTRYINDEX, script->_env);
+    }
+
+    // Push a new user data onto the stack (and setup its metatable)
+    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(_lua, sizeof(ScriptUtil::LuaObject));
+    object->instance = v;
+    object->owns = false;
+    luaL_getmetatable(_lua, type);
+    lua_setmetatable(_lua, -2);
+
+    if (script && script->_env)
+    {
+        lua_setfield(_lua, -2, name);
+    }
+    else
+    {
         lua_setglobal(_lua, name);
     }
 }

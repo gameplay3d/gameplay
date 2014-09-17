@@ -6,8 +6,6 @@ namespace gameplay
 {
 
 // TODO: Handle reloading scripts and then case where EventRegistries have events added AFTER a script has been loaded (i.e. need to reload callbacks for the script).
-// TODO: Should eventCallbacks store a vector of Event pointers instead of std::string (so we only have to do pointer comparisons instead of string comparisons)? What if Events are destroyed?
-// TODO: Should isolated scripts be cached (not currently), or a new script loaded for every ScriptTarget instance?
 
 extern void splitURL(const std::string& url, std::string* file, std::string* id);
 
@@ -100,7 +98,7 @@ ScriptTarget::~ScriptTarget()
 
         // Don't delete the actual EventRegistry, since it's shared by all
         // ScriptTargets of the same type
-        SAFE_DELETE(re);
+        SAFE_DELETE(tmp);
     }
 }
 
@@ -132,6 +130,18 @@ Script* ScriptTarget::addScript(const char* path, Script::Scope scope)
     Script* script = sc->loadScript(path, scope);
     if (!script)
         return NULL;
+
+    // For non-global scripts, automatically call the 'attached' event if it is defined
+    // within the script
+    if (scope != Script::GLOBAL)
+    {
+        if (sc->functionExists("attached", script))
+        {
+            char args[256];
+            sprintf(args, "<%s>", getTypeName());
+            sc->executeFunction<void>(script, "attached", args, dynamic_cast<void*>(this));
+        }
+    }
 
     // Attach the script
     ScriptEntry* se = new ScriptEntry(script);

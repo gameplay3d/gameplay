@@ -82,6 +82,14 @@ public:
     };
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * @return The type name of this class: "AnimationClip"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Gets the AnimationClip's ID.
      *
      * @return The AnimationClip's ID.

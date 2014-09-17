@@ -51,6 +51,11 @@ public:
     {
         GP_REGISTER_SCRIPT_EVENTS();
     }
+
+    const char* getTypeName() const
+    {
+        return "GameScriptTarget";
+    }
 };
 
 Game::Game()
@@ -179,11 +184,13 @@ bool Game::startup()
     // Set script handler
     if (_properties)
     {
-        const char* script = _properties->getString("script");
-        if (script)
+        const char* scriptPath = _properties->getString("script");
+        if (scriptPath)
         {
+            // TODO: Should we support specifying scope for the Game script, to support
+            // non-global Game scripts?
             _scriptTarget = new GameScriptTarget();
-            _scriptTarget->addScript(script, Script::GLOBAL);
+            _scriptTarget->addScript(scriptPath, Script::GLOBAL);
         }
     }
 

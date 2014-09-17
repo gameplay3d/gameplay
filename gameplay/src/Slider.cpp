@@ -59,6 +59,11 @@ void Slider::initialize(const char* typeName, Theme::Style* style, Properties* p
     setValue(_value);
 }
 
+const char* Slider::getTypeName() const
+{
+    return "Slider";
+}
+
 void Slider::setMin(float min)
 {
     _min = min;
@@ -492,11 +497,6 @@ unsigned int Slider::drawText(Form* form, const Rectangle& clip)
     }
 
     return drawCalls;
-}
-
-const char* Slider::getType() const
-{
-    return "slider";
 }
 
 }

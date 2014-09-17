@@ -36,6 +36,16 @@ public:
     static Slider* create(const char* id, Theme::Style* style = NULL);
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "Slider"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Set the minimum value that can be set on this slider.
      *
      * @param min The new minimum.
@@ -92,11 +102,6 @@ public:
      * @return This slider's current value.
      */
     float getValue() const;
-
-    /**
-     * @see Control::getType
-     */
-    const char* getType() const;
 
     /**
      * Sets if the slider value text is rendered below the control.

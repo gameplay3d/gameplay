@@ -68,6 +68,11 @@ AnimationClip::ListenerEvent::~ListenerEvent()
 {
 }
 
+const char* AnimationClip::getTypeName() const
+{
+    return "AnimationClip";
+}
+
 const char* AnimationClip::getId() const
 {
     return _id.c_str();

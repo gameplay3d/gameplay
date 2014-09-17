@@ -62,9 +62,14 @@ protected:
     void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
-     * @see Control::getType
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "Button"
+     * @see ScriptTarget::getTypeName()
      */
-    const char* getType() const;
+    const char* getTypeName() const;
 
     /**
      * Gets the data binding index for this control.

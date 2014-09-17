@@ -137,14 +137,14 @@ void Gamepad::bindGamepadControls(Container* container)
         {
             bindGamepadControls((Container*) control);
         }
-        else if (std::strcmp("joystick", control->getType()) == 0)
+        else if (std::strcmp("JoystickControl", control->getTypeName()) == 0)
         {
             JoystickControl* joystick = (JoystickControl*)control;
             joystick->setConsumeInputEvents(true);
             _uiJoysticks[joystick->getIndex()] = joystick;
             _joystickCount++;
         }
-        else if (std::strcmp("button", control->getType()) == 0)
+        else if (std::strcmp("Button", control->getTypeName()) == 0)
         {
             Button* button = (Button*)control;
             button->setConsumeInputEvents(true);

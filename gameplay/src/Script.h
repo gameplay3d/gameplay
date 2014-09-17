@@ -59,9 +59,6 @@ public:
          * Because of this, instance scripts can be used to store per-instance state, since it
          * will not be shared by multiple instances.
          *
-         * In some cases, such as when a script is loaded by a ScriptTarget object, the script
-         * may have direct access to the owning object by using the "this" keyword.
-         *
          * @see ScriptTarget
          */
         PRIVATE_INSTANCE

@@ -84,7 +84,7 @@ bool AIAgent::processMessage(AIMessage* message)
     if (_listener && _listener->messageReceived(message))
         return true;
 
-    if (_node && _node->fireScriptEvent<bool>(GP_GET_SCRIPT_EVENT(Node, messageReceived), _node, message))
+    if (_node && _node->fireScriptEvent<bool>(GP_GET_SCRIPT_EVENT(Node, messageReceived), dynamic_cast<void*>(_node), message))
         return true;
 
     return false;

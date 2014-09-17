@@ -236,6 +236,16 @@ public:
     static const int ANIMATE_OPACITY = 7;
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "Control"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Get this control's ID string.
      *
      * @return This control's ID.
@@ -907,13 +917,6 @@ public:
      * @return true if this object is of class Container, false otherwise.
      */
     virtual bool isContainer() const;
-
-    /**
-     * Gets the type of the Control and returns it as a string.
-     *
-     * @return The string of the Control type, all in lower-case.
-     */
-    virtual const char* getType() const;
 
     /**
      * Returns this control's parent, or NULL if this control does not have a parent.

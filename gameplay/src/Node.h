@@ -66,6 +66,14 @@ public:
     static Node* create(const char* id = NULL);
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * @return The type name of this class: "Node"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Gets the identifier for the node.
      *
      * @return The node identifier.

@@ -315,23 +315,4 @@ template<typename T> T ScriptController::executeFunction(Script* script, const c
     return value;
 }
 
-template<typename T>T* ScriptController::getObjectPointer(const char* type, const char* name)
-{
-    lua_getglobal(_lua, name);
-    void* userdata = luaL_checkudata(_lua, -1, type);
-    std::string msg = std::string("'") + std::string(type) + std::string("' expected.");
-    luaL_argcheck(_lua, userdata != NULL, 1, msg.c_str());
-    return (T*)((ScriptUtil::LuaObject*)userdata)->instance;
-}
-
-template<typename T>void ScriptController::setObjectPointer(const char* type, const char* name, T* v)
-{
-    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(_lua, sizeof(ScriptUtil::LuaObject));
-    object->instance = (void*)v;
-    object->owns = false;
-    luaL_getmetatable(_lua, type);
-    lua_setmetatable(_lua, -2);
-    lua_setglobal(_lua, name);
-}
-
 }

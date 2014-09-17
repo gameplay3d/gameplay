@@ -92,6 +92,11 @@ bool Transform::isTransformChangedSuspended()
     return (_suspendTransformChanged > 0);
 }
 
+const char* Transform::getTypeName() const
+{
+    return "Transform";
+}
+
 const Matrix& Transform::getMatrix() const
 {
     if (_matrixDirtyBits)
@@ -995,7 +1000,7 @@ void Transform::transformChanged()
             l.listener->transformChanged(this, l.cookie);
         }
     }
-    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Transform, transformChanged), this);
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Transform, transformChanged), dynamic_cast<void*>(this));
 }
 
 void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const

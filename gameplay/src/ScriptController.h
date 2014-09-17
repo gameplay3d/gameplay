@@ -182,7 +182,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a bool.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      *
      * @return The global boolean script variable.
      * 
@@ -195,7 +195,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global char script variable.
      * 
@@ -208,7 +208,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global short script variable.
      * 
@@ -221,7 +221,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global int script variable.
      * 
@@ -234,7 +234,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global long script variable.
      * 
@@ -247,7 +247,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global unsigned char script variable.
      * 
@@ -260,7 +260,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global unsigned short script variable.
      * 
@@ -273,7 +273,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global unsigned int script variable.
      * 
@@ -286,7 +286,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global unsigned long script variable.
      * 
@@ -299,7 +299,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global float script variable.
      * 
@@ -312,7 +312,7 @@ public:
      * 
      * @param name The name of the variable.
      * @param defaultValue The default value to return if the variable is not a number.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global double script variable.
      * 
@@ -328,7 +328,7 @@ public:
      * required, it should be copied into another string for storage.
      *
      * @param name The name of the variable.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The string variable or NULL if the variable is not a string.
      * 
@@ -341,19 +341,20 @@ public:
      * 
      * @param type The type of the variable in Lua.
      * @param name The name of the variable.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @return The global pointer script variable.
      * 
      * @script{ignore}
      */
-    template<typename T>T* getObjectPointer(const char* type, const char* name);
+    void* getObjectPointer(const char* type, const char* name, Script* script = NULL);
 
     /**
      * Sets the global boolean script variable with the given name to the given value.
      * 
      * @param name The name of the script variable.
      * @param v The boolean value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -364,7 +365,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The char value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -375,7 +376,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The short value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -386,7 +387,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The int value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -397,7 +398,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The long value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -408,7 +409,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The unsigned char value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -419,7 +420,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The unsigned short value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -430,7 +431,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The unsigned int value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -441,7 +442,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The unsigned long value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -452,7 +453,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The float value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -463,7 +464,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The double value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -474,7 +475,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The string value.
-     * @param script Optional script to use, or zero for the global script environment.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
@@ -482,14 +483,21 @@ public:
 
     /**
      * Sets the global pointer script variable of the given type with the given name to the given value.
-     * 
-     * @param type The type of the script variable.
+     *
+     * When passing an argument for the 'v' parameter, it is recommended that the object passed in
+     * be converted to void* using 'dynamic_cast<void*>(o)', to ensure that the address of the 
+     * most derived class possible be stored. In this case, the 'type' parameter should also be
+     * set to the most derived type to ensure that the full set of methods for that object are
+     * available to the script engine.
+     *
+     * @param type The type of the object point value being set.
      * @param name The name of the variable.
      * @param v The pointer value.
+     * @param script Optional script to use, or NULL for the global script environment.
      * 
      * @script{ignore}
      */
-    template<typename T>void setObjectPointer(const char* type, const char* name, T* v);
+    void setObjectPointer(const char* type, const char* name, void* v, Script* script = NULL);
 
     /**
      * Determines if there exists a function with the specified name in the given script environment.

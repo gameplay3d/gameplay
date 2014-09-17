@@ -28,16 +28,6 @@ Control* TextBox::create(Theme::Style* style, Properties* properties)
     return textBox;
 }
 
-void TextBox::addListener(Control::Listener* listener, int eventFlags)
-{
-    if ((eventFlags & Control::Listener::VALUE_CHANGED) == Control::Listener::VALUE_CHANGED)
-    {
-        GP_ERROR("VALUE_CHANGED event is not applicable to this control.");
-    }
-
-    Control::addListener(listener, eventFlags);
-}
-
 void TextBox::initialize(const char* typeName, Theme::Style* style, Properties* properties)
 {
     Label::initialize(typeName, style, properties);
@@ -46,6 +36,21 @@ void TextBox::initialize(const char* typeName, Theme::Style* style, Properties* 
 	{
 		_inputMode = getInputMode(properties->getString("inputMode"));
 	}
+}
+
+const char* TextBox::getTypeName() const
+{
+    return "TextBox";
+}
+
+void TextBox::addListener(Control::Listener* listener, int eventFlags)
+{
+    if ((eventFlags & Control::Listener::VALUE_CHANGED) == Control::Listener::VALUE_CHANGED)
+    {
+        GP_ERROR("VALUE_CHANGED event is not applicable to this control.");
+    }
+
+    Control::addListener(listener, eventFlags);
 }
 
 int TextBox::getLastKeypress()
@@ -439,11 +444,6 @@ void TextBox::getCaretLocation(Vector2* p)
 
     State state = getState();
     getFont(state)->getLocationAtIndex(getDisplayedText().c_str(), _textBounds, getFontSize(state), p, _caretLocation, getTextAlignment(state), true, getTextRightToLeft(state));
-}
-
-const char* TextBox::getType() const
-{
-    return "textBox";
 }
 
 void TextBox::setPasswordChar(char character)
