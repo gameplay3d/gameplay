@@ -688,8 +688,8 @@ private:
 
     lua_State* _lua;
     unsigned int _returnCount;
-    std::map<std::string, std::vector<std::string>> _hierarchy;
-    std::map<std::string, std::vector<Script*>> _scripts;
+    std::map<std::string, std::vector<std::string> > _hierarchy;
+    std::map<std::string, std::vector<Script*> > _scripts;
     std::vector<Script*> _envStack;
     std::list<ScriptTimeListener*> _timeListeners;
 };

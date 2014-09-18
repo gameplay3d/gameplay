@@ -303,7 +303,7 @@ template<typename T> T ScriptController::executeFunction(Script* script, const c
 
 template<typename T> T ScriptController::executeFunction(const char* func, const char* args, va_list* list)
 {
-    return executeFunctionHelper((Script*)NULL, func, args, list);
+    return executeFunctionHelper(1, func, args, list, (Script*)NULL);
 }
 
 template<typename T> T ScriptController::executeFunction(Script* script, const char* func, const char* args, va_list* list)

@@ -25,7 +25,7 @@ public: \
             static ScriptEvents instance; \
             return &instance; \
         } \
-        ScriptTarget::EventRegistry* getRegistry() \
+        static ScriptTarget::EventRegistry* getRegistry() \
         { \
             static ScriptTarget::EventRegistry registry; \
             return &registry; \
@@ -48,13 +48,14 @@ public: \
         { \
             SCRIPT_EVENT_ ## eventName() \
             { \
-                getEvent(); \
+                _event = ScriptEvents::getRegistry()->addEvent(#eventName, eventArgs); \
             } \
-            static const ScriptTarget::Event* getEvent() \
+            const ScriptTarget::Event* getEvent() \
             { \
-                static const ScriptTarget::Event* event = ScriptEvents::getInstance()->getRegistry()->addEvent(#eventName, eventArgs); \
-                return event; \
+                return _event; \
             } \
+        private: \
+            const ScriptTarget::Event* _event; \
         }; \
         SCRIPT_EVENT_ ## eventName eventName;
 
@@ -77,7 +78,7 @@ public: \
  * @script{ignore}
  */
 #define GP_GET_SCRIPT_EVENT(eventClass, eventName) \
-    eventClass ## ::ScriptEvents::getInstance()-> ## eventName ## .getEvent()
+    eventClass::ScriptEvents::getInstance()->eventName.getEvent()
 
 
 /**
@@ -381,7 +382,7 @@ protected:
     /** Holds the list of scripts referenced by this ScriptTarget. */
     ScriptEntry* _scripts;
     /** Holds the list of callback functions registered for this ScriptTarget. */
-    std::map<const Event*, std::vector<CallbackFunction>>* _scriptCallbacks;
+    std::map<const Event*, std::vector<CallbackFunction> >* _scriptCallbacks;
 };
 
 template<typename T> T ScriptTarget::fireScriptEvent(const Event* evt, ...)
