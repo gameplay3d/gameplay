@@ -523,7 +523,7 @@ static Keyboard::Key getKey(int keycode, int metastate)
         case AKEYCODE_Y:
             return (shiftOn) ? Keyboard::KEY_CAPITAL_Y : Keyboard::KEY_Y;
         case AKEYCODE_Z:
-            return (shiftOn) ? Keyboard::KEY_CAPITAL_Y : Keyboard::KEY_Y;
+            return (shiftOn) ? Keyboard::KEY_CAPITAL_Z : Keyboard::KEY_Z;
         case AKEYCODE_COMMA:
             return Keyboard::KEY_COMMA;
         case AKEYCODE_PERIOD:
