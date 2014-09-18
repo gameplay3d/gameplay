@@ -1,6 +1,11 @@
--- This lua script file represents a lua implementation translation of sample00-mesh with a box instead of a duck.
+
+-- Allocate objects to void creating each frame
+local textColor = Vector4.new(0, 0.5, 1, 1)
 
 function initialize()
+
+    Game.setVsync(false)
+
     -- Display splash screen for at least 1 second.
     ScreenDisplayer.start("drawSplash", 1000)
 
@@ -31,18 +36,15 @@ function initialize()
     local model = createGridModel()
     _scene:addNode("grid"):setModel(model)
 
-    dofile("res/ai.lua")
-
     ScreenDisplayer.finish()
 end
 
-function update(elapsedTime)
+function update(t)
+    -- Uncomment the line below to force a more stable and deterministic frame rate, to prevent occassional large garbage collections
+    --collectgarbage()
 end
 
--- Avoid allocating new objects every frame.
-textColor = Vector4.new(0, 0.5, 1, 1)
-
-function render(elapsedTime)
+function render()
     -- Clear the color and depth buffers.
     Game.getInstance():clear(Game.CLEAR_COLOR_DEPTH, Vector4.zero(), 1.0, 0)
 
@@ -50,7 +52,7 @@ function render(elapsedTime)
     _scene:visit("drawScene")
 
     -- Draw the fps.
-    local buffer = string.format("%u\n%s", Game.getInstance():getFrameRate(), _stateMachine:getActiveState():getId())
+    local buffer = string.format("%u\n%s", Game.getInstance():getFrameRate(), _modelNode:getAgent():getStateMachine():getActiveState():getId())
     _font:start()
     _font:drawText(buffer, 5, 1, textColor, _font:getSize())
     _font:finish()

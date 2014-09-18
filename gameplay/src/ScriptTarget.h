@@ -252,20 +252,20 @@ public:
     /**
      * Adds the given global script function as a callback for the given event.
      * 
-     * @param eventName The name of the event.
+     * @param event The event to add the callback for.
      * @param function The name of the script function to call when the event is fired; can either be
      *  just the name of a function (if the function's script file has already been loaded), or can be
      *  a URL of the form scriptFile.lua#functionName.
      */
-    void addScriptCallback(const char* eventName, const char* function);
+    void addScriptCallback(const Event* event, const char* function);
 
     /**
      * Removes the given script function as a callback for the given event.
      * 
-     * @param eventName The name of the event.
+     * @param event The event to remove the callback for.
      * @param function The name of the script function.
      */
-    void removeScriptCallback(const char* eventName, const char* function);
+    void removeScriptCallback(const Event* event, const char* function);
 
     /**
      *  Removes all scripts and callbacks from this object.

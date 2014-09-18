@@ -5,5 +5,6 @@ scene
     node box
     {
         material = res/lua.material
+        script = res/ai.lua
     }
 }

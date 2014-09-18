@@ -192,6 +192,35 @@ bool Game::startup()
             _scriptTarget = new GameScriptTarget();
             _scriptTarget->addScript(scriptPath, Script::GLOBAL);
         }
+        else
+        {
+            // Use the older scripts namespace for loading individual script callback functions
+            Properties* sns = _properties->getNamespace("scripts", true);
+            if (sns)
+            {
+                _scriptTarget = new GameScriptTarget();
+
+                // Define a macro to simplify defining the following script callback registrations
+                #define GP_REG_GAME_SCRIPT_CB(e) if (sns->exists(#e)) _scriptTarget->addScriptCallback(GP_GET_SCRIPT_EVENT(GameScriptTarget, e), sns->getString(#e))
+
+                // Register all supported script callbacks if they are defined
+                GP_REG_GAME_SCRIPT_CB(initialize);
+                GP_REG_GAME_SCRIPT_CB(finalize);
+                GP_REG_GAME_SCRIPT_CB(update);
+                GP_REG_GAME_SCRIPT_CB(render);
+                GP_REG_GAME_SCRIPT_CB(resizeEvent);
+                GP_REG_GAME_SCRIPT_CB(keyEvent);
+                GP_REG_GAME_SCRIPT_CB(touchEvent);
+                GP_REG_GAME_SCRIPT_CB(mouseEvent);
+                GP_REG_GAME_SCRIPT_CB(gestureSwipeEvent);
+                GP_REG_GAME_SCRIPT_CB(gesturePinchEvent);
+                GP_REG_GAME_SCRIPT_CB(gestureTapEvent);
+                GP_REG_GAME_SCRIPT_CB(gestureLongTapevent);
+                GP_REG_GAME_SCRIPT_CB(gestureDragEvent);
+                GP_REG_GAME_SCRIPT_CB(gestureDropEvent);
+                GP_REG_GAME_SCRIPT_CB(gamepadEvent);
+            }
+        }
     }
 
     _state = RUNNING;

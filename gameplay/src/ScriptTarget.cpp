@@ -131,18 +131,6 @@ Script* ScriptTarget::addScript(const char* path, Script::Scope scope)
     if (!script)
         return NULL;
 
-    // For non-global scripts, automatically call the 'attached' event if it is defined
-    // within the script
-    if (scope != Script::GLOBAL)
-    {
-        if (sc->functionExists("attached", script))
-        {
-            char args[256];
-            sprintf(args, "<%s>", getTypeName());
-            sc->executeFunction<void>(script, "attached", args, dynamic_cast<void*>(this));
-        }
-    }
-
     // Attach the script
     ScriptEntry* se = new ScriptEntry(script);
     if (_scripts)
@@ -175,6 +163,18 @@ Script* ScriptTarget::addScript(const char* path, Script::Scope scope)
             }
         }
         re = re->next;
+    }
+
+    // For non-global scripts, automatically call the 'attached' event if it is defined
+    // within the script
+    if (scope != Script::GLOBAL)
+    {
+        if (sc->functionExists("attached", script))
+        {
+            char args[256];
+            sprintf(args, "<%s>", getTypeName());
+            sc->executeFunction<void>(script, "attached", args, dynamic_cast<void*>(this));
+        }
     }
 
     return script;
@@ -237,26 +237,10 @@ void ScriptTarget::removeScript(ScriptEntry* se)
     SAFE_RELEASE(script);
 }
 
-void ScriptTarget::addScriptCallback(const char* eventName, const char* function)
+void ScriptTarget::addScriptCallback(const Event* event, const char* function)
 {
-    GP_ASSERT(eventName);
+    GP_ASSERT(event);
     GP_ASSERT(function);
-
-    // Lookup the specified event
-    const Event* event = NULL;
-    RegistryEntry* re = _scriptRegistries;
-    while (re)
-    {
-        if ((event = re->registry->getEvent(eventName)) != NULL)
-            break;
-        re = re->next;
-    }
-
-    if (event == NULL)
-    {
-        GP_WARN("No event named '%s' found for script target while registering function: %s", eventName, function);
-        return;
-    }
 
     // Parse the script name (if it exists) and function out
     std::string scriptPath, func;
@@ -324,7 +308,7 @@ void ScriptTarget::addScriptCallback(const char* eventName, const char* function
     }
 }
 
-void ScriptTarget::removeScriptCallback(const char* eventName, const char* function)
+void ScriptTarget::removeScriptCallback(const Event* event, const char* function)
 {
     // Parse the script name (if it exists) and function out
     std::string scriptPath, func;
@@ -362,7 +346,7 @@ void ScriptTarget::removeScriptCallback(const char* eventName, const char* funct
         for (; itr != _scriptCallbacks->end(); ++itr)
         {
             // Erase matching callback functions for this event
-            bool forEvent = itr->first->name == eventName;
+            bool forEvent = itr->first == event;
             std::vector<CallbackFunction>& callbacks = itr->second;
             std::vector<CallbackFunction>::iterator itr2 = callbacks.begin();
             while (itr2 != callbacks.end())
