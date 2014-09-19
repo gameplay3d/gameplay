@@ -243,13 +243,19 @@ bool ScriptController::loadScript(Script* script)
 
             // Create a metatable that forwards missed lookups to global table _G
             lua_newtable(_lua); // metatable [chunk, env, meta]
-            lua_getglobal(_lua, "_G"); // pushes _G, which will be the __index metatable entry [chunk, env, meta, _G]
+            lua_pushglobaltable(_lua); // pushes _G, which will be the __index metatable entry [chunk, env, meta, _G]
 
             // Set the __index property of the metatable to _G
             lua_setfield(_lua, -2, "__index"); // metatable on top [chunk, env, meta]
 
             // Set the metatable for our new environment table
             lua_setmetatable(_lua, -2); // [chunk, env]
+
+            // Store a pointer to the ENV table in the table itself, so it can refer to itself.
+            // This is similar to how the _G field works for accessing the global table, and
+            // how _G._G is valid.
+            lua_pushvalue(_lua, -1); // [chunk, env, env]
+            lua_setfield(_lua, -2, "_THIS"); // [chunk, env]
 
             // Set the first upvalue (_ENV) for our chunk to the new environment table
             if (lua_setupvalue(_lua, -2, 1) == NULL) // [chunk]
