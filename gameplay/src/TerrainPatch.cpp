@@ -48,6 +48,7 @@ TerrainPatch::~TerrainPatch()
     {
         deleteLayer(*_layers.begin());
     }
+    SAFE_RELEASE(_camera);
 }
 
 TerrainPatch* TerrainPatch::create(Terrain* terrain, unsigned int index,
