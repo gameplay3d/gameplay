@@ -25,6 +25,7 @@ int lua_AnimationClip_getId(lua_State* state);
 int lua_AnimationClip_getLoopBlendTime(lua_State* state);
 int lua_AnimationClip_getRefCount(lua_State* state);
 int lua_AnimationClip_getRepeatCount(lua_State* state);
+int lua_AnimationClip_getScriptEvent(lua_State* state);
 int lua_AnimationClip_getSpeed(lua_State* state);
 int lua_AnimationClip_getStartTime(lua_State* state);
 int lua_AnimationClip_getTypeName(lua_State* state);

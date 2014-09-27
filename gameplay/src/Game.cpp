@@ -187,14 +187,12 @@ bool Game::startup()
         const char* scriptPath = _properties->getString("script");
         if (scriptPath)
         {
-            // TODO: Should we support specifying scope for the Game script, to support
-            // non-global Game scripts?
             _scriptTarget = new GameScriptTarget();
-            _scriptTarget->addScript(scriptPath, Script::GLOBAL);
+            _scriptTarget->addScript(scriptPath);
         }
         else
         {
-            // Use the older scripts namespace for loading individual script callback functions
+            // Use the older scripts namespace for loading individual global script callback functions.
             Properties* sns = _properties->getNamespace("scripts", true);
             if (sns)
             {

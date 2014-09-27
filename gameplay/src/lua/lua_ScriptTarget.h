@@ -9,6 +9,7 @@ namespace gameplay
 int lua_ScriptTarget_addScript(lua_State* state);
 int lua_ScriptTarget_addScriptCallback(lua_State* state);
 int lua_ScriptTarget_clearScripts(lua_State* state);
+int lua_ScriptTarget_getScriptEvent(lua_State* state);
 int lua_ScriptTarget_getTypeName(lua_State* state);
 int lua_ScriptTarget_hasScriptListener(lua_State* state);
 int lua_ScriptTarget_removeScript(lua_State* state);

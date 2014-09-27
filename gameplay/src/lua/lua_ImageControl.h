@@ -46,6 +46,7 @@ int lua_ImageControl_getParent(lua_State* state);
 int lua_ImageControl_getRefCount(lua_State* state);
 int lua_ImageControl_getRegionDst(lua_State* state);
 int lua_ImageControl_getRegionSrc(lua_State* state);
+int lua_ImageControl_getScriptEvent(lua_State* state);
 int lua_ImageControl_getSkinColor(lua_State* state);
 int lua_ImageControl_getSkinRegion(lua_State* state);
 int lua_ImageControl_getState(lua_State* state);

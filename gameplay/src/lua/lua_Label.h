@@ -44,6 +44,7 @@ int lua_Label_getOpacity(lua_State* state);
 int lua_Label_getPadding(lua_State* state);
 int lua_Label_getParent(lua_State* state);
 int lua_Label_getRefCount(lua_State* state);
+int lua_Label_getScriptEvent(lua_State* state);
 int lua_Label_getSkinColor(lua_State* state);
 int lua_Label_getSkinRegion(lua_State* state);
 int lua_Label_getState(lua_State* state);

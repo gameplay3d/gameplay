@@ -30,6 +30,7 @@ int lua_Transform_getScale(lua_State* state);
 int lua_Transform_getScaleX(lua_State* state);
 int lua_Transform_getScaleY(lua_State* state);
 int lua_Transform_getScaleZ(lua_State* state);
+int lua_Transform_getScriptEvent(lua_State* state);
 int lua_Transform_getTranslation(lua_State* state);
 int lua_Transform_getTranslationX(lua_State* state);
 int lua_Transform_getTranslationY(lua_State* state);

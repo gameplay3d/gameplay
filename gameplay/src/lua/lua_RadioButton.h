@@ -45,6 +45,7 @@ int lua_RadioButton_getOpacity(lua_State* state);
 int lua_RadioButton_getPadding(lua_State* state);
 int lua_RadioButton_getParent(lua_State* state);
 int lua_RadioButton_getRefCount(lua_State* state);
+int lua_RadioButton_getScriptEvent(lua_State* state);
 int lua_RadioButton_getSkinColor(lua_State* state);
 int lua_RadioButton_getSkinRegion(lua_State* state);
 int lua_RadioButton_getState(lua_State* state);

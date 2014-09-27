@@ -102,9 +102,9 @@ public: \
  * registered ScriptTarget::Event object and any required parameters.
  *
  * In addition to script events that are explicitly defined by a custom ScriptTarget class,
- * all ScriptTarget scripts that execute within a non-global scope also implicitly
- * support an "attached" event. This event is called immediately after such a script is 
- * attached to a ScriptTarget and it takes a single parameter: the ScriptTarget object.
+ * all ScriptTarget scripts implicitly support an "attached" event. This event is called
+ * immediately after such a script is attached to a ScriptTarget and it takes a single
+ * parameter: the ScriptTarget object.
  */
 class ScriptTarget
 {
@@ -227,30 +227,32 @@ public:
     /**
      * Attaches a script to this object.
      *
-     * By default, scripts are added using the PRIVATE_INSTANCE scope, which
-     * loads scripts into their own private script environment, allowing
-     * variables with the same name to be used without trampling on other 
-     * scripts.
+     * Scripts attached to a ScriptTarget are loaded using the PROTECTED scope,
+     * which loads scripts into their own protected script environment, allowing
+     * variables with the same name to be used without colliding with other scripts.
      *
      * @param path Path to the script.
-     * @param scope Optional scope for the script (default is PRIVATE_INSTANCE).
      *
      * @return A pointer to the successfully loaded script, or NULL if unsuccessful.
      */
-    Script* addScript(const char* path, Script::Scope scope = Script::PRIVATE_INSTANCE);
+    Script* addScript(const char* path);
 
     /**
      * Removes a previously attached script from this object.
      *
      * @param path The same path that was used to load the script being removed.
-     * @param scope The same scope that was used to load the script being removed.
      *
      * @return True if a script is successfully removed, false otherwise.
      */
-    bool removeScript(const char* path, Script::Scope scope);
+    bool removeScript(const char* path);
 
     /**
      * Adds the given global script function as a callback for the given event.
+     *
+     * Individual script callback events registered via this method are expected
+     * to be global script functions. Registering individual callbacks in this
+     * manner is generally slower than registering a single script to handle script
+     * events for an object.
      * 
      * @param event The event to add the callback for.
      * @param function The name of the script function to call when the event is fired; can either be
@@ -291,6 +293,15 @@ public:
      * @return True if there is a listener for the specified event, false otherwise.
      */
     bool hasScriptListener(const Event* event) const;
+
+    /**
+     * Returns the event object for the given event name, if it exists.
+     *
+     * @param eventName Name of the event.
+     *
+     * @return The event object for the given name, or NULL if no such event exists.
+     */
+    const Event* getScriptEvent(const char* eventName) const;
 
     /**
      * Fires the specified script event, passing the specified arguments.

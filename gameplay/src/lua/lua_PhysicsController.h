@@ -17,6 +17,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state);
 int lua_PhysicsController_createSpringConstraint(lua_State* state);
 int lua_PhysicsController_drawDebug(lua_State* state);
 int lua_PhysicsController_getGravity(lua_State* state);
+int lua_PhysicsController_getScriptEvent(lua_State* state);
 int lua_PhysicsController_getTypeName(lua_State* state);
 int lua_PhysicsController_hasScriptListener(lua_State* state);
 int lua_PhysicsController_rayTest(lua_State* state);

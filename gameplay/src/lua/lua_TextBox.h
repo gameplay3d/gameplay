@@ -48,6 +48,7 @@ int lua_TextBox_getPadding(lua_State* state);
 int lua_TextBox_getParent(lua_State* state);
 int lua_TextBox_getPasswordChar(lua_State* state);
 int lua_TextBox_getRefCount(lua_State* state);
+int lua_TextBox_getScriptEvent(lua_State* state);
 int lua_TextBox_getSkinColor(lua_State* state);
 int lua_TextBox_getSkinRegion(lua_State* state);
 int lua_TextBox_getState(lua_State* state);

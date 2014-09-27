@@ -44,6 +44,7 @@ int lua_CheckBox_getOpacity(lua_State* state);
 int lua_CheckBox_getPadding(lua_State* state);
 int lua_CheckBox_getParent(lua_State* state);
 int lua_CheckBox_getRefCount(lua_State* state);
+int lua_CheckBox_getScriptEvent(lua_State* state);
 int lua_CheckBox_getSkinColor(lua_State* state);
 int lua_CheckBox_getSkinRegion(lua_State* state);
 int lua_CheckBox_getState(lua_State* state);

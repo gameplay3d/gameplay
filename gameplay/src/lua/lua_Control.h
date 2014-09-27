@@ -44,6 +44,7 @@ int lua_Control_getOpacity(lua_State* state);
 int lua_Control_getPadding(lua_State* state);
 int lua_Control_getParent(lua_State* state);
 int lua_Control_getRefCount(lua_State* state);
+int lua_Control_getScriptEvent(lua_State* state);
 int lua_Control_getSkinColor(lua_State* state);
 int lua_Control_getSkinRegion(lua_State* state);
 int lua_Control_getState(lua_State* state);

@@ -49,6 +49,7 @@ int lua_Container_getOpacity(lua_State* state);
 int lua_Container_getPadding(lua_State* state);
 int lua_Container_getParent(lua_State* state);
 int lua_Container_getRefCount(lua_State* state);
+int lua_Container_getScriptEvent(lua_State* state);
 int lua_Container_getScroll(lua_State* state);
 int lua_Container_getScrollPosition(lua_State* state);
 int lua_Container_getScrollWheelRequiresFocus(lua_State* state);

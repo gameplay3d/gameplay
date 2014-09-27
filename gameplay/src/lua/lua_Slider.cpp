@@ -62,6 +62,7 @@ void luaRegister_Slider()
         {"getPadding", lua_Slider_getPadding},
         {"getParent", lua_Slider_getParent},
         {"getRefCount", lua_Slider_getRefCount},
+        {"getScriptEvent", lua_Slider_getScriptEvent},
         {"getSkinColor", lua_Slider_getSkinColor},
         {"getSkinRegion", lua_Slider_getSkinRegion},
         {"getState", lua_Slider_getState},
@@ -320,43 +321,9 @@ int lua_Slider_addScript(lua_State* state)
             lua_error(state);
             break;
         }
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = gameplay::ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                Script::Scope param2 = (Script::Scope)luaL_checkint(state, 3);
-
-                Slider* instance = getInstance(state);
-                void* returnPtr = ((void*)instance->addScript(param1, param2));
-                if (returnPtr)
-                {
-                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Script");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Slider_addScript - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -2208,6 +2175,54 @@ int lua_Slider_getRefCount(lua_State* state)
     return 0;
 }
 
+int lua_Slider_getScriptEvent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+                Slider* instance = getInstance(state);
+                void* returnPtr = ((void*)instance->getScriptEvent(param1));
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ScriptTargetEvent");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Slider_getScriptEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Slider_getSkinColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -3634,20 +3649,16 @@ int lua_Slider_removeScript(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 3:
+        case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER)
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                Script::Scope param2 = (Script::Scope)luaL_checkint(state, 3);
-
                 Slider* instance = getInstance(state);
-                bool result = instance->removeScript(param1, param2);
+                bool result = instance->removeScript(param1);
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -3661,7 +3672,7 @@ int lua_Slider_removeScript(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

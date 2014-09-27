@@ -50,6 +50,7 @@ int lua_Form_getOpacity(lua_State* state);
 int lua_Form_getPadding(lua_State* state);
 int lua_Form_getParent(lua_State* state);
 int lua_Form_getRefCount(lua_State* state);
+int lua_Form_getScriptEvent(lua_State* state);
 int lua_Form_getScroll(lua_State* state);
 int lua_Form_getScrollPosition(lua_State* state);
 int lua_Form_getScrollWheelRequiresFocus(lua_State* state);

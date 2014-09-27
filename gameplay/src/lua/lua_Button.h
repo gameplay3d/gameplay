@@ -44,6 +44,7 @@ int lua_Button_getOpacity(lua_State* state);
 int lua_Button_getPadding(lua_State* state);
 int lua_Button_getParent(lua_State* state);
 int lua_Button_getRefCount(lua_State* state);
+int lua_Button_getScriptEvent(lua_State* state);
 int lua_Button_getSkinColor(lua_State* state);
 int lua_Button_getSkinRegion(lua_State* state);
 int lua_Button_getState(lua_State* state);

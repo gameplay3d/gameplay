@@ -46,6 +46,7 @@ int lua_Slider_getOpacity(lua_State* state);
 int lua_Slider_getPadding(lua_State* state);
 int lua_Slider_getParent(lua_State* state);
 int lua_Slider_getRefCount(lua_State* state);
+int lua_Slider_getScriptEvent(lua_State* state);
 int lua_Slider_getSkinColor(lua_State* state);
 int lua_Slider_getSkinRegion(lua_State* state);
 int lua_Slider_getState(lua_State* state);

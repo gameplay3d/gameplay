@@ -47,6 +47,7 @@ int lua_JoystickControl_getOuterRegionSize(lua_State* state);
 int lua_JoystickControl_getPadding(lua_State* state);
 int lua_JoystickControl_getParent(lua_State* state);
 int lua_JoystickControl_getRefCount(lua_State* state);
+int lua_JoystickControl_getScriptEvent(lua_State* state);
 int lua_JoystickControl_getSkinColor(lua_State* state);
 int lua_JoystickControl_getSkinRegion(lua_State* state);
 int lua_JoystickControl_getState(lua_State* state);

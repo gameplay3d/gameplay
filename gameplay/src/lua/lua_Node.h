@@ -61,6 +61,7 @@ int lua_Node_getScaleX(lua_State* state);
 int lua_Node_getScaleY(lua_State* state);
 int lua_Node_getScaleZ(lua_State* state);
 int lua_Node_getScene(lua_State* state);
+int lua_Node_getScriptEvent(lua_State* state);
 int lua_Node_getTag(lua_State* state);
 int lua_Node_getTerrain(lua_State* state);
 int lua_Node_getTranslation(lua_State* state);

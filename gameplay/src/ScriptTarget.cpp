@@ -122,12 +122,12 @@ void ScriptTarget::registerEvents(EventRegistry* registry)
     }
 }
 
-Script* ScriptTarget::addScript(const char* path, Script::Scope scope)
+Script* ScriptTarget::addScript(const char* path)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
     // Load the script
-    Script* script = sc->loadScript(path, scope);
+    Script* script = sc->loadScript(path, Script::PROTECTED);
     if (!script)
         return NULL;
 
@@ -165,29 +165,25 @@ Script* ScriptTarget::addScript(const char* path, Script::Scope scope)
         re = re->next;
     }
 
-    // For non-global scripts, automatically call the 'attached' event if it is defined
-    // within the script
-    if (scope != Script::GLOBAL)
+    // Automatically call the 'attached' event if it is defined within the script
+    if (sc->functionExists("attached", script))
     {
-        if (sc->functionExists("attached", script))
-        {
-            char args[256];
-            sprintf(args, "<%s>", getTypeName());
-            sc->executeFunction<void>(script, "attached", args, dynamic_cast<void*>(this));
-        }
+        char args[256];
+        sprintf(args, "<%s>", getTypeName());
+        sc->executeFunction<void>(script, "attached", args, dynamic_cast<void*>(this));
     }
 
     return script;
 }
 
-bool ScriptTarget::removeScript(const char* path, Script::Scope scope)
+bool ScriptTarget::removeScript(const char* path)
 {
     GP_ASSERT(path);
 
     ScriptEntry* se = _scripts;
     while (se)
     {
-        if (strcmp(se->script->getPath(), path) == 0 && scope == se->script->getScope())
+        if (strcmp(se->script->getPath(), path) == 0 && se->script->getScope() == Script::PROTECTED)
         {
             removeScript(se);
             return true;
@@ -383,6 +379,12 @@ void ScriptTarget::clearScripts()
 
 bool ScriptTarget::hasScriptListener(const char* eventName) const
 {
+    const Event* event = getScriptEvent(eventName);
+    return event ? hasScriptListener(event) : false;
+}
+
+const ScriptTarget::Event* ScriptTarget::getScriptEvent(const char* eventName) const
+{
     GP_ASSERT(eventName);
 
     // Lookup the event for this name
@@ -395,10 +397,7 @@ bool ScriptTarget::hasScriptListener(const char* eventName) const
         re = re->next;
     }
 
-    if (event == NULL)
-        return false;
-
-    return hasScriptListener(event);
+    return event;
 }
 
 bool ScriptTarget::hasScriptListener(const Event* event) const

@@ -403,7 +403,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             break;
         }
         case SceneNodeProperty::SCRIPT:
-            node->addScript(snp._value.c_str(), Script::PRIVATE_INSTANCE);
+            node->addScript(snp._value.c_str());
             break;
         default:
             GP_ERROR("Unsupported node property type (%d).", snp._type);

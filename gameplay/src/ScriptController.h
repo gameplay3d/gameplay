@@ -25,16 +25,15 @@ public:
      * Loads the given script file and executes its code (if it is not
      * alreay loaded).
      *
-     * The script is loaded into an environment that is defined by the scope 
-     * parameter. If the script scope is GLOBAL or PRIVATE_SHARED and if the
-     * forceReload parameter is false, a previously-loaded script object may
-     * be returned. PRIVATE_INSTANCE scope always results in a new script being
-     * loaded and executed.
+     * The script is loaded into an environment that is defined by the scope parameter.
+     * If the script scope is GLOBAL and the forceReload parameter is false, a
+     * previously-loaded script object may be returned. PROTECTED scope always results
+     * in a new script being loaded and executed.
      * 
      * @param path The path to the script.
      * @param scope The scope for the script to be executed in.
      * @param forceReload Whether the script should be reloaded if it has already been loaded
-     *      (applicable for GLOBAL and PRIVATE_SHARED scripts only).
+     *      (applicable for GLOBAL scripts only).
      *
      * @return The loaded script, or NULL if the script could not be loaded.
      */

@@ -34,34 +34,24 @@ public:
         GLOBAL,
 
         /**
-         * Private scripts execute in a more limited sandbox environment that by default does
-         * not  allow other scripts to see their variables or functions. Variables and functions
-         * in a private script can be named the same as those in other scripts without 
+         * Protected scripts execute in a more limited sandbox environment that by default does
+         * not allow other scripts to see their variables or functions. Variables and functions
+         * in a protected script can be named the same as those in other scripts without 
          * collision issues.
          *
-         * Although global code cannot access private scripts, private scripts can acceess
-         * global code. Similarly, private scripts can expose variables and functions to the
+         * Although global code cannot access protected scripts, protected scripts can acceess
+         * global code. Similarly, protected scripts can expose variables and functions to the
          * global environment using explicit notation, although the same precautions noted
          * for the GLOBAL scope should be used when doing this, to prevent naming collisions.
          *
-         * PRIVATE_SHARED scripts can have at most once instance of the script loaded into
-         * memory, with all objects referencing the script sharing it. This means that shared
-         * scripts may execute for multiple objects and therefore do not have any instance 
-         * information available to them other than what is passed through function callbacks.
-         * Similarly, shared scripts should not attempt to store any per-instance state.
-         */
-        PRIVATE_SHARED,
-
-        /**
-         * PRIVATE_INSTANCE scripts provide the same sandboxed envrionment that PRIVATE_SHARED
-         * scripts do. However, there may be multiple instances of the same PRIVATE_INSTANCE
-         * script loaded into memory at the same time: one for each object that references it.
-         * Because of this, instance scripts can be used to store per-instance state, since it
-         * will not be shared by multiple instances.
+         * Protected scripts are best used when associated with a single game object, since
+         * these scripts are not cached the same way global scripts are. Each time a protected
+         * script is loaded, a new instance of the script is loaded. This allows protected 
+         * scripts to store per-instance state, since it will not be shared by multiple instances.
          *
          * @see ScriptTarget
          */
-        PRIVATE_INSTANCE
+        PROTECTED
     };
 
     /**

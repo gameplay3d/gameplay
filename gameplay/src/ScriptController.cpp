@@ -161,9 +161,9 @@ Script* ScriptController::loadScript(const char* path, Script::Scope scope, bool
 
     Script* script = NULL;
 
-    // For single-instance scripts (GLOBAL and PRIVATE_SHARED), check if a script with the same
-    // path and scope is already loaded. PRIVATE_INSTANCE scripts are always reloaded.
-    if (scope == Script::GLOBAL || scope == Script::PRIVATE_SHARED)
+    // For global scripts, check if a script with the same path and scope is already loaded.
+    // Protected scripts are always loaded into a new instance.
+    if (scope == Script::GLOBAL)
     {
         std::map<std::string, std::vector<Script*>>::iterator itr = _scripts.find(path);
         if (itr != _scripts.end())
@@ -228,9 +228,9 @@ bool ScriptController::loadScript(Script* script)
 
     if (ret == LUA_OK)
     {
-        // If the requested scope is private, create a new script env table to execute
+        // If the requested scope is protected, create a new script env table to execute
         // the script within, using a metatable to fallback to the global table (_G)
-        if (script->_scope != Script::GLOBAL)
+        if (script->_scope == Script::PROTECTED)
         {
             // Create a new table as an environment for the new script
             lua_newtable(_lua); // new ENV for script [chunk, env]

@@ -882,8 +882,7 @@ void luaRegister_lua_Global()
         std::vector<std::string> scopePath;
         scopePath.push_back("Script");
         gameplay::ScriptUtil::registerEnumValue(Script::GLOBAL, "GLOBAL", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Script::PRIVATE_SHARED, "PRIVATE_SHARED", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Script::PRIVATE_INSTANCE, "PRIVATE_INSTANCE", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Script::PROTECTED, "PROTECTED", scopePath);
     }
 
     // Register enumeration Terrain::Flags.
