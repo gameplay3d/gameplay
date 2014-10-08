@@ -435,6 +435,7 @@ void Animation::setTransformRotationOffset(Curve* curve, unsigned int propertyId
     case Transform::ANIMATE_ROTATE_TRANSLATE:
         curve->setQuaternionOffset(ANIMATION_ROTATE_OFFSET);
         return;
+    case Transform::ANIMATE_SCALE_ROTATE:
     case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
         curve->setQuaternionOffset(ANIMATION_SRT_OFFSET);
         return;
