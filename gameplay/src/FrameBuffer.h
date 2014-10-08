@@ -101,10 +101,19 @@ public:
     /**
      * Set a RenderTarget on this FrameBuffer's color attachment at the specified index.
      *
-     * @param target The RenderTarget to set.
+     * @param target The 2D RenderTarget to set.
      * @param index The index of the color attachment to set.
      */
     void setRenderTarget(RenderTarget* target, unsigned int index = 0);
+
+    /**
+    * Set a RenderTarget on this FrameBuffer's color attachment at the specified index.
+    *
+    * @param target The Cubemap RenderTarget to set.
+    * @param face The face of the cubemap to target.
+    * @param index The index of the color attachment to set.
+    */
+    void setRenderTarget(RenderTarget* target, Texture::CubeFace face, unsigned int index = 0);
 
     /**
      * Get the RenderTarget attached to the FrameBuffer's color attachment at the specified index.
@@ -152,22 +161,22 @@ public:
      */
     FrameBuffer* bind();
 
-	/**
-	 * Records a screenshot of what is stored on the current FrameBuffer.
-	 *
-	 * @return A screenshot of the current framebuffer's content.
-	 */
-	static Image* createScreenshot();
+    /**
+     * Records a screenshot of what is stored on the current FrameBuffer.
+     *
+     * @param format The format the Image should be in.
+     * @return A screenshot of the current framebuffer's content.
+     */
+    static Image* createScreenshot(Image::Format format = Image::RGBA);
 
-	/**
-	 * Records a screenshot of what is stored on the current FrameBuffer to an Image.
-	 *
-	 * The Image must be the same size as the FrameBuffer, otherwise the operation will fail.
-	 * The Image must be format RGBA.
-	 *
-	 * @param image The Image to write the current framebuffer's content to.
-	 */
-	static void getScreenshot(Image* image);
+    /**
+     * Records a screenshot of what is stored on the current FrameBuffer to an Image.
+     *
+     * The Image must be the same size as the FrameBuffer, otherwise the operation will fail.
+     *
+     * @param image The Image to write the current framebuffer's content to.
+     */
+    static void getScreenshot(Image* image);
 
     /**
      * Binds the default FrameBuffer for rendering to the display.
@@ -199,6 +208,8 @@ private:
      * Hidden copy assignment operator.
      */
     FrameBuffer& operator=(const FrameBuffer&);
+
+    void setRenderTarget(RenderTarget* target, unsigned int index, GLenum textureTarget);
 
     static void initialize();
 

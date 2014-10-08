@@ -26,7 +26,7 @@ attribute vec2 a_texCoord;
 attribute vec2 a_texCoord1; 
 #endif
 
-#if defined(LIGHTING)
+#if defined(LIGHTING) || defined(CUBEMAP)
 attribute vec3 a_normal;
 
 #if defined(BUMPED)
@@ -71,6 +71,12 @@ uniform vec3 u_cameraPosition;
 
 #endif
 
+#if defined(CUBEMAP)
+uniform mat4 u_inverseTransposeWorldMatrix;
+uniform mat4 u_worldMatrix;
+uniform vec3 u_cameraWorldPosition;
+#endif
+
 #if defined(TEXTURE_REPEAT)
 uniform vec2 u_textureRepeat;
 #endif
@@ -87,10 +93,15 @@ varying vec2 v_texCoord;
 varying vec2 v_texCoord1;
 #endif
 
-#if defined(LIGHTING)
+#if defined(LIGHTING) || defined(CUBEMAP)
 
 #if !defined(BUMPED)
+#if defined(LIGHTING)
 varying vec3 v_normalVector;
+#endif
+#if defined(CUBEMAP)
+varying vec3 v_normalWorldVector;
+#endif
 #endif
 
 #if defined(BUMPED) && (DIRECTIONAL_LIGHT_COUNT > 0)
@@ -111,6 +122,9 @@ varying vec3 v_spotLightDirection[SPOT_LIGHT_COUNT];
 #if defined(SPECULAR)
 varying vec3 v_cameraDirection;
 #endif
+#if defined(CUBEMAP)
+varying vec3 v_cameraWorldDirection;
+#endif
 
 #include "lighting.vert"
 
@@ -127,24 +141,47 @@ void main()
     vec4 position = getPosition();
     gl_Position = u_worldViewProjectionMatrix * position;
 
-    #if defined(LIGHTING)
+    #if defined(LIGHTING) || defined(CUBEMAP)
     vec3 normal = getNormal();
+
+    #if defined(LIGHTING)
     // Transform the normal, tangent and binormals to view space.
     mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix[0].xyz, u_inverseTransposeWorldViewMatrix[1].xyz, u_inverseTransposeWorldViewMatrix[2].xyz);
     vec3 normalVector = normalize(inverseTransposeWorldViewMatrix * normal);
+    #endif
+    #if defined(CUBEMAP)
+    // Transform the normal, tangent and binormals to world space.
+    mat3 inverseTransposeWorldMatrix = mat3(u_inverseTransposeWorldMatrix[0].xyz, u_inverseTransposeWorldMatrix[1].xyz, u_inverseTransposeWorldMatrix[2].xyz);
+    vec3 normalWorldVector = normalize(inverseTransposeWorldMatrix * normal);
+    #endif
     
     #if defined(BUMPED)
-    
+
     vec3 tangent = getTangent();
     vec3 binormal = getBinormal();
+    
+    #if defined(LIGHTING)
     vec3 tangentVector  = normalize(inverseTransposeWorldViewMatrix * tangent);
     vec3 binormalVector = normalize(inverseTransposeWorldViewMatrix * binormal);
     mat3 tangentSpaceTransformMatrix = mat3(tangentVector.x, binormalVector.x, normalVector.x, tangentVector.y, binormalVector.y, normalVector.y, tangentVector.z, binormalVector.z, normalVector.z);
     applyLight(position, tangentSpaceTransformMatrix);
+    #endif
+
+    #if defined(CUBEMAP)
+    vec3 tangentWorldVector  = normalize(inverseTransposeWorldMatrix * tangent);
+    vec3 binormalWorldVector = normalize(inverseTransposeWorldMatrix * binormal);
+    mat3 tangentWorldSpaceTransformMatrix = mat3(tangentWorldVector.x, binormalWorldVector.x, normalWorldVector.x, tangentWorldVector.y, binormalWorldVector.y, normalWorldVector.y, tangentWorldVector.z, binormalWorldVector.z, normalWorldVector.z);
+    applyCubemap(position, tangentWorldSpaceTransformMatrix);
+    #endif
     
-    #else
+    #else // !defined(BUMPED)
     
+    #if defined(LIGHTING)
     v_normalVector = normalVector;
+    #endif
+    #if defined(CUBEMAP)
+    v_normalWorldVector = normalWorldVector;
+    #endif
     applyLight(position);
     
     #endif

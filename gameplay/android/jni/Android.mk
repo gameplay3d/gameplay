@@ -262,9 +262,11 @@ LOCAL_SRC_FILES := \
     lua/lua_TextBox.cpp \
     lua/lua_TextBoxInputMode.cpp \
     lua/lua_Texture.cpp \
+    lua/lua_TextureCubeFace.cpp \
     lua/lua_TextureFilter.cpp \
     lua/lua_TextureFormat.cpp \
     lua/lua_TextureSampler.cpp \
+    lua/lua_TextureType.cpp \
     lua/lua_TextureWrap.cpp \
     lua/lua_Theme.cpp \
     lua/lua_ThemeSideRegions.cpp \

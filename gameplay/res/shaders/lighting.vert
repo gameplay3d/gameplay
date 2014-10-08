@@ -36,7 +36,15 @@ void applyLight(vec4 position, mat3 tangentSpaceTransformMatrix)
     v_cameraDirection = tangentSpaceTransformMatrix * (u_cameraPosition - positionWorldViewSpace.xyz);
     #endif
 }
-#else
+
+#if defined(CUBEMAP)
+void applyCubemap(vec4 position, mat3 tangentWorldSpaceTransformMatrix)
+{
+    v_cameraWorldDirection = tangentWorldSpaceTransformMatrix * (u_cameraWorldPosition - (u_worldMatrix * position).xyz);
+}
+#endif
+
+#else // !defined(BUMPED)
 void applyLight(vec4 position)
 {
     #if defined(SPECULAR) || (POINT_LIGHT_COUNT > 0) || (SPOT_LIGHT_COUNT > 0)
@@ -61,6 +69,9 @@ void applyLight(vec4 position)
 
     #if defined(SPECULAR)  
 	v_cameraDirection = u_cameraPosition - positionWorldViewSpace.xyz;
+    #endif
+    #if defined(CUBEMAP)
+    v_cameraWorldDirection = u_cameraWorldPosition - (u_worldMatrix * position).xyz;
     #endif
 }
 

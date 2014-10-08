@@ -24,7 +24,7 @@ attribute vec4 a_blendIndices;
 attribute vec2 a_texCoord1;
 #endif
 
-#if defined(LIGHTING)
+#if defined(LIGHTING) || defined(CUBEMAP)
 attribute vec3 a_normal;
 #endif
 
@@ -66,6 +66,12 @@ uniform vec3 u_cameraPosition;
 
 #endif
 
+#if defined(CUBEMAP)
+uniform mat4 u_inverseTransposeWorldMatrix;
+uniform mat4 u_worldMatrix;
+uniform vec3 u_cameraWorldPosition;
+#endif
+
 ///////////////////////////////////////////////////////////
 // Varyings
 #if defined(LIGHTMAP)
@@ -76,9 +82,11 @@ varying vec2 v_texCoord1;
 varying vec3 v_color;
 #endif
 
-#if defined(LIGHTING)
+#if defined(LIGHTING) || defined(CUBEMAP)
 
+#if defined(LIGHTING)
 varying vec3 v_normalVector;
+#endif
 
 #if (DIRECTIONAL_LIGHT_COUNT > 0) 
 varying vec3 v_lightDirection[DIRECTIONAL_LIGHT_COUNT];
@@ -94,6 +102,11 @@ varying vec3 v_vertexToSpotLightDirection[SPOT_LIGHT_COUNT];
 
 #if defined(SPECULAR)
 varying vec3 v_cameraDirection;
+#endif
+
+#if defined(CUBEMAP)
+varying vec3 v_normalWorldVector;
+varying vec3 v_cameraWorldDirection;
 #endif
 
 #include "lighting.vert"
@@ -112,13 +125,21 @@ void main()
     vec4 position = getPosition();
     gl_Position = u_worldViewProjectionMatrix * position;
 
-    #if defined (LIGHTING)
+    #if defined (LIGHTING) || defined(CUBEMAP)
 
     vec3 normal = getNormal();
 
+    #if defined(LIGHTING)
     // Transform normal to view space.
     mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix[0].xyz, u_inverseTransposeWorldViewMatrix[1].xyz, u_inverseTransposeWorldViewMatrix[2].xyz);
     v_normalVector = inverseTransposeWorldViewMatrix * normal;
+    #endif
+
+    #if defined(CUBEMAP)
+    // Transform normal to world space
+    mat3 inverseTransposeWorldMatrix = mat3(u_inverseTransposeWorldMatrix[0].xyz, u_inverseTransposeWorldMatrix[1].xyz, u_inverseTransposeWorldMatrix[2].xyz);
+    v_normalWorldVector = inverseTransposeWorldMatrix * normal;
+    #endif
 
     // Apply light.
     applyLight(position);

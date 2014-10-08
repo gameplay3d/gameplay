@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "lua_TextureFilter.h"
 #include "lua_TextureFormat.h"
+#include "lua_TextureType.h"
 #include "lua_TextureWrap.h"
 
 namespace gameplay
@@ -25,10 +26,12 @@ void luaRegister_Texture()
         {"getHeight", lua_Texture_getHeight},
         {"getPath", lua_Texture_getPath},
         {"getRefCount", lua_Texture_getRefCount},
+        {"getType", lua_Texture_getType},
         {"getWidth", lua_Texture_getWidth},
         {"isCompressed", lua_Texture_isCompressed},
         {"isMipmapped", lua_Texture_isMipmapped},
         {"release", lua_Texture_release},
+        {"setData", lua_Texture_setData},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -334,6 +337,41 @@ int lua_Texture_getRefCount(lua_State* state)
     return 0;
 }
 
+int lua_Texture_getType(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Texture* instance = getInstance(state);
+                Texture::Type result = instance->getType();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, lua_stringFromEnum_TextureType(result));
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Texture_getType - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Texture_getWidth(lua_State* state)
 {
     // Get the number of parameters.
@@ -464,6 +502,42 @@ int lua_Texture_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Texture_setData(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
+            {
+                // Get parameter 1 off the stack.
+                gameplay::ScriptUtil::LuaArray<unsigned char> param1 = gameplay::ScriptUtil::getUnsignedCharPointer(2);
+
+                Texture* instance = getInstance(state);
+                instance->setData(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Texture_setData - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -777,9 +851,60 @@ int lua_Texture_static_create(lua_State* state)
             lua_error(state);
             break;
         }
+        case 6:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
+                    lua_type(state, 5) == LUA_TBOOLEAN &&
+                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    Texture::Format param1 = (Texture::Format)lua_enumFromString_TextureFormat(luaL_checkstring(state, 1));
+
+                    // Get parameter 2 off the stack.
+                    unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                    // Get parameter 4 off the stack.
+                    gameplay::ScriptUtil::LuaArray<unsigned char> param4 = gameplay::ScriptUtil::getUnsignedCharPointer(4);
+
+                    // Get parameter 5 off the stack.
+                    bool param5 = gameplay::ScriptUtil::luaCheckBool(state, 5);
+
+                    // Get parameter 6 off the stack.
+                    Texture::Type param6 = (Texture::Type)lua_enumFromString_TextureType(luaL_checkstring(state, 6));
+
+                    void* returnPtr = (void*)Texture::create(param1, param2, param3, param4, param5, param6);
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Texture");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Texture_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1, 2, 3, 4 or 5).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1, 2, 3, 4, 5 or 6).");
             lua_error(state);
             break;
         }

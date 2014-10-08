@@ -29,7 +29,7 @@ vec4 getPosition()
     return _skinnedPosition;    
 }
 
-#if defined(LIGHTING)
+#if defined(LIGHTING) || defined(CUBEMAP)
 
 vec3 _skinnedNormal;
 

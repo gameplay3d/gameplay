@@ -3,7 +3,7 @@ vec4 getPosition()
     return a_position;    
 }
 
-#if defined(LIGHTING)
+#if defined(LIGHTING) || defined(CUBEMAP)
 
 vec3 getNormal()
 {

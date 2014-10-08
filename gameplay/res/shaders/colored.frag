@@ -55,6 +55,14 @@ uniform float u_specularExponent;
 
 #endif
 
+#if defined(CUBEMAP)
+uniform samplerCube u_diffuseTexture;
+#endif
+
+#if defined(REFRACTION)
+uniform float u_refractionIndex;
+#endif
+
 #if defined(MODULATE_COLOR)
 uniform vec4 u_modulateColor;
 #endif
@@ -73,9 +81,11 @@ vec4 _baseColor;
 varying vec3 v_color;
 #endif
 
-#if defined(LIGHTING)
+#if defined(LIGHTING) || defined(CUBEMAP)
 
+#if defined(LIGHTING)
 varying vec3 v_normalVector;
+#endif
 
 #if (POINT_LIGHT_COUNT > 0)
 varying vec3 v_vertexToPointLightDirection[POINT_LIGHT_COUNT];
@@ -89,6 +99,11 @@ varying vec3 v_vertexToSpotLightDirection[SPOT_LIGHT_COUNT];
 varying vec3 v_cameraDirection; 
 #endif
 
+#if defined(CUBEMAP)
+varying vec3 v_normalWorldVector;
+varying vec3 v_cameraWorldDirection;
+#endif
+
 #include "lighting.frag"
 
 #endif
@@ -96,14 +111,22 @@ varying vec3 v_cameraDirection;
 
 void main()
 {
-    
+    #if defined(CUBEMAP)
+    vec3 cubemapNormal = normalize(v_normalWorldVector);
+    #endif
+
     #if defined(LIGHTING)
 
     #if defined(VERTEX_COLOR)
 	_baseColor.rgb = v_color;
+    _baseColor.a = 1.0;
     #else
     _baseColor = u_diffuseColor;
 	#endif
+
+    #if defined(CUBEMAP)
+    _baseColor.rgb *= getCubemapColor(cubemapNormal).rgb;
+    #endif
     
     gl_FragColor.a = _baseColor.a;
     gl_FragColor.rgb = getLitPixel();
@@ -115,6 +138,10 @@ void main()
     gl_FragColor.a = 1.0;
     #else
     gl_FragColor = u_diffuseColor;
+    #endif
+
+    #if defined(CUBEMAP)
+    gl_FragColor.rgb *= getCubemapColor(cubemapNormal).rgb;
     #endif
     
     #endif

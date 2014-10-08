@@ -1,8 +1,10 @@
 
+#if defined(LIGHTING)
+
 vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, float attenuation)
 {
     float diffuse = max(dot(normalVector, lightDirection), 0.0);
-     vec3 diffuseColor = lightColor * _baseColor.rgb * diffuse * attenuation;
+    vec3 diffuseColor = lightColor * _baseColor.rgb * diffuse * attenuation;
 
     #if defined(SPECULAR)
 
@@ -26,7 +28,7 @@ vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, fl
     #endif
 }
 
-vec3 getLitPixel()
+vec3 getNormal()
 {
     #if defined(BUMPED)
     
@@ -37,6 +39,13 @@ vec3 getLitPixel()
     vec3 normalVector = normalize(v_normalVector);
     
     #endif
+
+    return normalVector;
+}
+
+vec3 getLitPixel()
+{
+    vec3 normalVector = getNormal();
     
     vec3 ambientColor = _baseColor.rgb * u_ambientColor;
     vec3 combinedColor = ambientColor;
@@ -90,3 +99,24 @@ vec3 getLitPixel()
 
     return combinedColor;
 }
+
+#endif
+
+#if defined(CUBEMAP)
+
+vec4 getCubemapColor(vec3 normal)
+{
+    vec3 cubemapCameraDirection = normalize(v_cameraWorldDirection);
+
+    #if defined(REFLECTION)
+    vec3 cubemapDirection = reflect(-cubemapCameraDirection, normal);
+    #elif defined(REFRACTION)
+    vec3 cubemapDirection = refract(cubemapCameraDirection, normal, u_refractionIndex);
+    #else
+    vec3 cubemapDirection = cubemapCameraDirection;
+    #endif
+
+    return textureCube(u_diffuseTexture, cubemapDirection);
+}
+
+#endif
