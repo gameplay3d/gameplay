@@ -299,16 +299,6 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0600;
-				TargetAttributes = {
-					5B61611414CCC24C0073B857 = {
-						DevelopmentTeam = 5AW3RSVM9R;
-						SystemCapabilities = {
-							com.apple.GameCenter = {
-								enabled = 0;
-							};
-						};
-					};
-				};
 			};
 			buildConfigurationList = 42C932B61491A0DB0098216A /* Build configuration list for PBXProject "sample-lua" */;
 			compatibilityVersion = "Xcode 3.2";

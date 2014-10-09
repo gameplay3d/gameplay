@@ -300,16 +300,6 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0600;
-				TargetAttributes = {
-					5B04C5CF14BFE1A200EB0071 = {
-						DevelopmentTeam = 5AW3RSVM9R;
-						SystemCapabilities = {
-							com.apple.GameCenter = {
-								enabled = 0;
-							};
-						};
-					};
-				};
 			};
 			buildConfigurationList = 4217005814697FF100A45C02 /* Build configuration list for PBXProject "sample-mesh" */;
 			compatibilityVersion = "Xcode 3.2";
