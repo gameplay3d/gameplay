@@ -31,7 +31,9 @@ RacerGame game;
 #define STEERING_RESPONSE (7.0f)
 
 RacerGame::RacerGame()
-    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _upsetTimer(0),
+    : _scene(NULL), _font(NULL), _menu(NULL), _overlay(NULL), _keyFlags(0), _mouseFlags(0), _steering(0),
+    _gamepad(NULL), _physicalGamepad(NULL), _virtualGamepad(NULL), _virtualGamepadClip(NULL),
+    _carVehicle(NULL), _upsetTimer(0),
     _backgroundMusic(NULL), _engineSound(NULL), _brakingSound(NULL)
 {
 }
@@ -215,7 +217,7 @@ void RacerGame::update(float elapsedTime)
                     _engineSound->setGain(0.8f + (driving * 0.2f));
                 }
                 
-                if (!driving && (_keyFlags & ACCELERATOR || _keyFlags & ACCELERATOR_MOUSE || _gamepad->isButtonDown(Gamepad::BUTTON_A)))
+                if (!driving && ((_keyFlags & ACCELERATOR) || (_keyFlags & ACCELERATOR_MOUSE) || _gamepad->isButtonDown(Gamepad::BUTTON_A)))
                 {
                     driving = 1;
                     _engineSound->setGain(1.0f);
