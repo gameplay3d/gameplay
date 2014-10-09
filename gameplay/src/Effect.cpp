@@ -654,7 +654,7 @@ Effect* Effect::getCurrentEffect()
 }
 
 Uniform::Uniform() :
-    _location(-1), _type(0), _index(0)
+    _location(-1), _type(0), _index(0), _effect(NULL)
 {
 }
 
