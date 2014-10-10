@@ -54,4 +54,5 @@
 			<resource resourceType="PROJECT" workspacePath="/sample-browser"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
