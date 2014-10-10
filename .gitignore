@@ -50,6 +50,8 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay/android/local.properties
 /gameplay/android/project.properties
 /gameplay/android/obj
+/gameplay/android/gen
+/gameplay/android/bin
 /gameplay.xcworkspace/xcuserdata
 /gameplay/gameplay.xcodeproj/xcuserdata
 
