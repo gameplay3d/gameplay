@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>sample-browser</name>
+	<name>sample-lua</name>
 	<comment></comment>
 	<projects>
 		<project>gameplay</project>
@@ -51,7 +51,7 @@
 		<link>
 			<name>src</name>
 			<type>2</type>
-			<location>$%7BPARENT-2-PROJECT_LOC%7D/browser/src</location>
+			<locationURI>$%257BPARENT-2-PROJECT_LOC%257D/lua/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
