@@ -3,6 +3,7 @@
 	<name>sample-browser</name>
 	<comment></comment>
 	<projects>
+		<project>gameplay</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -46,4 +47,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src</name>
+			<type>2</type>
+			<location>$%7BPARENT-2-PROJECT_LOC%7D/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>
