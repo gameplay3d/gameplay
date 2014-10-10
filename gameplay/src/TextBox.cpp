@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-TextBox::TextBox() : _caretLocation(0), _lastKeypress(0), _fontSize(0), _caretImage(NULL), _passwordChar('*'), _inputMode(TEXT), _ctrlPressed(false)
+TextBox::TextBox() : _caretLocation(0), _lastKeypress(0), _fontSize(0), _caretImage(NULL), _passwordChar('*'), _inputMode(TEXT), _ctrlPressed(false), _shiftPressed(false)
 {
     _canFocus = true;
 }
@@ -140,6 +140,11 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
         {
             switch (key)
             {
+            	case Keyboard::KEY_SHIFT:
+            	{
+                	_shiftPressed = true;
+                	break;
+            	}
                 case Keyboard::KEY_CTRL:
                 {
                     _ctrlPressed = true;
@@ -257,6 +262,11 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     return false;
                 default:
                 {
+                	// Insert character into string, only if our font supports this character
+                	if (_shiftPressed && islower(key))
+                	{
+                	    key = toupper(key);
+                	}
                     // Insert character into string, only if our font supports this character
                     if (_font && _font->isCharacterSupported(key))
                     {
@@ -278,6 +288,11 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_RELEASE:
             switch (key)
             {
+            	case Keyboard::KEY_SHIFT:
+            	{
+                	_shiftPressed = false;
+                	break;
+             	 }
                 case Keyboard::KEY_CTRL:
                 {
                     _ctrlPressed = false;

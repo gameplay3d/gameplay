@@ -237,6 +237,11 @@ protected:
      */
     bool _ctrlPressed;
 
+    /**
+     * Indicate if the SHIFT key is currently pressed.
+     */
+	bool _shiftPressed = false;
+
 private:
 
     /**
