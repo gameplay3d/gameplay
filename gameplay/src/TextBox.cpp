@@ -262,11 +262,11 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     return false;
                 default:
                 {
-                	// Insert character into string, only if our font supports this character
-                	if (_shiftPressed && islower(key))
-                	{
-                	    key = toupper(key);
-                	}
+                    // Insert character into string, only if our font supports this character
+                    if (_shiftPressed && islower(key))
+                    {
+                        key = toupper(key);
+                    }
                     // Insert character into string, only if our font supports this character
                     if (_font && _font->isCharacterSupported(key))
                     {
