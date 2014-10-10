@@ -142,8 +142,8 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
             {
             	case Keyboard::KEY_SHIFT:
             	{
-                	_shiftPressed = true;
-                	break;
+                    _shiftPressed = true;
+                    break;
             	}
                 case Keyboard::KEY_CTRL:
                 {
@@ -290,8 +290,8 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
             {
             	case Keyboard::KEY_SHIFT:
             	{
-                	_shiftPressed = false;
-                	break;
+                    _shiftPressed = false;
+                    break;
              	 }
                 case Keyboard::KEY_CTRL:
                 {
