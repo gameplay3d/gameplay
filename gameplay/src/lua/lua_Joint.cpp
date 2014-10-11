@@ -151,7 +151,6 @@ void luaRegister_Joint()
         {"translateX", lua_Joint_translateX},
         {"translateY", lua_Joint_translateY},
         {"translateZ", lua_Joint_translateZ},
-        {"update", lua_Joint_update},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -6878,42 +6877,6 @@ int lua_Joint_translateZ(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Joint_translateZ - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joint_update(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
-
-                Joint* instance = getInstance(state);
-                instance->update(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Joint_update - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

@@ -149,7 +149,6 @@ void luaRegister_Node()
         {"translateX", lua_Node_translateX},
         {"translateY", lua_Node_translateY},
         {"translateZ", lua_Node_translateZ},
-        {"update", lua_Node_update},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -6898,42 +6897,6 @@ int lua_Node_translateZ(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Node_translateZ - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Node_update(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
-
-                Node* instance = getInstance(state);
-                instance->update(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Node_update - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
