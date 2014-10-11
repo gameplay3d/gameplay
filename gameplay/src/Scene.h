@@ -235,11 +235,6 @@ public:
     inline void visit(const char* visitMethod);
 
     /**
-     * Updates all the active nodes in the scene.
-     */
-    void update(float elapsedTime);
-
-    /**
      * @see VisibleSet#getNext
      */
     Node* getNext();

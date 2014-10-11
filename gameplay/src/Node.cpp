@@ -438,15 +438,6 @@ Node* Node::getRootNode() const
     return n;
 }
 
-void Node::update(float elapsedTime)
-{
-    for (Node* node = _firstChild; node != NULL; node = node->_nextSibling)
-    {
-        if (node->isActive())
-            node->update(elapsedTime);
-    }
-}
-
 bool Node::isStatic() const
 {
     return (_collisionObject && _collisionObject->isStatic());

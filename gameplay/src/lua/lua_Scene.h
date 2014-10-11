@@ -27,7 +27,6 @@ int lua_Scene_setId(lua_State* state);
 int lua_Scene_static_create(lua_State* state);
 int lua_Scene_static_getScene(lua_State* state);
 int lua_Scene_static_load(lua_State* state);
-int lua_Scene_update(lua_State* state);
 int lua_Scene_visit(lua_State* state);
 
 void luaRegister_Scene();

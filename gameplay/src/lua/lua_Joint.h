@@ -143,7 +143,6 @@ int lua_Joint_translateUp(lua_State* state);
 int lua_Joint_translateX(lua_State* state);
 int lua_Joint_translateY(lua_State* state);
 int lua_Joint_translateZ(lua_State* state);
-int lua_Joint_update(lua_State* state);
 
 void luaRegister_Joint();
 

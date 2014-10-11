@@ -143,7 +143,6 @@ int lua_Node_translateUp(lua_State* state);
 int lua_Node_translateX(lua_State* state);
 int lua_Node_translateY(lua_State* state);
 int lua_Node_translateZ(lua_State* state);
-int lua_Node_update(lua_State* state);
 
 void luaRegister_Node();
 

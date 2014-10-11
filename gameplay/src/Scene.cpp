@@ -384,15 +384,6 @@ void Scene::setAmbientColor(float red, float green, float blue)
     _ambientColor.set(red, green, blue);
 }
 
-void Scene::update(float elapsedTime)
-{
-    for (Node* node = _firstNode; node != NULL; node = node->_nextSibling)
-    {
-        if (node->isActive())
-            node->update(elapsedTime);
-    }
-}
-
 void Scene::reset()
 {
     _nextItr = NULL;

@@ -257,11 +257,6 @@ public:
     Node* getRootNode() const;
 
     /**
-     * Updates this node and any active children.
-     */
-    void update(float elapsedTime);
-
-    /**
      * Returns whether the transformation of this node is static.
      *
      * Nodes that have static rigid bodies attached to them are considered static.
