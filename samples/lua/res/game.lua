@@ -53,7 +53,7 @@ function render(elapsedTime)
     -- Draw the fps.
     local buffer = string.format("%u\n%s", Game.getInstance():getFrameRate(), _stateMachine:getActiveState():getId())
     _font:start()
-    _font:drawText(buffer, 5, 1, textColor, _font:getSize())
+    _font:drawText(buffer, 5, 1, textColor, 18)
     _font:finish()
 end
 
