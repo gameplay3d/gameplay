@@ -151,7 +151,7 @@ void Audio3DSample::render(float elapsedTime)
     // Visit all the nodes in the scene for drawing
     _scene->visit(this, &Audio3DSample::drawScene);
 
-    drawDebugText(5, _font->getSize());
+    drawDebugText(5, 20, 18);
 
     _gamepad->draw();
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
@@ -315,15 +315,15 @@ void Audio3DSample::addSound(const std::string& file)
     node->release();
 }
 
-void Audio3DSample::drawDebugText(int x, int y)
+void Audio3DSample::drawDebugText(int x, int y, unsigned int fontSize)
 {
     _font->start();
     static const int V_SPACE = 16;
     AudioListener* audioListener = AudioListener::getInstance();
     drawVector3("Position", audioListener->getPosition(), x, y);
-    drawVector3("Forward", audioListener->getOrientationForward(), x, y+=_font->getSize());
-    drawVector3("Orientation", audioListener->getOrientationUp(), x, y+=_font->getSize());
-    drawVector3("Velocity", audioListener->getVelocity(), x, y+=_font->getSize());
+    drawVector3("Forward", audioListener->getOrientationForward(), x, y += fontSize);
+    drawVector3("Orientation", audioListener->getOrientationUp(), x, y += fontSize);
+    drawVector3("Velocity", audioListener->getVelocity(), x, y += fontSize);
     _font->finish();
 }
 

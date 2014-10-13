@@ -75,7 +75,7 @@ void MeshBatchSample::render(float elapsedTime)
     _font->start();
     char text[1024];
     sprintf(text, "Touch to add triangles (%d)", (int)(_vertices.size() / 3));
-    _font->drawText(text, 10, getHeight() - _font->getSize() - 10, Vector4::one(), _font->getSize());
+    _font->drawText(text, 10, getHeight() - _font->getSize() - 10, Vector4::one(), 18);
     _font->finish();
 }
 

@@ -62,7 +62,7 @@ void TextureSample::initialize()
     cameraNode->translate(0, 0, 50);
     SAFE_RELEASE(camera);
 
-    const float fontSize = _font->getSize();
+    const float fontSize = 18;
     const float cubeSize = 10.0f;
     float x, y, textWidth;
     // Find the width of the cube in screen space
