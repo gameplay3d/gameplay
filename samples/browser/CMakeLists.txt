@@ -24,32 +24,7 @@ link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/glew/lib/linux/${ARCH_DIR}
 )
 
-
-set(GAMEPLAY_LIBRARIES
-    gameplay
-    m
-    lua
-    png
-    z
-    vorbis
-    ogg
-    BulletDynamics
-    BulletCollision
-    LinearMath
-    openal
-    GLEW
-    GL
-    rt
-    dl
-    X11
-    pthread
-    gtk-x11-2.0
-    glib-2.0
-    gobject-2.0
-) 
-
 add_definitions(-std=c++11)
-add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletCollision -lBulletDynamics -lLinearMath -lopenal -LGLEW -lGL -lrt -ldl -lX11 -lpthread -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0)
 
 set( GAME_NAME sample-browser)
 
