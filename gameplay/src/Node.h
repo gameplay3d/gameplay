@@ -274,7 +274,14 @@ public:
     Node* getRootNode() const;
 
     /**
-     * Updates this node and any active children.
+     * Called to update the state of this Node.
+     *
+     * This method is called by Scene::update(float) to update the state of all active
+     * nodes in a scene. A Node is considered active if Node::isActive() returns true.
+     *
+     * If any scripts are attached to the node, their update event will be fired.
+     *
+     * @param elapsedTime Elapsed time in milliseconds.
      */
     void update(float elapsedTime);
 

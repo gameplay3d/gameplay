@@ -1,12 +1,17 @@
 ## v3.0.0
 
 - Adds support for MacOSX 64-bit.
-- Adds support for iOS 7.1.
-- Adds updates to FBX SDK 2015.1.
+- Adds support for iOS 8
+- Adds support for XCode 6
+- Adds support for Eclipse for Linux.
+- Adds support for Eclipse for Android.
+- Adds updates to FBX SDK 2015.1
 - Adds support for Bullet Physics 2.82
 - Adds gameplay-encoder support for Visual Studio 2013.
 - Adds support for C++11.
+- Adds support for font kerning.
 - Fixes Android to build with arm instead of thumb.
+
 
 ## v2.0.0
 
@@ -14,7 +19,7 @@
 - Adds support for iOS 7, MacOS X 10.9 and XCode 5.
 - Adds support for BlackBerry NDK 10.2.
 - Adds support for CollisionObject group mask filtering.
-- Adds support in shaders for mulitple lights using shader defines.
+- Adds support in shaders for multiple lights using shader defines.
 - Adds various improvements to Material binding support.
 - Adds support for array MaterialParameter's.
 - Adds support for encoding distance field based fonts.

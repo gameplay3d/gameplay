@@ -324,6 +324,7 @@ bool Node::isActiveInHierarchy() const
    {
        if (!node->_active)
            return false;
+       node = node->_parent;
    }
    return true;
 }
