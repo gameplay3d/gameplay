@@ -271,9 +271,9 @@ Texture* Texture::create(TextureHandle handle, int width, int height, Format for
 void Texture::setData(const unsigned char* data)
 {
     // Don't work with any compressed or cached textures
-    GL_ASSERT( data );
-    GL_ASSERT( (!_compressed) );
-    GL_ASSERT( (!_cached) );
+    GP_ASSERT( data );
+    GP_ASSERT( (!_compressed) );
+    GP_ASSERT( (!_cached) );
 
     GL_ASSERT( glBindTexture((GLenum)_type, _handle) );
 

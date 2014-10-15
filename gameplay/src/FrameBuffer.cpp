@@ -166,7 +166,7 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 
 void FrameBuffer::setRenderTarget(RenderTarget* target, Texture::CubeFace face, unsigned int index)
 {
-    GL_ASSERT(face >= Texture::POSITIVE_X && face <= Texture::NEGATIVE_Z);
+    GP_ASSERT(face >= Texture::POSITIVE_X && face <= Texture::NEGATIVE_Z);
     GP_ASSERT(!target || (target->getTexture() && target->getTexture()->getType() == Texture::TEXTURE_CUBE));
 
     setRenderTarget(target, index, GL_TEXTURE_CUBE_MAP_POSITIVE_X + face);
