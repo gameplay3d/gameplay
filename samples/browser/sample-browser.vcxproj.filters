@@ -319,9 +319,6 @@
     <ClInclude Include="src\TerrainSample.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Timer.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
     <ClInclude Include="src\WaterSample.h">
       <Filter>src</Filter>
     </ClInclude>

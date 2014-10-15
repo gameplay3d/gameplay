@@ -19,7 +19,7 @@ WaterSample::WaterSample()
 	_reflectCameraNode(NULL), _inputMask(0u), _prevX(0),
 	 _prevY(0), _waterHeight(0.f), _refractBuffer(NULL),
 	 _refractBatch(NULL), _reflectBuffer(NULL), _reflectBatch(NULL),
-	 _showBuffers(true), _timer(NULL), _gamepad(NULL)
+	 _showBuffers(true), _gamepad(NULL)
 {
 
 }
@@ -106,7 +106,6 @@ void WaterSample::initialize()
 	SAFE_RELEASE(lightNode);
 
 	setMouseCaptured(true);
-	_timer = new Timer();
 
 	setMultiTouch(true);
 	_gamepad = getGamepad(0);
@@ -119,8 +118,6 @@ void WaterSample::initialize()
 
 void WaterSample::finalize()
 {
-	SAFE_DELETE(_timer);
-	
 	setMouseCaptured(false);
 
 	//relese ref counted members
