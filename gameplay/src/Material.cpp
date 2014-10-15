@@ -464,6 +464,11 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
             bool mipmap = ns->getBool("mipmap");
             Texture::Wrap wrapS = parseTextureWrapMode(ns->getString("wrapS"), Texture::REPEAT);
             Texture::Wrap wrapT = parseTextureWrapMode(ns->getString("wrapT"), Texture::REPEAT);
+            Texture::Wrap wrapR = Texture::REPEAT;
+            if(ns->exists("wrapR"))
+            {
+                wrapR = parseTextureWrapMode(ns->getString("wrapR"), Texture::REPEAT);
+            }
             Texture::Filter minFilter = parseTextureFilterMode(ns->getString("minFilter"), mipmap ? Texture::NEAREST_MIPMAP_LINEAR : Texture::LINEAR);
             Texture::Filter magFilter = parseTextureFilterMode(ns->getString("magFilter"), Texture::LINEAR);
 
@@ -472,7 +477,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
             Texture::Sampler* sampler = renderState->getParameter(name)->setValue(path.c_str(), mipmap);
             if (sampler)
             {
-                sampler->setWrapMode(wrapS, wrapT);
+                sampler->setWrapMode(wrapS, wrapT, wrapR);
                 sampler->setFilterMode(minFilter, magFilter);
             }
         }
