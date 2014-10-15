@@ -56,7 +56,6 @@ public:
      */
     enum Type
     {
-        TEXTURE_UNKNOWN = 0,
         TEXTURE_2D = GL_TEXTURE_2D,
         TEXTURE_CUBE = GL_TEXTURE_CUBE_MAP
     };

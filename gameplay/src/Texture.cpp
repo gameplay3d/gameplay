@@ -51,7 +51,7 @@ static std::vector<Texture*> __textureCache;
 static TextureHandle __currentTextureId = 0;
 static Texture::Type __currentTextureType = Texture::TEXTURE_2D;
 
-Texture::Texture() : _handle(0), _format(UNKNOWN), _type(TEXTURE_UNKNOWN), _width(0), _height(0), _mipmapped(false), _cached(false), _compressed(false),
+Texture::Texture() : _handle(0), _format(UNKNOWN), _type((Texture::Type)0), _width(0), _height(0), _mipmapped(false), _cached(false), _compressed(false),
     _wrapS(Texture::REPEAT), _wrapT(Texture::REPEAT), _wrapR(Texture::REPEAT), _minFilter(Texture::NEAREST_MIPMAP_LINEAR), _magFilter(Texture::LINEAR)
 {
 }
