@@ -5,6 +5,8 @@
 #include "FrameBuffer.h"
 #include "Game.h"
 #include "Ref.h"
+#include "lua_ImageFormat.h"
+#include "lua_TextureCubeFace.h"
 
 namespace gameplay
 {
@@ -577,23 +579,23 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                gameplay::ScriptUtil::LuaArray<RenderTarget> param1 = gameplay::ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
-                if (!param1Valid)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
                 {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'RenderTarget'.");
-                    lua_error(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<RenderTarget> param1 = gameplay::ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                FrameBuffer* instance = getInstance(state);
-                instance->setRenderTarget(param1);
-                
-                return 0;
-            }
+                    FrameBuffer* instance = getInstance(state);
+                    instance->setRenderTarget(param1);
+                    
+                    return 0;
+                }
+            } while (0);
 
             lua_pushstring(state, "lua_FrameBuffer_setRenderTarget - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
@@ -601,27 +603,81 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
         }
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                gameplay::ScriptUtil::LuaArray<RenderTarget> param1 = gameplay::ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
-                if (!param1Valid)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER)
                 {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'RenderTarget'.");
-                    lua_error(state);
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<RenderTarget> param1 = gameplay::ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                    FrameBuffer* instance = getInstance(state);
+                    instance->setRenderTarget(param1, param2);
+                    
+                    return 0;
                 }
+            } while (0);
 
-                // Get parameter 2 off the stack.
-                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<RenderTarget> param1 = gameplay::ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                FrameBuffer* instance = getInstance(state);
-                instance->setRenderTarget(param1, param2);
-                
-                return 0;
-            }
+                    // Get parameter 2 off the stack.
+                    Texture::CubeFace param2 = (Texture::CubeFace)lua_enumFromString_TextureCubeFace(luaL_checkstring(state, 3));
+
+                    FrameBuffer* instance = getInstance(state);
+                    instance->setRenderTarget(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_FrameBuffer_setRenderTarget - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        case 4:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<RenderTarget> param1 = gameplay::ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    Texture::CubeFace param2 = (Texture::CubeFace)lua_enumFromString_TextureCubeFace(luaL_checkstring(state, 3));
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                    FrameBuffer* instance = getInstance(state);
+                    instance->setRenderTarget(param1, param2, param3);
+                    
+                    return 0;
+                }
+            } while (0);
 
             lua_pushstring(state, "lua_FrameBuffer_setRenderTarget - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
@@ -629,7 +685,7 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2, 3 or 4).");
             lua_error(state);
             break;
         }
@@ -789,9 +845,37 @@ int lua_FrameBuffer_static_createScreenshot(lua_State* state)
             return 1;
             break;
         }
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Image::Format param1 = (Image::Format)lua_enumFromString_ImageFormat(luaL_checkstring(state, 1));
+
+                void* returnPtr = (void*)FrameBuffer::createScreenshot(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Image");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_FrameBuffer_static_createScreenshot - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
             lua_error(state);
             break;
         }
