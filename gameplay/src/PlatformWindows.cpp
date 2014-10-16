@@ -1368,17 +1368,17 @@ bool Platform::launchURL(const char* url)
 
 std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
 {
+    char currentDir[512];
+    GetCurrentDirectoryA(512, currentDir);
+
     std::string filename;
     OPENFILENAMEA ofn;
     memset(&ofn, 0, sizeof(ofn));
 
     // Set initial directory
     std::string initialDirectoryStr;
-    char currentDir[256];
     if (initialDirectory == NULL)
     {
-        char currentDir[512];
-        GetCurrentDirectoryA(512, currentDir);
         initialDirectoryStr = currentDir;
     }
     else
@@ -1431,8 +1431,7 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
 
     filename = szFileName;
         
-    if (initialDirectory == NULL)
-        SetCurrentDirectoryA(currentDir);
+    SetCurrentDirectoryA(currentDir);
 
     return filename;
 }
