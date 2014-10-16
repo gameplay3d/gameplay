@@ -1429,7 +1429,7 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
         GetSaveFileNameA(&ofn);
     }
 
-    filename = szFileName;            
+    filename = szFileName;
         
     SetCurrentDirectoryA(currentDir);
 

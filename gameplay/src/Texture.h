@@ -50,6 +50,28 @@ public:
         REPEAT = GL_REPEAT,
         CLAMP = GL_CLAMP_TO_EDGE
     };
+
+    /**
+     * Defines the type of Texture in use.
+     */
+    enum Type
+    {
+        TEXTURE_2D = GL_TEXTURE_2D,
+        TEXTURE_CUBE = GL_TEXTURE_CUBE_MAP
+    };
+
+    /**
+     * Defines a face of a Texture of Type: cube.
+     */
+    enum CubeFace
+    {
+        POSITIVE_X,
+        NEGATIVE_X,
+        POSITIVE_Y,
+        NEGATIVE_Y,
+        POSITIVE_Z,
+        NEGATIVE_Z
+    };
     
     /**
      * Defines a texture sampler.
@@ -96,8 +118,9 @@ public:
          *
          * @param wrapS The horizontal wrap mode.
          * @param wrapT The vertical wrap mode.
+         * @param wrapR The depth wrap mode.
          */
-        void setWrapMode(Wrap wrapS, Wrap wrapT);
+        void setWrapMode(Wrap wrapS, Wrap wrapT, Wrap wrapR = REPEAT);
 
         /**
          * Sets the texture filter modes for this sampler.
@@ -134,6 +157,7 @@ public:
         Texture* _texture;
         Wrap _wrapS;
         Wrap _wrapT;
+        Wrap _wrapR;
         Filter _minFilter;
         Filter _magFilter;
     };
@@ -169,15 +193,18 @@ public:
      * The data in the texture is expected to be tightly packed (no padding at the end of rows).
      *
      * @param format Format of the texture data.
-     * @param width Width of the texture data.
-     * @param height Height of the texture data.
-     * @param data Raw texture data (expected to be tightly packed).
+     * @param width Width of the texture data. If type is TEX_CUBE, then this is the cube face width.
+     * @param height Height of the texture data. If type is TEX_CUBE, then this is the cube face height.
+     * @param data Raw texture data (expected to be tightly packed). If the type parameter is set 
+     *   to TEXTURE_CUBE, then data is expected to be each face stored back contiguously within the
+     *   array.
      * @param generateMipmaps True to generate a full mipmap chain, false otherwise.
+     * @param type What type of Texture should be created.
      *
      * @return The new texture.
      * @script{create}
      */
-    static Texture* create(Format format, unsigned int width, unsigned int height, const unsigned char* data, bool generateMipmaps = false);
+    static Texture* create(Format format, unsigned int width, unsigned int height, const unsigned char* data, bool generateMipmaps = false, Type type = TEXTURE_2D);
 
     /**
      * Creates a texture object to wrap the specified pre-created native texture handle.
@@ -200,6 +227,15 @@ public:
     static Texture* create(TextureHandle handle, int width, int height, Format format = UNKNOWN);
 
     /**
+     * Set texture data to replace current texture image.
+     * 
+     * @param data Raw texture data (expected to be tightly packed). If the type parameter is set 
+     *   to TEXTURE_CUBE, then data is expected to be each face stored back contiguously within the
+     *   array.
+     */
+    void setData(const unsigned char* data);
+
+    /**
      * Returns the path that the texture was originally loaded from (if applicable).
      *
      * @return The texture path, or an empty string if the texture was not loaded from file.
@@ -212,6 +248,13 @@ public:
      * @return The texture format.
      */
     Format getFormat() const;
+
+    /**
+     * Gets the texture type.
+     *
+     * @return The texture type.
+     */
+    Type getType() const;
 
     /**
      * Gets the texture width.
@@ -277,15 +320,16 @@ private:
 
     static Texture* createCompressedDDS(const char* path);
 
-    static GLubyte* readCompressedPVRTC(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+    static GLubyte* readCompressedPVRTC(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount, unsigned int* faceCount, GLenum faces[6]);
 
-    static GLubyte* readCompressedPVRTCLegacy(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+    static GLubyte* readCompressedPVRTCLegacy(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount, unsigned int* faceCount, GLenum faces[6]);
 
     static int getMaskByteIndex(unsigned int mask);
 
     std::string _path;
     TextureHandle _handle;
     Format _format;
+    Type _type;
     unsigned int _width;
     unsigned int _height;
     bool _mipmapped;
@@ -293,6 +337,7 @@ private:
     bool _compressed;
     Wrap _wrapS;
     Wrap _wrapT;
+    Wrap _wrapR;
     Filter _minFilter;
     Filter _magFilter;
 };

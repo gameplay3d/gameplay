@@ -876,6 +876,12 @@
     <ClCompile Include="src\lua\lua_ContainerDirection.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\lua\lua_TextureCubeFace.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_TextureType.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Plane.h">
@@ -1737,6 +1743,12 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_ContainerDirection.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_TextureCubeFace.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_TextureType.h">
       <Filter>src\lua</Filter>
     </ClInclude>
   </ItemGroup>
