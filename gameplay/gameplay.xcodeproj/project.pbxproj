@@ -592,6 +592,9 @@
 		8C974D87193F709700FF9730 /* lua_TextureCubeFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C974D82193F709700FF9730 /* lua_TextureCubeFace.cpp */; };
 		8C974D88193F709700FF9730 /* lua_TextureType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C974D84193F709700FF9730 /* lua_TextureType.cpp */; };
 		8C974D89193F709700FF9730 /* lua_TextureType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C974D84193F709700FF9730 /* lua_TextureType.cpp */; };
+		B589116A19F6463300D1F6BD /* BGPAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B589116419F6463300D1F6BD /* BGPAppDelegate.mm */; };
+		B589116B19F6463300D1F6BD /* BGPView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B589116619F6463300D1F6BD /* BGPView.mm */; };
+		B589116C19F6463300D1F6BD /* BGPViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B589116819F6463300D1F6BD /* BGPViewController.mm */; };
 		BD2636E516CF5B7400CFE15F /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */; };
 		BD2636E616CF5B7400CFE15F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636E016CF5B7400CFE15F /* Foundation.framework */; };
 		BD2636E716CF5B7400CFE15F /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2636E116CF5B7400CFE15F /* OpenAL.framework */; };
@@ -1227,12 +1230,19 @@
 		8C974D83193F709700FF9730 /* lua_TextureCubeFace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_TextureCubeFace.h; sourceTree = "<group>"; };
 		8C974D84193F709700FF9730 /* lua_TextureType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_TextureType.cpp; sourceTree = "<group>"; };
 		8C974D85193F709700FF9730 /* lua_TextureType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_TextureType.h; sourceTree = "<group>"; };
-		BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		BD2636E016CF5B7400CFE15F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		BD2636E116CF5B7400CFE15F /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		BD2636E216CF5B7400CFE15F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		BD2636E316CF5B7400CFE15F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		BD2636E416CF5B7400CFE15F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		B589116319F6463300D1F6BD /* BGPAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGPAppDelegate.h; sourceTree = "<group>"; };
+		B589116419F6463300D1F6BD /* BGPAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BGPAppDelegate.mm; sourceTree = "<group>"; };
+		B589116519F6463300D1F6BD /* BGPView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGPView.h; sourceTree = "<group>"; };
+		B589116619F6463300D1F6BD /* BGPView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BGPView.mm; sourceTree = "<group>"; };
+		B589116719F6463300D1F6BD /* BGPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGPViewController.h; sourceTree = "<group>"; };
+		B589116819F6463300D1F6BD /* BGPViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BGPViewController.mm; sourceTree = "<group>"; };
+		B589116919F6463300D1F6BD /* PlatformiOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlatformiOS.h; sourceTree = "<group>"; };
+		BD2636DF16CF5B7400CFE15F /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		BD2636E016CF5B7400CFE15F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		BD2636E116CF5B7400CFE15F /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		BD2636E216CF5B7400CFE15F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		BD2636E316CF5B7400CFE15F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		BD2636E416CF5B7400CFE15F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1655,6 +1665,7 @@
 		4234D9A314686C52003031B3 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				B589116219F6463300D1F6BD /* ios */,
 				420BBAA51817416D00C7B720 /* lua */,
 				42CC52F71809A4EB00AAD8AD /* AbsoluteLayout.cpp */,
 				42CC52F81809A4EB00AAD8AD /* AbsoluteLayout.h */,
@@ -1977,6 +1988,21 @@
 			);
 			name = MacOSX;
 			sourceTree = "<group>";
+		};
+		B589116219F6463300D1F6BD /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				B589116319F6463300D1F6BD /* BGPAppDelegate.h */,
+				B589116419F6463300D1F6BD /* BGPAppDelegate.mm */,
+				B589116519F6463300D1F6BD /* BGPView.h */,
+				B589116619F6463300D1F6BD /* BGPView.mm */,
+				B589116719F6463300D1F6BD /* BGPViewController.h */,
+				B589116819F6463300D1F6BD /* BGPViewController.mm */,
+				B589116919F6463300D1F6BD /* PlatformiOS.h */,
+			);
+			name = ios;
+			path = src/ios;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -2470,11 +2496,13 @@
 				42CC5A071809A4EF00AAD8AD /* Transform.cpp in Sources */,
 				42CC559D1809A4EF00AAD8AD /* AudioController.cpp in Sources */,
 				42CC55BF1809A4EF00AAD8AD /* CheckBox.cpp in Sources */,
+				B589116A19F6463300D1F6BD /* BGPAppDelegate.mm in Sources */,
 				420BBE231817416F00C7B720 /* lua_RenderStateBlend.cpp in Sources */,
 				420BBE371817416F00C7B720 /* lua_RenderStateStencilFunction.cpp in Sources */,
 				42CC5A0B1809A4EF00AAD8AD /* Vector2.cpp in Sources */,
 				420BBE671817416F00C7B720 /* lua_Technique.cpp in Sources */,
 				420BBE5B1817416F00C7B720 /* lua_ScriptTarget.cpp in Sources */,
+				B589116C19F6463300D1F6BD /* BGPViewController.mm in Sources */,
 				8BA1B8C0197C3212009FF517 /* lua_ContainerDirection.cpp in Sources */,
 				420BBD371817416F00C7B720 /* lua_Light.cpp in Sources */,
 				42CC55A11809A4EF00AAD8AD /* AudioListener.cpp in Sources */,
@@ -2487,6 +2515,7 @@
 				420BBD2B1817416F00C7B720 /* lua_Label.cpp in Sources */,
 				420BBDE31817416F00C7B720 /* lua_PhysicsRigidBodyParameters.cpp in Sources */,
 				420BBDF31817416F00C7B720 /* lua_PhysicsVehicleWheel.cpp in Sources */,
+				B589116B19F6463300D1F6BD /* BGPView.mm in Sources */,
 				42CC59331809A4EF00AAD8AD /* PhysicsCharacter.cpp in Sources */,
 				420BBEBF1817416F00C7B720 /* lua_Vector3.cpp in Sources */,
 				420BBE771817416F00C7B720 /* lua_TextBox.cpp in Sources */,
@@ -2749,6 +2778,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_LOCATION = NO;
@@ -2802,6 +2832,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
