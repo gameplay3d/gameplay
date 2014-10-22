@@ -11,7 +11,7 @@ extern double getMachTimeInMilliseconds();
 
 @interface BGPPlatformManager : NSObject
 
-@property (nonatomic, strong) BGPViewController* activeViewController;
+@property (nonatomic, weak) BGPViewController* activeViewController;
 @property (nonatomic, strong) CMMotionManager* motionManager;
 
 + (BGPPlatformManager*)sharedInstance;
