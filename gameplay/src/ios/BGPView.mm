@@ -154,11 +154,6 @@ int getUnicode(int key);
 
 - (void)dealloc
 {
-    if (game)
-    {
-        game->exit();
-    }
-
     [self deleteFramebuffer];
 
     if ([EAGLContext currentContext] == context)

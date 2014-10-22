@@ -2,6 +2,10 @@
 #import "BGPViewController.h"
 #import "BGPAppDelegate.h"
 #import "PlatformiOS.h"
+#include "Base.h"
+#include "Game.h"
+
+using namespace gameplay;
 
 @interface BGPAppDelegate ()
 {
@@ -71,6 +75,13 @@
 - (void)applicationWillTerminate:(UIApplication*)application
 {
     [viewController stopUpdating];
+
+    Game *game = Game::getInstance();
+
+    if (game)
+    {
+        game->exit();
+    }
 }
 
 - (void)dealloc
