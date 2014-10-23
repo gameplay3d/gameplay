@@ -9,8 +9,6 @@
 
 - (instancetype)initWithFrame:(CGRect)frame;
 
-- (void)startGame;
-
 - (void)startUpdating;
 
 - (void)stopUpdating;

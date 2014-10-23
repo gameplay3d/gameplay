@@ -67,8 +67,6 @@ int getUnicode(int key);
     bool _gestureDraging;
 
     TouchPoint _touchPoints[TOUCH_POINTS_MAX];
-
-    double _timeStart;
 }
 
 - (BOOL)createFramebuffer;
@@ -141,7 +139,7 @@ int getUnicode(int key);
         multisampleDepthbuffer = 0;
         swapInterval = 1;
         updating = FALSE;
-        game = nil;
+        game = Game::getInstance();
         screenScale = scale;
 
         // Set the resource path and initalize the game
@@ -191,7 +189,7 @@ int getUnicode(int key);
     GL_ASSERT(glGenRenderbuffers(1, &colorRenderbuffer));
     GL_ASSERT(glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer));
 
-    // Associate render buffer storage with CAEAGLLauyer so that the rendered content is display on our UI layer.
+    // Associate render buffer storage with CAEAGLLayer so that the rendered content is display on our UI layer.
     [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
 
     // Attach the color buffer to our frame buffer
@@ -204,7 +202,7 @@ int getUnicode(int key);
     NSLog(@"width: %d, height: %d", framebufferWidth, framebufferHeight);
 
     // If multisampling is enabled in config, create and setup a multisample buffer
-    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
+    Properties* config = game->getConfig()->getNamespace("window", true);
     int samples = config ? config->getInt("samples") : 0;
 
     if (samples < 0)
@@ -386,10 +384,8 @@ int getUnicode(int key);
 
 - (void)startGame
 {
-    if (game == nil)
+    if (game->getState() == Game::UNINITIALIZED)
     {
-        game = Game::getInstance();
-        _timeStart = getMachTimeInMilliseconds();
         game->run();
     }
 }
@@ -402,7 +398,7 @@ int getUnicode(int key);
         [displayLink setFrameInterval:swapInterval];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 
-        if (game)
+        if (game->getState() == Game::PAUSED)
         {
             game->resume();
         }
@@ -415,8 +411,11 @@ int getUnicode(int key);
 {
     if (updating)
     {
-        if (game)
+        if (game->getState() == Game::RUNNING)
+        {
             game->pause();
+        }
+
         [displayLink invalidate];
         displayLink = nil;
         updating = FALSE;
@@ -438,7 +437,7 @@ int getUnicode(int key);
             [self createFramebuffer];
 
             // Start the game after our framebuffer is created for the first time.
-            if (game == nil)
+            if (game->getState() == Game::UNINITIALIZED)
             {
                 [self startGame];
 
@@ -455,8 +454,10 @@ int getUnicode(int key);
         GL_ASSERT(glViewport(0, 0, framebufferWidth, framebufferHeight));
 
         // Execute a single game frame
-        if (game)
+        if (game->getState() == Game::RUNNING)
+        {
             game->frame();
+        }
 
         // Present the contents of the color buffer
         [self swapBuffers];

@@ -19,6 +19,8 @@ char** __argv = 0;
 static bool __vsync;
 static double __timeAbsolute;
 
+static __weak BGPViewController* __activeViewController = nil;
+static CMMotionManager* __motionManager = nil;
 
 namespace gameplay
 {
@@ -54,26 +56,39 @@ double getMachTimeInMilliseconds()
 
 }
 
-@implementation BGPPlatformManager
+@implementation BGPPlatform
 
-+ (BGPPlatformManager*)sharedInstance
++ (void)setActiveViewController:(BGPViewController*)viewController
 {
-    static dispatch_once_t predicate;
-    static BGPPlatformManager* sharedInstance = nil;
-
-    dispatch_once(&predicate, ^{
-        sharedInstance = [[BGPPlatformManager alloc] init];
-    });
-
-    return sharedInstance;
+    __activeViewController = viewController;
 }
 
-- (void)getAccelerometerPitch:(float*)pitch roll:(float*)roll
++ (BGPViewController*)activeViewController
+{
+    return __activeViewController;
+}
+
++ (void)setMotionManager:(CMMotionManager*)motionManager
+{
+    __motionManager = motionManager;
+}
+
++ (CMMotionManager*)motionManager
+{
+    return __motionManager;
+}
+
++ (void)shutdownGame
+{
+    Platform::shutdownInternal();
+}
+
++ (void)getAccelerometerPitch:(float*)pitch roll:(float*)roll
 {
     float p = 0.0f;
     float r = 0.0f;
 
-    CMAccelerometerData* accelerometerData = [[self motionManager] accelerometerData];
+    CMAccelerometerData* accelerometerData = [__motionManager accelerometerData];
 
     if(accelerometerData != nil)
     {
@@ -114,9 +129,9 @@ double getMachTimeInMilliseconds()
         *roll = r;
 }
 
-- (void)getRawAccelX:(float*)x Y:(float*)y Z:(float*)z
++ (void)getRawAccelX:(float*)x Y:(float*)y Z:(float*)z
 {
-    CMAccelerometerData* accelerometerData = [[self motionManager] accelerometerData];
+    CMAccelerometerData* accelerometerData = [__motionManager accelerometerData];
     if(accelerometerData != nil)
     {
         *x = -9.81f * accelerometerData.acceleration.x;
@@ -125,9 +140,9 @@ double getMachTimeInMilliseconds()
     }
 }
 
-- (void)getRawGyroX:(float*)x Y:(float*)y Z:(float*)z
++ (void)getRawGyroX:(float*)x Y:(float*)y Z:(float*)z
 {
-    CMGyroData* gyroData = [[self motionManager] gyroData];
+    CMGyroData* gyroData = [__motionManager gyroData];
     if(gyroData != nil)
     {
         *x = gyroData.rotationRate.x;
@@ -161,10 +176,7 @@ int Platform::enterMessagePump()
 
 void Platform::signalShutdown() 
 {
-    // Cannot 'exit' an iOS Application
-    assert(false);
-    [[[[BGPPlatformManager sharedInstance] activeViewController] gamePlayView] stopUpdating];
-    exit(0);
+    [[__activeViewController gamePlayView] stopUpdating];
 }
 
 bool Platform::canExit()
@@ -174,12 +186,12 @@ bool Platform::canExit()
 
 unsigned int Platform::getDisplayWidth()
 {
-    return [[[[BGPPlatformManager sharedInstance] activeViewController] view] bounds].size.width * [[UIScreen mainScreen] scale];
+    return [[__activeViewController view] bounds].size.width * [[UIScreen mainScreen] scale];
 }
 
 unsigned int Platform::getDisplayHeight()
 {
-    return [[[[BGPPlatformManager sharedInstance] activeViewController] view] bounds].size.height * [[UIScreen mainScreen] scale];
+    return [[__activeViewController view] bounds].size.height * [[UIScreen mainScreen] scale];
 }
 
 double Platform::getAbsoluteTime()
@@ -205,7 +217,7 @@ void Platform::setVsync(bool enable)
 
 void Platform::swapBuffers()
 {
-    BGPView* view = [[[BGPPlatformManager sharedInstance] activeViewController] gamePlayView];
+    BGPView* view = [__activeViewController gamePlayView];
 
     if (view)
     {
@@ -224,14 +236,14 @@ bool Platform::hasAccelerometer()
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
-    [[BGPPlatformManager sharedInstance] getAccelerometerPitch:pitch roll:roll];
+    [BGPPlatform getAccelerometerPitch:pitch roll:roll];
 }
 
 void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
     float x, y, z;
 
-    [[BGPPlatformManager sharedInstance] getRawAccelX:&x Y:&y Z:&z];
+    [BGPPlatform getRawAccelX:&x Y:&y Z:&z];
 
     if (accelX)
     {
@@ -248,7 +260,7 @@ void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, floa
         *accelZ = z;
     }
 
-    [[BGPPlatformManager sharedInstance] getRawGyroX:&x Y:&y Z:&z];
+    [BGPPlatform getRawGyroX:&x Y:&y Z:&z];
 
     if (gyroX)
     {
@@ -315,17 +327,17 @@ bool Platform::isMultiSampling()
 
 void Platform::setMultiTouch(bool enabled) 
 {
-    [[[[BGPPlatformManager sharedInstance] activeViewController] view] setMultipleTouchEnabled:enabled];
+    [[__activeViewController view] setMultipleTouchEnabled:enabled];
 }
 
 bool Platform::isMultiTouch() 
 {
-    return [[[[BGPPlatformManager sharedInstance] activeViewController] view] isMultipleTouchEnabled];
+    return [[__activeViewController view] isMultipleTouchEnabled];
 }
 
 void Platform::displayKeyboard(bool display) 
 {
-    BGPView* view = [[[BGPPlatformManager sharedInstance] activeViewController] gamePlayView];
+    BGPView* view = [__activeViewController gamePlayView];
 
     if (view)
     {
@@ -352,17 +364,17 @@ bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 
 void Platform::registerGesture(Gesture::GestureEvent evt)
 {
-    [[[[BGPPlatformManager sharedInstance] activeViewController] gamePlayView] registerGesture:evt];
+    [[__activeViewController gamePlayView] registerGesture:evt];
 }
 
 void Platform::unregisterGesture(Gesture::GestureEvent evt)
 {
-    [[[[BGPPlatformManager sharedInstance] activeViewController] gamePlayView] unregisterGesture:evt];
+    [[__activeViewController gamePlayView] unregisterGesture:evt];
 }
 
 bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
 {
-    return [[[[BGPPlatformManager sharedInstance] activeViewController] gamePlayView] isGestureRegistered:evt];
+    return [[__activeViewController gamePlayView] isGestureRegistered:evt];
 }
 
 void Platform::pollGamepadState(Gamepad* gamepad)

@@ -2,18 +2,14 @@
 
 @class BGPViewController;
 
-namespace gameplay
-{
+@interface BGPPlatform : NSObject
 
-extern double getMachTimeInMilliseconds();
++ (void)setActiveViewController:(BGPViewController*)viewController;
++ (BGPViewController*)activeViewController;
 
-}
++ (void)setMotionManager:(CMMotionManager*)motionManager;
++ (CMMotionManager*)motionManager;
 
-@interface BGPPlatformManager : NSObject
-
-@property (nonatomic, weak) BGPViewController* activeViewController;
-@property (nonatomic, strong) CMMotionManager* motionManager;
-
-+ (BGPPlatformManager*)sharedInstance;
++ (void)shutdownGame;
 
 @end

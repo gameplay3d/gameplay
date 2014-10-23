@@ -24,6 +24,7 @@ using namespace gameplay;
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 
     motionManager = [[CMMotionManager alloc] init];
+    [BGPPlatform setMotionManager:motionManager];
 
     if ([motionManager isAccelerometerAvailable])
     {
@@ -37,11 +38,10 @@ using namespace gameplay;
         [motionManager startGyroUpdates];
     }
 
-    [[BGPPlatformManager sharedInstance] setMotionManager:motionManager];
+    viewController = [[BGPViewController alloc] init];
+    [BGPPlatform setActiveViewController:viewController];
 
     window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    viewController = [[BGPViewController alloc] init];
-    [[BGPPlatformManager sharedInstance] setActiveViewController:viewController];
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
     return YES;
