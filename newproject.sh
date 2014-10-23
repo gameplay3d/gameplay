@@ -102,7 +102,7 @@ echo "   This can be a relative path, absolute path,"
 echo "   or empty for the current folder. Note that"
 echo "   a project folder named $projName will also"
 echo "   be created inside this folder."
-echo "   Ex. samples"
+echo "   Ex. ./samples"
 echo
 read -p "Path: " location
 if [[ "$location" == "" ]]; then
