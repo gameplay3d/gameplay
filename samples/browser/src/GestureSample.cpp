@@ -86,15 +86,16 @@ void GestureSample::render(float elapsedTime)
 
     // Draw text
     Vector4 fontColor(1.0f, 1.0f, 1.0f, 1.0f);
-
+    unsigned int fontSize = 18;
+    
     _font->start();
     int y = 0;
     size_t count = 0;
     for (std::list<std::string>::const_iterator it = _eventLog.begin(); it != _eventLog.end(); ++it)
     {
         ++count;
-        _font->drawText(it->c_str(), 0, y, fontColor, _font->getSize());
-        y += _font->getSize();
+        _font->drawText(it->c_str(), 0, y, fontColor, fontSize);
+        y += fontSize;
 
         if (y > (int)getHeight())
         {
@@ -104,37 +105,37 @@ void GestureSample::render(float elapsedTime)
     }
     
     int x = getWidth() - 200;
-    y = getHeight() - _font->getSize() * 6;
+    y = getHeight() - fontSize * 6;
 
     if (isGestureSupported(Gesture::GESTURE_TAP))
     {
-        _font->drawText("Tap supported", x, y, fontColor, _font->getSize());
-        y += _font->getSize();
+        _font->drawText("Tap supported", x, y, fontColor, fontSize);
+        y += fontSize;
     }
     if (isGestureSupported(Gesture::GESTURE_SWIPE))
     {
-        _font->drawText("Swipe supported", x, y, fontColor, _font->getSize());
-        y += _font->getSize();
+        _font->drawText("Swipe supported", x, y, fontColor, fontSize);
+        y += fontSize;
     }
     if (isGestureSupported(Gesture::GESTURE_PINCH))
     {
-        _font->drawText("Pinch supported", x, y, fontColor, _font->getSize());
-        y += _font->getSize();
+        _font->drawText("Pinch supported", x, y, fontColor, fontSize);
+        y += fontSize;
     }
     if (isGestureSupported(Gesture::GESTURE_LONG_TAP))
     {
-        _font->drawText("Long tap supported", x, y, fontColor, _font->getSize());
-        y += _font->getSize();
+        _font->drawText("Long tap supported", x, y, fontColor, fontSize);
+        y += fontSize;
     }
     if (isGestureSupported(Gesture::GESTURE_DRAG))
     {
-        _font->drawText("Drag supported", x, y, fontColor, _font->getSize());
-        y += _font->getSize();
+        _font->drawText("Drag supported", x, y, fontColor, fontSize);
+        y += fontSize;
     }
     if (isGestureSupported(Gesture::GESTURE_DROP))
     {
-        _font->drawText("Drop supported", x, y, fontColor, _font->getSize());
-        y += _font->getSize();
+        _font->drawText("Drop supported", x, y, fontColor, fontSize);
+        y += fontSize;
     }
 
     _font->finish();
