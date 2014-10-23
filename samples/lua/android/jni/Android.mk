@@ -9,7 +9,7 @@ OGG_PATH := $(call my-dir)/../../../../external-deps/ogg/lib/android/arm
 VORBIS_PATH := $(call my-dir)/../../../../external-deps/vorbis/lib/android/arm
 OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
 
-# gameplay
+# libgameplay
 LOCAL_PATH := $(call my-dir)/../../../../gameplay/android/libs/armeabi-v7a
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libgameplay
@@ -82,10 +82,8 @@ include $(PREBUILT_STATIC_LIBRARY)
 # sample-lua
 LOCAL_PATH := $(SAMPLE_PATH)
 include $(CLEAR_VARS)
-
 LOCAL_MODULE    := sample-lua
 LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp LuaGame.cpp
-
 LOCAL_CPPFLAGS += -std=c++11 -Wno-switch-enum -Wno-switch
 LOCAL_ARM_MODE := arm
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
@@ -93,4 +91,5 @@ LOCAL_CFLAGS    := -D__ANDROID__ -I"../../../external-deps/lua/include" -I"../..
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng libz liblua libBulletDynamics libBulletCollision libLinearMath libvorbis libogg libOpenAL
 LOCAL_SHARED_LIBRARIES := gameplay
 include $(BUILD_SHARED_LIBRARY)
+
 $(call import-module,android/native_app_glue)

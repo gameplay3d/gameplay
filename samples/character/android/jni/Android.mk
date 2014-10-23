@@ -9,7 +9,7 @@ OGG_PATH := $(call my-dir)/../../../../external-deps/ogg/lib/android/arm
 VORBIS_PATH := $(call my-dir)/../../../../external-deps/vorbis/lib/android/arm
 OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
 
-# gameplay
+# libgameplay
 LOCAL_PATH := $(call my-dir)/../../../../gameplay/android/libs/armeabi-v7a
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libgameplay
@@ -82,7 +82,6 @@ include $(PREBUILT_STATIC_LIBRARY)
 # sample-character
 LOCAL_PATH := $(SAMPLE_PATH)
 include $(CLEAR_VARS)
-
 LOCAL_MODULE    := sample-character
 LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp CharacterGame.cpp
 LOCAL_CPPFLAGS += -std=c++11 -Wno-switch-enum -Wno-switch
