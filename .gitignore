@@ -81,6 +81,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/browser/res/shaders
 /samples/browser/res/ui
 /samples/browser/res/logo_powered_white.png
+/samples/browser/src/org
 /samples/browser/android/src
 /samples/browser/android/assets
 /samples/browser/android/bin
@@ -108,9 +109,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/character/res/shaders
 /samples/character/res/ui
 /samples/character/res/logo_powered_white.png
-/samples/character/android/proguard-project.txt
-/samples/character/android/proguard.cfg
-/samples/character/android/local.properties
+/samples/character/src/org
 /samples/character/android/src
 /samples/character/android/assets
 /samples/character/android/bin
@@ -118,6 +117,9 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/character/android/libs
 /samples/character/android/obj
 /samples/character/android/NUL
+/samples/character/android/local.properties
+/samples/character/android/proguard-project.txt
+/samples/character/android/proguard.cfg
 /samples/character/res/gamepad.xcf
 /samples/character/sample-character.xcodeproj/xcuserdata
 
@@ -134,6 +136,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/lua/res/shaders
 /samples/lua/res/ui
 /samples/lua/res/logo_powered_white.png
+/samples/lua/src/org
 /samples/lua/android/src
 /samples/lua/android/assets
 /samples/lua/android/bin
@@ -144,6 +147,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/lua/android/local.properties
 /samples/lua/android/proguard-project.txt
 /samples/lua/android/proguard.cfg
+/samples/lua/android/src/org/gameplay3d
 /samples/lua/sample-lua.xcodeproj/xcuserdata
 
 /samples/mesh/Debug
@@ -159,6 +163,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/mesh/res/shaders
 /samples/mesh/res/ui
 /samples/mesh/res/logo_powered_white.png
+/samples/mesh/src/org
 /samples/mesh/android/src
 /samples/mesh/android/assets
 /samples/mesh/android/bin
@@ -187,12 +192,14 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/particles/Device-Debug
 /samples/particles/Debug
 /samples/particles/DebugMem
+/samples/particles/src/org
 /samples/particles/android/src
 /samples/particles/android/assets
 /samples/particles/android/bin
 /samples/particles/android/gen
 /samples/particles/android/libs
 /samples/particles/android/obj
+/samples/particles/android/NUL
 /samples/particles/android/local.properties
 /samples/particles/android/proguard-project.txt
 /samples/particles/android/proguard.cfg
@@ -214,6 +221,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/racer/res/shaders
 /samples/racer/res/ui
 /samples/racer/res/logo_powered_white.png
+/samples/racer/src/org
 /samples/racer/android/src
 /samples/racer/android/assets
 /samples/racer/android/bin
@@ -239,13 +247,14 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/spaceship/res/shaders
 /samples/spaceship/res/ui
 /samples/spaceship/res/logo_powered_white.png
-/samples/spaceship/android/NUL
+/samples/spaceship/src/org
+/samples/spaceship/android/src
 /samples/spaceship/android/assets
 /samples/spaceship/android/bin
 /samples/spaceship/android/gen
 /samples/spaceship/android/libs
 /samples/spaceship/android/obj
-/samples/spaceship/android/src
+/samples/spaceship/android/NUL
 /samples/spaceship/android/local.properties
 /samples/spaceship/android/proguard.cfg
 /samples/spaceship/android/proguard-project.txt

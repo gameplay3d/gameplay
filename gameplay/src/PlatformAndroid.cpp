@@ -1031,13 +1031,16 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                 gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey(keycode, metastate));
                 if (int character = getUnicode(keycode, metastate))
                     gameplay::Platform::keyEventInternal(Keyboard::KEY_CHAR, character);
+                if (keycode == AKEYCODE_BACK)
+                	return 1;
                 break;
                     
             case AKEY_EVENT_ACTION_UP:
                 gameplay::Platform::keyEventInternal(Keyboard::KEY_RELEASE, getKey(keycode, metastate));
+                if (keycode == AKEYCODE_BACK)
+                	return 1;
                 break;
         }
-
         return 1;
     }
     return 0;
@@ -1049,7 +1052,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
     switch (cmd) 
     {
         case APP_CMD_INIT_WINDOW:
-            // The window is being shown, get it ready.
             if (app->window != NULL)
             {
                 initEGL();
@@ -1065,6 +1067,29 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
             destroyEGLMain();
             __initialized = false;
             break;
+        case APP_CMD_PAUSE:
+            Game::getInstance()->pause();
+            __suspended = true;
+            break;
+        case APP_CMD_RESUME:
+            if (__initialized)
+            {
+                Game::getInstance()->resume();
+            }
+            __suspended = false;
+            break;
+        case APP_CMD_LOST_FOCUS:
+            // When our app loses focus, we stop monitoring the sensors.
+            // This is to avoid consuming battery while not being used.
+            if (__accelerometerSensor != NULL)
+            {
+                ASensorEventQueue_disableSensor(__sensorEventQueue, __accelerometerSensor);
+            }
+            if (__gyroscopeSensor != NULL)
+            {
+                ASensorEventQueue_disableSensor(__sensorEventQueue, __gyroscopeSensor);
+            }
+            break;
         case APP_CMD_GAINED_FOCUS:
             // When our app gains focus, we start monitoring the sensors.
             if (__accelerometerSensor != NULL) 
@@ -1079,7 +1104,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
                 // We'd like to get 60 events per second (in microseconds).
                 ASensorEventQueue_setEventRate(__sensorEventQueue, __gyroscopeSensor, (1000L/60)*1000);
             }
-
             if (Game::getInstance()->getState() == Game::UNINITIALIZED)
             {
                 Game::getInstance()->run();
@@ -1087,29 +1111,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
             else
             {
                 Game::getInstance()->resume();
-            }
-            break;
-        case APP_CMD_RESUME:
-            if (__initialized)
-            {
-                Game::getInstance()->resume();
-            }
-            __suspended = false;
-            break;
-        case APP_CMD_PAUSE:
-            Game::getInstance()->pause();
-            __suspended = true;
-            break;
-        case APP_CMD_LOST_FOCUS:
-            // When our app loses focus, we stop monitoring the sensors.
-            // This is to avoid consuming battery while not being used.
-            if (__accelerometerSensor != NULL) 
-            {
-                ASensorEventQueue_disableSensor(__sensorEventQueue, __accelerometerSensor);
-            }
-            if (__gyroscopeSensor != NULL) 
-            {
-                ASensorEventQueue_disableSensor(__sensorEventQueue, __gyroscopeSensor);
             }
             break;
     }
@@ -1638,4 +1639,22 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
 
 }
 
+extern "C"
+{
+
+JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventConnectedImpl(JNIEnv* env, jclass clazz, jint deviceId, jint buttonCount, jint joystickCount, jint triggerCount, jint vendorId, jint productId, jstring vendorIdStr, jstring productIdStr)
+{
+	// TODO
+	//gameplay::Platform::gamepadEventConnectedInternal(deviceId, buttonCount, joystickCount, triggerCount, vendorId, productId, "", "");
+}
+
+JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventDisconnectedImpl(JNIEnv* env, jclass clazz, jint deviceId)
+{
+	// TODO
+	//gameplay::Platform::gamepadEventDisconnectedInternal(deviceId);
+}
+
+}
+
 #endif
+

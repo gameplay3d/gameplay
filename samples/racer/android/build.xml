@@ -7,18 +7,61 @@
     <loadproperties srcFile="project.properties" />
     
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'" unless="sdk.dir" />
-
+	<fail message="OS not supported. Supported platforms: Windows, MacOS X or Linux.">
+	    <condition>
+	      <not>
+	        <or>
+	          <os family="unix"/>
+	          <os family="windows"/>
+	        </or>
+	      </not>
+	    </condition>
+	</fail>
+	<macrodef name="build-native">
+		<attribute name="location"/>
+	     <sequential>
+		 	<exec osfamily="unix" dir="@{location}/android" executable="android">
+			    <arg value="update"/>
+				<arg value="project"/>
+				<arg value="-t"/>
+				<arg value="1"/>
+				<arg value="-p"/>
+				<arg value="."/>
+				<arg value="-s"/>
+			</exec>
+			<exec osfamily="unix" dir="@{location}/android" executable="ndk-build"/>
+			<exec osfamily="windows" dir="@{location}/android" executable="cmd">
+				<arg value="/c"/>
+				<arg value="android.bat"/>
+				<arg value="update"/>
+				<arg value="project"/>
+				<arg value="-t"/>
+				<arg value="1"/>
+				<arg value="-p"/>
+				<arg value="."/>
+				<arg value="-s"/>
+			</exec>
+			<exec osfamily="windows" dir="@{location}/android" executable="cmd">
+				<arg value="/c"/>
+				<arg value="ndk-build -j4"/>
+			</exec> 
+	    </sequential>
+	</macrodef>
+    
     <target name="-pre-build">
-	    <mkdir dir="src"/>
+		<build-native location="../../../gameplay"/>
+    	<build-native location=".."/>
+        <mkdir dir="../src/org/gameplay3d"/>
+	    <copy todir="../src/org/gameplay3d">
+            <fileset dir="../../../gameplay/src/org/gameplay3d"/>
+	    </copy>
     </target>
 	
     <target name="-post-compile">
-	    <copy file="../game.png.config" tofile="assets/game.config"/>
-		
+  	    <copy file="../game.png.config" tofile="assets/game.config"/>
         <copy todir="assets/res/common">
             <fileset dir="../res/common"/>
         </copy>
-		
         <copy todir="assets/res/png">
             <fileset dir="../res/png"/>
         </copy>

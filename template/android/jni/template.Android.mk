@@ -13,8 +13,8 @@ OPENAL_PATH := ../GAMEPLAY_PATH/external-deps/openal/lib/android/arm
 LOCAL_PATH := ../GAMEPLAY_PATH/gameplay/android/obj/local/armeabi-v7a
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libgameplay
-LOCAL_SRC_FILES := libgameplay.a
-include $(PREBUILT_STATIC_LIBRARY)
+LOCAL_SRC_FILES := libgameplay.so
+include $(PREBUILT_SHARED_LIBRARY)
 
 # libpng
 LOCAL_PATH := $(PNG_PATH)
