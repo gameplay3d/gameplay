@@ -93,7 +93,7 @@ echo    This can be a relative path, absolute path,
 echo    or empty for the current folder. Note that
 echo    a project folder named %projName% will also
 echo    be created inside this folder.
-echo    Ex. samples
+echo    Ex. ./samples
 echo.
 set /p location=Path: 
 if "%location%" == "" (
@@ -177,7 +177,7 @@ copy template\android\build.xml "%projPath%\android\build.xml"
 call:replace "%projPath%\android\build.xml" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\android\build.xml" GAMEPLAY_PATH "%gpPath%"
 
-copy template\project.properties "%projPath%\project.properties"
+copy template\android\project.properties "%projPath%\android\project.properties"
 
 mkdir "%projPath%\android\jni"
 
