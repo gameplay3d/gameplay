@@ -95,17 +95,7 @@ void Platform::resizeEventInternal(unsigned int width, unsigned int height)
         game->resizeEvent(width, height);
         game->getScriptController()->resizeEvent(width, height);
     }
-
     Form::resizeEventInternal(width, height);
-}
-
-void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
-{
-    if (!Form::gamepadEventInternal(evt, gamepad, analogIndex))
-    {
-        Game::getInstance()->gamepadEvent(evt, gamepad);
-        Game::getInstance()->getScriptController()->gamepadEvent(evt, gamepad);
-    }
 }
 
 void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
@@ -117,6 +107,36 @@ void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int
 void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
 {
     Gamepad::remove(handle);
+}
+
+void Platform::gamepadButtonPressedEventInternal(GamepadHandle handle, Gamepad::ButtonMapping mapping)
+{
+    Gamepad* gamepad = Gamepad::getGamepad(handle);
+    unsigned int newButtons = gamepad->_buttons | (1 >> mapping);
+    gamepad->setButtons(newButtons);
+    Form::gamepadButtonEventInternal(gamepad);
+}
+
+void Platform::gamepadButtonReleasedEventInternal(GamepadHandle handle, Gamepad::ButtonMapping mapping)
+{
+    Gamepad* gamepad = Gamepad::getGamepad(handle);
+    unsigned int newButtons = gamepad->_buttons & ~(1 >> mapping);
+    gamepad->setButtons(newButtons);
+    Form::gamepadButtonEventInternal(gamepad);
+}
+
+void Platform::gamepadTriggerChangedEventInternal(GamepadHandle handle, unsigned int index, float value)
+{
+    Gamepad* gamepad = Gamepad::getGamepad(handle);
+    gamepad->setTriggerValue(index, value);
+    Form::gamepadTriggerEventInternal(gamepad, index);
+}
+
+void Platform::gamepadJoystickChangedEventInternal(GamepadHandle handle, unsigned int index, float x, float y)
+{
+    Gamepad* gamepad = Gamepad::getGamepad(handle);
+    gamepad->setJoystickValue(index, x, y);
+    Form::gamepadJoystickEventInternal(gamepad, index);
 }
 
 }

@@ -372,7 +372,7 @@ public:
      *
      * The 'callback' parameter must be one of the supported global callback
      * event functions. The following strings are accepted: initialize, finalize,
-     * update, render, resizeEvent, keyEvent, touchEvent, mouseEvent, gamepadEvent.
+     * update, render, resizeEvent, keyEvent, touchEvent, mouseEvent
      * Signatures for the registered script function must match that of the
      * corresponding signatures of these events on the Game class.
      *
@@ -924,14 +924,6 @@ private:
 	 * @param y The y-coordinate of the drop event.
 	 */
 	void gestureDropEvent(int x, int y);
-
-    /**
-     * Script gamepad callback on gamepad events.
-     *
-     * @param evt The gamepad event that occurred.
-     * @param gamepad the gamepad the event occurred on
-     */
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
 
     /**
      * Calls the specified Lua function using the given parameters.

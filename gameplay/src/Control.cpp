@@ -1078,7 +1078,17 @@ bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
-bool Control::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+bool Control::gamepadButtonEvent(Gamepad* gamepad)
+{
+    return false;
+}
+
+bool Control::gamepadTriggerEvent(Gamepad* gamepad, unsigned int index)
+{
+    return false;
+}
+
+bool Control::gamepadJoystickEvent(Gamepad* gamepad, unsigned int index)
 {
     return false;
 }

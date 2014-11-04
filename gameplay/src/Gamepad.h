@@ -32,10 +32,7 @@ public:
     enum GamepadEvent
     {
         CONNECTED_EVENT,
-        DISCONNECTED_EVENT,
-        BUTTON_EVENT,
-        JOYSTICK_EVENT,
-        TRIGGER_EVENT
+        DISCONNECTED_EVENT
     };
 
     /**
@@ -192,9 +189,9 @@ private:
      * @param vendorString The vendor string/name.
      * @param productString The product string/name.
      */
-    Gamepad(GamepadHandle handle, 
-            unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-            unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
+    Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+            unsigned int vendorId, unsigned int productId, 
+            const char* vendorString, const char* productString);
 
     /**
      * Copy constructor.
@@ -208,9 +205,9 @@ private:
 
     static void updateInternal(float elapsedTime);
 
-    static Gamepad* add(GamepadHandle handle, 
-                        unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                        unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
+    static Gamepad* add(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                        unsigned int vendorId, unsigned int productId, 
+                        const char* vendorString, const char* productString);
 
     static Gamepad* add(const char* formPath);
 
@@ -220,7 +217,7 @@ private:
 
     static unsigned int getGamepadCount();
 
-    static Gamepad* getGamepad(unsigned int index, bool preferPhysical = true);
+    static Gamepad* getGamepad(unsigned int index, bool preferPhysical);
 
     static Gamepad* getGamepad(GamepadHandle handle);
 

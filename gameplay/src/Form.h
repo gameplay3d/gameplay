@@ -201,11 +201,25 @@ private:
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
-     * Propagate gamepad events to enabled forms.
+     * Propagate gamepad button events to enabled forms.
      *
-     * @see Control::gamepadEvent
+     * @see Control::gamepadButtonEventInternal
      */
-    static bool gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+    static bool gamepadButtonEventInternal(Gamepad* gamepad);
+
+    /**
+     * Propagate gamepad trigger events to enabled forms.
+     *
+     * @see Control::gamepadTriggerEventInternal
+     */
+    static bool gamepadTriggerEventInternal(Gamepad* gamepad, unsigned int index);
+
+    /**
+     * Propagate gamepad button events to enabled forms.
+     *
+     * @see Control::gamepadJoystickEventInternal
+     */
+    static bool gamepadJoystickEventInternal(Gamepad* gamepad, unsigned int index);
 
     /**
      * Fired by the platform when the game window resizes.
