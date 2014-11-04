@@ -403,10 +403,10 @@ public:
     static void gamepadTriggerChangedEventInternal(GamepadHandle handle, unsigned int index, float value);
 
     /**
-    * Internal method used only from static code in various platform implementation.
-    *
-    * @script{ignore}
-    */
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
     static void gamepadJoystickChangedEventInternal(GamepadHandle handle, unsigned int index, float x, float y);
 
     /**

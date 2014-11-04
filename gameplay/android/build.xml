@@ -3,10 +3,10 @@
 
     <property file="local.properties" />
     <property file="ant.properties" />
-    
+   
     <loadproperties srcFile="project.properties" />
     
-    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'" unless="sdk.dir" />
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project -t 1 -p . -s'" unless="sdk.dir" />
     <fail message="OS not supported. Supported platforms: Windows, MacOS X or Linux.">
         <condition>
             <not>
@@ -20,26 +20,8 @@
     <macrodef name="build-native">
         <attribute name="location"/>
         <sequential>
-            <exec osfamily="unix" dir="@{location}/android" executable="android">
-                <arg value="update"/>
-                <arg value="project"/>
-                <arg value="-t"/>
-                <arg value="1"/>
-                <arg value="-p"/>
-                <arg value="."/>
-                <arg value="-s"/>
-            </exec>
-            <exec osfamily="unix" dir="@{location}/android" executable="ndk-build"/>
-            <exec osfamily="windows" dir="@{location}/android" executable="cmd">
-                <arg value="/c"/>
-                <arg value="android.bat"/>
-                <arg value="update"/>
-                <arg value="project"/>
-                <arg value="-t"/>
-                <arg value="1"/>
-                <arg value="-p"/>
-                <arg value="."/>
-                <arg value="-s"/>
+            <exec osfamily="unix" dir="@{location}/android" executable="ndk-build">
+                <arg value="-j4"/>
             </exec>
             <exec osfamily="windows" dir="@{location}/android" executable="cmd">
                 <arg value="/c"/>
