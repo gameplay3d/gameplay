@@ -885,13 +885,6 @@ void ScriptController::gestureDropEvent(int x, int y)
 {
 }
 
-void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
-{
-    std::vector<std::string>& list = _callbacks[GAMEPAD_EVENT];
-    for (size_t i = 0; i < list.size(); ++i)
-        executeFunction<void>(list[i].c_str(), "[Gamepad::GamepadEvent]<Gamepad>", evt, gamepad);
-}
-
 void ScriptController::executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list)
 {
 	if (!_lua)
@@ -1073,8 +1066,6 @@ ScriptController::ScriptCallback ScriptController::toCallback(const char* name)
         return ScriptController::GESTURE_PINCH_EVENT;
     else if (strcmp(name, "gestureTapEvent") == 0)
         return ScriptController::GESTURE_TAP_EVENT;
-    else if (strcmp(name, "gamepadEvent") == 0)
-        return ScriptController::GAMEPAD_EVENT;
     else
         return ScriptController::INVALID_CALLBACK;
 }

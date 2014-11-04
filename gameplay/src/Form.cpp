@@ -903,7 +903,7 @@ bool Form::pollGamepad(Gamepad* gamepad)
     return focusPressed || scrolling;
 }
 
-bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+bool Form::gamepadButtonEventInternal(Gamepad* gamepad)
 {
     if (!__focusControl)
         return false;
@@ -911,56 +911,83 @@ bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, uns
     bool selectButtonPressed = gamepad->isButtonDown(Gamepad::BUTTON_A) || gamepad->isButtonDown(Gamepad::BUTTON_X);
 
     // Fire press, release and click events to focused controls
-    switch (evt)
+    if (selectButtonPressed && __focusControl->_state != ACTIVE)
     {
-    case Gamepad::BUTTON_EVENT:
-        if (selectButtonPressed && __focusControl->_state != ACTIVE)
-        {
-            if (__activeControl[0])
-                __activeControl[0]->setDirty(DIRTY_STATE);
+        if (__activeControl[0])
+            __activeControl[0]->setDirty(DIRTY_STATE);
 
-            __activeControl[0] = __focusControl;
-            __focusControl->_state = ACTIVE;
-            __focusControl->notifyListeners(Control::Listener::PRESS);
-            return true;
-        }
-        else if (!selectButtonPressed && __focusControl->_state == ACTIVE)
-        {
-            if (__activeControl[0])
-                __activeControl[0]->setDirty(DIRTY_STATE);
+        __activeControl[0] = __focusControl;
+        __focusControl->_state = ACTIVE;
+        __focusControl->notifyListeners(Control::Listener::PRESS);
+        return true;
+    }
+    else if (!selectButtonPressed && __focusControl->_state == ACTIVE)
+    {
+        if (__activeControl[0])
+            __activeControl[0]->setDirty(DIRTY_STATE);
 
-            for (unsigned int i = 0; i < Touch::MAX_TOUCH_POINTS; ++i)
+        for (unsigned int i = 0; i < Touch::MAX_TOUCH_POINTS; ++i)
+        {
+            if (__activeControl[i] == __focusControl)
             {
-                if (__activeControl[i] == __focusControl)
-                {
-                    __activeControl[i] = NULL;
-                }
+                __activeControl[i] = NULL;
             }
-
-            __focusControl->_state = NORMAL;
-            __focusControl->notifyListeners(Control::Listener::RELEASE);
-            __focusControl->notifyListeners(Control::Listener::CLICK);
-            return true;
         }
-        break;
+
+        __focusControl->_state = NORMAL;
+        __focusControl->notifyListeners(Control::Listener::RELEASE);
+        __focusControl->notifyListeners(Control::Listener::CLICK);
+        return true;
     }
 
-    // Dispatch gamepad events to focused controls (or their parents)
-    Control * ctrl = __focusControl;
+    // Dispatch gamepad button events to focused controls (or their parents)
+    Control* ctrl = __focusControl;
     while (ctrl)
     {
         if (ctrl->isEnabled() && ctrl->isVisible())
         {
-            if (ctrl->gamepadEvent(evt, gamepad, analogIndex))
+            if (ctrl->gamepadButtonEvent(gamepad))
                 return true;
         }
 
         ctrl = ctrl->getParent();
     }
-
     return false;
 }
 
+bool Form::gamepadTriggerEventInternal(Gamepad* gamepad, unsigned int index)
+{
+    // Dispatch gamepad trigger events to focused controls (or their parents)
+    Control* ctrl = __focusControl;
+    while (ctrl)
+    {
+        if (ctrl->isEnabled() && ctrl->isVisible())
+        {
+            if (ctrl->gamepadTriggerEvent(gamepad, index))
+                return true;
+        }
+
+        ctrl = ctrl->getParent();
+    }
+    return false;
+}
+
+bool Form::gamepadJoystickEventInternal(Gamepad* gamepad, unsigned int index)
+{
+    // Dispatch gamepad joystick events to focused controls (or their parents)
+    Control* ctrl = __focusControl;
+    while (ctrl)
+    {
+        if (ctrl->isEnabled() && ctrl->isVisible())
+        {
+            if (ctrl->gamepadJoystickEvent(gamepad, index))
+                return true;
+        }
+
+        ctrl = ctrl->getParent();
+    }
+    return false;
+}
 void Form::resizeEventInternal(unsigned int width, unsigned int height)
 {
     for (size_t i = 0, size = __forms.size(); i < size; ++i)
