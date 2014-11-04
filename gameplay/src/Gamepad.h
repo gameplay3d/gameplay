@@ -39,7 +39,7 @@ public:
      * Gamepad buttons.
      */
     enum ButtonMapping
-    {
+    {        
         BUTTON_A,
         BUTTON_B,
         BUTTON_C,
