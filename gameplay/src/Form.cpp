@@ -10,8 +10,8 @@
 #include "CheckBox.h"
 #include "Scene.h"
 
-// Scroll speed when using a DPad -- max scroll speed when using a joystick.
-static const float GAMEPAD_SCROLL_SPEED = 500.0f;
+// Scroll speed when using a joystick.
+static const float GAMEPAD_SCROLL_SPEED = 600.0f;
 // Distance a joystick must be pushed in order to trigger focus-change and/or scrolling.
 static const float JOYSTICK_THRESHOLD = 0.75f;
 // If the DPad or joystick is held down, this is the initial delay in milliseconds between focus changes.

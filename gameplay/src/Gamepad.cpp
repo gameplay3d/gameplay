@@ -389,8 +389,7 @@ void Gamepad::setButtons(unsigned int buttons)
     if (buttons != _buttons)
     {
         _buttons = buttons;
-        if (isVirtual())
-            Form::gamepadButtonEventInternal(this);
+        Form::gamepadButtonEventInternal(this);
     }
 }
 
@@ -399,8 +398,7 @@ void Gamepad::setJoystickValue(unsigned int index, float x, float y)
     if (_joysticks[index].x != x || _joysticks[index].y != y)
     {
         _joysticks[index].set(x, y);
-        if (isVirtual())
-            Form::gamepadJoystickEventInternal(this, index);
+        Form::gamepadJoystickEventInternal(this, index);
     }
 }
 
@@ -409,8 +407,7 @@ void Gamepad::setTriggerValue(unsigned int index, float value)
     if (_triggers[index] != value)
     {
         _triggers[index] = value;
-        if (isVirtual())
-            Form::gamepadTriggerEventInternal(this, index);
+        Form::gamepadTriggerEventInternal(this, index);
     }
 }
 

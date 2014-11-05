@@ -752,6 +752,13 @@ Gamepad::ButtonMapping getGamepadButtonMapping(jint keycode)
     return Gamepad::BUTTON_MENU4;
 }
 
+static float clampFuzz(float value, float fuzz)
+{
+    if (std::fabs(value) <= fuzz)
+        return 0.0f;
+    return value;
+}
+
 // Process the next input event.
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
 {
@@ -768,8 +775,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
         int y;
         
         if (source & AINPUT_SOURCE_JOYSTICK)
-        {            
-            // DPAD (axis hats)
+        {
+            // DPAD handling (axis hats)
             float xaxis = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_HAT_X, 0);
             float yaxis = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_HAT_Y, 0);        
             if (xaxis == -1.0f)
@@ -785,7 +792,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                 gameplay::Platform::gamepadButtonReleasedEventInternal(deviceId, gameplay::Gamepad::BUTTON_LEFT);
                 gameplay::Platform::gamepadButtonReleasedEventInternal(deviceId, gameplay::Gamepad::BUTTON_RIGHT);
             }
-            
+
             if(yaxis == -1.0f)
             {
                 gameplay::Platform::gamepadButtonPressedEventInternal(deviceId, gameplay::Gamepad::BUTTON_UP);
@@ -798,14 +805,22 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
             {
                 gameplay::Platform::gamepadButtonReleasedEventInternal(deviceId, gameplay::Gamepad::BUTTON_UP);
                 gameplay::Platform::gamepadButtonReleasedEventInternal(deviceId, gameplay::Gamepad::BUTTON_DOWN);
-            }         
-            
-            /* TRIGGERS
+            }
+
+            // Trigger handling
             float leftTrigger = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_BRAKE, 0);
-                gameplay::Platform::gamepadTriggerChangedEventInternal(deviceId, 0, leftTrigger);
-            float rightTrigger = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_GAS, 1);
-                gameplay::Platform::gamepadTriggerChangedEventInternal(deviceId, 0, rightTrigger);
-            */
+            gameplay::Platform::gamepadTriggerChangedEventInternal(deviceId, 0, leftTrigger);
+            float rightTrigger = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_GAS, 0);
+            gameplay::Platform::gamepadTriggerChangedEventInternal(deviceId, 1, rightTrigger);
+
+            // jJoystick handling
+            float fuzz = 0.15f;
+            float x = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_X, 0);
+            float y = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_Y, 0);
+            gameplay::Platform::gamepadJoystickChangedEventInternal(deviceId, 0, clampFuzz(x, fuzz), clampFuzz(y, fuzz));
+            float z = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_Z, 0);
+            float rz = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RZ, 0);
+            gameplay::Platform::gamepadJoystickChangedEventInternal(deviceId, 1, clampFuzz(z, fuzz), clampFuzz(rz, fuzz));
         }
         else
         {
