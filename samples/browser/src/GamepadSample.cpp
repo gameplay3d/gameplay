@@ -30,10 +30,7 @@ void GamepadSample::finalize()
 void GamepadSample::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned int player)
 {
     char s[128];
-    sprintf(s, "Player: %d - VendorID: %d, %s, Product ID: %d, %s\nButtons: ",
-                player,
-                gamepad->getVendorId(), gamepad->getVendorString(),
-                gamepad->getProductId(), gamepad->getProductString());
+    sprintf(s, "Player: %d - %s\nButtons: ",player, gamepad->getProductString());
     _status += s;
     for (int j = 0; j < 20; ++j)
     {

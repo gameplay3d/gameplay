@@ -22,8 +22,6 @@
 #define MICROSOFT_XBOX360_PRODUCT_ID    0x028e
 #define STEELSERIES_VENDOR_ID           0x1038
 #define STEELSERIES_FREE_PRODUCT_ID     0x1412
-#define FRUCTEL_VENDOR_ID               0x25B6
-#define FRUCTEL_GAMETEL_PRODUCT_ID      0x0001
 
 using namespace std;
 using namespace gameplay;
@@ -2054,21 +2052,6 @@ void Platform::pollGamepadState(Gamepad* gamepad)
             Gamepad::BUTTON_MENU1
         };
         
-        static const int GametelMapping103[12] = {
-            Gamepad::BUTTON_B,
-            Gamepad::BUTTON_X,
-            Gamepad::BUTTON_Y,
-            Gamepad::BUTTON_A,
-            Gamepad::BUTTON_L1,
-            Gamepad::BUTTON_R1,
-            Gamepad::BUTTON_MENU1,
-            Gamepad::BUTTON_MENU2,
-            Gamepad::BUTTON_RIGHT,
-            Gamepad::BUTTON_LEFT,
-            Gamepad::BUTTON_DOWN,
-            Gamepad::BUTTON_UP
-        };
-        
         const int* mapping = NULL;
         float axisDeadZone = 0.0f;
         if (gamepad->_vendorId == SONY_USB_VENDOR_ID &&
@@ -2088,17 +2071,6 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         {
             mapping = SteelSeriesFreeMapping;
             axisDeadZone = 0.005f;
-        }
-        else if (gamepad->_vendorId == FRUCTEL_VENDOR_ID &&
-                 gamepad->_productId == FRUCTEL_GAMETEL_PRODUCT_ID)
-        {
-            int ver = [gp versionNumber];
-            int major = ver >> 8;
-            int minor = ver & 0x00ff;
-            if (major >= 1 && minor > 1)
-            {
-                mapping = GametelMapping103;
-            }
         }
         
         unsigned int buttons = 0;

@@ -47,7 +47,6 @@ public class GameNativeActivity extends NativeActivity
     
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.i(TAG, "onSaveInstanceState");
         super.onSaveInstanceState(outState);
     }
     
@@ -58,42 +57,52 @@ public class GameNativeActivity extends NativeActivity
     
     @Override
     protected void onResume() {
-        Log.i(TAG, "onResume");
         super.onResume();
         _inputManager.registerInputDeviceListener(this, null);
         int[] ids = InputDevice.getDeviceIds();
         for (int i = 0; i < ids.length; i++) {
-            Log.i(TAG, "getGamepadDevice: " + ids[i]);
             getGamepadDevice(ids[i]);
         }
     }
     
     @Override
     protected void onPause() {
-        Log.i(TAG, "onPause");
         _inputManager.unregisterInputDeviceListener(this);
         super.onPause();
     }
     
     @Override
     public void onInputDeviceAdded(int deviceId) {
-        Log.i(TAG, "onInputDeviceAdded: " + deviceId);
         getGamepadDevice(deviceId);
     }
 
     @Override
     public void onInputDeviceRemoved(int deviceId) {
-        Log.i(TAG, "onInputDeviceRemoved: " + deviceId);
         InputDevice device = _gamepadDevices.get(deviceId);
         if (device != null) {
             _gamepadDevices.remove(deviceId);
+            Log.v(TAG, "Gamepad disconnected:id=" + deviceId);
             gamepadEventDisconnectedImpl(deviceId);
         }
     }
     
     @Override
     public void onInputDeviceChanged(int deviceId) {
-        Log.i(TAG, "onInputDeviceChanged: " + deviceId);
+    }
+    
+    private void onGamepadConnected(int deviceId, String deviceName) {
+        int buttonCount = 20;
+        int joystickCount = 2;
+        int triggerCount = 2;
+        int vendorId = 0;
+        int productId = 0;
+        String vendorName = "";
+        String productName = deviceName;
+        
+        Log.v(TAG, "Gamepad connected:id=" + deviceId + ", name=" + deviceName);
+        
+        gamepadEventConnectedImpl(deviceId, buttonCount, joystickCount, triggerCount, 
+                                  productId, vendorId, vendorName, productName);
     }
     
     private InputDevice getGamepadDevice(int deviceId) {
@@ -106,8 +115,8 @@ public class GameNativeActivity extends NativeActivity
             if (((sources & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD) || 
                 ((sources & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK)) {
                 _gamepadDevices.put(deviceId, device);
-                Log.i(TAG, "gamepadEventConnectedImpl: " + device.toString());
-                gamepadEventConnectedImpl(deviceId, 26, 2, 2, 0, 0, "", device.getName());
+                
+                onGamepadConnected(deviceId, device.getName());
             }
         }
         return device;
