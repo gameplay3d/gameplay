@@ -1772,7 +1772,13 @@ extern "C"
 
 JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventConnectedImpl(JNIEnv* env, jclass clazz, jint deviceId, jint buttonCount, jint joystickCount, jint triggerCount, jint vendorId, jint productId, jstring vendorIdStr, jstring productIdStr)
 {
-	gameplay::Platform::gamepadEventConnectedInternal(deviceId, buttonCount, joystickCount, triggerCount, vendorId, productId, "", "");
+    const char* vendorString = env->GetStringUTFChars(vendorIdStr, JNI_FALSE);
+    const char* productString = env->GetStringUTFChars(productIdStr, JNI_FALSE);
+    
+	gameplay::Platform::gamepadEventConnectedInternal(deviceId, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+    
+    env->ReleaseStringUTFChars(vendorIdStr, vendorString);
+    env->ReleaseStringUTFChars(productIdStr, productString);
 }
 
 JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventDisconnectedImpl(JNIEnv* env, jclass clazz, jint deviceId)
