@@ -389,7 +389,7 @@ void Gamepad::setButtons(unsigned int buttons)
     if (buttons != _buttons)
     {
         _buttons = buttons;
-        Platform::gamepadEventInternal(BUTTON_EVENT, this);
+        Form::gamepadButtonEventInternal(this);
     }
 }
 
@@ -398,7 +398,7 @@ void Gamepad::setJoystickValue(unsigned int index, float x, float y)
     if (_joysticks[index].x != x || _joysticks[index].y != y)
     {
         _joysticks[index].set(x, y);
-        Platform::gamepadEventInternal(JOYSTICK_EVENT, this, index);
+        Form::gamepadJoystickEventInternal(this, index);
     }
 }
 
@@ -407,7 +407,7 @@ void Gamepad::setTriggerValue(unsigned int index, float value)
     if (_triggers[index] != value)
     {
         _triggers[index] = value;
-        Platform::gamepadEventInternal(TRIGGER_EVENT, this, index);
+        Form::gamepadTriggerEventInternal(this, index);
     }
 }
 
