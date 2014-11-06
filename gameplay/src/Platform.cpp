@@ -91,10 +91,9 @@ void Platform::resizeEventInternal(unsigned int width, unsigned int height)
     Form::resizeEventInternal(width, height);
 }
 
-void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
+void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name)
 {
-    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, name);
 }
 
 void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)

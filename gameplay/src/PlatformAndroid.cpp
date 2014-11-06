@@ -710,15 +710,11 @@ Gamepad::ButtonMapping getGamepadButtonMapping(jint keycode)
         return Gamepad::BUTTON_X;
     case AKEYCODE_BUTTON_Y:
         return Gamepad::BUTTON_Y;
-    case AKEYCODE_BUTTON_Z:
-        return Gamepad::BUTTON_Z;
     case AKEYCODE_BUTTON_A:
     case AKEYCODE_DPAD_CENTER:
         return Gamepad::BUTTON_A;
     case AKEYCODE_BUTTON_B:
         return Gamepad::BUTTON_B;
-    case AKEYCODE_BUTTON_C:
-        return Gamepad::BUTTON_C;
     case AKEYCODE_BUTTON_L1:
         return Gamepad::BUTTON_L1;
     case AKEYCODE_BUTTON_L2:
@@ -731,13 +727,6 @@ Gamepad::ButtonMapping getGamepadButtonMapping(jint keycode)
         return Gamepad::BUTTON_R2;
     case AKEYCODE_BUTTON_THUMBR:
         return Gamepad::BUTTON_R3;
-    case AKEYCODE_BUTTON_SELECT:
-    case AKEYCODE_BACK:
-        return Gamepad::BUTTON_MENU1;
-    case AKEYCODE_BUTTON_START:
-        return Gamepad::BUTTON_MENU2;
-    case AKEYCODE_BUTTON_MODE:
-        return Gamepad::BUTTON_MENU3;
     case AKEYCODE_DPAD_UP:
         return Gamepad::BUTTON_UP;
     case AKEYCODE_DPAD_DOWN:
@@ -746,10 +735,15 @@ Gamepad::ButtonMapping getGamepadButtonMapping(jint keycode)
         return Gamepad::BUTTON_LEFT;
     case AKEYCODE_DPAD_RIGHT:
         return Gamepad::BUTTON_RIGHT;
+    case AKEYCODE_BUTTON_SELECT:
+        return Gamepad::BUTTON_MENU1;
+    case AKEYCODE_BUTTON_START:
+        return Gamepad::BUTTON_MENU2;
+    case AKEYCODE_BUTTON_MODE:
+        return Gamepad::BUTTON_MENU3;
     default:
-        break;
+        return Gamepad::BUTTON_A;
     }
-    return Gamepad::BUTTON_MENU4;
 }
 
 static float clampFuzz(float value, float fuzz)
@@ -1770,15 +1764,13 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
 extern "C"
 {
 
-JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventConnectedImpl(JNIEnv* env, jclass clazz, jint deviceId, jint buttonCount, jint joystickCount, jint triggerCount, jint vendorId, jint productId, jstring vendorIdStr, jstring productIdStr)
+JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventConnectedImpl(JNIEnv* env, jclass clazz, jint deviceId, jint buttonCount, jint joystickCount, jint triggerCount, jstring deviceName)
 {
-    const char* vendorString = env->GetStringUTFChars(vendorIdStr, JNI_FALSE);
-    const char* productString = env->GetStringUTFChars(productIdStr, JNI_FALSE);
+    const char* name = env->GetStringUTFChars(deviceName, JNI_FALSE);
     
-	gameplay::Platform::gamepadEventConnectedInternal(deviceId, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+	gameplay::Platform::gamepadEventConnectedInternal(deviceId, buttonCount, joystickCount, triggerCount, name);
     
-    env->ReleaseStringUTFChars(vendorIdStr, vendorString);
-    env->ReleaseStringUTFChars(productIdStr, productString);
+    env->ReleaseStringUTFChars(deviceName, name);
 }
 
 JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventDisconnectedImpl(JNIEnv* env, jclass clazz, jint deviceId)

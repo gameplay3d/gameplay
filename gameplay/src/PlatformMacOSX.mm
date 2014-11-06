@@ -332,7 +332,6 @@ double getMachTimeInMilliseconds()
 
 - (NSString*)identifierName;
 - (NSString*)productName;
-- (NSString*)manufacturerName;
 - (NSString*)serialNumber;
 - (int)versionNumber;
 - (int)vendorID;
@@ -544,7 +543,6 @@ double getMachTimeInMilliseconds()
 {
     NSString* idName = NULL;
     if(idName == NULL) idName = [self productName];
-    if(idName == NULL) idName = [self manufacturerName];
     if(idName == NULL) idName = [self serialNumber];
     if(idName == NULL) idName = [NSString stringWithFormat:@"%d-%d", [self vendorID], [self productID]];
     return idName;
@@ -558,16 +556,6 @@ double getMachTimeInMilliseconds()
         return NULL;
     }
     return (NSString*)productName;
-}
-
-- (NSString*)manufacturerName
-{
-    CFStringRef manufacturerName = (CFStringRef)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDManufacturerKey));
-    if(manufacturerName == NULL || CFGetTypeID(manufacturerName) != CFStringGetTypeID())
-    {
-        return NULL;
-    }
-    return (NSString*)manufacturerName;
 }
 
 - (NSString*)serialNumber
@@ -784,9 +772,6 @@ double getMachTimeInMilliseconds()
                                                     [gamepad numberOfButtons],
                                                     [gamepad numberOfSticks],
                                                     [gamepad numberOfTriggerButtons],
-                                                    [gamepad vendorID],
-                                                    [gamepad productID],
-                                                    [[gamepad manufacturerName] cStringUsingEncoding:NSASCIIStringEncoding],
                                                     [[gamepad productName] cStringUsingEncoding:NSASCIIStringEncoding]);
 
             [__activeGamepads setObject:locationID forKey:locationID];
@@ -2054,20 +2039,20 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         
         const int* mapping = NULL;
         float axisDeadZone = 0.0f;
-        if (gamepad->_vendorId == SONY_USB_VENDOR_ID &&
-            gamepad->_productId == SONY_USB_PS3_PRODUCT_ID)
+        if ([gp vendorID] == SONY_USB_VENDOR_ID &&
+            [gp productID] == SONY_USB_PS3_PRODUCT_ID)
         {
             mapping = PS3Mapping;
             axisDeadZone = 0.07f;
         }
-        else if (gamepad->_vendorId == MICROSOFT_VENDOR_ID &&
-                 gamepad->_productId == MICROSOFT_XBOX360_PRODUCT_ID)
+        else if ([gp vendorID] == MICROSOFT_VENDOR_ID &&
+                 [gp productID] == MICROSOFT_XBOX360_PRODUCT_ID)
         {
             mapping = XBox360Mapping;
             axisDeadZone = 0.2f;
         }
-        else if (gamepad->_vendorId == STEELSERIES_VENDOR_ID &&
-                 gamepad->_productId == STEELSERIES_FREE_PRODUCT_ID)
+        else if ([gp vendorID] == STEELSERIES_VENDOR_ID &&
+                 [gp productID] == STEELSERIES_FREE_PRODUCT_ID)
         {
             mapping = SteelSeriesFreeMapping;
             axisDeadZone = 0.005f;

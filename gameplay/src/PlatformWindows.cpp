@@ -951,7 +951,7 @@ Platform* Platform::create(Game* game)
             if (!__connectedXInput[i])
             {
                 // Gamepad is connected.
-                Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, 0, 0, "Microsoft", "XBox360 Controller");
+                Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, "Microsoft X-Box 360 pad");
                 __connectedXInput[i] = true;
             }
         }
@@ -1008,7 +1008,7 @@ int Platform::enterMessagePump()
                 if (XInputGetState(i, &__xInputState) == NO_ERROR && !__connectedXInput[i])
                 {
                     // Gamepad was just connected.
-                    Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, 0, 0, "Microsoft", "XBox360 Controller");
+                    Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, "Microsoft X-Box 360 pad");
                     __connectedXInput[i] = true;
                 }
                 else if (XInputGetState(i, &__xInputState) != NO_ERROR && __connectedXInput[i])
