@@ -1368,22 +1368,22 @@ bool Platform::launchURL(const char* url)
 
 std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
 {
-    char currentDir[512];
-    GetCurrentDirectoryA(512, currentDir);
-
     std::string filename;
     OPENFILENAMEA ofn;
     memset(&ofn, 0, sizeof(ofn));
 
-    // Set initial directory
+    char currentDir[1024];
+    char absPath[1024];
     std::string initialDirectoryStr;
     if (initialDirectory == NULL)
     {
+        GetCurrentDirectoryA(1024, currentDir);
         initialDirectoryStr = currentDir;
     }
     else
     {
-        initialDirectoryStr = initialDirectory;
+        GetFullPathNameA(initialDirectory, 1024, absPath, 0);
+        initialDirectoryStr = absPath;
     }
 
     // Filter on extensions
@@ -1408,14 +1408,14 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
     strcpy(filter, descStr.c_str());
     strcpy(filter + descStr.length() + 1, extStr.c_str());
 
-    char szFileName[512] = "";
+    char szFileName[1024] = "";
     ofn.lpstrFile = szFileName;
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = GetForegroundWindow();
     ofn.lpstrTitle = title;
     ofn.lpstrFilter = filter;
     ofn.lpstrInitialDir = initialDirectoryStr.c_str();
-    ofn.nMaxFile = 512;
+    ofn.nMaxFile = 1024;
     ofn.lpstrDefExt = filter;
 
     if (mode == FileSystem::OPEN)
@@ -1430,8 +1430,6 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
     }
 
     filename = szFileName;
-        
-    SetCurrentDirectoryA(currentDir);
 
     return filename;
 }
