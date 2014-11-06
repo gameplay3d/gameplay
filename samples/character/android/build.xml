@@ -6,10 +6,40 @@
     
     <loadproperties srcFile="project.properties" />
 
-    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'" unless="sdk.dir" />
-
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project -t 1 -p . -s'" unless="sdk.dir" />
+	<fail message="OS not supported. Supported platforms: Windows, MacOS X or Linux.">
+	    <condition>
+	      <not>
+	        <or>
+	          <os family="unix"/>
+	          <os family="windows"/>
+	        </or>
+	      </not>
+	    </condition>
+	</fail>
+	<macrodef name="build-native">
+		<attribute name="location"/>
+	     <sequential>
+            <exec osfamily="unix" dir="@{location}/android" executable="ndk-build">
+                <arg value="-j4"/>
+            </exec>
+			<exec osfamily="windows" dir="@{location}/android" executable="cmd">
+				<arg value="/c"/>
+				<arg value="ndk-build -j4"/>
+			</exec> 
+	    </sequential>
+	</macrodef>
+    
     <target name="-pre-build">
-		<mkdir dir="src"/>
+		<build-native location="../../../gameplay"/>
+    	<build-native location=".."/>
+        <mkdir dir="../src/org/gameplay3d"/>
+	    <copy todir="../src/org/gameplay3d">
+            <fileset dir="../../../gameplay/src/org/gameplay3d"/>
+	    </copy>
+    </target>
+	
+    <target name="-post-compile">
         <copy file="../game.png.config" tofile="assets/game.config"/>
         <copy file="../res/design/backboard.png" tofile="assets/res/png/backboard.png"/>
         <copy file="../res/design/basketball.png" tofile="assets/res/png/basketball.png"/>
@@ -54,9 +84,6 @@
          <copy todir="assets/res/ui">
             <fileset dir="../../../gameplay/res/ui"/>
         </copy>
-    </target>
-	
-    <target name="-post-compile">
     </target>
 
     <!-- version-tag: 1 -->

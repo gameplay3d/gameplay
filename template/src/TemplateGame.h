@@ -1,5 +1,5 @@
-#ifndef TEMPLATEGAME_H_
-#define TEMPLATEGAME_H_
+#ifndef TemplateGame_H_
+#define TemplateGame_H_
 
 #include "gameplay.h"
 

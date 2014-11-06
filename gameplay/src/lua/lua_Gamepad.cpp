@@ -22,12 +22,9 @@ void luaRegister_Gamepad()
         {"getForm", lua_Gamepad_getForm},
         {"getJoystickCount", lua_Gamepad_getJoystickCount},
         {"getJoystickValues", lua_Gamepad_getJoystickValues},
-        {"getProductId", lua_Gamepad_getProductId},
-        {"getProductString", lua_Gamepad_getProductString},
+        {"getName", lua_Gamepad_getName},
         {"getTriggerCount", lua_Gamepad_getTriggerCount},
         {"getTriggerValue", lua_Gamepad_getTriggerValue},
-        {"getVendorId", lua_Gamepad_getVendorId},
-        {"getVendorString", lua_Gamepad_getVendorString},
         {"isButtonDown", lua_Gamepad_isButtonDown},
         {"isVirtual", lua_Gamepad_isVirtual},
         {"update", lua_Gamepad_update},
@@ -238,7 +235,7 @@ int lua_Gamepad_getJoystickValues(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_getProductId(lua_State* state)
+int lua_Gamepad_getName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -251,42 +248,7 @@ int lua_Gamepad_getProductId(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Gamepad* instance = getInstance(state);
-                unsigned int result = instance->getProductId();
-
-                // Push the return value onto the stack.
-                lua_pushunsigned(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Gamepad_getProductId - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Gamepad_getProductString(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Gamepad* instance = getInstance(state);
-                const char* result = instance->getProductString();
+                const char* result = instance->getName();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, result);
@@ -294,7 +256,7 @@ int lua_Gamepad_getProductString(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_Gamepad_getProductString - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Gamepad_getName - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -375,76 +337,6 @@ int lua_Gamepad_getTriggerValue(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Gamepad_getVendorId(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Gamepad* instance = getInstance(state);
-                unsigned int result = instance->getVendorId();
-
-                // Push the return value onto the stack.
-                lua_pushunsigned(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Gamepad_getVendorId - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Gamepad_getVendorString(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Gamepad* instance = getInstance(state);
-                const char* result = instance->getVendorString();
-
-                // Push the return value onto the stack.
-                lua_pushstring(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Gamepad_getVendorString - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

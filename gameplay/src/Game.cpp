@@ -696,7 +696,7 @@ void Game::gestureDropEventInternal(int x, int y)
         _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureDropEvent), x, y);
 }
 
-void Game::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+void Game::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
     gamepadEvent(evt, gamepad);
     if (_scriptTarget)

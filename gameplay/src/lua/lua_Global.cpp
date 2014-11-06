@@ -423,14 +423,8 @@ void luaRegister_lua_Global()
         scopePath.push_back("Gamepad");
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_A, "BUTTON_A", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_B, "BUTTON_B", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_C, "BUTTON_C", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_X, "BUTTON_X", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_Y, "BUTTON_Y", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_Z, "BUTTON_Z", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_MENU1, "BUTTON_MENU1", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_MENU2, "BUTTON_MENU2", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_MENU3, "BUTTON_MENU3", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_MENU4, "BUTTON_MENU4", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_L1, "BUTTON_L1", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_L2, "BUTTON_L2", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_L3, "BUTTON_L3", scopePath);
@@ -441,6 +435,9 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_DOWN, "BUTTON_DOWN", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_LEFT, "BUTTON_LEFT", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_RIGHT, "BUTTON_RIGHT", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_MENU1, "BUTTON_MENU1", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_MENU2, "BUTTON_MENU2", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_MENU3, "BUTTON_MENU3", scopePath);
     }
 
     // Register enumeration Gamepad::GamepadEvent.
@@ -449,9 +446,6 @@ void luaRegister_lua_Global()
         scopePath.push_back("Gamepad");
         gameplay::ScriptUtil::registerEnumValue(Gamepad::CONNECTED_EVENT, "CONNECTED_EVENT", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Gamepad::DISCONNECTED_EVENT, "DISCONNECTED_EVENT", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Gamepad::BUTTON_EVENT, "BUTTON_EVENT", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Gamepad::JOYSTICK_EVENT, "JOYSTICK_EVENT", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(Gamepad::TRIGGER_EVENT, "TRIGGER_EVENT", scopePath);
     }
 
     // Register enumeration Gesture::GestureEvent.
@@ -902,6 +896,18 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerEnumValue(TextBox::PASSWORD, "PASSWORD", scopePath);
     }
 
+    // Register enumeration Texture::CubeFace.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Texture");
+        gameplay::ScriptUtil::registerEnumValue(Texture::POSITIVE_X, "POSITIVE_X", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Texture::NEGATIVE_X, "NEGATIVE_X", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Texture::POSITIVE_Y, "POSITIVE_Y", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Texture::NEGATIVE_Y, "NEGATIVE_Y", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Texture::POSITIVE_Z, "POSITIVE_Z", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Texture::NEGATIVE_Z, "NEGATIVE_Z", scopePath);
+    }
+
     // Register enumeration Texture::Filter.
     {
         std::vector<std::string> scopePath;
@@ -922,6 +928,14 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerEnumValue(Texture::RGB, "RGB", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Texture::RGBA, "RGBA", scopePath);
         gameplay::ScriptUtil::registerEnumValue(Texture::ALPHA, "ALPHA", scopePath);
+    }
+
+    // Register enumeration Texture::Type.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Texture");
+        gameplay::ScriptUtil::registerEnumValue(Texture::TEXTURE_2D, "TEXTURE_2D", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(Texture::TEXTURE_CUBE, "TEXTURE_CUBE", scopePath);
     }
 
     // Register enumeration Texture::Wrap.

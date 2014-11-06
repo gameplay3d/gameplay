@@ -1869,7 +1869,7 @@ Bundle::Reference::~Reference()
 }
 
 Bundle::MeshPartData::MeshPartData() :
-    indexCount(0), indexData(NULL)
+		primitiveType(Mesh::TRIANGLES), indexFormat(Mesh::INDEX32), indexCount(0), indexData(NULL)
 {
 }
 
@@ -1879,7 +1879,7 @@ Bundle::MeshPartData::~MeshPartData()
 }
 
 Bundle::MeshData::MeshData(const VertexFormat& vertexFormat)
-    : vertexFormat(vertexFormat), vertexCount(0), vertexData(NULL)
+    : vertexFormat(vertexFormat), vertexCount(0), vertexData(NULL), primitiveType(Mesh::TRIANGLES)
 {
 }
 

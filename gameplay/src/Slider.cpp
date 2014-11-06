@@ -257,26 +257,18 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
-bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+bool Slider::gamepadJoystickEvent(Gamepad* gamepad, unsigned int index)
 {
-    switch (evt)
+    // The right analog stick can be used to change a slider's value.
+    if (index == 1)
     {
-        case Gamepad::JOYSTICK_EVENT:
-        {
-            // The right analog stick can be used to change a slider's value.
-            if (analogIndex == 1)
-            {
-                Vector2 joy;
-                gamepad->getJoystickValues(analogIndex, &joy);
-                _gamepadValue = _value;
-                _delta = joy.x;
-                return true;
-            }
-            break;
-        }
+        Vector2 joy;
+        gamepad->getJoystickValues(index, &joy);
+        _gamepadValue = _value;
+        _delta = joy.x;
+        return true;
     }
-
-    return Label::gamepadEvent(evt, gamepad, analogIndex);
+    return Label::gamepadJoystickEvent(gamepad, index);
 }
 
 bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)

@@ -1103,13 +1103,27 @@ protected:
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
-     * Gamepad callback on gamepad events.
+     * Gamepad callback on gamepad button changes.
      *
-     * @param gamepad The gamepad whose state changed.
-     * @param evt The gamepad event that occurred.
-     * @param analogIndex If evt is JOYSTICK_EVENT or TRIGGER_EVENT, this will be the index of the corresponding control.
+     * @param gamepad The gamepad whose one or more buttons have changed.
      */
-    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+    virtual bool gamepadButtonEvent(Gamepad* gamepad);
+
+    /**
+     * Gamepad callback on gamepad trigger changes.
+     *
+     * @param gamepad The gamepad whose one or more buttons have changed.
+     * @param index The index of the trigger that changed. 
+     */
+    virtual bool gamepadTriggerEvent(Gamepad* gamepad, unsigned int index);
+
+    /**
+     * Gamepad callback on gamepad analog joystick changes.
+     *
+     * @param gamepad The gamepad whose one or more buttons have changed.
+     * @param index The index of the joystick that changed.
+     */
+    virtual bool gamepadJoystickEvent(Gamepad* gamepad, unsigned int index);
 
     /**
      * Called each frame to update this control and its children.

@@ -237,8 +237,7 @@ void RacerGame::update(float elapsedTime)
                 {
                     driving = -0.6f;
                 }
-
-                if ( (_keyFlags & BRAKE) || (_keyFlags & BRAKE_MOUSE) || _gamepad->isButtonDown(Gamepad::BUTTON_B))
+                if ((_keyFlags & BRAKE) || (_keyFlags & BRAKE_MOUSE) || _gamepad->isButtonDown(Gamepad::BUTTON_B) || (_gamepad->getTriggerCount() > 0 && _gamepad->getTriggerValue(0) > 0.5f))
                 {
                     braking = 1;
                     if (_brakingSound && (_brakingSound->getState() != AudioSource::PLAYING) && (v > 30.0f))
@@ -318,7 +317,7 @@ void RacerGame::render(float elapsedTime)
 
     // Draw the gamepad
     if (_gamepad && _gamepad->isVirtual())
-    	_gamepad->draw();
+        _gamepad->draw();
 
     // Draw the menu
     if (__showMenu)
@@ -531,22 +530,22 @@ void RacerGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 
         if (_physicalGamepad)
         {
-        	if (_virtualGamepadClip && _gamepad == _virtualGamepad)
+            if (_virtualGamepadClip && _gamepad == _virtualGamepad)
             {
-        		_virtualGamepadClip->setSpeed(1.0f);
+                _virtualGamepadClip->setSpeed(1.0f);
                 _virtualGamepadClip->play();
             }
             _gamepad = _physicalGamepad;
-			if (_virtualGamepad)
-			{
-				_virtualGamepad->getForm()->setEnabled(false);
-			}
+            if (_virtualGamepad)
+            {
+                _virtualGamepad->getForm()->setEnabled(false);
+            }
         }
         else if (_virtualGamepad)
         {
             if (_gamepad == _physicalGamepad)
             {
-        	    _virtualGamepadClip->setSpeed(-1.0f);
+                _virtualGamepadClip->setSpeed(-1.0f);
                 _virtualGamepadClip->play();
             }
             _gamepad = _virtualGamepad;

@@ -1511,29 +1511,33 @@ bool Platform::canExit()
 
 unsigned int Platform::getDisplayWidth()
 {
-    if(NSFoundationVersionNumber <= NSFoundationVersionNumber_iOS_7_1)
-    {
-        CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
-        return size.width;
-    }
-    else
+#ifdef NSFoundationVersionNumber_iOS_7_1
+    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1)
     {
         //iOS 8+
         return [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale];
+    }
+    else
+#endif
+    {
+        CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
+        return size.width;
     }
 }
 
 unsigned int Platform::getDisplayHeight()
 {
-    if(NSFoundationVersionNumber <= NSFoundationVersionNumber_iOS_7_1)
-    {
-        CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
-        return size.height;
-    }
-    else
+#ifdef NSFoundationVersionNumber_iOS_7_1
+    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1)
     {
         //iOS 8+
         return [[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale];
+    }
+    else
+#endif
+    {
+        CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
+        return size.height;
     }
 }
 

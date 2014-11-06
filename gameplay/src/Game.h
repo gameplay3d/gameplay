@@ -31,6 +31,7 @@ class ScriptController;
 class Game
 {
     friend class Platform;
+    friend class Gamepad;
     friend class ShutdownListener;
 
 public:
@@ -740,7 +741,7 @@ private:
     void gestureLongTapEventInternal(int x, int y, float duration);
     void gestureDragEventInternal(int x, int y);
     void gestureDropEventInternal(int x, int y);
-    void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+    void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.

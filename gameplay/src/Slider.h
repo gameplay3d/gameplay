@@ -185,47 +185,24 @@ protected:
     void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
-     * Touch callback on touch events.  Controls return true if they consume the touch event.
-     *
-     * @param evt The touch event that occurred.
-     * @param x The x position of the touch in pixels. Left edge is zero.
-     * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
-     *
-     * @return Whether the touch event was consumed by the control.
-     *
-     * @see Touch::TouchEvent
+     * @see Control::KeyEvent
+     */
+    bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * @see Control::TouchEvent
      */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
-     * Mouse callback on mouse events.
-     *
-     * @param evt The mouse event that occurred.
-     * @param x The x position of the mouse in pixels. Left edge is zero.
-     * @param y The y position of the mouse in pixels. Top edge is zero.
-     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
-     *
-     * @return True if the mouse event is consumed or false if it is not consumed.
-     *
-     * @see Mouse::MouseEvent
+     * @see Control::MouseEvent
      */
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
-     * Gamepad callback on gamepad events.
-     *
-     * @see Control::gamepadEvent
+     * @see Control::gamepadJoystickEvent
      */
-    bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
-
-    /**
-     * Keyboard callback on key events.
-     *
-     * @see Keyboard::KeyEvent
-     * @see Keyboard::Key
-     */
-    bool keyEvent(Keyboard::KeyEvent evt, int key);
+    bool gamepadJoystickEvent(Gamepad* gamepad, unsigned int index);
 
     /**
      * @see Control::drawImages

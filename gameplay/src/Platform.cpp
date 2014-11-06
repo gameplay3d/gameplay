@@ -34,64 +34,78 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
 
 void Platform::gestureSwipeEventInternal(int x, int y, int direction)
 {
-    // TODO: Add support to Form for gestures
     Game::getInstance()->gestureSwipeEventInternal(x, y, direction);
 }
 
 void Platform::gesturePinchEventInternal(int x, int y, float scale)
 {
-    // TODO: Add support to Form for gestures
     Game::getInstance()->gesturePinchEventInternal(x, y, scale);
 }
 
 void Platform::gestureTapEventInternal(int x, int y)
 {
-    // TODO: Add support to Form for gestures
     Game::getInstance()->gestureTapEventInternal(x, y);
 }
 
 void Platform::gestureLongTapEventInternal(int x, int y, float duration)
 {
-    // TODO: Add support to Form for gestures
     Game::getInstance()->gestureLongTapEventInternal(x, y, duration);
 }
 
 void Platform::gestureDragEventInternal(int x, int y)
 {
-    // TODO: Add support to Form for gestures
     Game::getInstance()->gestureDragEventInternal(x, y);
 }
 
 void Platform::gestureDropEventInternal(int x, int y)
 {
-    // TODO: Add support to Form for gestures
     Game::getInstance()->gestureDropEventInternal(x, y);
 }
 
 void Platform::resizeEventInternal(unsigned int width, unsigned int height)
 {
     Game::getInstance()->resizeEventInternal(width, height);
-
     Form::resizeEventInternal(width, height);
 }
 
-void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name)
 {
-    if (!Form::gamepadEventInternal(evt, gamepad, analogIndex))
-    {
-        Game::getInstance()->gamepadEventInternal(evt, gamepad, analogIndex);
-    }
-}
-
-void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-{
-    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, name);
 }
 
 void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
 {
     Gamepad::remove(handle);
+}
+
+void Platform::gamepadButtonPressedEventInternal(GamepadHandle handle, Gamepad::ButtonMapping mapping)
+{
+    Gamepad* gamepad = Gamepad::getGamepad(handle);
+    unsigned int newButtons = gamepad->_buttons | (1 << mapping);
+    gamepad->setButtons(newButtons);
+    Form::gamepadButtonEventInternal(gamepad);
+}
+
+void Platform::gamepadButtonReleasedEventInternal(GamepadHandle handle, Gamepad::ButtonMapping mapping)
+{
+    Gamepad* gamepad = Gamepad::getGamepad(handle);
+    unsigned int newButtons = gamepad->_buttons & ~(1 << mapping);
+    gamepad->setButtons(newButtons);
+    Form::gamepadButtonEventInternal(gamepad);
+}
+
+void Platform::gamepadTriggerChangedEventInternal(GamepadHandle handle, unsigned int index, float value)
+{
+    Gamepad* gamepad = Gamepad::getGamepad(handle);
+    gamepad->setTriggerValue(index, value);
+    Form::gamepadTriggerEventInternal(gamepad, index);
+}
+
+void Platform::gamepadJoystickChangedEventInternal(GamepadHandle handle, unsigned int index, float x, float y)
+{
+    Gamepad* gamepad = Gamepad::getGamepad(handle);
+    gamepad->setJoystickValue(index, x, y);
+    Form::gamepadJoystickEventInternal(gamepad, index);
 }
 
 }

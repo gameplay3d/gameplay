@@ -951,7 +951,7 @@ Platform* Platform::create(Game* game)
             if (!__connectedXInput[i])
             {
                 // Gamepad is connected.
-                Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, 0, 0, "Microsoft", "XBox360 Controller");
+                Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, "Microsoft XBox360 Controller");
                 __connectedXInput[i] = true;
             }
         }
@@ -1008,7 +1008,7 @@ int Platform::enterMessagePump()
                 if (XInputGetState(i, &__xInputState) == NO_ERROR && !__connectedXInput[i])
                 {
                     // Gamepad was just connected.
-                    Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, 0, 0, "Microsoft", "XBox360 Controller");
+                    Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, "Microsoft XBox360 Controller");
                     __connectedXInput[i] = true;
                 }
                 else if (XInputGetState(i, &__xInputState) != NO_ERROR && __connectedXInput[i])
@@ -1372,18 +1372,18 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
     OPENFILENAMEA ofn;
     memset(&ofn, 0, sizeof(ofn));
 
-    // Set initial directory
+    char currentDir[1024];
+    char absPath[1024];
     std::string initialDirectoryStr;
-    char currentDir[256];
     if (initialDirectory == NULL)
     {
-        char currentDir[512];
-        GetCurrentDirectoryA(512, currentDir);
+        GetCurrentDirectoryA(1024, currentDir);
         initialDirectoryStr = currentDir;
     }
     else
     {
-        initialDirectoryStr = initialDirectory;
+        GetFullPathNameA(initialDirectory, 1024, absPath, 0);
+        initialDirectoryStr = absPath;
     }
 
     // Filter on extensions
@@ -1408,14 +1408,14 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
     strcpy(filter, descStr.c_str());
     strcpy(filter + descStr.length() + 1, extStr.c_str());
 
-    char szFileName[512] = "";
+    char szFileName[1024] = "";
     ofn.lpstrFile = szFileName;
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = GetForegroundWindow();
     ofn.lpstrTitle = title;
     ofn.lpstrFilter = filter;
     ofn.lpstrInitialDir = initialDirectoryStr.c_str();
-    ofn.nMaxFile = 512;
+    ofn.nMaxFile = 1024;
     ofn.lpstrDefExt = filter;
 
     if (mode == FileSystem::OPEN)
@@ -1430,9 +1430,6 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
     }
 
     filename = szFileName;
-        
-    if (initialDirectory == NULL)
-        SetCurrentDirectoryA(currentDir);
 
     return filename;
 }

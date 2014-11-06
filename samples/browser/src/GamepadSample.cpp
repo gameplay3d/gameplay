@@ -30,16 +30,13 @@ void GamepadSample::finalize()
 void GamepadSample::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned int player)
 {
     char s[128];
-    sprintf(s, "Player: %d - VendorID: %d, %s, Product ID: %d, %s\nButtons: ",
-                player,
-                gamepad->getVendorId(), gamepad->getVendorString(),
-                gamepad->getProductId(), gamepad->getProductString());
+    sprintf(s, "Player: %d - %s\nButtons: ", player, gamepad->getName());
     _status += s;
-    for (int j = 0; j < 20; ++j)
+    for (int i = 0; i < 20; ++i)
     {
-        if (gamepad->isButtonDown((Gamepad::ButtonMapping)j))
+        if (gamepad->isButtonDown((Gamepad::ButtonMapping)i))
         {
-            sprintf(s, "%s ", getStringFromButtonMapping((Gamepad::ButtonMapping)j));
+            sprintf(s, "%s ", getStringFromButtonMapping((Gamepad::ButtonMapping)i));
             _status += s;
         }
     }
@@ -51,9 +48,9 @@ void GamepadSample::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned 
         sprintf(s, "Joystick %d: (%f, %f)\n", j, joystick.x, joystick.y);
         _status += s;
     }
-    for (unsigned int j = 0; j < gamepad->getTriggerCount(); ++j)
+    for (unsigned int k = 0; k < gamepad->getTriggerCount(); ++k)
     {
-        sprintf(s, "Trigger %d: %f\n", j, gamepad->getTriggerValue(j));
+        sprintf(s, "Trigger %d: %f\n", k, gamepad->getTriggerValue(k));
         _status += s;
     }
     _status += "\n";
@@ -103,22 +100,10 @@ const char* GamepadSample::getStringFromButtonMapping(Gamepad::ButtonMapping map
             return "A";
         case Gamepad::BUTTON_B:
             return "B";
-        case Gamepad::BUTTON_C:
-            return "C";
         case Gamepad::BUTTON_X:
             return "X";
         case Gamepad::BUTTON_Y:
             return "Y";
-        case Gamepad::BUTTON_Z:
-            return "Z";
-        case Gamepad::BUTTON_MENU1:
-            return "MENU1";
-        case Gamepad::BUTTON_MENU2:
-            return "MENU2";
-        case Gamepad::BUTTON_MENU3:
-            return "MENU3";
-        case Gamepad::BUTTON_MENU4:
-            return "MENU4";
         case Gamepad::BUTTON_L1:
             return "L1";
         case Gamepad::BUTTON_L2:
@@ -139,6 +124,12 @@ const char* GamepadSample::getStringFromButtonMapping(Gamepad::ButtonMapping map
             return "LEFT";
         case Gamepad::BUTTON_RIGHT:
             return "RIGHT";
+        case Gamepad::BUTTON_MENU1:
+            return "MENU1";
+        case Gamepad::BUTTON_MENU2:
+            return "MENU2";
+        case Gamepad::BUTTON_MENU3:
+            return "MENU3";
         default:
             return "";
     }

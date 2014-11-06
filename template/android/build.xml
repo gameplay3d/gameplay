@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="sample-spaceship" default="help">
+<project name="TEMPLATE_PROJECT" default="help">
 
     <property file="local.properties" />
     <property file="ant.properties" />
     
     <loadproperties srcFile="project.properties" />
-    
-    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project -t 1 -p . -s'" unless="sdk.dir" />
+
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project -t 1 -p . -s'" unless="sdk.dir"/>
 	<fail message="OS not supported. Supported platforms: Windows, MacOS X or Linux.">
 	    <condition>
 	      <not>
@@ -17,6 +17,7 @@
 	      </not>
 	    </condition>
 	</fail>
+
 	<macrodef name="build-native">
 		<attribute name="location"/>
 	     <sequential>
@@ -29,30 +30,26 @@
 			</exec> 
 	    </sequential>
 	</macrodef>
-    
+
     <target name="-pre-build">
-		<build-native location="../../../gameplay"/>
+        <build-native location="../GAMEPLAY_PATH/gameplay"/>
     	<build-native location=".."/>
         <mkdir dir="../src/org/gameplay3d"/>
 	    <copy todir="../src/org/gameplay3d">
-            <fileset dir="../../../gameplay/src/org/gameplay3d"/>
+            <fileset dir="../GAMEPLAY_PATH/gameplay/src/org/gameplay3d"/>
 	    </copy>
     </target>
 
     <target name="-post-compile">
-        <copy file="../res/airstrip.gpb" tofile="assets/res/airstrip.gpb"/>
-        <copy file="../res/background.ogg" tofile="assets/res/background.ogg"/>
-        <copy file="../res/background.png" tofile="assets/res/background.png"/>
-        <copy file="../res/propulsion_glow.png" tofile="assets/res/propulsion_glow.png"/>
-        <copy file="../res/spaceship.gpb" tofile="assets/res/spaceship.gpb"/>
-        <copy file="../res/spaceship.wav" tofile="assets/res/spaceship.wav"/>
-        <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
+        <copy todir="assets/res">
+            <fileset dir="../res" />
+        </copy>
         <copy todir="assets/res/shaders">
-            <fileset dir="../../../gameplay/res/shaders"/>
-        </copy>
+            <fileset dir="../GAMEPLAY_PATH/gameplay/res/shaders" />
+       </copy>
         <copy todir="assets/res/ui">
-            <fileset dir="../../../gameplay/res/ui"/>
-        </copy>
+            <fileset dir="../GAMEPLAY_PATH/gameplay/res/ui" />
+       </copy>
     </target>
 
     <!-- version-tag: 1 -->
