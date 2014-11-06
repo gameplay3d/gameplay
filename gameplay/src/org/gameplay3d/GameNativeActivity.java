@@ -91,18 +91,13 @@ public class GameNativeActivity extends NativeActivity
     }
     
     private void onGamepadConnected(int deviceId, String deviceName) {
-        int buttonCount = 20;
+        int buttonCount = 17;
         int joystickCount = 2;
         int triggerCount = 2;
-        int vendorId = 0;
-        int productId = 0;
-        String vendorName = "";
-        String productName = deviceName;
         
         Log.v(TAG, "Gamepad connected:id=" + deviceId + ", name=" + deviceName);
         
-        gamepadEventConnectedImpl(deviceId, buttonCount, joystickCount, triggerCount, 
-                                  productId, vendorId, vendorName, productName);
+        gamepadEventConnectedImpl(deviceId, buttonCount, joystickCount, triggerCount, deviceName);
     }
     
     private InputDevice getGamepadDevice(int deviceId) {
@@ -124,7 +119,7 @@ public class GameNativeActivity extends NativeActivity
     
     
     // JNI calls to PlatformAndroid.cpp
-    private static native void gamepadEventConnectedImpl(int deviceId, int buttonCount, int joystickCount, int triggerCount, int vendorId, int productId, String vendorString, String productString);
+    private static native void gamepadEventConnectedImpl(int deviceId, int buttonCount, int joystickCount, int triggerCount, String deviceName);
     private static native void gamepadEventDisconnectedImpl(int deviceId);
     
     private InputManager _inputManager;

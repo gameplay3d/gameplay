@@ -1012,7 +1012,8 @@ void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSI
     unsigned int vendorId =readIntegerGamepadIdPropery(sysFSIdPath,"vendor");
     unsigned int productId =readIntegerGamepadIdPropery(sysFSIdPath,"product");
 
-    if (isBlackListed(vendorId,productId)) return;
+    if (isBlackListed(vendorId, productId))
+        return;
 
     GamepadHandle handle = ::open(devPath,O_RDONLY | O_NONBLOCK);
     if(handle < 0)
@@ -1029,18 +1030,17 @@ void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSI
     ioctl (handle, JSIOCGAXES, &axesNum);
     ioctl (handle, JSIOCGBUTTONS, &btnsNum);
 
-    const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(vendorId,productId,(unsigned int)axesNum,(unsigned int)btnsNum);
+    const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(vendorId, productId, (unsigned int)axesNum, (unsigned int)btnsNum);
     unsigned int numJS = gpInfo.numberOfJS;
     unsigned int numTR = gpInfo.numberOfTriggers;
 
-    // Ignore accelerometer devices that register themselves as joysticks. Ensure they have at least 2 buttons.s
+    // Ignore accelerometer devices that register themselves as joysticks. Ensure they have at least 2 buttons.
     if (btnsNum < 2)
         return;
 
-    Platform::gamepadEventConnectedInternal(handle,btnsNum,numJS,numTR,vendorId,productId,"",name);
+    Platform::gamepadEventConnectedInternal(handle, btnsNum, numJS, numTR, name);
     ConnectedGamepadDevInfo info = {devId,handle,gpInfo}; 
     __connectedGamepads.push_back(info);
-    
 }
 
 static float normalizeJoystickAxis(int axisValue, int deadZone, bool zeroToOne)

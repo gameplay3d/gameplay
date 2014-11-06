@@ -370,9 +370,7 @@ public:
      *
      * @script{ignore}
      */
-    static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                              unsigned int vendorId, unsigned int productId,
-                                              const char* vendorString, const char* productString);
+    static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name);
 
     /**
      * Internal method used only from static code in various platform implementation.
