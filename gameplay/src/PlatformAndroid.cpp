@@ -768,7 +768,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
         int x;
         int y;
         
-        if (source & AINPUT_SOURCE_JOYSTICK)
+        if ((source & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK)
         {
             // DPAD handling (axis hats)
             float xaxis = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_HAT_X, 0);
@@ -1142,7 +1142,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
         switch(action)
         {
             case AKEY_EVENT_ACTION_DOWN:
-                if ((source & AINPUT_SOURCE_GAMEPAD) || (source & AINPUT_SOURCE_JOYSTICK))
+                if (((source & AINPUT_SOURCE_GAMEPAD) == AINPUT_SOURCE_GAMEPAD) || ((source & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK))
                 {
                     gameplay::Platform::gamepadButtonPressedEventInternal(deviceId, gameplay::getGamepadButtonMapping(keycode));
                 }
@@ -1155,7 +1155,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                 break;
                     
             case AKEY_EVENT_ACTION_UP:
-                if ((source & AINPUT_SOURCE_GAMEPAD) || (source & AINPUT_SOURCE_JOYSTICK) )
+                if (((source & AINPUT_SOURCE_GAMEPAD) == AINPUT_SOURCE_GAMEPAD) || ((source & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK))
                 {
                     gameplay::Platform::gamepadButtonReleasedEventInternal(deviceId, gameplay::getGamepadButtonMapping(keycode));
                 }
