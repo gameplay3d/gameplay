@@ -14,71 +14,71 @@ class WaterSample : public Sample
 {
 public:
 
-	WaterSample();
+    WaterSample();
 
-	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-	
-	void keyEvent(Keyboard::KeyEvent evt, int key);
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    
+    void keyEvent(Keyboard::KeyEvent evt, int key);
 
-	bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+    bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
-	void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
 protected:
 
-	void initialize();
+    void initialize();
 
-	void finalize();
+    void finalize();
 
-	void update(float elapsedTime);
+    void update(float elapsedTime);
 
-	void render(float elapsedTime);
+    void render(float elapsedTime);
 
 private:
-	enum Button
-	{
-		Forward		= (1 << 0),
-		Back		= (1 << 1),
-		Left		= (1 << 2),
-		Right		= (1 << 3)
-	};
+    enum Button
+    {
+        Forward     = (1 << 0),
+        Back        = (1 << 1),
+        Left        = (1 << 2),
+        Right       = (1 << 3)
+    };
 
-	Font* _font;
-	Scene* _scene;
-	Node* _cameraNode;
-	Node* _reflectCameraNode;
+    Font* _font;
+    Scene* _scene;
+    Node* _cameraNode;
+    Node* _reflectCameraNode;
 
-	Vector3 _cameraAcceleration;
-	float _waterHeight;
+    Vector3 _cameraAcceleration;
+    float _waterHeight;
 
-	unsigned _inputMask;
-	int _prevX, _prevY;
+    unsigned _inputMask;
+    int _prevX, _prevY;
 
-	FrameBuffer* _refractBuffer;
-	SpriteBatch* _refractBatch;
-	FrameBuffer* _reflectBuffer;
-	SpriteBatch* _reflectBatch;
+    FrameBuffer* _refractBuffer;
+    SpriteBatch* _refractBatch;
+    FrameBuffer* _reflectBuffer;
+    SpriteBatch* _reflectBatch;
 
-	bool _showBuffers;
+    bool _showBuffers;
 
-	Vector4 _clipPlane;
-	const Vector4& getClipPlane() const
-	{
-		return _clipPlane;
-	}
-	Matrix m_worldViewProjectionReflection;
-	const Matrix& getReflectionMatrix() const
-	{
-		return m_worldViewProjectionReflection;
-	}
+    Vector4 _clipPlane;
+    const Vector4& getClipPlane() const
+    {
+        return _clipPlane;
+    }
+    Matrix m_worldViewProjectionReflection;
+    const Matrix& getReflectionMatrix() const
+    {
+        return m_worldViewProjectionReflection;
+    }
 
-	float getTime() const
-	{
-		return Game::getGameTime() * 0.0001;
-	}
+    float getTime() const
+    {
+        return Game::getGameTime() * 0.0001;
+    }
 
-	Gamepad* _gamepad;
-	bool drawScene(Node* node, bool drawWater);
+    Gamepad* _gamepad;
+    bool drawScene(Node* node, bool drawWater);
 };
 
 #endif
