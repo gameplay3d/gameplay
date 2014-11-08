@@ -3,13 +3,12 @@
 
 #include "gameplay.h"
 #include "Sample.h"
-#include "Timer.h"
 
 
 using namespace gameplay;
 
 /**
-* Sample creating and draw a single triangle.
+* Sample creating a water effect.
 */
 class WaterSample : public Sample
 {
@@ -73,10 +72,9 @@ private:
 		return m_worldViewProjectionReflection;
 	}
 
-	Timer* _timer;
 	float getTime() const
 	{
-		return _timer->elapsed().asSeconds() * 0.1f;
+		return Game::getGameTime() * 0.0001;
 	}
 
 	Gamepad* _gamepad;

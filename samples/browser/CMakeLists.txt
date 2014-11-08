@@ -96,7 +96,6 @@ set(GAME_SRC
     src/TextureSample.h
     src/TriangleSample.cpp
     src/TriangleSample.h
-    src/Timer.h
     src/WaterSample.h
     src/WaterSample.cpp    
 )
