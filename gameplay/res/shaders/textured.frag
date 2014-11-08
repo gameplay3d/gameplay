@@ -111,11 +111,17 @@ varying vec3 v_cameraDirection;
 
 #include "lighting.frag"
 
+#include "clip.frag"
+
 #endif
 
 
 void main()
 {
+    #if defined(CLIP_PLANE)
+    clipFrag();
+    #endif
+    
     _baseColor = texture2D(u_diffuseTexture, v_texCoord);
  
     gl_FragColor.a = _baseColor.a;

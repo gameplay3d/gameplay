@@ -4,8 +4,8 @@ material ground
     {
         pass
         {
-            vertexShader = res/common/water/textured_watersample.vert
-            fragmentShader = res/common/water/textured_watersample.frag
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
             defines = DIRECTIONAL_LIGHT_COUNT 1;CLIP_PLANE
             
             u_worldMatrix = WORLD_MATRIX
@@ -37,35 +37,34 @@ material ground
 
 material water
 {
-	technique
-	{
-		
-		pass
-		{
-			vertexShader = res/common/water/watersample.vert
-			fragmentShader = res/common/water/watersample.frag
-			
-			u_worldMatrix = WORLD_MATRIX
-			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-			u_cameraPosition = CAMERA_WORLD_POSITION
-						
-			sampler u_normalMap
-			{
-				mipmap = true
-				wrapS = REPEAT
-				wrapT = REPEAT
-				minFilter = LINEAR_MIPMAP_LINEAR
-				magFilter = LINEAR
+    technique
+    {
 
-				path = res/common/water/water_normal.png
-			}
-			
-			renderState
-			{
-				cullFace = true
-				depthTest = true
-			}
-		
-		}
-	}
+        pass
+        {
+             vertexShader = res/common/water/watersample.vert
+             fragmentShader = res/common/water/watersample.frag
+
+             u_worldMatrix = WORLD_MATRIX
+             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+             u_cameraPosition = CAMERA_WORLD_POSITION
+
+             sampler u_normalMap
+             {
+                 mipmap = true
+                 wrapS = REPEAT
+                 wrapT = REPEAT
+                 minFilter = LINEAR_MIPMAP_LINEAR
+                 magFilter = LINEAR
+
+                 path = res/common/water/water_normal.png
+             }
+
+             renderState
+             {
+                 cullFace = true
+                 depthTest = true
+             }
+         }
+     }
 }

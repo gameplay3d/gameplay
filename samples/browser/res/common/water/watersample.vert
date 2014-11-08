@@ -23,12 +23,12 @@ varying vec3 v_eyePosition;
 /////////////////////////////
 void main()
 {
-	v_vertexRefractionPosition = u_worldViewProjectionMatrix * a_position;
-	v_vertexReflectionPosition = u_worldViewProjectionReflectionMatrix * a_position;
-	
-	gl_Position = v_vertexRefractionPosition;
-	
-	v_texCoord = a_texCoord;
-	
-	v_eyePosition = u_cameraPosition - (u_worldMatrix * a_position).xyz;
+    v_vertexRefractionPosition = u_worldViewProjectionMatrix * a_position;
+    v_vertexReflectionPosition = u_worldViewProjectionReflectionMatrix * a_position;
+
+    gl_Position = v_vertexRefractionPosition;
+
+    v_texCoord = a_texCoord;
+
+    v_eyePosition = u_cameraPosition - (u_worldMatrix * a_position).xyz;
 }

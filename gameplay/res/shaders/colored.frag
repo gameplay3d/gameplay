@@ -91,11 +91,16 @@ varying vec3 v_cameraDirection;
 
 #include "lighting.frag"
 
+#include "clip.frag"
+
 #endif
 
 
 void main()
 {
+    #if defined(CLIP_PLANE)
+    clipFrag();
+    #endif    
     
     #if defined(LIGHTING)
 
