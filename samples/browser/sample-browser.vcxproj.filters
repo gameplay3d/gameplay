@@ -319,6 +319,9 @@
     <ClInclude Include="src\TerrainSample.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\WaterSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshPrimitiveSample.cpp">
@@ -385,6 +388,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TerrainSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WaterSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

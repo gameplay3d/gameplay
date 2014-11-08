@@ -79,6 +79,8 @@ uniform vec2 u_textureRepeat;
 uniform vec2 u_textureOffset;
 #endif
 
+#include "clip.vert"
+
 ///////////////////////////////////////////////////////////
 // Varyings
 varying vec2 v_texCoord;
@@ -150,6 +152,10 @@ void main()
     #endif
     
     #endif 
+    
+    #if defined(CLIP_PLANE)
+    clipVert(position);
+    #endif     
     
     v_texCoord = a_texCoord;
     

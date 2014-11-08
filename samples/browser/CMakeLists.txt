@@ -96,6 +96,8 @@ set(GAME_SRC
     src/TextureSample.h
     src/TriangleSample.cpp
     src/TriangleSample.h
+    src/WaterSample.h
+    src/WaterSample.cpp    
 )
 
 add_executable(${GAME_NAME}

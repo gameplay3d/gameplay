@@ -66,6 +66,8 @@ uniform vec3 u_cameraPosition;
 
 #endif
 
+#include "clip.vert"
+
 ///////////////////////////////////////////////////////////
 // Varyings
 #if defined(LIGHTMAP)
@@ -123,6 +125,10 @@ void main()
     // Apply light.
     applyLight(position);
 
+    #endif
+
+    #if defined(CLIP_PLANE)
+    clipVert(position);
     #endif
 
     // Pass the lightmap texture coordinate

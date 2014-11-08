@@ -84,7 +84,8 @@ LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp \
 	TerrainSample.cpp \
     TextSample.cpp \
     TextureSample.cpp \
-	TriangleSample.cpp
+	TriangleSample.cpp \
+	WaterSample.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../external-deps/lua/include" -I"../../../external-deps/bullet/include" -I"../../../external-deps/png/include" -I"../../../external-deps/oggvorbis/include" -I"../../../external-deps/openal/include" -I"../../../gameplay/src"

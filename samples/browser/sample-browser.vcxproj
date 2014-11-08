@@ -436,6 +436,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <ClCompile Include="src\TextSample.cpp" />
     <ClCompile Include="src\TextureSample.cpp" />
     <ClCompile Include="src\MeshBatchSample.cpp" />
+    <ClCompile Include="src\WaterSample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio3DSample.h" />
@@ -460,6 +461,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <ClInclude Include="src\TextSample.h" />
     <ClInclude Include="src\TextureSample.h" />
     <ClInclude Include="src\MeshBatchSample.h" />
+    <ClInclude Include="src\WaterSample.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\common\terrain\dirt.dds" />
