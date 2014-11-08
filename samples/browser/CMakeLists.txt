@@ -59,7 +59,6 @@ set(GAME_SRC
     src/BillboardSample.cpp
     src/BillboardSample.h
     src/CreateSceneSample.cpp
-    src/CreateSceneSample.h    
     src/CreateSceneSample.h
     src/FirstPersonCamera.cpp
     src/FirstPersonCamera.h
