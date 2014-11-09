@@ -153,18 +153,14 @@ fi
 # Copy Microsoft Visual Studio project files
 #############################################
 gpPathWin=$(echo $gpPath | sed 's*/*\\\\*g')
-
 cp "template/template.vcxproj" "$projPath/$projName.vcxproj"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.vcxproj"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPathWin*g" "$projPath/$projName.vcxproj"
-
 cp "template/template.vcxproj.filters" "$projPath/$projName.vcxproj.filters"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj.filters"
-
 cp "template/template.vcxproj.user" "$projPath/$projName.vcxproj.user"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPathWin*g" "$projPath/$projName.vcxproj.user"
-
 
 #############################################
 # Copy Apple Xcode project files
@@ -174,10 +170,8 @@ cp "template/template.xcodeproj/project.pbxproj" "$projPath/$projName.xcodeproj/
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.xcodeproj/project.pbxproj"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.xcodeproj/project.pbxproj"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.xcodeproj/project.pbxproj"
-
 cp "template/TEMPLATE_PROJECT-macosx.plist" "$projPath/$projName-macosx.plist"
 aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-macosx.plist"
-
 cp "template/TEMPLATE_PROJECT-ios.plist" "$projPath/$projName-ios.plist"
 cp "template/Default-568h@2x.png" "$projPath/Default-568h@2x.png"
 aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/$projName-ios.plist"
@@ -190,52 +184,53 @@ mkdir -p "$projPath/android"
 mkdir -p "$projPath/android/jni"
 mkdir -p "$projPath/android/res/values"
 mkdir -p "$projPath/android/res/drawable"
-
 cp "template/android/AndroidManifest.xml" "$projPath/android/AndroidManifest.xml"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/AndroidManifest.xml"
 aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/android/AndroidManifest.xml"
-
 cp "template/android/build.xml" "$projPath/android/build.xml"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/build.xml"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/build.xml"
-
 cp "template/android/project.properties" "$projPath/android/project.properties"
-
 cp "template/android/jni/Application.mk" "$projPath/android/jni/Application.mk"
 cp "template/android/jni/Android.mk" "$projPath/android/jni/Android.mk"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/jni/Android.mk"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/android/jni/Android.mk"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/jni/Android.mk"
-
 cp "template/icon.png" "$projPath/android/res/drawable/icon.png"
 cp "template/android/res/values/template.strings.xml" "$projPath/android/res/values/strings.xml"
 aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/android/res/values/strings.xml"
 
 #############################################
-# Copy Android Eclipse files
+# Copy Eclipse files for Android
 #############################################
 cp "template/android/.cproject" "$projPath/android/.cproject"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/.cproject"
 aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/android/.cproject"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/.cproject"
-
 cp "template/android/.project" "$projPath/android/.project"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/.project"
-
 cp "template/android/.classpath" "$projPath/android/.classpath"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/.classpath"
 
 #############################################
-# Copy Linux Eclipse files
+# Copy Eclipse files for Linux
 #############################################
-
 cp "template/.cproject" "$projPath/.cproject"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/.cproject"
 aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/.cproject"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/.cproject"
-
 cp "template/.project" "$projPath/.project"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/.project"
+
+#############################################
+# Copy QtCreator files
+#############################################
+cp "template/TEMPLATE_PROJECT.pro" "$projPath/$projName.pro"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.pro"
+aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.pro"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.pro"
+cp "template/TEMPLATE_PROJECT.pro.user" "$projPath/$projName.pro.user"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.pro.user"
 
 #############################################
 # Copy CMake files
@@ -245,16 +240,6 @@ cp "template/template-CMakeLists.txt" "$projPath/CMakeLists.txt"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/CMakeLists.txt"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/CMakeLists.txt"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/CMakeLists.txt"
-
-#############################################
-# Copy QT Creator project files
-#############################################
-cp "template/TEMPLATE_PROJECT.pro" "$projPath/$projName.pro"
-aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.pro"
-aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.pro"
-aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.pro"
-cp "template/TEMPLATE_PROJECT.pro.user" "$projPath/$projName.pro.user"
-aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.pro.user"
 
 #############################################
 # Copy source files
