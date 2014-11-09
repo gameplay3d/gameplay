@@ -5,23 +5,21 @@
 ADD_SAMPLE("Graphics", "Water", WaterSample, 14);
 #endif
 
-//camera movement consts
+// Camera movement consts
 static const float MOUSE_SPEED = 0.125f;
 static const float MASS = 1.8f;
 static const float FRICTION = 0.9f;
 static const float SPEED = 5.5f;
-//
-static const unsigned BUFFER_SIZE = 512u;
+static const unsigned int BUFFER_SIZE = 512;
 static const float WATER_OFFSET = 0.55f;
 
 WaterSample::WaterSample()
     : _font(NULL), _scene(NULL), _cameraNode(NULL),
     _reflectCameraNode(NULL), _inputMask(0u), _prevX(0),
-     _prevY(0), _waterHeight(0.f), _refractBuffer(NULL),
-     _refractBatch(NULL), _reflectBuffer(NULL), _reflectBatch(NULL),
-     _showBuffers(true), _gamepad(NULL)
+     _prevY(0), _waterHeight(0.f), 
+     _refractBuffer(NULL), _refractBatch(NULL), _reflectBuffer(NULL), _reflectBatch(NULL), 
+     _showBuffers(false), _gamepad(NULL)
 {
-
 }
 
 void WaterSample::initialize()
@@ -29,13 +27,12 @@ void WaterSample::initialize()
     // Create the font for drawing the framerate.
     _font = Font::create("res/ui/arial.gpb");
 
-    //load the scene file
+    // Load the scene file
     _scene = Scene::load("res/common/water/watersample.scene");
     _waterHeight = _scene->findNode("Water")->getTranslationY();
 
-    //----set up a first person style camera----//
+    // Set up a first person style camera
     const Vector3 camStartPosition(0.f, 10.f, -30.f);
-
     _cameraNode = Node::create("cameraNode");
     _cameraNode->setTranslation(camStartPosition);
 
@@ -45,50 +42,44 @@ void WaterSample::initialize()
     camPitchNode->rotate(m);
     _cameraNode->addChild(camPitchNode);
     _scene->addNode(_cameraNode);
-
     Camera* camera = Camera::createPerspective(45.f, Game::getInstance()->getAspectRatio(), 0.1f, 150.f);
     camPitchNode->setCamera(camera);
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
     SAFE_RELEASE(camPitchNode);
 
-    //add a second camera do draw the reflections
+    // Add a second camera do draw the reflections
     _reflectCameraNode = Node::create("reflectCamNode");
     _reflectCameraNode->setTranslation(camStartPosition.x, -camStartPosition.y, camStartPosition.z);
-
     camPitchNode = Node::create();
     Matrix::createLookAt(_reflectCameraNode->getTranslation(), Vector3::zero(), Vector3::unitY(), &m);
     camPitchNode->rotate(m);
     _reflectCameraNode->addChild(camPitchNode);
-
     camera = Camera::createPerspective(45.f, Game::getInstance()->getAspectRatio(), 0.1f, 150.f);
     camPitchNode->setCamera(camera);
     SAFE_RELEASE(camera);
     SAFE_RELEASE(camPitchNode);
-    //------------------------------------------//
 
-    //---render buffer and preview for refraction---//
+    // Render buffer and preview for refraction
     _refractBuffer = FrameBuffer::create("refractBuffer", BUFFER_SIZE, BUFFER_SIZE);
     DepthStencilTarget* refractDepthTarget = DepthStencilTarget::create("refractDepth", DepthStencilTarget::DEPTH, BUFFER_SIZE, BUFFER_SIZE);
     _refractBuffer->setDepthStencilTarget(refractDepthTarget);
     SAFE_RELEASE(refractDepthTarget);
     _refractBatch = SpriteBatch::create(_refractBuffer->getRenderTarget()->getTexture());
-    //----------------------------------------------//
 
-    //---render buffer and preview for reflection---//
+    // Render buffer and preview for reflection
     _reflectBuffer = FrameBuffer::create("reflectBuffer", BUFFER_SIZE, BUFFER_SIZE);
     DepthStencilTarget* reflectDepthTarget = DepthStencilTarget::create("reflectDepth", DepthStencilTarget::DEPTH, BUFFER_SIZE, BUFFER_SIZE);
     _reflectBuffer->setDepthStencilTarget(reflectDepthTarget);
     SAFE_RELEASE(reflectDepthTarget);
     _reflectBatch = SpriteBatch::create(_reflectBuffer->getRenderTarget()->getTexture());
-    //----------------------------------------------//
 
-    //----add a node to provide light direction-----//
+    // Add a node to provide light direction
     Node* lightNode = Node::create("lightNode");
     lightNode->rotateX(-MATH_DEG_TO_RAD(90));
     _scene->addNode(lightNode);
 
-    //---bind uniforms to material properties---//
+    // Bind material properties
     Material* groundMaterial = _scene->findNode("Ground")->getModel()->getMaterial();
     groundMaterial->getParameter("u_clipPlane")->bindValue(this, &WaterSample::getClipPlane);
     groundMaterial->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorView);
@@ -101,16 +92,12 @@ void WaterSample::initialize()
     SAFE_RELEASE(reflectSampler);
     waterMaterial->getParameter("u_worldViewProjectionReflectionMatrix")->bindValue(this, &WaterSample::getReflectionMatrix);
     waterMaterial->getParameter("u_time")->bindValue(this, &WaterSample::getTime);
-    //------------------------------------------//
-
     SAFE_RELEASE(lightNode);
 
     setMouseCaptured(true);
 
     setMultiTouch(true);
     _gamepad = getGamepad(0);
-    // This is needed because the virtual gamepad is shared between all samples.
-    // SamplesGame always ensures the virtual gamepad is disabled when a sample is exited.
     if (_gamepad && _gamepad->isVirtual())
         _gamepad->getForm()->setEnabled(true);
 
@@ -119,8 +106,6 @@ void WaterSample::initialize()
 void WaterSample::finalize()
 {
     setMouseCaptured(false);
-
-    //relese ref counted members
     SAFE_DELETE(_reflectBatch);
     SAFE_RELEASE(_reflectBuffer);
     SAFE_DELETE(_refractBatch);
@@ -133,15 +118,12 @@ void WaterSample::finalize()
 
 void WaterSample::update(float elapsedTime)
 {
-    //check controller state
     Vector2 axis;
     const float minVal = 0.1f;
     if (_gamepad && _gamepad->getJoystickCount())
-    {
         _gamepad->getJoystickValues(0, &axis);
-    }
     
-    //move the camera by applying a force
+    // Move the camera by applying a force
     Vector3 force;
     if (_inputMask & Button::Forward || axis.y > minVal)
         force += _cameraNode->getFirstChild()->getForwardVectorWorld();
@@ -159,48 +141,46 @@ void WaterSample::update(float elapsedTime)
         _cameraAcceleration = Vector3::zero();
     _cameraNode->translate(_cameraAcceleration * SPEED * (elapsedTime / 1000.f));
     
-    //make sure the reflection camera follows
+    // Make sure the reflection camera follows
     Vector3 position = _cameraNode->getTranslation();
     position.y = -position.y + _waterHeight * 2.f;
     _reflectCameraNode->setTranslation(position);
-    //------------------------------------- 
 }
 
 void WaterSample::render(float elapsedTime)
 {
     const Vector4 clearColour(0.84f, 0.89f, 1.f, 1.f);
     
-    //update the refract buffer
+    // Update the refract buffer
     FrameBuffer* defaultBuffer = _refractBuffer->bind();
     Rectangle defaultViewport = getViewport();
     setViewport(Rectangle(BUFFER_SIZE, BUFFER_SIZE));
-
     _clipPlane.y = -1.f;
     _clipPlane.w = _waterHeight + WATER_OFFSET;
     clear(CLEAR_COLOR_DEPTH, clearColour, 1.0f, 0);
     _scene->visit(this, &WaterSample::drawScene, false);
 
-    //switch plane direction and camera, and update reflection buffer
+    // Switch plane direction and camera, and update reflection buffer
     _reflectBuffer->bind();
     _clipPlane.y = 1.f;
     _clipPlane.w = -_waterHeight + WATER_OFFSET;
-
-    Camera* defaultCam = _scene->getActiveCamera();
+    Camera* defaultCamera = _scene->getActiveCamera();
     _scene->setActiveCamera(_reflectCameraNode->getFirstChild()->getCamera());
-    //store the mvp matrix here as it is only valid when reflect camera is active
+
+    // Store the mvp matrix here as it is only valid when reflect camera is active
     m_worldViewProjectionReflection = _scene->findNode("Water")->getWorldViewProjectionMatrix();
     clear(CLEAR_COLOR_DEPTH, clearColour, 1.0f, 0);
     _scene->visit(this, &WaterSample::drawScene, false);
 
-    //draw the final scene
+    // Draw the final scene
     defaultBuffer->bind();
     setViewport(defaultViewport);
     _clipPlane = Vector4::zero();
-    _scene->setActiveCamera(defaultCam);
+    _scene->setActiveCamera(defaultCamera);
     clear(CLEAR_COLOR_DEPTH, clearColour, 1.0f, 0);
     _scene->visit(this, &WaterSample::drawScene, true);
 
-    //draw preview if enabled
+    // Draw preview if enabled
     if (_showBuffers)
     {
         _refractBatch->start();
@@ -211,7 +191,7 @@ void WaterSample::render(float elapsedTime)
         _reflectBatch->finish();
     }
 
-    // draw the gamepad
+    // Draw the gamepad
     _gamepad->draw();
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
@@ -341,8 +321,6 @@ void WaterSample::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
     case Gamepad::CONNECTED_EVENT:
     case Gamepad::DISCONNECTED_EVENT:
         _gamepad = getGamepad(0);
-        // This is needed because the virtual gamepad is shared between all samples.
-        // SamplesGame always ensures the virtual gamepad is disabled when a sample is exited.
         if (_gamepad && _gamepad->isVirtual())
             _gamepad->getForm()->setEnabled(true);
         break;

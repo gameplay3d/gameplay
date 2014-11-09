@@ -4,7 +4,6 @@
 #include "gameplay.h"
 #include "Sample.h"
 
-
 using namespace gameplay;
 
 /**
@@ -60,7 +59,6 @@ private:
     SpriteBatch* _reflectBatch;
 
     bool _showBuffers;
-
     Vector4 _clipPlane;
     const Vector4& getClipPlane() const
     {
