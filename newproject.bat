@@ -141,13 +141,10 @@ copy template\template.vcxproj "%projPath%\%projName%.vcxproj"
 call:replace "%projPath%\%projName%.vcxproj" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\%projName%.vcxproj" TemplateGame "%className%"
 call:replace "%projPath%\%projName%.vcxproj" GAMEPLAY_PATH "%gpPath%"
-
 copy template\template.vcxproj.filters "%projPath%\%projName%.vcxproj.filters"
 call:replace "%projPath%\%projName%.vcxproj.filters" TemplateGame "%className%"
-
 copy template\template.vcxproj.user "%projPath%\%projName%.vcxproj.user"
 call:replace "%projPath%\%projName%.vcxproj.user" GAMEPLAY_PATH "%gpPath%"
-
 call:replacevar gpPath "\" "/"
 
 REM Copy Apple XCode project files
@@ -156,68 +153,59 @@ copy template\template.xcodeproj\project.pbxproj "%projPath%\%projName%.xcodepro
 call:replace "%projPath%\%projName%.xcodeproj\project.pbxproj" GAMEPLAY_PATH "%gpPath%"
 call:replace "%projPath%\%projName%.xcodeproj\project.pbxproj" TemplateGame "%className%"
 call:replace "%projPath%\%projName%.xcodeproj\project.pbxproj" TEMPLATE_PROJECT "%projName%"
-
 copy template\TEMPLATE_PROJECT-macosx.plist "%projPath%\%projName%-macosx.plist"
 call:replace "%projPath%\%projName%-macosx.plist" TEMPLATE_UUID "%uuid%"
-
 copy template\TEMPLATE_PROJECT-ios.plist "%projPath%\%projName%-ios.plist"
 copy template\Default-568h@2x.png "%projPath%\Default-568h@2x.png"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_TITLE "%title%"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_UUID "%uuid%"
 
-
 REM Copy Android NDK project files
 mkdir "%projPath%\android"
-
 copy template\android\AndroidManifest.xml "%projPath%\android\AndroidManifest.xml"
 call:replace "%projPath%\android\AndroidManifest.xml" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\android\AndroidManifest.xml" TEMPLATE_UUID "%uuid%"
-
 copy template\android\build.xml "%projPath%\android\build.xml"
 call:replace "%projPath%\android\build.xml" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\android\build.xml" GAMEPLAY_PATH "%gpPath%"
-
 copy template\android\project.properties "%projPath%\android\project.properties"
-
 mkdir "%projPath%\android\jni"
-
 copy template\android\jni\Application.mk "%projPath%\android\jni\Application.mk"
-
 copy template\android\jni\Android.mk "%projPath%\android\jni\Android.mk"
 call:replace "%projPath%\android\jni\Android.mk" TemplateGame "%className%"
 call:replace "%projPath%\android\jni\Android.mk" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\android\jni\Android.mk" GAMEPLAY_PATH "%gpPath%"
-
 mkdir "%projPath%\android\res\drawable"
-
 copy template\icon.png "%projPath%\android\res\drawable\icon.png"
-
 mkdir "%projPath%\android\res\values"
-
 copy template\android\res\values\template.strings.xml "%projPath%\android\res\values\strings.xml"
 call:replace "%projPath%\android\res\values\strings.xml" TEMPLATE_TITLE "%title%"
 
-REM Copy Android Eclipse files
+REM Copy Eclipse files for Android
 copy template\android\.cproject "%projPath%\android\.cproject"
 call:replace "%projPath%\android\.cproject" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\android\.cproject" TEMPLATE_UUID "%uuid%"
 call:replace "%projPath%\android\.cproject" GAMEPLAY_PATH "%gpPath%"
-
 copy template\android\.project "%projPath%\android\.project"
 call:replace "%projPath%\android\.project" TEMPLATE_PROJECT "%projName%"
-
 copy template\android\.classpath "%projPath%\android\.classpath"
 call:replace "%projPath%\android\.classpath" TEMPLATE_PROJECT "%projName%"
 
-REM Copy Linux Eclipse files
+REM Copy Eclipse files for Linux
 copy template\.cproject "%projPath%\.cproject"
 call:replace "%projPath%\.cproject" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\.cproject" TEMPLATE_UUID "%uuid%"
 call:replace "%projPath%\.cproject" GAMEPLAY_PATH "%gpPath%"
-
 copy template\.project "%projPath%\.project"
 call:replace "%projPath%\.project" TEMPLATE_PROJECT "%projName%"
 
+REM Copy QtCreator files
+copy template\TEMPLATE_PROJECT.pro "%projPath%\%projName%.pro"
+call:replace "%projPath%\%projName%.pro" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\%projName%.pro" GAMEPLAY_PATH "%gpPath%"
+call:replace "%projPath%\%projName%.pro" TemplateGame %className%
+copy template\TEMPLATE_PROJECT.pro.user "%projPath%\%projName%.pro.user"
+call:replace "%projPath%\%projName%.pro.user" TEMPLATE_PROJECT "%projName%"
 
 REM Copy CMake files
 mkdir "%projPath%\build"
