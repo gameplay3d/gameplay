@@ -34,12 +34,12 @@ protected:
     void render(float elapsedTime);
 
 private:
-    enum Button
+    enum CameraMovement
     {
-        Forward     = (1 << 0),
-        Back        = (1 << 1),
-        Left        = (1 << 2),
-        Right       = (1 << 3)
+        MOVE_FORWARD     = (1 << 0),
+        MOVE_BACKWARD    = (1 << 1),
+        MOVE_LEFT        = (1 << 2),
+        MOVE_RIGHT       = (1 << 3)
     };
 
     Font* _font;

@@ -125,13 +125,13 @@ void WaterSample::update(float elapsedTime)
     
     // Move the camera by applying a force
     Vector3 force;
-    if (_inputMask & Button::Forward || axis.y > minVal)
+    if ((_inputMask & MOVE_FORWARD) || axis.y > minVal)
         force += _cameraNode->getFirstChild()->getForwardVectorWorld();
-    if (_inputMask & Button::Back || axis.y < -minVal)
+    if (_inputMask & MOVE_BACKWARD || axis.y < -minVal)
         force -= _cameraNode->getFirstChild()->getForwardVectorWorld();
-    if (_inputMask & Button::Left || axis.x < -minVal)
+    if (_inputMask & MOVE_LEFT || axis.x < -minVal)
         force += _cameraNode->getRightVectorWorld();
-    if (_inputMask & Button::Right || axis.y > minVal)
+    if (_inputMask & MOVE_RIGHT || axis.y > minVal)
         force -= _cameraNode->getRightVectorWorld();
     if (force.lengthSquared() > 1.f) force.normalize();
 
@@ -243,19 +243,19 @@ void WaterSample::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_W:
         case Keyboard::KEY_UP_ARROW:
-            _inputMask |= Button::Forward;
+            _inputMask |= MOVE_FORWARD;
             break;
         case Keyboard::KEY_S:
         case Keyboard::KEY_DOWN_ARROW:
-            _inputMask |= Button::Back;
+            _inputMask |= MOVE_BACKWARD;
             break;
         case Keyboard::KEY_A:
         case Keyboard::KEY_LEFT_ARROW:
-            _inputMask |= Button::Left;
+            _inputMask |= MOVE_LEFT;
             break;
         case Keyboard::KEY_D:
         case Keyboard::KEY_RIGHT_ARROW:
-            _inputMask |= Button::Right;
+            _inputMask |= MOVE_RIGHT;
             break;
         }
     }
@@ -265,19 +265,19 @@ void WaterSample::keyEvent(Keyboard::KeyEvent evt, int key)
         {
         case Keyboard::KEY_W:
         case Keyboard::KEY_UP_ARROW:
-            _inputMask &= ~Button::Forward;
+            _inputMask &= ~MOVE_FORWARD;
             break;
         case Keyboard::KEY_S:
         case Keyboard::KEY_DOWN_ARROW:
-            _inputMask &= ~Button::Back;
+            _inputMask &= ~MOVE_BACKWARD;
             break;
         case Keyboard::KEY_A:
         case Keyboard::KEY_LEFT_ARROW:
-            _inputMask &= ~Button::Left;
+            _inputMask &= ~MOVE_LEFT;
             break;
         case Keyboard::KEY_D:
         case Keyboard::KEY_RIGHT_ARROW:
-            _inputMask &= ~Button::Right;
+            _inputMask &= ~MOVE_RIGHT;
             break;
         }
     }
@@ -298,16 +298,16 @@ bool WaterSample::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta
     }
         return true;
     case Mouse::MOUSE_PRESS_LEFT_BUTTON:
-        _inputMask |= Button::Forward;
+        _inputMask |= MOVE_FORWARD;
         return true;
     case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
-        _inputMask &= ~Button::Forward;
+        _inputMask &= ~MOVE_FORWARD;
         return true;
     case Mouse::MOUSE_PRESS_RIGHT_BUTTON:
-        _inputMask |= Button::Back;
+        _inputMask |= MOVE_BACKWARD;
         return true;
     case Mouse::MOUSE_RELEASE_RIGHT_BUTTON:
-        _inputMask &= ~Button::Back;
+        _inputMask &= ~MOVE_BACKWARD;
         return true;
     default: return false;
     }
