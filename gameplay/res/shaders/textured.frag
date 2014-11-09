@@ -113,9 +113,17 @@ varying vec3 v_cameraDirection;
 
 #endif
 
+#if defined(CLIP_PLANE)
+varying float v_clipDistance;
+#endif
+
 
 void main()
 {
+    #if defined(CLIP_PLANE)
+    if(v_clipDistance < 0.0) discard;
+    #endif
+ 
     _baseColor = texture2D(u_diffuseTexture, v_texCoord);
  
     gl_FragColor.a = _baseColor.a;
