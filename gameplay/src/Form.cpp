@@ -1000,7 +1000,7 @@ bool Form::projectPoint(int x, int y, Vector3* point)
 
         // To get the plane's distance from the origin, we project a point on the
         // plane onto the plane's normal vector.
-        const float distance = fabs(Vector3::dot(pointOnPlane, normal));
+        const float distance = Vector3::dot(pointOnPlane, normal);
         Plane plane(normal, -distance);
 
         // Check for collision with plane.
