@@ -229,8 +229,6 @@ cp "template/TEMPLATE_PROJECT.pro" "$projPath/$projName.pro"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.pro"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.pro"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.pro"
-cp "template/TEMPLATE_PROJECT.pro.user" "$projPath/$projName.pro.user"
-aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.pro.user"
 
 #############################################
 # Copy CMake files
