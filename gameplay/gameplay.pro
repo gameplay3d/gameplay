@@ -608,16 +608,6 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_VertexFormatUsage.h \
     src/lua/lua_VerticalLayout.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
-DEFINES += __linux__
-DEFINES += GP_USE_GAMEPAD
-
-QMAKE_CXXFLAGS += -fPIC -fmessage-length=0 -std=c++11 -lstdc++ -pthread -w
-
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/bullet/include
 INCLUDEPATH += $$PWD/../external-deps/lua/include
@@ -626,21 +616,24 @@ INCLUDEPATH += $$PWD/../external-deps/zlib/include
 INCLUDEPATH += $$PWD/../external-deps/ogg/include
 INCLUDEPATH += $$PWD/../external-deps/vorbis/include
 INCLUDEPATH += $$PWD/../external-deps/openal/include
-INCLUDEPATH += $$PWD/../external-deps/glew/include
-INCLUDEPATH += /usr/include/gtk-2.0
-INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
-INCLUDEPATH += /usr/include/atk-1.0
-INCLUDEPATH += /usr/include/cairo
-INCLUDEPATH += /usr/include/gdk-pixbuf-2.0
-INCLUDEPATH += /usr/include/pango-1.0
-INCLUDEPATH += /usr/include/gio-unix-2.0
-INCLUDEPATH += /usr/include/freetype2
-INCLUDEPATH += /usr/include/glib-2.0
-INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include
-INCLUDEPATH += /usr/include/pixman-1
-INCLUDEPATH += /usr/include/libpng12
-INCLUDEPATH += /usr/include/harfbuzz
-
+linux:!android:!android: INCLUDEPATH += $$PWD/../external-deps/glew/include
+linux:!android: INCLUDEPATH += /usr/include/gtk-2.0
+linux:!android: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
+linux:!android: INCLUDEPATH += /usr/include/atk-1.0
+linux:!android: INCLUDEPATH += /usr/include/cairo
+linux:!android: INCLUDEPATH += /usr/include/gdk-pixbuf-2.0
+linux:!android: INCLUDEPATH += /usr/include/pango-1.0
+linux:!android: INCLUDEPATH += /usr/include/gio-unix-2.0
+linux:!android: INCLUDEPATH += /usr/include/freetype2
+linux:!android: INCLUDEPATH += /usr/include/glib-2.0
+linux:!android: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include
+linux:!android: INCLUDEPATH += /usr/include/pixman-1
+linux:!android: INCLUDEPATH += /usr/include/libpng12
+linux:!android: INCLUDEPATH += /usr/include/harfbuzz
 DEPENDPATH += INCLUDEPATH
+
+linux:!android: DEFINES += GP_USE_GAMEPAD
+linux:!android: DEFINES += __linux__
+linux:!android: QMAKE_CXXFLAGS += -std=c++11 -lstdc++ -pthread -w
 
 

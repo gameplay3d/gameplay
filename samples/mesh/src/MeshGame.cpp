@@ -121,7 +121,7 @@ void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, u
     char buffer[10];
     sprintf(buffer, "%u", fps);
     font->start();
-    font->drawText(buffer, x, y, color, font->getSize());
+    font->drawText(buffer, x, y, color, 20);
     font->finish();
 }
 
