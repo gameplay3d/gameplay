@@ -16,14 +16,14 @@ extern void printMemoryLeaks();
 #endif
 void* operator new (std::size_t size, const char* file, int line);
 void* operator new[] (std::size_t size, const char* file, int line);
-void* operator new (std::size_t size) throw(std::bad_alloc);
-void* operator new[] (std::size_t size) throw(std::bad_alloc);
-void* operator new (std::size_t size, const std::nothrow_t&) throw();
-void* operator new[] (std::size_t size, const std::nothrow_t&) throw();
-void operator delete (void* p) throw();
-void operator delete[] (void* p) throw();
-void operator delete (void* p, const char* file, int line) throw();
-void operator delete[] (void* p, const char* file, int line) throw();
+void* operator new (std::size_t size);
+void* operator new[] (std::size_t size);
+void* operator new (std::size_t size, const std::nothrow_t& nothrow_value) noexcept;
+void* operator new[] (std::size_t size, const std::nothrow_t& nothrow_value) noexcept;
+void operator delete (void* p) noexcept;
+void operator delete[] (void* p) noexcept;
+void operator delete (void* p, const char* file, int line) noexcept;
+void operator delete[] (void* p, const char* file, int line) noexcept;
 #ifdef _MSC_VER
 #pragma warning( default : 4290 )
 #endif

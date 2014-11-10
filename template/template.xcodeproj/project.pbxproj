@@ -660,7 +660,8 @@
 					"GAMEPLAY_PATH/external-deps/bullet/include",
 					"GAMEPLAY_PATH/external-deps/lua/include",
 					"GAMEPLAY_PATH/external-deps/png/include",
-					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
+					"GAMEPLAY_PATH/external-deps/ogg/include",
+					"GAMEPLAY_PATH/external-deps/vorbis/include",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
