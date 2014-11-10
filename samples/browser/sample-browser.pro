@@ -30,7 +30,8 @@ SOURCES += src/Audio3DSample.cpp \
     src/SamplesGame.cpp \
     src/TextSample.cpp \
     src/TextureSample.cpp \
-    src/TriangleSample.cpp
+    src/TriangleSample.cpp \
+    src/WaterSample.cpp
 
 HEADERS += src/Audio3DSample.h \
     src/BillboardSample.h \
@@ -53,7 +54,8 @@ HEADERS += src/Audio3DSample.h \
     src/SamplesGame.h \
     src/TextSample.h \
     src/TextureSample.h \
-    src/TriangleSample.h
+    src/TriangleSample.h \
+    src/WaterSample.h
 
 INCLUDEPATH += $$PWD/../../gameplay/src
 INCLUDEPATH += $$PWD/../../external-deps/bullet/include
