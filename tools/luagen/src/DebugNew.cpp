@@ -46,42 +46,42 @@ void* operator new[] (std::size_t size, const char* file, int line)
     return operator new (size, file, line);
 }
 
-void* operator new (std::size_t size) throw(std::bad_alloc)
+void* operator new (std::size_t size)
 {
     return operator new (size, "", 0);
 }
 
-void* operator new[] (std::size_t size) throw(std::bad_alloc)
+void* operator new[] (std::size_t size)
 {
     return operator new (size, "", 0);
 }
 
-void* operator new (std::size_t size, const std::nothrow_t&) throw()
+void* operator new (std::size_t size, const std::nothrow_t& nothrow_value) noexcept
 {
     return operator new (size, "", 0);
 }
 
-void* operator new[] (std::size_t size, const std::nothrow_t&) throw()
+void* operator new[] (std::size_t size, const std::nothrow_t& nothrow_value) noexcept
 {
     return operator new (size, "", 0);
 }
 
-void operator delete (void* p) throw()
+void operator delete (void* p) noexcept
 {
     debugFree(p);
 }
 
-void operator delete[] (void* p) throw()
+void operator delete[] (void* p) noexcept
 {
     operator delete (p);
 }
 
-void operator delete (void* p, const char* file, int line) throw()
+void operator delete (void* p, const char* file, int line) noexcept
 {
     operator delete (p);
 }
 
-void operator delete[] (void* p, const char* file, int line) throw()
+void operator delete[] (void* p, const char* file, int line) noexcept
 {
     operator delete (p);
 }

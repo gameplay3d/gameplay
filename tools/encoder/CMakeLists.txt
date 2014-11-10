@@ -7,7 +7,9 @@ include_directories(
     /usr/include
 )
 
+if ( "${CMAKE_BUILD_TYPE}" STREQUAL "DEBUG" )
 add_definitions(-D_DEBUG)
+endif()
 add_definitions(-D__linux__ -DUSE_FBX)
 
 link_directories(
@@ -32,6 +34,7 @@ add_definitions(-lstdc++ -ldl -lfbxsdk -lpng -lz -lfreetype -lpthread)
 set( APP_NAME gameplay-encoder )
 
 set(APP_SRC
+    src/main.cpp
     src/AnimationChannel.cpp
     src/AnimationChannel.h
     src/Animation.cpp
@@ -75,7 +78,6 @@ set(APP_SRC
     src/Image.h
     src/Light.cpp
     src/Light.h
-    src/main.cpp
     src/Material.cpp
     src/Material.h
     src/MaterialParameter.cpp
