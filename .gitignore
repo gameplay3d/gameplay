@@ -3,6 +3,7 @@
 *.opensdf
 *.layout
 *.depend
+*.pro.user
 .DS_Store*
 ehthumbs.db
 Icon?

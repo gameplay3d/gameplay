@@ -204,8 +204,6 @@ copy template\TEMPLATE_PROJECT.pro "%projPath%\%projName%.pro"
 call:replace "%projPath%\%projName%.pro" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\%projName%.pro" GAMEPLAY_PATH "%gpPath%"
 call:replace "%projPath%\%projName%.pro" TemplateGame %className%
-copy template\TEMPLATE_PROJECT.pro.user "%projPath%\%projName%.pro.user"
-call:replace "%projPath%\%projName%.pro.user" TEMPLATE_PROJECT "%projName%"
 
 REM Copy CMake files
 mkdir "%projPath%\build"
