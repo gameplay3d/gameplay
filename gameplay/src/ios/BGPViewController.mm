@@ -1,11 +1,6 @@
-//
-// Created by Benjamin Dobell on 20/10/14.
-//
-
 #import <GameKit/GameKit.h>
 #import "BGPViewController.h"
 #import "BGPView.h"
-#import "PlatformiOS.h"
 
 #define UIInterfaceOrientationEnum(x) ([x isEqualToString:@"UIInterfaceOrientationPortrait"]?UIInterfaceOrientationPortrait:                        \
                                       ([x isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"]?UIInterfaceOrientationPortraitUpsideDown:    \

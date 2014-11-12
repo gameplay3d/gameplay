@@ -3,7 +3,6 @@
 #import "Base.h"
 #import "FileSystem.h"
 #import "BGPView.h"
-#import "PlatformiOS.h"
 #import "Platform.h"
 
 using namespace gameplay;
