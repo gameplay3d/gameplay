@@ -141,10 +141,6 @@ int getUnicode(int key);
         updating = FALSE;
         game = Game::getInstance();
         screenScale = scale;
-
-        // Set the resource path and initalize the game
-        NSString* bundlePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/"];
-        FileSystem::setResourcePath([bundlePath fileSystemRepresentation]);
     }
 
     return self;

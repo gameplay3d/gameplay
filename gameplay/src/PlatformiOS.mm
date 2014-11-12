@@ -163,6 +163,10 @@ Platform::~Platform()
 
 Platform* Platform::create(Game* game)
 {
+    // Set the resource path
+    NSString* bundlePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/"];
+    FileSystem::setResourcePath([bundlePath fileSystemRepresentation]);
+
     Platform* platform = new Platform(game);
     return platform;
 }
