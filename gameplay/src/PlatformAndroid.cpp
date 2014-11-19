@@ -736,6 +736,7 @@ Gamepad::ButtonMapping getGamepadButtonMapping(jint keycode)
     case AKEYCODE_DPAD_RIGHT:
         return Gamepad::BUTTON_RIGHT;
     case AKEYCODE_BUTTON_SELECT:
+    case AKEYCODE_BACK:
         return Gamepad::BUTTON_MENU1;
     case AKEYCODE_BUTTON_START:
         return Gamepad::BUTTON_MENU2;
