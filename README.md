@@ -11,7 +11,7 @@ GamePlay3D is an open-source, cross-platform 3D native C++ game framework making
 - [Development Guide](https://github.com/blackberry/GamePlay/wiki#wiki-Development_Guide)
 
 ## Supported Platforms
-- [Linux](https://github.com/blackberry/GamePlay/wiki/Linux-Setup)
+- [Linux](https://github.com/blackberry/GamePlay/wiki/CMake Setup - Linux)
 - [Windows](https://github.com/blackberry/GamePlay/wiki/Visual-Studio-Setup) 
 - [MacOS X](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup)
 - [iOS](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup)
