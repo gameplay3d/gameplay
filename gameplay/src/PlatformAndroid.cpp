@@ -1765,7 +1765,7 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
 extern "C"
 {
 
-JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventConnectedImpl(JNIEnv* env, jclass clazz, jint deviceId, jint buttonCount, jint joystickCount, jint triggerCount, jstring deviceName)
+JNIEXPORT void JNICALL Java_org_gameplay3d_GamePlayNativeActivity_gamepadEventConnectedImpl(JNIEnv* env, jclass clazz, jint deviceId, jint buttonCount, jint joystickCount, jint triggerCount, jstring deviceName)
 {
     const char* name = env->GetStringUTFChars(deviceName, JNI_FALSE);
     
@@ -1774,7 +1774,7 @@ JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventConnec
     env->ReleaseStringUTFChars(deviceName, name);
 }
 
-JNIEXPORT void JNICALL Java_org_gameplay3d_GameNativeActivity_gamepadEventDisconnectedImpl(JNIEnv* env, jclass clazz, jint deviceId)
+JNIEXPORT void JNICALL Java_org_gameplay3d_GamePlayNativeActivity_gamepadEventDisconnectedImpl(JNIEnv* env, jclass clazz, jint deviceId)
 {
 	gameplay::Platform::gamepadEventDisconnectedInternal(deviceId);
 }
