@@ -1,14 +1,13 @@
-
 GAMEPLAY_PATH := $(call my-dir)/../../src
 
 # external-deps
-PNG_PATH := ../../external-deps/png/lib/android/arm
-ZLIB_PATH := ../../external-deps/zlib/lib/android/arm
-LUA_PATH := ../../external-deps/lua/lib/android/arm
-BULLET_PATH := ../../external-deps/bullet/lib/android/arm
-OGG_PATH := ../../external-deps/ogg/lib/android/arm
-VORBIS_PATH := ../../external-deps/vorbis/lib/android/arm
-OPENAL_PATH := ../../external-deps/openal/lib/android/arm
+PNG_PATH := ../../external-deps/png/lib/android/$(TARGET_ARCH_ABI)
+ZLIB_PATH := ../../external-deps/zlib/lib/android/$(TARGET_ARCH_ABI)
+LUA_PATH := ../../external-deps/lua/lib/android/$(TARGET_ARCH_ABI)
+BULLET_PATH := ../../external-deps/bullet/lib/android/$(TARGET_ARCH_ABI)
+OGG_PATH := ../../external-deps/ogg/lib/android/$(TARGET_ARCH_ABI)
+VORBIS_PATH := ../../external-deps/vorbis/lib/android/$(TARGET_ARCH_ABI)
+OPENAL_PATH := ../../external-deps/openal/lib/android/$(TARGET_ARCH_ABI)
 
 # libpng
 LOCAL_PATH := $(PNG_PATH)
