@@ -46,7 +46,7 @@ set(GAME_SRC
     src/TriangleSample.cpp
     src/TriangleSample.h
     src/WaterSample.cpp
-    src.WaterSample.h
+    src/WaterSample.h
 )
 
 add_executable(${GAME_NAME}
