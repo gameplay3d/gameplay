@@ -1,3 +1,4 @@
+include(../BuildHelpers.CMakeLists.txt)
 
 include_directories( 
     ${CMAKE_SOURCE_DIR}/gameplay/src
