@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -279,7 +279,9 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a4c9fdfd5a48360be13e7925323513d52">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a24ffdbd2fd875c056ad9cce4f4dcf0f6">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0556a8e97fdca1d40e5bebd895618e29">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad, unsigned int analogIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a32f03794aa2392fd7d46f7800f740909">gamepadButtonEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af5c2b740403893f171703c919d12c38e">gamepadTriggerEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad, unsigned int index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a273bcb9df46774e7099ad9553160ebe4">gamepadJoystickEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad, unsigned int index)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a445f119ac18af8d663e07b655812f95a">update</a> (float elapsedTime)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac9f2fe41ef26e82071598aa3ac4ce4d3">updateState</a> (<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3d33ab72db5cf776844da3f79f8e4f65">updateBounds</a> ()</td></tr>
@@ -303,7 +305,6 @@ Static Protected Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8e38c807b110825f36a77d43ded3d78a">_id</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a83f2f3bea018c203b7ce7cb18f1073b5">_enabled</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac78438f65735e017bad66fd7af3aeea3">_boundsBits</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a2361889c2adbb4d8843d97a65dcc3b6e">_relativeBounds</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a9d4f21435b4eddf02f9fa5661133b47e">_bounds</a></td></tr>
@@ -326,6 +327,7 @@ std::list&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html">C
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a47d8c92a3d773672106b82ae8c66ef8e">_contactIndex</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a73150749073784d72da95375bb4ebd50">_focusIndex</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aa3c10c6defa0b93a6f692b17fd81621f">_canFocus</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a08e0c8e34c28edcddc7099281e9b423a">_state</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a28174c6d21906a5b4a9793b82317631c">_parent</a></td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
@@ -483,7 +485,7 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a9128c7978c37299194abe2c55d80bf93">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac317d5e1ce467855d0cc61b316337b30">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a3fab62ffe2814f687e9e21e31f161a9e">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_label.html#a21d473e1749ab7d876c8ebabb96bb375">gameplay::Label</a>, and <a class="el" href="classgameplay_1_1_joystick_control.html#a3b080b9c7cb5f1de44da750cd1739f9d">gameplay::JoystickControl</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a9128c7978c37299194abe2c55d80bf93">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#ab45a02444a11fec50d2c8da17bd695b7">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac317d5e1ce467855d0cc61b316337b30">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a3fab62ffe2814f687e9e21e31f161a9e">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_label.html#a21d473e1749ab7d876c8ebabb96bb375">gameplay::Label</a>, and <a class="el" href="classgameplay_1_1_joystick_control.html#a3b080b9c7cb5f1de44da750cd1739f9d">gameplay::JoystickControl</a>.</p>
 
 </div>
 </div>
@@ -720,19 +722,37 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1eb941b483324abf5cbb3e62dee40a58"></a><!-- doxytag: member="gameplay::Control::gamepadEvent" ref="a1eb941b483324abf5cbb3e62dee40a58" args="(Gamepad::GamepadEvent evt, Gamepad *gamepad, unsigned int analogIndex)" -->
+<a class="anchor" id="a32f03794aa2392fd7d46f7800f740909"></a><!-- doxytag: member="gameplay::Control::gamepadButtonEvent" ref="a32f03794aa2392fd7d46f7800f740909" args="(Gamepad *gamepad)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">gameplay::Control::gamepadEvent</a> </td>
+          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_control.html#a32f03794aa2392fd7d46f7800f740909">gameplay::Control::gamepadButtonEvent</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a>&#160;</td>
-          <td class="paramname"><em>evt</em>, </td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td>
+          <td class="paramname"><em>gamepad</em></td><td>)</td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad button changes.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gamepad</td><td>The gamepad whose one or more buttons have changed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a273bcb9df46774e7099ad9553160ebe4"></a><!-- doxytag: member="gameplay::Control::gamepadJoystickEvent" ref="a273bcb9df46774e7099ad9553160ebe4" args="(Gamepad *gamepad, unsigned int index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
         <tr>
-          <td class="paramkey"></td>
-          <td></td>
+          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_control.html#a273bcb9df46774e7099ad9553160ebe4">gameplay::Control::gamepadJoystickEvent</a> </td>
+          <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td>
           <td class="paramname"><em>gamepad</em>, </td>
         </tr>
@@ -740,7 +760,7 @@ Static Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>analogIndex</em>&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -750,17 +770,51 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events.</p>
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad analog joystick changes.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">gamepad</td><td>The gamepad whose state changed. </td></tr>
-    <tr><td class="paramname">evt</td><td>The gamepad event that occurred. </td></tr>
-    <tr><td class="paramname">analogIndex</td><td>If evt is JOYSTICK_EVENT or TRIGGER_EVENT, this will be the index of the corresponding control. </td></tr>
+    <tr><td class="paramname">gamepad</td><td>The gamepad whose one or more buttons have changed. </td></tr>
+    <tr><td class="paramname">index</td><td>The index of the joystick that changed. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a8a2b476ed271ba4f75375e59265aeefb">gameplay::Slider</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a004b91fd9107414928709c36f13a7a33">gameplay::Slider</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af5c2b740403893f171703c919d12c38e"></a><!-- doxytag: member="gameplay::Control::gamepadTriggerEvent" ref="af5c2b740403893f171703c919d12c38e" args="(Gamepad *gamepad, unsigned int index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_control.html#af5c2b740403893f171703c919d12c38e">gameplay::Control::gamepadTriggerEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td>
+          <td class="paramname"><em>gamepad</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad trigger changes.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gamepad</td><td>The gamepad whose one or more buttons have changed. </td></tr>
+    <tr><td class="paramname">index</td><td>The index of the trigger that changed. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -3783,20 +3837,6 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a83f2f3bea018c203b7ce7cb18f1073b5"></a><!-- doxytag: member="gameplay::Control::_enabled" ref="a83f2f3bea018c203b7ce7cb18f1073b5" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a83f2f3bea018c203b7ce7cb18f1073b5">gameplay::Control::_enabled</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Whether the control is enabled. </p>
-
-</div>
-</div>
 <a class="anchor" id="a73150749073784d72da95375bb4ebd50"></a><!-- doxytag: member="gameplay::Control::_focusIndex" ref="a73150749073784d72da95375bb4ebd50" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -3878,6 +3918,20 @@ Static Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Local bounds, relative to parent container's clipping window, possibly stored as percentages (see _boundsBits). </p>
+
+</div>
+</div>
+<a class="anchor" id="a08e0c8e34c28edcddc7099281e9b423a"></a><!-- doxytag: member="gameplay::Control::_state" ref="a08e0c8e34c28edcddc7099281e9b423a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> <a class="el" href="classgameplay_1_1_control.html#a08e0c8e34c28edcddc7099281e9b423a">gameplay::Control::_state</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>This control's current state. </p>
 
 </div>
 </div>
@@ -4123,7 +4177,7 @@ Static Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

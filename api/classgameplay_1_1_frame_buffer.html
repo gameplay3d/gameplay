@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -115,6 +115,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a7817548cc856398209fe096659ccc7dc">getWidth</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a4ab7b16e08a87c42c47f23d63d46b529">getHeight</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#aa5c53a6a80144041cb770e9355d870f5">setRenderTarget</a> (<a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> *target, unsigned int index=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a4a426dfaafc306676df9d7e730e6ccf0">setRenderTarget</a> (<a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> *target, <a class="el" href="classgameplay_1_1_texture.html#ab5d117f20c57979a3c7aaed95f6da841">Texture::CubeFace</a> face, unsigned int index=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a144c907eb9faecd7cd8fd32a731464d3">getRenderTarget</a> (unsigned int index=0) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ad76764fdc17a26f20c02fa129f3aed3e">getRenderTargetCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a5369b0adca5a7666ca4499083531fa0e">setDepthStencilTarget</a> (<a class="el" href="classgameplay_1_1_depth_stencil_target.html">DepthStencilTarget</a> *target)</td></tr>
@@ -127,7 +128,7 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a2f0fbdb518c3357b41340c15c496f501">create</a> (const char *id, unsigned int width, unsigned int height)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a2d4b1f194d1b2e90028ff89320fd34cf">getFrameBuffer</a> (const char *id)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ad370566c9456ae2a278c7e174e33138f">getMaxRenderTargets</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_image.html">Image</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ad2d823badd24c87e3ef5ccc89e5c5cb4">createScreenshot</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_image.html">Image</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a6db6be1d3da02839641db7b7cdedc669">createScreenshot</a> (<a class="el" href="classgameplay_1_1_image.html#ae596c8dbba69dc5fb062113e608a753b">Image::Format</a> format=Image::RGBA)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ac6b4066a35dd3c38afb7a4c90672a112">getScreenshot</a> (<a class="el" href="classgameplay_1_1_image.html">Image</a> *image)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a6d1ad214098f6796d6c4027b8a432015">bindDefault</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#aa8811bfb4e227afc2a6ece0e73fc8310">getCurrent</a> ()</td></tr>
@@ -246,20 +247,27 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad2d823badd24c87e3ef5ccc89e5c5cb4"></a><!-- doxytag: member="gameplay::FrameBuffer::createScreenshot" ref="ad2d823badd24c87e3ef5ccc89e5c5cb4" args="()" -->
+<a class="anchor" id="a6db6be1d3da02839641db7b7cdedc669"></a><!-- doxytag: member="gameplay::FrameBuffer::createScreenshot" ref="a6db6be1d3da02839641db7b7cdedc669" args="(Image::Format format=Image::RGBA)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classgameplay_1_1_image.html">Image</a>* <a class="el" href="classgameplay_1_1_frame_buffer.html#ad2d823badd24c87e3ef5ccc89e5c5cb4">gameplay::FrameBuffer::createScreenshot</a> </td>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_image.html">Image</a>* <a class="el" href="classgameplay_1_1_frame_buffer.html#a6db6be1d3da02839641db7b7cdedc669">gameplay::FrameBuffer::createScreenshot</a> </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_image.html#ae596c8dbba69dc5fb062113e608a753b">Image::Format</a>&#160;</td>
+          <td class="paramname"><em>format</em> = <code>Image::RGBA</code></td><td>)</td>
           <td><code> [static]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Records a screenshot of what is stored on the current <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">format</td><td>The format the <a class="el" href="classgameplay_1_1_image.html">Image</a> should be in. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A screenshot of the current framebuffer's content. </dd></dl>
 
 </div>
@@ -437,7 +445,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Records a screenshot of what is stored on the current <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> to an <a class="el" href="classgameplay_1_1_image.html">Image</a>.</p>
-<p>The <a class="el" href="classgameplay_1_1_image.html">Image</a> must be the same size as the <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>, otherwise the operation will fail. The <a class="el" href="classgameplay_1_1_image.html">Image</a> must be format RGBA.</p>
+<p>The <a class="el" href="classgameplay_1_1_image.html">Image</a> must be the same size as the <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>, otherwise the operation will fail.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">image</td><td>The <a class="el" href="classgameplay_1_1_image.html">Image</a> to write the current framebuffer's content to. </td></tr>
@@ -534,7 +542,49 @@ Static Public Member Functions</h2></td></tr>
 <p>Set a <a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> on this <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>'s color attachment at the specified index.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">target</td><td>The <a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> to set. </td></tr>
+    <tr><td class="paramname">target</td><td>The 2D <a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> to set. </td></tr>
+    <tr><td class="paramname">index</td><td>The index of the color attachment to set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a4a426dfaafc306676df9d7e730e6ccf0"></a><!-- doxytag: member="gameplay::FrameBuffer::setRenderTarget" ref="a4a426dfaafc306676df9d7e730e6ccf0" args="(RenderTarget *target, Texture::CubeFace face, unsigned int index=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_frame_buffer.html#aa5c53a6a80144041cb770e9355d870f5">gameplay::FrameBuffer::setRenderTarget</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> *&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_texture.html#ab5d117f20c57979a3c7aaed95f6da841">Texture::CubeFace</a>&#160;</td>
+          <td class="paramname"><em>face</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Set a <a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> on this <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>'s color attachment at the specified index.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>The Cubemap <a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> to set. </td></tr>
+    <tr><td class="paramname">face</td><td>The face of the cubemap to target. </td></tr>
     <tr><td class="paramname">index</td><td>The index of the color attachment to set. </td></tr>
   </table>
   </dd>
@@ -560,7 +610,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

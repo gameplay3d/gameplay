@@ -14,6 +14,7 @@ var searchData=
   ['destroyanimation',['destroyAnimation',['../classgameplay_1_1_animation_target.html#a7bc288605c05e88521448cae2f21e2bc',1,'gameplay::AnimationTarget']]],
   ['determinant',['determinant',['../classgameplay_1_1_matrix.html#a2f4fc61b659eaedda33077939b648aaf',1,'gameplay::Matrix']]],
   ['dialogmode',['DialogMode',['../classgameplay_1_1_file_system.html#ae4f5cab63325b8800eec48e8cfecd821',1,'gameplay::FileSystem']]],
+  ['direction',['Direction',['../classgameplay_1_1_container.html#a02ec5768ad845e076fd99ee4becf0542',1,'gameplay::Container']]],
   ['dirty',['dirty',['../classgameplay_1_1_transform.html#a726f6197a310ccfc9a56dbb2b6801456',1,'gameplay::Transform']]],
   ['dirty_5fbounds',['DIRTY_BOUNDS',['../classgameplay_1_1_control.html#ab630c2e2b0ede0846e97a0e10b135045',1,'gameplay::Control']]],
   ['dirty_5fstate',['DIRTY_STATE',['../classgameplay_1_1_control.html#aaf40f0ded9a0645d78ac3b54782bbfaf',1,'gameplay::Control']]],

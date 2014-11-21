@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -132,6 +132,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#af03a2da5ecefd86b2e61e024b2314890">getPasswordChar</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#a25777c9a0f14dfccf7e14b57815f2385">setInputMode</a> (<a class="el" href="classgameplay_1_1_text_box.html#a05ece66157a1bf47fde6f53575ef3b93">InputMode</a> inputMode)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_text_box.html#a05ece66157a1bf47fde6f53575ef3b93">InputMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#ad17b0f5998dfa785b648863fe7b338ac">getInputMode</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#ab45a02444a11fec50d2c8da17bd695b7">addListener</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *listener, int eventFlags)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_text_box.html">TextBox</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#a100054ba7e7f6aafc4bc17454bc6f08e">create</a> (const char *id, <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style=NULL)</td></tr>
@@ -161,6 +162,7 @@ Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#ad243350835a06ef41096d2c9820f1fcf">_passwordChar</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_text_box.html#a05ece66157a1bf47fde6f53575ef3b93">InputMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#ad053bb4710c68a7f2edf881b601c6f31">_inputMode</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#af082cf867d9b748c22aa1bcfb3525f9d">_ctrlPressed</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_text_box.html#a9b27b10764377a158b984d383bbc849f">_shiftPressed</a> = false</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a text control.</p>
@@ -227,6 +229,43 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ab45a02444a11fec50d2c8da17bd695b7"></a><!-- doxytag: member="gameplay::TextBox::addListener" ref="ab45a02444a11fec50d2c8da17bd695b7" args="(Control::Listener *listener, int eventFlags)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_text_box.html#ab45a02444a11fec50d2c8da17bd695b7">gameplay::TextBox::addListener</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *&#160;</td>
+          <td class="paramname"><em>listener</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>eventFlags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Add a listener to be notified of specific events affecting this control. Event types can be OR'ed together. E.g. To listen to touch-press and touch-release events, pass <code>Control::Listener::TOUCH | <a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7ba4d6d0d7568cba92935eb52fff947a985">Control::Listener::RELEASE</a></code> as the second parameter.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listener</td><td>The listener to add. </td></tr>
+    <tr><td class="paramname">eventFlags</td><td>The events to listen for. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a21d473e1749ab7d876c8ebabb96bb375">gameplay::Label</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ae0045c3d1c4722f0d5b83c8f66dbb1c3"></a><!-- doxytag: member="gameplay::TextBox::controlEvent" ref="ae0045c3d1c4722f0d5b83c8f66dbb1c3" args="(Control::Listener::EventType evt)" -->
 <div class="memitem">
 <div class="memproto">
@@ -851,6 +890,20 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9b27b10764377a158b984d383bbc849f"></a><!-- doxytag: member="gameplay::TextBox::_shiftPressed" ref="a9b27b10764377a158b984d383bbc849f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_text_box.html#a9b27b10764377a158b984d383bbc849f">gameplay::TextBox::_shiftPressed</a> = false<code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Indicate if the SHIFT key is currently pressed. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -869,7 +922,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:26 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

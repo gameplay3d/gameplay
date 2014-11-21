@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -82,9 +82,12 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a665a2091d832c2eca7a29a51228fe9e9">create</a>(Game *game)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a451762616bc523f10cbe23b3f5a299b9">displayFileDialog</a>(size_t mode, const char *title, const char *filterDescription, const char *filterExtensions, const char *initialDirectory)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#ab5379118d7f39805fb7d62820aa36cd6">enterMessagePump</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a7e094074d74f3ca49f7669bb6f93f4a5">gamepadEventConnectedInternal</a>(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int vendorId, unsigned int productId, const char *vendorString, const char *productString)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#ac8002065c2f3186f1b8469927da84632">gamepadButtonPressedEventInternal</a>(GamepadHandle handle, Gamepad::ButtonMapping mapping)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#ac86709e17993c43b0cd130086e5ec3b6">gamepadButtonReleasedEventInternal</a>(GamepadHandle handle, Gamepad::ButtonMapping button)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#afaf92ae6ace83c7f95f1b5fdc35706bc">gamepadEventConnectedInternal</a>(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char *name)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a4a282fb3ebd9cae31ab3c00a17c10acd">gamepadEventDisconnectedInternal</a>(GamepadHandle handle)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a0256707204f0ade5bdfdd85b4a43693d">gamepadEventInternal</a>(Gamepad::GamepadEvent evt, Gamepad *gamepad, unsigned int analogIndex=0)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a0e43490f02132b7a6fdb66313b34b0e9">gamepadJoystickChangedEventInternal</a>(GamepadHandle handle, unsigned int index, float x, float y)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a1fef1095ac0312bfecf2ac4c1daf592b">gamepadTriggerChangedEventInternal</a>(GamepadHandle handle, unsigned int index, float value)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#aefd362c33509d818b5109182d94f16fc">gestureDragEventInternal</a>(int x, int y)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a267ff1910dabcb5dfc78672e150279d9">gestureDropEventInternal</a>(int x, int y)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a8a260e6c8b6e44ef0c30cbd3f97038da">gestureLongTapEventInternal</a>(int x, int y, float duration)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
@@ -117,7 +120,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:25 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

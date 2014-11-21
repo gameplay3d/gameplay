@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -102,40 +102,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">GamepadEvent</a> { <br/>
-&#160;&#160;<b>CONNECTED_EVENT</b>, 
-<b>DISCONNECTED_EVENT</b>, 
-<b>BUTTON_EVENT</b>, 
-<b>JOYSTICK_EVENT</b>, 
-<br/>
-&#160;&#160;<b>TRIGGER_EVENT</b>
-<br/>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">GamepadEvent</a> { <b>CONNECTED_EVENT</b>, 
+<b>DISCONNECTED_EVENT</b>
  }</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a91729957739fbe8a6b88f3e17c2a7ff9">ButtonMapping</a> { <br/>
 &#160;&#160;<b>BUTTON_A</b>, 
 <b>BUTTON_B</b>, 
-<b>BUTTON_C</b>, 
 <b>BUTTON_X</b>, 
+<b>BUTTON_Y</b>, 
 <br/>
-&#160;&#160;<b>BUTTON_Y</b>, 
-<b>BUTTON_Z</b>, 
+&#160;&#160;<b>BUTTON_L1</b>, 
+<b>BUTTON_L2</b>, 
+<b>BUTTON_L3</b>, 
+<b>BUTTON_R1</b>, 
+<br/>
+&#160;&#160;<b>BUTTON_R2</b>, 
+<b>BUTTON_R3</b>, 
+<b>BUTTON_UP</b>, 
+<b>BUTTON_DOWN</b>, 
+<br/>
+&#160;&#160;<b>BUTTON_LEFT</b>, 
+<b>BUTTON_RIGHT</b>, 
 <b>BUTTON_MENU1</b>, 
 <b>BUTTON_MENU2</b>, 
 <br/>
-&#160;&#160;<b>BUTTON_MENU3</b>, 
-<b>BUTTON_MENU4</b>, 
-<b>BUTTON_L1</b>, 
-<b>BUTTON_L2</b>, 
-<br/>
-&#160;&#160;<b>BUTTON_L3</b>, 
-<b>BUTTON_R1</b>, 
-<b>BUTTON_R2</b>, 
-<b>BUTTON_R3</b>, 
-<br/>
-&#160;&#160;<b>BUTTON_UP</b>, 
-<b>BUTTON_DOWN</b>, 
-<b>BUTTON_LEFT</b>, 
-<b>BUTTON_RIGHT</b>
+&#160;&#160;<b>BUTTON_MENU3</b>
 <br/>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
@@ -146,10 +137,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#ab3e57827cfdbf0e18d37aa7ae03d452f">getJoystickValues</a> (unsigned int joystickId, <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *outValues) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#aa33cea2b84705953d296b3586a4cdbf6">getTriggerCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a7e1b24552efae9bd23cb24bd29a5d157">getTriggerValue</a> (unsigned int triggerId) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a02527151298b5c48f2db7964075bb0a4">getVendorId</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a9350e1b68e399f1684591469dedc148e">getProductId</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a3dccc24ff037b5dd2dee9ff0a8607a6d">getVendorString</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a61b902e10d25c244a166deacb4c7111a">getProductString</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#aa1f2a111cf6758ec17e51fcc6ba671db">getName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#aad447cbdd1a03ae1fd27b7d7ac2da17d">isVirtual</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a0b2de80713f58635c141a66717b9683a">getForm</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#ad38b2f6bee5c6cdf8a9a4222a84df7c5">update</a> (float elapsedTime)</td></tr>
@@ -294,12 +282,12 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9350e1b68e399f1684591469dedc148e"></a><!-- doxytag: member="gameplay::Gamepad::getProductId" ref="a9350e1b68e399f1684591469dedc148e" args="() const " -->
+<a class="anchor" id="aa1f2a111cf6758ec17e51fcc6ba671db"></a><!-- doxytag: member="gameplay::Gamepad::getName" ref="aa1f2a111cf6758ec17e51fcc6ba671db" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const unsigned int <a class="el" href="classgameplay_1_1_gamepad.html#a9350e1b68e399f1684591469dedc148e">gameplay::Gamepad::getProductId</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_gamepad.html#aa1f2a111cf6758ec17e51fcc6ba671db">gameplay::Gamepad::getName</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -307,26 +295,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get this gamepad's product ID.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>This gamepad's product ID. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a61b902e10d25c244a166deacb4c7111a"></a><!-- doxytag: member="gameplay::Gamepad::getProductString" ref="a61b902e10d25c244a166deacb4c7111a" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_gamepad.html#a61b902e10d25c244a166deacb4c7111a">gameplay::Gamepad::getProductString</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Get this gamepad's product name.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>This gamepad's product name. </dd></dl>
+<p>Get this gamepad's device/product name.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>This gamepad's device/product name. </dd></dl>
 
 </div>
 </div>
@@ -370,42 +340,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The value of the given trigger. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a02527151298b5c48f2db7964075bb0a4"></a><!-- doxytag: member="gameplay::Gamepad::getVendorId" ref="a02527151298b5c48f2db7964075bb0a4" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const unsigned int <a class="el" href="classgameplay_1_1_gamepad.html#a02527151298b5c48f2db7964075bb0a4">gameplay::Gamepad::getVendorId</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Get this gamepad's vendor ID.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>This gamepad's vendor ID. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a3dccc24ff037b5dd2dee9ff0a8607a6d"></a><!-- doxytag: member="gameplay::Gamepad::getVendorString" ref="a3dccc24ff037b5dd2dee9ff0a8607a6d" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_gamepad.html#a3dccc24ff037b5dd2dee9ff0a8607a6d">gameplay::Gamepad::getVendorString</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Get this gamepad's vendor name.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>This gamepad's vendor name. </dd></dl>
 
 </div>
 </div>
@@ -494,7 +428,7 @@ Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

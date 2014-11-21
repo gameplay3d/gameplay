@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -126,6 +126,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#acc6b7a0607f5af5b694e1d6add7e1820">stop</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#a9974ed052d73d89a7758426ddd1efb98">rewind</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_audio_source.html#a53fd1787d6625fc16b765be2b3c2a7ae">AudioSource::State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#af1bb2c2fed72d276c6f51d7c5a00696a">getState</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#a99e1b62d422ee55b86f9dc24130b7ee4">isStreamed</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#a323ff6fb92199d2d62f0d1ec5245b0ac">isLooped</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#a43aa4b9de4bfc39a0cef6b15de315b81">setLooped</a> (bool looped)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#a79b0d9f563333da5347c1eca6ad4e90b">getGain</a> () const </td></tr>
@@ -138,7 +139,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#ac249279bfcecad9a3f98748c33421c1f">getNode</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#a07bb587d919f7cdc1b0d9a48f5bc94a1">create</a> (const char *url)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#a76879aad4e527d9f4d4d18d590067717">create</a> (const char *url, bool streamed=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_audio_source.html#a7d9edd60d409d95461715fcfb2c111fb">create</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
@@ -161,16 +162,26 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a07bb587d919f7cdc1b0d9a48f5bc94a1"></a><!-- doxytag: member="gameplay::AudioSource::create" ref="a07bb587d919f7cdc1b0d9a48f5bc94a1" args="(const char *url)" -->
+<a class="anchor" id="a76879aad4e527d9f4d4d18d590067717"></a><!-- doxytag: member="gameplay::AudioSource::create" ref="a76879aad4e527d9f4d4d18d590067717" args="(const char *url, bool streamed=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a>* <a class="el" href="classgameplay_1_1_audio_source.html#a07bb587d919f7cdc1b0d9a48f5bc94a1">gameplay::AudioSource::create</a> </td>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a>* <a class="el" href="classgameplay_1_1_audio_source.html#a76879aad4e527d9f4d4d18d590067717">gameplay::AudioSource::create</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>url</em></td><td>)</td>
-          <td><code> [static]</code></td>
+          <td class="paramname"><em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>streamed</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -179,6 +190,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">url</td><td>The relative location on disk of the sound file or a URL specifying a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object defining an audio source. </td></tr>
+    <tr><td class="paramname">streamed</td><td>Don't read the entire audio buffer first before playing, instead play immediately from a stream that is read on demand. </td></tr>
   </table>
   </dd>
 </dl>
@@ -191,7 +203,7 @@ Static Public Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a>* <a class="el" href="classgameplay_1_1_audio_source.html#a07bb587d919f7cdc1b0d9a48f5bc94a1">gameplay::AudioSource::create</a> </td>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a>* <a class="el" href="classgameplay_1_1_audio_source.html#a76879aad4e527d9f4d4d18d590067717">gameplay::AudioSource::create</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td>
           <td class="paramname"><em>properties</em></td><td>)</td>
@@ -316,6 +328,24 @@ Static Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Determines whether the audio source is looped or not.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true if the audio source is looped, false if not. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a99e1b62d422ee55b86f9dc24130b7ee4"></a><!-- doxytag: member="gameplay::AudioSource::isStreamed" ref="a99e1b62d422ee55b86f9dc24130b7ee4" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_audio_source.html#a99e1b62d422ee55b86f9dc24130b7ee4">gameplay::AudioSource::isStreamed</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines whether the audio source is streaming or not.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>true if the audio source is streaming, false if not. </dd></dl>
 
 </div>
 </div>
@@ -560,7 +590,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -80,7 +80,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 This is the complete list of members for <a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a>, including all inherited members.<table>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a66e39f63477efb32cc190f6605ef0c74">addRef</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#a07bb587d919f7cdc1b0d9a48f5bc94a1">create</a>(const char *url)</td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#a76879aad4e527d9f4d4d18d590067717">create</a>(const char *url, bool streamed=false)</td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#a7d9edd60d409d95461715fcfb2c111fb">create</a>(Properties *properties)</td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#a79b0d9f563333da5347c1eca6ad4e90b">getGain</a>() const </td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#ac249279bfcecad9a3f98748c33421c1f">getNode</a>() const </td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td></td></tr>
@@ -90,6 +90,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_a
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#ac64c62677c019dd4bb50a915f73882ed">getVelocity</a>() const </td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>INITIAL</b> enum value (defined in <a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a>)</td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#a323ff6fb92199d2d62f0d1ec5245b0ac">isLooped</a>() const </td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#a99e1b62d422ee55b86f9dc24130b7ee4">isStreamed</a>() const </td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#a6804f9b49bd8e9cd4d19cdd9477c6af0">pause</a>()</td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>PAUSED</b> enum value (defined in <a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a>)</td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_audio_source.html#a2d267325c838d24188210b1943846085">play</a>()</td><td><a class="el" href="classgameplay_1_1_audio_source.html">gameplay::AudioSource</a></td><td></td></tr>
@@ -127,7 +128,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_a
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

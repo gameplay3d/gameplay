@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -118,9 +118,12 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aefd362c33509d818b5109182d94f16fc">gestureDragEventInternal</a> (int x, int y)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a267ff1910dabcb5dfc78672e150279d9">gestureDropEventInternal</a> (int x, int y)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a675072446a9bb21dbe840b896e52bfd0">resizeEventInternal</a> (unsigned int width, unsigned int height)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a0256707204f0ade5bdfdd85b4a43693d">gamepadEventInternal</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad, unsigned int analogIndex=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a7e094074d74f3ca49f7669bb6f93f4a5">gamepadEventConnectedInternal</a> (GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int vendorId, unsigned int productId, const char *vendorString, const char *productString)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#afaf92ae6ace83c7f95f1b5fdc35706bc">gamepadEventConnectedInternal</a> (GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char *name)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a4a282fb3ebd9cae31ab3c00a17c10acd">gamepadEventDisconnectedInternal</a> (GamepadHandle handle)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ac8002065c2f3186f1b8469927da84632">gamepadButtonPressedEventInternal</a> (GamepadHandle handle, <a class="el" href="classgameplay_1_1_gamepad.html#a91729957739fbe8a6b88f3e17c2a7ff9">Gamepad::ButtonMapping</a> mapping)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ac86709e17993c43b0cd130086e5ec3b6">gamepadButtonReleasedEventInternal</a> (GamepadHandle handle, <a class="el" href="classgameplay_1_1_gamepad.html#a91729957739fbe8a6b88f3e17c2a7ff9">Gamepad::ButtonMapping</a> button)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a1fef1095ac0312bfecf2ac4c1daf592b">gamepadTriggerChangedEventInternal</a> (GamepadHandle handle, unsigned int index, float value)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a0e43490f02132b7a6fdb66313b34b0e9">gamepadJoystickChangedEventInternal</a> (GamepadHandle handle, unsigned int index, float x, float y)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a8be3321d6f355bd53b5a3ab179d8c9ee">pollGamepadState</a> (<a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a451762616bc523f10cbe23b3f5a299b9">displayFileDialog</a> (size_t mode, const char *title, const char *filterDescription, const char *filterExtensions, const char *initialDirectory)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a1f27f0260b230dad54f08bd5d439d4bd">shutdownInternal</a> ()</td></tr>
@@ -249,12 +252,68 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7e094074d74f3ca49f7669bb6f93f4a5"></a><!-- doxytag: member="gameplay::Platform::gamepadEventConnectedInternal" ref="a7e094074d74f3ca49f7669bb6f93f4a5" args="(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int vendorId, unsigned int productId, const char *vendorString, const char *productString)" -->
+<a class="anchor" id="ac8002065c2f3186f1b8469927da84632"></a><!-- doxytag: member="gameplay::Platform::gamepadButtonPressedEventInternal" ref="ac8002065c2f3186f1b8469927da84632" args="(GamepadHandle handle, Gamepad::ButtonMapping mapping)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#a7e094074d74f3ca49f7669bb6f93f4a5">gameplay::Platform::gamepadEventConnectedInternal</a> </td>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#ac8002065c2f3186f1b8469927da84632">gameplay::Platform::gamepadButtonPressedEventInternal</a> </td>
+          <td>(</td>
+          <td class="paramtype">GamepadHandle&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html#a91729957739fbe8a6b88f3e17c2a7ff9">Gamepad::ButtonMapping</a>&#160;</td>
+          <td class="paramname"><em>mapping</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Internal method used only from static code in various platform implementation.</p>
+ 
+</div>
+</div>
+<a class="anchor" id="ac86709e17993c43b0cd130086e5ec3b6"></a><!-- doxytag: member="gameplay::Platform::gamepadButtonReleasedEventInternal" ref="ac86709e17993c43b0cd130086e5ec3b6" args="(GamepadHandle handle, Gamepad::ButtonMapping button)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#ac86709e17993c43b0cd130086e5ec3b6">gameplay::Platform::gamepadButtonReleasedEventInternal</a> </td>
+          <td>(</td>
+          <td class="paramtype">GamepadHandle&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html#a91729957739fbe8a6b88f3e17c2a7ff9">Gamepad::ButtonMapping</a>&#160;</td>
+          <td class="paramname"><em>button</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Internal method used only from static code in various platform implementation.</p>
+ 
+</div>
+</div>
+<a class="anchor" id="afaf92ae6ace83c7f95f1b5fdc35706bc"></a><!-- doxytag: member="gameplay::Platform::gamepadEventConnectedInternal" ref="afaf92ae6ace83c7f95f1b5fdc35706bc" args="(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char *name)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#afaf92ae6ace83c7f95f1b5fdc35706bc">gameplay::Platform::gamepadEventConnectedInternal</a> </td>
           <td>(</td>
           <td class="paramtype">GamepadHandle&#160;</td>
           <td class="paramname"><em>handle</em>, </td>
@@ -280,26 +339,8 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>vendorId</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>productId</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>vendorString</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>productString</em>&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -331,27 +372,67 @@ Static Public Member Functions</h2></td></tr>
  
 </div>
 </div>
-<a class="anchor" id="a0256707204f0ade5bdfdd85b4a43693d"></a><!-- doxytag: member="gameplay::Platform::gamepadEventInternal" ref="a0256707204f0ade5bdfdd85b4a43693d" args="(Gamepad::GamepadEvent evt, Gamepad *gamepad, unsigned int analogIndex=0)" -->
+<a class="anchor" id="a0e43490f02132b7a6fdb66313b34b0e9"></a><!-- doxytag: member="gameplay::Platform::gamepadJoystickChangedEventInternal" ref="a0e43490f02132b7a6fdb66313b34b0e9" args="(GamepadHandle handle, unsigned int index, float x, float y)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#a0256707204f0ade5bdfdd85b4a43693d">gameplay::Platform::gamepadEventInternal</a> </td>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#a0e43490f02132b7a6fdb66313b34b0e9">gameplay::Platform::gamepadJoystickChangedEventInternal</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a>&#160;</td>
-          <td class="paramname"><em>evt</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td>
-          <td class="paramname"><em>gamepad</em>, </td>
+          <td class="paramtype">GamepadHandle&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>analogIndex</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Internal method used only from static code in various platform implementation.</p>
+ 
+</div>
+</div>
+<a class="anchor" id="a1fef1095ac0312bfecf2ac4c1daf592b"></a><!-- doxytag: member="gameplay::Platform::gamepadTriggerChangedEventInternal" ref="a1fef1095ac0312bfecf2ac4c1daf592b" args="(GamepadHandle handle, unsigned int index, float value)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#a1fef1095ac0312bfecf2ac4c1daf592b">gameplay::Platform::gamepadTriggerChangedEventInternal</a> </td>
+          <td>(</td>
+          <td class="paramtype">GamepadHandle&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -633,7 +714,8 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Internal method used by <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> that polls the platform for the updated <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> states such as joysticks, buttons and trigger values.</p>
+<p>Internal method used to poll the platform for the updated <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> states such as buttons, joytick and trigger values.</p>
+<p>Some platforms require to poll the gamepad system to get deltas.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">gamepad</td><td>The gamepad to be returned with the latest polled values populated.  </td></tr>
@@ -769,7 +851,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:25 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

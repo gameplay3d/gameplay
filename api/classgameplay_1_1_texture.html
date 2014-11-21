@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -134,10 +134,25 @@ Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a1be9d041e4548acc075d5254c642a4ac">Wrap</a> { <b>REPEAT</b> =  GL_REPEAT, 
 <b>CLAMP</b> =  GL_CLAMP_TO_EDGE
  }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a479523cae02df5f309927762d7e0865b">Type</a> { <b>TEXTURE_2D</b> =  GL_TEXTURE_2D, 
+<b>TEXTURE_CUBE</b> =  GL_TEXTURE_CUBE_MAP
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#ab5d117f20c57979a3c7aaed95f6da841">CubeFace</a> { <br/>
+&#160;&#160;<b>POSITIVE_X</b>, 
+<b>NEGATIVE_X</b>, 
+<b>POSITIVE_Y</b>, 
+<b>NEGATIVE_Y</b>, 
+<br/>
+&#160;&#160;<b>POSITIVE_Z</b>, 
+<b>NEGATIVE_Z</b>
+<br/>
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a64e73bd464ef54ceae83c4b40a0782d5">setData</a> (const unsigned char *data)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a9ebabaafec0fc46ba442767dd4920cab">getPath</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a8b246e020dec41cd8398842640838c93">getFormat</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_texture.html#a479523cae02df5f309927762d7e0865b">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#ad0e494a80dd36906654148ff17f78b51">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a80bddd8745b36e0c51cf54adbb1a55f6">getWidth</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a5c84500dc18a15edfc4b6644c6e07673">getHeight</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a> ()</td></tr>
@@ -148,12 +163,26 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#abd9c85cfbbba9068ed9b50a64288d609">create</a> (const char *path, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a154ece331771656e95c174d20c35bed7">create</a> (<a class="el" href="classgameplay_1_1_image.html">Image</a> *image, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#af4154b0c1ac69906b3fbcf8114ee24c2">create</a> (<a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> format, unsigned int width, unsigned int height, const unsigned char *data, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#ae5f9f55b7d35be505422f67aa22cadeb">create</a> (<a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> format, unsigned int width, unsigned int height, const unsigned char *data, bool <a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>=false, <a class="el" href="classgameplay_1_1_texture.html#a479523cae02df5f309927762d7e0865b">Type</a> type=TEXTURE_2D)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_texture.html#a22178110f5ec57b0360d11e67f811627">create</a> (TextureHandle handle, int width, int height, <a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> format=UNKNOWN)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a standard texture. </p>
 </div><hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="ab5d117f20c57979a3c7aaed95f6da841"></a><!-- doxytag: member="gameplay::Texture::CubeFace" ref="ab5d117f20c57979a3c7aaed95f6da841" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classgameplay_1_1_texture.html#ab5d117f20c57979a3c7aaed95f6da841">gameplay::Texture::CubeFace</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Defines a face of a <a class="el" href="classgameplay_1_1_texture.html">Texture</a> of Type: cube. </p>
+
+</div>
+</div>
 <a class="anchor" id="a17d2554f8fb6b579843f5fe348dc887e"></a><!-- doxytag: member="gameplay::Texture::Filter" ref="a17d2554f8fb6b579843f5fe348dc887e" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -179,6 +208,20 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Defines the set of supported texture formats. </p>
+
+</div>
+</div>
+<a class="anchor" id="a479523cae02df5f309927762d7e0865b"></a><!-- doxytag: member="gameplay::Texture::Type" ref="a479523cae02df5f309927762d7e0865b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classgameplay_1_1_texture.html#a479523cae02df5f309927762d7e0865b">gameplay::Texture::Type</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Defines the type of <a class="el" href="classgameplay_1_1_texture.html">Texture</a> in use. </p>
 
 </div>
 </div>
@@ -270,7 +313,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af4154b0c1ac69906b3fbcf8114ee24c2"></a><!-- doxytag: member="gameplay::Texture::create" ref="af4154b0c1ac69906b3fbcf8114ee24c2" args="(Format format, unsigned int width, unsigned int height, const unsigned char *data, bool generateMipmaps=false)" -->
+<a class="anchor" id="ae5f9f55b7d35be505422f67aa22cadeb"></a><!-- doxytag: member="gameplay::Texture::create" ref="ae5f9f55b7d35be505422f67aa22cadeb" args="(Format format, unsigned int width, unsigned int height, const unsigned char *data, bool generateMipmaps=false, Type type=TEXTURE_2D)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -302,7 +345,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>generateMipmaps</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>generateMipmaps</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_texture.html#a479523cae02df5f309927762d7e0865b">Type</a>&#160;</td>
+          <td class="paramname"><em>type</em> = <code>TEXTURE_2D</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -317,10 +366,11 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">format</td><td>Format of the texture data. </td></tr>
-    <tr><td class="paramname">width</td><td>Width of the texture data. </td></tr>
-    <tr><td class="paramname">height</td><td>Height of the texture data. </td></tr>
-    <tr><td class="paramname">data</td><td>Raw texture data (expected to be tightly packed). </td></tr>
-    <tr><td class="paramname">generateMipmaps</td><td>True to generate a full mipmap chain, false otherwise.</td></tr>
+    <tr><td class="paramname">width</td><td>Width of the texture data. If type is TEX_CUBE, then this is the cube face width. </td></tr>
+    <tr><td class="paramname">height</td><td>Height of the texture data. If type is TEX_CUBE, then this is the cube face height. </td></tr>
+    <tr><td class="paramname">data</td><td>Raw texture data (expected to be tightly packed). If the type parameter is set to TEXTURE_CUBE, then data is expected to be each face stored back contiguously within the array. </td></tr>
+    <tr><td class="paramname">generateMipmaps</td><td>True to generate a full mipmap chain, false otherwise. </td></tr>
+    <tr><td class="paramname">type</td><td>What type of <a class="el" href="classgameplay_1_1_texture.html">Texture</a> should be created.</td></tr>
   </table>
   </dd>
 </dl>
@@ -468,6 +518,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad0e494a80dd36906654148ff17f78b51"></a><!-- doxytag: member="gameplay::Texture::getType" ref="ad0e494a80dd36906654148ff17f78b51" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_texture.html#a479523cae02df5f309927762d7e0865b">Type</a> <a class="el" href="classgameplay_1_1_texture.html#ad0e494a80dd36906654148ff17f78b51">gameplay::Texture::getType</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the texture type.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The texture type. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a80bddd8745b36e0c51cf54adbb1a55f6"></a><!-- doxytag: member="gameplay::Texture::getWidth" ref="a80bddd8745b36e0c51cf54adbb1a55f6" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -521,6 +589,30 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a64e73bd464ef54ceae83c4b40a0782d5"></a><!-- doxytag: member="gameplay::Texture::setData" ref="a64e73bd464ef54ceae83c4b40a0782d5" args="(const unsigned char *data)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_texture.html#a64e73bd464ef54ceae83c4b40a0782d5">gameplay::Texture::setData</a> </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned char *&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Set texture data to replace current texture image.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Raw texture data (expected to be tightly packed). If the type parameter is set to TEXTURE_CUBE, then data is expected to be each face stored back contiguously within the array. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -539,7 +631,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:26 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

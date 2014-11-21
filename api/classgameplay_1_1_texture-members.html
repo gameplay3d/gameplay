@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -84,8 +84,9 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_t
   <tr bgcolor="#f0f0f0"><td><b>CLAMP</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#abd9c85cfbbba9068ed9b50a64288d609">create</a>(const char *path, bool generateMipmaps=false)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a154ece331771656e95c174d20c35bed7">create</a>(Image *image, bool generateMipmaps=false)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#af4154b0c1ac69906b3fbcf8114ee24c2">create</a>(Format format, unsigned int width, unsigned int height, const unsigned char *data, bool generateMipmaps=false)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#ae5f9f55b7d35be505422f67aa22cadeb">create</a>(Format format, unsigned int width, unsigned int height, const unsigned char *data, bool generateMipmaps=false, Type type=TEXTURE_2D)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a22178110f5ec57b0360d11e67f811627">create</a>(TextureHandle handle, int width, int height, Format format=UNKNOWN)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#ab5d117f20c57979a3c7aaed95f6da841">CubeFace</a> enum name</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a17d2554f8fb6b579843f5fe348dc887e">Filter</a> enum name</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a062414a71169c01a7ae7af0c221d8645">Format</a> enum name</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a502cf79334ec038207332c1047fff0cf">generateMipmaps</a>()</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
@@ -94,6 +95,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_t
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a5c84500dc18a15edfc4b6644c6e07673">getHeight</a>() const </td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a9ebabaafec0fc46ba442767dd4920cab">getPath</a>() const </td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a6f58fd4c48dd9ed3ad2019d88fd1196d">getRefCount</a>() const </td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#ad0e494a80dd36906654148ff17f78b51">getType</a>() const </td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a80bddd8745b36e0c51cf54adbb1a55f6">getWidth</a>() const </td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a55c4d73438039393baca04b55dccc02b">isCompressed</a>() const </td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#abdfd19cb06395db4fdfaaef5a4bc9452">isMipmapped</a>() const </td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
@@ -103,12 +105,22 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_t
   <tr bgcolor="#f0f0f0"><td><b>NEAREST</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>NEAREST_MIPMAP_LINEAR</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>NEAREST_MIPMAP_NEAREST</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>NEGATIVE_X</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>NEGATIVE_Y</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>NEGATIVE_Z</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>POSITIVE_X</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>POSITIVE_Y</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>POSITIVE_Z</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a866a859fcc96f2a48d5ee2f06a8c2a43">Ref</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a4af6b566116534038e02bfffea72867f">Ref</a>(const Ref &amp;copy)</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b">release</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>REPEAT</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>RGB</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>RGBA</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a64e73bd464ef54ceae83c4b40a0782d5">setData</a>(const unsigned char *data)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>TEXTURE_2D</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>TEXTURE_CUBE</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a479523cae02df5f309927762d7e0865b">Type</a> enum name</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>UNKNOWN</b> enum value (defined in <a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a>)</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_texture.html#a1be9d041e4548acc075d5254c642a4ac">Wrap</a> enum name</td><td><a class="el" href="classgameplay_1_1_texture.html">gameplay::Texture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a4442b32c090160052130593d6523945c">~Ref</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected, virtual]</code></td></tr>
@@ -130,7 +142,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_t
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:26 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -127,7 +127,7 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#aab237347cf2d4e60e83ecd56e5ec9fef">create</a> (const char *url)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#adbceb59dadeb425c45db53e0023e8fc5">create</a> (const char *id, <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a> layoutType=<a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7aeb62aeb50e356bf668bfd3af0ae2d0d9">Layout::LAYOUT_ABSOLUTE</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#ab9c437f09410703a5a969a6b8f264eff">getForm</a> (const char *id)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a6ea0539287a787e9829a380f9cfcb6a6">getActiveControl</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a6e9bc41a15191ee726c8e073e96b5e4c">getActiveControl</a> (unsigned int touchIndex=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a2c884dd8390d0b6a7943aed7ebc7f9f0">getFocusControl</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a366962023119d2885948ab46d612a9ee">clearFocus</a> ()</td></tr>
 </table>
@@ -242,20 +242,28 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6ea0539287a787e9829a380f9cfcb6a6"></a><!-- doxytag: member="gameplay::Form::getActiveControl" ref="a6ea0539287a787e9829a380f9cfcb6a6" args="()" -->
+<a class="anchor" id="a6e9bc41a15191ee726c8e073e96b5e4c"></a><!-- doxytag: member="gameplay::Form::getActiveControl" ref="a6e9bc41a15191ee726c8e073e96b5e4c" args="(unsigned int touchIndex=0)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classgameplay_1_1_control.html">Control</a>* <a class="el" href="classgameplay_1_1_form.html#a6ea0539287a787e9829a380f9cfcb6a6">gameplay::Form::getActiveControl</a> </td>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_control.html">Control</a>* <a class="el" href="classgameplay_1_1_form.html#a6e9bc41a15191ee726c8e073e96b5e4c">gameplay::Form::getActiveControl</a> </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>touchIndex</em> = <code>0</code></td><td>)</td>
           <td><code> [static]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the single currently active control within the UI system.</p>
+<p>Returns the currently active control within the UI system.</p>
+<p>An active control is a control that is currently pressed or hovered over. On a multi-touch system, it is possible for several controls to be active at once (one for each touch point). However, only a single control can have focus at once.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">touchIndex</td><td>Optional touch point index to retrieve the active control for.</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The currently active control, or NULL if no controls are currently active. </dd></dl>
 
 </div>
@@ -273,7 +281,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the single current control that is in focus.</p>
+<p>Returns the current control that is in focus.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The current control in focus, or NULL if no controls are in focus. </dd></dl>
 
 </div>
@@ -447,7 +455,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

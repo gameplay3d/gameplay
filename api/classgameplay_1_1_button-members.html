@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -91,7 +91,6 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_b
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a636f864fa6dbcd49d19e903f1ea086f2">_consumeInputEvents</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a47d8c92a3d773672106b82ae8c66ef8e">_contactIndex</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a7b8c3427c8e4bf56929ca40a4165f9be">_dirtyBits</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a83f2f3bea018c203b7ce7cb18f1073b5">_enabled</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_script_target.html#ac88e927741e89f2674dad7370db79943">_events</a></td><td><a class="el" href="classgameplay_1_1_script_target.html">gameplay::ScriptTarget</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a73150749073784d72da95375bb4ebd50">_focusIndex</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_label.html#ac4aab4460df13e322899329f764d4212">_font</a></td><td><a class="el" href="classgameplay_1_1_label.html">gameplay::Label</a></td><td><code> [protected]</code></td></tr>
@@ -100,6 +99,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_b
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a1cf80f236ba38ce3d035b5ba62f6454c">_opacity</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a28174c6d21906a5b4a9793b82317631c">_parent</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a2361889c2adbb4d8843d97a65dcc3b6e">_relativeBounds</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a08e0c8e34c28edcddc7099281e9b423a">_state</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a8adea2635b544f38ca34162f11ec903d">_style</a></td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_target.html#a3427f0e388bbfed7b5ee9fdda24b60a8">_targetType</a></td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_label.html#a5bf6bfb1335b826775daecf044dd76ef">_text</a></td><td><a class="el" href="classgameplay_1_1_label.html">gameplay::Label</a></td><td><code> [protected]</code></td></tr>
@@ -168,7 +168,9 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_b
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#ad62ecce661c5d61ab719bcc052dd6893">finishBatch</a>(Form *form, SpriteBatch *batch)</td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_script_target.html#a1399600b66d222fae0a1c5766dcfd473">fireScriptEvent</a>(const char *eventName,...)</td><td><a class="el" href="classgameplay_1_1_script_target.html">gameplay::ScriptTarget</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> enum value</td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">gamepadEvent</a>(Gamepad::GamepadEvent evt, Gamepad *gamepad, unsigned int analogIndex)</td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected, virtual]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a32f03794aa2392fd7d46f7800f740909">gamepadButtonEvent</a>(Gamepad *gamepad)</td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected, virtual]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a273bcb9df46774e7099ad9553160ebe4">gamepadJoystickEvent</a>(Gamepad *gamepad, unsigned int index)</td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected, virtual]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#af5c2b740403893f171703c919d12c38e">gamepadTriggerEvent</a>(Gamepad *gamepad, unsigned int index)</td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected, virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#aed1a08b34ad1a7a0ae9faf5629ec46df">getAbsoluteBounds</a>() const </td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#ad8ae42690735608d9c4038c78669b5cb">getAlignment</a>() const </td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_control.html#a4e810a0450dcab9e23c0e6208539e731">getAlignment</a>(const char *alignment)</td><td><a class="el" href="classgameplay_1_1_control.html">gameplay::Control</a></td><td><code> [protected, static]</code></td></tr>
@@ -322,7 +324,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_b
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -25,10 +25,10 @@
 <td id="logo"><a href="http://gameplay3d.org/"><img src="images/logo.png" alt="gameplay" border="0" height="64px"/></a></td>
 <td width="100%"/>
 <td><a href="http://gameplay3d.org/"><span class="button">overview</span></a></td><td width="12px"/>
-<td><a href="https://github.com/blackberry/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
-<td><a href="http://blackberry.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
+<td><a href="https://github.com/gameplay3d/GamePlay/wiki"><span class="button">wiki</span></a></td><td width="12px"/>
+<td><a href="http://gameplay3d.github.com/GamePlay/api/index.html"><span class="button">api&nbsp;reference</span></a></td><td width="12px"/>
 <td><a href="http://www.gameplay3d.org/forums"><span class="button">forums</span></a></td>
-<td><a href="https://github.com/blackberry/GamePlay"><span class="button">download</span></a></td>
+<td><a href="https://github.com/gameplay3d/GamePlay"><span class="button">download</span></a></td>
 </tr>
 </tbody>
 </table>
@@ -125,6 +125,16 @@ Public Types</h2></td></tr>
 <b>SCROLL_VERTICAL</b> =  0x02, 
 <b>SCROLL_BOTH</b> =  SCROLL_HORIZONTAL | SCROLL_VERTICAL
  }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a02ec5768ad845e076fd99ee4becf0542">Direction</a> { <br/>
+&#160;&#160;<b>UP</b> =  0x01, 
+<b>DOWN</b> =  0x02, 
+<b>LEFT</b> =  0x04, 
+<b>RIGHT</b> =  0x08, 
+<br/>
+&#160;&#160;<b>NEXT</b> =  0x10, 
+<b>PREVIOUS</b> =  0x20
+<br/>
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_layout.html">Layout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a9d1e8ad2c17d7311ae587e80b22728b1">getLayout</a> ()</td></tr>
@@ -157,6 +167,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a3f81f890f63477bd0c126bbc05c644a3">getScrollWheelRequiresFocus</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a2a1665bf08f46fc714911d6d6ac68291">setScrollWheelRequiresFocus</a> (bool required)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a099c23e2bc96cce46fe2c385891470ac">setFocus</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a4bf34792a1060166e6bb5c3cc55bce7f">moveFocus</a> (<a class="el" href="classgameplay_1_1_container.html#a02ec5768ad845e076fd99ee4becf0542">Direction</a> direction)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a4632ac6abb192a220ecded82b083170c">getActiveControl</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#abcc8cf728feeec39ae6389c1926fa5a5">setActiveControl</a> (<a class="el" href="classgameplay_1_1_control.html">Control</a> *control)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a540ba8ee5dd80383d64f07342ddda2e7">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
@@ -229,6 +240,20 @@ Protected Attributes</h2></td></tr>
 <div class="textblock"><p>Defines a container that contains zero or more controls.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="a02ec5768ad845e076fd99ee4becf0542"></a><!-- doxytag: member="gameplay::Container::Direction" ref="a02ec5768ad845e076fd99ee4becf0542" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classgameplay_1_1_container.html#a02ec5768ad845e076fd99ee4becf0542">gameplay::Container::Direction</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Defines supported focus chagne directions. </p>
+
+</div>
+</div>
 <a class="anchor" id="a0c3e32288adc78753990d36f95d4de3b"></a><!-- doxytag: member="gameplay::Container::Scroll" ref="a0c3e32288adc78753990d36f95d4de3b" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -1006,6 +1031,31 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Whether the scroll event was consumed by scrolling within this container.</dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4bf34792a1060166e6bb5c3cc55bce7f"></a><!-- doxytag: member="gameplay::Container::moveFocus" ref="a4bf34792a1060166e6bb5c3cc55bce7f" args="(Direction direction)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_container.html#a4bf34792a1060166e6bb5c3cc55bce7f">gameplay::Container::moveFocus</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_container.html#a02ec5768ad845e076fd99ee4becf0542">Direction</a>&#160;</td>
+          <td class="paramname"><em>direction</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Attempts to switch focus to a child of this container in the specified direction.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">direction</td><td>The direction for focus change.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True on success, false if there are no controls to focus on. </dd></dl>
 
 </div>
 </div>
@@ -2013,7 +2063,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 27 2014 14:57:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
