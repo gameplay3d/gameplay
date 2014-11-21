@@ -12,7 +12,7 @@ GamePlay3D is an open-source, cross-platform 3D native C++ game framework making
 
 ## Supported Platforms
 - [Linux](https://github.com/gameplay3d/GamePlay/wiki/CMake Setup - Linux) (using CMake)
-- [Microsoft Windows](https://github.com/gameplay3d/GamePlay/wiki/Visual-Studio-Setup) (using Microsoft Visual Studio)
+- [Windows](https://github.com/gameplay3d/GamePlay/wiki/Visual-Studio-Setup) (using Microsoft Visual Studio)
 - [MacOS X](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode)
 - [iOS](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode)
 - [Android](https://github.com/gameplay3d/GamePlay/wiki/Android-NDK-Setup) (using Google Android NDK)
