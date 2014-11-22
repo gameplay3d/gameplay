@@ -6,26 +6,26 @@ GamePlay3D is an open-source, cross-platform 3D native C++ game framework making
 
 - [Website](http://www.gameplay3d.org/)
 - [Forums](http://www.gameplay3d.org/forums/)
-- [Wiki](https://github.com/blackberry/GamePlay/wiki)
-- [API Reference](http://blackberry.github.io/GamePlay/api/index.html)
-- [Development Guide](https://github.com/blackberry/GamePlay/wiki#wiki-Development_Guide)
+- [Wiki](https://github.com/gameplay3d/GamePlay/wiki)
+- [API Reference](http://gameplay3d.github.io/GamePlay/api/index.html)
+- [Development Guide](https://github.com/gameplay3d/GamePlay/wiki#wiki-Development_Guide)
 
 ## Supported Platforms
-- [Linux](https://github.com/blackberry/GamePlay/wiki/CMake Setup - Linux)
-- [Windows](https://github.com/blackberry/GamePlay/wiki/Visual-Studio-Setup) 
-- [MacOSX](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup)
-- [iOS](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup)
-- [Android](https://github.com/blackberry/GamePlay/wiki/Android-NDK-Setup)
+- [Windows](https://github.com/gameplay3d/GamePlay/wiki/Visual-Studio-Setup) 
+- [Linux](https://github.com/gameplay3d/GamePlay/wiki/CMake Setup - Linux)
+- [MacOSX](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup)
+- [iOS](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup)
+- [Android](https://github.com/gameplay3d/GamePlay/wiki/Android-NDK-Setup)
 
 ## Roadmap for 'next' branch
-- [3.5.0](https://github.com/blackberry/GamePlay/milestones/3.5.0)
-- [backlog](https://github.com/blackberry/GamePlay/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
+- [3.5.0](https://github.com/gameplay3d/GamePlay/milestones/3.5.0)
+- [backlog](https://github.com/gameplay3d/GamePlay/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 ## License
-The project is open sourced under the [Apache 2.0 license](http://www.tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29).
+Open-source under [Apache 2.0 license](http://www.tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29).
 
 ## Bug Reporting
-Please log bugs under [Issues](https://github.com/blackberry/GamePlay/issues) on github.
+Please log bugs under [Issues](https://github.com/gameplay3d/GamePlay/issues) on github.
 If you are unsure if your problem is a bug then post on the [Help Forum](http://www.gameplay3d.org/forums/viewforum.php?f=3).
 
 ## Feature Requests
