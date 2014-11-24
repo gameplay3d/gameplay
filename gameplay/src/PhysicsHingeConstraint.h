@@ -14,7 +14,7 @@ namespace gameplay
  * (or one rigid body and the world) where movement is
  * restricted to rotation about one axis.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
  */
 class PhysicsHingeConstraint : public PhysicsConstraint
 {

@@ -13,7 +13,7 @@ namespace gameplay
  * between two rigid bodies (or one rigid body and the world)
  * where rotation is unrestricted about the constraint joint (pivot point).
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
  */
 class PhysicsSocketConstraint : public PhysicsConstraint
 {
