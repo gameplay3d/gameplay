@@ -14,7 +14,7 @@ namespace gameplay
  * It is a collision volume that does not participate in the physics
  * simulation but can be used the test against other phyics collision objects.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsGhostObject : public PhysicsCollisionObject, public Transform::Listener
 {
