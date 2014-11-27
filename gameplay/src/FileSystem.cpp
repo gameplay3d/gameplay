@@ -87,6 +87,7 @@ static bool androidFileExists(const char* filePath)
 
 /** @script{ignore} */
 static std::string __resourcePath("./");
+static std::string __assetPath("");
 static std::map<std::string, std::string> __aliases;
 
 /**
@@ -343,14 +344,18 @@ bool FileSystem::fileExists(const char* filePath)
 {
     GP_ASSERT(filePath);
 
+    std::string fullPath;
+
 #ifdef __ANDROID__
-    if (androidFileExists(resolvePath(filePath)))
+    fullPath = __assetPath;
+    fullPath += resolvePath(filePath);
+
+    if (androidFileExists(fullPath.c_str()))
     {
         return true;
     }
 #endif
 
-    std::string fullPath;
     getFullPath(filePath, fullPath);
 
     gp_stat_struct s;
@@ -388,7 +393,10 @@ Stream* FileSystem::open(const char* path, size_t streamMode)
         if (!stream)
         {
             // Otherwise fall-back to assets loaded via the AssetManager
-            stream = FileStreamAndroid::create(resolvePath(path), modeStr);
+            fullPath = __assetPath;
+            fullPath += resolvePath(path);
+
+            stream = FileStreamAndroid::create(fullPath.c_str(), modeStr);
         }
 
         return stream;
@@ -462,6 +470,16 @@ bool FileSystem::isAbsolutePath(const char* filePath)
 #else
     return filePath[0] == '/';
 #endif
+}
+
+void FileSystem::setAssetPath(const char* path)
+{
+    __assetPath = path;
+}
+
+const char* FileSystem::getAssetPath()
+{
+    return __assetPath.c_str();
 }
 
 void FileSystem::createFileFromAsset(const char* path)
