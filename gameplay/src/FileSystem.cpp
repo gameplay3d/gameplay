@@ -364,17 +364,17 @@ Stream* FileSystem::open(const char* path, size_t streamMode)
     if ((streamMode & WRITE) != 0)
         modeStr[0] = 'w';
 #ifdef __ANDROID__
+    std::string fullPath(__resourcePath);
+    fullPath += resolvePath(path);
+
     if ((streamMode & WRITE) != 0)
     {
         // Open a file on the SD card
-        std::string fullPath(__resourcePath);
-        fullPath += resolvePath(path);
-
         size_t index = fullPath.rfind('/');
         if (index != std::string::npos)
         {
             std::string directoryPath = fullPath.substr(0, index);
-            struct stat s;
+            gp_stat_struct s;
             if (stat(directoryPath.c_str(), &s) != 0)
                 makepath(directoryPath, 0777);
         }
@@ -382,8 +382,16 @@ Stream* FileSystem::open(const char* path, size_t streamMode)
     }
     else
     {
-        // Open a file in the read-only asset directory
-        return FileStreamAndroid::create(resolvePath(path), modeStr);
+        // First try the SD card
+        Stream* stream = FileStream::create(fullPath.c_str(), modeStr);
+
+        if (!stream)
+        {
+            // Otherwise fall-back to assets loaded via the AssetManager
+            stream = FileStreamAndroid::create(resolvePath(path), modeStr);
+        }
+
+        return stream;
     }
 #else
     std::string fullPath;
