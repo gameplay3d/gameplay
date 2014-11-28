@@ -31,7 +31,7 @@
 #include "lua_MeshPrimitiveType.h"
 #include "lua_MouseMouseEvent.h"
 #include "lua_NodeType.h"
-#include "lua_ParticleEmitterTextureBlending.h"
+#include "lua_ParticleEmitterBlendMode.h"
 #include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"
 #include "lua_PhysicsCollisionObjectType.h"
 #include "lua_PhysicsCollisionShapeType.h"

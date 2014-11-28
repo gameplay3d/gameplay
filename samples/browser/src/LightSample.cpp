@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Light", LightSample, 11);
+    ADD_SAMPLE("Graphics", "Light", LightSample, 8);
 #endif
 
 LightSample::LightSample()

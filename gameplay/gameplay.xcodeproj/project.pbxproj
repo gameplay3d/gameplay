@@ -195,8 +195,8 @@
 		420BBD831817416F00C7B720 /* lua_NodeType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB5E1817416E00C7B720 /* lua_NodeType.cpp */; };
 		420BBD861817416F00C7B720 /* lua_ParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB601817416E00C7B720 /* lua_ParticleEmitter.cpp */; };
 		420BBD871817416F00C7B720 /* lua_ParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB601817416E00C7B720 /* lua_ParticleEmitter.cpp */; };
-		420BBD8A1817416F00C7B720 /* lua_ParticleEmitterTextureBlending.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB621817416E00C7B720 /* lua_ParticleEmitterTextureBlending.cpp */; };
-		420BBD8B1817416F00C7B720 /* lua_ParticleEmitterTextureBlending.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB621817416E00C7B720 /* lua_ParticleEmitterTextureBlending.cpp */; };
+		420BBD8A1817416F00C7B720 /* lua_ParticleEmitterBlendMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB621817416E00C7B720 /* lua_ParticleEmitterBlendMode.cpp */; };
+		420BBD8B1817416F00C7B720 /* lua_ParticleEmitterBlendMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB621817416E00C7B720 /* lua_ParticleEmitterBlendMode.cpp */; };
 		420BBD8E1817416F00C7B720 /* lua_Pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB641817416E00C7B720 /* lua_Pass.cpp */; };
 		420BBD8F1817416F00C7B720 /* lua_Pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB641817416E00C7B720 /* lua_Pass.cpp */; };
 		420BBD921817416F00C7B720 /* lua_PhysicsCharacter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB661817416E00C7B720 /* lua_PhysicsCharacter.cpp */; };
@@ -789,8 +789,8 @@
 		420BBB5F1817416E00C7B720 /* lua_NodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_NodeType.h; sourceTree = "<group>"; };
 		420BBB601817416E00C7B720 /* lua_ParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_ParticleEmitter.cpp; sourceTree = "<group>"; };
 		420BBB611817416E00C7B720 /* lua_ParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_ParticleEmitter.h; sourceTree = "<group>"; };
-		420BBB621817416E00C7B720 /* lua_ParticleEmitterTextureBlending.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_ParticleEmitterTextureBlending.cpp; sourceTree = "<group>"; };
-		420BBB631817416E00C7B720 /* lua_ParticleEmitterTextureBlending.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_ParticleEmitterTextureBlending.h; sourceTree = "<group>"; };
+		420BBB621817416E00C7B720 /* lua_ParticleEmitterBlendMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_ParticleEmitterBlendMode.cpp; sourceTree = "<group>"; };
+		420BBB631817416E00C7B720 /* lua_ParticleEmitterBlendMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_ParticleEmitterBlendMode.h; sourceTree = "<group>"; };
 		420BBB641817416E00C7B720 /* lua_Pass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Pass.cpp; sourceTree = "<group>"; };
 		420BBB651817416E00C7B720 /* lua_Pass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Pass.h; sourceTree = "<group>"; };
 		420BBB661817416E00C7B720 /* lua_PhysicsCharacter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_PhysicsCharacter.cpp; sourceTree = "<group>"; };
@@ -1461,8 +1461,8 @@
 				420BBB5F1817416E00C7B720 /* lua_NodeType.h */,
 				420BBB601817416E00C7B720 /* lua_ParticleEmitter.cpp */,
 				420BBB611817416E00C7B720 /* lua_ParticleEmitter.h */,
-				420BBB621817416E00C7B720 /* lua_ParticleEmitterTextureBlending.cpp */,
-				420BBB631817416E00C7B720 /* lua_ParticleEmitterTextureBlending.h */,
+				420BBB621817416E00C7B720 /* lua_ParticleEmitterBlendMode.cpp */,
+				420BBB631817416E00C7B720 /* lua_ParticleEmitterBlendMode.h */,
 				420BBB641817416E00C7B720 /* lua_Pass.cpp */,
 				420BBB651817416E00C7B720 /* lua_Pass.h */,
 				420BBB661817416E00C7B720 /* lua_PhysicsCharacter.cpp */,
@@ -2221,7 +2221,7 @@
 				420BBED61817416F00C7B720 /* lua_VerticalLayout.cpp in Sources */,
 				42CC55CE1809A4EF00AAD8AD /* DebugNew.cpp in Sources */,
 				420BBE7A1817416F00C7B720 /* lua_TextBoxInputMode.cpp in Sources */,
-				420BBD8A1817416F00C7B720 /* lua_ParticleEmitterTextureBlending.cpp in Sources */,
+				420BBD8A1817416F00C7B720 /* lua_ParticleEmitterBlendMode.cpp in Sources */,
 				420BBDEA1817416F00C7B720 /* lua_PhysicsSpringConstraint.cpp in Sources */,
 				42CC59141809A4EF00AAD8AD /* MeshBatch.cpp in Sources */,
 				42CC55701809A4EF00AAD8AD /* AIAgent.cpp in Sources */,
@@ -2518,7 +2518,7 @@
 				420BBED71817416F00C7B720 /* lua_VerticalLayout.cpp in Sources */,
 				42CC55CF1809A4EF00AAD8AD /* DebugNew.cpp in Sources */,
 				420BBE7B1817416F00C7B720 /* lua_TextBoxInputMode.cpp in Sources */,
-				420BBD8B1817416F00C7B720 /* lua_ParticleEmitterTextureBlending.cpp in Sources */,
+				420BBD8B1817416F00C7B720 /* lua_ParticleEmitterBlendMode.cpp in Sources */,
 				420BBDEB1817416F00C7B720 /* lua_PhysicsSpringConstraint.cpp in Sources */,
 				42CC59151809A4EF00AAD8AD /* MeshBatch.cpp in Sources */,
 				42CC55711809A4EF00AAD8AD /* AIAgent.cpp in Sources */,

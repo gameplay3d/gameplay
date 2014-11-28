@@ -1,7 +1,7 @@
 #include "FormsSample.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Forms", FormsSample, 10);
+    ADD_SAMPLE("Graphics", "Forms", FormsSample, 7);
 #endif
 
 // Input bit-flags

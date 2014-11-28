@@ -682,12 +682,12 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("JOINT", "JOINT", scopePath);
     }
 
-    // Register enumeration ParticleEmitter::TextureBlending.
+    // Register enumeration ParticleEmitter::BlendMode.
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("ParticleEmitter");
-        gameplay::ScriptUtil::registerConstantString("BLEND_OPAQUE", "BLEND_OPAQUE", scopePath);
-        gameplay::ScriptUtil::registerConstantString("BLEND_TRANSPARENT", "BLEND_TRANSPARENT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("BLEND_NONE", "BLEND_NONE", scopePath);
+        gameplay::ScriptUtil::registerConstantString("BLEND_ALPHA", "BLEND_ALPHA", scopePath);
         gameplay::ScriptUtil::registerConstantString("BLEND_ADDITIVE", "BLEND_ADDITIVE", scopePath);
         gameplay::ScriptUtil::registerConstantString("BLEND_MULTIPLIED", "BLEND_MULTIPLIED", scopePath);
     }
@@ -1047,8 +1047,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_MouseMouseEvent((Mouse::MouseEvent)value);
     if (enumname == "Node::Type")
         return lua_stringFromEnum_NodeType((Node::Type)value);
-    if (enumname == "ParticleEmitter::TextureBlending")
-        return lua_stringFromEnum_ParticleEmitterTextureBlending((ParticleEmitter::TextureBlending)value);
+    if (enumname == "ParticleEmitter::BlendMode")
+        return lua_stringFromEnum_ParticleEmitterBlendMode((ParticleEmitter::BlendMode)value);
     if (enumname == "PhysicsCollisionObject::CollisionListener::EventType")
         return lua_stringFromEnum_PhysicsCollisionObjectCollisionListenerEventType((PhysicsCollisionObject::CollisionListener::EventType)value);
     if (enumname == "PhysicsCollisionObject::Type")

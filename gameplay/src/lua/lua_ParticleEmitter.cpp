@@ -9,7 +9,7 @@
 #include "Quaternion.h"
 #include "Ref.h"
 #include "Scene.h"
-#include "lua_ParticleEmitterTextureBlending.h"
+#include "lua_ParticleEmitterBlendMode.h"
 
 namespace gameplay
 {
@@ -56,7 +56,7 @@ void luaRegister_ParticleEmitter()
         {"getSpriteHeight", lua_ParticleEmitter_getSpriteHeight},
         {"getSpriteWidth", lua_ParticleEmitter_getSpriteWidth},
         {"getTexture", lua_ParticleEmitter_getTexture},
-        {"getTextureBlending", lua_ParticleEmitter_getTextureBlending},
+        {"getBlendMode", lua_ParticleEmitter_getBlendMode},
         {"getVelocity", lua_ParticleEmitter_getVelocity},
         {"getVelocityVariance", lua_ParticleEmitter_getVelocityVariance},
         {"isActive", lua_ParticleEmitter_isActive},
@@ -83,7 +83,7 @@ void luaRegister_ParticleEmitter()
         {"setSpriteLooped", lua_ParticleEmitter_setSpriteLooped},
         {"setSpriteTexCoords", lua_ParticleEmitter_setSpriteTexCoords},
         {"setTexture", lua_ParticleEmitter_setTexture},
-        {"setTextureBlending", lua_ParticleEmitter_setTextureBlending},
+        {"setBlendMode", lua_ParticleEmitter_setBlendMode},
         {"setVelocity", lua_ParticleEmitter_setVelocity},
         {"start", lua_ParticleEmitter_start},
         {"stop", lua_ParticleEmitter_stop},
@@ -93,7 +93,7 @@ void luaRegister_ParticleEmitter()
     const luaL_Reg lua_statics[] = 
     {
         {"create", lua_ParticleEmitter_static_create},
-        {"getTextureBlendingFromString", lua_ParticleEmitter_static_getTextureBlendingFromString},
+        {"getBlendModeFromString", lua_ParticleEmitter_static_getBlendModeFromString},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -1591,7 +1591,7 @@ int lua_ParticleEmitter_getTexture(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getTextureBlending(lua_State* state)
+int lua_ParticleEmitter_getBlendMode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1604,15 +1604,15 @@ int lua_ParticleEmitter_getTextureBlending(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
-                ParticleEmitter::TextureBlending result = instance->getTextureBlending();
+                ParticleEmitter::BlendMode result = instance->getBlendMode();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ParticleEmitterTextureBlending(result));
+                lua_pushstring(state, lua_stringFromEnum_ParticleEmitterBlendMode(result));
 
                 return 1;
             }
 
-            lua_pushstring(state, "lua_ParticleEmitter_getTextureBlending - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_ParticleEmitter_getBlendMode - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -2716,7 +2716,7 @@ int lua_ParticleEmitter_setTexture(lua_State* state)
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
-                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 3));
+                    ParticleEmitter::BlendMode param2 = (ParticleEmitter::BlendMode)lua_enumFromString_ParticleEmitterBlendMode(luaL_checkstring(state, 3));
 
                     ParticleEmitter* instance = getInstance(state);
                     instance->setTexture(param1, param2);
@@ -2738,7 +2738,7 @@ int lua_ParticleEmitter_setTexture(lua_State* state)
                         break;
 
                     // Get parameter 2 off the stack.
-                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 3));
+                    ParticleEmitter::BlendMode param2 = (ParticleEmitter::BlendMode)lua_enumFromString_ParticleEmitterBlendMode(luaL_checkstring(state, 3));
 
                     ParticleEmitter* instance = getInstance(state);
                     instance->setTexture(param1, param2);
@@ -2761,7 +2761,7 @@ int lua_ParticleEmitter_setTexture(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setTextureBlending(lua_State* state)
+int lua_ParticleEmitter_setBlendMode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2775,15 +2775,15 @@ int lua_ParticleEmitter_setTextureBlending(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ParticleEmitter::TextureBlending param1 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 2));
+                ParticleEmitter::BlendMode param1 = (ParticleEmitter::BlendMode)lua_enumFromString_ParticleEmitterBlendMode(luaL_checkstring(state, 2));
 
                 ParticleEmitter* instance = getInstance(state);
-                instance->setTextureBlending(param1);
+                instance->setBlendMode(param1);
                 
                 return 0;
             }
 
-            lua_pushstring(state, "lua_ParticleEmitter_setTextureBlending - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_ParticleEmitter_setBlendMode - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -2960,7 +2960,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
                     const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     // Get parameter 2 off the stack.
-                    ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 2));
+                    ParticleEmitter::BlendMode param2 = (ParticleEmitter::BlendMode)lua_enumFromString_ParticleEmitterBlendMode(luaL_checkstring(state, 2));
 
                     // Get parameter 3 off the stack.
                     unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
@@ -2997,7 +2997,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_static_getTextureBlendingFromString(lua_State* state)
+int lua_ParticleEmitter_static_getBlendModeFromString(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3012,15 +3012,15 @@ int lua_ParticleEmitter_static_getTextureBlendingFromString(lua_State* state)
                 // Get parameter 1 off the stack.
                 const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
-                ParticleEmitter::TextureBlending result = ParticleEmitter::getTextureBlendingFromString(param1);
+                ParticleEmitter::BlendMode result = ParticleEmitter::getBlendModeFromString(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ParticleEmitterTextureBlending(result));
+                lua_pushstring(state, lua_stringFromEnum_ParticleEmitterBlendMode(result));
 
                 return 1;
             }
 
-            lua_pushstring(state, "lua_ParticleEmitter_static_getTextureBlendingFromString - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_ParticleEmitter_static_getBlendModeFromString - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
