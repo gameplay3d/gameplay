@@ -234,7 +234,7 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/lua/lua_NodeCloneContext.cpp \
     src/lua/lua_NodeType.cpp \
     src/lua/lua_ParticleEmitter.cpp \
-    src/lua/lua_ParticleEmitterTextureBlending.cpp \
+    src/lua/lua_ParticleEmitterBlendMode.cpp \
     src/lua/lua_Pass.cpp \
     src/lua/lua_PhysicsCharacter.cpp \
     src/lua/lua_PhysicsCollisionObject.cpp \

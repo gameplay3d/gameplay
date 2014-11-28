@@ -100,6 +100,7 @@ LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp \
     LoadSceneSample.cpp \
     MeshBatchSample.cpp \
     MeshPrimitiveSample.cpp \
+	ParticlesSample.cpp \
     PhysicsCollisionObjectSample.cpp \
     PostProcessSample.cpp \
     SpriteBatchSample.cpp \

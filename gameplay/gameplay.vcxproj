@@ -158,7 +158,7 @@
     <ClCompile Include="src\lua\lua_NodeCloneContext.cpp" />
     <ClCompile Include="src\lua\lua_NodeType.cpp" />
     <ClCompile Include="src\lua\lua_ParticleEmitter.cpp" />
-    <ClCompile Include="src\lua\lua_ParticleEmitterTextureBlending.cpp" />
+    <ClCompile Include="src\lua\lua_ParticleEmitterBlendMode.cpp" />
     <ClCompile Include="src\lua\lua_Pass.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsCharacter.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsCollisionObject.cpp" />
@@ -448,7 +448,7 @@
     <ClInclude Include="src\lua\lua_NodeCloneContext.h" />
     <ClInclude Include="src\lua\lua_NodeType.h" />
     <ClInclude Include="src\lua\lua_ParticleEmitter.h" />
-    <ClInclude Include="src\lua\lua_ParticleEmitterTextureBlending.h" />
+    <ClInclude Include="src\lua\lua_ParticleEmitterBlendMode.h" />
     <ClInclude Include="src\lua\lua_Pass.h" />
     <ClInclude Include="src\lua\lua_PhysicsCharacter.h" />
     <ClInclude Include="src\lua\lua_PhysicsCollisionObject.h" />

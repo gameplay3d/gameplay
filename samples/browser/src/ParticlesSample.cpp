@@ -883,13 +883,13 @@ bool ParticlesSample::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelD
             Vector3 n(-(float)x * PANNING_SENSITIVITY, (float)y * PANNING_SENSITIVITY, 0);
             _cameraParent->getMatrix().transformVector(&n);
             _cameraParent->translate(n);
-            return false;
+            return true;
         }
         else if (_rotating)
         {
             _cameraParent->rotateY(-MATH_DEG_TO_RAD((float)x * ROTATE_SENSITIVITY));
             _cameraParent->rotateX(-MATH_DEG_TO_RAD((float)y * ROTATE_SENSITIVITY));
-            return false;
+            return true;
         }
         else if (_zooming)
         {
@@ -897,7 +897,7 @@ bool ParticlesSample::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelD
             v.normalize();
             v.scale((float)(x-y) * INPUT_SENSITIVITY);
             _scene->getActiveCamera()->getNode()->translate(v);
-            return false;
+            return true;
         }
         break;
 
@@ -908,12 +908,12 @@ bool ParticlesSample::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelD
             v.normalize();
             v.scale((float)(wheelDelta));
             _scene->getActiveCamera()->getNode()->translate(v);
-            return false;
+            return true;
         }
         break;
     }
 
-    return false;
+    return true;
 }
 
 void ParticlesSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)

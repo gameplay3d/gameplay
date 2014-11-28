@@ -204,6 +204,12 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="res\common\light.form" />
     <None Include="res\common\light.material" />
     <None Include="res\common\lightBrickWall.gpb" />
+    <None Include="res\common\particles\editor.form" />
+    <None Include="res\common\particles\editor.theme" />
+    <None Include="res\common\particles\explosion.particle" />
+    <None Include="res\common\particles\fire.particle" />
+    <None Include="res\common\particles\grid.material" />
+    <None Include="res\common\particles\smoke.particle" />
     <None Include="res\common\physics.form" />
     <None Include="res\common\physics.gpb" />
     <None Include="res\common\physics.material" />
@@ -233,6 +239,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="res\common\terrain\terrain.form" />
     <None Include="res\common\terrain\terrain.material" />
     <None Include="res\common\text.form" />
+    <None Include="res\common\water\pond.gpb" />
+    <None Include="res\common\water\watersample.frag" />
+    <None Include="res\common\water\watersample.material" />
+    <None Include="res\common\water\watersample.scene" />
+    <None Include="res\common\water\watersample.vert" />
     <None Include="res\shaders\colored.frag" />
     <None Include="res\shaders\colored.vert" />
     <None Include="res\shaders\font.frag" />
@@ -258,6 +269,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <ClCompile Include="src\GamepadSample.cpp" />
     <ClCompile Include="src\GestureSample.cpp" />
     <ClCompile Include="src\LightSample.cpp" />
+    <ClCompile Include="src\ParticlesSample.cpp" />
     <ClCompile Include="src\PostProcessSample.cpp" />
     <ClCompile Include="src\TerrainSample.cpp" />
     <ClCompile Include="src\TriangleSample.cpp" />
@@ -283,6 +295,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <ClInclude Include="src\GamepadSample.h" />
     <ClInclude Include="src\GestureSample.h" />
     <ClInclude Include="src\LightSample.h" />
+    <ClInclude Include="src\ParticlesSample.h" />
     <ClInclude Include="src\PostProcessSample.h" />
     <ClInclude Include="src\TerrainSample.h" />
     <ClInclude Include="src\TriangleSample.h" />
@@ -301,11 +314,17 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <ClInclude Include="src\WaterSample.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\common\particles\editor.png" />
+    <Image Include="res\common\particles\explosion.png" />
+    <Image Include="res\common\particles\fire.png" />
+    <Image Include="res\common\particles\smoke.png" />
     <Image Include="res\common\terrain\dirt.dds" />
     <Image Include="res\common\terrain\grass.dds" />
     <Image Include="res\common\terrain\normalmap.dds" />
     <Image Include="res\common\terrain\rock.dds" />
     <Image Include="res\common\terrain\sky.dds" />
+    <Image Include="res\common\water\water_normal.png" />
+    <Image Include="res\common\water\water_sample.png" />
     <Image Include="res\logo_powered_white.png" />
     <Image Include="res\png\brick.png" />
     <Image Include="res\png\brickn.png" />

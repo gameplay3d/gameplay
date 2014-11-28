@@ -27,6 +27,8 @@ set(GAME_SRC
     src/MeshBatchSample.h
     src/MeshPrimitiveSample.cpp
     src/MeshPrimitiveSample.h
+    src/ParticlesSample.cpp
+    src/ParticlesSample.h
     src/PhysicsCollisionObjectSample.cpp
     src/PhysicsCollisionObjectSample.h
     src/PostProcessSample.cpp

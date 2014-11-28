@@ -276,7 +276,7 @@ LOCAL_SRC_FILES := \
     lua/lua_NodeCloneContext.cpp \
     lua/lua_NodeType.cpp \
     lua/lua_ParticleEmitter.cpp \
-    lua/lua_ParticleEmitterTextureBlending.cpp \
+    lua/lua_ParticleEmitterBlendMode.cpp \
     lua/lua_Pass.cpp \
     lua/lua_PhysicsCharacter.cpp \
     lua/lua_PhysicsCollisionObject.cpp \
