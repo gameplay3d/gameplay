@@ -28,7 +28,7 @@ class Terrain;
  * Model, Camera, Light, PhysicsCollisionObject, AudioSource, ParticleEmitter and
  * Form components.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Node
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Node
  */
 class Node : public Transform, public Ref
 {
@@ -187,25 +187,25 @@ public:
     void setUserPointer(void* pointer, void (*cleanupCallback)(void*) = NULL);
 
     /**
-     * Sets if the node is active in the scene.
+     * Sets if the node is enabled in the scene.
      *
-     * @param active if the node is active in the scene.
+     * @param enabled if the node is enabled in the scene.
      */
-    void setActive(bool active);
+    void setEnabled(bool enabled);
 
     /**
-     * Gets if the node is active in the scene.
+     * Gets if the node is enabled in the scene.
      *
-     * @return if the node is active in the scene.
+     * @return if the node is enabled in the scene.
      */
-    bool isActive() const;
+    bool isEnabled() const;
 
     /**
-     * Gets if the node  either inherited active.
+     * Gets if the node either inherently enabled.
      *
-     * @return if visual components attached on this node should be drawn.
+     * @return if components attached on this node should be running.
      */
-    bool isActiveInHierarchy() const;
+    bool isEnabledInHierarchy() const;
 
     /**
      * Returns the number of direct children of this item.
@@ -771,9 +771,9 @@ protected:
     unsigned int _childCount;
 
     /**
-     * If this node is active in the scrne. This may not be active in hierarchy if its parents are not active.
+     * If this node is enabled in the scene. This may not be enabled in hierarchy if its parents are not enabled.
      */
-    bool _active;
+    bool _enabled;
 
     /**
      * List of custom tags for a node.

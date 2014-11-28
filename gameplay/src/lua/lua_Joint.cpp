@@ -101,8 +101,8 @@ void luaRegister_Joint()
         {"getWorldViewMatrix", lua_Joint_getWorldViewMatrix},
         {"getWorldViewProjectionMatrix", lua_Joint_getWorldViewProjectionMatrix},
         {"hasTag", lua_Joint_hasTag},
-        {"isActive", lua_Joint_isActive},
-        {"isActiveInHierarchy", lua_Joint_isActiveInHierarchy},
+        {"isEnabled", lua_Joint_isEnabled},
+        {"isEnabledInHierarchy", lua_Joint_isEnabledInHierarchy},
         {"isStatic", lua_Joint_isStatic},
         {"release", lua_Joint_release},
         {"removeAllChildren", lua_Joint_removeAllChildren},
@@ -118,12 +118,12 @@ void luaRegister_Joint()
         {"scaleY", lua_Joint_scaleY},
         {"scaleZ", lua_Joint_scaleZ},
         {"set", lua_Joint_set},
-        {"setActive", lua_Joint_setActive},
         {"setAgent", lua_Joint_setAgent},
         {"setAnimationPropertyValue", lua_Joint_setAnimationPropertyValue},
         {"setAudioSource", lua_Joint_setAudioSource},
         {"setCamera", lua_Joint_setCamera},
         {"setCollisionObject", lua_Joint_setCollisionObject},
+        {"setEnabled", lua_Joint_setEnabled},
         {"setForm", lua_Joint_setForm},
         {"setId", lua_Joint_setId},
         {"setIdentity", lua_Joint_setIdentity},
@@ -3810,7 +3810,7 @@ int lua_Joint_hasTag(lua_State* state)
     return 0;
 }
 
-int lua_Joint_isActive(lua_State* state)
+int lua_Joint_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3823,7 +3823,7 @@ int lua_Joint_isActive(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Joint* instance = getInstance(state);
-                bool result = instance->isActive();
+                bool result = instance->isEnabled();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -3831,7 +3831,7 @@ int lua_Joint_isActive(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_Joint_isActive - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Joint_isEnabled - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3845,7 +3845,7 @@ int lua_Joint_isActive(lua_State* state)
     return 0;
 }
 
-int lua_Joint_isActiveInHierarchy(lua_State* state)
+int lua_Joint_isEnabledInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3858,7 +3858,7 @@ int lua_Joint_isActiveInHierarchy(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Joint* instance = getInstance(state);
-                bool result = instance->isActiveInHierarchy();
+                bool result = instance->isEnabledInHierarchy();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -3866,7 +3866,7 @@ int lua_Joint_isActiveInHierarchy(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_Joint_isActiveInHierarchy - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Joint_isEnabledInHierarchy - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4680,42 +4680,6 @@ int lua_Joint_set(lua_State* state)
     return 0;
 }
 
-int lua_Joint_setActive(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
-            {
-                // Get parameter 1 off the stack.
-                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
-
-                Joint* instance = getInstance(state);
-                instance->setActive(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Joint_setActive - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Joint_setAgent(lua_State* state)
 {
     // Get the number of parameters.
@@ -5214,6 +5178,42 @@ int lua_Joint_setCollisionObject(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2, 3, 4, 5 or 6).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_setEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                Joint* instance = getInstance(state);
+                instance->setEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Joint_setEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

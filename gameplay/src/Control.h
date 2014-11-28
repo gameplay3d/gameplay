@@ -21,7 +21,7 @@ class Form;
 /**
  * Defines the base class for all controls.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Control : public Ref, public AnimationTarget, public ScriptTarget
 {

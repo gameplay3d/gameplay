@@ -99,8 +99,8 @@ void luaRegister_Node()
         {"getWorldViewMatrix", lua_Node_getWorldViewMatrix},
         {"getWorldViewProjectionMatrix", lua_Node_getWorldViewProjectionMatrix},
         {"hasTag", lua_Node_hasTag},
-        {"isActive", lua_Node_isActive},
-        {"isActiveInHierarchy", lua_Node_isActiveInHierarchy},
+        {"isEnabled", lua_Node_isEnabled},
+        {"isEnabledInHierarchy", lua_Node_isEnabledInHierarchy},
         {"isStatic", lua_Node_isStatic},
         {"release", lua_Node_release},
         {"removeAllChildren", lua_Node_removeAllChildren},
@@ -116,12 +116,12 @@ void luaRegister_Node()
         {"scaleY", lua_Node_scaleY},
         {"scaleZ", lua_Node_scaleZ},
         {"set", lua_Node_set},
-        {"setActive", lua_Node_setActive},
         {"setAgent", lua_Node_setAgent},
         {"setAnimationPropertyValue", lua_Node_setAnimationPropertyValue},
         {"setAudioSource", lua_Node_setAudioSource},
         {"setCamera", lua_Node_setCamera},
         {"setCollisionObject", lua_Node_setCollisionObject},
+        {"setEnabled", lua_Node_setEnabled},
         {"setForm", lua_Node_setForm},
         {"setId", lua_Node_setId},
         {"setIdentity", lua_Node_setIdentity},
@@ -3765,7 +3765,7 @@ int lua_Node_hasTag(lua_State* state)
     return 0;
 }
 
-int lua_Node_isActive(lua_State* state)
+int lua_Node_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3778,7 +3778,7 @@ int lua_Node_isActive(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Node* instance = getInstance(state);
-                bool result = instance->isActive();
+                bool result = instance->isEnabled();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -3786,7 +3786,7 @@ int lua_Node_isActive(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_Node_isActive - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Node_isEnabled - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3800,7 +3800,7 @@ int lua_Node_isActive(lua_State* state)
     return 0;
 }
 
-int lua_Node_isActiveInHierarchy(lua_State* state)
+int lua_Node_isEnabledInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3813,7 +3813,7 @@ int lua_Node_isActiveInHierarchy(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Node* instance = getInstance(state);
-                bool result = instance->isActiveInHierarchy();
+                bool result = instance->isEnabledInHierarchy();
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -3821,7 +3821,7 @@ int lua_Node_isActiveInHierarchy(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_Node_isActiveInHierarchy - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_Node_isEnabledInHierarchy - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4635,42 +4635,6 @@ int lua_Node_set(lua_State* state)
     return 0;
 }
 
-int lua_Node_setActive(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
-            {
-                // Get parameter 1 off the stack.
-                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
-
-                Node* instance = getInstance(state);
-                instance->setActive(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Node_setActive - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Node_setAgent(lua_State* state)
 {
     // Get the number of parameters.
@@ -5169,6 +5133,42 @@ int lua_Node_setCollisionObject(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2, 3, 4, 5 or 6).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Node_setEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                Node* instance = getInstance(state);
+                instance->setEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Node_setEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
