@@ -1,3 +1,7 @@
+ifdef GAMEPLAY_STATIC
+LOCAL_PATH := $(call my-dir)/../../src
+include $(CLEAR_VARS)
+else
 GAMEPLAY_PATH := $(call my-dir)/../../src
 
 # external-deps
@@ -75,6 +79,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 # libgameplay
 include $(CLEAR_VARS)
 LOCAL_PATH := $(GAMEPLAY_PATH)
+endif
 LOCAL_MODULE    := libgameplay
 LOCAL_SRC_FILES := \
     AbsoluteLayout.cpp \
@@ -362,11 +367,20 @@ LOCAL_SRC_FILES := \
 
 LOCAL_CPPFLAGS += -std=c++11 -Wno-switch-enum -Wno-switch
 LOCAL_ARM_MODE := arm
-LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
+
 LOCAL_CFLAGS := -D__ANDROID__ -I"../../external-deps/lua/include" -I"../../external-deps/bullet/include" -I"../../external-deps/png/include" -I"../../external-deps/ogg/include" -I"../../external-deps/vorbis/include" -I"../../external-deps/openal/include"
+
+ifdef GAMEPLAY_STATIC
+LOCAL_STATIC_LIBRARIES := android_native_app_glue
+#These tweaks reduce generated binary size
+LOCAL_CPPFLAGS += -ffunction-sections -fdata-sections -fvisibility=hidden
+include $(BUILD_STATIC_LIBRARY)
+else
+LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_ADDITIONAL_DEPENDENCIES := gameplay
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng libz liblua libBulletDynamics libBulletCollision libLinearMath libvorbis libogg libOpenAL
 include $(BUILD_SHARED_LIBRARY)
+endif
 
 $(call import-module,android/native_app_glue)
 
