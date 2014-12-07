@@ -12,6 +12,7 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import java.lang.UnsatisfiedLinkError;
 
 /**
  * GamePlay native activity extension for Android platform.
@@ -24,13 +25,17 @@ import android.view.View;
  */
 public class GamePlayNativeActivity extends NativeActivity
     implements InputManager.InputDeviceListener {
-    
-    static {
-        System.loadLibrary("gameplay");
-    }
-    
+
     private static final String TAG = "GamePlayNativeActivity";
-    
+
+    static {
+        try {
+            System.loadLibrary("gameplay");
+        } catch (UnsatisfiedLinkError e) {
+            Log.w(TAG, "Cannot find libgameplay.so, assuming it's statically linked.");
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
