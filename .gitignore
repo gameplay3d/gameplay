@@ -32,6 +32,9 @@ Thumbs.db
 /api/html
 /gameplay-tests
 gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
+DerivedData/
+*.xccheckout/
+xcuserdata/
 
 /gameplay/Debug
 /gameplay/DebugMem

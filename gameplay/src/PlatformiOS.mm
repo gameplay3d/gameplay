@@ -22,9 +22,6 @@
                                       ([x isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"]?UIInterfaceOrientationPortraitUpsideDown:    \
                                       ([x isEqualToString:@"UIInterfaceOrientationLandscapeLeft"]?UIInterfaceOrientationLandscapeLeft:              \
                                         UIInterfaceOrientationLandscapeRight)))
-#define DeviceOrientedSize(o)         ((o == UIInterfaceOrientationPortrait || o == UIInterfaceOrientationPortraitUpsideDown)?                      \
-                                            CGSizeMake([[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale], [[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale]):  \
-                                            CGSizeMake([[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale], [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale]))
 
 using namespace std;
 using namespace gameplay;
@@ -83,6 +80,9 @@ double getMachTimeInMilliseconds();
 
 int getKey(unichar keyCode);
 int getUnicode(int key);
+
+bool CheckDeviceVersion(float fVersion);
+CGSize DeviceOrientedSize(int type);
 
 @interface View : UIView <UIKeyInput>
 {
@@ -1454,6 +1454,35 @@ int getUnicode(int key)
             return key;
         default:
             return 0;
+    }
+}
+
+/// original device orient code is below
+//#define DeviceOrientedSize(o)         ((o == UIInterfaceOrientationPortrait || o == UIInterfaceOrientationPortraitUpsideDown)?                      \
+//                                            CGSizeMake([[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale], [[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale]):  \
+//                                            CGSizeMake([[UIScreen mainScreen] bounds].size.height * [[UIScreen mainScreen] scale], [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale]))
+//
+// but in latest iOS, UIViewController's `interfaceOrientation` had been deprecated from 8.0, so here is a new solution about that.
+bool CheckDeviceVersion(float fVersion)
+{
+    return [UIDevice currentDevice].systemVersion.floatValue >= fVersion;
+}
+
+CGSize DeviceOrientedSize(int type)
+{
+    const CGFloat scrScale = [UIScreen mainScreen].scale;
+    const CGFloat scrWidth = [UIScreen mainScreen].bounds.size.width * scrScale;
+    const CGFloat scrHeight = [UIScreen mainScreen].bounds.size.height * scrScale;
+    
+    if ([UIDevice currentDevice].systemVersion.floatValue < 8.0) {
+        /// iOS version < 8.0
+        UIInterfaceOrientation o = (UIInterfaceOrientation)type;
+        return (UIInterfaceOrientationIsPortrait(o) ? CGSizeMake(scrHeight, scrWidth) : CGSizeMake(scrWidth, scrHeight));
+    }
+    else {
+        /// iOS version >= 8.0
+        UIDeviceOrientation o = (UIDeviceOrientation)type;
+        return (UIDeviceOrientationIsPortrait(o) ? CGSizeMake(scrHeight, scrWidth) : CGSizeMake(scrWidth, scrHeight));
     }
 }
 
