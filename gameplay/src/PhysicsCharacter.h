@@ -19,7 +19,7 @@ namespace gameplay
  * character than would be possible if trying to move a character by applying
  * physical simulation with forces.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsCharacter : public PhysicsGhostObject
 {

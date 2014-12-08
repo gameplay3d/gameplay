@@ -18,7 +18,7 @@ class NodeCloneContext;
  * material files (.material). When multiple techniques are loaded using a material file,
  * the current technique for an object can be set at runtime.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Materials
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Materials
  */
 class Material : public RenderState
 {

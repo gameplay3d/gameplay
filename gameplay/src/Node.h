@@ -28,7 +28,7 @@ class Terrain;
  * Model, Camera, Light, PhysicsCollisionObject, AudioSource, ParticleEmitter and
  * Form components.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Node
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Node
  */
 class Node : public Transform, public Ref
 {

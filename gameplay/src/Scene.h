@@ -12,7 +12,7 @@ namespace gameplay
 /**
  * Defines the root container for a hierarchy of Node objects.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Scene
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Scene
  */
 class Scene : public Ref
 {

@@ -15,7 +15,7 @@ namespace gameplay
  *
  * This allows forms to display seperate images from arbitrary files not specified in the theme.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class ImageControl : public Control
 {

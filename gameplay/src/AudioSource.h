@@ -17,7 +17,7 @@ class NodeCloneContext;
  *
  * This can be attached to a Node for applying its 3D transformation.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Audio
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Audio
  */
 class AudioSource : public Ref, public Transform::Listener
 {
