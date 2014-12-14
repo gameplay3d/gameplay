@@ -40,6 +40,8 @@
 		422FE594169690830062D1FE /* PostProcessSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422FE592169690830062D1FE /* PostProcessSample.cpp */; };
 		422FE595169690830062D1FE /* PostProcessSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422FE592169690830062D1FE /* PostProcessSample.cpp */; };
 		424CC030161F8E3000577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC02F161F8E3000577827 /* IOKit.framework */; };
+		4258369D1A0F2AF400AFDFEB /* WaterSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4258369B1A0F2AF400AFDFEB /* WaterSample.cpp */; };
+		4258369E1A0F2AF400AFDFEB /* WaterSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4258369B1A0F2AF400AFDFEB /* WaterSample.cpp */; };
 		425F3A5617FBCBF00085454F /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 425F3A5517FBCBF00085454F /* libgameplay.a */; };
 		428F7BDE15CB131A009ED24C /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 428F7BDD15CB131A009ED24C /* game.config */; };
 		42BE773016A68CE3008AFA65 /* GamepadSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BE772E16A68CE3008AFA65 /* GamepadSample.cpp */; };
@@ -125,6 +127,8 @@
 		422FE592169690830062D1FE /* PostProcessSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PostProcessSample.cpp; sourceTree = "<group>"; };
 		422FE593169690830062D1FE /* PostProcessSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostProcessSample.h; sourceTree = "<group>"; };
 		424CC02F161F8E3000577827 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		4258369B1A0F2AF400AFDFEB /* WaterSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WaterSample.cpp; sourceTree = "<group>"; };
+		4258369C1A0F2AF400AFDFEB /* WaterSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaterSample.h; sourceTree = "<group>"; };
 		425F3A5517FBCBF00085454F /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "/Users/setaylor/Code/GamePlay/samples/character/../../../../Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug-iphoneos/libgameplay.a"; sourceTree = "<absolute>"; };
 		428F7BDD15CB131A009ED24C /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42BE772E16A68CE3008AFA65 /* GamepadSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadSample.cpp; sourceTree = "<group>"; };
@@ -347,6 +351,8 @@
 				420D545515FE430D00AD0B91 /* TextureSample.h */,
 				420D545615FE430D00AD0B91 /* TriangleSample.cpp */,
 				420D545715FE430D00AD0B91 /* TriangleSample.h */,
+				4258369B1A0F2AF400AFDFEB /* WaterSample.cpp */,
+				4258369C1A0F2AF400AFDFEB /* WaterSample.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -510,6 +516,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4258369D1A0F2AF400AFDFEB /* WaterSample.cpp in Sources */,
 				42C932F11491A5160098216A /* SamplesGame.cpp in Sources */,
 				420D545815FE430D00AD0B91 /* Audio3DSample.cpp in Sources */,
 				420D545A15FE430D00AD0B91 /* CreateSceneSample.cpp in Sources */,
@@ -539,6 +546,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4258369E1A0F2AF400AFDFEB /* WaterSample.cpp in Sources */,
 				5B61611614CCC24C0073B857 /* SamplesGame.cpp in Sources */,
 				420D545915FE430D00AD0B91 /* Audio3DSample.cpp in Sources */,
 				420D545B15FE430D00AD0B91 /* CreateSceneSample.cpp in Sources */,

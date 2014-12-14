@@ -1,0 +1,15 @@
+scene
+{
+    path = res/common/water/pond.gpb
+
+
+    node Ground
+    {
+        material = res/common/water/watersample.material#ground
+    }
+
+    node Water
+    {
+        material = res/common/water/watersample.material#water		
+    }    	
+}

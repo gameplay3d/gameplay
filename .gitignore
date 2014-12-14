@@ -3,6 +3,7 @@
 *.opensdf
 *.layout
 *.depend
+*.pro.user
 .DS_Store*
 ehthumbs.db
 Icon?
@@ -56,9 +57,9 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay.xcworkspace/xcuserdata
 /gameplay/gameplay.xcodeproj/xcuserdata
 
-/tools/gameplay-encoder/Debug
-/tools/gameplay-encoder/Release
-/tools/gameplay-encoder/gameplay-encoder.xcodeproj/xcuserdata
+/tools/encoder/Debug
+/tools/encoder/Release
+/tools/encoder/gameplay-encoder.xcodeproj/xcuserdata
 
 /tools/luagen/Release
 /tools/luagen/Debug

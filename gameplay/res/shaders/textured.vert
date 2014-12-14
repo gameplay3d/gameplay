@@ -79,6 +79,11 @@ uniform vec2 u_textureRepeat;
 uniform vec2 u_textureOffset;
 #endif
 
+#if defined(CLIP_PLANE)
+uniform mat4 u_worldMatrix;
+uniform vec4 u_clipPlane;
+#endif
+
 ///////////////////////////////////////////////////////////
 // Varyings
 varying vec2 v_texCoord;
@@ -122,6 +127,10 @@ varying vec3 v_cameraDirection;
 #include "skinning-none.vert" 
 #endif
 
+#if defined(CLIP_PLANE)
+varying float v_clipDistance;
+#endif
+
 void main()
 {
     vec4 position = getPosition();
@@ -163,5 +172,9 @@ void main()
     
     #if defined(LIGHTMAP)
     v_texCoord1 = a_texCoord1;
+    #endif
+    
+    #if defined(CLIP_PLANE)
+    v_clipDistance = dot(u_worldMatrix * position, u_clipPlane);
     #endif
 }
