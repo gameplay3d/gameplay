@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Scene", "Create Scene", CreateSceneSample, 1);
+    ADD_SAMPLE("Graphics", "Create Scene", CreateSceneSample, 15);
 #endif
 
 static Mesh* createCubeMesh(float size = 1.0f)

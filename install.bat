@@ -7,7 +7,7 @@ REM
 REM Helps prevent repo bloat due to large binary files
 REM
 
-set prefix=https://github.com/blackberry/GamePlay/releases/download/v3.0.0
+set prefix=https://github.com/gameplay3d/GamePlay/releases/download/v3.0.0
 
 set filename=gameplay-deps
 
@@ -75,10 +75,10 @@ cd %~dp0
 >> temp1.vbs ECHO End if
 >> temp1.vbs ECHO Set objXMLHTTP = Nothing
 
-if exist %windir%\Microsoft.NET\Framework\v2.0.50727\NUL (
+if exist %windir%\Microsoft.NET\Framework\v2.0.50727\csc.exe (
     %windir%\Microsoft.NET\Framework\v2.0.50727\csc temp.cs
 ) else (
-if exist %windir%\Microsoft.NET\Framework\v4.0.30319\NUL (
+if exist %windir%\Microsoft.NET\Framework\v4.0.30319\csc.exe (
     %windir%\Microsoft.NET\Framework\v4.0.30319\csc temp.cs
 ) else (
     goto USE_VBS_AS_FALLBACK

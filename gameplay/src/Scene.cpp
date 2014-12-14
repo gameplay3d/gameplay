@@ -443,7 +443,7 @@ Node* Scene::findNextVisibleSibling(Node* node)
 
 bool Scene::isNodeVisible(Node* node)
 {
-    if (!node->isActive())
+    if (!node->isEnabled())
         return false;
 
     if (node->getForm() || node->getParticleEmitter() || node->getTerrain() || node->getLight() || node->getCamera())

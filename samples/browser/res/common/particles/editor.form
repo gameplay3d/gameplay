@@ -2,17 +2,9 @@ form particleEditor
 {
     ${leftWidth} = 195
 
-    size = 100%, 100%
+    size = 95%, 100%
     consumeInputEvents = false
     style = Empty
-
-	checkBox vsync
-	{
-		position = 200, 5
-		text = VSYNC
-		checked = true
-        fontSize = 18
-	}
 
     container leftSide
     {
@@ -27,8 +19,8 @@ form particleEditor
 
 	        button save
 	        {
-                width = 100%
-		        text = Save
+                    width = 100%
+		    text = Save
 	        }
 
             button load : save
@@ -43,7 +35,7 @@ form particleEditor
             style = Form
             width = 100%
 
-	        layout
+            layout
             {
                 type = LAYOUT_VERTICAL
                 spacing = 5
@@ -57,14 +49,14 @@ form particleEditor
 
 	        image sprite
 	        {
-		        path = res/fire.png
-		        size = 120, 120
+                path = res/fire.png
+                size = 120, 120
 	        }
 
             container imageSettings
             {
                 width = 100%
-		        layout = LAYOUT_VERTICAL
+                layout = LAYOUT_VERTICAL
 
                 radioButton additive
                 {
@@ -148,8 +140,8 @@ form particleEditor
 
                 button updateFrames
                 {
-			        width = 100%
-			        text = Update
+                    width = 100%
+                    text = Update
                 }
             }
         }
@@ -158,64 +150,65 @@ form particleEditor
         container emission
         {
             style = Form
-	        layout = LAYOUT_VERTICAL
-	        width = ${leftWidth}
+            layout = LAYOUT_VERTICAL
+            width = ${leftWidth}
 
-	        // Burst emission
-	        button emit
-	        {
+            // Burst emission
+            button emit
+            {
                 width = 100%
-		        text = Emit
-	        }
+                text = Emit
+            }
 
             label spacer
             {
                 size = 5,5
             }
 
-	        // Emission rate
-	        slider emissionRate
-	        {
+            // Emission rate
+            slider emissionRate
+            {
                 width = 100%
-		        orientation = HORIZONTAL
-		        min = 1
-		        max = 500
-		        value = 100
-		        step = 1
-		        text = Emission Rate
-		        textAlignment = ALIGN_TOP_HCENTER
-		        valueTextVisible = true
-		        valueTextAlignment = ALIGN_BOTTOM_HCENTER
-		        valueTextPrecision = 2            
-	        }
+                orientation = HORIZONTAL
+                min = 1
+                max = 500
+                value = 100
+                step = 1
+                text = Emission Rate
+                textAlignment = ALIGN_TOP_HCENTER
+                valueTextVisible = true
+                valueTextAlignment = ALIGN_BOTTOM_HCENTER
+                valueTextPrecision = 2            
+            }
 
-	        slider burstSize : emissionRate
-	        {
-		        text = Burst Size
-		        value = 20
-		        max = 50
-		        step = 1
-	        }
+            slider burstSize : emissionRate
+            {
+                text = Burst Size
+                value = 20
+                max = 50
+                step = 1
+            }
 
-	        // Start / Stop Emitter
-	        checkBox started
-	        {
-		        text = Running
-		        checked = true
-	        }
+            // Start / Stop Emitter
+            checkBox started
+            {
+                text = Running
+                checked = true
+            }
         }
 
         button reset
-	    {
+        {
             width = ${leftWidth}
-		    text = Reset
-	    }
+            text = Reset
+        }
     }
 
     container particleProperties
     {
         style = Form
         alignment = ALIGN_TOP_RIGHT
+        y = 50
         size = 210, 100%
         layout = LAYOUT_VERTICAL
         scroll = SCROLL_VERTICAL

@@ -14,7 +14,7 @@ class PhysicsVehicle;
  * Defines a class for vehicle wheel physics which represents the individual wheel
  * itself as well as the tire and suspension.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 
 class PhysicsVehicleWheel : public PhysicsCollisionObject

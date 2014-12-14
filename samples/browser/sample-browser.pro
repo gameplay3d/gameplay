@@ -22,6 +22,7 @@ SOURCES += src/Audio3DSample.cpp \
     src/LoadSceneSample.cpp \
     src/MeshBatchSample.cpp \
     src/MeshPrimitiveSample.cpp \
+	src/ParticlesSample.cpp \
     src/PhysicsCollisionObjectSample.cpp \
     src/PostProcessSample.cpp \
     src/SpriteBatchSample.cpp \
@@ -46,6 +47,7 @@ HEADERS += src/Audio3DSample.h \
     src/LoadSceneSample.h \
     src/MeshBatchSample.h \
     src/MeshPrimitiveSample.h \
+	src/ParticlesSample.h \
     src/PhysicsCollisionObjectSample.h \
     src/PostProcessSample.h \
     src/SpriteBatchSample.h \

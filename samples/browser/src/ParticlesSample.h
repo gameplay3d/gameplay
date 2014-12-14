@@ -1,21 +1,22 @@
-#ifndef PARTICLESGAME_H_
-#define PARTICLESGAME_H_
+#ifndef PARTICLESSAMPLE_H_
+#define PARTICLESSAMPLE_H_
 
 #include "gameplay.h"
+#include "Sample.h"
 
 using namespace gameplay;
 
 /**
  * Main game class.
  */
-class ParticlesGame: public Game, Control::Listener
+class ParticlesSample: public Sample, Control::Listener
 {
 public:
 
     /**
      * Constructor.
      */
-    ParticlesGame();
+    ParticlesSample();
 
     /**
      * @see Game::touchEvent
@@ -68,8 +69,6 @@ private:
 
     bool drawScene(Node* node, void* cookie);
 
-    void drawSplash(void* param);
-
     void loadEmitters();
 
     void emitterChanged();
@@ -98,19 +97,20 @@ private:
     
     std::string toString(const Quaternion& q);
     
-    std::string toString(ParticleEmitter::TextureBlending blending);
+    std::string toString(ParticleEmitter::BlendMode blendMode);
 
     Scene* _scene;
-    Node* _particleEmitterNode;
     Node* _cameraParent;
-    Form* _form;
+    Node* _particleEmitterNode;
+    ParticleEmitter* _particleEmitter;
     bool _wDown, _sDown, _aDown, _dDown;
     bool _touched;
     int _prevX, _prevY;
-    ParticleEmitter* _particleEmitter;
-    std::string _url;
+    bool _panning;
+    bool _rotating;
+    bool _zooming;
     Font* _font;
-    
+    Form* _form;
     Slider* _startRed;
     Slider* _startGreen;
     Slider* _startBlue;
@@ -162,9 +162,7 @@ private:
     Container* _position;
     Container* _particleProperties;
     CheckBox* _vsync;
-    bool _panning;
-    bool _rotating;
-    bool _zooming;
+    std::string _url;
 };
 
 #endif

@@ -340,7 +340,7 @@ bool InputSample::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta
         _mouseWheel = wheelDelta;
         break;
     }
-    return true;
+    return false;
 }
 
 void InputSample::keyEvent(Keyboard::KeyEvent evt, int key)

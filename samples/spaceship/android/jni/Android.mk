@@ -1,13 +1,13 @@
 SAMPLE_PATH := $(call my-dir)/../../src
 
 # external-deps
-PNG_PATH := $(call my-dir)/../../../../external-deps/png/lib/android/arm
-ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
-LUA_PATH := $(call my-dir)/../../../../external-deps/lua/lib/android/arm
-BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
-OGG_PATH := $(call my-dir)/../../../../external-deps/ogg/lib/android/arm
-VORBIS_PATH := $(call my-dir)/../../../../external-deps/vorbis/lib/android/arm
-OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
+PNG_PATH := $(call my-dir)/../../../../external-deps/png/lib/android/$(TARGET_ARCH_ABI)
+ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/$(TARGET_ARCH_ABI)
+LUA_PATH := $(call my-dir)/../../../../external-deps/lua/lib/android/$(TARGET_ARCH_ABI)
+BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/$(TARGET_ARCH_ABI)
+OGG_PATH := $(call my-dir)/../../../../external-deps/ogg/lib/android/$(TARGET_ARCH_ABI)
+VORBIS_PATH := $(call my-dir)/../../../../external-deps/vorbis/lib/android/$(TARGET_ARCH_ABI)
+OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/$(TARGET_ARCH_ABI)
 
 # libgameplay
 LOCAL_PATH := $(call my-dir)/../../../../gameplay/android/libs/armeabi-v7a

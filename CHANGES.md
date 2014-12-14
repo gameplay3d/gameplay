@@ -1,15 +1,21 @@
 ## v3.0.0
 
 - Adds support for MacOSX 64-bit.
-- Adds support for iOS 8
-- Adds support for XCode 6
+- Adds support for iOS 8+.
+- Adds support for XCode 6+.
+- Adds support for QTCreator 3.2+ for Linux.
 - Adds support for Eclipse for Linux.
 - Adds support for Eclipse for Android.
 - Adds updates to FBX SDK 2015.1
 - Adds support for Bullet Physics 2.82
-- Adds gameplay-encoder support for Visual Studio 2013.
 - Adds support for C++11.
+- Adds support for cubemap textures.
 - Adds support for font kerning.
+- Adds support for Android x86.
+- Adds support for gamepads on Android.
+- Adds supoprt for Android extensions through new custom native activity
+- Adds new WaterSample to sample browser.
+- Fixes Image to support grayscale PNGs.
 - Fixes Android to build with arm instead of thumb.
 
 

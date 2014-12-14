@@ -66,7 +66,7 @@ Image* Image::create(const char* path)
     png_set_sig_bytes(png, 8);
 
     // Read the entire image into memory.
-    png_read_png(png, info, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
+    png_read_png(png, info, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_GRAY_TO_RGB, NULL);
 
     Image* image = new Image();
     image->_width = png_get_image_width(png, info);

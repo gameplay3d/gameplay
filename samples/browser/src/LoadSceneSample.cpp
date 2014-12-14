@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Scene", "Load Scene", LoadSceneSample, 2);
+    ADD_SAMPLE("Graphics", "Load Scene", LoadSceneSample, 17);
 #endif
 
 LoadSceneSample::LoadSceneSample()

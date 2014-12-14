@@ -14,7 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Game extension for Android platform.
+ * GamePlay native activity extension for Android platform.
  * 
  * Handles any platform features that cannot be handled natively in PlatformAndroid.cpp 
  * 
@@ -22,14 +22,14 @@ import android.view.View;
  * that are not offered directly the gameplay3d framework such as platform events, access to 
  * android user-interface, life-cycle events for saving game state and custom plug-ins/extensions.
  */
-public class GameNativeActivity extends NativeActivity
+public class GamePlayNativeActivity extends NativeActivity
     implements InputManager.InputDeviceListener {
     
     static {
         System.loadLibrary("gameplay");
     }
     
-    private static final String TAG = "GameNativeActivity";
+    private static final String TAG = "GamePlayNativeActivity";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

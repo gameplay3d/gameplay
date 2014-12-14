@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Text", TextSample, 9);
+    ADD_SAMPLE("Graphics", "Text", TextSample, 6);
 #endif
 
 #define FONT_COUNT 5

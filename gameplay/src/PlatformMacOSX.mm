@@ -1135,7 +1135,7 @@ bool getMousePointForEvent(NSPoint& point, NSEvent* event)
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
 
     [__view->gameLock lock];
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_WHEEL, point.x, __height - point.y, (int)([event deltaY] * 10.0f));
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_WHEEL, point.x, __height - point.y, (int)([event deltaY]));
     [__view->gameLock unlock];
 }
 

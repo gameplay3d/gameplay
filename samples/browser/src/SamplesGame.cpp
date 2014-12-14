@@ -271,6 +271,7 @@ void SamplesGame::exitActiveSample()
 
     // Reset some game options
     setMultiTouch(false);
+    setMouseCaptured(false);
 }
 
 void SamplesGame::addSample(const char* category, const char* title, void* func, unsigned int order)
@@ -281,10 +282,9 @@ void SamplesGame::addSample(const char* category, const char* title, void* func,
     {
         _categories = new std::vector<std::string>();
         _categories->push_back("Graphics");
-        _categories->push_back("Scene");
-        _categories->push_back("Input");
         _categories->push_back("Physics");
-        _categories->push_back("Audio");
+        _categories->push_back("Media");
+        _categories->push_back("Input");
         _samples->resize(_categories->size());
     }
 

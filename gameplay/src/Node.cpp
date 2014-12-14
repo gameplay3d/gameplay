@@ -20,7 +20,7 @@ namespace gameplay
 {
 
 Node::Node(const char* id)
-    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _active(true),
+    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _enabled(true),
     _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
@@ -299,30 +299,30 @@ void Node::setUserPointer(void* pointer, void (*cleanupCallback)(void*))
     }
 }
 
-void Node::setActive(bool active)
+void Node::setEnabled(bool enabled)
 {
-    if (_active != active)
+    if (_enabled != enabled)
     {
         if (_collisionObject)
-            _collisionObject->setEnabled(active);
+            _collisionObject->setEnabled(enabled);
 
-        _active = active;
+        _enabled = enabled;
     }
 }
 
-bool Node::isActive() const
+bool Node::isEnabled() const
 {
-    return _active;
+    return _enabled;
 }
 
-bool Node::isActiveInHierarchy() const
+bool Node::isEnabledInHierarchy() const
 {
-    if (!_active)
+    if (!_enabled)
        return false;
    Node* node = _parent;
    while (node)
    {
-       if (!node->_active)
+       if (!node->_enabled)
            return false;
        node = node->_parent;
    }

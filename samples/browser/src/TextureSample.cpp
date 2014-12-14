@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Textures", TextureSample, 6);
+    ADD_SAMPLE("Graphics", "Textures", TextureSample, 4);
 #endif
 
 Node* addQuadModelAndNode(Scene* scene, Mesh* mesh)

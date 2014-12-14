@@ -26,7 +26,7 @@ class ScriptController;
  * This represents a running cross-platform game application and provides an abstraction
  * to most typical platform functionality and events.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Game_Config
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Game_Config
  */
 class Game
 {

@@ -14,7 +14,7 @@ namespace gameplay
  *
  * This is a button that can be enabled or disabled.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class CheckBox : public Button
 {

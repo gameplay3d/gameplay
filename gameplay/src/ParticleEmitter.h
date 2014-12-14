@@ -136,7 +136,7 @@ class Node;
  * be set before rendering the particle system and then will be reset to their original
  * values.  Accepts the same symbolic constants as glBlendFunc().
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Particles
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Particles
  */
 class ParticleEmitter : public Ref
 {
@@ -145,12 +145,12 @@ class ParticleEmitter : public Ref
 public:
 
     /**
-     * Defines the types of texture blending 
+     * Defines the types of blend modes
      */
-    enum TextureBlending
+    enum BlendMode
     {
-        BLEND_OPAQUE,
-        BLEND_TRANSPARENT,
+        BLEND_NONE,
+        BLEND_ALPHA,
         BLEND_ADDITIVE,
         BLEND_MULTIPLIED
     };
@@ -181,11 +181,11 @@ public:
      * Creates an uninitialized ParticleEmitter.
      *
      * @param texturePath A path to the image to use as this ParticleEmitter's texture.
-     * @param textureBlending The type of texture blending to be used for the particles emitted.
+     * @param blendMode The blend mode to be used for the particles emitted.
      * @param particleCountMax The maximum number of particles that can be alive at one time in this ParticleEmitter's system.
      * @script{create}
      */
-    static ParticleEmitter* create(const char* texturePath, TextureBlending textureBlending,  unsigned int particleCountMax);
+    static ParticleEmitter* create(const char* texturePath, BlendMode blendMode,  unsigned int particleCountMax);
 
     /**
      * Sets a new texture for this particle emitter.
@@ -193,9 +193,9 @@ public:
      * The current texture's reference count is decreased.
      *
      * @param texturePath Path to the new texture to set.
-     * @param textureBlending Blending mode for the new texture.
+     * @param blendMode Blend mode for the new texture.
      */
-    void setTexture(const char* texturePath, TextureBlending textureBlending);
+    void setTexture(const char* texturePath, BlendMode blendMode);
 
     /**
      * Sets a new texture for this particle emitter.
@@ -204,9 +204,9 @@ public:
      * current texture's reference count is decreased.
      *
      * @param texture The new texture to set.
-     * @param textureBlending Blending mode for the new texture.
+     * @param blendMode Blend mode for the new texture.
      */
-    void setTexture(Texture* texture, TextureBlending textureBlending);
+    void setTexture(Texture* texture, BlendMode blendMode);
 
     /**
      * Returns the texture currently set for this particle emitter.
@@ -705,23 +705,23 @@ public:
     unsigned int draw();
 
     /**
-     * Gets a TextureBlending enum from a corresponding string.
+     * Gets a blend mode from a corresponding string.
      */
-    static TextureBlending getTextureBlendingFromString(const char* src);
+    static ParticleEmitter::BlendMode getBlendModeFromString(const char* src);
 
     /**
      * Sets the texture blend mode for this particle emitter.
      *
-     * @param blending The new blend mode.
+     * @param blendMode The new blend mode.
      */
-    void setTextureBlending(TextureBlending blending);
+    void setBlendMode(BlendMode blendMode);
 
     /**
      * Gets the current texture blend mode for this particle emitter.
      *
      * @return The current blend mode.
      */
-    TextureBlending getTextureBlending() const;
+    BlendMode getBlendMode() const;
 
     /**
      * Clones the particle emitter and returns a new emitter.
@@ -746,11 +746,11 @@ private:
      * Creates an uninitialized ParticleEmitter.
      *
      * @param texture the texture to use.
-     * @param textureBlending The type of texture blending to be used for the particles emitted.
+     * @param blendMode The blend mode to be used for the particles emitted.
      * @param particleCountMax The maximum number of particles that can be alive at one time in this ParticleEmitter's system.
      * @script{create}
      */
-    static ParticleEmitter* create(Texture* texture, TextureBlending textureBlending,  unsigned int particleCountMax);
+    static ParticleEmitter* create(Texture* texture, BlendMode blendMode,  unsigned int particleCountMax);
 
     /**
      * Hidden copy assignment operator.
@@ -834,7 +834,7 @@ private:
     Vector3 _rotationAxisVar;
     Matrix _rotation;
     SpriteBatch* _spriteBatch;
-    TextureBlending _spriteTextureBlending;
+    BlendMode _spriteBlendMode;
     float _spriteTextureWidth;
     float _spriteTextureHeight;
     float _spriteTextureWidthRatio;

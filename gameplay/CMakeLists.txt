@@ -422,8 +422,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_NodeType.h
     src/lua/lua_ParticleEmitter.cpp
     src/lua/lua_ParticleEmitter.h
-    src/lua/lua_ParticleEmitterTextureBlending.cpp
-    src/lua/lua_ParticleEmitterTextureBlending.h
+    src/lua/lua_ParticleEmitterBlendMode.cpp
+    src/lua/lua_ParticleEmitterBlendMode.h
     src/lua/lua_Pass.cpp
     src/lua/lua_Pass.h
     src/lua/lua_PhysicsCharacter.cpp
