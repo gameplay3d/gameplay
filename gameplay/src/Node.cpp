@@ -449,7 +449,7 @@ void Node::update(float elapsedTime)
 {
     for (Node* node = _firstChild; node != NULL; node = node->_nextSibling)
     {
-        if (node->isActive())
+        if (node->isEnabled())
             node->update(elapsedTime);
     }
 

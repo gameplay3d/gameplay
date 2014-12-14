@@ -388,7 +388,7 @@ void Scene::update(float elapsedTime)
 {
     for (Node* node = _firstNode; node != NULL; node = node->_nextSibling)
     {
-        if (node->isActive())
+        if (node->isEnabled())
             node->update(elapsedTime);
     }
 }

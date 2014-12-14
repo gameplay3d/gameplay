@@ -713,17 +713,10 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("ParticleEmitter");
-<<<<<<< HEAD
-        gameplay::ScriptUtil::registerEnumValue(ParticleEmitter::BLEND_OPAQUE, "BLEND_OPAQUE", scopePath);
-        gameplay::ScriptUtil::registerEnumValue(ParticleEmitter::BLEND_TRANSPARENT, "BLEND_TRANSPARENT", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(ParticleEmitter::BLEND_NONE, "BLEND_NONE", scopePath);
+        gameplay::ScriptUtil::registerEnumValue(ParticleEmitter::BLEND_ALPHA, "BLEND_ALPHA", scopePath);
         gameplay::ScriptUtil::registerEnumValue(ParticleEmitter::BLEND_ADDITIVE, "BLEND_ADDITIVE", scopePath);
         gameplay::ScriptUtil::registerEnumValue(ParticleEmitter::BLEND_MULTIPLIED, "BLEND_MULTIPLIED", scopePath);
-=======
-        gameplay::ScriptUtil::registerConstantString("BLEND_NONE", "BLEND_NONE", scopePath);
-        gameplay::ScriptUtil::registerConstantString("BLEND_ALPHA", "BLEND_ALPHA", scopePath);
-        gameplay::ScriptUtil::registerConstantString("BLEND_ADDITIVE", "BLEND_ADDITIVE", scopePath);
-        gameplay::ScriptUtil::registerConstantString("BLEND_MULTIPLIED", "BLEND_MULTIPLIED", scopePath);
->>>>>>> 56056e69d8e0dfc651a52a1888c65c01d0f1f51d
     }
 
     // Register enumeration PhysicsCollisionObject::CollisionListener::EventType.
@@ -1025,120 +1018,4 @@ int lua__strcmpnocase(lua_State* state)
     return 0;
 }
 
-<<<<<<< HEAD
-=======
-static const char* enumStringEmpty = "";
-
-const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
-{
-    if (enumname == "AIMessage::ParameterType")
-        return lua_stringFromEnum_AIMessageParameterType((AIMessage::ParameterType)value);
-    if (enumname == "AnimationClip::Listener::EventType")
-        return lua_stringFromEnum_AnimationClipListenerEventType((AnimationClip::Listener::EventType)value);
-    if (enumname == "AudioSource::State")
-        return lua_stringFromEnum_AudioSourceState((AudioSource::State)value);
-    if (enumname == "Camera::Type")
-        return lua_stringFromEnum_CameraType((Camera::Type)value);
-    if (enumname == "Container::Direction")
-        return lua_stringFromEnum_ContainerDirection((Container::Direction)value);
-    if (enumname == "Container::Scroll")
-        return lua_stringFromEnum_ContainerScroll((Container::Scroll)value);
-    if (enumname == "Control::Alignment")
-        return lua_stringFromEnum_ControlAlignment((Control::Alignment)value);
-    if (enumname == "Control::AutoSize")
-        return lua_stringFromEnum_ControlAutoSize((Control::AutoSize)value);
-    if (enumname == "Control::Listener::EventType")
-        return lua_stringFromEnum_ControlListenerEventType((Control::Listener::EventType)value);
-    if (enumname == "Control::State")
-        return lua_stringFromEnum_ControlState((Control::State)value);
-    if (enumname == "Curve::InterpolationType")
-        return lua_stringFromEnum_CurveInterpolationType((Curve::InterpolationType)value);
-    if (enumname == "DepthStencilTarget::Format")
-        return lua_stringFromEnum_DepthStencilTargetFormat((DepthStencilTarget::Format)value);
-    if (enumname == "Font::Format")
-        return lua_stringFromEnum_FontFormat((Font::Format)value);
-    if (enumname == "Font::Justify")
-        return lua_stringFromEnum_FontJustify((Font::Justify)value);
-    if (enumname == "Font::Style")
-        return lua_stringFromEnum_FontStyle((Font::Style)value);
-    if (enumname == "Game::ClearFlags")
-        return lua_stringFromEnum_GameClearFlags((Game::ClearFlags)value);
-    if (enumname == "Game::State")
-        return lua_stringFromEnum_GameState((Game::State)value);
-    if (enumname == "Gamepad::ButtonMapping")
-        return lua_stringFromEnum_GamepadButtonMapping((Gamepad::ButtonMapping)value);
-    if (enumname == "Gamepad::GamepadEvent")
-        return lua_stringFromEnum_GamepadGamepadEvent((Gamepad::GamepadEvent)value);
-    if (enumname == "Gesture::GestureEvent")
-        return lua_stringFromEnum_GestureGestureEvent((Gesture::GestureEvent)value);
-    if (enumname == "Image::Format")
-        return lua_stringFromEnum_ImageFormat((Image::Format)value);
-    if (enumname == "Keyboard::Key")
-        return lua_stringFromEnum_KeyboardKey((Keyboard::Key)value);
-    if (enumname == "Keyboard::KeyEvent")
-        return lua_stringFromEnum_KeyboardKeyEvent((Keyboard::KeyEvent)value);
-    if (enumname == "Layout::Type")
-        return lua_stringFromEnum_LayoutType((Layout::Type)value);
-    if (enumname == "Light::Type")
-        return lua_stringFromEnum_LightType((Light::Type)value);
-    if (enumname == "Logger::Level")
-        return lua_stringFromEnum_LoggerLevel((Logger::Level)value);
-    if (enumname == "Mesh::IndexFormat")
-        return lua_stringFromEnum_MeshIndexFormat((Mesh::IndexFormat)value);
-    if (enumname == "Mesh::PrimitiveType")
-        return lua_stringFromEnum_MeshPrimitiveType((Mesh::PrimitiveType)value);
-    if (enumname == "Mouse::MouseEvent")
-        return lua_stringFromEnum_MouseMouseEvent((Mouse::MouseEvent)value);
-    if (enumname == "Node::Type")
-        return lua_stringFromEnum_NodeType((Node::Type)value);
-    if (enumname == "ParticleEmitter::BlendMode")
-        return lua_stringFromEnum_ParticleEmitterBlendMode((ParticleEmitter::BlendMode)value);
-    if (enumname == "PhysicsCollisionObject::CollisionListener::EventType")
-        return lua_stringFromEnum_PhysicsCollisionObjectCollisionListenerEventType((PhysicsCollisionObject::CollisionListener::EventType)value);
-    if (enumname == "PhysicsCollisionObject::Type")
-        return lua_stringFromEnum_PhysicsCollisionObjectType((PhysicsCollisionObject::Type)value);
-    if (enumname == "PhysicsCollisionShape::Type")
-        return lua_stringFromEnum_PhysicsCollisionShapeType((PhysicsCollisionShape::Type)value);
-    if (enumname == "PhysicsController::Listener::EventType")
-        return lua_stringFromEnum_PhysicsControllerListenerEventType((PhysicsController::Listener::EventType)value);
-    if (enumname == "Properties::Type")
-        return lua_stringFromEnum_PropertiesType((Properties::Type)value);
-    if (enumname == "RenderState::AutoBinding")
-        return lua_stringFromEnum_RenderStateAutoBinding((RenderState::AutoBinding)value);
-    if (enumname == "RenderState::Blend")
-        return lua_stringFromEnum_RenderStateBlend((RenderState::Blend)value);
-    if (enumname == "RenderState::CullFaceSide")
-        return lua_stringFromEnum_RenderStateCullFaceSide((RenderState::CullFaceSide)value);
-    if (enumname == "RenderState::DepthFunction")
-        return lua_stringFromEnum_RenderStateDepthFunction((RenderState::DepthFunction)value);
-    if (enumname == "RenderState::FrontFace")
-        return lua_stringFromEnum_RenderStateFrontFace((RenderState::FrontFace)value);
-    if (enumname == "RenderState::StencilFunction")
-        return lua_stringFromEnum_RenderStateStencilFunction((RenderState::StencilFunction)value);
-    if (enumname == "RenderState::StencilOperation")
-        return lua_stringFromEnum_RenderStateStencilOperation((RenderState::StencilOperation)value);
-    if (enumname == "Terrain::Flags")
-        return lua_stringFromEnum_TerrainFlags((Terrain::Flags)value);
-    if (enumname == "TextBox::InputMode")
-        return lua_stringFromEnum_TextBoxInputMode((TextBox::InputMode)value);
-    if (enumname == "Texture::CubeFace")
-        return lua_stringFromEnum_TextureCubeFace((Texture::CubeFace)value);
-    if (enumname == "Texture::Filter")
-        return lua_stringFromEnum_TextureFilter((Texture::Filter)value);
-    if (enumname == "Texture::Format")
-        return lua_stringFromEnum_TextureFormat((Texture::Format)value);
-    if (enumname == "Texture::Type")
-        return lua_stringFromEnum_TextureType((Texture::Type)value);
-    if (enumname == "Texture::Wrap")
-        return lua_stringFromEnum_TextureWrap((Texture::Wrap)value);
-    if (enumname == "Touch::TouchEvent")
-        return lua_stringFromEnum_TouchTouchEvent((Touch::TouchEvent)value);
-    if (enumname == "VertexFormat::Usage")
-        return lua_stringFromEnum_VertexFormatUsage((VertexFormat::Usage)value);
-
-    GP_ERROR("Unrecognized enumeration type '%s'.", enumname.c_str());
-    return enumStringEmpty;
-}
-
->>>>>>> 56056e69d8e0dfc651a52a1888c65c01d0f1f51d
 }
