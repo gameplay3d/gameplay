@@ -25,7 +25,9 @@ template<> void ScriptTarget::fireScriptEvent<void>(const char* eventName, ...)
     va_list list;
     va_start(list, eventName);
 
-    std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(eventName);
+    static std::string searchString;
+    searchString = eventName;
+    std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(searchString);
     if (iter != _callbacks.end() && iter->second != NULL)
     {
         ScriptController* sc = Game::getInstance()->getScriptController();
@@ -54,7 +56,9 @@ template<> bool ScriptTarget::fireScriptEvent<bool>(const char* eventName, ...)
     va_list list;
     va_start(list, eventName);
 
-    std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(eventName);
+    static std::string searchString;
+    searchString = eventName;
+    std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(searchString);
     if (iter != _callbacks.end() && iter->second)
     {
         ScriptController* sc = Game::getInstance()->getScriptController();
