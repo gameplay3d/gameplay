@@ -26,9 +26,6 @@ void Logger::log(Level level, const char* message, ...)
     if (!state.enabled)
         return;
 
-    va_list args;
-    va_start(args, message);
-
     // Declare a moderately sized buffer on the stack that should be
     // large enough to accommodate most log requests.
     int size = 1024;
@@ -37,6 +34,9 @@ void Logger::log(Level level, const char* message, ...)
     char* str = stackBuffer;
     for ( ; ; )
     {
+        va_list args;
+        va_start(args, message);
+
         // Pass one less than size to leave room for NULL terminator
         int needed = vsnprintf(str, size-1, message, args);
 
@@ -46,12 +46,15 @@ void Logger::log(Level level, const char* message, ...)
         {
             // Successfully wrote buffer. Added a NULL terminator in case it wasn't written.
             str[needed] = '\0';
+            va_end(args);
             break;
         }
 
         size = needed > 0 ? (needed + 1) : (size * 2);
         dynamicBuffer.resize(size);
         str = &dynamicBuffer[0];
+
+        va_end(args);
     }
 
     if (state.logFunctionC)
@@ -69,8 +72,6 @@ void Logger::log(Level level, const char* message, ...)
         // Log to the default output
         gameplay::print("%s", str);
     }
-
-    va_end(args);
 }
 
 bool Logger::isEnabled(Level level)
