@@ -484,8 +484,7 @@ void PhysicsController::update(float elapsedTime)
     _world->stepSimulation(elapsedTime * 0.001f, 10);
 
     // If we have status listeners, then check if our status has changed.
-    static const std::string statusEventId = "statusEvent";
-    if (_listeners || _callbacks[statusEventId])
+    if (_listeners || _callbacks["statusEvent"])
     {
         Listener::EventType oldStatus = _status;
 
