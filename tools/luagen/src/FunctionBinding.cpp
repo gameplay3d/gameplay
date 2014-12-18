@@ -130,7 +130,10 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "        void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
+                if (Generator::getInstance()->hasDerivedClasses(bindings[0].returnParam.info))
+                    o << "        void* returnPtr = dynamic_cast<void*>(instance->" << bindings[0].name << ");\n";
+                else
+                    o << "        void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
                 o << "        void* returnPtr = (void*)new " << bindings[0].returnParam << "(instance->" << bindings[0].name << ");\n";
@@ -202,10 +205,13 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "        void* returnPtr = (void*)";
+                if (Generator::getInstance()->hasDerivedClasses(bindings[0].returnParam.info))
+                    o << "        void* returnPtr = dynamic_cast<void*>(";
+                else
+                    o << "        void* returnPtr = ((void*)";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
-                o << bindings[0].name << ";\n";
+                o << bindings[0].name << ");\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
                 o << "        void* returnPtr = (void*)new " << bindings[0].returnParam << "(";
@@ -252,7 +258,10 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "    void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
+                if (Generator::getInstance()->hasDerivedClasses(bindings[0].returnParam.info))
+                    o << "    void* returnPtr = dynamic_cast<void*>(instance->" << bindings[0].name << ");\n";
+                else
+                    o << "    void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
                 o << "    void* returnPtr = (void*)new " << bindings[0].returnParam << "(instance->" << bindings[0].name << ");\n";
@@ -290,10 +299,13 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "    void* returnPtr = (void*)";
+                if (Generator::getInstance()->hasDerivedClasses(bindings[0].returnParam.info))
+                    o << "    void* returnPtr = dynamic_cast<void*>(";
+                else
+                    o << "    void* returnPtr = ((void*)";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
-                o << bindings[0].name << ";\n";
+                o << bindings[0].name << ");\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
                 o << "    void* returnPtr = (void*)new " << bindings[0].returnParam << "(";
@@ -548,9 +560,11 @@ static inline void outputLuaTypeCheck(ostream& o, int index, const FunctionBindi
         }
         break;
     case FunctionBinding::Param::TYPE_STRING:
-    case FunctionBinding::Param::TYPE_ENUM:
         o << "(lua_type(state, " << index << ") == LUA_TSTRING || ";
         o << "lua_type(state, " << index << ") == LUA_TNIL)";
+        break;
+    case FunctionBinding::Param::TYPE_ENUM:
+        o << "lua_type(state, " << index << ") == LUA_TNUMBER";
         break;
     case FunctionBinding::Param::TYPE_OBJECT:
         o << "(lua_type(state, " << index << ") == LUA_TUSERDATA || ";
@@ -631,13 +645,18 @@ static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b,
         }
 
         // For functions that return objects, create the appropriate user data in Lua.
+        bool needsExtraClosingBrace = false;
         if (b.returnParam.type == FunctionBinding::Param::TYPE_CONSTRUCTOR || b.returnParam.type == FunctionBinding::Param::TYPE_OBJECT)
         {
+            needsExtraClosingBrace = true;
             indent(o, indentLevel);
             switch (b.returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "void* returnPtr = (void*)";
+                if (Generator::getInstance()->hasDerivedClasses(b.returnParam.info))
+                    o << "void* returnPtr = dynamic_cast<void*>(";
+                else
+                    o << "void* returnPtr = ((void*)";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
                 o << "void* returnPtr = (void*)new " << b.returnParam << "(";
@@ -688,8 +707,8 @@ static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b,
                 o << ", ";
         }
 
-        // Output the matching parenthesis for the case where a non-pointer object is being returned.
-        if (b.returnParam.type == FunctionBinding::Param::TYPE_OBJECT && b.returnParam.kind != FunctionBinding::Param::KIND_POINTER)
+        // Add the closing brace from the casting, if neccessary
+        if (needsExtraClosingBrace)
             o << ")";
 
         o << ");\n";
@@ -804,7 +823,7 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
         break;
     case FunctionBinding::Param::TYPE_ENUM:
         indent(o, indentLevel);
-        o << p << " param" << i+1 << " = (" << p << ")lua_enumFromString_" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "(luaL_checkstring(state, " << paramIndex << "));\n";
+        o << p << " param" << i+1 << " = (" << p << ")luaL_checkint(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_UNRECOGNIZED:
         // Attempt to retrieve the unrecognized type as an unsigned integer.
@@ -978,7 +997,7 @@ static inline void outputReturnValue(ostream& o, const FunctionBinding& b, int i
         o << "lua_pushnumber(state, result);\n";
         break;
     case FunctionBinding::Param::TYPE_ENUM:
-        o << "lua_pushstring(state, lua_stringFromEnum_" << Generator::getInstance()->getUniqueNameFromRef(b.returnParam.info) << "(result));\n";
+        o << "lua_pushnumber(state, (int)result);\n";
         break;
     case FunctionBinding::Param::TYPE_STRING:
         if (b.returnParam.info == "string")

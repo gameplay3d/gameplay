@@ -21,7 +21,7 @@ ScriptUtil::LuaArray<T>::LuaArray(int count)
     // Allocate a chunk of memory to store 'count' number of T.
     // Use new instead of malloc since we track memory allocations
     // int DebugMem configurations.
-    _data->value = (T*)new unsigned char[sizeof(T) * count];
+    _data->value = (T*)new unsigned char[sizeof(T)* count];
 
     // Positive ref count means we automatically cleanup memory
     _data->refCount = 1;
@@ -272,7 +272,12 @@ ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type
 
 template<typename T> T ScriptController::executeFunction(const char* func)
 {
-    executeFunctionHelper(1, func, NULL, NULL);
+    return executeFunction<T>((Script*)NULL, func);
+}
+
+template<typename T> T ScriptController::executeFunction(Script* script, const char* func)
+{
+    executeFunctionHelper(1, func, NULL, NULL, script);
     T value = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
     lua_pop(_lua, -1);
     return value;
@@ -282,40 +287,32 @@ template<typename T> T ScriptController::executeFunction(const char* func, const
 {
     va_list list;
     va_start(list, args);
-    executeFunctionHelper(1, func, args, &list);
+    T value = executeFunction<T>((Script*)NULL, func, args, list);
+    va_end(list);
+    return value;
+}
 
-    T value = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
-    lua_pop(_lua, -1);
+template<typename T> T ScriptController::executeFunction(Script* script, const char* func, const char* args, ...)
+{
+    va_list list;
+    va_start(list, args);
+    T value = executeFunction<T>(script, func, args, list);
     va_end(list);
     return value;
 }
 
 template<typename T> T ScriptController::executeFunction(const char* func, const char* args, va_list* list)
 {
-    executeFunctionHelper(1, func, args, list);
+    return executeFunctionHelper(1, func, args, list, (Script*)NULL);
+}
+
+template<typename T> T ScriptController::executeFunction(Script* script, const char* func, const char* args, va_list* list)
+{
+    executeFunctionHelper(1, func, args, list, script);
 
     T value = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
     lua_pop(_lua, -1);
     return value;
-}
-
-template<typename T>T* ScriptController::getObjectPointer(const char* type, const char* name)
-{
-    lua_getglobal(_lua, name);
-    void* userdata = luaL_checkudata(_lua, -1, type);
-    std::string msg = std::string("'") + std::string(type) + std::string("' expected.");
-    luaL_argcheck(_lua, userdata != NULL, 1, msg.c_str());
-    return (T*)((ScriptUtil::LuaObject*)userdata)->instance;
-}
-
-template<typename T>void ScriptController::setObjectPointer(const char* type, const char* name, T* v)
-{
-    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(_lua, sizeof(ScriptUtil::LuaObject));
-    object->instance = (void*)v;
-    object->owns = false;
-    luaL_getmetatable(_lua, type);
-    lua_setmetatable(_lua, -2);
-    lua_setglobal(_lua, name);
 }
 
 }

@@ -9,8 +9,6 @@ AIAgent::AIAgent()
     : _stateMachine(NULL), _node(NULL), _enabled(true), _listener(NULL), _next(NULL)
 {
     _stateMachine = new AIStateMachine(this);
-
-    addScriptEvent("message", "<AIMessage>");
 }
 
 AIAgent::~AIAgent()
@@ -85,10 +83,10 @@ bool AIAgent::processMessage(AIMessage* message)
     // Dispatch message to registered listener.
     if (_listener && _listener->messageReceived(message))
         return true;
-    
-    if (fireScriptEvent<bool>("message", message))
+
+    if (_node && _node->fireScriptEvent<bool>(GP_GET_SCRIPT_EVENT(Node, messageReceived), dynamic_cast<void*>(_node), message))
         return true;
-    
+
     return false;
 }
 

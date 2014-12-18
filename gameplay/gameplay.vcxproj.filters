@@ -357,9 +357,6 @@
     <ClCompile Include="src\lua\lua_AIMessage.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_AIMessageParameterType.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_AIState.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
@@ -379,9 +376,6 @@
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_AnimationClipListener.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_AnimationClipListenerEventType.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_AnimationController.cpp">
@@ -405,9 +399,6 @@
     <ClCompile Include="src\lua\lua_AudioSource.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_AudioSourceState.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_BoundingBox.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
@@ -423,46 +414,22 @@
     <ClCompile Include="src\lua\lua_Camera.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_CameraType.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_CheckBox.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Container.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_ContainerScroll.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Control.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_ControlAlignment.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_ControlAutoSize.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_ControlListener.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_ControlListenerEventType.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_ControlState.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Curve.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_CurveInterpolationType.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_DepthStencilTarget.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_DepthStencilTargetFormat.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Effect.cpp">
@@ -475,15 +442,6 @@
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Font.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_FontFormat.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_FontJustify.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_FontStyle.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_FontText.cpp">
@@ -501,25 +459,10 @@
     <ClCompile Include="src\lua\lua_Game.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_GameClearFlags.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Gamepad.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_GamepadButtonMapping.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_GamepadGamepadEvent.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_GameState.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Gesture.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_GestureGestureEvent.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Global.cpp">
@@ -534,19 +477,10 @@
     <ClCompile Include="src\lua\lua_ImageControl.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_ImageFormat.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Joint.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Keyboard.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_KeyboardKey.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_KeyboardKeyEvent.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Label.cpp">
@@ -555,19 +489,10 @@
     <ClCompile Include="src\lua\lua_Layout.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_LayoutType.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Light.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_LightType.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Logger.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_LoggerLevel.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Material.cpp">
@@ -588,13 +513,7 @@
     <ClCompile Include="src\lua\lua_MeshBatch.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_MeshIndexFormat.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_MeshPart.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_MeshPrimitiveType.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_MeshSkin.cpp">
@@ -606,22 +525,13 @@
     <ClCompile Include="src\lua\lua_Mouse.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_MouseMouseEvent.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Node.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_NodeCloneContext.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_NodeType.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_ParticleEmitter.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_ParticleEmitterTextureBlending.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Pass.cpp">
@@ -636,22 +546,13 @@
     <ClCompile Include="src\lua\lua_PhysicsCollisionObjectCollisionListener.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_PhysicsCollisionObjectCollisionListenerEventType.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_PhysicsCollisionObjectCollisionPair.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_PhysicsCollisionObjectType.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_PhysicsCollisionShape.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_PhysicsCollisionShapeDefinition.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_PhysicsCollisionShapeType.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_PhysicsConstraint.cpp">
@@ -667,9 +568,6 @@
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_PhysicsControllerListener.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_PhysicsControllerListenerEventType.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_PhysicsFixedConstraint.cpp">
@@ -711,9 +609,6 @@
     <ClCompile Include="src\lua\lua_Properties.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_PropertiesType.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Quaternion.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
@@ -732,28 +627,7 @@
     <ClCompile Include="src\lua\lua_RenderState.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_RenderStateAutoBinding.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_RenderStateBlend.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_RenderStateCullFaceSide.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_RenderStateDepthFunction.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_RenderStateFrontFace.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_RenderStateStateBlock.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_RenderStateStencilFunction.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_RenderStateStencilOperation.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_RenderTarget.cpp">
@@ -783,28 +657,13 @@
     <ClCompile Include="src\lua\lua_Terrain.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_TerrainFlags.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_TextBox.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_TextBoxInputMode.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Texture.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_TextureFilter.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_TextureFormat.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_TextureSampler.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_TextureWrap.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Theme.cpp">
@@ -823,9 +682,6 @@
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Touch.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_TouchTouchEvent.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Transform.cpp">
@@ -855,9 +711,6 @@
     <ClCompile Include="src\lua\lua_VertexFormatElement.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_VertexFormatUsage.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_VerticalLayout.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
@@ -873,7 +726,16 @@
     <ClCompile Include="src\lua\lua_JoystickControl.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_ContainerDirection.cpp">
+    <ClCompile Include="src\Script.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_Script.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_ScriptTargetEvent.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_ScriptTargetEventRegistry.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_TextureCubeFace.cpp">
@@ -1226,9 +1088,6 @@
     <ClInclude Include="src\lua\lua_AIMessage.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_AIMessageParameterType.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_AIState.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1248,9 +1107,6 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_AnimationClipListener.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_AnimationClipListenerEventType.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_AnimationController.h">
@@ -1274,9 +1130,6 @@
     <ClInclude Include="src\lua\lua_AudioSource.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_AudioSourceState.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_BoundingBox.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1292,46 +1145,22 @@
     <ClInclude Include="src\lua\lua_Camera.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_CameraType.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_CheckBox.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Container.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_ContainerScroll.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Control.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_ControlAlignment.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_ControlAutoSize.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_ControlListener.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_ControlListenerEventType.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_ControlState.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Curve.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_CurveInterpolationType.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_DepthStencilTarget.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_DepthStencilTargetFormat.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Effect.h">
@@ -1344,15 +1173,6 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Font.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_FontFormat.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_FontJustify.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_FontStyle.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_FontText.h">
@@ -1370,25 +1190,10 @@
     <ClInclude Include="src\lua\lua_Game.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_GameClearFlags.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Gamepad.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_GamepadButtonMapping.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_GamepadGamepadEvent.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_GameState.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Gesture.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_GestureGestureEvent.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Global.h">
@@ -1403,19 +1208,10 @@
     <ClInclude Include="src\lua\lua_ImageControl.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_ImageFormat.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Joint.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Keyboard.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_KeyboardKey.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_KeyboardKeyEvent.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Label.h">
@@ -1424,19 +1220,10 @@
     <ClInclude Include="src\lua\lua_Layout.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_LayoutType.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Light.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_LightType.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Logger.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_LoggerLevel.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Material.h">
@@ -1457,13 +1244,7 @@
     <ClInclude Include="src\lua\lua_MeshBatch.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_MeshIndexFormat.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_MeshPart.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_MeshPrimitiveType.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_MeshSkin.h">
@@ -1475,22 +1256,13 @@
     <ClInclude Include="src\lua\lua_Mouse.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_MouseMouseEvent.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Node.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_NodeCloneContext.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_NodeType.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_ParticleEmitter.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_ParticleEmitterTextureBlending.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Pass.h">
@@ -1505,22 +1277,13 @@
     <ClInclude Include="src\lua\lua_PhysicsCollisionObjectCollisionListener.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_PhysicsCollisionObjectCollisionListenerEventType.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_PhysicsCollisionObjectCollisionPair.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_PhysicsCollisionObjectType.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_PhysicsCollisionShape.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_PhysicsCollisionShapeDefinition.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_PhysicsCollisionShapeType.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_PhysicsConstraint.h">
@@ -1536,9 +1299,6 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_PhysicsControllerListener.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_PhysicsControllerListenerEventType.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_PhysicsFixedConstraint.h">
@@ -1580,9 +1340,6 @@
     <ClInclude Include="src\lua\lua_Properties.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_PropertiesType.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Quaternion.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1601,28 +1358,7 @@
     <ClInclude Include="src\lua\lua_RenderState.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_RenderStateAutoBinding.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_RenderStateBlend.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_RenderStateCullFaceSide.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_RenderStateDepthFunction.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_RenderStateFrontFace.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_RenderStateStateBlock.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_RenderStateStencilFunction.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_RenderStateStencilOperation.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_RenderTarget.h">
@@ -1652,28 +1388,13 @@
     <ClInclude Include="src\lua\lua_Terrain.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_TerrainFlags.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_TextBox.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_TextBoxInputMode.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Texture.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_TextureFilter.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_TextureFormat.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_TextureSampler.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_TextureWrap.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Theme.h">
@@ -1692,9 +1413,6 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Touch.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_TouchTouchEvent.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Transform.h">
@@ -1724,9 +1442,6 @@
     <ClInclude Include="src\lua\lua_VertexFormatElement.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_VertexFormatUsage.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_VerticalLayout.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1742,7 +1457,16 @@
     <ClInclude Include="src\lua\lua_JoystickControl.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_ContainerDirection.h">
+    <ClInclude Include="src\Script.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_Script.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ScriptTargetEvent.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ScriptTargetEventRegistry.h">
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_TextureCubeFace.h">

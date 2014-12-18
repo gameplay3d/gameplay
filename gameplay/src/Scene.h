@@ -177,6 +177,17 @@ public:
     void setAmbientColor(float red, float green, float blue);
 
     /**
+     * Updates all active nodes in the scene.
+     *
+     * This method is recursively calls the Node::update(float) method on all nodes that
+     * are active within the scene. A Node is considered active if Node::isActive()
+     * returns true.
+     *
+     * @param elapsedTime Elapsed time in milliseconds.
+     */
+    void update(float elapsedTime);
+
+    /**
      * Visits each node in the scene and calls the specified method pointer.
      *
      * Calling this method invokes the specified method pointer for each node

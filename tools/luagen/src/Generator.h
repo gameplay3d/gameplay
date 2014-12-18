@@ -100,6 +100,11 @@ public:
      */
     bool isRef(string classname);
 
+    /**
+     * Checks whether the given class has any public derived classes.
+     */
+    bool hasDerivedClasses(string classname);
+
 protected:
     /**
      * Constructor.

@@ -33,6 +33,16 @@ public:
     static JoystickControl* create(const char* id, Theme::Style* style = NULL);
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "JoystickControl"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
@@ -107,11 +117,6 @@ public:
      * @return The index of this joystick on a form.
      */
     unsigned int getIndex() const;
-    
-    /**
-     * @see Control::getType
-     */
-    const char* getType() const;
 
 protected:
     

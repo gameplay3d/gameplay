@@ -30,6 +30,7 @@ class AIAgent;
 class AIStateMachine
 {
     friend class AIAgent;
+    friend class AIState;
 
 public:
 

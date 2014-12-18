@@ -1,6 +1,8 @@
 #include "Base.h"
 #include "AIState.h"
+#include "AIAgent.h"
 #include "AIStateMachine.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -10,9 +12,6 @@ AIState* AIState::_empty = NULL;
 AIState::AIState(const char* id)
     : _id(id), _listener(NULL)
 {
-    addScriptEvent("enter", "<AIAgent><AIState>");
-    addScriptEvent("exit", "<AIAgent><AIState>");
-    addScriptEvent("update", "<AIAgent><AIState>f");
 }
 
 AIState::~AIState()
@@ -39,7 +38,9 @@ void AIState::enter(AIStateMachine* stateMachine)
     if (_listener)
         _listener->stateEnter(stateMachine->getAgent(), this);
 
-    fireScriptEvent<void>("enter", stateMachine->getAgent(), this);
+    Node* node = stateMachine->_agent->_node;
+    if (node)
+        node->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, stateEnter), dynamic_cast<void*>(node), this);
 }
 
 void AIState::exit(AIStateMachine* stateMachine)
@@ -47,7 +48,9 @@ void AIState::exit(AIStateMachine* stateMachine)
     if (_listener)
         _listener->stateExit(stateMachine->getAgent(), this);
 
-    fireScriptEvent<void>("exit", stateMachine->getAgent(), this);
+    Node* node = stateMachine->_agent->_node;
+    if (node)
+        node->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, stateExit), dynamic_cast<void*>(node), this);
 }
 
 void AIState::update(AIStateMachine* stateMachine, float elapsedTime)
@@ -55,7 +58,9 @@ void AIState::update(AIStateMachine* stateMachine, float elapsedTime)
     if (_listener)
         _listener->stateUpdate(stateMachine->getAgent(), this, elapsedTime);
 
-    fireScriptEvent<void>("update", stateMachine->getAgent(), this, elapsedTime);
+    Node* node = stateMachine->_agent->_node;
+    if (node)
+        node->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, stateUpdate), dynamic_cast<void*>(node), this, elapsedTime);
 }
 
 AIState::Listener::~Listener()
