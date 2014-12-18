@@ -91,7 +91,8 @@ Scene* SceneLoader::loadInternal(const char* url)
         SceneNodeProperty::CAMERA |
         SceneNodeProperty::ROTATE |
         SceneNodeProperty::SCALE |
-        SceneNodeProperty::TRANSLATE);
+        SceneNodeProperty::TRANSLATE |
+        SceneNodeProperty::SCRIPT);
     applyNodeProperties(sceneProperties, SceneNodeProperty::COLLISION_OBJECT);
 
     // Apply node tags
@@ -377,7 +378,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
     }
     else
     {
-        // Handle scale, rotate and translate.
+        // Handle simple types (scale, rotate, translate, script, etc)
         switch (snp._type)
         {
         case SceneNodeProperty::TRANSLATE:
@@ -401,6 +402,9 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 node->scale(s);
             break;
         }
+        case SceneNodeProperty::SCRIPT:
+            node->addScript(snp._value.c_str());
+            break;
         default:
             GP_ERROR("Unsupported node property type (%d).", snp._type);
             break;
@@ -779,6 +783,10 @@ void SceneLoader::parseNode(Properties* ns, SceneNode* parent, const std::string
         else if (strcmp(name, "scale") == 0)
         {
             addSceneNodeProperty(sceneNode, SceneNodeProperty::SCALE, ns->getString());
+        }
+        else if (strcmp(name, "script") == 0)
+        {
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::SCRIPT, ns->getString());
         }
         else
         {
@@ -1203,29 +1211,33 @@ void splitURL(const std::string& url, std::string* file, std::string* id)
         return;
     }
 
-    // Check if the url references a file (otherwise, it only references a node within the main GPB).
-    size_t loc = url.rfind(".");
+    // Check if the url references a file (otherwise, it only references some sort of ID)
+    size_t loc = url.rfind("#"); 
     if (loc != std::string::npos)
     {
-        // If the url references a specific namespace within the file,
-        // set the id out parameter appropriately. Otherwise, set the id out
-        // parameter to the empty string so we know to load the first namespace.
-        loc = url.rfind("#");
-        if (loc != std::string::npos)
+        *file = url.substr(0, loc);
+        if (FileSystem::fileExists(file->c_str()))
         {
-            *file = url.substr(0, loc);
             *id = url.substr(loc + 1);
         }
         else
         {
-            *file = url;
-            *id = std::string();
+            *file = std::string();
+            *id = url;
         }
     }
     else
     {
-        *file = std::string();
-        *id = url;
+        if (FileSystem::fileExists(url.c_str()))
+        {
+            *file = url;
+            *id = std::string();
+        }
+        else
+        {
+            *file = std::string();
+            *id = url;
+        }
     }
 }
 

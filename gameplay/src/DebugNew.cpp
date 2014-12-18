@@ -114,7 +114,7 @@ void* debugAlloc(std::size_t size, const char* file, int line)
 
     // Capture the stack frame (up to MAX_STACK_FRAMES) if we 
     // are running on Windows and the user has enabled it.
-#if defined(WIN32) && defined(_M_IX86)
+#if defined(WIN32)
     rec->trackStackTrace = __trackStackTrace;
     if (rec->trackStackTrace)
     {
@@ -134,13 +134,21 @@ void* debugAlloc(std::size_t size, const char* file, int line)
         memset(&stackFrame, 0, sizeof(STACKFRAME64));
 
         // Initialize the stack frame based on the machine architecture.
-#ifdef _M_IX86
+#if defined(_M_IX86)
         static const DWORD machineType = IMAGE_FILE_MACHINE_I386;
         stackFrame.AddrPC.Offset = context.Eip;
         stackFrame.AddrPC.Mode = AddrModeFlat;
         stackFrame.AddrFrame.Offset = context.Ebp;
         stackFrame.AddrFrame.Mode = AddrModeFlat;
         stackFrame.AddrStack.Offset = context.Esp;
+        stackFrame.AddrStack.Mode = AddrModeFlat;
+#elif defined (_M_X64)
+        static const DWORD machineType = IMAGE_FILE_MACHINE_AMD64;
+        stackFrame.AddrPC.Offset = context.Rip;
+        stackFrame.AddrPC.Mode = AddrModeFlat;
+        stackFrame.AddrFrame.Offset = context.Rdi;
+        stackFrame.AddrFrame.Mode = AddrModeFlat;
+        stackFrame.AddrStack.Offset = context.Rsp;
         stackFrame.AddrStack.Mode = AddrModeFlat;
 #else
 #error "Machine architecture not supported!"

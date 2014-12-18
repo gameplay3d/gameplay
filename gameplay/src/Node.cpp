@@ -24,6 +24,8 @@ Node::Node(const char* id)
     _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     if (id)
     {
         _id = id;
@@ -68,6 +70,11 @@ Node::~Node()
 Node* Node::create(const char* id)
 {
     return new Node(id);
+}
+
+const char* Node::getTypeName() const
+{
+    return "Node";
 }
 
 const char* Node::getId() const
@@ -436,6 +443,17 @@ Node* Node::getRootNode() const
         n = n->getParent();
     }
     return n;
+}
+
+void Node::update(float elapsedTime)
+{
+    for (Node* node = _firstChild; node != NULL; node = node->_nextSibling)
+    {
+        if (node->isEnabled())
+            node->update(elapsedTime);
+    }
+
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Node, update), dynamic_cast<void*>(this), elapsedTime);
 }
 
 bool Node::isStatic() const
@@ -1267,6 +1285,16 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
 
 AIAgent* Node::getAgent() const
 {
+    // Lazily create a new Agent for this Node if we don't have one yet.
+    // Basically, all Nodes by default can have an Agent, we just won't
+    // waste the memory unless they request one.
+    if (!_agent)
+    {
+        _agent = AIAgent::create();
+        _agent->_node = const_cast<Node*>(this);
+        Game::getInstance()->getAIController()->addAgent(_agent);
+    }
+
     return _agent;
 }
 
