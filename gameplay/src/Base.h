@@ -294,7 +294,7 @@ typedef unsigned long GamepadHandle;
  * mode and is therefore safe to use for realtime/per-frame GL
  * function calls.
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) || (defined(__APPLE__) && !defined(DEBUG))
 #define GL_ASSERT( gl_code ) gl_code
 #else
 #define GL_ASSERT( gl_code ) do \
