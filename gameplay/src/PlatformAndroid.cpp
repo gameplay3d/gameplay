@@ -1779,6 +1779,11 @@ JNIEXPORT void JNICALL Java_org_gameplay3d_GamePlayNativeActivity_gamepadEventDi
 	gameplay::Platform::gamepadEventDisconnectedInternal(deviceId);
 }
 
+JNIEXPORT void JNICALL Java_org_gameplay3d_GamePlayNativeActivity_screenOrientationChanged(JNIEnv* env, jclass clazz, jint orientation)
+{
+    __orientationAngle = orientation * 90;
+}
+
 }
 
 #endif
