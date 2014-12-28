@@ -41,11 +41,14 @@ public class GamePlayNativeActivity extends NativeActivity
         _gamepadDevices = new SparseArray<InputDevice>();
         _inputManager = (InputManager)getSystemService(Context.INPUT_SERVICE);
 
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        if (Build.VERSION.SDK_INT >= 18) 
-            uiOptions ^= 0x00000800; // View.SYSTEM_UI_FLAG_IMMERSIVE;
-        decorView.setSystemUiVisibility(uiOptions);
+        if (Build.VERSION.SDK_INT >= 19)
+        {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                            View.SYSTEM_UI_FLAG_FULLSCREEN |
+                            0x00000800; // View.SYSTEM_UI_FLAG_IMMERSIVE;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
 
         orientationListener = new OrientationEventListener(this) {
             public void onOrientationChanged(int orientation) {
