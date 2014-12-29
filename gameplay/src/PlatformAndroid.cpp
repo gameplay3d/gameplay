@@ -857,7 +857,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                         
                         // Gestures
                         bool gestureDetected = false;
-					    if (__pointer0.pressed &&  __pointer0.pointerId == pointerId)
+					    if (__pointer0.pressed &&  __pointer0.pointerId == pointerId && !Form::getActiveControl())
                         {
                             int deltaX = x - __pointer0.x;
                             int deltaY = y - __pointer0.y;
@@ -966,7 +966,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                         y = AMotionEvent_getY(event, pointerIndex);
 
                         bool gestureDetected = false;
-                        if (__pointer1.pressed &&  __pointer1.pointerId == pointerId)
+                        if (__pointer1.pressed &&  __pointer1.pointerId == pointerId && !Form::getActiveControl())
                         {
                             int deltaX = x - __pointer1.x;
                             int deltaY = y - __pointer1.y;
@@ -1032,7 +1032,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                             y = AMotionEvent_getY(event, i);
                             
                             bool gestureDetected = false;
-						    if (__pointer0.pressed)
+						    if (__pointer0.pressed && !Form::getActiveControl())
 						    {
 							    //The two pointers are pressed and the event was done by one of it
 							    if (__pointer1.pressed && (pointerId == __pointer0.pointerId || pointerId == __pointer1.pointerId))
