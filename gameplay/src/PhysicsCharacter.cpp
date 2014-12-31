@@ -650,6 +650,9 @@ void PhysicsCharacter::ActionInterface::debugDraw(btIDebugDraw* debugDrawer)
 
 void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
 {
+    if (!isEnabled())
+        return;
+
     GP_ASSERT(_ghostObject);
     GP_ASSERT(_node);
 
