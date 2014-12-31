@@ -201,7 +201,7 @@ extern int strcmpnocase(const char* s1, const char* s2);
 
 // Scripting
 using std::va_list;
-#include <lua.hpp>
+#include <lua/lua.hpp>
 
 #define WINDOW_VSYNC        1
 

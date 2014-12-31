@@ -21,7 +21,7 @@ shopt -s expand_aliases
 
 #Alias the sed in-place command for OSX and Linux - incompatibilities between BSD and Linux sed args
 if [[ "$unamestr" == "Darwin" ]]; then
-	alias aliassedinplace='sed -i""'
+	alias aliassedinplace='sed -i ""'
 else
 	#For Linux, notice no space after the '-i' 
 	alias aliassedinplace='sed -i""'
