@@ -196,6 +196,8 @@ set(GAMEPLAY_SRC
     src/ScriptTarget.h
     src/Slider.cpp
     src/Slider.h
+    src/Sprite.cpp
+    src/Sprite.h
     src/SpriteBatch.cpp
     src/SpriteBatch.h
     src/Technique.cpp
@@ -204,6 +206,8 @@ set(GAMEPLAY_SRC
     src/Terrain.h
     src/TerrainPatch.cpp
     src/TerrainPatch.h
+    src/Text.cpp
+    src/Text.h
     src/TextBox.cpp
     src/TextBox.h
     src/Texture.cpp
@@ -212,6 +216,8 @@ set(GAMEPLAY_SRC
     src/Theme.h
     src/ThemeStyle.cpp
     src/ThemeStyle.h
+    src/TileSet.cpp
+    src/TileSet.h
     src/Transform.cpp
     src/Transform.h
     src/Vector2.cpp
@@ -302,8 +308,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_FlowLayout.h
     src/lua/lua_Font.cpp
     src/lua/lua_Font.h
-    src/lua/lua_FontText.cpp
-    src/lua/lua_FontText.h
     src/lua/lua_Form.cpp
     src/lua/lua_Form.h
     src/lua/lua_FrameBuffer.cpp
