@@ -62,7 +62,7 @@ Gamepad* Gamepad::add(GamepadHandle handle, unsigned int buttonCount, unsigned i
     Gamepad* gamepad = new Gamepad(handle, buttonCount, joystickCount, triggerCount, name);
 
     __gamepads.push_back(gamepad);
-    Game::getInstance()->gamepadEvent(CONNECTED_EVENT, gamepad);
+    Game::getInstance()->gamepadEventInternal(CONNECTED_EVENT, gamepad);
     return gamepad;
 }
 
@@ -71,7 +71,7 @@ Gamepad* Gamepad::add(const char* formPath)
     Gamepad* gamepad = new Gamepad(formPath);
 
     __gamepads.push_back(gamepad);
-    Game::getInstance()->gamepadEvent(CONNECTED_EVENT, gamepad);
+    Game::getInstance()->gamepadEventInternal(CONNECTED_EVENT, gamepad);
     return gamepad;
 }
 
@@ -84,7 +84,7 @@ void Gamepad::remove(GamepadHandle handle)
         if (gamepad->_handle == handle)
         {
             it = __gamepads.erase(it);
-            Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, gamepad);
+            Game::getInstance()->gamepadEventInternal(DISCONNECTED_EVENT, gamepad);
             SAFE_DELETE(gamepad);
         }
         else
@@ -103,7 +103,7 @@ void Gamepad::remove(Gamepad* gamepad)
         if (g == gamepad)
         {
             it = __gamepads.erase(it);
-            Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, g);
+            Game::getInstance()->gamepadEventInternal(DISCONNECTED_EVENT, g);
             SAFE_DELETE(gamepad);
         }
         else
@@ -127,14 +127,14 @@ void Gamepad::bindGamepadControls(Container* container)
         {
             bindGamepadControls((Container*) control);
         }
-        else if (std::strcmp("joystick", control->getType()) == 0)
+        else if (std::strcmp("JoystickControl", control->getTypeName()) == 0)
         {
             JoystickControl* joystick = (JoystickControl*)control;
             joystick->setConsumeInputEvents(true);
             _uiJoysticks[joystick->getIndex()] = joystick;
             _joystickCount++;
         }
-        else if (std::strcmp("button", control->getType()) == 0)
+        else if (std::strcmp("Button", control->getTypeName()) == 0)
         {
             Button* button = (Button*)control;
             button->setConsumeInputEvents(true);

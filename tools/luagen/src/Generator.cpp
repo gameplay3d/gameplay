@@ -836,7 +836,7 @@ void Generator::getTypedefs(XMLElement* fileNode, string ns)
             return;
         }
 
-        // Process the enums.
+        // Process the typedefs.
         if (strcmp(kind, "typedef") == 0)
         {
             XMLElement* e = node->FirstChildElement("memberdef");
@@ -1314,24 +1314,6 @@ void Generator::resolveType(FunctionBinding::Param* param, string functionName, 
             }
         }
     }
-
-    // Ensure that the header for the Lua enum conversion 
-    // functions is included in the file containing the
-    // generated binding that this param/return value is part of.
-    if (param->type == FunctionBinding::Param::TYPE_ENUM)
-    {
-        string enumHeader = string("lua_") + getUniqueName(name) + string(".h");
-        if (_includes.find(header) != _includes.end())
-        {
-            set<string>& includes = _includes[header];
-            if (includes.find(enumHeader) == includes.end())
-                includes.insert(enumHeader);
-        }
-        else
-        {
-            _includes[header].insert(enumHeader);
-        }
-    }
 }
 
 void Generator::resolveTypes()
@@ -1424,134 +1406,6 @@ void Generator::generateBindings(string* bindingNS)
             baseClasses.push_back(iter->first);
     }
 
-    // Write out all the enum files.
-    if (_enums.size() > 0)
-    {
-        // Write out the enum conversion function declarations.
-        for (map<string, EnumBinding>::iterator iter = _enums.begin(); iter != _enums.end(); iter++)
-        {
-            if (generatingGameplay || (!generatingGameplay &&  _namespaces["gameplay"].find(iter->first) == _namespaces["gameplay"].end()))
-            {
-                cout << "Generating bindings for '" << iter->first << "'...\n";
-
-                // Header.
-                string enumHStr = _outDir + string("lua_") + getUniqueName(iter->first) + string(".h");
-                ostringstream enumH;
-                includeGuard = string("lua_") + getUniqueName(iter->first) + string("_H_");
-                transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
-                enumH << "#ifndef " << includeGuard << "\n";
-                enumH << "#define " << includeGuard << "\n\n";
-                enumH << "#include \"" << iter->second.include << "\"\n\n";
-
-                if (bindingNS)
-                {
-                    enumH << "namespace " << *bindingNS << "\n";
-                    enumH << "{\n\n";
-                }
-
-                enumH << "// Lua bindings for enum conversion functions for " << iter->first << ".\n";
-                enumH << iter->first << " lua_enumFromString_" << getUniqueName(iter->first) << "(const char* s);\n";
-                enumH << "const char* lua_stringFromEnum_" << getUniqueName(iter->first) << "(" << iter->first << " e);\n\n";
-
-                if (bindingNS)
-                {
-                    enumH << "}\n\n";
-                }
-
-                enumH << "#endif\n";
-
-                writeFile(enumHStr, enumH.str());
-
-                // Implementation.
-                string enumCppStr = _outDir + string("lua_") + getUniqueName(iter->first) + string(".cpp"); 
-                ostringstream enumCpp(enumCppStr.c_str());
-                enumCpp << "#include \"Base.h\"\n";
-                enumCpp << "#include \"lua_" << getUniqueName(iter->first) << ".h\"\n\n";
-
-                if (bindingNS)
-                {
-                    enumCpp << "namespace " << *bindingNS << "\n";
-                    enumCpp << "{\n\n";
-                }
-
-                enumCpp << "static const char* enumStringEmpty = \"\";\n\n";
-
-                // Build the scope string if applicable.
-                string scope;
-                if (iter->second.scopePath.size() > 0)
-                {
-                    for (unsigned int i = 0; i < iter->second.scopePath.size(); i++)
-                    {
-                        scope += iter->second.scopePath[i] + string("::");
-                    }
-                }
-
-                // Write out the string constants that correspond to the enumeration values.
-                for (unsigned int i = 0; i < iter->second.values.size(); i++)
-                {
-                    enumCpp << "static const char* luaEnumString_" << getUniqueName(iter->first) << "_";
-                    enumCpp << iter->second.values[i] << " = \"" << iter->second.values[i] << "\";\n";
-                }
-                enumCpp << "\n";
-
-                enumCpp << iter->first << " lua_enumFromString_" << getUniqueName(iter->first) << "(const char* s)\n";
-                enumCpp << "{\n";
-                
-                for (unsigned int i = 0; i < iter->second.values.size(); i++)
-                {
-                    enumCpp << "    ";
-                        
-                    enumCpp << "if (strcmp(s, luaEnumString_" << getUniqueName(iter->first) << "_" << iter->second.values[i] << ") == 0)\n";
-                    enumCpp << "        return ";
-                    if (scope.size() > 0)
-                        enumCpp << scope;
-                    enumCpp << iter->second.values[i] << ";\n";
-
-                    if (i == iter->second.values.size() - 1)
-                    {
-                        //enumCpp << "    GP_ERROR(\"Invalid enumeration value '%s' for enumeration " << iter->first << ".\", s);\n";
-                        enumCpp << "    return ";
-                        if (scope.size() > 0)
-                            enumCpp << scope;
-                        enumCpp << iter->second.values[0] << ";\n";
-                    }
-                }
-
-                enumCpp << "}\n\n";
-
-                enumCpp << "const char* lua_stringFromEnum_" << getUniqueName(iter->first) << "(" << iter->first << " e)\n";
-                enumCpp << "{\n";
-
-                // Write out the enum-to-string conversion code.
-                for (unsigned int i = 0; i < iter->second.values.size(); i++)
-                {
-                    enumCpp << "    ";
-                        
-                    enumCpp << "if (e == ";
-                    if (scope.size() > 0)
-                        enumCpp << scope;
-                    enumCpp << iter->second.values[i] << ")\n";
-                    enumCpp << "        return luaEnumString_" << getUniqueName(iter->first) << "_" << iter->second.values[i] << ";\n";
-
-                    if (i == iter->second.values.size() - 1)
-                    {
-                        //enumCpp << "    GP_ERROR(\"Invalid enumeration value '%d' for enumeration " << iter->first << ".\", e);\n";
-                        enumCpp << "    return enumStringEmpty;\n";
-                    }
-                }
-
-                enumCpp << "}\n\n";
-
-                if (bindingNS)
-                {
-                    enumCpp << "}\n\n";
-                }
-
-                writeFile(enumCppStr, enumCpp.str());
-            }
-        }
-    }
-
     // Write out the global bindings file.
     cout << "Generating global bindings...\n";
     if (baseClasses.size() > 0 || _functions.size() > 0 || _enums.size() > 0)
@@ -1593,13 +1447,6 @@ void Generator::generateBindings(string* bindingNS)
             global << "#ifndef " << includeGuard << "\n";
             global << "#define " << includeGuard << "\n\n";
 
-            // Write out the needed includes for the global enumeration function.
-            for (map<string, EnumBinding>::iterator iter = _enums.begin(); iter != _enums.end(); iter++)
-            {
-                if (generatingGameplay || (!generatingGameplay &&  _namespaces["gameplay"].find(iter->first) == _namespaces["gameplay"].end()))
-                    global << "#include \"lua_" << getUniqueName(iter->first) << ".h\"\n";
-            }
-            global << "\n";
             luaAllH << "#include \"" << string(LUA_GLOBAL_FILENAME) << ".h\"\n";
             luaAllCpp << "    luaRegister_" << LUA_GLOBAL_FILENAME << "();\n";
 
@@ -1622,12 +1469,6 @@ void Generator::generateBindings(string* bindingNS)
                 global << "\n";
             }
 
-            if (generateEnumBindings)
-            {
-                global << "// Global enum to string conversion function (used to pass enums to Lua from C++).\n";
-                global << "const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value);\n\n";
-            }
-            
             // Write out the signature of the function used to register the global functions with Lua.
             global << "void luaRegister_" << LUA_GLOBAL_FILENAME << "();\n\n";
 
@@ -1642,16 +1483,35 @@ void Generator::generateBindings(string* bindingNS)
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".cpp");
             ostringstream global;
-            global << "#include \"ScriptController.h\"\n";
-            global << "#include \"" << LUA_GLOBAL_FILENAME << ".h\"\n";
+
+            // Add unique set of global includes
+            vector<string> globalIncludes;
+            globalIncludes.push_back("ScriptController.h");
+            globalIncludes.push_back(string(LUA_GLOBAL_FILENAME) + ".h");
+
             map<string, set<string> >::iterator iter = _includes.find(string(LUA_GLOBAL_FILENAME) + string(".h"));
             if (iter != _includes.end())
             {
                 set<string>::iterator includeIter = iter->second.begin();
                 for (; includeIter != iter->second.end(); includeIter++)
                 {
-                    global << "#include \"" << *includeIter << "\"\n";
+                    if (std::find(globalIncludes.begin(), globalIncludes.end(), *includeIter) == globalIncludes.end())
+                        globalIncludes.push_back(*includeIter);
                 }
+            }
+
+            for (map<string, EnumBinding>::iterator itr = _enums.begin(); itr != _enums.end(); ++itr)
+            {
+                if (generatingGameplay || (!generatingGameplay &&  _namespaces["gameplay"].find(itr->first) == _namespaces["gameplay"].end()))
+                {
+                    if (std::find(globalIncludes.begin(), globalIncludes.end(), itr->second.include) == globalIncludes.end())
+                        globalIncludes.push_back(itr->second.include);
+                }
+            }
+
+            for (vector<string>::iterator itr = globalIncludes.begin(); itr != globalIncludes.end(); ++itr)
+            {
+                global << "#include \"" << *itr << "\"\n";
             }
             global << "\n";
 
@@ -1693,11 +1553,6 @@ void Generator::generateBindings(string* bindingNS)
             // Register all enums.
             if (generateEnumBindings)
             {
-                global << "    gameplay::ScriptUtil::addStringFromEnumConversionFunction(&";
-                if (bindingNS)
-                    global << *bindingNS << "::";
-                global << "lua_stringFromEnumGlobal);\n";
-
                 for (map<string, EnumBinding>::iterator iter = _enums.begin(); iter != _enums.end(); iter++)
                 {
                     if (generatingGameplay || (!generatingGameplay &&  _namespaces["gameplay"].find(iter->first) == _namespaces["gameplay"].end()))
@@ -1706,15 +1561,17 @@ void Generator::generateBindings(string* bindingNS)
                         global << "    {\n";
 
                         global << "        std::vector<std::string> scopePath;\n";
+                        string enumClass;
                         for (unsigned int i = 0; i < iter->second.scopePath.size(); i++)
                         {
                             global << "        scopePath.push_back(\"" << iter->second.scopePath[i] << "\");\n";
+                            enumClass += iter->second.scopePath[i] + "::";
                         }
 
                         vector<string>::iterator enumIter = iter->second.values.begin();
                         for (; enumIter != iter->second.values.end(); enumIter++)
                         {
-                            global << "        gameplay::ScriptUtil::registerConstantString(\"" << *enumIter << "\", \"" << *enumIter << "\", scopePath);\n";
+                            global << "        gameplay::ScriptUtil::registerEnumValue(" << enumClass << *enumIter << ", \"" << *enumIter << "\", scopePath);\n";
                         }
 
                         global << "    }\n";
@@ -1731,27 +1588,6 @@ void Generator::generateBindings(string* bindingNS)
                     if (generatingGameplay || (!generatingGameplay &&  _namespaces["gameplay"].find(iter->second[0].name) == _namespaces["gameplay"].end()))
                         FunctionBinding::write(global, iter->second);
                 }
-            }
-
-            // Write out the global enum conversion function (used to pass enums from C++ to Lua).
-            if (generateEnumBindings)
-            {
-                global << "static const char* enumStringEmpty = \"\";\n\n";
-                global << "const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)\n";
-                global << "{\n";
-                for (map<string, EnumBinding>::iterator iter = _enums.begin(); iter != _enums.end(); iter++)
-                {
-                    if (generatingGameplay || (!generatingGameplay &&  _namespaces["gameplay"].find(iter->first) == _namespaces["gameplay"].end()))
-                    {
-                        global << "    if (enumname == \"";
-                        global << iter->first << "\")\n";
-                        global << "        return lua_stringFromEnum_" << getUniqueName(iter->first) << "((" << iter->first << ")value);\n";
-                    }
-                }
-                global << "\n";
-                global << "    GP_ERROR(\"Unrecognized enumeration type '%s'.\", enumname.c_str());\n";
-                global << "    return enumStringEmpty;\n";
-                global << "}\n\n";
             }
 
             if (bindingNS)
@@ -1793,6 +1629,25 @@ void Generator::getAllDerived(set<string>& derived, string classname)
             getAllDerived(derived, derivedClassName);
         }
     }
+}
+
+bool Generator::hasDerivedClasses(string classname)
+{
+    map<string, ClassBinding>::iterator itr = _classes.find(classname);
+    if (itr != _classes.end())
+    {
+        for (size_t i = 0, count = itr->second.derived.size(); i < count; i++)
+        {
+            // If the derived class is not in the ref ID table, then it
+            // is a hidden (protected, private, etc.) class, so don't include it.
+            if (_refIds.find(itr->second.derived[i]) != _refIds.end())
+            {
+                return true; // has at least one public derived class
+            }
+        }
+    }
+
+    return false;
 }
 
 void Generator::getIncludes(XMLElement* e, string filename)

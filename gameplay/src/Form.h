@@ -94,6 +94,16 @@ public:
     static void clearFocus();
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "Form"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * @see Container#isForm()
      */
     bool isForm() const;
@@ -118,11 +128,6 @@ public:
      * @return The nubmer of draw calls issued to draw the form.
      */
     unsigned int draw();
-
-    /**
-     * @see Control::getType
-     */
-    const char* getType() const;
 
     /**
      * Determines whether batching is enabled for this form.

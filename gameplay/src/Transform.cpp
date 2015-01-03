@@ -12,33 +12,37 @@ std::vector<Transform*> Transform::_transformsChanged;
 Transform::Transform()
     : _matrixDirtyBits(0), _listeners(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     _targetType = AnimationTarget::TRANSFORM;
     _scale.set(Vector3::one());
-    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
     : _matrixDirtyBits(0), _listeners(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
-    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Matrix& rotation, const Vector3& translation)
     : _matrixDirtyBits(0), _listeners(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
-    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Transform& copy)
     : _matrixDirtyBits(0), _listeners(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     _targetType = AnimationTarget::TRANSFORM;
     set(copy);
-    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::~Transform()
@@ -86,6 +90,11 @@ void Transform::resumeTransformChanged()
 bool Transform::isTransformChangedSuspended()
 {
     return (_suspendTransformChanged > 0);
+}
+
+const char* Transform::getTypeName() const
+{
+    return "Transform";
 }
 
 const Matrix& Transform::getMatrix() const
@@ -991,7 +1000,7 @@ void Transform::transformChanged()
             l.listener->transformChanged(this, l.cookie);
         }
     }
-    fireScriptEvent<void>("transformChanged", this);
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Transform, transformChanged), dynamic_cast<void*>(this));
 }
 
 void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const

@@ -1,25 +1,30 @@
 #ifndef ANIMATIONCLIP_H_
 #define ANIMATIONCLIP_H_
 
-#include "Base.h"
 #include "AnimationValue.h"
 #include "Curve.h"
 #include "Animation.h"
+#include "ScriptTarget.h"
 
 namespace gameplay
 {
 
 class Animation;
 class AnimationValue;
-class ScriptListener;
 
 /**
  * Defines the runtime session of an Animation to be played.
  */
-class AnimationClip : public Ref
+class AnimationClip : public Ref, public ScriptTarget
 {
     friend class AnimationController;
     friend class Animation;
+
+    GP_SCRIPT_EVENTS_START();
+    GP_SCRIPT_EVENT(clipBegin, "<AnimationClip>");
+    GP_SCRIPT_EVENT(clipEnd, "<AnimationClip>");
+    GP_SCRIPT_EVENT(clipUpdate, "<AnimationClip>f");
+    GP_SCRIPT_EVENTS_END();
 
 public:
 
@@ -37,7 +42,7 @@ public:
 
     public:
 
-        /*
+        /**
          * Constructor.
          */
         Listener() 
@@ -75,6 +80,14 @@ public:
          */
         virtual void animationEvent(AnimationClip* clip, EventType type) = 0;
     };
+
+    /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * @return The type name of this class: "AnimationClip"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
 
     /**
      * Gets the AnimationClip's ID.
@@ -271,59 +284,6 @@ public:
      */
     void removeListener(AnimationClip::Listener* listener, unsigned long eventTime);
 
-    /**
-     * Adds an animation begin listener.
-     * 
-     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
-     *
-     * @param function The Lua script function to be called when an AnimationClip begins.
-     */
-    void addBeginListener(const char* function);
-
-    /**
-     * Removes an animation begin listener.
-     *
-     * @param function The Lua script function to remove.
-     */
-    void removeBeginListener(const char* function);
-
-    /**
-     * Adds an animation end listener.
-     * 
-     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
-     *
-     * @param function The Lua script function to be called when an AnimationClip ends.
-     */
-    void addEndListener(const char* function);
-
-    /**
-     * Removes an animation end listener.
-     *
-     * @param function The Lua script function to remove.
-     */
-    void removeEndListener(const char* function);
-
-    /**
-     * Adds an animation listener to be called back at the specified eventTime during the playback 
-     * of the AnimationClip.
-     * 
-     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
-     * 
-     * @param function The Lua script function to be called when an AnimationClip reaches the 
-     *      specified time in its playback.
-     * @param eventTime The time the listener will be called during the playback of the AnimationClip. 
-     *      Must be between 0 and the duration of the AnimationClip.
-     */
-    void addListener(const char* function, unsigned long eventTime);
-
-    /**
-     * Removes an animation listener assigned to the specified eventTime.
-     *
-     * @param function The Lua script function to remove with the specified time.
-     * @param eventTime The time of the listener to be removed.
-     */
-    void removeListener(const char* function, unsigned long eventTime);
-
 private:
     
     static const unsigned char CLIP_IS_PLAYING_BIT = 0x01;             // Bit representing whether AnimationClip is a running clip in AnimationController
@@ -360,25 +320,6 @@ private:
 
         Listener* _listener;        // This listener to call back when this event is triggered.
         unsigned long _eventTime;   // The time at which the listener will be called back at during the playback of the AnimationClip.
-    };
-
-    /**
-     * Listener implementation for script callbacks.
-     */
-    struct ScriptListener : public AnimationClip::Listener
-    {
-        /**
-         * Constructor.
-         */
-        ScriptListener(const std::string& function);
-
-        /**
-         * @see AnimationClip::Listener::animationEvent
-         */
-        void animationEvent(AnimationClip* clip, EventType type);
-
-        /** The function to call back when an animation event occurs. */
-        std::string function;
     };
 
     /**
@@ -466,7 +407,6 @@ private:
     std::vector<Listener*>* _endListeners;              // Collection of end listeners on the clip.
     std::list<ListenerEvent*>* _listeners;              // Ordered collection of listeners on the clip.
     std::list<ListenerEvent*>::iterator* _listenerItr;  // Iterator that points to the next listener event to be triggered.
-    std::vector<ScriptListener*>* _scriptListeners;     // Collection of listeners that are bound to Lua script functions.
 };
 
 }

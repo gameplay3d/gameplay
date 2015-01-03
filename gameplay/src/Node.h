@@ -2,6 +2,7 @@
 #define NODE_H_
 
 #include "Transform.h"
+#include "ScriptTarget.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
@@ -45,6 +46,14 @@ class Node : public Transform, public Ref
     friend class MeshSkin;
     friend class Light;
 
+    GP_SCRIPT_EVENTS_START();
+    GP_SCRIPT_EVENT(update, "<Node>f");
+    GP_SCRIPT_EVENT(messageReceived, "<Node><AIMessage>");
+    GP_SCRIPT_EVENT(stateEnter, "<Node><AIState>");
+    GP_SCRIPT_EVENT(stateExit, "<Node><AIState>");
+    GP_SCRIPT_EVENT(stateUpdate, "<Node><AIState>f");
+    GP_SCRIPT_EVENTS_END();
+
 public:
 
     /**
@@ -63,6 +72,14 @@ public:
      * @script{create}
      */
     static Node* create(const char* id = NULL);
+
+    /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * @return The type name of this class: "Node"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
 
     /**
      * Gets the identifier for the node.
@@ -263,6 +280,18 @@ public:
      * Gets the top level node in this node's parent hierarchy.
      */
     Node* getRootNode() const;
+
+    /**
+     * Called to update the state of this Node.
+     *
+     * This method is called by Scene::update(float) to update the state of all active
+     * nodes in a scene. A Node is considered active if Node::isActive() returns true.
+     *
+     * If any scripts are attached to the node, their update event will be fired.
+     *
+     * @param elapsedTime Elapsed time in milliseconds.
+     */
+    void update(float elapsedTime);
 
     /**
      * Returns whether the transformation of this node is static.
@@ -901,7 +930,7 @@ protected:
     /**
      * Pointer to the AI agent attached to the Node.
      */
-    AIAgent* _agent;
+    mutable AIAgent* _agent;
 
     /**
      * World Matrix representation of the Node.

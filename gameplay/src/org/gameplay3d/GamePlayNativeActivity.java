@@ -8,10 +8,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Display;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.OrientationEventListener;
 
 /**
  * GamePlay native activity extension for Android platform.
@@ -38,11 +41,26 @@ public class GamePlayNativeActivity extends NativeActivity
         _gamepadDevices = new SparseArray<InputDevice>();
         _inputManager = (InputManager)getSystemService(Context.INPUT_SERVICE);
 
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        if (Build.VERSION.SDK_INT >= 18) 
-            uiOptions ^= 0x00000800; // View.SYSTEM_UI_FLAG_IMMERSIVE;
-        decorView.setSystemUiVisibility(uiOptions);
+        if (Build.VERSION.SDK_INT >= 19)
+        {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                            View.SYSTEM_UI_FLAG_FULLSCREEN |
+                            0x00000800; // View.SYSTEM_UI_FLAG_IMMERSIVE;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+
+        orientationListener = new OrientationEventListener(this) {
+            public void onOrientationChanged(int orientation) {
+                if (orientation != OrientationEventListener.ORIENTATION_UNKNOWN) {
+                    WindowManager mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+
+                    Display display = mWindowManager.getDefaultDisplay();
+                    int rotation = display.getRotation();
+                    screenOrientationChanged(rotation);
+                }
+            }
+        };
     }
     
     @Override
@@ -58,6 +76,7 @@ public class GamePlayNativeActivity extends NativeActivity
     @Override
     protected void onResume() {
         super.onResume();
+        orientationListener.enable();
         _inputManager.registerInputDeviceListener(this, null);
         int[] ids = InputDevice.getDeviceIds();
         for (int i = 0; i < ids.length; i++) {
@@ -67,6 +86,7 @@ public class GamePlayNativeActivity extends NativeActivity
     
     @Override
     protected void onPause() {
+        orientationListener.disable();
         _inputManager.unregisterInputDeviceListener(this);
         super.onPause();
     }
@@ -121,7 +141,9 @@ public class GamePlayNativeActivity extends NativeActivity
     // JNI calls to PlatformAndroid.cpp
     private static native void gamepadEventConnectedImpl(int deviceId, int buttonCount, int joystickCount, int triggerCount, String deviceName);
     private static native void gamepadEventDisconnectedImpl(int deviceId);
+    private static native void screenOrientationChanged(int orientation);
     
     private InputManager _inputManager;
     private SparseArray<InputDevice> _gamepadDevices;
+    private OrientationEventListener orientationListener;
 }

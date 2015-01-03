@@ -1,12 +1,11 @@
 #ifndef TRANSFORM_H_
 #define TRANSFORM_H_
 
-#include "Ref.h"
+#include "ScriptTarget.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix.h"
 #include "AnimationTarget.h"
-#include "ScriptTarget.h"
 
 namespace gameplay
 {
@@ -31,6 +30,10 @@ class ScriptListener;
  */
 class Transform : public AnimationTarget, public ScriptTarget
 {
+    GP_SCRIPT_EVENTS_START();
+    GP_SCRIPT_EVENT(transformChanged, "<Transform>");
+    GP_SCRIPT_EVENTS_END();
+
 public:
 
     /**
@@ -172,6 +175,14 @@ public:
      * Destructor.
      */
     virtual ~Transform();
+
+    /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * @return The type name of this class: "Transform"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
 
     /**
      * Gets the matrix corresponding to this transform.

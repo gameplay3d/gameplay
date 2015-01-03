@@ -84,6 +84,8 @@ LOCAL_PATH := $(SAMPLE_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := TEMPLATE_PROJECT
 LOCAL_SRC_FILES := ../GAMEPLAY_PATH/gameplay/src/gameplay-main-android.cpp TemplateGame.cpp
+
+
 LOCAL_CPPFLAGS += -std=c++11 -Wno-switch-enum -Wno-switch
 LOCAL_ARM_MODE := arm
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES

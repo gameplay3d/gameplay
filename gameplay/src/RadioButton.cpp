@@ -60,6 +60,11 @@ void RadioButton::initialize(const char* typeName, Theme::Style* style, Properti
     }
 }
 
+const char* RadioButton::getTypeName() const
+{
+    return "RadioButton";
+}
+
 bool RadioButton::isSelected() const
 {
     return _selected;
@@ -196,11 +201,6 @@ unsigned int RadioButton::drawImages(Form* form, const Rectangle& clip)
     finishBatch(form, batch);
 
     return 1;
-}
-
-const char* RadioButton::getType() const
-{
-    return "radioButton";
 }
 
 void RadioButton::setGroupId(const char* groupId)
