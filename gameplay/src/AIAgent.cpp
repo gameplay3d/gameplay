@@ -35,6 +35,11 @@ Node* AIAgent::getNode() const
 {
     return _node;
 }
+    
+void AIAgent::setNode(Node* node)
+{
+    _node = node;
+}
 
 AIStateMachine* AIAgent::getStateMachine()
 {

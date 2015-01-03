@@ -1,5 +1,5 @@
-#ifndef CREATESCENESAMPLE_H_
-#define CREATESCENESAMPLE_H_
+#ifndef SCENECREATESAMPLE_H_
+#define SCENECREATESAMPLE_H_
 
 #include "gameplay.h"
 #include "Sample.h"
@@ -9,11 +9,11 @@ using namespace gameplay;
 /**
  * Samples programattically contructing a scene.
  */
-class CreateSceneSample : public Sample
+class SceneCreateSample : public Sample
 {
 public:
 
-    CreateSceneSample();
+    SceneCreateSample();
 
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 

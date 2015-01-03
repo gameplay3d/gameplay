@@ -1,5 +1,5 @@
-#ifndef LOADSCENESAMPLE_H_
-#define LOADSCENESAMPLE_H_
+#ifndef SCENELOADSAMPLE_H_
+#define SCENELOADSAMPLE_H_
 
 #include "gameplay.h"
 #include "Sample.h"
@@ -9,11 +9,11 @@ using namespace gameplay;
 /**
  * Sample for loading a scene from a .scene file.
  */
-class LoadSceneSample : public Sample
+class SceneLoadSample : public Sample
 {
 public:
 
-    LoadSceneSample();
+    SceneLoadSample();
 
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 

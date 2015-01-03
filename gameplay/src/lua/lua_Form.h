@@ -109,7 +109,6 @@ int lua_Form_setImageColor(lua_State* state);
 int lua_Form_setImageRegion(lua_State* state);
 int lua_Form_setLayout(lua_State* state);
 int lua_Form_setMargin(lua_State* state);
-int lua_Form_setNode(lua_State* state);
 int lua_Form_setOpacity(lua_State* state);
 int lua_Form_setPadding(lua_State* state);
 int lua_Form_setPosition(lua_State* state);

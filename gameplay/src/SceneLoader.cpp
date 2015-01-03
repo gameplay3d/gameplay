@@ -91,7 +91,10 @@ Scene* SceneLoader::loadInternal(const char* url)
         SceneNodeProperty::CAMERA |
         SceneNodeProperty::ROTATE |
         SceneNodeProperty::SCALE |
-        SceneNodeProperty::TRANSLATE);
+        SceneNodeProperty::TRANSLATE |
+        SceneNodeProperty::SPRITE |
+        SceneNodeProperty::TILESET |
+        SceneNodeProperty::TEXT);
     applyNodeProperties(sceneProperties, SceneNodeProperty::COLLISION_OBJECT);
 
     // Apply node tags
@@ -245,7 +248,10 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         snp._type == SceneNodeProperty::TERRAIN ||
         snp._type == SceneNodeProperty::LIGHT ||
         snp._type == SceneNodeProperty::CAMERA ||
-        snp._type == SceneNodeProperty::COLLISION_OBJECT)
+        snp._type == SceneNodeProperty::COLLISION_OBJECT ||
+        snp._type == SceneNodeProperty::SPRITE ||
+        snp._type == SceneNodeProperty::TILESET ||
+        snp._type == SceneNodeProperty::TEXT)
     {
         // Check to make sure the referenced properties object was loaded properly.
         Properties* p = _properties[snp._value];
@@ -269,6 +275,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             break;
         }
         case SceneNodeProperty::MATERIAL:
+        {
             if (!node->getModel())
             {
                 GP_ERROR("Attempting to set a material on node '%s', which has no model.", sceneNode._nodeID);
@@ -281,6 +288,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 SAFE_RELEASE(material);
             }
             break;
+        }
         case SceneNodeProperty::PARTICLE:
         {
             ParticleEmitter* particleEmitter = ParticleEmitter::create(p);
@@ -368,6 +376,27 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 else
                     node->setCollisionObject(p);
             }
+            break;
+        }
+        case SceneNodeProperty::SPRITE:
+        {
+            Sprite* sprite = Sprite::create(p);
+            node->setSprite(sprite);
+            SAFE_RELEASE(sprite);
+            break;
+        }
+        case SceneNodeProperty::TILESET:
+        {
+            TileSet* tileset = TileSet::create(p);
+            node->setTileSet(tileset);
+            SAFE_RELEASE(tileset);
+            break;
+        }
+        case SceneNodeProperty::TEXT:
+        {
+            Text* text = Text::create(p);
+            node->setText(text);
+            SAFE_RELEASE(text);
             break;
         }
         default:
@@ -704,6 +733,24 @@ void SceneLoader::parseNode(Properties* ns, SceneNode* parent, const std::string
             addSceneNodeProperty(sceneNode, SceneNodeProperty::COLLISION_OBJECT, propertyUrl.c_str());
             _properties[propertyUrl] = subns;
         }
+        else if (strcmp(subns->getNamespace(), "sprite") == 0)
+        {
+            propertyUrl = path + "sprite/" + std::string(subns->getId());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::SPRITE, propertyUrl.c_str());
+            _properties[propertyUrl] = subns;
+        }
+        else if (strcmp(subns->getNamespace(), "tileset") == 0)
+        {
+            propertyUrl = path + "tileset/" + std::string(subns->getId());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::TILESET, propertyUrl.c_str());
+            _properties[propertyUrl] = subns;
+        }
+        else if (strcmp(subns->getNamespace(), "text") == 0)
+        {
+            propertyUrl = path + "text/" + std::string(subns->getId());
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::TEXT, propertyUrl.c_str());
+            _properties[propertyUrl] = subns;
+        }
         else if (strcmp(subns->getNamespace(), "tags") == 0)
         {
             while ((name = subns->getNextProperty()) != NULL)
@@ -759,6 +806,18 @@ void SceneLoader::parseNode(Properties* ns, SceneNode* parent, const std::string
         else if (strcmp(name, "collisionObject") == 0)
         {
             addSceneNodeProperty(sceneNode, SceneNodeProperty::COLLISION_OBJECT, ns->getString(), true);
+        }
+        else if (strcmp(name, "sprite") == 0)
+        {
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::SPRITE, ns->getString(), true);
+        }
+        else if (strcmp(name, "tileset") == 0)
+        {
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::TILESET, ns->getString(), true);
+        }
+        else if (strcmp(name, "text") == 0)
+        {
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::TEXT, ns->getString(), true);
         }
         else if (strcmp(name, "rigidBodyModel") == 0)
         {

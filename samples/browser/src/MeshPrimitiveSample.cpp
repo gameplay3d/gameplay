@@ -200,11 +200,6 @@ void MeshPrimitiveSample::finalize()
     SAFE_RELEASE(_lines);
     SAFE_RELEASE(_points);
     SAFE_RELEASE(_font);
-    for (std::list<Font::Text*>::iterator it = _text.begin(); it != _text.end(); ++it)
-    {
-        SAFE_DELETE(*it);
-    }
-    _text.clear();
 }
 
 void MeshPrimitiveSample::update(float elapsedTime)

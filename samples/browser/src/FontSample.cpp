@@ -1,8 +1,8 @@
-#include "TextSample.h"
+#include "FontSample.h"
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Text", TextSample, 6);
+    ADD_SAMPLE("Graphics", "Font", FontSample, 7);
 #endif
 
 #define FONT_COUNT 5
@@ -25,13 +25,13 @@ std::string _fontFiles[] =
     "res/common/fonts/neuropol.gpb"
 };
 
-TextSample::TextSample()
+FontSample::FontSample()
     : _form(NULL), _stateBlock(NULL), _size(18), _wrap(true), _ignoreClip(false), _useViewport(true), _rightToLeft(false), _simple(false), _alignment(Font::ALIGN_LEFT),
       _fontsCount(FONT_COUNT), _fontIndex(0), _font(NULL), _viewport(250, 100, 512, 200)
 {
 }
 
-void TextSample::finalize()
+void FontSample::finalize()
 {
     SAFE_RELEASE(_stateBlock);
 
@@ -43,7 +43,7 @@ void TextSample::finalize()
     SAFE_RELEASE(_form);
 }
 
-void TextSample::initialize()
+void FontSample::initialize()
 {
     // Create our render state block that will be reused across all materials
     _stateBlock = RenderState::StateBlock::create();
@@ -88,11 +88,11 @@ void TextSample::initialize()
     static_cast<Button*>(_form->getControl("bottomRightButton"))->addListener(this, Control::Listener::CLICK);
 }
 
-void TextSample::update(float elapsedTime)
+void FontSample::update(float elapsedTime)
 {
 }
 
-void TextSample::render(float elapsedTime)
+void FontSample::render(float elapsedTime)
 {
     // Clear the screen.
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
@@ -147,13 +147,13 @@ void TextSample::render(float elapsedTime)
     _form->draw();
 }
 
-void TextSample::touchEvent(Touch::TouchEvent event, int x, int y, unsigned int contactIndex)
+void FontSample::touchEvent(Touch::TouchEvent event, int x, int y, unsigned int contactIndex)
 {
     _viewport.width = x - _viewport.x;
     _viewport.height = y - _viewport.y;
 }
 
-void TextSample::controlEvent(Control* control, EventType evt)
+void FontSample::controlEvent(Control* control, EventType evt)
 {
     const char* id = control->getId();
 

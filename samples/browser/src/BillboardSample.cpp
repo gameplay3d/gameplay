@@ -3,7 +3,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Billboards", BillboardSample, 10);
+    ADD_SAMPLE("Graphics", "Billboards", BillboardSample, 11);
 #endif
 
 static const unsigned int MOVE_FORWARD = 1;

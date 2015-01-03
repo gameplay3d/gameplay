@@ -3,7 +3,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Media", "Audio Listener", Audio3DSample, 1);
+    ADD_SAMPLE("Media", "Audio 3D", Audio3DSample, 1);
 #endif
 
 static const unsigned int MOVE_FORWARD = 1;

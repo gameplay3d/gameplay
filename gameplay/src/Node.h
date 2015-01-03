@@ -5,6 +5,9 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
+#include "Sprite.h"
+#include "TileSet.h"
+#include "Text.h"
 #include "Form.h"
 #include "ParticleEmitter.h"
 #include "PhysicsRigidBody.h"
@@ -15,11 +18,16 @@
 namespace gameplay
 {
 
-class AudioSource;
-class Bundle;
 class Scene;
+class Model;
+class Sprite;
+class TileSet;
+class Text;
 class Form;
+class ParticleEmitter;
 class Terrain;
+class AudioSource;
+class AIAgent;
 
 /**
  * Defines a hierarchical structure of objects in 3D transformation spaces.
@@ -412,31 +420,31 @@ public:
     Animation* getAnimation(const char* id = NULL) const;
 
     /**
-     * Returns the pointer to this node's camera.
+     * Gets the camera attached to this node.
      *
-     * @return The pointer to this node's camera or NULL.
+     * @return Gets the camera attached to this node.
      */
     Camera* getCamera() const;
 
     /**
-     * Assigns a camera to this node.
+     * Attaches a camera to this node.
      *
      * This will increase the reference count of the new camera and decrease
      * the reference count of the old camera.
      *
-     * @param camera A pointer to a camera. May be NULL.
+     * @param camera The new camera. May be NULL.
      */
     void setCamera(Camera* camera);
 
     /**
-     * Returns the pointer to this node's light.
+     * Get the light attached to this node.
      *
-     * @return The pointer to this node's light or NULL.
+     * @return The light attached to this node.
      */
     Light* getLight() const;
 
     /**
-     * Assigns a light to this node.
+     * Attaches a light to this node.
      *
      * This will increase the reference count of the new light and decrease
      * the reference count of the old light.
@@ -446,14 +454,14 @@ public:
     void setLight(Light* light);
 
     /**
-     * Returns the pointer to this node's model.
+     * Gets the model attached to this node.
      *
-     * @return The pointer to this node's model or NULL.
+     * @return The model attached to this node.
      */
     Model* getModel() const;
 
     /**
-     * Assigns a model to this node.
+     * Attaches a model to this node.
      *
      * This will increase the reference count of the new model and decrease
      * the reference count of the old model.
@@ -461,16 +469,98 @@ public:
      * @param model The new model. May be NULL.
      */
     void setModel(Model* model);
+    
+    /**
+     * Gets the sprite attached to this node.
+     *
+     * @return The sprite attached to this node
+     */
+    Sprite* getSprite() const;
+    
+    /**
+     * Attaches a sprite to this node.
+     *
+     * This will increase the reference count of the new sprite and decrease
+     * the reference count of the old sprite.
+     *
+     * @param sprite The new sprite. May be NULL.
+     */
+    void setSprite(Sprite* sprite);
+    
+    /**
+     * Gets the tileset attached to this node.
+     *
+     * @return The tileset attached to this node
+     */
+    TileSet* getTileSet() const;
+    
+    /**
+     * Attaches a tileset to this node.
+     *
+     * This will increase the reference count of the new tileset and decrease
+     * the reference count of the old tileset.
+     *
+     * @param tileset The new tileset. May be NULL.
+     */
+    void setTileSet(TileSet* tileset);
+    
+    /**
+     * Gets the tileset attached to this node.
+     *
+     * @return The tileset attached to this node
+     */
+    Text* getText() const;
+    
+    /**
+     * Attaches text to this node.
+     *
+     * This will increase the reference count of the new text and decrease
+     * the reference count of the old text.
+     *
+     * @param tileset The new tileset. May be NULL.
+     */
+    void setText(Text* text);
 
     /**
-     * Returns the pointer to this node's terrain.
+     * Gets the form attached to this node.
      *
-     * @return The pointer to this node's terrain.
+     * @return The form attached to this node.
+     */
+    Form* getForm() const;
+
+    /**
+     * Attaches a form to this node.
+     *
+     * @param form The new form. May be NULL.
+     */
+    void setForm(Form* form);
+    
+    /**
+     * Returns the pointer to this node's particle emitter.
+     *
+     * @return The pointer to this node's particle emitter or NULL.
+     */
+    ParticleEmitter* getParticleEmitter() const;
+    
+    /**
+     * Attaches a particle emitter to this node.
+     *
+     * This will increase the reference count of the new particle emitter and decrease
+     * the reference count of the old particle emitter.
+     *
+     * @param emitter The new particle emitter. May be NULL.
+     */
+    void setParticleEmitter(ParticleEmitter* emitter);
+    
+    /**
+     * Gets the terrain attached to this node.
+     *
+     * @return The terrain attached to this node.
      */
     Terrain* getTerrain() const;
-
+    
     /**
-     * Assigns a terrain to this node.
+     * Attaches a terrain to this node.
      *
      * This will increase the reference count of the new terrain and decrease
      * the reference count of the old terrain.
@@ -480,28 +570,14 @@ public:
     void setTerrain(Terrain* terrain);
 
     /**
-     * Returns the pointer to this node's form.
+     * Gets the audio source attached to this node.
      *
-     * @return The pointer to this node's form or NULL.
-     */
-    Form* getForm() const;
-
-    /**
-     * Assigns a form to this node.
-     *
-     * @param form The form pointer. May be NULL.
-     */
-    void setForm(Form* form);
-
-    /**
-     * Returns the pointer to this node's audio source.
-     *
-     * @return The pointer to this node's audio source or NULL.
+     * @return The audio source attached to this node.
      */
     AudioSource* getAudioSource() const;
 
     /**
-     * Assigns an audio source to this node.
+     * Attaches an audio source to this node.
      *
      * This will increase the reference count of the new audio source and decrease
      * the reference count of the old audio source.
@@ -509,23 +585,6 @@ public:
      * @param audio The new audio source. May be NULL.
      */
     void setAudioSource(AudioSource* audio);
-
-    /**
-     * Returns the pointer to this node's particle emitter.
-     *
-     * @return The pointer to this node's particle emitter or NULL.
-     */
-    ParticleEmitter* getParticleEmitter() const;
-
-    /**
-     * Assigns a particle emitter to this node.
-     *
-     * This will increase the reference count of the new particle emitter and decrease
-     * the reference count of the old particle emitter.
-     *
-     * @param emitter The new particle emitter. May be NULL.
-     */
-    void setParticleEmitter(ParticleEmitter* emitter);
 
     /**
      * Returns the pointer to this node's physics collision object.
@@ -580,8 +639,11 @@ public:
      * @param group Group identifier of the object for collision filtering.
      * @param mask Bitmask to filter groups of objects to collide with this one.
      */
-    PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape = PhysicsCollisionShape::box(),
-                                               PhysicsRigidBody::Parameters* rigidBodyParameters = NULL, int group = PHYSICS_COLLISION_GROUP_DEFAULT, int mask = PHYSICS_COLLISION_MASK_DEFAULT);
+    PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type,
+                                               const PhysicsCollisionShape::Definition& shape = PhysicsCollisionShape::box(),
+                                               PhysicsRigidBody::Parameters* rigidBodyParameters = NULL,
+                                               int group = PHYSICS_COLLISION_GROUP_DEFAULT,
+                                               int mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Sets the physics collision object for this node using the data from the Properties object defined at the specified URL,
@@ -741,27 +803,27 @@ protected:
     Scene* _scene;
 
     /**
-     * The Node's ID.
+     * Node's ID.
      */
     std::string _id;
 
     /**
-     * Pointer to the Node's first child.
+     * Node's first child.
      */
     Node* _firstChild;
 
     /**
-     * Pointer to the Node's next child.
+     * Node's next child.
      */
     Node* _nextSibling;
 
     /**
-     * Pointer to the Node's previous sibling.
+     * Node's previous sibling.
      */
     Node* _prevSibling;
 
     /**
-     * Pointer to the Node's parent.
+     * Node's parent.
      */
     Node* _parent;
 
@@ -771,49 +833,65 @@ protected:
     unsigned int _childCount;
 
     /**
-     * If this node is enabled in the scene. This may not be enabled in hierarchy if its parents are not enabled.
+     * If this node is enabled in the scene.
+     * This may not be enabled in hierarchy if its parents are not enabled.
      */
     bool _enabled;
 
     /**
-     * List of custom tags for a node.
+     * List of tags for a node.
      */
     std::map<std::string, std::string>* _tags;
 
     /**
-     * Pointer to the Camera attached to the Node.
+     * Camera attached to the Node.
      */
     Camera* _camera;
 
     /**
-     * Pointer to the Light attached to the Node.
+     * Light attached to the Node.
      */
     Light* _light;
 
     /**
-     * Pointer to the Model attached to the Node.
+     * Model attached to the Node.
      */
     Model* _model;
 
+    /**
+     * Sprite attached to the Node.
+     */
+    Sprite* _sprite;
+    
+    /**
+     * TileSet attached to the Node.
+     */
+    TileSet* _tileset;
+    
+    /**
+     * Text attached to the Node.
+     */
+    Text* _text;
+    
+    /**
+     * Form attached to the Node.
+     */
+    Form* _form;
+    
+    /**
+     * Pointer to the ParticleEmitter attached to the Node.
+     */
+    ParticleEmitter* _particleEmitter;
+    
     /**
      * Pointer to the Terrain attached to the Node.
      */
     Terrain* _terrain;
 
     /**
-     * Pointer to the Form attached to the Node.
-     */
-    Form* _form;
-
-    /**
      * Pointer to the AudioSource attached to the Node.
      */
     AudioSource* _audioSource;
-
-    /**
-     * Pointer to the ParticleEmitter attached to the Node.
-     */
-    ParticleEmitter* _particleEmitter;
 
     /**
      * Pointer to the PhysicsCollisionObject attached to the Node.

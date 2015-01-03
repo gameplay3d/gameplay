@@ -40,7 +40,6 @@ void lua_RegisterAllBindings()
     luaRegister_FileSystem();
     luaRegister_FlowLayout();
     luaRegister_Font();
-    luaRegister_FontText();
     luaRegister_Form();
     luaRegister_FrameBuffer();
     luaRegister_Frustum();

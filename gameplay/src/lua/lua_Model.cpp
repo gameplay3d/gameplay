@@ -29,7 +29,6 @@ void luaRegister_Model()
         {"hasMaterial", lua_Model_hasMaterial},
         {"release", lua_Model_release},
         {"setMaterial", lua_Model_setMaterial},
-        {"setNode", lua_Model_setNode},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -760,48 +759,6 @@ int lua_Model_setMaterial(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2, 3, 4 or 5).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Model_setNode(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                gameplay::ScriptUtil::LuaArray<Node> param1 = gameplay::ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
-                if (!param1Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
-                    lua_error(state);
-                }
-
-                Model* instance = getInstance(state);
-                instance->setNode(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Model_setNode - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

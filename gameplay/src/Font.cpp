@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Font.h"
+#include "Text.h"
 #include "Game.h"
 #include "FileSystem.h"
 #include "Bundle.h"
@@ -16,7 +17,7 @@ static std::vector<Font*> __fontCache;
 static Effect* __fontEffect = NULL;
 
 Font::Font() :
-    _format(BITMAP), _style(PLAIN), _size(0), _spacing(0.0f), _glyphs(NULL), _glyphCount(0), _texture(NULL), _batch(NULL), _cutoffParam(NULL)
+    _format(BITMAP), _style(PLAIN), _size(0), _spacing(0.0f), _glyphs(NULL), _glyphCount(0), _batch(NULL), _cutoffParam(NULL)
 {
 }
 
@@ -31,7 +32,6 @@ Font::~Font()
 
     SAFE_DELETE(_batch);
     SAFE_DELETE_ARRAY(_glyphs);
-    SAFE_RELEASE(_texture);
 
     // Free child fonts
     for (size_t i = 0, count = _sizes.size(); i < count; ++i)
@@ -146,7 +146,6 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
     font->_family = family;
     font->_style = style;
     font->_size = size;
-    font->_texture = texture;
     font->_batch = batch;
 
     // Copy the glyphs array.
@@ -219,252 +218,6 @@ void Font::finish()
     }
 }
 
-Font::Text* Font::createText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify,
-    bool wrap, bool rightToLeft, const Rectangle* clip)
-{
-    GP_ASSERT(text);
-    GP_ASSERT(_glyphs);
-    GP_ASSERT(_batch);
-    GP_ASSERT(_size);
-
-    if (size == 0)
-    {
-        size = _size;
-    }
-    else
-    {
-        // Delegate to closest sized font
-        Font* f = findClosestSize(size);
-        if (f != this)
-        {
-            return f->createText(text, area, color, size, justify, wrap, rightToLeft, clip);
-        }
-    }
-
-    float scale = (float)size / _size;
-    int spacing = (int)(size * _spacing);
-    int yPos = area.y;
-    const float areaHeight = area.height - size;
-    std::vector<int> xPositions;
-    std::vector<unsigned int> lineLengths;
-
-    getMeasurementInfo(text, area, size, justify, wrap, rightToLeft, &xPositions, &yPos, &lineLengths);
-
-    Text* batch = new Text(text);
-    batch->_font = this;
-    batch->_font->addRef();
-
-    GP_ASSERT(batch->_vertices);
-    GP_ASSERT(batch->_indices);
-
-    int xPos = area.x;
-    std::vector<int>::const_iterator xPositionsIt = xPositions.begin();
-    if (xPositionsIt != xPositions.end())
-    {
-        xPos = *xPositionsIt++;
-    }
-
-    const char* token = text;
-    int iteration = 1;
-    unsigned int lineLength;
-    unsigned int currentLineLength = 0;
-    const char* lineStart;
-    std::vector<unsigned int>::const_iterator lineLengthsIt;
-    if (rightToLeft)
-    {
-        lineStart = token;
-        lineLengthsIt = lineLengths.begin();
-        lineLength = *lineLengthsIt++;
-        token += lineLength - 1;
-        iteration = -1;
-    }
-
-    while (token[0] != 0)
-    {
-        // Handle delimiters until next token.
-        if (!handleDelimiters(&token, size, iteration, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
-        {
-            break;
-        }
-
-        bool truncated = false;
-        unsigned int tokenLength;
-        unsigned int tokenWidth;
-        unsigned int startIndex;
-        if (rightToLeft)
-        {
-            tokenLength = getReversedTokenLength(token, text);
-            currentLineLength += tokenLength;
-            token -= (tokenLength - 1);
-            tokenWidth = getTokenWidth(token, tokenLength, size, scale);
-            iteration = -1;
-            startIndex = tokenLength - 1;
-        }
-        else
-        {
-            tokenLength = (unsigned int)strcspn(token, " \r\n\t");
-            tokenWidth = getTokenWidth(token, tokenLength, size, scale);
-            iteration = 1;
-            startIndex = 0;
-        }
-
-        // Wrap if necessary.
-        if (wrap && (xPos + (int)tokenWidth > area.x + area.width || (rightToLeft && currentLineLength > lineLength)))
-        {
-            yPos += (int)size;
-            currentLineLength = tokenLength;
-
-            if (xPositionsIt != xPositions.end())
-            {
-                xPos = *xPositionsIt++;
-            }
-            else
-            {
-                xPos = area.x;
-            }
-        }
-
-        bool draw = true;
-        if (yPos < static_cast<int>(area.y))
-        {
-            // Skip drawing until line break or wrap.
-            draw = false;
-        }
-        else if (yPos > area.y + areaHeight)
-        {
-            // Truncate below area's vertical limit.
-            break;
-        }
-
-        for (int i = startIndex; i < (int)tokenLength && i >= 0; i += iteration)
-        {
-            char c = token[i];
-            int glyphIndex = c - 32; // HACK for ASCII
-
-            if (glyphIndex >= 0 && glyphIndex < (int)_glyphCount)
-            {
-                Glyph& g = _glyphs[glyphIndex];
-
-                if (xPos + (int)(g.advance*scale) > area.x + area.width)
-                {
-                    // Truncate this line and go on to the next one.
-                    truncated = true;
-                    break;
-                }
-                else if (xPos >= (int)area.x)
-                {
-                    // Draw this character.
-                    if (draw)
-                    {
-                        if (clip)
-                        {
-                            _batch->addSprite(xPos + (int)(g.bearingX * scale), yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, *clip, &batch->_vertices[batch->_vertexCount]);
-                        }
-                        else
-                        {
-                            _batch->addSprite(xPos + (int)(g.bearingX * scale), yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, &batch->_vertices[batch->_vertexCount]);
-                        }
-
-                        if (batch->_vertexCount == 0)
-                        {
-                            // Simply copy values directly into the start of the index array
-                            batch->_indices[batch->_vertexCount] = batch->_vertexCount;
-                            batch->_indices[batch->_vertexCount + 1] = batch->_vertexCount + 1;
-                            batch->_indices[batch->_vertexCount + 2] = batch->_vertexCount + 2;
-                            batch->_indices[batch->_vertexCount + 3] = batch->_vertexCount + 3;
-                            batch->_vertexCount += 4;
-                            batch->_indexCount += 4;
-                        }
-                        else
-                        {
-                            // Create a degenerate triangle to connect separate triangle strips
-                            // by duplicating the previous and next vertices.
-                            batch->_indices[batch->_indexCount] = batch->_indices[batch->_indexCount - 1];
-                            batch->_indices[batch->_indexCount + 1] = batch->_vertexCount;
-
-                            // Loop through all indices and insert them, their their value offset by
-                            // 'vertexCount' so that they are relative to the first newly insertted vertex
-                            for (unsigned int i = 0; i < 4; ++i)
-                            {
-                                batch->_indices[batch->_indexCount + 2 + i] = i + batch->_vertexCount;
-                            }
-
-                            batch->_indexCount += 6;
-                            batch->_vertexCount += 4;
-                        }
-
-                    }
-                }
-                xPos += (int)(g.advance)*scale + spacing;
-            }
-        }
-
-        if (!truncated)
-        {
-            if (rightToLeft)
-            {
-                if (token == lineStart)
-                {
-                    token += lineLength;
-
-                    // Now handle delimiters going forwards.
-                    if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
-                    {
-                        break;
-                    }
-
-                    if (lineLengthsIt != lineLengths.end())
-                    {
-                        lineLength = *lineLengthsIt++;
-                    }
-                    lineStart = token;
-                    token += lineLength-1;
-                }
-                else
-                {
-                    token--;
-                }
-            }
-            else
-            {
-                token += tokenLength;
-            }
-        }
-        else
-        {
-            if (rightToLeft)
-            {
-                token = lineStart + lineLength;
-
-                if (!handleDelimiters(&token, size, 1, area.x, &xPos, &yPos, &currentLineLength, &xPositionsIt, xPositions.end()))
-                {
-                    break;
-                }
-
-                if (lineLengthsIt != lineLengths.end())
-                {
-                    lineLength = *lineLengthsIt++;
-                }
-                lineStart = token;
-                token += lineLength-1;
-            }
-            else
-            {
-                // Skip the rest of this line.
-                size_t tokenLength = strcspn(token, "\n");
-
-                if (tokenLength > 0)
-                {
-                    // Get first token of next line.
-                    token += tokenLength;
-                }
-            }
-        }
-    }
-
-    return batch;
-}
-
 Font* Font::findClosestSize(int size)
 {
     if (size == (int)_size)
@@ -484,26 +237,6 @@ Font* Font::findClosestSize(int size)
     }
 
     return closest;
-}
-
-void Font::drawText(Text* text)
-{
-    GP_ASSERT(text);
-    GP_ASSERT(text->_font);
-
-    if (text->_font != this)
-    {
-        // Make sure we draw using the font/batch the text was created with
-        text->_font->drawText(text);
-        return;
-    }
-
-    GP_ASSERT(_batch);
-    GP_ASSERT(text->_vertices);
-    GP_ASSERT(text->_indices);
-
-    lazyStart();
-    _batch->draw(text->_vertices, text->_vertexCount, text->_indices, text->_indexCount);
 }
 
 void Font::drawText(const char* text, int x, int y, const Vector4& color, unsigned int size, bool rightToLeft)
@@ -656,7 +389,7 @@ void Font::drawText(const char* text, int x, int y, float red, float green, floa
     drawText(text, x, y, Vector4(red, green, blue, alpha), size, rightToLeft);
 }
 
-void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft, const Rectangle* clip)
+void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft, const Rectangle& clip)
 {
     GP_ASSERT(text);
     GP_ASSERT(_size);
@@ -796,9 +529,9 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
                             // TODO: Fix me so that smaller font are much smoother
                             _cutoffParam->setVector2(Vector2(1.0, 1.0));
                         }
-                        if (clip)
+                        if (clip != Rectangle(0, 0, 0, 0))
                         {
-                            _batch->draw(xPos + (int)(g.bearingX * scale), yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, *clip);
+                            _batch->draw(xPos + (int)(g.bearingX * scale), yPos, g.width * scale, size, g.uvs[0], g.uvs[1], g.uvs[2], g.uvs[3], color, clip);
                         }
                         else
                         {
@@ -1979,25 +1712,6 @@ Font::Justify Font::getJustify(const char* justify)
 
     // Default.
     return Font::ALIGN_TOP_LEFT;
-}
-
-Font::Text::Text(const char* text) : _text(text ? text : ""), _vertexCount(0), _vertices(NULL), _indexCount(0), _indices(NULL), _font(NULL)
-{
-    const size_t length = strlen(text);
-    _vertices = new SpriteBatch::SpriteVertex[length * 4];
-    _indices = new unsigned short[((length - 1) * 6) + 4];
-}
-
-Font::Text::~Text()
-{
-    SAFE_DELETE_ARRAY(_vertices);
-    SAFE_DELETE_ARRAY(_indices);
-    SAFE_RELEASE(_font);
-}
-
-const char* Font::Text::getText()
-{
-    return _text.c_str();
 }
 
 }

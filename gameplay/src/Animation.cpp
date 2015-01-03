@@ -138,9 +138,9 @@ void Animation::createClips(const char* url)
     SAFE_DELETE(properties);
 }
 
-AnimationClip* Animation::createClip(const char* id, unsigned long start, unsigned long end)
+AnimationClip* Animation::createClip(const char* id, unsigned long begin, unsigned long end)
 {
-    AnimationClip* clip = new AnimationClip(id, this, start, end);
+    AnimationClip* clip = new AnimationClip(id, this, begin, end);
     addClip(clip);
     return clip;
 }
@@ -237,6 +237,7 @@ bool Animation::targets(AnimationTarget* target) const
     }
     return false;
 }
+
 
 void Animation::createDefaultClip()
 {

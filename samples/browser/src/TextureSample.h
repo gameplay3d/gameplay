@@ -34,7 +34,6 @@ private:
     Font* _font;
     Scene* _scene;
     float _zOffset;
-    std::list<Font::Text*> _text;
 };
 
 #endif

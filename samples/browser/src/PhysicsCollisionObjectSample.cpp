@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Physics", "Collision Objects", PhysicsCollisionObjectSample, 1);
+    ADD_SAMPLE("Physics", "Collision 3D", PhysicsCollisionObjectSample, 1);
 #endif
 
 PhysicsCollisionObjectSample::PhysicsCollisionObjectSample()

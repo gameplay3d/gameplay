@@ -57,13 +57,13 @@ public:
      * Creates an AnimationClip from the Animation.
      *
      * @param id The ID to the give the AnimationClip.
-     * @param start The time (in milliseconds) that the AnimationClip will begin from.
-     * @param end The time (in milliseconds) that the AnimationClip will end.
+     * @param begin The begin time (in milliseconds) or keyframe(for keyframe animations).
+     * @param end The end time (in milliseconds) or keyframe (for keyframe animations).
      *
      * @return The newly created AnimationClip; NULL if an AnimationClip already exists with the same ID.
      * @script{create}
      */
-    AnimationClip* createClip(const char* id, unsigned long start, unsigned long end);
+    AnimationClip* createClip(const char* id, unsigned long begin, unsigned long end);
 
     /**
      * Finds the AnimationClip with the specified name. If NULL, gets the default clip.

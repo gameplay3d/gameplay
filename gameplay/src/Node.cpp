@@ -8,8 +8,8 @@
 #include "PhysicsVehicleWheel.h"
 #include "PhysicsGhostObject.h"
 #include "PhysicsCharacter.h"
-#include "Game.h"
 #include "Terrain.h"
+#include "Game.h"
 
 // Node dirty flags
 #define NODE_DIRTY_WORLD 1
@@ -20,9 +20,10 @@ namespace gameplay
 {
 
 Node::Node(const char* id)
-    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _enabled(true),
-    _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
-    _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
+    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
+       _enabled(true), _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _sprite(NULL), _tileset(NULL), _text(NULL),
+        _form(NULL), _particleEmitter(NULL), _terrain(NULL), _audioSource(NULL), _collisionObject(NULL), _agent(NULL),
+       _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
     {
@@ -49,6 +50,9 @@ Node::~Node()
     SAFE_RELEASE(_terrain);
     SAFE_RELEASE(_audioSource);
     SAFE_RELEASE(_particleEmitter);
+    SAFE_RELEASE(_sprite);
+    SAFE_RELEASE(_tileset);
+    SAFE_RELEASE(_text);
     SAFE_RELEASE(_form);
     SAFE_DELETE(_collisionObject);
     SAFE_DELETE(_tags);
@@ -844,6 +848,131 @@ void Node::setModel(Model* model)
     }
 }
 
+Sprite* Node::getSprite() const
+{
+    return _sprite;
+}
+
+void Node::setSprite(Sprite* sprite)
+{
+    if (_sprite != sprite)
+    {
+        if (_sprite)
+        {
+            _sprite->setNode(NULL);
+            SAFE_RELEASE(_sprite);
+        }
+        
+        _sprite = sprite;
+        
+        if (_sprite)
+        {
+            _sprite->addRef();
+            _sprite->setNode(this);
+        }
+    }
+}
+
+TileSet* Node::getTileSet() const
+{
+    return _tileset;
+}
+
+void Node::setTileSet(TileSet* tileset)
+{
+    if (_tileset != tileset)
+    {
+        if (_tileset)
+        {
+            _tileset->setNode(NULL);
+            SAFE_RELEASE(_tileset);
+        }
+        
+        _tileset = tileset;
+        
+        if (_tileset)
+        {
+            _tileset->addRef();
+            _tileset->setNode(this);
+        }
+    }
+}
+
+Text* Node::getText() const
+{
+    return _text;
+}
+
+void Node::setText(Text* text)
+{
+    if (_text != text)
+    {
+        if (_text)
+        {
+            _text->setNode(NULL);
+            SAFE_RELEASE(_text);
+        }
+        
+        _text = text;
+        
+        if (_text)
+        {
+            _text->addRef();
+            _text->setNode(this);
+        }
+    }
+}
+    
+Form* Node::getForm() const
+{
+    return _form;
+}
+
+void Node::setForm(Form* form)
+{
+    if (_form != form)
+    {
+        if (_form)
+        {
+            _form->setNode(NULL);
+            SAFE_RELEASE(_form);
+        }
+
+        _form = form;
+
+        if (_form)
+        {
+            _form->addRef();
+            _form->setNode(this);
+        }
+    }
+}
+
+ParticleEmitter* Node::getParticleEmitter() const
+{
+    return _particleEmitter;
+}
+
+void Node::setParticleEmitter(ParticleEmitter* emitter)
+{
+    if (_particleEmitter != emitter)
+    {
+        if (_particleEmitter)
+        {
+            _particleEmitter->setNode(NULL);
+            SAFE_RELEASE(_particleEmitter);
+        }
+        
+        _particleEmitter = emitter;
+        
+        if (_particleEmitter)
+        {
+            _particleEmitter->addRef();
+            _particleEmitter->setNode(this);
+        }
+    }
+}
+    
 Terrain* Node::getTerrain() const
 {
     return _terrain;
@@ -868,31 +997,6 @@ void Node::setTerrain(Terrain* terrain)
         }
 
         setBoundsDirty();
-    }
-}
-
-Form* Node::getForm() const
-{
-    return _form;
-}
-
-void Node::setForm(Form* form)
-{
-    if (_form != form)
-    {
-        if (_form)
-        {
-            _form->setNode(NULL);
-            SAFE_RELEASE(_form);
-        }
-
-        _form = form;
-
-        if (_form)
-        {
-            _form->addRef();
-            _form->setNode(this);
-        }
     }
 }
 
@@ -1073,6 +1177,25 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
         node->setParticleEmitter(emitterClone);
         emitterClone->release();
     }
+    if (Sprite* sprite = getSprite())
+    {
+        Sprite* spriteClone = sprite->clone(context);
+        node->setSprite(spriteClone);
+        spriteClone->release();
+    }
+    if (TileSet* tileset = getTileSet())
+    {
+        TileSet* tilesetClone = tileset->clone(context);
+        node->setTileSet(tilesetClone);
+        tilesetClone->release();
+    }
+    if (Text* text = getText())
+    {
+        Text* textClone = text->clone(context);
+        node->setText(textClone);
+        textClone->release();
+    }
+    
     node->_world = _world;
     node->_bounds = _bounds;
 
@@ -1106,31 +1229,6 @@ void Node::setAudioSource(AudioSource* audio)
         {
             _audioSource->addRef();
             _audioSource->setNode(this);
-        }
-    }
-}
-
-ParticleEmitter* Node::getParticleEmitter() const
-{
-    return _particleEmitter;
-}
-
-void Node::setParticleEmitter(ParticleEmitter* emitter)
-{
-    if (_particleEmitter != emitter)
-    {
-        if (_particleEmitter)
-        {
-            _particleEmitter->setNode(NULL);
-            SAFE_RELEASE(_particleEmitter);
-        }
-        
-        _particleEmitter = emitter;
-
-        if (_particleEmitter)
-        {
-            _particleEmitter->addRef();
-            _particleEmitter->setNode(this);
         }
     }
 }
@@ -1277,7 +1375,7 @@ void Node::setAgent(AIAgent* agent)
         if (_agent)
         {
             Game::getInstance()->getAIController()->removeAgent(_agent);
-            _agent->_node = NULL;
+            _agent->setNode(NULL);
             SAFE_RELEASE(_agent);
         }
 
@@ -1286,7 +1384,7 @@ void Node::setAgent(AIAgent* agent)
         if (_agent)
         {
             _agent->addRef();
-            _agent->_node = this;
+            _agent->setNode(this);
             Game::getInstance()->getAIController()->addAgent(_agent);
         }
     }

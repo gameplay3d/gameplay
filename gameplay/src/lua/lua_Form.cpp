@@ -147,7 +147,6 @@ void luaRegister_Form()
         {"setImageRegion", lua_Form_setImageRegion},
         {"setLayout", lua_Form_setLayout},
         {"setMargin", lua_Form_setMargin},
-        {"setNode", lua_Form_setNode},
         {"setOpacity", lua_Form_setOpacity},
         {"setPadding", lua_Form_setPadding},
         {"setPosition", lua_Form_setPosition},
@@ -5079,48 +5078,6 @@ int lua_Form_setMargin(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 5).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Form_setNode(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                gameplay::ScriptUtil::LuaArray<Node> param1 = gameplay::ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
-                if (!param1Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
-                    lua_error(state);
-                }
-
-                Form* instance = getInstance(state);
-                instance->setNode(param1);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Form_setNode - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

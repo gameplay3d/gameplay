@@ -1,17 +1,17 @@
-#include "LoadSceneSample.h"
+#include "SceneLoadSample.h"
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Load Scene", LoadSceneSample, 17);
+    ADD_SAMPLE("Graphics", "Scene Loading", SceneLoadSample, 16);
 #endif
 
-LoadSceneSample::LoadSceneSample()
+SceneLoadSample::SceneLoadSample()
     : _font(NULL), _scene(NULL), _wireFrame(false)
 {
     
 }
 
-void LoadSceneSample::initialize()
+void SceneLoadSample::initialize()
 {
     // Create the font for drawing the framerate.
     _font = Font::create("res/ui/arial.gpb");
@@ -22,12 +22,12 @@ void LoadSceneSample::initialize()
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 
     // Visit all the nodes in the scene, drawing the models/mesh.
-    _scene->visit(this, &LoadSceneSample::initializeMaterials);
+    _scene->visit(this, &SceneLoadSample::initializeMaterials);
 
 }
 
 
-bool LoadSceneSample::initializeMaterials(Node* node)
+bool SceneLoadSample::initializeMaterials(Node* node)
 {
     Model* model = node->getModel();
     if (model)
@@ -42,29 +42,29 @@ bool LoadSceneSample::initializeMaterials(Node* node)
     return true;
 }
 
-void LoadSceneSample::finalize()
+void SceneLoadSample::finalize()
 {
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
 }
 
-void LoadSceneSample::update(float elapsedTime)
+void SceneLoadSample::update(float elapsedTime)
 {
     
 }
 
-void LoadSceneSample::render(float elapsedTime)
+void SceneLoadSample::render(float elapsedTime)
 {
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0);
 
     // Visit all the nodes in the scene, drawing the models/mesh.
-    _scene->visit(this, &LoadSceneSample::drawScene);
+    _scene->visit(this, &SceneLoadSample::drawScene);
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
 
-void LoadSceneSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+void SceneLoadSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     switch (evt)
     {
@@ -83,7 +83,7 @@ void LoadSceneSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned i
     };
 }
 
-void LoadSceneSample::keyEvent(Keyboard::KeyEvent evt, int key)
+void SceneLoadSample::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (evt == Keyboard::KEY_PRESS)
     {
@@ -97,7 +97,7 @@ void LoadSceneSample::keyEvent(Keyboard::KeyEvent evt, int key)
     }
 }
 
-bool LoadSceneSample::drawScene(Node* node)
+bool SceneLoadSample::drawScene(Node* node)
 {
     Model* model = node->getModel();
     if (model)

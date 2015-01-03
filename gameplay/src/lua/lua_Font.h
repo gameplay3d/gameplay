@@ -7,7 +7,6 @@ namespace gameplay
 // Lua bindings for Font.
 int lua_Font__gc(lua_State* state);
 int lua_Font_addRef(lua_State* state);
-int lua_Font_createText(lua_State* state);
 int lua_Font_drawText(lua_State* state);
 int lua_Font_finish(lua_State* state);
 int lua_Font_getCharacterSpacing(lua_State* state);

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4204EC411A2EB8310074FCE9 /* TileSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4204EC3F1A2EB8310074FCE9 /* TileSet.cpp */; };
+		4204EC421A2EB8310074FCE9 /* TileSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4204EC3F1A2EB8310074FCE9 /* TileSet.cpp */; };
+		4204EC451A2F878C0074FCE9 /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4204EC441A2F878C0074FCE9 /* Sprite.cpp */; };
+		4204EC461A2F878C0074FCE9 /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4204EC441A2F878C0074FCE9 /* Sprite.cpp */; };
 		420BBC0E1817416F00C7B720 /* ControlFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBAA21817416D00C7B720 /* ControlFactory.cpp */; };
 		420BBC0F1817416F00C7B720 /* ControlFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBAA21817416D00C7B720 /* ControlFactory.cpp */; };
 		420BBC121817416F00C7B720 /* lua_AbsoluteLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBAA61817416D00C7B720 /* lua_AbsoluteLayout.cpp */; };
@@ -105,8 +109,6 @@
 		420BBCCB1817416F00C7B720 /* lua_FontJustify.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB021817416E00C7B720 /* lua_FontJustify.cpp */; };
 		420BBCCE1817416F00C7B720 /* lua_FontStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB041817416E00C7B720 /* lua_FontStyle.cpp */; };
 		420BBCCF1817416F00C7B720 /* lua_FontStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB041817416E00C7B720 /* lua_FontStyle.cpp */; };
-		420BBCD21817416F00C7B720 /* lua_FontText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB061817416E00C7B720 /* lua_FontText.cpp */; };
-		420BBCD31817416F00C7B720 /* lua_FontText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB061817416E00C7B720 /* lua_FontText.cpp */; };
 		420BBCD61817416F00C7B720 /* lua_Form.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB081817416E00C7B720 /* lua_Form.cpp */; };
 		420BBCD71817416F00C7B720 /* lua_Form.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB081817416E00C7B720 /* lua_Form.cpp */; };
 		420BBCDA1817416F00C7B720 /* lua_FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420BBB0A1817416E00C7B720 /* lua_FrameBuffer.cpp */; };
@@ -580,6 +582,8 @@
 		42CC5A1B1809A4EF00AAD8AD /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55651809A4EE00AAD8AD /* VertexFormat.cpp */; };
 		42CC5A1E1809A4EF00AAD8AD /* VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */; };
 		42CC5A1F1809A4EF00AAD8AD /* VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */; };
+		42ECC3FA1A4EF5A00036C839 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42ECC3F81A4EF5A00036C839 /* Text.cpp */; };
+		42ECC3FB1A4EF5A00036C839 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42ECC3F81A4EF5A00036C839 /* Text.cpp */; };
 		5B21E99616153890006EBEAC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B21E99516153890006EBEAC /* IOKit.framework */; };
 		5B2BC75F1512514500D176CD /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75D1512514500D176CD /* OpenAL.framework */; };
 		5B2BC7601512514500D176CD /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75E1512514500D176CD /* OpenGL.framework */; };
@@ -601,6 +605,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4204EC3F1A2EB8310074FCE9 /* TileSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileSet.cpp; path = src/TileSet.cpp; sourceTree = SOURCE_ROOT; };
+		4204EC401A2EB8310074FCE9 /* TileSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TileSet.h; path = src/TileSet.h; sourceTree = SOURCE_ROOT; };
+		4204EC431A2F70BA0074FCE9 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sprite.h; path = src/Sprite.h; sourceTree = SOURCE_ROOT; };
+		4204EC441A2F878C0074FCE9 /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sprite.cpp; path = src/Sprite.cpp; sourceTree = SOURCE_ROOT; };
 		420BBAA21817416D00C7B720 /* ControlFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ControlFactory.cpp; path = src/ControlFactory.cpp; sourceTree = SOURCE_ROOT; };
 		420BBAA31817416D00C7B720 /* ControlFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ControlFactory.h; path = src/ControlFactory.h; sourceTree = SOURCE_ROOT; };
 		420BBAA61817416D00C7B720 /* lua_AbsoluteLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_AbsoluteLayout.cpp; sourceTree = "<group>"; };
@@ -699,8 +707,6 @@
 		420BBB031817416E00C7B720 /* lua_FontJustify.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_FontJustify.h; sourceTree = "<group>"; };
 		420BBB041817416E00C7B720 /* lua_FontStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_FontStyle.cpp; sourceTree = "<group>"; };
 		420BBB051817416E00C7B720 /* lua_FontStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_FontStyle.h; sourceTree = "<group>"; };
-		420BBB061817416E00C7B720 /* lua_FontText.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_FontText.cpp; sourceTree = "<group>"; };
-		420BBB071817416E00C7B720 /* lua_FontText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_FontText.h; sourceTree = "<group>"; };
 		420BBB081817416E00C7B720 /* lua_Form.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Form.cpp; sourceTree = "<group>"; };
 		420BBB091817416E00C7B720 /* lua_Form.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Form.h; sourceTree = "<group>"; };
 		420BBB0A1817416E00C7B720 /* lua_FrameBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_FrameBuffer.cpp; sourceTree = "<group>"; };
@@ -1206,6 +1212,8 @@
 		42CD0DA7147D8EA80000361E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/ogg/lib/macosx/x64/libogg.a"; sourceTree = "<group>"; };
 		42CD0DA8147D8EA80000361E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/vorbis/lib/macosx/x64/libvorbis.a"; sourceTree = "<group>"; };
 		42DFAB4F16AD8ECD0000F342 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
+		42ECC3F81A4EF5A00036C839 /* Text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Text.cpp; path = src/Text.cpp; sourceTree = SOURCE_ROOT; };
+		42ECC3F91A4EF5A00036C839 /* Text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Text.h; path = src/Text.h; sourceTree = SOURCE_ROOT; };
 		42FA645D1953DDD600337ABC /* libBulletCollision.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision.a; path = "../external-deps/bullet/lib/macosx/x64/libBulletCollision.a"; sourceTree = "<group>"; };
 		42FA645E1953DDD600337ABC /* libBulletDynamics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics.a; path = "../external-deps/bullet/lib/macosx/x64/libBulletDynamics.a"; sourceTree = "<group>"; };
 		42FA645F1953DDD600337ABC /* libLinearMath.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath.a; path = "../external-deps/bullet/lib/macosx/x64/libLinearMath.a"; sourceTree = "<group>"; };
@@ -1369,8 +1377,6 @@
 				420BBB031817416E00C7B720 /* lua_FontJustify.h */,
 				420BBB041817416E00C7B720 /* lua_FontStyle.cpp */,
 				420BBB051817416E00C7B720 /* lua_FontStyle.h */,
-				420BBB061817416E00C7B720 /* lua_FontText.cpp */,
-				420BBB071817416E00C7B720 /* lua_FontText.h */,
 				420BBB081817416E00C7B720 /* lua_Form.cpp */,
 				420BBB091817416E00C7B720 /* lua_Form.h */,
 				420BBB0A1817416E00C7B720 /* lua_FrameBuffer.cpp */,
@@ -1862,6 +1868,10 @@
 				42CC55301809A4EE00AAD8AD /* ScriptTarget.h */,
 				42CC55311809A4EE00AAD8AD /* Slider.cpp */,
 				42CC55321809A4EE00AAD8AD /* Slider.h */,
+				4204EC441A2F878C0074FCE9 /* Sprite.cpp */,
+				4204EC431A2F70BA0074FCE9 /* Sprite.h */,
+				4204EC3F1A2EB8310074FCE9 /* TileSet.cpp */,
+				4204EC401A2EB8310074FCE9 /* TileSet.h */,
 				42CC55451809A4EE00AAD8AD /* SpriteBatch.cpp */,
 				42CC55461809A4EE00AAD8AD /* SpriteBatch.h */,
 				42CC55471809A4EE00AAD8AD /* Stream.h */,
@@ -1871,6 +1881,8 @@
 				42CC554B1809A4EE00AAD8AD /* Terrain.h */,
 				42CC554C1809A4EE00AAD8AD /* TerrainPatch.cpp */,
 				42CC554D1809A4EE00AAD8AD /* TerrainPatch.h */,
+				42ECC3F81A4EF5A00036C839 /* Text.cpp */,
+				42ECC3F91A4EF5A00036C839 /* Text.h */,
 				42CC554E1809A4EE00AAD8AD /* TextBox.cpp */,
 				42CC554F1809A4EE00AAD8AD /* TextBox.h */,
 				42CC55501809A4EE00AAD8AD /* Texture.cpp */,
@@ -2071,6 +2083,7 @@
 				42CC55DE1809A4EF00AAD8AD /* FlowLayout.cpp in Sources */,
 				420BBE861817416F00C7B720 /* lua_TextureFormat.cpp in Sources */,
 				426F831B187F72DF00640CBA /* lua_JoystickControl.cpp in Sources */,
+				4204EC411A2EB8310074FCE9 /* TileSet.cpp in Sources */,
 				42CC59F61809A4EF00AAD8AD /* Texture.cpp in Sources */,
 				42CC55CA1809A4EF00AAD8AD /* Curve.cpp in Sources */,
 				420BBDAE1817416F00C7B720 /* lua_PhysicsCollisionShapeDefinition.cpp in Sources */,
@@ -2204,6 +2217,7 @@
 				420BBCE61817416F00C7B720 /* lua_GameClearFlags.cpp in Sources */,
 				42CC59261809A4EF00AAD8AD /* Node.cpp in Sources */,
 				42CC597A1809A4EF00AAD8AD /* PlatformMacOSX.mm in Sources */,
+				4204EC451A2F878C0074FCE9 /* Sprite.cpp in Sources */,
 				420BBEAE1817416F00C7B720 /* lua_Transform.cpp in Sources */,
 				420BBD961817416F00C7B720 /* lua_PhysicsCollisionObject.cpp in Sources */,
 				420BBDEE1817416F00C7B720 /* lua_PhysicsVehicle.cpp in Sources */,
@@ -2315,7 +2329,6 @@
 				420BBC761817416F00C7B720 /* lua_Button.cpp in Sources */,
 				420BBCDE1817416F00C7B720 /* lua_Frustum.cpp in Sources */,
 				420BBE2A1817416F00C7B720 /* lua_RenderStateDepthFunction.cpp in Sources */,
-				420BBCD21817416F00C7B720 /* lua_FontText.cpp in Sources */,
 				420BBC1A1817416F00C7B720 /* lua_AIAgentListener.cpp in Sources */,
 				42CC59101809A4EF00AAD8AD /* Mesh.cpp in Sources */,
 				42CC55DA1809A4EF00AAD8AD /* FileSystem.cpp in Sources */,
@@ -2324,6 +2337,7 @@
 				420BBECA1817416F00C7B720 /* lua_VertexFormat.cpp in Sources */,
 				420BBC561817416F00C7B720 /* lua_AudioBuffer.cpp in Sources */,
 				420BBDFE1817416F00C7B720 /* lua_Properties.cpp in Sources */,
+				42ECC3FA1A4EF5A00036C839 /* Text.cpp in Sources */,
 				42CC56121809A4EF00AAD8AD /* ImageControl.cpp in Sources */,
 				42CC55E21809A4EF00AAD8AD /* Font.cpp in Sources */,
 				420BBE8E1817416F00C7B720 /* lua_TextureWrap.cpp in Sources */,
@@ -2367,6 +2381,7 @@
 				42CC55DF1809A4EF00AAD8AD /* FlowLayout.cpp in Sources */,
 				420BBE871817416F00C7B720 /* lua_TextureFormat.cpp in Sources */,
 				426F831C187F72DF00640CBA /* lua_JoystickControl.cpp in Sources */,
+				4204EC421A2EB8310074FCE9 /* TileSet.cpp in Sources */,
 				42CC59F71809A4EF00AAD8AD /* Texture.cpp in Sources */,
 				42CC55CB1809A4EF00AAD8AD /* Curve.cpp in Sources */,
 				420BBDAF1817416F00C7B720 /* lua_PhysicsCollisionShapeDefinition.cpp in Sources */,
@@ -2500,6 +2515,7 @@
 				420BBE5F1817416F00C7B720 /* lua_Slider.cpp in Sources */,
 				420BBDD71817416F00C7B720 /* lua_PhysicsGhostObject.cpp in Sources */,
 				420BBCE71817416F00C7B720 /* lua_GameClearFlags.cpp in Sources */,
+				4204EC461A2F878C0074FCE9 /* Sprite.cpp in Sources */,
 				42CC59271809A4EF00AAD8AD /* Node.cpp in Sources */,
 				420BBEAF1817416F00C7B720 /* lua_Transform.cpp in Sources */,
 				420BBD971817416F00C7B720 /* lua_PhysicsCollisionObject.cpp in Sources */,
@@ -2611,7 +2627,6 @@
 				420BBC771817416F00C7B720 /* lua_Button.cpp in Sources */,
 				420BBCDF1817416F00C7B720 /* lua_Frustum.cpp in Sources */,
 				420BBE2B1817416F00C7B720 /* lua_RenderStateDepthFunction.cpp in Sources */,
-				420BBCD31817416F00C7B720 /* lua_FontText.cpp in Sources */,
 				420BBC1B1817416F00C7B720 /* lua_AIAgentListener.cpp in Sources */,
 				42CC59111809A4EF00AAD8AD /* Mesh.cpp in Sources */,
 				42CC55DB1809A4EF00AAD8AD /* FileSystem.cpp in Sources */,
@@ -2620,6 +2635,7 @@
 				420BBECB1817416F00C7B720 /* lua_VertexFormat.cpp in Sources */,
 				420BBC571817416F00C7B720 /* lua_AudioBuffer.cpp in Sources */,
 				420BBDFF1817416F00C7B720 /* lua_Properties.cpp in Sources */,
+				42ECC3FB1A4EF5A00036C839 /* Text.cpp in Sources */,
 				42CC56131809A4EF00AAD8AD /* ImageControl.cpp in Sources */,
 				42CC55E31809A4EF00AAD8AD /* Font.cpp in Sources */,
 				420BBE8F1817416F00C7B720 /* lua_TextureWrap.cpp in Sources */,

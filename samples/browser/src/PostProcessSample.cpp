@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Post Process", PostProcessSample, 13);
+    ADD_SAMPLE("Graphics", "Post Process", PostProcessSample, 14);
 #endif
 
 #define FRAMEBUFFER_WIDTH 1024

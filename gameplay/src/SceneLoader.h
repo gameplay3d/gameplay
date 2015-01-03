@@ -57,7 +57,10 @@ private:
             TRANSLATE = 128,
             ROTATE = 256,
             SCALE = 512,
-            URL = 1024
+            URL = 1024,
+            SPRITE = 2048,
+            TILESET = 4096,
+            TEXT = 8192
         };
 
         SceneNodeProperty(Type type, const std::string& value, int index, bool isUrl);

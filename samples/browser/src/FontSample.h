@@ -1,5 +1,5 @@
-#ifndef TEXTSAMPLE_H_
-#define TEXTSAMPLE_H_
+#ifndef FONTSAMPLE_H_
+#define FONTSAMPLE_H_
 
 #include "gameplay.h"
 #include "Sample.h"
@@ -7,13 +7,13 @@
 using namespace gameplay;
 
 /**
- * Sample the text and font class with various text functionality.
+ * Sample testing the font with various functionality.
  */
-class TextSample : public Sample, public Control::Listener
+class FontSample : public Sample, public Control::Listener
 {
 public:
 
-    TextSample();
+    FontSample();
 
 protected:
     void initialize();

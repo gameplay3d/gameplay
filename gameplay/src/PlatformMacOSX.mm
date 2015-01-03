@@ -13,6 +13,7 @@
 #import <OpenGL/OpenGL.h>
 #import <mach/mach_time.h>
 #import <Foundation/Foundation.h>
+#import <Availability.h>
 #import <GameKit/GameKit.h>
 
 // These should probably be moved to a platform common file
@@ -849,7 +850,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         NSOpenGLPFASamples, static_cast<NSOpenGLPixelFormatAttribute>(samples),
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAScreenMask, (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
+    #if (__MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_7)
         NSOpenGLPFAFullScreen,
+    #endif
         NSOpenGLPFAColorSize, 32,
         NSOpenGLPFADepthSize, 24,
         NSOpenGLPFAAlphaSize, 8,

@@ -75,7 +75,8 @@ void TextureSample::initialize()
         node->setTranslation(-25, cubeSize, 0);
         // Find the position of the node in screen space
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("Quad: Textured", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
+        
+        //_text.push_back(Text::create("res/ui/arial.gpb", "Quad: Textured", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
     // Textured quad points
     {
@@ -85,7 +86,7 @@ void TextureSample::initialize()
         setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
         node->setTranslation(-14, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("Quad: Points", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
+        //_text.push_back(_font->createText("Quad: Points", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
     // Texture clamp
     {
@@ -94,7 +95,7 @@ void TextureSample::initialize()
         node->setId("clamp");
         node->setTranslation(-3, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("Wrap: Clamp", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
+        //_text.push_back(_font->createText("Wrap: Clamp", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
     // Texture wrapped+repeat
     {
@@ -108,7 +109,7 @@ void TextureSample::initialize()
         }
         node->setTranslation(8, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("Wrap: Repeat", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
+        //_text.push_back(_font->createText("Wrap: Repeat", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }
     // Mipmapping Off
     {
@@ -117,7 +118,7 @@ void TextureSample::initialize()
         node->setId("mipmap off");
         node->setTranslation(-25.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("MipMap: Off", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
+        //_text.push_back(_font->createText("MipMap: Off", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }
     // Mipmapping On
     {
@@ -126,7 +127,7 @@ void TextureSample::initialize()
         node->setId("mipmap on");
         node->setTranslation(-5.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("MipMap: On", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
+        //_text.push_back(_font->createText("MipMap: On", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }
 }
 
@@ -135,11 +136,6 @@ void TextureSample::finalize()
     // Model and font are reference counted and should be released before closing this sample.
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
-    for (std::list<Font::Text*>::iterator it = _text.begin(); it != _text.end(); ++it)
-    {
-        SAFE_DELETE(*it);
-    }
-    _text.clear();
 }
 
 void TextureSample::update(float elapsedTime)
@@ -161,13 +157,6 @@ void TextureSample::render(float elapsedTime)
     _scene->visit(this, &TextureSample::drawScene);
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
-
-    _font->start();
-    for (std::list<Font::Text*>::const_iterator it = _text.begin(); it != _text.end(); ++it)
-    {
-        _font->drawText(*it);
-    }
-    _font->finish();
 }
 
 void TextureSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)

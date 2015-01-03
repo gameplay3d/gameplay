@@ -141,6 +141,11 @@ private:
      * Hidden copy assignment operator.
      */
     AIAgent& operator=(const AIAgent&);
+    
+    /**
+     * Set the node this agent is attached to.
+     */
+    void setNode(Node* node);
 
     /**
      * Called by the AIController to process a message for the AIAgent.

@@ -7,18 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42097DF51A28C4B000D0B312 /* SpriteSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42097DF31A28C4B000D0B312 /* SpriteSample.cpp */; };
+		42097DF61A28C4B000D0B312 /* SpriteSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42097DF31A28C4B000D0B312 /* SpriteSample.cpp */; };
 		420D545815FE430D00AD0B91 /* Audio3DSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543A15FE430D00AD0B91 /* Audio3DSample.cpp */; };
 		420D545915FE430D00AD0B91 /* Audio3DSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543A15FE430D00AD0B91 /* Audio3DSample.cpp */; };
-		420D545A15FE430D00AD0B91 /* CreateSceneSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543C15FE430D00AD0B91 /* CreateSceneSample.cpp */; };
-		420D545B15FE430D00AD0B91 /* CreateSceneSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543C15FE430D00AD0B91 /* CreateSceneSample.cpp */; };
+		420D545A15FE430D00AD0B91 /* SceneCreateSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543C15FE430D00AD0B91 /* SceneCreateSample.cpp */; };
+		420D545B15FE430D00AD0B91 /* SceneCreateSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543C15FE430D00AD0B91 /* SceneCreateSample.cpp */; };
 		420D545C15FE430D00AD0B91 /* FirstPersonCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543E15FE430D00AD0B91 /* FirstPersonCamera.cpp */; };
 		420D545D15FE430D00AD0B91 /* FirstPersonCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543E15FE430D00AD0B91 /* FirstPersonCamera.cpp */; };
 		420D545E15FE430D00AD0B91 /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544015FE430D00AD0B91 /* Grid.cpp */; };
 		420D545F15FE430D00AD0B91 /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544015FE430D00AD0B91 /* Grid.cpp */; };
 		420D546015FE430D00AD0B91 /* InputSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544215FE430D00AD0B91 /* InputSample.cpp */; };
 		420D546115FE430D00AD0B91 /* InputSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544215FE430D00AD0B91 /* InputSample.cpp */; };
-		420D546215FE430D00AD0B91 /* LoadSceneSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544415FE430D00AD0B91 /* LoadSceneSample.cpp */; };
-		420D546315FE430D00AD0B91 /* LoadSceneSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544415FE430D00AD0B91 /* LoadSceneSample.cpp */; };
+		420D546215FE430D00AD0B91 /* SceneLoadSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544415FE430D00AD0B91 /* SceneLoadSample.cpp */; };
+		420D546315FE430D00AD0B91 /* SceneLoadSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544415FE430D00AD0B91 /* SceneLoadSample.cpp */; };
 		420D546415FE430D00AD0B91 /* MeshBatchSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544615FE430D00AD0B91 /* MeshBatchSample.cpp */; };
 		420D546515FE430D00AD0B91 /* MeshBatchSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544615FE430D00AD0B91 /* MeshBatchSample.cpp */; };
 		420D546615FE430D00AD0B91 /* MeshPrimitiveSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544815FE430D00AD0B91 /* MeshPrimitiveSample.cpp */; };
@@ -27,8 +29,8 @@
 		420D546D15FE430D00AD0B91 /* SpriteBatchSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544E15FE430D00AD0B91 /* SpriteBatchSample.cpp */; };
 		420D546E15FE430D00AD0B91 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545015FE430D00AD0B91 /* Sample.cpp */; };
 		420D546F15FE430D00AD0B91 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545015FE430D00AD0B91 /* Sample.cpp */; };
-		420D547015FE430D00AD0B91 /* TextSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545215FE430D00AD0B91 /* TextSample.cpp */; };
-		420D547115FE430D00AD0B91 /* TextSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545215FE430D00AD0B91 /* TextSample.cpp */; };
+		420D547015FE430D00AD0B91 /* FontSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545215FE430D00AD0B91 /* FontSample.cpp */; };
+		420D547115FE430D00AD0B91 /* FontSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545215FE430D00AD0B91 /* FontSample.cpp */; };
 		420D547215FE430D00AD0B91 /* TextureSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545415FE430D00AD0B91 /* TextureSample.cpp */; };
 		420D547315FE430D00AD0B91 /* TextureSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545415FE430D00AD0B91 /* TextureSample.cpp */; };
 		420D547415FE430D00AD0B91 /* TriangleSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545615FE430D00AD0B91 /* TriangleSample.cpp */; };
@@ -96,18 +98,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		42097DF31A28C4B000D0B312 /* SpriteSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteSample.cpp; sourceTree = "<group>"; };
+		42097DF41A28C4B000D0B312 /* SpriteSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteSample.h; sourceTree = "<group>"; };
 		420D543A15FE430D00AD0B91 /* Audio3DSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Audio3DSample.cpp; sourceTree = "<group>"; };
 		420D543B15FE430D00AD0B91 /* Audio3DSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio3DSample.h; sourceTree = "<group>"; };
-		420D543C15FE430D00AD0B91 /* CreateSceneSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CreateSceneSample.cpp; sourceTree = "<group>"; };
-		420D543D15FE430D00AD0B91 /* CreateSceneSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateSceneSample.h; sourceTree = "<group>"; };
+		420D543C15FE430D00AD0B91 /* SceneCreateSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneCreateSample.cpp; sourceTree = "<group>"; };
+		420D543D15FE430D00AD0B91 /* SceneCreateSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneCreateSample.h; sourceTree = "<group>"; };
 		420D543E15FE430D00AD0B91 /* FirstPersonCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirstPersonCamera.cpp; sourceTree = "<group>"; };
 		420D543F15FE430D00AD0B91 /* FirstPersonCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstPersonCamera.h; sourceTree = "<group>"; };
 		420D544015FE430D00AD0B91 /* Grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grid.cpp; sourceTree = "<group>"; };
 		420D544115FE430D00AD0B91 /* Grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
 		420D544215FE430D00AD0B91 /* InputSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputSample.cpp; sourceTree = "<group>"; };
 		420D544315FE430D00AD0B91 /* InputSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSample.h; sourceTree = "<group>"; };
-		420D544415FE430D00AD0B91 /* LoadSceneSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadSceneSample.cpp; sourceTree = "<group>"; };
-		420D544515FE430D00AD0B91 /* LoadSceneSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadSceneSample.h; sourceTree = "<group>"; };
+		420D544415FE430D00AD0B91 /* SceneLoadSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneLoadSample.cpp; sourceTree = "<group>"; };
+		420D544515FE430D00AD0B91 /* SceneLoadSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneLoadSample.h; sourceTree = "<group>"; };
 		420D544615FE430D00AD0B91 /* MeshBatchSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBatchSample.cpp; sourceTree = "<group>"; };
 		420D544715FE430D00AD0B91 /* MeshBatchSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshBatchSample.h; sourceTree = "<group>"; };
 		420D544815FE430D00AD0B91 /* MeshPrimitiveSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshPrimitiveSample.cpp; sourceTree = "<group>"; };
@@ -116,8 +120,8 @@
 		420D544F15FE430D00AD0B91 /* SpriteBatchSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchSample.h; sourceTree = "<group>"; };
 		420D545015FE430D00AD0B91 /* Sample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sample.cpp; sourceTree = "<group>"; };
 		420D545115FE430D00AD0B91 /* Sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sample.h; sourceTree = "<group>"; };
-		420D545215FE430D00AD0B91 /* TextSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextSample.cpp; sourceTree = "<group>"; };
-		420D545315FE430D00AD0B91 /* TextSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSample.h; sourceTree = "<group>"; };
+		420D545215FE430D00AD0B91 /* FontSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontSample.cpp; sourceTree = "<group>"; };
+		420D545315FE430D00AD0B91 /* FontSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSample.h; sourceTree = "<group>"; };
 		420D545415FE430D00AD0B91 /* TextureSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureSample.cpp; sourceTree = "<group>"; };
 		420D545515FE430D00AD0B91 /* TextureSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureSample.h; sourceTree = "<group>"; };
 		420D545615FE430D00AD0B91 /* TriangleSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleSample.cpp; sourceTree = "<group>"; };
@@ -323,10 +327,10 @@
 				420D543B15FE430D00AD0B91 /* Audio3DSample.h */,
 				F10DEAB516726157006FFFDC /* BillboardSample.cpp */,
 				F10DEAB616726157006FFFDC /* BillboardSample.h */,
-				420D543C15FE430D00AD0B91 /* CreateSceneSample.cpp */,
-				420D543D15FE430D00AD0B91 /* CreateSceneSample.h */,
 				9F4C6CFE162735020076E137 /* GestureSample.cpp */,
 				9F4C6CFF162735020076E137 /* GestureSample.h */,
+				420D545215FE430D00AD0B91 /* FontSample.cpp */,
+				420D545315FE430D00AD0B91 /* FontSample.h */,
 				F1E4B3F81671372E007516A7 /* FormsSample.cpp */,
 				F1E4B3F91671372E007516A7 /* FormsSample.h */,
 				42BE772E16A68CE3008AFA65 /* GamepadSample.cpp */,
@@ -335,8 +339,6 @@
 				420D544315FE430D00AD0B91 /* InputSample.h */,
 				42BE773216A68CF2008AFA65 /* LightSample.cpp */,
 				42BE773316A68CF2008AFA65 /* LightSample.h */,
-				420D544415FE430D00AD0B91 /* LoadSceneSample.cpp */,
-				420D544515FE430D00AD0B91 /* LoadSceneSample.h */,
 				420D544615FE430D00AD0B91 /* MeshBatchSample.cpp */,
 				420D544715FE430D00AD0B91 /* MeshBatchSample.h */,
 				420D544815FE430D00AD0B91 /* MeshPrimitiveSample.cpp */,
@@ -347,12 +349,16 @@
 				42BE773716A68D07008AFA65 /* PhysicsCollisionObjectSample.h */,
 				422FE592169690830062D1FE /* PostProcessSample.cpp */,
 				422FE593169690830062D1FE /* PostProcessSample.h */,
+				420D543C15FE430D00AD0B91 /* SceneCreateSample.cpp */,
+				420D543D15FE430D00AD0B91 /* SceneCreateSample.h */,
+				420D544415FE430D00AD0B91 /* SceneLoadSample.cpp */,
+				420D544515FE430D00AD0B91 /* SceneLoadSample.h */,
+				42097DF31A28C4B000D0B312 /* SpriteSample.cpp */,
+				42097DF41A28C4B000D0B312 /* SpriteSample.h */,
 				420D544E15FE430D00AD0B91 /* SpriteBatchSample.cpp */,
 				420D544F15FE430D00AD0B91 /* SpriteBatchSample.h */,
 				42DFABD216AD96F10000F342 /* TerrainSample.cpp */,
 				42DFABD316AD96F10000F342 /* TerrainSample.h */,
-				420D545215FE430D00AD0B91 /* TextSample.cpp */,
-				420D545315FE430D00AD0B91 /* TextSample.h */,
 				420D545415FE430D00AD0B91 /* TextureSample.cpp */,
 				420D545515FE430D00AD0B91 /* TextureSample.h */,
 				420D545615FE430D00AD0B91 /* TriangleSample.cpp */,
@@ -525,16 +531,17 @@
 				4258369D1A0F2AF400AFDFEB /* WaterSample.cpp in Sources */,
 				42C932F11491A5160098216A /* SamplesGame.cpp in Sources */,
 				420D545815FE430D00AD0B91 /* Audio3DSample.cpp in Sources */,
-				420D545A15FE430D00AD0B91 /* CreateSceneSample.cpp in Sources */,
+				420D545A15FE430D00AD0B91 /* SceneCreateSample.cpp in Sources */,
 				420D545C15FE430D00AD0B91 /* FirstPersonCamera.cpp in Sources */,
+				42097DF51A28C4B000D0B312 /* SpriteSample.cpp in Sources */,
 				420D545E15FE430D00AD0B91 /* Grid.cpp in Sources */,
 				420D546015FE430D00AD0B91 /* InputSample.cpp in Sources */,
-				420D546215FE430D00AD0B91 /* LoadSceneSample.cpp in Sources */,
+				420D546215FE430D00AD0B91 /* SceneLoadSample.cpp in Sources */,
 				420D546415FE430D00AD0B91 /* MeshBatchSample.cpp in Sources */,
 				420D546615FE430D00AD0B91 /* MeshPrimitiveSample.cpp in Sources */,
 				420D546C15FE430D00AD0B91 /* SpriteBatchSample.cpp in Sources */,
 				420D546E15FE430D00AD0B91 /* Sample.cpp in Sources */,
-				420D547015FE430D00AD0B91 /* TextSample.cpp in Sources */,
+				420D547015FE430D00AD0B91 /* FontSample.cpp in Sources */,
 				42A1BA201A27BCE200BF506D /* ParticlesSample.cpp in Sources */,
 				420D547215FE430D00AD0B91 /* TextureSample.cpp in Sources */,
 				420D547415FE430D00AD0B91 /* TriangleSample.cpp in Sources */,
@@ -556,16 +563,17 @@
 				4258369E1A0F2AF400AFDFEB /* WaterSample.cpp in Sources */,
 				5B61611614CCC24C0073B857 /* SamplesGame.cpp in Sources */,
 				420D545915FE430D00AD0B91 /* Audio3DSample.cpp in Sources */,
-				420D545B15FE430D00AD0B91 /* CreateSceneSample.cpp in Sources */,
+				420D545B15FE430D00AD0B91 /* SceneCreateSample.cpp in Sources */,
 				420D545D15FE430D00AD0B91 /* FirstPersonCamera.cpp in Sources */,
+				42097DF61A28C4B000D0B312 /* SpriteSample.cpp in Sources */,
 				420D545F15FE430D00AD0B91 /* Grid.cpp in Sources */,
 				420D546115FE430D00AD0B91 /* InputSample.cpp in Sources */,
-				420D546315FE430D00AD0B91 /* LoadSceneSample.cpp in Sources */,
+				420D546315FE430D00AD0B91 /* SceneLoadSample.cpp in Sources */,
 				420D546515FE430D00AD0B91 /* MeshBatchSample.cpp in Sources */,
 				420D546715FE430D00AD0B91 /* MeshPrimitiveSample.cpp in Sources */,
 				420D546D15FE430D00AD0B91 /* SpriteBatchSample.cpp in Sources */,
 				420D546F15FE430D00AD0B91 /* Sample.cpp in Sources */,
-				420D547115FE430D00AD0B91 /* TextSample.cpp in Sources */,
+				420D547115FE430D00AD0B91 /* FontSample.cpp in Sources */,
 				42A1BA211A27BCE200BF506D /* ParticlesSample.cpp in Sources */,
 				420D547315FE430D00AD0B91 /* TextureSample.cpp in Sources */,
 				420D547515FE430D00AD0B91 /* TriangleSample.cpp in Sources */,

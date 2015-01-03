@@ -1,8 +1,8 @@
-#include "CreateSceneSample.h"
+#include "SceneCreateSample.h"
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Create Scene", CreateSceneSample, 15);
+    ADD_SAMPLE("Graphics", "Scene Creation", SceneCreateSample, 15);
 #endif
 
 static Mesh* createCubeMesh(float size = 1.0f)
@@ -59,12 +59,12 @@ static Mesh* createCubeMesh(float size = 1.0f)
     return mesh;
 }
 
-CreateSceneSample::CreateSceneSample()
+SceneCreateSample::SceneCreateSample()
     : _font(NULL), _scene(NULL), _cubeNode(NULL)
 {
 }
 
-void CreateSceneSample::initialize()
+void SceneCreateSample::initialize()
 {
     // Create the font for drawing the framerate.
     _font = Font::create("res/ui/arial.gpb");
@@ -128,30 +128,30 @@ void CreateSceneSample::initialize()
     SAFE_RELEASE(cubeModel);
 }
 
-void CreateSceneSample::finalize()
+void SceneCreateSample::finalize()
 {
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
 }
 
-void CreateSceneSample::update(float elapsedTime)
+void SceneCreateSample::update(float elapsedTime)
 {
     // Rotate the directional light.
     _cubeNode->rotateY(elapsedTime * 0.001 * MATH_PI);
 }
 
-void CreateSceneSample::render(float elapsedTime)
+void SceneCreateSample::render(float elapsedTime)
 {
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0);
 
     // Visit all the nodes in the scene, drawing the models.
-    _scene->visit(this, &CreateSceneSample::drawScene);
+    _scene->visit(this, &SceneCreateSample::drawScene);
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
 
-void CreateSceneSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+void SceneCreateSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     switch (evt)
     {
@@ -169,7 +169,7 @@ void CreateSceneSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned
     };
 }
 
-bool CreateSceneSample::drawScene(Node* node)
+bool SceneCreateSample::drawScene(Node* node)
 {
     Model* model = node->getModel();
     if (model)

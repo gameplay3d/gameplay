@@ -731,7 +731,6 @@ Node* ParticleEmitter::getNode() const
 
 void ParticleEmitter::setNode(Node* node)
 {
-    // Connect the new node.
     _node = node;
 }
 
@@ -843,7 +842,15 @@ ParticleEmitter::BlendMode ParticleEmitter::getBlendModeFromString(const char* s
     {
         return BLEND_NONE;
     }
+    else if (strcmp(str, "BLEND_OPAQUE") == 0 || strcmp(str, "OPAQUE") == 0 )
+    {
+        return BLEND_NONE;
+    }
     else if (strcmp(str, "BLEND_ALPHA") == 0 || strcmp(str, "ALPHA") == 0 )
+    {
+        return BLEND_ALPHA;
+    }
+    else if (strcmp(str, "BLEND_TRANSPARENT") == 0 || strcmp(str, "TRANSPARENT") == 0 )
     {
         return BLEND_ALPHA;
     }

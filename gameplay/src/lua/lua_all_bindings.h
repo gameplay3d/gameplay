@@ -35,7 +35,6 @@
 #include "lua_FileSystem.h"
 #include "lua_FlowLayout.h"
 #include "lua_Font.h"
-#include "lua_FontText.h"
 #include "lua_Form.h"
 #include "lua_FrameBuffer.h"
 #include "lua_Frustum.h"
