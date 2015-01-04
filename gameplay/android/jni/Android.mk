@@ -104,14 +104,17 @@ LOCAL_SRC_FILES := \
     ScriptController.cpp \
     ScriptTarget.cpp \
     Slider.cpp \
+    Sprite.cpp \
     SpriteBatch.cpp \
     Technique.cpp \
     Terrain.cpp \
     TerrainPatch.cpp \
+    Text.cpp \
     TextBox.cpp \
     Texture.cpp \
     Theme.cpp \
     ThemeStyle.cpp \
+    TileSet.cpp \
     Transform.cpp \
     Vector2.cpp \
     Vector3.cpp \
@@ -154,7 +157,6 @@ LOCAL_SRC_FILES := \
     lua/lua_FileSystem.cpp \
     lua/lua_FlowLayout.cpp \
     lua/lua_Font.cpp \
-    lua/lua_FontText.cpp \
     lua/lua_Form.cpp \
     lua/lua_FrameBuffer.cpp \
     lua/lua_Frustum.cpp \
