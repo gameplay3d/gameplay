@@ -1,10 +1,8 @@
 
 include_directories( 
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/include
-    ${CMAKE_SOURCE_DIR}/external-deps/png/include
+    ${CMAKE_SOURCE_DIR}/external-deps/include
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/include
     /usr/include/fbxsdk
-    /usr/include
 )
 
 if ( "${CMAKE_BUILD_TYPE}" STREQUAL "DEBUG" )
@@ -12,24 +10,26 @@ add_definitions(-D_DEBUG)
 endif()
 add_definitions(-D__linux__ -DUSE_FBX)
 
+IF(ARCH_DIR STREQUAL "x64")
+    set(ARCH_DEPS_DIR "x86_64")
+ELSE()
+    set(ARCH_DEPS_DIR "x86")
+ENDIF(ARCH_DIR STREQUAL "x64")
+
 link_directories(
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/png/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/libs/Linux/${ARCH_DEPS_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
-    /usr/lib/gcc4/${ARCH_DIR}/release
-    /usr/lib
 )
 
 set(APP_LIBRARIES
     dl
     fbxsdk
-    png
-    z   
+    gameplay-deps
     freetype
     pthread
-) 
+)
 
-add_definitions(-lstdc++ -ldl -lfbxsdk -lpng -lz -lfreetype -lpthread)
+add_definitions(-lstdc++ -ldl -lfbxsdk -lgameplay-deps -lfreetype -lpthread)
 
 set( APP_NAME gameplay-encoder )
 
