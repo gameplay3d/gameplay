@@ -1,24 +1,25 @@
 
 include_directories( 
-    ${CMAKE_SOURCE_DIR}/external-deps/lua/include
-    ${CMAKE_SOURCE_DIR}/external-deps/tinyxml2/include
-    /usr/include
+    ${CMAKE_SOURCE_DIR}/external-deps/include
 )
 
 add_definitions(-D__linux__)
 
+IF(ARCH_DIR STREQUAL "x64")
+    set(ARCH_DEPS_DIR "x86_64")
+ELSE()
+    set(ARCH_DEPS_DIR "x86")
+ENDIF(ARCH_DIR STREQUAL "x64")
+
 link_directories(
-    ${CMAKE_SOURCE_DIR}/external-deps/lua/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/tinyxml2/lib/linux/${ARCH_DIR}
-    /usr/lib
+    ${CMAKE_SOURCE_DIR}/external-deps/libs/Linux/${ARCH_DEPS_DIR}
 )
 
 set(APP_LIBRARIES
-    lua
-    tinyxml2
+    gameplay-deps
 ) 
 
-add_definitions(-lstdc++ -llua -ltinyxml2)
+add_definitions(-std=c++11 -lstdc++ -lgameplay-deps)
 
 set( APP_NAME gameplay-luagen )
 

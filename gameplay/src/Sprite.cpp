@@ -35,7 +35,7 @@ Sprite* Sprite::create(const char* imagePath, float width, float height,
 {
     GP_ASSERT(imagePath != NULL);
     GP_ASSERT(width >= -1 && height >= -1);
-    GP_ASSERT(source.width >= -1 && source.heigh >= -1);
+    GP_ASSERT(source.width >= -1 && source.height >= -1);
     GP_ASSERT(frameCount > 0);
     
     SpriteBatch* batch = SpriteBatch::create(imagePath, effect);

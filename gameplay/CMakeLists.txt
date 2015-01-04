@@ -196,6 +196,8 @@ set(GAMEPLAY_SRC
     src/ScriptTarget.h
     src/Slider.cpp
     src/Slider.h
+    src/Sprite.cpp
+    src/Sprite.h
     src/SpriteBatch.cpp
     src/SpriteBatch.h
     src/Technique.cpp
@@ -204,6 +206,8 @@ set(GAMEPLAY_SRC
     src/Terrain.h
     src/TerrainPatch.cpp
     src/TerrainPatch.h
+    src/Text.cpp
+    src/Text.h
     src/TextBox.cpp
     src/TextBox.h
     src/Texture.cpp
@@ -212,6 +216,8 @@ set(GAMEPLAY_SRC
     src/Theme.h
     src/ThemeStyle.cpp
     src/ThemeStyle.h
+    src/TileSet.cpp
+    src/TileSet.h
     src/Transform.cpp
     src/Transform.h
     src/Vector2.cpp
@@ -526,14 +532,8 @@ set(GAMEPLAY_RES_SHADERS
 
 include_directories(
     src
-    ../external-deps/lua/include
-    ../external-deps/bullet/include
-    ../external-deps/png/include
-    ../external-deps/zlib/include
-    ../external-deps/ogg/include
-    ../external-deps/vorbis/include
-    ../external-deps/openal/include
-    ../external-deps/glew/include
+    ../external-deps/include
+    ../external-deps/include/bullet
 )
 
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")

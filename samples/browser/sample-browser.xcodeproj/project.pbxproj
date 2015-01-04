@@ -36,9 +36,6 @@
 		420D547415FE430D00AD0B91 /* TriangleSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545615FE430D00AD0B91 /* TriangleSample.cpp */; };
 		420D547515FE430D00AD0B91 /* TriangleSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545615FE430D00AD0B91 /* TriangleSample.cpp */; };
 		421090EA18299EBA00761E40 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421090E918299EBA00761E40 /* GameKit.framework */; };
-		422E8EC11956324B001DE81F /* libBulletCollision.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 422E8EBE1956324B001DE81F /* libBulletCollision.a */; };
-		422E8EC21956324B001DE81F /* libBulletDynamics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 422E8EBF1956324B001DE81F /* libBulletDynamics.a */; };
-		422E8EC31956324B001DE81F /* libLinearMath.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 422E8EC01956324B001DE81F /* libLinearMath.a */; };
 		422FE594169690830062D1FE /* PostProcessSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422FE592169690830062D1FE /* PostProcessSample.cpp */; };
 		422FE595169690830062D1FE /* PostProcessSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422FE592169690830062D1FE /* PostProcessSample.cpp */; };
 		424CC030161F8E3000577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC02F161F8E3000577827 /* IOKit.framework */; };
@@ -61,28 +58,18 @@
 		42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933161491A5EB0098216A /* OpenGL.framework */; };
 		42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331C1491A6750098216A /* QuartzCore.framework */; };
 		42C9331F1491A67F0098216A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331E1491A67F0098216A /* OpenAL.framework */; };
-		42C933261491A6E50098216A /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933221491A6E50098216A /* libogg.a */; };
-		42C933271491A6E50098216A /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933231491A6E50098216A /* libvorbis.a */; };
-		42C9332C1491A7680098216A /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332A1491A7390098216A /* libpng.a */; };
-		42C9332F1491A78D0098216A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
-		42CACBDF16ADA45F000D911A /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6195416A71DD000C4FEA1 /* liblua.a */; };
-		42CACBE016ADA463000D911A /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB9A16AD90080000F342 /* libogg.a */; };
-		42CACBE116ADA466000D911A /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F2377116AD99EA0019CAC9 /* libpng.a */; };
-		42CACBE216ADA468000D911A /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB9B16AD90080000F342 /* libvorbis.a */; };
-		42CACBE516ADA473000D911A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB2316AD8C1C0000F342 /* libz.dylib */; };
 		42DFAABC16AD89670000F342 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAABB16AD89670000F342 /* CoreMotion.framework */; };
 		42DFAAD416AD8A8C0000F342 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAAD316AD8A8C0000F342 /* Foundation.framework */; };
 		42DFAB1F16AD8BBC0000F342 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB1B16AD8BBC0000F342 /* OpenAL.framework */; };
 		42DFAB2016AD8BBC0000F342 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB1C16AD8BBC0000F342 /* OpenGLES.framework */; };
 		42DFAB2116AD8BBC0000F342 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB1D16AD8BBC0000F342 /* QuartzCore.framework */; };
 		42DFAB2216AD8BBC0000F342 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB1E16AD8BBC0000F342 /* UIKit.framework */; };
-		42DFABD116AD961C0000F342 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFABD016AD961C0000F342 /* libgameplay.a */; };
 		42DFABD416AD96F10000F342 /* TerrainSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42DFABD216AD96F10000F342 /* TerrainSample.cpp */; };
 		42DFABD516AD96F10000F342 /* TerrainSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42DFABD216AD96F10000F342 /* TerrainSample.cpp */; };
 		42F237A816AD9DD70019CAC9 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42F237A716AD9DD70019CAC9 /* Default-568h@2x.png */; };
-		42FA64661953DF8100337ABC /* libBulletCollision.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FA64631953DF8100337ABC /* libBulletCollision.a */; };
-		42FA64671953DF8100337ABC /* libBulletDynamics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FA64641953DF8100337ABC /* libBulletDynamics.a */; };
-		42FA64681953DF8100337ABC /* libLinearMath.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FA64651953DF8100337ABC /* libLinearMath.a */; };
+		435FC4091A53449B003D4E9C /* libgameplay-deps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435FC4081A53449B003D4E9C /* libgameplay-deps.a */; };
+		435FC40D1A534AB4003D4E9C /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435FC40C1A534AB4003D4E9C /* libgameplay.a */; };
+		435FC40F1A538315003D4E9C /* libgameplay-deps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435FC40E1A538315003D4E9C /* libgameplay-deps.a */; };
 		5B61611614CCC24C0073B857 /* SamplesGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* SamplesGame.cpp */; };
 		5B61612614CCC24C0073B857 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
 		5B61612714CCC24C0073B857 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
@@ -94,7 +81,6 @@
 		F10DEAB816726157006FFFDC /* BillboardSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F10DEAB516726157006FFFDC /* BillboardSample.cpp */; };
 		F1E4B3FA1671372E007516A7 /* FormsSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E4B3F81671372E007516A7 /* FormsSample.cpp */; };
 		F1E4B3FB1671372E007516A7 /* FormsSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E4B3F81671372E007516A7 /* FormsSample.cpp */; };
-		F1F6195216A71DB100C4FEA1 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6195116A71DB100C4FEA1 /* liblua.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -175,6 +161,9 @@
 		42FA64631953DF8100337ABC /* libBulletCollision.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision.a; path = "../../external-deps/bullet/lib/macosx/x64/libBulletCollision.a"; sourceTree = "<group>"; };
 		42FA64641953DF8100337ABC /* libBulletDynamics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics.a; path = "../../external-deps/bullet/lib/macosx/x64/libBulletDynamics.a"; sourceTree = "<group>"; };
 		42FA64651953DF8100337ABC /* libLinearMath.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath.a; path = "../../external-deps/bullet/lib/macosx/x64/libLinearMath.a"; sourceTree = "<group>"; };
+		435FC4081A53449B003D4E9C /* libgameplay-deps.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgameplay-deps.a"; path = "../../external-deps/libs/MacOS/x86_64/libgameplay-deps.a"; sourceTree = "<group>"; };
+		435FC40C1A534AB4003D4E9C /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = ../../gameplay/Build/Products/Debug/libgameplay.a; sourceTree = "<group>"; };
+		435FC40E1A538315003D4E9C /* libgameplay-deps.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgameplay-deps.a"; path = "../../external-deps/libs/iOS/x86/libgameplay-deps.a"; sourceTree = "<group>"; };
 		5B61611214CCC2200073B857 /* sample-browser-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample-browser-macosx.plist"; sourceTree = "<group>"; };
 		5B61612C14CCC24C0073B857 /* sample-browser-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-browser-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* sample-browser-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample-browser-ios.plist"; sourceTree = "<group>"; };
@@ -194,19 +183,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42DFABD116AD961C0000F342 /* libgameplay.a in Frameworks */,
-				42FA64671953DF8100337ABC /* libBulletDynamics.a in Frameworks */,
-				42FA64661953DF8100337ABC /* libBulletCollision.a in Frameworks */,
-				F1F6195216A71DB100C4FEA1 /* liblua.a in Frameworks */,
-				42C933261491A6E50098216A /* libogg.a in Frameworks */,
-				42C933271491A6E50098216A /* libvorbis.a in Frameworks */,
-				42C9332C1491A7680098216A /* libpng.a in Frameworks */,
-				42C9332F1491A78D0098216A /* libz.dylib in Frameworks */,
+				435FC40D1A534AB4003D4E9C /* libgameplay.a in Frameworks */,
+				435FC4091A53449B003D4E9C /* libgameplay-deps.a in Frameworks */,
 				6212DAB81829DA1D006213DD /* GameKit.framework in Frameworks */,
 				424CC030161F8E3000577827 /* IOKit.framework in Frameworks */,
 				42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */,
 				42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */,
-				42FA64681953DF8100337ABC /* libLinearMath.a in Frameworks */,
 				42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */,
 				42C9331F1491A67F0098216A /* OpenAL.framework in Frameworks */,
 			);
@@ -216,17 +198,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42CACBDF16ADA45F000D911A /* liblua.a in Frameworks */,
-				42CACBE016ADA463000D911A /* libogg.a in Frameworks */,
-				422E8EC21956324B001DE81F /* libBulletDynamics.a in Frameworks */,
-				42CACBE116ADA466000D911A /* libpng.a in Frameworks */,
-				42CACBE216ADA468000D911A /* libvorbis.a in Frameworks */,
-				42CACBE516ADA473000D911A /* libz.dylib in Frameworks */,
+				435FC40F1A538315003D4E9C /* libgameplay-deps.a in Frameworks */,
 				42DFAABC16AD89670000F342 /* CoreMotion.framework in Frameworks */,
 				42DFAAD416AD8A8C0000F342 /* Foundation.framework in Frameworks */,
 				42DFAB1F16AD8BBC0000F342 /* OpenAL.framework in Frameworks */,
-				422E8EC11956324B001DE81F /* libBulletCollision.a in Frameworks */,
-				422E8EC31956324B001DE81F /* libLinearMath.a in Frameworks */,
 				421090EA18299EBA00761E40 /* GameKit.framework in Frameworks */,
 				42DFAB2016AD8BBC0000F342 /* OpenGLES.framework in Frameworks */,
 				425F3A5617FBCBF00085454F /* libgameplay.a in Frameworks */,
@@ -313,6 +288,9 @@
 		42C932BF1491A0DB0098216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				435FC40E1A538315003D4E9C /* libgameplay-deps.a */,
+				435FC40C1A534AB4003D4E9C /* libgameplay.a */,
+				435FC4081A53449B003D4E9C /* libgameplay-deps.a */,
 				5B61613A14CCC3590073B857 /* MacOSX */,
 				5B61613914CCC3560073B857 /* iOS */,
 			);
@@ -677,21 +655,14 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
-					"../../external-deps/bullet/include",
-					"../../external-deps/png/include",
-					"../../external-deps/lua/include",
-					"../../external-deps/ogg/include",
-					"../../external-deps/vorbis/include",
+					"../../external-deps/include",
+					"../../external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "sample-browser-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../external-deps/bullet/lib/macosx/x64",
-					"../../external-deps/png/lib/macosx/x64",
-					"../../external-deps/lua/lib/macosx/x64",
-					"../../external-deps/ogg/lib/macosx/x64",
-					"../../external-deps/vorbis/lib/macosx/x64",
-					"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug",
+					"../../external-deps/libs/MacOS/x86_64",
+					../../gameplay/Build/Products/Debug,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -712,21 +683,14 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
-					"../../external-deps/bullet/include",
-					"../../external-deps/png/include",
-					"../../external-deps/lua/include",
-					"../../external-deps/ogg/include",
-					"../../external-deps/vorbis/include",
+					"../../external-deps/include",
+					"../../external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "sample-browser-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../external-deps/bullet/lib/macosx/x64",
-					"../../external-deps/png/lib/macosx/x64",
-					"../../external-deps/lua/lib/macosx/x64",
-					"../../external-deps/ogg/lib/macosx/x64",
-					"../../external-deps/vorbis/lib/macosx/x64",
-					"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug",
+					"../../external-deps/libs/MacOS/x86_64",
+					../../gameplay/Build/Products/Debug,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -748,22 +712,19 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
-					"../../external-deps/bullet/include",
-					"../../external-deps/png/include",
-					"../../external-deps/lua/include",
-					"../../external-deps/ogg/include",
-					"../../external-deps/vorbis/include",
+					"../../external-deps/include",
+					"../../external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "sample-browser-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)",
-					"../../external-deps/png/lib/ios/$(CURRENT_ARCH)",
-					"../../external-deps/lua/lib/ios/$(CURRENT_ARCH)",
-					"../../external-deps/ogg/lib/ios/$(CURRENT_ARCH)",
-					"../../external-deps/vorbis/lib/ios/$(CURRENT_ARCH)",
-					"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug-iphoneos",
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+					"-L../../external-deps/libs/iOS/arm",
+					"-L../../gameplay/Build/Products/Debug-iphoneos",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"-L../../external-deps/libs/iOS/x86",
+					"-L../../gameplay/Build/Products/Debug-iphonesimulator",
 				);
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -786,23 +747,12 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
-					"../../external-deps/bullet/include",
-					"../../external-deps/png/include",
-					"../../external-deps/lua/include",
-					"../../external-deps/ogg/include",
-					"../../external-deps/vorbis/include",
+					"../../external-deps/include",
+					"../../external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "sample-browser-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)",
-					"../../external-deps/png/lib/ios/$(CURRENT_ARCH)",
-					"../../external-deps/lua/lib/ios/$(CURRENT_ARCH)",
-					"../../external-deps/ogg/lib/ios/$(CURRENT_ARCH)",
-					"../../external-deps/vorbis/lib/ios/$(CURRENT_ARCH)",
-					"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug-iphoneos",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

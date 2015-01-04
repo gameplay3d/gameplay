@@ -79,15 +79,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\lua\include;..\..\external-deps\bullet\include;..\..\external-deps\openal\include\AL;..\..\external-deps\ogg\include;..\..\external-deps\vorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;..\..\external-deps\include\bullet</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;GLEW.lib;OpenAL.lib;lua.lib;png.lib;zlib.lib;gameplay.lib;ogg.lib;vorbis.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64\Debug;..\..\external-deps\bullet\lib\windows\x64\Debug;..\..\external-deps\openal\lib\windows\x64\Debug;..\..\external-deps\ogg\lib\windows\x64\Debug;..\..\external-deps\vorbis\lib\windows\x64\Debug;..\..\external-deps\glew\lib\windows\x64\Debug;..\..\external-deps\png\lib\windows\x64\Debug;..\..\external-deps\zlib\lib\windows\x64\Debug;..\..\gameplay\windows\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\external-deps\libs\Windows\x86_64\Debug;..\..\gameplay\windows\x64\Debug</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -110,7 +110,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\lua\include;..\..\external-deps\bullet\include;..\..\external-deps\openal\include\AL;..\..\external-deps\ogg\include;..\..\external-deps\vorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;..\..\external-deps\include\bullet</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessToFile>false</PreprocessToFile>
@@ -119,8 +119,8 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;GLEW.lib;OpenAL.lib;lua.lib;png.lib;zlib.lib;gameplay.lib;ogg.lib;vorbis.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64\Debug;..\..\external-deps\bullet\lib\windows\x64\Debug;..\..\external-deps\openal\lib\windows\x64\Debug;..\..\external-deps\ogg\lib\windows\x64\Debug;..\..\external-deps\vorbis\lib\windows\x64\Debug;..\..\external-deps\glew\lib\windows\x64\Debug;..\..\external-deps\png\lib\windows\x64\Debug;..\..\external-deps\zlib\lib\windows\x64\Debug;..\..\gameplay\windows\x64\DebugMem</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\external-deps\libs\Windows\x86_64\Debug;..\..\gameplay\windows\x64\DebugMem</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -145,15 +145,15 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\lua\include;..\..\external-deps\bullet\include;..\..\external-deps\openal\include\AL;..\..\external-deps\ogg\include;..\..\external-deps\vorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;..\..\external-deps\include\bullet</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;GLEW.lib;OpenAL.lib;lua.lib;png.lib;zlib.lib;gameplay.lib;ogg.lib;vorbis.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64\Release;..\..\external-deps\bullet\lib\windows\x64\Release;..\..\external-deps\openal\lib\windows\x64\Release;..\..\external-deps\ogg\lib\windows\x64\Release;..\..\external-deps\vorbis\lib\windows\x64\Release;..\..\external-deps\glew\lib\windows\x64\Release;..\..\external-deps\png\lib\windows\x64\Release;..\..\external-deps\zlib\lib\windows\x64\Release;..\..\gameplay\windows\x64\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\external-deps\libs\Windows\x86_64\Release;..\..\gameplay\windows\x64\Release</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -264,25 +264,26 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
   <ItemGroup>
     <ClCompile Include="src\Audio3DSample.cpp" />
     <ClCompile Include="src\BillboardSample.cpp" />
-    <ClCompile Include="src\CreateSceneSample.cpp" />
+    <ClCompile Include="src\FontSample.cpp" />
     <ClCompile Include="src\FormsSample.cpp" />
     <ClCompile Include="src\GamepadSample.cpp" />
     <ClCompile Include="src\GestureSample.cpp" />
     <ClCompile Include="src\LightSample.cpp" />
     <ClCompile Include="src\ParticlesSample.cpp" />
     <ClCompile Include="src\PostProcessSample.cpp" />
+    <ClCompile Include="src\SceneCreateSample.cpp" />
+    <ClCompile Include="src\SceneLoadSample.cpp" />
+    <ClCompile Include="src\SpriteSample.cpp" />
     <ClCompile Include="src\TerrainSample.cpp" />
     <ClCompile Include="src\TriangleSample.cpp" />
     <ClCompile Include="src\FirstPersonCamera.cpp" />
     <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\InputSample.cpp" />
-    <ClCompile Include="src\LoadSceneSample.cpp" />
     <ClCompile Include="src\MeshPrimitiveSample.cpp" />
     <ClCompile Include="src\PhysicsCollisionObjectSample.cpp" />
     <ClCompile Include="src\SpriteBatchSample.cpp" />
     <ClCompile Include="src\Sample.cpp" />
     <ClCompile Include="src\SamplesGame.cpp" />
-    <ClCompile Include="src\TextSample.cpp" />
     <ClCompile Include="src\TextureSample.cpp" />
     <ClCompile Include="src\MeshBatchSample.cpp" />
     <ClCompile Include="src\WaterSample.cpp" />
@@ -290,25 +291,26 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
   <ItemGroup>
     <ClInclude Include="src\Audio3DSample.h" />
     <ClInclude Include="src\BillboardSample.h" />
-    <ClInclude Include="src\CreateSceneSample.h" />
+    <ClInclude Include="src\FontSample.h" />
     <ClInclude Include="src\FormsSample.h" />
     <ClInclude Include="src\GamepadSample.h" />
     <ClInclude Include="src\GestureSample.h" />
     <ClInclude Include="src\LightSample.h" />
     <ClInclude Include="src\ParticlesSample.h" />
     <ClInclude Include="src\PostProcessSample.h" />
+    <ClInclude Include="src\SceneCreateSample.h" />
+    <ClInclude Include="src\SceneLoadSample.h" />
+    <ClInclude Include="src\SpriteSample.h" />
     <ClInclude Include="src\TerrainSample.h" />
     <ClInclude Include="src\TriangleSample.h" />
     <ClInclude Include="src\FirstPersonCamera.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\InputSample.h" />
-    <ClInclude Include="src\LoadSceneSample.h" />
     <ClInclude Include="src\MeshPrimitiveSample.h" />
     <ClInclude Include="src\PhysicsCollisionObjectSample.h" />
     <ClInclude Include="src\SpriteBatchSample.h" />
     <ClInclude Include="src\Sample.h" />
     <ClInclude Include="src\SamplesGame.h" />
-    <ClInclude Include="src\TextSample.h" />
     <ClInclude Include="src\TextureSample.h" />
     <ClInclude Include="src\MeshBatchSample.h" />
     <ClInclude Include="src\WaterSample.h" />

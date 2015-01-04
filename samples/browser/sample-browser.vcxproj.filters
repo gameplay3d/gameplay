@@ -251,24 +251,26 @@
     <None Include="res\common\fonts\neuropol.gpb">
       <Filter>res\common\fonts</Filter>
     </None>
+    <None Include="res\common\particles\editor.form" />
+    <None Include="res\common\particles\editor.theme" />
+    <None Include="res\common\particles\explosion.particle" />
+    <None Include="res\common\particles\fire.particle" />
+    <None Include="res\common\particles\grid.material" />
+    <None Include="res\common\particles\smoke.particle" />
+    <None Include="res\common\water\pond.gpb" />
+    <None Include="res\common\water\watersample.frag" />
+    <None Include="res\common\water\watersample.material" />
+    <None Include="res\common\water\watersample.scene" />
+    <None Include="res\common\water\watersample.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MeshPrimitiveSample.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CreateSceneSample.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Audio3DSample.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\InputSample.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LoadSceneSample.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TextSample.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\TextureSample.h">
@@ -322,24 +324,24 @@
     <ClInclude Include="src\WaterSample.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\ParticlesSample.h" />
+    <ClInclude Include="src\FontSample.h" />
+    <ClInclude Include="src\SpriteSample.h" />
+    <ClInclude Include="src\SceneCreateSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneLoadSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshPrimitiveSample.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CreateSceneSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Audio3DSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\InputSample.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LoadSceneSample.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TextSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TextureSample.cpp">
@@ -391,6 +393,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\WaterSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticlesSample.cpp" />
+    <ClCompile Include="src\FontSample.cpp" />
+    <ClCompile Include="src\SpriteSample.cpp" />
+    <ClCompile Include="src\SceneCreateSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneLoadSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -452,6 +463,12 @@
     <Image Include="res\png\logo.png">
       <Filter>res\png</Filter>
     </Image>
+    <Image Include="res\common\particles\editor.png" />
+    <Image Include="res\common\particles\explosion.png" />
+    <Image Include="res\common\particles\fire.png" />
+    <Image Include="res\common\particles\smoke.png" />
+    <Image Include="res\common\water\water_normal.png" />
+    <Image Include="res\common\water\water_sample.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\common\footsteps.wav">

@@ -444,9 +444,6 @@
     <ClCompile Include="src\lua\lua_Font.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_FontText.cpp">
-      <Filter>src\lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_Form.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
@@ -738,11 +735,14 @@
     <ClCompile Include="src\lua\lua_ScriptTargetEventRegistry.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_TextureCubeFace.cpp">
-      <Filter>src\lua</Filter>
+    <ClCompile Include="src\Sprite.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_TextureType.cpp">
-      <Filter>src\lua</Filter>
+    <ClCompile Include="src\Text.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TileSet.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1175,9 +1175,6 @@
     <ClInclude Include="src\lua\lua_Font.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_FontText.h">
-      <Filter>src\lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_Form.h">
       <Filter>src\lua</Filter>
     </ClInclude>
@@ -1469,11 +1466,14 @@
     <ClInclude Include="src\lua\lua_ScriptTargetEventRegistry.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_TextureCubeFace.h">
-      <Filter>src\lua</Filter>
+    <ClInclude Include="src\Sprite.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_TextureType.h">
-      <Filter>src\lua</Filter>
+    <ClInclude Include="src\Text.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TileSet.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
