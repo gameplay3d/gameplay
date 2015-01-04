@@ -5,12 +5,14 @@ set(GAME_NAME TEMPLATE_PROJECT)
 
 if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
     set(ARCH_DIR "x64" )
+    set(ARCH_DEPS_DIR "x86_64" )
 else()
     set(ARCH_DIR "x86" )
+    set(ARCH_DEPS_DIR "x86" )
 endif()
 
 set(GAMEPLAY_SRC_PATH "GAMEPLAY_PATH") 
-set(GAMEPLAY_EXT_LIBS_PATH "${GAMEPLAY_SRC_PATH}/external-deps")
+set(GAMEPLAY_EXT_LIBS_PATH "${GAMEPLAY_SRC_PATH}/external-deps/libs")
 
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
     ADD_DEFINITIONS(-D__linux__)
@@ -57,7 +59,7 @@ macro (append_gameplay_ext_lib listToAppend libName libDirName)
 		find_library(FOUND_LIB_${libName} NAMES ${libName} ${ARGN})
     ELSE("${libDirName}" STREQUAL "")
         set(pathToSearch
-            "${GAMEPLAY_EXT_LIBS_PATH}/${libDirName}/lib/${TARGET_OS_DIR}/${ARCH_DIR}")
+            "${GAMEPLAY_EXT_LIBS_PATH}/${CMAKE_SYSTEM_NAME}/${ARCH_DEPS_DIR}")
 		find_library(FOUND_LIB_${libName} NAMES ${libName} ${ARGN} HINTS ${pathToSearch})
     ENDIF("${libDirName}" STREQUAL "")
 
@@ -90,28 +92,12 @@ endmacro(copy_files)
 
 include_directories( 
     ${GAMEPLAY_SRC_PATH}/gameplay/src
-    ${GAMEPLAY_SRC_PATH}/external-deps/lua/include
-    ${GAMEPLAY_SRC_PATH}/external-deps/bullet/include
-    ${GAMEPLAY_SRC_PATH}/external-deps/png/include
-    ${GAMEPLAY_SRC_PATH}/external-deps/ogg/include
-    ${GAMEPLAY_SRC_PATH}/external-deps/vorbis/include
-    ${GAMEPLAY_SRC_PATH}/external-deps/zlib/include
-    ${GAMEPLAY_SRC_PATH}/external-deps/openal/include
-    ${GAMEPLAY_SRC_PATH}/external-deps/openal/include/AL
-    ${GAMEPLAY_SRC_PATH}/external-deps/glew/include
+    ${GAMEPLAY_SRC_PATH}/external-deps/include
+    ${GAMEPLAY_SRC_PATH}/external-deps/include/bullet
 )
 
 append_gameplay_lib(GAMEPLAY_LIBRARIES)
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "GLEW" "glew" "glew32")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "lua" "lua")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "png" "png" "libpng")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "BulletDynamics" "bullet")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "BulletCollision" "bullet")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "LinearMath" "bullet")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "openal" "openal" "openal32")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "vorbis" "vorbis" "libvorbis")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "ogg" "ogg" "libogg")
-append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "z" "zlib" "zlib")
+append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "gameplay-deps" "libs")
 
 IF (TARGET_OS STREQUAL "LINUX")
 	append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "GL" "")
