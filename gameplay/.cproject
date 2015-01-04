@@ -37,14 +37,8 @@
 								<option id="gnu.cpp.compiler.option.include.paths.800094241" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lua}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/png/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/zlib/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/ogg/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/vorbis/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/openal/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/glew/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/include/bullet&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
@@ -122,14 +116,8 @@
 								<option id="gnu.cpp.compiler.option.include.paths.1112278724" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lua}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/png/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/zlib/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/ogg/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/vorbis/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/openal/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/glew/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/include/bullet&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
