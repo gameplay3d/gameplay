@@ -91,21 +91,22 @@ LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp \
     SamplesGame.cpp \
     Audio3DSample.cpp \
     BillboardSample.cpp \
-    CreateSceneSample.cpp \
+    FontSample.cpp \
     FormsSample.cpp \
     GestureSample.cpp \
     GamepadSample.cpp \
     InputSample.cpp \
     LightSample.cpp \
-    LoadSceneSample.cpp \
     MeshBatchSample.cpp \
     MeshPrimitiveSample.cpp \
-	ParticlesSample.cpp \
+    ParticlesSample.cpp \
     PhysicsCollisionObjectSample.cpp \
     PostProcessSample.cpp \
+    SceneCreateSample.cpp \
+    SceneLoadSample.cpp \
     SpriteBatchSample.cpp \
+    SpriteSample.cpp \
     TerrainSample.cpp \
-    TextSample.cpp \
     TextureSample.cpp \
     TriangleSample.cpp \
     WaterSample.cpp

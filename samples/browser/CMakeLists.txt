@@ -5,10 +5,10 @@ set(GAME_SRC
     src/Audio3DSample.h
     src/BillboardSample.cpp
     src/BillboardSample.h
-    src/CreateSceneSample.cpp
-    src/CreateSceneSample.h
     src/FirstPersonCamera.cpp
     src/FirstPersonCamera.h
+    src/FontSample.cpp
+    src/FontSample.h
     src/FormsSample.cpp
     src/FormsSample.h
     src/GamepadSample.cpp
@@ -21,8 +21,6 @@ set(GAME_SRC
     src/InputSample.h
     src/LightSample.cpp
     src/LightSample.h
-    src/LoadSceneSample.cpp
-    src/LoadSceneSample.h
     src/MeshBatchSample.cpp
     src/MeshBatchSample.h
     src/MeshPrimitiveSample.cpp
@@ -33,16 +31,20 @@ set(GAME_SRC
     src/PhysicsCollisionObjectSample.h
     src/PostProcessSample.cpp
     src/PostProcessSample.h
-    src/SpriteBatchSample.cpp
-    src/SpriteBatchSample.h
-    src/TerrainSample.cpp
-    src/TerrainSample.h
     src/Sample.cpp
     src/Sample.h
     src/SamplesGame.cpp
     src/SamplesGame.h
-    src/TextSample.cpp
-    src/TextSample.h
+    src/SceneCreateSample.cpp
+    src/SceneCreateSample.h
+    src/SceneLoadSample.cpp
+    src/SceneLoadSample.h
+    src/SpriteBatchSample.cpp
+    src/SpriteBatchSample.h
+    src/SpriteSample.cpp
+    src/SpriteSample.h
+    src/TerrainSample.cpp
+    src/TerrainSample.h
     src/TextureSample.cpp
     src/TextureSample.h
     src/TriangleSample.cpp

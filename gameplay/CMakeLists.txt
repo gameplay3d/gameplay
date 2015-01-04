@@ -302,8 +302,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_FlowLayout.h
     src/lua/lua_Font.cpp
     src/lua/lua_Font.h
-    src/lua/lua_FontText.cpp
-    src/lua/lua_FontText.h
     src/lua/lua_Form.cpp
     src/lua/lua_Form.h
     src/lua/lua_FrameBuffer.cpp

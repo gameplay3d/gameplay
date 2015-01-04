@@ -120,14 +120,17 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/ScriptController.inl \
     src/ScriptTarget.cpp \
     src/Slider.cpp \
+    src/Sprite.cpp \
     src/SpriteBatch.cpp \
     src/Technique.cpp \
     src/Terrain.cpp \
     src/TerrainPatch.cpp \
+    src/Text.cpp \
     src/TextBox.cpp \
     src/Texture.cpp \
     src/Theme.cpp \
     src/ThemeStyle.cpp \
+    src/TileSet.cpp \
     src/Transform.cpp \
     src/Vector2.cpp \
     src/Vector2.inl \
@@ -138,20 +141,18 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/VertexAttributeBinding.cpp \
     src/VertexFormat.cpp \
     src/VerticalLayout.cpp \
+    src/lua/lua_all_bindings.cpp \
     src/lua/lua_AbsoluteLayout.cpp \
     src/lua/lua_AIAgent.cpp \
     src/lua/lua_AIAgentListener.cpp \
     src/lua/lua_AIController.cpp \
     src/lua/lua_AIMessage.cpp \
-    src/lua/lua_AIMessageParameterType.cpp \
     src/lua/lua_AIState.cpp \
     src/lua/lua_AIStateListener.cpp \
     src/lua/lua_AIStateMachine.cpp \
-    src/lua/lua_all_bindings.cpp \
     src/lua/lua_Animation.cpp \
     src/lua/lua_AnimationClip.cpp \
     src/lua/lua_AnimationClipListener.cpp \
-    src/lua/lua_AnimationClipListenerEventType.cpp \
     src/lua/lua_AnimationController.cpp \
     src/lua/lua_AnimationTarget.cpp \
     src/lua/lua_AnimationValue.cpp \
@@ -159,98 +160,67 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/lua/lua_AudioController.cpp \
     src/lua/lua_AudioListener.cpp \
     src/lua/lua_AudioSource.cpp \
-    src/lua/lua_AudioSourceState.cpp \
     src/lua/lua_BoundingBox.cpp \
     src/lua/lua_BoundingSphere.cpp \
     src/lua/lua_Bundle.cpp \
     src/lua/lua_Button.cpp \
     src/lua/lua_Camera.cpp \
     src/lua/lua_CameraListener.cpp \
-    src/lua/lua_CameraType.cpp \
     src/lua/lua_CheckBox.cpp \
     src/lua/lua_Container.cpp \
     src/lua/lua_ContainerDirection.cpp \
     src/lua/lua_ContainerScroll.cpp \
     src/lua/lua_Control.cpp \
-    src/lua/lua_ControlAlignment.cpp \
-    src/lua/lua_ControlAutoSize.cpp \
     src/lua/lua_ControlListener.cpp \
-    src/lua/lua_ControlListenerEventType.cpp \
-    src/lua/lua_ControlState.cpp \
     src/lua/lua_Curve.cpp \
-    src/lua/lua_CurveInterpolationType.cpp \
     src/lua/lua_DepthStencilTarget.cpp \
-    src/lua/lua_DepthStencilTargetFormat.cpp \
     src/lua/lua_Effect.cpp \
     src/lua/lua_FileSystem.cpp \
     src/lua/lua_FlowLayout.cpp \
     src/lua/lua_Font.cpp \
-    src/lua/lua_FontFormat.cpp \
-    src/lua/lua_FontJustify.cpp \
-    src/lua/lua_FontStyle.cpp \
-    src/lua/lua_FontText.cpp \
     src/lua/lua_Form.cpp \
     src/lua/lua_FrameBuffer.cpp \
     src/lua/lua_Frustum.cpp \
     src/lua/lua_Game.cpp \
-    src/lua/lua_GameClearFlags.cpp \
     src/lua/lua_Gamepad.cpp \
-    src/lua/lua_GamepadButtonMapping.cpp \
-    src/lua/lua_GamepadGamepadEvent.cpp \
-    src/lua/lua_GameState.cpp \
     src/lua/lua_Gesture.cpp \
-    src/lua/lua_GestureGestureEvent.cpp \
     src/lua/lua_Global.cpp \
     src/lua/lua_HeightField.cpp \
     src/lua/lua_Image.cpp \
     src/lua/lua_ImageControl.cpp \
-    src/lua/lua_ImageFormat.cpp \
     src/lua/lua_Joint.cpp \
     src/lua/lua_JoystickControl.cpp \
     src/lua/lua_Keyboard.cpp \
-    src/lua/lua_KeyboardKey.cpp \
-    src/lua/lua_KeyboardKeyEvent.cpp \
     src/lua/lua_Label.cpp \
     src/lua/lua_Layout.cpp \
-    src/lua/lua_LayoutType.cpp \
     src/lua/lua_Light.cpp \
-    src/lua/lua_LightType.cpp \
     src/lua/lua_Logger.cpp \
-    src/lua/lua_LoggerLevel.cpp \
     src/lua/lua_Material.cpp \
     src/lua/lua_MaterialParameter.cpp \
     src/lua/lua_MathUtil.cpp \
     src/lua/lua_Matrix.cpp \
     src/lua/lua_Mesh.cpp \
     src/lua/lua_MeshBatch.cpp \
-    src/lua/lua_MeshIndexFormat.cpp \
     src/lua/lua_MeshPart.cpp \
-    src/lua/lua_MeshPrimitiveType.cpp \
     src/lua/lua_MeshSkin.cpp \
     src/lua/lua_Model.cpp \
     src/lua/lua_Mouse.cpp \
-    src/lua/lua_MouseMouseEvent.cpp \
     src/lua/lua_Node.cpp \
     src/lua/lua_NodeCloneContext.cpp \
     src/lua/lua_NodeType.cpp \
     src/lua/lua_ParticleEmitter.cpp \
-    src/lua/lua_ParticleEmitterBlendMode.cpp \
     src/lua/lua_Pass.cpp \
     src/lua/lua_PhysicsCharacter.cpp \
     src/lua/lua_PhysicsCollisionObject.cpp \
     src/lua/lua_PhysicsCollisionObjectCollisionListener.cpp \
-    src/lua/lua_PhysicsCollisionObjectCollisionListenerEventType.cpp \
     src/lua/lua_PhysicsCollisionObjectCollisionPair.cpp \
-    src/lua/lua_PhysicsCollisionObjectType.cpp \
     src/lua/lua_PhysicsCollisionShape.cpp \
     src/lua/lua_PhysicsCollisionShapeDefinition.cpp \
-    src/lua/lua_PhysicsCollisionShapeType.cpp \
     src/lua/lua_PhysicsConstraint.cpp \
     src/lua/lua_PhysicsController.cpp \
     src/lua/lua_PhysicsControllerHitFilter.cpp \
     src/lua/lua_PhysicsControllerHitResult.cpp \
     src/lua/lua_PhysicsControllerListener.cpp \
-    src/lua/lua_PhysicsControllerListenerEventType.cpp \
     src/lua/lua_PhysicsFixedConstraint.cpp \
     src/lua/lua_PhysicsGenericConstraint.cpp \
     src/lua/lua_PhysicsGhostObject.cpp \
@@ -264,7 +234,6 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/lua/lua_Plane.cpp \
     src/lua/lua_Platform.cpp \
     src/lua/lua_Properties.cpp \
-    src/lua/lua_PropertiesType.cpp \
     src/lua/lua_Quaternion.cpp \
     src/lua/lua_RadioButton.cpp \
     src/lua/lua_Ray.cpp \
@@ -272,13 +241,7 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/lua/lua_Ref.cpp \
     src/lua/lua_RenderState.cpp \
     src/lua/lua_RenderStateAutoBinding.cpp \
-    src/lua/lua_RenderStateBlend.cpp \
-    src/lua/lua_RenderStateCullFaceSide.cpp \
-    src/lua/lua_RenderStateDepthFunction.cpp \
-    src/lua/lua_RenderStateFrontFace.cpp \
     src/lua/lua_RenderStateStateBlock.cpp \
-    src/lua/lua_RenderStateStencilFunction.cpp \
-    src/lua/lua_RenderStateStencilOperation.cpp \
     src/lua/lua_RenderTarget.cpp \
     src/lua/lua_Scene.cpp \
     src/lua/lua_ScreenDisplayer.cpp \
@@ -288,24 +251,16 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/lua/lua_SpriteBatch.cpp \
     src/lua/lua_Technique.cpp \
     src/lua/lua_Terrain.cpp \
-    src/lua/lua_TerrainFlags.cpp \
     src/lua/lua_TerrainPatch.cpp \
     src/lua/lua_TextBox.cpp \
-    src/lua/lua_TextBoxInputMode.cpp \
     src/lua/lua_Texture.cpp \
-    src/lua/lua_TextureCubeFace.cpp \
-    src/lua/lua_TextureFilter.cpp \
-    src/lua/lua_TextureFormat.cpp \
     src/lua/lua_TextureSampler.cpp \
-    src/lua/lua_TextureType.cpp \
-    src/lua/lua_TextureWrap.cpp \
     src/lua/lua_Theme.cpp \
     src/lua/lua_ThemeSideRegions.cpp \
     src/lua/lua_ThemeStyle.cpp \
     src/lua/lua_ThemeThemeImage.cpp \
     src/lua/lua_ThemeUVs.cpp \
     src/lua/lua_Touch.cpp \
-    src/lua/lua_TouchTouchEvent.cpp \
     src/lua/lua_Transform.cpp \
     src/lua/lua_TransformListener.cpp \
     src/lua/lua_Uniform.cpp \
@@ -315,7 +270,6 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/lua/lua_VertexAttributeBinding.cpp \
     src/lua/lua_VertexFormat.cpp \
     src/lua/lua_VertexFormatElement.cpp \
-    src/lua/lua_VertexFormatUsage.cpp \
     src/lua/lua_VerticalLayout.cpp
 
 HEADERS += src/AbsoluteLayout.h \

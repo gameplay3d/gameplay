@@ -11,50 +11,52 @@ TEMPLATE = app
 
 SOURCES += src/Audio3DSample.cpp \
     src/BillboardSample.cpp \
-    src/CreateSceneSample.cpp \
     src/FirstPersonCamera.cpp \
+    src/FontSample.cpp \
     src/FormsSample.cpp \
     src/GamepadSample.cpp \
     src/GestureSample.cpp \
     src/Grid.cpp \
     src/InputSample.cpp \
     src/LightSample.cpp \
-    src/LoadSceneSample.cpp \
     src/MeshBatchSample.cpp \
     src/MeshPrimitiveSample.cpp \
-	src/ParticlesSample.cpp \
+    src/ParticlesSample.cpp \
     src/PhysicsCollisionObjectSample.cpp \
     src/PostProcessSample.cpp \
-    src/SpriteBatchSample.cpp \
-    src/TerrainSample.cpp \
     src/Sample.cpp \
     src/SamplesGame.cpp \
-    src/TextSample.cpp \
+    src/SceneCreateSample.cpp \
+    src/SceneLoadSample.cpp \
+    src/SpriteBatchSample.cpp \
+    src/SpriteSample.cpp \
+    src/TerrainSample.cpp \
     src/TextureSample.cpp \
     src/TriangleSample.cpp \
     src/WaterSample.cpp
 
 HEADERS += src/Audio3DSample.h \
     src/BillboardSample.h \
-    src/CreateSceneSample.h \
     src/FirstPersonCamera.h \
+    src/FontSample.h \
     src/FormsSample.h \
     src/GamepadSample.h \
     src/GestureSample.h \
     src/Grid.h \
     src/InputSample.h \
     src/LightSample.h \
-    src/LoadSceneSample.h \
     src/MeshBatchSample.h \
     src/MeshPrimitiveSample.h \
-	src/ParticlesSample.h \
+    src/ParticlesSample.h \
     src/PhysicsCollisionObjectSample.h \
     src/PostProcessSample.h \
-    src/SpriteBatchSample.h \
-    src/TerrainSample.h \
     src/Sample.h \
     src/SamplesGame.h \
-    src/TextSample.h \
+    src/SceneCreateSample.h \
+    src/SceneLoadSample.h \
+    src/SpriteBatchSample.h \
+    src/SpriteSample.h \
+    src/TerrainSample.h \
     src/TextureSample.h \
     src/TriangleSample.h \
     src/WaterSample.h
