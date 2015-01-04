@@ -19,7 +19,7 @@ set(APP_LIBRARIES
     gameplay-deps
 ) 
 
-add_definitions(-lstdc++ -lgameplay-deps)
+add_definitions(-std=c++11 -lstdc++ -lgameplay-deps)
 
 set( APP_NAME gameplay-luagen )
 
