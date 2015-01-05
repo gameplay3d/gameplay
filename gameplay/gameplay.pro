@@ -116,6 +116,7 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/Scene.cpp \
     src/SceneLoader.cpp \
     src/ScreenDisplayer.cpp \
+    src/Script.cpp \
     src/ScriptController.cpp \
     src/ScriptController.inl \
     src/ScriptTarget.cpp \
@@ -168,8 +169,6 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/lua/lua_CameraListener.cpp \
     src/lua/lua_CheckBox.cpp \
     src/lua/lua_Container.cpp \
-    src/lua/lua_ContainerDirection.cpp \
-    src/lua/lua_ContainerScroll.cpp \
     src/lua/lua_Control.cpp \
     src/lua/lua_ControlListener.cpp \
     src/lua/lua_Curve.cpp \
@@ -207,7 +206,6 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/lua/lua_Mouse.cpp \
     src/lua/lua_Node.cpp \
     src/lua/lua_NodeCloneContext.cpp \
-    src/lua/lua_NodeType.cpp \
     src/lua/lua_ParticleEmitter.cpp \
     src/lua/lua_Pass.cpp \
     src/lua/lua_PhysicsCharacter.cpp \
@@ -240,13 +238,15 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/lua/lua_Rectangle.cpp \
     src/lua/lua_Ref.cpp \
     src/lua/lua_RenderState.cpp \
-    src/lua/lua_RenderStateAutoBinding.cpp \
     src/lua/lua_RenderStateStateBlock.cpp \
     src/lua/lua_RenderTarget.cpp \
     src/lua/lua_Scene.cpp \
     src/lua/lua_ScreenDisplayer.cpp \
+    src/lua/lua_Script.cpp \
     src/lua/lua_ScriptController.cpp \
     src/lua/lua_ScriptTarget.cpp \
+    src/lua/lua_ScriptTargetEvent.cpp \
+    src/lua/lua_ScriptTargetEventRegistry.cpp \
     src/lua/lua_Slider.cpp \
     src/lua/lua_SpriteBatch.cpp \
     src/lua/lua_Technique.cpp \
@@ -361,6 +361,7 @@ HEADERS += src/AbsoluteLayout.h \
     src/Scene.h \
     src/SceneLoader.h \
     src/ScreenDisplayer.h \
+    src/Script.h \
     src/ScriptController.h \
     src/ScriptTarget.h \
     src/Slider.h \
@@ -387,7 +388,6 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_AIAgentListener.h \
     src/lua/lua_AIController.h \
     src/lua/lua_AIMessage.h \
-    src/lua/lua_AIMessageParameterType.h \
     src/lua/lua_AIState.h \
     src/lua/lua_AIStateListener.h \
     src/lua/lua_AIStateMachine.h \
@@ -395,7 +395,6 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_Animation.h \
     src/lua/lua_AnimationClip.h \
     src/lua/lua_AnimationClipListener.h \
-    src/lua/lua_AnimationClipListenerEventType.h \
     src/lua/lua_AnimationController.h \
     src/lua/lua_AnimationTarget.h \
     src/lua/lua_AnimationValue.h \
@@ -403,47 +402,28 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_AudioController.h \
     src/lua/lua_AudioListener.h \
     src/lua/lua_AudioSource.h \
-    src/lua/lua_AudioSourceState.h \
     src/lua/lua_BoundingBox.h \
     src/lua/lua_BoundingSphere.h \
     src/lua/lua_Bundle.h \
     src/lua/lua_Button.h \
     src/lua/lua_Camera.h \
     src/lua/lua_CameraListener.h \
-    src/lua/lua_CameraType.h \
     src/lua/lua_CheckBox.h \
     src/lua/lua_Container.h \
-    src/lua/lua_ContainerDirection.h \
-    src/lua/lua_ContainerScroll.h \
     src/lua/lua_Control.h \
-    src/lua/lua_ControlAlignment.h \
-    src/lua/lua_ControlAutoSize.h \
     src/lua/lua_ControlListener.h \
-    src/lua/lua_ControlListenerEventType.h \
-    src/lua/lua_ControlState.h \
     src/lua/lua_Curve.h \
-    src/lua/lua_CurveInterpolationType.h \
     src/lua/lua_DepthStencilTarget.h \
-    src/lua/lua_DepthStencilTargetFormat.h \
     src/lua/lua_Effect.h \
     src/lua/lua_FileSystem.h \
     src/lua/lua_FlowLayout.h \
     src/lua/lua_Font.h \
-    src/lua/lua_FontFormat.h \
-    src/lua/lua_FontJustify.h \
-    src/lua/lua_FontStyle.h \
-    src/lua/lua_FontText.h \
     src/lua/lua_Form.h \
     src/lua/lua_FrameBuffer.h \
     src/lua/lua_Frustum.h \
     src/lua/lua_Game.h \
-    src/lua/lua_GameClearFlags.h \
     src/lua/lua_Gamepad.h \
-    src/lua/lua_GamepadButtonMapping.h \
-    src/lua/lua_GamepadGamepadEvent.h \
-    src/lua/lua_GameState.h \
     src/lua/lua_Gesture.h \
-    src/lua/lua_GestureGestureEvent.h \
     src/lua/lua_Global.h \
     src/lua/lua_HeightField.h \
     src/lua/lua_Image.h \
@@ -452,49 +432,36 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_Joint.h \
     src/lua/lua_JoystickControl.h \
     src/lua/lua_Keyboard.h \
-    src/lua/lua_KeyboardKey.h \
-    src/lua/lua_KeyboardKeyEvent.h \
     src/lua/lua_Label.h \
     src/lua/lua_Layout.h \
-    src/lua/lua_LayoutType.h \
     src/lua/lua_Light.h \
-    src/lua/lua_LightType.h \
     src/lua/lua_Logger.h \
-    src/lua/lua_LoggerLevel.h \
     src/lua/lua_Material.h \
     src/lua/lua_MaterialParameter.h \
     src/lua/lua_MathUtil.h \
     src/lua/lua_Matrix.h \
     src/lua/lua_Mesh.h \
     src/lua/lua_MeshBatch.h \
-    src/lua/lua_MeshIndexFormat.h \
     src/lua/lua_MeshPart.h \
-    src/lua/lua_MeshPrimitiveType.h \
     src/lua/lua_MeshSkin.h \
     src/lua/lua_Model.h \
     src/lua/lua_Mouse.h \
-    src/lua/lua_MouseMouseEvent.h \
     src/lua/lua_Node.h \
     src/lua/lua_NodeCloneContext.h \
-    src/lua/lua_NodeType.h \
     src/lua/lua_ParticleEmitter.h \
-    src/lua/lua_ParticleEmitterTextureBlending.h \
     src/lua/lua_Pass.h \
     src/lua/lua_PhysicsCharacter.h \
     src/lua/lua_PhysicsCollisionObject.h \
     src/lua/lua_PhysicsCollisionObjectCollisionListener.h \
-    src/lua/lua_PhysicsCollisionObjectCollisionListenerEventType.h \
     src/lua/lua_PhysicsCollisionObjectCollisionPair.h \
     src/lua/lua_PhysicsCollisionObjectType.h \
     src/lua/lua_PhysicsCollisionShape.h \
     src/lua/lua_PhysicsCollisionShapeDefinition.h \
-    src/lua/lua_PhysicsCollisionShapeType.h \
     src/lua/lua_PhysicsConstraint.h \
     src/lua/lua_PhysicsController.h \
     src/lua/lua_PhysicsControllerHitFilter.h \
     src/lua/lua_PhysicsControllerHitResult.h \
     src/lua/lua_PhysicsControllerListener.h \
-    src/lua/lua_PhysicsControllerListenerEventType.h \
     src/lua/lua_PhysicsFixedConstraint.h \
     src/lua/lua_PhysicsGenericConstraint.h \
     src/lua/lua_PhysicsGhostObject.h \
@@ -508,41 +475,28 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_Plane.h \
     src/lua/lua_Platform.h \
     src/lua/lua_Properties.h \
-    src/lua/lua_PropertiesType.h \
     src/lua/lua_Quaternion.h \
     src/lua/lua_RadioButton.h \
     src/lua/lua_Ray.h \
     src/lua/lua_Rectangle.h \
     src/lua/lua_Ref.h \
     src/lua/lua_RenderState.h \
-    src/lua/lua_RenderStateAutoBinding.h \
-    src/lua/lua_RenderStateBlend.h \
-    src/lua/lua_RenderStateCullFaceSide.h \
-    src/lua/lua_RenderStateDepthFunction.h \
-    src/lua/lua_RenderStateFrontFace.h \
-    src/lua/lua_RenderStateStateBlock.h \
-    src/lua/lua_RenderStateStencilFunction.h \
-    src/lua/lua_RenderStateStencilOperation.h \
     src/lua/lua_RenderTarget.h \
     src/lua/lua_Scene.h \
     src/lua/lua_ScreenDisplayer.h \
+    src/lua/lua_Script.h \
     src/lua/lua_ScriptController.h \
     src/lua/lua_ScriptTarget.h \
+    src/lua/lua_ScriptTargetEvent.h \
+    src/lua/lua_ScriptTargetEventRegistry.h \
     src/lua/lua_Slider.h \
     src/lua/lua_SpriteBatch.h \
     src/lua/lua_Technique.h \
     src/lua/lua_Terrain.h \
-    src/lua/lua_TerrainFlags.h \
     src/lua/lua_TerrainPatch.h \
     src/lua/lua_TextBox.h \
-    src/lua/lua_TextBoxInputMode.h \
     src/lua/lua_Texture.h \
-    src/lua/lua_TextureCubeFace.h \
-    src/lua/lua_TextureFilter.h \
-    src/lua/lua_TextureFormat.h \
     src/lua/lua_TextureSampler.h \
-    src/lua/lua_TextureType.h \
-    src/lua/lua_TextureWrap.h \
     src/lua/lua_Theme.h \
     src/lua/lua_ThemeSideRegions.h \
     src/lua/lua_ThemeStyle.h \
@@ -559,18 +513,12 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_VertexAttributeBinding.h \
     src/lua/lua_VertexFormat.h \
     src/lua/lua_VertexFormatElement.h \
-    src/lua/lua_VertexFormatUsage.h \
     src/lua/lua_VerticalLayout.h
 
 INCLUDEPATH += $$PWD/../gameplay/src
-INCLUDEPATH += $$PWD/../external-deps/bullet/include
-INCLUDEPATH += $$PWD/../external-deps/lua/include
-INCLUDEPATH += $$PWD/../external-deps/png/include
-INCLUDEPATH += $$PWD/../external-deps/zlib/include
-INCLUDEPATH += $$PWD/../external-deps/ogg/include
-INCLUDEPATH += $$PWD/../external-deps/vorbis/include
-INCLUDEPATH += $$PWD/../external-deps/openal/include
-linux:!android:!android: INCLUDEPATH += $$PWD/../external-deps/glew/include
+INCLUDEPATH += $$PWD/../external-deps/include
+INCLUDEPATH += $$PWD/../external-deps/include/bullet
+
 linux:!android: INCLUDEPATH += /usr/include/gtk-2.0
 linux:!android: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
 linux:!android: INCLUDEPATH += /usr/include/atk-1.0
