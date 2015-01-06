@@ -86,7 +86,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;..\..\external-deps\include\bullet</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\libs\Windows\x86_64\Debug;..\..\gameplay\windows\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Debug;..\..\gameplay\windows\x64\Debug</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
@@ -120,7 +120,7 @@ copy .\game.dxt.config .\game.config</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;..\..\external-deps\include\bullet</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -128,7 +128,7 @@ copy .\game.dxt.config .\game.config</Command>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\libs\Windows\x86_64\Debug;..\..\gameplay\windows\x64\DebugMem</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Debug;..\..\gameplay\windows\x64\DebugMem</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
@@ -155,7 +155,7 @@ copy .\game.dxt.config .\game.config</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;..\..\external-deps\include\bullet</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -163,7 +163,7 @@ copy .\game.dxt.config .\game.config</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\libs\Windows\x86_64\Release;..\..\gameplay\windows\x64\Release</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Release;..\..\gameplay\windows\x64\Release</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
