@@ -16,7 +16,6 @@
 		42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331C1491A6750098216A /* QuartzCore.framework */; };
 		42C9331F1491A67F0098216A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331E1491A67F0098216A /* OpenAL.framework */; };
 		42CD5E8816ADB34000C1D49D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CD5E8716ADB34000C1D49D /* Default-568h@2x.png */; };
-		42D604DF16058F89003F3C48 /* game.dxt.config in Resources */ = {isa = PBXBuildFile; fileRef = 42D604DE16058F89003F3C48 /* game.dxt.config */; };
 		42D604E216058F97003F3C48 /* game.pvr.config in Resources */ = {isa = PBXBuildFile; fileRef = 42D604E116058F97003F3C48 /* game.pvr.config */; };
 		42DFAACF16AD8A160000F342 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAACE16AD8A160000F342 /* CoreMotion.framework */; };
 		42DFAAE216AD8B140000F342 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAAE116AD8B140000F342 /* Foundation.framework */; };
@@ -250,9 +249,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				42C932EE1491A4CB0098216A /* icon.png in Resources */,
-				42C932F31491A53E0098216A /* res in Resources */,
 				F188C94B15C1971F0025FC73 /* game.config in Resources */,
-				42D604DF16058F89003F3C48 /* game.dxt.config in Resources */,
+				42C932F31491A53E0098216A /* res in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
