@@ -533,7 +533,6 @@ set(GAMEPLAY_RES_SHADERS
 include_directories(
     src
     ../external-deps/include
-    ../external-deps/include/bullet
 )
 
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")

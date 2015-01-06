@@ -3,15 +3,14 @@ include(BuildHelpers.CMakeLists.txt)
 include_directories( 
     ${CMAKE_SOURCE_DIR}/gameplay/src
     ${CMAKE_SOURCE_DIR}/external-deps/include
-    ${CMAKE_SOURCE_DIR}/external-deps/include/bullet
 )
 
 add_definitions(-D__linux__)
 
 IF(ARCH_DIR STREQUAL "x64")
-    link_directories(${CMAKE_SOURCE_DIR}/external-deps/libs/Linux/x86_64)
+    link_directories(${CMAKE_SOURCE_DIR}/external-deps/lib/linux/x86_64)
 ELSE()
-    link_directories(${CMAKE_SOURCE_DIR}/external-deps/libs/Linux/x86)
+    link_directories(${CMAKE_SOURCE_DIR}/external-deps/lib/linux/x86)
 ENDIF(ARCH_DIR STREQUAL "x64")
 
 

@@ -12,7 +12,7 @@ else()
 endif()
 
 set(GAMEPLAY_SRC_PATH "GAMEPLAY_PATH") 
-set(GAMEPLAY_EXT_LIBS_PATH "${GAMEPLAY_SRC_PATH}/external-deps/libs")
+set(GAMEPLAY_EXT_LIBS_PATH "${GAMEPLAY_SRC_PATH}/external-deps/lib")
 
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
     ADD_DEFINITIONS(-D__linux__)
@@ -55,11 +55,12 @@ macro (append_gameplay_lib listToAppend)
 endmacro(append_gameplay_lib)
 
 macro (append_gameplay_ext_lib listToAppend libName libDirName)
+    string(TOLOWER ${CMAKE_SYSTEM_NAME} systemName)
     IF("${libDirName}" STREQUAL "")
 		find_library(FOUND_LIB_${libName} NAMES ${libName} ${ARGN})
     ELSE("${libDirName}" STREQUAL "")
         set(pathToSearch
-            "${GAMEPLAY_EXT_LIBS_PATH}/${CMAKE_SYSTEM_NAME}/${ARCH_DEPS_DIR}")
+            "${GAMEPLAY_EXT_LIBS_PATH}/${systemName}/${ARCH_DEPS_DIR}")
 		find_library(FOUND_LIB_${libName} NAMES ${libName} ${ARGN} HINTS ${pathToSearch})
     ENDIF("${libDirName}" STREQUAL "")
 
@@ -93,7 +94,6 @@ endmacro(copy_files)
 include_directories( 
     ${GAMEPLAY_SRC_PATH}/gameplay/src
     ${GAMEPLAY_SRC_PATH}/external-deps/include
-    ${GAMEPLAY_SRC_PATH}/external-deps/include/bullet
 )
 
 append_gameplay_lib(GAMEPLAY_LIBRARIES)
