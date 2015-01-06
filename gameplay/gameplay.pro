@@ -37,7 +37,6 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/Control.cpp \
     src/ControlFactory.cpp \
     src/Curve.cpp \
-    src/DebugNew.cpp \
     src/DepthStencilTarget.cpp \
     src/Effect.cpp \
     src/FileSystem.cpp \
@@ -49,9 +48,6 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/Game.cpp \
     src/Game.inl \
     src/Gamepad.cpp \
-    src/gameplay-main-android.cpp \
-    src/gameplay-main-linux.cpp \
-    src/gameplay-main-windows.cpp \
     src/HeightField.cpp \
     src/Image.cpp \
     src/Image.inl \
@@ -100,9 +96,6 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/Plane.cpp \
     src/Plane.inl \
     src/Platform.cpp \
-    src/PlatformAndroid.cpp \
-    src/PlatformLinux.cpp \
-    src/PlatformWindows.cpp \
     src/Properties.cpp \
     src/Quaternion.cpp \
     src/Quaternion.inl \
@@ -298,7 +291,6 @@ HEADERS += src/AbsoluteLayout.h \
     src/Control.h \
     src/ControlFactory.h \
     src/Curve.h \
-    src/DebugNew.h \
     src/DepthStencilTarget.h \
     src/Effect.h \
     src/FileSystem.h \
@@ -515,27 +507,39 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_VertexFormatElement.h \
     src/lua/lua_VerticalLayout.h
 
+DEFINES += GP_USE_GAMEPAD
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include
 INCLUDEPATH += $$PWD/../external-deps/include/bullet
 
-linux:!android: INCLUDEPATH += /usr/include/gtk-2.0
-linux:!android: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
-linux:!android: INCLUDEPATH += /usr/include/atk-1.0
-linux:!android: INCLUDEPATH += /usr/include/cairo
-linux:!android: INCLUDEPATH += /usr/include/gdk-pixbuf-2.0
-linux:!android: INCLUDEPATH += /usr/include/pango-1.0
-linux:!android: INCLUDEPATH += /usr/include/gio-unix-2.0
-linux:!android: INCLUDEPATH += /usr/include/freetype2
-linux:!android: INCLUDEPATH += /usr/include/glib-2.0
-linux:!android: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include
-linux:!android: INCLUDEPATH += /usr/include/pixman-1
-linux:!android: INCLUDEPATH += /usr/include/libpng12
-linux:!android: INCLUDEPATH += /usr/include/harfbuzz
-DEPENDPATH += INCLUDEPATH
+# linux
+linux: SOURCES += src/PlatformLinux.cpp
+linux:: SORCES += src/gameplay-main-linux.cpp
+linux: DEFINES += __linux__
+linux: QMAKE_CXXFLAGS += -std=c++11 -lstdc++ -pthread -w
+linux: INCLUDEPATH += /usr/include/gtk-2.0
+linux: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
+linux: INCLUDEPATH += /usr/include/atk-1.0
+linux: INCLUDEPATH += /usr/include/cairo
+linux: INCLUDEPATH += /usr/include/gdk-pixbuf-2.0
+linux: INCLUDEPATH += /usr/include/pango-1.0
+linux: INCLUDEPATH += /usr/include/gio-unix-2.0
+linux: INCLUDEPATH += /usr/include/freetype2
+linux: INCLUDEPATH += /usr/include/glib-2.0
+linux: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include
+linux: INCLUDEPATH += /usr/include/pixman-1
+linux: INCLUDEPATH += /usr/include/libpng12
+linux: INCLUDEPATH += /usr/include/harfbuzz
 
-linux:!android: DEFINES += GP_USE_GAMEPAD
-linux:!android: DEFINES += __linux__
-linux:!android: QMAKE_CXXFLAGS += -std=c++11 -lstdc++ -pthread -w
-
-
+# macosx
+macx: OBJECTIVE_SOURCES += src/PlatformMacOSX.mm
+macx: OBJECTIVE_SOURCES += src/gameplay-main-macosx.mm
+macx: QMAKE_CXXFLAGS += -x c++ -std=c++11 -stdlib=libc++ -w -arch x86_64 -v
+macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -std=c++11 -stdlib=libc++ -w -arch x86_64 -v
+macx: LIBS += -L$$PWD/../../external-deps/libs/MacOS/x86_64/ -lgameplay-deps
+macx: LIBS += -F/System/Library/Frameworks -framework GameKit
+macx: LIBS += -F/System/Library/Frameworks -framework IOKit
+macx: LIBS += -F/System/Library/Frameworks -framework QuartzCore
+macx: LIBS += -F/System/Library/Frameworks -framework OpenAL
+macx: LIBS += -F/System/Library/Frameworks -framework OpenGL
+macx: LIBS += -F/System/Library/Frameworks -framework Cocoa
