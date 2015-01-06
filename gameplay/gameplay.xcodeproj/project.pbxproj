@@ -1337,7 +1337,6 @@
 			children = (
 				5BC4E7D4150F8C3C00CBE1C0 /* res */,
 				4234D9A314686C52003031B3 /* src */,
-				427D4F42147DC8DE0076760E /* Libraries */,
 				42CCD4AF146D811D00353661 /* Frameworks */,
 				4234D99B14686C52003031B3 /* Products */,
 			);
@@ -1611,15 +1610,6 @@
 			path = gameplay;
 			sourceTree = "<group>";
 		};
-		427D4F42147DC8DE0076760E /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				5B5ADCE114C22DC700AC6109 /* MacOSX */,
-				5B5ADCE014C22DBE00AC6109 /* iOS */,
-			);
-			name = Libraries;
-			sourceTree = "<group>";
-		};
 		42CCD4AF146D811D00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1652,20 +1642,6 @@
 				5B2BC75D1512514500D176CD /* OpenAL.framework */,
 				5B2BC75E1512514500D176CD /* OpenGL.framework */,
 				4234D99D14686C52003031B3 /* Cocoa.framework */,
-			);
-			name = MacOSX;
-			sourceTree = "<group>";
-		};
-		5B5ADCE014C22DBE00AC6109 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		5B5ADCE114C22DC700AC6109 /* MacOSX */ = {
-			isa = PBXGroup;
-			children = (
 			);
 			name = MacOSX;
 			sourceTree = "<group>";
