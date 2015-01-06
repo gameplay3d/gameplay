@@ -209,6 +209,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+
+		F1F49B8516AD8C22008715A2 /* MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				421539C916ADC583001308A3 /* libgameplay.a */,
+			);
+			name = MacOSX;
+			sourceTree = "<group>";
+		};
+		F1F49B8716AD8C30008715A2 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				421539CC16ADC592001308A3 /* libgameplay.a */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -467,12 +484,11 @@
 				HEADER_SEARCH_PATHS = (
 					GAMEPLAY_PATH/gameplay/src,
 					"GAMEPLAY_PATH/external-deps/include",
-					"GAMEPLAY_PATH/external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"GAMEPLAY_PATH/external-deps/libs/MacOS/x86_64",
+					"GAMEPLAY_PATH/external-deps/lib/macosx/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -494,12 +510,11 @@
 				HEADER_SEARCH_PATHS = (
 					GAMEPLAY_PATH/gameplay/src,
 					"GAMEPLAY_PATH/external-deps/include",
-					"GAMEPLAY_PATH/external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"GAMEPLAY_PATH/external-deps/libs/MacOS/x86_64",
+					"GAMEPLAY_PATH/external-deps/lib/macosx/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -521,13 +536,12 @@
 				HEADER_SEARCH_PATHS = (
 					"\"GAMEPLAY_PATH/gameplay/src\"",
 					"GAMEPLAY_PATH/external-deps/include",
-					"GAMEPLAY_PATH/external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = "-LGAMEPLAY_PATH/external-deps/libs/iOS/arm";
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = "-LGAMEPLAY_PATH/external-deps/libs/iOS/x86";
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = "-LGAMEPLAY_PATH/external-deps/lib/ios/arm";
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = "-LGAMEPLAY_PATH/external-deps/lib/ios/x86";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -548,7 +562,6 @@
 				HEADER_SEARCH_PATHS = (
 					"\"GAMEPLAY_PATH/gameplay/src\"",
 					"GAMEPLAY_PATH/external-deps/include",
-					"GAMEPLAY_PATH/external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;

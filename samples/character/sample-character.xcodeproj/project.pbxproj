@@ -398,13 +398,11 @@
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
 					"../../external-deps/include",
-					"../../external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "sample-character-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../../gameplay/Build/Products/Debug,
-					"../../external-deps/libs/MacOS/x86_64",
+					"../../external-deps/lib/macosx/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
@@ -429,13 +427,11 @@
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
 					"../../external-deps/include",
-					"../../external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "sample-character-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../../gameplay/Build/Products/Debug,
-					"../../external-deps/libs/MacOS/x86_64",
+					"../../external-deps/lib/macosx/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
@@ -460,19 +456,12 @@
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
 					"../../external-deps/include",
-					"../../external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "sample-character-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
-					"-L../../external-deps/libs/iOS/arm",
-					"-L../../gameplay/Build/Products/Debug-iphoneos",
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"-L../../external-deps/libs/iOS/x86",
-					"-L../../gameplay/Build/Products/Debug-iphonesimulator",
-				);
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = "-L../../external-deps/lib/ios/arm";
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = "-L../../external-deps/lib/ios/x86";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -498,7 +487,6 @@
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
 					"../../external-deps/include",
-					"../../external-deps/include/bullet",
 				);
 				INFOPLIST_FILE = "sample-character-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;

@@ -1,7 +1,6 @@
 
 include_directories( 
     ${CMAKE_SOURCE_DIR}/external-deps/include
-    ${CMAKE_SOURCE_DIR}/external-deps/freetype2/include
     /usr/include/fbxsdk
 )
 
@@ -17,8 +16,7 @@ ELSE()
 ENDIF(ARCH_DIR STREQUAL "x64")
 
 link_directories(
-    ${CMAKE_SOURCE_DIR}/external-deps/libs/Linux/${ARCH_DEPS_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/lib/linux/${ARCH_DEPS_DIR}
 )
 
 set(APP_LIBRARIES

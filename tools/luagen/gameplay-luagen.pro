@@ -27,8 +27,7 @@ HEADERS += src/Base.h \
     src/Generator.h \
     src/TypedefBinding.h
 
-INCLUDEPATH += $$PWD/../../external-deps/lua/include
-INCLUDEPATH += $$PWD/../../external-deps/tinyxml2/include
+INCLUDEPATH += $$PWD/../../external-deps/include
 
 DEPENDPATH += INCLUDEPATH
 
@@ -36,10 +35,7 @@ linux:!android: DEFINES += __linux__
 
 linux:!android: QMAKE_CXXFLAGS += -std=c++11 -lstdc++ -pthread -w
 
-linux:!android: LIBS += -L$$PWD/../../external-deps/lua/lib/linux/x64/ -llua
-linux:!android: LIBS += -L$$PWD/../../external-deps/tinyxml2/lib/linux/x64/ -ltinyxml2
+linux:!android: LIBS += -L$$PWD/../../external-deps/lib/linux/x86_64/ -lgameplay-deps
 linux:!android: LIBS += -lstdc++
 
-linux:!android: PRE_TARGETDEPS += $$PWD/../../external-deps/lua/lib/linux/x64/liblua.a
-linux:!android: PRE_TARGETDEPS += $$PWD/../../external-deps/tinyxml2/lib/linux/x64/libtinyxml2.a
-
+linux:!android: PRE_TARGETDEPS += $$PWD/../../external-deps/lib/linux/x86_64/libgameplay-deps.a

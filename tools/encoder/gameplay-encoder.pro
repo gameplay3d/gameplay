@@ -112,9 +112,7 @@ HEADERS += src/AnimationChannel.h \
     src/VertexElement.h \
     src/Vertex.h
 
-INCLUDEPATH += $$PWD/../../external-deps/png/include
-INCLUDEPATH += $$PWD/../../external-deps/zlib/include
-INCLUDEPATH += $$PWD/../../external-deps/freetype2/include
+INCLUDEPATH += $$PWD/../../external-deps/include
 linux:!android: INCLUDEPATH += /usr/include/fbxsdk
 linux:!android: INCLUDEPATH += /usr/include
 
@@ -125,14 +123,12 @@ linux:!android: DEFINES += __linux__
 
 linux:!android: QMAKE_CXXFLAGS += -std=c++11 -lstdc++ -pthread -w
 
-linux:!android: LIBS += -L$$PWD/../../external-deps/png/lib/linux/x64/ -lpng
-linux:!android: LIBS += -L$$PWD/../../external-deps/zlib/lib/linux/x64/ -lz
-linux:!android: LIBS += -L$$PWD/../../external-deps/freetype2/lib/linux/x64/ -lfreetype
+linux:!android: LIBS += -L$$PWD/../../external-deps/lib/linux/x86_64/ -lgameplay-deps -lfreetype
 linux:!android: LIBS += -L/usr/lib/gcc4/x64/release -lfbxsdk
 linux:!android: LIBS += -lstdc++
 linux:!android: LIBS += -ldl
 linux:!android: LIBS += -lpthread
 
-linux:!android: PRE_TARGETDEPS += $$PWD/../../external-deps/png/lib/linux/x64/libpng.a
-linux:!android: PRE_TARGETDEPS += $$PWD/../../external-deps/zlib/lib/linux/x64/libz.a
+linux:!android: PRE_TARGETDEPS += $$PWD/../../external-deps/lib/linux/x86_64/libgameplay-deps.a
+linux:!android: PRE_TARGETDEPS += $$PWD/../../external-deps/lib/linux/x86_64/libfreetype.a
 linux:!android: PRE_TARGETDEPS += /usr/lib/gcc4/x64/release/libfbxsdk.a

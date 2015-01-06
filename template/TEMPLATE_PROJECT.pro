@@ -17,7 +17,6 @@ CONFIG += c++11
 
 INCLUDEPATH += GAMEPLAY_PATH/gameplay/src
 INCLUDEPATH += GAMEPLAY_PATH/external-deps/include
-INCLUDEPATH += GAMEPLAY_PATH/external-deps/include/bullet
 LIBS += -L$$PWD/GAMEPLAY_PATH/gameplay/Debug/ -lgameplay
 PRE_TARGETDEPS += $$PWD/GAMEPLAY_PATH/gameplay/Debug/libgameplay.a
 
@@ -37,7 +36,7 @@ linux: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include
 linux: INCLUDEPATH += /usr/include/pixman-1
 linux: INCLUDEPATH += /usr/include/libpng12
 linux: INCLUDEPATH += /usr/include/harfbuzz
-linux: LIBS += -L$$PWD/GAMEPLAY_PATH/external-deps/libs/Linux/x86_64/ -lgameplay-deps
+linux: LIBS += -L$$PWD/GAMEPLAY_PATH/external-deps/lib/linux/x86_64/ -lgameplay-deps
 linux: LIBS += -lm
 linux: LIBS += -lGL
 linux: LIBS += -lrt
@@ -47,7 +46,7 @@ linux: LIBS += -lpthread
 linux: LIBS += -lgtk-x11-2.0
 linux: LIBS += -lglib-2.0
 linux: LIBS += -lgobject-2.0
-linux: PRE_TARGETDEPS += $$PWD/GAMEPLAY_PATH/external-deps/libs/Linux/x86_64/libgameplay-deps.a
+linux: PRE_TARGETDEPS += $$PWD/GAMEPLAY_PATH/external-deps/lib/linux/x86_64/libgameplay-deps.a
 linux: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/GAMEPLAY_PATH/gameplay/res/shaders ../res$$escape_expand(\n\t))
 linux: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/GAMEPLAY_PATH/gameplay/res/ui ../res$$escape_expand(\n\t))
 linux: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/GAMEPLAY_PATH/gameplay/res/logo_powered_white.png ../res$$escape_expand(\n\t))
@@ -55,7 +54,7 @@ linux: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/GAMEPLAY_PATH/gameplay/res/logo_p
 macx: QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
 macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -stdlib=libc++ -w -arch x86_64
 macx: DEFINES += GP_USE_GAMEPAD
-macx: LIBS += -L$$PWD/GAMEPLAY_PATH/external-deps/libs/MacOS/x86_64/ -lgameplay-deps
+macx: LIBS += -L$$PWD/GAMEPLAY_PATH/external-deps/lib/macosx/x86_64/ -lgameplay-deps
 macx: LIBS += -F/System/Library/Frameworks -framework GameKit
 macx: LIBS += -F/System/Library/Frameworks -framework IOKit
 macx: LIBS += -F/System/Library/Frameworks -framework QuartzCore

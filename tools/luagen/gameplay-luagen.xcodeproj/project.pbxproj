@@ -213,7 +213,7 @@
 				HEADER_SEARCH_PATHS = "../../external-deps/include";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../external-deps/libs/MacOS/x86_64",
+					"../../external-deps/lib/macosx/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -229,7 +229,7 @@
 				HEADER_SEARCH_PATHS = "../../external-deps/include";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../external-deps/libs/MacOS/x86_64",
+					"../../external-deps/lib/macosx/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
