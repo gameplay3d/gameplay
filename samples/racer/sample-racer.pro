@@ -63,7 +63,7 @@ macx: LIBS += -F/System/Library/Frameworks -framework Cocoa
 macx: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/shaders ../res$$escape_expand(\n\t))
 macx: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/ui ../res$$escape_expand(\n\t))
 macx: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/../../gameplay/res/logo_powered_white.png ../res$$escape_expand(\n\t))
-macx: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/../game.dxt.config ../game.config(\n\t))
+macx: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/../game.dxt.config ../game.config$$escape_expand(\n\t))
 macx
 {
     icon.files = icon.png
