@@ -13,15 +13,17 @@ SOURCES += src/SpaceshipGame.cpp
 
 HEADERS += src/SpaceshipGame.h 
 
-DEFINES += GP_USE_GAMEPAD
+CONFIG += c++11
+
 INCLUDEPATH += $$PWD/../../gameplay/src
 INCLUDEPATH += $$PWD/../../external-deps/include
 INCLUDEPATH += $$PWD/../../external-deps/include/bullet
 LIBS += -L$$PWD/../../gameplay/Debug/ -lgameplay
 PRE_TARGETDEPS += $$PWD/../../gameplay/Debug/libgameplay.a
 
+linux: QMAKE_CXXFLAGS += -lstdc++ -pthread -w
+linux: DEFINES += GP_USE_GAMEPAD
 linux: DEFINES += __linux__
-linux: QMAKE_CXXFLAGS += -std=c++11 -lstdc++ -pthread -w
 linux: INCLUDEPATH += /usr/include/gtk-2.0
 linux: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
 linux: INCLUDEPATH += /usr/include/atk-1.0
@@ -50,8 +52,9 @@ linux: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/shaders ..
 linux: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/ui ../res$$escape_expand(\n\t))
 linux: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/../../gameplay/res/logo_powered_white.png ../res$$escape_expand(\n\t))
 
-macx: QMAKE_CXXFLAGS += -x c++ -std=c++11 -stdlib=libc++ -w -arch x86_64
-macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -std=c++11 -stdlib=libc++ -w -arch x86_64
+macx: QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
+macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -stdlib=libc++ -w -arch x86_64
+macx: DEFINES += GP_USE_GAMEPAD
 macx: LIBS += -L$$PWD/../../external-deps/libs/MacOS/x86_64/ -lgameplay-deps
 macx: LIBS += -F/System/Library/Frameworks -framework GameKit
 macx: LIBS += -F/System/Library/Frameworks -framework IOKit
@@ -62,3 +65,17 @@ macx: LIBS += -F/System/Library/Frameworks -framework Cocoa
 macx: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/shaders ../res$$escape_expand(\n\t))
 macx: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/ui ../res$$escape_expand(\n\t))
 macx: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/../../gameplay/res/logo_powered_white.png ../res$$escape_expand(\n\t))
+macx
+{
+    icon.files = icon.png
+    icon.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += icon
+
+    gameconfig.files = game.config
+    gameconfig.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += gameconfig
+
+    res.files = res
+    res.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += res
+}
