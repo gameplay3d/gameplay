@@ -172,9 +172,14 @@ float AnimationClip::getBlendWeight() const
 
 void AnimationClip::setLoopBlendTime(float loopBlendTime)
 {
-    _loopBlendTime = loopBlendTime;
-    if (_loopBlendTime < 0.0f)
-        _loopBlendTime = 0.0f;
+    if (loopBlendTime < 0.0f)
+    {
+        _loopBlendTime = 0;
+    }
+    else
+    {
+        _loopBlendTime = (unsigned int)loopBlendTime;
+    }
 }
 
 float AnimationClip::getLoopBlendTime() const
