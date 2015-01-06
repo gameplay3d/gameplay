@@ -31,14 +31,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1388077261" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/png/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/zlib/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/ogg/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/vorbis/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/openal/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/glew/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/include&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
@@ -66,17 +59,8 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.1574466352" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.libs.1247748738" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="gameplay"/>
+									<listOptionValue builtIn="false" value="gameplay-deps"/>
 									<listOptionValue builtIn="false" value="m"/>
-									<listOptionValue builtIn="false" value="lua"/>
-									<listOptionValue builtIn="false" value="png"/>
-									<listOptionValue builtIn="false" value="z"/>
-									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="ogg"/>
-									<listOptionValue builtIn="false" value="BulletDynamics"/>
-									<listOptionValue builtIn="false" value="BulletCollision"/>
-									<listOptionValue builtIn="false" value="LinearMath"/>
-									<listOptionValue builtIn="false" value="openal"/>
-									<listOptionValue builtIn="false" value="GLEW"/>
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="rt"/>
 									<listOptionValue builtIn="false" value="dl"/>
@@ -87,14 +71,7 @@
 									<listOptionValue builtIn="false" value="gobject-2.0"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.550339008" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/zlib/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/png/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/ogg/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/vorbis/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/openal/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/glew/lib/linux/x64"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lib/linux/x86_64"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1774954616" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -139,14 +116,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.218187428" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay}/src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/png/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/zlib/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/ogg/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/vorbis/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/openal/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/glew/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/include&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
@@ -174,17 +144,8 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.999807535" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
 								<option id="gnu.cpp.link.option.libs.893848113" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="gameplay"/>
+									<listOptionValue builtIn="false" value="gameplay-deps"/>
 									<listOptionValue builtIn="false" value="m"/>
-									<listOptionValue builtIn="false" value="lua"/>
-									<listOptionValue builtIn="false" value="png"/>
-									<listOptionValue builtIn="false" value="z"/>
-									<listOptionValue builtIn="false" value="vorbis"/>
-									<listOptionValue builtIn="false" value="ogg"/>
-									<listOptionValue builtIn="false" value="BulletDynamics"/>
-									<listOptionValue builtIn="false" value="BulletCollision"/>
-									<listOptionValue builtIn="false" value="LinearMath"/>
-									<listOptionValue builtIn="false" value="openal"/>
-									<listOptionValue builtIn="false" value="GLEW"/>
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="rt"/>
 									<listOptionValue builtIn="false" value="dl"/>
@@ -195,14 +156,7 @@
 									<listOptionValue builtIn="false" value="gobject-2.0"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.725660289" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/zlib/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/png/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/ogg/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/vorbis/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/openal/lib/linux/x64"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/glew/lib/linux/x64"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lib/linux/x86_64"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.487294404" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">

@@ -562,13 +562,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"../../external-deps/include",
-					"../../external-deps/freetype2/include",
 					"\"/Applications/Autodesk/FBX SDK/2015.1/include\"",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"../../external-deps/libs/MacOS/x86_64",
-					"../../external-deps/freetype2/lib/macosx/x64",
-				);
+				LIBRARY_SEARCH_PATHS = "../../external-deps/lib/macosx/x86_64";
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = "-L$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2015.1/lib/clang/debug";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -590,13 +586,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"../../external-deps/include",
-					"../../external-deps/freetype2/include",
 					"\"/Applications/Autodesk/FBX SDK/2015.1/include\"",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"../../external-deps/libs/MacOS/x86_64",
-					"../../external-deps/freetype2/lib/macosx/x64",
-				);
+				LIBRARY_SEARCH_PATHS = "../../external-deps/lib/macosx/x86_64";
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = "-L$(SYSTEM_APPS_DIR)/Autodesk/FBX\\ SDK/2015.1/lib/clang/release";
 				PRODUCT_NAME = "$(TARGET_NAME)";

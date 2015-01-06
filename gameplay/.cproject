@@ -38,7 +38,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lua}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/include/bullet&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
@@ -117,7 +116,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lua}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../external-deps/include/bullet&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>

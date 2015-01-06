@@ -1,7 +1,7 @@
 GAMEPLAY_PATH := $(call my-dir)/../../src
 
 # external-deps
-GAMEPLAY_DEPS := ../../external-deps/libs/Android/$(TARGET_ARCH_ABI)
+GAMEPLAY_DEPS := ../../external-deps/lib/android/$(TARGET_ARCH_ABI)
 
 # libgameplay-deps
 LOCAL_PATH := $(GAMEPLAY_DEPS)
@@ -255,7 +255,7 @@ LOCAL_SRC_FILES := \
 LOCAL_CPPFLAGS += -std=c++11 -Wno-switch-enum -Wno-switch
 LOCAL_ARM_MODE := arm
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
-LOCAL_CFLAGS := -D__ANDROID__ -I"../../external-deps/include" -I"../../external-deps/include/bullet"
+LOCAL_CFLAGS := -D__ANDROID__ -I"../../external-deps/include"
 LOCAL_ADDITIONAL_DEPENDENCIES := gameplay
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay-deps
 include $(BUILD_SHARED_LIBRARY)

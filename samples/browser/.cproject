@@ -32,7 +32,6 @@
 								<option id="gnu.cpp.compiler.option.include.paths.343631545" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../../external-deps/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../../external-deps/include/bullet&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
@@ -72,7 +71,7 @@
 									<listOptionValue builtIn="false" value="gobject-2.0"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1831524135" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/../../external-deps/libs/Linux/x86_64"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/../../external-deps/lib/linux/x86_64"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/gameplay/${ConfigName}}"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2024097993" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -121,7 +120,6 @@
 								<option id="gnu.cpp.compiler.option.include.paths.1219047092" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameplay/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../../external-deps/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../../../external-deps/include/bullet&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
@@ -161,7 +159,7 @@
 									<listOptionValue builtIn="false" value="gobject-2.0"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1951075365" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/../../external-deps/libs/Linux/x86_64"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/../../external-deps/lib/linux/x86_64"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/gameplay/${ConfigName}}"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.792701845" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">

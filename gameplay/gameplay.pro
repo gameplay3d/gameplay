@@ -511,7 +511,6 @@ CONFIG += c++11
 
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include
-INCLUDEPATH += $$PWD/../external-deps/include/bullet
 
 # linux
 linux: SOURCES += src/PlatformLinux.cpp
@@ -539,7 +538,7 @@ macx: OBJECTIVE_SOURCES += src/gameplay-main-macosx.mm
 macx: QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
 macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -stdlib=libc++ -w -arch x86_64
 macx: DEFINES += GP_USE_GAMEPAD
-macx: LIBS += -L$$PWD/../../external-deps/libs/MacOS/x86_64/ -lgameplay-deps
+macx: LIBS += -L$$PWD/../../external-deps/lib/macosx/x86_64/ -lgameplay-deps
 macx: LIBS += -F/System/Library/Frameworks -framework GameKit
 macx: LIBS += -F/System/Library/Frameworks -framework IOKit
 macx: LIBS += -F/System/Library/Frameworks -framework QuartzCore
