@@ -507,16 +507,18 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_VertexFormatElement.h \
     src/lua/lua_VerticalLayout.h
 
-DEFINES += GP_USE_GAMEPAD
+CONFIG += c++11
+
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include
 INCLUDEPATH += $$PWD/../external-deps/include/bullet
 
 # linux
 linux: SOURCES += src/PlatformLinux.cpp
-linux:: SORCES += src/gameplay-main-linux.cpp
+linux: SOURCES += src/gameplay-main-linux.cpp
+linux: QMAKE_CXXFLAGS += -lstdc++ -pthread -w
+linux: DEFINES += GP_USE_GAMEPAD
 linux: DEFINES += __linux__
-linux: QMAKE_CXXFLAGS += -std=c++11 -lstdc++ -pthread -w
 linux: INCLUDEPATH += /usr/include/gtk-2.0
 linux: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
 linux: INCLUDEPATH += /usr/include/atk-1.0
@@ -534,8 +536,9 @@ linux: INCLUDEPATH += /usr/include/harfbuzz
 # macosx
 macx: OBJECTIVE_SOURCES += src/PlatformMacOSX.mm
 macx: OBJECTIVE_SOURCES += src/gameplay-main-macosx.mm
-macx: QMAKE_CXXFLAGS += -x c++ -std=c++11 -stdlib=libc++ -w -arch x86_64 -v
-macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -std=c++11 -stdlib=libc++ -w -arch x86_64 -v
+macx: QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
+macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -stdlib=libc++ -w -arch x86_64
+macx: DEFINES += GP_USE_GAMEPAD
 macx: LIBS += -L$$PWD/../../external-deps/libs/MacOS/x86_64/ -lgameplay-deps
 macx: LIBS += -F/System/Library/Frameworks -framework GameKit
 macx: LIBS += -F/System/Library/Frameworks -framework IOKit
