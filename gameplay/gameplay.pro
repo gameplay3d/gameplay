@@ -510,7 +510,6 @@ HEADERS += src/AbsoluteLayout.h \
 DEFINES += GP_USE_GAMEPAD
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include
-INCLUDEPATH += $$PWD/../external-deps/include/bullet
 
 # linux
 linux: SOURCES += src/PlatformLinux.cpp
@@ -536,7 +535,7 @@ macx: OBJECTIVE_SOURCES += src/PlatformMacOSX.mm
 macx: OBJECTIVE_SOURCES += src/gameplay-main-macosx.mm
 macx: QMAKE_CXXFLAGS += -x c++ -std=c++11 -stdlib=libc++ -w -arch x86_64 -v
 macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -std=c++11 -stdlib=libc++ -w -arch x86_64 -v
-macx: LIBS += -L$$PWD/../../external-deps/libs/MacOS/x86_64/ -lgameplay-deps
+macx: LIBS += -L$$PWD/../../external-deps/lib/macosx/x86_64/ -lgameplay-deps
 macx: LIBS += -F/System/Library/Frameworks -framework GameKit
 macx: LIBS += -F/System/Library/Frameworks -framework IOKit
 macx: LIBS += -F/System/Library/Frameworks -framework QuartzCore
