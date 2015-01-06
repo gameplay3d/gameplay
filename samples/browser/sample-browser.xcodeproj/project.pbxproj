@@ -38,6 +38,7 @@
 		421090EA18299EBA00761E40 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421090E918299EBA00761E40 /* GameKit.framework */; };
 		422FE594169690830062D1FE /* PostProcessSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422FE592169690830062D1FE /* PostProcessSample.cpp */; };
 		422FE595169690830062D1FE /* PostProcessSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422FE592169690830062D1FE /* PostProcessSample.cpp */; };
+		424566581A5B9BE800A9E659 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 424566571A5B9BE800A9E659 /* libgameplay.a */; };
 		424CC030161F8E3000577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC02F161F8E3000577827 /* IOKit.framework */; };
 		4258369D1A0F2AF400AFDFEB /* WaterSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4258369B1A0F2AF400AFDFEB /* WaterSample.cpp */; };
 		4258369E1A0F2AF400AFDFEB /* WaterSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4258369B1A0F2AF400AFDFEB /* WaterSample.cpp */; };
@@ -111,9 +112,10 @@
 		420D545515FE430D00AD0B91 /* TextureSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureSample.h; sourceTree = "<group>"; };
 		420D545615FE430D00AD0B91 /* TriangleSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleSample.cpp; sourceTree = "<group>"; };
 		420D545715FE430D00AD0B91 /* TriangleSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriangleSample.h; sourceTree = "<group>"; };
-		421090E918299EBA00761E40 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
+		421090E918299EBA00761E40 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		422FE592169690830062D1FE /* PostProcessSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PostProcessSample.cpp; sourceTree = "<group>"; };
 		422FE593169690830062D1FE /* PostProcessSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostProcessSample.h; sourceTree = "<group>"; };
+		424566571A5B9BE800A9E659 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../gameplay/Build/Products/Debug-iphoneos/libgameplay.a"; sourceTree = "<group>"; };
 		424CC02F161F8E3000577827 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		4258369B1A0F2AF400AFDFEB /* WaterSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WaterSample.cpp; sourceTree = "<group>"; };
 		4258369C1A0F2AF400AFDFEB /* WaterSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaterSample.h; sourceTree = "<group>"; };
@@ -135,12 +137,12 @@
 		42C933161491A5EB0098216A /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		42C9331C1491A6750098216A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42C9331E1491A67F0098216A /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
-		42DFAABB16AD89670000F342 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		42DFAAD316AD8A8C0000F342 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		42DFAB1B16AD8BBC0000F342 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		42DFAB1C16AD8BBC0000F342 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		42DFAB1D16AD8BBC0000F342 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		42DFAB1E16AD8BBC0000F342 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAABB16AD89670000F342 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAAD316AD8A8C0000F342 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAB1B16AD8BBC0000F342 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAB1C16AD8BBC0000F342 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAB1D16AD8BBC0000F342 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAB1E16AD8BBC0000F342 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		42DFABD216AD96F10000F342 /* TerrainSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TerrainSample.cpp; sourceTree = "<group>"; };
 		42DFABD316AD96F10000F342 /* TerrainSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TerrainSample.h; sourceTree = "<group>"; };
 		42F237A716AD9DD70019CAC9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				424566581A5B9BE800A9E659 /* libgameplay.a in Frameworks */,
 				435FC40F1A538315003D4E9C /* libgameplay-deps.a in Frameworks */,
 				42DFAABC16AD89670000F342 /* CoreMotion.framework in Frameworks */,
 				42DFAAD416AD8A8C0000F342 /* Foundation.framework in Frameworks */,
@@ -235,11 +238,8 @@
 		42C932BF1491A0DB0098216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				435FC40E1A538315003D4E9C /* libgameplay-deps.a */,
-				435FC40C1A534AB4003D4E9C /* libgameplay.a */,
-				435FC4081A53449B003D4E9C /* libgameplay-deps.a */,
-				5B61613A14CCC3590073B857 /* MacOSX */,
 				5B61613914CCC3560073B857 /* iOS */,
+				5B61613A14CCC3590073B857 /* MacOSX */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -297,6 +297,8 @@
 		5B61613914CCC3560073B857 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				424566571A5B9BE800A9E659 /* libgameplay.a */,
+				435FC40E1A538315003D4E9C /* libgameplay-deps.a */,
 				421090E918299EBA00761E40 /* GameKit.framework */,
 				42DFAABB16AD89670000F342 /* CoreMotion.framework */,
 				42DFAAD316AD8A8C0000F342 /* Foundation.framework */,
@@ -311,6 +313,8 @@
 		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				435FC40C1A534AB4003D4E9C /* libgameplay.a */,
+				435FC4081A53449B003D4E9C /* libgameplay-deps.a */,
 				6212DAB71829DA1D006213DD /* GameKit.framework */,
 				424CC02F161F8E3000577827 /* IOKit.framework */,
 				42C932C01491A0DB0098216A /* Cocoa.framework */,
@@ -678,7 +682,10 @@
 				);
 				INFOPLIST_FILE = "sample-browser-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug-iphoneos",
+				);
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

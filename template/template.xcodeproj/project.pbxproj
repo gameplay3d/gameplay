@@ -59,17 +59,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		42049B5216ADBB61005DD1F9 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5316ADBB61005DD1F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5416ADBB61005DD1F9 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5516ADBB61005DD1F9 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5616ADBB61005DD1F9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5716ADBB61005DD1F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		42049B5216ADBB61005DD1F9 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		42049B5316ADBB61005DD1F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		42049B5416ADBB61005DD1F9 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		42049B5516ADBB61005DD1F9 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		42049B5616ADBB61005DD1F9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		42049B5716ADBB61005DD1F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		42049B7C16ADBCDB005DD1F9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		421090F91829A5AE00761E40 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
-		421090FB1829A5BF00761E40 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
-		421539C916ADC583001308A3 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
-		421539CC16ADC592001308A3 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug-iphoneos/libgameplay.a"; sourceTree = "<group>"; };
+		421090FB1829A5BF00761E40 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		424CC03B161FCBDD00577827 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		428F7BDD15CB131A009ED24C /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TEMPLATE_PROJECT-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,7 +135,6 @@
 				428F7BDD15CB131A009ED24C /* game.config */,
 				42C932F21491A53E0098216A /* res */,
 				42C932C61491A0DB0098216A /* src */,
-				42C932DD1491A1050098216A /* Libraries */,
 				42C932BF1491A0DB0098216A /* Frameworks */,
 				42C932BD1491A0DB0098216A /* Products */,
 			);
@@ -155,12 +152,10 @@
 		42C932BF1491A0DB0098216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				435FC42B1A539B4E003D4E9C /* libgameplay.a */,
-				435FC4291A539B31003D4E9C /* libgameplay-deps.a */,
-				435FC4271A539A9C003D4E9C /* libgameplay.a */,
-				435FC4251A539A8D003D4E9C /* libgameplay-deps.a */,
-				5B61613A14CCC3590073B857 /* MacOSX */,
+				5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */,
+				5BC4E849150F911D00CBE1C0 /* shaders */,
 				5B61613914CCC3560073B857 /* iOS */,
+				5B61613A14CCC3590073B857 /* MacOSX */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -174,19 +169,11 @@
 			path = src;
 			sourceTree = "<group>";
 		};
-		42C932DD1491A1050098216A /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				5BC4E825150F8CE600CBE1C0 /* GamePlay */,
-				F1F49B8516AD8C22008715A2 /* MacOSX */,
-				F1F49B8716AD8C30008715A2 /* iOS */,
-			);
-			name = Libraries;
-			sourceTree = "<group>";
-		};
 		5B61613914CCC3560073B857 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				435FC42B1A539B4E003D4E9C /* libgameplay.a */,
+				435FC4291A539B31003D4E9C /* libgameplay-deps.a */,
 				421090FB1829A5BF00761E40 /* GameKit.framework */,
 				42049B5216ADBB61005DD1F9 /* CoreMotion.framework */,
 				42049B5316ADBB61005DD1F9 /* Foundation.framework */,
@@ -201,6 +188,8 @@
 		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				435FC4271A539A9C003D4E9C /* libgameplay.a */,
+				435FC4251A539A8D003D4E9C /* libgameplay-deps.a */,
 				421090F91829A5AE00761E40 /* GameKit.framework */,
 				424CC03B161FCBDD00577827 /* IOKit.framework */,
 				42C932C01491A0DB0098216A /* Cocoa.framework */,
@@ -209,15 +198,6 @@
 				42C9331E1491A67F0098216A /* OpenAL.framework */,
 			);
 			name = MacOSX;
-			sourceTree = "<group>";
-		};
-		5BC4E825150F8CE600CBE1C0 /* GamePlay */ = {
-			isa = PBXGroup;
-			children = (
-				5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */,
-				5BC4E849150F911D00CBE1C0 /* shaders */,
-			);
-			name = GamePlay;
 			sourceTree = "<group>";
 		};
 		BDBFA857188347B000342B78 /* Products */ = {
@@ -229,6 +209,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+
 		F1F49B8516AD8C22008715A2 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (

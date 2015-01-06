@@ -1613,8 +1613,8 @@
 		42CCD4AF146D811D00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B04C5FE14BFE52F00EB0071 /* MacOSX */,
 				5B04C5FD14BFE52300EB0071 /* iOS */,
+				5B04C5FE14BFE52F00EB0071 /* MacOSX */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
