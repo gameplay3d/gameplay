@@ -175,7 +175,7 @@ void PhysicsVehicleWheel::setHost(PhysicsVehicle* host, unsigned int indexInHost
 void PhysicsVehicleWheel::addToVehicle(btRaycastVehicle* vehicle)
 {
     GP_ASSERT(_host);
-    GP_ASSERT(_host->getNumWheels() == vehicle->getNumWheels() + 1);
+    GP_ASSERT(_host->getWheelCount() == vehicle->getNumWheels() + 1);
 
     // Use safe defaults for now. Properties are assigned elsewhere.
     btRaycastVehicle::btVehicleTuning tuning;
