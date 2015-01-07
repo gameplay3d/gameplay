@@ -343,6 +343,7 @@ private:
     float _spacing;
     Glyph* _glyphs;
     unsigned int _glyphCount;
+    Texture* _texture;
     SpriteBatch* _batch;
     Rectangle _viewport;
     MaterialParameter* _cutoffParam;
