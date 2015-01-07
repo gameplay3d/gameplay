@@ -25,7 +25,7 @@ int lua_PhysicsVehicle_getDrivedownFull(lua_State* state);
 int lua_PhysicsVehicle_getDrivedownStart(lua_State* state);
 int lua_PhysicsVehicle_getDrivingForce(lua_State* state);
 int lua_PhysicsVehicle_getNode(lua_State* state);
-int lua_PhysicsVehicle_getNumWheels(lua_State* state);
+int lua_PhysicsVehicle_getWheelCount(lua_State* state);
 int lua_PhysicsVehicle_getRigidBody(lua_State* state);
 int lua_PhysicsVehicle_getShapeType(lua_State* state);
 int lua_PhysicsVehicle_getSpeedKph(lua_State* state);

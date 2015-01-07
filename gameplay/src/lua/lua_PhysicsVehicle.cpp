@@ -41,7 +41,7 @@ void luaRegister_PhysicsVehicle()
         {"getDrivedownStart", lua_PhysicsVehicle_getDrivedownStart},
         {"getDrivingForce", lua_PhysicsVehicle_getDrivingForce},
         {"getNode", lua_PhysicsVehicle_getNode},
-        {"getNumWheels", lua_PhysicsVehicle_getNumWheels},
+        {"getWheelCount", lua_PhysicsVehicle_getWheelCount},
         {"getRigidBody", lua_PhysicsVehicle_getRigidBody},
         {"getShapeType", lua_PhysicsVehicle_getShapeType},
         {"getSpeedKph", lua_PhysicsVehicle_getSpeedKph},
@@ -902,7 +902,7 @@ int lua_PhysicsVehicle_getNode(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getNumWheels(lua_State* state)
+int lua_PhysicsVehicle_getWheelCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -915,7 +915,7 @@ int lua_PhysicsVehicle_getNumWheels(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsVehicle* instance = getInstance(state);
-                unsigned int result = instance->getNumWheels();
+                unsigned int result = instance->getWheelCount();
 
                 // Push the return value onto the stack.
                 lua_pushunsigned(state, result);
@@ -923,7 +923,7 @@ int lua_PhysicsVehicle_getNumWheels(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_PhysicsVehicle_getNumWheels - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_PhysicsVehicle_getWheelCount - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
