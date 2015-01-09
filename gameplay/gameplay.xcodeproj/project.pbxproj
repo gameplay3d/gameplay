@@ -484,6 +484,8 @@
 		42CC5A1B1809A4EF00AAD8AD /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55651809A4EE00AAD8AD /* VertexFormat.cpp */; };
 		42CC5A1E1809A4EF00AAD8AD /* VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */; };
 		42CC5A1F1809A4EF00AAD8AD /* VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */; };
+		42D9299B1A6051EC0073258D /* Drawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42D929991A6051EC0073258D /* Drawable.cpp */; };
+		42D9299C1A6051EC0073258D /* Drawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42D929991A6051EC0073258D /* Drawable.cpp */; };
 		42ECC3FA1A4EF5A00036C839 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42ECC3F81A4EF5A00036C839 /* Text.cpp */; };
 		42ECC3FB1A4EF5A00036C839 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42ECC3F81A4EF5A00036C839 /* Text.cpp */; };
 		5B21E99616153890006EBEAC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B21E99516153890006EBEAC /* IOKit.framework */; };
@@ -1009,6 +1011,8 @@
 		42CC55661809A4EE00AAD8AD /* VertexFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexFormat.h; path = src/VertexFormat.h; sourceTree = SOURCE_ROOT; };
 		42CC55671809A4EE00AAD8AD /* VerticalLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VerticalLayout.cpp; path = src/VerticalLayout.cpp; sourceTree = SOURCE_ROOT; };
 		42CC55681809A4EE00AAD8AD /* VerticalLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerticalLayout.h; path = src/VerticalLayout.h; sourceTree = SOURCE_ROOT; };
+		42D929991A6051EC0073258D /* Drawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Drawable.cpp; path = src/Drawable.cpp; sourceTree = SOURCE_ROOT; };
+		42D9299A1A6051EC0073258D /* Drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Drawable.h; path = src/Drawable.h; sourceTree = SOURCE_ROOT; };
 		42ECC3F81A4EF5A00036C839 /* Text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Text.cpp; path = src/Text.cpp; sourceTree = SOURCE_ROOT; };
 		42ECC3F91A4EF5A00036C839 /* Text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Text.h; path = src/Text.h; sourceTree = SOURCE_ROOT; };
 		5B04C5CA14BFCFE100EB0071 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1412,6 +1416,8 @@
 				42CC532B1809A4EB00AAD8AD /* DebugNew.h */,
 				42CC532C1809A4EB00AAD8AD /* DepthStencilTarget.cpp */,
 				42CC532D1809A4EB00AAD8AD /* DepthStencilTarget.h */,
+				42D929991A6051EC0073258D /* Drawable.cpp */,
+				42D9299A1A6051EC0073258D /* Drawable.h */,
 				42CC532E1809A4EB00AAD8AD /* Effect.cpp */,
 				42CC532F1809A4EB00AAD8AD /* Effect.h */,
 				42CC53301809A4EB00AAD8AD /* FileSystem.cpp */,
@@ -1855,6 +1861,7 @@
 				42CC560A1809A4EF00AAD8AD /* HeightField.cpp in Sources */,
 				420BBE321817416F00C7B720 /* lua_RenderStateStateBlock.cpp in Sources */,
 				420BBC3E1817416F00C7B720 /* lua_AnimationClip.cpp in Sources */,
+				42D9299B1A6051EC0073258D /* Drawable.cpp in Sources */,
 				420BBE521817416F00C7B720 /* lua_ScreenDisplayer.cpp in Sources */,
 				42CC55AE1809A4EF00AAD8AD /* BoundingSphere.cpp in Sources */,
 				420BBED61817416F00C7B720 /* lua_VerticalLayout.cpp in Sources */,
@@ -2105,6 +2112,7 @@
 				42CC592B1809A4EF00AAD8AD /* ParticleEmitter.cpp in Sources */,
 				420BBE331817416F00C7B720 /* lua_RenderStateStateBlock.cpp in Sources */,
 				420BBC3F1817416F00C7B720 /* lua_AnimationClip.cpp in Sources */,
+				42D9299C1A6051EC0073258D /* Drawable.cpp in Sources */,
 				42CC560B1809A4EF00AAD8AD /* HeightField.cpp in Sources */,
 				420BBE531817416F00C7B720 /* lua_ScreenDisplayer.cpp in Sources */,
 				42CC55AF1809A4EF00AAD8AD /* BoundingSphere.cpp in Sources */,

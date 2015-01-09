@@ -9,14 +9,13 @@ namespace gameplay
 Text::Text() :
     _font(NULL), _text(""), _size(0), _width(0), _height(0), _wrap(true), _rightToLeft(false),
     _align(Font::ALIGN_TOP_LEFT), _clip(Rectangle(0, 0, 0, 0)),
-    _opacity(1.0f), _color(Vector4::one()), _node(NULL)
+    _opacity(1.0f), _color(Vector4::one())
 {
 }
 
 Text::~Text()
 {
-    if (_font)
-        SAFE_RELEASE(_font);
+    SAFE_RELEASE(_font);
 }
     
 Text& Text::operator=(const Text& text)
@@ -153,7 +152,25 @@ const Vector4& Text::getColor() const
     return _color;
 }
     
-unsigned int Text::draw()
+Drawable* Text::clone(NodeCloneContext& context)
+{
+    Text* textClone = new Text();
+    textClone->_font = _font;
+    _font->addRef();
+    textClone->_text = _text;
+    textClone->_size = _size;
+    textClone->_width = _width;
+    textClone->_height = _height;
+    textClone->_wrap = _wrap;
+    textClone->_rightToLeft = _rightToLeft;
+    textClone->_align = _align;
+    textClone->_clip = _clip;
+    textClone->_opacity = _opacity;
+    textClone->_color = _color;
+    return textClone;
+}
+
+unsigned int Text::draw(bool wireframe)
 {
     // Apply scene camera projection and translation offsets
     Rectangle viewport = Game::getInstance()->getViewport();
@@ -194,16 +211,6 @@ unsigned int Text::draw()
                     _align, _wrap, _rightToLeft, clipViewport);
     _font->finish();
     return 1;
-}
-    
-Node* Text::getNode() const
-{
-    return _node;
-}
-
-void Text::setNode(Node* node)
-{
-    _node = node;
 }
     
 unsigned int Text::getAnimationPropertyComponentCount(int propertyId) const
@@ -257,33 +264,6 @@ void Text::setAnimationPropertyValue(int propertyId, AnimationValue* value, floa
         default:
             break;
     }
-}
-
-Text* Text::clone(NodeCloneContext &context)
-{
-    Text* copy = new Text();
-    cloneInto(copy, context);
-    return copy;
-}
-
-void Text::cloneInto(Text* text, NodeCloneContext &context) const
-{
-    GP_ASSERT(text);
-    
-    // Clone properties
-    text->_font = _font;
-    _font->addRef();
-    text->_text = _text;
-    text->_size = _size;
-    text->_width = _width;
-    text->_height = _height;
-    text->_wrap = _wrap;
-    text->_rightToLeft = _rightToLeft;
-    text->_align = _align;
-    text->_clip = _clip;
-    text->_opacity = _opacity;
-    text->_color = _color;
-    text->_node = _node;
 }
 
 }

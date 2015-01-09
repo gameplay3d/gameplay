@@ -3,11 +3,11 @@
 
 #include "PhysicsCollisionObject.h"
 #include "PhysicsRigidBody.h"
+#include "Node.h"
 
 namespace gameplay
 {
 
-class Node;
 class PhysicsVehicle;
 
 /**

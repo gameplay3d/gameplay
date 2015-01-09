@@ -4,6 +4,10 @@
 #include "Bundle.h"
 #include "SceneLoader.h"
 #include "Terrain.h"
+#include "ParticleEmitter.h"
+#include "Sprite.h"
+#include "Text.h"
+#include "TileSet.h"
 #include "Light.h"
 
 namespace gameplay
@@ -277,30 +281,31 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         }
         case SceneNodeProperty::MATERIAL:
         {
-            if (!node->getModel())
+            Model* model = dynamic_cast<Model*>(node->getDrawable());
+            if (model)
             {
-                GP_ERROR("Attempting to set a material on node '%s', which has no model.", sceneNode._nodeID);
-                return;
+                Material* material = Material::create(p);
+                model->setMaterial(material, snp._index);
+                SAFE_RELEASE(material);
             }
             else
             {
-                Material* material = Material::create(p);
-                node->getModel()->setMaterial(material, snp._index);
-                SAFE_RELEASE(material);
+                GP_ERROR("Attempting to set a material on node '%s', which has no model.", sceneNode._nodeID);
+                return;
             }
             break;
         }
         case SceneNodeProperty::PARTICLE:
         {
             ParticleEmitter* particleEmitter = ParticleEmitter::create(p);
-            node->setParticleEmitter(particleEmitter);
+            node->setDrawable(particleEmitter);
             SAFE_RELEASE(particleEmitter);
             break;
         }
         case SceneNodeProperty::TERRAIN:
         {
             Terrain* terrain = Terrain::create(p);
-            node->setTerrain(terrain);
+            node->setDrawable(terrain);
             SAFE_RELEASE(terrain);
             break;
         }
@@ -348,26 +353,26 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                     }
                     else
                     {
-                        if (!modelNode->getModel())
+                        if ( dynamic_cast<Model*>(modelNode->getDrawable()) == NULL)
                         {
                             GP_ERROR("Node '%s' does not have a model; attempting to use its model for collision object creation.", name);
                         }
                         else
                         {
                             // Temporarily set rigidBody model on model so it's used during collision object creation.
-                            Model* model = node->getModel();
-                        
+                            Model* model = dynamic_cast<Model*>(node->getDrawable());
+
                             // Up ref count to prevent node from releasing the model when we swap it.
                             if (model)
-                                model->addRef(); 
-                        
+                                model->addRef();
+
                             // Create collision object with new rigidBodyModel (aka collisionMesh) set.
-                            node->setModel(modelNode->getModel());
+                            node->setDrawable(dynamic_cast<Model*>(modelNode->getDrawable()));
                             node->setCollisionObject(p);
 
                             // Restore original model.
-                            node->setModel(model);
-                        
+                            node->setDrawable(model);
+
                             // Decrement temporarily added reference.
                             if (model)
                                 model->release();
@@ -382,21 +387,21 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         case SceneNodeProperty::SPRITE:
         {
             Sprite* sprite = Sprite::create(p);
-            node->setSprite(sprite);
+            node->setDrawable(sprite);
             SAFE_RELEASE(sprite);
             break;
         }
         case SceneNodeProperty::TILESET:
         {
             TileSet* tileset = TileSet::create(p);
-            node->setTileSet(tileset);
+            node->setDrawable(tileset);
             SAFE_RELEASE(tileset);
             break;
         }
         case SceneNodeProperty::TEXT:
         {
             Text* text = Text::create(p);
-            node->setText(text);
+            node->setDrawable(text);
             SAFE_RELEASE(text);
             break;
         }

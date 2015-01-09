@@ -5,19 +5,17 @@
 namespace gameplay
 {
 
-Sprite::Sprite()
-    : _width(0), _height(0), _offset(OFFSET_BOTTOM_LEFT), _anchor(Vector2(0.5f, 0.5f)), _flipFlags(FLIP_NONE),
-      _frames(NULL), _frameCount(1), _frameStride(0), _framePadding(1), _frameIndex(0),
-      _opacity(1.0f), _color(Vector4::one()), _blendMode(BLEND_ALPHA), _batch(NULL), _node(NULL)
+Sprite::Sprite() : Drawable(),
+    _width(0), _height(0), _offset(OFFSET_BOTTOM_LEFT), _anchor(Vector2(0.5f, 0.5f)), _flipFlags(FLIP_NONE),
+    _frames(NULL), _frameCount(1), _frameStride(0), _framePadding(1), _frameIndex(0),
+    _opacity(1.0f), _color(Vector4::one()), _blendMode(BLEND_ALPHA), _batch(NULL)
 {
 }
 
 Sprite::~Sprite()
 {
-    if (_frames)
-        SAFE_DELETE_ARRAY(_frames);
-    if (_batch)
-        SAFE_DELETE(_batch);
+    SAFE_DELETE_ARRAY(_frames);
+    SAFE_DELETE(_batch);
 }
 
 Sprite& Sprite::operator=(const Sprite& sprite)
@@ -278,7 +276,7 @@ Material* Sprite::getMaterial() const
     return _batch->getMaterial();
 }
 
-unsigned int Sprite::draw()
+unsigned int Sprite::draw(bool wireframe)
 {
     // Apply scene camera projection and translation offsets
     Vector3 position = Vector3::zero();
@@ -361,30 +359,13 @@ unsigned int Sprite::draw()
     
     return 1;
 }
-
-Node* Sprite::getNode() const
-{
-    return _node;
-}
     
-void Sprite::setNode(Node* node)
+Drawable* Sprite::clone(NodeCloneContext& context)
 {
-    _node = node;
-}
-    
-Sprite* Sprite::clone(NodeCloneContext &context)
-{
-    Sprite* copy = new Sprite();
-    cloneInto(copy, context);
-    return copy;
-}
-
-void Sprite::cloneInto(Sprite* sprite, NodeCloneContext &context) const
-{
-    GP_ASSERT(sprite);
+    Sprite* spriteClone = new Sprite();
 
     // Clone animations
-    AnimationTarget::cloneInto(static_cast<AnimationTarget*>(sprite), context);
+    AnimationTarget::cloneInto(static_cast<AnimationTarget*>(spriteClone), context);
 
     // Get copied node if it exists
     if (Node* node = getNode())
@@ -392,26 +373,28 @@ void Sprite::cloneInto(Sprite* sprite, NodeCloneContext &context) const
         Node* clonedNode = context.findClonedNode(node);
         if (clonedNode)
         {
-            sprite->setNode(clonedNode);
+            spriteClone->setNode(clonedNode);
         }
     }
 
     // Clone properties
-    sprite->_width = _width;
-    sprite->_height = _height;
-    sprite->_offset = _offset;
-    sprite->_anchor = _anchor;
-    sprite->_flipFlags = _flipFlags;
-    sprite->_opacity = _opacity;
-    sprite->_color = _color;
-    sprite->_blendMode = _blendMode;
-    sprite->_frames = new Rectangle[_frameCount];
-    memcpy(sprite->_frames, _frames, sizeof(Rectangle) * _frameCount);
-    sprite->_frameCount = _frameCount;
-    sprite->_frameStride = _frameStride;
-    sprite->_framePadding = _framePadding;
-    sprite->_frameIndex = _frameIndex;
-    sprite->_batch = _batch;
+    spriteClone->_width = _width;
+    spriteClone->_height = _height;
+    spriteClone->_offset = _offset;
+    spriteClone->_anchor = _anchor;
+    spriteClone->_flipFlags = _flipFlags;
+    spriteClone->_opacity = _opacity;
+    spriteClone->_color = _color;
+    spriteClone->_blendMode = _blendMode;
+    spriteClone->_frames = new Rectangle[_frameCount];
+    memcpy(spriteClone->_frames, _frames, sizeof(Rectangle) * _frameCount);
+    spriteClone->_frameCount = _frameCount;
+    spriteClone->_frameStride = _frameStride;
+    spriteClone->_framePadding = _framePadding;
+    spriteClone->_frameIndex = _frameIndex;
+    spriteClone->_batch = _batch;
+
+    return spriteClone;
 }
 
 unsigned int Sprite::getAnimationPropertyComponentCount(int propertyId) const

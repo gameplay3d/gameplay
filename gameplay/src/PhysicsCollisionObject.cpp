@@ -188,31 +188,6 @@ bool PhysicsCollisionObject::collidesWith(PhysicsCollisionObject* object) const
     return callback.result;
 }
 
-PhysicsRigidBody* PhysicsCollisionObject::asRigidBody()
-{
-    return getType() == RIGID_BODY ? static_cast<PhysicsRigidBody*>(this) : NULL;
-}
-
-PhysicsCharacter* PhysicsCollisionObject::asCharacter()
-{
-    return getType() == CHARACTER ? static_cast<PhysicsCharacter*>(this) : NULL;
-}
-
-PhysicsGhostObject* PhysicsCollisionObject::asGhostObject()
-{
-    return getType() == GHOST_OBJECT ? static_cast<PhysicsGhostObject*>(this) : NULL;
-}
-
-PhysicsVehicle* PhysicsCollisionObject::asVehicle()
-{
-    return getType() == VEHICLE ? static_cast<PhysicsVehicle*>(this) : NULL;
-}
-
-PhysicsVehicleWheel* PhysicsCollisionObject::asVehicleWheel()
-{
-    return getType() == VEHICLE_WHEEL ? static_cast<PhysicsVehicleWheel*>(this) : NULL;
-}
-
 PhysicsCollisionObject::CollisionPair::CollisionPair(PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB)
     : objectA(objectA), objectB(objectB)
 {

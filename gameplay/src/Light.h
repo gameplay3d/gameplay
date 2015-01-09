@@ -299,10 +299,9 @@ private:
      * Clones the light and returns a new light.
      * 
      * @param context The clone context.
-     * 
      * @return The newly created light.
      */
-    Light* clone(NodeCloneContext &context) const;
+    Light* clone(NodeCloneContext& context);
 
     Light::Type _type;
     

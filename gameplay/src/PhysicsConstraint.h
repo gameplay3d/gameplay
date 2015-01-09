@@ -6,8 +6,8 @@
 
 namespace gameplay
 {
-    class Node;
     class PhysicsRigidBody;
+    class Node;
 
 /**
  * Defines the base class for physics constraints.

@@ -3,7 +3,6 @@
 
 #include "Script.h"
 #include "Game.h"
-#include "Control.h"
 
 namespace gameplay
 {

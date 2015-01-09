@@ -711,11 +711,13 @@ bool TerrainAutoBindingResolver::resolveAutoBinding(const char* autoBinding, Nod
     {
         static TerrainPatch* getPatch(Node* node)
         {
-            Terrain* terrain = node->getTerrain();
+            Terrain* terrain = dynamic_cast<Terrain*>(node->getDrawable());
             if (terrain)
             {
                 if (__currentPatchIndex >= 0 && __currentPatchIndex < (int)terrain->_patches.size())
+                {
                     return terrain->_patches[__currentPatchIndex];
+                }
             }
             return NULL;
         }
@@ -730,7 +732,7 @@ bool TerrainAutoBindingResolver::resolveAutoBinding(const char* autoBinding, Nod
     }
     else if (strcmp(autoBinding, "TERRAIN_NORMAL_MAP") == 0)
     {
-        Terrain* terrain = node->getTerrain();
+        Terrain* terrain = dynamic_cast<Terrain*>(node->getDrawable());
         if (terrain && terrain->_normalMap)
             parameter->setValue(terrain->_normalMap);
         return true;

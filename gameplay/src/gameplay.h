@@ -37,6 +37,7 @@
 #include "RenderState.h"
 #include "VertexFormat.h"
 #include "VertexAttributeBinding.h"
+#include "Drawable.h"
 #include "Model.h"
 #include "Camera.h"
 #include "Light.h"

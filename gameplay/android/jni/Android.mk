@@ -42,6 +42,7 @@ LOCAL_SRC_FILES := \
     Curve.cpp \
     DebugNew.cpp \
     DepthStencilTarget.cpp \
+    Drawable.cpp \
     Effect.cpp \
     FileSystem.cpp \
     FlowLayout.cpp \

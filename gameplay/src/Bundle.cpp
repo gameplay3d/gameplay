@@ -680,9 +680,12 @@ bool Bundle::skipNode()
     }
 
     // Skip over the node's camera, light, and model attachments.
-    Camera* camera = readCamera(); SAFE_RELEASE(camera);
-    Light* light = readLight(); SAFE_RELEASE(light);
-    Model* model = readModel(id); SAFE_RELEASE(model);
+    Camera* camera = readCamera();
+    SAFE_RELEASE(camera);
+    Light* light = readLight();
+    SAFE_RELEASE(light);
+    Model* model = readModel(id);
+    SAFE_RELEASE(model);
 
     return true;
 }
@@ -820,10 +823,9 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
     Model* model = readModel(node->getId());
     if (model)
     {
-        node->setModel(model);
+        node->setDrawable(model);
         SAFE_RELEASE(model);
     }
-
     return node;
 }
 

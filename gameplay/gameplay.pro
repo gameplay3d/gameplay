@@ -38,6 +38,7 @@ SOURCES += src/AbsoluteLayout.cpp \
     src/ControlFactory.cpp \
     src/Curve.cpp \
     src/DepthStencilTarget.cpp \
+    src/Drawable.cpp \
     src/Effect.cpp \
     src/FileSystem.cpp \
     src/FlowLayout.cpp \
@@ -292,6 +293,7 @@ HEADERS += src/AbsoluteLayout.h \
     src/ControlFactory.h \
     src/Curve.h \
     src/DepthStencilTarget.h \
+    src/Drawable.h \
     src/Effect.h \
     src/FileSystem.h \
     src/FlowLayout.h \
@@ -357,15 +359,18 @@ HEADERS += src/AbsoluteLayout.h \
     src/ScriptController.h \
     src/ScriptTarget.h \
     src/Slider.h \
+    src/Sprite.h \
     src/SpriteBatch.h \
     src/Stream.h \
     src/Technique.h \
     src/Terrain.h \
     src/TerrainPatch.h \
+    src/Text.h \
     src/TextBox.h \
     src/Texture.h \
     src/Theme.h \
     src/ThemeStyle.h \
+    src/TileSet.h \
     src/TimeListener.h \
     src/Touch.h \
     src/Transform.h \

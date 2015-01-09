@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DebugMem|x64">
@@ -41,6 +41,7 @@
     <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\DebugNew.cpp" />
     <ClCompile Include="src\DepthStencilTarget.cpp" />
+    <ClCompile Include="src\Drawable.cpp” />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\FlowLayout.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\DebugNew.h" />
     <ClInclude Include="src\DepthStencilTarget.h" />
+    <ClInclude Include="src\Drawable.h” />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\FlowLayout.h" />

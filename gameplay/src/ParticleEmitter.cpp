@@ -14,7 +14,7 @@
 namespace gameplay
 {
 
-ParticleEmitter::ParticleEmitter(unsigned int particleCountMax) :
+ParticleEmitter::ParticleEmitter(unsigned int particleCountMax) : Drawable(),
     _particleCountMax(particleCountMax), _particleCount(0), _particles(NULL),
     _emissionRate(PARTICLE_EMISSION_RATE), _started(false), _ellipsoid(false),
     _sizeStartMin(1.0f), _sizeStartMax(1.0f), _sizeEndMin(1.0f), _sizeEndMax(1.0f),
@@ -28,7 +28,7 @@ ParticleEmitter::ParticleEmitter(unsigned int particleCountMax) :
     _rotationAxis(Vector3::zero()), _rotation(Matrix::identity()),
     _spriteBatch(NULL), _spriteBlendMode(BLEND_ALPHA),  _spriteTextureWidth(0), _spriteTextureHeight(0), _spriteTextureWidthRatio(0), _spriteTextureHeightRatio(0), _spriteTextureCoords(NULL),
     _spriteAnimated(false),  _spriteLooped(false), _spriteFrameCount(1), _spriteFrameRandomOffset(0),_spriteFrameDuration(0L), _spriteFrameDurationSecs(0.0f), _spritePercentPerFrame(0.0f),
-    _node(NULL), _orbitPosition(false), _orbitVelocity(false), _orbitAcceleration(false),
+    _orbitPosition(false), _orbitVelocity(false), _orbitAcceleration(false),
     _timePerEmission(PARTICLE_EMISSION_RATE_TIME_INTERVAL), _emitTime(0), _lastUpdated(0)
 {
     GP_ASSERT(particleCountMax);
@@ -193,13 +193,11 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
     emitter->setAcceleration(acceleration, accelerationVar);
     emitter->setRotationPerParticle(rotationPerParticleSpeedMin, rotationPerParticleSpeedMax);
     emitter->setRotation(rotationSpeedMin, rotationSpeedMax, rotationAxis, rotationAxisVar);
-
     emitter->setSpriteAnimated(spriteAnimated);
     emitter->setSpriteLooped(spriteLooped);
     emitter->setSpriteFrameRandomOffset(spriteFrameRandomOffset);
     emitter->setSpriteFrameDuration(spriteFrameDuration);
     emitter->setSpriteFrameCoords(spriteFrameCount, spriteWidth, spriteHeight);
-
     emitter->setOrbit(orbitPosition, orbitVelocity, orbitAcceleration);
 
     return emitter;
@@ -724,16 +722,6 @@ unsigned int ParticleEmitter::getSpriteFrameCount() const
     return _spriteFrameCount;
 }
 
-Node* ParticleEmitter::getNode() const
-{
-    return _node;
-}
-
-void ParticleEmitter::setNode(Node* node)
-{
-    _node = node;
-}
-
 void ParticleEmitter::setOrbit(bool orbitPosition, bool orbitVelocity, bool orbitAcceleration)
 {
     _orbitPosition = orbitPosition;
@@ -991,7 +979,7 @@ void ParticleEmitter::update(float elapsedTime)
     }
 }
 
-unsigned int ParticleEmitter::draw()
+unsigned int ParticleEmitter::draw(bool wireframe)
 {
     if (!isActive())
         return 0;
@@ -1038,47 +1026,46 @@ unsigned int ParticleEmitter::draw()
     return 1;
 }
 
-ParticleEmitter* ParticleEmitter::clone()
+Drawable* ParticleEmitter::clone(NodeCloneContext& context)
 {
     // Create a clone of this emitter
-    ParticleEmitter* emitter = ParticleEmitter::create(_spriteBatch->getSampler()->getTexture(),
-                                                       _spriteBlendMode, _particleCountMax);
+    ParticleEmitter* clone = ParticleEmitter::create(_spriteBatch->getSampler()->getTexture(),
+                                                     _spriteBlendMode, _particleCountMax);
+    // Clone properties
+    clone->setEmissionRate(_emissionRate);
+    clone->_ellipsoid = _ellipsoid;
+    clone->_sizeStartMin = _sizeStartMin;
+    clone->_sizeStartMax = _sizeStartMax;
+    clone->_sizeEndMin = _sizeEndMin;
+    clone->_sizeEndMax = _sizeEndMax;
+    clone->_energyMin = _energyMin;
+    clone->_energyMax = _energyMax;
+    clone->_colorStart = _colorStart;
+    clone->_colorStartVar = _colorStartVar;
+    clone->_colorEnd = _colorEnd;
+    clone->_colorEndVar = _colorEndVar;
+    clone->_position = _position;
+    clone->_positionVar = _positionVar;
+    clone->_velocity = _velocity;
+    clone->_velocityVar = _velocityVar;
+    clone->_acceleration = _acceleration;
+    clone->_accelerationVar = _accelerationVar;
+    clone->_rotationPerParticleSpeedMin = _rotationPerParticleSpeedMin;
+    clone->_rotationPerParticleSpeedMax = _rotationPerParticleSpeedMax;
+    clone->_rotationSpeedMin = _rotationSpeedMin;
+    clone->_rotationSpeedMax = _rotationSpeedMax;
+    clone->_rotationAxis = _rotationAxis;
+    clone->_rotationAxisVar = _rotationAxisVar;
+    clone->setSpriteTexCoords(_spriteFrameCount, _spriteTextureCoords);
+    clone->_spriteAnimated = _spriteAnimated;
+    clone->_spriteLooped = _spriteLooped;
+    clone->_spriteFrameRandomOffset = _spriteFrameRandomOffset;
+    clone->setSpriteFrameDuration(_spriteFrameDuration);
+    clone->_orbitPosition = _orbitPosition;
+    clone->_orbitVelocity = _orbitVelocity;
+    clone->_orbitAcceleration = _orbitAcceleration;
 
-    // Copy all properties to the clone
-    emitter->setEmissionRate(_emissionRate);
-    emitter->_ellipsoid = _ellipsoid;
-    emitter->_sizeStartMin = _sizeStartMin;
-    emitter->_sizeStartMax = _sizeStartMax;
-    emitter->_sizeEndMin = _sizeEndMin;
-    emitter->_sizeEndMax = _sizeEndMax;
-    emitter->_energyMin = _energyMin;
-    emitter->_energyMax = _energyMax;
-    emitter->_colorStart = _colorStart;
-    emitter->_colorStartVar = _colorStartVar;
-    emitter->_colorEnd = _colorEnd;
-    emitter->_colorEndVar = _colorEndVar;
-    emitter->_position = _position;
-    emitter->_positionVar = _positionVar;
-    emitter->_velocity = _velocity;
-    emitter->_velocityVar = _velocityVar;
-    emitter->_acceleration = _acceleration;
-    emitter->_accelerationVar = _accelerationVar;
-    emitter->_rotationPerParticleSpeedMin = _rotationPerParticleSpeedMin;
-    emitter->_rotationPerParticleSpeedMax = _rotationPerParticleSpeedMax;
-    emitter->_rotationSpeedMin = _rotationSpeedMin;
-    emitter->_rotationSpeedMax = _rotationSpeedMax;
-    emitter->_rotationAxis = _rotationAxis;
-    emitter->_rotationAxisVar = _rotationAxisVar;
-    emitter->setSpriteTexCoords(_spriteFrameCount, _spriteTextureCoords);
-    emitter->_spriteAnimated = _spriteAnimated;
-    emitter->_spriteLooped = _spriteLooped;
-    emitter->_spriteFrameRandomOffset = _spriteFrameRandomOffset;
-    emitter->setSpriteFrameDuration(_spriteFrameDuration);
-    emitter->_orbitPosition = _orbitPosition;
-    emitter->_orbitVelocity = _orbitVelocity;
-    emitter->_orbitAcceleration = _orbitAcceleration;
-
-    return emitter;
+    return clone;
 }
 
 }
