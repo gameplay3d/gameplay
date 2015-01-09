@@ -67,6 +67,16 @@ Text* Text::create(Properties* properties)
     return NULL;
 }
     
+void Text::setText(const char* str)
+{
+    _text = str;
+}
+
+const char* Text::getText() const
+{
+    return _text.c_str();
+}
+
 unsigned int Text::getSize() const
 {
     return _size;

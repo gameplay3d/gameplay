@@ -2,10 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_FrameBuffer.h"
-#include "Base.h"
 #include "FrameBuffer.h"
-#include "Game.h"
-#include "Ref.h"
 
 namespace gameplay
 {

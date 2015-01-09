@@ -2,18 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_AudioSource.h"
-#include "Animation.h"
-#include "AnimationTarget.h"
-#include "AudioBuffer.h"
-#include "AudioController.h"
 #include "AudioSource.h"
-#include "Base.h"
-#include "Game.h"
-#include "Node.h"
-#include "Ref.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
-#include "Transform.h"
 
 namespace gameplay
 {

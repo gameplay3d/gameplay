@@ -3,10 +3,6 @@
 #include "ScriptController.h"
 #include "lua_AudioBuffer.h"
 #include "AudioBuffer.h"
-#include "Base.h"
-#include "FileSystem.h"
-#include "Game.h"
-#include "Ref.h"
 
 namespace gameplay
 {

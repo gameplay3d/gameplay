@@ -3,12 +3,6 @@
 #include "ScriptController.h"
 #include "lua_AbsoluteLayout.h"
 #include "AbsoluteLayout.h"
-#include "Base.h"
-#include "Container.h"
-#include "Control.h"
-#include "Game.h"
-#include "Layout.h"
-#include "Ref.h"
 
 namespace gameplay
 {

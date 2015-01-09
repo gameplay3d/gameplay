@@ -2,7 +2,6 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Rectangle.h"
-#include "Base.h"
 #include "Rectangle.h"
 
 namespace gameplay

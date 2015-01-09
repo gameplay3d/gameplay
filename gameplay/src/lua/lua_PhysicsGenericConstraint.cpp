@@ -2,12 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_PhysicsGenericConstraint.h"
-#include "Base.h"
-#include "Game.h"
-#include "Node.h"
-#include "PhysicsConstraint.h"
 #include "PhysicsGenericConstraint.h"
-#include "PhysicsRigidBody.h"
 
 namespace gameplay
 {

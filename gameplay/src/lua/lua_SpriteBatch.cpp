@@ -2,9 +2,6 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_SpriteBatch.h"
-#include "Base.h"
-#include "Game.h"
-#include "Material.h"
 #include "SpriteBatch.h"
 
 namespace gameplay
@@ -225,6 +222,36 @@ int lua_SpriteBatch_draw(lua_State* state)
 
                     SpriteBatch* instance = getInstance(state);
                     instance->draw(*param1, *param2, *param3, *param4);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
+                    lua_type(state, 5) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<SpriteBatch::SpriteVertex> param1 = gameplay::ScriptUtil::getObjectPointer<SpriteBatch::SpriteVertex>(2, "SpriteBatchSpriteVertex", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                    // Get parameter 3 off the stack.
+                    gameplay::ScriptUtil::LuaArray<unsigned short> param3 = gameplay::ScriptUtil::getUnsignedShortPointer(4);
+
+                    // Get parameter 4 off the stack.
+                    unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+
+                    SpriteBatch* instance = getInstance(state);
+                    instance->draw(param1, param2, param3, param4);
                     
                     return 0;
                 }

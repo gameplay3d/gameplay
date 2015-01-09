@@ -46,6 +46,7 @@ int lua_Form_getImageRegion(lua_State* state);
 int lua_Form_getImageUVs(lua_State* state);
 int lua_Form_getLayout(lua_State* state);
 int lua_Form_getMargin(lua_State* state);
+int lua_Form_getNode(lua_State* state);
 int lua_Form_getOpacity(lua_State* state);
 int lua_Form_getPadding(lua_State* state);
 int lua_Form_getParent(lua_State* state);

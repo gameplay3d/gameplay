@@ -2,7 +2,6 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_ScreenDisplayer.h"
-#include "Base.h"
 #include "ScreenDisplayer.h"
 
 namespace gameplay

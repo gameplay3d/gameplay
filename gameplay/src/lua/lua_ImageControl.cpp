@@ -2,18 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_ImageControl.h"
-#include "Animation.h"
-#include "AnimationTarget.h"
-#include "Base.h"
-#include "Control.h"
-#include "Form.h"
-#include "Game.h"
 #include "ImageControl.h"
-#include "Node.h"
-#include "Ref.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
-#include "Theme.h"
 
 namespace gameplay
 {

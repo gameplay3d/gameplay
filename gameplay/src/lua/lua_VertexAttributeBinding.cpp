@@ -2,11 +2,6 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_VertexAttributeBinding.h"
-#include "Base.h"
-#include "Effect.h"
-#include "Game.h"
-#include "Mesh.h"
-#include "Ref.h"
 #include "VertexAttributeBinding.h"
 
 namespace gameplay

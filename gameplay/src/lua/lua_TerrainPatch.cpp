@@ -2,14 +2,6 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_TerrainPatch.h"
-#include "Base.h"
-#include "Camera.h"
-#include "Game.h"
-#include "MeshPart.h"
-#include "Node.h"
-#include "PhysicsController.h"
-#include "Scene.h"
-#include "Terrain.h"
 #include "TerrainPatch.h"
 
 namespace gameplay

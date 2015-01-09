@@ -2,7 +2,6 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_VertexFormat.h"
-#include "Base.h"
 #include "VertexFormat.h"
 
 namespace gameplay

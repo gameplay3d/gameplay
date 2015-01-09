@@ -2,12 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_HeightField.h"
-#include "Base.h"
-#include "FileSystem.h"
-#include "Game.h"
 #include "HeightField.h"
-#include "Image.h"
-#include "Ref.h"
 
 namespace gameplay
 {

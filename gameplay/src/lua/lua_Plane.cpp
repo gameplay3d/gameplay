@@ -2,12 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Plane.h"
-#include "Base.h"
-#include "BoundingBox.h"
-#include "BoundingSphere.h"
-#include "Frustum.h"
 #include "Plane.h"
-#include "Ray.h"
 
 namespace gameplay
 {

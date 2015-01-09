@@ -2,11 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Matrix.h"
-#include "Base.h"
-#include "MathUtil.h"
 #include "Matrix.h"
-#include "Plane.h"
-#include "Quaternion.h"
 
 namespace gameplay
 {

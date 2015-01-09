@@ -2,12 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Font.h"
-#include "Base.h"
-#include "Bundle.h"
-#include "FileSystem.h"
 #include "Font.h"
-#include "Game.h"
-#include "Ref.h"
 
 namespace gameplay
 {
@@ -541,7 +536,7 @@ int lua_Font_drawText(lua_State* state)
                     lua_type(state, 6) == LUA_TNUMBER &&
                     lua_type(state, 7) == LUA_TBOOLEAN &&
                     lua_type(state, 8) == LUA_TBOOLEAN &&
-                    (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
+                    (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
                     const char* param1 = gameplay::ScriptUtil::getString(2, false);
@@ -642,7 +637,7 @@ int lua_Font_drawText(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2, 4, 5, 6, 7, 8, 9 or 10).");
+            lua_pushstring(state, "Invalid number of parameters (expected 4, 5, 6, 7, 8, 9 or 10).");
             lua_error(state);
             break;
         }

@@ -3,11 +3,6 @@
 #include "ScriptController.h"
 #include "lua_AudioListener.h"
 #include "AudioListener.h"
-#include "Base.h"
-#include "Camera.h"
-#include "Game.h"
-#include "Node.h"
-#include "PhysicsController.h"
 
 namespace gameplay
 {

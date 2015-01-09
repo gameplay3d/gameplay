@@ -3,8 +3,6 @@
 #include "ScriptController.h"
 #include "lua_AIController.h"
 #include "AIController.h"
-#include "Base.h"
-#include "Game.h"
 
 namespace gameplay
 {

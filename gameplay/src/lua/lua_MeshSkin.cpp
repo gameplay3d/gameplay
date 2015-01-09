@@ -2,16 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_MeshSkin.h"
-#include "Animation.h"
-#include "AnimationTarget.h"
-#include "Base.h"
-#include "Game.h"
-#include "Joint.h"
 #include "MeshSkin.h"
-#include "Node.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
-#include "Transform.h"
 
 namespace gameplay
 {

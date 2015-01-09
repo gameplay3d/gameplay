@@ -3,9 +3,6 @@
 #include "ScriptController.h"
 #include "lua_Logger.h"
 #include "Logger.h"
-#include "Base.h"
-#include "Game.h"
-#include "ScriptController.h"
 
 namespace gameplay
 {

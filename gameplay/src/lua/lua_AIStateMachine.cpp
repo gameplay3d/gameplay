@@ -2,11 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_AIStateMachine.h"
-#include "AIAgent.h"
-#include "AIMessage.h"
 #include "AIStateMachine.h"
-#include "Base.h"
-#include "Game.h"
 
 namespace gameplay
 {

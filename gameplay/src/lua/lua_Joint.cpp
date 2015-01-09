@@ -2,25 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Joint.h"
-#include "Animation.h"
-#include "AnimationTarget.h"
-#include "AudioSource.h"
-#include "Base.h"
-#include "Game.h"
 #include "Joint.h"
-#include "MeshSkin.h"
-#include "Node.h"
-#include "PhysicsCharacter.h"
-#include "PhysicsGhostObject.h"
-#include "PhysicsRigidBody.h"
-#include "PhysicsVehicle.h"
-#include "PhysicsVehicleWheel.h"
-#include "Ref.h"
-#include "Scene.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
-#include "Terrain.h"
-#include "Transform.h"
 
 namespace gameplay
 {
@@ -54,6 +36,7 @@ void luaRegister_Joint()
         {"getChildCount", lua_Joint_getChildCount},
         {"getCollisionObject", lua_Joint_getCollisionObject},
         {"getDownVector", lua_Joint_getDownVector},
+        {"getDrawable", lua_Joint_getDrawable},
         {"getFirstChild", lua_Joint_getFirstChild},
         {"getForwardVector", lua_Joint_getForwardVector},
         {"getForwardVectorView", lua_Joint_getForwardVectorView},
@@ -123,6 +106,7 @@ void luaRegister_Joint()
         {"setAudioSource", lua_Joint_setAudioSource},
         {"setCamera", lua_Joint_setCamera},
         {"setCollisionObject", lua_Joint_setCollisionObject},
+        {"setDrawable", lua_Joint_setDrawable},
         {"setEnabled", lua_Joint_setEnabled},
         {"setId", lua_Joint_setId},
         {"setIdentity", lua_Joint_setIdentity},
@@ -1681,6 +1665,50 @@ int lua_Joint_getDownVector(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_getDrawable(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joint* instance = getInstance(state);
+                void* returnPtr = ((void*)instance->getDrawable());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Drawable");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Joint_getDrawable - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -5276,6 +5304,48 @@ int lua_Joint_setCollisionObject(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2, 3, 4, 5 or 6).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_setDrawable(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Drawable> param1 = gameplay::ScriptUtil::getObjectPointer<Drawable>(2, "Drawable", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Drawable'.");
+                    lua_error(state);
+                }
+
+                Joint* instance = getInstance(state);
+                instance->setDrawable(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Joint_setDrawable - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

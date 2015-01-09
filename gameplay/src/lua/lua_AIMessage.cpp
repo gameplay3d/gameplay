@@ -3,7 +3,6 @@
 #include "ScriptController.h"
 #include "lua_AIMessage.h"
 #include "AIMessage.h"
-#include "Base.h"
 
 namespace gameplay
 {

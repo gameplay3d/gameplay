@@ -2,12 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_ThemeSideRegions.h"
-#include "Base.h"
-#include "FileSystem.h"
-#include "Game.h"
-#include "Ref.h"
 #include "Theme.h"
-#include "ThemeStyle.h"
 
 namespace gameplay
 {

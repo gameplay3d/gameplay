@@ -2,10 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_DepthStencilTarget.h"
-#include "Base.h"
 #include "DepthStencilTarget.h"
-#include "Game.h"
-#include "Ref.h"
 
 namespace gameplay
 {

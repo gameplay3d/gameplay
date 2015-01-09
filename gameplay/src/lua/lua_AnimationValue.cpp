@@ -3,7 +3,6 @@
 #include "ScriptController.h"
 #include "lua_AnimationValue.h"
 #include "AnimationValue.h"
-#include "Base.h"
 
 namespace gameplay
 {

@@ -37,6 +37,7 @@ void lua_RegisterAllBindings()
     luaRegister_ControlListener();
     luaRegister_Curve();
     luaRegister_DepthStencilTarget();
+    luaRegister_Drawable();
     luaRegister_Effect();
     luaRegister_FileSystem();
     luaRegister_FlowLayout();
@@ -111,10 +112,13 @@ void lua_RegisterAllBindings()
     luaRegister_ScriptTargetEvent();
     luaRegister_ScriptTargetEventRegistry();
     luaRegister_Slider();
+    luaRegister_Sprite();
     luaRegister_SpriteBatch();
+    luaRegister_SpriteBatchSpriteVertex();
     luaRegister_Technique();
     luaRegister_Terrain();
     luaRegister_TerrainPatch();
+    luaRegister_Text();
     luaRegister_TextBox();
     luaRegister_Texture();
     luaRegister_TextureSampler();
@@ -123,6 +127,7 @@ void lua_RegisterAllBindings()
     luaRegister_ThemeStyle();
     luaRegister_ThemeThemeImage();
     luaRegister_ThemeUVs();
+    luaRegister_TileSet();
     luaRegister_Touch();
     luaRegister_Transform();
     luaRegister_TransformListener();

@@ -2,18 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_PhysicsVehicle.h"
-#include "Base.h"
-#include "Game.h"
-#include "MathUtil.h"
-#include "Node.h"
-#include "PhysicsCharacter.h"
-#include "PhysicsCollisionObject.h"
-#include "PhysicsController.h"
-#include "PhysicsGhostObject.h"
-#include "PhysicsRigidBody.h"
 #include "PhysicsVehicle.h"
-#include "PhysicsVehicleWheel.h"
-#include "ScriptController.h"
 
 namespace gameplay
 {
@@ -36,7 +25,6 @@ void luaRegister_PhysicsVehicle()
         {"getDrivedownStart", lua_PhysicsVehicle_getDrivedownStart},
         {"getDrivingForce", lua_PhysicsVehicle_getDrivingForce},
         {"getNode", lua_PhysicsVehicle_getNode},
-        {"getWheelCount", lua_PhysicsVehicle_getWheelCount},
         {"getRigidBody", lua_PhysicsVehicle_getRigidBody},
         {"getShapeType", lua_PhysicsVehicle_getShapeType},
         {"getSpeedKph", lua_PhysicsVehicle_getSpeedKph},
@@ -46,6 +34,7 @@ void luaRegister_PhysicsVehicle()
         {"getSteeringGain", lua_PhysicsVehicle_getSteeringGain},
         {"getType", lua_PhysicsVehicle_getType},
         {"getWheel", lua_PhysicsVehicle_getWheel},
+        {"getWheelCount", lua_PhysicsVehicle_getWheelCount},
         {"isDynamic", lua_PhysicsVehicle_isDynamic},
         {"isEnabled", lua_PhysicsVehicle_isEnabled},
         {"isKinematic", lua_PhysicsVehicle_isKinematic},
@@ -677,41 +666,6 @@ int lua_PhysicsVehicle_getNode(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getWheelCount(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                PhysicsVehicle* instance = getInstance(state);
-                unsigned int result = instance->getWheelCount();
-
-                // Push the return value onto the stack.
-                lua_pushunsigned(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_PhysicsVehicle_getWheelCount - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_PhysicsVehicle_getRigidBody(lua_State* state)
 {
     // Get the number of parameters.
@@ -1042,6 +996,41 @@ int lua_PhysicsVehicle_getWheel(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getWheelCount(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                unsigned int result = instance->getWheelCount();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsVehicle_getWheelCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
