@@ -3,6 +3,8 @@ set(GAME_NAME sample-browser)
 set(GAME_SRC
     src/Audio3DSample.cpp
     src/Audio3DSample.h
+    src/AudioSample.cpp
+    src/AudioSample.h
     src/BillboardSample.cpp
     src/BillboardSample.h
     src/FirstPersonCamera.cpp

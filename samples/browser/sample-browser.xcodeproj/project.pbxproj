@@ -70,6 +70,8 @@
 		435FC4091A53449B003D4E9C /* libgameplay-deps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435FC4081A53449B003D4E9C /* libgameplay-deps.a */; };
 		435FC40D1A534AB4003D4E9C /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435FC40C1A534AB4003D4E9C /* libgameplay.a */; };
 		435FC40F1A538315003D4E9C /* libgameplay-deps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435FC40E1A538315003D4E9C /* libgameplay-deps.a */; };
+		437D9C731A66225400F65BDD /* AudioSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437D9C711A66225400F65BDD /* AudioSample.cpp */; };
+		437D9C741A66225400F65BDD /* AudioSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437D9C711A66225400F65BDD /* AudioSample.cpp */; };
 		5B61611614CCC24C0073B857 /* SamplesGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* SamplesGame.cpp */; };
 		5B61612614CCC24C0073B857 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
 		5B61612714CCC24C0073B857 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
@@ -149,6 +151,8 @@
 		435FC4081A53449B003D4E9C /* libgameplay-deps.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgameplay-deps.a"; path = "../../external-deps/libs/MacOS/x86_64/libgameplay-deps.a"; sourceTree = "<group>"; };
 		435FC40C1A534AB4003D4E9C /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = ../../gameplay/Build/Products/Debug/libgameplay.a; sourceTree = "<group>"; };
 		435FC40E1A538315003D4E9C /* libgameplay-deps.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgameplay-deps.a"; path = "../../external-deps/libs/iOS/x86/libgameplay-deps.a"; sourceTree = "<group>"; };
+		437D9C711A66225400F65BDD /* AudioSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSample.cpp; sourceTree = "<group>"; };
+		437D9C721A66225400F65BDD /* AudioSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSample.h; sourceTree = "<group>"; };
 		5B61611214CCC2200073B857 /* sample-browser-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample-browser-macosx.plist"; sourceTree = "<group>"; };
 		5B61612C14CCC24C0073B857 /* sample-browser-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-browser-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* sample-browser-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample-browser-ios.plist"; sourceTree = "<group>"; };
@@ -250,6 +254,8 @@
 				420D547715FE433900AD0B91 /* common */,
 				420D543A15FE430D00AD0B91 /* Audio3DSample.cpp */,
 				420D543B15FE430D00AD0B91 /* Audio3DSample.h */,
+				437D9C711A66225400F65BDD /* AudioSample.cpp */,
+				437D9C721A66225400F65BDD /* AudioSample.h */,
 				F10DEAB516726157006FFFDC /* BillboardSample.cpp */,
 				F10DEAB616726157006FFFDC /* BillboardSample.h */,
 				9F4C6CFE162735020076E137 /* GestureSample.cpp */,
@@ -462,6 +468,7 @@
 				420D546C15FE430D00AD0B91 /* SpriteBatchSample.cpp in Sources */,
 				420D546E15FE430D00AD0B91 /* Sample.cpp in Sources */,
 				420D547015FE430D00AD0B91 /* FontSample.cpp in Sources */,
+				437D9C731A66225400F65BDD /* AudioSample.cpp in Sources */,
 				42A1BA201A27BCE200BF506D /* ParticlesSample.cpp in Sources */,
 				420D547215FE430D00AD0B91 /* TextureSample.cpp in Sources */,
 				420D547415FE430D00AD0B91 /* TriangleSample.cpp in Sources */,
@@ -494,6 +501,7 @@
 				420D546D15FE430D00AD0B91 /* SpriteBatchSample.cpp in Sources */,
 				420D546F15FE430D00AD0B91 /* Sample.cpp in Sources */,
 				420D547115FE430D00AD0B91 /* FontSample.cpp in Sources */,
+				437D9C741A66225400F65BDD /* AudioSample.cpp in Sources */,
 				42A1BA211A27BCE200BF506D /* ParticlesSample.cpp in Sources */,
 				420D547315FE430D00AD0B91 /* TextureSample.cpp in Sources */,
 				420D547515FE430D00AD0B91 /* TriangleSample.cpp in Sources */,
