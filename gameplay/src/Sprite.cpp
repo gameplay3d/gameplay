@@ -63,24 +63,307 @@ Sprite* Sprite::create(const char* imagePath, float width, float height,
     return sprite;
 }
 
+static bool parseBlendMode(const char* str, Sprite::BlendMode* blend)
+{
+    GP_ASSERT(blend);
+
+    if (!str)
+    {
+        *blend = Sprite::BLEND_NONE;
+        return false;
+    }
+
+    if (strcmp(str, "BLEND_ALPHA") == 0)
+    {
+        *blend = Sprite::BLEND_ALPHA;
+    }
+    else if (strcmp(str, "BLEND_ADDITIVE") == 0)
+    {
+        *blend = Sprite::BLEND_ADDITIVE;
+    }
+    else if (strcmp(str, "BLEND_MULTIPLIED") == 0)
+    {
+        *blend = Sprite::BLEND_MULTIPLIED;
+    }
+    else if (strcmp(str, "BLEND_NONE") != 0)
+    {
+        GP_ERROR("Failed to get corresponding sprite blend mode for unsupported value '%s'.", str);
+        *blend = Sprite::BLEND_NONE;
+        return false;
+    }
+    else
+    {
+        *blend = Sprite::BLEND_NONE;
+    }
+
+    return true;
+}
+
+static bool parseFlipFlags(const char* str, Sprite::FlipFlags* flip)
+{
+    GP_ASSERT(flip);
+
+    if (!str)
+    {
+        *flip = Sprite::FLIP_NONE;
+        return false;
+    }
+
+    if (strcmp(str, "FLIP_VERTICAL") == 0)
+    {
+        *flip = Sprite::FLIP_VERTICAL;
+    }
+    else if (strcmp(str, "FLIP_HORIZONTAL") == 0)
+    {
+        *flip = Sprite::FLIP_HORIZONTAL;
+    }
+    else if (strcmp(str, "FLIP_VERTICAL_HORIZONTAL") == 0)
+    {
+		*flip = (Sprite::FlipFlags)(Sprite::FLIP_VERTICAL | Sprite::FLIP_HORIZONTAL);
+    }
+    else if (strcmp(str, "FLIP_NONE") != 0)
+    {
+        GP_ERROR("Failed to get corresponding sprite flip flag for unsupported value '%s'.", str);
+        *flip = Sprite::FLIP_NONE;
+        return false;
+    }
+    else
+    {
+        *flip = Sprite::FLIP_NONE;
+    }
+
+    return true;
+}
+
+static bool parseOffset(const char* str, Sprite::Offset* offset)
+{
+    GP_ASSERT(offset);
+
+    if (!str)
+    {
+        *offset = Sprite::OFFSET_LEFT;
+        return false;
+    }
+
+    if (strcmp(str, "OFFSET_LEFT") == 0)
+    {
+        *offset = Sprite::OFFSET_LEFT;
+    }
+    else if (strcmp(str, "OFFSET_HCENTER") == 0)
+    {
+        *offset = Sprite::OFFSET_HCENTER;
+    }
+    else if (strcmp(str, "OFFSET_RIGHT") == 0)
+    {
+        *offset = Sprite::OFFSET_RIGHT;
+    }
+    else if (strcmp(str, "OFFSET_TOP") == 0)
+    {
+        *offset = Sprite::OFFSET_TOP;
+    }
+    else if (strcmp(str, "OFFSET_VCENTER") == 0)
+    {
+        *offset = Sprite::OFFSET_VCENTER;
+    }
+    else if (strcmp(str, "OFFSET_BOTTOM") == 0)
+    {
+        *offset = Sprite::OFFSET_BOTTOM;
+    }
+    else if (strcmp(str, "OFFSET_ANCHOR") == 0)
+    {
+        *offset = Sprite::OFFSET_ANCHOR;
+    }
+    else if (strcmp(str, "OFFSET_TOP_LEFT") == 0)
+    {
+        *offset = Sprite::OFFSET_TOP_LEFT;
+    }
+    else if (strcmp(str, "OFFSET_VCENTER_LEFT") == 0)
+    {
+        *offset = Sprite::OFFSET_VCENTER_LEFT;
+    }
+    else if (strcmp(str, "OFFSET_BOTTOM_LEFT") == 0)
+    {
+        *offset = Sprite::OFFSET_BOTTOM_LEFT;
+    }
+    else if (strcmp(str, "OFFSET_TOP_HCENTER") == 0)
+    {
+        *offset = Sprite::OFFSET_TOP_HCENTER;
+    }
+    else if (strcmp(str, "OFFSET_VCENTER_HCENTER") == 0)
+    {
+        *offset = Sprite::OFFSET_VCENTER_HCENTER;
+    }
+    else if (strcmp(str, "OFFSET_BOTTOM_HCENTER") == 0)
+    {
+        *offset = Sprite::OFFSET_BOTTOM_HCENTER;
+    }
+    else if (strcmp(str, "OFFSET_TOP_RIGHT") == 0)
+    {
+        *offset = Sprite::OFFSET_TOP_RIGHT;
+    }
+    else if (strcmp(str, "OFFSET_VCENTER_RIGHT") == 0)
+    {
+        *offset = Sprite::OFFSET_VCENTER_RIGHT;
+    }
+    else if (strcmp(str, "OFFSET_BOTTOM_RIGHT") != 0)
+    {
+        GP_ERROR("Failed to get corresponding sprite offset for unsupported value '%s'.", str);
+        *offset = Sprite::OFFSET_LEFT;
+        return false;
+    }
+    else
+    {
+        *offset = Sprite::OFFSET_BOTTOM_RIGHT;
+    }
+
+    return true;
+}
+
 Sprite* Sprite::create(Properties* properties)
-{    
-    /*
-     sprite spaceship
-     {
-         anchor = 0.5, 0.5
-         color = 0,0,0,1
-         opacity = 1.0f
-         blendMode = BLEND_ALPHA
-         path = res/foo/spaceship.png
-         width = 100
-         height = 100
-         source = 0, 0, 70, 70
-         flip = FLIP_VERTICAL
-         frameCount = 1
-     }
-     */
-    return NULL;
+{
+    // Check if the Properties is valid and has a valid namespace.
+    if (!properties || strcmp(properties->getNamespace(), "sprite") != 0)
+    {
+        GP_ERROR("Properties object must be non-null and have namespace equal to 'sprite'.");
+        return NULL;
+    }
+
+    // Get image path.
+    const char* imagePath = properties->getString("path");
+    if (imagePath == NULL || strlen(imagePath) == 0)
+    {
+        GP_ERROR("Sprite is missing required image file path.");
+        return NULL;
+    }
+
+    // Don't support loading custom effects
+    Effect* effect = NULL;
+
+    // Get width and height
+    float width = -1.0f;
+    float height = -1.0f;
+    float widthPercentage = 0.0f;
+    float heightPercentage = 0.0f;
+    if (properties->exists("width"))
+    {
+        if (properties->getType("width") == Properties::NUMBER) //TODO: Verify that this works for "100" but fails for "100%"
+        {
+            width = properties->getFloat("width");
+        }
+        else
+        {
+            widthPercentage = properties->getFloat("width") / 100.0f;
+        }
+    }
+    if (properties->exists("height"))
+    {
+        if (properties->getType("height") == Properties::NUMBER)
+        {
+            height = properties->getFloat("height");
+        }
+        else
+        {
+            heightPercentage = properties->getFloat("height") / 100.0f;
+        }
+    }
+
+    Sprite* sprite;
+    if (properties->exists("source"))
+    {
+        // Get source frame
+        Rectangle source;
+        properties->getVector4("source", (Vector4*)&source);
+
+        // Get frame count
+        int frameCount = properties->getInt("frameCount");
+        if (frameCount < 0)
+        {
+            GP_WARN("Sprites require at least one frame. Defaulting to frame count 1.");
+        }
+        if (frameCount < 1)
+        {
+            frameCount = 1;
+        }
+
+        // Load sprite
+        sprite = Sprite::create(imagePath, width, height, source, frameCount, effect);
+    }
+    else
+    {
+        // Load sprite
+        sprite = Sprite::create(imagePath, width, height, effect);
+    }
+
+    // Edit scaling of sprites if needed
+    if (widthPercentage != 0.0f || heightPercentage != 0.0f)
+    {
+        if (widthPercentage != 0.0f)
+        {
+            sprite->_width *= widthPercentage;
+            sprite->_frames[0].width *= widthPercentage;
+        }
+        if (heightPercentage != 0.0f)
+        {
+            sprite->_height *= heightPercentage;
+            sprite->_frames[0].height *= heightPercentage;
+        }
+    }
+
+    // Get anchor
+    Vector4 vect;
+    if (properties->getVector2("anchor", (Vector2*)&vect))
+    {
+        sprite->setAnchor(*((Vector2*)&vect));
+    }
+
+    // Get color
+    if (properties->exists("color"))
+    {
+        switch (properties->getType("color"))
+        {
+            case Properties::VECTOR3:
+                vect.w = 1.0f;
+                properties->getVector3("color", (Vector3*)&vect);
+                break;
+            case Properties::VECTOR4:
+                properties->getVector4("color", &vect);
+                break;
+            case Properties::STRING:
+            default:
+                properties->getColor("color", &vect);
+                break;
+        }
+        sprite->setColor(vect);
+    }
+
+    // Get opacity
+    if (properties->exists("opacity"))
+    {
+        sprite->setOpacity(properties->getFloat("opacity"));
+    }
+
+    // Get blend mode
+    BlendMode mode;
+    if (parseBlendMode(properties->getString("blendMode"), &mode))
+    {
+        sprite->setBlendMode(mode);
+    }
+
+    // Get flip flags
+    FlipFlags flags;
+    if (parseFlipFlags(properties->getString("flip"), &flags))
+    {
+        sprite->setFlip(flags);
+    }
+
+    // Get sprite offset
+    Offset offset;
+    if (parseOffset(properties->getString("offset"), &offset))
+    {
+        sprite->setOffset(offset);
+    }
+
+    return sprite;
 }
     
 float Sprite::getWidth() const
@@ -395,6 +678,29 @@ Drawable* Sprite::clone(NodeCloneContext& context)
     spriteClone->_batch = _batch;
 
     return spriteClone;
+}
+
+int Sprite::getPropertyId(TargetType type, const char* propertyIdStr)
+{
+    GP_ASSERT(propertyIdStr);
+
+    if (type == AnimationTarget::TRANSFORM)
+    {
+        if (strcmp(propertyIdStr, "ANIMATE_OPACITY") == 0)
+        {
+            return Sprite::ANIMATE_OPACITY;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_COLOR") == 0)
+        {
+            return Sprite::ANIMATE_COLOR;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_KEYFRAME") == 0)
+        {
+            return Sprite::ANIMATE_KEYFRAME;
+        }
+    }
+
+    return AnimationTarget::getPropertyId(type, propertyIdStr);
 }
 
 unsigned int Sprite::getAnimationPropertyComponentCount(int propertyId) const

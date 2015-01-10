@@ -55,16 +55,59 @@ Text* Text::create(const char* fontPath, const char* str, const Vector4& color, 
     
 Text* Text::create(Properties* properties)
 {
-    // TODO Load from properties from .scene files
-    /*
-    text level
+    // Check if the Properties is valid and has a valid namespace.
+    if (!properties || strcmp(properties->getNamespace(), "text") != 0)
     {
-        font = res/arial.gpb
-        size = 18
-        text = Player 1
-     }
-     */
-    return NULL;
+        GP_ERROR("Properties object must be non-null and have namespace equal to 'text'.");
+        return NULL;
+    }
+
+    // Get font path.
+    const char* fontPath = properties->getString("font");
+    if (fontPath == NULL || strlen(fontPath) == 0)
+    {
+        GP_ERROR("Text is missing required font file path.");
+        return NULL;
+    }
+
+    // Get text
+    const char* text = properties->getString("text");
+    if (text == NULL || strlen(text) == 0)
+    {
+        GP_ERROR("Text is missing required 'text' value.");
+        return NULL;
+    }
+
+    // Get size
+    int size = properties->getInt("size"); // Default return is 0 if a value doesn't exist
+    if (size < 0)
+    {
+        GP_WARN("Text size must be a positive value, with zero being default font size. Using default font size.");
+        size = 0;
+    }
+
+    // Get text color
+    Vector4 color = Vector4::one();
+    if (properties->exists("color"))
+    {
+        switch (properties->getType("color"))
+        {
+            case Properties::VECTOR3:
+                color.w = 1.0f;
+                properties->getVector3("color", (Vector3*)&color);
+                break;
+            case Properties::VECTOR4:
+                properties->getVector4("color", &color);
+                break;
+            case Properties::STRING:
+            default:
+                properties->getColor("color", &color);
+                break;
+        }
+    }
+
+    // Create
+    return Text::create(fontPath, text, color, size);
 }
     
 void Text::setText(const char* str)
@@ -221,6 +264,25 @@ unsigned int Text::draw(bool wireframe)
                     _align, _wrap, _rightToLeft, clipViewport);
     _font->finish();
     return 1;
+}
+    
+int Text::getPropertyId(TargetType type, const char* propertyIdStr)
+{
+    GP_ASSERT(propertyIdStr);
+
+    if (type == AnimationTarget::TRANSFORM)
+    {
+        if (strcmp(propertyIdStr, "ANIMATE_OPACITY") == 0)
+        {
+            return Text::ANIMATE_OPACITY;
+        }
+        else if (strcmp(propertyIdStr, "ANIMATE_COLOR") == 0)
+        {
+            return Text::ANIMATE_COLOR;
+        }
+    }
+
+    return AnimationTarget::getPropertyId(type, propertyIdStr);
 }
     
 unsigned int Text::getAnimationPropertyComponentCount(int propertyId) const
