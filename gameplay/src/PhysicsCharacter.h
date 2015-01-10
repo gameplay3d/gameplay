@@ -178,8 +178,9 @@ public:
      * Causes the character to jump to the specified height.
      *
      * @param height The amount to jump.
+     * @param force Set true to force the character to jump even if vertical velocity is non-zero
      */
-    void jump(float height);
+    void jump(float height, bool force = false);
 
 protected:
 

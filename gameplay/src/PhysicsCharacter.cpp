@@ -234,10 +234,10 @@ Vector3 PhysicsCharacter::getCurrentVelocity() const
     return v;
 }
 
-void PhysicsCharacter::jump(float height)
+void PhysicsCharacter::jump(float height, bool force)
 {
     // TODO: Add support for different jump modes (i.e. double jump, changing direction in air, holding down jump button for extra height, etc)
-    if (!_verticalVelocity.isZero())
+    if (!force && !_verticalVelocity.isZero())
         return;
 
     // v = sqrt(v0^2 + 2 a s)
