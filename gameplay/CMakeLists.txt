@@ -302,6 +302,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_Curve.h
     src/lua/lua_DepthStencilTarget.cpp
     src/lua/lua_DepthStencilTarget.h
+    src/lua/lua_Drawable.cpp
+    src/lua/lua_Drawable.h
     src/lua/lua_Effect.cpp
     src/lua/lua_Effect.h
     src/lua/lua_FileSystem.cpp
@@ -452,14 +454,20 @@ set(GAMEPLAY_LUA
     src/lua/lua_ScriptTargetEventRegistry.h
     src/lua/lua_Slider.cpp
     src/lua/lua_Slider.h
+    src/lua/lua_Sprite.cpp
+    src/lua/lua_Sprite.h
     src/lua/lua_SpriteBatch.cpp
     src/lua/lua_SpriteBatch.h
+    src/lua/lua_SpriteBatchSpriteVertex.cpp
+    src/lua/lua_SpriteBatchSpriteVertex.h
     src/lua/lua_Technique.cpp
     src/lua/lua_Technique.h
     src/lua/lua_Terrain.cpp
     src/lua/lua_Terrain.h
     src/lua/lua_TerrainPatch.cpp
     src/lua/lua_TerrainPatch.h
+    src/lua/lua_Text.cpp
+    src/lua/lua_Text.h
     src/lua/lua_TextBox.cpp
     src/lua/lua_TextBox.h
     src/lua/lua_Texture.cpp
@@ -476,6 +484,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_ThemeThemeImage.h
     src/lua/lua_ThemeUVs.cpp
     src/lua/lua_ThemeUVs.h
+    src/lua/lua_TileSet.cpp
+    src/lua/lua_TileSet.h
     src/lua/lua_Touch.cpp
     src/lua/lua_Touch.h
     src/lua/lua_Transform.cpp
