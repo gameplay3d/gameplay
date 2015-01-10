@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "Game.h"
 #include "Image.h"
+#include "MaterialParameter.h"
 #include "MeshPart.h"
 #include "Node.h"
 #include "PhysicsCharacter.h"

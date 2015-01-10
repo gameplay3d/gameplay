@@ -7,7 +7,6 @@
 namespace gameplay
 {
 
-class Node;
 class PhysicsVehicleWheel;
 
 /**

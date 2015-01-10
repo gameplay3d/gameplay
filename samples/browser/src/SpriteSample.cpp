@@ -37,7 +37,7 @@ void SpriteSample::initialize()
     // Background sprite image
     _backgroundSprite = Sprite::create("res/common/sprites/background.png", getWidth() * 5, getHeight());
     _backgroundNode = _scene->addNode("background");
-    _backgroundNode->setSprite(_backgroundSprite);
+    _backgroundNode->setDrawable(_backgroundSprite);
     
     // Level floor tile set
     _floorTileSet = TileSet::create("res/common/sprites/level.png", 70, 70, 3, 7);
@@ -63,7 +63,7 @@ void SpriteSample::initialize()
     _floorTileSet->setTileSource(6, 2, Vector2(497, 284));
     
     _floorNode = _scene->addNode("floor");
-    _floorNode->setTileSet(_floorTileSet);
+    _floorNode->setDrawable(_floorTileSet);
     
     // Idle[0]
     _playerSprite = Sprite::create("res/common/sprites/player1.png", 72.0f, 97.0f, Rectangle(67, 196, 66, 92), 13);
@@ -83,7 +83,7 @@ void SpriteSample::initialize()
     // Jump[12]
     _playerSprite->setFrameSource(12, Rectangle(438, 93, 67, 94));
     _playerNode = _scene->addNode("player");
-    _playerNode->setSprite(_playerSprite);
+    _playerNode->setDrawable(_playerSprite);
     _playerNode->translateY(_floorTileSet->getHeight());
     
     // The player animation clips
@@ -103,7 +103,7 @@ void SpriteSample::initialize()
     _rocketSprite->setAnchor(Vector2(0.5f, 0.3f));
     _rocketSprite->setOffset(Sprite::OFFSET_ANCHOR);
     _rocketNode = _scene->addNode("rocket");
-    _rocketNode->setSprite(_rocketSprite);
+    _rocketNode->setDrawable(_rocketSprite);
     _rocketNode->translate(Vector3(getWidth(), 0,  0));
     _rocketNode->rotateZ(MATH_DEG_TO_RAD(-45));
     
@@ -113,7 +113,7 @@ void SpriteSample::initialize()
     _waterSprite->setAnchor(Vector2::zero());
     _waterSprite->setOpacity(0.5f);
     _waterNode = _scene->addNode("water");
-    _waterNode->setSprite(_waterSprite);
+    _waterNode->setDrawable(_waterSprite);
     Material* waterMaterial = _waterSprite->getMaterial();
     Texture::Sampler* noiseSampler = Texture::Sampler::create("res/common/sprites/water2d-noise.png");
     waterMaterial->getParameter("u_texture_noise")->setValue(noiseSampler);
@@ -125,10 +125,10 @@ void SpriteSample::initialize()
     _text = Text::create("res/ui/arial.gpb", "P1", Vector4(0, 0, 1, 1), 18);
     _textNode = Node::create("text");
     _playerNode->addChild(_textNode);
-    _text->setWidth(_playerNode->getSprite()->getWidth());
-    _textNode->setText(_text);
+    _text->setWidth(dynamic_cast<Sprite*>(_playerNode->getDrawable())->getWidth());
+    _textNode->setDrawable(_text);
     _text->setJustify(Font::ALIGN_TOP_HCENTER);
-    _textNode->translateY(_playerNode->getSprite()->getHeight());
+    _textNode->translateY(dynamic_cast<Sprite*>(_playerNode->getDrawable())->getHeight());
 }
 
 void SpriteSample::finalize()
@@ -240,15 +240,9 @@ void SpriteSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int 
 
 bool SpriteSample::drawScene(Node* node)
 {
-    Sprite* sprite = node->getSprite();
-    if (sprite)
-        sprite->draw();
-    TileSet* tileset = node->getTileSet();
-    if (tileset)
-        tileset->draw();
-    Text* text = node->getText();
-    if (text)
-        text->draw();
+    Drawable* drawable = node->getDrawable();
+    if (drawable)
+        drawable->draw();
     
     return true;
 }

@@ -262,50 +262,6 @@ public:
      */
     bool collidesWith(PhysicsCollisionObject* object) const;
 
-    /**
-     * Returns this collision object as a physics rigid body.
-     *
-     * If this collision object is not of type RIGID_BODY, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsRigidBody.
-     */
-    PhysicsRigidBody* asRigidBody();
-
-    /**
-     * Returns this collision object as a physics character.
-     *
-     * If this collision object is not of type CHARACTER, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsCharacter.
-     */
-    PhysicsCharacter* asCharacter();
-
-    /**
-     * Returns this collision object as a physics ghost object.
-     *
-     * If this collision object is not of type GHOST_OBJECT, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsGhostObject.
-     */
-    PhysicsGhostObject* asGhostObject();
-
-    /**
-     * Returns this collision object as a physics vehicle.
-     *
-     * If this collision object is not of type VEHICLE, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsVehicle.
-     */
-    PhysicsVehicle* asVehicle();
-
-    /**
-     * Returns this collision object as a physics vehicle wheel.
-     *
-     * If this collision object is not of type VEHICLE_WHEEL, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsVehicleWheel.
-     */
-    PhysicsVehicleWheel* asVehicleWheel();
 
 protected:
 

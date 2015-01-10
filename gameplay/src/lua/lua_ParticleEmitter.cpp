@@ -3,6 +3,7 @@
 #include "ScriptController.h"
 #include "lua_ParticleEmitter.h"
 #include "Base.h"
+#include "Drawable.h"
 #include "Game.h"
 #include "Node.h"
 #include "ParticleEmitter.h"
@@ -19,7 +20,6 @@ void luaRegister_ParticleEmitter()
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_ParticleEmitter_addRef},
-        {"clone", lua_ParticleEmitter_clone},
         {"draw", lua_ParticleEmitter_draw},
         {"emitOnce", lua_ParticleEmitter_emitOnce},
         {"getAcceleration", lua_ParticleEmitter_getAcceleration},
@@ -93,7 +93,6 @@ void luaRegister_ParticleEmitter()
     const luaL_Reg lua_statics[] = 
     {
         {"create", lua_ParticleEmitter_static_create},
-        {"getBlendModeFromString", lua_ParticleEmitter_static_getBlendModeFromString},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -178,50 +177,6 @@ int lua_ParticleEmitter_addRef(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_clone(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                ParticleEmitter* instance = getInstance(state);
-                void* returnPtr = ((void*)instance->clone());
-                if (returnPtr)
-                {
-                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "ParticleEmitter");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_ParticleEmitter_clone - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_ParticleEmitter_draw(lua_State* state)
 {
     // Get the number of parameters.
@@ -247,9 +202,30 @@ int lua_ParticleEmitter_draw(lua_State* state)
             lua_error(state);
             break;
         }
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                ParticleEmitter* instance = getInstance(state);
+                unsigned int result = instance->draw(param1);
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_ParticleEmitter_draw - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
             lua_error(state);
             break;
         }
@@ -2990,43 +2966,6 @@ int lua_ParticleEmitter_static_create(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_ParticleEmitter_static_getBlendModeFromString(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = gameplay::ScriptUtil::getString(1, false);
-
-                ParticleEmitter::BlendMode result = ParticleEmitter::getBlendModeFromString(param1);
-
-                // Push the return value onto the stack.
-                lua_pushnumber(state, (int)result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_ParticleEmitter_static_getBlendModeFromString - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

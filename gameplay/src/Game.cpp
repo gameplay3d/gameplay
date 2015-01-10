@@ -7,6 +7,7 @@
 #include "SceneLoader.h"
 #include "ControlFactory.h"
 #include "Theme.h"
+#include "Form.h"
 
 /** @script{ignore} */
 GLenum __gl_error_code = GL_NO_ERROR;

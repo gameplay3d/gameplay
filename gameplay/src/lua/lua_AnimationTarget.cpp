@@ -6,6 +6,7 @@
 #include "AnimationTarget.h"
 #include "Base.h"
 #include "Game.h"
+#include "MaterialParameter.h"
 #include "Node.h"
 
 namespace gameplay

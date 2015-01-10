@@ -8,7 +8,6 @@ namespace gameplay
 // Lua bindings for ParticleEmitter.
 int lua_ParticleEmitter__gc(lua_State* state);
 int lua_ParticleEmitter_addRef(lua_State* state);
-int lua_ParticleEmitter_clone(lua_State* state);
 int lua_ParticleEmitter_draw(lua_State* state);
 int lua_ParticleEmitter_emitOnce(lua_State* state);
 int lua_ParticleEmitter_getAcceleration(lua_State* state);
@@ -76,7 +75,6 @@ int lua_ParticleEmitter_setTexture(lua_State* state);
 int lua_ParticleEmitter_setVelocity(lua_State* state);
 int lua_ParticleEmitter_start(lua_State* state);
 int lua_ParticleEmitter_static_create(lua_State* state);
-int lua_ParticleEmitter_static_getBlendModeFromString(lua_State* state);
 int lua_ParticleEmitter_stop(lua_State* state);
 int lua_ParticleEmitter_update(lua_State* state);
 

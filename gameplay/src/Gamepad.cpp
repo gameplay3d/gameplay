@@ -51,10 +51,7 @@ Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int jo
 
 Gamepad::~Gamepad()
 {
-    if (_form)
-    {
-        SAFE_RELEASE(_form);
-    }
+    SAFE_RELEASE(_form);
 }
 
 Gamepad* Gamepad::add(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name)

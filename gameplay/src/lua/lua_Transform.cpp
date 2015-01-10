@@ -6,6 +6,7 @@
 #include "AnimationTarget.h"
 #include "Base.h"
 #include "Game.h"
+#include "MaterialParameter.h"
 #include "Node.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"

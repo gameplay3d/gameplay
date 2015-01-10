@@ -87,7 +87,7 @@ void PostProcessSample::initialize()
 
     // Initialize box model
     _modelNode = _scene->findNode("duck");
-    Model* model = _modelNode->getModel();
+    Model* model = dynamic_cast<Model*>(_modelNode->getDrawable());
     Material* material = model->setMaterial("res/common/duck.material");
     // Get light node
     Node* lightNode = _scene->findNode("directionalLight1");
@@ -209,12 +209,9 @@ void PostProcessSample::render(float elapsedTime)
 
 bool PostProcessSample::drawScene(Node* node)
 {
-    // If the node visited contains a model, draw it
-    Model* model = node->getModel(); 
-    if (model)
-    {
-        model->draw();
-    }
+    Drawable* drawable = node->getDrawable(); 
+    if (drawable)
+        drawable->draw();
     return true;
 }
 

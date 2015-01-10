@@ -5,6 +5,7 @@
 #include "MeshBatch.h"
 #include "ScriptController.h"
 #include "Light.h"
+#include "Model.h"
 
 namespace gameplay
 {
@@ -346,9 +347,10 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
     // since we don't add joint hierarchies directly to the scene. If joints are never
     // visited, it's possible that nodes embedded within the joint hierarchy that contain
     // models will never get visited (and therefore never get drawn).
-    if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
+    if (model && model->_skin && model->_skin->_rootNode)
     {
-        visitNode(node->_model->_skin->_rootNode, instance, visitMethod);
+        visitNode(model->_skin->_rootNode, instance, visitMethod);
     }
 
     // Recurse for all children.
@@ -369,9 +371,10 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), 
     // since we don't add joint hierarchies directly to the scene. If joints are never
     // visited, it's possible that nodes embedded within the joint hierarchy that contain
     // models will never get visited (and therefore never get drawn).
-    if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
+    if (model && model->_skin && model->_skin->_rootNode)
     {
-        visitNode(node->_model->_skin->_rootNode, instance, visitMethod, cookie);
+        visitNode(model->_skin->_rootNode, instance, visitMethod, cookie);
     }
 
     // Recurse for all children.

@@ -2,7 +2,6 @@
 #define TEXTBOX_H_
 
 #include <string>
-
 #include "Label.h"
 
 namespace gameplay

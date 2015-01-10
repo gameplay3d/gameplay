@@ -9,7 +9,7 @@ Node* addQuadModelAndNode(Scene* scene, Mesh* mesh)
 {
     Model* model = Model::create(mesh);
     Node* node = scene->addNode();
-    node->setModel(model);
+    node->setDrawable(model);
     SAFE_RELEASE(model);
     return node;
 }
@@ -71,7 +71,7 @@ void TextureSample::initialize()
     // Textured quad mesh
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/color-wheel.png");
         node->setTranslation(-25, cubeSize, 0);
         // Find the position of the node in screen space
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
@@ -83,7 +83,7 @@ void TextureSample::initialize()
         Mesh* mesh = Mesh::createQuad(Vector3(0, cubeSize, 0), Vector3(0, 0, 0), Vector3(cubeSize, cubeSize, 0), Vector3(cubeSize, 0, 0));
         Node* node = addQuadModelAndNode(_scene, mesh);
         SAFE_RELEASE(mesh);
-        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/color-wheel.png");
         node->setTranslation(-14, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
         //_text.push_back(_font->createText("Quad: Points", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
@@ -91,7 +91,7 @@ void TextureSample::initialize()
     // Texture clamp
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize, -1, -1, 2, 2);
-        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/color-wheel.png");
         node->setId("clamp");
         node->setTranslation(-3, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
@@ -100,9 +100,9 @@ void TextureSample::initialize()
     // Texture wrapped+repeat
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize, -1, -1, 2, 2);
-        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/color-wheel.png");
         node->setId("repeat");
-        Texture::Sampler* sampler = node->getModel()->getMaterial()->getParameter("u_diffuseTexture")->getSampler();
+        Texture::Sampler* sampler = dynamic_cast<Model*>(node->getDrawable())->getMaterial()->getParameter("u_diffuseTexture")->getSampler();
         if (sampler)
         {
             sampler->setWrapMode(Texture::REPEAT, Texture::REPEAT);
@@ -114,7 +114,7 @@ void TextureSample::initialize()
     // Mipmapping Off
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/logo.png", false);
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/logo.png", false);
         node->setId("mipmap off");
         node->setTranslation(-25.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
@@ -123,7 +123,7 @@ void TextureSample::initialize()
     // Mipmapping On
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/logo.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/logo.png");
         node->setId("mipmap on");
         node->setTranslation(-5.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
@@ -179,8 +179,8 @@ void TextureSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 
 bool TextureSample::drawScene(Node* node)
 {
-    Model* model = node->getModel();
-    if (model)
-        model->draw();
+    Drawable* drawable = node->getDrawable();
+    if (drawable)
+        drawable->draw();
     return true;
 }

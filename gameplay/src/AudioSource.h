@@ -3,7 +3,7 @@
 
 #include "Vector3.h"
 #include "Ref.h"
-#include "Node.h"
+#include "Transform.h"
 
 namespace gameplay
 {
@@ -200,10 +200,9 @@ private:
      * Clones the audio source and returns a new audio source.
      * 
      * @param context The clone context.
-     * 
      * @return The newly created audio source.
      */
-    AudioSource* clone(NodeCloneContext &context) const;
+    AudioSource* clone(NodeCloneContext& context);
 
     bool streamDataIfNeeded();
 

@@ -29,7 +29,7 @@ void SceneLoadSample::initialize()
 
 bool SceneLoadSample::initializeMaterials(Node* node)
 {
-    Model* model = node->getModel();
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
     if (model)
     {
         Material* material = model->getMaterial();
@@ -99,8 +99,8 @@ void SceneLoadSample::keyEvent(Keyboard::KeyEvent evt, int key)
 
 bool SceneLoadSample::drawScene(Node* node)
 {
-    Model* model = node->getModel();
-    if (model)
-        model->draw(_wireFrame);
+    Drawable* drawable = node->getDrawable();
+    if (drawable)
+        drawable->draw(_wireFrame);
     return true;
 }

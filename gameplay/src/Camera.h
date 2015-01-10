@@ -346,7 +346,7 @@ private:
      * @param context The clone context.
      * @return The newly created camera.
      */
-    Camera* clone(NodeCloneContext &context) const;
+    Camera* clone(NodeCloneContext& context);
 
     /**
      * Sets the node associated with this camera.
@@ -358,9 +358,6 @@ private:
      */
     void transformChanged(Transform* transform, long cookie);
 
-    /**
-     *
-     */
     void cameraChanged();
 
     Camera::Type _type;

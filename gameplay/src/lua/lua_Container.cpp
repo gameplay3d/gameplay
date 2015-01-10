@@ -18,6 +18,7 @@
 #include "JoystickControl.h"
 #include "Label.h"
 #include "Layout.h"
+#include "MaterialParameter.h"
 #include "Node.h"
 #include "RadioButton.h"
 #include "Ref.h"

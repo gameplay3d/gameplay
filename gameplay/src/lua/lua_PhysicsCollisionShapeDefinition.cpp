@@ -11,6 +11,7 @@
 #include "PhysicsCollisionShape.h"
 #include "Properties.h"
 #include "Ref.h"
+#include "Terrain.h"
 
 namespace gameplay
 {

@@ -11,6 +11,7 @@
 #include "Game.h"
 #include "Gamepad.h"
 #include "Label.h"
+#include "MaterialParameter.h"
 #include "Node.h"
 #include "RadioButton.h"
 #include "Ref.h"

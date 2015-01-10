@@ -9,6 +9,7 @@
 #include "Rectangle.h"
 #include "SpriteBatch.h"
 #include "Properties.h"
+#include "Drawable.h"
 
 namespace gameplay
 {
@@ -138,7 +139,7 @@ class Node;
  *
  * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Particles
  */
-class ParticleEmitter : public Ref
+class ParticleEmitter : public Ref, public Drawable
 {
     friend class Node;
 
@@ -655,13 +656,6 @@ public:
     unsigned int getSpriteFrameCount() const;
 
     /**
-     * Gets the node that this emitter is attached to.
-     *
-     * @return The node that this emitter is attached to.
-     */
-    Node* getNode() const;
-
-    /**
      * Sets whether the vector properties of newly emitted particles are rotated around the node's position
      * by the node's rotation matrix.
      *
@@ -693,23 +687,6 @@ public:
     bool getOrbitAcceleration() const;
 
     /**
-     * Updates the particles currently being emitted.
-     *
-     * @param elapsedTime The amount of time that has passed since the last call to update(), in milliseconds.
-     */
-    void update(float elapsedTime);
-
-    /**
-     * Draws the particles currently being emitted.
-     */
-    unsigned int draw();
-
-    /**
-     * Gets a blend mode from a corresponding string.
-     */
-    static ParticleEmitter::BlendMode getBlendModeFromString(const char* src);
-
-    /**
      * Sets the texture blend mode for this particle emitter.
      *
      * @param blendMode The new blend mode.
@@ -724,11 +701,18 @@ public:
     BlendMode getBlendMode() const;
 
     /**
-     * Clones the particle emitter and returns a new emitter.
-     * 
-     * @return The new cloned particle emitter.
+     * Updates the particles currently being emitted.
+     *
+     * @param elapsedTime The amount of time that has passed since the last call to update(), in milliseconds.
      */
-    ParticleEmitter* clone();
+    void update(float elapsedTime);
+
+    /**
+     * @see Drawable::draw
+     *
+     * Draws the particles currently being emitted.
+     */
+    unsigned int draw(bool wireframe = false);
 
 private:
 
@@ -741,6 +725,11 @@ private:
      * Destructor.
      */
     ~ParticleEmitter();
+
+    /**
+     * @see Drawable::clone
+     */
+    Drawable* clone(NodeCloneContext& context);
 
     /**
      * Creates an uninitialized ParticleEmitter.
@@ -757,11 +746,6 @@ private:
      */
     ParticleEmitter& operator=(const ParticleEmitter&);
 
-    /**
-     * Sets the node that this emitter is attached to.
-     */
-    void setNode(Node* node);
-
     // Generates a scalar within the range defined by min and max.
     float generateScalar(float min, float max);
 
@@ -777,6 +761,9 @@ private:
 
     // Generates a color within the domain defined by a base vector and its variance.
     void generateColor(const Vector4& base, const Vector4& variance, Vector4* dst);
+
+    // Gets the blend mode from string.
+    static ParticleEmitter::BlendMode getBlendModeFromString(const char* src);
 
     /**
      * Defines the data for a single particle in the system.
@@ -847,7 +834,6 @@ private:
     long _spriteFrameDuration;
     float _spriteFrameDurationSecs;
     float _spritePercentPerFrame;
-    Node* _node;
     bool _orbitPosition;
     bool _orbitVelocity;
     bool _orbitAcceleration;

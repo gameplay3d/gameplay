@@ -293,7 +293,7 @@ void AudioSource::transformChanged(Transform* transform, long cookie)
     }
 }
 
-AudioSource* AudioSource::clone(NodeCloneContext &context) const
+AudioSource* AudioSource::clone(NodeCloneContext& context)
 {
     GP_ASSERT(_buffer);
 
@@ -301,7 +301,7 @@ AudioSource* AudioSource::clone(NodeCloneContext &context) const
     AL_CHECK( alGenSources(1, &alSource) );
     if (AL_LAST_ERROR())
     {
-        GP_ERROR("Error generating audio source.");
+        GP_ERROR("Unable to cloning audio.");
         return NULL;
     }
     AudioSource* audioClone = new AudioSource(_buffer, alSource);

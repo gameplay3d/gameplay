@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "FileSystem.h"
 #include "Bundle.h"
+#include "Material.h"
 
 // Default font shaders
 #define FONT_VSH "res/shaders/font.vert"

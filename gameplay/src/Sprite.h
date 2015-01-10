@@ -2,13 +2,13 @@
 #define SPRITE_H_
 
 #include "Ref.h"
+#include "Drawable.h"
 #include "AnimationTarget.h"
 #include "Properties.h"
 #include "Rectangle.h"
 #include "Vector4.h"
 #include "SpriteBatch.h"
 #include "Effect.h"
-#include "Node.h"
 
 namespace gameplay
 {
@@ -26,7 +26,7 @@ namespace gameplay
  * Sprites can be animated using the animation system.
  * Sprites can have physics applied to them via their node binding.
  */
-class Sprite : public Ref, public AnimationTarget
+class Sprite : public Ref, public Drawable, public AnimationTarget
 {
     friend class Node;
     
@@ -329,18 +329,9 @@ public:
     Material* getMaterial() const;
 
     /**
-     * Gets the node that this sprite is attached to.
-     *
-     * @return The node that this sprite is attached to.
+     * @see Drawable::draw
      */
-    Node* getNode() const;
-
-    /**
-     * Draw the sprite.
-     *
-     * @return The number of draw calls.
-     */
-    unsigned int draw();
+    unsigned int draw(bool wireframe = false);
 
 protected:
     
@@ -360,9 +351,9 @@ protected:
     Sprite& operator=(const Sprite& sprite);
 
     /**
-     * Sets the node this sprite is attached to.
+     * @see Drawable::clone
      */
-    void setNode(Node* node);
+    Drawable* clone(NodeCloneContext& context);
     
     /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
@@ -378,11 +369,7 @@ protected:
      * @see AnimationTarget::setAnimationProperty
      */
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
-    
-    Sprite* clone(NodeCloneContext &context);
-    
-    void cloneInto(Sprite* sprite, NodeCloneContext &context) const;
-    
+
     float _width;
     float _height;
     Offset _offset;
@@ -397,7 +384,6 @@ protected:
     float _opacity;
     Vector4 _color;
     BlendMode _blendMode;
-    Node* _node;
 };
 
 }

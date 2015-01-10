@@ -2,11 +2,12 @@
 #define TILESET_H__
 
 #include "Ref.h"
+#include "Drawable.h"
 #include "Properties.h"
 #include "Vector2.h"
 #include "Vector4.h"
+#include "SpriteBatch.h"
 #include "Effect.h"
-#include "Node.h"
 
 namespace gameplay
 {
@@ -26,10 +27,10 @@ namespace gameplay
  *
  * The tile set does not support rotation or scaling.
  */
-class TileSet : public Ref
+class TileSet : public Ref, public Drawable
 {
     friend class Node;
-    
+
 public:
 
     /**
@@ -145,20 +146,11 @@ public:
      * @return The color(RGBA) for the sprite.
      */
     const Vector4& getColor() const;
-    
-    /**
-     * Gets the node that this sprite is attached to.
-     *
-     * @return The node that this sprite is attached to.
-     */
-    Node* getNode() const;
    
     /**
-     * Draws the TileSet.
-     *
-     * @return The number of draw calls made.
+     * @see Drawable::draw
      */
-    unsigned int draw();
+    unsigned int draw(bool wireframe = false);
     
 protected:
     /**
@@ -177,14 +169,10 @@ protected:
     TileSet& operator=(const TileSet& set);
     
     /**
-     * Sets the node this sprite is attached to.
+     * @see Drawable::clone
      */
-    void setNode(Node* node);
+    Drawable* clone(NodeCloneContext &context);
     
-    TileSet* clone(NodeCloneContext &context);
-    
-    void cloneInto(TileSet* tileset, NodeCloneContext &context) const;
-
     Vector2* _tiles;
     float _tileWidth;
     float _tileHeight;
@@ -195,7 +183,6 @@ protected:
     SpriteBatch* _batch;
     float _opacity;
     Vector4 _color;
-    Node* _node;
 };
     
 }

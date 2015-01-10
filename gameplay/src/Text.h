@@ -8,7 +8,7 @@
 #include "Vector2.h"
 #include "Vector4.h"
 #include "Effect.h"
-#include "Node.h"
+#include "Drawable.h"
 
 namespace gameplay
 {
@@ -18,7 +18,7 @@ namespace gameplay
  *
  * Text can be attached to a node.
  */
-class Text : public Ref, public AnimationTarget
+class Text : public Ref, public Drawable, public AnimationTarget
 {
     friend class Node;
     
@@ -202,20 +202,14 @@ public:
      * @return The color(RGBA) for the sprite.
      */
     const Vector4& getColor() const;
-    
+
     /**
-     * Gets the node that this sprite is attached to.
-     *
-     * @return The node that this sprite is attached to.
+     * @see Drawable::draw
      */
-    Node* getNode() const;
-   
-    /**
-     * Draws the text.
-     */
-    unsigned int draw();
+    unsigned int draw(bool wireframe = false);
     
 protected:
+
     /**
      * Constructor
      */
@@ -232,9 +226,9 @@ protected:
     Text& operator=(const Text& text);
     
     /**
-     * Sets the node this sprite is attached to.
+     * @see Drawable::clone
      */
-    void setNode(Node* node);
+    Drawable* clone(NodeCloneContext &context);
     
     /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
@@ -251,10 +245,6 @@ protected:
      */
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
     
-    Text* clone(NodeCloneContext &context);
-    
-    void cloneInto(Text* text, NodeCloneContext &context) const;
-
     Font* _font;
     std::string _text;
     unsigned int _size;
@@ -266,7 +256,6 @@ protected:
     Rectangle _clip;
     float _opacity;
     Vector4 _color;
-    Node* _node;
 };
     
 }

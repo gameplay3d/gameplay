@@ -9,6 +9,7 @@
 #include "Form.h"
 #include "Game.h"
 #include "Label.h"
+#include "MaterialParameter.h"
 #include "Node.h"
 #include "Ref.h"
 #include "ScriptController.h"

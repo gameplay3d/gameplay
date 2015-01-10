@@ -42,7 +42,7 @@ struct FormInit
 };
 static FormInit __init;
 
-Form::Form() : _node(NULL), _batched(true)
+Form::Form() : Drawable(), _batched(true)
 {
 }
 
@@ -180,14 +180,6 @@ bool Form::isForm() const
     return true;
 }
 
-void Form::setNode(Node* node)
-{
-    if (_node != node)
-    {
-        _node = node;
-    }
-}
-
 static unsigned int nextPowerOfTwo(unsigned int v)
 {
     if (!((v & (v - 1)) == 0))
@@ -241,7 +233,7 @@ const Matrix& Form::getProjectionMatrix() const
     return  _projectionMatrix;
 }
 
-unsigned int Form::draw()
+unsigned int Form::draw(bool wireframe)
 {
     if (!_visible || _absoluteClipBounds.width == 0 || _absoluteClipBounds.height == 0)
         return 0;
@@ -281,8 +273,13 @@ unsigned int Form::draw()
         _batches.clear();
         drawCalls = batchCount;
     }
-
     return drawCalls;
+}
+
+Drawable* Form::clone(NodeCloneContext& context)
+{
+    // TODO:
+    return NULL;
 }
 
 bool Form::isBatchingEnabled() const

@@ -3,6 +3,7 @@
 #include "ScriptController.h"
 #include "lua_Model.h"
 #include "Base.h"
+#include "Drawable.h"
 #include "Game.h"
 #include "MeshPart.h"
 #include "Model.h"

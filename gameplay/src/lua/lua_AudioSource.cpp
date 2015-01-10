@@ -9,6 +9,7 @@
 #include "AudioSource.h"
 #include "Base.h"
 #include "Game.h"
+#include "MaterialParameter.h"
 #include "Node.h"
 #include "Ref.h"
 #include "ScriptController.h"

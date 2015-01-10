@@ -5,6 +5,7 @@
 #include "Base.h"
 #include "ControlFactory.h"
 #include "FileSystem.h"
+#include "Form.h"
 #include "FrameBuffer.h"
 #include "Game.h"
 #include "Platform.h"

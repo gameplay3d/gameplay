@@ -41,6 +41,7 @@
     <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\DebugNew.cpp" />
     <ClCompile Include="src\DepthStencilTarget.cpp" />
+    <ClCompile Include="src\Drawable.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\FlowLayout.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="src\lua\lua_ControlListener.cpp" />
     <ClCompile Include="src\lua\lua_Curve.cpp" />
     <ClCompile Include="src\lua\lua_DepthStencilTarget.cpp" />
+    <ClCompile Include="src\lua\lua_Drawable.cpp" />
     <ClCompile Include="src\lua\lua_Effect.cpp" />
     <ClCompile Include="src\lua\lua_FileSystem.cpp" />
     <ClCompile Include="src\lua\lua_FlowLayout.cpp" />
@@ -168,10 +170,13 @@
     <ClCompile Include="src\lua\lua_ScriptTargetEvent.cpp" />
     <ClCompile Include="src\lua\lua_ScriptTargetEventRegistry.cpp" />
     <ClCompile Include="src\lua\lua_Slider.cpp" />
+    <ClCompile Include="src\lua\lua_Sprite.cpp" />
     <ClCompile Include="src\lua\lua_SpriteBatch.cpp" />
+    <ClCompile Include="src\lua\lua_SpriteBatchSpriteVertex.cpp" />
     <ClCompile Include="src\lua\lua_Technique.cpp" />
     <ClCompile Include="src\lua\lua_Terrain.cpp" />
     <ClCompile Include="src\lua\lua_TerrainPatch.cpp" />
+    <ClCompile Include="src\lua\lua_Text.cpp" />
     <ClCompile Include="src\lua\lua_TextBox.cpp" />
     <ClCompile Include="src\lua\lua_Texture.cpp" />
     <ClCompile Include="src\lua\lua_TextureSampler.cpp" />
@@ -180,6 +185,7 @@
     <ClCompile Include="src\lua\lua_ThemeStyle.cpp" />
     <ClCompile Include="src\lua\lua_ThemeThemeImage.cpp" />
     <ClCompile Include="src\lua\lua_ThemeUVs.cpp" />
+    <ClCompile Include="src\lua\lua_TileSet.cpp" />
     <ClCompile Include="src\lua\lua_Touch.cpp" />
     <ClCompile Include="src\lua\lua_Transform.cpp" />
     <ClCompile Include="src\lua\lua_TransformListener.cpp" />
@@ -285,6 +291,7 @@
     <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\DebugNew.h" />
     <ClInclude Include="src\DepthStencilTarget.h" />
+    <ClInclude Include="src\Drawable.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\FlowLayout.h" />
@@ -337,6 +344,7 @@
     <ClInclude Include="src\lua\lua_ControlListener.h" />
     <ClInclude Include="src\lua\lua_Curve.h" />
     <ClInclude Include="src\lua\lua_DepthStencilTarget.h" />
+    <ClInclude Include="src\lua\lua_Drawable.h" />
     <ClInclude Include="src\lua\lua_Effect.h" />
     <ClInclude Include="src\lua\lua_FileSystem.h" />
     <ClInclude Include="src\lua\lua_FlowLayout.h" />
@@ -412,10 +420,13 @@
     <ClInclude Include="src\lua\lua_ScriptTargetEvent.h" />
     <ClInclude Include="src\lua\lua_ScriptTargetEventRegistry.h" />
     <ClInclude Include="src\lua\lua_Slider.h" />
+    <ClInclude Include="src\lua\lua_Sprite.h" />
     <ClInclude Include="src\lua\lua_SpriteBatch.h" />
+    <ClInclude Include="src\lua\lua_SpriteBatchSpriteVertex.h" />
     <ClInclude Include="src\lua\lua_Technique.h" />
     <ClInclude Include="src\lua\lua_Terrain.h" />
     <ClInclude Include="src\lua\lua_TerrainPatch.h" />
+    <ClInclude Include="src\lua\lua_Text.h" />
     <ClInclude Include="src\lua\lua_TextBox.h" />
     <ClInclude Include="src\lua\lua_Texture.h" />
     <ClInclude Include="src\lua\lua_TextureSampler.h" />
@@ -424,6 +435,7 @@
     <ClInclude Include="src\lua\lua_ThemeStyle.h" />
     <ClInclude Include="src\lua\lua_ThemeThemeImage.h" />
     <ClInclude Include="src\lua\lua_ThemeUVs.h" />
+    <ClInclude Include="src\lua\lua_TileSet.h" />
     <ClInclude Include="src\lua\lua_Touch.h" />
     <ClInclude Include="src\lua\lua_Transform.h" />
     <ClInclude Include="src\lua\lua_TransformListener.h" />

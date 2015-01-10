@@ -80,10 +80,10 @@ void WaterSample::initialize()
     _scene->addNode(lightNode);
 
     // Bind material properties
-    Material* groundMaterial = _scene->findNode("Ground")->getModel()->getMaterial();
+    Material* groundMaterial = dynamic_cast<Model*>(_scene->findNode("Ground")->getDrawable())->getMaterial();
     groundMaterial->getParameter("u_clipPlane")->bindValue(this, &WaterSample::getClipPlane);
     groundMaterial->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &Node::getForwardVectorView);
-    auto waterMaterial = _scene->findNode("Water")->getModel()->getMaterial();
+    auto waterMaterial = dynamic_cast<Model*>(_scene->findNode("Water")->getDrawable())->getMaterial();
     auto refractSampler = Texture::Sampler::create(_refractBuffer->getRenderTarget()->getTexture());
     waterMaterial->getParameter("u_refractionTexture")->setSampler(refractSampler);
     SAFE_RELEASE(refractSampler);
@@ -332,8 +332,8 @@ bool WaterSample::drawScene(Node* node, bool drawWater)
     std::string id = node->getId();
     if (!drawWater && id == "Water") return true;
     
-    Model* model = node->getModel();
-    if (model)
-        model->draw();
+    Drawable* drawable = node->getDrawable();
+    if (drawable)
+        drawable->draw();
     return true;
 }

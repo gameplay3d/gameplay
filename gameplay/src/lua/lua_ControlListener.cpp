@@ -8,6 +8,7 @@
 #include "Control.h"
 #include "Form.h"
 #include "Game.h"
+#include "MaterialParameter.h"
 #include "Node.h"
 #include "Ref.h"
 #include "ScriptController.h"

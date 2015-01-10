@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "Camera.h"
 #include "Game.h"
+#include "MaterialParameter.h"
 #include "Node.h"
 #include "PhysicsController.h"
 #include "Ref.h"

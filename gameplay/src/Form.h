@@ -10,6 +10,7 @@
 #include "Mouse.h"
 #include "Gamepad.h"
 #include "FrameBuffer.h"
+#include "Drawable.h"
 
 namespace gameplay
 {
@@ -23,7 +24,7 @@ class Theme;
  *
  * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
-class Form : public Container
+class Form : public Drawable, public Container
 {
     friend class Platform;
     friend class Game;
@@ -99,7 +100,7 @@ public:
      * Child controls should override this function to return the correct type name.
      *
      * @return The type name of this class: "Form"
-     * @see ScriptTarget::getTypeName()
+     * @see ScriptTarget::getTypeName
      */
     const char* getTypeName() const;
 
@@ -107,15 +108,6 @@ public:
      * @see Container#isForm()
      */
     bool isForm() const;
-
-    /**
-     * Attach this form to a node.
-     *
-     * A form can be drawn as part of the 3-dimensional world if it is attached to a node.
-     *
-     * @param node The node to attach this form to.
-     */
-    void setNode(Node* node);
 
     /**
      * @see Control::update
@@ -127,7 +119,7 @@ public:
      *
      * @return The nubmer of draw calls issued to draw the form.
      */
-    unsigned int draw();
+    unsigned int draw(bool wireframe = false);
 
     /**
      * Determines whether batching is enabled for this form.
@@ -164,6 +156,11 @@ private:
      * Destructor.
      */
     virtual ~Form();
+
+    /**
+     * @see Drawable::clone
+     */
+    Drawable* clone(NodeCloneContext &context);
 
     /**
      * @see Control::initialize
@@ -279,7 +276,6 @@ private:
 
     static bool pollGamepad(Gamepad* gamepad);
 
-    Node* _node;                        // Node for transforming this Form in world-space.
     Matrix _projectionMatrix;           // Projection matrix to be set on SpriteBatch objects when rendering the form
     std::vector<SpriteBatch*> _batches;
     bool _batched;
