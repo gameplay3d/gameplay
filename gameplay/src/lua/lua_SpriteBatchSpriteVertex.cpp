@@ -2,6 +2,9 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_SpriteBatchSpriteVertex.h"
+#include "Base.h"
+#include "Game.h"
+#include "Material.h"
 #include "SpriteBatch.h"
 
 namespace gameplay

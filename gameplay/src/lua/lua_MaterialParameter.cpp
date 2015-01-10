@@ -2,7 +2,13 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_MaterialParameter.h"
+#include "Animation.h"
+#include "AnimationTarget.h"
+#include "Base.h"
+#include "Game.h"
 #include "MaterialParameter.h"
+#include "Node.h"
+#include "Ref.h"
 
 namespace gameplay
 {

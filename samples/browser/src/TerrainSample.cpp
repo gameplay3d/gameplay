@@ -41,7 +41,7 @@ void TerrainSample::initialize()
 {
     // Load scene
 	_scene = Scene::load("res/common/terrain/sample.scene");
-	_terrain = _scene->findNode("terrain")->getTerrain();
+	_terrain = dynamic_cast<Terrain*>(_scene->findNode("terrain")->getDrawable());
     _sky = _scene->findNode("sky");
     _sky->setTag("lighting", "none");
 
@@ -49,12 +49,12 @@ void TerrainSample::initialize()
     Bundle* bundle;
     bundle = Bundle::create("res/common/sphere.gpb");
     _sphere = bundle->loadNode("sphere");
-    _sphere->getModel()->setMaterial("res/common/terrain/shapes.material#sphere", 0);
+    dynamic_cast<Model*>(_sphere->getDrawable())->setMaterial("res/common/terrain/shapes.material#sphere", 0);
     SAFE_RELEASE(bundle);
 
     bundle = Bundle::create("res/common/box.gpb");
     _box = bundle->loadNode("box");
-    _box->getModel()->setMaterial("res/common/terrain/shapes.material#box", 0);
+    dynamic_cast<Model*>(_box->getDrawable())->setMaterial("res/common/terrain/shapes.material#box", 0);
     SAFE_RELEASE(bundle);
 
     // Load font
@@ -157,18 +157,15 @@ bool TerrainSample::drawScene(Node* node)
 {
     Camera* camera = _scene->getActiveCamera();
 
-	if (node->getModel())
-	{
-        if (node->getBoundingSphere().intersects(camera->getFrustum()))
-        {
-            node->getModel()->draw();
-        }
-	}
-	else if (node->getTerrain())
-	{
-        Terrain* terrain = node->getTerrain();
-        terrain->draw(_wireframe);
-	}
+    Drawable* drawable = node->getDrawable();
+    if (dynamic_cast<Model*>(drawable))
+    {
+        if (!node->getBoundingSphere().intersects(camera->getFrustum()))
+            return true;
+    }
+
+    if (drawable)
+        drawable->draw(_wireframe);
 
 	return true;
 }

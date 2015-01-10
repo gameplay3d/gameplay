@@ -746,11 +746,6 @@ private:
      */
     ParticleEmitter& operator=(const ParticleEmitter&);
 
-    /**
-     * Sets the node that this emitter is attached to.
-     */
-    void setNode(Node* node);
-
     // Generates a scalar within the range defined by min and max.
     float generateScalar(float min, float max);
 

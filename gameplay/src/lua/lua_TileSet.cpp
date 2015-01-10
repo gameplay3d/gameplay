@@ -2,6 +2,13 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_TileSet.h"
+#include "Base.h"
+#include "Drawable.h"
+#include "Game.h"
+#include "Matrix.h"
+#include "Node.h"
+#include "Ref.h"
+#include "Scene.h"
 #include "TileSet.h"
 
 namespace gameplay

@@ -2,7 +2,16 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_PhysicsControllerHitFilter.h"
+#include "Base.h"
+#include "Bundle.h"
+#include "Game.h"
+#include "MeshPart.h"
+#include "PhysicsCharacter.h"
 #include "PhysicsController.h"
+#include "PhysicsRigidBody.h"
+#include "ScriptController.h"
+#include "ScriptTarget.h"
+#include "Terrain.h"
 
 namespace gameplay
 {

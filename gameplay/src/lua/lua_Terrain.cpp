@@ -2,7 +2,20 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Terrain.h"
+#include "Animation.h"
+#include "AnimationTarget.h"
+#include "Base.h"
+#include "Drawable.h"
+#include "FileSystem.h"
+#include "Game.h"
+#include "MaterialParameter.h"
+#include "Node.h"
+#include "Ref.h"
+#include "ScriptController.h"
+#include "ScriptTarget.h"
 #include "Terrain.h"
+#include "TerrainPatch.h"
+#include "Transform.h"
 
 namespace gameplay
 {

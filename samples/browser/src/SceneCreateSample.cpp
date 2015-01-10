@@ -123,7 +123,7 @@ void SceneCreateSample::initialize()
     material->getStateBlock()->setDepthWrite(true);
 
     _cubeNode = _scene->addNode("cube");
-    _cubeNode->setModel(cubeModel);
+    _cubeNode->setDrawable(cubeModel);
     _cubeNode->rotateY(MATH_PIOVER4);
     SAFE_RELEASE(cubeModel);
 }
@@ -171,8 +171,8 @@ void SceneCreateSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned
 
 bool SceneCreateSample::drawScene(Node* node)
 {
-    Model* model = node->getModel();
-    if (model)
-        model->draw();
+    Drawable* drawable = node->getDrawable();
+    if (drawable)
+        drawable->draw();
     return true;
 }

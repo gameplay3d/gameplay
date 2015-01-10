@@ -2,7 +2,11 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Curve.h"
+#include "Base.h"
 #include "Curve.h"
+#include "Game.h"
+#include "Quaternion.h"
+#include "Ref.h"
 
 namespace gameplay
 {

@@ -166,6 +166,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Container");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Control");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Form");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "GameScriptTarget");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joint");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "JoystickControl");

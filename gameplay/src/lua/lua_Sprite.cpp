@@ -2,6 +2,15 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Sprite.h"
+#include "Animation.h"
+#include "AnimationTarget.h"
+#include "Base.h"
+#include "Drawable.h"
+#include "Game.h"
+#include "MaterialParameter.h"
+#include "Node.h"
+#include "Ref.h"
+#include "Scene.h"
 #include "Sprite.h"
 
 namespace gameplay

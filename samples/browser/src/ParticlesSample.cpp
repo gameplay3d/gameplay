@@ -120,7 +120,7 @@ void ParticlesSample::addGrid(unsigned int lineCount)
     model->setMaterial("res/common/particles/grid.material");
     SAFE_RELEASE(mesh);
 
-    _scene->addNode("grid")->setModel(model);
+    _scene->addNode("grid")->setDrawable(model);
     model->release();
 }
 
@@ -423,7 +423,7 @@ void ParticlesSample::controlEvent(Control* control, EventType evt)
     std::string id = control->getId();
 
     // Handle UI events.
-    ParticleEmitter* emitter = _particleEmitterNode->getParticleEmitter();
+    ParticleEmitter* emitter = dynamic_cast<ParticleEmitter*>(_particleEmitterNode->getDrawable());
     switch(evt)
     {
     case Listener::VALUE_CHANGED:
@@ -821,8 +821,11 @@ void ParticlesSample::update(float elapsedTime)
         _scene->getActiveCamera()->getNode()->translate(v);
     }
 
-    // Update particles.
-    _particleEmitterNode->getParticleEmitter()->update(elapsedTime);
+    // Update particles. 
+    //TODO: Change this so update is called pre-render so this is not needed.
+    ParticleEmitter* emitter = dynamic_cast<ParticleEmitter*>(_particleEmitterNode->getDrawable());
+    if (emitter)
+        emitter->update(elapsedTime);
 }
 
 void ParticlesSample::render(float elapsedTime)
@@ -842,10 +845,9 @@ void ParticlesSample::render(float elapsedTime)
 
 bool ParticlesSample::drawScene(Node* node, void* cookie)
 {
-    if (node->getModel())
-        node->getModel()->draw();
-    if (node->getParticleEmitter())
-        node->getParticleEmitter()->draw();
+    Drawable* drawable = node->getDrawable();
+    if (drawable)
+        drawable->draw();
     return true;
 }
 
@@ -962,8 +964,11 @@ void ParticlesSample::keyEvent(Keyboard::KeyEvent evt, int key)
             exit();
             break;
         case Keyboard::KEY_B:
-            _particleEmitterNode->getParticleEmitter()->setBlendMode(ParticleEmitter::BLEND_NONE);
+        {
+            ParticleEmitter* emitter = dynamic_cast<ParticleEmitter*>(_particleEmitterNode->getDrawable());
+            emitter->setBlendMode(ParticleEmitter::BLEND_NONE);
             break;
+        }
         case Keyboard::KEY_W:
             _wDown = true;
             break;
@@ -1016,7 +1021,7 @@ void ParticlesSample::emitterChanged()
     ParticleEmitter* emitter = _particleEmitter;
 
     // Set the new emitter on the node.
-    _particleEmitterNode->setParticleEmitter(_particleEmitter);
+    _particleEmitterNode->setDrawable(_particleEmitter);
     _particleEmitter->release();
 
     // Reset camera view and zoom.
@@ -1132,7 +1137,7 @@ void ParticlesSample::emitterChanged()
 void ParticlesSample::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
 {
     char buffer[30];
-    sprintf(buffer, "FPS: %u\nParticles: %u", fps, _particleEmitterNode->getParticleEmitter()->getParticlesCount());
+    sprintf(buffer, "FPS: %u\nParticles: %u", fps,dynamic_cast<ParticleEmitter*>(_particleEmitterNode->getDrawable())->getParticlesCount());
     font->start();
     font->drawText(buffer, x, y, color, 22);
     font->finish();

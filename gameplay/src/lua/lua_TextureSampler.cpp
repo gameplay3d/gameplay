@@ -2,6 +2,11 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_TextureSampler.h"
+#include "Base.h"
+#include "FileSystem.h"
+#include "Game.h"
+#include "Image.h"
+#include "Ref.h"
 #include "Texture.h"
 
 namespace gameplay

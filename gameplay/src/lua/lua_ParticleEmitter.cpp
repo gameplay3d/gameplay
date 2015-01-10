@@ -2,7 +2,15 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_ParticleEmitter.h"
+#include "Base.h"
+#include "Drawable.h"
+#include "Game.h"
+#include "Node.h"
 #include "ParticleEmitter.h"
+#include "Properties.h"
+#include "Quaternion.h"
+#include "Ref.h"
+#include "Scene.h"
 
 namespace gameplay
 {

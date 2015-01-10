@@ -70,7 +70,7 @@ void InputSample::initialize()
     _formNodeRestPosition.set(0, 0, -1.5f);
     _formNodeParent->setTranslation(_formNodeRestPosition);
     _formNode->setTranslation(-0.2f, -0.2f, 0);
-    _formNode->setForm(form);
+    _formNode->setDrawable(form);
     form->release();
 }
 
@@ -216,7 +216,7 @@ void InputSample::render(float elapsedTime)
     }
     if (hasAccelerometer() && !_keyboardState)
     {
-        _formNode->getForm()->draw();
+        _formNode->getDrawable()->draw();
 
         sprintf(buffer, "Pitch: %f   Roll: %f", pitch, roll);
         _font->measureText(buffer, 18, &width, &height);
@@ -227,12 +227,9 @@ void InputSample::render(float elapsedTime)
 
 bool InputSample::drawScene(Node* node)
 {
-    // If the node visited contains a model, draw it
-    Model* model = node->getModel(); 
-    if (model)
-    {
-        model->draw();
-    }
+    Drawable* drawable = node->getDrawable(); 
+    if (drawable)
+        drawable->draw();
     return true;
 }
 

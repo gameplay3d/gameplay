@@ -120,28 +120,28 @@ void SpaceshipGame::initializeSpaceship()
     // Setup spaceship model
     // Part 0
     _shipNode = _scene->findNode("pSpaceShip");
-    material = _shipNode->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1", 0);
+    material = dynamic_cast<Model*>(_shipNode->getDrawable())->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1", 0);
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.53544f, 0.53544f, 0.53544f, 1.0f));
     initializeMaterial(material, true, true);
     // Part 1
-    material = _shipNode->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1", 1);
+    material = dynamic_cast<Model*>(_shipNode->getDrawable())->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1", 1);
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     _shipSpecularParameter = material->getParameter("u_specularExponent");
     initializeMaterial(material, true, true);
     // Part 2
-    material = _shipNode->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1", 2);
+    material = dynamic_cast<Model*>(_shipNode->getDrawable())->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1", 2);
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
     initializeMaterial(material, true, true);
 
     // Setup spaceship propulsion model
     _propulsionNode = _scene->findNode("pPropulsion");
-    material = _propulsionNode->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1");
+    material = dynamic_cast<Model*>(_propulsionNode->getDrawable())->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1");
     material->getParameter("u_diffuseColor")->setValue(Vector4(0.8f, 0.8f, 0.8f, 1.0f));
     initializeMaterial(material, true, true);
 
     // Glow effect node
     _glowNode = _scene->findNode("pGlow");
-    material = _glowNode->getModel()->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "MODULATE_COLOR");
+    material = dynamic_cast<Model*>(_glowNode->getDrawable())->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "MODULATE_COLOR");
     material->getParameter("u_diffuseTexture")->setValue("res/propulsion_glow.png", true);
     _glowDiffuseParameter = material->getParameter("u_modulateColor");
     initializeMaterial(material, false, false);
@@ -164,7 +164,7 @@ void SpaceshipGame::initializeEnvironment()
     for (size_t i = 0, count = nodes.size(); i < count; ++i)
     {
         Node* pGround = nodes[i];
-        material = pGround->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1");
+        material = dynamic_cast<Model*>(pGround->getDrawable())->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1");
         material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
         initializeMaterial(material, true, true);
     }
@@ -175,7 +175,7 @@ void SpaceshipGame::initializeEnvironment()
     for (size_t i = 0, count = nodes.size(); i < count; ++i)
     {
         Node* pRoof = nodes[i];
-        material = pRoof->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1");
+        material = dynamic_cast<Model*>(pRoof->getDrawable())->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR;DIRECTIONAL_LIGHT_COUNT 1");
         material->getParameter("u_diffuseColor")->setValue(Vector4(0.280584f, 0.5584863f, 0.6928f, 1.0f));
         initializeMaterial(material, true, true);
     }
@@ -183,7 +183,7 @@ void SpaceshipGame::initializeEnvironment()
     // Setup background model
     nodes.clear();
     Node* pBackground = _scene->findNode("pBackground");
-    material = pBackground->getModel()->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "DIRECTIONAL_LIGHT_COUNT 1");
+    material = dynamic_cast<Model*>(pBackground->getDrawable())->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "DIRECTIONAL_LIGHT_COUNT 1");
     material->getParameter("u_diffuseTexture")->setValue("res/background.png", true);
     initializeMaterial(material, true, false);
 }
@@ -366,7 +366,7 @@ void SpaceshipGame::handleCollisions(float t)
     const BoundingSphere& shipBounds = _shipNode->getBoundingSphere();
 
     // Compute a bounding box for floor collisions
-    BoundingBox propulsionBounds = _propulsionNode->getModel()->getMesh()->getBoundingBox();
+    BoundingBox propulsionBounds = dynamic_cast<Model*>(_propulsionNode->getDrawable())->getMesh()->getBoundingBox();
     propulsionBounds.transform(_propulsionNode->getWorldMatrix());
 
     if (propulsionBounds.min.y <= FLOOR_HEIGHT)
@@ -480,15 +480,15 @@ void SpaceshipGame::drawSplash(void* param)
 
 bool SpaceshipGame::drawScene(Node* node, void* cookie)
 {
-    Model* model = node->getModel();
-    if (model)
+    Drawable* drawable = node->getDrawable();
+    if (drawable)
     {
         // Transparent nodes must be drawn last (stage 1)
         bool isTransparent = (node == _glowNode);
 
         // Skip transparent objects for stage 0
         if ((!isTransparent && (int*)cookie == 0) || (isTransparent && (int*)cookie == (int*)1))
-            model->draw();
+            drawable->draw();
     }
 
     return true;

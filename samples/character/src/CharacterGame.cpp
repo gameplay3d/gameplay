@@ -66,7 +66,7 @@ void CharacterGame::initialize()
 
 bool CharacterGame::initializeScene(Node* node)
 {
-    Model* model = node->getModel();
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
     if (model && model->getMaterial())
     {
         initializeMaterial(_scene, node, model->getMaterial());
@@ -109,7 +109,7 @@ void CharacterGame::initializeCharacter()
     _floorLevel = _basketballNode->getTranslationY();
 
     // Store the alpha material parameter from the character's model.
-    _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechniqueByIndex(0)->getPassByIndex(0)->getParameter("u_modulateAlpha");
+    _materialParameterAlpha = dynamic_cast<Model*>(_characterMeshNode->getDrawable())->getMaterial()->getTechniqueByIndex(0)->getPassByIndex(0)->getParameter("u_modulateAlpha");
 
     // Load character animations.
     _animation = node->getAnimation("animations");
@@ -145,8 +145,8 @@ void CharacterGame::drawSplash(void* param)
 
 bool CharacterGame::drawScene(Node* node, bool transparent)
 {
-    if (node->getModel() && (transparent == node->hasTag("transparent")))
-        node->getModel()->draw(_wireframe);
+    if (node->getDrawable() && (transparent == node->hasTag("transparent")))
+        node->getDrawable()->draw(_wireframe);
 
     return true;
 }

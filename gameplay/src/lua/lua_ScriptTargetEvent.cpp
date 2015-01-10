@@ -2,6 +2,8 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_ScriptTargetEvent.h"
+#include "Base.h"
+#include "ScriptController.h"
 #include "ScriptTarget.h"
 
 namespace gameplay

@@ -3,6 +3,14 @@
 #include "ScriptController.h"
 #include "lua_Animation.h"
 #include "Animation.h"
+#include "AnimationClip.h"
+#include "AnimationController.h"
+#include "AnimationTarget.h"
+#include "Base.h"
+#include "Game.h"
+#include "Properties.h"
+#include "Ref.h"
+#include "Transform.h"
 
 namespace gameplay
 {

@@ -2,6 +2,12 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_VerticalLayout.h"
+#include "Base.h"
+#include "Container.h"
+#include "Control.h"
+#include "Game.h"
+#include "Layout.h"
+#include "Ref.h"
 #include "VerticalLayout.h"
 
 namespace gameplay

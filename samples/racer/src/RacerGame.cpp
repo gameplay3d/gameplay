@@ -112,7 +112,7 @@ bool RacerGame::initializeScene(Node* node)
 {
     static Node* lightNode = _scene->findNode("directionalLight1");
 
-    Model* model = node->getModel();
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
     if (model)
     {
         Material* material = model->getMaterial();
@@ -341,7 +341,7 @@ void RacerGame::render(float elapsedTime)
 
 bool RacerGame::buildRenderQueues(Node* node)
 {
-    Model* model = node->getModel(); 
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
     if (model)
     {
         // Perform view-frustum culling for this node
@@ -369,7 +369,7 @@ void RacerGame::drawScene()
 
         for (size_t j = 0, ncount = queue.size(); j < ncount; ++j)
         {
-            queue[j]->getModel()->draw();
+            queue[j]->getDrawable()->draw();
         }
     }
 }

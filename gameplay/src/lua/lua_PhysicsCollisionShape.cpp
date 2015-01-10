@@ -2,7 +2,16 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_PhysicsCollisionShape.h"
+#include "Base.h"
+#include "FileSystem.h"
+#include "Game.h"
+#include "HeightField.h"
+#include "Image.h"
+#include "Node.h"
 #include "PhysicsCollisionShape.h"
+#include "Properties.h"
+#include "Ref.h"
+#include "Terrain.h"
 
 namespace gameplay
 {

@@ -2,6 +2,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_MeshPart.h"
+#include "Base.h"
 #include "MeshPart.h"
 
 namespace gameplay

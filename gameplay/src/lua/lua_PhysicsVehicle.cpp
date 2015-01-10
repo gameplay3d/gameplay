@@ -2,7 +2,18 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_PhysicsVehicle.h"
+#include "Base.h"
+#include "Game.h"
+#include "MathUtil.h"
+#include "Node.h"
+#include "PhysicsCharacter.h"
+#include "PhysicsCollisionObject.h"
+#include "PhysicsController.h"
+#include "PhysicsGhostObject.h"
+#include "PhysicsRigidBody.h"
 #include "PhysicsVehicle.h"
+#include "PhysicsVehicleWheel.h"
+#include "ScriptController.h"
 
 namespace gameplay
 {

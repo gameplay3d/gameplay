@@ -3,6 +3,10 @@
 #include "ScriptController.h"
 #include "lua_AIAgentListener.h"
 #include "AIAgent.h"
+#include "Base.h"
+#include "Game.h"
+#include "Node.h"
+#include "Ref.h"
 
 namespace gameplay
 {

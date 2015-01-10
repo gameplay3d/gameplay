@@ -2,6 +2,8 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_MeshBatch.h"
+#include "Base.h"
+#include "Material.h"
 #include "MeshBatch.h"
 
 namespace gameplay
