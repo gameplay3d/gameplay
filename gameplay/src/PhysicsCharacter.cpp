@@ -191,7 +191,7 @@ void PhysicsCharacter::setVelocity(float x, float y, float z)
     _moveVelocity.setValue(x, y, z);
 }
 
-void PhysicsCharacter::resetVeloctiyState()
+void PhysicsCharacter::resetVelocityState()
 {
     _forwardVelocity = 0.0f;
     _rightVelocity = 0.0f;

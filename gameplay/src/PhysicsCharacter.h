@@ -114,10 +114,10 @@ public:
     void setVelocity(float x, float y, float z);
 
     /**
-     * Resets all of interal velocity state which brings the character to an immediate stop
+     * Resets the internal velocity state which brings the character to an immediate stop
      *
     */
-    void resetVeloctiyState();
+    void resetVelocityState();
 
     /**
      * Rotates the character.
