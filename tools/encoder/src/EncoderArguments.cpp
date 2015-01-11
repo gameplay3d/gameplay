@@ -358,6 +358,10 @@ EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
     {
         return FILEFORMAT_FBX;
     }
+    if (ext.compare("tmx") == 0)
+    {
+        return FILEFORMAT_TMX;
+    }
     if (ext.compare("ttf") == 0)
     {
         return FILEFORMAT_TTF;

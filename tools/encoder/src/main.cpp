@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "FBXSceneEncoder.h"
+#include "TMXSceneEncoder.h"
 #include "TTFFontEncoder.h"
 #include "GPBDecoder.h"
 #include "EncoderArguments.h"
@@ -109,6 +110,13 @@ int main(int argc, const char** argv)
             std::string realpath(arguments.getFilePath());
             FBXSceneEncoder fbxEncoder;
             fbxEncoder.write(realpath, arguments);
+            break;
+        }
+    case EncoderArguments::FILEFORMAT_TMX:
+        {
+            std::string realpath(arguments.getFilePath());
+            TMXSceneEncoder tmxEncoder;
+            tmxEncoder.write(realpath);
             break;
         }
     case EncoderArguments::FILEFORMAT_TTF:

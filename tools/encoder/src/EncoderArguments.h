@@ -20,6 +20,7 @@ public:
         FILEFORMAT_UNKNOWN,
         FILEFORMAT_DAE,
         FILEFORMAT_FBX,
+        FILEFORMAT_TMX,
         FILEFORMAT_TTF,
         FILEFORMAT_GPB,
         FILEFORMAT_PNG,

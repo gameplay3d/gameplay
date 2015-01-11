@@ -50,6 +50,7 @@
     <ClCompile Include="src\Sampler.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\StringUtil.cpp" />
+    <ClCompile Include="src\TMXSceneEncoder.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\TTFFontEncoder.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\StringUtil.h" />
     <ClInclude Include="src\Thread.h" />
+    <ClInclude Include="src\TMXSceneEncoder.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\TTFFontEncoder.h" />
     <ClInclude Include="src\Vector2.h" />
