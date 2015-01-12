@@ -111,6 +111,7 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     float mass = 1.0f;
     float maxStepHeight = 0.1f;
     float maxSlopeAngle = 0.0f;
+    Vector3 gravity = Game::getInstance()->getPhysicsController()->getGravity();
     const char* name = NULL;
     while ((name = properties->getNextProperty()) != NULL)
     {
@@ -126,6 +127,10 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
         {
             maxSlopeAngle = properties->getFloat();
         }
+        else if (strcmp(name, "gravity") == 0)
+        {
+            properties->getVector3("gravity", &gravity);
+        }
         else
         {
             // Ignore this case (the attributes for the character's collision shape would end up here).
@@ -136,6 +141,7 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     PhysicsCharacter* character = new PhysicsCharacter(node, shape, mass);
     character->setMaxStepHeight(maxStepHeight);
     character->setMaxSlopeAngle(maxSlopeAngle);
+    character->setGravity(gravity);
 
     return character;
 }
@@ -244,6 +250,23 @@ Vector3 PhysicsCharacter::getCurrentVelocity() const
     return v;
 }
 
+Vector3 PhysicsCharacter::getGravity() const
+{
+    return _gravity;
+}
+
+void PhysicsCharacter::setGravity(const Vector3& gravity)
+{
+    _gravity = gravity;
+}
+
+void PhysicsCharacter::setGravity(float x, float y, float z)
+{
+    _gravity.x = x;
+    _gravity.y = y;
+    _gravity.z = z;
+}
+
 void PhysicsCharacter::jump(float height, bool force)
 {
     // TODO: Add support for different jump modes (i.e. double jump, changing direction in air, holding down jump button for extra height, etc)
@@ -255,7 +278,7 @@ void PhysicsCharacter::jump(float height, bool force)
     //  a == acceleration (inverse gravity)
     //  s == linear displacement (height)
     GP_ASSERT(Game::getInstance()->getPhysicsController());
-    Vector3 jumpVelocity = -Game::getInstance()->getPhysicsController()->getGravity() * height * 2.0f;
+    Vector3 jumpVelocity = -_gravity * height * 2.0f;
     jumpVelocity.set(
         jumpVelocity.x == 0 ? 0 : std::sqrt(jumpVelocity.x),
         jumpVelocity.y == 0 ? 0 : std::sqrt(jumpVelocity.y),
@@ -433,7 +456,7 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
     GP_ASSERT(collisionWorld);
 
     // Contribute gravity to vertical velocity.
-    btVector3 gravity = Game::getInstance()->getPhysicsController()->_world->getGravity();
+    btVector3 gravity(_gravity.x, _gravity.y, _gravity.z);
     _verticalVelocity += (gravity * time);
 
     // Compute new position from vertical velocity.

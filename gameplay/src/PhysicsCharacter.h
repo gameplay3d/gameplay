@@ -181,6 +181,30 @@ public:
     Vector3 getCurrentVelocity() const;
 
     /**
+     * Gets the gravity that affects the character (this can
+     * be different from the global gravity; @see setGravity(Vector3)).
+     *
+     * @return The gravity.
+     */
+    Vector3 getGravity() const;
+
+    /**
+     * Sets the characters gravity (this overrides the global gravity for this character).
+     *
+     * @param gravity The gravity.
+     */
+    void setGravity(const Vector3& gravity);
+
+    /**
+     * Sets the characters gravity (this overrides the global gravity for this character).
+     *
+     * @param x The x coordinate of the gravity vector.
+     * @param y The y coordinate of the gravity vector.
+     * @param z The z coordinate of the gravity vector.
+     */
+    void setGravity(float x, float y, float z);
+
+    /**
      * Causes the character to jump to the specified height.
      *
      * @param height The amount to jump.
@@ -274,6 +298,7 @@ private:
     bool _physicsEnabled;
     float _mass;
     ActionInterface* _actionInterface;
+    gameplay::Vector3 _gravity;
 };
 
 }
