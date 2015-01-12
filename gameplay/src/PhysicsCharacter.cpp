@@ -191,6 +191,16 @@ void PhysicsCharacter::setVelocity(float x, float y, float z)
     _moveVelocity.setValue(x, y, z);
 }
 
+void PhysicsCharacter::resetVelocityState()
+{
+    _forwardVelocity = 0.0f;
+    _rightVelocity = 0.0f;
+    _verticalVelocity.setZero();
+    _currentVelocity.setZero();
+    _normalizedVelocity.setZero();
+    _moveVelocity.setZero();
+}
+
 void PhysicsCharacter::rotate(const Vector3& axis, float angle)
 {
     GP_ASSERT(_node);
