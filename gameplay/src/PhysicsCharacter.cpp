@@ -255,11 +255,11 @@ void PhysicsCharacter::jump(float height, bool force)
     //  a == acceleration (inverse gravity)
     //  s == linear displacement (height)
     GP_ASSERT(Game::getInstance()->getPhysicsController());
-    Vector3 jumpVelocity = -Game::getInstance()->getPhysicsController()->getGravity() * height * 2.0f;
+    Vector3 jumpVelocity = Game::getInstance()->getPhysicsController()->getGravity() * height * 2.0f;
     jumpVelocity.set(
-        jumpVelocity.x == 0 ? 0 : std::sqrt(jumpVelocity.x),
-        jumpVelocity.y == 0 ? 0 : std::sqrt(jumpVelocity.y),
-        jumpVelocity.z == 0 ? 0 : std::sqrt(jumpVelocity.z));
+        jumpVelocity.x == 0 ? 0 : std::sqrt(std::fabs(jumpVelocity.x)) * (jumpVelocity.x > 0 ? 1.0f : -1.0f),
+        jumpVelocity.y == 0 ? 0 : std::sqrt(std::fabs(jumpVelocity.y)) * (jumpVelocity.y < 0 ? 1.0f : -1.0f),
+        jumpVelocity.z == 0 ? 0 : std::sqrt(std::fabs(jumpVelocity.z)) * (jumpVelocity.z > 0 ? 1.0f : -1.0f));
     _verticalVelocity += BV(jumpVelocity);
 }
 
