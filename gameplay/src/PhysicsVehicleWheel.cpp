@@ -129,8 +129,8 @@ void PhysicsVehicleWheel::findAncestorAndBind()
     Node* m;
     for (Node* n = getNode(); n && !host; n = n->getParent())
     {
-        // Visit siblings before n
-        for (m = n->getPreviousSibling(); m && !host; m = m->getPreviousSibling())
+        // Visit siblings previous siblings starting with n
+        for (m = n; m && !host; m = m->getPreviousSibling())
         {
             host = findVehicle(m);
         }
