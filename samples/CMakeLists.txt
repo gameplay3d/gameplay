@@ -7,11 +7,11 @@ include_directories(
 
 add_definitions(-D__linux__)
 
-IF(ARCH_DIR STREQUAL "x64")
+IF(ARCH_DIR STREQUAL "x86_64")
     link_directories(${CMAKE_SOURCE_DIR}/external-deps/lib/linux/x86_64)
 ELSE()
     link_directories(${CMAKE_SOURCE_DIR}/external-deps/lib/linux/x86)
-ENDIF(ARCH_DIR STREQUAL "x64")
+ENDIF(ARCH_DIR STREQUAL "x86_64")
 
 
 set(GAMEPLAY_LIBRARIES
