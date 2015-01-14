@@ -73,6 +73,10 @@ vec4 _baseColor;
 varying vec3 v_color;
 #endif
 
+#if defined(LIGHTMAP)
+varying vec2 v_texCoord1;
+#endif
+
 #if defined(LIGHTING)
 
 varying vec3 v_normalVector;
