@@ -4,39 +4,8 @@
 #include "Form.h"
 #include "Theme.h"
 
-#define BOUNDS_X_PERCENTAGE_BIT 1
-#define BOUNDS_Y_PERCENTAGE_BIT 2
-#define BOUNDS_WIDTH_PERCENTAGE_BIT 4
-#define BOUNDS_HEIGHT_PERCENTAGE_BIT 8
-
 namespace gameplay
 {
-
-static float parseCoord(const char* s, bool* isPercentage)
-{
-    const char* p;
-    if ((p = strchr(s, '%')) != NULL)
-    {
-        std::string value(s, (std::string::size_type)(p - s));
-        *isPercentage = true;
-        return (float)(atof(value.c_str()) * 0.01);
-    }
-    *isPercentage = false;
-    return (float)atof(s);
-}
-
-static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percentage, bool* v2Percentage)
-{
-    size_t len = strlen(s);
-    const char* s2 = strchr(s, ',');
-    if (s2 == NULL)
-        return false;
-    std::string v1Str(s, (std::string::size_type)(s2 - s));
-    std::string v2Str(s2 + 1);
-    *v1 = parseCoord(v1Str.c_str(), v1Percentage);
-    *v2 = parseCoord(v2Str.c_str(), v2Percentage);
-    return true;
-}
 
 Control::Control()
     : _id(""), _boundsBits(0), _dirtyBits(DIRTY_BOUNDS | DIRTY_STATE), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT),
@@ -1898,6 +1867,32 @@ Control::Alignment Control::getAlignment(const char* alignment)
 
     // Default.
     return Control::ALIGN_TOP_LEFT;
+}
+
+float Control::parseCoord(const char* s, bool* isPercentage)
+{
+    const char* p;
+    if ((p = strchr(s, '%')) != NULL)
+    {
+        std::string value(s, (std::string::size_type)(p - s));
+        *isPercentage = true;
+        return (float)(atof(value.c_str()) * 0.01);
+    }
+    *isPercentage = false;
+    return (float)atof(s);
+}
+
+bool Control::parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percentage, bool* v2Percentage)
+{
+    size_t len = strlen(s);
+    const char* s2 = strchr(s, ',');
+    if (s2 == NULL)
+        return false;
+    std::string v1Str(s, (std::string::size_type)(s2 - s));
+    std::string v2Str(s2 + 1);
+    *v1 = parseCoord(v1Str.c_str(), v1Percentage);
+    *v2 = parseCoord(v2Str.c_str(), v2Percentage);
+    return true;
 }
 
 }

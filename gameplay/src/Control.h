@@ -993,6 +993,31 @@ protected:
     static const int DIRTY_STATE = 2;
 
     /**
+     * Indicates that the x position of the control is a percentage.
+     */
+    static const int BOUNDS_X_PERCENTAGE_BIT = 1;
+
+    /**
+     * Indicates that the y position of the control is a percentage.
+     */
+    static const int BOUNDS_Y_PERCENTAGE_BIT = 2;
+
+    /**
+     * Indicates that the width of the control is a percentage.
+     */
+    static const int BOUNDS_WIDTH_PERCENTAGE_BIT = 4;
+
+    /**
+     * Indicates that the height of the control is a percentage.
+     */
+    static const int BOUNDS_HEIGHT_PERCENTAGE_BIT = 8;
+
+    /**
+     * Indicates that the radius of the control is a percentage.
+     */
+    static const int BOUNDS_RADIUS_PERCENTAGE_BIT = 16;
+
+    /**
      * Constructor.
      */
     Control();
@@ -1264,7 +1289,7 @@ protected:
      * @param id The ID of the image to retrieve.
      * @param state The state to get this image from.
      *
-     * @return The requested Theme::ThemeImage, or NULL if none was found.
+     * @return The requested Theme::ThemeImage, or an empty image from the controls theme if none was found.
      */
     Theme::ThemeImage* getImage(const char* id, State state);
 
@@ -1306,6 +1331,29 @@ protected:
      * @return The Alignment enum value corresponding to the given string.
      */
     static Alignment getAlignment(const char* alignment);
+
+    /**
+     * Converts a string in the format of either 'N' or 'N%' (where N is a number)
+     * into its value and sets a flag to indicate if it should be treated as a percentage.
+     *
+     * @param s A string in the format of either 'N' or 'N%' (where N is a number)
+     * @param isPercentage Set to true if the returned value should be treated as a percentage
+     * @return The number contained within the string
+     */
+    static float parseCoord(const char* s, bool* isPercentage);
+
+    /**
+     * Converts a string in the format of either 'N, N' or 'N%, N%' (where N is a number)
+     * into its values and sets flags to indicate which numbers should be treated as percentages
+     *
+     * @param s A string in the format of either 'N, N' or 'N%, N%' (where N is a number)
+     * @param v1 Set to the value of the first number in the string
+     * @param v1 Set to the value of the second number in the string
+     * @param v1Percentage Set to true if the first number should be treated as a percentage
+     * @param v2Percentage Set to true if the second number should be treated as a percentage
+     * @return True if the string was parsed
+     */
+    static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percentage, bool* v2Percentage);
 
     /** 
      * The Control's ID.
