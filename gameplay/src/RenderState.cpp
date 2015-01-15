@@ -378,7 +378,7 @@ const Vector4* RenderState::autoBindingGetMatrixPalette() const
     {
         MeshSkin* skin = model->getSkin();
         if (skin)
-            skin->getMatrixPalette();
+            return skin->getMatrixPalette();
     }
     return NULL;
 }
@@ -390,7 +390,7 @@ unsigned int RenderState::autoBindingGetMatrixPaletteSize() const
     {
         MeshSkin* skin = model->getSkin();
         if (skin)
-            skin->getMatrixPaletteSize();
+            return skin->getMatrixPaletteSize();
     }
     return 0;
 }
