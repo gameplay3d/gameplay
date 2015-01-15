@@ -143,8 +143,6 @@ call:replace "%projPath%\%projName%.vcxproj" TemplateGame "%className%"
 call:replace "%projPath%\%projName%.vcxproj" GAMEPLAY_PATH "%gpPath%"
 copy template\template.vcxproj.filters "%projPath%\%projName%.vcxproj.filters"
 call:replace "%projPath%\%projName%.vcxproj.filters" TemplateGame "%className%"
-copy template\template.vcxproj.user "%projPath%\%projName%.vcxproj.user"
-call:replace "%projPath%\%projName%.vcxproj.user" GAMEPLAY_PATH "%gpPath%"
 call:replacevar gpPath "\" "/"
 
 REM Copy Apple XCode project files
@@ -236,7 +234,7 @@ goto done
 :replace
 set rtemp=%~1.rtemp
 if exist "%rtemp%" del /Q "%rtemp%"
-for /f "tokens=1* eol=€ delims=€]" %%j in ('type "%~1" ^| find /V /N ""') do (
+for /f "tokens=1* eol=€ delims=€]" %%j in ('type "%~1" ^| %windir%\system32\find /V /N ""') do (
     set line=%%k
     setlocal EnableDelayedExpansion
     if "!line!" == "" (

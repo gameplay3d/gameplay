@@ -159,8 +159,6 @@ aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPathWin*g" "$projPath/$projName.vcxproj"
 cp "template/template.vcxproj.filters" "$projPath/$projName.vcxproj.filters"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj.filters"
-cp "template/template.vcxproj.user" "$projPath/$projName.vcxproj.user"
-aliassedinplace "s*GAMEPLAY_PATH*$gpPathWin*g" "$projPath/$projName.vcxproj.user"
 
 #############################################
 # Copy Apple Xcode project files
@@ -233,7 +231,6 @@ aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.pro"
 #############################################
 # Copy CMake files
 #############################################
-mkdir -p "$projPath/build"
 cp "template/template-CMakeLists.txt" "$projPath/CMakeLists.txt"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/CMakeLists.txt"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/CMakeLists.txt"
