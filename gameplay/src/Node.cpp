@@ -293,8 +293,8 @@ unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool rec
                 nodes.push_back(rootNode);
                 ++count;
             }
+            count += rootNode->findNodes(id, nodes, true, exactMatch);
         }
-        count += rootNode->findNodes(id, nodes, true, exactMatch);
     }
 
     // Search immediate children first.
