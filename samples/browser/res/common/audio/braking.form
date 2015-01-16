@@ -27,25 +27,25 @@ form brakeControls
         text = Loop Audio
     }
 
-	slider gainBrakingSlider
-	{
-		width = 250
-		orientation = HORIZONTAL
-		min = 0
-		max = 1
-		value = 0
-		text = Gain
-		valueTextVisible = false
-	}
+    slider gainBrakingSlider
+    {
+        width = 250
+        orientation = HORIZONTAL
+        min = 0
+        max = 1
+        value = 0
+        text = Gain
+        valueTextVisible = false
+    }
 
-	slider pitchBrakingSlider
-	{
-		width = 250
-		orientation = HORIZONTAL
-		min = 0.1
-		max = 5
-		value = 1
-		text = Pitch
-		valueTextVisible = false
-	}
+    slider pitchBrakingSlider
+    {
+        width = 250
+        orientation = HORIZONTAL
+        min = 0.1
+        max = 5
+        value = 1
+        text = Pitch
+        valueTextVisible = false
+    }
 }

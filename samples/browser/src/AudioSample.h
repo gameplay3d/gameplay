@@ -1,5 +1,5 @@
-#ifndef FORMSSAMPLE_H_
-#define FORMSSAMPLE_H_
+#ifndef AUDIOSAMPLE_H_
+#define AUDIOSAMPLE_H_
 
 #include "SamplesGame.h"
 
