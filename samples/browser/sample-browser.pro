@@ -10,6 +10,7 @@ TARGET = sample-browser
 TEMPLATE = app
 
 SOURCES += src/Audio3DSample.cpp \
+    src/AudioSample.cpp \
     src/BillboardSample.cpp \
     src/FirstPersonCamera.cpp \
     src/FontSample.cpp \
@@ -36,6 +37,7 @@ SOURCES += src/Audio3DSample.cpp \
     src/WaterSample.cpp
 
 HEADERS += src/Audio3DSample.h \
+    src/AudioSample.h \
     src/BillboardSample.h \
     src/FirstPersonCamera.h \
     src/FontSample.h \

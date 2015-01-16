@@ -28,6 +28,7 @@ LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp \
     Sample.cpp \
     SamplesGame.cpp \
     Audio3DSample.cpp \
+    AudioSample.cpp \
     BillboardSample.cpp \
     FontSample.cpp \
     FormsSample.cpp \

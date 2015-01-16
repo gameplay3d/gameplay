@@ -168,6 +168,12 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <SubType>Designer</SubType>
     </None>
     <None Include="icon.png" />
+    <None Include="res\common\audio\background.form" />
+    <None Include="res\common\audio\background_track.ogg" />
+    <None Include="res\common\audio\braking.form" />
+    <None Include="res\common\audio\engine.form" />
+    <None Include="res\common\audio\engine_loop.ogg" />
+    <None Include="res\common\audio\sample.audio" />
     <None Include="res\common\box.gpb" />
     <None Include="res\common\box.material" />
     <None Include="res\common\camera.lua" />
@@ -254,6 +260,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio3DSample.cpp" />
+    <ClCompile Include="src\AudioSample.cpp" />
     <ClCompile Include="src\BillboardSample.cpp" />
     <ClCompile Include="src\FontSample.cpp" />
     <ClCompile Include="src\FormsSample.cpp" />
@@ -281,6 +288,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio3DSample.h" />
+    <ClInclude Include="src\AudioSample.h" />
     <ClInclude Include="src\BillboardSample.h" />
     <ClInclude Include="src\FontSample.h" />
     <ClInclude Include="src\FormsSample.h" />
@@ -334,6 +342,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <Image Include="res\png\logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="res\common\audio\braking.wav" />
     <Media Include="res\common\footsteps.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
