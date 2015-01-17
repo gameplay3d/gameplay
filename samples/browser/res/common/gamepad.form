@@ -7,27 +7,27 @@ form VIRTUAL GAMEPAD
     container left
     {
         alignment = ALIGN_BOTTOM_LEFT
-        size = 300, 300
+        size = 23%, 41%
         consumeInputEvents = false
         
         joystick
         {
             style = joystickStyle
-            size = 256, 256
+            size = 85%, 85%
             alignment = ALIGN_VCENTER_HCENTER
-            radius = 32
+            radius = 12.5%
         }
     }
 
     container right
     {
         alignment = ALIGN_BOTTOM_RIGHT
-        size = 256, 256
+        size = 20%, 35%
 		consumeInputEvents = false
 		
         container inner
         {
-            size = 230, 230
+            size = 90%, 90%
             alignment = ALIGN_VCENTER_HCENTER
             consumeInputEvents = false
             
@@ -35,7 +35,7 @@ form VIRTUAL GAMEPAD
             {
                 mapping = BUTTON_A
                 style = buttonAStyle
-                size = 128, 128
+                size = 50%, 50%
                 alignment = ALIGN_BOTTOM_LEFT
             }
 
@@ -43,7 +43,7 @@ form VIRTUAL GAMEPAD
             {
                 mapping = BUTTON_B
                 style = buttonBStyle
-                size = 128, 128
+                size = 50%, 50%
                 alignment = ALIGN_TOP_RIGHT
             }
         }
