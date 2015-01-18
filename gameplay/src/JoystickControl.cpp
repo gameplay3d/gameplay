@@ -279,7 +279,7 @@ void JoystickControl::updateAbsoluteSizes()
 
         *_outerSizePixels = _outerRegionCoord ? getPixelSize(*_outerRegionCoord, _outerRegionCoordBoundsBits) : getPixelSize(outerImage);
         _screenRegionPixels.width = _outerSizePixels->x > _screenRegionPixels.width ? _outerSizePixels->x : _screenRegionPixels.width;
-        _screenRegionPixels.width = _outerSizePixels->y > _screenRegionPixels.height ? _outerSizePixels->y : _screenRegionPixels.height;
+        _screenRegionPixels.height = _outerSizePixels->y > _screenRegionPixels.height ? _outerSizePixels->y : _screenRegionPixels.height;
     }
 
     _radiusPixels = std::max(1.0f, _boundsBits & BOUNDS_RADIUS_PERCENTAGE_BIT ?
