@@ -6,8 +6,8 @@
 namespace gameplay
 {
 
-Drawable::Drawable()
-    : _node(NULL)
+Drawable::Drawable(Type type)
+    : _node(NULL), _type(type)
 {
 }
 
@@ -23,6 +23,11 @@ Node* Drawable::getNode() const
 void Drawable::setNode(Node* node)
 {
     _node = node;
+}
+
+Drawable::Type Drawable::getType() const
+{
+    return _type;
 }
 
 }

@@ -6,7 +6,7 @@
 namespace gameplay
 {
   
-TileSet::TileSet() : Drawable(),
+TileSet::TileSet() : Drawable(Drawable::TILESET),
     _tiles(NULL), _tileWidth(0), _tileHeight(0),
     _rowCount(0), _columnCount(0), _width(0), _height(0),
     _opacity(1.0f), _color(Vector4::one()), _batch(NULL)

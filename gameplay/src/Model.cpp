@@ -9,12 +9,12 @@
 namespace gameplay
 {
 
-Model::Model() : Drawable(),
+Model::Model() : Drawable(Drawable::MODEL),
     _mesh(NULL), _material(NULL), _partCount(0), _partMaterials(NULL), _skin(NULL)
 {
 }
 
-Model::Model(Mesh* mesh) : Drawable(),
+Model::Model(Mesh* mesh) : Drawable(Drawable::MODEL),
     _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _skin(NULL)
 {
     GP_ASSERT(mesh);

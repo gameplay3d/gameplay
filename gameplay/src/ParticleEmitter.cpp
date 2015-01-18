@@ -14,7 +14,7 @@
 namespace gameplay
 {
 
-ParticleEmitter::ParticleEmitter(unsigned int particleCountMax) : Drawable(),
+ParticleEmitter::ParticleEmitter(unsigned int particleCountMax) : Drawable(Drawable::PARTICLE_EMITTER),
     _particleCountMax(particleCountMax), _particleCount(0), _particles(NULL),
     _emissionRate(PARTICLE_EMISSION_RATE), _started(false), _ellipsoid(false),
     _sizeStartMin(1.0f), _sizeStartMax(1.0f), _sizeEndMin(1.0f), _sizeEndMax(1.0f),
