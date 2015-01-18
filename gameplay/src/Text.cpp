@@ -6,7 +6,7 @@
 namespace gameplay
 {
   
-Text::Text() :
+Text::Text() : Drawable(Drawable::TEXT),
     _font(NULL), _text(""), _size(0), _width(0), _height(0), _wrap(true), _rightToLeft(false),
     _align(Font::ALIGN_TOP_LEFT), _clip(Rectangle(0, 0, 0, 0)),
     _opacity(1.0f), _color(Vector4::one())

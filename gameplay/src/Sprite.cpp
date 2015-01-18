@@ -5,7 +5,7 @@
 namespace gameplay
 {
 
-Sprite::Sprite() : Drawable(),
+Sprite::Sprite() : Drawable(Drawable::SPRITE),
     _width(0), _height(0), _offset(OFFSET_BOTTOM_LEFT), _anchor(Vector2(0.5f, 0.5f)), _flipFlags(FLIP_NONE),
     _frames(NULL), _frameCount(1), _frameStride(0), _framePadding(1), _frameIndex(0),
     _opacity(1.0f), _color(Vector4::one()), _blendMode(BLEND_ALPHA), _batch(NULL)

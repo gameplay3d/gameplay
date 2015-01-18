@@ -42,7 +42,7 @@ struct FormInit
 };
 static FormInit __init;
 
-Form::Form() : Drawable(), _batched(true)
+Form::Form() : Drawable(Drawable::FORM), _batched(true)
 {
 }
 

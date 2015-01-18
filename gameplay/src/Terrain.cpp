@@ -27,7 +27,7 @@ static const unsigned int DIRTY_FLAG_INVERSE_WORLD = 1;
 
 static float getDefaultHeight(unsigned int width, unsigned int height);
 
-Terrain::Terrain() : Drawable(),
+Terrain::Terrain() : Drawable(Drawable::TERRAIN),
     _heightfield(NULL), _normalMap(NULL), _flags(FRUSTUM_CULLING | LEVEL_OF_DETAIL),
     _dirtyFlags(DIRTY_FLAG_INVERSE_WORLD)
 {

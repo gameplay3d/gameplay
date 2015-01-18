@@ -14,12 +14,26 @@ class Drawable
 {
 public:
 
+    /**
+     * Defines the type of the drawable.
+     */
+    enum Type {
+        INVALID = -1,
+        FORM,
+        MODEL,
+        PARTICLE_EMITTER,
+        SPRITE,
+        TERRAIN,
+        TEXT,
+        TILESET,
+    };
+
     friend class Node;
 
     /**
      * Constructor.
      */
-    Drawable();
+    Drawable(Type type = INVALID);
 
     /**
      * Destructor.
@@ -42,6 +56,13 @@ public:
      */
     Node* getNode() const;
 
+    /**
+     * Gets the type of this drawable
+     *
+     * @return Type of the drawable
+     */
+    Type getType() const;
+
 protected:
 
     /**
@@ -60,6 +81,7 @@ protected:
     virtual void setNode(Node* node);
 
     Node* _node;
+    const Type _type;
 };
 
 }
