@@ -1,12 +1,12 @@
 form brakeControls
 {
     layout = LAYOUT_VERTICAL
-    alignment = ALIGN_VCENTER_HCENTER
+    alignment = ALIGN_VCENTER_RIGHT
     size = 270, 430
 
     label titleBraking
     {
-        text = Sound Effect #1
+        text = Sound Effect #2
         fontSize = 32
     }
 
