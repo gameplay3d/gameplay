@@ -51,7 +51,7 @@ form backgroundControls
         orientation = HORIZONTAL
         min = 0
         max = 1
-        value = 0
+        value = 0.5
         text = Gain
         valueTextVisible = false
     }

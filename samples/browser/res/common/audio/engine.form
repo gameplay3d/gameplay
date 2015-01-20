@@ -1,12 +1,12 @@
 form engineControls
 {
     layout = LAYOUT_VERTICAL
-    alignment = ALIGN_VCENTER_RIGHT
+    alignment = ALIGN_VCENTER_HCENTER
     size = 270, 430
 
     label titleEngine
     {
-        text = Sound Effect #2
+        text = Sound Effect #1
         fontSize = 32
     }
 

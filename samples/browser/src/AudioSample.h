@@ -26,11 +26,11 @@ protected:
 private:
     
     Form* _formBackground;
-    Form* _formBraking;
     Form* _formEngine;
-    AudioSource* _audioBackgroundSource;
-    AudioSource* _audioBrakingSource;
-    AudioSource* _audioEngineSource;
+    Form* _formBraking;
+    AudioSource* _audioBackground;
+    AudioSource* _audioEngine;
+    AudioSource* _audioBraking;
 };
 
 #endif
