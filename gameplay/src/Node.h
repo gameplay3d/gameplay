@@ -416,7 +416,6 @@ public:
     /**
      * Gets the drawable object attached to this node.
      *
-     * Use Drawable::getType() then static_cast to the associate Type for specialization.
      *
      * @return The model attached to this node.
      */
