@@ -53,25 +53,97 @@ TileSet* TileSet::create(const char* imagePath,
     
 TileSet* TileSet::create(Properties* properties)
 {
-    // TODO Load from properties
-    /*
-    tileset level
+    // Check if the Properties is valid and has a valid namespace.
+    if (!properties || strcmp(properties->getNamespace(), "tileset") != 0)
     {
-        path = res/foo/level.png
-        tileWidth = 72
-        tileHeight = 72
-        tile
+        GP_ERROR("Properties object must be non-null and have namespace equal to 'tileset'.");
+        return NULL;
+    }
+
+    // Get image path.
+    const char* imagePath = properties->getString("path");
+    if (imagePath == NULL || strlen(imagePath) == 0)
+    {
+        GP_ERROR("TileSet is missing required image file path.");
+        return NULL;
+    }
+
+    // Get set size
+    int rows = properties->getInt("rows");
+    if (rows <= 0)
+    {
+        GP_ERROR("TileSet row count must be greater then zero.");
+        return NULL;
+    }
+    int columns = properties->getInt("columns");
+    if (columns <= 0)
+    {
+        GP_ERROR("TileSet column count must be greater then zero.");
+        return NULL;
+    }
+
+    // Get tile size
+    float tileWidth = properties->getFloat("tileWidth");
+    if (tileWidth <= 0)
+    {
+        GP_ERROR("TileSet tile width must be greater then zero.");
+        return NULL;
+    }
+    float tileHeight = properties->getFloat("tileHeight");
+    if (tileHeight <= 0)
+    {
+        GP_ERROR("TileSet tile height must be greater then zero.");
+        return NULL;
+    }
+
+    // Create tile set
+    TileSet* set = TileSet::create(imagePath, tileWidth, tileHeight, rows, columns);
+
+    // Get color
+    if (properties->exists("color"))
+    {
+        Vector4 color;
+        switch (properties->getType("color"))
         {
-            cell = col, row
-            source = x, y
+        case Properties::VECTOR3:
+            color.w = 1.0f;
+            properties->getVector3("color", (Vector3*)&color);
+            break;
+        case Properties::VECTOR4:
+            properties->getVector4("color", &color);
+            break;
+        case Properties::STRING:
+        default:
+            properties->getColor("color", &color);
+            break;
         }
-        tile
+        set->setColor(color);
+    }
+
+    // Get opacity
+    if (properties->exists("opacity"))
+    {
+        set->setOpacity(properties->getFloat("opacity"));
+    }
+
+    // Get tile sources
+    properties->rewind();
+    Properties* tileProperties = NULL;
+    while ((tileProperties = properties->getNextNamespace()))
+    {
+        if (strcmp(tileProperties->getNamespace(), "tile") == 0)
         {
-            ...
+            Vector2 cell;
+            Vector2 source;
+            if (tileProperties->getVector2("cell", &cell) && tileProperties->getVector2("source", &source) &&
+                (cell.x > 0 && cell.y > 0 && cell.x < set->_columnCount && cell.y < set->_rowCount))
+            {
+                set->_tiles[(int)cell.y * set->_columnCount + (int)cell.x] = source;
+            }
         }
-     }
-     */
-    return NULL;
+    }
+
+    return set;
 }
 
 void TileSet::setTileSource(unsigned int column, unsigned int row, const Vector2& source)

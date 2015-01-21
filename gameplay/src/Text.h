@@ -229,6 +229,11 @@ protected:
      * @see Drawable::clone
      */
     Drawable* clone(NodeCloneContext &context);
+
+    /**
+     * @see AnimationTarget::getPropertyId
+     */
+    int getPropertyId(TargetType type, const char* propertyIdStr);
     
     /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
