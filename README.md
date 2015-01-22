@@ -1,6 +1,6 @@
 ## GamePlay v3.0.0
 
-GamePlay3D is an open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
+GamePlay is an open-source, cross-platform native C++ game framework making it easy to learn and write mobile and desktop games. 
 
 <img align="right" src="https://raw.github.com/wiki/gameplay3d/GamePlay/img/logo.png" alt="gameplay3d" />
 
