@@ -73,15 +73,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_GAMEPAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\include;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;Xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Debug;..\..\gameplay\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Debug;..\..\gameplay\Debug;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
@@ -102,7 +102,7 @@ copy .\game.dxt.config .\game.config</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_GAMEPAD;GP_USE_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\include;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessToFile>false</PreprocessToFile>
@@ -111,8 +111,8 @@ copy .\game.dxt.config .\game.config</Command>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;Xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Debug;..\..\gameplay\DebugMem</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Debug;..\..\gameplay\DebugMem;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
@@ -135,15 +135,15 @@ copy .\game.dxt.config .\game.config</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;GP_USE_GAMEPAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;Xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Release;..\..\gameplay\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Release;..\..\gameplay\Release;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)game.dxt.config" "$(ProjectDir)game.config"</Command>
