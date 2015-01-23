@@ -258,7 +258,7 @@ LOCAL_SRC_FILES := \
     lua/lua_VertexFormatElement.cpp \
     lua/lua_VerticalLayout.cpp
 
-LOCAL_CPPFLAGS += -std=c++11 -Wno-switch-enum -Wno-switch
+LOCAL_CPPFLAGS += -std=c++11 -frtti -Wno-switch-enum -Wno-switch
 LOCAL_ARM_MODE := arm
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_CFLAGS := -D__ANDROID__ -I"../../external-deps/include"
