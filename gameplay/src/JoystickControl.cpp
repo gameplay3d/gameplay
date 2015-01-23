@@ -125,7 +125,7 @@ unsigned int JoystickControl::getIndex() const
     return _index;
 }
 
-void setBit(bool set, int& bitSetOut, int bit)
+void JoystickControl::setBoundsBit(bool set, int& bitSetOut, int bit)
 {
     if(set)
     {
@@ -140,7 +140,7 @@ void setBit(bool set, int& bitSetOut, int bit)
 void JoystickControl::setRadius(float radius, bool isPercentage)
 {
     _radiusCoord = radius;
-    setBit(isPercentage, _boundsBits, BOUNDS_RADIUS_PERCENTAGE_BIT);
+    setBoundsBit(isPercentage, _boundsBits, BOUNDS_RADIUS_PERCENTAGE_BIT);
     updateAbsoluteSizes();
 }
 
@@ -174,7 +174,7 @@ void JoystickControl::initialize(const char* typeName, Theme::Style* style, Prop
         const char* radiusStr = properties->getString(radiusId);
         bool isPercentage = false;
         _radiusCoord = parseCoord(radiusStr, &isPercentage);
-        setBit(isPercentage, _boundsBits, BOUNDS_RADIUS_PERCENTAGE_BIT);
+        setBoundsBit(isPercentage, _boundsBits, BOUNDS_RADIUS_PERCENTAGE_BIT);
     }
 
     const char* relativeId = "relative";
@@ -213,17 +213,17 @@ void JoystickControl::updateAbsoluteBounds(const Vector2& offset)
 void JoystickControl::setRegion(const Vector2& regionSizeIn, Vector2& regionSizeOut, int& regionBoundsBitsOut, bool isWidthPercentage, bool isHeightPercentage)
 {
     regionSizeOut = regionSizeIn;
-    setBit(isWidthPercentage, regionBoundsBitsOut, BOUNDS_WIDTH_PERCENTAGE_BIT);
-    setBit(isHeightPercentage, regionBoundsBitsOut, BOUNDS_HEIGHT_PERCENTAGE_BIT);
+    setBoundsBit(isWidthPercentage, regionBoundsBitsOut, BOUNDS_WIDTH_PERCENTAGE_BIT);
+    setBoundsBit(isHeightPercentage, regionBoundsBitsOut, BOUNDS_HEIGHT_PERCENTAGE_BIT);
 }
 
-void JoystickControl::getRegion(Vector2& regionOut, int & regionBoundsBitsOut, const char* regionPropertyId) const
+void JoystickControl::getRegion(Vector2& regionOut, int& regionBoundsBitsOut, const char* regionPropertyId)
 {
     bool isWidthPercent = false;
     bool isHeightPercent = false;
     parseCoordPair(regionPropertyId, &regionOut.x, &regionOut.y, &isWidthPercent, &isHeightPercent);
-    setBit(isWidthPercent, regionBoundsBitsOut, BOUNDS_WIDTH_PERCENTAGE_BIT);
-    setBit(isHeightPercent, regionBoundsBitsOut, BOUNDS_HEIGHT_PERCENTAGE_BIT);
+    setBoundsBit(isWidthPercent, regionBoundsBitsOut, BOUNDS_WIDTH_PERCENTAGE_BIT);
+    setBoundsBit(isHeightPercent, regionBoundsBitsOut, BOUNDS_HEIGHT_PERCENTAGE_BIT);
 }
 
 Vector2 JoystickControl::getPixelSize(const Vector2& region, const int regionBoundsBits) const

@@ -45,14 +45,12 @@ Control::AutoSize Control::parseAutoSize(const char* str)
 {
     if (str == NULL)
         return _autoSize;
-
     if (strcmpnocase(str, "AUTO_SIZE_WIDTH") == 0 )
         return AUTO_SIZE_WIDTH;
     if (strcmpnocase(str, "AUTO_SIZE_HEIGHT") == 0)
         return AUTO_SIZE_HEIGHT;
     if (strcmpnocase(str, "AUTO_SIZE_BOTH") == 0)
         return AUTO_SIZE_BOTH;
-
     return _autoSize;
 }
 
@@ -69,8 +67,7 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
             // The passed in style is our parent control's style : attempt to load our style from it.
             _style = style->getTheme()->getStyle(styleName);
         }
-
-        if (!_style)
+        else
         {
             // Use an empty style from our parent's theme
             _style = style->getTheme()->getEmptyStyle();
@@ -86,17 +83,14 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
     {
         // Search for a style from the default theme that matches this control's name
         _style = Theme::getDefault()->getStyle(typeName);
-
         if (!_style)
         {
             // No style was found, use an empty style
             _style = style ? style->getTheme()->getEmptyStyle() : Theme::getDefault()->getEmptyStyle();
         }
     }
-
     // Increase the reference count of the style's theme while we hold the style
     _style->getTheme()->addRef();
-
     if (properties)
     {
         const char* id = properties->getId();
@@ -105,11 +99,8 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 
 		// Properties not defined by the style.
 		const char* alignmentString = properties->getString("alignment");
-
 		_alignment = getAlignment(alignmentString);
-
 		_consumeInputEvents = properties->getBool("consumeInputEvents", true);
-
 		_visible = properties->getBool("visible", true);
 
 		if (properties->exists("zIndex"))
@@ -120,10 +111,8 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 		{
 			_zIndex = -1;
 		}
-
 		if (properties->exists("canFocus"))
 			_canFocus = properties->getBool("canFocus", false);
-
 		if (properties->exists("focusIndex"))
 		{
 			_focusIndex = properties->getInt("focusIndex");
@@ -132,7 +121,6 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 		{
 			_focusIndex = -1;
 		}
-
 		float bounds[2];
 		bool boundsBits[2];
         const char* position = properties->getString("position");
@@ -154,7 +142,6 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
                 setY(bounds[1], boundsBits[1]);
             }
 		}
-
         // If there is an explicitly specified size, width or height, unset the corresponding autoSize bit
         const char* size = properties->getString("size");
         if (size && parseCoordPair(size, &bounds[0], &bounds[1], &boundsBits[0], &boundsBits[1]))
@@ -177,7 +164,6 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
                 setHeight(bounds[1], boundsBits[1]);
             }
 		}
-
         // Backwards Compatibility: Support deprecated autoWidth and autoHeight properties,
         // which resolve to width=100% and height=100%.
         if (properties->getBool("autoWidth"))
@@ -248,7 +234,6 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
 				setPadding(innerSpace->getFloat("top"), innerSpace->getFloat("bottom"),
 					innerSpace->getFloat("left"), innerSpace->getFloat("right"));
 			}
-
 			innerSpace = properties->getNextNamespace();
 		}
 	}
@@ -561,10 +546,10 @@ void Control::setEnabled(bool enabled)
     if (enabled != isEnabled())
     {
         if (!enabled)
+        {
             Form::controlDisabled(this);
-
+        }
         _state = enabled ? NORMAL : DISABLED;
-
         setDirty(DIRTY_STATE);
     }
 }
@@ -578,7 +563,6 @@ bool Control::isEnabledInHierarchy() const
 {
     if (!isEnabled())
         return false;
-
     if (_parent)
         return _parent->isEnabledInHierarchy();
 
@@ -596,7 +580,6 @@ void Control::setBorder(float top, float bottom, float left, float right, unsign
         if (overlays[i])
             overlays[i]->setBorder(top, bottom, left, right);
     }
-
     setDirty(DIRTY_BOUNDS);
 }
 
@@ -1734,7 +1717,6 @@ void Control::overrideThemedProperties(Properties* properties, unsigned char sta
     {
         setTextRightToLeft(properties->getBool("rightToLeft"), states);
     }
-
     if (properties->exists("opacity"))
     {
         setOpacity(properties->getFloat("opacity"), states);
@@ -1752,7 +1734,6 @@ void Control::setImageList(Theme::ImageList* imageList, unsigned char states)
         if( overlays[i] )
             overlays[i]->setImageList(imageList);
     }
-
     if (_autoSize != AUTO_SIZE_NONE)
         setDirty(DIRTY_BOUNDS);
 }
@@ -1781,7 +1762,6 @@ void Control::setSkin(Theme::Skin* skin, unsigned char states)
         if( overlays[i] )
             overlays[i]->setSkin(skin);
     }
-
     if (_autoSize != AUTO_SIZE_NONE)
         setDirty(DIRTY_BOUNDS);
 }
@@ -1864,8 +1844,6 @@ Control::Alignment Control::getAlignment(const char* alignment)
     {
         GP_ERROR("Failed to get corresponding control alignment for unsupported value '%s'.", alignment);
     }
-
-    // Default.
     return Control::ALIGN_TOP_LEFT;
 }
 

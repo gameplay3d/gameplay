@@ -202,14 +202,11 @@ protected:
 
 private:
 
-    /**
-     * Copy constructor.
-     */
     JoystickControl(const JoystickControl& copy);
 
     void setRegion(const Vector2& regionSizeIn, Vector2& regionSizeOut, int& regionBoundsBitsOut, bool isWidthPercentage, bool isHeightPercentage);
 
-    void getRegion(Vector2& regionOut, int & regionBoundsBitsOut, const char* regionPropertyId) const;
+    void getRegion(Vector2& regionOut, int& regionBoundsBitsOut, const char* regionPropertyId);
 
     Vector2 getPixelSize(const Vector2& region, const int regionBoundsBits) const;
 
@@ -219,17 +216,17 @@ private:
 
     void updateAbsoluteSizes();
 
+    void setBoundsBit(bool set, int& bitSetOut, int bit);
+
     float _radiusCoord;
     Vector2* _innerRegionCoord;
     Vector2* _outerRegionCoord;
     int _innerRegionCoordBoundsBits;
     int _outerRegionCoordBoundsBits;
-
     float _radiusPixels;
     Vector2* _innerSizePixels;
     Vector2* _outerSizePixels;
     Rectangle _screenRegionPixels;
-
     bool _relative;
     Vector2 _value;
     Vector2 _displacement;

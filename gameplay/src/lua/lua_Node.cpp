@@ -95,6 +95,7 @@ void luaRegister_Node()
         {"getTypeName", lua_Node_getTypeName},
         {"getUpVector", lua_Node_getUpVector},
         {"getUpVectorWorld", lua_Node_getUpVectorWorld},
+        {"getUserObject", lua_Node_getUserObject},
         {"getViewMatrix", lua_Node_getViewMatrix},
         {"getViewProjectionMatrix", lua_Node_getViewProjectionMatrix},
         {"getWorldMatrix", lua_Node_getWorldMatrix},
@@ -140,6 +141,7 @@ void luaRegister_Node()
         {"setTranslationX", lua_Node_setTranslationX},
         {"setTranslationY", lua_Node_setTranslationY},
         {"setTranslationZ", lua_Node_setTranslationZ},
+        {"setUserObject", lua_Node_setUserObject},
         {"transformPoint", lua_Node_transformPoint},
         {"transformVector", lua_Node_transformVector},
         {"translate", lua_Node_translate},
@@ -3545,6 +3547,50 @@ int lua_Node_getUpVectorWorld(lua_State* state)
     return 0;
 }
 
+int lua_Node_getUserObject(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Node* instance = getInstance(state);
+                void* returnPtr = ((void*)instance->getUserObject());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Ref");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Node_getUserObject - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Node_getViewMatrix(lua_State* state)
 {
     // Get the number of parameters.
@@ -5050,36 +5096,6 @@ int lua_Node_setCollisionObject(lua_State* state)
                 }
             } while (0);
 
-            do
-            {
-                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
-                {
-                    // Get parameter 1 off the stack.
-                    bool param1Valid;
-                    gameplay::ScriptUtil::LuaArray<Properties> param1 = gameplay::ScriptUtil::getObjectPointer<Properties>(2, "Properties", false, &param1Valid);
-                    if (!param1Valid)
-                        break;
-
-                    Node* instance = getInstance(state);
-                    void* returnPtr = ((void*)instance->setCollisionObject(param1));
-                    if (returnPtr)
-                    {
-                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
-                        object->instance = returnPtr;
-                        object->owns = false;
-                        luaL_getmetatable(state, "PhysicsCollisionObject");
-                        lua_setmetatable(state, -2);
-                    }
-                    else
-                    {
-                        lua_pushnil(state);
-                    }
-
-                    return 1;
-                }
-            } while (0);
-
             lua_pushstring(state, "lua_Node_setCollisionObject - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
@@ -6014,6 +6030,48 @@ int lua_Node_setTranslationZ(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Node_setTranslationZ - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Node_setUserObject(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Ref> param1 = gameplay::ScriptUtil::getObjectPointer<Ref>(2, "Ref", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Ref'.");
+                    lua_error(state);
+                }
+
+                Node* instance = getInstance(state);
+                instance->setUserObject(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Node_setUserObject - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
