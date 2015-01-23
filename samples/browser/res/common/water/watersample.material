@@ -13,17 +13,17 @@ material ground
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             
             u_ambientColor = SCENE_AMBIENT_COLOR
-	    u_directionalLightColor[0] = 1, 1, 1
+	        u_directionalLightColor[0] = 1, 1, 1
             
             sampler u_diffuseTexture
             {
             	mipmap = true
-	    	wrapS = REPEAT
-	    	wrapT = REPEAT
-	    	minFilter = LINEAR_MIPMAP_LINEAR
-		magFilter = LINEAR
-		
-		path = res/common/water/water_sample.png
+                wrapS = REPEAT
+                wrapT = REPEAT
+                minFilter = LINEAR_MIPMAP_LINEAR
+                magFilter = LINEAR
+
+                path = res/common/water/water_sample.png
             }
             
             renderState

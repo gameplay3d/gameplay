@@ -156,16 +156,17 @@ void TerrainSample::render(float elapsedTime)
 bool TerrainSample::drawScene(Node* node)
 {
     Camera* camera = _scene->getActiveCamera();
-
     Drawable* drawable = node->getDrawable();
     if (dynamic_cast<Model*>(drawable))
     {
         if (!node->getBoundingSphere().intersects(camera->getFrustum()))
             return true;
     }
-
     if (drawable)
-        drawable->draw(_wireframe);
+    {
+        bool wireframe = (node == _sky) ? false : _wireframe;
+        drawable->draw(wireframe);
+    }
 
 	return true;
 }
