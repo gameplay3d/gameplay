@@ -22,7 +22,7 @@ LOCAL_PATH := $(SAMPLE_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := sample-spaceship
 LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp SpaceshipGame.cpp
-LOCAL_CPPFLAGS += -std=c++11 -Wno-switch-enum -Wno-switch
+LOCAL_CPPFLAGS += -std=c++11 -frtti -Wno-switch-enum -Wno-switch
 LOCAL_ARM_MODE := arm
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_CFLAGS    := -D__ANDROID__ -I"../../../external-deps/include" -I"../../../gameplay/src"
