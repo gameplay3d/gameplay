@@ -67,7 +67,7 @@ void Control::initialize(const char* typeName, Theme::Style* style, Properties* 
             // The passed in style is our parent control's style : attempt to load our style from it.
             _style = style->getTheme()->getStyle(styleName);
         }
-        else
+        if (!_style)
         {
             // Use an empty style from our parent's theme
             _style = style->getTheme()->getEmptyStyle();
