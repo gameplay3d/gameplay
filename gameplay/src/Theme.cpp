@@ -72,8 +72,6 @@ Theme* Theme::getDefault()
 
         if (!__defaultTheme)
         {
-            GP_WARN("No default theme detected.");
-
             // Create an empty theme so that UI's with no theme don't just crash
             __defaultTheme = new Theme();
             unsigned int color = 0x00000000;
