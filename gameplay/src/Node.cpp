@@ -12,19 +12,21 @@
 #include "Game.h"
 #include "Drawable.h"
 #include "Form.h"
+#include "Ref.h"
 
 // Node dirty flags
 #define NODE_DIRTY_WORLD 1
 #define NODE_DIRTY_BOUNDS 2
-#define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS)
+#define NODE_DIRTY_HIERARCHY 4
+#define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS | NODE_DIRTY_HIERARCHY)
 
 namespace gameplay
 {
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0), _enabled(true), _tags(NULL),
-      _drawable(NULL), _camera(NULL), _light(NULL), _audioSource(NULL), _collisionObject(NULL), _agent(NULL),
-      _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true)
+    _drawable(NULL), _camera(NULL), _light(NULL), _audioSource(NULL), _collisionObject(NULL), _agent(NULL), _userObject(NULL),
+      _dirtyBits(NODE_DIRTY_ALL)
 {
     GP_REGISTER_SCRIPT_EVENTS();
     if (id)
@@ -36,7 +38,6 @@ Node::Node(const char* id)
 Node::~Node()
 {
     removeAllChildren();
-
     if (_drawable)
         _drawable->setNode(NULL);
     if (_audioSource)
@@ -47,6 +48,7 @@ Node::~Node()
     SAFE_RELEASE(_light);
     SAFE_RELEASE(_audioSource);
     SAFE_DELETE(_collisionObject);
+    SAFE_RELEASE(_userObject);
     SAFE_DELETE(_tags);
     setAgent(NULL);
 }
@@ -88,7 +90,6 @@ void Node::addChild(Node* child)
         // This node is already present in our hierarchy
         return;
     }
-
     child->addRef();
 
     // If the item belongs to another hierarchy, remove it first.
@@ -100,7 +101,6 @@ void Node::addChild(Node* child)
     {
         child->_scene->removeNode(child);
     }
-
     // Add child to the end of the list.
     // NOTE: This is different than the original behavior which inserted nodes
     // into the beginning of the list. Although slightly slower to add to the
@@ -118,14 +118,11 @@ void Node::addChild(Node* child)
     {
         _firstChild = child;
     }
-
     child->_parent = this;
-
     ++_childCount;
-
     setBoundsDirty();
 
-    if (_notifyHierarchyChanged)
+    if (_dirtyBits & NODE_DIRTY_HIERARCHY)
     {
         hierarchyChanged();
     }
@@ -138,23 +135,19 @@ void Node::removeChild(Node* child)
         // The child is not in our hierarchy.
         return;
     }
-
     // Call remove on the child.
     child->remove();
-
     SAFE_RELEASE(child);
 }
 
 void Node::removeAllChildren()
 {
-    _notifyHierarchyChanged = false;
-
+    _dirtyBits &= ~NODE_DIRTY_HIERARCHY;
     while (_firstChild)
     {
         removeChild(_firstChild);
     }
-
-    _notifyHierarchyChanged = true;
+    _dirtyBits |= NODE_DIRTY_HIERARCHY;
     hierarchyChanged();
 }
 
@@ -169,7 +162,6 @@ void Node::remove()
     {
         _nextSibling->_prevSibling = _prevSibling;
     }
-
     // Update our parent.
     Node* parent = _parent;
     if (parent)
@@ -178,15 +170,13 @@ void Node::remove()
         {
             parent->_firstChild = _nextSibling;
         }
-
         --parent->_childCount;
     }
-
     _nextSibling = NULL;
     _prevSibling = NULL;
     _parent = NULL;
 
-    if (parent && parent->_notifyHierarchyChanged)
+    if (parent && parent->_dirtyBits & NODE_DIRTY_HIERARCHY)
     {
         parent->hierarchyChanged();
     }
@@ -248,7 +238,6 @@ Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
             }
         }
     }
-
     // Search immediate children first.
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
     {
@@ -258,7 +247,6 @@ Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
             return child;
         }
     }
-
     // Recurse.
     if (recursive)
     {
@@ -271,7 +259,6 @@ Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
             }
         }
     }
-
     return NULL;
 }
 
@@ -279,9 +266,8 @@ unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool rec
 {
     GP_ASSERT(id);
 
-    unsigned int count = 0;
-
     // If the drawable is a model with a mesh skin, search the skin's hierarchy as well.
+    unsigned int count = 0;
     Node* rootNode = NULL;
     Model* model = dynamic_cast<Model*>(_drawable);
     if (model)
@@ -296,7 +282,6 @@ unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool rec
             count += rootNode->findNodes(id, nodes, true, exactMatch);
         }
     }
-
     // Search immediate children first.
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
     {
@@ -307,7 +292,6 @@ unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool rec
             ++count;
         }
     }
-
     // Recurse.
     if (recursive)
     {
@@ -332,14 +316,12 @@ Scene* Node::getScene() const
         if (scene)
             return scene;
     }
-
     return NULL;
 }
 
 bool Node::hasTag(const char* name) const
 {
     GP_ASSERT(name);
-
     return (_tags ? _tags->find(name) != _tags->end() : false);
 }
 
@@ -462,7 +444,6 @@ const Matrix& Node::getWorldMatrix() const
             }
         }
     }
-
     return _world;
 }
 
@@ -626,7 +607,6 @@ Vector3 Node::getActiveCameraTranslationWorld() const
             }
         }
     }
-
     return Vector3::zero();
 }
 
@@ -645,13 +625,13 @@ Vector3 Node::getActiveCameraTranslationView() const
             }
         }
     }
-
     return Vector3::zero();
 }
 
 void Node::hierarchyChanged()
 {
     // When our hierarchy changes our world transform is affected, so we must dirty it.
+    _dirtyBits |= NODE_DIRTY_HIERARCHY;
     transformChanged();
 }
 
@@ -677,7 +657,6 @@ void Node::transformChanged()
             n->transformChanged();
         }
     }
-
     Transform::transformChanged();
 }
 
@@ -758,21 +737,21 @@ Camera* Node::getCamera() const
 
 void Node::setCamera(Camera* camera)
 {
-    if (_camera != camera)
+    if (_camera == camera)
+        return;
+
+    if (_camera)
     {
-        if (_camera)
-        {
-            _camera->setNode(NULL);
-            SAFE_RELEASE(_camera);
-        }
+        _camera->setNode(NULL);
+        SAFE_RELEASE(_camera);
+    }
 
-        _camera = camera;
+    _camera = camera;
 
-        if (_camera)
-        {
-            _camera->addRef();
-            _camera->setNode(this);
-        }
+    if (_camera)
+    {
+        _camera->addRef();
+        _camera->setNode(this);
     }
 }
 
@@ -783,24 +762,24 @@ Light* Node::getLight() const
 
 void Node::setLight(Light* light)
 {
-    if (_light != light)
+    if (_light == light)
+        return;
+
+    if (_light)
     {
-        if (_light)
-        {
-            _light->setNode(NULL);
-            SAFE_RELEASE(_light);
-        }
-
-        _light = light;
-
-        if (_light)
-        {
-            _light->addRef();
-            _light->setNode(this);
-        }
-
-        setBoundsDirty();
+        _light->setNode(NULL);
+        SAFE_RELEASE(_light);
     }
+
+    _light = light;
+
+    if (_light)
+    {
+        _light->addRef();
+        _light->setNode(this);
+    }
+
+    setBoundsDirty();
 }
 
 Drawable* Node::getDrawable() const
@@ -1032,20 +1011,20 @@ AudioSource* Node::getAudioSource() const
 void Node::setAudioSource(AudioSource* audio)
 {
     if (_audioSource != audio)
-    {
-        if (_audioSource)
-        {
-            _audioSource->setNode(NULL);
-            SAFE_RELEASE(_audioSource);
-        }
-        
-        _audioSource = audio;
+        return;
 
-        if (_audioSource)
-        {
-            _audioSource->addRef();
-            _audioSource->setNode(this);
-        }
+    if (_audioSource)
+    {
+        _audioSource->setNode(NULL);
+        SAFE_RELEASE(_audioSource);
+    }
+        
+    _audioSource = audio;
+
+    if (_audioSource)
+    {
+        _audioSource->addRef();
+        _audioSource->setNode(this);
     }
 }
 
@@ -1196,24 +1175,34 @@ AIAgent* Node::getAgent() const
 
 void Node::setAgent(AIAgent* agent)
 {
-    if (agent != _agent)
+    if (agent == _agent)
+        return;
+
+    if (_agent)
     {
-        if (_agent)
-        {
-            Game::getInstance()->getAIController()->removeAgent(_agent);
-            _agent->setNode(NULL);
-            SAFE_RELEASE(_agent);
-        }
-
-        _agent = agent;
-
-        if (_agent)
-        {
-            _agent->addRef();
-            _agent->setNode(this);
-            Game::getInstance()->getAIController()->addAgent(_agent);
-        }
+        Game::getInstance()->getAIController()->removeAgent(_agent);
+        _agent->setNode(NULL);
+        SAFE_RELEASE(_agent);
     }
+
+    _agent = agent;
+
+    if (_agent)
+    {
+        _agent->addRef();
+        _agent->setNode(this);
+        Game::getInstance()->getAIController()->addAgent(_agent);
+    }
+}
+
+Ref* Node::getUserObject() const
+{
+    return _userObject;
+}
+
+void Node::setUserObject(Ref* obj)
+{
+    _userObject = obj;
 }
 
 NodeCloneContext::NodeCloneContext()

@@ -30,14 +30,14 @@ class Drawable;
  * Defines a hierarchical structure of objects in 3D transformation spaces.
  *
  * This object allow you to attach components to a scene such as:
- * Model, Camera, Light, PhysicsCollisionObject, AudioSource, ParticleEmitter and
- * Form components.
+ * Drawable's(Model, Camera, Light, PhysicsCollisionObject, AudioSource, etc.
  *
  * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Node
  */
 class Node : public Transform, public Ref
 {
     friend class Scene;
+    friend class SceneLoader;
     friend class Bundle;
     friend class MeshSkin;
     friend class Light;
@@ -540,7 +540,6 @@ public:
                                                PhysicsRigidBody::Parameters* rigidBodyParameters = NULL,
                                                int group = PHYSICS_COLLISION_GROUP_DEFAULT,
                                                int mask = PHYSICS_COLLISION_MASK_DEFAULT);
-
     /**
      * Sets the physics collision object for this node using the data from the Properties object defined at the specified URL,
      * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
@@ -551,14 +550,7 @@ public:
     PhysicsCollisionObject* setCollisionObject(const char* url);
 
     /**
-     * Sets the physics collision object for this node from the given properties object.
-     *
-     * @param properties The properties object defining the collision object.
-     */
-    PhysicsCollisionObject* setCollisionObject(Properties* properties);
-
-    /**
-     * Returns the AI agent assigned to this node.
+     * Gets the AI agent assigned to this node
      *
      * @return The AI agent for this node.
      */
@@ -570,6 +562,20 @@ public:
      * @param agent The AI agent to set.
      */
     void setAgent(AIAgent* agent);
+
+    /**
+     * Gets the user object assigned to this node.
+     *
+     * @return The user object assigned object to this node.
+     */
+    Ref* getUserObject() const;
+
+    /**
+    * Sets a user object to be assigned object to this node.
+    *
+    * @param obj The user object assigned object to this node.
+    */
+    void setUserObject(Ref* obj);
 
     /**
      * Returns the bounding sphere for the Node, in world space.
@@ -670,108 +676,33 @@ private:
      */
     Node& operator=(const Node&);
 
+    PhysicsCollisionObject* setCollisionObject(Properties* properties);
+
 protected:
 
-    /**
-     * The Scene this node belongs to.
-     */
     Scene* _scene;
-
-    /**
-     * Node's ID.
-     */
     std::string _id;
-
-    /**
-     * Node's first child.
-     */
     Node* _firstChild;
-
-    /**
-     * Node's next child.
-     */
     Node* _nextSibling;
-
-    /**
-     * Node's previous sibling.
-     */
     Node* _prevSibling;
-
-    /**
-     * Node's parent.
-     */
     Node* _parent;
-
-    /**
-     * The number of children belonging to the Node.
-     */
     unsigned int _childCount;
-
-    /**
-     * If this node is enabled in the scene.
-     * This may not be enabled in hierarchy if its parents are not enabled.
-     */
-    bool _enabled;
-
-    /**
-     * List of tags for a node.
-     */
+    bool _enabled; 
     std::map<std::string, std::string>* _tags;
-
-    /**
-     * Drawable objects attached to the Node.
-     */
     Drawable* _drawable;
-
-    /**
-     * Camera attached to the Node.
-     */
     Camera* _camera;
-
-    /**
-     * Light attached to the Node.
-     */
     Light* _light;
-
-    /**
-     * Pointer to the AudioSource attached to the Node.
-     */
     AudioSource* _audioSource;
-
-    /**
-     * Pointer to the PhysicsCollisionObject attached to the Node.
-     */
     PhysicsCollisionObject* _collisionObject;
-
-    /**
-     * Pointer to the AI agent attached to the Node.
-     */
     mutable AIAgent* _agent;
-
-    /**
-     * World Matrix representation of the Node.
-     */
+    Ref* _userObject;
     mutable Matrix _world;
-
-    /**
-     * Dirty bits flag for the Node.
-     */
     mutable int _dirtyBits;
-
-    /**
-     * A flag indicating if the Node's hierarchy has changed.
-     */
-    bool _notifyHierarchyChanged;
-
-    /**
-     * The Bounding Sphere containing the Node.
-     */
     mutable BoundingSphere _bounds;
 };
 
 /**
  * NodeCloneContext represents the context data that is kept when cloning a node.
- *
  * The NodeCloneContext is used to make sure objects don't get cloned twice.
  */
 class NodeCloneContext
