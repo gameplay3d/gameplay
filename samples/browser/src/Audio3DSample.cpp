@@ -12,7 +12,6 @@ static const unsigned int MOVE_LEFT = 4;
 static const unsigned int MOVE_RIGHT = 8;
 static const unsigned int MOVE_UP = 16;
 static const unsigned int MOVE_DOWN = 32;
-
 static const float MOVE_SPEED = 15.0f;
 static const float UP_DOWN_SPEED = 10.0f;
 

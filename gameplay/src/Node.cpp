@@ -1010,7 +1010,7 @@ AudioSource* Node::getAudioSource() const
 
 void Node::setAudioSource(AudioSource* audio)
 {
-    if (_audioSource != audio)
+    if (_audioSource == audio)
         return;
 
     if (_audioSource)
