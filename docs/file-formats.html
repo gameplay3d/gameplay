@@ -402,18 +402,10 @@
 </tr>
 <tr>
 	<td>
-		.dae
-	</td>
-	<td>
-		COLLADA
-	</td>
-</tr>
-<tr>
-	<td>
 		.fbx
 	</td>
 	<td>
-		Autodesk
+		Autodesk FBX Scene
 	</td>
 </tr>
 <tr>
@@ -422,14 +414,6 @@
 	</td>
 	<td>
 		Maya Binary
-	</td>
-</tr>
-<tr>
-	<td>
-		.ma
-	</td>
-	<td>
-		Maya ASCII
 	</td>
 </tr>
 <tr>
@@ -445,15 +429,15 @@
 		.lua
 	</td>
 	<td>
-		Lua source code
+		Lua Script
 	</td>
 </tr>
 <tr>
 	<td>
-		.dds, .dds, .pvr
+	        .dds, .pvr
 	</td>
 	<td>
-		Compressed texture
+		Compressed Texture
 	</td>
 </tr>
 </table>
@@ -4573,7 +4557,7 @@ Audio Source</h4>
 </tr>
 </table>
 <h2>
-<a name="wiki-Particles"></a>Particles</h2>
+<a name="wiki-blendingicles"></a>Particles</h2>
 <div class="highlight">
 <pre><span class="c1">// Load a particle emitter from a property file</span>
 <span class="n">ParticleEmitter</span><span class="o">*</span> <span class="n">p</span> <span
@@ -4705,9 +4689,9 @@ class="p">);</span>
 </tr>
 <tr>
 	<td>
-		&nbsp;&nbsp;&nbsp; blending = <span class="Non-literal"><span>OPAQUE | TRANSPARENT |</span></span>
+		&nbsp;&nbsp;&nbsp; blendMode = <span class="Non-literal"><span>BLEND_NONE | BLEND_ALPHA |</span></span>
 		<br/>
-		<span class="Non-literal"><span>ADDITIVE | MULTIPLIED</span></span>
+		<span class="Non-literal"><span>BLEND_ADDITIVE | BLEND_MULTIPLIED</span></span>
 	</td>
 	<td>
 		[0..1]
