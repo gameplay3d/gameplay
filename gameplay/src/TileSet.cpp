@@ -136,7 +136,7 @@ TileSet* TileSet::create(Properties* properties)
             Vector2 cell;
             Vector2 source;
             if (tileProperties->getVector2("cell", &cell) && tileProperties->getVector2("source", &source) &&
-                (cell.x > 0 && cell.y > 0 && cell.x < set->_columnCount && cell.y < set->_rowCount))
+                (cell.x >= 0 && cell.y >= 0 && cell.x < set->_columnCount && cell.y < set->_rowCount))
             {
                 set->_tiles[(int)cell.y * set->_columnCount + (int)cell.x] = source;
             }

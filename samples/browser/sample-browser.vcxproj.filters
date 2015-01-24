@@ -345,9 +345,6 @@
     <ClInclude Include="src\WaterSample.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\ParticlesSample.h" />
-    <ClInclude Include="src\FontSample.h" />
-    <ClInclude Include="src\SpriteSample.h" />
     <ClInclude Include="src\SceneCreateSample.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -355,6 +352,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\AudioSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticlesSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpriteSample.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -419,9 +425,6 @@
     <ClCompile Include="src\WaterSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ParticlesSample.cpp" />
-    <ClCompile Include="src\FontSample.cpp" />
-    <ClCompile Include="src\SpriteSample.cpp" />
     <ClCompile Include="src\SceneCreateSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -429,6 +432,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\AudioSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FontSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticlesSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
