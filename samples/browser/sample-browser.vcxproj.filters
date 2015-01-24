@@ -39,6 +39,9 @@
     <Filter Include="res\common\particles">
       <UniqueIdentifier>{98333a4d-224e-4f83-ac60-baca4885bf82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\common\sprites">
+      <UniqueIdentifier>{5f9e3afc-ab2a-463d-9376-9d9df3e9fed4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
@@ -307,6 +310,12 @@
     <None Include="res\common\particles\grid.material">
       <Filter>res\common</Filter>
     </None>
+    <None Include="res\common\sprites\sprite.scene">
+      <Filter>res\common\sprites</Filter>
+    </None>
+    <None Include="res\common\sprites\water2d.frag">
+      <Filter>res\common\sprites</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MeshPrimitiveSample.h">
@@ -544,6 +553,30 @@
     <Image Include="res\common\particles\smoke.png">
       <Filter>res\common\particles</Filter>
     </Image>
+    <Image Include="res\common\sprites\background.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\level.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\player1.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\player2.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\player3.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\rocket.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\water2d.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\water2d-noise.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\common\footsteps.wav">
@@ -552,5 +585,19 @@
     <Media Include="res\common\audio\braking.wav">
       <Filter>res\common\audio</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\common\sprites\level.txt">
+      <Filter>res\common\sprites</Filter>
+    </Text>
+    <Text Include="res\common\sprites\player1.txt">
+      <Filter>res\common\sprites</Filter>
+    </Text>
+    <Text Include="res\common\sprites\player2.txt">
+      <Filter>res\common\sprites</Filter>
+    </Text>
+    <Text Include="res\common\sprites\player3.txt">
+      <Filter>res\common\sprites</Filter>
+    </Text>
   </ItemGroup>
 </Project>
