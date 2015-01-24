@@ -85,8 +85,10 @@ void ControlFactory::registerStandardControls()
     registerCustomControl("CONTAINER", &Container::create);
     registerCustomControl("SLIDER", &Slider::create);
     registerCustomControl("TEXTBOX", &TextBox::create);
-    registerCustomControl("JOYSTICK", &JoystickControl::create);
-    registerCustomControl("IMAGE", &ImageControl::create);
+    registerCustomControl("JOYSTICK", &JoystickControl::create); // convenience alias
+    registerCustomControl("JOYSTICKCONTROL", &JoystickControl::create);
+    registerCustomControl("IMAGE", &ImageControl::create);  // convenience alias
+    registerCustomControl("IMAGECONTROL", &ImageControl::create);
 }
 
 }

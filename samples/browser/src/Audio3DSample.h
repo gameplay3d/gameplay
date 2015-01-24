@@ -39,7 +39,7 @@ private:
 
     void addSound(const std::string& file);
 
-    void drawDebugText(int x = 0, int y = 0);
+    void drawDebugText(int x, int y, unsigned int fontSize);
 
     void drawVector3(const char* str, const Vector3& vector, int x, int y);
 

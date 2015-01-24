@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Light", LightSample, 11);
+    ADD_SAMPLE("Graphics", "Light", LightSample, 10);
 #endif
 
 LightSample::LightSample()
@@ -51,7 +51,7 @@ void LightSample::initialize()
 
 	// Get the wall model node
 	_modelNode = _scene->findNode("wall"); 
-	_model = _modelNode->getModel();
+	_model = dynamic_cast<Model*>(_modelNode->getDrawable());
 
 	// Create a directional light and a reference icon for the light
 	Light* directionalLight = Light::createDirectional(Vector3::one());
@@ -62,7 +62,7 @@ void LightSample::initialize()
 	_directionalLightQuadModel = Model::create(directionalLightQuadMesh);
     SAFE_RELEASE(directionalLightQuadMesh);
 	setUnlitMaterialTexture(_directionalLightQuadModel, "res/png/light-directional.png"); 
-	_directionalLightNode->setModel(_directionalLightQuadModel);
+	_directionalLightNode->setDrawable(_directionalLightQuadModel);
     _directionalLightNode->setTranslation(0.0f, 0.0f, 7.0f);
 	_scene->addNode(_directionalLightNode);
 
@@ -75,7 +75,7 @@ void LightSample::initialize()
 	_spotLightQuadModel = Model::create(spotLightQuadMesh);
     SAFE_RELEASE(spotLightQuadMesh);
 	setUnlitMaterialTexture(_spotLightQuadModel, "res/png/light-spot.png");
-	_spotLightNode->setModel(_spotLightQuadModel);
+	_spotLightNode->setDrawable(_spotLightQuadModel);
 	_spotLightNode->setTranslation(0.0f, 0.0f, 8.0f);
 	_scene->addNode(_spotLightNode);
 
@@ -88,7 +88,7 @@ void LightSample::initialize()
 	_pointLightQuadModel = Model::create(pointLightQuadMesh);
     SAFE_RELEASE(pointLightQuadMesh);
 	setUnlitMaterialTexture(_pointLightQuadModel, "res/png/light-point.png");
-	_pointLightNode->setModel(_pointLightQuadModel);
+	_pointLightNode->setDrawable(_pointLightQuadModel);
 	_pointLightNode->setTranslation(0.0f, 0.0f, 8.0f);
 	_scene->addNode(_pointLightNode);
 

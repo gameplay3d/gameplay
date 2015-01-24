@@ -370,16 +370,7 @@ public:
      *
      * @script{ignore}
      */
-    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
-
-    /**
-     * Internal method used only from static code in various platform implementation.
-     *
-     * @script{ignore}
-     */
-    static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                              unsigned int vendorId, unsigned int productId,
-                                              const char* vendorString, const char* productString);
+    static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name);
 
     /**
      * Internal method used only from static code in various platform implementation.
@@ -389,8 +380,38 @@ public:
     static void gamepadEventDisconnectedInternal(GamepadHandle handle);
 
     /**
-     * Internal method used by Gamepad that polls the platform for the updated Gamepad
-     * states such as joysticks, buttons and trigger values.
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadButtonPressedEventInternal(GamepadHandle handle, Gamepad::ButtonMapping mapping);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadButtonReleasedEventInternal(GamepadHandle handle, Gamepad::ButtonMapping button);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadTriggerChangedEventInternal(GamepadHandle handle, unsigned int index, float value);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadJoystickChangedEventInternal(GamepadHandle handle, unsigned int index, float x, float y);
+
+    /**
+     * Internal method used to poll the platform for the updated Gamepad
+     * states such as buttons, joytick and trigger values.
+     *
+     * Some platforms require to poll the gamepad system to get deltas. 
      *
      * @param gamepad The gamepad to be returned with the latest polled values populated.
      * @script{ignore}

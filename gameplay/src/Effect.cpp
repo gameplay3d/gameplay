@@ -219,7 +219,7 @@ static void writeShaderToErrorFile(const char* filePath, const char* source)
 {
     std::string path = filePath;
     path += ".err";
-    std::auto_ptr<Stream> stream(FileSystem::open(path.c_str(), FileSystem::WRITE));
+    std::unique_ptr<Stream> stream(FileSystem::open(path.c_str(), FileSystem::WRITE));
     if (stream.get() != NULL && stream->canWrite())
     {
         stream->write(source, 1, strlen(source));
@@ -439,7 +439,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
                 uniform->_name = uniformName;
                 uniform->_location = uniformLocation;
                 uniform->_type = uniformType;
-                if (uniformType == GL_SAMPLER_2D)
+                if (uniformType == GL_SAMPLER_2D || uniformType == GL_SAMPLER_CUBE)
                 {
                     uniform->_index = samplerIndex;
                     samplerIndex += uniformSize;
@@ -608,8 +608,10 @@ void Effect::setValue(Uniform* uniform, const Vector4* values, unsigned int coun
 void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
 {
     GP_ASSERT(uniform);
-    GP_ASSERT(uniform->_type == GL_SAMPLER_2D);
+    GP_ASSERT(uniform->_type == GL_SAMPLER_2D || uniform->_type == GL_SAMPLER_CUBE);
     GP_ASSERT(sampler);
+    GP_ASSERT((sampler->getTexture()->getType() == Texture::TEXTURE_2D && uniform->_type == GL_SAMPLER_2D) || 
+        (sampler->getTexture()->getType() == Texture::TEXTURE_CUBE && uniform->_type == GL_SAMPLER_CUBE));
 
     GL_ASSERT( glActiveTexture(GL_TEXTURE0 + uniform->_index) );
 
@@ -622,13 +624,15 @@ void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
 void Effect::setValue(Uniform* uniform, const Texture::Sampler** values, unsigned int count)
 {
     GP_ASSERT(uniform);
-    GP_ASSERT(uniform->_type == GL_SAMPLER_2D);
+    GP_ASSERT(uniform->_type == GL_SAMPLER_2D || uniform->_type == GL_SAMPLER_CUBE);
     GP_ASSERT(values);
 
     // Set samplers as active and load texture unit array
     GLint units[32];
     for (unsigned int i = 0; i < count; ++i)
     {
+        GP_ASSERT((const_cast<Texture::Sampler*>(values[i])->getTexture()->getType() == Texture::TEXTURE_2D && uniform->_type == GL_SAMPLER_2D) || 
+            (const_cast<Texture::Sampler*>(values[i])->getTexture()->getType() == Texture::TEXTURE_CUBE && uniform->_type == GL_SAMPLER_CUBE));
         GL_ASSERT( glActiveTexture(GL_TEXTURE0 + uniform->_index + i) );
 
         // Bind the sampler - this binds the texture and applies sampler state
@@ -654,7 +658,7 @@ Effect* Effect::getCurrentEffect()
 }
 
 Uniform::Uniform() :
-    _location(-1), _type(0), _index(0)
+    _location(-1), _type(0), _index(0), _effect(NULL)
 {
 }
 

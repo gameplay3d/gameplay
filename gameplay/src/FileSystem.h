@@ -202,6 +202,23 @@ public:
     static bool isAbsolutePath(const char* filePath);
 
     /**
+    * Sets the asset root path for the game on platforms that have separate assets (currently just Android).
+    *
+    * Once set, all asset paths will be loaded relative to the given path.
+    * The default asset path is an empty string ("").
+    *
+    * @param path The asset root path.
+    */
+    static void setAssetPath(const char* path);
+
+    /**
+    * Returns the currently set asset root path.
+    *
+    * @return The currently set asset root path.
+    */
+    static const char* getAssetPath();
+
+    /**
      * Creates a file on the file system from the specified asset (Android-specific).
      * 
      * @param path The path to the file.

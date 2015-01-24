@@ -59,6 +59,11 @@ void Slider::initialize(const char* typeName, Theme::Style* style, Properties* p
     setValue(_value);
 }
 
+const char* Slider::getTypeName() const
+{
+    return "Slider";
+}
+
 void Slider::setMin(float min)
 {
     _min = min;
@@ -169,7 +174,7 @@ void Slider::updateValue(int x, int y)
     const Rectangle& maxCapRegion = _maxImage->getRegion();
     const Rectangle& markerRegion = _markerImage->getRegion();
 
-    float markerPosition = x / (_viewportBounds.width - markerRegion.width);
+    float markerPosition = (x - markerRegion.width * 0.5f) / (_viewportBounds.width - markerRegion.width);
             
     if (markerPosition > 1.0f)
     {
@@ -252,26 +257,18 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
-bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+bool Slider::gamepadJoystickEvent(Gamepad* gamepad, unsigned int index)
 {
-    switch (evt)
+    // The right analog stick can be used to change a slider's value.
+    if (index == 1)
     {
-        case Gamepad::JOYSTICK_EVENT:
-        {
-            // The right analog stick can be used to change a slider's value.
-            if (analogIndex == 1)
-            {
-                Vector2 joy;
-                gamepad->getJoystickValues(analogIndex, &joy);
-                _gamepadValue = _value;
-                _delta = joy.x;
-                return true;
-            }
-            break;
-        }
+        Vector2 joy;
+        gamepad->getJoystickValues(index, &joy);
+        _gamepadValue = _value;
+        _delta = joy.x;
+        return true;
     }
-
-    return Label::gamepadEvent(evt, gamepad, analogIndex);
+    return Label::gamepadJoystickEvent(gamepad, index);
 }
 
 bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -485,18 +482,13 @@ unsigned int Slider::drawText(Form* form, const Rectangle& clip)
 
         SpriteBatch* batch = _font->getSpriteBatch(fontSize);
         startBatch(form, batch);
-        _font->drawText(_valueText.c_str(), _textBounds, _textColor, fontSize, _valueTextAlignment, true, getTextRightToLeft(state), &_viewportClipBounds);
+        _font->drawText(_valueText.c_str(), _textBounds, _textColor, fontSize, _valueTextAlignment, true, getTextRightToLeft(state), _viewportClipBounds);
         finishBatch(form, batch);
 
         ++drawCalls;
     }
 
     return drawCalls;
-}
-
-const char* Slider::getType() const
-{
-    return "slider";
 }
 
 }

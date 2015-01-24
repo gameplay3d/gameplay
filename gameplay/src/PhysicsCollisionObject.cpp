@@ -13,6 +13,8 @@
 namespace gameplay
 {
 
+extern void splitURL(const std::string& url, std::string* file, std::string* id);
+
 /**
  * Internal class used to implement the collidesWith(PhysicsCollisionObject*) function.
  * @script{ignore}
@@ -45,7 +47,7 @@ PhysicsCollisionObject::~PhysicsCollisionObject()
 
     if (_scriptListeners)
     {
-        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        for (size_t i = 0, count = _scriptListeners->size(); i < count; ++i)
         {
             SAFE_DELETE((*_scriptListeners)[i]);
         }
@@ -144,11 +146,14 @@ void PhysicsCollisionObject::removeCollisionListener(CollisionListener* listener
 
 void PhysicsCollisionObject::addCollisionListener(const char* function, PhysicsCollisionObject* object)
 {
+    ScriptListener* listener = ScriptListener::create(function);
+    if (!listener)
+        return; // falied to load
+
     if (!_scriptListeners)
         _scriptListeners = new std::vector<ScriptListener*>();
-
-    ScriptListener* listener = new ScriptListener(function);
     _scriptListeners->push_back(listener);
+
     addCollisionListener(listener, object);
 }
 
@@ -158,7 +163,7 @@ void PhysicsCollisionObject::removeCollisionListener(const char* function, Physi
         return;
 
     std::string url = function;
-    for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+    for (size_t i = 0, count = _scriptListeners->size(); i < count; ++i)
     {
         if ((*_scriptListeners)[i]->url == url)
         {
@@ -181,31 +186,6 @@ bool PhysicsCollisionObject::collidesWith(PhysicsCollisionObject* object) const
     callback.result = false;
     Game::getInstance()->getPhysicsController()->_world->contactPairTest(getCollisionObject(), object->getCollisionObject(), callback);
     return callback.result;
-}
-
-PhysicsRigidBody* PhysicsCollisionObject::asRigidBody()
-{
-    return getType() == RIGID_BODY ? static_cast<PhysicsRigidBody*>(this) : NULL;
-}
-
-PhysicsCharacter* PhysicsCollisionObject::asCharacter()
-{
-    return getType() == CHARACTER ? static_cast<PhysicsCharacter*>(this) : NULL;
-}
-
-PhysicsGhostObject* PhysicsCollisionObject::asGhostObject()
-{
-    return getType() == GHOST_OBJECT ? static_cast<PhysicsGhostObject*>(this) : NULL;
-}
-
-PhysicsVehicle* PhysicsCollisionObject::asVehicle()
-{
-    return getType() == VEHICLE ? static_cast<PhysicsVehicle*>(this) : NULL;
-}
-
-PhysicsVehicleWheel* PhysicsCollisionObject::asVehicleWheel()
-{
-    return getType() == VEHICLE_WHEEL ? static_cast<PhysicsVehicleWheel*>(this) : NULL;
 }
 
 PhysicsCollisionObject::CollisionPair::CollisionPair(PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB)
@@ -301,10 +281,43 @@ void PhysicsCollisionObject::PhysicsMotionState::setCenterOfMassOffset(const Vec
     _centerOfMassOffset.setOrigin(BV(centerOfMassOffset));
 }
 
-PhysicsCollisionObject::ScriptListener::ScriptListener(const char* url)
-    : url(url)
+PhysicsCollisionObject::ScriptListener::ScriptListener()
+    : script(NULL)
 {
-    function = Game::getInstance()->getScriptController()->loadUrl(url);
+}
+
+PhysicsCollisionObject::ScriptListener::~ScriptListener()
+{
+    SAFE_RELEASE(script);
+}
+
+PhysicsCollisionObject::ScriptListener* PhysicsCollisionObject::ScriptListener::create(const char* url)
+{
+    std::string scriptPath, func;
+    splitURL(url, &scriptPath, &func);
+    if (func.empty())
+    {
+        // Only a function was specified
+        func = scriptPath;
+        scriptPath = "";
+    }
+
+    Script* script = NULL;
+    if (!scriptPath.empty())
+    {
+        script = Game::getInstance()->getScriptController()->loadScript(scriptPath.c_str(), Script::GLOBAL);
+        if (!script)
+        {
+            // Failed to load script
+            return NULL;
+        }
+    }
+
+    ScriptListener* listener = new ScriptListener();
+    listener->url = url;
+    listener->script = script;
+    listener->function = func;
+    return listener;
 }
 
 void PhysicsCollisionObject::ScriptListener::collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type,

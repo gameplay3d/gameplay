@@ -51,7 +51,7 @@ public:
     /**
      * Creates a perspective camera.
      *
-     * @param fieldOfView The field of view for the perspective camera (normally in the range of 40-60 degrees).
+     * @param fieldOfView The field of view in degrees for the perspective camera (normally in the range of 40-60 degrees).
      * @param aspectRatio The aspect ratio of the camera (normally the width of the viewport divided by the height of the viewport).
      * @param nearPlane The near plane distance.
      * @param farPlane The far plane distance.
@@ -346,7 +346,7 @@ private:
      * @param context The clone context.
      * @return The newly created camera.
      */
-    Camera* clone(NodeCloneContext &context) const;
+    Camera* clone(NodeCloneContext& context);
 
     /**
      * Sets the node associated with this camera.
@@ -358,9 +358,6 @@ private:
      */
     void transformChanged(Transform* transform, long cookie);
 
-    /**
-     *
-     */
     void cameraChanged();
 
     Camera::Type _type;

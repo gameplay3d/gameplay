@@ -1,6 +1,6 @@
-## GamePlay v2.0.0
+## GamePlay v3.0.0
 
-GamePlay3D is an open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
+GamePlay is an open-source, cross-platform native C++ game framework making it easy to learn and write mobile and desktop games. 
 
 <img align="right" src="https://raw.github.com/wiki/gameplay3d/GamePlay/img/logo.png" alt="gameplay3d" />
 
@@ -11,15 +11,15 @@ GamePlay3D is an open-source, cross-platform 3D native C++ game framework making
 - [Development Guide](https://github.com/gameplay3d/GamePlay/wiki#wiki-Development_Guide)
 
 ## Supported Platforms
-- [Windows](https://github.com/gameplay3d/GamePlay/wiki/Visual-Studio-Setup) (using Microsoft Visual Studio)
-- [Linux](https://github.com/gameplay3d/GamePlay/wiki/CMake Setup - Linux) (using CMake)
-- [MacOSX](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode)
-- [iOS](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode)
-- [Android](https://github.com/gameplay3d/GamePlay/wiki/Android-NDK-Setup) (using Google Android NDK)
+- [Windows](https://github.com/gameplay3d/GamePlay/wiki/Visual-Studio-Setup) 
+- [Linux](https://github.com/gameplay3d/GamePlay/wiki/CMake Setup - Linux)
+- [MacOSX](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup)
+- [iOS](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup)
+- [Android](https://github.com/gameplay3d/GamePlay/wiki/Android-NDK-Setup)
 
 ## Roadmap for 'next' branch
-- [3.0.0](https://github.com/gameplay3d/GamePlay/milestones/3.0.0)
-- [backlog](https://github.com/gameplay3d/GamePlay/issues?q=is%3Aopen+no%3Amilestone)
+- [4.0.0](https://github.com/gameplay3d/GamePlay/milestones/4.0.0)
+- [backlog](https://github.com/gameplay3d/GamePlay/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 ## License
 Open-source under [Apache 2.0 license](http://www.tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29).

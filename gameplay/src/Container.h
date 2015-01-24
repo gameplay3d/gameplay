@@ -38,6 +38,19 @@ public:
     };
 
     /**
+     * Defines supported focus chagne directions.
+     */
+    enum Direction
+    {
+        UP = 0x01,
+        DOWN = 0x02,
+        LEFT = 0x04,
+        RIGHT = 0x08,
+        NEXT = 0x10,
+        PREVIOUS = 0x20
+    };
+
+    /**
      * Creates a new container.
      *
      * @param id The container ID.
@@ -48,6 +61,16 @@ public:
      * @script{create}
      */
     static Container* create(const char* id, Theme::Style* style = NULL, Layout::Type layout = Layout::LAYOUT_ABSOLUTE);
+
+    /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "Container"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
 
     /**
      * Get this container's layout.
@@ -221,11 +244,6 @@ public:
     bool isContainer() const;
 
     /**
-     * @see Control::getType
-     */
-    const char* getType() const;
-
-    /**
      * Get whether this container requires focus in order to handle scroll-wheel events.
      */
     bool getScrollWheelRequiresFocus() const;
@@ -244,6 +262,15 @@ public:
      * @see Control::setFocus
      */
     bool setFocus();
+
+    /**
+     * Attempts to switch focus to a child of this container in the specified direction.
+     *
+     * @param direction The direction for focus change.
+     *
+     * @return True on success, false if there are no controls to focus on.
+     */
+    bool moveFocus(Direction direction);
 
     /**
      * Returns the currently active control for this container.
@@ -546,21 +573,7 @@ private:
      */
     Container(const Container& copy);
 
-    enum Direction
-    {
-        UP = 0x01,
-        DOWN = 0x02,
-        LEFT = 0x04,
-        RIGHT = 0x08,
-        NEXT = 0x10,
-        PREVIOUS = 0x20
-    };
-
     static const int MAX_CONTACT_INDICES = 10;
-
-    // Returns true on success; false if there are no controls to focus on,
-    // in which case scrolling can be initiated.
-    bool moveFocus(Direction direction);
 
 	bool moveFocusNextPrevious(Direction direction);
 	bool moveFocusDirectional(Direction direction);

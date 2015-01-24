@@ -129,8 +129,8 @@ private:
     PhysicsVehicle* _carVehicle;
     float _upsetTimer;
 
-    // Sounds
-    AudioSource* _backgroundSound;
+    // Music and Sounds
+    AudioSource* _backgroundMusic;
     AudioSource* _engineSound;
     AudioSource* _brakingSound;
 };

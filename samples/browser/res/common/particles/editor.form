@@ -1,0 +1,562 @@
+form particleEditor
+{
+    ${leftWidth} = 195
+
+    size = 95%, 100%
+    consumeInputEvents = false
+    style = Empty
+
+    container leftSide
+    {
+        layout = LAYOUT_VERTICAL
+        width = ${leftWidth}
+
+        container saveLoad
+        {
+            style = Form
+            width = 100%
+            layout = LAYOUT_VERTICAL
+
+	        button save
+	        {
+                    width = 100%
+		    text = Save
+	        }
+
+            button load : save
+	        {
+		        text = Load
+	        }
+        }
+
+        // Image settings
+        container image
+        {
+            style = Form
+            width = 100%
+
+            layout
+            {
+                type = LAYOUT_VERTICAL
+                spacing = 5
+            }
+
+            label
+            {
+                text = Image
+                fontSize = 18
+            }
+
+	        image sprite
+	        {
+                path = res/fire.png
+                size = 120, 120
+	        }
+
+            container imageSettings
+            {
+                width = 100%
+                layout = LAYOUT_VERTICAL
+
+                radioButton additive
+                {
+                    text = Additive
+                    group = blendMode
+                    height = 25
+                    selected = true
+                }
+
+                radioButton transparent : additive
+                {
+                    text = Transparent
+                    selected = false
+                }
+
+                radioButton multiply : transparent
+                {
+                    text = Multiply
+                    selected = false
+                }
+
+                radioButton opaque : transparent
+                {
+                    text = Opaque
+                    selected = false
+                }
+
+                container
+                {
+                    width = 100%
+
+                    label
+                    {
+                        text = Frame Count:
+                        alignment = ALIGN_VCENTER_LEFT
+                    }
+
+                    textBox frameCount
+                    {
+                        text = 1
+                        size = 60, 32
+                        position = 110, 0
+                    }
+                }
+
+                container
+                {
+                    width = 100%
+
+                    label
+                    {
+                        text = Frame Width:
+                        alignment = ALIGN_VCENTER_LEFT
+                    }
+
+                    textBox frameWidth
+                    {
+                        text = 1
+                        size = 60, 32
+                        position = 110, 0
+                    }
+                }
+
+                container
+                {
+                    width = 100%
+
+                    label
+                    {
+                        text = Frame Height:
+                        alignment = ALIGN_VCENTER_LEFT
+                    }
+
+                    textBox frameHeight
+                    {
+                        text = 1
+                        size = 60, 32
+                        position = 110, 0
+                    }
+                }
+
+                button updateFrames
+                {
+                    width = 100%
+                    text = Update
+                }
+            }
+        }
+
+        // Emission settings
+        container emission
+        {
+            style = Form
+            layout = LAYOUT_VERTICAL
+            width = ${leftWidth}
+
+            // Burst emission
+            button emit
+            {
+                width = 100%
+                text = Emit
+            }
+
+            label spacer
+            {
+                size = 5,5
+            }
+
+            // Emission rate
+            slider emissionRate
+            {
+                width = 100%
+                orientation = HORIZONTAL
+                min = 1
+                max = 500
+                value = 100
+                step = 1
+                text = Emission Rate
+                textAlignment = ALIGN_TOP_HCENTER
+                valueTextVisible = true
+                valueTextAlignment = ALIGN_BOTTOM_HCENTER
+                valueTextPrecision = 2            
+            }
+
+            slider burstSize : emissionRate
+            {
+                text = Burst Size
+                value = 20
+                max = 50
+                step = 1
+            }
+
+            // Start / Stop Emitter
+            checkBox started
+            {
+                text = Running
+                checked = true
+            }
+        }
+
+        button reset
+        {
+            width = ${leftWidth}
+            text = Reset
+        }
+    }
+
+    container particleProperties
+    {
+        style = Form
+        alignment = ALIGN_TOP_RIGHT
+        y = 50
+        size = 210, 100%
+        layout = LAYOUT_VERTICAL
+        scroll = SCROLL_VERTICAL
+        scrollBarsAutoHide = false
+
+        // Particle Size
+        label titleSize
+        {
+            padding
+            {
+                bottom = 5
+            }
+            text = Particle Size
+            fontSize = 18
+        }
+
+        slider startMin
+        {
+            width = 100%
+            orientation = HORIZONTAL
+            min = 0
+            max = 10
+            value = 1
+            step = 0.1
+            text = Min Begin
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2
+        }
+
+        slider startMax : startMin
+        {
+            text = Max Begin
+        }
+
+        slider endMin : startMin
+        {
+            text = Min End
+        }
+
+        slider endMax : startMin
+        {
+            text = Max End
+        }
+
+        // Energy
+        label titleEnergy : titleSize
+        {
+            text = Energy
+        }
+
+        slider energyMin
+        {
+            width = 100%
+            orientation = HORIZONTAL
+            min = 0
+            max = 5000
+            step = 1
+            text = Min
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2
+        }
+
+        slider energyMax : energyMin
+        {
+            text = Max
+        }
+
+        // Start color
+        label titleStartColor : titleSize
+        {
+            text = Start Color
+        }
+
+        slider startRed
+        {
+            width = 100%
+            orientation = HORIZONTAL
+            min = 0
+            max = 1
+            text = Red
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2
+        }
+
+        slider startGreen : startRed
+        {
+            text = Green
+        }
+
+        slider startBlue : startRed
+        {
+            text = Blue
+        }
+
+        slider startAlpha : startRed
+        {
+            text = Alpha
+        }
+
+        // End color
+        label titleEndColor : titleSize
+        {
+            text = End Color
+        }
+
+        slider endRed : startRed
+        {
+        }
+
+        slider endGreen : startGreen
+        {
+        }
+
+        slider endBlue : startBlue
+        {
+        }
+
+        slider endAlpha : startAlpha
+        {
+        }
+
+        // Position
+        label titlePosition : titleSize
+        {
+            text = Position
+        }
+
+        slider posX : startRed
+        {
+            min = -2
+            max = 2
+            step = 0.1
+            text = X
+        }
+
+        slider posY : posX
+        {
+            text = Y
+        }
+
+        slider posZ : posX
+        {
+            text = Z
+        }
+
+        // Position variance
+        label titlePositionVar : titleSize
+        {
+            text = Position Var.
+        }
+
+        slider posVarX : startRed
+        {
+            min = 0
+            max = 10
+            text = X
+        }
+
+        slider posVarY : posVarX
+        {
+            text = Y
+        }
+
+        slider posVarZ : posVarX
+        {
+            text = Z
+        }
+
+        // Initial velocity
+        label titleVelocity : titleSize
+        {
+            text = Velocity
+        }
+
+        slider velocityX : posVarX
+        {
+            min = -10
+            max = 10
+            text = X
+        }
+
+        slider velocityY : velocityX
+        {
+            text = Y
+        }
+
+        slider velocityZ : velocityX
+        {
+            text = Z
+        }
+
+        // Velocity variance
+        label titleVelocityVar : titleSize
+        {
+            text = Velocity Var.
+        }
+
+        slider velocityVarX : posVarX
+        {
+        }
+
+        slider velocityVarY : posVarY
+        {
+        }
+
+        slider velocityVarZ : posVarZ
+        {
+        }
+
+        // Acceleration
+        label titleAcceleration : titleSize
+        {
+            text = Accel.
+        }
+
+        slider accelX : velocityX
+        {
+            text = X
+        }
+
+        slider accelY : accelX
+        {
+            text = Y
+        }
+
+        slider accelZ : accelX
+        {
+            text = Z
+        }
+
+        // Acceleration variance
+        label titleAccelerationVar : titleSize
+        {
+            text = Accel. Var.
+        }
+
+        slider accelVarX : posVarX
+        {
+            text = X
+        }
+
+        slider accelVarY : posVarX
+        {
+            text = Y
+        }
+
+        slider accelVarZ : posVarX
+        {
+            text = Z
+        }
+
+        // Local rotation speed
+        label titleSpinSpeed : titleSize
+        {
+            text = Spin Speed
+        }
+
+        slider spinSpeedMin : velocityX
+        {
+            text = Min
+        }
+
+        slider spinSpeedMax : spinSpeedMin
+        {
+            text = Max
+        }
+
+        // Rotation axis
+        label titleRotationAxis : titleSize
+        {
+            text = Axis Rotation
+        }
+
+        slider axisX : startRed
+        {
+            text = X
+        }
+
+        slider axisY : axisX
+        {
+            text = Y
+        }
+
+        slider axisZ : axisX
+        {
+            text = Z
+        }
+
+        // Rotation axis variance
+        label titleRotationAxisVar : titleSize
+        {
+            text = Axis Var.
+        }
+
+        slider axisVarX : axisX
+        {
+            text = X
+        }
+
+        slider axisVarY : axisVarX
+        {
+            text = Y
+        }
+
+        slider axisVarZ : axisVarX
+        {
+            text = Z
+        }
+
+        // Axis rotation speed
+        label titleRotationSpeed : titleSize
+        {
+            text = Rotation Speed
+        }
+
+        slider rotationSpeedMin : velocityX
+        {
+            text = Min
+        }
+
+        slider rotationSpeedMax : rotationSpeedMin
+        {
+            text = Max
+        }
+    }
+
+	// Camera Zoom
+	container zoom
+	{
+        alignment = ALIGN_BOTTOM_HCENTER
+
+		button zoomIn
+		{
+			width = 60
+			text = +
+            fontSize = 30
+		}
+
+		button zoomOut : zoomIn
+		{
+            x = 60
+			text = -
+		}
+	}
+}

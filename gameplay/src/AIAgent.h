@@ -4,7 +4,6 @@
 #include "Ref.h"
 #include "AIStateMachine.h"
 #include "AIMessage.h"
-#include "ScriptTarget.h"
 
 namespace gameplay
 {
@@ -19,9 +18,10 @@ class Node;
  * such as state machines. By default, an AIAgent has an empty state 
  * machine.
  */
-class AIAgent : public Ref, public ScriptTarget
+class AIAgent : public Ref
 {
     friend class Node;
+    friend class AIState;
     friend class AIController;
 
 public:
@@ -141,6 +141,11 @@ private:
      * Hidden copy assignment operator.
      */
     AIAgent& operator=(const AIAgent&);
+    
+    /**
+     * Set the node this agent is attached to.
+     */
+    void setNode(Node* node);
 
     /**
      * Called by the AIController to process a message for the AIAgent.

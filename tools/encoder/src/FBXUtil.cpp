@@ -395,10 +395,10 @@ void loadVertexColor(FbxMesh* fbxMesh, int vertexIndex, int controlPointIndex, V
 void loadBlendData(const vector<Vector2>& vertexWeights, Vertex* vertex)
 {
     size_t size = vertexWeights.size();
+    vertex->hasWeights= true;
 
     if (size >= 1)
     {
-        vertex->hasWeights= true;
         vertex->blendIndices.x = vertexWeights[0].x;
         vertex->blendWeights.x = vertexWeights[0].y;
     }

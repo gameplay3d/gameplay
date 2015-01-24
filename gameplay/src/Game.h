@@ -31,6 +31,7 @@ class ScriptController;
 class Game
 {
     friend class Platform;
+    friend class Gamepad;
     friend class ShutdownListener;
 
 public:
@@ -58,6 +59,11 @@ public:
         CLEAR_DEPTH_STENCIL = CLEAR_DEPTH | CLEAR_STENCIL,
         CLEAR_COLOR_DEPTH_STENCIL = CLEAR_COLOR | CLEAR_DEPTH | CLEAR_STENCIL
     };
+
+    /**
+     * Constructor.
+     */
+    Game();
 
     /**
      * Destructor.
@@ -590,13 +596,19 @@ public:
      * Schedules a time event to be sent to the given TimeListener a given number of game milliseconds from now.
      * Game time stops while the game is paused. A time offset of zero will fire the time event in the next frame.
      * 
-     * Note: the given Lua function must take a single floating point number, which is the difference between the
-     * current game time and the target time (see TimeListener::timeEvent).
+     * The given script function must take a single floating point number, which is the difference between the
+     * current game time and the target time (see TimeListener::timeEvent). The function will be executed
+     * in the context of the script envionrment that the schedule function was called from.
      * 
      * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
-     * @param function The Lua script function that will receive the event.
+     * @param function The script function that will receive the event.
      */
     void schedule(float timeOffset, const char* function);
+
+    /**
+     * Clears all scheduled time events.
+     */
+    void clearSchedule();
 
     /**
      * Opens an URL in an external browser, if available.
@@ -610,19 +622,14 @@ public:
 protected:
 
     /**
-     * Constructor.
-     */
-    Game();
-
-    /**
      * Initialize callback that is called just before the first frame when the game starts.
      */
-    virtual void initialize() = 0;
+    virtual void initialize();
 
     /**
      * Finalize callback that is called when the game on exits.
      */
-    virtual void finalize() = 0;
+    virtual void finalize();
 
     /**
      * Update callback for handling update routines.
@@ -632,7 +639,7 @@ protected:
      *
      * @param elapsedTime The elapsed game time.
      */
-    virtual void update(float elapsedTime) = 0;
+    virtual void update(float elapsedTime);
 
     /**
      * Render callback for handling rendering routines.
@@ -642,7 +649,7 @@ protected:
      *
      * @param elapsedTime The elapsed game time.
      */
-    virtual void render(float elapsedTime) = 0;
+    virtual void render(float elapsedTime);
 
     /**
      * Renders a single frame once and then swaps it to the display.
@@ -654,7 +661,7 @@ protected:
 
     /**
      * Renders a single frame once and then swaps it to the display.
-     * This calls the given Lua function, which should take no parameters and return nothing (void).
+     * This calls the given script function, which should take no parameters and return nothing (void).
      *
      * This is useful for rendering splash screens.
      */
@@ -670,25 +677,6 @@ protected:
     void updateOnce();
 
 private:
-
-    /**
-     * Allows time listener interaction from Lua scripts.
-     */
-    struct ScriptListener : public TimeListener
-    {
-        /**
-         * Constructor.
-         */
-        ScriptListener(const char* url);
-
-        /**
-         * @see TimeListener#timeEvent(long, void*)
-         */
-        void timeEvent(long timeDiff, void* cookie);
-
-        /** Holds the name of the Lua script function to call back. */
-        std::string function;
-    };
 
     struct ShutdownListener : public TimeListener
     {
@@ -743,6 +731,18 @@ private:
      */
     void loadGamepads();
 
+    void keyEventInternal(Keyboard::KeyEvent evt, int key);
+    void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+    void resizeEventInternal(unsigned int width, unsigned int height);
+    void gestureSwipeEventInternal(int x, int y, int direction);
+    void gesturePinchEventInternal(int x, int y, float scale);
+    void gestureTapEventInternal(int x, int y);
+    void gestureLongTapEventInternal(int x, int y, float duration);
+    void gestureDragEventInternal(int x, int y);
+    void gestureDropEventInternal(int x, int y);
+    void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
     unsigned int _pausedCount;                  // Number of times pause() has been called.
@@ -765,7 +765,7 @@ private:
     AudioListener* _audioListener;              // The audio listener in 3D space.
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
     ScriptController* _scriptController;            // Controls the scripting engine.
-    std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.
+    ScriptTarget* _scriptTarget;                // Script target for the game
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 

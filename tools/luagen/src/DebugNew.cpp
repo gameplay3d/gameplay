@@ -34,6 +34,11 @@ void debugFree(void* p);
 
 #ifdef _MSC_VER
 #pragma warning( disable : 4290 )
+
+#include <yvals.h>
+#define NOEXCEPT _NOEXCEPT
+#else
+#define NOEXCEPT noexcept
 #endif
 
 void* operator new (std::size_t size, const char* file, int line)
@@ -46,42 +51,42 @@ void* operator new[] (std::size_t size, const char* file, int line)
     return operator new (size, file, line);
 }
 
-void* operator new (std::size_t size) throw(std::bad_alloc)
+void* operator new (std::size_t size)
 {
     return operator new (size, "", 0);
 }
 
-void* operator new[] (std::size_t size) throw(std::bad_alloc)
+void* operator new[] (std::size_t size)
 {
     return operator new (size, "", 0);
 }
 
-void* operator new (std::size_t size, const std::nothrow_t&) throw()
+void* operator new (std::size_t size, const std::nothrow_t& nothrow_value) NOEXCEPT
 {
     return operator new (size, "", 0);
 }
 
-void* operator new[] (std::size_t size, const std::nothrow_t&) throw()
+void* operator new[](std::size_t size, const std::nothrow_t& nothrow_value) NOEXCEPT
 {
     return operator new (size, "", 0);
 }
 
-void operator delete (void* p) throw()
+void operator delete (void* p) NOEXCEPT
 {
     debugFree(p);
 }
 
-void operator delete[] (void* p) throw()
+void operator delete[](void* p) NOEXCEPT
 {
     operator delete (p);
 }
 
-void operator delete (void* p, const char* file, int line) throw()
+void operator delete (void* p, const char* file, int line) NOEXCEPT
 {
     operator delete (p);
 }
 
-void operator delete[] (void* p, const char* file, int line) throw()
+void operator delete[](void* p, const char* file, int line) NOEXCEPT
 {
     operator delete (p);
 }
@@ -132,13 +137,13 @@ void* debugAlloc(std::size_t size, const char* file, int line)
         memset(&stackFrame, 0, sizeof(STACKFRAME64));
 
         // Initialize the stack frame based on the machine architecture.
-#ifdef _M_IX86
-        static const DWORD machineType = IMAGE_FILE_MACHINE_I386;
-        stackFrame.AddrPC.Offset = context.Eip;
+#ifdef _M_X64
+        static const DWORD machineType = IMAGE_FILE_MACHINE_IA64;
+        stackFrame.AddrPC.Offset = context.Rip;
         stackFrame.AddrPC.Mode = AddrModeFlat;
-        stackFrame.AddrFrame.Offset = context.Ebp;
+        stackFrame.AddrFrame.Offset = context.Rbp;
         stackFrame.AddrFrame.Mode = AddrModeFlat;
-        stackFrame.AddrStack.Offset = context.Esp;
+        stackFrame.AddrStack.Offset = context.Rsp;
         stackFrame.AddrStack.Mode = AddrModeFlat;
 #else
 #error "Machine architecture not supported!"

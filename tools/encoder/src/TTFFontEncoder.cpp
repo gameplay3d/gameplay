@@ -316,7 +316,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
         // Allocate temporary image buffer to draw the glyphs into.
         unsigned char* imageBuffer = (unsigned char*)malloc(imageWidth * imageHeight);
         memset(imageBuffer, 0, imageWidth * imageHeight);
-        penX = 0;
+        penX = 1;
         penY = 0;
         row = 0;
         i = 0;
@@ -339,7 +339,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
             // If we reach the end of the image wrap aroud to the next row.
             if ((penX + advance) > (int)imageWidth)
             {
-                penX = 0;
+                penX = 1;
                 row += 1;
                 penY = row * rowSize;
                 if (penY + rowSize > (int)imageHeight)
@@ -361,6 +361,8 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
 
             glyphArray[i].index = ascii;
             glyphArray[i].width = advance - GLYPH_PADDING;
+            glyphArray[i].bearingX = slot->metrics.horiBearingX >> 6;
+            glyphArray[i].advance = slot->metrics.horiAdvance >> 6;
 
             // Generate UV coords.
             glyphArray[i].uvCoords[0] = (float)penX / (float)imageWidth;
@@ -415,7 +417,14 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
         // Glyphs.
         unsigned int glyphSetSize = END_INDEX - START_INDEX;
         writeUint(gpbFp, glyphSetSize);
-        fwrite(&font->glyphArray, sizeof(TTFGlyph), glyphSetSize, gpbFp);
+        for (unsigned int j = 0; j < glyphSetSize; j++)
+        {
+            writeUint(gpbFp, font->glyphArray[j].index);
+            writeUint(gpbFp, font->glyphArray[j].width);
+            fwrite(&font->glyphArray[j].bearingX, sizeof(int), 1, gpbFp);
+            writeUint(gpbFp, font->glyphArray[j].advance);
+            fwrite(&font->glyphArray[j].uvCoords, sizeof(float), 4, gpbFp);
+        }
 
         // Image dimensions
         unsigned int imageSize = font->imageWidth * font->imageHeight;

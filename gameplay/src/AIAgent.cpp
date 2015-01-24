@@ -9,8 +9,6 @@ AIAgent::AIAgent()
     : _stateMachine(NULL), _node(NULL), _enabled(true), _listener(NULL), _next(NULL)
 {
     _stateMachine = new AIStateMachine(this);
-
-    addScriptEvent("message", "<AIMessage>");
 }
 
 AIAgent::~AIAgent()
@@ -34,6 +32,11 @@ const char* AIAgent::getId() const
 Node* AIAgent::getNode() const
 {
     return _node;
+}
+    
+void AIAgent::setNode(Node* node)
+{
+    _node = node;
 }
 
 AIStateMachine* AIAgent::getStateMachine()
@@ -78,15 +81,17 @@ bool AIAgent::processMessage(AIMessage* message)
             }
         }
         break;
+    case AIMessage::MESSAGE_TYPE_CUSTOM:
+        break;
     }
 
     // Dispatch message to registered listener.
     if (_listener && _listener->messageReceived(message))
         return true;
-    
-    if (fireScriptEvent<bool>("message", message))
+
+    if (_node && _node->fireScriptEvent<bool>(GP_GET_SCRIPT_EVENT(Node, messageReceived), dynamic_cast<void*>(_node), message))
         return true;
-    
+
     return false;
 }
 

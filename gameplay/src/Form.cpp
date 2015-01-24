@@ -10,8 +10,8 @@
 #include "CheckBox.h"
 #include "Scene.h"
 
-// Scroll speed when using a DPad -- max scroll speed when using a joystick.
-static const float GAMEPAD_SCROLL_SPEED = 500.0f;
+// Scroll speed when using a joystick.
+static const float GAMEPAD_SCROLL_SPEED = 600.0f;
 // Distance a joystick must be pushed in order to trigger focus-change and/or scrolling.
 static const float JOYSTICK_THRESHOLD = 0.75f;
 // If the DPad or joystick is held down, this is the initial delay in milliseconds between focus changes.
@@ -42,7 +42,7 @@ struct FormInit
 };
 static FormInit __init;
 
-Form::Form() : _node(NULL), _batched(true)
+Form::Form() : Drawable(), _batched(true)
 {
 }
 
@@ -170,17 +170,14 @@ void Form::clearFocus()
     setFocusControl(NULL);
 }
 
+const char* Form::getTypeName() const
+{
+    return "Form";
+}
+
 bool Form::isForm() const
 {
     return true;
-}
-
-void Form::setNode(Node* node)
-{
-    if (_node != node)
-    {
-        _node = node;
-    }
 }
 
 static unsigned int nextPowerOfTwo(unsigned int v)
@@ -236,7 +233,7 @@ const Matrix& Form::getProjectionMatrix() const
     return  _projectionMatrix;
 }
 
-unsigned int Form::draw()
+unsigned int Form::draw(bool wireframe)
 {
     if (!_visible || _absoluteClipBounds.width == 0 || _absoluteClipBounds.height == 0)
         return 0;
@@ -276,15 +273,14 @@ unsigned int Form::draw()
         _batches.clear();
         drawCalls = batchCount;
     }
-
     return drawCalls;
 }
 
-const char* Form::getType() const
+Drawable* Form::clone(NodeCloneContext& context)
 {
-    return "form";
+    // TODO:
+    return NULL;
 }
-
 
 bool Form::isBatchingEnabled() const
 {
@@ -738,8 +734,6 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
             __shiftKeyDown = false;
         break;
     }
-    if (key == Keyboard::KEY_ESCAPE)
-        return false;
 
     // Handle focus changing
     if (__focusControl)
@@ -905,7 +899,7 @@ bool Form::pollGamepad(Gamepad* gamepad)
     return focusPressed || scrolling;
 }
 
-bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+bool Form::gamepadButtonEventInternal(Gamepad* gamepad)
 {
     if (!__focusControl)
         return false;
@@ -913,56 +907,83 @@ bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, uns
     bool selectButtonPressed = gamepad->isButtonDown(Gamepad::BUTTON_A) || gamepad->isButtonDown(Gamepad::BUTTON_X);
 
     // Fire press, release and click events to focused controls
-    switch (evt)
+    if (selectButtonPressed && __focusControl->_state != ACTIVE)
     {
-    case Gamepad::BUTTON_EVENT:
-        if (selectButtonPressed && __focusControl->_state != ACTIVE)
-        {
-            if (__activeControl[0])
-                __activeControl[0]->setDirty(DIRTY_STATE);
+        if (__activeControl[0])
+            __activeControl[0]->setDirty(DIRTY_STATE);
 
-            __activeControl[0] = __focusControl;
-            __focusControl->_state = ACTIVE;
-            __focusControl->notifyListeners(Control::Listener::PRESS);
-            return true;
-        }
-        else if (!selectButtonPressed && __focusControl->_state == ACTIVE)
-        {
-            if (__activeControl[0])
-                __activeControl[0]->setDirty(DIRTY_STATE);
+        __activeControl[0] = __focusControl;
+        __focusControl->_state = ACTIVE;
+        __focusControl->notifyListeners(Control::Listener::PRESS);
+        return true;
+    }
+    else if (!selectButtonPressed && __focusControl->_state == ACTIVE)
+    {
+        if (__activeControl[0])
+            __activeControl[0]->setDirty(DIRTY_STATE);
 
-            for (unsigned int i = 0; i < Touch::MAX_TOUCH_POINTS; ++i)
+        for (unsigned int i = 0; i < Touch::MAX_TOUCH_POINTS; ++i)
+        {
+            if (__activeControl[i] == __focusControl)
             {
-                if (__activeControl[i] == __focusControl)
-                {
-                    __activeControl[i] = NULL;
-                }
+                __activeControl[i] = NULL;
             }
-
-            __focusControl->_state = NORMAL;
-            __focusControl->notifyListeners(Control::Listener::RELEASE);
-            __focusControl->notifyListeners(Control::Listener::CLICK);
-            return true;
         }
-        break;
+
+        __focusControl->_state = NORMAL;
+        __focusControl->notifyListeners(Control::Listener::RELEASE);
+        __focusControl->notifyListeners(Control::Listener::CLICK);
+        return true;
     }
 
-    // Dispatch gamepad events to focused controls (or their parents)
-    Control * ctrl = __focusControl;
+    // Dispatch gamepad button events to focused controls (or their parents)
+    Control* ctrl = __focusControl;
     while (ctrl)
     {
         if (ctrl->isEnabled() && ctrl->isVisible())
         {
-            if (ctrl->gamepadEvent(evt, gamepad, analogIndex))
+            if (ctrl->gamepadButtonEvent(gamepad))
                 return true;
         }
 
         ctrl = ctrl->getParent();
     }
-
     return false;
 }
 
+bool Form::gamepadTriggerEventInternal(Gamepad* gamepad, unsigned int index)
+{
+    // Dispatch gamepad trigger events to focused controls (or their parents)
+    Control* ctrl = __focusControl;
+    while (ctrl)
+    {
+        if (ctrl->isEnabled() && ctrl->isVisible())
+        {
+            if (ctrl->gamepadTriggerEvent(gamepad, index))
+                return true;
+        }
+
+        ctrl = ctrl->getParent();
+    }
+    return false;
+}
+
+bool Form::gamepadJoystickEventInternal(Gamepad* gamepad, unsigned int index)
+{
+    // Dispatch gamepad joystick events to focused controls (or their parents)
+    Control* ctrl = __focusControl;
+    while (ctrl)
+    {
+        if (ctrl->isEnabled() && ctrl->isVisible())
+        {
+            if (ctrl->gamepadJoystickEvent(gamepad, index))
+                return true;
+        }
+
+        ctrl = ctrl->getParent();
+    }
+    return false;
+}
 void Form::resizeEventInternal(unsigned int width, unsigned int height)
 {
     for (size_t i = 0, size = __forms.size(); i < size; ++i)
@@ -971,7 +992,7 @@ void Form::resizeEventInternal(unsigned int width, unsigned int height)
         if (form)
         {
             // Dirty the form
-            form->setDirty(Control::DIRTY_STATE);
+            form->setDirty(Control::DIRTY_BOUNDS | Control::DIRTY_STATE);
         }
     }
 }
