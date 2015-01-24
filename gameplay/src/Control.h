@@ -1348,10 +1348,10 @@ protected:
      *
      * @param s A string in the format of either 'N, N' or 'N%, N%' (where N is a number)
      * @param v1 Set to the value of the first number in the string
-     * @param v1 Set to the value of the second number in the string
+     * @param v2 Set to the value of the second number in the string
      * @param v1Percentage Set to true if the first number should be treated as a percentage
      * @param v2Percentage Set to true if the second number should be treated as a percentage
-     * @return True if the string was parsed
+     * @return true if the string was parsed
      */
     static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percentage, bool* v2Percentage);
 

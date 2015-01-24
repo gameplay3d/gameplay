@@ -165,7 +165,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="bar-descriptor.xml" />
     <None Include="game.config" />
     <None Include="icon.png" />
     <None Include="res\airstrip.gpb" />

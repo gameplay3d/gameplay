@@ -12,9 +12,9 @@ class NodeCloneContext;
  */
 class Drawable
 {
-public:
-
     friend class Node;
+
+public:
 
     /**
      * Constructor.
@@ -59,6 +59,9 @@ protected:
      */
     virtual void setNode(Node* node);
 
+    /**
+     * Node this drawable is attached to.
+     */
     Node* _node;
 };
 

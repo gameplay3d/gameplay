@@ -41,6 +41,7 @@ public:
      * @param tileHeight The height of each tile in the tile set.
      * @param rowCount The number of tile rows.
      * @param columnCount The number of tile columns.
+     *
      * @return The tile set created.
      */
     static TileSet* create(const char* imagePath, float tileWidth, float tileHeight,
@@ -129,7 +130,7 @@ public:
      *
      * The range is from full transparent to opaque [0.0,1.0].
      *
-     * @preturn The opacity for the sprite.
+     * @return The opacity for the sprite.
      */
     float getOpacity() const;
     
@@ -172,7 +173,9 @@ protected:
      * @see Drawable::clone
      */
     Drawable* clone(NodeCloneContext &context);
-    
+
+private:
+
     Vector2* _tiles;
     float _tileWidth;
     float _tileHeight;

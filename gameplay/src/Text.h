@@ -133,6 +133,7 @@ public:
      * Sets if the text is rendered right-to-left.
      *
      * Default is false (left-to-right)
+     *
      * @return rightToLeft true if the text is rendered right-to-left, false if left-to-right.
      */
     bool getRightToLeft() const;
@@ -167,7 +168,7 @@ public:
      *
      * Default is Rectangle(0, 0, 0, 0) which means no clipping region is applied.
      *
-     * @param clip The clipping region for this text.
+     * @return clip The clipping region for this text.
      */
     const Rectangle& getClip() const;
     
@@ -185,7 +186,7 @@ public:
      *
      * The range is from full transparent to opaque [0.0,1.0].
      *
-     * @preturn The opacity for the sprite.
+     * @return The opacity for the sprite.
      */
     float getOpacity() const;
     
@@ -250,6 +251,8 @@ protected:
      */
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
     
+private:
+
     Font* _font;
     std::string _text;
     unsigned int _size;

@@ -44,20 +44,10 @@ private:
     Font* _font;
     Scene* _scene;
     Node* _cameraNode;
-    TileSet* _floorTileSet;
-    Node* _floorNode;
-    Sprite* _backgroundSprite;
-    Node* _backgroundNode;
     Sprite* _playerSprite;
     Node* _playerNode;
     Animation* _playerAnimation;
     int _playerMovement;
-    Sprite* _rocketSprite;
-    Node* _rocketNode;
-    Sprite* _waterSprite;
-    Node* _waterNode;
-    Text* _text;
-    Node* _textNode;
     
 };
 

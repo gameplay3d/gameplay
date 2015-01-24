@@ -416,18 +416,19 @@ public:
     /**
      * Gets the drawable object attached to this node.
      *
-     *
-     * @return The model attached to this node.
+     * @return The drawable component attached to this node.
      */
     Drawable* getDrawable() const;
 
     /**
-     * Set the drawable object to be attached to this node.
+     * Set the drawable object to be attached to this node
+     *
+     * This is typically a Model, ParticleEmiiter, Form, Terrrain, Sprite, TileSet or Text.
      *
      * This will increase the reference count of the new drawble and decrease
      * the reference count of the old drawable.
      *
-     * @param model The new model. May be NULL.
+     * @param drawable The new drawable component. May be NULL.
      */
     void setDrawable(Drawable* drawable);
 
@@ -680,25 +681,44 @@ private:
 
 protected:
 
+    /** The scene this node is attached to. */
     Scene* _scene;
+    /** The nodes id. */
     std::string _id;
+    /** The nodes first child. */
     Node* _firstChild;
+    /** The nodes next sibiling. */
     Node* _nextSibling;
+    /** The nodes previous sibiling. */
     Node* _prevSibling;
+    /** The nodes parent. */
     Node* _parent;
+    /** The number of child nodes. */
     unsigned int _childCount;
+    /** If this node is enabled. Maybe different if parent is enabled/disabled. */
     bool _enabled; 
+    /** Tags assigned to this node. */
     std::map<std::string, std::string>* _tags;
+    /** The drawble component attached to this node. */
     Drawable* _drawable;
+    /** The camera component attached to this node. */
     Camera* _camera;
+    /** The light component attached to this node. */
     Light* _light;
+    /** The audio source component attached to this node. */
     AudioSource* _audioSource;
+    /** The collision object component attached to this node. */
     PhysicsCollisionObject* _collisionObject;
+    /** The AI agent component attached to this node. */
     mutable AIAgent* _agent;
+    /** The user object component attached to this node. */
     Ref* _userObject;
+    /** The world matrix for this node. */
     mutable Matrix _world;
-    mutable int _dirtyBits;
+    /** The bounding sphere for this node. */
     mutable BoundingSphere _bounds;
+    /** The dirty bits used for optimization. */
+    mutable int _dirtyBits;
 };
 
 /**

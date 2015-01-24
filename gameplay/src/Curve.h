@@ -339,8 +339,10 @@ public:
      * Sets the tangents for a point on the curve specified by the index.
      *
      * @param index The index of the point.
-     *
-     *
+     * @param type The interpolation type.
+     * @param type The curve interpolation type.
+     * @param inValue The tangent approaching the point.
+     * @param outValue The tangent leaving the point.
      */
     void setTangent(unsigned int index, InterpolationType type, float* inValue, float* outValue);
     

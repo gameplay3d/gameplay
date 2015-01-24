@@ -131,6 +131,7 @@ public:
     /**
      * Sets the radius of joystick motion
      *
+     * @param radius The radius to be set.
      * @param isPercentage If the radius value is a percentage value of the relative size of this control
      */
     void setRadius(float radius, bool isPercentage = false);

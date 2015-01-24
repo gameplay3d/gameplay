@@ -246,12 +246,14 @@ Sprite* Sprite::create(Properties* properties)
     float heightPercentage = 0.0f;
     if (properties->exists("width"))
     {
-        if (properties->getType("width") == Properties::NUMBER) //TODO: Verify that this works for "100" but fails for "100%"
+        if (properties->getType("width") == Properties::NUMBER)
         {
+			// Number only (200)
             width = properties->getFloat("width");
         }
         else
         {
+			// Number and something else (200%)
             widthPercentage = properties->getFloat("width") / 100.0f;
         }
     }

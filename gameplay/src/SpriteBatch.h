@@ -267,14 +267,23 @@ public:
      */
     struct SpriteVertex
     {
+        /** Vertex position x */
         float x;
+        /** Vertex position y */
         float y;
+        /** Vertex position z */
         float z;
+        /** Vertex texture u */
         float u;
+        /** Vertex texture v */
         float v;
+        /** Vertex color red component */
         float r;
+        /** Vertex color green component */
         float g;
+        /** Vertex color blue component */
         float b;
+        /** Vertex color alpha component */
         float a;
     };
     
@@ -391,11 +400,6 @@ private:
      */
     void addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip, SpriteBatch::SpriteVertex* vertices);
 
-    /**
-     * Clip position and size to fit within clip region.
-     *
-     * @return true if any part of sprite intersects with the clip region and therefore needs drawing, false otherwise.
-     */
     bool clipSprite(const Rectangle& clip, float& x, float& y, float& width, float& height, float& u1, float& v1, float& u2, float& v2);
 
     MeshBatch* _batch;

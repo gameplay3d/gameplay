@@ -161,9 +161,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="bar-descriptor.xml">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="game.config">
       <SubType>Designer</SubType>
     </None>
@@ -196,7 +193,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="res\common\forms\formZOrder.form" />
     <None Include="res\common\gamepad.form" />
     <None Include="res\common\gamepad.theme" />
-    <None Include="res\common\grid.material" />
     <None Include="res\common\inputs.form" />
     <None Include="res\common\light.form" />
     <None Include="res\common\light.material" />
@@ -225,6 +221,8 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="res\common\sample.material" />
     <None Include="res\common\sample.scene" />
     <None Include="res\common\sphere.gpb" />
+    <None Include="res\common\sprites\sprite.scene" />
+    <None Include="res\common\sprites\water2d.frag" />
     <None Include="res\common\terrain\encode.bat" />
     <None Include="res\common\terrain\heightmap.r16" />
     <None Include="res\common\terrain\sample.scene" />
@@ -319,6 +317,14 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <Image Include="res\common\particles\explosion.png" />
     <Image Include="res\common\particles\fire.png" />
     <Image Include="res\common\particles\smoke.png" />
+    <Image Include="res\common\sprites\background.png" />
+    <Image Include="res\common\sprites\level.png" />
+    <Image Include="res\common\sprites\player1.png" />
+    <Image Include="res\common\sprites\player2.png" />
+    <Image Include="res\common\sprites\player3.png" />
+    <Image Include="res\common\sprites\rocket.png" />
+    <Image Include="res\common\sprites\water2d-noise.png" />
+    <Image Include="res\common\sprites\water2d.png" />
     <Image Include="res\common\terrain\dirt.dds" />
     <Image Include="res\common\terrain\grass.dds" />
     <Image Include="res\common\terrain\normalmap.dds" />
@@ -344,6 +350,12 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
   <ItemGroup>
     <Media Include="res\common\audio\braking.wav" />
     <Media Include="res\common\footsteps.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\common\sprites\level.txt" />
+    <Text Include="res\common\sprites\player1.txt" />
+    <Text Include="res\common\sprites\player2.txt" />
+    <Text Include="res\common\sprites\player3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
