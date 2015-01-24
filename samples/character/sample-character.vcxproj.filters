@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" />
-    <None Include="bar-descriptor.xml" />
     <None Include="game.config" />
     <None Include="game.dxt.config" />
     <None Include="res\common\arial.gpb">

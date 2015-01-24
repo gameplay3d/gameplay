@@ -33,11 +33,16 @@
     <Filter Include="res\common\audio">
       <UniqueIdentifier>{7da0c58a-d770-4181-8781-f9948df5bdd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\common\water">
+      <UniqueIdentifier>{e6d4de4b-95e9-4893-a8a9-ce00291995cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\common\particles">
+      <UniqueIdentifier>{98333a4d-224e-4f83-ac60-baca4885bf82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
     <None Include="icon.png" />
-    <None Include="bar-descriptor.xml" />
     <None Include="res\common\forms\formBasicControls.form">
       <Filter>res\common\forms</Filter>
     </None>
@@ -141,9 +146,6 @@
       <Filter>res\common</Filter>
     </None>
     <None Include="res\common\gamepad.theme">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\grid.material">
       <Filter>res\common</Filter>
     </None>
     <None Include="res\common\inputs.form">
@@ -254,17 +256,6 @@
     <None Include="res\common\fonts\neuropol.gpb">
       <Filter>res\common\fonts</Filter>
     </None>
-    <None Include="res\common\particles\editor.form" />
-    <None Include="res\common\particles\editor.theme" />
-    <None Include="res\common\particles\explosion.particle" />
-    <None Include="res\common\particles\fire.particle" />
-    <None Include="res\common\particles\grid.material" />
-    <None Include="res\common\particles\smoke.particle" />
-    <None Include="res\common\water\pond.gpb" />
-    <None Include="res\common\water\watersample.frag" />
-    <None Include="res\common\water\watersample.material" />
-    <None Include="res\common\water\watersample.scene" />
-    <None Include="res\common\water\watersample.vert" />
     <None Include="res\common\audio\background.form">
       <Filter>res\common\audio</Filter>
     </None>
@@ -282,6 +273,39 @@
     </None>
     <None Include="res\common\audio\sample.audio">
       <Filter>res\common\audio</Filter>
+    </None>
+    <None Include="res\common\water\watersample.vert">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\water\watersample.frag">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\water\watersample.material">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\water\watersample.scene">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\particles\editor.form">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\particles\editor.theme">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\particles\explosion.particle">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\particles\fire.particle">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\particles\smoke.particle">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\water\pond.gpb">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\particles\grid.material">
+      <Filter>res\common</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -345,9 +369,6 @@
     <ClInclude Include="src\WaterSample.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\ParticlesSample.h" />
-    <ClInclude Include="src\FontSample.h" />
-    <ClInclude Include="src\SpriteSample.h" />
     <ClInclude Include="src\SceneCreateSample.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -355,6 +376,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\AudioSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticlesSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpriteSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontSample.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -419,9 +449,6 @@
     <ClCompile Include="src\WaterSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ParticlesSample.cpp" />
-    <ClCompile Include="src\FontSample.cpp" />
-    <ClCompile Include="src\SpriteSample.cpp" />
     <ClCompile Include="src\SceneCreateSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -429,6 +456,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\AudioSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticlesSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FontSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -490,12 +526,24 @@
     <Image Include="res\png\logo.png">
       <Filter>res\png</Filter>
     </Image>
-    <Image Include="res\common\particles\editor.png" />
-    <Image Include="res\common\particles\explosion.png" />
-    <Image Include="res\common\particles\fire.png" />
-    <Image Include="res\common\particles\smoke.png" />
-    <Image Include="res\common\water\water_normal.png" />
-    <Image Include="res\common\water\water_sample.png" />
+    <Image Include="res\common\water\water_normal.png">
+      <Filter>res\common\water</Filter>
+    </Image>
+    <Image Include="res\common\water\water_sample.png">
+      <Filter>res\common\water</Filter>
+    </Image>
+    <Image Include="res\common\particles\editor.png">
+      <Filter>res\common\particles</Filter>
+    </Image>
+    <Image Include="res\common\particles\explosion.png">
+      <Filter>res\common\particles</Filter>
+    </Image>
+    <Image Include="res\common\particles\fire.png">
+      <Filter>res\common\particles</Filter>
+    </Image>
+    <Image Include="res\common\particles\smoke.png">
+      <Filter>res\common\particles</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\common\footsteps.wav">

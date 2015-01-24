@@ -164,9 +164,6 @@ copy .\game.dxt.config .\game.config</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="bar-descriptor.xml">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="game.config">
       <SubType>Designer</SubType>
     </None>

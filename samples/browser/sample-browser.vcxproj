@@ -161,9 +161,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="bar-descriptor.xml">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="game.config">
       <SubType>Designer</SubType>
     </None>
@@ -196,7 +193,6 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="res\common\forms\formZOrder.form" />
     <None Include="res\common\gamepad.form" />
     <None Include="res\common\gamepad.theme" />
-    <None Include="res\common\grid.material" />
     <None Include="res\common\inputs.form" />
     <None Include="res\common\light.form" />
     <None Include="res\common\light.material" />
