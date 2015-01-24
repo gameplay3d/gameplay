@@ -122,14 +122,14 @@ public:
     public:
 
         /**
-         * Returns the name of this event.
+         * Gets the name of this event.
          *
          * @return The event name.
          */
         const char* getName() const;
 
         /**
-         * Returns the argument string for this event.
+         * Gets the argument string for this event.
          *
          * @return The argument string.
          */
@@ -144,7 +144,6 @@ public:
 
         /**
          * The event arguments.
-         *
          * @see ScriptController::executeFunction
          */
         std::string args;
@@ -164,7 +163,7 @@ public:
     public:
 
         /**
-         * Creates an empty event registry.
+         * Constructor.
          */
         EventRegistry();
 
@@ -180,7 +179,6 @@ public:
          * @param args The argument string for the event.
          *
          * @return The added event.
-         *
          * @see ScriptController::executeFunction
          */
         const Event* addEvent(const char* name, const char* args = NULL);
@@ -196,7 +194,6 @@ public:
          * Returns the event with the given index.
          *
          * @param index The index of the event to retrieve.
-         *
          * @return The event for the given index.
          */
         const Event* getEvent(unsigned int index) const;
@@ -205,7 +202,6 @@ public:
          * Returns the event that matches the given name.
          *
          * @param name The name of the event to search for.
-         *
          * @return The matching event, or NULL if no such event exists.
          */
         const Event* getEvent(const char* name) const;
@@ -216,8 +212,7 @@ public:
     };
 
     /**
-     * Implemented by child classes to return the type name identifier for
-     * the class that extends ScriptTarget.
+     * Gets the type name identifier for the class that extends ScriptTarget.
      *
      * @return A string describing the type name of the ScriptTarget child
      *      class, as it is defined in the lua bindings (i.e. "Node").
@@ -232,7 +227,6 @@ public:
      * variables with the same name to be used without colliding with other scripts.
      *
      * @param path Path to the script.
-     *
      * @return A pointer to the successfully loaded script, or NULL if unsuccessful.
      */
     Script* addScript(const char* path);
@@ -241,7 +235,6 @@ public:
      * Removes a previously attached script from this object.
      *
      * @param path The same path that was used to load the script being removed.
-     *
      * @return True if a script is successfully removed, false otherwise.
      */
     bool removeScript(const char* path);
@@ -279,7 +272,6 @@ public:
      * event (i.e. has a function callback defined for the given event).
      *
      * @param eventName The script event to check.
-     *
      * @return True if there is a listener for the specified event, false otherwise.
      */
     bool hasScriptListener(const char* eventName) const;
@@ -289,16 +281,14 @@ public:
      * event (i.e. has a function callback defined for the given event).
      *
      * @param event The script event to check.
-     *
      * @return True if there is a listener for the specified event, false otherwise.
      */
     bool hasScriptListener(const Event* event) const;
 
     /**
-     * Returns the event object for the given event name, if it exists.
+     * Gets the event object for the given event name, if it exists.
      *
      * @param eventName Name of the event.
-     *
      * @return The event object for the given name, or NULL if no such event exists.
      */
     const Event* getScriptEvent(const char* eventName) const;
@@ -326,10 +316,17 @@ protected:
      */
     struct RegistryEntry
     {
+        /** The event registry. */
         EventRegistry* registry;
+        /** The next entry in the registry. */
         RegistryEntry* next;
+        /** The previous entry in the registry. */
         RegistryEntry* prev;
 
+        /**
+         * Constructor.
+         * @param registry The event registry.
+         */
         RegistryEntry(EventRegistry* registry) : registry(registry), next(NULL), prev(NULL) { }
     };
 
@@ -338,9 +335,18 @@ protected:
      */
     struct ScriptEntry
     {
+        /** The script. */
         Script* script;
+        /** The next script entry. */
         ScriptEntry* next;
+        /** The previous script entry. */
         ScriptEntry* prev;
+
+        /**
+         * Constructor.
+         *
+         * @param script The script to create an entry for.
+         */
         ScriptEntry(Script* script) : script(script), next(NULL), prev(NULL) { }
     };
 
@@ -349,12 +355,16 @@ protected:
      */
     struct CallbackFunction
     {
-        // The script the callback belongs to (or NULL if the callback is a global function)
+        /** The script the callback belongs to (or NULL if the callback is a global function) */
         Script* script;
-
-        // The function within the script to call
+        /** The function within the script to call. */
         std::string function;
 
+        /**
+         * The callback function to registry script function to.
+         * @param script The script.
+         * @param function The script function.
+         */
         CallbackFunction(Script* script, const char* function) : script(script), function(function) { }
     };
 
@@ -370,8 +380,10 @@ protected:
 
     /**
      * Removes the specified script.
+     *
+     * @param entry The script entry to be removed.
      */
-    void removeScript(ScriptEntry* se);
+    void removeScript(ScriptEntry* entry);
 
     /**
      * Registers a set of supported script events and event arguments for this ScriptTarget. 
@@ -396,15 +408,34 @@ protected:
     std::map<const Event*, std::vector<CallbackFunction> >* _scriptCallbacks;
 };
 
-template<typename T> T ScriptTarget::fireScriptEvent(const Event* evt, ...)
+/**
+ * The fire script event template specialization.
+ *
+ * @param event The event fired.
+ * @param ... Optional list of arguments to pass to the script event.
+ */
+template<typename T> T ScriptTarget::fireScriptEvent(const Event* event, ...)
 {
     GP_ERROR("Unsupported return type for template function ScriptTarget::fireScriptEvent.");
 }
 
-/** Template specialization. */
-template<> void ScriptTarget::fireScriptEvent<void>(const Event* event, ...);
-/** Template specialization. */
-template<> bool ScriptTarget::fireScriptEvent<bool>(const Event* event, ...);
+/** 
+ * Template specialization. 
+ *
+ * @param evt The event fired.
+ * @param ... Optional list of arguments to pass to the script event (should match the
+ *      script event argument definition).
+ */
+template<> void ScriptTarget::fireScriptEvent<void>(const Event* evt, ...);
+
+/** 
+ * Template specialization.
+ *
+ * @param evt The event fired.
+ * @param ... Optional list of arguments to pass to the script event (should match the
+ *      script event argument definition).
+ */
+template<> bool ScriptTarget::fireScriptEvent<bool>(const Event* evt, ...);
 
 }
 

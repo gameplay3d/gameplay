@@ -124,6 +124,7 @@ public:
     /**
      * Creates a sprite from properties.
      *
+     * @param properties The properties object to create from.
      * @return The new Sprite.
      */
     static Sprite* create(Properties* properties);
@@ -193,13 +194,15 @@ public:
     /**
      * Sets the source region from the source image.
      *
-     * @param sourceClip The source clip region from the source image.
+     * @param frameIndex The frame index to specify the source region for.
+     * @param source The source clip region from the source image.
      */
     void setFrameSource(unsigned int frameIndex, const Rectangle& source);
     
     /**
      * Gets the source region from the source image.
      *
+     * @param frameIndex The frame index to get the source region from.
      * @return The source clip region from the source image.
      */
     const Rectangle& getFrameSource(unsigned int frameIndex) const;
@@ -244,7 +247,7 @@ public:
      *
      * @param index The current frame index to be rendered.
      */
-    void setFrameIndex(unsigned int frameIndex);
+    void setFrameIndex(unsigned int index);
     
     /**
      * Gets the current frame index to be rendered.
@@ -267,7 +270,7 @@ public:
      *
      * The range is from full transparent to opaque [0.0,1.0].
      *
-     * @preturn The opacity for the sprite.
+     * @return The opacity for the sprite.
      */
     float getOpacity() const;
     
@@ -302,11 +305,11 @@ public:
     BlendMode getBlendMode() const;
     
     /**
-     * Gets the texture sampler.
-     *
-     * This return texture sampler is used when sampling the texture in the
-     * effect. This can be modified for controlling sampler setting such as
+     * Gets the texture sampler used when sampling the texture.
+     * This can be modified for controlling sampler setting such as
      * filtering modes.
+     *
+     * @return The texture sampler used when sampling the texture.
      */
     Texture::Sampler* getSampler() const;
     
@@ -322,9 +325,9 @@ public:
     RenderState::StateBlock* getStateBlock() const;
     
     /**
-     * Gets the material used by this batch.
+     * Gets the material used by sprite batch.
      *
-     * @return The material.
+     * @return The material used by the sprite batch.
      */
     Material* getMaterial() const;
 
@@ -374,6 +377,8 @@ protected:
      * @see AnimationTarget::setAnimationProperty
      */
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
+
+private:
 
     float _width;
     float _height;

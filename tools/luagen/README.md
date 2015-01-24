@@ -1,7 +1,9 @@
 ## Usage
 Make sure that you have [doxygen](http://www.doxygen.org/) installed.
 
-To generate the Lua script bindings for gameplay, run the generate-doxygen-xml.bat (or .sh) script. Then, on Windows, open the gameplay-luagen Visual Studio solution and build and run the gameplay-luagen project. On Mac, open the gameplay-luagen XCode workspace and build and run the gameplay-luagen project.
+To generate the Lua script bindings for gameplay, run the generate-doxygen-xml.bat (or .sh) script. 
+Then, on Windows, open the gameplay-luagen Visual Studio solution and build and run the gameplay-luagen project. 
+On Mac, open the gameplay-luagen XCode workspace and build and run the gameplay-luagen project.
 
 There are also prebuilt binaries in the gameplay/bin folder.
 
