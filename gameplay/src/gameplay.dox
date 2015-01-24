@@ -1,9 +1,9 @@
-/** \mainpage gameplay - 3D Game Framework
+/** \mainpage gameplay3d - Game Framework
  *
  * \section intro Introduction
  *
  * The gameplay framework is a cross-platform, C++, 3D game framework that includes a runtime library, tools,
- * and learning content that allows developers to write games for mobile and desktop platforms
+ * and learning content that allows indie developers to write games for mobile and desktop platforms
  * without worrying about platform details.
  *
  * \section License
@@ -12,26 +12,27 @@
  *
  * \section Project Features
  *
- * The gameplay C++ runtime library offers a simple, well-defined, 3D game framework that's
- * designed to get the most out of today's mobile and desktop platforms. Its purpose is to help you
- * create stunning, world-class, games that harness the power and performance of the platform without
+ * The framework offers a well-defined, 3D game framework that's designed to get the most out of today's mobile and desktop platforms. 
+ * Its purpose is to help you create stunning, world-class, games that harness the power and performance of the platform without
  * being concerned about the platform details. This is accomplished through a set of C++ classes that
  * are built on top of the OS, providing access to the hardware, graphics, and audio libraries
- * (including OpenGL ES 2.0, and OpenAL 1.1). These classes allow you to:
+ * (including OpenGL, OpenGL ES, and OpenAL). 
+ *
+ * These classes allow you to:
  *
  * <b>Build your game without worrying about platform details</b>
- * \li Drive your game with application initialization, update, and render callbacks.
- * \li Control your game with touch screen, keyboard and accelerometer handlers.
- * \li Manage your game with control over the device's file system.
+ * \li Drive your game with application initialization, update, and render events.
+ * \li Control your game with touch screen, keyboard, accelerometer and gamepad support.
+ * \li Manage your game assets with an abstraction layer over the device's file system.
  *
  * <b>Create game components with ease</b>
- * \li Add visuals with scene, node, camera, lights, mesh, texture, sprite, materials, animation, and physics classes.
+ * \li Add visuals with scene, node, camera, lights, model, sprites, materials, animation, physics and AI classes.
  * \li Control and position the game using the viewport, camera, and audio listener.
  * \li Manage fundamental elements such as fonts, colors, and curves.
  * \li Update game data with built-in math classes for vectors, matrices, rays, planes, bounding volumes and their associated operations.
  *
  * <b>Improve your game and learn</b>
- * \li Supports TrueType fonts and the Khronos COLLADA and Autodesk FBX interchange scene formats to import and binary encode your 3D game assets.
+ * \li Supports TrueType fonts and Autodesk FBX interchange scene formats to import and binary encode your 3D game assets into bundles.
  * \li Built-in materials and shaders to enhance your game's rendering.
  * \li Both mobile and desktop platforms are supported for ease of portability and tooling options.
  * \li Documentation, tutorials, and code samples are provided.
