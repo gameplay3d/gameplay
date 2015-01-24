@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['a',['a',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html#a764182ac9b3e7db246dd1d0d8eeda046',1,'gameplay::PhysicsController::DebugDrawer::DebugVertex']]],
+  ['a',['a',['../structgameplay_1_1_sprite_batch_1_1_sprite_vertex.html#a038842c7a82e0fdbbbc3a67029ced0d7',1,'gameplay::SpriteBatch::SpriteVertex']]],
   ['angulardamping',['angularDamping',['../structgameplay_1_1_physics_rigid_body_1_1_parameters.html#aef99ab3434cf6a01bbffc4703328a9fe',1,'gameplay::PhysicsRigidBody::Parameters']]],
   ['angularfactor',['angularFactor',['../structgameplay_1_1_physics_rigid_body_1_1_parameters.html#abc14351f256fed962e741e86d35e0766',1,'gameplay::PhysicsRigidBody::Parameters']]],
-  ['animate_5fopacity',['ANIMATE_OPACITY',['../classgameplay_1_1_control.html#a0550cbfcaa518b112c2796a9e7a17777',1,'gameplay::Control']]],
+  ['animate_5fcolor',['ANIMATE_COLOR',['../classgameplay_1_1_sprite.html#adcb03c0d2e78a4344fcb677aeee46cb8',1,'gameplay::Sprite::ANIMATE_COLOR()'],['../classgameplay_1_1_text.html#abd5f2e9a9e718c256d6433e4eb923bc3',1,'gameplay::Text::ANIMATE_COLOR()']]],
+  ['animate_5fkeyframe',['ANIMATE_KEYFRAME',['../classgameplay_1_1_sprite.html#a2ce614bf68a1193dc858a7da950c22aa',1,'gameplay::Sprite']]],
+  ['animate_5fopacity',['ANIMATE_OPACITY',['../classgameplay_1_1_control.html#a0550cbfcaa518b112c2796a9e7a17777',1,'gameplay::Control::ANIMATE_OPACITY()'],['../classgameplay_1_1_sprite.html#a634af9e4cf0fd1bfce3254adf0e9750f',1,'gameplay::Sprite::ANIMATE_OPACITY()'],['../classgameplay_1_1_text.html#a763372569a34042c897fbc199fa4cda7',1,'gameplay::Text::ANIMATE_OPACITY()']]],
   ['animate_5fposition',['ANIMATE_POSITION',['../classgameplay_1_1_control.html#aefc69c44cc549f575b66faee33af06d6',1,'gameplay::Control']]],
   ['animate_5fposition_5fx',['ANIMATE_POSITION_X',['../classgameplay_1_1_control.html#a87c33d17cf1bd74f0eb64d802c07f228',1,'gameplay::Control']]],
   ['animate_5fposition_5fy',['ANIMATE_POSITION_Y',['../classgameplay_1_1_control.html#a82ec35acb4af91d95115e14dcd813243',1,'gameplay::Control']]],

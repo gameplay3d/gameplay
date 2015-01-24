@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay::Model Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="gameplay::Model" --><!-- doxytag: inherits="gameplay::Ref" -->
+<!-- doxytag: class="gameplay::Model" --><!-- doxytag: inherits="gameplay::Ref,gameplay::Drawable" -->
 <p><code>#include &lt;Model.h&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for gameplay::Model:</div>
@@ -103,7 +103,8 @@ Inheritance diagram for gameplay::Model:</div>
  <div class="center">
   <img src="classgameplay_1_1_model.png" usemap="#gameplay::Model_map" alt=""/>
   <map id="gameplay::Model_map" name="gameplay::Model_map">
-<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,107,24"/>
+<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,126,24"/>
+<area href="classgameplay_1_1_drawable.html" alt="gameplay::Drawable" shape="rect" coords="136,0,262,24"/>
 </map>
  </div></div>
 
@@ -119,8 +120,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a001b277e2b44f606ed24e56937f9269f">setMaterial</a> (const char *materialPath, int partIndex=-1)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a3a93e00f225d15d6501f201154c374fa">hasMaterial</a> (unsigned int partIndex) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a3980f3ebfa237b8879fb2b088d118b8b">getSkin</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a6135333bffe979a43f9523da2ace64a1">getNode</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#a40351ed3b48b938582906af0515b3ab4">setNode</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_model.html#af52bb521eea8934e739f3df8ce412897">draw</a> (bool wireframe=false)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -156,20 +155,15 @@ Static Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>wireframe</em> = <code>false</code></td><td>)</td>
-          <td></td>
+          <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Draws this mesh instance.</p>
-<p>This method binds the vertex buffer and index buffers for the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> and all of its MeshParts and draws the mesh geometry. Any other state necessary to render the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a>, such as rendering states, shader state, and so on, should be set up before calling this method.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">wireframe</td><td>If true, draw the model in wireframe mode. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The number of draw calls (mesh parts). </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_drawable.html#aa1127fbb66153ca432d46456709af97e">Drawable::draw</a></dd></dl>
+<p>Binds the vertex buffer and index buffers for the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> and all of its <a class="el" href="classgameplay_1_1_mesh_part.html">MeshPart</a>'s and draws the mesh geometry. Any other state necessary to render the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a>, such as rendering states, shader state, and so on, should be set up before calling this method. </p>
+
+<p>Implements <a class="el" href="classgameplay_1_1_drawable.html#aa1127fbb66153ca432d46456709af97e">gameplay::Drawable</a>.</p>
 
 </div>
 </div>
@@ -232,24 +226,6 @@ Static Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Returns the number of parts in the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> for this <a class="el" href="classgameplay_1_1_model.html">Model</a>.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The number of parts in the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> for this <a class="el" href="classgameplay_1_1_model.html">Model</a>. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a6135333bffe979a43f9523da2ace64a1"></a><!-- doxytag: member="gameplay::Model::getNode" ref="a6135333bffe979a43f9523da2ace64a1" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_node.html">Node</a>* <a class="el" href="classgameplay_1_1_model.html#a6135333bffe979a43f9523da2ace64a1">gameplay::Model::getNode</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the node that is associated with this model.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The node that is associated with this model. </dd></dl>
 
 </div>
 </div>
@@ -423,31 +399,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a40351ed3b48b938582906af0515b3ab4"></a><!-- doxytag: member="gameplay::Model::setNode" ref="a40351ed3b48b938582906af0515b3ab4" args="(Node *node)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_model.html#a40351ed3b48b938582906af0515b3ab4">gameplay::Model::setNode</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Sets the node that is associated with this model.</p>
-<p>This method is automatically called when a model is attached to a node and therefore should not normally be called explicitly.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">node</td><td>The node that is associated with this model. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -466,7 +417,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:24 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

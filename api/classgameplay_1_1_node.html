@@ -89,7 +89,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
@@ -117,9 +116,6 @@ Inheritance diagram for gameplay::Node:</div>
 
 <p><a href="classgameplay_1_1_node-members.html">List of all members.</a></p>
 <table class="memberdecls">
-<tr><td colspan="2"><h2><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">Type</a> { <b>NODE</b> =  1, 
@@ -127,6 +123,7 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aeb481a07d7fcdbd868575fba58927019">getTypeName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a543a786bf0958aa661d48057b17d8e42">getId</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ae211acf4c2b9c326d33dd679d8a2612c">setId</a> (const char *id)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">Node::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ae49ee3bfe26085ad179765e1b53b2d5c">getType</a> () const </td></tr>
@@ -137,19 +134,18 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ab7e18a29bc11c23c4a072c3fe3d33b5b">getNextSibling</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a4ace33975d00751cd783819382293650">getPreviousSibling</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#adc7c8761ae81d45f6a94edf471e0a0b0">getParent</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ad26da2c7c0c3f5313c9a4d7dd04fe2fd">setTag</a> (const char *name, const char *value=&quot;&quot;)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aaee6264b6105b962031927e282b168c8">getTag</a> (const char *name) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a2bd733be82848d3d244d976e283aace2">hasTag</a> (const char *name) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a2fbad0d2977cbce3544d8a8c1046abbc">getUserPointer</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ae2e5a28dd90e7506b6fd9fa9b03fa58f">setUserPointer</a> (void *pointer, void(*cleanupCallback)(void *)=NULL)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ae5d90829b2a106de31ca237ad07687c4">setActive</a> (bool active)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a6ed6d833b5f66de3b7436135e609776b">isActive</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a13b4603245a12664d49c10be2299749b">isActiveInHierarchy</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a626c00f77bee1120374694edf4d5f6ab">getChildCount</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a6b03f4b8af63f2beb3f651a8e1039904">getRootNode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a80062083db7ab8758e66507eceddc971">findNode</a> (const char *id, bool recursive=true, bool exactMatch=true) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a6de79cee46d2ff247cde30309d6091b5">findNodes</a> (const char *id, std::vector&lt; <a class="el" href="classgameplay_1_1_node.html">Node</a> * &gt; &amp;nodes, bool recursive=true, bool exactMatch=true) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classgameplay_1_1_scene.html">Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ac25a6131d93f001a27c79609d5c4b18a">getScene</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a6b03f4b8af63f2beb3f651a8e1039904">getRootNode</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ad26da2c7c0c3f5313c9a4d7dd04fe2fd">setTag</a> (const char *name, const char *value=&quot;&quot;)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aaee6264b6105b962031927e282b168c8">getTag</a> (const char *name) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a2bd733be82848d3d244d976e283aace2">hasTag</a> (const char *name) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ab2fb0cb4eaf093125d46206aeee90e72">setEnabled</a> (bool enabled)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a193546fe8c65a2241af47b0f72e8bf0b">isEnabled</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a93a0d44ff052c2972a4dcc9ad9fb1d85">isEnabledInHierarchy</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a54961f9ed8bbda4b98195b9637958eea">update</a> (float elapsedTime)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a1e62dc8bc433b52bd6096a8e68039b41">isStatic</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a2493835971f261f95ebbc439983f7a8d">getWorldMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a7b475fcb02299ad241ca6f8853fdab03">getWorldViewMatrix</a> () const </td></tr>
@@ -170,26 +166,21 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aef6bfae445794ad6c6b401cd36a2ac1d">getActiveCameraTranslationWorld</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a1703ad8be4b10d3792ecb5cc3da7425e">getActiveCameraTranslationView</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a18ccc842b846acee10da31419e29545d">getAnimation</a> (const char *id=NULL) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_drawable.html">Drawable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a09cff4e30be226d98649155731bec1f6">getDrawable</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ae1dd56170ef12a58b6e12fe420b0632e">setDrawable</a> (<a class="el" href="classgameplay_1_1_drawable.html">Drawable</a> *drawable)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#abb37f1a62112b5f05b6ad70eaa4d5c3b">getCamera</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aa92e79f39c36188912c7288356cbb340">setCamera</a> (<a class="el" href="classgameplay_1_1_camera.html">Camera</a> *camera)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_light.html">Light</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#abf0568dd8ce2123d21bb1d45a202d3f1">getLight</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aaf77efed0146acb8fad73497916818f8">setLight</a> (<a class="el" href="classgameplay_1_1_light.html">Light</a> *light)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#af10e066b900230f93a8c24ca95f5df0d">getModel</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aa3dc1fedce81d47d06a81a000ea6b1a7">setModel</a> (<a class="el" href="classgameplay_1_1_model.html">Model</a> *model)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_terrain.html">Terrain</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ac3c7155b7329ffb0cc9b8f951dc67ad9">getTerrain</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ab5c01484976c781a4ba0e3514b4a7e26">setTerrain</a> (<a class="el" href="classgameplay_1_1_terrain.html">Terrain</a> *terrain)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a94fcad0a56e096a6df82a6415eddc472">getForm</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a44bc8c91f74faa7c6ffb02e3b380feae">setForm</a> (<a class="el" href="classgameplay_1_1_form.html">Form</a> *form)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a72a6b81076e2029d922b0f26792833cb">getAudioSource</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a0eef42b73a98454126679bf259e0831e">setAudioSource</a> (<a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> *audio)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aa962106c8c01e1604aa26be334c4f537">getParticleEmitter</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a3d723fca56ded58e0b4553662bf1d31a">setParticleEmitter</a> (<a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *emitter)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aa5fb531f1d24a0a68a4e05254007efad">getCollisionObject</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a726f8ec665dd9f87769455bcbf405d57">setCollisionObject</a> (<a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463e">PhysicsCollisionObject::Type</a> type, const <a class="el" href="structgameplay_1_1_physics_collision_shape_1_1_definition.html">PhysicsCollisionShape::Definition</a> &amp;shape=<a class="el" href="classgameplay_1_1_physics_collision_shape.html#a26d78ad2920bcb8f9cd28d600fd43358">PhysicsCollisionShape::box</a>(), <a class="el" href="structgameplay_1_1_physics_rigid_body_1_1_parameters.html">PhysicsRigidBody::Parameters</a> *rigidBodyParameters=NULL, int group=PHYSICS_COLLISION_GROUP_DEFAULT, int mask=PHYSICS_COLLISION_MASK_DEFAULT)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#af6fb0a364ebf43657d8bad8113f57773">setCollisionObject</a> (const char *url)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a8fcc93f4859a6cb9158d6c4cedeb93c6">setCollisionObject</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_a_i_agent.html">AIAgent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ac1fe498dda19054532dac9e33772ba40">getAgent</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a911dbfb0958f07c024c83d60393a6e36">setAgent</a> (<a class="el" href="classgameplay_1_1_a_i_agent.html">AIAgent</a> *agent)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_ref.html">Ref</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a264374c353a3a6880f99f402c013bd47">getUserObject</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a524c2bd552c3325cb669e4d00dc5cfb3">setUserObject</a> (<a class="el" href="classgameplay_1_1_ref.html">Ref</a> *obj)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a3a2e9509178a79f6bf4d1324c28577be">getBoundingSphere</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a208b0372c2bdeae41629e6e53b19cb47">clone</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
@@ -215,28 +206,24 @@ Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a184343e28a4da222bd16ba805fc8fdc5">_prevSibling</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a069c03f7125b60c187ad0c443d459fe6">_parent</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a838bd72a5257af82d4a84bbd64bb9181">_childCount</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ae28900c8bfc0f9101523ab2985a5a50f">_active</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a4aed116a4189e24cc9d6d5c94c224837">_enabled</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <br class="typebreak"/>
 std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a3dd518dd2a718c9fa29d97570cba0ce0">_tags</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_drawable.html">Drawable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a95e8b9d2ca3806380ec6569cb87b5ae3">_drawable</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a91121ca0be89e614ccfadef9fbced1b3">_camera</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_light.html">Light</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aca8208dfbc190ec33dee5b7e1857bd52">_light</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a05686a4de65e5a86f32bf40a82113c53">_model</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_terrain.html">Terrain</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a4328b4ed453735856f8304ebf4c202ea">_terrain</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#afd2de9961b45705acba1c670ef21f536">_form</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ac837c4ea233f97e5c6f1a8b7af82ca6d">_audioSource</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ab61b2ddfd46374d273b6bacc6f807e5c">_particleEmitter</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a424aa4eb0818087cfcf057e7bcf101ba">_collisionObject</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_a_i_agent.html">AIAgent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a248ebe9a1818fbfd310ba363855547e7">_agent</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_ref.html">Ref</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#acfdb2e379a4cab00e2c302edeaf8d466">_userObject</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a2a0688d2ca497dcbfe1adbd4195f6d68">_world</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a66652f93aec036a5c51f217351e0acd4">_dirtyBits</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a7436cc6cc8a9ea6e3388b425dee1b202">_notifyHierarchyChanged</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aa45f1a5609704c99849b77b5db57b4b5">_bounds</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a823c329894dfe4364922ef34b55238a7">_userData</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a66652f93aec036a5c51f217351e0acd4">_dirtyBits</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a hierarchical structure of objects in 3D transformation spaces.</p>
-<p>This object allow you to attach components to a scene such as: <a class="el" href="classgameplay_1_1_model.html">Model</a>, <a class="el" href="classgameplay_1_1_camera.html">Camera</a>, <a class="el" href="classgameplay_1_1_light.html">Light</a>, <a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a>, <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a>, <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> and <a class="el" href="classgameplay_1_1_form.html">Form</a> components.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Node">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Node</a> </dd></dl>
+<p>This object allow you to attach components to a scene such as: <a class="el" href="classgameplay_1_1_drawable.html">Drawable</a>'s(<a class="el" href="classgameplay_1_1_model.html">Model</a>, <a class="el" href="classgameplay_1_1_camera.html">Camera</a>, <a class="el" href="classgameplay_1_1_light.html">Light</a>, <a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a>, <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a>, etc.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Node">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Node</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="aeda54e8fa43853b7795b53d99aab08b4"></a><!-- doxytag: member="gameplay::Node::Type" ref="aeda54e8fa43853b7795b53d99aab08b4" args="" -->
 <div class="memitem">
@@ -587,7 +574,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the AI agent assigned to this node.</p>
+<p>Gets the AI agent assigned to this node</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The AI agent for this node. </dd></dl>
 
 </div>
@@ -632,8 +619,8 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the pointer to this node's audio source.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The pointer to this node's audio source or NULL. </dd></dl>
+<p>Gets the audio source attached to this node.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The audio source attached to this node. </dd></dl>
 
 </div>
 </div>
@@ -671,8 +658,8 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the pointer to this node's camera.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The pointer to this node's camera or NULL. </dd></dl>
+<p>Gets the camera attached to this node.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Gets the camera attached to this node. </dd></dl>
 
 </div>
 </div>
@@ -713,6 +700,24 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
+<a class="anchor" id="a09cff4e30be226d98649155731bec1f6"></a><!-- doxytag: member="gameplay::Node::getDrawable" ref="a09cff4e30be226d98649155731bec1f6" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_drawable.html">Drawable</a>* <a class="el" href="classgameplay_1_1_node.html#a09cff4e30be226d98649155731bec1f6">gameplay::Node::getDrawable</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the drawable object attached to this node.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The drawable component attached to this node. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="acef20cc2267c5528a9fcaf685c61990b"></a><!-- doxytag: member="gameplay::Node::getFirstChild" ref="acef20cc2267c5528a9fcaf685c61990b" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -728,24 +733,6 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 <div class="memdoc">
 <p>Returns the first child for this node.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The first child. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a94fcad0a56e096a6df82a6415eddc472"></a><!-- doxytag: member="gameplay::Node::getForm" ref="a94fcad0a56e096a6df82a6415eddc472" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_form.html">Form</a>* <a class="el" href="classgameplay_1_1_node.html#a94fcad0a56e096a6df82a6415eddc472">gameplay::Node::getForm</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the pointer to this node's form.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The pointer to this node's form or NULL. </dd></dl>
 
 </div>
 </div>
@@ -890,26 +877,8 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the pointer to this node's light.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The pointer to this node's light or NULL. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="af10e066b900230f93a8c24ca95f5df0d"></a><!-- doxytag: member="gameplay::Node::getModel" ref="af10e066b900230f93a8c24ca95f5df0d" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_model.html">Model</a>* <a class="el" href="classgameplay_1_1_node.html#af10e066b900230f93a8c24ca95f5df0d">gameplay::Node::getModel</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the pointer to this node's model.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The pointer to this node's model or NULL. </dd></dl>
+<p>Get the light attached to this node.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The light attached to this node. </dd></dl>
 
 </div>
 </div>
@@ -946,24 +915,6 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 <div class="memdoc">
 <p>Returns the parent of this node.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The parent. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aa962106c8c01e1604aa26be334c4f537"></a><!-- doxytag: member="gameplay::Node::getParticleEmitter" ref="aa962106c8c01e1604aa26be334c4f537" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="el" href="classgameplay_1_1_node.html#aa962106c8c01e1604aa26be334c4f537">gameplay::Node::getParticleEmitter</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the pointer to this node's particle emitter.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The pointer to this node's particle emitter or NULL. </dd></dl>
 
 </div>
 </div>
@@ -1051,7 +1002,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the scene.</p>
+<p>Gets the scene this node is currenlty within.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The scene. </dd></dl>
 
 <p>Reimplemented in <a class="el" href="classgameplay_1_1_joint.html#ae4cf129e4f46e5990afa315e02ad0b11">gameplay::Joint</a>.</p>
@@ -1080,24 +1031,6 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The value of the given tag, or NULL if the tag is not set. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="ac3c7155b7329ffb0cc9b8f951dc67ad9"></a><!-- doxytag: member="gameplay::Node::getTerrain" ref="ac3c7155b7329ffb0cc9b8f951dc67ad9" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_terrain.html">Terrain</a>* <a class="el" href="classgameplay_1_1_node.html#ac3c7155b7329ffb0cc9b8f951dc67ad9">gameplay::Node::getTerrain</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the pointer to this node's terrain.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The pointer to this node's terrain. </dd></dl>
 
 </div>
 </div>
@@ -1156,6 +1089,27 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
+<a class="anchor" id="aeb481a07d7fcdbd868575fba58927019"></a><!-- doxytag: member="gameplay::Node::getTypeName" ref="aeb481a07d7fcdbd868575fba58927019" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_node.html#aeb481a07d7fcdbd868575fba58927019">gameplay::Node::getTypeName</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Extends <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> to return the type name of this class.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The type name of this class: "Node" </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_transform.html#aa20d5d4fcaaea04b3d715eaf937e9dab">gameplay::Transform</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ad88b19faa25918782c69a0914b1ce0c9"></a><!-- doxytag: member="gameplay::Node::getUpVectorWorld" ref="ad88b19faa25918782c69a0914b1ce0c9" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1174,12 +1128,12 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
-<a class="anchor" id="a2fbad0d2977cbce3544d8a8c1046abbc"></a><!-- doxytag: member="gameplay::Node::getUserPointer" ref="a2fbad0d2977cbce3544d8a8c1046abbc" args="() const " -->
+<a class="anchor" id="a264374c353a3a6880f99f402c013bd47"></a><!-- doxytag: member="gameplay::Node::getUserObject" ref="a264374c353a3a6880f99f402c013bd47" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void* <a class="el" href="classgameplay_1_1_node.html#a2fbad0d2977cbce3544d8a8c1046abbc">gameplay::Node::getUserPointer</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_ref.html">Ref</a>* <a class="el" href="classgameplay_1_1_node.html#a264374c353a3a6880f99f402c013bd47">gameplay::Node::getUserObject</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1187,9 +1141,8 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Returns the user pointer for this node.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The user pointer for this node. </dd></dl>
-<dl class="see"><dt><b>See also:</b></dt><dd>setUserPointer(void*)  </dd></dl>
+<p>Gets the user object assigned to this node.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The user object assigned object to this node. </dd></dl>
 
 </div>
 </div>
@@ -1325,12 +1278,12 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
-<a class="anchor" id="a6ed6d833b5f66de3b7436135e609776b"></a><!-- doxytag: member="gameplay::Node::isActive" ref="a6ed6d833b5f66de3b7436135e609776b" args="() const " -->
+<a class="anchor" id="a193546fe8c65a2241af47b0f72e8bf0b"></a><!-- doxytag: member="gameplay::Node::isEnabled" ref="a193546fe8c65a2241af47b0f72e8bf0b" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a6ed6d833b5f66de3b7436135e609776b">gameplay::Node::isActive</a> </td>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a193546fe8c65a2241af47b0f72e8bf0b">gameplay::Node::isEnabled</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1338,17 +1291,17 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Gets if the node is active in the scene.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>if the node is active in the scene. </dd></dl>
+<p>Gets if the node is enabled in the scene.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>if the node is enabled in the scene. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a13b4603245a12664d49c10be2299749b"></a><!-- doxytag: member="gameplay::Node::isActiveInHierarchy" ref="a13b4603245a12664d49c10be2299749b" args="() const " -->
+<a class="anchor" id="a93a0d44ff052c2972a4dcc9ad9fb1d85"></a><!-- doxytag: member="gameplay::Node::isEnabledInHierarchy" ref="a93a0d44ff052c2972a4dcc9ad9fb1d85" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a13b4603245a12664d49c10be2299749b">gameplay::Node::isActiveInHierarchy</a> </td>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a93a0d44ff052c2972a4dcc9ad9fb1d85">gameplay::Node::isEnabledInHierarchy</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1356,8 +1309,8 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Gets if the node either inherited active.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>if visual components attached on this node should be drawn. </dd></dl>
+<p>Gets if the node inherently enabled.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>if components attached on this node should be running. </dd></dl>
 
 </div>
 </div>
@@ -1441,30 +1394,6 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
-<a class="anchor" id="ae5d90829b2a106de31ca237ad07687c4"></a><!-- doxytag: member="gameplay::Node::setActive" ref="ae5d90829b2a106de31ca237ad07687c4" args="(bool active)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#ae5d90829b2a106de31ca237ad07687c4">gameplay::Node::setActive</a> </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>active</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Sets if the node is active in the scene.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">active</td><td>if the node is active in the scene. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="a911dbfb0958f07c024c83d60393a6e36"></a><!-- doxytag: member="gameplay::Node::setAgent" ref="a911dbfb0958f07c024c83d60393a6e36" args="(AIAgent *agent)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1503,7 +1432,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Assigns an audio source to this node.</p>
+<p>Attaches an audio source to this node.</p>
 <p>This will increase the reference count of the new audio source and decrease the reference count of the old audio source.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -1545,11 +1474,11 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Assigns a camera to this node.</p>
+<p>Attaches a camera to this node.</p>
 <p>This will increase the reference count of the new camera and decrease the reference count of the old camera.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">camera</td><td>A pointer to a camera. May be NULL. </td></tr>
+    <tr><td class="paramname">camera</td><td>The new camera. May be NULL. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1641,48 +1570,50 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
-<a class="anchor" id="a8fcc93f4859a6cb9158d6c4cedeb93c6"></a><!-- doxytag: member="gameplay::Node::setCollisionObject" ref="a8fcc93f4859a6cb9158d6c4cedeb93c6" args="(Properties *properties)" -->
+<a class="anchor" id="ae1dd56170ef12a58b6e12fe420b0632e"></a><!-- doxytag: member="gameplay::Node::setDrawable" ref="ae1dd56170ef12a58b6e12fe420b0632e" args="(Drawable *drawable)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a>* <a class="el" href="classgameplay_1_1_node.html#a726f8ec665dd9f87769455bcbf405d57">gameplay::Node::setCollisionObject</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#ae1dd56170ef12a58b6e12fe420b0632e">gameplay::Node::setDrawable</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td>
-          <td class="paramname"><em>properties</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_drawable.html">Drawable</a> *&#160;</td>
+          <td class="paramname"><em>drawable</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Sets the physics collision object for this node from the given properties object.</p>
+<p>Set the drawable object to be attached to this node</p>
+<p>This is typically a <a class="el" href="classgameplay_1_1_model.html">Model</a>, ParticleEmiiter, <a class="el" href="classgameplay_1_1_form.html">Form</a>, Terrrain, <a class="el" href="classgameplay_1_1_sprite.html">Sprite</a>, <a class="el" href="classgameplay_1_1_tile_set.html">TileSet</a> or <a class="el" href="classgameplay_1_1_text.html">Text</a>.</p>
+<p>This will increase the reference count of the new drawble and decrease the reference count of the old drawable.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">properties</td><td>The properties object defining the collision object. </td></tr>
+    <tr><td class="paramname">drawable</td><td>The new drawable component. May be NULL. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a class="anchor" id="a44bc8c91f74faa7c6ffb02e3b380feae"></a><!-- doxytag: member="gameplay::Node::setForm" ref="a44bc8c91f74faa7c6ffb02e3b380feae" args="(Form *form)" -->
+<a class="anchor" id="ab2fb0cb4eaf093125d46206aeee90e72"></a><!-- doxytag: member="gameplay::Node::setEnabled" ref="ab2fb0cb4eaf093125d46206aeee90e72" args="(bool enabled)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#a44bc8c91f74faa7c6ffb02e3b380feae">gameplay::Node::setForm</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#ab2fb0cb4eaf093125d46206aeee90e72">gameplay::Node::setEnabled</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td>
-          <td class="paramname"><em>form</em></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Assigns a form to this node.</p>
+<p>Sets if the node is enabled in the scene.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">form</td><td>The form pointer. May be NULL. </td></tr>
+    <tr><td class="paramname">enabled</td><td>if the node is enabled in the scene. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1727,61 +1658,11 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Assigns a light to this node.</p>
+<p>Attaches a light to this node.</p>
 <p>This will increase the reference count of the new light and decrease the reference count of the old light.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">light</td><td>The new light. May be NULL. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="aa3dc1fedce81d47d06a81a000ea6b1a7"></a><!-- doxytag: member="gameplay::Node::setModel" ref="aa3dc1fedce81d47d06a81a000ea6b1a7" args="(Model *model)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#aa3dc1fedce81d47d06a81a000ea6b1a7">gameplay::Node::setModel</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_model.html">Model</a> *&#160;</td>
-          <td class="paramname"><em>model</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Assigns a model to this node.</p>
-<p>This will increase the reference count of the new model and decrease the reference count of the old model.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">model</td><td>The new model. May be NULL. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a3d723fca56ded58e0b4553662bf1d31a"></a><!-- doxytag: member="gameplay::Node::setParticleEmitter" ref="a3d723fca56ded58e0b4553662bf1d31a" args="(ParticleEmitter *emitter)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#a3d723fca56ded58e0b4553662bf1d31a">gameplay::Node::setParticleEmitter</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> *&#160;</td>
-          <td class="paramname"><em>emitter</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Assigns a particle emitter to this node.</p>
-<p>This will increase the reference count of the new particle emitter and decrease the reference count of the old particle emitter.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">emitter</td><td>The new particle emitter. May be NULL. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1812,8 +1693,8 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Sets a custom tag on this <a class="el" href="classgameplay_1_1_node.html">Node</a>.</p>
-<p>Custom tags can be used for a variety of purposes within a game. For example, a tag called "transparent" can be added to nodes, to indicate which nodes in a scene are transparent. This tag can then be read during rendering to sort transparent and opaque objects for correct drawing order.</p>
+<p>Sets a tag on this <a class="el" href="classgameplay_1_1_node.html">Node</a>.</p>
+<p>tags can be used for a variety of purposes within a game. For example, a tag called "transparent" can be added to nodes, to indicate which nodes in a scene are transparent. This tag can then be read during rendering to sort transparent and opaque objects for correct drawing order.</p>
 <p>Setting a tag to NULL removes the tag from the <a class="el" href="classgameplay_1_1_node.html">Node</a>.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -1825,62 +1706,24 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
-<a class="anchor" id="ab5c01484976c781a4ba0e3514b4a7e26"></a><!-- doxytag: member="gameplay::Node::setTerrain" ref="ab5c01484976c781a4ba0e3514b4a7e26" args="(Terrain *terrain)" -->
+<a class="anchor" id="a524c2bd552c3325cb669e4d00dc5cfb3"></a><!-- doxytag: member="gameplay::Node::setUserObject" ref="a524c2bd552c3325cb669e4d00dc5cfb3" args="(Ref *obj)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#ab5c01484976c781a4ba0e3514b4a7e26">gameplay::Node::setTerrain</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#a524c2bd552c3325cb669e4d00dc5cfb3">gameplay::Node::setUserObject</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_terrain.html">Terrain</a> *&#160;</td>
-          <td class="paramname"><em>terrain</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_ref.html">Ref</a> *&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Assigns a terrain to this node.</p>
-<p>This will increase the reference count of the new terrain and decrease the reference count of the old terrain.</p>
+<p>Sets a user object to be assigned object to this node.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">terrain</td><td>The new terrain. May be NULL. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="ae2e5a28dd90e7506b6fd9fa9b03fa58f"></a><!-- doxytag: member="gameplay::Node::setUserPointer" ref="ae2e5a28dd90e7506b6fd9fa9b03fa58f" args="(void *pointer, void(*cleanupCallback)(void *)=NULL)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#ae2e5a28dd90e7506b6fd9fa9b03fa58f">gameplay::Node::setUserPointer</a> </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>pointer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void(*)(void *)&#160;</td>
-          <td class="paramname"><em>cleanupCallback</em> = <code>NULL</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Sets the user pointer for this node.</p>
-<p>The user pointer is initially NULL and can be set to anything. This is normally used to store game-specific data, such as game state for a particular node. For example, attributes for a game character, such as hit points, stamina, etc can be defined in a game structure and stored in this field.</p>
-<p>When a node is deleted, the (optional) cleanup callback function passed to this function is called to allow the user to free any memory associated with the user pointer.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pointer</td><td>User pointer. </td></tr>
-    <tr><td class="paramname">cleanupCallback</td><td>Optional callback that is called when the <a class="el" href="classgameplay_1_1_node.html">Node</a> is being destroyed (or when the user pointer changes), to allow the user to cleanup any memory associated with the user pointer.  </td></tr>
+    <tr><td class="paramname">obj</td><td>The user object assigned object to this node. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1908,32 +1751,44 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
-<hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="ae28900c8bfc0f9101523ab2985a5a50f"></a><!-- doxytag: member="gameplay::Node::_active" ref="ae28900c8bfc0f9101523ab2985a5a50f" args="" -->
+<a class="anchor" id="a54961f9ed8bbda4b98195b9637958eea"></a><!-- doxytag: member="gameplay::Node::update" ref="a54961f9ed8bbda4b98195b9637958eea" args="(float elapsedTime)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#ae28900c8bfc0f9101523ab2985a5a50f">gameplay::Node::_active</a><code> [protected]</code></td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#a54961f9ed8bbda4b98195b9637958eea">gameplay::Node::update</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>If this node is active in the scrne. This may not be active in hierarchy if its parents are not active. </p>
+<p>Called to update the state of this <a class="el" href="classgameplay_1_1_node.html">Node</a>.</p>
+<p>This method is called by <a class="el" href="classgameplay_1_1_scene.html#add189aadcbd93a7ffe3e6f2504a0799d">Scene::update(float)</a> to update the state of all active nodes in a scene. A <a class="el" href="classgameplay_1_1_node.html">Node</a> is considered active if Node::isActive() returns true.</p>
+<p>If any scripts are attached to the node, their update event will be fired.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">elapsedTime</td><td>Elapsed time in milliseconds. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
+<hr/><h2>Member Data Documentation</h2>
 <a class="anchor" id="a248ebe9a1818fbfd310ba363855547e7"></a><!-- doxytag: member="gameplay::Node::_agent" ref="a248ebe9a1818fbfd310ba363855547e7" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_a_i_agent.html">AIAgent</a>* <a class="el" href="classgameplay_1_1_node.html#a248ebe9a1818fbfd310ba363855547e7">gameplay::Node::_agent</a><code> [protected]</code></td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_a_i_agent.html">AIAgent</a>* <a class="el" href="classgameplay_1_1_node.html#a248ebe9a1818fbfd310ba363855547e7">gameplay::Node::_agent</a><code> [mutable, protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the AI agent attached to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The AI agent component attached to this node. </p>
 
 </div>
 </div>
@@ -1947,7 +1802,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_audio_source.html">AudioSource</a> attached to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The audio source component attached to this node. </p>
 
 </div>
 </div>
@@ -1961,7 +1816,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>The Bounding Sphere containing the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The bounding sphere for this node. </p>
 
 </div>
 </div>
@@ -1975,7 +1830,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_camera.html">Camera</a> attached to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The camera component attached to this node. </p>
 
 </div>
 </div>
@@ -1989,7 +1844,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>The number of children belonging to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The number of child nodes. </p>
 
 </div>
 </div>
@@ -2003,7 +1858,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> attached to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The collision object component attached to this node. </p>
 
 </div>
 </div>
@@ -2017,7 +1872,35 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Dirty bits flag for the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The dirty bits used for optimization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a95e8b9d2ca3806380ec6569cb87b5ae3"></a><!-- doxytag: member="gameplay::Node::_drawable" ref="a95e8b9d2ca3806380ec6569cb87b5ae3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_drawable.html">Drawable</a>* <a class="el" href="classgameplay_1_1_node.html#a95e8b9d2ca3806380ec6569cb87b5ae3">gameplay::Node::_drawable</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The drawble component attached to this node. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4aed116a4189e24cc9d6d5c94c224837"></a><!-- doxytag: member="gameplay::Node::_enabled" ref="a4aed116a4189e24cc9d6d5c94c224837" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a4aed116a4189e24cc9d6d5c94c224837">gameplay::Node::_enabled</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>If this node is enabled. Maybe different if parent is enabled/disabled. </p>
 
 </div>
 </div>
@@ -2031,21 +1914,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_node.html">Node</a>'s first child. </p>
-
-</div>
-</div>
-<a class="anchor" id="afd2de9961b45705acba1c670ef21f536"></a><!-- doxytag: member="gameplay::Node::_form" ref="afd2de9961b45705acba1c670ef21f536" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_form.html">Form</a>* <a class="el" href="classgameplay_1_1_node.html#afd2de9961b45705acba1c670ef21f536">gameplay::Node::_form</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_form.html">Form</a> attached to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The nodes first child. </p>
 
 </div>
 </div>
@@ -2059,7 +1928,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>The <a class="el" href="classgameplay_1_1_node.html">Node</a>'s ID. </p>
+<p>The nodes id. </p>
 
 </div>
 </div>
@@ -2073,21 +1942,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_light.html">Light</a> attached to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
-
-</div>
-</div>
-<a class="anchor" id="a05686a4de65e5a86f32bf40a82113c53"></a><!-- doxytag: member="gameplay::Node::_model" ref="a05686a4de65e5a86f32bf40a82113c53" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_model.html">Model</a>* <a class="el" href="classgameplay_1_1_node.html#a05686a4de65e5a86f32bf40a82113c53">gameplay::Node::_model</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_model.html">Model</a> attached to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The light component attached to this node. </p>
 
 </div>
 </div>
@@ -2101,21 +1956,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_node.html">Node</a>'s next child. </p>
-
-</div>
-</div>
-<a class="anchor" id="a7436cc6cc8a9ea6e3388b425dee1b202"></a><!-- doxytag: member="gameplay::Node::_notifyHierarchyChanged" ref="a7436cc6cc8a9ea6e3388b425dee1b202" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a7436cc6cc8a9ea6e3388b425dee1b202">gameplay::Node::_notifyHierarchyChanged</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>A flag indicating if the <a class="el" href="classgameplay_1_1_node.html">Node</a>'s hierarchy has changed. </p>
+<p>The nodes next sibiling. </p>
 
 </div>
 </div>
@@ -2129,21 +1970,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_node.html">Node</a>'s parent. </p>
-
-</div>
-</div>
-<a class="anchor" id="ab61b2ddfd46374d273b6bacc6f807e5c"></a><!-- doxytag: member="gameplay::Node::_particleEmitter" ref="ab61b2ddfd46374d273b6bacc6f807e5c" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>* <a class="el" href="classgameplay_1_1_node.html#ab61b2ddfd46374d273b6bacc6f807e5c">gameplay::Node::_particleEmitter</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> attached to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The nodes parent. </p>
 
 </div>
 </div>
@@ -2157,7 +1984,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_node.html">Node</a>'s previous sibling. </p>
+<p>The nodes previous sibiling. </p>
 
 </div>
 </div>
@@ -2171,7 +1998,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>The <a class="el" href="classgameplay_1_1_scene.html">Scene</a> this node belongs to. </p>
+<p>The scene this node is attached to. </p>
 
 </div>
 </div>
@@ -2185,35 +2012,21 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>List of custom tags for a node. </p>
+<p>Tags assigned to this node. </p>
 
 </div>
 </div>
-<a class="anchor" id="a4328b4ed453735856f8304ebf4c202ea"></a><!-- doxytag: member="gameplay::Node::_terrain" ref="a4328b4ed453735856f8304ebf4c202ea" args="" -->
+<a class="anchor" id="acfdb2e379a4cab00e2c302edeaf8d466"></a><!-- doxytag: member="gameplay::Node::_userObject" ref="acfdb2e379a4cab00e2c302edeaf8d466" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_terrain.html">Terrain</a>* <a class="el" href="classgameplay_1_1_node.html#a4328b4ed453735856f8304ebf4c202ea">gameplay::Node::_terrain</a><code> [protected]</code></td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_ref.html">Ref</a>* <a class="el" href="classgameplay_1_1_node.html#acfdb2e379a4cab00e2c302edeaf8d466">gameplay::Node::_userObject</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Pointer to the <a class="el" href="classgameplay_1_1_terrain.html">Terrain</a> attached to the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
-
-</div>
-</div>
-<a class="anchor" id="a823c329894dfe4364922ef34b55238a7"></a><!-- doxytag: member="gameplay::Node::_userData" ref="a823c329894dfe4364922ef34b55238a7" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a>* <a class="el" href="classgameplay_1_1_node.html#a823c329894dfe4364922ef34b55238a7">gameplay::Node::_userData</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Pointer to custom <a class="el" href="structgameplay_1_1_node_1_1_user_data.html">UserData</a> and cleanup call back that can be stored in a <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The user object component attached to this node. </p>
 
 </div>
 </div>
@@ -2227,7 +2040,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div>
 <div class="memdoc">
-<p>World <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> representation of the <a class="el" href="classgameplay_1_1_node.html">Node</a>. </p>
+<p>The world matrix for this node. </p>
 
 </div>
 </div>
@@ -2249,7 +2062,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:24 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay::Form Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="gameplay::Form" --><!-- doxytag: inherits="gameplay::Container" -->
+<!-- doxytag: class="gameplay::Form" --><!-- doxytag: inherits="gameplay::Drawable,gameplay::Container" -->
 <p><code>#include &lt;Form.h&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for gameplay::Form:</div>
@@ -103,6 +103,7 @@ Inheritance diagram for gameplay::Form:</div>
  <div class="center">
   <img src="classgameplay_1_1_form.png" usemap="#gameplay::Form_map" alt=""/>
   <map id="gameplay::Form_map" name="gameplay::Form_map">
+<area href="classgameplay_1_1_drawable.html" alt="gameplay::Drawable" shape="rect" coords="0,112,163,136"/>
 <area href="classgameplay_1_1_container.html" alt="gameplay::Container" shape="rect" coords="173,112,336,136"/>
 <area href="classgameplay_1_1_control.html" alt="gameplay::Control" shape="rect" coords="173,56,336,80"/>
 <area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,163,24"/>
@@ -115,11 +116,10 @@ Inheritance diagram for gameplay::Form:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a1e9c683c5327cfc6a0477afa6e6d603f">getTypeName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a02d24fbd19f703f3077191ea256a2972">isForm</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#aedb8f5113ddebf12d30c7dea5cba1191">setNode</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a0a6bdd50ceecb5f41566d92aa6735af4">update</a> (float elapsedTime)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#ae526e5facfbdbc6d75ba991990662cae">draw</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">getType</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a17533d9f628583a0bef3acfe337a0fc5">draw</a> (bool wireframe=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a6889ca98d486a8f46ad5a8756be3e3b4">isBatchingEnabled</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a0ee9809329420f25a6909ffdc00de782">setBatchingEnabled</a> (bool enabled)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
@@ -134,7 +134,7 @@ Static Public Member Functions</h2></td></tr>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a form that is a root container that contains zero or more controls.</p>
 <p>This can also be attached on a scene <a class="el" href="classgameplay_1_1_node.html">Node</a> to support 3D forms.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a366962023119d2885948ab46d612a9ee"></a><!-- doxytag: member="gameplay::Form::clearFocus" ref="a366962023119d2885948ab46d612a9ee" args="()" -->
 <div class="memitem">
@@ -224,21 +224,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae526e5facfbdbc6d75ba991990662cae"></a><!-- doxytag: member="gameplay::Form::draw" ref="ae526e5facfbdbc6d75ba991990662cae" args="()" -->
+<a class="anchor" id="a17533d9f628583a0bef3acfe337a0fc5"></a><!-- doxytag: member="gameplay::Form::draw" ref="a17533d9f628583a0bef3acfe337a0fc5" args="(bool wireframe=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_form.html#ae526e5facfbdbc6d75ba991990662cae">gameplay::Form::draw</a> </td>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_form.html#a17533d9f628583a0bef3acfe337a0fc5">gameplay::Form::draw</a> </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>wireframe</em> = <code>false</code></td><td>)</td>
+          <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Draws this form.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The nubmer of draw calls issued to draw the form. </dd></dl>
+
+<p>Implements <a class="el" href="classgameplay_1_1_drawable.html#aa1127fbb66153ca432d46456709af97e">gameplay::Drawable</a>.</p>
 
 </div>
 </div>
@@ -311,12 +314,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa211f5d6baced954de1fdf2f961ede71"></a><!-- doxytag: member="gameplay::Form::getType" ref="aa211f5d6baced954de1fdf2f961ede71" args="() const " -->
+<a class="anchor" id="a1e9c683c5327cfc6a0477afa6e6d603f"></a><!-- doxytag: member="gameplay::Form::getTypeName" ref="a1e9c683c5327cfc6a0477afa6e6d603f" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form::getType</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_form.html#a1e9c683c5327cfc6a0477afa6e6d603f">gameplay::Form::getTypeName</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const<code> [virtual]</code></td>
@@ -324,9 +327,12 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">Control::getType</a> </dd></dl>
+<p>Extends <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> to return the type name of this class.</p>
+<p>Child controls should override this function to return the correct type name.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The type name of this class: "Form" </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName</a> </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_container.html#a1fdd759c2f7141d5275efc5d680e920c">gameplay::Container</a>.</p>
 
 </div>
 </div>
@@ -392,31 +398,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aedb8f5113ddebf12d30c7dea5cba1191"></a><!-- doxytag: member="gameplay::Form::setNode" ref="aedb8f5113ddebf12d30c7dea5cba1191" args="(Node *node)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_form.html#aedb8f5113ddebf12d30c7dea5cba1191">gameplay::Form::setNode</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Attach this form to a node.</p>
-<p>A form can be drawn as part of the 3-dimensional world if it is attached to a node.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">node</td><td>The node to attach this form to. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="a0a6bdd50ceecb5f41566d92aa6735af4"></a><!-- doxytag: member="gameplay::Form::update" ref="a0a6bdd50ceecb5f41566d92aa6735af4" args="(float elapsedTime)" -->
 <div class="memitem">
 <div class="memproto">
@@ -455,7 +436,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

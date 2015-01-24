@@ -116,6 +116,7 @@ Inheritance diagram for gameplay::ImageControl:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_image_control.html#a99bbafbb78702dc780396177cc03afa3">getTypeName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_image_control.html#ab4fa5ae1afca04263f2eb8f32367b399">setImage</a> (const char *path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_image_control.html#afdd4699c2e1a43f6545a9dcb8e103780">setRegionSrc</a> (float x, float y, float width, float height)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_image_control.html#aee1f0513e3d23881dddc70d713ae7f26">setRegionSrc</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;region)</td></tr>
@@ -123,7 +124,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_image_control.html#a037a889bc4e2599f3244ff6e9f7847bd">setRegionDst</a> (float x, float y, float width, float height)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_image_control.html#ad9334545aaf69aeb2093c13277106222">setRegionDst</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;region)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_image_control.html#a4b814ca692716b364a3d39b5f8235a72">getRegionDst</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_image_control.html#a5baf1490bb084a487941d00f071b9645">getType</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_image_control.html">ImageControl</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_image_control.html#a77b0d4c75cb85f24be49323c88ed3c60">create</a> (const char *id, <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style=NULL)</td></tr>
@@ -139,7 +139,7 @@ Static Protected Member Functions</h2></td></tr>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines an image control.</p>
 <p>This allows forms to display seperate images from arbitrary files not specified in the theme.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a77b0d4c75cb85f24be49323c88ed3c60"></a><!-- doxytag: member="gameplay::ImageControl::create" ref="a77b0d4c75cb85f24be49323c88ed3c60" args="(const char *id, Theme::Style *style=NULL)" -->
 <div class="memitem">
@@ -279,12 +279,12 @@ Static Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5baf1490bb084a487941d00f071b9645"></a><!-- doxytag: member="gameplay::ImageControl::getType" ref="a5baf1490bb084a487941d00f071b9645" args="() const " -->
+<a class="anchor" id="a99bbafbb78702dc780396177cc03afa3"></a><!-- doxytag: member="gameplay::ImageControl::getTypeName" ref="a99bbafbb78702dc780396177cc03afa3" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_image_control.html#a5baf1490bb084a487941d00f071b9645">gameplay::ImageControl::getType</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_image_control.html#a99bbafbb78702dc780396177cc03afa3">gameplay::ImageControl::getTypeName</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const<code> [virtual]</code></td>
@@ -292,10 +292,12 @@ Static Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the type of the <a class="el" href="classgameplay_1_1_control.html">Control</a> and returns it as a string.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The string of the <a class="el" href="classgameplay_1_1_control.html">Control</a> type, all in lower-case. </dd></dl>
+<p>Extends <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> to return the type name of this class.</p>
+<p>Child controls should override this function to return the correct type name.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The type name of this class: "ImageControl" </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">gameplay::Control</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a5e00321d739db9b2055478bc978d2aab">gameplay::Control</a>.</p>
 
 </div>
 </div>
@@ -550,7 +552,7 @@ Static Protected Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

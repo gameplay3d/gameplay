@@ -89,9 +89,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::ScriptController Class Reference</div>  </div>
 </div><!--header-->
@@ -101,46 +101,76 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><a href="classgameplay_1_1_script_controller-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>ScriptTimeListener</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aeee2f3c540bc8cd3480589939ccbf64a">loadScript</a> (const char *path, bool forceReload=false)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ae478047facb082367b9d68975af84c88">loadUrl</a> (const char *url)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a22d1763653fcd1eec9ae5df93bde398c">registerCallback</a> (const char *callback, const char *function)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a0b30839f9812471082046e30a79b92dc">unregisterCallback</a> (const char *callback, const char *function)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a9e53c3153053206ce07feacd75123a69">loadScript</a> (const char *path, <a class="el" href="classgameplay_1_1_script.html#a8b296af219762d7fa7f54a820947e7dc">Script::Scope</a> scope=<a class="el" href="classgameplay_1_1_script.html#a8b296af219762d7fa7f54a820947e7dcaab4c13774b342e27d113c28ede53d211">Script::GLOBAL</a>, bool forceReload=false)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">executeFunction</a> (const char *func)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a895565252a85bcd47749880521ff3d89">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ac87bb43b36ce19521b8fcccc96e7b48f">executeFunction</a> (const char *func, const char *args,...)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a8d3de9396635c56411793cec5c5304a6">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aa9afc0a519b763e95b2d82065699888e">executeFunction</a> (const char *func, const char *args, va_list *list)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a24f6e310416ca20b27e00eebe10fbafc">getBool</a> (const char *name, bool defaultValue=false)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a38698006da5fa405bbe0c29796046c30">getChar</a> (const char *name, char defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a3ba7fc7e20365c3dbd8944eef2908246">getShort</a> (const char *name, short defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a3db8a05a6260de4f6b911bf524c70583">getInt</a> (const char *name, int defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a74a12c1bc612bb22eb3ce30439c19f3a">getLong</a> (const char *name, long defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a0a5a0d85627fa3c76f33ca59be927473">getUnsignedChar</a> (const char *name, unsigned char defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a2426030af4a39bded84e5e4039109968">getUnsignedShort</a> (const char *name, unsigned short defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aac3631bc87a8b3999b7a1ce5707d453d">getUnsignedInt</a> (const char *name, unsigned int defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a69a2755832d03810a7d545428061a12d">getUnsignedLong</a> (const char *name, unsigned long defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#abd96265e1f9a87e9bd08b0fa5166753c">getFloat</a> (const char *name, float defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a3b1f34605310460ed3ddf9267bef12d7">getDouble</a> (const char *name, double defaultValue=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aea160ca5d2077a7de8fa75ce6a733d32">getString</a> (const char *name)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a415a7ab62655a32586ad91780c221cc1">getObjectPointer</a> (const char *type, const char *name)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a7b02af8e375d3d60d3585eae4e5d40c0">setBool</a> (const char *name, bool v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ab754ac8b86f4ce4ee69b9dabc28d3eba">setChar</a> (const char *name, char v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a8e19d21c7f8b36202cd28895d3ed99ef">setShort</a> (const char *name, short v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ab23e88a3775b8a49c576695d3e46d001">setInt</a> (const char *name, int v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a73c31c5762db0712f34b506547e33c87">setLong</a> (const char *name, long v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#abcf2e0bb0b3c98366e4086d1dece0276">setUnsignedChar</a> (const char *name, unsigned char v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ad7a42338e5f0356c7258510285a3cc49">setUnsignedShort</a> (const char *name, unsigned short v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a32243f0a769df7572433dd8431fbc880">setUnsignedInt</a> (const char *name, unsigned int v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#adeac3a568d7ae7d3678552b0a21c1752">setUnsignedLong</a> (const char *name, unsigned long v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#af33f30e4753ca029bc6c984d484fa644">setFloat</a> (const char *name, float v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a4436b541f64827f881726f84d99397c2">setDouble</a> (const char *name, double v)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a19f800dd70aa406b91f4963bc3bddc21">setString</a> (const char *name, const char *v)</td></tr>
-<tr><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a0bee0306c5c686ea0c8cdc0bf4f99c55">setObjectPointer</a> (const char *type, const char *name, T *v)</td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ad7b58d0d5247d98ef2cdcfb5534f0903">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a6fadee23037b7aa7dd9ebc9db9095318">getBool</a> (const char *name, bool defaultValue=false, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a0cda7c2ef370b4d95e0553c52deccb7c">getChar</a> (const char *name, char defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a7974013166189890b87237a5dca6d9a2">getShort</a> (const char *name, short defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a0d432278e70d332fc130a5aa94f299d9">getInt</a> (const char *name, int defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ab42c8978d867a830d2447dc3518cd324">getLong</a> (const char *name, long defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a17109a78c20278408a95b95fb48b603b">getUnsignedChar</a> (const char *name, unsigned char defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a809b0a6e37f6fd079e243d13bab09f0b">getUnsignedShort</a> (const char *name, unsigned short defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a82384c9d53f336bd98f9d6548ed20289">getUnsignedInt</a> (const char *name, unsigned int defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a609b76b594d4b926338916039aa109cd">getUnsignedLong</a> (const char *name, unsigned long defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a30624308772aa691e06a14026c987277">getFloat</a> (const char *name, float defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a7ddf1f53c503cc7f23452720eb83ffe8">getDouble</a> (const char *name, double defaultValue=0, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a408d0679462765ca375dd472dc3c7d9f">getString</a> (const char *name, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a9e9ab60ec04b26a6806594f7561d45f8">getObjectPointer</a> (const char *type, const char *name, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a73e7f1f4e6168322aae14b5e322d42db">setBool</a> (const char *name, bool v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#adadf7ef271d572fd9e7bbf89cf1b5639">setChar</a> (const char *name, char v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aa335f8db41f61d57837decac5ab2dcdb">setShort</a> (const char *name, short v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a162aee5b38c5f8e35d628e4896f88e77">setInt</a> (const char *name, int v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a658a1400df1660d93b6d96544cfcfe0c">setLong</a> (const char *name, long v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aed16e906100024827e586fe73d3e0adc">setUnsignedChar</a> (const char *name, unsigned char v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a156993f0b5cead30937771c05f2658cc">setUnsignedShort</a> (const char *name, unsigned short v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a6901478462cfbd7de1159955896d0b28">setUnsignedInt</a> (const char *name, unsigned int v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a76cbee4d38af54c07defb7f930bb969f">setUnsignedLong</a> (const char *name, unsigned long v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a505b027970206ceb6f94d85cb632cf7e">setFloat</a> (const char *name, float v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a357a85bbce8a84a34e1cd0dbbacfb18a">setDouble</a> (const char *name, double v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a9208479a3558a4a342582cf3cf0162cd">setString</a> (const char *name, const char *v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#adc879f404e2c1f09c006eb9fb3b38168">setObjectPointer</a> (const char *type, const char *name, void *v, <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a4740e6d320896e325777b36f7756a3e5">functionExists</a> (const char *name, const <a class="el" href="classgameplay_1_1_script.html">Script</a> *script=NULL) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a4ff7fe3e2b4d10a950c02dbbe3a25ef6">getCurrentScript</a> () const </td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a373c28f6b21e768f70a00b33b28e0ab4">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a1c9735059e4613a6f3311cbdae5117dd">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">char&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a181867ed7df1c69c95364db92fb2b41e">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">short&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a3b88da06b3d7ca7317348bf2833b672e">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aeea3e7e7accbfadf8d6b09d79b283861">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">long&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a17ba5659f8ceba06085f310e2aac4651">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ad0dc806e5f8e6407e52a9dc90fbcb6e0">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned short&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ae41fcc2b23c742d79d91cb597e8419ee">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ab9b7372e03fa76cd49e0b8ec4f1758b4">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a06c6503978356de7994b2ed4a499752d">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">float&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ae6c95513057c0e7275ce01cf7241a72b">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#af67a7351605de5507f2c4671bc110052">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a57489b4dea163bf806344ee274d52b73">executeFunction</a> (const char *func, const char *args,...)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
@@ -166,6 +196,30 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a9b229386381d3a0c003fba1010f348c1">executeFunction</a> (const char *func, const char *args,...)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aa65f429fc6b564cd303ac2fedc91b124">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ac3e90d6b06bece9013db1fa5d0b549da">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">char&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a9b0367fd32cf5879d7392edac6f0c8aa">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">short&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a1b3dd7235ca4c5477efe102db9c3fc4f">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a97f7fd6210f62c2746e62596b83ac08f">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">long&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ac2df73ebf119a32c107d2328f3ecb876">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aea85fb8a9a8cde492eac0dc573b73713">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned short&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ae1cea78c1f1c6403a000bab759f63fc4">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a94de329da995298d22b6c88631b390df">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a7c69751e17c929e11abf4d82bc697a4c">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">float&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#af06ac0106225041b123c2d738656a042">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a33fbe138cac2d500be8b3820eb763f73">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args,...)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a771beef86b5da3c9093fddcddbfa5e52">executeFunction</a> (const char *func, const char *args, va_list *list)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a624461054ced803a94f5d9818f1d246e">executeFunction</a> (const char *func, const char *args, va_list *list)</td></tr>
@@ -189,57 +243,34 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">float&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a685b160db54d4d98f1cf07e2e0b41a57">executeFunction</a> (const char *func, const char *args, va_list *list)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a9bcd4db738f2993a2c99a901efe7aee1">executeFunction</a> (const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ad0461467cc097572b3f27260e0e9e4c7">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a103443f11811fd3eb4162e1f0a7db5d2">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">char&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#adc536ea7b3ec97a55b9aef17d9ab1ec0">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">short&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a78f9f36aa29f7baeaa7b20d26609a77e">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#afe0a66b01f24298105caa21282253584">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">long&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a5ed01d0fcddb6b2d0d2d22aa21932f59">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aa1c2d0ac3a97be37bbcfa63cce74acbb">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned short&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ac3a7a1a36cd02d3b3a4c5bbaa0abfd91">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a19a763554e69a76d291e945f7d0e3faa">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a58c593f8181f79b241afb83267d3d854">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">float&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ac003d9ea30067f8addbbd8288fef603d">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a934671ac15d8b0ccb8a5c96661c3cbc7">executeFunction</a> (<a class="el" href="classgameplay_1_1_script.html">Script</a> *script, const char *func, const char *args, va_list *list)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a344980c5588d2845b74efae26d860eaf">print</a> (const char *str)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a74610ca6a756aec69ec16912f722eb7e">print</a> (const char *str1, const char *str2)</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae762c160e7e3e6d5e800ac5595e6a86a"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::registerLibrary" ref="ae762c160e7e3e6d5e800ac5595e6a86a" args="(const char *name, const luaL_Reg *functions)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerLibrary</b> (const char *name, const luaL_Reg *functions)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60218f4914949fc80d24afc868f99a63"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::registerConstantBool" ref="a60218f4914949fc80d24afc868f99a63" args="(const std::string &amp;name, bool value, const std::vector&lt; std::string &gt; &amp;scopePath)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantBool</b> (const std::string &amp;name, bool value, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5561c8111ffc22495b3ba5c7e5eb09a2"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::registerConstantNumber" ref="a5561c8111ffc22495b3ba5c7e5eb09a2" args="(const std::string &amp;name, double value, const std::vector&lt; std::string &gt; &amp;scopePath)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantNumber</b> (const std::string &amp;name, double value, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9b2fb76276706d6f245005ac08f82b0e"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::registerConstantString" ref="a9b2fb76276706d6f245005ac08f82b0e" args="(const std::string &amp;name, const std::string &amp;value, const std::vector&lt; std::string &gt; &amp;scopePath)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantString</b> (const std::string &amp;name, const std::string &amp;value, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4344f5f4e93e6d6fd2beef4aec3272fd"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::registerClass" ref="a4344f5f4e93e6d6fd2beef4aec3272fd" args="(const char *name, const luaL_Reg *members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg *statics, const std::vector&lt; std::string &gt; &amp;scopePath)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerClass</b> (const char *name, const luaL_Reg *members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg *statics, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d465e18de50c584117562fffc938000"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::registerFunction" ref="a1d465e18de50c584117562fffc938000" args="(const char *luaFunction, lua_CFunction cppFunction)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerFunction</b> (const char *luaFunction, lua_CFunction cppFunction)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cc6da7a1715070876b1b5038d88666c"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::setGlobalHierarchyPair" ref="a8cc6da7a1715070876b1b5038d88666c" args="(const std::string &amp;base, const std::string &amp;derived)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::setGlobalHierarchyPair</b> (const std::string &amp;base, const std::string &amp;derived)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0736c7938fc869e14af5b2df97c1db36"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::addStringFromEnumConversionFunction" ref="a0736c7938fc869e14af5b2df97c1db36" args="(luaStringEnumConversionFunction stringFromEnum)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::addStringFromEnumConversionFunction</b> (luaStringEnumConversionFunction stringFromEnum)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90322c10329ee3a3e96b9b0cff25458d"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getBoolPointer" ref="a90322c10329ee3a3e96b9b0cff25458d" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getBoolPointer</b> (int index)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acab092c54cc5512058da19ab898cb775"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getShortPointer" ref="acab092c54cc5512058da19ab898cb775" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; short &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getShortPointer</b> (int index)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0656b023604ea41981c334ae43f1ad23"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getIntPointer" ref="a0656b023604ea41981c334ae43f1ad23" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getIntPointer</b> (int index)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a047e2875fb6bc9bd57240f17db82d1aa"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getLongPointer" ref="a047e2875fb6bc9bd57240f17db82d1aa" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; long &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getLongPointer</b> (int index)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba9c1129aadba94da01f14ee492847f6"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getUnsignedCharPointer" ref="aba9c1129aadba94da01f14ee492847f6" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; unsigned <br class="typebreak"/>
-char &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedCharPointer</b> (int index)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a335250b811808a9a358a50b2adec95"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getUnsignedShortPointer" ref="a0a335250b811808a9a358a50b2adec95" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; unsigned <br class="typebreak"/>
-short &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedShortPointer</b> (int index)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a908fbf00789d50edce5b37741115a9d1"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getUnsignedIntPointer" ref="a908fbf00789d50edce5b37741115a9d1" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; unsigned <br class="typebreak"/>
-int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedIntPointer</b> (int index)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaec3bea5c9a840c601a7ab0173adf9f2"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getUnsignedLongPointer" ref="aaec3bea5c9a840c601a7ab0173adf9f2" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; unsigned <br class="typebreak"/>
-long &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedLongPointer</b> (int index)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab3dd14ca7d0a278669b83992bb3bee1"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getFloatPointer" ref="aab3dd14ca7d0a278669b83992bb3bee1" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getFloatPointer</b> (int index)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaeabab96f608d06cb41777d5e4ea3f1f"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getDoublePointer" ref="aaeabab96f608d06cb41777d5e4ea3f1f" args="(int index)" -->
-<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getDoublePointer</b> (int index)</td></tr>
-<tr><td class="memTemplParams" colspan="2"><a class="anchor" id="a584848ba374121de56e65f224c0adf13"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getObjectPointer" ref="a584848ba374121de56e65f224c0adf13" args="(int index, const char *type, bool nonNull, bool *success)" -->
-template&lt;typename T &gt; </td></tr>
-<tr><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ScriptUtil::getObjectPointer</b> (int index, const char *type, bool nonNull, bool *success)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a667f44e40c1c8d32cf06d8ba3f936d14"></a><!-- doxytag: member="gameplay::ScriptController::ScriptUtil::getString" ref="a667f44e40c1c8d32cf06d8ba3f936d14" args="(int index, bool isStdString)" -->
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getString</b> (int index, bool isStdString)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Controls and manages all scripts. </p>
@@ -258,7 +289,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::g
       </table>
 </div>
 <div class="memdoc">
-<p>Calls the specified no-parameter Lua function.</p>
+<p>Calls a zero-parameter global function.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">func</td><td>The name of the function to call.</td></tr>
@@ -268,6 +299,44 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::g
 <dl class="return"><dt><b>Returns:</b></dt><dd>The return value of the executed Lua function.</dd></dl>
 <p>Template specialization. </p>
 
+</div>
+</div>
+<a class="anchor" id="a895565252a85bcd47749880521ff3d89"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a895565252a85bcd47749880521ff3d89" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Calls a zero-parameter function.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">script</td><td>The script to execute the function on, or NULL for the global script environment. </td></tr>
+    <tr><td class="paramname">func</td><td>The name of the function to call.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The return value of the executed Lua function.</dd></dl>
+ 
 </div>
 </div>
 <a class="anchor" id="ac87bb43b36ce19521b8fcccc96e7b48f"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ac87bb43b36ce19521b8fcccc96e7b48f" args="(const char *func, const char *args,...)" -->
@@ -302,7 +371,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div>
 <div class="memdoc">
-<p>Calls the specified Lua function using the given parameters.</p>
+<p>Calls a global function using the given parameters.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">func</td><td>The name of the function to call. </td></tr>
@@ -321,14 +390,84 @@ template&lt;typename T &gt; </div>
 <li>'s' - string</li>
 <li>'p' - pointer</li>
 <li>'&lt;object-type&gt;' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).</li>
-<li>'[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).</li>
+<li>'[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets). </li>
 </ul>
 </td></tr>
+    <tr><td class="paramname">...</td><td>Parameters to pass to the script fucntion, as specified by the args parameter.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The return value of the executed Lua function. </dd></dl>
-
+<dl class="return"><dt><b>Returns:</b></dt><dd>The return value of the executed Lua function.</dd></dl>
+ 
+</div>
+</div>
+<a class="anchor" id="a8d3de9396635c56411793cec5c5304a6"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a8d3de9396635c56411793cec5c5304a6" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Calls the a function from the specified script, using the given parameters.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">script</td><td>The script to execute the function on, or NULL for the global script environment. </td></tr>
+    <tr><td class="paramname">func</td><td>The name of the function to call. </td></tr>
+    <tr><td class="paramname">args</td><td>The argument signature of the function. Of the form 'xxx', where each 'x' is a parameter type and must be one of:<ul>
+<li>'b' - bool</li>
+<li>'c' - char</li>
+<li>'h' - short</li>
+<li>'i' - int</li>
+<li>'l' - long</li>
+<li>'f' - float</li>
+<li>'d' - double</li>
+<li>'ui' - unsigned int</li>
+<li>'ul' - unsigned long</li>
+<li>'uc' - unsigned char</li>
+<li>'uh' - unsigned short</li>
+<li>'s' - string</li>
+<li>'p' - pointer</li>
+<li>'&lt;object-type&gt;' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).</li>
+<li>'[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets). </li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">...</td><td>Parameters to pass to the script fucntion, as specified by the args parameter.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The return value of the executed Lua function.</dd></dl>
+ 
 </div>
 </div>
 <a class="anchor" id="aa9afc0a519b763e95b2d82065699888e"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="aa9afc0a519b763e95b2d82065699888e" args="(const char *func, const char *args, va_list *list)" -->
@@ -363,11 +502,11 @@ template&lt;typename T &gt; </div>
       </table>
 </div>
 <div class="memdoc">
-<p>Calls the specified Lua function using the given parameters.</p>
+<p>Calls the specified global Lua function using the given parameters.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">func</td><td>The name of the function to call. </td></tr>
-    <tr><td class="paramname">args</td><td>The argument signature of the function. Of the form 'xxx', where each 'x' is a parameter type and must be one of:<ul>
+    <tr><td class="paramname">args</td><td>The optional argument signature of the function. Of the form 'xxx', where each 'x' is a parameter type and must be one of:<ul>
 <li>'b' - bool</li>
 <li>'c' - char</li>
 <li>'h' - short</li>
@@ -385,11 +524,440 @@ template&lt;typename T &gt; </div>
 <li>'[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets). </li>
 </ul>
 </td></tr>
-    <tr><td class="paramname">list</td><td>The variable argument list containing the function's parameters.</td></tr>
+    <tr><td class="paramname">list</td><td>The variable argument list containing the function's parameters, or NULL for an empty parameter list.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The return value of the executed Lua function. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The return value of the executed Lua function.</dd></dl>
+ 
+</div>
+</div>
+<a class="anchor" id="ad7b58d0d5247d98ef2cdcfb5534f0903"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ad7b58d0d5247d98ef2cdcfb5534f0903" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Calls the specified global Lua function using the given parameters.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment. </td></tr>
+    <tr><td class="paramname">func</td><td>The name of the function to call. </td></tr>
+    <tr><td class="paramname">args</td><td>The optional argument signature of the function. Of the form 'xxx', where each 'x' is a parameter type and must be one of:<ul>
+<li>'b' - bool</li>
+<li>'c' - char</li>
+<li>'h' - short</li>
+<li>'i' - int</li>
+<li>'l' - long</li>
+<li>'f' - float</li>
+<li>'d' - double</li>
+<li>'ui' - unsigned int</li>
+<li>'ul' - unsigned long</li>
+<li>'uc' - unsigned char</li>
+<li>'uh' - unsigned short</li>
+<li>'s' - string</li>
+<li>'p' - pointer</li>
+<li>'&lt;object-type&gt;' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).</li>
+<li>'[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets). </li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">list</td><td>The variable argument list containing the function's parameters, or NULL for an empty parameter list.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The return value of the executed Lua function.</dd></dl>
+ 
+</div>
+</div>
+<a class="anchor" id="a373c28f6b21e768f70a00b33b28e0ab4"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a373c28f6b21e768f70a00b33b28e0ab4" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1c9735059e4613a6f3311cbdae5117dd"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a1c9735059e4613a6f3311cbdae5117dd" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a181867ed7df1c69c95364db92fb2b41e"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a181867ed7df1c69c95364db92fb2b41e" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">char <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a3b88da06b3d7ca7317348bf2833b672e"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a3b88da06b3d7ca7317348bf2833b672e" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">short <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="aeea3e7e7accbfadf8d6b09d79b283861"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="aeea3e7e7accbfadf8d6b09d79b283861" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a17ba5659f8ceba06085f310e2aac4651"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a17ba5659f8ceba06085f310e2aac4651" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">long <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad0dc806e5f8e6407e52a9dc90fbcb6e0"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ad0dc806e5f8e6407e52a9dc90fbcb6e0" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae41fcc2b23c742d79d91cb597e8419ee"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ae41fcc2b23c742d79d91cb597e8419ee" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned short <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab9b7372e03fa76cd49e0b8ec4f1758b4"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ab9b7372e03fa76cd49e0b8ec4f1758b4" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a06c6503978356de7994b2ed4a499752d"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a06c6503978356de7994b2ed4a499752d" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae6c95513057c0e7275ce01cf7241a72b"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ae6c95513057c0e7275ce01cf7241a72b" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="af67a7351605de5507f2c4671bc110052"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="af67a7351605de5507f2c4671bc110052" args="(Script *script, const char *func)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
 
 </div>
 </div>
@@ -798,6 +1366,510 @@ template&lt;&gt; </div>
         <tr>
           <td class="memname">double <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
           <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa65f429fc6b564cd303ac2fedc91b124"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="aa65f429fc6b564cd303ac2fedc91b124" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac3e90d6b06bece9013db1fa5d0b549da"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ac3e90d6b06bece9013db1fa5d0b549da" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9b0367fd32cf5879d7392edac6f0c8aa"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a9b0367fd32cf5879d7392edac6f0c8aa" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">char <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1b3dd7235ca4c5477efe102db9c3fc4f"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a1b3dd7235ca4c5477efe102db9c3fc4f" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">short <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a97f7fd6210f62c2746e62596b83ac08f"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a97f7fd6210f62c2746e62596b83ac08f" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac2df73ebf119a32c107d2328f3ecb876"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ac2df73ebf119a32c107d2328f3ecb876" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">long <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="aea85fb8a9a8cde492eac0dc573b73713"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="aea85fb8a9a8cde492eac0dc573b73713" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae1cea78c1f1c6403a000bab759f63fc4"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ae1cea78c1f1c6403a000bab759f63fc4" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned short <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a94de329da995298d22b6c88631b390df"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a94de329da995298d22b6c88631b390df" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a7c69751e17c929e11abf4d82bc697a4c"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a7c69751e17c929e11abf4d82bc697a4c" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="af06ac0106225041b123c2d738656a042"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="af06ac0106225041b123c2d738656a042" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a33fbe138cac2d500be8b3820eb763f73"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a33fbe138cac2d500be8b3820eb763f73" args="(Script *script, const char *func, const char *args,...)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>func</em>, </td>
         </tr>
@@ -1257,12 +2329,552 @@ template&lt;&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a24f6e310416ca20b27e00eebe10fbafc"></a><!-- doxytag: member="gameplay::ScriptController::getBool" ref="a24f6e310416ca20b27e00eebe10fbafc" args="(const char *name, bool defaultValue=false)" -->
+<a class="anchor" id="ad0461467cc097572b3f27260e0e9e4c7"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ad0461467cc097572b3f27260e0e9e4c7" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a103443f11811fd3eb4162e1f0a7db5d2"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a103443f11811fd3eb4162e1f0a7db5d2" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="adc536ea7b3ec97a55b9aef17d9ab1ec0"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="adc536ea7b3ec97a55b9aef17d9ab1ec0" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">char <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a78f9f36aa29f7baeaa7b20d26609a77e"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a78f9f36aa29f7baeaa7b20d26609a77e" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">short <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="afe0a66b01f24298105caa21282253584"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="afe0a66b01f24298105caa21282253584" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a5ed01d0fcddb6b2d0d2d22aa21932f59"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a5ed01d0fcddb6b2d0d2d22aa21932f59" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">long <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa1c2d0ac3a97be37bbcfa63cce74acbb"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="aa1c2d0ac3a97be37bbcfa63cce74acbb" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac3a7a1a36cd02d3b3a4c5bbaa0abfd91"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ac3a7a1a36cd02d3b3a4c5bbaa0abfd91" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned short <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a19a763554e69a76d291e945f7d0e3faa"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a19a763554e69a76d291e945f7d0e3faa" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a58c593f8181f79b241afb83267d3d854"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a58c593f8181f79b241afb83267d3d854" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac003d9ea30067f8addbbd8288fef603d"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="ac003d9ea30067f8addbbd8288fef603d" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a934671ac15d8b0ccb8a5c96661c3cbc7"></a><!-- doxytag: member="gameplay::ScriptController::executeFunction" ref="a934671ac15d8b0ccb8a5c96661c3cbc7" args="(Script *script, const char *func, const char *args, va_list *list)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">gameplay::ScriptController::executeFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list *&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Template specialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4740e6d320896e325777b36f7756a3e5"></a><!-- doxytag: member="gameplay::ScriptController::functionExists" ref="a4740e6d320896e325777b36f7756a3e5" args="(const char *name, const Script *script=NULL) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_script_controller.html#a24f6e310416ca20b27e00eebe10fbafc">gameplay::ScriptController::getBool</a> </td>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_script_controller.html#a4740e6d320896e325777b36f7756a3e5">gameplay::ScriptController::functionExists</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if there exists a function with the specified name in the given script environment.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the function to check. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to inspect, or NULL to inspect the global script environment.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the specified function exists, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6fadee23037b7aa7dd9ebc9db9095318"></a><!-- doxytag: member="gameplay::ScriptController::getBool" ref="a6fadee23037b7aa7dd9ebc9db9095318" args="(const char *name, bool defaultValue=false, Script *script=NULL)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_script_controller.html#a6fadee23037b7aa7dd9ebc9db9095318">gameplay::ScriptController::getBool</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1271,7 +2883,13 @@ template&lt;&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1285,7 +2903,8 @@ template&lt;&gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a bool.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a bool. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1293,12 +2912,12 @@ template&lt;&gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="a38698006da5fa405bbe0c29796046c30"></a><!-- doxytag: member="gameplay::ScriptController::getChar" ref="a38698006da5fa405bbe0c29796046c30" args="(const char *name, char defaultValue=0)" -->
+<a class="anchor" id="a0cda7c2ef370b4d95e0553c52deccb7c"></a><!-- doxytag: member="gameplay::ScriptController::getChar" ref="a0cda7c2ef370b4d95e0553c52deccb7c" args="(const char *name, char defaultValue=0, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char <a class="el" href="classgameplay_1_1_script_controller.html#a38698006da5fa405bbe0c29796046c30">gameplay::ScriptController::getChar</a> </td>
+          <td class="memname">char <a class="el" href="classgameplay_1_1_script_controller.html#a0cda7c2ef370b4d95e0553c52deccb7c">gameplay::ScriptController::getChar</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1307,7 +2926,13 @@ template&lt;&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1321,7 +2946,8 @@ template&lt;&gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1329,12 +2955,31 @@ template&lt;&gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="a3b1f34605310460ed3ddf9267bef12d7"></a><!-- doxytag: member="gameplay::ScriptController::getDouble" ref="a3b1f34605310460ed3ddf9267bef12d7" args="(const char *name, double defaultValue=0)" -->
+<a class="anchor" id="a4ff7fe3e2b4d10a950c02dbbe3a25ef6"></a><!-- doxytag: member="gameplay::ScriptController::getCurrentScript" ref="a4ff7fe3e2b4d10a950c02dbbe3a25ef6" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double <a class="el" href="classgameplay_1_1_script_controller.html#a3b1f34605310460ed3ddf9267bef12d7">gameplay::ScriptController::getDouble</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_script.html">Script</a>* <a class="el" href="classgameplay_1_1_script_controller.html#a4ff7fe3e2b4d10a950c02dbbe3a25ef6">gameplay::ScriptController::getCurrentScript</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the currently executing script.</p>
+<p>Note that this function returns the currently executing <a class="el" href="classgameplay_1_1_script.html">Script</a> object, which is not guaranteed to be valid unless the returned script's reference count is increased while the caller holds onto it.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The currently executing script, or NULL if either there is no currently executing script or the global script environment is current. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7ddf1f53c503cc7f23452720eb83ffe8"></a><!-- doxytag: member="gameplay::ScriptController::getDouble" ref="a7ddf1f53c503cc7f23452720eb83ffe8" args="(const char *name, double defaultValue=0, Script *script=NULL)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classgameplay_1_1_script_controller.html#a7ddf1f53c503cc7f23452720eb83ffe8">gameplay::ScriptController::getDouble</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1343,7 +2988,13 @@ template&lt;&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1357,7 +3008,8 @@ template&lt;&gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1365,12 +3017,12 @@ template&lt;&gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="abd96265e1f9a87e9bd08b0fa5166753c"></a><!-- doxytag: member="gameplay::ScriptController::getFloat" ref="abd96265e1f9a87e9bd08b0fa5166753c" args="(const char *name, float defaultValue=0)" -->
+<a class="anchor" id="a30624308772aa691e06a14026c987277"></a><!-- doxytag: member="gameplay::ScriptController::getFloat" ref="a30624308772aa691e06a14026c987277" args="(const char *name, float defaultValue=0, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float <a class="el" href="classgameplay_1_1_script_controller.html#abd96265e1f9a87e9bd08b0fa5166753c">gameplay::ScriptController::getFloat</a> </td>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_script_controller.html#a30624308772aa691e06a14026c987277">gameplay::ScriptController::getFloat</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1379,7 +3031,13 @@ template&lt;&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1393,7 +3051,8 @@ template&lt;&gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1401,12 +3060,12 @@ template&lt;&gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="a3db8a05a6260de4f6b911bf524c70583"></a><!-- doxytag: member="gameplay::ScriptController::getInt" ref="a3db8a05a6260de4f6b911bf524c70583" args="(const char *name, int defaultValue=0)" -->
+<a class="anchor" id="a0d432278e70d332fc130a5aa94f299d9"></a><!-- doxytag: member="gameplay::ScriptController::getInt" ref="a0d432278e70d332fc130a5aa94f299d9" args="(const char *name, int defaultValue=0, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="classgameplay_1_1_script_controller.html#a3db8a05a6260de4f6b911bf524c70583">gameplay::ScriptController::getInt</a> </td>
+          <td class="memname">int <a class="el" href="classgameplay_1_1_script_controller.html#a0d432278e70d332fc130a5aa94f299d9">gameplay::ScriptController::getInt</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1415,7 +3074,13 @@ template&lt;&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1429,7 +3094,8 @@ template&lt;&gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1437,12 +3103,12 @@ template&lt;&gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="a74a12c1bc612bb22eb3ce30439c19f3a"></a><!-- doxytag: member="gameplay::ScriptController::getLong" ref="a74a12c1bc612bb22eb3ce30439c19f3a" args="(const char *name, long defaultValue=0)" -->
+<a class="anchor" id="ab42c8978d867a830d2447dc3518cd324"></a><!-- doxytag: member="gameplay::ScriptController::getLong" ref="ab42c8978d867a830d2447dc3518cd324" args="(const char *name, long defaultValue=0, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">long <a class="el" href="classgameplay_1_1_script_controller.html#a74a12c1bc612bb22eb3ce30439c19f3a">gameplay::ScriptController::getLong</a> </td>
+          <td class="memname">long <a class="el" href="classgameplay_1_1_script_controller.html#ab42c8978d867a830d2447dc3518cd324">gameplay::ScriptController::getLong</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1451,7 +3117,13 @@ template&lt;&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1465,7 +3137,8 @@ template&lt;&gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1473,14 +3146,12 @@ template&lt;&gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="a415a7ab62655a32586ad91780c221cc1"></a><!-- doxytag: member="gameplay::ScriptController::getObjectPointer" ref="a415a7ab62655a32586ad91780c221cc1" args="(const char *type, const char *name)" -->
+<a class="anchor" id="a9e9ab60ec04b26a6806594f7561d45f8"></a><!-- doxytag: member="gameplay::ScriptController::getObjectPointer" ref="a9e9ab60ec04b26a6806594f7561d45f8" args="(const char *type, const char *name, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">T* <a class="el" href="classgameplay_1_1_script_controller.html#a415a7ab62655a32586ad91780c221cc1">gameplay::ScriptController::getObjectPointer</a> </td>
+          <td class="memname">void* <a class="el" href="classgameplay_1_1_script_controller.html#a9e9ab60ec04b26a6806594f7561d45f8">gameplay::ScriptController::getObjectPointer</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>type</em>, </td>
@@ -1489,7 +3160,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1503,7 +3180,8 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">type</td><td>The type of the variable in Lua. </td></tr>
-    <tr><td class="paramname">name</td><td>The name of the variable.</td></tr>
+    <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1511,12 +3189,12 @@ template&lt;typename T &gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="a3ba7fc7e20365c3dbd8944eef2908246"></a><!-- doxytag: member="gameplay::ScriptController::getShort" ref="a3ba7fc7e20365c3dbd8944eef2908246" args="(const char *name, short defaultValue=0)" -->
+<a class="anchor" id="a7974013166189890b87237a5dca6d9a2"></a><!-- doxytag: member="gameplay::ScriptController::getShort" ref="a7974013166189890b87237a5dca6d9a2" args="(const char *name, short defaultValue=0, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">short <a class="el" href="classgameplay_1_1_script_controller.html#a3ba7fc7e20365c3dbd8944eef2908246">gameplay::ScriptController::getShort</a> </td>
+          <td class="memname">short <a class="el" href="classgameplay_1_1_script_controller.html#a7974013166189890b87237a5dca6d9a2">gameplay::ScriptController::getShort</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1525,7 +3203,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">short&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1539,7 +3223,8 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1547,24 +3232,36 @@ template&lt;typename T &gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="aea160ca5d2077a7de8fa75ce6a733d32"></a><!-- doxytag: member="gameplay::ScriptController::getString" ref="aea160ca5d2077a7de8fa75ce6a733d32" args="(const char *name)" -->
+<a class="anchor" id="a408d0679462765ca375dd472dc3c7d9f"></a><!-- doxytag: member="gameplay::ScriptController::getString" ref="a408d0679462765ca375dd472dc3c7d9f" args="(const char *name, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_script_controller.html#aea160ca5d2077a7de8fa75ce6a733d32">gameplay::ScriptController::getString</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_script_controller.html#a408d0679462765ca375dd472dc3c7d9f">gameplay::ScriptController::getString</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Gets the global string variable with the given name.</p>
+<p>The returned character string is temporary and is not gauranteed to live forever, therefore you should not store a pointer to the returned value. If long-term access to the returned string is required, it should be copied into another string for storage.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">name</td><td>The name of the variable.</td></tr>
+    <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1572,12 +3269,12 @@ template&lt;typename T &gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="a0a5a0d85627fa3c76f33ca59be927473"></a><!-- doxytag: member="gameplay::ScriptController::getUnsignedChar" ref="a0a5a0d85627fa3c76f33ca59be927473" args="(const char *name, unsigned char defaultValue=0)" -->
+<a class="anchor" id="a17109a78c20278408a95b95fb48b603b"></a><!-- doxytag: member="gameplay::ScriptController::getUnsignedChar" ref="a17109a78c20278408a95b95fb48b603b" args="(const char *name, unsigned char defaultValue=0, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned char <a class="el" href="classgameplay_1_1_script_controller.html#a0a5a0d85627fa3c76f33ca59be927473">gameplay::ScriptController::getUnsignedChar</a> </td>
+          <td class="memname">unsigned char <a class="el" href="classgameplay_1_1_script_controller.html#a17109a78c20278408a95b95fb48b603b">gameplay::ScriptController::getUnsignedChar</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1586,7 +3283,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned char&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1600,7 +3303,8 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1608,12 +3312,12 @@ template&lt;typename T &gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="aac3631bc87a8b3999b7a1ce5707d453d"></a><!-- doxytag: member="gameplay::ScriptController::getUnsignedInt" ref="aac3631bc87a8b3999b7a1ce5707d453d" args="(const char *name, unsigned int defaultValue=0)" -->
+<a class="anchor" id="a82384c9d53f336bd98f9d6548ed20289"></a><!-- doxytag: member="gameplay::ScriptController::getUnsignedInt" ref="a82384c9d53f336bd98f9d6548ed20289" args="(const char *name, unsigned int defaultValue=0, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_script_controller.html#aac3631bc87a8b3999b7a1ce5707d453d">gameplay::ScriptController::getUnsignedInt</a> </td>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_script_controller.html#a82384c9d53f336bd98f9d6548ed20289">gameplay::ScriptController::getUnsignedInt</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1622,7 +3326,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1636,7 +3346,8 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1644,12 +3355,12 @@ template&lt;typename T &gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="a69a2755832d03810a7d545428061a12d"></a><!-- doxytag: member="gameplay::ScriptController::getUnsignedLong" ref="a69a2755832d03810a7d545428061a12d" args="(const char *name, unsigned long defaultValue=0)" -->
+<a class="anchor" id="a609b76b594d4b926338916039aa109cd"></a><!-- doxytag: member="gameplay::ScriptController::getUnsignedLong" ref="a609b76b594d4b926338916039aa109cd" args="(const char *name, unsigned long defaultValue=0, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned long <a class="el" href="classgameplay_1_1_script_controller.html#a69a2755832d03810a7d545428061a12d">gameplay::ScriptController::getUnsignedLong</a> </td>
+          <td class="memname">unsigned long <a class="el" href="classgameplay_1_1_script_controller.html#a609b76b594d4b926338916039aa109cd">gameplay::ScriptController::getUnsignedLong</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1658,7 +3369,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned long&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1672,7 +3389,8 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1680,12 +3398,12 @@ template&lt;typename T &gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="a2426030af4a39bded84e5e4039109968"></a><!-- doxytag: member="gameplay::ScriptController::getUnsignedShort" ref="a2426030af4a39bded84e5e4039109968" args="(const char *name, unsigned short defaultValue=0)" -->
+<a class="anchor" id="a809b0a6e37f6fd079e243d13bab09f0b"></a><!-- doxytag: member="gameplay::ScriptController::getUnsignedShort" ref="a809b0a6e37f6fd079e243d13bab09f0b" args="(const char *name, unsigned short defaultValue=0, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned short <a class="el" href="classgameplay_1_1_script_controller.html#a2426030af4a39bded84e5e4039109968">gameplay::ScriptController::getUnsignedShort</a> </td>
+          <td class="memname">unsigned short <a class="el" href="classgameplay_1_1_script_controller.html#a809b0a6e37f6fd079e243d13bab09f0b">gameplay::ScriptController::getUnsignedShort</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1694,7 +3412,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned short&#160;</td>
-          <td class="paramname"><em>defaultValue</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>defaultValue</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1708,7 +3432,8 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number.</td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the variable is not a number. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1716,15 +3441,21 @@ template&lt;typename T &gt; </div>
  
 </div>
 </div>
-<a class="anchor" id="aeee2f3c540bc8cd3480589939ccbf64a"></a><!-- doxytag: member="gameplay::ScriptController::loadScript" ref="aeee2f3c540bc8cd3480589939ccbf64a" args="(const char *path, bool forceReload=false)" -->
+<a class="anchor" id="a9e53c3153053206ce07feacd75123a69"></a><!-- doxytag: member="gameplay::ScriptController::loadScript" ref="a9e53c3153053206ce07feacd75123a69" args="(const char *path, Script::Scope scope=Script::GLOBAL, bool forceReload=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#aeee2f3c540bc8cd3480589939ccbf64a">gameplay::ScriptController::loadScript</a> </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_script.html">Script</a>* <a class="el" href="classgameplay_1_1_script_controller.html#a9e53c3153053206ce07feacd75123a69">gameplay::ScriptController::loadScript</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html#a8b296af219762d7fa7f54a820947e7dc">Script::Scope</a>&#160;</td>
+          <td class="paramname"><em>scope</em> = <code><a class="el" href="classgameplay_1_1_script.html#a8b296af219762d7fa7f54a820947e7dcaab4c13774b342e27d113c28ede53d211">Script::GLOBAL</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1740,39 +3471,17 @@ template&lt;typename T &gt; </div>
       </table>
 </div>
 <div class="memdoc">
-<p>Loads the given script file and executes its global code.</p>
+<p>Loads the given script file and executes its code (if it is not alreay loaded).</p>
+<p>The script is loaded into an environment that is defined by the scope parameter. If the script scope is GLOBAL and the forceReload parameter is false, a previously-loaded script object may be returned. PROTECTED scope always results in a new script being loaded and executed.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">path</td><td>The path to the script. </td></tr>
-    <tr><td class="paramname">forceReload</td><td>Whether the script should be reloaded if it has already been loaded. </td></tr>
+    <tr><td class="paramname">scope</td><td>The scope for the script to be executed in. </td></tr>
+    <tr><td class="paramname">forceReload</td><td>Whether the script should be reloaded if it has already been loaded (applicable for GLOBAL scripts only).</td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a class="anchor" id="ae478047facb082367b9d68975af84c88"></a><!-- doxytag: member="gameplay::ScriptController::loadUrl" ref="ae478047facb082367b9d68975af84c88" args="(const char *url)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string <a class="el" href="classgameplay_1_1_script_controller.html#ae478047facb082367b9d68975af84c88">gameplay::ScriptController::loadUrl</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>url</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Given a URL, loads the referenced file and returns the referenced function name.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">url</td><td>The url to load.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The function that the URL references. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The loaded script, or NULL if the script could not be loaded. </dd></dl>
 
 </div>
 </div>
@@ -1835,48 +3544,12 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a22d1763653fcd1eec9ae5df93bde398c"></a><!-- doxytag: member="gameplay::ScriptController::registerCallback" ref="a22d1763653fcd1eec9ae5df93bde398c" args="(const char *callback, const char *function)" -->
+<a class="anchor" id="a73e7f1f4e6168322aae14b5e322d42db"></a><!-- doxytag: member="gameplay::ScriptController::setBool" ref="a73e7f1f4e6168322aae14b5e322d42db" args="(const char *name, bool v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a22d1763653fcd1eec9ae5df93bde398c">gameplay::ScriptController::registerCallback</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>callback</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>function</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Registers the given script callback.</p>
-<p>The 'callback' parameter must be one of the supported global callback event functions. The following strings are accepted: initialize, finalize, update, render, resizeEvent, keyEvent, touchEvent, mouseEvent Signatures for the registered script function must match that of the corresponding signatures of these events on the <a class="el" href="classgameplay_1_1_game.html">Game</a> class.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">callback</td><td>The script callback to register for. </td></tr>
-    <tr><td class="paramname">function</td><td>The name of the script function to register. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a7b02af8e375d3d60d3585eae4e5d40c0"></a><!-- doxytag: member="gameplay::ScriptController::setBool" ref="a7b02af8e375d3d60d3585eae4e5d40c0" args="(const char *name, bool v)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a7b02af8e375d3d60d3585eae4e5d40c0">gameplay::ScriptController::setBool</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a73e7f1f4e6168322aae14b5e322d42db">gameplay::ScriptController::setBool</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1885,7 +3558,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1899,19 +3578,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The boolean value.</td></tr>
+    <tr><td class="paramname">v</td><td>The boolean value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="ab754ac8b86f4ce4ee69b9dabc28d3eba"></a><!-- doxytag: member="gameplay::ScriptController::setChar" ref="ab754ac8b86f4ce4ee69b9dabc28d3eba" args="(const char *name, char v)" -->
+<a class="anchor" id="adadf7ef271d572fd9e7bbf89cf1b5639"></a><!-- doxytag: member="gameplay::ScriptController::setChar" ref="adadf7ef271d572fd9e7bbf89cf1b5639" args="(const char *name, char v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#ab754ac8b86f4ce4ee69b9dabc28d3eba">gameplay::ScriptController::setChar</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#adadf7ef271d572fd9e7bbf89cf1b5639">gameplay::ScriptController::setChar</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1920,7 +3600,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1934,19 +3620,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The char value.</td></tr>
+    <tr><td class="paramname">v</td><td>The char value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="a4436b541f64827f881726f84d99397c2"></a><!-- doxytag: member="gameplay::ScriptController::setDouble" ref="a4436b541f64827f881726f84d99397c2" args="(const char *name, double v)" -->
+<a class="anchor" id="a357a85bbce8a84a34e1cd0dbbacfb18a"></a><!-- doxytag: member="gameplay::ScriptController::setDouble" ref="a357a85bbce8a84a34e1cd0dbbacfb18a" args="(const char *name, double v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a4436b541f64827f881726f84d99397c2">gameplay::ScriptController::setDouble</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a357a85bbce8a84a34e1cd0dbbacfb18a">gameplay::ScriptController::setDouble</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1955,7 +3642,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1969,19 +3662,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The double value.</td></tr>
+    <tr><td class="paramname">v</td><td>The double value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="af33f30e4753ca029bc6c984d484fa644"></a><!-- doxytag: member="gameplay::ScriptController::setFloat" ref="af33f30e4753ca029bc6c984d484fa644" args="(const char *name, float v)" -->
+<a class="anchor" id="a505b027970206ceb6f94d85cb632cf7e"></a><!-- doxytag: member="gameplay::ScriptController::setFloat" ref="a505b027970206ceb6f94d85cb632cf7e" args="(const char *name, float v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#af33f30e4753ca029bc6c984d484fa644">gameplay::ScriptController::setFloat</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a505b027970206ceb6f94d85cb632cf7e">gameplay::ScriptController::setFloat</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1990,7 +3684,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2004,19 +3704,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The float value.</td></tr>
+    <tr><td class="paramname">v</td><td>The float value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="ab23e88a3775b8a49c576695d3e46d001"></a><!-- doxytag: member="gameplay::ScriptController::setInt" ref="ab23e88a3775b8a49c576695d3e46d001" args="(const char *name, int v)" -->
+<a class="anchor" id="a162aee5b38c5f8e35d628e4896f88e77"></a><!-- doxytag: member="gameplay::ScriptController::setInt" ref="a162aee5b38c5f8e35d628e4896f88e77" args="(const char *name, int v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#ab23e88a3775b8a49c576695d3e46d001">gameplay::ScriptController::setInt</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a162aee5b38c5f8e35d628e4896f88e77">gameplay::ScriptController::setInt</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -2025,7 +3726,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2039,19 +3746,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The int value.</td></tr>
+    <tr><td class="paramname">v</td><td>The int value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="a73c31c5762db0712f34b506547e33c87"></a><!-- doxytag: member="gameplay::ScriptController::setLong" ref="a73c31c5762db0712f34b506547e33c87" args="(const char *name, long v)" -->
+<a class="anchor" id="a658a1400df1660d93b6d96544cfcfe0c"></a><!-- doxytag: member="gameplay::ScriptController::setLong" ref="a658a1400df1660d93b6d96544cfcfe0c" args="(const char *name, long v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a73c31c5762db0712f34b506547e33c87">gameplay::ScriptController::setLong</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a658a1400df1660d93b6d96544cfcfe0c">gameplay::ScriptController::setLong</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -2060,7 +3768,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2074,21 +3788,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The long value.</td></tr>
+    <tr><td class="paramname">v</td><td>The long value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="a0bee0306c5c686ea0c8cdc0bf4f99c55"></a><!-- doxytag: member="gameplay::ScriptController::setObjectPointer" ref="a0bee0306c5c686ea0c8cdc0bf4f99c55" args="(const char *type, const char *name, T *v)" -->
+<a class="anchor" id="adc879f404e2c1f09c006eb9fb3b38168"></a><!-- doxytag: member="gameplay::ScriptController::setObjectPointer" ref="adc879f404e2c1f09c006eb9fb3b38168" args="(const char *type, const char *name, void *v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a0bee0306c5c686ea0c8cdc0bf4f99c55">gameplay::ScriptController::setObjectPointer</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#adc879f404e2c1f09c006eb9fb3b38168">gameplay::ScriptController::setObjectPointer</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>type</em>, </td>
@@ -2102,8 +3815,14 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2114,23 +3833,25 @@ template&lt;typename T &gt; </div>
 </div>
 <div class="memdoc">
 <p>Sets the global pointer script variable of the given type with the given name to the given value.</p>
+<p>When passing an argument for the 'v' parameter, it is recommended that the object passed in be converted to void* using 'dynamic_cast&lt;void*&gt;(o)', to ensure that the address of the most derived class possible be stored. In this case, the 'type' parameter should also be set to the most derived type to ensure that the full set of methods for that object are available to the script engine.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">type</td><td>The type of the script variable. </td></tr>
+    <tr><td class="paramname">type</td><td>The type of the object point value being set. </td></tr>
     <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The pointer value.</td></tr>
+    <tr><td class="paramname">v</td><td>The pointer value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="a8e19d21c7f8b36202cd28895d3ed99ef"></a><!-- doxytag: member="gameplay::ScriptController::setShort" ref="a8e19d21c7f8b36202cd28895d3ed99ef" args="(const char *name, short v)" -->
+<a class="anchor" id="aa335f8db41f61d57837decac5ab2dcdb"></a><!-- doxytag: member="gameplay::ScriptController::setShort" ref="aa335f8db41f61d57837decac5ab2dcdb" args="(const char *name, short v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a8e19d21c7f8b36202cd28895d3ed99ef">gameplay::ScriptController::setShort</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#aa335f8db41f61d57837decac5ab2dcdb">gameplay::ScriptController::setShort</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -2139,7 +3860,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">short&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2153,19 +3880,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The short value.</td></tr>
+    <tr><td class="paramname">v</td><td>The short value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="a19f800dd70aa406b91f4963bc3bddc21"></a><!-- doxytag: member="gameplay::ScriptController::setString" ref="a19f800dd70aa406b91f4963bc3bddc21" args="(const char *name, const char *v)" -->
+<a class="anchor" id="a9208479a3558a4a342582cf3cf0162cd"></a><!-- doxytag: member="gameplay::ScriptController::setString" ref="a9208479a3558a4a342582cf3cf0162cd" args="(const char *name, const char *v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a19f800dd70aa406b91f4963bc3bddc21">gameplay::ScriptController::setString</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a9208479a3558a4a342582cf3cf0162cd">gameplay::ScriptController::setString</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -2174,7 +3902,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2188,19 +3922,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The string value.</td></tr>
+    <tr><td class="paramname">v</td><td>The string value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="abcf2e0bb0b3c98366e4086d1dece0276"></a><!-- doxytag: member="gameplay::ScriptController::setUnsignedChar" ref="abcf2e0bb0b3c98366e4086d1dece0276" args="(const char *name, unsigned char v)" -->
+<a class="anchor" id="aed16e906100024827e586fe73d3e0adc"></a><!-- doxytag: member="gameplay::ScriptController::setUnsignedChar" ref="aed16e906100024827e586fe73d3e0adc" args="(const char *name, unsigned char v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#abcf2e0bb0b3c98366e4086d1dece0276">gameplay::ScriptController::setUnsignedChar</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#aed16e906100024827e586fe73d3e0adc">gameplay::ScriptController::setUnsignedChar</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -2209,7 +3944,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned char&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2223,19 +3964,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The unsigned char value.</td></tr>
+    <tr><td class="paramname">v</td><td>The unsigned char value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="a32243f0a769df7572433dd8431fbc880"></a><!-- doxytag: member="gameplay::ScriptController::setUnsignedInt" ref="a32243f0a769df7572433dd8431fbc880" args="(const char *name, unsigned int v)" -->
+<a class="anchor" id="a6901478462cfbd7de1159955896d0b28"></a><!-- doxytag: member="gameplay::ScriptController::setUnsignedInt" ref="a6901478462cfbd7de1159955896d0b28" args="(const char *name, unsigned int v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a32243f0a769df7572433dd8431fbc880">gameplay::ScriptController::setUnsignedInt</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a6901478462cfbd7de1159955896d0b28">gameplay::ScriptController::setUnsignedInt</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -2244,7 +3986,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2258,19 +4006,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The unsigned int value.</td></tr>
+    <tr><td class="paramname">v</td><td>The unsigned int value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="adeac3a568d7ae7d3678552b0a21c1752"></a><!-- doxytag: member="gameplay::ScriptController::setUnsignedLong" ref="adeac3a568d7ae7d3678552b0a21c1752" args="(const char *name, unsigned long v)" -->
+<a class="anchor" id="a76cbee4d38af54c07defb7f930bb969f"></a><!-- doxytag: member="gameplay::ScriptController::setUnsignedLong" ref="a76cbee4d38af54c07defb7f930bb969f" args="(const char *name, unsigned long v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#adeac3a568d7ae7d3678552b0a21c1752">gameplay::ScriptController::setUnsignedLong</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a76cbee4d38af54c07defb7f930bb969f">gameplay::ScriptController::setUnsignedLong</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -2279,7 +4028,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned long&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2293,19 +4048,20 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The unsigned long value.</td></tr>
+    <tr><td class="paramname">v</td><td>The unsigned long value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
 </div>
 </div>
-<a class="anchor" id="ad7a42338e5f0356c7258510285a3cc49"></a><!-- doxytag: member="gameplay::ScriptController::setUnsignedShort" ref="ad7a42338e5f0356c7258510285a3cc49" args="(const char *name, unsigned short v)" -->
+<a class="anchor" id="a156993f0b5cead30937771c05f2658cc"></a><!-- doxytag: member="gameplay::ScriptController::setUnsignedShort" ref="a156993f0b5cead30937771c05f2658cc" args="(const char *name, unsigned short v, Script *script=NULL)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#ad7a42338e5f0356c7258510285a3cc49">gameplay::ScriptController::setUnsignedShort</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a156993f0b5cead30937771c05f2658cc">gameplay::ScriptController::setUnsignedShort</a> </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -2314,7 +4070,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned short&#160;</td>
-          <td class="paramname"><em>v</em>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_script.html">Script</a> *&#160;</td>
+          <td class="paramname"><em>script</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2328,47 +4090,12 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the script variable. </td></tr>
-    <tr><td class="paramname">v</td><td>The unsigned short value.</td></tr>
+    <tr><td class="paramname">v</td><td>The unsigned short value. </td></tr>
+    <tr><td class="paramname">script</td><td>Optional script to use, or NULL for the global script environment.</td></tr>
   </table>
   </dd>
 </dl>
  
-</div>
-</div>
-<a class="anchor" id="a0b30839f9812471082046e30a79b92dc"></a><!-- doxytag: member="gameplay::ScriptController::unregisterCallback" ref="a0b30839f9812471082046e30a79b92dc" args="(const char *callback, const char *function)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a0b30839f9812471082046e30a79b92dc">gameplay::ScriptController::unregisterCallback</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>callback</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>function</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Unregisters the given script callback.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">callback</td><td>The script callback to unregister for. </td></tr>
-    <tr><td class="paramname">function</td><td>The name of the script function to unregister.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_controller.html#a22d1763653fcd1eec9ae5df93bde398c">registerCallback(const char*, const char*)</a> </dd></dl>
-
 </div>
 </div>
 </div><!-- contents -->
@@ -2389,7 +4116,7 @@ template&lt;typename T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:25 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -122,9 +122,9 @@ Inheritance diagram for gameplay::Label:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#aaf90460c49cbc350c4687cfcfc4e630b">getTypeName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a29f916c4b4afab37d6bdaa467720d3c7">setText</a> (const char *text)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a914dd10a6abc2231fd60a5e040205f41">getText</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a21d473e1749ab7d876c8ebabb96bb375">addListener</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *listener, int eventFlags)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -152,7 +152,7 @@ Protected Attributes</h2></td></tr>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a label control.</p>
 <p>This is capable of rendering text within its border.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a1b85fc1bebe9cd82da2f5b8891fbd452"></a><!-- doxytag: member="gameplay::Label::Label" ref="a1b85fc1bebe9cd82da2f5b8891fbd452" args="()" -->
 <div class="memitem">
@@ -354,12 +354,12 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af11e3bc6954d534ee1ed9bf848904c16"></a><!-- doxytag: member="gameplay::Label::getType" ref="af11e3bc6954d534ee1ed9bf848904c16" args="() const " -->
+<a class="anchor" id="aaf90460c49cbc350c4687cfcfc4e630b"></a><!-- doxytag: member="gameplay::Label::getTypeName" ref="aaf90460c49cbc350c4687cfcfc4e630b" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label::getType</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_label.html#aaf90460c49cbc350c4687cfcfc4e630b">gameplay::Label::getTypeName</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const<code> [virtual]</code></td>
@@ -367,11 +367,14 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">Control::getType</a> </dd></dl>
+<p>Extends <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> to return the type name of this class.</p>
+<p>Child controls should override this function to return the correct type name.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The type name of this class: "Label" </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">gameplay::Control</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a5e00321d739db9b2055478bc978d2aab">gameplay::Control</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_button.html#ab7c170d4764214e5236104f2fa3b6892">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_text_box.html#abcb90645dc8d31918ebdb2127173ab49">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a74774316a6b4617769c60eb16dc30920">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_slider.html#acdbd87e2d12c44e22d03791665ec4597">gameplay::Slider</a>, and <a class="el" href="classgameplay_1_1_check_box.html#ae8810aedc885c236045f1b929745fce5">gameplay::CheckBox</a>.</p>
 
 </div>
 </div>
@@ -599,7 +602,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:24 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -114,7 +114,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463e">PhysicsCollisionObject::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_vehicle.html#a787ac4de341777c2c717b70f41fde574">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_vehicle.html#aeaa41f6f945f64ecb5e3fc50b7ba1415">getRigidBody</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_vehicle.html#a4179b1f23f21ebd31fcb1847791fbed9">setEnabled</a> (bool enable)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_vehicle.html#acd66e17305712e7543f4f36e6112c37c">getNumWheels</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_vehicle.html#a6e1dd16ffb53b5d1bb01933b2d021167">getWheelCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html">PhysicsVehicleWheel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_vehicle.html#a12f584c1b670f4805cc91fba0f6456ac">getWheel</a> (unsigned int i)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_vehicle.html#a6534ad6c91b227fe5d25d9dc4a1a2642">addWheel</a> (<a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html">PhysicsVehicleWheel</a> *wheel)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_vehicle.html#a497024669011eb8da86136e8cd5f289f">getSpeedKph</a> () const </td></tr>
@@ -148,7 +148,7 @@ Protected Member Functions</h2></td></tr>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a class for vehicle physics.</p>
 <p>In addition to its own properties defined below, a vehicle has available to it all of the properties of a rigid body such as shape, mass, friction, etc which correspond to the vehicle body:</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects</a> </dd></dl>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a6534ad6c91b227fe5d25d9dc4a1a2642"></a><!-- doxytag: member="gameplay::PhysicsVehicle::addWheel" ref="a6534ad6c91b227fe5d25d9dc4a1a2642" args="(PhysicsVehicleWheel *wheel)" -->
 <div class="memitem">
@@ -355,24 +355,6 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acd66e17305712e7543f4f36e6112c37c"></a><!-- doxytag: member="gameplay::PhysicsVehicle::getNumWheels" ref="acd66e17305712e7543f4f36e6112c37c" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_physics_vehicle.html#acd66e17305712e7543f4f36e6112c37c">gameplay::PhysicsVehicle::getNumWheels</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the number of wheels on this vehicle.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>the number of wheels on this vehicle. </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="aeaa41f6f945f64ecb5e3fc50b7ba1415"></a><!-- doxytag: member="gameplay::PhysicsVehicle::getRigidBody" ref="aeaa41f6f945f64ecb5e3fc50b7ba1415" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -403,7 +385,7 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Returns an indication of vehicle speed in kilometers per hour. </p>
+<p>Gets an indication of vehicle speed in kilometers per hour. </p>
 
 </div>
 </div>
@@ -420,7 +402,7 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Returns a lagged version of vehicle speed in kilometers per hour, for example that might be used to control engine sounds. </p>
+<p>Gets a lagged version of vehicle speed in kilometers per hour, for example that might be used to control engine sounds. </p>
 
 </div>
 </div>
@@ -519,6 +501,24 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the wheel at the specified index. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6e1dd16ffb53b5d1bb01933b2d021167"></a><!-- doxytag: member="gameplay::PhysicsVehicle::getWheelCount" ref="a6e1dd16ffb53b5d1bb01933b2d021167" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_physics_vehicle.html#a6e1dd16ffb53b5d1bb01933b2d021167">gameplay::PhysicsVehicle::getWheelCount</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the number of wheels on this vehicle.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>the number of wheels on this vehicle. </dd></dl>
 
 </div>
 </div>
@@ -868,7 +868,7 @@ Protected Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:25 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:41 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

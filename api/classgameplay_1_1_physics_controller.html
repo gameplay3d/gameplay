@@ -119,6 +119,7 @@ Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">Listener</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ac02e10f014e34ceb3be8d77139a92dfa">getTypeName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a9c9c7800807569809a677be38873170a">addStatusListener</a> (<a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">PhysicsController::Listener</a> *listener)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ac59f6753cb8c7b6a920082d23579a8a9">removeStatusListener</a> (<a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">Listener</a> *listener)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_fixed_constraint.html">PhysicsFixedConstraint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a547b335f3814fb6c124e2470393812e2">createFixedConstraint</a> (<a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *a, <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *b=NULL)</td></tr>
@@ -137,7 +138,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a class for controlling game physics.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Physics">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Physics</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Physics">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Physics</a> </dd></dl>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a9c9c7800807569809a677be38873170a"></a><!-- doxytag: member="gameplay::PhysicsController::addStatusListener" ref="a9c9c7800807569809a677be38873170a" args="(PhysicsController::Listener *listener)" -->
 <div class="memitem">
@@ -591,6 +592,27 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac02e10f014e34ceb3be8d77139a92dfa"></a><!-- doxytag: member="gameplay::PhysicsController::getTypeName" ref="ac02e10f014e34ceb3be8d77139a92dfa" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_physics_controller.html#ac02e10f014e34ceb3be8d77139a92dfa">gameplay::PhysicsController::getTypeName</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Extends <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> to return the type name of this class.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The type name of this class: "PhysicsController" </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> </dd></dl>
+
+<p>Implements <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">gameplay::ScriptTarget</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a3e4973d8d738551e2750475ab6c62871"></a><!-- doxytag: member="gameplay::PhysicsController::rayTest" ref="a3e4973d8d738551e2750475ab6c62871" args="(const Ray &amp;ray, float distance, PhysicsController::HitResult *result=NULL, PhysicsController::HitFilter *filter=NULL)" -->
 <div class="memitem">
 <div class="memproto">
@@ -758,7 +780,7 @@ Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:24 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:41 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

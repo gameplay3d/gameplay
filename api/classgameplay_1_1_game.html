@@ -105,7 +105,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>ScriptListener</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>ShutdownListener</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>TimeEvent</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-types"></a>
@@ -127,6 +126,7 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ac8e478eb88e8f9d42030f6c7e4cc5639">Game</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ab43f875eeb2925735fc61bef481d4f59">~Game</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_game.html#ab92abc94a6896257f0155f42533cda4c">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a1cdfd0352e709a0283cb1179d5a8ee99">getState</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#af5b343706792c40e1e8d0339a5980ab2">isInitialized</a> () const </td></tr>
@@ -195,11 +195,10 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aea8d19a1e4334f378b8636e837f58cce">getGameTime</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ac8e478eb88e8f9d42030f6c7e4cc5639">Game</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a497397009f6221e3cc02a28e749a423d">initialize</a> ()=0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a84a8111bf36fa5d631272ac955943b40">finalize</a> ()=0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a519bcb0fb67b399e8246aceefdfc7d0e">update</a> (float elapsedTime)=0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aa6d136ae96b6a86ef217fa965be47c29">render</a> (float elapsedTime)=0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ae0df774fa6b27f82bee29be8e8d36fea">initialize</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7f3a8a5192df9d0fecb39670b138d778">finalize</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aee578bb48da2ff8cb1fea4e30f4911a8">update</a> (float elapsedTime)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a531f156fe9d40d30686deb3c0a473b3a">render</a> (float elapsedTime)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">renderOnce</a> (T *instance, void(T::*method)(void *), void *cookie)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a682bf5d3640869d39103802cfe4fa484">renderOnce</a> (const char *function)</td></tr>
@@ -208,7 +207,7 @@ Protected Member Functions</h2></td></tr>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines the base class your game will extend for game initialization, logic and platform delegates.</p>
 <p>This represents a running cross-platform game application and provides an abstraction to most typical platform functionality and events.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Game_Config">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Game_Config</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Game_Config">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Game_Config</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a7866ef6e9e0ee3b812b408a75cc13cdb"></a><!-- doxytag: member="gameplay::Game::ClearFlags" ref="a7866ef6e9e0ee3b812b408a75cc13cdb" args="" -->
 <div class="memitem">
@@ -239,6 +238,23 @@ Protected Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ac8e478eb88e8f9d42030f6c7e4cc5639"></a><!-- doxytag: member="gameplay::Game::Game" ref="ac8e478eb88e8f9d42030f6c7e4cc5639" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_game.html#ac8e478eb88e8f9d42030f6c7e4cc5639">gameplay::Game::Game</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Constructor. </p>
+
+</div>
+</div>
 <a class="anchor" id="ab43f875eeb2925735fc61bef481d4f59"></a><!-- doxytag: member="gameplay::Game::~Game" ref="ab43f875eeb2925735fc61bef481d4f59" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -253,23 +269,6 @@ Protected Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Destructor. </p>
-
-</div>
-</div>
-<a class="anchor" id="ac8e478eb88e8f9d42030f6c7e4cc5639"></a><!-- doxytag: member="gameplay::Game::Game" ref="ac8e478eb88e8f9d42030f6c7e4cc5639" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_game.html#ac8e478eb88e8f9d42030f6c7e4cc5639">gameplay::Game::Game</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Constructor. </p>
 
 </div>
 </div>
@@ -469,15 +468,15 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a84a8111bf36fa5d631272ac955943b40"></a><!-- doxytag: member="gameplay::Game::finalize" ref="a84a8111bf36fa5d631272ac955943b40" args="()=0" -->
+<a class="anchor" id="a7f3a8a5192df9d0fecb39670b138d778"></a><!-- doxytag: member="gameplay::Game::finalize" ref="a7f3a8a5192df9d0fecb39670b138d778" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a84a8111bf36fa5d631272ac955943b40">gameplay::Game::finalize</a> </td>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a7f3a8a5192df9d0fecb39670b138d778">gameplay::Game::finalize</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td><code> [protected, pure virtual]</code></td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -500,7 +499,7 @@ Protected Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p><a class="el" href="classgameplay_1_1_platform.html">Platform</a> frame delegate.</p>
-<p>This is called every frame from the platform. This in turn calls back on the user implemented game methods: <a class="el" href="classgameplay_1_1_game.html#a519bcb0fb67b399e8246aceefdfc7d0e">update()</a> then <a class="el" href="classgameplay_1_1_game.html#aa6d136ae96b6a86ef217fa965be47c29">render()</a> </p>
+<p>This is called every frame from the platform. This in turn calls back on the user implemented game methods: <a class="el" href="classgameplay_1_1_game.html#aee578bb48da2ff8cb1fea4e30f4911a8">update()</a> then <a class="el" href="classgameplay_1_1_game.html#a531f156fe9d40d30686deb3c0a473b3a">render()</a> </p>
 
 </div>
 </div>
@@ -528,7 +527,7 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT and Gamepad::DISCONNECTED_EVENT, and store the Gamepad* in order to poll it from <a class="el" href="classgameplay_1_1_game.html#a519bcb0fb67b399e8246aceefdfc7d0e">update()</a>.</p>
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT and Gamepad::DISCONNECTED_EVENT, and store the Gamepad* in order to poll it from <a class="el" href="classgameplay_1_1_game.html#aee578bb48da2ff8cb1fea4e30f4911a8">update()</a>.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">evt</td><td>The gamepad event that occurred. </td></tr>
@@ -1291,15 +1290,15 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a497397009f6221e3cc02a28e749a423d"></a><!-- doxytag: member="gameplay::Game::initialize" ref="a497397009f6221e3cc02a28e749a423d" args="()=0" -->
+<a class="anchor" id="ae0df774fa6b27f82bee29be8e8d36fea"></a><!-- doxytag: member="gameplay::Game::initialize" ref="ae0df774fa6b27f82bee29be8e8d36fea" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a497397009f6221e3cc02a28e749a423d">gameplay::Game::initialize</a> </td>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#ae0df774fa6b27f82bee29be8e8d36fea">gameplay::Game::initialize</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td><code> [protected, pure virtual]</code></td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -1619,16 +1618,16 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa6d136ae96b6a86ef217fa965be47c29"></a><!-- doxytag: member="gameplay::Game::render" ref="aa6d136ae96b6a86ef217fa965be47c29" args="(float elapsedTime)=0" -->
+<a class="anchor" id="a531f156fe9d40d30686deb3c0a473b3a"></a><!-- doxytag: member="gameplay::Game::render" ref="a531f156fe9d40d30686deb3c0a473b3a" args="(float elapsedTime)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#aa6d136ae96b6a86ef217fa965be47c29">gameplay::Game::render</a> </td>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a531f156fe9d40d30686deb3c0a473b3a">gameplay::Game::render</a> </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>elapsedTime</em></td><td>)</td>
-          <td><code> [protected, pure virtual]</code></td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -1695,7 +1694,7 @@ template&lt;class T &gt; </div>
       </table>
 </div>
 <div class="memdoc">
-<p>Renders a single frame once and then swaps it to the display. This calls the given Lua function, which should take no parameters and return nothing (void).</p>
+<p>Renders a single frame once and then swaps it to the display. This calls the given script function, which should take no parameters and return nothing (void).</p>
 <p>This is useful for rendering splash screens. </p>
 
 </div>
@@ -1838,11 +1837,11 @@ template&lt;class T &gt; </div>
 </div>
 <div class="memdoc">
 <p>Schedules a time event to be sent to the given <a class="el" href="classgameplay_1_1_time_listener.html">TimeListener</a> a given number of game milliseconds from now. <a class="el" href="classgameplay_1_1_game.html">Game</a> time stops while the game is paused. A time offset of zero will fire the time event in the next frame.</p>
-<p>Note: the given Lua function must take a single floating point number, which is the difference between the current game time and the target time (see <a class="el" href="classgameplay_1_1_time_listener.html#ae8c70a337ff59086e98e91f76644ceab">TimeListener::timeEvent</a>).</p>
+<p>The given script function must take a single floating point number, which is the difference between the current game time and the target time (see <a class="el" href="classgameplay_1_1_time_listener.html#ae8c70a337ff59086e98e91f76644ceab">TimeListener::timeEvent</a>). The function will be executed in the context of the script envionrment that the schedule function was called from.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">timeOffset</td><td>The number of game milliseconds in the future to schedule the event to be fired. </td></tr>
-    <tr><td class="paramname">function</td><td>The Lua script function that will receive the event. </td></tr>
+    <tr><td class="paramname">function</td><td>The script function that will receive the event. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2065,16 +2064,16 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a519bcb0fb67b399e8246aceefdfc7d0e"></a><!-- doxytag: member="gameplay::Game::update" ref="a519bcb0fb67b399e8246aceefdfc7d0e" args="(float elapsedTime)=0" -->
+<a class="anchor" id="aee578bb48da2ff8cb1fea4e30f4911a8"></a><!-- doxytag: member="gameplay::Game::update" ref="aee578bb48da2ff8cb1fea4e30f4911a8" args="(float elapsedTime)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a519bcb0fb67b399e8246aceefdfc7d0e">gameplay::Game::update</a> </td>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#aee578bb48da2ff8cb1fea4e30f4911a8">gameplay::Game::update</a> </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>elapsedTime</em></td><td>)</td>
-          <td><code> [protected, pure virtual]</code></td>
+          <td><code> [protected, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -2104,7 +2103,7 @@ template&lt;class T &gt; </div>
 </div>
 <div class="memdoc">
 <p>Updates the game's internal systems (audio, animation, physics) once.</p>
-<p>Note: This does not call the user-defined <a class="el" href="classgameplay_1_1_game.html#a519bcb0fb67b399e8246aceefdfc7d0e">Game::update()</a> function.</p>
+<p>Note: This does not call the user-defined <a class="el" href="classgameplay_1_1_game.html#aee578bb48da2ff8cb1fea4e30f4911a8">Game::update()</a> function.</p>
 <p>This is useful for rendering animated splash screens. </p>
 
 </div>
@@ -2127,7 +2126,7 @@ template&lt;class T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -126,6 +126,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a1e82d613d55019ccb8395d4f8f35bb03">setMaxSlopeAngle</a> (float angle)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a816c05fec786e3afb18ee6a06047d949">setVelocity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;velocity)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a37d5bbab04b7b31017205ebfb5ac25ea">setVelocity</a> (float x, float y, float z)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#aa138dcf05179cace1b0a9cc44378612b">resetVelocityState</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#ab46f2970653a9253158553fee1f0d64b">rotate</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;axis, float angle)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a29996f780c7338659d8ddeb4317851c3">rotate</a> (const <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> &amp;rotation)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#ac9fad77eece5ebc6cf5926c6a3bd6056">setRotation</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;axis, float angle)</td></tr>
@@ -133,7 +134,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#acb709cbdc29547132ca06dc9e630fbf3">setForwardVelocity</a> (float velocity=1.0f)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a8861777624baf4a46e4dc144fbffe0e1">setRightVelocity</a> (float velocity=1.0f)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a1666989f683cb1b9aecf1d9c7048fe55">getCurrentVelocity</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a332f32377672d38a6e5fd3feb6de5615">jump</a> (float height)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a34b98f668eb4222ba844bc22a9aa8d9b">jump</a> (float height, bool force=false)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">btCollisionObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#aac150c2dc76bf492747c2e6d8c1371e5">getCollisionObject</a> () const </td></tr>
@@ -141,7 +142,7 @@ Protected Member Functions</h2></td></tr>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a physics controller class for a game character.</p>
 <p>This can be used to control the movements and collisions of a character in a game. It interacts with the Physics system to apply gravity and handle collisions, however dynamics are not applied to the character directly by the physics system. Instead, the character's movement is controlled directly by the <a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> class. This results in a more responsive and typical game character than would be possible if trying to move a character by applying physical simulation with forces.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects</a> </dd></dl>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="aac150c2dc76bf492747c2e6d8c1371e5"></a><!-- doxytag: member="gameplay::PhysicsCharacter::getCollisionObject" ref="aac150c2dc76bf492747c2e6d8c1371e5" args="() const " -->
 <div class="memitem">
@@ -255,16 +256,26 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a332f32377672d38a6e5fd3feb6de5615"></a><!-- doxytag: member="gameplay::PhysicsCharacter::jump" ref="a332f32377672d38a6e5fd3feb6de5615" args="(float height)" -->
+<a class="anchor" id="a34b98f668eb4222ba844bc22a9aa8d9b"></a><!-- doxytag: member="gameplay::PhysicsCharacter::jump" ref="a34b98f668eb4222ba844bc22a9aa8d9b" args="(float height, bool force=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_physics_character.html#a332f32377672d38a6e5fd3feb6de5615">gameplay::PhysicsCharacter::jump</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_physics_character.html#a34b98f668eb4222ba844bc22a9aa8d9b">gameplay::PhysicsCharacter::jump</a> </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>height</em></td><td>)</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>force</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
@@ -273,9 +284,27 @@ Protected Member Functions</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">height</td><td>The amount to jump. </td></tr>
+    <tr><td class="paramname">force</td><td>Set true to force the character to jump even if vertical velocity is non-zero </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="aa138dcf05179cace1b0a9cc44378612b"></a><!-- doxytag: member="gameplay::PhysicsCharacter::resetVelocityState" ref="aa138dcf05179cace1b0a9cc44378612b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_physics_character.html#aa138dcf05179cace1b0a9cc44378612b">gameplay::PhysicsCharacter::resetVelocityState</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Resets the internal velocity state which brings the character to an immediate stop </p>
 
 </div>
 </div>
@@ -609,7 +638,7 @@ Protected Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:24 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:41 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

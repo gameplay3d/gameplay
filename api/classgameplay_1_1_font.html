@@ -114,7 +114,6 @@ Inheritance diagram for gameplay::Font:</div>
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>Glyph</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a1a26ebf11d0cb5530c0ba8ef0bcde246">Style</a> { <b>PLAIN</b> =  0, 
@@ -155,9 +154,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a9c1ba229364193649f71d5e93c7f5637">start</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">drawText</a> (const char *text, int x, int y, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, bool rightToLeft=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a570322bf3209492e5778554ef6292dc5">drawText</a> (const char *text, int x, int y, float red, float green, float blue, float alpha, unsigned int size=0, bool rightToLeft=false)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a3ba343b3fe49855972933fe0ee969447">drawText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;area, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *clip=NULL)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a2f4128b68c10983b3e70a7fb31aeb65d">drawText</a> (<a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> *text)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a093006c4587bdd79ccf7eec38c8f483a">createText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;area, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *clip=NULL)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a0ec078e09bd1b62a8ad78622e57f32f4">drawText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;area, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip=<a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>(0, 0, 0, 0))</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#af15e5143cd584d253cfa8cf4722fe868">finish</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a15ef90498b3283f8472d8caa0020ef7e">measureText</a> (const char *text, unsigned int size, unsigned int *widthOut, unsigned int *heightOut)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#af0b1d2b8dec763cde4ee5c9e3e9bb9e2">measureText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, unsigned int size, <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *out, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool ignoreClip=false)</td></tr>
@@ -252,84 +249,6 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The specified <a class="el" href="classgameplay_1_1_font.html">Font</a> or NULL if there was an error.  </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a093006c4587bdd79ccf7eec38c8f483a"></a><!-- doxytag: member="gameplay::Font::createText" ref="a093006c4587bdd79ccf7eec38c8f483a" args="(const char *text, const Rectangle &amp;area, const Vector4 &amp;color, unsigned int size=0, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false, const Rectangle *clip=NULL)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a>* <a class="el" href="classgameplay_1_1_font.html#a093006c4587bdd79ccf7eec38c8f483a">gameplay::Font::createText</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>text</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
-          <td class="paramname"><em>area</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;&#160;</td>
-          <td class="paramname"><em>color</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>size</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a>&#160;</td>
-          <td class="paramname"><em>justify</em> = <code>ALIGN_TOP_LEFT</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>wrap</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>rightToLeft</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *&#160;</td>
-          <td class="paramname"><em>clip</em> = <code>NULL</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Create an immutable <a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> object from a given string. Vertex coordinates, UVs and indices will be computed and stored in the <a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> object. For static text labels that do not change frequently, this means these computations need not be performed every frame.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">text</td><td>The text to draw. </td></tr>
-    <tr><td class="paramname">area</td><td>The viewport area to draw within. <a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> will be clipped outside this rectangle. </td></tr>
-    <tr><td class="paramname">color</td><td>The color of text. </td></tr>
-    <tr><td class="paramname">size</td><td>The size to draw text (0 for default size). </td></tr>
-    <tr><td class="paramname">justify</td><td>Justification of text within the viewport. </td></tr>
-    <tr><td class="paramname">wrap</td><td>Wraps text to fit within the width of the viewport if true. </td></tr>
-    <tr><td class="paramname">rightToLeft</td><td>Whether to draw text from right to left. </td></tr>
-    <tr><td class="paramname">clip</td><td>A region to clip text within after applying justification to the viewport area.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>A <a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> object. </dd></dl>
 
 </div>
 </div>
@@ -480,7 +399,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3ba343b3fe49855972933fe0ee969447"></a><!-- doxytag: member="gameplay::Font::drawText" ref="a3ba343b3fe49855972933fe0ee969447" args="(const char *text, const Rectangle &amp;area, const Vector4 &amp;color, unsigned int size=0, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false, const Rectangle *clip=NULL)" -->
+<a class="anchor" id="a0ec078e09bd1b62a8ad78622e57f32f4"></a><!-- doxytag: member="gameplay::Font::drawText" ref="a0ec078e09bd1b62a8ad78622e57f32f4" args="(const char *text, const Rectangle &amp;area, const Vector4 &amp;color, unsigned int size=0, Justify justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false, const Rectangle &amp;clip=Rectangle(0, 0, 0, 0))" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -529,8 +448,8 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *&#160;</td>
-          <td class="paramname"><em>clip</em> = <code>NULL</code>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
+          <td class="paramname"><em>clip</em> = <code><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>(0,&#160;0,&#160;0,&#160;0)</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -544,37 +463,13 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">text</td><td>The text to draw. </td></tr>
-    <tr><td class="paramname">area</td><td>The viewport area to draw within. <a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> will be clipped outside this rectangle. </td></tr>
+    <tr><td class="paramname">area</td><td>The viewport area to draw within. <a class="el" href="classgameplay_1_1_text.html">Text</a> will be clipped outside this rectangle. </td></tr>
     <tr><td class="paramname">color</td><td>The color of text. </td></tr>
     <tr><td class="paramname">size</td><td>The size to draw text (0 for default size). </td></tr>
     <tr><td class="paramname">justify</td><td>Justification of text within the viewport. </td></tr>
     <tr><td class="paramname">wrap</td><td>Wraps text to fit within the width of the viewport if true. </td></tr>
     <tr><td class="paramname">rightToLeft</td><td>Whether to draw text from right to left. </td></tr>
     <tr><td class="paramname">clip</td><td>A region to clip text within after applying justification to the viewport area. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a2f4128b68c10983b3e70a7fb31aeb65d"></a><!-- doxytag: member="gameplay::Font::drawText" ref="a2f4128b68c10983b3e70a7fb31aeb65d" args="(Text *text)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">gameplay::Font::drawText</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> *&#160;</td>
-          <td class="paramname"><em>text</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Draw a string from a precomputed <a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> object.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">text</td><td>The text to draw. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1059,7 +954,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

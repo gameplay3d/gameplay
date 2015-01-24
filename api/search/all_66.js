@@ -3,7 +3,7 @@ var searchData=
   ['fileexists',['fileExists',['../classgameplay_1_1_file_system.html#a6a2fa61565252c8652bc4b972444d905',1,'gameplay::FileSystem']]],
   ['filesystem',['FileSystem',['../classgameplay_1_1_file_system.html',1,'gameplay']]],
   ['filter',['filter',['../classgameplay_1_1_physics_controller_1_1_hit_filter.html#ade69b87924c2d1d5509246c030b3900c',1,'gameplay::PhysicsController::HitFilter::filter()'],['../classgameplay_1_1_texture.html#a17d2554f8fb6b579843f5fe348dc887e',1,'gameplay::Texture::Filter()']]],
-  ['finalize',['finalize',['../classgameplay_1_1_game.html#a84a8111bf36fa5d631272ac955943b40',1,'gameplay::Game::finalize()'],['../classgameplay_1_1_render_state.html#ad99d1f7dd74d076f575a949230a9d06a',1,'gameplay::RenderState::finalize()']]],
+  ['finalize',['finalize',['../classgameplay_1_1_game.html#a7f3a8a5192df9d0fecb39670b138d778',1,'gameplay::Game::finalize()'],['../classgameplay_1_1_render_state.html#ad99d1f7dd74d076f575a949230a9d06a',1,'gameplay::RenderState::finalize()']]],
   ['findagent',['findAgent',['../classgameplay_1_1_a_i_controller.html#a334a10efb6425a436f8dad0836251d6f',1,'gameplay::AIController']]],
   ['findclonedanimation',['findClonedAnimation',['../classgameplay_1_1_node_clone_context.html#afb8fad243e027061b906ca2f2b894aa1',1,'gameplay::NodeCloneContext']]],
   ['findclonednode',['findClonedNode',['../classgameplay_1_1_node_clone_context.html#aff75fe25661d42095c629555ec15ae4b',1,'gameplay::NodeCloneContext']]],
@@ -11,9 +11,10 @@ var searchData=
   ['findnodes',['findNodes',['../classgameplay_1_1_node.html#a6de79cee46d2ff247cde30309d6091b5',1,'gameplay::Node::findNodes()'],['../classgameplay_1_1_scene.html#af6b189b5de7bc833348bd886eb52c8fa',1,'gameplay::Scene::findNodes()']]],
   ['finish',['finish',['../classgameplay_1_1_font.html#af15e5143cd584d253cfa8cf4722fe868',1,'gameplay::Font::finish()'],['../classgameplay_1_1_mesh_batch.html#aa8d1126eae917a78016c0159e28896af',1,'gameplay::MeshBatch::finish()'],['../classgameplay_1_1_screen_displayer.html#ad8d81b3035b04d545286eba9534c9cad',1,'gameplay::ScreenDisplayer::finish()'],['../classgameplay_1_1_sprite_batch.html#a2951d5c5dc8b9cbed5728f6d2f42eb56',1,'gameplay::SpriteBatch::finish()']]],
   ['finishbatch',['finishBatch',['../classgameplay_1_1_control.html#ad62ecce661c5d61ab719bcc052dd6893',1,'gameplay::Control']]],
-  ['firescriptevent',['fireScriptEvent',['../classgameplay_1_1_script_target.html#a1399600b66d222fae0a1c5766dcfd473',1,'gameplay::ScriptTarget']]],
+  ['firescriptevent',['fireScriptEvent',['../classgameplay_1_1_script_target.html#a3466b35a77f3164c068a91f9bee9ec99',1,'gameplay::ScriptTarget']]],
   ['flags',['Flags',['../classgameplay_1_1_terrain.html#a77a4beef1ca0bf89e4568f34e7091337',1,'gameplay::Terrain']]],
   ['flat',['FLAT',['../classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1aa2eaab5a3ca9fd0d8eacbc1b5c7d1071',1,'gameplay::Curve']]],
+  ['flipflags',['FlipFlags',['../classgameplay_1_1_sprite.html#af1eb7b006f75506c6754d8d959b6cd37',1,'gameplay::Sprite']]],
   ['floatptrvalue',['floatPtrValue',['../classgameplay_1_1_material_parameter.html#a0d986efe6f8f5b81ac2d8e6f353da858',1,'gameplay::MaterialParameter']]],
   ['floatvalue',['floatValue',['../classgameplay_1_1_material_parameter.html#adb9ea488024aaaf3295c07a15cd4b82b',1,'gameplay::MaterialParameter']]],
   ['flowlayout',['FlowLayout',['../classgameplay_1_1_flow_layout.html',1,'gameplay']]],
@@ -29,9 +30,10 @@ var searchData=
   ['friction',['friction',['../structgameplay_1_1_physics_rigid_body_1_1_parameters.html#a9c2fc05015de8a315b7d47535e1eea00',1,'gameplay::PhysicsRigidBody::Parameters']]],
   ['fromcolor',['fromColor',['../classgameplay_1_1_vector3.html#afe67411730984735d8d4b886ac4537cc',1,'gameplay::Vector3::fromColor()'],['../classgameplay_1_1_vector4.html#a8f69d344ede8e8cfda219b3424375b87',1,'gameplay::Vector4::fromColor()']]],
   ['frontface',['FrontFace',['../classgameplay_1_1_render_state.html#ac229ec6fafce34cc8943206a60b5fb25',1,'gameplay::RenderState']]],
-  ['frustum',['Frustum',['../classgameplay_1_1_frustum.html',1,'gameplay']]],
   ['frustum',['Frustum',['../classgameplay_1_1_frustum.html#a592778a70f00d2e7438481e968208e93',1,'gameplay::Frustum::Frustum()'],['../classgameplay_1_1_frustum.html#ab48e7150951e5247e6901624e3781d65',1,'gameplay::Frustum::Frustum(const Matrix &amp;matrix)'],['../classgameplay_1_1_frustum.html#a96d45ad30ba1bdf4c3ad91b8ecde6963',1,'gameplay::Frustum::Frustum(const Frustum &amp;frustum)']]],
+  ['frustum',['Frustum',['../classgameplay_1_1_frustum.html',1,'gameplay']]],
   ['frustum_5fculling',['FRUSTUM_CULLING',['../classgameplay_1_1_terrain.html#a77a4beef1ca0bf89e4568f34e7091337abe18a570f7a6c3da4f6e433c80b198e9',1,'gameplay::Terrain']]],
   ['full',['full',['../structgameplay_1_1_theme_1_1_u_vs.html#aadf7528f368eb2908ef7239fa2e86043',1,'gameplay::Theme::UVs']]],
-  ['function',['function',['../structgameplay_1_1_physics_collision_object_1_1_script_listener.html#af0de7cb5d974425eee6cdeb6ffda7f95',1,'gameplay::PhysicsCollisionObject::ScriptListener::function()'],['../structgameplay_1_1_script_target_1_1_callback.html#a511d546883eb41f3fce2dec82fadd7c6',1,'gameplay::ScriptTarget::Callback::function()']]]
+  ['function',['function',['../classgameplay_1_1_physics_collision_object_1_1_script_listener.html#af0de7cb5d974425eee6cdeb6ffda7f95',1,'gameplay::PhysicsCollisionObject::ScriptListener::function()'],['../structgameplay_1_1_script_target_1_1_callback_function.html#a972e7cd976abcc50e2fa8ec1bdfb04da',1,'gameplay::ScriptTarget::CallbackFunction::function()']]],
+  ['functionexists',['functionExists',['../classgameplay_1_1_script.html#ae3490b858b389b8105751cff5461c2f1',1,'gameplay::Script::functionExists()'],['../classgameplay_1_1_script_controller.html#a4740e6d320896e325777b36f7756a3e5',1,'gameplay::ScriptController::functionExists()']]]
 ];

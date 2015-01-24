@@ -186,6 +186,9 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#a9fcd66f3465b64fc6880556142b0b283">setPoint</a> (unsigned int index, float time, float *value, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#a04810ceb111a6983adb65066e5247bf9">setPoint</a> (unsigned int index, float time, float *value, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type, float *inValue, float *outValue)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#a5e1507314653f0962d0f5c827b11e070">setTangent</a> (unsigned int index, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type, float *inValue, float *outValue)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#a37f163fb95aa5758ad5ad0b5337252c2">getPointTime</a> (unsigned int index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#ac9c93ccbb45703924c57a5c371ddf4c4">getPointInterpolation</a> (unsigned int index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#a26972934d5bd93197025638940d21e97">getPointValues</a> (unsigned int index, float *value, float *inValue, float *outValue) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#ac8e72bf270f5ac3e93c7137bb3e05823">evaluate</a> (float time, float *dst) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#aa12a3d6e621e8e1af43e1b369b7e5af9">evaluate</a> (float time, float startTime, float endTime, float loopBlendTime, float *dst) const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
@@ -546,6 +549,105 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac9c93ccbb45703924c57a5c371ddf4c4"></a><!-- doxytag: member="gameplay::Curve::getPointInterpolation" ref="ac9c93ccbb45703924c57a5c371ddf4c4" args="(unsigned int index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> <a class="el" href="classgameplay_1_1_curve.html#ac9c93ccbb45703924c57a5c371ddf4c4">gameplay::Curve::getPointInterpolation</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the interpolation type at the specified point</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the point.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The interpolation type at the specified index. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a37f163fb95aa5758ad5ad0b5337252c2"></a><!-- doxytag: member="gameplay::Curve::getPointTime" ref="a37f163fb95aa5758ad5ad0b5337252c2" args="(unsigned int index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_curve.html#a37f163fb95aa5758ad5ad0b5337252c2">gameplay::Curve::getPointTime</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the time at a specified point.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the point.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The time for a key point. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a26972934d5bd93197025638940d21e97"></a><!-- doxytag: member="gameplay::Curve::getPointValues" ref="a26972934d5bd93197025638940d21e97" args="(unsigned int index, float *value, float *inValue, float *outValue) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_curve.html#a26972934d5bd93197025638940d21e97">gameplay::Curve::getPointValues</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>inValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>outValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the values and in/out tangent value at a spedified point.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the point. </td></tr>
+    <tr><td class="paramname">value</td><td>The value at the specified index. Ignored if NULL. </td></tr>
+    <tr><td class="paramname">inValue</td><td>The tangent inValue at the specified index. Ignored if NULL. </td></tr>
+    <tr><td class="paramname">outValue</td><td>The tangent outValue at the specified index. Ignored if NULL. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ae960ef36166c683ad325f4c276ee70f6"></a><!-- doxytag: member="gameplay::Curve::getStartTime" ref="ae960ef36166c683ad325f4c276ee70f6" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -634,7 +736,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Sets the given point values on the curve the curve.</p>
+<p>Sets the given point values on the curve.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">index</td><td>The index of the point. </td></tr>
@@ -750,6 +852,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">index</td><td>The index of the point. </td></tr>
+    <tr><td class="paramname">type</td><td>The interpolation type. </td></tr>
     <tr><td class="paramname">type</td><td>The curve interpolation type. </td></tr>
     <tr><td class="paramname">inValue</td><td>The tangent approaching the point. </td></tr>
     <tr><td class="paramname">outValue</td><td>The tangent leaving the point. </td></tr>
@@ -777,7 +880,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

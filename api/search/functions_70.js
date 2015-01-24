@@ -3,6 +3,8 @@ var searchData=
   ['parameters',['Parameters',['../structgameplay_1_1_physics_rigid_body_1_1_parameters.html#ac84cfac5442a46ee3e8e863319790d63',1,'gameplay::PhysicsRigidBody::Parameters::Parameters()'],['../structgameplay_1_1_physics_rigid_body_1_1_parameters.html#a69cb51f707a7c88ddf9de67c94edb96b',1,'gameplay::PhysicsRigidBody::Parameters::Parameters(float mass, float friction=0.5f, float restitution=0.0f, float linearDamping=0.0f, float angularDamping=0.0f, bool kinematic=false, const Vector3 &amp;anisotropicFriction=Vector3::one(), const Vector3 &amp;linearFactor=Vector3::one(), const Vector3 &amp;angularFactor=Vector3::one())']]],
   ['parseaxisangle',['parseAxisAngle',['../classgameplay_1_1_properties.html#a40cc4d3fb47ee563df3c272c215244dc',1,'gameplay::Properties']]],
   ['parsecolor',['parseColor',['../classgameplay_1_1_properties.html#a30a5eb21d9c9d1dd523b0ba59b3f352e',1,'gameplay::Properties::parseColor(const char *str, Vector3 *out)'],['../classgameplay_1_1_properties.html#aa4ce225f8eddf4374b2582a380e09338',1,'gameplay::Properties::parseColor(const char *str, Vector4 *out)']]],
+  ['parsecoord',['parseCoord',['../classgameplay_1_1_control.html#a02cc1227a9efcdfb67b7945aa47a87e5',1,'gameplay::Control']]],
+  ['parsecoordpair',['parseCoordPair',['../classgameplay_1_1_control.html#aa649dee36984733f4864fe01090369df',1,'gameplay::Control']]],
   ['parsevector2',['parseVector2',['../classgameplay_1_1_properties.html#a4aa8803fbe36751c8c0f3467613fede9',1,'gameplay::Properties']]],
   ['parsevector3',['parseVector3',['../classgameplay_1_1_properties.html#abd3453c6dd072ba9b73e1d5279aa6549',1,'gameplay::Properties']]],
   ['parsevector4',['parseVector4',['../classgameplay_1_1_properties.html#a0cfe772dfee2616d1796016c77456f8c',1,'gameplay::Properties']]],

@@ -126,6 +126,8 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#ad51e142f9305ac652edd4989197dba87">openFile</a> (const char *filePath, const char *mode)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#af65e3195958242239fcb8db228a9db0c">readAll</a> (const char *filePath, int *fileSize=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a0e8074b04446a8087899d3559e9b0d09">isAbsolutePath</a> (const char *filePath)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#af7f6d5b852ef32de998ee6bd31b1fffd">setAssetPath</a> (const char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#aac0bfeda03dafb650d697a0a2b2bd3c5">getAssetPath</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a4e310ae4419c45a6fed11fd34c27c7e1">createFileFromAsset</a> (const char *path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#ab7324718472508fe11c4042c62879f61">getDirectoryName</a> (const char *path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a2a9e75f6ad418973f51e435a11b4b3d3">getExtension</a> (const char *path)</td></tr>
@@ -283,6 +285,24 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd><code>true</code> if the file exists; <code>false</code> otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aac0bfeda03dafb650d697a0a2b2bd3c5"></a><!-- doxytag: member="gameplay::FileSystem::getAssetPath" ref="aac0bfeda03dafb650d697a0a2b2bd3c5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static const char* <a class="el" href="classgameplay_1_1_file_system.html#aac0bfeda03dafb650d697a0a2b2bd3c5">gameplay::FileSystem::getAssetPath</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the currently set asset root path.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The currently set asset root path. </dd></dl>
 
 </div>
 </div>
@@ -616,6 +636,31 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af7f6d5b852ef32de998ee6bd31b1fffd"></a><!-- doxytag: member="gameplay::FileSystem::setAssetPath" ref="af7f6d5b852ef32de998ee6bd31b1fffd" args="(const char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_file_system.html#af7f6d5b852ef32de998ee6bd31b1fffd">gameplay::FileSystem::setAssetPath</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the asset root path for the game on platforms that have separate assets (currently just Android).</p>
+<p>Once set, all asset paths will be loaded relative to the given path. The default asset path is an empty string ("").</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The asset root path. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ac3c9fe8cc588bc76a53c5c3841781f73"></a><!-- doxytag: member="gameplay::FileSystem::setResourcePath" ref="ac3c9fe8cc588bc76a53c5c3841781f73" args="(const char *path)" -->
 <div class="memitem">
 <div class="memproto">
@@ -659,7 +704,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

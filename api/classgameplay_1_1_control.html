@@ -169,6 +169,7 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a5e00321d739db9b2055478bc978d2aab">getTypeName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8e31f6fd1f18ffd5d5766f3993410c0f">getId</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af74739a51e8bd70e77443133665e5416">setId</a> (const char *id)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3b67523de27b0159fa3cb72a03478a1b">getX</a> () const </td></tr>
@@ -247,7 +248,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aba60dc716e687b4e2edf3aef64f8162e">getFocusIndex</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab32797889a239b0b9d4ffe70da80a4d1">setFocusIndex</a> (int focusIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a86b7ce720dacec4d5e31c61a102630b7">isContainer</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae9597ef3ffa8ffa929fdc3cfdd51963a">getParent</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aec6686870fc560eade8fa4bc9de529bd">isChild</a> (<a class="el" href="classgameplay_1_1_control.html">Control</a> *control) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab5ec9295141292d9a8014dab4b2b0734">getTopLevelForm</a> () const </td></tr>
@@ -302,6 +302,8 @@ Protected Member Functions</h2></td></tr>
 Static Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae43388e365a054968f10526daa0a69c4">getState</a> (const char *state)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13">Alignment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a4e810a0450dcab9e23c0e6208539e731">getAlignment</a> (const char *alignment)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a02cc1227a9efcdfb67b7945aa47a87e5">parseCoord</a> (const char *s, bool *isPercentage)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aa649dee36984733f4864fe01090369df">parseCoordPair</a> (const char *s, float *v1, float *v2, bool *v1Percentage, bool *v2Percentage)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8e38c807b110825f36a77d43ded3d78a">_id</a></td></tr>
@@ -334,10 +336,15 @@ Static Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1c549701ef58bc3cf2df6f8c7c783ede">INVALID_CONTACT_INDEX</a> = -1</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab630c2e2b0ede0846e97a0e10b135045">DIRTY_BOUNDS</a> = 1</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aaf40f0ded9a0645d78ac3b54782bbfaf">DIRTY_STATE</a> = 2</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8401af07f3a47fddb395328994c2adc2">BOUNDS_X_PERCENTAGE_BIT</a> = 1</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0758cfe03227ac148c7f3b49bc0e13f1">BOUNDS_Y_PERCENTAGE_BIT</a> = 2</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0f2297d2086908c53f95dae2ac572062">BOUNDS_WIDTH_PERCENTAGE_BIT</a> = 4</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ad285faff764e7f71016e6a5438bfa078">BOUNDS_HEIGHT_PERCENTAGE_BIT</a> = 8</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab4996933568fa439d07e5a53daf48b38">BOUNDS_RADIUS_PERCENTAGE_BIT</a> = 16</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines the base class for all controls.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a81f7bde0bfab996b044e2dc33aff5d13"></a><!-- doxytag: member="gameplay::Control::Alignment" ref="a81f7bde0bfab996b044e2dc33aff5d13" args="" -->
 <div class="memitem">
@@ -644,7 +651,7 @@ Static Protected Attributes</h2></td></tr>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The number of draw calls issued. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#ae52c617f4bc726bfaf727787cdace1a7">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_text_box.html#a872132f6a4cc61659c27ee7f26a01166">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_joystick_control.html#ad4ed5a99982d9e5a84b4c1ae205e41c4">gameplay::JoystickControl</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a5f7e8042c85d39258cfe837fc92553d6">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a4159b2f5c41dc8da180dae03557b6b04">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_image_control.html#affc5539e8451ca8e8711d5478e5290c9">gameplay::ImageControl</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#ae52c617f4bc726bfaf727787cdace1a7">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick_control.html#ad4ed5a99982d9e5a84b4c1ae205e41c4">gameplay::JoystickControl</a>, <a class="el" href="classgameplay_1_1_text_box.html#a872132f6a4cc61659c27ee7f26a01166">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a5f7e8042c85d39258cfe837fc92553d6">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a4159b2f5c41dc8da180dae03557b6b04">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_image_control.html#affc5539e8451ca8e8711d5478e5290c9">gameplay::ImageControl</a>.</p>
 
 </div>
 </div>
@@ -1254,7 +1261,7 @@ Static Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The requested <a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a>, or NULL if none was found. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The requested <a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a>, or an empty image from the controls theme if none was found. </dd></dl>
 
 </div>
 </div>
@@ -1684,12 +1691,12 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="adc74e6fa5d73449369faf239b1fe8bc3"></a><!-- doxytag: member="gameplay::Control::getType" ref="adc74e6fa5d73449369faf239b1fe8bc3" args="() const " -->
+<a class="anchor" id="a5e00321d739db9b2055478bc978d2aab"></a><!-- doxytag: member="gameplay::Control::getTypeName" ref="a5e00321d739db9b2055478bc978d2aab" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const char* <a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">gameplay::Control::getType</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_control.html#a5e00321d739db9b2055478bc978d2aab">gameplay::Control::getTypeName</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const<code> [virtual]</code></td>
@@ -1697,10 +1704,14 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the type of the <a class="el" href="classgameplay_1_1_control.html">Control</a> and returns it as a string.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The string of the <a class="el" href="classgameplay_1_1_control.html">Control</a> type, all in lower-case. </dd></dl>
+<p>Extends <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> to return the type name of this class.</p>
+<p>Child controls should override this function to return the correct type name.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The type name of this class: "Control" </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_joystick_control.html#a9afcdb585704b65ed1ee331dd3708f8f">gameplay::JoystickControl</a>, <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_image_control.html#a5baf1490bb084a487941d00f071b9645">gameplay::ImageControl</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label</a>.</p>
+<p>Implements <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">gameplay::ScriptTarget</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#a1e9c683c5327cfc6a0477afa6e6d603f">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_container.html#a1fdd759c2f7141d5275efc5d680e920c">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_button.html#ab7c170d4764214e5236104f2fa3b6892">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_text_box.html#abcb90645dc8d31918ebdb2127173ab49">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_image_control.html#a99bbafbb78702dc780396177cc03afa3">gameplay::ImageControl</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a74774316a6b4617769c60eb16dc30920">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_slider.html#acdbd87e2d12c44e22d03791665ec4597">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8810aedc885c236045f1b929745fce5">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_joystick_control.html#a42f26dc2b895883b7376b999abc03561">gameplay::JoystickControl</a>, and <a class="el" href="classgameplay_1_1_label.html#aaf90460c49cbc350c4687cfcfc4e630b">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -2184,6 +2195,99 @@ Static Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Hidden copy assignment operator. </p>
+
+</div>
+</div>
+<a class="anchor" id="a02cc1227a9efcdfb67b7945aa47a87e5"></a><!-- doxytag: member="gameplay::Control::parseCoord" ref="a02cc1227a9efcdfb67b7945aa47a87e5" args="(const char *s, bool *isPercentage)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float <a class="el" href="classgameplay_1_1_control.html#a02cc1227a9efcdfb67b7945aa47a87e5">gameplay::Control::parseCoord</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>isPercentage</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Converts a string in the format of either 'N' or 'N' (where N is a number) into its value and sets a flag to indicate if it should be treated as a percentage.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>A string in the format of either 'N' or 'N' (where N is a number) </td></tr>
+    <tr><td class="paramname">isPercentage</td><td>Set to true if the returned value should be treated as a percentage </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The number contained within the string </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa649dee36984733f4864fe01090369df"></a><!-- doxytag: member="gameplay::Control::parseCoordPair" ref="aa649dee36984733f4864fe01090369df" args="(const char *s, float *v1, float *v2, bool *v1Percentage, bool *v2Percentage)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_control.html#aa649dee36984733f4864fe01090369df">gameplay::Control::parseCoordPair</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>v1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>v2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>v1Percentage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>v2Percentage</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Converts a string in the format of either 'N, N' or 'N%, N' (where N is a number) into its values and sets flags to indicate which numbers should be treated as percentages</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>A string in the format of either 'N, N' or 'N%, N' (where N is a number) </td></tr>
+    <tr><td class="paramname">v1</td><td>Set to the value of the first number in the string </td></tr>
+    <tr><td class="paramname">v2</td><td>Set to the value of the second number in the string </td></tr>
+    <tr><td class="paramname">v1Percentage</td><td>Set to true if the first number should be treated as a percentage </td></tr>
+    <tr><td class="paramname">v2Percentage</td><td>Set to true if the second number should be treated as a percentage </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>true if the string was parsed </dd></dl>
 
 </div>
 </div>
@@ -3631,7 +3735,7 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a12b1033ab2e19c4dff4f2f765a7c39c7">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6cc5444038a9b8bc754a32729844862d">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac6b18307dccf63986573db1b4c991d4d">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_label.html#a94b07f80e6e14272a31ddf64b8d74a58">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a12b1033ab2e19c4dff4f2f765a7c39c7">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_joystick_control.html#a6c2b6a3635a109f2c26d259b7d74db02">gameplay::JoystickControl</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6cc5444038a9b8bc754a32729844862d">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac6b18307dccf63986573db1b4c991d4d">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_label.html#a94b07f80e6e14272a31ddf64b8d74a58">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -3651,7 +3755,7 @@ Static Protected Attributes</h2></td></tr>
 <p>Updates the local bounds for this control and its children.</p>
 <p>Child controls that need to customize their bounds calculation should override this method. </p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ad0524c933dae0f9b2ef46b2a80996db6">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#adfd33b559b74457df3bd64c5e2e40fd3">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a3d149d020e25a74e322c3ace7aaa3092">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_image_control.html#a441520878dca456172ada62b6fee01a6">gameplay::ImageControl</a>, <a class="el" href="classgameplay_1_1_check_box.html#a3090b1936a7af6ff14f49513e9723548">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_label.html#aa3c05408a28d9832e7b33b576cac2402">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ad0524c933dae0f9b2ef46b2a80996db6">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#adfd33b559b74457df3bd64c5e2e40fd3">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_image_control.html#a441520878dca456172ada62b6fee01a6">gameplay::ImageControl</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a3d149d020e25a74e322c3ace7aaa3092">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a3090b1936a7af6ff14f49513e9723548">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_label.html#aa3c05408a28d9832e7b33b576cac2402">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -4103,6 +4207,76 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad285faff764e7f71016e6a5438bfa078"></a><!-- doxytag: member="gameplay::Control::BOUNDS_HEIGHT_PERCENTAGE_BIT" ref="ad285faff764e7f71016e6a5438bfa078" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="classgameplay_1_1_control.html#ad285faff764e7f71016e6a5438bfa078">gameplay::Control::BOUNDS_HEIGHT_PERCENTAGE_BIT</a> = 8<code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Indicates that the height of the control is a percentage. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab4996933568fa439d07e5a53daf48b38"></a><!-- doxytag: member="gameplay::Control::BOUNDS_RADIUS_PERCENTAGE_BIT" ref="ab4996933568fa439d07e5a53daf48b38" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="classgameplay_1_1_control.html#ab4996933568fa439d07e5a53daf48b38">gameplay::Control::BOUNDS_RADIUS_PERCENTAGE_BIT</a> = 16<code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Indicates that the radius of the control is a percentage. </p>
+
+</div>
+</div>
+<a class="anchor" id="a0f2297d2086908c53f95dae2ac572062"></a><!-- doxytag: member="gameplay::Control::BOUNDS_WIDTH_PERCENTAGE_BIT" ref="a0f2297d2086908c53f95dae2ac572062" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="classgameplay_1_1_control.html#a0f2297d2086908c53f95dae2ac572062">gameplay::Control::BOUNDS_WIDTH_PERCENTAGE_BIT</a> = 4<code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Indicates that the width of the control is a percentage. </p>
+
+</div>
+</div>
+<a class="anchor" id="a8401af07f3a47fddb395328994c2adc2"></a><!-- doxytag: member="gameplay::Control::BOUNDS_X_PERCENTAGE_BIT" ref="a8401af07f3a47fddb395328994c2adc2" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="classgameplay_1_1_control.html#a8401af07f3a47fddb395328994c2adc2">gameplay::Control::BOUNDS_X_PERCENTAGE_BIT</a> = 1<code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Indicates that the x position of the control is a percentage. </p>
+
+</div>
+</div>
+<a class="anchor" id="a0758cfe03227ac148c7f3b49bc0e13f1"></a><!-- doxytag: member="gameplay::Control::BOUNDS_Y_PERCENTAGE_BIT" ref="a0758cfe03227ac148c7f3b49bc0e13f1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="classgameplay_1_1_control.html#a0758cfe03227ac148c7f3b49bc0e13f1">gameplay::Control::BOUNDS_Y_PERCENTAGE_BIT</a> = 2<code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Indicates that the y position of the control is a percentage. </p>
+
+</div>
+</div>
 <a class="anchor" id="ab630c2e2b0ede0846e97a0e10b135045"></a><!-- doxytag: member="gameplay::Control::DIRTY_BOUNDS" ref="ab630c2e2b0ede0846e97a0e10b135045" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -4177,7 +4351,7 @@ Static Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:40 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

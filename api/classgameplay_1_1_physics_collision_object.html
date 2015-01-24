@@ -121,7 +121,7 @@ Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html">CollisionListener</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_pair.html">CollisionPair</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsMotionState</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgameplay_1_1_physics_collision_object_1_1_script_listener.html">ScriptListener</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object_1_1_script_listener.html">ScriptListener</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463e">Type</a> { <br/>
@@ -152,11 +152,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a7d5aa64d146597047f37ca1f41cbf21c">addCollisionListener</a> (const char *function, <a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a2387d311b13f8bf70ab8908ef31343f7">removeCollisionListener</a> (const char *function, <a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#ac513d80d3c52b38bc6194ac190a7ae48">collidesWith</a> (<a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a710c1a218ea6a686c6d8e56ddd02df12">asRigidBody</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a098e6de23b495efc68be47e5634855e6">asCharacter</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_ghost_object.html">PhysicsGhostObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a554b17b9bffa63dbc36e502fe10d2768">asGhostObject</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_vehicle.html">PhysicsVehicle</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#ac3e4f91b4f6c30221e34bdf6d55db67e">asVehicle</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html">PhysicsVehicleWheel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#af36bd215bb4b372d466e2197b4df3938">asVehicleWheel</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#af4f8dbddf11f30f0e17be3bbb8e7b9b4">PhysicsCollisionObject</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node, int group=PHYSICS_COLLISION_GROUP_DEFAULT, int mask=PHYSICS_COLLISION_MASK_DEFAULT)</td></tr>
@@ -166,11 +161,11 @@ Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a4bd75a609b534a04703af2022f073432">_node</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_shape.html">PhysicsCollisionShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#ab81c354d53e0cad80b064d5e9ad40bd9">_collisionShape</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a8d5a2ea2f573d43542e590d40657cfb2">_enabled</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structgameplay_1_1_physics_collision_object_1_1_script_listener.html">ScriptListener</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a1dfa1f422906cfbbaa2a0f48f1e8dbdc">_scriptListeners</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgameplay_1_1_physics_collision_object_1_1_script_listener.html">ScriptListener</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a1dfa1f422906cfbbaa2a0f48f1e8dbdc">_scriptListeners</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines the base class for all physics objects that support collision events.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a99aa09f043883dcd33865cd582de463e"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::Type" ref="a99aa09f043883dcd33865cd582de463e" args="" -->
 <div class="memitem">
@@ -321,109 +316,14 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Adds a collision listener for this collision object.</p>
-<p>Note: the given Lua function must match the function signature of <a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html#a8a9c5c68b83a925eb0d160e99e683443">PhysicsCollisionObject::CollisionListener::collisionEvent</a>.</p>
+<p>Note: the given script function must be global and it must match the function signature of <a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html#a8a9c5c68b83a925eb0d160e99e683443">PhysicsCollisionObject::CollisionListener::collisionEvent</a>.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">function</td><td>The Lua script function to add as a listener callback. </td></tr>
+    <tr><td class="paramname">function</td><td>A valid global script function to add as a listener callback. </td></tr>
     <tr><td class="paramname">object</td><td>Optional collision object used to filter the collision event. </td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a class="anchor" id="a098e6de23b495efc68be47e5634855e6"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::asCharacter" ref="a098e6de23b495efc68be47e5634855e6" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a>* <a class="el" href="classgameplay_1_1_physics_collision_object.html#a098e6de23b495efc68be47e5634855e6">gameplay::PhysicsCollisionObject::asCharacter</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns this collision object as a physics character.</p>
-<p>If this collision object is not of type CHARACTER, this method returns NULL.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>This collision object cast to a <a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a>. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a554b17b9bffa63dbc36e502fe10d2768"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::asGhostObject" ref="a554b17b9bffa63dbc36e502fe10d2768" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_physics_ghost_object.html">PhysicsGhostObject</a>* <a class="el" href="classgameplay_1_1_physics_collision_object.html#a554b17b9bffa63dbc36e502fe10d2768">gameplay::PhysicsCollisionObject::asGhostObject</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns this collision object as a physics ghost object.</p>
-<p>If this collision object is not of type GHOST_OBJECT, this method returns NULL.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>This collision object cast to a <a class="el" href="classgameplay_1_1_physics_ghost_object.html">PhysicsGhostObject</a>. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a710c1a218ea6a686c6d8e56ddd02df12"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::asRigidBody" ref="a710c1a218ea6a686c6d8e56ddd02df12" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a>* <a class="el" href="classgameplay_1_1_physics_collision_object.html#a710c1a218ea6a686c6d8e56ddd02df12">gameplay::PhysicsCollisionObject::asRigidBody</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns this collision object as a physics rigid body.</p>
-<p>If this collision object is not of type RIGID_BODY, this method returns NULL.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>This collision object cast to a <a class="el" href="classgameplay_1_1_physics_rigid_body.html">PhysicsRigidBody</a>. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="ac3e4f91b4f6c30221e34bdf6d55db67e"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::asVehicle" ref="ac3e4f91b4f6c30221e34bdf6d55db67e" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_physics_vehicle.html">PhysicsVehicle</a>* <a class="el" href="classgameplay_1_1_physics_collision_object.html#ac3e4f91b4f6c30221e34bdf6d55db67e">gameplay::PhysicsCollisionObject::asVehicle</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns this collision object as a physics vehicle.</p>
-<p>If this collision object is not of type VEHICLE, this method returns NULL.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>This collision object cast to a <a class="el" href="classgameplay_1_1_physics_vehicle.html">PhysicsVehicle</a>. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="af36bd215bb4b372d466e2197b4df3938"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::asVehicleWheel" ref="af36bd215bb4b372d466e2197b4df3938" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html">PhysicsVehicleWheel</a>* <a class="el" href="classgameplay_1_1_physics_collision_object.html#af36bd215bb4b372d466e2197b4df3938">gameplay::PhysicsCollisionObject::asVehicleWheel</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns this collision object as a physics vehicle wheel.</p>
-<p>If this collision object is not of type VEHICLE_WHEEL, this method returns NULL.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>This collision object cast to a <a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html">PhysicsVehicleWheel</a>. </dd></dl>
 
 </div>
 </div>
@@ -682,7 +582,7 @@ Protected Attributes</h2></td></tr>
 <p>Removes a collision listener.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">function</td><td>The Lua function (used as a listener callback) to remove. </td></tr>
+    <tr><td class="paramname">function</td><td>The previously added script function to remove. </td></tr>
     <tr><td class="paramname">object</td><td>Optional collision object used to filter the collision event. </td></tr>
   </table>
   </dd>
@@ -764,7 +664,7 @@ Protected Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="structgameplay_1_1_physics_collision_object_1_1_script_listener.html">ScriptListener</a>*&gt;* <a class="el" href="classgameplay_1_1_physics_collision_object.html#a1dfa1f422906cfbbaa2a0f48f1e8dbdc">gameplay::PhysicsCollisionObject::_scriptListeners</a><code> [protected]</code></td>
+          <td class="memname">std::vector&lt;<a class="el" href="classgameplay_1_1_physics_collision_object_1_1_script_listener.html">ScriptListener</a>*&gt;* <a class="el" href="classgameplay_1_1_physics_collision_object.html#a1dfa1f422906cfbbaa2a0f48f1e8dbdc">gameplay::PhysicsCollisionObject::_scriptListeners</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -791,7 +691,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:24 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:41 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -126,6 +126,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#a3c3e6c8ff626476027f67d08d409ba36">bindAudioListenerToCamera</a> (bool bind)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#ac1725190b60b42bb52910f150fcc0a8a">getAmbientColor</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#a6ba9b754208e53e248c25b4c180279bf">setAmbientColor</a> (float red, float green, float blue)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#add189aadcbd93a7ffe3e6f2504a0799d">update</a> (float elapsedTime)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#ae234fd87e01b77182066b6f881cae3a6">visit</a> (T *instance, bool(T::*visitMethod)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *))</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;class T , class C &gt; </td></tr>
@@ -141,7 +142,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines the root container for a hierarchy of <a class="el" href="classgameplay_1_1_node.html">Node</a> objects.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Scene">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Scene</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Scene">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Scene</a> </dd></dl>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="ab1a97e4db3a60f86f9ec3e109499239a"></a><!-- doxytag: member="gameplay::Scene::addNode" ref="ab1a97e4db3a60f86f9ec3e109499239a" args="(const char *id=NULL)" -->
 <div class="memitem">
@@ -644,6 +645,31 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="add189aadcbd93a7ffe3e6f2504a0799d"></a><!-- doxytag: member="gameplay::Scene::update" ref="add189aadcbd93a7ffe3e6f2504a0799d" args="(float elapsedTime)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_scene.html#add189aadcbd93a7ffe3e6f2504a0799d">gameplay::Scene::update</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Updates all active nodes in the scene.</p>
+<p>This method is recursively calls the <a class="el" href="classgameplay_1_1_node.html#a54961f9ed8bbda4b98195b9637958eea">Node::update(float)</a> method on all nodes that are active within the scene. A <a class="el" href="classgameplay_1_1_node.html">Node</a> is considered active if Node::isActive() returns true.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">elapsedTime</td><td>Elapsed time in milliseconds. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ae234fd87e01b77182066b6f881cae3a6"></a><!-- doxytag: member="gameplay::Scene::visit" ref="ae234fd87e01b77182066b6f881cae3a6" args="(T *instance, bool(T::*visitMethod)(Node *))" -->
 <div class="memitem">
 <div class="memproto">
@@ -776,7 +802,7 @@ template&lt;class T , class C &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:25 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:41 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -129,6 +129,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a3c0074dcfc275d6d3376c0b8cdcbb92c">Transform</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;<a class="el" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>, const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;rotation, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;translation)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a9d2055030c5d50431e7569d78479e500">Transform</a> (const <a class="el" href="classgameplay_1_1_transform.html">Transform</a> &amp;copy)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a6d1d3cb7465bac73bc79874dc2471140">~Transform</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aa20d5d4fcaaea04b3d715eaf937e9dab">getTypeName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a8a2d728985fcc879cf9de1c4d36b702b">getMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#ad781143dd214d457b39a8df3932eefca">getScale</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a5886844a77ca86699cddec4e414feaf0">getScale</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *<a class="el" href="classgameplay_1_1_transform.html#a30252ebed5e4d565276e9a8dfba81c2f">scale</a>) const </td></tr>
@@ -1057,6 +1058,29 @@ Protected Attributes</h2></td></tr>
 <div class="memdoc">
 <p>Gets the translation factor along the z-axis of this transform.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The translation factor along the z-axis. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa20d5d4fcaaea04b3d715eaf937e9dab"></a><!-- doxytag: member="gameplay::Transform::getTypeName" ref="aa20d5d4fcaaea04b3d715eaf937e9dab" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_transform.html#aa20d5d4fcaaea04b3d715eaf937e9dab">gameplay::Transform::getTypeName</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Extends <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> to return the type name of this class.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The type name of this class: "Transform" </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> </dd></dl>
+
+<p>Implements <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">gameplay::ScriptTarget</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_node.html#aeb481a07d7fcdbd868575fba58927019">gameplay::Node</a>.</p>
 
 </div>
 </div>
@@ -2993,7 +3017,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:26 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

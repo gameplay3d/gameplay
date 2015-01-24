@@ -103,7 +103,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>SpriteVertex</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgameplay_1_1_sprite_batch_1_1_sprite_vertex.html">SpriteVertex</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#affacb9af6342ee4a7e62b91928349eaf">~SpriteBatch</a> ()</td></tr>
@@ -119,6 +119,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#ad20a0e98fec87d117d55858a1cd46b13">draw</a> (float x, float y, float width, float height, float u1, float v1, float u2, float v2, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#affffe22d1a38849d8b0280f126f79b0b">draw</a> (float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a387de73d85ec26aa866fc50d914dac16">draw</a> (float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, bool positionIsCenter=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a2bf23037920bc009850169db5c48372e">draw</a> (<a class="el" href="structgameplay_1_1_sprite_batch_1_1_sprite_vertex.html">SpriteBatch::SpriteVertex</a> *vertices, unsigned int vertexCount, unsigned short *indices, unsigned int indexCount)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a2951d5c5dc8b9cbed5728f6d2f42eb56">finish</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_texture_1_1_sampler.html">Texture::Sampler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#aa844c17fd6d53676e7bda341914e15c7">getSampler</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html">RenderState::StateBlock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a5b87358a17b8e7cbdfadee1add078c99">getStateBlock</a> () const </td></tr>
@@ -1098,6 +1099,56 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 
 </div>
 </div>
+<a class="anchor" id="a2bf23037920bc009850169db5c48372e"></a><!-- doxytag: member="gameplay::SpriteBatch::draw" ref="a2bf23037920bc009850169db5c48372e" args="(SpriteBatch::SpriteVertex *vertices, unsigned int vertexCount, unsigned short *indices, unsigned int indexCount)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_sprite_batch.html#a7e440ac07da7a39f4b3bf577a8d71e5a">gameplay::SpriteBatch::draw</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structgameplay_1_1_sprite_batch_1_1_sprite_vertex.html">SpriteBatch::SpriteVertex</a> *&#160;</td>
+          <td class="paramname"><em>vertices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>vertexCount</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short *&#160;</td>
+          <td class="paramname"><em>indices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>indexCount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Draws an array of vertices.</p>
+<p>This is for more advanced usage.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vertices</td><td>The vertices to draw. </td></tr>
+    <tr><td class="paramname">vertexCount</td><td>The number of vertices within the vertex array. </td></tr>
+    <tr><td class="paramname">indices</td><td>The vertex indices. </td></tr>
+    <tr><td class="paramname">indexCount</td><td>The number of indices within the index array. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a2951d5c5dc8b9cbed5728f6d2f42eb56"></a><!-- doxytag: member="gameplay::SpriteBatch::finish" ref="a2951d5c5dc8b9cbed5728f6d2f42eb56" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -1268,7 +1319,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:26 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

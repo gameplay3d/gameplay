@@ -96,7 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">gameplay::AnimationClip Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="gameplay::AnimationClip" --><!-- doxytag: inherits="gameplay::Ref" -->
+<!-- doxytag: class="gameplay::AnimationClip" --><!-- doxytag: inherits="gameplay::Ref,gameplay::ScriptTarget" -->
 <p><code>#include &lt;AnimationClip.h&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for gameplay::AnimationClip:</div>
@@ -105,6 +105,7 @@ Inheritance diagram for gameplay::AnimationClip:</div>
   <img src="classgameplay_1_1_animation_clip.png" usemap="#gameplay::AnimationClip_map" alt=""/>
   <map id="gameplay::AnimationClip_map" name="gameplay::AnimationClip_map">
 <area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,149,24"/>
+<area href="classgameplay_1_1_script_target.html" alt="gameplay::ScriptTarget" shape="rect" coords="159,0,308,24"/>
 </map>
  </div></div>
 
@@ -114,9 +115,9 @@ Inheritance diagram for gameplay::AnimationClip:</div>
 Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">Listener</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>ListenerEvent</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>ScriptListener</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a94ba56bb5e835db6bc9d6e310bd0b8e5">getTypeName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a964b19aa8de84b2fa40ac07df7ffddff">getId</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a12c347102fdd8fdbe8e30804b1833742">getAnimation</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a66b9cad3b41aba5a1695917489b6f92d">getStartTime</a> () const </td></tr>
@@ -144,12 +145,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#aec799b6c4b13d01eae0d6a0f1a84b68a">removeEndListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac1ffa1b5991a31c5810902f72c445e64">addListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener, unsigned long eventTime)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a140f43660effeae41c302286d3b1849a">removeListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener, unsigned long eventTime)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#aca653dd7453eea98e31eea001f32e6c9">addBeginListener</a> (const char *function)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a36d386d33772fa8209a9cba1b86cc6f9">removeBeginListener</a> (const char *function)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a247149e1d64d99afaf7483352e90a9b8">addEndListener</a> (const char *function)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a46de382b10415643a2a22890f67f6f34">removeEndListener</a> (const char *function)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a99cba39780ba947ae9081d3eabae50d9">addListener</a> (const char *function, unsigned long eventTime)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a58f01ac44b5b1650660d4105ae26129f">removeListener</a> (const char *function, unsigned long eventTime)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a32c79759c1e6a69d0d10db44579853b6">REPEAT_INDEFINITE</a> = 0</td></tr>
@@ -181,31 +176,6 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aca653dd7453eea98e31eea001f32e6c9"></a><!-- doxytag: member="gameplay::AnimationClip::addBeginListener" ref="aca653dd7453eea98e31eea001f32e6c9" args="(const char *function)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#abf7d596e7960b8dfa7c79ace78aeaf71">gameplay::AnimationClip::addBeginListener</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>function</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Adds an animation begin listener.</p>
-<p>Note: the given Lua function must have the same function signature as <a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html#ae46b7010e5e5c64f61dcd55755e9c218">AnimationClip::Listener::animationEvent</a>.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">function</td><td>The Lua script function to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> begins. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="af1e38797873c3fa5a8921e6b43e40719"></a><!-- doxytag: member="gameplay::AnimationClip::addEndListener" ref="af1e38797873c3fa5a8921e6b43e40719" args="(AnimationClip::Listener *listener)" -->
 <div class="memitem">
 <div class="memproto">
@@ -224,31 +194,6 @@ Static Public Attributes</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">listener</td><td>The listener to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> ends. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a247149e1d64d99afaf7483352e90a9b8"></a><!-- doxytag: member="gameplay::AnimationClip::addEndListener" ref="a247149e1d64d99afaf7483352e90a9b8" args="(const char *function)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#af1e38797873c3fa5a8921e6b43e40719">gameplay::AnimationClip::addEndListener</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>function</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Adds an animation end listener.</p>
-<p>Note: the given Lua function must have the same function signature as <a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html#ae46b7010e5e5c64f61dcd55755e9c218">AnimationClip::Listener::animationEvent</a>.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">function</td><td>The Lua script function to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> ends. </td></tr>
   </table>
   </dd>
 </dl>
@@ -283,42 +228,6 @@ Static Public Attributes</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">listener</td><td>The listener to be called when the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> reaches the specified time in its playback. </td></tr>
-    <tr><td class="paramname">eventTime</td><td>The time the listener will be called during the playback of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. Must be between 0 and the duration of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a99cba39780ba947ae9081d3eabae50d9"></a><!-- doxytag: member="gameplay::AnimationClip::addListener" ref="a99cba39780ba947ae9081d3eabae50d9" args="(const char *function, unsigned long eventTime)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#ac1ffa1b5991a31c5810902f72c445e64">gameplay::AnimationClip::addListener</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>function</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned long&#160;</td>
-          <td class="paramname"><em>eventTime</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Adds an animation listener to be called back at the specified eventTime during the playback of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>.</p>
-<p>Note: the given Lua function must have the same function signature as <a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html#ae46b7010e5e5c64f61dcd55755e9c218">AnimationClip::Listener::animationEvent</a>.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">function</td><td>The Lua script function to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> reaches the specified time in its playback. </td></tr>
     <tr><td class="paramname">eventTime</td><td>The time the listener will be called during the playback of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. Must be between 0 and the duration of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </td></tr>
   </table>
   </dd>
@@ -559,6 +468,27 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a94ba56bb5e835db6bc9d6e310bd0b8e5"></a><!-- doxytag: member="gameplay::AnimationClip::getTypeName" ref="a94ba56bb5e835db6bc9d6e310bd0b8e5" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_animation_clip.html#a94ba56bb5e835db6bc9d6e310bd0b8e5">gameplay::AnimationClip::getTypeName</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Extends <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> to return the type name of this class.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The type name of this class: "AnimationClip" </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> </dd></dl>
+
+<p>Implements <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">gameplay::ScriptTarget</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a5c94a21f0850ea1c91b5612571510027"></a><!-- doxytag: member="gameplay::AnimationClip::isPlaying" ref="a5c94a21f0850ea1c91b5612571510027" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -635,30 +565,6 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a36d386d33772fa8209a9cba1b86cc6f9"></a><!-- doxytag: member="gameplay::AnimationClip::removeBeginListener" ref="a36d386d33772fa8209a9cba1b86cc6f9" args="(const char *function)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#af4d28a5db1cdb321c83b0f23a9b241c1">gameplay::AnimationClip::removeBeginListener</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>function</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Removes an animation begin listener.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">function</td><td>The Lua script function to remove. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="aec799b6c4b13d01eae0d6a0f1a84b68a"></a><!-- doxytag: member="gameplay::AnimationClip::removeEndListener" ref="aec799b6c4b13d01eae0d6a0f1a84b68a" args="(AnimationClip::Listener *listener)" -->
 <div class="memitem">
 <div class="memproto">
@@ -677,30 +583,6 @@ Static Public Attributes</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">listener</td><td>The listener to be removed. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a46de382b10415643a2a22890f67f6f34"></a><!-- doxytag: member="gameplay::AnimationClip::removeEndListener" ref="a46de382b10415643a2a22890f67f6f34" args="(const char *function)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#aec799b6c4b13d01eae0d6a0f1a84b68a">gameplay::AnimationClip::removeEndListener</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>function</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Removes an animation end listener.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">function</td><td>The Lua script function to remove. </td></tr>
   </table>
   </dd>
 </dl>
@@ -735,41 +617,6 @@ Static Public Attributes</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">listener</td><td>The listener to be removed with the specified time. </td></tr>
-    <tr><td class="paramname">eventTime</td><td>The time of the listener to be removed. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a58f01ac44b5b1650660d4105ae26129f"></a><!-- doxytag: member="gameplay::AnimationClip::removeListener" ref="a58f01ac44b5b1650660d4105ae26129f" args="(const char *function, unsigned long eventTime)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#a140f43660effeae41c302286d3b1849a">gameplay::AnimationClip::removeListener</a> </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>function</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned long&#160;</td>
-          <td class="paramname"><em>eventTime</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Removes an animation listener assigned to the specified eventTime.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">function</td><td>The Lua script function to remove with the specified time. </td></tr>
     <tr><td class="paramname">eventTime</td><td>The time of the listener to be removed. </td></tr>
   </table>
   </dd>
@@ -949,7 +796,7 @@ Static Public Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:22 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

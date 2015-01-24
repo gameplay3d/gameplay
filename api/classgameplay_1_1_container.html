@@ -137,6 +137,7 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a1fdd759c2f7141d5275efc5d680e920c">getTypeName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_layout.html">Layout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a9d1e8ad2c17d7311ae587e80b22728b1">getLayout</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#aba81407eb7cac91af8135f22c542e8f3">setLayout</a> (<a class="el" href="classgameplay_1_1_layout.html#a47d8bcec9f206d71699cbadb833b57e7">Layout::Type</a> type)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a7a4646f4479107c99a79d194eb10c3e9">addControl</a> (<a class="el" href="classgameplay_1_1_control.html">Control</a> *control)</td></tr>
@@ -163,7 +164,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a40d6fb513c0c42f07770a725ea8b3f3f">setScrollPosition</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;scrollPosition)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a1f88ffbc4b0fcf37d5e0be9cf76cac22">getAnimation</a> (const char *id=NULL) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#aab3cb736de9572f4d6b6850b505fe35f">isContainer</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a3f81f890f63477bd0c126bbc05c644a3">getScrollWheelRequiresFocus</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a2a1665bf08f46fc714911d6d6ac68291">setScrollWheelRequiresFocus</a> (bool required)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a099c23e2bc96cce46fe2c385891470ac">setFocus</a> ()</td></tr>
@@ -238,7 +238,7 @@ Protected Attributes</h2></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a container that contains zero or more controls.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a href="http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms">http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms</a> </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a02ec5768ad845e076fd99ee4becf0542"></a><!-- doxytag: member="gameplay::Container::Direction" ref="a02ec5768ad845e076fd99ee4becf0542" args="" -->
 <div class="memitem">
@@ -816,12 +816,12 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae82a9d7043153cdc100fc49e84340ea3"></a><!-- doxytag: member="gameplay::Container::getType" ref="ae82a9d7043153cdc100fc49e84340ea3" args="() const " -->
+<a class="anchor" id="a1fdd759c2f7141d5275efc5d680e920c"></a><!-- doxytag: member="gameplay::Container::getTypeName" ref="a1fdd759c2f7141d5275efc5d680e920c" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container::getType</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_container.html#a1fdd759c2f7141d5275efc5d680e920c">gameplay::Container::getTypeName</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const<code> [virtual]</code></td>
@@ -829,11 +829,14 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">Control::getType</a> </dd></dl>
+<p>Extends <a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> to return the type name of this class.</p>
+<p>Child controls should override this function to return the correct type name.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The type name of this class: "Container" </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_target.html#ac419e98f0eac8a52a6095da0e3853df3">ScriptTarget::getTypeName()</a> </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">gameplay::Control</a>.</p>
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a5e00321d739db9b2055478bc978d2aab">gameplay::Control</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#a1e9c683c5327cfc6a0477afa6e6d603f">gameplay::Form</a>.</p>
 
 </div>
 </div>
@@ -2063,7 +2066,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 21 2014 16:26:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 23 2015 23:30:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

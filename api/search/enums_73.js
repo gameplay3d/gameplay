@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['scope',['Scope',['../classgameplay_1_1_script.html#a8b296af219762d7fa7f54a820947e7dc',1,'gameplay::Script']]],
   ['scroll',['Scroll',['../classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b',1,'gameplay::Container']]],
   ['state',['State',['../classgameplay_1_1_audio_source.html#a53fd1787d6625fc16b765be2b3c2a7ae',1,'gameplay::AudioSource::State()'],['../classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4',1,'gameplay::Control::State()'],['../classgameplay_1_1_game.html#ab92abc94a6896257f0155f42533cda4c',1,'gameplay::Game::State()']]],
   ['stencilfunction',['StencilFunction',['../classgameplay_1_1_render_state.html#aca1ebcc53b145ec61e89cf79902dfe3f',1,'gameplay::RenderState']]],

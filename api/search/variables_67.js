@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['g',['g',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html#acbc3a844f45670e7a9d1bfcfdc84e6e0',1,'gameplay::PhysicsController::DebugDrawer::DebugVertex']]]
+  ['g',['g',['../structgameplay_1_1_sprite_batch_1_1_sprite_vertex.html#adf06ab3a9766f767095eaa7559195b6a',1,'gameplay::SpriteBatch::SpriteVertex']]]
 ];
