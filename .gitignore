@@ -17,15 +17,10 @@ Thumbs.db
 /cmake
 /Debug
 /Release
-/gameplay-internal
 /api/xml
 /bin
 /external-deps
-/gameplay-samples
-/gameplay-api/html
-/gameplay-docs
 /api/html
-/gameplay-tests
 gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 
 /gameplay/Debug
@@ -52,13 +47,15 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /tools/luagen/Release
 /tools/luagen/Debug
 /tools/luagen/gameplay-luagen.xcodeproj/xcuserdata
+/tools/luagen/gameplay-luagen.xcodeproj/project.xcworkspace/
 /tools/luagen/doxygen_entrydb_680.tmp
 /tools/luagen/doxygen_objdb_680.tmp
 /tools/luagen/xml
-/tools/luagen/gameplay-luagen.xcodeproj/project.xcworkspace/
 
 /tools/editor
 /tools/editor/src
+/tools/editor/Debug
+/tools/editor/Release
 
 /samples/browser/Debug
 /samples/browser/DebugMem
