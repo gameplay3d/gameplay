@@ -17,13 +17,6 @@ Thumbs.db
 /cmake
 /Debug
 /Release
-/Simulator
-/Simulator-Coverage
-/Simulator-Profile
-/Device-Debug
-/Device-Coverage
-/Device-Profile
-/Device-Release
 /gameplay-internal
 /api/xml
 /bin
@@ -38,14 +31,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay/Debug
 /gameplay/DebugMem
 /gameplay/Release
-/gameplay/Simulator
-/gameplay/Simulator-Coverage
-/gameplay/Simulator-Profile
-/gameplay/Device-Debug
-/gameplay/Device-Coverage
-/gameplay/Device-Profile
-/gameplay/Device-Release
-/gameplay/windows
 /gameplay/android/NUL
 /gameplay/android/proguard.cfg
 /gameplay/android/proguard-project.txt
@@ -57,10 +42,13 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay.xcworkspace/xcuserdata
 /gameplay/gameplay.xcodeproj/xcuserdata
 
+/tools/encoder
 /tools/encoder/Debug
 /tools/encoder/Release
 /tools/encoder/gameplay-encoder.xcodeproj/xcuserdata
+/tools/encoder/gameplay-encoder.xcodeproj/project.xcworkspace/
 
+/tools/luagen
 /tools/luagen/Release
 /tools/luagen/Debug
 /tools/luagen/gameplay-luagen.xcodeproj/xcuserdata
@@ -69,16 +57,12 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /tools/luagen/xml
 /tools/luagen/gameplay-luagen.xcodeproj/project.xcworkspace/
 
+/tools/editor
+/tools/editor/src
+
 /samples/browser/Debug
 /samples/browser/DebugMem
 /samples/browser/Release
-/samples/browser/Simulator
-/samples/browser/Simulator-Coverage
-/samples/browser/Simulator-Profile
-/samples/browser/Device-Debug
-/samples/browser/Device-Coverage
-/samples/browser/Device-Profile
-/samples/browser/Device-Release
 /samples/browser/res/shaders
 /samples/browser/res/ui
 /samples/browser/res/logo_powered_white.png
@@ -97,15 +81,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/character/Debug
 /samples/character/DebugMem
 /samples/character/Release
-/samples/character/Simulator
-/samples/character/Simulator-Coverage
-/samples/character/Simulator-Profile
-/samples/character/Device-Debug
-/samples/character/Device-Debug-QC
-/samples/character/Device-Coverage
-/samples/character/Device-Profile
-/samples/character/Device-Release
-/samples/character/Device-Release-QC
 /samples/character/game.config
 /samples/character/res/shaders
 /samples/character/res/ui
@@ -127,15 +102,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/racer/Debug
 /samples/racer/DebugMem
 /samples/racer/Release
-/samples/racer/Simulator
-/samples/racer/Simulator-Coverage
-/samples/racer/Simulator-Profile
-/samples/racer/Device-Debug
-/samples/racer/Device-Debug-QC
-/samples/racer/Device-Coverage
-/samples/racer/Device-Profile
-/samples/racer/Device-Release
-/samples/racer/Device-Release-QC
 /samples/racer/game.config
 /samples/racer/res/shaders
 /samples/racer/res/ui
@@ -156,13 +122,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/spaceship/Debug
 /samples/spaceship/DebugMem
 /samples/spaceship/Release
-/samples/spaceship/Simulator
-/samples/spaceship/Simulator-Coverage
-/samples/spaceship/Simulator-Profile
-/samples/spaceship/Device-Debug
-/samples/spaceship/Device-Coverage
-/samples/spaceship/Device-Profile
-/samples/spaceship/Device-Release
 /samples/spaceship/res/shaders
 /samples/spaceship/res/ui
 /samples/spaceship/res/logo_powered_white.png
@@ -178,7 +137,3 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/spaceship/android/proguard.cfg
 /samples/spaceship/android/proguard-project.txt
 /samples/spaceship/sample-spaceship.xcodeproj/xcuserdata
-
-/tools/encoder/windows
-/tools/luagen/windows
-/tools/encoder/gameplay-encoder.xcodeproj/project.xcworkspace/
