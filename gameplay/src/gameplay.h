@@ -26,6 +26,7 @@
 #include "BoundingSphere.h"
 #include "BoundingBox.h"
 #include "Curve.h"
+#include "Color.h"
 
 // Graphics
 #include "Image.h"

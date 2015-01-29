@@ -48,6 +48,13 @@ public:
      */
     Vector4(float x, float y, float z, float w);
 
+	/**
+	* Constructs a new vector initializing x, y, z and w to the specified values.
+	*
+	* @param value The x, y, z and w coordinates.
+	*/
+	Vector4(float value);
+
     /**
      * Constructs a new vector from the values in the specified array.
      *

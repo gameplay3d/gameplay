@@ -35,6 +35,7 @@
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CheckBox.cpp" />
+    <ClCompile Include="src\Color.cpp" />
     <ClCompile Include="src\Container.cpp" />
     <ClCompile Include="src\Control.cpp" />
     <ClCompile Include="src\ControlFactory.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\CheckBox.h" />
+    <ClInclude Include="src\Color.h" />
     <ClInclude Include="src\Container.h" />
     <ClInclude Include="src\Control.h" />
     <ClInclude Include="src\ControlFactory.h" />
@@ -535,6 +537,7 @@
     <None Include="res\ui\default.theme" />
     <None Include="src\BoundingBox.inl" />
     <None Include="src\BoundingSphere.inl" />
+    <None Include="src\Color.inl" />
     <None Include="src\Game.inl" />
     <None Include="src\Image.inl" />
     <None Include="src\MathUtil.inl" />
