@@ -129,8 +129,10 @@ SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int
     batch->_sampler = sampler;
     batch->_customEffect = customEffect;
     batch->_batch = meshBatch;
-    batch->_textureWidthRatio = 1.0f / (float)texture->getWidth();
-    batch->_textureHeightRatio = 1.0f / (float)texture->getHeight();
+	batch->_textureWidth = texture->getWidth();
+	batch->_textureHeight = texture->getHeight();
+	batch->_textureWidthRatio = 1.0f / (float)batch->_textureWidth;
+	batch->_textureHeightRatio = 1.0f / (float)batch->_textureHeight;
 
 	// Bind an ortho projection to the material by default (user can override with setProjectionMatrix)
 	Game* game = Game::getInstance();
@@ -398,6 +400,16 @@ Texture::Sampler* SpriteBatch::getSampler() const
 Material* SpriteBatch::getMaterial() const
 {
     return _batch->getMaterial();
+}
+
+unsigned int SpriteBatch::getTextureWidth() const
+{
+	return _textureWidth;
+}
+
+unsigned int SpriteBatch::getTextureHeight() const
+{
+	return _textureHeight;
 }
 
 void SpriteBatch::setProjectionMatrix(const Matrix& matrix)

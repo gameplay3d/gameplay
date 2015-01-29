@@ -762,6 +762,9 @@
     <ClCompile Include="src\lua\lua_VerticalLayout.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\Color.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Plane.h">
@@ -1511,6 +1514,9 @@
     <ClInclude Include="src\lua\lua_VerticalLayout.h">
       <Filter>src\lua</Filter>
     </ClInclude>
+    <ClInclude Include="src\Color.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ScriptController.inl">
@@ -1593,6 +1599,9 @@
     </None>
     <None Include="res\ui\default.theme">
       <Filter>res\ui</Filter>
+    </None>
+    <None Include="src\Color.inl">
+      <Filter>src</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

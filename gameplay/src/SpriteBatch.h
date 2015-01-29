@@ -334,6 +334,20 @@ public:
      */
     Material* getMaterial() const;
 
+	/**
+	* Gets the width of the texture used by this batch.
+	*
+	* @return The width.
+	*/
+	unsigned int getTextureWidth() const;
+
+	/**
+	* Gets the height of the texture used by this batch.
+	*
+	* @return The height.
+	*/
+	unsigned int getTextureHeight() const;
+
     /**
      * Sets a custom projection matrix to use with the sprite batch.
      *
@@ -405,6 +419,8 @@ private:
     MeshBatch* _batch;
     Texture::Sampler* _sampler;
     bool _customEffect;
+	unsigned int _textureWidth;
+	unsigned int _textureHeight;
     float _textureWidthRatio;
     float _textureHeightRatio;
     mutable Matrix _projectionMatrix;

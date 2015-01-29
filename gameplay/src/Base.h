@@ -47,6 +47,7 @@ using std::tolower;
 using std::size_t;
 using std::min;
 using std::max;
+using std::floor;
 using std::modf;
 using std::atoi;
 
