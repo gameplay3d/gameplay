@@ -68,7 +68,8 @@ macx
 }
 
 win32: DEFINES += WIN32 _WINDOWS _UNICODE UNICODE
-win32: LIBS += -L$$PWD/GAMEPLAY_PATH/gameplay/Debug/ -lgameplay
+win32: CONFIG(debug, debug|release): LIBS += -L$$PWD/GAMEPLAY_PATH/gameplay/Debug/debug/ -lgameplay
+win32: CONFIG(release, debug|release): LIBS += -L$$PWD/GAMEPLAY_PATH/gameplay/Release/release/ -lgameplay
 win32: CONFIG(debug, debug|release): LIBS += -L$$PWD/GAMEPLAY_PATH/external-deps/lib/windows/x86_64/Debug/ -lgameplay-deps
 win32: CONFIG(release, debug|release): LIBS += -L$$PWD/GAMEPLAY_PATH/external-deps/lib/windows/x86_64/Release/ -lgameplay-deps
 win32: LIBS += -lOpenGL32 -lGLU32 -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32
