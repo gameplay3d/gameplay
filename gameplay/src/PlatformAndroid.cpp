@@ -1,3 +1,4 @@
+#ifndef GP_NO_PLATFORM
 #ifdef __ANDROID__
 
 #include "Base.h"
@@ -1786,5 +1787,6 @@ JNIEXPORT void JNICALL Java_org_gameplay3d_GamePlayNativeActivity_screenOrientat
 
 }
 
+#endif
 #endif
 

@@ -1,3 +1,4 @@
+#ifndef GP_NO_PLATFORM
 #ifdef __APPLE__
 
 #include "Base.h"
@@ -1729,4 +1730,5 @@ std::string Platform::displayFileDialog(size_t mode, const char* title, const ch
  
 }
 
+#endif
 #endif
