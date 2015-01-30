@@ -254,6 +254,7 @@ protected:
 private:
 
     Font* _font;
+    Font* _drawFont;
     std::string _text;
     unsigned int _size;
     float _width;
