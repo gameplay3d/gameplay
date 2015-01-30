@@ -8,10 +8,8 @@
 ehthumbs.db
 Icon?
 Thumbs.db
-/.metadata
+.metadata
 .settings
-/169.254.0.1
-/usb
 /ipch
 /build
 /cmake
@@ -21,6 +19,9 @@ Thumbs.db
 /bin
 /external-deps
 /api/html
+Makefile
+Makefile.Debug
+Makefile.Release
 gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 
 /gameplay/Debug
@@ -36,6 +37,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay/android/obj
 /gameplay.xcworkspace/xcuserdata
 /gameplay/gameplay.xcodeproj/xcuserdata
+/gameplay/gameplay.vcxproj.user
 
 /tools/encoder
 /tools/encoder/Debug
@@ -74,6 +76,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/browser/android/local.properties
 /samples/browser/android/proguard-project.txt
 /samples/browser/sample-browser.xcodeproj/xcuserdata
+/samples/browser/sample-browser.vcxproj.user
 
 /samples/character/Debug
 /samples/character/DebugMem
@@ -95,6 +98,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/character/android/proguard.cfg
 /samples/character/res/gamepad.xcf
 /samples/character/sample-character.xcodeproj/xcuserdata
+/samples/character/sample-character.vcxproj.user
 
 /samples/racer/Debug
 /samples/racer/DebugMem
@@ -115,6 +119,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/racer/android/proguard-project.txt
 /samples/racer/android/proguard.cfg
 /samples/racer/sample-racer.xcodeproj/xcuserdata
+/samples/racer/sample-racer.vcxproj.user
 
 /samples/spaceship/Debug
 /samples/spaceship/DebugMem
@@ -134,3 +139,4 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/spaceship/android/proguard.cfg
 /samples/spaceship/android/proguard-project.txt
 /samples/spaceship/sample-spaceship.xcodeproj/xcuserdata
+/samples/spaceship/sample-spaceship.vcxproj.user

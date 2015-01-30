@@ -3,12 +3,12 @@
 # Project created by QtCreator
 #
 #-------------------------------------------------
-
 QT -= core gui
-
 TARGET = gameplay
 TEMPLATE = lib
 CONFIG += staticlib
+CONFIG += c++11
+CONFIG -= qt
 
 SOURCES += src/AbsoluteLayout.cpp \
     src/AIAgent.cpp \
@@ -522,16 +522,13 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_VertexFormatElement.h \
     src/lua/lua_VerticalLayout.h
 
-CONFIG += c++11
-
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include
+DEFINES += GP_USE_GAMEPAD
 
-# linux
 linux: SOURCES += src/PlatformLinux.cpp
 linux: SOURCES += src/gameplay-main-linux.cpp
 linux: QMAKE_CXXFLAGS += -lstdc++ -pthread -w
-linux: DEFINES += GP_USE_GAMEPAD
 linux: DEFINES += __linux__
 linux: INCLUDEPATH += /usr/include/gtk-2.0
 linux: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
@@ -547,16 +544,20 @@ linux: INCLUDEPATH += /usr/include/pixman-1
 linux: INCLUDEPATH += /usr/include/libpng12
 linux: INCLUDEPATH += /usr/include/harfbuzz
 
-# macosx
 macx: OBJECTIVE_SOURCES += src/PlatformMacOSX.mm
 macx: OBJECTIVE_SOURCES += src/gameplay-main-macosx.mm
 macx: QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
 macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -stdlib=libc++ -w -arch x86_64
-macx: DEFINES += GP_USE_GAMEPAD
-macx: LIBS += -L$$PWD/../../external-deps/lib/macosx/x86_64/ -lgameplay-deps
 macx: LIBS += -F/System/Library/Frameworks -framework GameKit
 macx: LIBS += -F/System/Library/Frameworks -framework IOKit
 macx: LIBS += -F/System/Library/Frameworks -framework QuartzCore
 macx: LIBS += -F/System/Library/Frameworks -framework OpenAL
 macx: LIBS += -F/System/Library/Frameworks -framework OpenGL
 macx: LIBS += -F/System/Library/Frameworks -framework Cocoa
+
+win32: SOURCES += src/PlatformWindows.cpp
+win32: SOURCES += src/gameplay-main-windows.cpp
+win32: DEFINES += WIN32 _UNICODE UNICODE
+win32: INCLUDEPATH += "$(ProgramFiles(x86))/Microsoft DirectX SDK (June 2010)/Include"
+win32: QMAKE_CXXFLAGS_WARN_ON -= -w34100
+win32: QMAKE_CXXFLAGS_WARN_ON -= -w34189
