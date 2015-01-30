@@ -98,6 +98,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/character/res/gamepad.xcf
 /samples/character/sample-character.xcodeproj/xcuserdata
 /samples/character/sample-character.vcxproj.user
+/samples/character/game.config
 
 /samples/racer/Debug
 /samples/racer/DebugMem
@@ -118,6 +119,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/racer/android/proguard.cfg
 /samples/racer/sample-racer.xcodeproj/xcuserdata
 /samples/racer/sample-racer.vcxproj.user
+/samples/racer/game.config
 
 /samples/spaceship/Debug
 /samples/spaceship/DebugMem
