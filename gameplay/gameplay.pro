@@ -10,6 +10,8 @@ CONFIG += staticlib
 CONFIG += c++11
 CONFIG -= qt
 
+#DEFINES += GP_NO_PLATFORM
+
 SOURCES += src/AbsoluteLayout.cpp \
     src/AIAgent.cpp \
     src/AIController.cpp \

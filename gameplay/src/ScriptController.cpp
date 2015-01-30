@@ -2,7 +2,7 @@
 #include "FileSystem.h"
 #include "ScriptController.h"
 
-#ifndef NO_LUA_BINDINGS
+#ifndef GP_NO_LUA_BINDINGS
 #include "lua/lua_all_bindings.h"
 #endif
 
@@ -716,7 +716,7 @@ void ScriptController::initialize()
         GP_ERROR("Failed to initialize Lua scripting engine.");
     luaL_openlibs(_lua);
 
-#ifndef NO_LUA_BINDINGS
+#ifndef GP_NO_LUA_BINDINGS
     lua_RegisterAllBindings();
     ScriptUtil::registerFunction("convert", ScriptController::convert);
 #endif

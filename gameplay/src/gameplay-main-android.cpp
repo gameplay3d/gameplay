@@ -1,3 +1,4 @@
+#ifndef GP_NO_PLATFORM
 #ifdef __ANDROID__
 
 #include <android_native_app_glue.h>
@@ -28,4 +29,5 @@ void android_main(struct android_app* state)
     exit(0);
 }
 
+#endif
 #endif
