@@ -77,8 +77,6 @@ linux: INCLUDEPATH += /usr/include/gdk-pixbuf-2.0
 linux: INCLUDEPATH += /usr/include/pango-1.0
 linux: INCLUDEPATH += /usr/include/gio-unix-2.0
 linux: INCLUDEPATH += /usr/include/freetype2
-linux: PRE_TARGETDEPS += $$PWD/../../gameplay/Debug/libgameplay.a
-linux: PRE_TARGETDEPS += $$PWD/../../external-deps/lib/linux/x86_64/libgameplay-deps.a
 linux: INCLUDEPATH += /usr/include/glib-2.0
 linux: INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include
 linux: INCLUDEPATH += /usr/include/pixman-1
@@ -93,8 +91,6 @@ linux: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/../../gameplay/res/logo_powered_w
 
 macx: QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
 macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -stdlib=libc++ -w -arch x86_64
-macx: PRE_TARGETDEPS += $$PWD/../../gameplay/Debug/libgameplay.a
-macx: PRE_TARGETDEPS += $$PWD/../../external-deps/lib/macosx/x86_64/libgameplay-deps.a
 macx: LIBS += -L$$PWD/../../gameplay/Debug/ -lgameplay
 macx: LIBS += -L$$PWD/../../external-deps/lib/macosx/x86_64/ -lgameplay-deps
 macx: LIBS += -F/System/Library/Frameworks -framework GameKit
@@ -106,6 +102,7 @@ macx: LIBS += -F/System/Library/Frameworks -framework Cocoa
 macx: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/shaders ../res$$escape_expand(\n\t))
 macx: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/ui ../res$$escape_expand(\n\t))
 macx: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/../../gameplay/res/logo_powered_white.png ../res$$escape_expand(\n\t))
+macx: ICON = icon.png
 macx 
 {
     icon.files = icon.png

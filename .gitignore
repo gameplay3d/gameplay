@@ -81,7 +81,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/character/Debug
 /samples/character/DebugMem
 /samples/character/Release
-/samples/character/game.config
 /samples/character/res/shaders
 /samples/character/res/ui
 /samples/character/res/logo_powered_white.png
@@ -103,7 +102,6 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /samples/racer/Debug
 /samples/racer/DebugMem
 /samples/racer/Release
-/samples/racer/game.config
 /samples/racer/res/shaders
 /samples/racer/res/ui
 /samples/racer/res/logo_powered_white.png
