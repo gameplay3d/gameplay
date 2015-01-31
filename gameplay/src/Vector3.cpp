@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Vector3.h"
+#include "Quaternion.h"
 #include "MathUtil.h"
 
 namespace gameplay
@@ -262,6 +263,25 @@ void Vector3::scale(float scalar)
     x *= scalar;
     y *= scalar;
     z *= scalar;
+}
+
+void Vector3::applyQuaternion(Quaternion& q)
+{
+
+	Quaternion vecQuat;
+	Quaternion resQuat;
+	vecQuat.x = this->x;
+	vecQuat.y = this->y;
+	vecQuat.z = this->z;
+	vecQuat.w = 0.0f;
+
+	Quaternion conQuat = q;
+	conQuat.conjugate();
+
+	resQuat = vecQuat * conQuat;
+	resQuat = q * resQuat;
+
+	this->set(resQuat.x, resQuat.y, resQuat.z);
 }
 
 void Vector3::set(float x, float y, float z)

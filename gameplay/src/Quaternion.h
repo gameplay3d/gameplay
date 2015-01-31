@@ -139,6 +139,15 @@ public:
      */
     bool isZero() const;
 
+	/**
+	* Creates this quaternion equal to the rotation from the specified euler angles
+	* and stores the result in dst.
+	*
+	* @param euler A vector describing the euler angles (in radians).
+	* @param dst A quaternion to store the conjugate in.
+	*/
+	static void createFromEuler(const Vector3& euler, Quaternion* dst);
+
     /**
      * Creates a quaternion equal to the rotational part of the specified matrix
      * and stores the result in dst.
@@ -262,6 +271,13 @@ public:
      * @param angle The angle of rotation (in radians).
      */
     void set(const Vector3& axis, float angle);
+
+	/**
+	* Sets the elements of this quaternion to a copy of the specified euler angle.
+	*
+	* @param euler The euler angle (in radians).
+	*/
+	void set(const Vector3& euler);
 
     /**
      * Sets the elements of this quaternion to a copy of the specified quaternion.

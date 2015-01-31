@@ -60,6 +60,23 @@ bool Quaternion::isZero() const
     return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
 }
 
+void Quaternion::createFromEuler(const Vector3& euler, Quaternion* dst)
+{
+	GP_ASSERT(dst);
+
+	float cx = cos(euler.x * 0.5f);
+	float cy = cos(euler.y * 0.5f);
+	float cz = cos(euler.z * 0.5f);
+	float sx = cos(euler.x * 0.5f);
+	float sy = cos(euler.y * 0.5f);
+	float sz = cos(euler.z * 0.5f);
+
+	dst->x = sx * cy * cz - cx * sy * sz;
+	dst->y = cx * sy * cz + sx * cy * sz;
+	dst->z = cx * cy * sz - sx * sy * cz;
+	dst->w = cx * cy * cz + sx * sy * sz;
+}
+
 void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
 {
     m.getRotation(dst);
@@ -217,6 +234,11 @@ void Quaternion::set(const Quaternion& q)
     this->y = q.y;
     this->z = q.z;
     this->w = q.w;
+}
+
+void Quaternion::set(const Vector3& euler)
+{
+	Quaternion::createFromEuler(euler, this);
 }
 
 void Quaternion::setIdentity()
