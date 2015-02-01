@@ -81,6 +81,11 @@ public:
     const char* getFilePathPointer() const;
 
     /**
+     * Get the file name of the input file.
+     */
+    const std::string getFileName() const;
+
+    /**
      * Returns the output path/folder.
      * Example: "C:/dir"
      */
@@ -165,6 +170,8 @@ public:
 
     bool outputMaterialEnabled() const;
 
+    bool generateTextureGutter() const;
+
     const char* getNodeId() const;
 
     static std::string getRealPath(const std::string& filepath);
@@ -211,6 +218,7 @@ private:
     bool _optimizeAnimations;
     AnimationGroupOption _animationGrouping;
     bool _outputMaterial;
+    bool _generateTextureGutter;
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;

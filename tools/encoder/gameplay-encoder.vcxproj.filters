@@ -142,6 +142,12 @@
     <ClCompile Include="src\TMXSceneEncoder.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\TMXTypes.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base64.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\VertexElement.h">
@@ -283,6 +289,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\TMXSceneEncoder.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TMXTypes.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Base64.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

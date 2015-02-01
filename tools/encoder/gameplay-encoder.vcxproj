@@ -14,6 +14,7 @@
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\AnimationChannel.cpp" />
     <ClCompile Include="src\Base.cpp" />
+    <ClCompile Include="src\Base64.cpp" />
     <ClCompile Include="src\BoundingVolume.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Constants.cpp" />
@@ -51,6 +52,7 @@
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\StringUtil.cpp" />
     <ClCompile Include="src\TMXSceneEncoder.cpp" />
+    <ClCompile Include="src\TMXTypes.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\TTFFontEncoder.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
@@ -63,6 +65,7 @@
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AnimationChannel.h" />
     <ClInclude Include="src\Base.h" />
+    <ClInclude Include="src\Base64.h" />
     <ClInclude Include="src\BoundingVolume.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Constants.h" />
@@ -100,6 +103,7 @@
     <ClInclude Include="src\StringUtil.h" />
     <ClInclude Include="src\Thread.h" />
     <ClInclude Include="src\TMXSceneEncoder.h" />
+    <ClInclude Include="src\TMXTypes.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\TTFFontEncoder.h" />
     <ClInclude Include="src\Vector2.h" />

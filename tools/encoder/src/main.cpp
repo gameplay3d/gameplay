@@ -116,7 +116,7 @@ int main(int argc, const char** argv)
         {
             std::string realpath(arguments.getFilePath());
             TMXSceneEncoder tmxEncoder;
-            tmxEncoder.write(realpath);
+            tmxEncoder.write(realpath, arguments);
             break;
         }
     case EncoderArguments::FILEFORMAT_TTF:

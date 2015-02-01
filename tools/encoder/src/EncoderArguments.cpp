@@ -28,7 +28,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _textOutput(false),
     _optimizeAnimations(false),
     _animationGrouping(ANIMATIONGROUP_PROMPT),
-    _outputMaterial(false)
+    _outputMaterial(false),
+    _generateTextureGutter(false)
 {
     __instance = this;
 
@@ -86,6 +87,12 @@ const char* EncoderArguments::getFilePathPointer() const
     return _filePath.c_str();
 }
 
+const std::string EncoderArguments::getFileName() const
+{
+    int pos = _filePath.find_last_of('/');
+    return (pos == -1 ? _filePath : _filePath.substr(pos + 1));
+}
+
 std::string EncoderArguments::getOutputDirPath() const
 {
     if (_fileOutputPath.size() > 0)
@@ -104,6 +111,8 @@ std::string EncoderArguments::getOutputFileExtension() const
 {
     switch (getFileFormat())
     {
+    case FILEFORMAT_TMX:
+        return ".scene";
     case FILEFORMAT_PNG:
     case FILEFORMAT_RAW:
         if (_normalMap)
@@ -271,6 +280,11 @@ void EncoderArguments::printUsage() const
         "\t\tMultiple -h arguments can be supplied to generate more than one \n" \
         "\t\theightmap. For 24-bit packed height data use -hp instead of -h.\n" \
     "\n" \
+    "TMX file options:\n" \
+    "  -tg\tEnable texture gutter's around tiles. This will modify any referenced\n" \
+    "  \ttile sets to add a 1px border around it to prevent seams.\n"
+    "  -tg:none\tDo not priduce a texture gutter.\n"
+    "\n" \
     "Normal map options:\n" \
         "  -n\t\tGenerate normal map (requires input file of type PNG or RAW)\n" \
         "  -s\t\tSize/resolution of the input heightmap image (required for RAW files)\n" \
@@ -317,6 +331,11 @@ bool EncoderArguments::optimizeAnimationsEnabled() const
 bool EncoderArguments::outputMaterialEnabled() const
 {
     return _outputMaterial;
+}
+
+bool EncoderArguments::generateTextureGutter() const
+{
+    return _generateTextureGutter;
 }
 
 const char* EncoderArguments::getNodeId() const
@@ -655,6 +674,14 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             {
                 _tangentBinormalId.insert(nodeId);
             }
+        }
+        else if (str.compare("-textureGutter:none") == 0 || str.compare("-tg:none") == 0)
+        {
+            _generateTextureGutter = false;
+        }
+        else if (str.compare("-textureGutter") == 0 || str.compare("-tg") == 0)
+        {
+            _generateTextureGutter = true;
         }
         break;
     case 'v':

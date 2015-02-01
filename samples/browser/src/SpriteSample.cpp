@@ -50,17 +50,12 @@ void SpriteSample::initialize()
     _playerAnimation->getClip("walk")->setSpeed(24.0f/1000.0f);
     _playerAnimation->play("idle");
 
-    // Setup player text
-    Node* playerTextNode = _scene->findNode("text");
-    playerTextNode->addRef();
-    _scene->removeNode(playerTextNode); //XXX This is because SceneLoader doesn't support loading child nodes for other nodes
-    _playerNode->addChild(playerTextNode);
-
-    playerTextNode->translateY(_playerSprite->getHeight());
-    Text* playerText = dynamic_cast<Text*>(playerTextNode->getDrawable());
-    playerText->setJustify(Font::ALIGN_TOP_HCENTER);
-    playerText->setWidth(_playerSprite->getWidth());
-    SAFE_RELEASE(playerTextNode);
+	// Setup player text
+	Node* playerTextNode = _playerNode->findNode("text");
+	playerTextNode->translateY(_playerSprite->getHeight());
+	Text* playerText = dynamic_cast<Text*>(playerTextNode->getDrawable());
+	playerText->setJustify(Font::ALIGN_TOP_HCENTER);
+	playerText->setWidth(_playerSprite->getWidth());
 
     // Custom Effect in sprite
     Effect* waterEffect = Effect::createFromFile("res/shaders/sprite.vert", "res/common/sprites/water2d.frag");

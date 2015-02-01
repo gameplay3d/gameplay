@@ -139,6 +139,18 @@ scene spriteSample
 
 	node player
 	{
+		node text
+		{
+			text
+			{
+				font = res/ui/arial.gpb
+
+				text = P1
+				size = 18
+				color = 0, 0, 1, 1
+			}
+		}
+
 		sprite
 		{
 			path = res/common/sprites/player1.png
@@ -174,18 +186,6 @@ scene spriteSample
 	{
 		// Sprite drawable set in code because Effect isn't supported
 		translate = 0, -50, 0
-	}
-
-	node text
-	{
-		text
-		{
-			font = res/ui/arial.gpb
-
-			text = P1
-			size = 18
-			color = 0, 0, 1, 1
-		}
 	}
 
 	// Set active camera
