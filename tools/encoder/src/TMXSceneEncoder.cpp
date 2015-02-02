@@ -72,6 +72,7 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const std
 
     // Read in the map values //XXX should compact this so XML attribute parsing is a little nicer
     unsigned int uiValue;
+    int iValue;
     auto attValue = xmlMap->Attribute("width");
     sscanf(attValue, "%u", &uiValue);
     map.setWidth(uiValue);
@@ -161,7 +162,6 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const std
         if (xmlTileOffset)
         {
             Vector2 offset;
-            int iValue;
 
             attValue = xmlTileOffset->Attribute("x");
             sscanf(attValue, "%d", &iValue);
@@ -175,6 +175,10 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const std
 
         // Load image source. Don't worry about <data>, trans, or height
         auto xmlTileSetImage = xmlTileSetToLoad->FirstChildElement("image");
+        if (!xmlTileSetImage)
+        {
+            return false;
+        }
         tileSet.setImagePath(xmlTileSetImage->Attribute("source"));
 
         // We only care about image width...
@@ -207,7 +211,7 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const std
             SAFE_DELETE(img);
         }
 
-        //TODO: tiles (specifically, tile animations)
+        //TODO: tiles (specifically, tile animations) if possible. May require marking tiles as special tiles, and spinning them off to Sprites
         //<tile id="relId"><animation><frame tileid="relId" duration="numInMS"></...></...></...>
 
         // Save the tileset
@@ -216,62 +220,63 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const std
         xmlTileSet = xmlTileSet->NextSiblingElement("tileset");
     }
 
-    // Finally we load the layers
+    // Load the layers
     auto xmlLayer = xmlMap->FirstChildElement("layer");
     while (xmlLayer)
     {
-        TMXLayer layer;
+        auto layer = new TMXLayer();
 
-        //XXX what if name doesn't exist?
-        layer.setName(xmlLayer->Attribute("name"));
+        layer->setName(xmlLayer->Attribute("name"));
 
         // Load properties
         attValue = xmlLayer->Attribute("width");
         if (attValue)
         {
             sscanf(attValue, "%u", &uiValue);
-            layer.setWidth(uiValue);
+            layer->setWidth(uiValue);
         }
         else
         {
-            layer.setWidth(map.getWidth());
+            layer->setWidth(map.getWidth());
         }
 
         attValue = xmlLayer->Attribute("height");
         if (attValue)
         {
             sscanf(attValue, "%u", &uiValue);
-            layer.setHeight(uiValue);
+            layer->setHeight(uiValue);
         }
         else
         {
-            layer.setHeight(map.getHeight());
+            layer->setHeight(map.getHeight());
         }
 
         attValue = xmlLayer->Attribute("opacity");
         if (attValue)
         {
             sscanf(attValue, "%f", &fValue);
-            layer.setOpacity(fValue);
+            layer->setOpacity(fValue);
         }
 
         attValue = xmlLayer->Attribute("visible");
         if (attValue)
         {
             sscanf(attValue, "%u", &uiValue);
-            layer.setVisible(uiValue == 1);
+            layer->setVisible(uiValue == 1);
         }
 
+        parseProperties(xmlLayer->FirstChildElement("properties"), layer->getProperties());
+
         // Load tiles
-        layer.setupTiles();
+        layer->setupTiles();
         auto data = loadDataElement(xmlLayer->FirstChildElement("data"));
         auto data_size = data.size();
         for (int i = 0; i < data_size; i++)
         {
             //XXX this might depend on map's renderorder
-            auto x = i % layer.getWidth();
-            auto y = i / layer.getWidth();
-            layer.setTile(x, y, data[i]);
+            auto x = i % layer->getWidth();
+            auto y = i / layer->getWidth();
+            layer->setTile(x, y, data[i]);
         }
 
         // Save layer
@@ -280,9 +285,75 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const std
         xmlLayer = xmlLayer->NextSiblingElement("layer");
     }
 
-    //TODO: imagelayer (a kind of individual sprite)
+    // Load image layers
+    auto xmlImgLayer = xmlMap->FirstChildElement("imagelayer");
+    while (xmlImgLayer)
+    {
+        auto imgLayer = new TMXImageLayer();
+
+        imgLayer->setName(xmlImgLayer->Attribute("name"));
+
+        // Load properties
+        attValue = xmlImgLayer->Attribute("x");
+        if (attValue)
+        {
+            sscanf(attValue, "%d", &iValue);
+            imgLayer->setX(iValue);
+        }
+        attValue = xmlImgLayer->Attribute("y");
+        if (attValue)
+        {
+            sscanf(attValue, "%d", &iValue);
+            imgLayer->setY(iValue);
+        }
+
+        attValue = xmlImgLayer->Attribute("opacity");
+        if (attValue)
+        {
+            sscanf(attValue, "%f", &fValue);
+            imgLayer->setOpacity(fValue);
+        }
+
+        attValue = xmlImgLayer->Attribute("visible");
+        if (attValue)
+        {
+            sscanf(attValue, "%u", &uiValue);
+            imgLayer->setVisible(uiValue == 1);
+        }
+
+        parseProperties(xmlImgLayer->FirstChildElement("properties"), imgLayer->getProperties());
+
+        // Load image source. Don't worry about <data>, trans, width, height
+        auto xmlImage = xmlImgLayer->FirstChildElement("image");
+        if (!xmlImage)
+        {
+            return false;
+        }
+        imgLayer->setImagePath(xmlImage->Attribute("source"));
+
+        // Save image layer
+        map.addLayer(imgLayer);
+
+        xmlImgLayer = xmlImgLayer->NextSiblingElement("imagelayer");
+    }
 
     return true;
+}
+
+void TMXSceneEncoder::parseProperties(const tinyxml2::XMLElement* xmlProperties, gameplay::TMXProperties& properties) const
+{
+    if (!xmlProperties)
+    {
+        return;
+    }
+
+    auto xmlProperty = xmlProperties->FirstChildElement("property");
+    while (xmlProperty)
+    {
+        properties[xmlProperty->Attribute("name")] = xmlProperty->Attribute("value");
+
+        xmlProperty = xmlProperty->NextSiblingElement("property");
+    }
 }
 
 //XXX could probably seperate the writing process to a seperate class (PropertyWriter...)
@@ -300,33 +371,29 @@ void TMXSceneEncoder::writeScene(const TMXMap& map, const string& outputFilepath
     // Prepare for writing the scene
     std::ofstream file(outputFilepath.c_str(), std::ofstream::out | std::ofstream::trunc);
 
-    auto tilesetCount = map.getLayerCount();
-    bool singleLayer = tilesetCount <= 1;
-
-    //XXX should really build an ordered list, and draw based on that (for z-depth)
+    auto layerCount = map.getLayerCount();
 
     // Write initial scene
     WRITE_PROPERTY_BLOCK_START("scene " + sceneName);
-    if (!singleLayer)
+
+    // Write all layers
+    for (auto i = 0u; i < layerCount; i++)
     {
-        WRITE_PROPERTY_BLOCK_START("node all_tilesets"); //XXX what if there are sprites between tilesets?
+        auto layer = map.getLayer(i);
+        auto type = layer->getType();
+        if (type == TMXLayerType::NormalLayer)
+        {
+            writeTileset(map, dynamic_cast<const TMXLayer*>(layer), file);
+            WRITE_PROPERTY_NEWLINE();
+        }
+        else if (type == TMXLayerType::ImageLayer)
+        {
+            writeSprite(dynamic_cast<const TMXImageLayer*>(layer), file);
+            WRITE_PROPERTY_NEWLINE();
+        }
     }
 
-    // Write all tilesets
-    for (auto i = 0u; i < tilesetCount; i++)
-    {
-        writeTileset(map, i, file);
-        WRITE_PROPERTY_NEWLINE();
-    }
-
-    if (!singleLayer)
-    {
-        WRITE_PROPERTY_BLOCK_END(); // node tilesets
-    }
-
-    //TODO: other sprites
-
-    WRITE_PROPERTY_BLOCK_END(); // scene
+    WRITE_PROPERTY_BLOCK_END();
 
     // Cleanup
     file.flush();
@@ -334,22 +401,22 @@ void TMXSceneEncoder::writeScene(const TMXMap& map, const string& outputFilepath
 }
 
 // This is actually a misnomer. What is a Layer in Tiled/TMX is a TileSet for GamePlay3d. TileSet in Tiled/TMX is something different.
-void TMXSceneEncoder::writeTileset(const TMXMap& map, unsigned int tileSetIndex, std::ofstream& file)
+void TMXSceneEncoder::writeTileset(const TMXMap& map, const TMXLayer* tileset, std::ofstream& file)
 {
-    auto tileset = map.getLayer(tileSetIndex);
-    if (!tileset.hasTiles())
+    if (!tileset || !tileset->hasTiles())
     {
         return;
     }
 
-    auto tilesets = tileset.getTilesetsUsed(map);
+    auto tilesets = tileset->getTilesetsUsed(map);
     if (tilesets.size() == 0)
     {
         return;
     }
 
     char buffer[BUFFER_SIZE];
-    WRITE_PROPERTY_BLOCK_START("node " + tileset.getName());
+    WRITE_PROPERTY_BLOCK_START("node " + tileset->getName());
+
     if (tilesets.size() > 1)
     {
         auto i = 0u;
@@ -359,7 +426,7 @@ void TMXSceneEncoder::writeTileset(const TMXMap& map, unsigned int tileSetIndex,
             WRITE_PROPERTY_BLOCK_START(buffer);
 
             auto tmxTileset = map.getTileSet(*it);
-            writeSoloTileset(map, tmxTileset, tileset, file, *it);
+            writeSoloTileset(map, tmxTileset, *tileset, file, *it);
 
             auto tileOffset = tmxTileset.getOffset();
             if (!(tileOffset == Vector2::zero()))
@@ -380,7 +447,7 @@ void TMXSceneEncoder::writeTileset(const TMXMap& map, unsigned int tileSetIndex,
     else
     {
         auto tmxTileset = map.getTileSet(*(tilesets.begin()));
-        writeSoloTileset(map, tmxTileset, tileset, file);
+        writeSoloTileset(map, tmxTileset, *tileset, file);
 
         auto tileOffset = tmxTileset.getOffset();
         if (!(tileOffset == Vector2::zero()))
@@ -391,12 +458,8 @@ void TMXSceneEncoder::writeTileset(const TMXMap& map, unsigned int tileSetIndex,
             WRITE_PROPERTY_DIRECT(buffer);
         }
     }
-    if (!tileset.getVisible())
-    {
-        // Default is true, so only write it false
-        WRITE_PROPERTY_NEWLINE();
-        WRITE_PROPERTY_DIRECT("enabled = false");
-    }
+
+    writeNodeProperties(tileset->getVisible(), tileset->getProperties(), file);
     WRITE_PROPERTY_BLOCK_END();
 }
 
@@ -460,6 +523,62 @@ void TMXSceneEncoder::writeSoloTileset(const TMXMap& map, const gameplay::TMXTil
     }
 
     WRITE_PROPERTY_BLOCK_END();
+}
+
+void TMXSceneEncoder::writeSprite(const gameplay::TMXImageLayer* imageLayer, std::ofstream& file)
+{
+    if (!imageLayer)
+    {
+        return;
+    }
+
+    WRITE_PROPERTY_BLOCK_START("node " + imageLayer->getName());
+
+    // Sprite
+    {
+        WRITE_PROPERTY_BLOCK_START("sprite");
+
+        WRITE_PROPERTY_BLOCK_VALUE("path", imageLayer->getImagePath());
+        WRITE_PROPERTY_NEWLINE();
+
+        WRITE_PROPERTY_BLOCK_END();
+    }
+
+    writeNodeProperties(imageLayer->getVisible(), imageLayer->getPosition(), imageLayer->getProperties(), file);
+    WRITE_PROPERTY_BLOCK_END();
+}
+
+void TMXSceneEncoder::writeNodeProperties(bool enabled, const Vector2& pos, const TMXProperties& properties, std::ofstream& file, bool seperatorLineWritten)
+{
+    char buffer[BUFFER_SIZE];
+    if (!enabled)
+    {
+        // Default is true, so only write it false
+        WRITE_PROPERTY_NEWLINE();
+        seperatorLineWritten = true;
+        WRITE_PROPERTY_DIRECT("enabled = false");
+    }
+    if (!(pos == Vector2::zero()))
+    {
+        if (!seperatorLineWritten)
+        {
+            WRITE_PROPERTY_NEWLINE();
+            seperatorLineWritten = true;
+        }
+        snprintf(buffer, BUFFER_SIZE, "translate = %d, %d, 0", static_cast<int>(pos.x), static_cast<int>(pos.y));
+        WRITE_PROPERTY_DIRECT(buffer);
+    }
+
+    if (properties.size() > 0)
+    {
+        WRITE_PROPERTY_NEWLINE();
+        WRITE_PROPERTY_BLOCK_START("tags");
+        for (auto it = properties.begin(); it != properties.end(); it++)
+        {
+            WRITE_PROPERTY_BLOCK_VALUE(it->first, it->second);
+        }
+        WRITE_PROPERTY_BLOCK_END();
+    }
 }
 
 #undef WRITE_PROPERTY_NEWLINE
