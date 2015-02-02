@@ -67,9 +67,9 @@ void Quaternion::createFromEuler(const Vector3& euler, Quaternion* dst)
 	float cx = cos(euler.x * 0.5f);
 	float cy = cos(euler.y * 0.5f);
 	float cz = cos(euler.z * 0.5f);
-	float sx = cos(euler.x * 0.5f);
-	float sy = cos(euler.y * 0.5f);
-	float sz = cos(euler.z * 0.5f);
+	float sx = sin(euler.x * 0.5f);
+	float sy = sin(euler.y * 0.5f);
+	float sz = sin(euler.z * 0.5f);
 
 	dst->x = sx * cy * cz - cx * sy * sz;
 	dst->y = cx * sy * cz + sx * cy * sz;
