@@ -16,70 +16,71 @@ void SpriteSample::initialize()
     // Create the font for drawing the framerate.
     _font = Font::create("res/ui/arial.gpb");
 
-	// Load sprite scene
-	_scene = Scene::load("res/common/sprites/sprite.scene");
-	_cameraNode = _scene->findNode("camera");
+    // Load sprite scene
+    _scene = Scene::load("res/common/sprites/sprite.scene");
+    _cameraNode = _scene->findNode("camera");
 
-	// Setup the player
-	_playerNode = _scene->findNode("player");
-	_playerSprite = dynamic_cast<Sprite*>(_playerNode->getDrawable());
+    // Setup the player
+    _playerNode = _scene->findNode("player");
+    _playerSprite = dynamic_cast<Sprite*>(_playerNode->getDrawable());
 
-	// Idle [0] - Set at load time
-	// Walk [1 - 11]
-	_playerSprite->setFrameSource(1, Rectangle( 0, 0, 72, 92));
-	_playerSprite->setFrameSource(2, Rectangle(73, 0, 72, 97));
-	_playerSprite->setFrameSource(3, Rectangle(146, 0, 72, 97));
-	_playerSprite->setFrameSource(4, Rectangle(0, 98, 72, 97));
-	_playerSprite->setFrameSource(5, Rectangle(73, 98, 72, 97));
-	_playerSprite->setFrameSource(6, Rectangle(146, 98, 72, 97));
-	_playerSprite->setFrameSource(7, Rectangle(219, 0, 72, 97));
-	_playerSprite->setFrameSource(8, Rectangle(292, 0, 72, 97));
-	_playerSprite->setFrameSource(9, Rectangle(219, 98, 72, 97));
-	_playerSprite->setFrameSource(10, Rectangle(365, 0, 72, 97));
-	_playerSprite->setFrameSource(11, Rectangle(292, 98, 72, 97));
-	// Jump[12]
-	_playerSprite->setFrameSource(12, Rectangle(438, 93, 67, 94));
+    // Idle [0] - Set at load time
+    // Walk [1 - 11]
+    _playerSprite->setFrameSource(1, Rectangle( 0, 0, 72, 92));
+    _playerSprite->setFrameSource(2, Rectangle(73, 0, 72, 97));
+    _playerSprite->setFrameSource(3, Rectangle(146, 0, 72, 97));
+    _playerSprite->setFrameSource(4, Rectangle(0, 98, 72, 97));
+    _playerSprite->setFrameSource(5, Rectangle(73, 98, 72, 97));
+    _playerSprite->setFrameSource(6, Rectangle(146, 98, 72, 97));
+    _playerSprite->setFrameSource(7, Rectangle(219, 0, 72, 97));
+    _playerSprite->setFrameSource(8, Rectangle(292, 0, 72, 97));
+    _playerSprite->setFrameSource(9, Rectangle(219, 98, 72, 97));
+    _playerSprite->setFrameSource(10, Rectangle(365, 0, 72, 97));
+    _playerSprite->setFrameSource(11, Rectangle(292, 98, 72, 97));
+    // Jump[12]
+    _playerSprite->setFrameSource(12, Rectangle(438, 93, 67, 94));
 
-	// The player animation clips
-	unsigned int keyTimes[4] = {0, 1, 11, 12};
-	float keyValues[4] =  { 0, 1, 11, 12 };
-	_playerAnimation = _playerSprite->createAnimation("player-animations", Sprite::ANIMATE_KEYFRAME, 4, keyTimes, keyValues, Curve::LINEAR);
-	_playerAnimation->createClip("idle", 0, 0);
-	_playerAnimation->createClip("walk", 1, 11)->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
-	// Set the speed to 24 FPS
-	_playerAnimation->getClip("walk")->setSpeed(24.0f/1000.0f);
-	_playerAnimation->play("idle");
+    // The player animation clips
+    unsigned int keyTimes[4] = {0, 1, 11, 12};
+    float keyValues[4] =  { 0, 1, 11, 12 };
+    _playerAnimation = _playerSprite->createAnimation("player-animations", Sprite::ANIMATE_KEYFRAME, 4, keyTimes, keyValues, Curve::LINEAR);
+    _playerAnimation->createClip("idle", 0, 0);
+    _playerAnimation->createClip("walk", 1, 11)->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
+    // Set the speed to 24 FPS
+    _playerAnimation->getClip("walk")->setSpeed(24.0f/1000.0f);
+    _playerAnimation->play("idle");
 
-	// Setup player text
-	Node* playerTextNode = _scene->findNode("text");
-	playerTextNode->addRef();
-	_scene->removeNode(playerTextNode); //XXX This is because SceneLoader doesn't support loading child nodes for other nodes
-	_playerNode->addChild(playerTextNode);
+    // Setup player text
+    Node* playerTextNode = _scene->findNode("text");
+    playerTextNode->addRef();
+    _scene->removeNode(playerTextNode); //XXX This is because SceneLoader doesn't support loading child nodes for other nodes
+    _playerNode->addChild(playerTextNode);
 
-	playerTextNode->translateY(_playerSprite->getHeight());
-	Text* playerText = dynamic_cast<Text*>(playerTextNode->getDrawable());
-	playerText->setJustify(Font::ALIGN_TOP_HCENTER);
-	playerText->setWidth(_playerSprite->getWidth());
-	SAFE_RELEASE(playerTextNode);
+    playerTextNode->translateY(_playerSprite->getHeight());
+    Text* playerText = dynamic_cast<Text*>(playerTextNode->getDrawable());
+    playerText->setJustify(Font::ALIGN_TOP_HCENTER);
+    playerText->setWidth(_playerSprite->getWidth());
+    SAFE_RELEASE(playerTextNode);
 
-	// Custom Effect in sprite
-	Effect* waterEffect = Effect::createFromFile("res/shaders/sprite.vert", "res/common/sprites/water2d.frag");
-	Sprite* waterSprite = Sprite::create("res/common/sprites/water2d.png", getWidth() * 5, getHeight() / 3, waterEffect);
-	SAFE_RELEASE(waterEffect);
-	waterSprite->setAnchor(Vector2::zero());
-	waterSprite->setOpacity(0.5f);
-	_scene->findNode("water")->setDrawable(waterSprite);
-	Material* waterMaterial = waterSprite->getMaterial();
-	SAFE_RELEASE(waterSprite);
-	Texture::Sampler* noiseSampler = Texture::Sampler::create("res/common/sprites/water2d-noise.png");
-	waterMaterial->getParameter("u_texture_noise")->setValue(noiseSampler);
-	SAFE_RELEASE(noiseSampler);
-	waterMaterial->getParameter("u_time")->bindValue(this, &SpriteSample::getTime);
+    // Custom Effect in sprite
+    Effect* waterEffect = Effect::createFromFile("res/shaders/sprite.vert", "res/common/sprites/water2d.frag");
+    Sprite* waterSprite = Sprite::create("res/common/sprites/water2d.png", getWidth() * 5, getHeight() / 3, waterEffect);
+    SAFE_RELEASE(waterEffect);
+    waterSprite->setAnchor(Vector2::zero());
+    waterSprite->setOpacity(0.5f);
+    _scene->findNode("water")->setDrawable(waterSprite);
+    Material* waterMaterial = waterSprite->getMaterial();
+    SAFE_RELEASE(waterSprite);
+    Texture::Sampler* noiseSampler = Texture::Sampler::create("res/common/sprites/water2d-noise.png");
+    waterMaterial->getParameter("u_texture_noise")->setValue(noiseSampler);
+    SAFE_RELEASE(noiseSampler);
+    waterMaterial->getParameter("u_time")->bindValue(this, &SpriteSample::getTime);
 }
 
 void SpriteSample::finalize()
 {
-	SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_font);
 }
 
 void SpriteSample::update(float elapsedTime)

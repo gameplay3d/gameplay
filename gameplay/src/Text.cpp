@@ -7,7 +7,7 @@ namespace gameplay
 {
   
 Text::Text() :
-    _font(NULL), _text(""), _size(0), _width(0), _height(0), _wrap(true), _rightToLeft(false),
+    _font(NULL), _drawFont(NULL), _text(""), _size(0), _width(0), _height(0), _wrap(true), _rightToLeft(false),
     _align(Font::ALIGN_TOP_LEFT), _clip(Rectangle(0, 0, 0, 0)),
     _opacity(1.0f), _color(Vector4::one())
 {
@@ -15,7 +15,9 @@ Text::Text() :
 
 Text::~Text()
 {
+    // _drawFont is a child of _font, so it should never be released
     SAFE_RELEASE(_font);
+    _drawFont = NULL;
 }
     
 Text& Text::operator=(const Text& text)
@@ -29,21 +31,24 @@ Text* Text::create(const char* fontPath, const char* str, const Vector4& color, 
     GP_ASSERT(str);
 
     Font* font = Font::create(fontPath);
+    Font* drawFont;
     
     if (size == 0)
     {
         size = font->_size;
+        drawFont = font;
     }
     else
     {
         // Delegate to closest sized font
-        font = font->findClosestSize(size);
-        size = font->_size;
+        drawFont = font->findClosestSize(size);
+        size = drawFont->_size;
     }
     unsigned int widthOut, heightOut;
     font->measureText(str, size, &widthOut, &heightOut);
     Text* text = new Text();
     text->_font = font;
+    text->_drawFont = drawFont;
     text->_text = str;
     text->_size = size;
     text->_width = (float)widthOut + 1;
@@ -210,6 +215,7 @@ Drawable* Text::clone(NodeCloneContext& context)
     Text* textClone = new Text();
     textClone->_font = _font;
     _font->addRef();
+    textClone->_drawFont = _drawFont;
     textClone->_text = _text;
     textClone->_size = _size;
     textClone->_width = _width;
@@ -258,11 +264,11 @@ unsigned int Text::draw(bool wireframe)
             clipViewport.y += position.y;
         }
     }
-    _font->start();
-    _font->drawText(_text.c_str(), Rectangle(position.x, position.y, _width, _height),
+    _drawFont->start();
+    _drawFont->drawText(_text.c_str(), Rectangle(position.x, position.y, _width, _height),
                     Vector4(_color.x, _color.y, _color.z, _color.w * _opacity), _size,
                     _align, _wrap, _rightToLeft, clipViewport);
-    _font->finish();
+    _drawFont->finish();
     return 1;
 }
     
