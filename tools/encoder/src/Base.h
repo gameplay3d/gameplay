@@ -101,6 +101,9 @@ void fillArray(float values[], float value, size_t length);
  */
 std::string getBaseName(const std::string& filepath);
 
+std::string base64_encode(unsigned char const*, unsigned int len);
+std::string base64_decode(std::string const& s);
+
 #define ISZERO(x) (fabs(x) < MATH_EPSILON)
 #define ISONE(x) ((x - 1.0f) < MATH_EPSILON)
 

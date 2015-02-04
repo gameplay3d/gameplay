@@ -82,6 +82,12 @@ const std::string& EncoderArguments::getFilePath() const
     return _filePath;
 }
 
+const std::string EncoderArguments::getFileDirPath() const
+{
+    int pos = _filePath.find_last_of('/');
+    return (pos == -1 ? _filePath : _filePath.substr(0, pos));
+}
+
 const char* EncoderArguments::getFilePathPointer() const
 {
     return _filePath.c_str();

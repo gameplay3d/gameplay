@@ -2,6 +2,7 @@
 #define TMXSCENEEENCODER_H_
 
 #include <fstream>
+#include <unordered_map>
 #include <tinyxml2.h>
 
 #include "Base.h"
@@ -29,14 +30,24 @@ public:
     /**
      * Writes out encoded TMX file.
      */
-    void write(const std::string& filepath, const gameplay::EncoderArguments& arguments);
+    void write(const gameplay::EncoderArguments& arguments);
 
 private:
     static std::vector<unsigned int> loadDataElement(const tinyxml2::XMLElement* data);
+    static inline std::string buildFilePath(const std::string& directory, const std::string& file);
+    static void copyImage(unsigned char* dst, const unsigned char* src,
+        unsigned int srcWidth, unsigned int dstWidth, unsigned int bpp,
+        unsigned int srcx, unsigned int srcy, unsigned int dstx, unsigned int dsty, unsigned int width, unsigned int height);
 
-    bool parseTmx(const tinyxml2::XMLDocument& xmlDoc, gameplay::TMXMap& map, const std::string& outputDirectory) const;
-    void parseProperties(const tinyxml2::XMLElement* xmlProperties, gameplay::TMXProperties& properties) const;
+    // Parsing
+    bool parseTmx(const tinyxml2::XMLDocument& xmlDoc, gameplay::TMXMap& map, const std::string& inputDirectory) const;
+    void parseBaseLayerProperties(const tinyxml2::XMLElement* xmlBaseLayer, gameplay::TMXBaseLayer* layer) const;
 
+    // Gutter
+    void buildTileGutter(gameplay::TMXMap& map, const std::string& inputDirectory, const std::string& outputDirectory);
+    bool buildTileGutterTileset(const gameplay::TMXTileSet& tileset, const std::string& inputFile, const std::string& outputFile);
+
+    // Writing
     void writeScene(const gameplay::TMXMap& map, const std::string& outputFilepath, const std::string& sceneName);
 
     void writeTileset(const gameplay::TMXMap& map, const gameplay::TMXLayer* layer, std::ofstream& file);

@@ -76,6 +76,12 @@ public:
     const std::string& getFilePath() const;
 
     /**
+     * Returns the path/folder.
+     * Example: "C:/dir"
+     */
+    const std::string getFileDirPath() const;
+
+    /**
      * Returns the char pointer to the file path string.
      */
     const char* getFilePathPointer() const;
