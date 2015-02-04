@@ -67,7 +67,7 @@ void TMXSceneEncoder::write(const EncoderArguments& arguments)
 
 bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const string& inputDirectory) const
 {
-    auto xmlMap = xmlDoc.FirstChildElement("map");
+    const XMLElement* xmlMap = xmlDoc.FirstChildElement("map");
     if (!xmlMap)
     {
         LOG(1, "Missing root <map> element.\n");
@@ -77,7 +77,7 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const str
     // Read in the map values //XXX should compact this so XML attribute parsing is a little nicer
     unsigned int uiValue;
     int iValue;
-    auto attValue = xmlMap->Attribute("width");
+    const char* attValue = xmlMap->Attribute("width");
     sscanf(attValue, "%u", &uiValue);
     map.setWidth(uiValue);
 
@@ -95,7 +95,7 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const str
     map.setTileHeight(fValue);
 
     // Now we load all tilesets
-    auto xmlTileSet = xmlMap->FirstChildElement("tileset");
+    const XMLElement* xmlTileSet = xmlMap->FirstChildElement("tileset");
     while (xmlTileSet)
     {
         TMXTileSet tileSet;
@@ -160,7 +160,7 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const str
         }
 
         // Tile offset
-        auto xmlTileOffset = xmlTileSetToLoad->FirstChildElement("tileoffset");
+        const XMLElement* xmlTileOffset = xmlTileSetToLoad->FirstChildElement("tileoffset");
         if (xmlTileOffset)
         {
             Vector2 offset;
@@ -176,7 +176,7 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const str
         }
 
         // Load image source. Don't worry about <data> or trans
-        auto xmlTileSetImage = xmlTileSetToLoad->FirstChildElement("image");
+        const XMLElement* xmlTileSetImage = xmlTileSetToLoad->FirstChildElement("image");
         if (!xmlTileSetImage)
         {
             LOG(1, "Could not find <image> element for tileset.\n");
@@ -226,10 +226,10 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const str
     }
 
     // Load the layers
-    auto xmlLayer = xmlMap->FirstChildElement("layer");
+    const XMLElement* xmlLayer = xmlMap->FirstChildElement("layer");
     while (xmlLayer)
     {
-        auto layer = new TMXLayer();
+        TMXLayer* layer = new TMXLayer();
 
         parseBaseLayerProperties(xmlLayer, layer);
 
@@ -259,12 +259,12 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const str
         // Load tiles
         layer->setupTiles();
         auto data = loadDataElement(xmlLayer->FirstChildElement("data"));
-        auto dataSize = data.size();
+        size_t dataSize = data.size();
         for (int i = 0; i < dataSize; i++)
         {
-            //XXX this might depend on map's renderorder
-            auto x = i % layer->getWidth();
-            auto y = i / layer->getWidth();
+            //XXX this might depend on map's renderorder... not sure
+            unsigned int x = i % layer->getWidth();
+            unsigned int y = i / layer->getWidth();
             layer->setTile(x, y, data[i]);
         }
 
@@ -275,10 +275,10 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const str
     }
 
     // Load image layers
-    auto xmlImgLayer = xmlMap->FirstChildElement("imagelayer");
+    const XMLElement* xmlImgLayer = xmlMap->FirstChildElement("imagelayer");
     while (xmlImgLayer)
     {
-        auto imgLayer = new TMXImageLayer();
+        TMXImageLayer* imgLayer = new TMXImageLayer();
 
         parseBaseLayerProperties(xmlImgLayer, imgLayer);
 
@@ -297,7 +297,7 @@ bool TMXSceneEncoder::parseTmx(const XMLDocument& xmlDoc, TMXMap& map, const str
         }
 
         // Load image source. Don't worry about <data>, trans, width, or height
-        auto xmlImage = xmlImgLayer->FirstChildElement("image");
+        const XMLElement* xmlImage = xmlImgLayer->FirstChildElement("image");
         if (!xmlImage)
         {
             LOG(1, "Could not find <image> element for the image layer.\n");
@@ -321,7 +321,7 @@ void TMXSceneEncoder::parseBaseLayerProperties(const tinyxml2::XMLElement* xmlBa
     float fValue;
     unsigned int uiValue;
 
-    auto attValue = xmlBaseLayer->Attribute("opacity");
+    const char* attValue = xmlBaseLayer->Attribute("opacity");
     if (attValue)
     {
         sscanf(attValue, "%f", &fValue);
@@ -335,11 +335,11 @@ void TMXSceneEncoder::parseBaseLayerProperties(const tinyxml2::XMLElement* xmlBa
         layer->setVisible(uiValue == 1);
     }
 
-    auto xmlProperties = xmlBaseLayer->FirstChildElement("properties");
+    const XMLElement* xmlProperties = xmlBaseLayer->FirstChildElement("properties");
     if (xmlProperties)
     {
-        auto properties = layer->getProperties();
-        auto xmlProperty = xmlProperties->FirstChildElement("property");
+        TMXProperties& properties = layer->getProperties();
+        const XMLElement* xmlProperty = xmlProperties->FirstChildElement("property");
         while (xmlProperty)
         {
             properties[xmlProperty->Attribute("name")] = xmlProperty->Attribute("value");
@@ -362,10 +362,10 @@ void TMXSceneEncoder::buildTileGutter(TMXMap& map, const string& inputDirectory,
     std::unordered_map<std::string, std::string> processedFiles;
     std::unordered_map<std::string, std::string> reverseLookupProcessedFiles;
 
-    auto tilesetCount = map.getTileSetCount();
-    for (auto i = 0u; i < tilesetCount; i++)
+    unsigned int tilesetCount = map.getTileSetCount();
+    for (unsigned int i = 0; i < tilesetCount; i++)
     {
-        auto& tileset = map.getTileSet(i);
+        TMXTileSet& tileset = map.getTileSet(i);
 
         // See if the tileset was already processed. Then we can skip it
         auto potentialEasyProcess = processedFiles.find(tileset.getImagePath());
@@ -376,9 +376,9 @@ void TMXSceneEncoder::buildTileGutter(TMXMap& map, const string& inputDirectory,
         }
 
         // Process tileset
-        auto orgImgPath = tileset.getImagePath();
-        auto imgPath = orgImgPath;
-        auto inputFile = buildFilePath(inputDirectory, imgPath);
+        string orgImgPath = tileset.getImagePath();
+        string imgPath = orgImgPath;
+        string inputFile = buildFilePath(inputDirectory, imgPath);
         int pos = imgPath.find_last_of('.');
         if (pos == -1)
         {
@@ -388,7 +388,7 @@ void TMXSceneEncoder::buildTileGutter(TMXMap& map, const string& inputDirectory,
         {
             imgPath = imgPath.substr(0, pos) + "_guttered" + imgPath.substr(pos);
         }
-        auto outputFile = buildFilePath(outputDirectory, imgPath);
+        string outputFile = buildFilePath(outputDirectory, imgPath);
 
         if (buildTileGutterTileset(tileset, inputFile, outputFile))
         {
@@ -402,7 +402,7 @@ void TMXSceneEncoder::buildTileGutter(TMXMap& map, const string& inputDirectory,
         else
         {
             // Revert all processed tilemaps
-            for (auto k = 0u; k < i; k++)
+            for (unsigned int k = 0; k < i; k++)
             {
                 tileset = map.getTileSet(k);
 
@@ -445,9 +445,9 @@ bool TMXSceneEncoder::buildTileGutterTileset(const TMXTileSet& tileset, const st
         return false;
     }
 
-    auto tilesetWidth = tileset.getHorizontalTileCount();
-    auto tilesetHeight = tileset.getVerticalTileCount();
-    auto tileSize = Vector2(tileset.getMaxTileWidth(), tileset.getMaxTileHeight());
+    unsigned int tilesetWidth = tileset.getHorizontalTileCount();
+    unsigned int tilesetHeight = tileset.getVerticalTileCount();
+    Vector2 tileSize = Vector2(tileset.getMaxTileWidth(), tileset.getMaxTileHeight());
     unsigned int bpp = 0;
     switch (inputImage->getFormat())
     {
@@ -470,21 +470,21 @@ bool TMXSceneEncoder::buildTileGutterTileset(const TMXTileSet& tileset, const st
         TMXTileSet::calculateImageDimension(tilesetHeight, tileSize.y, tileset.getSpacing() + 2, tileset.getMargin() + 1));
 
     // Get a couple variables so we don't constantly call functions (they aren't inline)
-    auto inputImageWidth = inputImage->getWidth();
-    auto inputImageHeight = inputImage->getHeight();
-    auto outputImageWidth = outputImage->getWidth();
-    auto outputImageHeight = outputImage->getHeight();
-    auto outputData = static_cast<unsigned char*>(outputImage->getData());
-    auto tilesetSpacing = tileset.getSpacing();
-    auto tilesetMargin = tileset.getMargin();
+    unsigned int inputImageWidth = inputImage->getWidth();
+    unsigned int inputImageHeight = inputImage->getHeight();
+    unsigned int outputImageWidth = outputImage->getWidth();
+    unsigned int outputImageHeight = outputImage->getHeight();
+    unsigned char* outputData = static_cast<unsigned char*>(outputImage->getData());
+    unsigned int tilesetSpacing = tileset.getSpacing();
+    unsigned int tilesetMargin = tileset.getMargin();
 
     // Copy margin
     if (tilesetMargin != 0)
     {
         // Horizontal
-        auto avaliable = inputImageWidth;
-        auto remaining = outputImageWidth;
-        auto use = min(avaliable, remaining);
+        unsigned int avaliable = inputImageWidth;
+        unsigned int remaining = outputImageWidth;
+        unsigned int use = min(avaliable, remaining);
 
         while (remaining > 0)
         {
@@ -517,9 +517,9 @@ bool TMXSceneEncoder::buildTileGutterTileset(const TMXTileSet& tileset, const st
     }
 
     // Copy the contents of each tile
-    for (auto y = 0u; y < tilesetHeight; y++)
+    for (unsigned int y = 0; y < tilesetHeight; y++)
     {
-        for (auto x = 0u; x < tilesetWidth; x++)
+        for (unsigned int x = 0; x < tilesetWidth; x++)
         {
             Vector2 src = TMXTileSet::calculateTileOrigin(Vector2(x, y), tileSize, tilesetSpacing, tilesetMargin);
             Vector2 dst = TMXTileSet::calculateTileOrigin(Vector2(x, y), tileSize, tilesetSpacing + 2, tilesetMargin + 1);
@@ -529,8 +529,8 @@ bool TMXSceneEncoder::buildTileGutterTileset(const TMXTileSet& tileset, const st
     }
     
     // Extend the edges of the tiles to produce the "gutter"
-    auto gutterContents = outputImageHeight - ((tilesetMargin + 1) * 2);
-    for (auto x = 0u; x < tilesetWidth; x++)
+    unsigned int gutterContents = outputImageHeight - ((tilesetMargin + 1) * 2);
+    for (unsigned int x = 0; x < tilesetWidth; x++)
     {
         Vector2 pos = TMXTileSet::calculateTileOrigin(Vector2(x, 0), tileSize, tilesetSpacing + 2, tilesetMargin + 1);
         
@@ -545,7 +545,7 @@ bool TMXSceneEncoder::buildTileGutterTileset(const TMXTileSet& tileset, const st
             pos.x + tileSize.x - 1, pos.y, pos.x + tileSize.x, pos.y, 1, gutterContents);
     }
     gutterContents = outputImageWidth - ((tilesetMargin + 1) * 2);
-    for (auto y = 0u; y < tilesetHeight; y++)
+    for (unsigned int y = 0; y < tilesetHeight; y++)
     {
         Vector2 pos = TMXTileSet::calculateTileOrigin(Vector2(0, y), tileSize, tilesetSpacing + 2, tilesetMargin + 1);
 
@@ -585,16 +585,16 @@ void TMXSceneEncoder::writeScene(const TMXMap& map, const string& outputFilepath
     // Prepare for writing the scene
     std::ofstream file(outputFilepath.c_str(), std::ofstream::out | std::ofstream::trunc);
 
-    auto layerCount = map.getLayerCount();
+    unsigned int layerCount = map.getLayerCount();
 
     // Write initial scene
     WRITE_PROPERTY_BLOCK_START("scene " + sceneName);
 
     // Write all layers
-    for (auto i = 0u; i < layerCount; i++)
+    for (unsigned int i = 0; i < layerCount; i++)
     {
-        auto layer = map.getLayer(i);
-        auto type = layer->getType();
+        const TMXBaseLayer* layer = map.getLayer(i);
+        TMXLayerType type = layer->getType();
         if (type == TMXLayerType::NormalLayer)
         {
             writeTileset(map, dynamic_cast<const TMXLayer*>(layer), file);
@@ -622,7 +622,7 @@ void TMXSceneEncoder::writeTileset(const TMXMap& map, const TMXLayer* tileset, s
         return;
     }
 
-    auto tilesets = tileset->getTilesetsUsed(map);
+    std::set<unsigned int> tilesets = tileset->getTilesetsUsed(map);
     if (tilesets.size() == 0)
     {
         return;
@@ -633,16 +633,16 @@ void TMXSceneEncoder::writeTileset(const TMXMap& map, const TMXLayer* tileset, s
 
     if (tilesets.size() > 1)
     {
-        auto i = 0u;
+        unsigned int i = 0;
         for (auto it = tilesets.begin(); it != tilesets.end(); it++, i++)
         {
             snprintf(buffer, BUFFER_SIZE, "node tileset_%d", i);
             WRITE_PROPERTY_BLOCK_START(buffer);
 
-            auto tmxTileset = map.getTileSet(*it);
+            const TMXTileSet& tmxTileset = map.getTileSet(*it);
             writeSoloTileset(map, tmxTileset, *tileset, file, *it);
 
-            auto tileOffset = tmxTileset.getOffset();
+            const Vector2& tileOffset = tmxTileset.getOffset();
             if (!(tileOffset == Vector2::zero()))
             {
                 // Tile offset moves the tiles, not the origin of each tile
@@ -660,10 +660,10 @@ void TMXSceneEncoder::writeTileset(const TMXMap& map, const TMXLayer* tileset, s
     }
     else
     {
-        auto tmxTileset = map.getTileSet(*(tilesets.begin()));
+        const TMXTileSet& tmxTileset = map.getTileSet(*(tilesets.begin()));
         writeSoloTileset(map, tmxTileset, *tileset, file);
 
-        auto tileOffset = tmxTileset.getOffset();
+        const Vector2& tileOffset = tmxTileset.getOffset();
         if (!(tileOffset == Vector2::zero()))
         {
             // Tile offset moves the tiles, not the origin of each tile
@@ -709,12 +709,12 @@ void TMXSceneEncoder::writeSoloTileset(const TMXMap& map, const gameplay::TMXTil
     }
 
     // Write tiles
-    auto tilesetHeight = tileset.getHeight();
-    auto tilesetWidth = tileset.getWidth();
-    for (auto y = 0u; y < tilesetHeight; y++)
+    unsigned int tilesetHeight = tileset.getHeight();
+    unsigned int tilesetWidth = tileset.getWidth();
+    for (unsigned int y = 0; y < tilesetHeight; y++)
     {
         bool tilesWritten = false;
-        for (auto x = 0u; x < tilesetWidth; x++)
+        for (unsigned int x = 0; x < tilesetWidth; x++)
         {
             Vector2 startPos = tileset.getTileStart(x, y, map, resultOnlyForTileset);
             if (startPos.x < 0 || startPos.y < 0)
@@ -830,7 +830,7 @@ std::vector<unsigned int> TMXSceneEncoder::loadDataElement(const XMLElement* dat
 
     if (!compression && !encoding)
     {
-        auto xmlTile = data->FirstChildElement("tile");
+        const XMLElement* xmlTile = data->FirstChildElement("tile");
         while (xmlTile)
         {
             attValue = xmlTile->Attribute("gid");
@@ -850,7 +850,7 @@ std::vector<unsigned int> TMXSceneEncoder::loadDataElement(const XMLElement* dat
                 exit(-1);
             }
 
-            auto rawCsvData = data->GetText();
+            const char* rawCsvData = data->GetText();
             int start = 0;
             char* endptr;
             // Skip everything before values
@@ -875,7 +875,7 @@ std::vector<unsigned int> TMXSceneEncoder::loadDataElement(const XMLElement* dat
             if (base64Data.size() > 0 && (!isBase64(base64Data[0]) || !isBase64(base64Data[base64Data.size() - 1])))
             {
                 int start = 0;
-                auto end = base64Data.size() - 1;
+                size_t end = base64Data.size() - 1;
                 while (!isBase64(base64Data[start]))
                 {
                     start++;
@@ -886,7 +886,7 @@ std::vector<unsigned int> TMXSceneEncoder::loadDataElement(const XMLElement* dat
                 }
                 base64Data = base64Data.substr(start, end - start + 1);
             }
-            auto byteData = base64_decode(base64Data);
+            string byteData = base64_decode(base64Data);
 
             if (compression)
             {
@@ -954,7 +954,7 @@ std::vector<unsigned int> TMXSceneEncoder::loadDataElement(const XMLElement* dat
                 byteData = decomData;
             }
 
-            auto byteDataSize = byteData.size();
+            size_t byteDataSize = byteData.size();
             for (unsigned int i = 0; i < byteDataSize; i += 4)
             {
                 unsigned int gid = static_cast<unsigned char>(byteData[i + 0]) |
@@ -983,11 +983,11 @@ void TMXSceneEncoder::copyImage(unsigned char* dst, const unsigned char* src,
     unsigned int srcWidth, unsigned int dstWidth, unsigned int bpp,
     unsigned int srcx, unsigned int srcy, unsigned int dstx, unsigned int dsty, unsigned int width, unsigned int height)
 {
-    auto sizePerRow = width * bpp;
-    for (auto y = 0u; y < height; y++)
+    unsigned int sizePerRow = width * bpp;
+    for (unsigned int y = 0; y < height; y++)
     {
-        auto srcPtr = &src[((y + srcy) * srcWidth + srcx) * bpp];
-        auto dstPtr = &dst[((y + dsty) * dstWidth + dstx) * bpp];
+        const unsigned char* srcPtr = &src[((y + srcy) * srcWidth + srcx) * bpp];
+        unsigned char* dstPtr = &dst[((y + dsty) * dstWidth + dstx) * bpp];
         if (src == dst)
         {
             memmove(dstPtr, srcPtr, sizePerRow);

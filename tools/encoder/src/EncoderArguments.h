@@ -18,7 +18,6 @@ public:
     enum FileFormat
     {
         FILEFORMAT_UNKNOWN,
-        FILEFORMAT_DAE,
         FILEFORMAT_FBX,
         FILEFORMAT_TMX,
         FILEFORMAT_TTF,

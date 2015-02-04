@@ -375,10 +375,6 @@ EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
         ext[i] = (char)tolower(ext[i]);
     
     // Match every supported extension with its format constant
-    if (ext.compare("dae") == 0)
-    {
-        return FILEFORMAT_DAE;
-    }
     if (ext.compare("fbx") == 0)
     {
         return FILEFORMAT_FBX;

@@ -100,11 +100,6 @@ int main(int argc, const char** argv)
 
     switch (arguments.getFileFormat())
     {
-    case EncoderArguments::FILEFORMAT_DAE:
-        {
-            LOG(1, "Error: Collada support has been removed. Convert your DAE file to FBX.\n");
-            return -1;
-        }
     case EncoderArguments::FILEFORMAT_FBX:
         {
             std::string realpath(arguments.getFilePath());

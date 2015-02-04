@@ -62,7 +62,7 @@ bool TMXMap::isValidTileId(unsigned int tileId) const
 {
     if (tileId != 0)
     {
-        auto tileSet = findTileSet(tileId);
+        unsigned int tileSet = findTileSet(tileId);
         return tileSet < _tileSets.size();
     }
 
@@ -261,8 +261,8 @@ unsigned int TMXTileSet::calculateImageDimension(unsigned int tileCount, unsigne
 
 Vector2 TMXTileSet::calculateTileOrigin(const Vector2& pos, const Vector2& tileSize, unsigned int spacing, unsigned int margin)
 {
-    auto xpos = (tileSize.x + spacing) * pos.x;
-    auto ypos = (tileSize.y + spacing) * pos.y;
+    float xpos = (tileSize.x + spacing) * pos.x;
+    float ypos = (tileSize.y + spacing) * pos.y;
 
     return Vector2(xpos + margin, ypos + margin);
 }
@@ -371,7 +371,7 @@ void TMXLayer::setTile(unsigned int x, unsigned int y, unsigned int gid)
     bool flipHorz = (gid & FLIPPED_HORIZONTALLY_FLAG) != 0;
     bool flipVert = (gid & FLIPPED_VERTICALLY_FLAG) != 0;
     bool flipDiag = (gid & FLIPPED_DIAGONALLY_FLAG) != 0;
-    auto flaglessGid = gid & ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
+    unsigned int flaglessGid = gid & ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
     _tiles[x + y * _width] = { flaglessGid, flipHorz, flipVert, flipDiag };
 }
 
@@ -393,28 +393,28 @@ bool TMXLayer::isEmptyTile(unsigned int x, unsigned int y) const
 Vector2 TMXLayer::getTileStart(unsigned int x, unsigned int y, const TMXMap& map, unsigned int resultOnlyForTileset) const
 {
     // Get the tile
-    auto gid = getTileStruct(x, y).gid;
+    unsigned int gid = getTileStruct(x, y).gid;
     if (gid == 0)
     {
         return Vector2(-1, -1);
     }
 
     // Get the tileset for the tile
-    auto tileset_id = map.findTileSet(gid);
+    unsigned int tileset_id = map.findTileSet(gid);
     if (tileset_id == map.getTileSetCount() || 
         (resultOnlyForTileset != TMX_INVALID_ID && tileset_id != resultOnlyForTileset))
     {
         return Vector2(-1, -1);
     }
-    auto tileset = map.getTileSet(tileset_id);
+    const TMXTileSet& tileset = map.getTileSet(tileset_id);
     if (tileset.getHorizontalTileCount() == 0)
     {
         return Vector2(-1, -1);
     }
 
     // Calculate the tile position
-    auto horzTileCount = tileset.getHorizontalTileCount();
-    auto adjusted_gid = gid - tileset.getFirstGid();
+    unsigned int horzTileCount = tileset.getHorizontalTileCount();
+    unsigned int adjusted_gid = gid - tileset.getFirstGid();
 
     return TMXTileSet::calculateTileOrigin(Vector2(static_cast<float>(adjusted_gid % horzTileCount), static_cast<float>(adjusted_gid / horzTileCount)),
         Vector2(static_cast<float>(tileset.getMaxTileWidth()), static_cast<float>(tileset.getMaxTileHeight())),
@@ -424,8 +424,8 @@ Vector2 TMXLayer::getTileStart(unsigned int x, unsigned int y, const TMXMap& map
 
 bool TMXLayer::hasTiles() const
 {
-    auto tile_size = _tiles.size();
-    for (auto i = 0u; i < tile_size; i++)
+    size_t tile_size = _tiles.size();
+    for (unsigned int i = 0; i < tile_size; i++)
     {
         if (_tiles[i].gid != 0)
         {
@@ -439,17 +439,17 @@ std::set<unsigned int> TMXLayer::getTilesetsUsed(const TMXMap& map) const
 {
     std::set<unsigned int> tilesets;
 
-    auto tileset_size = map.getTileSetCount();
-    auto tile_size = _tiles.size();
-    for (auto i = 0u; i < tile_size; i++)
+    unsigned int tileset_size = map.getTileSetCount();
+    size_t tile_size = _tiles.size();
+    for (unsigned int i = 0; i < tile_size; i++)
     {
-        auto gid = _tiles[i].gid;
+        unsigned int gid = _tiles[i].gid;
         if (gid == 0)
         {
             // Empty tile
             continue;
         }
-        auto tileset = map.findTileSet(gid);
+        unsigned int tileset = map.findTileSet(gid);
         if (tileset == tileset_size)
         {
             // Could not find tileset
