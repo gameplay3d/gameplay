@@ -393,6 +393,17 @@ void Matrix::createRotationZ(float angle, Matrix* dst)
     dst->m[5] = c;
 }
 
+void Matrix::createFromEuler(float yaw, float pitch, float roll, Matrix* dst)
+{
+	GP_ASSERT(dst);
+
+	memcpy(dst, MATRIX_IDENTITY, MATRIX_SIZE);
+	
+	dst->rotateY(yaw);
+	dst->rotateX(pitch);
+	dst->rotateZ(roll);
+}
+
 void Matrix::createTranslation(const Vector3& translation, Matrix* dst)
 {
     GP_ASSERT(dst);

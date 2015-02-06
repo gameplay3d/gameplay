@@ -5,7 +5,6 @@ namespace gameplay
 {
 
 class Matrix;
-class Quaternion;
 
 /**
  * Defines a 3-element floating point vector.
@@ -300,16 +299,6 @@ public:
      * @param scalar The scalar value.
      */
     void scale(float scalar);
-
-	/**
-	* Apply a quaternion rotation to this vector
-	*
-	* Note: This vector must first be normalized.
-	*
-	* @param vec The vector to multiply.
-	* @return The multiplied vector.
-	*/
-	void applyQuaternion(Quaternion& q);
 
     /**
      * Sets the elements of this vector to the specified values.
