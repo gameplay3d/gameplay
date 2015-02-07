@@ -736,11 +736,23 @@ bool initializeGL(WindowCreationParams* params)
         0
     };
 
-    if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs) ) )
+    if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs)))
     {
         wglDeleteContext(tempContext);
-        GP_ERROR("Failed to create OpenGL context.");
-        return false;
+        GP_WARN("Failed to create OpenGL 3.1 context, fallback to OpenGL 2.0.");
+
+        int attribs[] =
+        {
+            WGL_CONTEXT_MAJOR_VERSION_ARB, 2,
+            WGL_CONTEXT_MINOR_VERSION_ARB, 0,
+            0
+        };
+
+        if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs)))
+        {
+            GP_ERROR("Failed to create OpenGL context.");
+            return false;
+        }
     }
 
     // Delete the old/temporary context and window
