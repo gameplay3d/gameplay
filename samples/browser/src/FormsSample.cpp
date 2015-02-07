@@ -1,7 +1,7 @@
 #include "FormsSample.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Forms", FormsSample, 10);
+    ADD_SAMPLE("Graphics", "Forms", FormsSample, 8);
 #endif
 
 // Input bit-flags
@@ -150,7 +150,7 @@ void FormsSample::formChanged()
     _formNode->setScale(scale, scale, 1.0f);
     _formNodeParent->setTranslation(0, 0, -1.5f);
     _formNode->setTranslation(-0.5f, -0.5f, 0);
-    _formNode->setForm(_activeForm);
+    _formNode->setDrawable(_activeForm);
 }
 
 void FormsSample::createSampleForm()

@@ -1,28 +1,30 @@
 
 include_directories( 
-    ${CMAKE_SOURCE_DIR}/external-deps/lua/include
-    ${CMAKE_SOURCE_DIR}/external-deps/tinyxml2/include
-    /usr/include
+    ${CMAKE_SOURCE_DIR}/external-deps/include
 )
 
 add_definitions(-D__linux__)
 
+IF(ARCH_DIR STREQUAL "x64")
+    set(ARCH_DEPS_DIR "x86_64")
+ELSE()
+    set(ARCH_DEPS_DIR "x86")
+ENDIF(ARCH_DIR STREQUAL "x64")
+
 link_directories(
-    ${CMAKE_SOURCE_DIR}/external-deps/lua/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/tinyxml2/lib/linux
-    /usr/lib
+    ${CMAKE_SOURCE_DIR}/external-deps/lib/linux/${ARCH_DEPS_DIR}
 )
 
 set(APP_LIBRARIES
-    lua
-    tinyxml2
+    gameplay-deps
 ) 
 
-add_definitions(-lstdc++ -llua -ltinyxml2)
+add_definitions(-std=c++11 -lstdc++ -lgameplay-deps)
 
 set( APP_NAME gameplay-luagen )
 
 set(APP_SRC
+    src/main.cpp
     src/Base.h
     src/ClassBinding.cpp
     src/ClassBinding.h
@@ -33,7 +35,6 @@ set(APP_SRC
     src/FunctionBinding.h
     src/Generator.cpp
     src/Generator.h
-    src/main.cpp
     src/TypedefBinding.h
 )
 

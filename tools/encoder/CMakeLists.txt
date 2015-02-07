@@ -1,37 +1,38 @@
 
 include_directories( 
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/include
-    ${CMAKE_SOURCE_DIR}/external-deps/png/include
-    ${CMAKE_SOURCE_DIR}/external-deps/freetype2/include
+    ${CMAKE_SOURCE_DIR}/external-deps/include
     /usr/include/fbxsdk
-    /usr/include
 )
 
+if ( "${CMAKE_BUILD_TYPE}" STREQUAL "DEBUG" )
 add_definitions(-D_DEBUG)
+endif()
 add_definitions(-D__linux__ -DUSE_FBX)
 
+IF(ARCH_DIR STREQUAL "x64")
+    set(ARCH_DEPS_DIR "x86_64")
+ELSE()
+    set(ARCH_DEPS_DIR "x86")
+ENDIF(ARCH_DIR STREQUAL "x64")
+
 link_directories(
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/png/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
-    /usr/lib/gcc4/${ARCH_DIR}/release
-    /usr/lib
+    ${CMAKE_SOURCE_DIR}/external-deps/lib/linux/${ARCH_DEPS_DIR}
 )
 
 set(APP_LIBRARIES
     dl
     fbxsdk
-    png
-    z   
+    gameplay-deps
     freetype
     pthread
-) 
+)
 
-add_definitions(-lstdc++ -ldl -lfbxsdk -lpng -lz -lfreetype -lpthread)
+add_definitions(-std=c++11 -lstdc++ -ldl -lfbxsdk -lgameplay-deps -lfreetype -lpthread)
 
 set( APP_NAME gameplay-encoder )
 
 set(APP_SRC
+    src/main.cpp
     src/AnimationChannel.cpp
     src/AnimationChannel.h
     src/Animation.cpp
@@ -75,7 +76,6 @@ set(APP_SRC
     src/Image.h
     src/Light.cpp
     src/Light.h
-    src/main.cpp
     src/Material.cpp
     src/Material.h
     src/MaterialParameter.cpp
@@ -116,6 +116,10 @@ set(APP_SRC
     src/Transform.h
     src/TTFFontEncoder.cpp
     src/TTFFontEncoder.h
+    src/TMXSceneEncoder.cpp
+    src/TMXSceneEncoder.h
+    src/TMXTypes.cpp
+    src/TMXTypes.h
     src/Vector2.cpp
     src/Vector2.h
     src/Vector2.inl

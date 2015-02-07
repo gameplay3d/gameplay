@@ -1,3 +1,4 @@
+#ifndef GP_NO_PLATFORM
 #ifdef __linux__
 
 #include "gameplay.h"
@@ -22,4 +23,5 @@ int main(int argc, char** argv)
     return result;
 }
 
+#endif
 #endif

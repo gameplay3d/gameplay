@@ -313,7 +313,7 @@ public:
     float getEndTime() const;
 
     /**
-     * Sets the given point values on the curve the curve.
+     * Sets the given point values on the curve.
      *
      * @param index The index of the point.
      * @param time The time for the key.
@@ -332,17 +332,47 @@ public:
      * @param inValue The tangent approaching the point.
      * @param outValue The tangent leaving the point.
      */
-    void setPoint(unsigned int index, float time, float* value, InterpolationType type, float* inValue, float* outValue);
+    void setPoint(unsigned int index, float time, float* value, InterpolationType type,
+                  float* inValue, float* outValue);
 
     /**
      * Sets the tangents for a point on the curve specified by the index.
      *
      * @param index The index of the point.
+     * @param type The interpolation type.
      * @param type The curve interpolation type.
      * @param inValue The tangent approaching the point.
      * @param outValue The tangent leaving the point.
      */
     void setTangent(unsigned int index, InterpolationType type, float* inValue, float* outValue);
+    
+    /**
+     * Gets the time at a specified point.
+     *
+     * @param index The index of the point.
+     *
+     * @return The time for a key point.
+     */
+    float getPointTime(unsigned int index) const;
+    
+    /**
+     * Gets the interpolation type at the specified point
+     *
+     * @param index The index of the point.
+     * 
+     * @return The interpolation type at the specified index.
+     */
+    InterpolationType getPointInterpolation(unsigned int index) const;
+    
+    /**
+     * Gets the values and in/out tangent value at a spedified point.
+     *
+     * @param index The index of the point.
+     * @param value The value at the specified index. Ignored if NULL.
+     * @param inValue The tangent inValue at the specified index. Ignored if NULL.
+     * @param outValue The tangent outValue at the specified index. Ignored if NULL.
+     */
+    void getPointValues(unsigned int index, float* value, float* inValue, float* outValue) const;
 
     /**
      * Evaluates the curve at the given position value.

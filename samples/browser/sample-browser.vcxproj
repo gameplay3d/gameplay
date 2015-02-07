@@ -1,25 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="DebugMem|Win32">
-      <Configuration>DebugMem</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="DebugMem|x64">
       <Configuration>DebugMem</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
@@ -32,19 +20,7 @@
     <RootNamespace>sample-browser</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
@@ -53,13 +29,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
@@ -73,41 +42,8 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(Configuration)\</OutDir>
-    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <CustomBuildBeforeTargets>
-    </CustomBuildBeforeTargets>
-    <IntDir>$(Configuration)\</IntDir>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(Configuration)\</OutDir>
-    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <CustomBuildBeforeTargets />
-    <IntDir>$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(Configuration)\</OutDir>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
@@ -121,103 +57,28 @@
     <CustomBuildBeforeTargets />
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(Configuration)\</OutDir>
-    <CustomBuildBeforeTargets>
-    </CustomBuildBeforeTargets>
-    <IntDir>$(Configuration)\</IntDir>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(Configuration)\</OutDir>
     <CustomBuildBeforeTargets />
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\lua\include;..\..\external-deps\bullet\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x86;..\..\external-deps\bullet\lib\windows\x86;..\..\external-deps\openal\lib\windows\x86;..\..\external-deps\oggvorbis\lib\windows\x86;..\..\external-deps\glew\lib\windows\x86;..\..\external-deps\png\lib\windows\x86;..\..\external-deps\zlib\lib\windows\x86;..\..\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
-    </Link>
-    <CustomBuildStep>
-      <Command>
-      </Command>
-      <Message>
-      </Message>
-      <Outputs>
-      </Outputs>
-    </CustomBuildStep>
-    <PreBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\lua\include;..\..\external-deps\bullet\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_GAMEPAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;$(MSBuildProgramFiles32)\Microsoft DirectX SDK (June 2010)\include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64;..\..\external-deps\bullet\lib\windows\x64;..\..\external-deps\openal\lib\windows\x64;..\..\external-deps\oggvorbis\lib\windows\x64;..\..\external-deps\glew\lib\windows\x64;..\..\external-deps\png\lib\windows\x64;..\..\external-deps\zlib\lib\windows\x64;..\..\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
-    </Link>
-    <CustomBuildStep>
-      <Command>
-      </Command>
-      <Message>
-      </Message>
-      <Outputs>
-      </Outputs>
-    </CustomBuildStep>
-    <PreBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
-    <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_MEM_LEAK_DETECTION;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\lua\include;..\..\external-deps\bullet\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <ShowIncludes>false</ShowIncludes>
-      <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x86;..\..\external-deps\bullet\lib\windows\x86;..\..\external-deps\openal\lib\windows\x86;..\..\external-deps\oggvorbis\lib\windows\x86;..\..\external-deps\glew\lib\windows\x86;..\..\external-deps\png\lib\windows\x86;..\..\external-deps\zlib\lib\windows\x86;..\..\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Debug;..\..\gameplay\Debug;$(MSBuildProgramFiles32)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -239,51 +100,18 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_MEM_LEAK_DETECTION;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\lua\include;..\..\external-deps\bullet\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_GAMEPAD;GP_USE_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;$(MSBuildProgramFiles32)\Microsoft DirectX SDK (June 2010)\include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessToFile>false</PreprocessToFile>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64;..\..\external-deps\bullet\lib\windows\x64;..\..\external-deps\openal\lib\windows\x64;..\..\external-deps\oggvorbis\lib\windows\x64;..\..\external-deps\glew\lib\windows\x64;..\..\external-deps\png\lib\windows\x64;..\..\external-deps\zlib\lib\windows\x64;..\..\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
-    </Link>
-    <CustomBuildStep>
-      <Command>
-      </Command>
-      <Message>
-      </Message>
-      <Outputs>
-      </Outputs>
-    </CustomBuildStep>
-    <PreBuildEvent>
-      <Command>xcopy ..\..\gameplay\res\shaders res\shaders\* /s /y /d
-xcopy ..\..\gameplay\res\ui res\ui\* /s /y /d
-copy ..\..\gameplay\res\logo_powered_white.png res</Command>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\lua\include;..\..\external-deps\bullet\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x86;..\..\external-deps\bullet\lib\windows\x86;..\..\external-deps\openal\lib\windows\x86;..\..\external-deps\oggvorbis\lib\windows\x86;..\..\external-deps\glew\lib\windows\x86;..\..\external-deps\png\lib\windows\x86;..\..\external-deps\zlib\lib\windows\x86;..\..\gameplay\windows\x86\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Debug;..\..\gameplay\DebugMem</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -307,16 +135,16 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\lua\include;..\..\external-deps\bullet\include;..\..\external-deps\openal\include\AL;..\..\external-deps\oggvorbis\include;..\..\external-deps\png\include;..\..\external-deps\zlib\include;..\..\external-deps\glew\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;GP_USE_GAMEPAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;$(MSBuildProgramFiles32)\Microsoft DirectX SDK (June 2010)\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\external-deps\lua\lib\windows\x64;..\..\external-deps\bullet\lib\windows\x64;..\..\external-deps\openal\lib\windows\x64;..\..\external-deps\oggvorbis\lib\windows\x64;..\..\external-deps\glew\lib\windows\x64;..\..\external-deps\png\lib\windows\x64;..\..\external-deps\zlib\lib\windows\x64;..\..\gameplay\windows\x64\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\external-deps\lib\windows\x86_64\Release;..\..\gameplay\Release;$(MSBuildProgramFiles32)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -333,13 +161,16 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="bar-descriptor.xml">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="game.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="icon.png" />
+    <None Include="res\common\audio\background.form" />
+    <None Include="res\common\audio\background_track.ogg" />
+    <None Include="res\common\audio\braking.form" />
+    <None Include="res\common\audio\engine.form" />
+    <None Include="res\common\audio\engine_loop.ogg" />
+    <None Include="res\common\audio\sample.audio" />
     <None Include="res\common\box.gpb" />
     <None Include="res\common\box.material" />
     <None Include="res\common\camera.lua" />
@@ -362,11 +193,16 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="res\common\forms\formZOrder.form" />
     <None Include="res\common\gamepad.form" />
     <None Include="res\common\gamepad.theme" />
-    <None Include="res\common\grid.material" />
     <None Include="res\common\inputs.form" />
     <None Include="res\common\light.form" />
     <None Include="res\common\light.material" />
     <None Include="res\common\lightBrickWall.gpb" />
+    <None Include="res\common\particles\editor.form" />
+    <None Include="res\common\particles\editor.theme" />
+    <None Include="res\common\particles\explosion.particle" />
+    <None Include="res\common\particles\fire.particle" />
+    <None Include="res\common\particles\grid.material" />
+    <None Include="res\common\particles\smoke.particle" />
     <None Include="res\common\physics.form" />
     <None Include="res\common\physics.gpb" />
     <None Include="res\common\physics.material" />
@@ -385,6 +221,8 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="res\common\sample.material" />
     <None Include="res\common\sample.scene" />
     <None Include="res\common\sphere.gpb" />
+    <None Include="res\common\sprites\sprite.scene" />
+    <None Include="res\common\sprites\water2d.frag" />
     <None Include="res\common\terrain\encode.bat" />
     <None Include="res\common\terrain\heightmap.r16" />
     <None Include="res\common\terrain\sample.scene" />
@@ -396,6 +234,11 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <None Include="res\common\terrain\terrain.form" />
     <None Include="res\common\terrain\terrain.material" />
     <None Include="res\common\text.form" />
+    <None Include="res\common\water\pond.gpb" />
+    <None Include="res\common\water\watersample.frag" />
+    <None Include="res\common\water\watersample.material" />
+    <None Include="res\common\water\watersample.scene" />
+    <None Include="res\common\water\watersample.vert" />
     <None Include="res\shaders\colored.frag" />
     <None Include="res\shaders\colored.vert" />
     <None Include="res\shaders\font.frag" />
@@ -415,58 +258,80 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio3DSample.cpp" />
+    <ClCompile Include="src\AudioSample.cpp" />
     <ClCompile Include="src\BillboardSample.cpp" />
-    <ClCompile Include="src\CreateSceneSample.cpp" />
+    <ClCompile Include="src\FontSample.cpp" />
     <ClCompile Include="src\FormsSample.cpp" />
     <ClCompile Include="src\GamepadSample.cpp" />
     <ClCompile Include="src\GestureSample.cpp" />
     <ClCompile Include="src\LightSample.cpp" />
+    <ClCompile Include="src\ParticlesSample.cpp" />
     <ClCompile Include="src\PostProcessSample.cpp" />
+    <ClCompile Include="src\SceneCreateSample.cpp" />
+    <ClCompile Include="src\SceneLoadSample.cpp" />
+    <ClCompile Include="src\SpriteSample.cpp" />
     <ClCompile Include="src\TerrainSample.cpp" />
     <ClCompile Include="src\TriangleSample.cpp" />
     <ClCompile Include="src\FirstPersonCamera.cpp" />
     <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\InputSample.cpp" />
-    <ClCompile Include="src\LoadSceneSample.cpp" />
     <ClCompile Include="src\MeshPrimitiveSample.cpp" />
     <ClCompile Include="src\PhysicsCollisionObjectSample.cpp" />
     <ClCompile Include="src\SpriteBatchSample.cpp" />
     <ClCompile Include="src\Sample.cpp" />
     <ClCompile Include="src\SamplesGame.cpp" />
-    <ClCompile Include="src\TextSample.cpp" />
     <ClCompile Include="src\TextureSample.cpp" />
     <ClCompile Include="src\MeshBatchSample.cpp" />
+    <ClCompile Include="src\WaterSample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio3DSample.h" />
+    <ClInclude Include="src\AudioSample.h" />
     <ClInclude Include="src\BillboardSample.h" />
-    <ClInclude Include="src\CreateSceneSample.h" />
+    <ClInclude Include="src\FontSample.h" />
     <ClInclude Include="src\FormsSample.h" />
     <ClInclude Include="src\GamepadSample.h" />
     <ClInclude Include="src\GestureSample.h" />
     <ClInclude Include="src\LightSample.h" />
+    <ClInclude Include="src\ParticlesSample.h" />
     <ClInclude Include="src\PostProcessSample.h" />
+    <ClInclude Include="src\SceneCreateSample.h" />
+    <ClInclude Include="src\SceneLoadSample.h" />
+    <ClInclude Include="src\SpriteSample.h" />
     <ClInclude Include="src\TerrainSample.h" />
     <ClInclude Include="src\TriangleSample.h" />
     <ClInclude Include="src\FirstPersonCamera.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\InputSample.h" />
-    <ClInclude Include="src\LoadSceneSample.h" />
     <ClInclude Include="src\MeshPrimitiveSample.h" />
     <ClInclude Include="src\PhysicsCollisionObjectSample.h" />
     <ClInclude Include="src\SpriteBatchSample.h" />
     <ClInclude Include="src\Sample.h" />
     <ClInclude Include="src\SamplesGame.h" />
-    <ClInclude Include="src\TextSample.h" />
     <ClInclude Include="src\TextureSample.h" />
     <ClInclude Include="src\MeshBatchSample.h" />
+    <ClInclude Include="src\WaterSample.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\common\particles\editor.png" />
+    <Image Include="res\common\particles\explosion.png" />
+    <Image Include="res\common\particles\fire.png" />
+    <Image Include="res\common\particles\smoke.png" />
+    <Image Include="res\common\sprites\background.png" />
+    <Image Include="res\common\sprites\level.png" />
+    <Image Include="res\common\sprites\player1.png" />
+    <Image Include="res\common\sprites\player2.png" />
+    <Image Include="res\common\sprites\player3.png" />
+    <Image Include="res\common\sprites\rocket.png" />
+    <Image Include="res\common\sprites\water2d-noise.png" />
+    <Image Include="res\common\sprites\water2d.png" />
     <Image Include="res\common\terrain\dirt.dds" />
     <Image Include="res\common\terrain\grass.dds" />
     <Image Include="res\common\terrain\normalmap.dds" />
     <Image Include="res\common\terrain\rock.dds" />
     <Image Include="res\common\terrain\sky.dds" />
+    <Image Include="res\common\water\water_normal.png" />
+    <Image Include="res\common\water\water_sample.png" />
     <Image Include="res\logo_powered_white.png" />
     <Image Include="res\png\brick.png" />
     <Image Include="res\png\brickn.png" />
@@ -483,7 +348,14 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
     <Image Include="res\png\logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="res\common\audio\braking.wav" />
     <Media Include="res\common\footsteps.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\common\sprites\level.txt" />
+    <Text Include="res\common\sprites\player1.txt" />
+    <Text Include="res\common\sprites\player2.txt" />
+    <Text Include="res\common\sprites\player3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,14 +2,14 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Textures", TextureSample, 6);
+    ADD_SAMPLE("Graphics", "Textures", TextureSample, 4);
 #endif
 
 Node* addQuadModelAndNode(Scene* scene, Mesh* mesh)
 {
     Model* model = Model::create(mesh);
     Node* node = scene->addNode();
-    node->setModel(model);
+    node->setDrawable(model);
     SAFE_RELEASE(model);
     return node;
 }
@@ -62,7 +62,7 @@ void TextureSample::initialize()
     cameraNode->translate(0, 0, 50);
     SAFE_RELEASE(camera);
 
-    const float fontSize = _font->getSize();
+    const float fontSize = 18;
     const float cubeSize = 10.0f;
     float x, y, textWidth;
     // Find the width of the cube in screen space
@@ -71,62 +71,63 @@ void TextureSample::initialize()
     // Textured quad mesh
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/color-wheel.png");
         node->setTranslation(-25, cubeSize, 0);
         // Find the position of the node in screen space
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("Quad: Textured", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
+        
+        //_text.push_back(Text::create("res/ui/arial.gpb", "Quad: Textured", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
     // Textured quad points
     {
         Mesh* mesh = Mesh::createQuad(Vector3(0, cubeSize, 0), Vector3(0, 0, 0), Vector3(cubeSize, cubeSize, 0), Vector3(cubeSize, 0, 0));
         Node* node = addQuadModelAndNode(_scene, mesh);
         SAFE_RELEASE(mesh);
-        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/color-wheel.png");
         node->setTranslation(-14, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("Quad: Points", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
+        //_text.push_back(_font->createText("Quad: Points", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
     // Texture clamp
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize, -1, -1, 2, 2);
-        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/color-wheel.png");
         node->setId("clamp");
         node->setTranslation(-3, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("Wrap: Clamp", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
+        //_text.push_back(_font->createText("Wrap: Clamp", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
     // Texture wrapped+repeat
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize, -1, -1, 2, 2);
-        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/color-wheel.png");
         node->setId("repeat");
-        Texture::Sampler* sampler = node->getModel()->getMaterial()->getParameter("u_diffuseTexture")->getSampler();
+        Texture::Sampler* sampler = dynamic_cast<Model*>(node->getDrawable())->getMaterial()->getParameter("u_diffuseTexture")->getSampler();
         if (sampler)
         {
             sampler->setWrapMode(Texture::REPEAT, Texture::REPEAT);
         }
         node->setTranslation(8, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("Wrap: Repeat", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
+        //_text.push_back(_font->createText("Wrap: Repeat", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }
     // Mipmapping Off
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/logo.png", false);
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/logo.png", false);
         node->setId("mipmap off");
         node->setTranslation(-25.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("MipMap: Off", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
+        //_text.push_back(_font->createText("MipMap: Off", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }
     // Mipmapping On
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
-        setTextureUnlitMaterial(node->getModel(), "res/png/logo.png");
+        setTextureUnlitMaterial(dynamic_cast<Model*>(node->getDrawable()), "res/png/logo.png");
         node->setId("mipmap on");
         node->setTranslation(-5.5f, -2.5f, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("MipMap: On", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
+        //_text.push_back(_font->createText("MipMap: On", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }
 }
 
@@ -135,11 +136,6 @@ void TextureSample::finalize()
     // Model and font are reference counted and should be released before closing this sample.
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
-    for (std::list<Font::Text*>::iterator it = _text.begin(); it != _text.end(); ++it)
-    {
-        SAFE_DELETE(*it);
-    }
-    _text.clear();
 }
 
 void TextureSample::update(float elapsedTime)
@@ -161,13 +157,6 @@ void TextureSample::render(float elapsedTime)
     _scene->visit(this, &TextureSample::drawScene);
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
-
-    _font->start();
-    for (std::list<Font::Text*>::const_iterator it = _text.begin(); it != _text.end(); ++it)
-    {
-        _font->drawText(*it);
-    }
-    _font->finish();
 }
 
 void TextureSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -190,8 +179,8 @@ void TextureSample::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 
 bool TextureSample::drawScene(Node* node)
 {
-    Model* model = node->getModel();
-    if (model)
-        model->draw();
+    Drawable* drawable = node->getDrawable();
+    if (drawable)
+        drawable->draw();
     return true;
 }

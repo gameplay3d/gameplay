@@ -28,6 +28,9 @@
 #include <functional>
 #include <bitset>
 #include <typeinfo>
+#include <thread>
+#include <mutex>
+#include <chrono>
 #include "Logger.h"
 
 // Bring common functions from C into global namespace
@@ -175,23 +178,23 @@ extern int strcmpnocase(const char* s1, const char* s2);
     #define NOMINMAX
 #endif
 
-// Audio (OpenAL/Vorbis)
-#ifdef __QNX__
-#include <AL/al.h>
-#include <AL/alc.h>
-#elif __ANDROID__
-#include <AL/al.h>
-#include <AL/alc.h>
-#elif __linux__
-#include <AL/al.h>
-#include <AL/alc.h>
+// Audio (OpenAL)
+#ifdef __ANDROID__
+    #include <AL/al.h>
+    #include <AL/alc.h>
 #elif WIN32
-#include <al.h>
-#include <alc.h>
+    #define AL_LIBTYPE_STATIC
+    #include <AL/al.h>
+    #include <AL/alc.h>
+#elif __linux__
+    #include <AL/al.h>
+    #include <AL/alc.h>
 #elif __APPLE__
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
+    #include <OpenAL/al.h>
+    #include <OpenAL/alc.h>
 #endif
+
+// Compressed Media
 #include <vorbis/vorbisfile.h>
 
 // Image
@@ -199,28 +202,12 @@ extern int strcmpnocase(const char* s1, const char* s2);
 
 // Scripting
 using std::va_list;
-#include <lua.hpp>
+#include <lua/lua.hpp>
 
 #define WINDOW_VSYNC        1
 
 // Graphics (OpenGL)
-#ifdef __QNX__
-    #include <EGL/egl.h>
-    #include <GLES2/gl2.h>
-    #include <GLES2/gl2ext.h>
-    #include <screen/screen.h>
-    extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
-    extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
-    extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
-    extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
-    #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
-    #define glClearDepth glClearDepthf
-    #define OPENGL_ES
-    #define USE_PVRTC
-    #ifdef __arm__
-        #define USE_NEON
-    #endif
-#elif __ANDROID__
+#ifdef __ANDROID__
     #include <EGL/egl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
@@ -232,14 +219,14 @@ using std::va_list;
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
 #elif WIN32
-    #define WIN32_LEAN_AND_MEAN
-    #define GLEW_STATIC
-    #include <GL/glew.h>
-    #define USE_VAO
+        #define WIN32_LEAN_AND_MEAN
+        #define GLEW_STATIC
+        #include <GL/glew.h>
+        #define GP_USE_VAO
 #elif __linux__
         #define GLEW_STATIC
         #include <GL/glew.h>
-        #define USE_VAO
+        #define GP_USE_VAO
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
@@ -252,10 +239,7 @@ using std::va_list;
         #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
-        #define USE_VAO
-        #ifdef __arm__
-            #define USE_NEON
-        #endif
+        #define GP_USE_VAO
     #elif TARGET_OS_MAC
         #include <OpenGL/gl.h>
         #include <OpenGL/glext.h>
@@ -263,7 +247,7 @@ using std::va_list;
         #define glDeleteVertexArrays glDeleteVertexArraysAPPLE
         #define glGenVertexArrays glGenVertexArraysAPPLE
         #define glIsVertexArray glIsVertexArrayAPPLE
-        #define USE_VAO
+        #define GP_USE_VAO
     #else
         #error "Unsupported Apple Device"
     #endif
@@ -295,13 +279,11 @@ typedef GLuint FrameBufferHandle;
 /** Render buffer handle. */
 typedef GLuint RenderBufferHandle;
 
-/** Gamepad handle definitions vary by platform. */
-#if defined(__QNX__) && defined(GP_USE_GAMEPAD)
-    typedef screen_device_t GamepadHandle;
-#elif defined(WIN32)
-    typedef unsigned long GamepadHandle;
+/** Gamepad handle */
+#ifdef __ANDROID__
+typedef unsigned int GamepadHandle;
 #else
-    typedef unsigned int GamepadHandle;
+typedef unsigned long GamepadHandle;
 #endif
 }
 
@@ -313,7 +295,7 @@ typedef GLuint RenderBufferHandle;
  * mode and is therefore safe to use for realtime/per-frame GL
  * function calls.
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) || (defined(__APPLE__) && !defined(DEBUG))
 #define GL_ASSERT( gl_code ) gl_code
 #else
 #define GL_ASSERT( gl_code ) do \

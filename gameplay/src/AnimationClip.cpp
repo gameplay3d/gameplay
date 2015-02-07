@@ -9,12 +9,16 @@
 namespace gameplay
 {
 
+extern void splitURL(const std::string& url, std::string* file, std::string* id);
+
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), 
       _stateBits(0x00), _repeatCount(1.0f), _loopBlendTime(0), _activeDuration(_duration * _repeatCount), _speed(1.0f), _timeStarted(0), 
       _elapsedTime(0), _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f),
-      _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _listenerItr(NULL), _scriptListeners(NULL)
+      _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _listenerItr(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     GP_ASSERT(_animation);
     GP_ASSERT(0 <= startTime && startTime <= _animation->_duration && 0 <= endTime && endTime <= _animation->_duration);
 
@@ -40,15 +44,6 @@ AnimationClip::~AnimationClip()
     SAFE_DELETE(_beginListeners);
     SAFE_DELETE(_endListeners);
 
-    if (_scriptListeners)
-    {
-        for (size_t i = 0; i < _scriptListeners->size(); i++)
-        {
-            SAFE_DELETE((*_scriptListeners)[i]);
-        }
-        SAFE_DELETE(_scriptListeners);
-    }
-
     if (_listeners)
     {
         *_listenerItr = _listeners->begin();
@@ -56,7 +51,7 @@ AnimationClip::~AnimationClip()
         {
             ListenerEvent* lEvt = **_listenerItr;
             SAFE_DELETE(lEvt);
-            ++*_listenerItr;
+            ++(*_listenerItr);
         }
         SAFE_DELETE(_listeners);
     }
@@ -71,6 +66,11 @@ AnimationClip::ListenerEvent::ListenerEvent(Listener* listener, unsigned long ev
 
 AnimationClip::ListenerEvent::~ListenerEvent()
 {
+}
+
+const char* AnimationClip::getTypeName() const
+{
+    return "AnimationClip";
 }
 
 const char* AnimationClip::getId() const
@@ -172,9 +172,14 @@ float AnimationClip::getBlendWeight() const
 
 void AnimationClip::setLoopBlendTime(float loopBlendTime)
 {
-    _loopBlendTime = loopBlendTime;
-    if (_loopBlendTime < 0.0f)
-        _loopBlendTime = 0.0f;
+    if (loopBlendTime < 0.0f)
+    {
+        _loopBlendTime = 0;
+    }
+    else
+    {
+        _loopBlendTime = (unsigned int)loopBlendTime;
+    }
 }
 
 float AnimationClip::getLoopBlendTime() const
@@ -309,14 +314,42 @@ void AnimationClip::addListener(AnimationClip::Listener* listener, unsigned long
                 {
                     float currentTime = fmodf(_elapsedTime, (float)_duration);
                     GP_ASSERT(**_listenerItr || *_listenerItr == _listeners->end());
-                    if ((_speed >= 0.0f && currentTime < eventTime && (*_listenerItr == _listeners->end() || eventTime < (**_listenerItr)->_eventTime)) || 
+                    if ((_speed >= 0.0f && currentTime < eventTime && (*_listenerItr == _listeners->end() || eventTime < (**_listenerItr)->_eventTime)) ||
                         (_speed <= 0 && currentTime > eventTime && (*_listenerItr == _listeners->begin() || eventTime > (**_listenerItr)->_eventTime)))
+                    {
                         *_listenerItr = itr;
+                    }
                 }
                 return;
             }
         }
         _listeners->push_back(listenerEvent);
+    }
+}
+
+void AnimationClip::removeListener(AnimationClip::Listener* listener, unsigned long eventTime)
+{
+    if (_listeners)
+    {
+        GP_ASSERT(listener);
+        std::list<ListenerEvent*>::iterator iter = std::find_if(_listeners->begin(), _listeners->end(), [&](ListenerEvent* lst){ return lst->_eventTime == eventTime && lst->_listener == listener; });
+        if (iter != _listeners->end())
+        {
+            if (isClipStateBitSet(CLIP_IS_PLAYING_BIT))
+            {
+                float currentTime = fmodf(_elapsedTime, (float)_duration);
+                GP_ASSERT(**_listenerItr || *_listenerItr == _listeners->end());
+
+                // We the listener has not been triggered yet, then check if it is next to be triggered, remove it, and update the iterator
+                if (((_speed >= 0.0f && currentTime < eventTime) || (_speed <= 0 && currentTime > eventTime)) &&
+                    *iter == **_listenerItr)
+                {
+                    *_listenerItr = _listeners->erase(iter);
+                    return;
+                }
+            }
+            _listeners->erase(iter);
+        }
     }
 }
 
@@ -329,6 +362,19 @@ void AnimationClip::addBeginListener(AnimationClip::Listener* listener)
     _beginListeners->push_back(listener);
 }
 
+void AnimationClip::removeBeginListener(AnimationClip::Listener* listener)
+{
+    if (_beginListeners)
+    {
+        GP_ASSERT(listener);
+        std::vector<Listener*>::iterator iter = std::find(_beginListeners->begin(), _beginListeners->end(), listener);
+        if (iter != _beginListeners->end())
+        {
+            _beginListeners->erase(iter);
+        }
+    }
+}
+
 void AnimationClip::addEndListener(AnimationClip::Listener* listener)
 {
     if (!_endListeners)
@@ -338,34 +384,17 @@ void AnimationClip::addEndListener(AnimationClip::Listener* listener)
     _endListeners->push_back(listener);
 }
 
-void AnimationClip::addBeginListener(const char* function)
+void AnimationClip::removeEndListener(AnimationClip::Listener* listener)
 {
-    if (!_scriptListeners)
-        _scriptListeners = new std::vector<ScriptListener*>;
-
-    ScriptListener* listener = new ScriptListener(function);
-    _scriptListeners->push_back(listener);
-    addBeginListener(listener);
-}
-
-void AnimationClip::addEndListener(const char* function)
-{
-    if (!_scriptListeners)
-        _scriptListeners = new std::vector<ScriptListener*>;
-
-    ScriptListener* listener = new ScriptListener(function);
-    _scriptListeners->push_back(listener);
-    addEndListener(listener);
-}
-
-void AnimationClip::addListener(const char* function, unsigned long eventTime)
-{
-    if (!_scriptListeners)
-        _scriptListeners = new std::vector<ScriptListener*>;
-
-    ScriptListener* listener = new ScriptListener(function);
-    _scriptListeners->push_back(listener);
-    addListener(listener, eventTime);
+    if (_endListeners)
+    {
+        GP_ASSERT(listener);
+        std::vector<Listener*>::iterator iter = std::find(_endListeners->begin(), _endListeners->end(), listener);
+        if (iter != _endListeners->end())
+        {
+            _endListeners->erase(iter);
+        }
+    }
 }
 
 bool AnimationClip::update(float elapsedTime)
@@ -443,7 +472,7 @@ bool AnimationClip::update(float elapsedTime)
                 GP_ASSERT((**_listenerItr)->_listener);
 
                 (**_listenerItr)->_listener->animationEvent(this, Listener::TIME);
-                ++*_listenerItr;
+                ++(*_listenerItr);
             }
         }
         else
@@ -455,10 +484,13 @@ bool AnimationClip::update(float elapsedTime)
                 GP_ASSERT((**_listenerItr)->_listener);
 
                 (**_listenerItr)->_listener->animationEvent(this, Listener::TIME);
-                --*_listenerItr;
+                --(*_listenerItr);
             }
         }
     }
+
+    // Fire script update event
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(AnimationClip, clipUpdate), this, _elapsedTime);
 
     // Add back in start time, and divide by the total animation's duration to get the actual percentage complete
     GP_ASSERT(_animation);
@@ -587,6 +619,9 @@ void AnimationClip::onBegin()
         }
     }
 
+    // Fire script begin event
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(AnimationClip, clipBegin), this);
+
     release();
 }
 
@@ -608,6 +643,9 @@ void AnimationClip::onEnd()
             listener++;
         }
     }
+
+    // Fire script end event
+    fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(AnimationClip, clipEnd), this);
 
     release();
 }
@@ -650,17 +688,5 @@ AnimationClip* AnimationClip::clone(Animation* animation) const
     }
     return newClip;
 }
-
-AnimationClip::ScriptListener::ScriptListener(const std::string& function)
-{
-    // Store the function name.
-    this->function = Game::getInstance()->getScriptController()->loadUrl(function.c_str());
-}
-
-void AnimationClip::ScriptListener::animationEvent(AnimationClip* clip, EventType type)
-{
-    Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), "<AnimationClip>[AnimationClip::Listener::EventType]", clip, type);
-}
-
 
 }

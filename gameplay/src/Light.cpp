@@ -322,7 +322,7 @@ float Light::getOuterAngleCos()  const
     return _spot->outerAngleCos;
 }
 
-Light* Light::clone(NodeCloneContext &context) const
+Light* Light::clone(NodeCloneContext &context)
 {
     Light* lightClone = NULL;
     switch (_type)

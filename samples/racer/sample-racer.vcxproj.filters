@@ -14,7 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" />
-    <None Include="bar-descriptor.xml" />
     <None Include="res\shaders\colored.frag">
       <Filter>res\shaders</Filter>
     </None>
@@ -99,6 +98,10 @@
     <None Include="res\common\racer.scene">
       <Filter>res\common</Filter>
     </None>
+    <None Include="game.atc.config" />
+    <None Include="game.dxt.config" />
+    <None Include="game.png.config" />
+    <None Include="game.pvr.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\RacerGame.h">

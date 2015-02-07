@@ -73,6 +73,10 @@ vec4 _baseColor;
 varying vec3 v_color;
 #endif
 
+#if defined(LIGHTMAP)
+varying vec2 v_texCoord1;
+#endif
+
 #if defined(LIGHTING)
 
 varying vec3 v_normalVector;
@@ -93,10 +97,16 @@ varying vec3 v_cameraDirection;
 
 #endif
 
+#if defined(CLIP_PLANE)
+varying float v_clipDistance;
+#endif
 
 void main()
 {
-    
+    #if defined(CLIP_PLANE)
+    if(v_clipDistance < 0.0) discard;
+    #endif
+ 
     #if defined(LIGHTING)
 
     #if defined(VERTEX_COLOR)

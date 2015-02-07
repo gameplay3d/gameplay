@@ -221,8 +221,8 @@ public:
      */
     enum FrontFace
     {
-        FRONT_FACE_CW,
-        FRONT_FACE_CCW
+        FRONT_FACE_CW = GL_CW,
+        FRONT_FACE_CCW = GL_CCW
     };
 
 	/**

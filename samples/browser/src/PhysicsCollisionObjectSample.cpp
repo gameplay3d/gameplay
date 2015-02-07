@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Physics", "Collision Objects", PhysicsCollisionObjectSample, 1);
+    ADD_SAMPLE("Physics", "Collision 3D", PhysicsCollisionObjectSample, 1);
 #endif
 
 PhysicsCollisionObjectSample::PhysicsCollisionObjectSample()
@@ -114,15 +114,15 @@ void PhysicsCollisionObjectSample::keyEvent(Keyboard::KeyEvent evt, int key)
 
 bool PhysicsCollisionObjectSample::drawScene(Node* node)
 {
-    Model* model = node->getModel();
-    if (model)
-        model->draw(_wireFrame);
+    Drawable* drawable = node->getDrawable();
+    if (drawable)
+        drawable->draw(_wireFrame);
     return true;
 }
 
 bool PhysicsCollisionObjectSample::bindLights(Node* node)
 {
-    Model* model = node->getModel();
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
     if (model)
     {
         Material* material = model->getMaterial();

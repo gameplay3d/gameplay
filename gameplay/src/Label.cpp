@@ -41,6 +41,12 @@ void Label::initialize(const char* typeName, Theme::Style* style, Properties* pr
 	}
 }
 
+const char* Label::getTypeName() const
+{
+    return "Label";
+}
+
+
 void Label::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
@@ -54,7 +60,7 @@ void Label::addListener(Control::Listener* listener, int eventFlags)
 
     Control::addListener(listener, eventFlags);
 }
-    
+
 void Label::setText(const char* text)
 {
     if ((text == NULL && _text.length() > 0) || strcmp(text, _text.c_str()) != 0)
@@ -125,18 +131,13 @@ unsigned int Label::drawText(Form* form, const Rectangle& clip)
 
         SpriteBatch* batch = _font->getSpriteBatch(fontSize);
         startBatch(form, batch);
-        _font->drawText(_text.c_str(), _textBounds, _textColor, fontSize, getTextAlignment(state), true, getTextRightToLeft(state), &_viewportClipBounds);
+        _font->drawText(_text.c_str(), _textBounds, _textColor, fontSize, getTextAlignment(state), true, getTextRightToLeft(state), _viewportClipBounds);
         finishBatch(form, batch);
 
         return 1;
     }
 
     return 0;
-}
-
-const char* Label::getType() const
-{
-    return "label";
 }
 
 }

@@ -21,12 +21,16 @@ class Form;
 /**
  * Defines the base class for all controls.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Control : public Ref, public AnimationTarget, public ScriptTarget
 {
     friend class Form;
     friend class Container;
+
+    GP_SCRIPT_EVENTS_START();
+    GP_SCRIPT_EVENT(controlEvent, "<Control>[Control::Listener::EventType]");
+    GP_SCRIPT_EVENTS_END();
 
 public:
 
@@ -230,6 +234,16 @@ public:
      * Opacity property.  Data = opacity
      */
     static const int ANIMATE_OPACITY = 7;
+
+    /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "Control"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
 
     /**
      * Get this control's ID string.
@@ -905,13 +919,6 @@ public:
     virtual bool isContainer() const;
 
     /**
-     * Gets the type of the Control and returns it as a string.
-     *
-     * @return The string of the Control type, all in lower-case.
-     */
-    virtual const char* getType() const;
-
-    /**
      * Returns this control's parent, or NULL if this control does not have a parent.
      *
      * @return This control's parent.
@@ -984,6 +991,31 @@ protected:
      * Indicates that the state of the control is dirty.
      */
     static const int DIRTY_STATE = 2;
+
+    /**
+     * Indicates that the x position of the control is a percentage.
+     */
+    static const int BOUNDS_X_PERCENTAGE_BIT = 1;
+
+    /**
+     * Indicates that the y position of the control is a percentage.
+     */
+    static const int BOUNDS_Y_PERCENTAGE_BIT = 2;
+
+    /**
+     * Indicates that the width of the control is a percentage.
+     */
+    static const int BOUNDS_WIDTH_PERCENTAGE_BIT = 4;
+
+    /**
+     * Indicates that the height of the control is a percentage.
+     */
+    static const int BOUNDS_HEIGHT_PERCENTAGE_BIT = 8;
+
+    /**
+     * Indicates that the radius of the control is a percentage.
+     */
+    static const int BOUNDS_RADIUS_PERCENTAGE_BIT = 16;
 
     /**
      * Constructor.
@@ -1096,13 +1128,27 @@ protected:
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
-     * Gamepad callback on gamepad events.
+     * Gamepad callback on gamepad button changes.
      *
-     * @param gamepad The gamepad whose state changed.
-     * @param evt The gamepad event that occurred.
-     * @param analogIndex If evt is JOYSTICK_EVENT or TRIGGER_EVENT, this will be the index of the corresponding control.
+     * @param gamepad The gamepad whose one or more buttons have changed.
      */
-    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+    virtual bool gamepadButtonEvent(Gamepad* gamepad);
+
+    /**
+     * Gamepad callback on gamepad trigger changes.
+     *
+     * @param gamepad The gamepad whose one or more buttons have changed.
+     * @param index The index of the trigger that changed. 
+     */
+    virtual bool gamepadTriggerEvent(Gamepad* gamepad, unsigned int index);
+
+    /**
+     * Gamepad callback on gamepad analog joystick changes.
+     *
+     * @param gamepad The gamepad whose one or more buttons have changed.
+     * @param index The index of the joystick that changed.
+     */
+    virtual bool gamepadJoystickEvent(Gamepad* gamepad, unsigned int index);
 
     /**
      * Called each frame to update this control and its children.
@@ -1243,7 +1289,7 @@ protected:
      * @param id The ID of the image to retrieve.
      * @param state The state to get this image from.
      *
-     * @return The requested Theme::ThemeImage, or NULL if none was found.
+     * @return The requested Theme::ThemeImage, or an empty image from the controls theme if none was found.
      */
     Theme::ThemeImage* getImage(const char* id, State state);
 
@@ -1285,6 +1331,29 @@ protected:
      * @return The Alignment enum value corresponding to the given string.
      */
     static Alignment getAlignment(const char* alignment);
+
+    /**
+     * Converts a string in the format of either 'N' or 'N%' (where N is a number)
+     * into its value and sets a flag to indicate if it should be treated as a percentage.
+     *
+     * @param s A string in the format of either 'N' or 'N%' (where N is a number)
+     * @param isPercentage Set to true if the returned value should be treated as a percentage
+     * @return The number contained within the string
+     */
+    static float parseCoord(const char* s, bool* isPercentage);
+
+    /**
+     * Converts a string in the format of either 'N, N' or 'N%, N%' (where N is a number)
+     * into its values and sets flags to indicate which numbers should be treated as percentages
+     *
+     * @param s A string in the format of either 'N, N' or 'N%, N%' (where N is a number)
+     * @param v1 Set to the value of the first number in the string
+     * @param v2 Set to the value of the second number in the string
+     * @param v1Percentage Set to true if the first number should be treated as a percentage
+     * @param v2Percentage Set to true if the second number should be treated as a percentage
+     * @return true if the string was parsed
+     */
+    static bool parseCoordPair(const char* s, float* v1, float* v2, bool* v1Percentage, bool* v2Percentage);
 
     /** 
      * The Control's ID.

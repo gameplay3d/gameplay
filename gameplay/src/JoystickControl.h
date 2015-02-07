@@ -11,7 +11,7 @@ namespace gameplay
  *
  * This is used in virtual Gamepad instances.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class JoystickControl : public Control
 {
@@ -31,6 +31,16 @@ public:
      * @script{create}
      */
     static JoystickControl* create(const char* id, Theme::Style* style = NULL);
+
+    /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "JoystickControl"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
 
     /**
      * Add a listener to be notified of specific events affecting
@@ -56,32 +66,42 @@ public:
      * inner image region defined.
      * 
      * @param size The size of the inner region of the joystick. (x, y) == (width, height)
+     * @param isWidthPercentage If the width value should be computed as a percentage of the relative size of this control
+     * @param isHeightPercentage If the height value should be computed as a percentage of the relative size of this control
      */
-    void setInnerRegionSize(const Vector2& size);
+    void setInnerRegionSize(const Vector2& size, bool isWidthPercentage = false, bool isHeightPercentage = false);
 
     /**
      * Gets the image size of the inner region of the joystick. Returns (0,0) if there is no inner image
      * region defined.
      * 
+     * @param isWidthPercentage Set to true if the width value is a percentage value of the relative size of this control
+     * @param isHeightPercentage Set to true if the height value is a percentage value of the relative size of this control
+     *
      * @return The image size of the inner region of the joystick. (x, y) == (width, height)
      */
-    const Vector2& getInnerRegionSize() const;
+    const Vector2& getInnerRegionSize(bool* isWidthPercentage = NULL, bool* isHeightPercentage = NULL) const;
 
     /**
      * Sets the image size of the outer region of the joystick. Does not do anything if there is no
      * outer image region defined.
      * 
      * @param size The size of the outer region of the joystick. (x, y) == (width, height)
+     * @param isWidthPercentage If the width value should be computed as a percentage of the relative size of this control
+     * @param isHeightPercentage If the height value should be computed as a percentage of the relative size of this control
      */
-    void setOuterRegionSize(const Vector2& size);
+    void setOuterRegionSize(const Vector2& size, bool isWidthPercentage = false, bool isHeightPercentage = false);
 
     /**
      * Gets the image size of the outer region of the joystick. Returns (0,0) if there is no outer image
      * region defined.
+     *
+     * @param isWidthPercentage Set to true if the width value is a percentage value of the relative size of this control
+     * @param isHeightPercentage Set to true if the height value is a percentage value of the relative size of this control
      * 
      * @return The image size of the outer region of the joystick. (x, y) == (width, height)
      */
-    const Vector2& getOuterRegionSize() const;
+    const Vector2& getOuterRegionSize(bool* isWidthPercentage = NULL, bool* isHeightPercentage = NULL) const;
 
     /**
      * Sets whether relative positioning is enabled or not.
@@ -107,11 +127,28 @@ public:
      * @return The index of this joystick on a form.
      */
     unsigned int getIndex() const;
-    
+
     /**
-     * @see Control::getType
+     * Sets the radius of joystick motion
+     *
+     * @param radius The radius to be set.
+     * @param isPercentage If the radius value is a percentage value of the relative size of this control
      */
-    const char* getType() const;
+    void setRadius(float radius, bool isPercentage = false);
+
+    /**
+     * Gets the radius of joystick motion
+     *
+     * @return The radius of joystick motion
+     */
+    float getRadius() const;
+
+    /**
+      * Determines if the radius of joystick motion is a percentage value of the relative size of this control
+      *
+     * @return True if the radius of joystick motion is a percentage value of the relative size of this control
+     */
+    bool isRadiusPercentage() const;
 
 protected:
     
@@ -129,7 +166,7 @@ protected:
      * Create a joystick control with a given style and properties.
      *
      * @param style The style to apply to this joystick.
-     * @param properties A properties object containing a definition of the joystick (optional).
+     * @param properties A properties object containing a definition of the joystick.
 	 *
      * @return The new joystick.
      */
@@ -155,24 +192,45 @@ protected:
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
+     * @see Control::updateAbsoluteBounds
+     */
+    void updateAbsoluteBounds(const Vector2& offset);
+
+    /**
      * @see Control::drawImages
      */
     unsigned int drawImages(Form* form, const Rectangle& clip);
 
 private:
 
-    /**
-     * Copy constructor.
-     */
     JoystickControl(const JoystickControl& copy);
 
-    float _radius; 
+    void setRegion(const Vector2& regionSizeIn, Vector2& regionSizeOut, int& regionBoundsBitsOut, bool isWidthPercentage, bool isHeightPercentage);
+
+    void getRegion(Vector2& regionOut, int& regionBoundsBitsOut, const char* regionPropertyId);
+
+    Vector2 getPixelSize(const Vector2& region, const int regionBoundsBits) const;
+
+    Vector2 getPixelSize(const Theme::ThemeImage* image) const;
+
+    Theme::ThemeImage * getNonEmptyImage(const char* id, Control::State state);
+
+    void updateAbsoluteSizes();
+
+    void setBoundsBit(bool set, int& bitSetOut, int bit);
+
+    float _radiusCoord;
+    Vector2* _innerRegionCoord;
+    Vector2* _outerRegionCoord;
+    int _innerRegionCoordBoundsBits;
+    int _outerRegionCoordBoundsBits;
+    float _radiusPixels;
+    Vector2* _innerSizePixels;
+    Vector2* _outerSizePixels;
+    Rectangle _screenRegionPixels;
     bool _relative;
-    Rectangle _screenRegion;
     Vector2 _value;
     Vector2 _displacement;
-    Vector2* _innerSize;
-    Vector2* _outerSize;
     unsigned int _index;
 };
 

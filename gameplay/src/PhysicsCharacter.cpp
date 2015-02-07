@@ -191,6 +191,16 @@ void PhysicsCharacter::setVelocity(float x, float y, float z)
     _moveVelocity.setValue(x, y, z);
 }
 
+void PhysicsCharacter::resetVelocityState()
+{
+    _forwardVelocity = 0.0f;
+    _rightVelocity = 0.0f;
+    _verticalVelocity.setZero();
+    _currentVelocity.setZero();
+    _normalizedVelocity.setZero();
+    _moveVelocity.setZero();
+}
+
 void PhysicsCharacter::rotate(const Vector3& axis, float angle)
 {
     GP_ASSERT(_node);
@@ -234,10 +244,10 @@ Vector3 PhysicsCharacter::getCurrentVelocity() const
     return v;
 }
 
-void PhysicsCharacter::jump(float height)
+void PhysicsCharacter::jump(float height, bool force)
 {
     // TODO: Add support for different jump modes (i.e. double jump, changing direction in air, holding down jump button for extra height, etc)
-    if (!_verticalVelocity.isZero())
+    if (!force && !_verticalVelocity.isZero())
         return;
 
     // v = sqrt(v0^2 + 2 a s)
@@ -245,11 +255,11 @@ void PhysicsCharacter::jump(float height)
     //  a == acceleration (inverse gravity)
     //  s == linear displacement (height)
     GP_ASSERT(Game::getInstance()->getPhysicsController());
-    Vector3 jumpVelocity = -Game::getInstance()->getPhysicsController()->getGravity() * height * 2.0f;
+    Vector3 jumpVelocity = Game::getInstance()->getPhysicsController()->getGravity() * height * 2.0f;
     jumpVelocity.set(
-        jumpVelocity.x == 0 ? 0 : std::sqrt(jumpVelocity.x),
-        jumpVelocity.y == 0 ? 0 : std::sqrt(jumpVelocity.y),
-        jumpVelocity.z == 0 ? 0 : std::sqrt(jumpVelocity.z));
+        jumpVelocity.x == 0 ? 0 : std::sqrt(std::fabs(jumpVelocity.x)) * (jumpVelocity.x > 0 ? 1.0f : -1.0f),
+        jumpVelocity.y == 0 ? 0 : std::sqrt(std::fabs(jumpVelocity.y)) * (jumpVelocity.y < 0 ? 1.0f : -1.0f),
+        jumpVelocity.z == 0 ? 0 : std::sqrt(std::fabs(jumpVelocity.z)) * (jumpVelocity.z > 0 ? 1.0f : -1.0f));
     _verticalVelocity += BV(jumpVelocity);
 }
 
@@ -650,6 +660,9 @@ void PhysicsCharacter::ActionInterface::debugDraw(btIDebugDraw* debugDrawer)
 
 void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
 {
+    if (!isEnabled())
+        return;
+
     GP_ASSERT(_ghostObject);
     GP_ASSERT(_node);
 

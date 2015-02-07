@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Sprite Batch", SpriteBatchSample, 8);
+    ADD_SAMPLE("Graphics", "Sprite Batch", SpriteBatchSample, 5);
 #endif
 
 

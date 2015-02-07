@@ -57,6 +57,8 @@ set(GAMEPLAY_SRC
     src/DebugNew.h
     src/DepthStencilTarget.cpp
     src/DepthStencilTarget.h
+    src/Drawable.cpp
+    src/Drawable.h
     src/Effect.cpp
     src/Effect.h
     src/FileSystem.cpp
@@ -77,7 +79,6 @@ set(GAMEPLAY_SRC
     src/Gamepad.cpp
     src/Gamepad.h
     src/gameplay-main-android.cpp
-    src/gameplay-main-blackberry.cpp
     src/gameplay-main-linux.cpp
     src/gameplay-main-windows.cpp
     src/Gesture.h
@@ -162,7 +163,6 @@ set(GAMEPLAY_SRC
     src/Platform.h
     src/Platform.cpp
     src/PlatformAndroid.cpp
-    src/PlatformBlackBerry.cpp
     src/PlatformLinux.cpp
     src/PlatformWindows.cpp
     src/Properties.cpp
@@ -189,6 +189,8 @@ set(GAMEPLAY_SRC
     src/SceneLoader.h
     src/ScreenDisplayer.cpp
     src/ScreenDisplayer.h
+    src/Script.cpp
+    src/Script.h
     src/ScriptController.cpp
     src/ScriptController.h
     src/ScriptController.inl
@@ -196,6 +198,8 @@ set(GAMEPLAY_SRC
     src/ScriptTarget.h
     src/Slider.cpp
     src/Slider.h
+    src/Sprite.cpp
+    src/Sprite.h
     src/SpriteBatch.cpp
     src/SpriteBatch.h
     src/Technique.cpp
@@ -204,6 +208,8 @@ set(GAMEPLAY_SRC
     src/Terrain.h
     src/TerrainPatch.cpp
     src/TerrainPatch.h
+    src/Text.cpp
+    src/Text.h
     src/TextBox.cpp
     src/TextBox.h
     src/Texture.cpp
@@ -212,6 +218,8 @@ set(GAMEPLAY_SRC
     src/Theme.h
     src/ThemeStyle.cpp
     src/ThemeStyle.h
+    src/TileSet.cpp
+    src/TileSet.h
     src/Transform.cpp
     src/Transform.h
     src/Vector2.cpp
@@ -244,8 +252,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_AIController.h
     src/lua/lua_AIMessage.cpp
     src/lua/lua_AIMessage.h
-    src/lua/lua_AIMessageParameterType.cpp
-    src/lua/lua_AIMessageParameterType.h
     src/lua/lua_AIState.cpp
     src/lua/lua_AIState.h
     src/lua/lua_AIStateListener.cpp
@@ -258,8 +264,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_AnimationClip.h
     src/lua/lua_AnimationClipListener.cpp
     src/lua/lua_AnimationClipListener.h
-    src/lua/lua_AnimationClipListenerEventType.cpp
-    src/lua/lua_AnimationClipListenerEventType.h
     src/lua/lua_AnimationController.cpp
     src/lua/lua_AnimationController.h
     src/lua/lua_AnimationTarget.cpp
@@ -274,8 +278,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_AudioListener.h
     src/lua/lua_AudioSource.cpp
     src/lua/lua_AudioSource.h
-    src/lua/lua_AudioSourceState.cpp
-    src/lua/lua_AudioSourceState.h
     src/lua/lua_BoundingBox.cpp
     src/lua/lua_BoundingBox.h
     src/lua/lua_BoundingSphere.cpp
@@ -288,34 +290,20 @@ set(GAMEPLAY_LUA
     src/lua/lua_Camera.h
     src/lua/lua_CameraListener.h
     src/lua/lua_CameraListener.cpp
-    src/lua/lua_CameraType.cpp
-    src/lua/lua_CameraType.h
     src/lua/lua_CheckBox.cpp
     src/lua/lua_CheckBox.h
     src/lua/lua_Container.cpp
     src/lua/lua_Container.h
-    src/lua/lua_ContainerScroll.cpp
-    src/lua/lua_ContainerScroll.h
     src/lua/lua_Control.cpp
     src/lua/lua_Control.h
-    src/lua/lua_ControlAlignment.cpp
-    src/lua/lua_ControlAlignment.h
-    src/lua/lua_ControlAutoSize.cpp
-    src/lua/lua_ControlAutoSize.h
     src/lua/lua_ControlListener.cpp
     src/lua/lua_ControlListener.h
-    src/lua/lua_ControlListenerEventType.cpp
-    src/lua/lua_ControlListenerEventType.h
-    src/lua/lua_ControlState.cpp
-    src/lua/lua_ControlState.h
     src/lua/lua_Curve.cpp
     src/lua/lua_Curve.h
-    src/lua/lua_CurveInterpolationType.cpp
-    src/lua/lua_CurveInterpolationType.h
     src/lua/lua_DepthStencilTarget.cpp
     src/lua/lua_DepthStencilTarget.h
-    src/lua/lua_DepthStencilTargetFormat.cpp
-    src/lua/lua_DepthStencilTargetFormat.h
+    src/lua/lua_Drawable.cpp
+    src/lua/lua_Drawable.h
     src/lua/lua_Effect.cpp
     src/lua/lua_Effect.h
     src/lua/lua_FileSystem.cpp
@@ -324,14 +312,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_FlowLayout.h
     src/lua/lua_Font.cpp
     src/lua/lua_Font.h
-    src/lua/lua_FontFormat.cpp
-    src/lua/lua_FontFormat.h
-    src/lua/lua_FontJustify.cpp
-    src/lua/lua_FontJustify.h
-    src/lua/lua_FontStyle.cpp
-    src/lua/lua_FontStyle.h
-    src/lua/lua_FontText.cpp
-    src/lua/lua_FontText.h
     src/lua/lua_Form.cpp
     src/lua/lua_Form.h
     src/lua/lua_FrameBuffer.cpp
@@ -340,20 +320,10 @@ set(GAMEPLAY_LUA
     src/lua/lua_Frustum.h
     src/lua/lua_Game.cpp
     src/lua/lua_Game.h
-    src/lua/lua_GameClearFlags.cpp
-    src/lua/lua_GameClearFlags.h
     src/lua/lua_Gamepad.cpp
     src/lua/lua_Gamepad.h
-    src/lua/lua_GamepadButtonMapping.cpp
-    src/lua/lua_GamepadButtonMapping.h
-    src/lua/lua_GamepadGamepadEvent.cpp
-    src/lua/lua_GamepadGamepadEvent.h
-    src/lua/lua_GameState.cpp
-    src/lua/lua_GameState.h
     src/lua/lua_Gesture.cpp
     src/lua/lua_Gesture.h
-    src/lua/lua_GestureGestureEvent.cpp
-    src/lua/lua_GestureGestureEvent.h
     src/lua/lua_Global.cpp
     src/lua/lua_Global.h
     src/lua/lua_HeightField.cpp
@@ -362,32 +332,20 @@ set(GAMEPLAY_LUA
     src/lua/lua_Image.h
     src/lua/lua_ImageControl.cpp
     src/lua/lua_ImageControl.h
-    src/lua/lua_ImageFormat.cpp
-    src/lua/lua_ImageFormat.h
     src/lua/lua_Joint.cpp
     src/lua/lua_Joint.h
     src/lua/lua_JoystickControl.cpp
     src/lua/lua_JoystickControl.h
     src/lua/lua_Keyboard.cpp
     src/lua/lua_Keyboard.h
-    src/lua/lua_KeyboardKey.cpp
-    src/lua/lua_KeyboardKey.h
-    src/lua/lua_KeyboardKeyEvent.cpp
-    src/lua/lua_KeyboardKeyEvent.h
     src/lua/lua_Label.cpp
     src/lua/lua_Label.h
     src/lua/lua_Layout.cpp
     src/lua/lua_Layout.h
-    src/lua/lua_LayoutType.cpp
-    src/lua/lua_LayoutType.h
     src/lua/lua_Light.cpp
     src/lua/lua_Light.h
-    src/lua/lua_LightType.cpp
-    src/lua/lua_LightType.h
     src/lua/lua_Logger.cpp
     src/lua/lua_Logger.h
-    src/lua/lua_LoggerLevel.cpp
-    src/lua/lua_LoggerLevel.h
     src/lua/lua_Material.cpp
     src/lua/lua_Material.h
     src/lua/lua_MaterialParameter.cpp
@@ -400,30 +358,20 @@ set(GAMEPLAY_LUA
     src/lua/lua_Mesh.h
     src/lua/lua_MeshBatch.cpp
     src/lua/lua_MeshBatch.h
-    src/lua/lua_MeshIndexFormat.cpp
-    src/lua/lua_MeshIndexFormat.h
     src/lua/lua_MeshPart.cpp
     src/lua/lua_MeshPart.h
-    src/lua/lua_MeshPrimitiveType.cpp
-    src/lua/lua_MeshPrimitiveType.h
     src/lua/lua_MeshSkin.cpp
     src/lua/lua_MeshSkin.h
     src/lua/lua_Model.cpp
     src/lua/lua_Model.h
     src/lua/lua_Mouse.cpp
     src/lua/lua_Mouse.h
-    src/lua/lua_MouseMouseEvent.cpp
-    src/lua/lua_MouseMouseEvent.h
     src/lua/lua_Node.cpp
     src/lua/lua_Node.h
     src/lua/lua_NodeCloneContext.cpp
     src/lua/lua_NodeCloneContext.h
-    src/lua/lua_NodeType.cpp
-    src/lua/lua_NodeType.h
     src/lua/lua_ParticleEmitter.cpp
     src/lua/lua_ParticleEmitter.h
-    src/lua/lua_ParticleEmitterTextureBlending.cpp
-    src/lua/lua_ParticleEmitterTextureBlending.h
     src/lua/lua_Pass.cpp
     src/lua/lua_Pass.h
     src/lua/lua_PhysicsCharacter.cpp
@@ -432,18 +380,12 @@ set(GAMEPLAY_LUA
     src/lua/lua_PhysicsCollisionObject.h
     src/lua/lua_PhysicsCollisionObjectCollisionListener.cpp
     src/lua/lua_PhysicsCollisionObjectCollisionListener.h
-    src/lua/lua_PhysicsCollisionObjectCollisionListenerEventType.cpp
-    src/lua/lua_PhysicsCollisionObjectCollisionListenerEventType.h
     src/lua/lua_PhysicsCollisionObjectCollisionPair.cpp
     src/lua/lua_PhysicsCollisionObjectCollisionPair.h
-    src/lua/lua_PhysicsCollisionObjectType.cpp
-    src/lua/lua_PhysicsCollisionObjectType.h
     src/lua/lua_PhysicsCollisionShape.cpp
     src/lua/lua_PhysicsCollisionShape.h
     src/lua/lua_PhysicsCollisionShapeDefinition.cpp
     src/lua/lua_PhysicsCollisionShapeDefinition.h
-    src/lua/lua_PhysicsCollisionShapeType.cpp
-    src/lua/lua_PhysicsCollisionShapeType.h
     src/lua/lua_PhysicsConstraint.cpp
     src/lua/lua_PhysicsConstraint.h
     src/lua/lua_PhysicsController.cpp
@@ -454,8 +396,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_PhysicsControllerHitResult.h
     src/lua/lua_PhysicsControllerListener.cpp
     src/lua/lua_PhysicsControllerListener.h
-    src/lua/lua_PhysicsControllerListenerEventType.cpp
-    src/lua/lua_PhysicsControllerListenerEventType.h
     src/lua/lua_PhysicsFixedConstraint.cpp
     src/lua/lua_PhysicsFixedConstraint.h
     src/lua/lua_PhysicsGenericConstraint.cpp
@@ -482,8 +422,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_Platform.h
     src/lua/lua_Properties.cpp
     src/lua/lua_Properties.h
-    src/lua/lua_PropertiesType.cpp
-    src/lua/lua_PropertiesType.h
     src/lua/lua_Quaternion.cpp
     src/lua/lua_Quaternion.h
     src/lua/lua_RadioButton.cpp
@@ -496,57 +434,46 @@ set(GAMEPLAY_LUA
     src/lua/lua_Ref.h
     src/lua/lua_RenderState.cpp
     src/lua/lua_RenderState.h
-    src/lua/lua_RenderStateAutoBinding.cpp
-    src/lua/lua_RenderStateAutoBinding.h
-    src/lua/lua_RenderStateBlend.cpp
-    src/lua/lua_RenderStateBlend.h
-    src/lua/lua_RenderStateCullFaceSide.cpp
-    src/lua/lua_RenderStateDepthFunction.cpp
-    src/lua/lua_RenderStateDepthFunction.h
-    src/lua/lua_RenderStateFrontFace.cpp
-    src/lua/lua_RenderStateFrontFace.h
     src/lua/lua_RenderStateStateBlock.cpp
     src/lua/lua_RenderStateStateBlock.h
-    src/lua/lua_RenderStateStencilFunction.cpp
-    src/lua/lua_RenderStateStencilFunction.h
-    src/lua/lua_RenderStateStencilOperation.cpp
-    src/lua/lua_RenderStateStencilOperation.h
     src/lua/lua_RenderTarget.cpp
     src/lua/lua_RenderTarget.h
     src/lua/lua_Scene.cpp
     src/lua/lua_Scene.h
     src/lua/lua_ScreenDisplayer.cpp
     src/lua/lua_ScreenDisplayer.h
+    src/lua/lua_Script.cpp
+    src/lua/lua_Script.h
     src/lua/lua_ScriptController.cpp
     src/lua/lua_ScriptController.h
     src/lua/lua_ScriptTarget.cpp
     src/lua/lua_ScriptTarget.h
+    src/lua/lua_ScriptTargetEvent.cpp
+    src/lua/lua_ScriptTargetEvent.h
+    src/lua/lua_ScriptTargetEventRegistry.cpp
+    src/lua/lua_ScriptTargetEventRegistry.h
     src/lua/lua_Slider.cpp
     src/lua/lua_Slider.h
+    src/lua/lua_Sprite.cpp
+    src/lua/lua_Sprite.h
     src/lua/lua_SpriteBatch.cpp
     src/lua/lua_SpriteBatch.h
+    src/lua/lua_SpriteBatchSpriteVertex.cpp
+    src/lua/lua_SpriteBatchSpriteVertex.h
     src/lua/lua_Technique.cpp
     src/lua/lua_Technique.h
     src/lua/lua_Terrain.cpp
     src/lua/lua_Terrain.h
-    src/lua/lua_TerrainFlags.cpp
-    src/lua/lua_TerrainFlags.h
     src/lua/lua_TerrainPatch.cpp
     src/lua/lua_TerrainPatch.h
+    src/lua/lua_Text.cpp
+    src/lua/lua_Text.h
     src/lua/lua_TextBox.cpp
     src/lua/lua_TextBox.h
-    src/lua/lua_TextBoxInputMode.cpp
-    src/lua/lua_TextBoxInputMode.h
     src/lua/lua_Texture.cpp
     src/lua/lua_Texture.h
-    src/lua/lua_TextureFilter.cpp
-    src/lua/lua_TextureFilter.h
-    src/lua/lua_TextureFormat.cpp
-    src/lua/lua_TextureFormat.h
     src/lua/lua_TextureSampler.cpp
     src/lua/lua_TextureSampler.h
-    src/lua/lua_TextureWrap.cpp
-    src/lua/lua_TextureWrap.h
     src/lua/lua_Theme.cpp
     src/lua/lua_Theme.h
     src/lua/lua_ThemeSideRegions.cpp
@@ -557,10 +484,10 @@ set(GAMEPLAY_LUA
     src/lua/lua_ThemeThemeImage.h
     src/lua/lua_ThemeUVs.cpp
     src/lua/lua_ThemeUVs.h
+    src/lua/lua_TileSet.cpp
+    src/lua/lua_TileSet.h
     src/lua/lua_Touch.cpp
     src/lua/lua_Touch.h
-    src/lua/lua_TouchTouchEvent.cpp
-    src/lua/lua_TouchTouchEvent.h
     src/lua/lua_Transform.cpp
     src/lua/lua_Transform.h
     src/lua/lua_TransformListener.cpp
@@ -579,8 +506,6 @@ set(GAMEPLAY_LUA
     src/lua/lua_VertexFormat.h
     src/lua/lua_VertexFormatElement.cpp
     src/lua/lua_VertexFormatElement.h
-    src/lua/lua_VertexFormatUsage.cpp
-    src/lua/lua_VertexFormatUsage.h
     src/lua/lua_VerticalLayout.cpp
     src/lua/lua_VerticalLayout.h
 )
@@ -617,15 +542,9 @@ set(GAMEPLAY_RES_SHADERS
     res/ui/default.theme
 )
 
-include_directories( 
+include_directories(
     src
-    ../external-deps/lua/include
-    ../external-deps/bullet/include
-    ../external-deps/png/include
-    ../external-deps/zlib/include
-    ../external-deps/oggvorbis/include
-    ../external-deps/openal/include
-    ../external-deps/glew/include
+    ../external-deps/include
 )
 
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -636,6 +555,7 @@ add_definitions(${GTK2_CFLAGS_OTHER})
 add_definitions(-D__linux__)
 ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
+add_definitions(-std=c++11)
 add_definitions(-lstdc++)
 
 add_library(gameplay STATIC

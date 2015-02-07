@@ -14,7 +14,7 @@ namespace gameplay
  *
  * This is a button that can be enabled or disabled.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class CheckBox : public Button
 {
@@ -35,6 +35,16 @@ public:
     static CheckBox* create(const char* id, Theme::Style* style = NULL);
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "CheckBox"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Gets whether this checkbox is checked.
      *
      * @return Whether this checkbox is checked.
@@ -47,11 +57,6 @@ public:
      * @param checked TRUE if the checkbox is checked; FALSE if the checkbox is not checked.
      */
     void setChecked(bool checked);
-
-    /**
-     * @see Control::getType
-     */
-    const char* getType() const;
 
     /**
      * Add a listener to be notified of specific events affecting

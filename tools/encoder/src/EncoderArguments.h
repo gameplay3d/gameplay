@@ -18,8 +18,8 @@ public:
     enum FileFormat
     {
         FILEFORMAT_UNKNOWN,
-        FILEFORMAT_DAE,
         FILEFORMAT_FBX,
+        FILEFORMAT_TMX,
         FILEFORMAT_TTF,
         FILEFORMAT_GPB,
         FILEFORMAT_PNG,
@@ -75,9 +75,20 @@ public:
     const std::string& getFilePath() const;
 
     /**
+     * Returns the path/folder.
+     * Example: "C:/dir"
+     */
+    const std::string getFileDirPath() const;
+
+    /**
      * Returns the char pointer to the file path string.
      */
     const char* getFilePathPointer() const;
+
+    /**
+     * Get the file name of the input file.
+     */
+    const std::string getFileName() const;
 
     /**
      * Returns the output path/folder.
@@ -164,6 +175,8 @@ public:
 
     bool outputMaterialEnabled() const;
 
+    bool generateTextureGutter() const;
+
     const char* getNodeId() const;
 
     static std::string getRealPath(const std::string& filepath);
@@ -210,6 +223,7 @@ private:
     bool _optimizeAnimations;
     AnimationGroupOption _animationGrouping;
     bool _outputMaterial;
+    bool _generateTextureGutter;
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;

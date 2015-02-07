@@ -143,7 +143,7 @@ private:
     MaterialParameter* _shipSpecularParameter;
 
     // Sounds
-    AudioSource* _backgroundSound;
+    AudioSource* _backgroundMusic;
     AudioSource* _spaceshipSound;
 
     bool _hitSomething;

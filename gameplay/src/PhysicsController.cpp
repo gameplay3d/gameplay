@@ -33,10 +33,10 @@ PhysicsController::PhysicsController()
     _debugDrawer(NULL), _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
     _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL)
 {
+    GP_REGISTER_SCRIPT_EVENTS();
+
     // Default gravity is 9.8 along the negative Y axis.
     _collisionCallback = new CollisionCallback(this);
-
-    addScriptEvent("statusEvent", "[PhysicsController::Listener::EventType]");
 }
 
 PhysicsController::~PhysicsController()
@@ -45,6 +45,11 @@ PhysicsController::~PhysicsController()
     SAFE_DELETE(_ghostPairCallback);
     SAFE_DELETE(_debugDrawer);
     SAFE_DELETE(_listeners);
+}
+
+const char* PhysicsController::getTypeName() const
+{
+    return "PhysicsController";
 }
 
 void PhysicsController::addStatusListener(Listener* listener)
@@ -484,7 +489,7 @@ void PhysicsController::update(float elapsedTime)
     _world->stepSimulation(elapsedTime * 0.001f, 10);
 
     // If we have status listeners, then check if our status has changed.
-    if (_listeners || _callbacks["statusEvent"])
+    if (_listeners || hasScriptListener(GP_GET_SCRIPT_EVENT(PhysicsController, statusEvent)))
     {
         Listener::EventType oldStatus = _status;
 
@@ -529,7 +534,7 @@ void PhysicsController::update(float elapsedTime)
                 }
             }
 
-            fireScriptEvent<void>("statusEvent", _status);
+            fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(PhysicsController, statusEvent), _status);
         }
     }
 
@@ -714,15 +719,16 @@ static void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
     GP_ASSERT(node);
     GP_ASSERT(out);
 
-    if (node->getModel())
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
+    if (model != NULL)
     {
-        GP_ASSERT(node->getModel()->getMesh());
+        GP_ASSERT(model->getMesh());
 
         if (merge)
-            out->merge(node->getModel()->getMesh()->getBoundingBox());
+            out->merge(model->getMesh()->getBoundingBox());
         else
         {
-            out->set(node->getModel()->getMesh()->getBoundingBox());
+            out->set(model->getMesh()->getBoundingBox());
             merge = true;
         }
     }
@@ -740,15 +746,16 @@ static void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = fals
     GP_ASSERT(node);
     GP_ASSERT(out);
 
-    if (node->getModel())
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
+    if (model != NULL)
     {
-        GP_ASSERT(node->getModel()->getMesh());
+        GP_ASSERT(model->getMesh());
 
         if (merge)
-            out->merge(node->getModel()->getMesh()->getBoundingSphere());
+            out->merge(model->getMesh()->getBoundingSphere());
         else
         {
-            out->set(node->getModel()->getMesh()->getBoundingSphere());
+            out->set(model->getMesh()->getBoundingSphere());
             merge = true;
         }
     }
@@ -887,10 +894,10 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
             else
             {
                 // Build the heightfield from an attached terrain's height array
-                if (node->getTerrain() == NULL)
+                if (dynamic_cast<Terrain*>(node->getDrawable()) == NULL)
                     GP_ERROR("Empty heightfield collision shapes can only be used on nodes that have an attached Terrain.");
                 else
-                    collisionShape = createHeightfield(node, node->getTerrain()->_heightfield, centerOfMassOffset);
+                    collisionShape = createHeightfield(node, dynamic_cast<Terrain*>(node->getDrawable())->_heightfield, centerOfMassOffset);
             }
         }
         break;
@@ -1032,9 +1039,10 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, HeightFi
     node->getWorldMatrix().getScale(&scale);
 
     // If the node has a terrain, apply the terrain's local scale to the world scale
-    if (node->getTerrain())
+    Terrain* terrain = dynamic_cast<Terrain*>(node->getDrawable());
+    if (terrain != NULL)
     {
-        const Vector3& tScale = node->getTerrain()->_localScale;
+        const Vector3& tScale = terrain->_localScale;
         scale.set(scale.x * tScale.x, scale.y * tScale.y, scale.z * tScale.z);
     }
 

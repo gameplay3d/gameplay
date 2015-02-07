@@ -32,27 +32,18 @@ public:
     enum GamepadEvent
     {
         CONNECTED_EVENT,
-        DISCONNECTED_EVENT,
-        BUTTON_EVENT,
-        JOYSTICK_EVENT,
-        TRIGGER_EVENT
+        DISCONNECTED_EVENT
     };
 
     /**
      * Gamepad buttons.
      */
     enum ButtonMapping
-    {
+    {        
         BUTTON_A,
         BUTTON_B,
-        BUTTON_C,
         BUTTON_X,
         BUTTON_Y,
-        BUTTON_Z,
-        BUTTON_MENU1,
-        BUTTON_MENU2,
-        BUTTON_MENU3,
-        BUTTON_MENU4,
         BUTTON_L1,
         BUTTON_L2,
         BUTTON_L3,
@@ -62,7 +53,10 @@ public:
         BUTTON_UP,
         BUTTON_DOWN,
         BUTTON_LEFT,
-        BUTTON_RIGHT
+        BUTTON_RIGHT,
+        BUTTON_MENU1,
+        BUTTON_MENU2,
+        BUTTON_MENU3
     };
 
     /**
@@ -113,33 +107,12 @@ public:
      */
     float getTriggerValue(unsigned int triggerId) const;
 
-   /**
-     * Get this gamepad's vendor ID.
-     *
-     * @return This gamepad's vendor ID.
-     */
-    const unsigned int getVendorId() const;
-
     /**
-     * Get this gamepad's product ID.
+     * Get this gamepad's device/product name.
      *
-     * @return This gamepad's product ID.
+     * @return This gamepad's device/product name.
      */
-    const unsigned int getProductId() const;
-
-    /**
-     * Get this gamepad's vendor name.
-     *
-     * @return This gamepad's vendor name.
-     */
-    const char* getVendorString() const;
-
-    /**
-     * Get this gamepad's product name.
-     *
-     * @return This gamepad's product name.
-     */
-    const char* getProductString() const;
+    const char* getName() const;
 
     /**
      * Returns whether the gamepad is currently represented with a UI form or not.
@@ -187,14 +160,9 @@ private:
      * @param buttonCount the number of buttons on the gamepad. 
      * @param joystickCount the number of joysticks on the gamepad.
      * @param triggerCount the number of triggers on the gamepad.
-     * @param vendorId The vendor id
-     * @param productId The product id
-     * @param vendorString The vendor string/name.
-     * @param productString The product string/name.
+     * @param name The product/device name.
      */
-    Gamepad(GamepadHandle handle, 
-            unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-            unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
+    Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name);
 
     /**
      * Copy constructor.
@@ -208,9 +176,7 @@ private:
 
     static void updateInternal(float elapsedTime);
 
-    static Gamepad* add(GamepadHandle handle, 
-                        unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                        unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
+    static Gamepad* add(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name);
 
     static Gamepad* add(const char* formPath);
 
@@ -220,7 +186,7 @@ private:
 
     static unsigned int getGamepadCount();
 
-    static Gamepad* getGamepad(unsigned int index, bool preferPhysical = true);
+    static Gamepad* getGamepad(unsigned int index, bool preferPhysical);
 
     static Gamepad* getGamepad(GamepadHandle handle);
 
@@ -234,14 +200,11 @@ private:
     
     void bindGamepadControls(Container* container);
 
-    GamepadHandle _handle;        // The handle of the Gamepad.
-    unsigned int _buttonCount;    // Number of buttons.
-    unsigned int _joystickCount;  // Number of joysticks.
-    unsigned int _triggerCount;   // Number of triggers.
-    unsigned int _vendorId;
-    unsigned int _productId;
-    std::string _vendorString;
-    std::string _productString;
+    GamepadHandle _handle;
+    unsigned int _buttonCount;
+    unsigned int _joystickCount;
+    unsigned int _triggerCount;
+    std::string _name;
     Form* _form;
     JoystickControl* _uiJoysticks[2];
     Button* _uiButtons[20];

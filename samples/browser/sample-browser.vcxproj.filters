@@ -30,11 +30,22 @@
     <Filter Include="res\common\fonts">
       <UniqueIdentifier>{10e17594-e3ef-49d2-a2a4-fb874c32b5c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\common\audio">
+      <UniqueIdentifier>{7da0c58a-d770-4181-8781-f9948df5bdd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\common\water">
+      <UniqueIdentifier>{e6d4de4b-95e9-4893-a8a9-ce00291995cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\common\particles">
+      <UniqueIdentifier>{98333a4d-224e-4f83-ac60-baca4885bf82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\common\sprites">
+      <UniqueIdentifier>{5f9e3afc-ab2a-463d-9376-9d9df3e9fed4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
     <None Include="icon.png" />
-    <None Include="bar-descriptor.xml" />
     <None Include="res\common\forms\formBasicControls.form">
       <Filter>res\common\forms</Filter>
     </None>
@@ -138,9 +149,6 @@
       <Filter>res\common</Filter>
     </None>
     <None Include="res\common\gamepad.theme">
-      <Filter>res\common</Filter>
-    </None>
-    <None Include="res\common\grid.material">
       <Filter>res\common</Filter>
     </None>
     <None Include="res\common\inputs.form">
@@ -251,24 +259,72 @@
     <None Include="res\common\fonts\neuropol.gpb">
       <Filter>res\common\fonts</Filter>
     </None>
+    <None Include="res\common\audio\background.form">
+      <Filter>res\common\audio</Filter>
+    </None>
+    <None Include="res\common\audio\background_track.ogg">
+      <Filter>res\common\audio</Filter>
+    </None>
+    <None Include="res\common\audio\braking.form">
+      <Filter>res\common\audio</Filter>
+    </None>
+    <None Include="res\common\audio\engine.form">
+      <Filter>res\common\audio</Filter>
+    </None>
+    <None Include="res\common\audio\engine_loop.ogg">
+      <Filter>res\common\audio</Filter>
+    </None>
+    <None Include="res\common\audio\sample.audio">
+      <Filter>res\common\audio</Filter>
+    </None>
+    <None Include="res\common\water\watersample.vert">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\water\watersample.frag">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\water\watersample.material">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\water\watersample.scene">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\particles\editor.form">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\particles\editor.theme">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\particles\explosion.particle">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\particles\fire.particle">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\particles\smoke.particle">
+      <Filter>res\common\particles</Filter>
+    </None>
+    <None Include="res\common\water\pond.gpb">
+      <Filter>res\common\water</Filter>
+    </None>
+    <None Include="res\common\particles\grid.material">
+      <Filter>res\common</Filter>
+    </None>
+    <None Include="res\common\sprites\sprite.scene">
+      <Filter>res\common\sprites</Filter>
+    </None>
+    <None Include="res\common\sprites\water2d.frag">
+      <Filter>res\common\sprites</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MeshPrimitiveSample.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CreateSceneSample.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Audio3DSample.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\InputSample.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LoadSceneSample.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TextSample.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\TextureSample.h">
@@ -319,24 +375,36 @@
     <ClInclude Include="src\TerrainSample.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\WaterSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneCreateSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneLoadSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AudioSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticlesSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpriteSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshPrimitiveSample.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CreateSceneSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Audio3DSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\InputSample.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LoadSceneSample.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TextSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TextureSample.cpp">
@@ -385,6 +453,27 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TerrainSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WaterSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneCreateSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneLoadSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticlesSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FontSample.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -446,10 +535,69 @@
     <Image Include="res\png\logo.png">
       <Filter>res\png</Filter>
     </Image>
+    <Image Include="res\common\water\water_normal.png">
+      <Filter>res\common\water</Filter>
+    </Image>
+    <Image Include="res\common\water\water_sample.png">
+      <Filter>res\common\water</Filter>
+    </Image>
+    <Image Include="res\common\particles\editor.png">
+      <Filter>res\common\particles</Filter>
+    </Image>
+    <Image Include="res\common\particles\explosion.png">
+      <Filter>res\common\particles</Filter>
+    </Image>
+    <Image Include="res\common\particles\fire.png">
+      <Filter>res\common\particles</Filter>
+    </Image>
+    <Image Include="res\common\particles\smoke.png">
+      <Filter>res\common\particles</Filter>
+    </Image>
+    <Image Include="res\common\sprites\background.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\level.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\player1.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\player2.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\player3.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\rocket.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\water2d.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
+    <Image Include="res\common\sprites\water2d-noise.png">
+      <Filter>res\common\sprites</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\common\footsteps.wav">
       <Filter>res\common</Filter>
     </Media>
+    <Media Include="res\common\audio\braking.wav">
+      <Filter>res\common\audio</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\common\sprites\level.txt">
+      <Filter>res\common\sprites</Filter>
+    </Text>
+    <Text Include="res\common\sprites\player1.txt">
+      <Filter>res\common\sprites</Filter>
+    </Text>
+    <Text Include="res\common\sprites\player2.txt">
+      <Filter>res\common\sprites</Filter>
+    </Text>
+    <Text Include="res\common\sprites\player3.txt">
+      <Filter>res\common\sprites</Filter>
+    </Text>
   </ItemGroup>
 </Project>

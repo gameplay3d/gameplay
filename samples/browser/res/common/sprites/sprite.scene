@@ -1,0 +1,193 @@
+scene spriteSample
+{
+    // Width and height are expected to be 1280x720
+    node camera
+    {
+        camera
+        {
+            type = ORTHOGRAPHIC
+            nearPlane = 0
+            farPlane = 100
+
+            // zoomX default is game width
+            // zoomY default is game height
+            // aspectRatio default is game width / game height
+        }
+        // width and height are divided in half
+        translate = 640, 360, 0
+    }
+
+    // Background sprite
+    node background
+    {
+        sprite
+        {
+            path = res/common/sprites/background.png
+
+            // game width * 5
+            width = 6400
+            height = 720
+        }
+    }
+
+    // Level floor
+    node floor
+    {
+        tileset
+        {
+            path = res/common/sprites/level.png
+
+            tileWidth = 70
+            tileHeight = 70
+            rows = 3
+            columns = 7
+
+            tile
+            {
+                cell = 0, 0
+                source = 568, 284
+            }
+            tile
+            {
+                cell = 1, 0
+                source = 568, 284
+            }
+            tile
+            {
+                cell = 2, 0
+                source = 568, 284
+            }
+            tile
+            {
+                cell = 3, 0
+                source = 568, 284
+            }
+            tile
+            {
+                cell = 4, 0
+                source = 497, 284
+            }
+
+            tile
+            {
+                cell = 0, 1
+                source = 568, 0
+            }
+            tile
+            {
+                cell = 1, 1
+                source = 568, 0
+            }
+            tile
+            {
+                cell = 2, 1
+                source = 568, 0
+            }
+            tile
+            {
+                cell = 3, 1
+                source = 568, 0
+            }
+            tile
+            {
+                cell = 4, 1
+                source = 710, 142
+            }
+            tile
+            {
+                cell = 5, 1
+                source = 497, 284
+            }
+
+            tile
+            {
+                cell = 0, 2
+                source = 568, 0
+            }
+            tile
+            {
+                cell = 1, 2
+                source = 568, 0
+            }
+            tile
+            {
+                cell = 2, 2
+                source = 568, 0
+            }
+            tile
+            {
+                cell = 3, 2
+                source = 568, 0
+            }
+            tile
+            {
+                cell = 4, 2
+                source = 568, 0
+            }
+            tile
+            {
+                cell = 5, 2
+                source = 710, 142
+            }
+            tile
+            {
+                cell = 6, 2
+                source = 497, 284
+            }
+        }
+    }
+
+    node player
+    {
+        node text
+        {
+            text
+            {
+                font = res/ui/arial.gpb
+
+                text = P1
+                size = 18
+                color = 0, 0, 1, 1
+            }
+        }
+
+        sprite
+        {
+            path = res/common/sprites/player1.png
+
+            width = 72
+            height = 97
+            source = 67, 196, 66, 92
+            frameCount = 13
+        }
+
+        // Position player at lower-left. Y position is floor's tileset height (tileHeight * rows)
+        translate = 0, 210, 0
+    }
+
+    node rocket
+    {
+        sprite
+        {
+            path = res/common/sprites/rocket.png
+
+            width = 128
+            height = 128
+            blendMode = BLEND_ADDITIVE
+            anchor = 0.5, 0.3
+            offset = OFFSET_ANCHOR
+        }
+
+        translate = 1280, 0, 0
+        rotate = 0, 0, 1, -45
+    }
+
+    node water
+    {
+        // Sprite drawable set in code because Effect isn't supported
+        translate = 0, -50, 0
+    }
+
+    // Set active camera
+    activeCamera = camera
+}

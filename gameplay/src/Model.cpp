@@ -9,8 +9,13 @@
 namespace gameplay
 {
 
-Model::Model(Mesh* mesh) :
-    _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _node(NULL), _skin(NULL)
+Model::Model() : Drawable(),
+    _mesh(NULL), _material(NULL), _partCount(0), _partMaterials(NULL), _skin(NULL)
+{
+}
+
+Model::Model(Mesh* mesh) : Drawable(),
+    _mesh(mesh), _material(NULL), _partCount(0), _partMaterials(NULL), _skin(NULL)
 {
     GP_ASSERT(mesh);
     _partCount = mesh->getPartCount();
@@ -19,7 +24,6 @@ Model::Model(Mesh* mesh) :
 Model::~Model()
 {
     SAFE_RELEASE(_material);
-
     if (_partMaterials)
     {
         for (unsigned int i = 0; i < _partCount; ++i)
@@ -28,9 +32,7 @@ Model::~Model()
         }
         SAFE_DELETE_ARRAY(_partMaterials);
     }
-
     SAFE_RELEASE(_mesh);
-
     SAFE_DELETE(_skin);
 }
 
@@ -60,7 +62,6 @@ Material* Model::getMaterial(int partIndex)
 
     if (partIndex < 0)
         return _material;
-
     if (partIndex >= (int)_partCount)
         return NULL;
 
@@ -69,7 +70,6 @@ Material* Model::getMaterial(int partIndex)
     {
         m = _partMaterials[partIndex];
     }
-
     if (m == NULL)
     {
         // Return the shared material.
@@ -156,7 +156,6 @@ void Model::setMaterial(Material* material, int partIndex)
                 SAFE_RELEASE(b);
             }
         }
-
         // Apply node binding for the new material.
         if (_node)
         {
@@ -227,14 +226,9 @@ void Model::setSkin(MeshSkin* skin)
     }
 }
 
-Node* Model::getNode() const
-{
-    return _node;
-}
-
 void Model::setNode(Node* node)
 {
-    _node = node;
+    Drawable::setNode(node);
 
     // Re-bind node related material parameters
     if (node)
@@ -397,11 +391,11 @@ void Model::setMaterialNodeBinding(Material *material)
 
     if (_node)
     {
-        material->setNodeBinding(_node);
+        material->setNodeBinding(getNode());
     }
 }
 
-Model* Model::clone(NodeCloneContext &context)
+Drawable* Model::clone(NodeCloneContext& context)
 {
     Model* model = Model::create(getMesh());
     if (!model)

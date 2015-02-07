@@ -5,6 +5,7 @@
 #include "MeshBatch.h"
 #include "ScriptController.h"
 #include "Light.h"
+#include "Model.h"
 
 namespace gameplay
 {
@@ -12,7 +13,7 @@ namespace gameplay
 /**
  * Defines the root container for a hierarchy of Node objects.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Scene
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Scene
  */
 class Scene : public Ref
 {
@@ -177,6 +178,17 @@ public:
     void setAmbientColor(float red, float green, float blue);
 
     /**
+     * Updates all active nodes in the scene.
+     *
+     * This method is recursively calls the Node::update(float) method on all nodes that
+     * are active within the scene. A Node is considered active if Node::isActive()
+     * returns true.
+     *
+     * @param elapsedTime Elapsed time in milliseconds.
+     */
+    void update(float elapsedTime);
+
+    /**
      * Visits each node in the scene and calls the specified method pointer.
      *
      * Calling this method invokes the specified method pointer for each node
@@ -233,11 +245,6 @@ public:
      * @param visitMethod The name of the Lua function to call for each node in the scene.
      */
     inline void visit(const char* visitMethod);
-
-    /**
-     * Updates all the active nodes in the scene.
-     */
-    void update(float elapsedTime);
 
     /**
      * @see VisibleSet#getNext
@@ -340,9 +347,10 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
     // since we don't add joint hierarchies directly to the scene. If joints are never
     // visited, it's possible that nodes embedded within the joint hierarchy that contain
     // models will never get visited (and therefore never get drawn).
-    if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
+    if (model && model->_skin && model->_skin->_rootNode)
     {
-        visitNode(node->_model->_skin->_rootNode, instance, visitMethod);
+        visitNode(model->_skin->_rootNode, instance, visitMethod);
     }
 
     // Recurse for all children.
@@ -363,9 +371,10 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), 
     // since we don't add joint hierarchies directly to the scene. If joints are never
     // visited, it's possible that nodes embedded within the joint hierarchy that contain
     // models will never get visited (and therefore never get drawn).
-    if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
+    if (model && model->_skin && model->_skin->_rootNode)
     {
-        visitNode(node->_model->_skin->_rootNode, instance, visitMethod, cookie);
+        visitNode(model->_skin->_rootNode, instance, visitMethod, cookie);
     }
 
     // Recurse for all children.

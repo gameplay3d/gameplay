@@ -13,17 +13,23 @@ extern void printMemoryLeaks();
 // global new/delete operator overloads
 #ifdef _MSC_VER
 #pragma warning( disable : 4290 ) // C++ exception specification ignored.
+#include <yvals.h>
+#define NOEXCEPT _NOEXCEPT
+#else
+#define NOEXCEPT noexcept
 #endif
+
 void* operator new (std::size_t size, const char* file, int line);
 void* operator new[] (std::size_t size, const char* file, int line);
-void* operator new (std::size_t size) throw(std::bad_alloc);
-void* operator new[] (std::size_t size) throw(std::bad_alloc);
-void* operator new (std::size_t size, const std::nothrow_t&) throw();
-void* operator new[] (std::size_t size, const std::nothrow_t&) throw();
-void operator delete (void* p) throw();
-void operator delete[] (void* p) throw();
-void operator delete (void* p, const char* file, int line) throw();
-void operator delete[] (void* p, const char* file, int line) throw();
+void* operator new (std::size_t size);
+void* operator new[] (std::size_t size);
+void* operator new (std::size_t size, const std::nothrow_t& nothrow_value) NOEXCEPT;
+void* operator new[](std::size_t size, const std::nothrow_t& nothrow_value) NOEXCEPT;
+void operator delete (void* p) NOEXCEPT;
+void operator delete[](void* p) NOEXCEPT;
+void operator delete (void* p, const char* file, int line) NOEXCEPT;
+void operator delete[](void* p, const char* file, int line) NOEXCEPT;
+
 #ifdef _MSC_VER
 #pragma warning( default : 4290 )
 #endif

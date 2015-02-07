@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="TEMPLATE_PROJECT" default="help">
+
+    <property file="local.properties" />
+    <property file="ant.properties" />
+    
+    <loadproperties srcFile="project.properties" />
+
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project -t 1 -p . -s'" unless="sdk.dir"/>
+	<fail message="OS not supported. Supported platforms: Windows, MacOS X or Linux.">
+	    <condition>
+	      <not>
+	        <or>
+	          <os family="unix"/>
+	          <os family="windows"/>
+	        </or>
+	      </not>
+	    </condition>
+	</fail>
+
+	<macrodef name="build-native">
+		<attribute name="location"/>
+	     <sequential>
+            <exec osfamily="unix" dir="@{location}/android" executable="ndk-build">
+                <arg value="-j4"/>
+            </exec>
+			<exec osfamily="windows" dir="@{location}/android" executable="cmd">
+				<arg value="/c"/>
+				<arg value="ndk-build -j4"/>
+			</exec> 
+	    </sequential>
+	</macrodef>
+
+    <target name="-pre-build">
+        <build-native location="../GAMEPLAY_PATH/gameplay"/>
+    	<build-native location=".."/>
+        <mkdir dir="../src/org/gameplay3d"/>
+	    <copy todir="../src/org/gameplay3d">
+            <fileset dir="../GAMEPLAY_PATH/gameplay/src/org/gameplay3d"/>
+	    </copy>
+    </target>
+
+    <target name="-post-compile">
+        <copy todir="assets/res">
+            <fileset dir="../res" />
+        </copy>
+        <copy todir="assets/res/shaders">
+            <fileset dir="../GAMEPLAY_PATH/gameplay/res/shaders" />
+       </copy>
+        <copy todir="assets/res/ui">
+            <fileset dir="../GAMEPLAY_PATH/gameplay/res/ui" />
+       </copy>
+    </target>
+
+    <!-- version-tag: 1 -->
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+
+</project>

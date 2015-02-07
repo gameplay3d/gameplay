@@ -1,0 +1,51 @@
+form brakeControls
+{
+    layout = LAYOUT_VERTICAL
+    alignment = ALIGN_VCENTER_RIGHT
+    size = 270, 430
+
+    label titleBraking
+    {
+        text = Sound Effect #2
+        fontSize = 32
+    }
+
+    button playBrakingButton
+    {
+        text = Play
+        size = 250, 50
+    }
+
+    button stopBrakingButton
+    {
+        text = Stop
+        size = 250, 50
+    }
+
+    checkbox loopBrakingCheckBox
+    {
+        text = Loop Audio
+    }
+
+    slider gainBrakingSlider
+    {
+        width = 250
+        orientation = HORIZONTAL
+        min = 0
+        max = 1
+        value = 0
+        text = Gain
+        valueTextVisible = false
+    }
+
+    slider pitchBrakingSlider
+    {
+        width = 250
+        orientation = HORIZONTAL
+        min = 0.1
+        max = 5
+        value = 1
+        text = Pitch
+        valueTextVisible = false
+    }
+}

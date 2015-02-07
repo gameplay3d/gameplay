@@ -33,10 +33,12 @@ using std::endl;
 #if defined(WIN32)
     #pragma warning( disable : 4005 )
     #pragma warning( disable : 4172 )
+    #pragma warning( disable : 4189)
     #pragma warning( disable : 4244 )
     #pragma warning( disable : 4267 )
     #pragma warning( disable : 4311 )
     #pragma warning( disable : 4390 )
+    #pragma warning( disable : 4701 )
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )
 #endif
@@ -98,6 +100,9 @@ void fillArray(float values[], float value, size_t length);
  * @return Base file name.
  */
 std::string getBaseName(const std::string& filepath);
+
+std::string base64_encode(unsigned char const*, unsigned int len);
+std::string base64_decode(std::string const& s);
 
 #define ISZERO(x) (fabs(x) < MATH_EPSILON)
 #define ISONE(x) ((x - 1.0f) < MATH_EPSILON)

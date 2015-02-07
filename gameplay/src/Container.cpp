@@ -177,6 +177,11 @@ void Container::addControls(Properties* properties)
     sortControls();
 }
 
+const char* Container::getTypeName() const
+{
+    return "Container";
+}
+
 Layout* Container::getLayout()
 {
     return _layout;
@@ -197,55 +202,52 @@ unsigned int Container::addControl(Control* control)
 {
 	GP_ASSERT(control);
 
-    // Remove the control from its current parent
-    if (control->_parent && control->_parent != this)
-    {
-        control->_parent->removeControl(control);
-    }
+	if( control->_parent == this )
+	{
+		// Control is already in this container.
+		// Do nothing but determine and return control's index.
+		const size_t size = _controls.size();
+		for( size_t i = 0; i < size; ++i ) {
+			Control* c = _controls[ i ];
+			if( c == control ) {
+				return (unsigned int)i;
+			}
+		}
 
-    if (control->getZIndex() == -1)
-    {
-        control->setZIndex(_zIndexDefault++);
-    }
+		// Should never reach this.
+		GP_ASSERT( false );
+		return 0;
+	}
 
-    if (control->getFocusIndex() == -1)
-    {
-        // Find the current largest focus index
-        int maxFocusIndex = 0;
-        for (size_t i = 0, count = _controls.size(); i < count; ++i)
-        {
-            if (_controls[i]->_focusIndex > maxFocusIndex)
-                maxFocusIndex = _controls[i]->_focusIndex;
-        }
-        control->setFocusIndex(maxFocusIndex + 1);
-    }
+	if( control->getZIndex() == -1 ) {
+		control->setZIndex( _zIndexDefault++ );
+	}
 
-    if (control->_parent != this)
-    {
-        _controls.push_back(control);
-        control->addRef();
-        control->_parent = this;
-        sortControls();
-        return (unsigned int)(_controls.size() - 1);
-    }
-    else
-    {
-        // Control is already in this container.
-        // Do nothing but determine and return control's index.
-        const size_t size = _controls.size();
-        for (size_t i = 0; i < size; ++i)
-        {
-            Control* c = _controls[i];
-            if (c == control)
-            {
-                return (unsigned int)i;
-            }
-        }
+	if( control->getFocusIndex() == -1 ) {
+		// Find the current largest focus index
+		int maxFocusIndex = 0;
+		for( size_t i = 0, count = _controls.size(); i < count; ++i ) {
+			if( _controls[ i ]->_focusIndex > maxFocusIndex )
+				maxFocusIndex = _controls[ i ]->_focusIndex;
+		}
+		control->setFocusIndex( maxFocusIndex + 1 );
+	}
 
-        // Should never reach this.
-        GP_ASSERT(false);
-        return 0;
-    }
+	_controls.push_back( control );
+	control->addRef();
+
+	// Remove the control from its current parent
+	if( control->_parent )
+	{
+		control->_parent->removeControl( control );
+	}
+
+	control->_parent = this;
+
+	sortControls();
+    setDirty(Control::DIRTY_BOUNDS);
+
+	return (unsigned int)( _controls.size() - 1 );
 }
 
 void Container::insertControl(Control* control, unsigned int index)
@@ -263,6 +265,7 @@ void Container::insertControl(Control* control, unsigned int index)
         _controls.insert(it, control);
         control->addRef();
         control->_parent = this;
+        setDirty(Control::DIRTY_BOUNDS);
     }
 }
 
@@ -274,6 +277,7 @@ void Container::removeControl(unsigned int index)
     Control* control = *it;
     _controls.erase(it);
     control->_parent = NULL;
+    setDirty(Control::DIRTY_BOUNDS);
 
     if (_activeControl == control)
         _activeControl = NULL;
@@ -445,11 +449,6 @@ Animation* Container::getAnimation(const char* id) const
     return NULL;
 }
 
-const char* Container::getType() const
-{
-    return "container";
-}
-
 bool Container::getScrollWheelRequiresFocus() const
 {
     return _scrollWheelRequiresFocus;
@@ -555,7 +554,7 @@ void Container::updateBounds()
             for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
                 Control* ctrl = _controls[i];
-                if (!ctrl->isXPercentage() && !ctrl->isWidthPercentage())
+                if (ctrl->isVisible() && !ctrl->isXPercentage() && !ctrl->isWidthPercentage())
                 {
                     float w = ctrl->getX() + ctrl->getWidth();
                     if (width < w)
@@ -573,7 +572,7 @@ void Container::updateBounds()
             for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
                 Control* ctrl = _controls[i];
-                if (!ctrl->isYPercentage() && !ctrl->isHeightPercentage())
+                if (ctrl->isVisible() && !ctrl->isYPercentage() && !ctrl->isHeightPercentage())
                 {
                     float h = ctrl->getY() + ctrl->getHeight();
                     if (height < h)

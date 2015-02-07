@@ -28,7 +28,7 @@
 #define BUNDLE_MAX_STRING_LENGTH        5000
 
 #define BUNDLE_VERSION_MAJOR_FONT_FORMAT  1
-#define BUNDLE_VERSION_MINOR_FONT_FORMAT  4
+#define BUNDLE_VERSION_MINOR_FONT_FORMAT  5
 
 namespace gameplay
 {
@@ -680,9 +680,12 @@ bool Bundle::skipNode()
     }
 
     // Skip over the node's camera, light, and model attachments.
-    Camera* camera = readCamera(); SAFE_RELEASE(camera);
-    Light* light = readLight(); SAFE_RELEASE(light);
-    Model* model = readModel(id); SAFE_RELEASE(model);
+    Camera* camera = readCamera();
+    SAFE_RELEASE(camera);
+    Light* light = readLight();
+    SAFE_RELEASE(light);
+    Model* model = readModel(id);
+    SAFE_RELEASE(model);
 
     return true;
 }
@@ -820,10 +823,9 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
     Model* model = readModel(node->getId());
     if (model)
     {
-        node->setModel(model);
+        node->setDrawable(model);
         SAFE_RELEASE(model);
     }
-
     return node;
 }
 
@@ -1698,11 +1700,47 @@ Font* Bundle::loadFont(const char* id)
         }
 
         Font::Glyph* glyphs = new Font::Glyph[glyphCount];
-        if (_stream->read(glyphs, sizeof(Font::Glyph), glyphCount) != glyphCount)
+        for (unsigned j = 0; j < glyphCount; j++)
         {
-            GP_ERROR("Failed to read glyphs for font '%s'.", id);
-            SAFE_DELETE_ARRAY(glyphs);
-            return NULL;
+            if (_stream->read(&glyphs[j].code, 4, 1) != 1)
+            {
+                GP_ERROR("Failed to read glyph #%d code for font '%s'.", j, id);
+                SAFE_DELETE_ARRAY(glyphs);
+                return NULL;
+            }
+            if (_stream->read(&glyphs[j].width, 4, 1) != 1)
+            {
+                GP_ERROR("Failed to read glyph #%d width for font '%s'.", j, id);
+                SAFE_DELETE_ARRAY(glyphs);
+                return NULL;
+            }
+            if (getVersionMajor() >= 1 && getVersionMinor() >= 5)
+            {
+                if (_stream->read(&glyphs[j].bearingX, 4, 1) != 1)
+                {
+                    GP_ERROR("Failed to read glyph #%d bearingX for font '%s'.", j, id);
+                    SAFE_DELETE_ARRAY(glyphs);
+                    return NULL;
+                }
+                if (_stream->read(&glyphs[j].advance, 4, 1) != 1)
+                {
+                    GP_ERROR("Failed to read glyph #%d advance for font '%s'.", j, id);
+                    SAFE_DELETE_ARRAY(glyphs);
+                    return NULL;
+                }
+            }
+            else
+            {
+                // Fallback values for older GBP format.
+                glyphs[j].bearingX = 0;
+                glyphs[j].advance = glyphs[j].width;
+            }
+            if (_stream->read(&glyphs[j].uvs, 4, 4) != 4)
+            {
+                GP_ERROR("Failed to read glyph #%d uvs for font '%s'.", j, id);
+                SAFE_DELETE_ARRAY(glyphs);
+                return NULL;
+            }
         }
 
         // Read texture attributes.
@@ -1833,7 +1871,7 @@ Bundle::Reference::~Reference()
 }
 
 Bundle::MeshPartData::MeshPartData() :
-    indexCount(0), indexData(NULL)
+		primitiveType(Mesh::TRIANGLES), indexFormat(Mesh::INDEX32), indexCount(0), indexData(NULL)
 {
 }
 
@@ -1843,7 +1881,7 @@ Bundle::MeshPartData::~MeshPartData()
 }
 
 Bundle::MeshData::MeshData(const VertexFormat& vertexFormat)
-    : vertexFormat(vertexFormat), vertexCount(0), vertexData(NULL)
+    : vertexFormat(vertexFormat), vertexCount(0), vertexData(NULL), primitiveType(Mesh::TRIANGLES)
 {
 }
 
