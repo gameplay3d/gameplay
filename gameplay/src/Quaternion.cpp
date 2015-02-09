@@ -60,6 +60,27 @@ bool Quaternion::isZero() const
     return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
 }
 
+void Quaternion::createFromEuler(float yaw, float pitch, float roll, Quaternion* dst)
+{
+	GP_ASSERT(dst);
+
+	pitch *= 0.5f;
+	yaw *= 0.5f;
+	roll *= 0.5f;
+
+	float sinp = sin(pitch);
+	float siny = sin(yaw);
+	float sinr = sin(roll);
+	float cosp = cos(pitch);
+	float cosy = cos(yaw);
+	float cosr = cos(roll);
+
+	dst->w = cosp * cosy * cosr + sinp * siny * sinr;
+	dst->x = sinp * cosy * cosr - cosp * siny * sinr;
+	dst->y = cosp * siny * cosr + sinp * cosy * sinr;
+	dst->z = cosp * cosy * sinr - sinp * siny * cosr;
+}
+
 void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
 {
     m.getRotation(dst);
@@ -78,6 +99,17 @@ void Quaternion::createFromAxisAngle(const Vector3& axis, float angle, Quaternio
     dst->y = normal.y * sinHalfAngle;
     dst->z = normal.z * sinHalfAngle;
     dst->w = cosf(halfAngle);
+}
+
+void Quaternion::computeEuler(float* yaw, float* pitch, float* roll)
+{
+	GP_ASSERT(yaw);
+	GP_ASSERT(pitch);
+	GP_ASSERT(roll);
+
+	*pitch = std::atan2(2 * (w*x + y*z), 1 - 2 * (x*x + y*y));
+	*yaw = std::asin(2 * (w*y - z*x));
+	*roll = atan2(2 * (w*z + x*y), 1 - 2 * (y*y + z*z));
 }
 
 void Quaternion::conjugate()
@@ -181,6 +213,24 @@ void Quaternion::normalize(Quaternion* dst) const
     dst->y *= n;
     dst->z *= n;
     dst->w *= n;
+}
+
+void Quaternion::rotatePoint(const Vector3& point, Vector3* dst) const
+{
+	Quaternion vecQuat;
+	Quaternion resQuat;
+	vecQuat.x = point.x;
+	vecQuat.y = point.y;
+	vecQuat.z = point.z;
+	vecQuat.w = 0.0f;
+
+	Quaternion conQuat;
+	this->conjugate(&conQuat);
+
+	resQuat = vecQuat * conQuat;
+	resQuat = (*this) * resQuat;
+
+	dst->set(resQuat.x, resQuat.y, resQuat.z);
 }
 
 void Quaternion::set(float x, float y, float z, float w)

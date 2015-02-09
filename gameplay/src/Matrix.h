@@ -8,6 +8,7 @@ namespace gameplay
 {
 
 class Plane;
+class Quaternion;
 
 /**
  * Defines a 4 x 4 floating point matrix representing a 3D transformation.
@@ -316,6 +317,17 @@ public:
      * @param dst A matrix to store the result in.
      */
     static void createRotationZ(float angle, Matrix* dst);
+
+	/**
+	* Creates a matrix describing the yaw, pitch and roll rotations
+	*
+	* @param yaw The yaw angle (in radians)
+	* @param pitch The pitch angle (in radians)
+	* @param roll The roll angle (in radians)
+	* @param dst A matrix to store the result in.
+	*/
+	static void createFromEuler(float yaw, float pitch, float roll, Matrix* dst);
+
 
     /**
      * Creates a translation matrix.
