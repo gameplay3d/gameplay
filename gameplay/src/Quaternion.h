@@ -258,10 +258,11 @@ public:
 	*
 	* Note: The point must normalized.
 	*
-	* @param vec The vector to multiply.
-	* @return The multiplied vector.
+	* @param point The vector to rotate.
+	* @param dst The vector to store the result.
+
 	*/
-	void rotatePoint(Vector3& point, Vector3* dst) const;
+	void rotatePoint(const Vector3& point, Vector3* dst) const;
 
     /**
      * Sets the elements of the quaternion to the specified values.

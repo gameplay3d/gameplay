@@ -215,7 +215,7 @@ void Quaternion::normalize(Quaternion* dst) const
     dst->w *= n;
 }
 
-void Quaternion::rotatePoint(Vector3& point, Vector3* dst) const
+void Quaternion::rotatePoint(const Vector3& point, Vector3* dst) const
 {
 	Quaternion vecQuat;
 	Quaternion resQuat;
