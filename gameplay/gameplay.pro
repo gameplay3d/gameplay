@@ -560,6 +560,6 @@ macx: LIBS += -F/System/Library/Frameworks -framework Cocoa
 win32: SOURCES += src/PlatformWindows.cpp
 win32: SOURCES += src/gameplay-main-windows.cpp
 win32: DEFINES += WIN32 _UNICODE UNICODE
-win32: INCLUDEPATH += "$(ProgramFiles(x86))/Microsoft DirectX SDK (June 2010)/Include"
+win32: INCLUDEPATH += $$(DXSDK_DIR)Include
 win32: QMAKE_CXXFLAGS_WARN_ON -= -w34100
 win32: QMAKE_CXXFLAGS_WARN_ON -= -w34189
