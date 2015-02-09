@@ -2,7 +2,7 @@
 
 ## GamePlay v4.0.0
 
-GamePlay is an open-source, cross-platform native C++ game framework for creating 2D/3D mobile and desktop games.
+GamePlay is an open-source, cross-platform, C++ game framework/engine for creating 2D/3D mobile and desktop games.
 
 - [Website](http://www.gameplay3d.org/)
 - [Forums](http://www.gameplay3d.org/forums/)
