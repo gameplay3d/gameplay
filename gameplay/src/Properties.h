@@ -563,6 +563,7 @@ private:
     std::vector<Properties*>::const_iterator _namespacesItr;
     std::vector<Property>* _variables;
     std::string* _dirPath;
+    bool _visited;
     Properties* _parent;
 };
 

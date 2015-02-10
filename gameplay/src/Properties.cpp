@@ -26,12 +26,12 @@ void calculateNamespacePath(const std::string& urlString, std::string& fileStrin
 Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath);
 
 Properties::Properties()
-    : _variables(NULL), _dirPath(NULL), _parent(NULL)
+    : _variables(NULL), _dirPath(NULL), _visited(false), _parent(NULL)
 {
 }
 
 Properties::Properties(const Properties& copy)
-    : _namespace(copy._namespace), _id(copy._id), _parentID(copy._parentID), _properties(copy._properties), _variables(NULL), _dirPath(NULL), _parent(copy._parent)
+    : _namespace(copy._namespace), _id(copy._id), _parentID(copy._parentID), _properties(copy._properties), _variables(NULL), _dirPath(NULL), _visited(false), _parent(copy._parent)
 {
     setDirectoryPath(copy._dirPath);
     _namespaces = std::vector<Properties*>();
@@ -45,14 +45,14 @@ Properties::Properties(const Properties& copy)
 }
 
 Properties::Properties(Stream* stream)
-    : _variables(NULL), _dirPath(NULL), _parent(NULL)
+    : _variables(NULL), _dirPath(NULL), _visited(false), _parent(NULL)
 {
     readProperties(stream);
     rewind();
 }
 
 Properties::Properties(Stream* stream, const char* name, const char* id, const char* parentID, Properties* parent)
-    : _namespace(name), _variables(NULL), _dirPath(NULL), _parent(parent)
+    : _namespace(name), _variables(NULL), _dirPath(NULL), _visited(false), _parent(parent)
 {
     if (id)
     {
@@ -459,9 +459,11 @@ void Properties::resolveInheritance(const char* id)
         // If the namespace has a parent ID, find the parent.
         if (!derived->_parentID.empty())
         {
+            derived->_visited = true;
             Properties* parent = getNamespace(derived->_parentID.c_str());
             if (parent)
             {
+                GP_ASSERT(!parent->_visited);
                 resolveInheritance(parent->getId());
 
                 // Copy the child.
@@ -490,6 +492,7 @@ void Properties::resolveInheritance(const char* id)
                 // Delete the child copy.
                 SAFE_DELETE(overrides);
             }
+            derived->_visited = false;
         }
 
         // Resolve inheritance within this namespace.
