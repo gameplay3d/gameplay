@@ -27,6 +27,8 @@
 <li><a href="#wiki-Scene">Scene</a>
 	<ul>
 		<li><a href="#wiki-Node">Node</a></li>
+		<li><a href="#wiki-Camera">Camera</a></li>
+		<li><a href="#wiki-Light">Light</a></li>
 	</ul>
 </li>
 <li><a href="#wiki-Materials">Materials</a></li>
@@ -36,9 +38,21 @@
 		<li><a href="#wiki-Constraints">Constraints</a></li>
 	</ul>
 </li>
-<li><a href="#wiki-Animation">Animation</a></li>
+<li><a href="#wiki-Animation">Animation</a>
+	<ul>
+		<li><a href="#wiki-Animation-Clip">Animation Clip</a></li>
+	</ul>
+</li>
 <li><a href="#wiki-Audio">Audio</a></li>
-<li><a href="#wiki-Particles">Particles</a></li>
+<li><a href="#wiki-Drawables">Drawables</a>
+	<ul>
+		<li><a href="#wiki-Terrain">Terrain</a></li>
+		<li><a href="#wiki-Sprite">Sprite</a></li>
+		<li><a href="#wiki-Tileset">TileSet</a></li>
+		<li><a href="#wiki-Drawable-Text">Text</a></li>
+		<li><a href="#wiki-Particles">Particles</a></li>
+	</ul>
+</li>
 <li><a href="#wiki-UI_Forms">UI Forms</a>
 	<ul>
 		<li><a href="#wiki-Form">Form</a></li>
@@ -189,6 +203,14 @@
 </tr>
 <tr>
 	<td>
+		ref
+	</td>
+	<td>
+		Reference within the current file.
+	</td>
+</tr>
+<tr>
+	<td>
 		xref
 	</td>
 	<td>
@@ -196,7 +218,9 @@
 		This can be
 		<ul>
 			<li>a file path (<span class="Non-literal">res/common/game.scene</span>)</li>
-			<li>a reference to a named object in a property file (<span class="Non-literal">res/common/game.scene#duck</span>)
+			<li>a reference to a named object in a property file (<span class="Non-literal">res/common/duck</span>)
+			</li>
+			<li>a deep reference to a named object in a property file (<span class="Non-literal">res/common/game.scene#city/fifth_ave/empire_state_building</span>)
 			</li>
 		</ul>
 	</td>
@@ -227,7 +251,7 @@
 		<ul>
 			<li>A file path (<span class="Non-literal">res/wood.png</span>)</li>
 			<li>An alias for an image that will be defined in game config file for the purpose of
-				using different compressed textures on different platforms. (<span class="Non-literal">@wood)</span>.</li>
+				using different compressed textures on different platforms. (<span class="Non-literal">@wood</span>).</li>
 		</ul>
 	</td>
 </tr>
@@ -258,7 +282,7 @@
 	</td>
 	<td>
 		<a href="#wiki-window">window</a>, <a href="#wiki-graphics">graphics</a>, <a href="#wiki-scripts">
-			scripts</a>, <a href="#wiki-aliases">aliases</a>, <a href="#wiki-gamepads">gamepads</a>
+			scripts</a>, <a href="#wiki-aliases">aliases</a>, <a href="#wiki-gamepads">gamepads</a>, <a href="#wiki-ui">ui</a>
 	</td>
 </tr>
 <tr>
@@ -270,7 +294,7 @@
 	</td>
 	<td>
 		<a href="#wiki-scene">scene</a>, <a href="#wiki-node">node</a>, <a href="#wiki-physics">
-			physics</a>
+			physics</a>, <a href="#wiki-camera">camera</a>, <a href="#wiki-light">light</a>
 	</td>
 </tr>
 <tr>
@@ -293,8 +317,8 @@
 		Collision objects and physics constraints
 	</td>
 	<td>
-		<a href="#wiki-physics">physics</a>, <a href="#wiki-CollisionObjects">collisionObject</a>,
-		<a href="#wiki-Constraints">constraint</a>
+		<a href="#wiki-physics">physics</a>, <a href="#wiki-Collision_Objects">collisionObject</a>,
+		<a href="#wiki-constraints">constraint</a>
 	</td>
 </tr>
 <tr>
@@ -316,7 +340,29 @@
 		Audio source definitions
 	</td>
 	<td>
-		<a href="#wiki-Audio">audio</a>
+		<a href="#wiki-audio">audio</a>
+	</td>
+</tr>
+<tr>
+	<td>
+		.sprite
+	</td>
+	<td>
+		Sprite definitions
+	</td>
+	<td>
+		<a href="#wiki-sprite">sprite</a>
+	</td>
+</tr>
+<tr>
+	<td>
+		.tileset
+	</td>
+	<td>
+		TileSet definitions
+	</td>
+	<td>
+		<a href="#wiki-tileset">tileset</a>
 	</td>
 </tr>
 <tr>
@@ -327,7 +373,7 @@
 		Particle emitter definitions
 	</td>
 	<td>
-		<a href="#wiki-Particles">particle</a>
+		<a href="#wiki-particles">particle</a>
 	</td>
 </tr>
 <tr>
@@ -338,7 +384,7 @@
 		UI form definitions
 	</td>
 	<td>
-		<a href="#wiki-Form">form</a>
+		<a href="#wiki-form">form</a>
 	</td>
 </tr>
 <tr>
@@ -349,7 +395,7 @@
 		UI theme definitions
 	</td>
 	<td>
-		<a href="#wiki-Theme">theme</a>
+		<a href="#wiki-theme">theme</a>
 	</td>
 </tr>
 </table>
@@ -367,7 +413,7 @@
 		Gameplay Bundle
 	</td>
 	<td>
-		Binary encoded scene that is created by the gameplay-encoder from a .dae or .fbx
+		Binary encoded scene that is created by the gameplay-encoder from a .fbx
 		file.
 	</td>
 </tr>
@@ -410,10 +456,10 @@
 </tr>
 <tr>
 	<td>
-		.mb
+		.tmx
 	</td>
 	<td>
-		Maya Binary
+		Tiled "Tile Map XML"
 	</td>
 </tr>
 <tr>
@@ -434,7 +480,7 @@
 </tr>
 <tr>
 	<td>
-	        .dds, .pvr
+		.png .dds, .pvr
 	</td>
 	<td>
 		Compressed Texture
@@ -515,6 +561,17 @@
 </tr>
 <tr>
 	<td>
+		&nbsp; resizable = <span class="Non-literal"><span>bool</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>
 		&nbsp; title =<span class="Non-literal"><span> Hello World</span></span>
 	</td>
 	<td>
@@ -522,6 +579,17 @@
 	</td>
 	<td>
 		string
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; samples = <span class="Non-literal"><span>multisampling_state</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
 	</td>
 </tr>
 <tr>
@@ -549,24 +617,13 @@
 </tr>
 <tr>
 	<td>
-		&nbsp; samples = <span class="Non-literal"><span>multisampling_state</span></span>
+		&nbsp; shaderDefines = <span class="Non-literal"><span>semicolon separated list</span></span>
 	</td>
 	<td>
 		[0..1]
 	</td>
 	<td>
-		int
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; defaultMaterial = <span class="Non-literal"><span>none | res/foo.material#bar</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		none | file
+		string
 	</td>
 </tr>
 <tr>
@@ -577,8 +634,6 @@
 	<td>&nbsp;</td>
 </tr>
 </table>
-<p>
-Note: By default defaultMaterial uses a pink material.</p>
 <table>
 <tr>
 	<td>
@@ -640,6 +695,17 @@ Note: By default defaultMaterial uses a pink material.</p>
 </tr>
 <tr>
 	<td>
+		&nbsp; resizeEvent = <span class="Non-literal"><span>res/game.lua#resizeEvent</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		lua xref
+	</td>
+</tr>
+<tr>
+	<td>
 		&nbsp; keyEvent = <span class="Non-literal"><span>res/game.lua#keyEvent</span></span>
 	</td>
 	<td>
@@ -684,6 +750,72 @@ Note: By default defaultMaterial uses a pink material.</p>
 </tr>
 <tr>
 	<td>
+		&nbsp; gestureSwipeEvent = <span class="Non-literal"><span>res/game.lua#gestureSwipeEvent</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		lua xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; gesturePinchEvent = <span class="Non-literal"><span>res/game.lua#gesturePinchEvent</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		lua xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; gestureTapEvent = <span class="Non-literal"><span>res/game.lua#gestureTapEvent</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		lua xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; gestureLongTapevent = <span class="Non-literal"><span>res/game.lua#gestureLongTapevent</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		lua xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; gestureDragEvent = <span class="Non-literal"><span>res/game.lua#gestureDragEvent</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		lua xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; gestureDropEvent = <span class="Non-literal"><span>res/game.lua#gestureDropEvent</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		lua xref
+	</td>
+</tr>
+<tr>
+	<td>
 		{
 	</td>
 	<td>&nbsp;</td>
@@ -707,7 +839,7 @@ Note: By default defaultMaterial uses a pink material.</p>
 </tr>
 <tr>
 	<td>
-		&nbsp; <span class="Non-literal"><span>alias_name = file_path</span></span>
+		&nbsp; <span class="Non-literal"><span>alias_name</span></span> = <span class="Non-literal"><span>file_path</span></span>
 	</td>
 	<td>
 		[0..*]
@@ -758,6 +890,40 @@ Note: By default defaultMaterial uses a pink material.</p>
 	<td>&nbsp;</td>
 </tr>
 </table>
+<table>
+<tr>
+	<td>
+		<a name="wiki-ui"></a>ui
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; theme = <span class="Non-literal"><span>res/default.theme</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
 <h2>
 <a name="wiki-Scene"></a>Scene</h2>
 <div class="highlight">
@@ -770,7 +936,7 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 <table>
 <tr>
 	<td>
-		<a name="wiki-scene"></a>scene
+		<a name="wiki-scene"></a>scene <span class="Non-literal"><span>scene_id</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -788,7 +954,7 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 </tr>
 <tr>
 	<td>
-		&nbsp; path = <span class="Non-literal"><span>res/game.scene</span></span>
+		&nbsp; path = <span class="Non-literal"><span>res/game.gpb</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -820,8 +986,13 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 	</td>
 </tr>
 <tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
 	<td>
-		&nbsp; node <span class="Non-literal"><span>node_id</span></span> {}
+		&nbsp; node <span class="Non-literal"><span>id</span></span> {}
 	</td>
 	<td>
 		[0..*]
@@ -829,6 +1000,11 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 	<td>
 		block
 	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -840,6 +1016,78 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 	<td>
 		block
 	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; animations
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; {
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; animation <span class="Non-literal"><span>ani_id</span></span>
+	</td>
+	<td>
+		[0..*]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; {
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; url = <span class="Non-literal"><span>res/walk.animation</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; target = <span class="Non-literal"><span>node_id</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		ref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; }
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; }
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -855,7 +1103,6 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 <tr>
 	<td>
 		<a name="wiki-node"></a>node <span class="Non-literal"><span>node_id </span></span>
-		: <span class="Non-literal"><span>parent_node_id</span></span>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -877,6 +1124,11 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 	<td>
 		xref
 	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -903,6 +1155,95 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 <tr>
 	<td>
 		&nbsp; audio = <span class="Non-literal"><span>res/game.audio#quack</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; light = <span class="Non-literal"><span>res/game.scene#spotlight</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; camera = <span class="Non-literal"><span>res/game.scene#first_person_camera</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <span class="Comment"><span class="comment">// Drawable</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; particle = <span class="Non-literal"><span>res/game.particle#fog</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; terrain = <span class="Non-literal"><span>res/game.scene#lake</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; sprite = <span class="Non-literal"><span>res/game.sprite#indicator</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; tileset = <span class="Non-literal"><span>res/game.tileset#ground</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; text = <span class="Non-literal"><span>res/game.scene#name_tag</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -947,6 +1288,28 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 	</td>
 	<td>
 		3 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; script = <span class="Non-literal"><span>res/control.lua</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		lua xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; enabled = <span class="Non-literal"><span>bool</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
 	</td>
 </tr>
 <tr>
@@ -998,6 +1361,358 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 	<td>&nbsp;</td>
 </tr>
 <tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <span class="Comment"><span class="comment">// Each of these will be a child node</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; node <span class="Non-literal"><span>id</span></span> {}
+	</td>
+	<td>
+		[0..*]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h3>
+<a name="wiki-Camera"></a>Camera</h3>
+<table>
+<tr>
+	<td>
+		<a name="wiki-camera"></a>camera <span class="Non-literal"><span>camera_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; type = <span class="Non-literal"><span>PERSPECTIVE | ORTHOGRAPHIC</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; aspectRatio = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; nearPlane = <span class="Non-literal"><span>0.2</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; farPlane = <span class="Non-literal"><span>100.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<table>
+<tr>
+	<td>
+		camera <span class="Non-literal"><span>camera_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; type = <span class="Non-literal"><span>PERSPECTIVE</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; fieldOfView = <span class="Non-literal"><span>60.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<table>
+<tr>
+	<td>
+		camera <span class="Non-literal"><span>camera_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; type = <span class="Non-literal"><span>ORTHOGRAPHIC</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; zoomX = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; zoomY = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h3>
+<a name="wiki-Light"></a>Light</h3>
+<table>
+<tr>
+	<td>
+		<a name="wiki-light"></a>light <span class="Non-literal"><span>light_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; type = <span class="Non-literal"><span>DIRECTIONAL | POINT | SPOT</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; color = <span class="Non-literal"><span>r, g, b</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		3 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<table>
+<tr>
+	<td>
+		light <span class="Non-literal"><span>light_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; type = <span class="Non-literal"><span>POINT</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; range = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<table>
+<tr>
+	<td>
+		light <span class="Non-literal"><span>light_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; type = <span class="Non-literal"><span>SPOT</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; range = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; innerAngle = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; outerAngle = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
 	<td>
 		}
 	</td>
@@ -1008,7 +1723,7 @@ class="p">(</span><span class="s">"res/common/game.scene"</span><span class="p">
 <h2>
 <a name="wiki-Materials"></a>Materials</h2>
 <p>
-<strong>Note:</strong></p>
+<strong>Notes:</strong></p>
 <ul>
 <li><span class="Non-literalCode">id</span> is optional for material,
 	technique and pass.</li>
@@ -1227,7 +1942,7 @@ class="p">);</span>
 		&nbsp; vertexShader = <span class="Non-literal"><span>res/colored.vert</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
 		file path
@@ -1238,7 +1953,7 @@ class="p">);</span>
 		&nbsp; fragmentShader = <span class="Non-literal"><span>res/colored.frag</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
 		file path
@@ -1334,10 +2049,10 @@ class="p">);</span>
 </tr>
 <tr>
 	<td>
-		&nbsp; path = <span class="Non-literal"><span>res/wood.png | @wood</span></span>
+		&nbsp; path = <span class="Non-literal"><span>res/wood.png</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
 		image path
@@ -1368,6 +2083,17 @@ class="p">);</span>
 <tr>
 	<td>
 		&nbsp; wrapT = <span class="Non-literal"><span>REPEAT | CLAMP</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; wrapR = <span class="Non-literal"><span>REPEAT | CLAMP</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -1466,15 +2192,26 @@ class="p">);</span>
 	</td>
 </tr>
 <tr>
-        <td>
-                &nbsp; cullFaceSide = <a href="#wiki-CULL_FACE_SIDE_ENUM">CULL_FACE_SIDE_BACK</a>
-        </td>
-        <td>
-                [0..1]
-        </td>
-        <td>
-                enum
-        </td>
+    <td>
+        &nbsp; cullFaceSide = <a href="#wiki-CULL_FACE_SIDE_ENUM">CULL_FACE_SIDE_BACK</a>
+    </td>
+    <td>
+        [0..1]
+    </td>
+    <td>
+        enum
+    </td>
+</tr>
+<tr>
+	<td>
+		&nbsp; frontFace = <span class="Non-literal"><span>CW | CCW</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
 </tr>
 <tr>
 	<td>
@@ -1496,6 +2233,105 @@ class="p">);</span>
 	</td>
 	<td>
 		bool
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; depthFunc = <a href="#wiki-FUNC_ENUM">FUNC_ENUM</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; stencilTest = <span class="Non-literal"><span>false</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; stencilWrite = <span class="Non-literal"><span>4294967295</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; stencilFunc = <a href="#wiki-FUNC_ENUM">FUNC_ENUM</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; stencilFuncRef = <span class="Non-literal"><span>0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; stencilFuncMask = <span class="Non-literal"><span>4294967295</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; stencilOpSfail = <a href="#wiki-STENCIL_OP_ENUM">STENCIL_OPERATION_ENUM</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; stencilOpDpfail = <a href="#wiki-STENCIL_OP_ENUM">STENCIL_OPERATION_ENUM</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; stencilOpDppass = <a href="#wiki-STENCIL_OP_ENUM">STENCIL_OPERATION_ENUM</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
 	</td>
 </tr>
 <tr>
@@ -1761,6 +2597,88 @@ Material Enums</h4>
         </td>
 </tr>
 </table>
+<table>
+<tr>
+    <th align="left">
+            <a name="wiki-FUNC_ENUM"></a><b>FUNC_ENUM</b>
+    </th>
+    <th>
+    </th>
+</tr>
+<tr>
+    <td>
+        NEVER
+    </td>
+    <td>
+        ALWAYS
+    </td>
+</tr>
+<tr>
+    <td>
+        LESS
+    </td>
+    <td>
+        GREATER
+    </td>
+</tr>
+<tr>
+    <td>
+        EQUAL
+    </td>
+    <td>
+        NOTEQUAL
+    </td>
+</tr>
+<tr>
+    <td>
+        LEQUAL
+    </td>
+    <td>
+        GEQUAL
+    </td>
+</tr>
+</table>
+<table>
+<tr>
+    <th align="left">
+        <a name="wiki-STENCIL_OP_ENUM"></a><b>STENCIL_OPERATION_ENUM</b>
+    </th>
+    <th>
+    </th>
+</tr>
+<tr>
+    <td>
+        KEEP
+    </td>
+    <td>
+        REPLACE
+    </td>
+</tr>
+<tr>
+    <td>
+        ZERO
+    </td>
+    <td>
+        INVERT
+    </td>
+</tr>
+<tr>
+    <td>
+        INCR
+    </td>
+    <td>
+        DECR
+    </td>
+</tr>
+<tr>
+    <td>
+        INCR_WRAP
+    </td>
+    <td>
+        DECR_WRAP
+    </td>
+</tr>
+</table>
 <h2>
 <a name="wiki-Physics"></a>Physics</h2>
 <table>
@@ -1799,7 +2717,7 @@ Material Enums</h4>
 		&nbsp; constraint {}
 	</td>
 	<td>
-		[0..1]
+		[0..*]
 	</td>
 	<td>
 		block
@@ -1846,16 +2764,16 @@ Physics Rigid Body</h4>
 	</td>
 </tr>
 <tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
 	<td>
-		&nbsp; shape = <span class="Non-literal"><span>BOX | SPHERE | MESH | CAPSULE |</span></span><br/>
-		<span class="Non-literal"><span>HEIGHTFIELD</span></span>
+		&nbsp; ... same as <a href="#wiki-physics_shapes">physics shape</a>
 	</td>
-	<td>
-		required
-	</td>
-	<td>
-		enum
-	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>&nbsp;</td>
@@ -1951,20 +2869,8 @@ Physics Rigid Body</h4>
 	</td>
 </tr>
 <tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
 	<td>
-		&nbsp; <span class="Comment"><span class="comment">// BOX properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; extents = <span class="Non-literal"><span>x, y, z</span></span>
+		&nbsp; angularFactor = <span class="Non-literal"><span>x, y, z</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -1975,148 +2881,13 @@ Physics Rigid Body</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
+		&nbsp; linearFactor = <span class="Non-literal"><span>x, y, z</span></span>
 	</td>
 	<td>
 		[0..1]
 	</td>
 	<td>
 		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// SPHERE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// CAPSULE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; height = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// HEIGHTFIELD properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; image = <span class="Non-literal"><span>res/common/image.png</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		xref
 	</td>
 </tr>
 <tr>
@@ -2156,185 +2927,16 @@ Physics Ghost Object</h4>
 	</td>
 </tr>
 <tr>
-	<td>
-		&nbsp; shape = <span class="Non-literal"><span>BOX | SPHERE | MESH | CAPSULE |</span></span><br/>
-		<span class="Non-literal"><span>HEIGHTFIELD</span></span>
-	</td>
-	<td>
-		required
-	</td>
-	<td>
-		enum
-	</td>
-</tr>
-<tr>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
-		&nbsp; <span class="Comment"><span class="comment">// BOX properties</span></span>
+		&nbsp; ... same as <a href="#wiki-physics_shapes">physics shape</a>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; extents = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// SPHERE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// CAPSULE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; height = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// HEIGHTFIELD properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; image = <span class="Non-literal"><span>res/common/image.png</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		xref
-	</td>
 </tr>
 <tr>
 	<td>
@@ -2373,15 +2975,16 @@ Physics Character</h4>
 	</td>
 </tr>
 <tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
 	<td>
-		&nbsp; shape = <span class="Non-literal"><span>BOX | SPHERE | MESH | CAPSULE</span></span>
+		&nbsp; ... same as <a href="#wiki-physics_shapes">physics shape</a>
 	</td>
-	<td>
-		required
-	</td>
-	<td>
-		enum
-	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>&nbsp;</td>
@@ -2400,65 +3003,8 @@ Physics Character</h4>
 	</td>
 </tr>
 <tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
 	<td>
-		&nbsp; <span class="Comment"><span class="comment">// BOX properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; extents = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// SPHERE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
+		&nbsp; maxStepHeight = <span class="Non-literal"><span>float</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -2469,80 +3015,13 @@ Physics Character</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// CAPSULE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
+		&nbsp; maxSlopeAngle = <span class="Non-literal"><span>radians</span></span>
 	</td>
 	<td>
 		[0..1]
 	</td>
 	<td>
 		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; height = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
 	</td>
 </tr>
 <tr>
@@ -2582,264 +3061,19 @@ Physics Vehicle</h4>
 	</td>
 </tr>
 <tr>
-	<td>
-		&nbsp; shape = <span class="Non-literal"><span>BOX | SPHERE | MESH | CAPSULE</span></span>
-	</td>
-	<td>
-		required
-	</td>
-	<td>
-		enum
-	</td>
-</tr>
-<tr>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
-		&nbsp; mass = <span class="Non-literal"><span>kilograms</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; friction = <span class="Non-literal"><span>coefficient</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; restitution = <span class="Non-literal"><span>coefficient</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; linearDamping = <span class="Non-literal"><span>coefficient</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; angularDamping = <span class="Non-literal"><span>coefficient</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; kinematic = <span class="Non-literal"><span>bool</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; anisotropicFriction = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; gravity = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// BOX properties</span></span>
+		&nbsp; ... same as Rigid Body
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 </tr>
 <tr>
-	<td>
-		&nbsp; extents = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
 	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// SPHERE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>radius</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// CAPSULE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; height = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// VEHICLE only</span></span>
-	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 </tr>
@@ -2985,6 +3219,10 @@ Physics Vehicle</h4>
 </table>
 <h4>
 Physics Vehicle Wheel</h4>
+<p>
+<strong>Note:</strong>
+Vehicle wheels are special, in that they will automatically connect themselves to the parent node's Vehicle physics.</br>
+Vehicle must come before Vehicle Wheel in the scene graph.</p>
 <table>
 <tr>
 	<td>
@@ -3012,264 +3250,7 @@ Physics Vehicle Wheel</h4>
 	</td>
 </tr>
 <tr>
-	<td>
-		&nbsp; shape = <span class="Non-literal"><span>BOX | SPHERE | MESH | CAPSULE</span></span>
-	</td>
-	<td>
-		required
-	</td>
-	<td>
-		enum
-	</td>
-</tr>
-<tr>
 	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; mass = <span class="Non-literal"><span>kilograms</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; friction = <span class="Non-literal"><span>coefficient</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; restitution = <span class="Non-literal"><span>coefficient</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; linearDamping = <span class="Non-literal"><span>coefficient</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; angularDamping = <span class="Non-literal"><span>coefficient</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; kinematic = <span class="Non-literal"><span>bool</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; anisotropicFriction = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; gravity = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// BOX properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; extents = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// SPHERE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// CAPSULE properties</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; height = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; centerAbsolute = <span class="Non-literal"><span>x, y, z</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		3 floats
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; <span class="Comment"><span class="comment">// VEHICLE_WHEEL only</span></span>
-	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 </tr>
@@ -3330,6 +3311,17 @@ Physics Vehicle Wheel</h4>
 </tr>
 <tr>
 	<td>
+		&nbsp; strutTravelMax = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
 		&nbsp; strutStiffness = <span class="Non-literal"><span>coefficient</span></span>
 	</td>
 	<td>
@@ -3353,6 +3345,17 @@ Physics Vehicle Wheel</h4>
 <tr>
 	<td>
 		&nbsp; strutDampingRelaxation = <span class="Non-literal"><span>coefficient</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; strutForceMax = <span class="Non-literal"><span>coefficient</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -3402,8 +3405,364 @@ Physics Vehicle Wheel</h4>
 	<td>&nbsp;</td>
 </tr>
 </table>
+<h4>
+<a name="wiki-physics_shapes_wiki"></a>Shapes</h4>
+<table>
+<tr>
+	<td>
+		<a name="wiki-physics_shapes"></a>collisionObject <span class="Non-literal"><span>id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; ...
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; shape = <span class="Non-literal"><span>BOX | SPHERE | MESH |</span></span></br>
+		<span class="Non-literal"><span>HEIGHTFIELD | CAPSULE</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <span class="Comment"><span class="comment">// BOX properties</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; extents = <span class="Non-literal"><span>x, y, z</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		3 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		3 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; centerAbsolute = <span class="Non-literal"><span>bool</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <span class="Comment"><span class="comment">// SPHERE properties</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		3 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; centerAbsolute = <span class="Non-literal"><span>bool</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <span class="Comment"><span class="comment">// CAPSULE properties</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; radius = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; height = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; center = <span class="Non-literal"><span>x, y, z</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		3 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; centerAbsolute = <span class="Non-literal"><span>bool</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <span class="Comment"><span class="comment">// HEIGHTFIELD properties</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; image = <span class="Non-literal"><span>res/mountain_height.r16</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		image path
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; width = <span class="Non-literal"><span>uint</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; height = <span class="Non-literal"><span>uint</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; minHeight = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; maxHeight = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; ...
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
 <h3>
 <a name="wiki-Constraints"></a>Constraints</h3>
+<h4>
+All Constraints</h4>
+<table>
+<tr>
+	<td>
+		<a name="wiki-constraints"></a>constraint <span class="Non-literal"><span>id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; type = <span class="Non-literal"><span>FIXED | GENERIC | HINGE | SOCKET | SPRING</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; rigidBodyA = <span class="Non-literal"><span>rigid_body_node_id</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; rigidBodyB = <span class="Non-literal"><span>rigid_body_node_id</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; breakingImpulse = <span class="Non-literal"><span>float</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <span class="Comment"><span class="comment">// All other constraint variables, or changes to these variables</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
 <h4>
 Fixed Constraint</h4>
 <table>
@@ -3433,15 +3792,16 @@ Fixed Constraint</h4>
 	</td>
 </tr>
 <tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
 	<td>
-		&nbsp; breakingImpulse = <span class="Non-literal"><span>float</span></span>
+		&nbsp; <span class="Comment"><span class="comment">// FIXED has no other variables</span></span>
 	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -3569,17 +3929,6 @@ Generic Constraint</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; breakingImpulse = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
 		}
 	</td>
 	<td>&nbsp;</td>
@@ -3672,17 +4021,6 @@ Hinge Constraint</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; breakingImpulse = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
 		}
 	</td>
 	<td>&nbsp;</td>
@@ -3741,17 +4079,6 @@ Socket Constraint</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; breakingImpulse = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
 		}
 	</td>
 	<td>&nbsp;</td>
@@ -3759,7 +4086,7 @@ Socket Constraint</h4>
 </tr>
 </table>
 <h4>
-Sprint Constraint</h4>
+Spring Constraint</h4>
 <table>
 <tr>
 	<td>
@@ -3784,6 +4111,17 @@ Sprint Constraint</h4>
 	</td>
 	<td>
 		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; rigidBodyB = <span class="Non-literal"><span>rigid_body_node_id</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		xref
 	</td>
 </tr>
 <tr>
@@ -4008,17 +4346,6 @@ Sprint Constraint</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; breakingImpulse = <span class="Non-literal"><span>float</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
 		}
 	</td>
 	<td>&nbsp;</td>
@@ -4027,6 +4354,15 @@ Sprint Constraint</h4>
 </table>
 <h2>
 <a name="wiki-Animation"></a>Animation</h2>
+<div class="highlight">
+<pre>
+<span class="n">Animation</span><span class="o">*</span> <span class="n">animation</span> <span
+class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">createAnimation</span><span
+class="p">(</span><span class="s">"animation"</span><span class="o">, </span><span class="s">"res/common/boy.animation"</span><span class="p">);</span>
+</pre>
+</div>
+<h4>
+Animation</h4>
 <table>
 <tr>
 	<td>
@@ -4058,10 +4394,10 @@ Sprint Constraint</h4>
 		&nbsp; keyCount = <span class="Non-literal"><span>number_of_key_frames</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
-		int
+		uint
 	</td>
 </tr>
 <tr>
@@ -4069,7 +4405,7 @@ Sprint Constraint</h4>
 		&nbsp; keyTimes = <span class="Non-literal"><span>uint uint uint uint ...</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
 		uint(s)
@@ -4080,7 +4416,7 @@ Sprint Constraint</h4>
 		&nbsp; keyValues = <span class="Non-literal"><span>float float float float ...</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
 		float(s)
@@ -4098,34 +4434,45 @@ Sprint Constraint</h4>
 	</td>
 </tr>
 <tr>
-	<td>
-		}
-	</td>
 	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-</table>
-<div class="highlight">
-<pre><span class="c1">// Load the animation clips for sample03-character</span>
-<span class="n">Animation</span><span class="o">*</span> <span class="n">animation</span> <span
-class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">getAnimation</span><span
-class="p">(</span><span class="s">"animations"</span><span class="p">);</span>
-<span class="n">animation</span><span class="o">-&gt;</span><span class="n">createClips</span><span
-class="p">(</span><span class="s">"res/common/boy.animation"</span><span class="p">);</span>
-</pre>
-</div>
-<table>
-<tr>
-	<td>
-		animation <span class="Non-literal"><span>animation_id</span></span>
-	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
-		{
+		&nbsp; keyIn = <span class="Non-literal"><span>float float float float ...</span></span>
 	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float(s)
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; keyOut = <span class="Non-literal"><span>float float float float ...</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float(s)
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; repeatCount = <span class="Non-literal"><span>float | REPEAT_INDEFINITE</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float | enum
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 </tr>
@@ -4159,8 +4506,11 @@ class="p">(</span><span class="s">"res/common/boy.animation"</span><span class="
 	<td>&nbsp;</td>
 </tr>
 </table>
+<p>
+<strong>Note:</strong>
+frameCount is required only if one or more clips exist</p>
 <h4>
-Animation Clip</h4>
+<a name="wiki-Animation-Clip"></a>Animation Clip</h4>
 <table>
 <tr>
 	<td>
@@ -4212,6 +4562,17 @@ Animation Clip</h4>
 <tr>
 	<td>
 		&nbsp; speed = <span class="Non-literal"><span>1.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; loopBlendTime = <span class="Non-literal"><span>0.0</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -4285,6 +4646,8 @@ Animation Enums</h4>
 	</td>
 </tr>
 </table>
+<p>
+Some types have their own animation properties. They all start with ANIMATE_ and then state the property that will be changed.</p>
 <table>
 <tr>
 	<td>
@@ -4481,7 +4844,7 @@ Audio Source</h4>
 <table>
 <tr>
 	<td>
-		audio <span class="Non-literal"><span>audio_id</span></span>
+		<a name="wiki-audio"></a>audio <span class="Non-literal"><span>audio_id</span></span>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -4498,10 +4861,21 @@ Audio Source</h4>
 		&nbsp; path = <span class="Non-literal"><span>res/common/engine_loop.ogg</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
 		file path
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; streamed = <span class="Non-literal"><span>false</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
 	</td>
 </tr>
 <tr>
@@ -4557,7 +4931,874 @@ Audio Source</h4>
 </tr>
 </table>
 <h2>
-<a name="wiki-blendingicles"></a>Particles</h2>
+<a name="wiki-Drawables"></a>Drawables</h2>
+<p>
+<strong>Notes:</strong></p>
+<ul>
+<li>Only one drawable can exist per-node.</li>
+<li>Model counts as a drawable, but is only loadable from a GPB file. This can be set via the URL property on Node</li>
+</ul>
+<h4>
+<a name="wiki-Terrain"></a>Terrain</h4>
+<table>
+<tr>
+	<td>
+		<a name="wiki-physics"></a>terrain <span class="Non-literal"><span>terrain_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <span class="Comment"><span class="comment">// Use block for raw heightmap OR path for non-raw heightmap</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; heightmap
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; {
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; path = <span class="Non-literal"><span>res/mountain.raw</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		image path
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; size = <span class="Non-literal"><span>raw_width, raw_height</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		2 uints
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; }
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; heightmap = <span class="Non-literal"><span>res/mountain.png</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		image path
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; size = <span class="Non-literal"><span>width, height, depth</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		3 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; patchSize = <span class="Non-literal"><span>32</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; detailLevels = <span class="Non-literal"><span>1</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; skirtScale = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; normalMap = <span class="Non-literal"><span>res/mountain_normal.png</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		image path
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; material = <span class="Non-literal"><span>res/mountain.material#ground</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; layer <span class="Non-literal"><span>layer_id</span></span> {}
+	</td>
+	<td>
+		[0..*]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<table>
+<tr>
+	<td>
+		layer <span class="Non-literal"><span>layer_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; texture
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; {
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; path = <span class="Non-literal"><span>res/terrain/ground.png</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		image path
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; repeat = <span class="Non-literal"><span>1.0, 1.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		2 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; }
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; index = <span class="Non-literal"><span>layer_index</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; row = <span class="Non-literal"><span>layer_row</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; column = <span class="Non-literal"><span>layer_column</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; blend
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; {
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; path = <span class="Non-literal"><span>res/terrain/ground_blend.png</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		image path
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; channel = <span class="Non-literal"><span>R | G | B | A</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; }
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h4>
+<a name="wiki-Sprite"></a>Sprite</h4>
+<table>
+<tr>
+	<td>
+		<a name="wiki-sprite"></a>sprite <span class="Non-literal"><span>sprite_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; path = <span class="Non-literal"><span>res/player.png</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		image path
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; width = <span class="Non-literal"><span>sprite_width | image_width_scale (100.0%)</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; height = <span class="Non-literal"><span>sprite_height | image_height_scale (100.0%)</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; source = <span class="Non-literal"><span>frame_offset_x, frame_offset_y,</span></span></br>
+		<span class="Non-literal"><span>frame_width, frame_height</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		4 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; frameCount = <span class="Non-literal"><span>1</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; anchor = <span class="Non-literal"><span>0.0, 0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		2 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; color = <span class="Non-literal"><span>#RRGGBBAA</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		color
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; opacity = <span class="Non-literal"><span>1.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; blendMode = <span class="Non-literal"><span>BLEND_ALPHA | BLEND_ADDITIVE |</span></span></br><span class="Non-literal"><span>BLEND_MULTIPLIED | BLEND_NONE</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; flip = <span class="Non-literal"><span>FLIP_VERTICAL | FLIP_HORIZONTAL |</span></span></br><span class="Non-literal"><span>FLIP_VERTICAL_HORIZONTAL | FLIP_NONE</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; offset = <a href="#wiki-SPRITE_OFFSET_TYPE">SPRITE_OFFSET_TYPE</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h5>
+Sprite Offset</h5>
+<table>
+<tr>
+	<td>
+		<a name="wiki-SPRITE_OFFSET_TYPE"></a><b>SPRITE_OFFSET_TYPE</b>
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_ANCHOR
+	</td>
+	<td>
+		Anchor position for offset
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_LEFT
+	</td>
+	<td>
+		Left
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_HCENTER
+	</td>
+	<td>
+		Horizontal center
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_RIGHT
+	</td>
+	<td>
+		Right
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_TOP
+	</td>
+	<td>
+		Top
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_VCENTER
+	</td>
+	<td>
+		Vertical center
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_BOTTOM
+	</td>
+	<td>
+		Bottom
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_TOP_LEFT
+	</td>
+	<td>
+		OFFSET_TOP | OFFSET_LEFT
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_VCENTER_LEFT
+	</td>
+	<td>
+		OFFSET_VCENTER | OFFSET_LEFT
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_BOTTOM_LEFT
+	</td>
+	<td>
+		OFFSET_BOTTOM | OFFSET_LEFT
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_TOP_HCENTER
+	</td>
+	<td>
+		OFFSET_TOP | OFFSET_HCENTER
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_VCENTER_HCENTER
+	</td>
+	<td>
+		OFFSET_VCENTER | OFFSET_HCENTER
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_BOTTOM_HCENTER
+	</td>
+	<td>
+		OFFSET_BOTTOM | OFFSET_HCENTER
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_TOP_RIGHT
+	</td>
+	<td>
+		OFFSET_TOP | OFFSET_RIGHT
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_VCENTER_RIGHT
+	</td>
+	<td>
+		OFFSET_VCENTER | OFFSET_RIGHT
+	</td>
+</tr>
+<tr>
+	<td>
+		OFFSET_BOTTOM_RIGHT
+	</td>
+	<td>
+		OFFSET_BOTTOM | OFFSET_RIGHT
+	</td>
+</tr>
+</table>
+<h4>
+<a name="wiki-Tileset"></a>TileSet</h4>
+<table>
+<tr>
+	<td>
+		<a name="wiki-tileset"></a>tileset <span class="Non-literal"><span>tileset_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; path = <span class="Non-literal"><span>res/map.png</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		image path
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; rows = <span class="Non-literal"><span>row_count</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; columns = <span class="Non-literal"><span>column_count</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; tileWidth = <span class="Non-literal"><span>tile_width</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; tileHeight = <span class="Non-literal"><span>tile_height</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; color = <span class="Non-literal"><span>#RRGGBBAA</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		color
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; opacity = <span class="Non-literal"><span>1.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; tile
+	</td>
+	<td>
+		[0..*]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; {
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; cell = <span class="Non-literal"><span>tile_x, tile_y</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		2 uints
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; source = <span class="Non-literal"><span>image_offset_x, image_offset_y</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		2 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; }
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h4>
+<a name="wiki-Drawable-Text"></a>Text</h4>
+<table>
+<tr>
+	<td>
+		<a name="wiki-drawable-text"></a>text <span class="Non-literal"><span>text_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; font = <span class="Non-literal"><span>res/Arial.gpb</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		file path
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; text = <span class="Non-literal"><span>Hello World</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		string
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; size = <span class="Non-literal"><span>font_size</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		uint
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; color = <span class="Non-literal"><span>#RRGGBBAA</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		color
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h4>
+<a name="wiki-Particles"></a>Particles</h4>
 <div class="highlight">
 <pre><span class="c1">// Load a particle emitter from a property file</span>
 <span class="n">ParticleEmitter</span><span class="o">*</span> <span class="n">p</span> <span
@@ -4569,7 +5810,7 @@ class="p">);</span>
 <table>
 <tr>
 	<td>
-		particle <span class="Non-literal"><span>particle_id</span></span>
+		<a name="wiki-particles"></a>particle <span class="Non-literal"><span>particle_id</span></span>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -4586,7 +5827,7 @@ class="p">);</span>
 		&nbsp; sprite
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
 		block
@@ -4604,10 +5845,10 @@ class="p">);</span>
 		&nbsp;&nbsp;&nbsp; path = <span class="Non-literal"><span>res/common/smoke.png</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
-		file path
+		image path
 	</td>
 </tr>
 <tr>
@@ -4615,7 +5856,7 @@ class="p">);</span>
 		&nbsp;&nbsp;&nbsp; width = <span class="Non-literal"><span>int</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
 		int
@@ -4626,7 +5867,7 @@ class="p">);</span>
 		&nbsp;&nbsp;&nbsp; height = <span class="Non-literal"><span>int</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
 		int
@@ -4637,11 +5878,16 @@ class="p">);</span>
 		&nbsp;&nbsp;&nbsp; frameCount = <span class="Non-literal"><span>count</span></span>
 	</td>
 	<td>
-		[0..1]
+		required
 	</td>
 	<td>
-		int
+		uint
 	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -4691,7 +5937,9 @@ class="p">);</span>
 	<td>
 		&nbsp;&nbsp;&nbsp; blendMode = <span class="Non-literal"><span>BLEND_NONE | BLEND_ALPHA |</span></span>
 		<br/>
-		<span class="Non-literal"><span>BLEND_ADDITIVE | BLEND_MULTIPLIED</span></span>
+		<span class="Non-literal"><span>BLEND_ADDITIVE | BLEND_MULTIPLIED | </span></span>
+		<br/>
+		<span class="Non-literal"><span>BLEND_OPAQUE | BLEND_TRANSPARENT</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -4886,7 +6134,29 @@ class="p">);</span>
 </tr>
 <tr>
 	<td>
+		&nbsp; colorStartVar = <span class="Non-literal"><span>red, blue, green, alpha</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		4 floats
+	</td>
+</tr>
+<tr>
+	<td>
 		&nbsp; colorEnd = <span class="Non-literal"><span>red, blue, green, alpha</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		4 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; colorEndVar = <span class="Non-literal"><span>red, blue, green, alpha</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -4978,12 +6248,23 @@ class="o">=</span> <span class="n">Form</span><span class="o">::</span><span cla
 class="p">(</span><span class="s">"res/editor.form"</span><span class="p">);</span>
 </pre>
 </div>
+<p>
+<strong>Note:</strong>
+<ul>
+<li>
+	All Form elements are based off <a href="#wiki-UI_FORM_CONTROL">Control</a>.
+</li>
+<li>
+	It is possible to create custom controls and use them within a UI form</br>
+	by registering them with ControlFactory.
+</li>
+</ul></p>
 <h3>
 <a name="wiki-Form"></a>Form</h3>
 <table>
 <tr>
 	<td>
-		form <span class="Non-literal"><span>form_id</span></span>
+		<a name="wiki-form"></a>form <span class="Non-literal"><span>form_id</span></span>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -5000,21 +6281,10 @@ class="p">(</span><span class="s">"res/editor.form"</span><span class="p">);</sp
 		&nbsp; theme = <span class="Non-literal"><span>res/editor.theme</span></span>
 	</td>
 	<td>
-		required
+		[0..1]
 	</td>
 	<td>
 		xref
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; layout = <a href="#wiki-LAYOUT_ENUM">LAYOUT_ENUM</a>
-	</td>
-	<td>
-		required
-	</td>
-	<td>
-		enum
 	</td>
 </tr>
 <tr>
@@ -5030,84 +6300,7 @@ class="p">(</span><span class="s">"res/editor.form"</span><span class="p">);</sp
 </tr>
 <tr>
 	<td>
-		&nbsp; position = <span class="Non-literal"><span>x, y</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; alignment = <a href="#wiki-ALIGNMENT_ENUM">ALIGNMENT_ENUM</a>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		enum
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; size = <span class="Non-literal"><span>width, height</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; autoWidth = <span class="Non-literal"><span>false</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; autoHeight = <span class="Non-literal"><span>false</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; width = <span class="Non-literal"><span>width</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; height = <span class="Non-literal"><span>height</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; consumeInputEvents = <span class="Non-literal"><span>true</span></span>
+		&nbsp; batchingEnabled = <span class="Non-literal"><span>true</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -5123,80 +6316,10 @@ class="p">(</span><span class="s">"res/editor.form"</span><span class="p">);</sp
 </tr>
 <tr>
 	<td>
-		&nbsp; container <span class="Non-literal"><span>container_id</span></span> {}
+		&nbsp; ... same as container
 	</td>
-	<td>
-		[0..*]
-	</td>
-	<td>
-		block
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; label <span class="Non-literal"><span>label_id </span></span>{}
-	</td>
-	<td>
-		[0..*]
-	</td>
-	<td>
-		block
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; textBox <span class="Non-literal"><span>textBox_id </span></span>{}
-	</td>
-	<td>
-		[0..*]
-	</td>
-	<td>
-		block
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; button <span class="Non-literal"><span>button_id </span></span>{}
-	</td>
-	<td>
-		[0..*]
-	</td>
-	<td>
-		block
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; checkBox <span class="Non-literal"><span>checkBox_id </span></span>{}
-	</td>
-	<td>
-		[0..*]
-	</td>
-	<td>
-		block
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; radioButton <span class="Non-literal"><span>radioButton_id </span></span>{}
-	</td>
-	<td>
-		[0..*]
-	</td>
-	<td>
-		block
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; slider <span class="Non-literal"><span>slider_id </span></span>{}
-	</td>
-	<td>
-		[0..*]
-	</td>
-	<td>
-		block
-	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -5225,10 +6348,18 @@ Container</h4>
 </tr>
 <tr>
 	<td>
+		&nbsp; <span class="Comment"><span class="comment">// For specific layout options, use the</span></span></br>
+		<span class="Comment"><span class="comment">blocks, otherwise use the property</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
 		&nbsp; layout = <a href="#wiki-LAYOUT_ENUM">LAYOUT_ENUM</a>
 	</td>
 	<td>
-		required
+		[0..1]
 	</td>
 	<td>
 		enum
@@ -5236,7 +6367,137 @@ Container</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; style = <span class="Non-literal"><span>style_id</span></span>
+		&nbsp; layout <span class="Non-literal"><span>layout_id</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; {
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; type = <a href="#wiki-LAYOUT_ENUM">LAYOUT_ENUM</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; spacing = <span class="Non-literal"><span>0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; horizontalSpacing = <span class="Non-literal"><span>0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; verticalSpacing = <span class="Non-literal"><span>0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; }
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; scroll = <span class="Non-literal"><span>SCROLL_NONE | SCROLL_HORIZONTAL |</span></span></br>
+		<span class="Non-literal"><span>SCROLL_VERTICAL | SCROLL_BOTH</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; scrollBarsAutoHide = <span class="Non-literal"><span>false</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; scrollWheelRequiresFocus = <span class="Non-literal"><span>false</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; scrollingFriction = <span class="Non-literal"><span>1.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; scrollWheelSpeed = <span class="Non-literal"><span>400.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; activeControl = <span class="Non-literal"><span>control_id</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -5246,97 +6507,31 @@ Container</h4>
 	</td>
 </tr>
 <tr>
-	<td>
-		&nbsp; position = <span class="Non-literal"><span>x, y</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; alignment = <a href="#wiki-ALIGNMENT_ENUM">ALIGNMENT_ENUM</a>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		enum
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; size = <span class="Non-literal"><span>width, height</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; autoWidth = <span class="Non-literal"><span>false</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; autoHeight = <span class="Non-literal"><span>false</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; width = <span class="Non-literal"><span>width</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; height = <span class="Non-literal"><span>height</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		float
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; consumeInputEvents = <span class="Non-literal"><span>true</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; button <span class="Non-literal"><span>button_id</span></span>{}
+	</td>
+	<td>
+		[0..*]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; checkBox <span class="Non-literal"><span>checkBox_id</span></span>{}
+	</td>
+	<td>
+		[0..*]
+	</td>
+	<td>
+		block
+	</td>
 </tr>
 <tr>
 	<td>
@@ -5351,7 +6546,7 @@ Container</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; label <span class="Non-literal"><span>label_id </span></span>{}
+		&nbsp; image <span class="Non-literal"><span>image_id</span></span>{}
 	</td>
 	<td>
 		[0..*]
@@ -5362,7 +6557,7 @@ Container</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; textBox <span class="Non-literal"><span>textBox_id </span></span>{}
+		&nbsp; joystick <span class="Non-literal"><span>joystick_id</span></span>{}
 	</td>
 	<td>
 		[0..*]
@@ -5373,7 +6568,7 @@ Container</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; button <span class="Non-literal"><span>button_id </span></span>{}
+		&nbsp; label <span class="Non-literal"><span>label_id</span></span>{}
 	</td>
 	<td>
 		[0..*]
@@ -5384,7 +6579,7 @@ Container</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; checkBox <span class="Non-literal"><span>checkBox_id </span></span>{}
+		&nbsp; radioButton <span class="Non-literal"><span>radioButton_id</span></span>{}
 	</td>
 	<td>
 		[0..*]
@@ -5395,7 +6590,7 @@ Container</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; radioButton <span class="Non-literal"><span>radioButton_id </span></span>{}
+		&nbsp; slider <span class="Non-literal"><span>slider_id</span></span>{}
 	</td>
 	<td>
 		[0..*]
@@ -5406,7 +6601,7 @@ Container</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; slider <span class="Non-literal"><span>slider_id </span></span>{}
+		&nbsp; textBox <span class="Non-literal"><span>textBox_id</span></span>{}
 	</td>
 	<td>
 		[0..*]
@@ -5414,6 +6609,13 @@ Container</h4>
 	<td>
 		block
 	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <span class="Comment"><span class="comment">// Any other user-registered controls</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -5453,115 +6655,6 @@ Label</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; style = <span class="Non-literal"><span>style_id</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		string
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; position = <span class="Non-literal"><span>x, y</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; alignment = <a href="#wiki-ALIGNMENT_ENUM">ALIGNMENT_ENUM</a>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		enum
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; size = <span class="Non-literal"><span>width, height</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; autoWidth = <span class="Non-literal"><span>false</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; autoHeight = <span class="Non-literal"><span>false</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; consumeInputEvents = <span class="Non-literal"><span>true</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		}
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-</table>
-<h4>
-TextBox</h4>
-<table>
-<tr>
-	<td>
-		textBox <span class="Non-literal"><span>textBox_id</span></span>
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		{
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; ... same as label
-	</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td>
 		}
 	</td>
 	<td>&nbsp;</td>
@@ -5593,6 +6686,22 @@ Button</h4>
 	<td>&nbsp;</td>
 </tr>
 <tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; mapping = <a href="#wiki-UI_GAMEPAD_BUTTON_ENUM">BUTTON_ENUM</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
 	<td>
 		}
 	</td>
@@ -5619,6 +6728,18 @@ CheckBox</h4>
 </tr>
 <tr>
 	<td>
+		&nbsp; ... same as button
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
 		&nbsp; checked = <span class="Non-literal"><span>false</span></span>
 	</td>
 	<td>
@@ -5630,29 +6751,112 @@ CheckBox</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; text = <span class="Non-literal"><span>Hello World</span></span>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h4>
+Image</h4>
+<table>
+<tr>
+	<td>
+		image <span class="Non-literal"><span>image_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; path = <span class="Non-literal"><span>res/image.png</span></span>
 	</td>
 	<td>
 		[0..1]
 	</td>
 	<td>
-		string
+		image path
 	</td>
 </tr>
 <tr>
 	<td>
-		&nbsp; style = <span class="Non-literal"><span>style_id</span></span>
+		&nbsp; srcRegion = <span class="Non-literal"><span>x, y, width, height</span></span>
 	</td>
 	<td>
 		[0..1]
 	</td>
 	<td>
-		string
+		4 floats
 	</td>
 </tr>
 <tr>
 	<td>
-		&nbsp; position = <span class="Non-literal"><span>x, y</span></span>
+		&nbsp; dstRegion = <span class="Non-literal"><span>x, y, width, height</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		4 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h4>
+Joystick</h4>
+<table>
+<tr>
+	<td>
+		joystick <span class="Non-literal"><span>joystick_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; radius = <span class="Non-literal"><span>joystick_radius | joystick_radius%</span></span>
+	</td>
+	<td>
+		required
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; relative = <span class="Non-literal"><span>false</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; innerRegion = <span class="Non-literal"><span>x, y | x, y% | x%, y | x%, y%</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -5663,18 +6867,7 @@ CheckBox</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; alignment = <a href="#wiki-ALIGNMENT_ENUM">ALIGNMENT_ENUM</a>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		enum
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; size = <span class="Non-literal"><span>width, height</span></span>
+		&nbsp; outerRegion = <span class="Non-literal"><span>x, y | x, y% | x%, y | x%, y%</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -5685,35 +6878,13 @@ CheckBox</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; autoWidth = <span class="Non-literal"><span>false</span></span>
+		&nbsp; index = <span class="Non-literal"><span>joystick_index</span></span>
 	</td>
 	<td>
 		[0..1]
 	</td>
 	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; autoHeight = <span class="Non-literal"><span>false</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; consumeInputEvents = <span class="Non-literal"><span>true</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
+		int
 	</td>
 </tr>
 <tr>
@@ -5743,14 +6914,15 @@ RadioButton</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; group = <span class="Non-literal"><span>group_id</span></span>
+		&nbsp; ... same as button
 	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		string
-	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -5765,90 +6937,13 @@ RadioButton</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; text = <span class="Non-literal"><span>Hello World</span></span>
+		&nbsp; group = <span class="Non-literal"><span>group_id</span></span>
 	</td>
 	<td>
 		[0..1]
 	</td>
 	<td>
 		string
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; style = <span class="Non-literal"><span>style_id</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		string
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; position = <span class="Non-literal"><span>x, y</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; alignment = <a href="#wiki-ALIGNMENT_ENUM">ALIGNMENT_ENUM</a>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		enum
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; size = <span class="Non-literal"><span>width, height</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; autoWidth = <span class="Non-literal"><span>false</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; autoHeight = <span class="Non-literal"><span>false</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; consumeInputEvents = <span class="Non-literal"><span>true</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		bool
 	</td>
 </tr>
 <tr>
@@ -5878,36 +6973,15 @@ Slider</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; style = <span class="Non-literal"><span>style_id</span></span>
+		&nbsp; ... same as label
 	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		string
-	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
-	<td>
-		&nbsp; position = <span class="Non-literal"><span>x, y</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
-</tr>
-<tr>
-	<td>
-		&nbsp; size = <span class="Non-literal"><span>width, height</span></span>
-	</td>
-	<td>
-		[0..1]
-	</td>
-	<td>
-		2 floats
-	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -5955,13 +7029,140 @@ Slider</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; text = <span class="Non-literal"><span>Hello World</span></span>
+		&nbsp; valueTextVisible = <span class="Non-literal"><span>false</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; valueTextPrecision = <span class="Non-literal"><span>0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; valueTextAlignment = <a href="#wiki-ALIGNMENT_ENUM">ALIGNMENT_ENUM</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h4>
+TextBox</h4>
+<table>
+<tr>
+	<td>
+		textBox <span class="Non-literal"><span>textBox_id</span></span>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; ... same as label
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; inputMode = <span class="Non-literal"><span>TEXT | PASSWORD</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<h4>
+<a name="wiki-UI_FORM_CONTROL"></a>Control</h4>
+<p>
+<strong>Note:</strong>
+Control is not an actual UI element. It is the base class for all UI elements.</br>
+All properties and blocks with Control are avaliable for all UI elements,</br>
+including custom UI elements.</p>
+<table>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; ...
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; style = <span class="Non-literal"><span>style_id</span></span>
 	</td>
 	<td>
 		[0..1]
 	</td>
 	<td>
 		string
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; alignment = <a href="#wiki-ALIGNMENT_ENUM">ALIGNMENT_ENUM</a>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
 	</td>
 </tr>
 <tr>
@@ -5974,6 +7175,417 @@ Slider</h4>
 	<td>
 		bool
 	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; visible = <span class="Non-literal"><span>true</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; zIndex = <span class="Non-literal"><span>z_index</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; canFocus = <span class="Non-literal"><span>false</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; focusIndex = <span class="Non-literal"><span>focus_index</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		int
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; position = <span class="Non-literal"><span>x, y | x, y% | x%, y | x%, y%</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		2 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; x = <span class="Non-literal"><span>x | x%</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; y = <span class="Non-literal"><span>y | y%</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; size = <span class="Non-literal"><span>width, height | width, height% |</span></span></br>
+		<span class="Non-literal"><span>width%, height | width%, height%</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		2 floats
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; width = <span class="Non-literal"><span>width | width%</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; height = <span class="Non-literal"><span>width | width%</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; autoSize = <span class="Non-literal"><span>AUTO_SIZE_WIDTH | AUTO_SIZE_HEIGHT |</span></span></br>
+		<span class="Non-literal"><span>AUTO_SIZE_BOTH</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		enum
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; padding = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; margin = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; enabled = <span class="Non-literal"><span>true</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		bool
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; script = <span class="Non-literal"><span>res/ui.lua</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		xref
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; margin <span class="Non-literal"><span>margin_id</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; {
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; top = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; bottom = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; left = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; right = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; }
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; padding <span class="Non-literal"><span>padding_id</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; {
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; top = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; bottom = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; left = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp;&nbsp;&nbsp; right = <span class="Non-literal"><span>0.0</span></span>
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		float
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; }
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; ... to affect all states' theme, use the</br>properties of <a href="#wiki-UI_THEME_STATE_NORMAL">stateNormal</a>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; ... to affect a specific state's theme, use</br>the following blocks:
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <a href="#wiki-UI_THEME_STATE_NORMAL">stateNormal</a> {}
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <a href="#wiki-UI_THEME_STATE_FOCUS">stateFocus</a> {}
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <a href="#wiki-UI_THEME_STATE_ACTIVE">stateActive</a> {}
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <a href="#wiki-UI_THEME_STATE_DISABLED">stateDisabled</a> {}
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; <a href="#wiki-UI_THEME_STATE_HOVER">stateHover</a> {}
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; ...
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr>
 <tr>
 	<td>
@@ -6148,12 +7760,90 @@ Form Enums</h4>
 	</td>
 </tr>
 </table>
+<table>
+<tr>
+	<td>
+		<a name="wiki-UI_GAMEPAD_BUTTON_ENUM"></a><b>GAMEPAD_BUTTON_ENUM</b>
+	</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		A
+	</td>
+	<td>
+		B
+	</td>
+</tr>
+<tr>
+	<td>
+		X
+	</td>
+	<td>
+		Y
+	</td>
+</tr>
+<tr>
+	<td>
+		L1
+	</td>
+	<td>
+		R1
+	</td>
+</tr>
+<tr>
+	<td>
+		L2
+	</td>
+	<td>
+		R2
+	</td>
+</tr>
+<tr>
+	<td>
+		L3
+	</td>
+	<td>
+		R3
+	</td>
+</tr>
+<tr>
+	<td>
+		UP
+	</td>
+	<td>
+		DOWN
+	</td>
+</tr>
+<tr>
+	<td>
+		LEFT
+	</td>
+	<td>
+		RIGHT
+	</td>
+</tr>
+<tr>
+	<td>
+		MENU1
+	</td>
+	<td>
+		MENU2
+	</td>
+</tr>
+<tr>
+	<td>
+		MENU3
+	</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
 <h3>
 <a name="wiki-Theme"></a>Theme</h3>
 <table>
 <tr>
 	<td>
-		theme <span class="Non-literal"><span>theme_id</span></span>
+		<a name="wiki-theme"></a>theme <span class="Non-literal"><span>theme_id</span></span>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -6183,7 +7873,7 @@ Form Enums</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; cursor <span class="Non-literal"><span>cursor_id</span></span> {}
+		&nbsp; image <span class="Non-literal"><span>image_id</span></span> {}
 	</td>
 	<td>
 		[0..*]
@@ -6236,7 +7926,7 @@ Form Enums</h4>
 <table>
 <tr>
 	<td>
-		<a name="wiki-cursor"></a>cursor <span class="Non-literal"><span>cursor_id</span></span>
+		<a name="wiki-image"></a>image <span class="Non-literal"><span>image_id</span></span>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -6391,7 +8081,7 @@ Form Enums</h4>
 		[0..1]
 	</td>
 	<td>
-		int
+		float
 	</td>
 </tr>
 <tr>
@@ -6402,7 +8092,7 @@ Form Enums</h4>
 		[0..1]
 	</td>
 	<td>
-		int
+		float
 	</td>
 </tr>
 <tr>
@@ -6413,7 +8103,7 @@ Form Enums</h4>
 		[0..1]
 	</td>
 	<td>
-		int
+		float
 	</td>
 </tr>
 <tr>
@@ -6424,7 +8114,7 @@ Form Enums</h4>
 		[0..1]
 	</td>
 	<td>
-		int
+		float
 	</td>
 </tr>
 <tr>
@@ -6651,6 +8341,17 @@ Form Enums</h4>
 </tr>
 <tr>
 	<td>
+		&nbsp; stateHover {}
+	</td>
+	<td>
+		[0..1]
+	</td>
+	<td>
+		block
+	</td>
+</tr>
+<tr>
+	<td>
 		}
 	</td>
 	<td>&nbsp;</td>
@@ -6660,7 +8361,7 @@ Form Enums</h4>
 <table>
 <tr>
 	<td>
-		stateNormal
+		<a name="wiki-UI_THEME_STATE_NORMAL"></a>stateNormal
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -6696,7 +8397,7 @@ Form Enums</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; cursor = <span class="Non-literal"><span>cursor_id</span></span>
+		&nbsp; cursor = <span class="Non-literal"><span>image_id</span></span>
 	</td>
 	<td>
 		[0..1]
@@ -6782,7 +8483,7 @@ Form Enums</h4>
 <table>
 <tr>
 	<td>
-		stateFocus
+		<a name="wiki-UI_THEME_STATE_FOCUS"></a>stateFocus
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -6796,7 +8497,7 @@ Form Enums</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; ... same as stateNormal
+		&nbsp; ... same as <a href="#wiki-UI_THEME_STATE_NORMAL">stateNormal</a>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -6812,7 +8513,7 @@ Form Enums</h4>
 <table>
 <tr>
 	<td>
-		stateActive
+		<a name="wiki-UI_THEME_STATE_ACTIVE"></a>stateActive
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -6826,7 +8527,7 @@ Form Enums</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; ... same as stateNormal
+		&nbsp; ... same as <a href="#wiki-UI_THEME_STATE_NORMAL">stateNormal</a>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -6842,7 +8543,7 @@ Form Enums</h4>
 <table>
 <tr>
 	<td>
-		stateDisabled
+		<a name="wiki-UI_THEME_STATE_DISABLED"></a>stateDisabled
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
@@ -6856,7 +8557,37 @@ Form Enums</h4>
 </tr>
 <tr>
 	<td>
-		&nbsp; ... same as stateNormal
+		&nbsp; ... same as <a href="#wiki-UI_THEME_STATE_NORMAL">stateNormal</a>
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		}
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<table>
+<tr>
+	<td>
+		<a name="wiki-UI_THEME_STATE_HOVER"></a>stateHover
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		{
+	</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		&nbsp; ... same as <a href="#wiki-UI_THEME_STATE_NORMAL">stateNormal</a>
 	</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
