@@ -247,6 +247,24 @@ public:
     inline void visit(const char* visitMethod);
 
     /**
+     * Visits each node in the scene and calls the specified function object.
+     *
+     * Calling this method invokes the specified function object for each node
+     * in the scene hierarchy.
+     *
+     * The visitFunc parameter must have a bool return type and accept
+     * a single parameter of type Node*.
+     *
+     * A depth-first traversal of the scene continues while the visit method
+     * returns true. Returning false will stop traversing further children for
+     * the given node and the traversal will continue at the next sibling.
+     *
+     * @param visitFunc The function object to call for each node in the scene.
+     */
+    template <class T>
+    void visit(T visitFunc);
+
+    /**
      * @see VisibleSet#getNext
      */
     Node* getNext();
@@ -294,6 +312,12 @@ private:
      * Visits the given node and all of its children recursively.
      */
     void visitNode(Node* node, const char* visitMethod);
+
+    /**
+     * Visits the given node and all of its children recursively.
+     */
+    template <class T>
+    void visitNode(Node* node, T visitFunc);
 
     Node* findNextVisibleSibling(Node* node);
 
@@ -381,6 +405,39 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), 
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
         visitNode(child, instance, visitMethod, cookie);
+    }
+}
+
+template <class T>
+inline void Scene::visit(T visitFunc)
+{
+    for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
+    {
+        visitNode(node, visitFunc);
+    }
+}
+
+template <class T>
+void Scene::visitNode(Node* node, T visitFunc)
+{
+    // Invoke the visit method for this node.
+    if (!visitFunc(node))
+        return;
+
+    // If this node has a model with a mesh skin, visit the joint hierarchy within it
+    // since we don't add joint hierarchies directly to the scene. If joints are never
+    // visited, it's possible that nodes embedded within the joint hierarchy that contain
+    // models will never get visited (and therefore never get drawn).
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
+    if (model && model->_skin && model->_skin->_rootNode)
+    {
+        visitNode(model->_skin->_rootNode, visitFunc);
+    }
+
+    // Recurse for all children.
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        visitNode(child, visitFunc);
     }
 }
 
