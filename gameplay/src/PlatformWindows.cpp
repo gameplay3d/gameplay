@@ -656,114 +656,114 @@ bool initializeGL(WindowCreationParams* params)
 
     if( wglChoosePixelFormatARB && wglCreateContextAttribsARB )
     {
-    // Choose pixel format using wglChoosePixelFormatARB, which allows us to specify
-    // additional attributes such as multisampling.
-    //
-    // Note: Keep multisampling attributes at the start of the attribute lists since code below
-    // assumes they are array elements 0 through 3.
-    int attribList[] = {
-        WGL_SAMPLES_ARB, params ? params->samples : 0,
-        WGL_SAMPLE_BUFFERS_ARB, params ? (params->samples > 0 ? 1 : 0) : 0,
-        WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
-        WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
-        WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
-        WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
-        WGL_COLOR_BITS_ARB, DEFAULT_COLOR_BUFFER_SIZE,
-        WGL_DEPTH_BITS_ARB, DEFAULT_DEPTH_BUFFER_SIZE,
-        WGL_STENCIL_BITS_ARB, DEFAULT_STENCIL_BUFFER_SIZE,
-        0
-    };
-    __multiSampling = params && params->samples > 0;
+        // Choose pixel format using wglChoosePixelFormatARB, which allows us to specify
+        // additional attributes such as multisampling.
+        //
+        // Note: Keep multisampling attributes at the start of the attribute lists since code below
+        // assumes they are array elements 0 through 3.
+        int attribList[] = {
+            WGL_SAMPLES_ARB, params ? params->samples : 0,
+            WGL_SAMPLE_BUFFERS_ARB, params ? (params->samples > 0 ? 1 : 0) : 0,
+            WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+            WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+            WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+            WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+            WGL_COLOR_BITS_ARB, DEFAULT_COLOR_BUFFER_SIZE,
+            WGL_DEPTH_BITS_ARB, DEFAULT_DEPTH_BUFFER_SIZE,
+            WGL_STENCIL_BITS_ARB, DEFAULT_STENCIL_BUFFER_SIZE,
+            0
+        };
+        __multiSampling = params && params->samples > 0;
 
-    UINT numFormats;
-    if ( !wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) || numFormats == 0)
-    {
-        bool valid = false;
-        if (params && params->samples > 0)
+        UINT numFormats;
+        if ( !wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) || numFormats == 0)
         {
-            GP_WARN("Failed to choose pixel format with WGL_SAMPLES_ARB == %d. Attempting to fallback to lower samples setting.", params->samples);
-            while (params->samples > 0)
+            bool valid = false;
+            if (params && params->samples > 0)
             {
-                params->samples /= 2;
-                attribList[1] = params->samples;
-                attribList[3] = params->samples > 0 ? 1 : 0;
-                if (wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) && numFormats > 0)
+                GP_WARN("Failed to choose pixel format with WGL_SAMPLES_ARB == %d. Attempting to fallback to lower samples setting.", params->samples);
+                while (params->samples > 0)
                 {
-                    valid = true;
-                    GP_WARN("Found pixel format with WGL_SAMPLES_ARB == %d.", params->samples);
-                    break;
+                    params->samples /= 2;
+                    attribList[1] = params->samples;
+                    attribList[3] = params->samples > 0 ? 1 : 0;
+                    if (wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) && numFormats > 0)
+                    {
+                        valid = true;
+                        GP_WARN("Found pixel format with WGL_SAMPLES_ARB == %d.", params->samples);
+                        break;
+                    }
                 }
+
+                __multiSampling = params->samples > 0;
             }
 
-            __multiSampling = params->samples > 0;
+            if (!valid)
+            {
+                wglDeleteContext(tempContext);
+                DestroyWindow(hwnd);
+                GP_ERROR("Failed to choose a pixel format.");
+                return false;
+            }
         }
 
-        if (!valid)
+        // Create new/final window if needed
+        if (params)
         {
-            wglDeleteContext(tempContext);
             DestroyWindow(hwnd);
-            GP_ERROR("Failed to choose a pixel format.");
-            return false;
+            hwnd = NULL;
+            hdc = NULL;
+
+            if (!createWindow(params, &__hwnd, &__hdc))
+            {
+                wglDeleteContext(tempContext);
+                return false;
+            }
         }
-    }
 
-    // Create new/final window if needed
-    if (params)
-    {
-        DestroyWindow(hwnd);
-        hwnd = NULL;
-        hdc = NULL;
-
-        if (!createWindow(params, &__hwnd, &__hdc))
+        // Set final pixel format for window
+        if (!SetPixelFormat(__hdc, pixelFormat, &pfd))
         {
-            wglDeleteContext(tempContext);
+            GP_ERROR("Failed to set the pixel format: %d.", (int)GetLastError());
             return false;
         }
-    }
 
-    // Set final pixel format for window
-    if (!SetPixelFormat(__hdc, pixelFormat, &pfd))
-    {
-        GP_ERROR("Failed to set the pixel format: %d.", (int)GetLastError());
-        return false;
-    }
-
-    // Create our new GL context
-    int attribs[] =
-    {
-        WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-        WGL_CONTEXT_MINOR_VERSION_ARB, 1,
-        0
-    };
-
-    if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs)))
-    {
-        wglDeleteContext(tempContext);
-        GP_WARN("Failed to create OpenGL 3.1 context, fallback to OpenGL 2.0.");
-
+        // Create our new GL context
         int attribs[] =
         {
-            WGL_CONTEXT_MAJOR_VERSION_ARB, 2,
-            WGL_CONTEXT_MINOR_VERSION_ARB, 0,
+            WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+            WGL_CONTEXT_MINOR_VERSION_ARB, 1,
             0
         };
 
         if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs)))
         {
-            GP_ERROR("Failed to create OpenGL context.");
+            wglDeleteContext(tempContext);
+            GP_WARN("Failed to create OpenGL 3.1 context, fallback to OpenGL 2.0.");
+
+            int attribs[] =
+            {
+                WGL_CONTEXT_MAJOR_VERSION_ARB, 2,
+                WGL_CONTEXT_MINOR_VERSION_ARB, 0,
+                0
+            };
+
+            if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs)))
+            {
+                GP_ERROR("Failed to create OpenGL context.");
+                return false;
+            }
+        }
+
+        // Delete the old/temporary context and window
+        wglDeleteContext(tempContext);
+
+        // Make the new context current
+        if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
+        {
+            GP_ERROR("Failed to make the window current.");
             return false;
         }
-    }
-
-    // Delete the old/temporary context and window
-    wglDeleteContext(tempContext);
-
-    // Make the new context current
-    if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
-    {
-        GP_ERROR("Failed to make the window current.");
-        return false;
-    }
     } else    // fallback to OpenGL 2.0 if wglChoosePixelFormatARB or wglCreateContextAttribsARB is NULL.
     {
         // Context is already here, just use it.
