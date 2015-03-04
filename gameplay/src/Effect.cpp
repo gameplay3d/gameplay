@@ -240,7 +240,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     GLint length;
     GLint success;
 
-    // Replace all comma separated definitions with #define prefix and \n suffix
+    // Replace all semicolon-separated definitions with #define prefix and \n suffix
     std::string definesStr = "";
     replaceDefines(defines, definesStr);
     
