@@ -53,7 +53,8 @@ PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Defi
     : PhysicsGhostObject(node, shape, group, mask), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
     _verticalVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
     _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0), _stepHeight(0.1f),
-    _slopeAngle(0.0f), _cosSlopeAngle(1.0f), _physicsEnabled(true), _mass(mass), _actionInterface(NULL)
+    _slopeAngle(0.0f), _cosSlopeAngle(1.0f), _physicsEnabled(true), _mass(mass), _actionInterface(NULL),
+    _gameTimeElapsed(0.0f), _simulationTimeElapsed(0.0f), _previousGameTime(Game::getGameTime())
 {
     setMaxSlopeAngle(45.0f);
 
@@ -242,6 +243,11 @@ Vector3 PhysicsCharacter::getCurrentVelocity() const
     v.y += _verticalVelocity.y();
     v.z += _verticalVelocity.z();
     return v;
+}
+
+Vector3 PhysicsCharacter::getInterpolatedPosition() const
+{
+    return Vector3(_interpolatedPosition.x(), _interpolatedPosition.y(), _interpolatedPosition.z());
 }
 
 void PhysicsCharacter::jump(float height, bool force)
@@ -663,6 +669,24 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
     if (!isEnabled())
         return;
 
+    _simulationTimeElapsed += deltaTimeStep;
+
+    // Calculate an interpolated position from the previous frame
+    const float gameTime = Game::getGameTime();
+    if(gameTime != _previousGameTime)
+    {
+        if(_simulationTimeElapsed > _gameTimeElapsed)
+        {
+            _simulationTimeElapsed -= _gameTimeElapsed;
+            _gameTimeElapsed = (gameTime - _previousGameTime) * 0.001f;
+        }
+
+        _previousGameTime = gameTime;
+        const float fixedSimulationTimeStep = 1.0f / 60.f;
+        const float diff = 1.0f - (_gameTimeElapsed - _simulationTimeElapsed) / fixedSimulationTimeStep;
+        _interpolatedPosition = (_previousPosition * diff) + (_currentPosition * (1.0f - diff));
+    }
+
     GP_ASSERT(_ghostObject);
     GP_ASSERT(_node);
 
@@ -689,8 +713,9 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
     }
 
     // Update current and target world positions.
-    btVector3 startPosition = _ghostObject->getWorldTransform().getOrigin();
+    const btVector3 startPosition = _ghostObject->getWorldTransform().getOrigin();
     _currentPosition = startPosition;
+    _previousPosition = _currentPosition;
 
     // Process movement in the up direction.
     if (_physicsEnabled)
