@@ -181,6 +181,16 @@ public:
     Vector3 getCurrentVelocity() const;
 
     /**
+     * Returns the characters position value interpolated between physics simulation steps in the last frame.
+     *
+     * A PhysicsCharacter can process multiple physics steps in a single frame which can result
+     * in a visual jitter. Use this position for any character rendering or camera positioning logic.
+     *
+     * @return The interpolated position
+     */
+    Vector3 getInterpolatedPosition() const;
+
+    /**
      * Causes the character to jump to the specified height.
      *
      * @param height The amount to jump.
@@ -267,12 +277,17 @@ private:
     bool _colliding;
     btVector3 _collisionNormal;
     btVector3 _currentPosition;
+    btVector3 _previousPosition;
+    btVector3 _interpolatedPosition;
     btManifoldArray _manifoldArray;
     float _stepHeight;
     float _slopeAngle;
     float _cosSlopeAngle;
     bool _physicsEnabled;
     float _mass;
+    float _previousGameTime;
+    float _gameTimeElapsed;
+    float _simulationTimeElapsed;
     ActionInterface* _actionInterface;
 };
 
