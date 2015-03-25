@@ -8,7 +8,8 @@ namespace gameplay
 {
 
 Control::Control()
-    : _id(""), _boundsBits(0), _dirtyBits(DIRTY_BOUNDS | DIRTY_STATE), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT),
+    : _id(""), _boundsBits(0), _relativeFontSizeStates(0), _relativeFontSize(0), _dirtyBits(DIRTY_BOUNDS | DIRTY_STATE),
+    _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT),
     _autoSize(AUTO_SIZE_BOTH), _listeners(NULL), _style(NULL), _visible(true), _opacity(0.0f), _zIndex(-1),
     _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _canFocus(false), _state(NORMAL), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
@@ -775,21 +776,48 @@ Font* Control::getFont(State state) const
     return overlay->getFont();
 }
 
-void Control::setFontSize(unsigned int fontSize, unsigned char states)
+void Control::setFontSize(unsigned int fontSize, unsigned char states, bool percentage)
 {
+    if (percentage)
+    {
+        _relativeFontSizeStates |= states;
+        _relativeFontSize = fontSize;
+    }
+    else
+    {
+        _relativeFontSizeStates &= ~states;
+    }
+
+    if (_autoSize != AUTO_SIZE_NONE)
+        setDirty(DIRTY_BOUNDS);
+    else
+        setFontSizeInternal(fontSize, states, percentage);
+}
+
+void Control::setFontSizeInternal(unsigned int fontSize, unsigned char states, bool percentage)
+{
+    if (percentage)
+    {
+        unsigned int height = _bounds.height - getBorder(NORMAL).top - getBorder(NORMAL).bottom - getPadding().top - getPadding().bottom;
+        fontSize = (unsigned int)(float(fontSize)*0.01f * height);
+    }
+
     overrideStyle();
     Theme::Style::Overlay* overlays[Theme::Style::OVERLAY_MAX] = { 0 };
     getOverlays(states, overlays);
-
+    
     for (int i = 0; i < Theme::Style::OVERLAY_MAX; ++i)
     {
         if( overlays[i] )
             overlays[i]->setFontSize(fontSize);
     }
-
-    if (_autoSize != AUTO_SIZE_NONE)
-        setDirty(DIRTY_BOUNDS);
 }
+
+bool Control::isFontSizePercentage() const
+{
+    return _relativeFontSizeStates != 0;
+}
+
 
 unsigned int Control::getFontSize(State state) const
 {
@@ -1177,7 +1205,12 @@ void Control::updateBounds()
         _bounds.width *= parentAbsoluteBounds.width;
     if (isHeightPercentage())
         _bounds.height *= parentAbsoluteBounds.height;
-
+    
+    if (isFontSizePercentage())
+    {
+        setFontSizeInternal(_relativeFontSize, _relativeFontSizeStates, true);
+    }
+    
     // Apply control alignment
     if (_alignment != Control::ALIGN_TOP_LEFT)
     {
@@ -1698,7 +1731,15 @@ void Control::overrideThemedProperties(Properties* properties, unsigned char sta
 
     if (properties->exists("fontSize"))
     {
-        setFontSize(properties->getInt("fontSize"), states);
+        const char* strFontSize = properties->getString("fontSize");
+        bool isPercentage = false;
+        float fontSize = parseCoord(strFontSize, &isPercentage);
+        if (isPercentage)
+        {
+            fontSize *= 100;    // parseCoord supplied a float (100% == 1.0)
+                                // but it is already established that setFontSize takes an int
+        }
+        setFontSize(int(fontSize), states, isPercentage);
     }
 
     if (properties->exists("textColor"))

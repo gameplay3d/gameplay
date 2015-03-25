@@ -35,6 +35,12 @@ form formSelect
 
 	radioButton form5 : form1
 	{
+		text = Dynamic
+	}
+
+	radioButton form6 : form1
+	{
 		text = Programmatic
 	}
+
 }

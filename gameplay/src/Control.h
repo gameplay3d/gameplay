@@ -674,8 +674,9 @@ public:
      * @param size The new font size.
      * @param states The states to set this property on.
      *               One or more members of the Control::State enum, ORed together.
+     * @param percentage The size is expressed as a percentage of the viewport height
      */
-    void setFontSize(unsigned int size, unsigned char states = STATE_ALL);
+    void setFontSize(unsigned int size, unsigned char states = STATE_ALL, bool percentage = false);
 
     /**
      * Get this control's font size for a given state.
@@ -1079,6 +1080,26 @@ protected:
     void setHeightInternal(float height, bool percentage = false);
 
     /**
+     * Internal method for setting the font size of the control.
+     *
+     * The font size of the control is set without modifying the existing AutoSize
+     * rules for the control.
+     *
+     * This method is meant for internal use by the Control or descendent classes
+     * who need to modify the size of the control during bounds computation.
+     *
+     * @see setFontSize(float, unsigned char, bool)
+     */
+    void setFontSizeInternal(unsigned int fontSize, unsigned char states, bool percentage);
+
+    /**
+     * Determines if the font size of this control is computed as a percentage of container height.
+     *
+     * @return True if the font size is computed as a percentage of container height.
+     */
+    bool isFontSizePercentage() const;
+
+    /**
      * Get the overlay type corresponding to this control's current state.
      *
      * @return The overlay type corresponding to this control's current state.
@@ -1369,7 +1390,7 @@ protected:
      * Local bounds, relative to parent container's clipping window, possibly stored as percentages (see _boundsBits).
      */
     Rectangle _relativeBounds;
-
+    
     /**
      * Local bounds, relative to parent container's clipping window, and desired size.
      */
@@ -1400,6 +1421,16 @@ protected:
      */
     Rectangle _viewportClipBounds;
 
+    /**
+     * If bits set, the font size is relative to bounds height for the corresponding State
+     */
+    unsigned char _relativeFontSizeStates;
+
+    /**
+     * Font size expressed as a percentage of bounds height (see _relativeFontSizeStates)
+     */
+    unsigned int _relativeFontSize;
+    
     /**
      * Control dirty bits.
      */
