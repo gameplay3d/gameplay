@@ -629,6 +629,7 @@
     </Link>
     <Lib>
       <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalDependencies>  shcore.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">

@@ -1,0 +1,12 @@
+; Top-most EditorConfig file
+root = true
+
+; Unix-style newlines
+[*]
+end_of_line = crlf
+
+; 4-column tab indentation
+[*]
+indent_style = space
+indent_size = 4
+

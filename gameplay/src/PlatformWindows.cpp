@@ -11,6 +11,7 @@
 #include <windowsx.h>
 #include <Commdlg.h>
 #include <shellapi.h>
+#include <ShellScalingAPI.h>
 #ifdef GP_USE_GAMEPAD
 #include <XInput.h>
 #endif
@@ -347,7 +348,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
     case WM_CLOSE:
 #ifdef GP_USE_MEM_LEAK_DETECTION
-		DestroyWindow(__hwnd);
+        DestroyWindow(__hwnd);
 #else
         exit(0);
 #endif
@@ -494,6 +495,7 @@ struct WindowCreationParams
     bool fullscreen;
     bool resizable;
     int samples;
+    int dpiAwareness;
 };
 
 extern void print(const char* format, ...)
@@ -831,10 +833,15 @@ Platform* Platform::create(Game* game)
 
             // Read fullscreen state.
             params.fullscreen = config->getBool("fullscreen");
+            // Read dpi awareness state.
+            params.dpiAwareness = config->getInt("dpiAwareness");
             // Read resizable state.
             params.resizable = config->getBool("resizable");
             // Read multisampling state.
             params.samples = config->getInt("samples");
+
+            //Set DPI awareness as specified. Must be done before getting screen resolution.
+            ::SetProcessDpiAwareness((PROCESS_DPI_AWARENESS)params.dpiAwareness);
 
             // Read window rect.
             int x = config->getInt("x");
