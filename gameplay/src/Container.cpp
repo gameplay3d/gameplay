@@ -1087,6 +1087,9 @@ void Container::updateScroll()
     {
         Control* control = _controls[i];
 
+        if (!control->isVisible())
+            continue;
+
         const Rectangle& bounds = control->getBounds();
         const Theme::Margin& margin = control->getMargin();
 
