@@ -404,7 +404,7 @@ void LightSample::initializePointTechnique(const char* technique)
 
 void LightSample::setUnlitMaterialTexture(Model* model, const char* texturePath, bool mipmap)
 {
-    Material* material = model->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "DIRECTIONAL_LIGHT_COUNT 1");
+    Material* material = model->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", "");
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
 
     // Load the texture from file.
