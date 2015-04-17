@@ -7,7 +7,7 @@
 // Input bit-flags
 #define KEY_BACK 1
 
-const static unsigned int __formsCount = 5;
+const static unsigned int __formsCount = 6;
 
 FormsSample::FormsSample()
     : _scene(NULL), _formNode(NULL), _formNodeParent(NULL), _formSelect(NULL), _activeForm(NULL), _gamepad(NULL), _keyFlags(0)
@@ -19,6 +19,7 @@ FormsSample::FormsSample()
         "res/common/forms/formFlowLayout.form",
         "res/common/forms/formVerticalLayout.form",
         "res/common/forms/formZOrder.form",
+        "res/common/forms/formDynamic.form",
     };
 
     _formFiles.assign(formFiles, formFiles + __formsCount);
@@ -93,6 +94,10 @@ void FormsSample::initialize()
     
     RadioButton* form5Button = static_cast<RadioButton*>(_formSelect->getControl("form5"));
     form5Button->addListener(this, Control::Listener::CLICK);
+
+    RadioButton* form6Button = static_cast<RadioButton*>(_formSelect->getControl("form6"));
+    form6Button->addListener(this, Control::Listener::CLICK);
+
     for (unsigned int i = 0; i < _formFiles.size(); i++)
     {
 		Form* form = Form::create(_formFiles[i]);
@@ -100,6 +105,11 @@ void FormsSample::initialize()
         _forms.push_back(form);
     }
     _formIndex = 0;
+    
+    
+    Slider* dynamicSizeSlider = static_cast<Slider*>(_forms[5]->getControl("dynamicSizeSlider"));
+    dynamicSizeSlider->addListener(this, Control::Listener::VALUE_CHANGED);
+
 
     // Create a form programmatically.
     createSampleForm();
@@ -328,11 +338,26 @@ void FormsSample::controlEvent(Control* control, EventType evt)
             _formIndex = 5;
             formChanged();
         }
+        else if (strcmp("form6", control->getId()) == 0)
+        {
+            _formIndex = 6;
+            formChanged();
+        }
         else if (strcmp("opacityButton", control->getId()) == 0)
         {
             float from[] = { 1.0f };
             float to[] = { 0.5f };
             control->createAnimationFromTo("opacityButton", Form::ANIMATE_OPACITY, from, to, Curve::LINEAR, 1000)->getClip()->play();
+        }
+    }
+    else if (evt == VALUE_CHANGED)
+    {
+        if (strcmp("dynamicSizeSlider", control->getId()) == 0)
+        {
+            Slider* dynamicSizeSlider = static_cast<Slider*>(control);
+            float size = dynamicSizeSlider->getValue();
+        
+            control->getTopLevelForm()->getControl("dynamicContainer")->setSize(size, size);
         }
     }
 }

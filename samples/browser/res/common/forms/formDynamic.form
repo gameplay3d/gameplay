@@ -1,0 +1,79 @@
+form dynamic
+{
+    layout = LAYOUT_VERTICAL
+    size = 600, 600
+
+	slider dynamicSizeSlider
+	{
+		width = 400
+		orientation = HORIZONTAL
+		min = 300
+		max = 1000
+		value = 400
+		//step = 5
+		text = Size of the container below
+		valueTextVisible = true
+	}
+
+    container dynamicContainer
+    {
+        style = panel
+        width = 400
+        height = 400
+
+        scroll = SCROLL_BOTH
+        scrollBarsAutoHide = true
+
+        layout = LAYOUT_VERTICAL
+
+
+        textBox testTextBox
+        {
+            size = 100%, 22%
+            fontSize = 25%
+            text = This demonstrates how expressing object bounds and font sizes as percentages can enable GamePlay's UI system to create interfaces which scale with the device's screen size.
+        }
+
+        radioButton form0
+        {
+            text = The size (or height, and/or width) of
+
+            group = formSelection
+            selected = true
+
+            height = 8.5%
+            fontSize = 47%
+        }
+
+        radioButton form1 : form0
+        {
+            text = any container or control can be expressed
+            selected = false
+        }
+
+        radioButton form2 : form1
+        {
+            text = as a percentage of its parent view.
+        }
+
+        CheckBox
+        {
+            height = 8.5%
+            fontSize = 47%
+
+            text = This fontSize is 47% of the height of its container
+        }
+
+        Button
+        {
+            text = That's Cool
+            fontSize = 100%
+
+            height = 15%
+            autoSize AUTO_SIZE_WIDTH
+
+            alignment = ALIGN_RIGHT
+        }
+
+    }
+}
