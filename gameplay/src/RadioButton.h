@@ -15,7 +15,7 @@ namespace gameplay
  * A radio button can belong to a group, and only one radio button
  * from a group can be selected at one time.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class RadioButton : public Button
 {
@@ -36,6 +36,16 @@ public:
     static RadioButton* create(const char* id, Theme::Style* style = NULL);
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "RadioButton"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Get whether this radio button is currently selected.
      *
      * @return Whether this radio button is currently selected.
@@ -46,11 +56,6 @@ public:
      * Sets whether this radio button is currently selected.
      */
     void setSelected(bool selected);
-
-    /**
-     * @see Control::getType
-     */
-    const char* getType() const;
 
     /**
      * Add a listener to be notified of specific events affecting

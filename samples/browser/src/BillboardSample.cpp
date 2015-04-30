@@ -3,7 +3,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Billboards", BillboardSample, 12);
+    ADD_SAMPLE("Graphics", "Billboards", BillboardSample, 11);
 #endif
 
 static const unsigned int MOVE_FORWARD = 1;
@@ -159,7 +159,7 @@ void BillboardSample::render(float elapsedTime)
 		node->setRotation(q);
 
 		if (node->getBoundingSphere().intersects(camera->getFrustum()))
-			node->getModel()->draw();
+			node->getDrawable()->draw();
 	}
 
     // draw the gamepad
@@ -281,7 +281,7 @@ void BillboardSample::loadGround()
 	Node* node = Node::create();
 	_ground = Model::create(mesh);
 	SAFE_RELEASE(mesh);
-	node->setModel(_ground);
+	node->setDrawable(_ground);
     _scene->addNode(node);
 	node->rotateX(MATH_DEG_TO_RAD(90));
 	Effect* effect = Effect::createFromFile("res/shaders/textured.vert", "res/shaders/textured.frag", "TEXTURE_REPEAT");    
@@ -310,7 +310,7 @@ void BillboardSample::loadBillboards()
     {   
 		Node* node = Node::create();
 		Model* model = Model::create(mesh);
-		node->setModel(model);
+		node->setDrawable(model);
 		_scene->addNode(node);
         
 		Material* material = Material::create(effect); 

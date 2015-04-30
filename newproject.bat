@@ -2,7 +2,7 @@
 
 REM ********************************************************************
 REM
-REM generate-project.bat
+REM newproject.bat
 REM
 REM This windows batch script generates a set of gameplay project files.
 REM The new project will be based of the template project and 
@@ -20,6 +20,7 @@ echo.
 echo    This name will be given to the project 
 echo    executable and a folder with this name
 echo    will be created to store all project files.
+echo    Ex. foobar
 echo.
 set /p projName=Project name: 
 if "%projName%" == "" (
@@ -37,6 +38,7 @@ echo.
 echo    On some platforms, this title is used to
 echo    identify the game during installation and
 echo    on shortcuts/icons.
+echo    Ex. Foo Bar
 echo.
 set /p title=Title: 
 if "%title%" == "" (
@@ -49,20 +51,12 @@ if "%title%" == "" (
 echo.
 
 echo.
-echo 3. Enter a short game description.
-echo.
-set /p desc=Description: 
-if "%desc%" == "" (
-    set desc=%title%
-)
-echo.
-
-echo.
-echo 4. Enter a unique identifier for your project.
+echo 3. Enter a unique identifier for your project.
 echo.
 echo    This should be a human readable package name,
 echo    containing at least two words separated by a
-echo    period (eg. com.surname.gamename).
+echo    period.
+echo    Ex. com.example.foobar
 echo.
 set /p uuid=Unique ID: 
 if "%uuid%" == "" (
@@ -75,28 +69,12 @@ if "%uuid%" == "" (
 echo.
 
 echo.
-echo 5. Enter author name.
-echo.
-echo    On BlackBerry targets, this is used for
-echo    signing and must match the developer name
-echo    of your development certificate.
-echo.
-set /p author=Author: 
-if "%author%" == "" (
-    echo.
-    echo ERROR: No author specified.
-    echo.
-    pause
-    goto done
-)
-echo.
-
-echo.
-echo 6. Enter your game's main class name.
+echo 4. Enter your game's main class name.
 echo.
 echo    Your initial game header and source file
 echo    will be given this name and a class with 
 echo    this name will be created in these files.
+echo    Ex. FooBarGame
 echo.
 set /p className=Class name: 
 if "%className%" == "" (
@@ -109,12 +87,13 @@ if "%className%" == "" (
 echo.
 
 echo.
-echo 7. Enter the project path.
+echo 5. Enter the project path.
 echo.
 echo    This can be a relative path, absolute path,
 echo    or empty for the current folder. Note that
 echo    a project folder named %projName% will also
 echo    be created inside this folder.
+echo    Ex. ./samples
 echo.
 set /p location=Path: 
 if "%location%" == "" (
@@ -162,13 +141,8 @@ copy template\template.vcxproj "%projPath%\%projName%.vcxproj"
 call:replace "%projPath%\%projName%.vcxproj" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\%projName%.vcxproj" TemplateGame "%className%"
 call:replace "%projPath%\%projName%.vcxproj" GAMEPLAY_PATH "%gpPath%"
-
 copy template\template.vcxproj.filters "%projPath%\%projName%.vcxproj.filters"
 call:replace "%projPath%\%projName%.vcxproj.filters" TemplateGame "%className%"
-
-copy template\template.vcxproj.user "%projPath%\%projName%.vcxproj.user"
-call:replace "%projPath%\%projName%.vcxproj.user" GAMEPLAY_PATH "%gpPath%"
-
 call:replacevar gpPath "\" "/"
 
 REM Copy Apple XCode project files
@@ -177,63 +151,59 @@ copy template\template.xcodeproj\project.pbxproj "%projPath%\%projName%.xcodepro
 call:replace "%projPath%\%projName%.xcodeproj\project.pbxproj" GAMEPLAY_PATH "%gpPath%"
 call:replace "%projPath%\%projName%.xcodeproj\project.pbxproj" TemplateGame "%className%"
 call:replace "%projPath%\%projName%.xcodeproj\project.pbxproj" TEMPLATE_PROJECT "%projName%"
-
 copy template\TEMPLATE_PROJECT-macosx.plist "%projPath%\%projName%-macosx.plist"
 call:replace "%projPath%\%projName%-macosx.plist" TEMPLATE_UUID "%uuid%"
-call:replace "%projPath%\%projName%-macosx.plist" TEMPLATE_AUTHOR "%author%"
-
 copy template\TEMPLATE_PROJECT-ios.plist "%projPath%\%projName%-ios.plist"
 copy template\Default-568h@2x.png "%projPath%\Default-568h@2x.png"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_TITLE "%title%"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_UUID "%uuid%"
-call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_AUTHOR "%author%"
-
-REM Copy BlackBerry NDK project files
-copy template\template.cproject "%projPath%\.cproject"
-call:replace "%projPath%\.cproject" TEMPLATE_PROJECT "%projName%"
-call:replace "%projPath%\.cproject" TEMPLATE_UUID "%uuid%"
-call:replace "%projPath%\.cproject" GAMEPLAY_PATH "%gpPath%"
-
-copy template\template.project "%projPath%\.project"
-call:replace "%projPath%\.project" TEMPLATE_PROJECT "%projName%"
-
-copy template\template.bar-descriptor.xml "%projPath%\bar-descriptor.xml"
-call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_PROJECT "%projName%"
-call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_TITLE "%title%"
-call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_UUID "%uuid%"
-call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_AUTHOR "%author%"
-call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_DESCRIPTION "%desc%"
-call:replace "%projPath%\bar-descriptor.xml" GAMEPLAY_PATH "%gpPath%"
 
 REM Copy Android NDK project files
 mkdir "%projPath%\android"
-
-copy template\android\template.AndroidManifest.xml "%projPath%\android\AndroidManifest.xml"
+copy template\android\AndroidManifest.xml "%projPath%\android\AndroidManifest.xml"
 call:replace "%projPath%\android\AndroidManifest.xml" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\android\AndroidManifest.xml" TEMPLATE_UUID "%uuid%"
-
-copy template\android\template.build.xml "%projPath%\android\build.xml"
+copy template\android\build.xml "%projPath%\android\build.xml"
 call:replace "%projPath%\android\build.xml" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\android\build.xml" GAMEPLAY_PATH "%gpPath%"
-
+copy template\android\project.properties "%projPath%\android\project.properties"
 mkdir "%projPath%\android\jni"
-
 copy template\android\jni\Application.mk "%projPath%\android\jni\Application.mk"
-
-copy template\android\jni\template.Android.mk "%projPath%\android\jni\Android.mk"
+copy template\android\jni\Android.mk "%projPath%\android\jni\Android.mk"
 call:replace "%projPath%\android\jni\Android.mk" TemplateGame "%className%"
 call:replace "%projPath%\android\jni\Android.mk" TEMPLATE_PROJECT "%projName%"
 call:replace "%projPath%\android\jni\Android.mk" GAMEPLAY_PATH "%gpPath%"
-
 mkdir "%projPath%\android\res\drawable"
-
 copy template\icon.png "%projPath%\android\res\drawable\icon.png"
-
 mkdir "%projPath%\android\res\values"
-
 copy template\android\res\values\template.strings.xml "%projPath%\android\res\values\strings.xml"
 call:replace "%projPath%\android\res\values\strings.xml" TEMPLATE_TITLE "%title%"
 
+REM Copy Eclipse files for Android
+copy template\android\.cproject "%projPath%\android\.cproject"
+call:replace "%projPath%\android\.cproject" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\android\.cproject" TEMPLATE_UUID "%uuid%"
+call:replace "%projPath%\android\.cproject" GAMEPLAY_PATH "%gpPath%"
+copy template\android\.project "%projPath%\android\.project"
+call:replace "%projPath%\android\.project" TEMPLATE_PROJECT "%projName%"
+copy template\android\.classpath "%projPath%\android\.classpath"
+call:replace "%projPath%\android\.classpath" TEMPLATE_PROJECT "%projName%"
+
+REM Copy Eclipse files for Linux
+copy template\.cproject "%projPath%\.cproject"
+call:replace "%projPath%\.cproject" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\.cproject" TEMPLATE_UUID "%uuid%"
+call:replace "%projPath%\.cproject" GAMEPLAY_PATH "%gpPath%"
+copy template\.project "%projPath%\.project"
+call:replace "%projPath%\.project" TEMPLATE_PROJECT "%projName%"
+
+REM Copy QtCreator files
+copy template\TEMPLATE_PROJECT.pro "%projPath%\%projName%.pro"
+call:replace "%projPath%\%projName%.pro" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\%projName%.pro" GAMEPLAY_PATH "%gpPath%"
+call:replace "%projPath%\%projName%.pro" TemplateGame %className%
+
+REM Copy CMake files
 mkdir "%projPath%\build"
 copy "template\template-CMakeLists.txt" "%projPath%\CMakeLists.txt"
 call:replace "%projPath%\CMakeLists.txt" TEMPLATE_PROJECT %projName%
@@ -264,7 +234,7 @@ goto done
 :replace
 set rtemp=%~1.rtemp
 if exist "%rtemp%" del /Q "%rtemp%"
-for /f "tokens=1* eol=€ delims=€]" %%j in ('type "%~1" ^| find /V /N ""') do (
+for /f "tokens=1* eol=€ delims=€]" %%j in ('type "%~1" ^| %windir%\system32\find /V /N ""') do (
     set line=%%k
     setlocal EnableDelayedExpansion
     if "!line!" == "" (

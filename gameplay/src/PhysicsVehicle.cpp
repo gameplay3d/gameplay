@@ -224,14 +224,14 @@ void PhysicsVehicle::setEnabled(bool enable)
     getRigidBody()->setEnabled(enable);
 }
 
-unsigned int PhysicsVehicle::getNumWheels() const
+unsigned int PhysicsVehicle::getWheelCount() const
 {
     return (unsigned int)_wheels.size();
 }
 
-PhysicsVehicleWheel* PhysicsVehicle::getWheel(unsigned int i)
+PhysicsVehicleWheel* PhysicsVehicle::getWheel(unsigned int index)
 {
-    return _wheels.at(i);
+    return _wheels.at(index);
 }
 
 void PhysicsVehicle::addWheel(PhysicsVehicleWheel* wheel)

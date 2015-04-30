@@ -21,7 +21,7 @@ namespace gameplay
  * Increment the version number when making a change that break binary compatibility.
  * [0] is major, [1] is minor.
  */
-const unsigned char GPB_VERSION[2] = {1, 4};
+const unsigned char GPB_VERSION[2] = {1, 5};
 
 /**
  * The GamePlay Binary file class handles writing the GamePlay Binary file.

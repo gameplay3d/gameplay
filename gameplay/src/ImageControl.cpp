@@ -58,6 +58,11 @@ void ImageControl::initialize(const char* typeName, Theme::Style* style, Propert
 	}
 }
 
+const char* ImageControl::getTypeName() const
+{
+    return "ImageControl";
+}
+
 void ImageControl::setImage(const char* path)
 {
     SAFE_DELETE(_batch);
@@ -104,11 +109,6 @@ void ImageControl::setRegionDst(const Rectangle& region)
 const Rectangle& ImageControl::getRegionDst() const
 {
     return _dstRegion;
-}
-
-const char* ImageControl::getType() const
-{
-    return "image";
 }
 
 unsigned int ImageControl::drawImages(Form* form, const Rectangle& clip)

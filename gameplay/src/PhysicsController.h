@@ -20,7 +20,7 @@ class ScriptListener;
 /**
  * Defines a class for controlling game physics.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Physics
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Physics
  */
 class PhysicsController : public ScriptTarget
 {
@@ -31,6 +31,10 @@ class PhysicsController : public ScriptTarget
     friend class PhysicsVehicle;
     friend class PhysicsCollisionObject;
     friend class PhysicsGhostObject;
+
+    GP_SCRIPT_EVENTS_START();
+    GP_SCRIPT_EVENT(statusEvent, "[PhysicsController::Listener::EventType]");
+    GP_SCRIPT_EVENTS_END();
 
 public:
 
@@ -143,6 +147,14 @@ public:
          */
         virtual bool hit(const HitResult& result);
     };
+
+    /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * @return The type name of this class: "PhysicsController"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
 
     /**
      * Adds a listener to the physics controller.
@@ -464,10 +476,30 @@ private:
     {
     public:
 
-        /** 
-         * DebugVertex.
-         * @script{ignore}
+        /**
+         * Constructor.
          */
+        DebugDrawer(); 
+
+        /** 
+         * Destructor.
+         */
+        ~DebugDrawer();
+        
+        void begin(const Matrix& viewProjection);
+        void end();
+
+        // Overridden Bullet functions from btIDebugDraw.
+        void drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor);        
+        void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);        
+        void drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);        
+        void reportErrorWarning(const char* warningString);
+        void draw3dText(const btVector3& location, const char* textString);        
+        void setDebugMode(int mode);        
+        int getDebugMode() const;
+        
+    private:
+
         struct DebugVertex
         {
             /**
@@ -504,31 +536,7 @@ private:
              * The alpha component of the vertex.
              */
             float a;
-        };
-
-        /**
-         * Constructor.
-         */
-        DebugDrawer(); 
-
-        /** 
-         * Destructor.
-         */
-        ~DebugDrawer();
-        
-        void begin(const Matrix& viewProjection);
-        void end();
-
-        // Overridden Bullet functions from btIDebugDraw.
-        void drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor);        
-        void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);        
-        void drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);        
-        void reportErrorWarning(const char* warningString);
-        void draw3dText(const btVector3& location, const char* textString);        
-        void setDebugMode(int mode);        
-        int    getDebugMode() const;
-        
-    private:
+        };    	
         
         int _mode;
         MeshBatch* _meshBatch;

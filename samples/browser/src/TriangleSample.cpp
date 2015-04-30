@@ -2,7 +2,7 @@
 #include "SamplesGame.h"
 
 #if defined(ADD_SAMPLE)
-    ADD_SAMPLE("Graphics", "Draw Triangle", TriangleSample, 1);
+    ADD_SAMPLE("Graphics", "Triangle", TriangleSample, 1);
 #endif
 
 /**

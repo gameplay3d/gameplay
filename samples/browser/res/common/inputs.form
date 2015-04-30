@@ -2,7 +2,8 @@ form inputTestControls
 {
     width = 200
     height = 350
-    alignment = ALIGN_TOP_RIGHT
+    alignment = ALIGN_BOTTOM_RIGHT
+    consumeInputEvents = false
 
     button showKeyboardButton
     {

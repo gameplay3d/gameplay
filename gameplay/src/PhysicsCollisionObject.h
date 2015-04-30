@@ -1,6 +1,7 @@
 #ifndef PHYSICSCOLLISIONOBJECT_H_
 #define PHYSICSCOLLISIONOBJECT_H_
 
+#include "Script.h"
 #include "Vector3.h"
 #include "PhysicsCollisionShape.h"
 
@@ -20,7 +21,7 @@ class PhysicsVehicleWheel;
 /**
  * Defines the base class for all physics objects that support collision events.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsCollisionObject
 {
@@ -236,9 +237,10 @@ public:
     /**
      * Adds a collision listener for this collision object.
      * 
-     * Note: the given Lua function must match the function signature of PhysicsCollisionObject::CollisionListener::collisionEvent.
+     * Note: the given script function must be global and it must match the function 
+     * signature of PhysicsCollisionObject::CollisionListener::collisionEvent.
      * 
-     * @param function The Lua script function to add as a listener callback.
+     * @param function A valid global script function to add as a listener callback.
      * @param object Optional collision object used to filter the collision event.
      */
     void addCollisionListener(const char* function, PhysicsCollisionObject* object = NULL);
@@ -246,7 +248,7 @@ public:
     /**
      * Removes a collision listener.
      *
-     * @param function The Lua function (used as a listener callback) to remove.
+     * @param function The previously added script function to remove.
      * @param object Optional collision object used to filter the collision event.
      */
     void removeCollisionListener(const char* function, PhysicsCollisionObject* object = NULL);
@@ -260,62 +262,29 @@ public:
      */
     bool collidesWith(PhysicsCollisionObject* object) const;
 
-    /**
-     * Returns this collision object as a physics rigid body.
-     *
-     * If this collision object is not of type RIGID_BODY, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsRigidBody.
-     */
-    PhysicsRigidBody* asRigidBody();
-
-    /**
-     * Returns this collision object as a physics character.
-     *
-     * If this collision object is not of type CHARACTER, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsCharacter.
-     */
-    PhysicsCharacter* asCharacter();
-
-    /**
-     * Returns this collision object as a physics ghost object.
-     *
-     * If this collision object is not of type GHOST_OBJECT, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsGhostObject.
-     */
-    PhysicsGhostObject* asGhostObject();
-
-    /**
-     * Returns this collision object as a physics vehicle.
-     *
-     * If this collision object is not of type VEHICLE, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsVehicle.
-     */
-    PhysicsVehicle* asVehicle();
-
-    /**
-     * Returns this collision object as a physics vehicle wheel.
-     *
-     * If this collision object is not of type VEHICLE_WHEEL, this method returns NULL.
-     *
-     * @return This collision object cast to a PhysicsVehicleWheel.
-     */
-    PhysicsVehicleWheel* asVehicleWheel();
 
 protected:
 
     /**
      * Handles collision event callbacks to Lua script functions.
      */
-    struct ScriptListener : public CollisionListener
+    class ScriptListener : public CollisionListener
     {
+    public:
+
         /**
-         * Constructor.
+         * Destructor.
          */
-        ScriptListener(const char* url);
+        ~ScriptListener();
+
+        /**
+         * Creates a ScriptListener for the given script function url.
+         *
+         * @param url The global script function, or script#function.
+         *
+         * @return The ScriptListener, or NULL if the function could not be loaded.
+         */
+        static ScriptListener* create(const char* url);
 
         /**
          * @see PhysicsCollisionObject::CollisionListener
@@ -325,8 +294,17 @@ protected:
 
         /** The URL to the Lua script function to use as the callback. */
         std::string url;
+        /** The loaded script that contains the function. */
+        Script* script;
         /** The name of the Lua script function to use as the callback. */
         std::string function;
+
+    private:
+
+        /**
+         * Constructor.
+         */
+        ScriptListener();
     };
 
     /**

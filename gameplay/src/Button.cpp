@@ -45,9 +45,9 @@ void Button::initialize(const char* typeName, Theme::Style* style, Properties* p
     }
 }
 
-const char* Button::getType() const
+const char* Button::getTypeName() const
 {
-    return "button";
+    return "Button";
 }
 
 const unsigned int Button::getDataBinding() const

@@ -89,7 +89,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
     // Create a new VertexAttributeBinding.
     VertexAttributeBinding* b = new VertexAttributeBinding();
 
-#ifdef USE_VAO
+#ifdef GP_USE_VAO
     if (mesh && glGenVertexArrays)
     {
         GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, 0) );

@@ -15,7 +15,7 @@ void TemplateGame::initialize()
 
     // Get the box model and initialize its material parameter values and bindings
     Node* boxNode = _scene->findNode("box");
-    Model* boxModel = boxNode->getModel();
+    Model* boxModel = dynamic_cast<Model*>(boxNode->getDrawable());
     Material* boxMaterial = boxModel->getMaterial();
 
     // Set the aspect ratio for the scene's camera to match the current resolution
@@ -44,12 +44,11 @@ void TemplateGame::render(float elapsedTime)
 
 bool TemplateGame::drawScene(Node* node)
 {
-    // If the node visited contains a model, draw it
-    Model* model = node->getModel(); 
-    if (model)
-    {
-        model->draw(_wireframe);
-    }
+    // If the node visited contains a drawable object, draw it
+    Drawable* drawable = node->getDrawable(); 
+    if (drawable)
+        drawable->draw(_wireframe);
+
     return true;
 }
 

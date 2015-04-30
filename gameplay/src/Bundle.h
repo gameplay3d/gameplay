@@ -5,6 +5,7 @@
 #include "Font.h"
 #include "Node.h"
 #include "Game.h"
+#include "MeshSkin.h"
 
 namespace gameplay
 {

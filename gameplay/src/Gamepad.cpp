@@ -12,15 +12,13 @@ namespace gameplay
 static std::vector<Gamepad*> __gamepads;
 
 Gamepad::Gamepad(const char* formPath)
-    : _handle((GamepadHandle)INT_MAX), _buttonCount(0), _joystickCount(0), _triggerCount(0), _vendorId(0), _productId(0),
-      _form(NULL), _buttons(0)
+    : _handle((GamepadHandle)INT_MAX), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL), _buttons(0)
 {
     GP_ASSERT(formPath);
     _form = Form::create(formPath);
     GP_ASSERT(_form);
     _form->setConsumeInputEvents(false);
-    _vendorString = "None";
-    _productString = "Virtual";
+    _name = "Virtual";
 
     for (int i = 0; i < 2; ++i)
     {
@@ -36,19 +34,13 @@ Gamepad::Gamepad(const char* formPath)
     bindGamepadControls(_form);
 }
 
-Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                 unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
+Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name)
     : _handle(handle), _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount),
-      _vendorId(vendorId), _productId(productId), _form(NULL), _buttons(0)
+      _form(NULL), _buttons(0)
 {
-    if (vendorString)
+    if (name)
     {
-        _vendorString = vendorString;
-    }
-    
-    if (productString)
-    {
-        _productString = productString;
+        _name = name;
     }
 
     for (int i = 0; i < 2; ++i)
@@ -59,20 +51,15 @@ Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int jo
 
 Gamepad::~Gamepad()
 {
-    if (_form)
-    {
-        SAFE_RELEASE(_form);
-    }
+    SAFE_RELEASE(_form);
 }
 
-Gamepad* Gamepad::add(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                      unsigned int vendorId, unsigned int productId, 
-                      const char* vendorString, const char* productString)
+Gamepad* Gamepad::add(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name)
 {
-    Gamepad* gamepad = new Gamepad(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+    Gamepad* gamepad = new Gamepad(handle, buttonCount, joystickCount, triggerCount, name);
 
     __gamepads.push_back(gamepad);
-    Game::getInstance()->gamepadEvent(CONNECTED_EVENT, gamepad);
+    Game::getInstance()->gamepadEventInternal(CONNECTED_EVENT, gamepad);
     return gamepad;
 }
 
@@ -81,7 +68,7 @@ Gamepad* Gamepad::add(const char* formPath)
     Gamepad* gamepad = new Gamepad(formPath);
 
     __gamepads.push_back(gamepad);
-    Game::getInstance()->gamepadEvent(CONNECTED_EVENT, gamepad);
+    Game::getInstance()->gamepadEventInternal(CONNECTED_EVENT, gamepad);
     return gamepad;
 }
 
@@ -94,7 +81,7 @@ void Gamepad::remove(GamepadHandle handle)
         if (gamepad->_handle == handle)
         {
             it = __gamepads.erase(it);
-            Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, gamepad);
+            Game::getInstance()->gamepadEventInternal(DISCONNECTED_EVENT, gamepad);
             SAFE_DELETE(gamepad);
         }
         else
@@ -113,7 +100,7 @@ void Gamepad::remove(Gamepad* gamepad)
         if (g == gamepad)
         {
             it = __gamepads.erase(it);
-            Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, g);
+            Game::getInstance()->gamepadEventInternal(DISCONNECTED_EVENT, g);
             SAFE_DELETE(gamepad);
         }
         else
@@ -137,14 +124,14 @@ void Gamepad::bindGamepadControls(Container* container)
         {
             bindGamepadControls((Container*) control);
         }
-        else if (std::strcmp("joystick", control->getType()) == 0)
+        else if (std::strcmp("JoystickControl", control->getTypeName()) == 0)
         {
             JoystickControl* joystick = (JoystickControl*)control;
             joystick->setConsumeInputEvents(true);
             _uiJoysticks[joystick->getIndex()] = joystick;
             _joystickCount++;
         }
-        else if (std::strcmp("button", control->getType()) == 0)
+        else if (std::strcmp("Button", control->getTypeName()) == 0)
         {
             Button* button = (Button*)control;
             button->setConsumeInputEvents(true);
@@ -211,22 +198,10 @@ Gamepad::ButtonMapping Gamepad::getButtonMappingFromString(const char* string)
         return BUTTON_A;
     else if (strcmp(string, "B") == 0 || strcmp(string, "BUTTON_B") == 0)
         return BUTTON_B;
-    else if (strcmp(string, "C") == 0 || strcmp(string, "BUTTON_C") == 0)
-        return BUTTON_C;
     else if (strcmp(string, "X") == 0 || strcmp(string, "BUTTON_X") == 0)
         return BUTTON_X;
     else if (strcmp(string, "Y") == 0 || strcmp(string, "BUTTON_Y") == 0)
         return BUTTON_Y;
-    else if (strcmp(string, "Z") == 0 || strcmp(string, "BUTTON_Z") == 0)
-        return BUTTON_Z;
-    else if (strcmp(string, "MENU1") == 0 || strcmp(string, "BUTTON_MENU1") == 0)
-        return BUTTON_MENU1;
-    else if (strcmp(string, "MENU2") == 0 || strcmp(string, "BUTTON_MENU2") == 0)
-        return BUTTON_MENU2;
-    else if (strcmp(string, "MENU3") == 0 || strcmp(string, "BUTTON_MENU3") == 0)
-        return BUTTON_MENU3;
-    else if (strcmp(string, "MENU4") == 0 || strcmp(string, "BUTTON_MENU4") == 0)
-        return BUTTON_MENU4;
     else if (strcmp(string, "L1") == 0 || strcmp(string, "BUTTON_L1") == 0)
         return BUTTON_L1;
     else if (strcmp(string, "L2") == 0 || strcmp(string, "BUTTON_L2") == 0)
@@ -247,29 +222,20 @@ Gamepad::ButtonMapping Gamepad::getButtonMappingFromString(const char* string)
         return BUTTON_LEFT;
     else if (strcmp(string, "RIGHT") == 0 || strcmp(string, "BUTTON_RIGHT") == 0)
         return BUTTON_RIGHT;
+    else if (strcmp(string, "MENU1") == 0 || strcmp(string, "BUTTON_MENU1") == 0)
+        return BUTTON_MENU1;
+    else if (strcmp(string, "MENU2") == 0 || strcmp(string, "BUTTON_MENU2") == 0)
+        return BUTTON_MENU2;
+    else if (strcmp(string, "MENU3") == 0 || strcmp(string, "BUTTON_MENU3") == 0)
+        return BUTTON_MENU3;
 
-    GP_WARN("Unknown GamepadButton string.");
+    GP_WARN("Unknown string for ButtonMapping.");
     return BUTTON_A;
 }
 
-const unsigned int Gamepad::getVendorId() const
+const char* Gamepad::getName() const
 {
-    return _vendorId;
-}
-
-const unsigned int Gamepad::getProductId() const
-{
-    return _productId;
-}
-
-const char* Gamepad::getVendorString() const
-{
-    return _vendorString.c_str();
-}
-
-const char* Gamepad::getProductString() const
-{
-    return _productString.c_str();
+    return _name.c_str();
 }
 
 void Gamepad::update(float elapsedTime)
@@ -365,7 +331,7 @@ float Gamepad::getTriggerValue(unsigned int triggerId) const
 
     if (_form)
     {
-        // Triggers are currently not available for virtual gamepads.
+        // Triggers are not part of the virtual gamepad defintion
         return 0.0f;
     }
     else
@@ -389,7 +355,7 @@ void Gamepad::setButtons(unsigned int buttons)
     if (buttons != _buttons)
     {
         _buttons = buttons;
-        Platform::gamepadEventInternal(BUTTON_EVENT, this);
+        Form::gamepadButtonEventInternal(this);
     }
 }
 
@@ -398,7 +364,7 @@ void Gamepad::setJoystickValue(unsigned int index, float x, float y)
     if (_joysticks[index].x != x || _joysticks[index].y != y)
     {
         _joysticks[index].set(x, y);
-        Platform::gamepadEventInternal(JOYSTICK_EVENT, this, index);
+        Form::gamepadJoystickEventInternal(this, index);
     }
 }
 
@@ -407,7 +373,7 @@ void Gamepad::setTriggerValue(unsigned int index, float value)
     if (_triggers[index] != value)
     {
         _triggers[index] = value;
-        Platform::gamepadEventInternal(TRIGGER_EVENT, this, index);
+        Form::gamepadTriggerEventInternal(this, index);
     }
 }
 

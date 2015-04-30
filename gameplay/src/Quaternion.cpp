@@ -229,15 +229,15 @@ void Quaternion::setIdentity()
 
 float Quaternion::toAxisAngle(Vector3* axis) const
 {
-    GP_ASSERT(axis);
-
     Quaternion q(x, y, z, w);
     q.normalize();
-    axis->x = q.x;
-    axis->y = q.y;
-    axis->z = q.z;
-    axis->normalize();
-
+    if (axis)
+    {
+        axis->x = q.x;
+        axis->y = q.y;
+        axis->z = q.z;
+        axis->normalize();
+    }
     return (2.0f * acos(q.w));
 }
 

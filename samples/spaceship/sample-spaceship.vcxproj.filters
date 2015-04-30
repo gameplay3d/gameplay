@@ -12,7 +12,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bar-descriptor.xml" />
     <None Include="icon.png" />
     <None Include="game.config" />
     <None Include="res\airstrip.gpb">

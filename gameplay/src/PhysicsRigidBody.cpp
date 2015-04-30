@@ -286,8 +286,9 @@ float PhysicsRigidBody::getHeight(float x, float z) const
 
     // If our node has a terrain, call getHeight() on it since we need to factor in local
     // scaling on the terrain into the height calculation.
-    if (_node->getTerrain())
-        return _node->getTerrain()->getHeight(x, z);
+    Terrain* terrain = dynamic_cast<Terrain*>(_node->getDrawable());
+    if (terrain)
+        return terrain->getHeight(x, z);
 
     // This function is only supported for heightfield rigid bodies.
     if (_collisionShape->getType() != PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
@@ -374,9 +375,10 @@ void PhysicsRigidBody::transformChanged(Transform* transform, long cookie)
         _node->getWorldMatrix().getScale(&scale);
 
         // If the node has a terrain attached, factor in the terrain local scaling as well for the collision shape
-        if (_node->getTerrain())
+        Terrain* terrain = dynamic_cast<Terrain*>(_node->getDrawable());
+        if (terrain)
         {
-            const Vector3& tScale = _node->getTerrain()->_localScale;
+            const Vector3& tScale = terrain->_localScale;
             scale.set(scale.x * tScale.x, scale.y * tScale.y, scale.z * tScale.z);
         }
 

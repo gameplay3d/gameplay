@@ -71,6 +71,19 @@ vec4 _baseColor;
 varying vec3 v_normalVector;
 #else
 vec3 v_normalVector;
+
+#if (DIRECTIONAL_LIGHT_COUNT > 0)
+varying vec3 v_lightDirection[DIRECTIONAL_LIGHT_COUNT];
+#endif
+
+#if (POINT_LIGHT_COUNT > 0)
+varying vec3 v_vertexToPointLightDirection[POINT_LIGHT_COUNT];
+#endif
+
+#if (SPOT_LIGHT_COUNT > 0)
+varying vec3 v_vertexToSpotLightDirection[SPOT_LIGHT_COUNT];
+#endif
+
 #endif
 #endif
 

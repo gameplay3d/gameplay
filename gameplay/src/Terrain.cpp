@@ -27,8 +27,9 @@ static const unsigned int DIRTY_FLAG_INVERSE_WORLD = 1;
 
 static float getDefaultHeight(unsigned int width, unsigned int height);
 
-Terrain::Terrain() :
-    _heightfield(NULL), _node(NULL), _normalMap(NULL), _flags(FRUSTUM_CULLING | LEVEL_OF_DETAIL), _dirtyFlags(DIRTY_FLAG_INVERSE_WORLD)
+Terrain::Terrain() : Drawable(),
+    _heightfield(NULL), _normalMap(NULL), _flags(FRUSTUM_CULLING | LEVEL_OF_DETAIL),
+    _dirtyFlags(DIRTY_FLAG_INVERSE_WORLD)
 {
 }
 
@@ -259,7 +260,10 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale,
     BoundingBox& bounds = terrain->_boundingBox;
 
     if (normalMapPath)
+    {
         terrain->_normalMap = Texture::Sampler::create(normalMapPath, true);
+        GP_ASSERT( terrain->_normalMap->getTexture()->getType() == Texture::TEXTURE_2D );
+    }
 
     float halfWidth = (width - 1) * 0.5f;
     float halfHeight = (height - 1) * 0.5f;
@@ -373,26 +377,22 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale,
 
 void Terrain::setNode(Node* node)
 {
+
     if (_node != node)
     {
         if (_node)
-        {
             _node->removeListener(this);
-        }
 
-        _node = node;
+        Drawable::setNode(node);
 
         if (_node)
-        {
             _node->addListener(this);
-        }
 
         // Update patch node bindings
         for (size_t i = 0, count = _patches.size(); i < count; ++i)
         {
             _patches[i]->updateNodeBindings();
         }
-
         _dirtyFlags |= DIRTY_FLAG_INVERSE_WORLD;
     }
 }
@@ -409,10 +409,13 @@ const Matrix& Terrain::getInverseWorldMatrix() const
         _dirtyFlags &= ~DIRTY_FLAG_INVERSE_WORLD;
 
         if (_node)
+        {
             _inverseWorldMatrix.set(_node->getWorldMatrix());
+        }
         else
+        {
             _inverseWorldMatrix = Matrix::identity();
-
+        }
         // Apply local scale and invert
         _inverseWorldMatrix.scale(_localScale);
         _inverseWorldMatrix.invert();
@@ -438,13 +441,7 @@ bool Terrain::setLayer(int index, const char* texturePath, const Vector2& textur
                 result = false;
         }
     }
-
     return result;
-}
-
-Node* Terrain::getNode() const
-{
-    return _node;
 }
 
 bool Terrain::isFlagSet(Flags flag) const
@@ -477,7 +474,9 @@ void Terrain::setFlag(Flags flag, bool on)
     {
         // Dirty all materials since they need to be updated to support debug drawing
         for (size_t i = 0, count = _patches.size(); i < count; ++i)
+        {
             _patches[i]->setMaterialDirty();
+        }
     }
 }
 
@@ -537,6 +536,12 @@ unsigned int Terrain::draw(bool wireframe)
         visibleCount += _patches[i]->draw(wireframe);
     }
     return visibleCount;
+}
+
+Drawable* Terrain::clone(NodeCloneContext& context)
+{
+    // TODO:
+    return NULL;
 }
 
 static float getDefaultHeight(unsigned int width, unsigned int height)

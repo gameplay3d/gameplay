@@ -58,6 +58,7 @@ SpriteBatch* SpriteBatch::create(const char* texturePath, Effect* effect, unsign
 SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int initialCapacity)
 {
     GP_ASSERT(texture != NULL);
+    GP_ASSERT(texture->getType() == Texture::TEXTURE_2D);
 
     bool customEffect = (effect != NULL);
     if (!customEffect)
@@ -99,16 +100,15 @@ SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int
     }
 
     // Wrap the effect in a material
-    Material* material = Material::create(effect); // +ref effect
+    Material* material = Material::create(effect);
 
     // Set initial material state
     material->getStateBlock()->setBlend(true);
     material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
-    //material->getStateBlock()->setDepthFunction(RenderState::DEPTH_LEQUAL);
 
     // Bind the texture to the material as a sampler
-    Texture::Sampler* sampler = Texture::Sampler::create(texture); // +ref texture
+    Texture::Sampler* sampler = Texture::Sampler::create(texture);
     material->getParameter(samplerUniform->getName())->setValue(sampler);
     
     // Define the vertex format for the batch
@@ -210,15 +210,18 @@ void SpriteBatch::draw(float x, float y, float z, float width, float height, flo
     Vector2 downRight(x2, y2);
 
     // Rotate points around rotationAxis by rotationAngle.
-    Vector2 pivotPoint(rotationPoint);
-    pivotPoint.x *= width;
-    pivotPoint.y *= height;
-    pivotPoint.x += x;
-    pivotPoint.y += y;
-    upLeft.rotate(pivotPoint, rotationAngle);
-    upRight.rotate(pivotPoint, rotationAngle);
-    downLeft.rotate(pivotPoint, rotationAngle);
-    downRight.rotate(pivotPoint, rotationAngle);
+    if (rotationAngle != 0)
+    {
+        Vector2 pivotPoint(rotationPoint);
+        pivotPoint.x *= width;
+        pivotPoint.y *= height;
+        pivotPoint.x += x;
+        pivotPoint.y += y;
+        upLeft.rotate(pivotPoint, rotationAngle);
+        upRight.rotate(pivotPoint, rotationAngle);
+        downLeft.rotate(pivotPoint, rotationAngle);
+        downRight.rotate(pivotPoint, rotationAngle);
+    }
 
     // Write sprite vertex data.
     static SpriteVertex v[4];
@@ -257,34 +260,34 @@ void SpriteBatch::draw(const Vector3& position, const Vector3& right, const Vect
     p3 += tForward;
 
     // Calculate the rotation point.
-    Vector3 rp = p0;
-    tRight = right;
-    tRight *= width * rotationPoint.x;
-    tForward *= rotationPoint.y;
-    rp += tRight;
-    rp += tForward;
+    if (rotationAngle != 0)
+    {
+        Vector3 rp = p0;
+        tRight = right;
+        tRight *= width * rotationPoint.x;
+        tForward *= rotationPoint.y;
+        rp += tRight;
+        rp += tForward;
 
-    // Rotate all points the specified amount about the given point (about the up vector).
-    static Vector3 u;
-    Vector3::cross(right, forward, &u);
-    static Matrix rotation;
-    Matrix::createRotation(u, rotationAngle, &rotation);
+        // Rotate all points the specified amount about the given point (about the up vector).
+        static Vector3 u;
+        Vector3::cross(right, forward, &u);
+        static Matrix rotation;
+        Matrix::createRotation(u, rotationAngle, &rotation);
+        p0 -= rp;
+        p0 *= rotation;
+        p0 += rp;
+        p1 -= rp;
+        p1 *= rotation;
+        p1 += rp;
+        p2 -= rp;
+        p2 *= rotation;
+        p2 += rp;
+        p3 -= rp;
+        p3 *= rotation;
+        p3 += rp;
+    }
 
-    p0 -= rp;
-    p0 *= rotation;
-    p0 += rp;
-
-    p1 -= rp;
-    p1 *= rotation;
-    p1 += rp;
-
-    p2 -= rp;
-    p2 *= rotation;
-    p2 += rp;
-
-    p3 -= rp;
-    p3 *= rotation;
-    p3 += rp;
 
     // Add the sprite vertex data to the batch.
     static SpriteVertex v[4];

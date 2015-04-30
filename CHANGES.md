@@ -1,10 +1,37 @@
+## v3.0.0
+
+- Adds support for 2D Sprite, TileSet and Text.
+- Adds support for node instance scripts.
+- Adds support for C++11.
+- Adds support for MacOSX 64-bit.
+- Adds support for iOS 8+.
+- Adds support for XCode 6+.
+- Adds support for QTCreator for Linux and MacOSX.
+- Adds support for Eclipse for Linux.
+- Adds support for Eclipse for Android.
+- Adds updates to FBX SDK 2015.1
+- Adds support for Bullet Physics 2.82
+- Adds support for cubemap textures.
+- Adds support for font kerning.
+- Adds support for Android x86.
+- Adds support for gamepads on Android.
+- Adds supoprt for Android extensions through custom native activity.
+- Adds water sample to browser.
+- Adds audio player sample to browser. 
+- Adds GamePlay-deps repository for cross-platform Cmake dependency builds.
+- Fixes to Scene Graph for merging Drawables on Node.
+- Fixes from setUserPointer to setUserObject(Ref*)
+- Fixes for virtual gamepad scaling.
+- Fixes Image to support grayscale PNGs.
+- Fixes Android to build with arm instead of thumb.
+
 ## v2.0.0
 
 - Adds support for Visual Studio 2013.
 - Adds support for iOS 7, MacOS X 10.9 and XCode 5.
 - Adds support for BlackBerry NDK 10.2.
 - Adds support for CollisionObject group mask filtering.
-- Adds support in shaders for mulitple lights using shader defines.
+- Adds support in shaders for multiple lights using shader defines.
 - Adds various improvements to Material binding support.
 - Adds support for array MaterialParameter's.
 - Adds support for encoding distance field based fonts.

@@ -7,7 +7,6 @@
 namespace gameplay
 {
 
-class Node;
 class PhysicsVehicleWheel;
 
 /**
@@ -17,7 +16,7 @@ class PhysicsVehicleWheel;
  * to it all of the properties of a rigid body such as shape, mass, friction,
  * etc which correspond to the vehicle body:
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsVehicle : public PhysicsCollisionObject
 {
@@ -45,11 +44,11 @@ public:
     void setEnabled(bool enable);
 
     /**
-     * Returns the number of wheels on this vehicle.
+     * Gets the number of wheels on this vehicle.
      *
      * @return the number of wheels on this vehicle.
      */
-    unsigned int getNumWheels() const;
+    unsigned int getWheelCount() const;
 
     /**
      * Gets the wheel at the specified index.
@@ -67,12 +66,12 @@ public:
     void addWheel(PhysicsVehicleWheel* wheel);
 
     /**
-     * Returns an indication of vehicle speed in kilometers per hour.
+     * Gets an indication of vehicle speed in kilometers per hour.
      */
     float getSpeedKph() const;
 
     /**
-     * Returns a lagged version of vehicle speed in kilometers per hour,
+     * Gets a lagged version of vehicle speed in kilometers per hour,
      * for example that might be used to control engine sounds.
      */
     float getSpeedSmoothKph() const;

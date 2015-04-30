@@ -6,13 +6,13 @@
 
 namespace gameplay
 {
-    class Node;
     class PhysicsRigidBody;
+    class Node;
 
 /**
  * Defines the base class for physics constraints.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Constraints
  */
 class PhysicsConstraint
 {

@@ -19,7 +19,7 @@ namespace gameplay
  * character than would be possible if trying to move a character by applying
  * physical simulation with forces.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Collision_Objects
  */
 class PhysicsCharacter : public PhysicsGhostObject
 {
@@ -114,6 +114,12 @@ public:
     void setVelocity(float x, float y, float z);
 
     /**
+     * Resets the internal velocity state which brings the character to an immediate stop
+     *
+    */
+    void resetVelocityState();
+
+    /**
      * Rotates the character.
      *
      * @param axis Axis of rotation.
@@ -178,8 +184,9 @@ public:
      * Causes the character to jump to the specified height.
      *
      * @param height The amount to jump.
+     * @param force Set true to force the character to jump even if vertical velocity is non-zero
      */
-    void jump(float height);
+    void jump(float height, bool force = false);
 
 protected:
 

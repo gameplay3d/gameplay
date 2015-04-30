@@ -13,8 +13,14 @@ AudioSource::AudioSource(AudioBuffer* buffer, ALuint source)
     : _alSource(source), _buffer(buffer), _looped(false), _gain(1.0f), _pitch(1.0f), _node(NULL)
 {
     GP_ASSERT(buffer);
-    AL_CHECK( alSourcei(_alSource, AL_BUFFER, buffer->_alBuffer) );
-    AL_CHECK( alSourcei(_alSource, AL_LOOPING, _looped) );
+
+    if (isStreamed())
+        AL_CHECK(alSourceQueueBuffers(_alSource, 1, &buffer->_alBufferQueue[0]));
+    else
+        AL_CHECK(alSourcei(_alSource, AL_BUFFER, buffer->_alBufferQueue[0]));
+    
+    AL_CHECK(alSourcei(_alSource, AL_LOOPING, _looped && !isStreamed()));
+    
     AL_CHECK( alSourcef(_alSource, AL_PITCH, _pitch) );
     AL_CHECK( alSourcef(_alSource, AL_GAIN, _gain) );
     AL_CHECK( alSourcefv(_alSource, AL_VELOCITY, (const ALfloat*)&_velocity) );
@@ -24,13 +30,22 @@ AudioSource::~AudioSource()
 {
     if (_alSource)
     {
-        AL_CHECK( alDeleteSources(1, &_alSource) );
+        // Remove the source from the controller's set of currently playing sources
+        // regardless of the source's state. E.g. when the AudioController::pause is called
+        // all sources are paused but still remain in controller's set of currently 
+        // playing sources. When the source is deleted afterwards, it should be removed
+        // from controller's set regardless of its playing state.
+        AudioController* audioController = Game::getInstance()->getAudioController();
+        GP_ASSERT(audioController);
+        audioController->removePlayingSource(this);
+
+        AL_CHECK(alDeleteSources(1, &_alSource));
         _alSource = 0;
     }
     SAFE_RELEASE(_buffer);
 }
 
-AudioSource* AudioSource::create(const char* url)
+AudioSource* AudioSource::create(const char* url, bool streamed)
 {
     // Load from a .audio file.
     std::string pathStr = url;
@@ -49,7 +64,7 @@ AudioSource* AudioSource::create(const char* url)
     }
 
     // Create an audio buffer from this URL.
-    AudioBuffer* buffer = AudioBuffer::create(url);
+    AudioBuffer* buffer = AudioBuffer::create(url, streamed);
     if (buffer == NULL)
         return NULL;
 
@@ -84,8 +99,14 @@ AudioSource* AudioSource::create(Properties* properties)
         return NULL;
     }
 
+    bool streamed = false;
+    if (properties->exists("streamed"))
+    {
+        streamed = properties->getBool("streamed");
+    }
+
     // Create the audio source.
-    AudioSource* audio = AudioSource::create(path.c_str());
+    AudioSource* audio = AudioSource::create(path.c_str(), streamed);
     if (audio == NULL)
     {
         GP_ERROR("Audio file '%s' failed to load properly.", path.c_str());
@@ -133,6 +154,12 @@ AudioSource::State AudioSource::getState() const
     return INITIAL;
 }
 
+bool AudioSource::isStreamed() const
+{
+    GP_ASSERT(_buffer);
+    return _buffer->_streamed;
+}
+
 void AudioSource::play()
 {
     AL_CHECK( alSourcePlay(_alSource) );
@@ -140,8 +167,7 @@ void AudioSource::play()
     // Add the source to the controller's list of currently playing sources.
     AudioController* audioController = Game::getInstance()->getAudioController();
     GP_ASSERT(audioController);
-    if (audioController->_playingSources.find(this) == audioController->_playingSources.end())
-        audioController->_playingSources.insert(this);
+    audioController->addPlayingSource(this);
 }
 
 void AudioSource::pause()
@@ -152,12 +178,7 @@ void AudioSource::pause()
     // if the source is being paused by the user and not the controller itself.
     AudioController* audioController = Game::getInstance()->getAudioController();
     GP_ASSERT(audioController);
-    if (audioController->_pausingSource != this)
-    {
-        std::set<AudioSource*>::iterator iter = audioController->_playingSources.find(this);
-        if (iter != audioController->_playingSources.end())
-            audioController->_playingSources.erase(iter);
-    }
+    audioController->removePlayingSource(this);
 }
 
 void AudioSource::resume()
@@ -175,9 +196,7 @@ void AudioSource::stop()
     // Remove the source from the controller's set of currently playing sources.
     AudioController* audioController = Game::getInstance()->getAudioController();
     GP_ASSERT(audioController);
-    std::set<AudioSource*>::iterator iter = audioController->_playingSources.find(this);
-    if (iter != audioController->_playingSources.end())
-        audioController->_playingSources.erase(iter);
+    audioController->removePlayingSource(this);
 }
 
 void AudioSource::rewind()
@@ -192,7 +211,7 @@ bool AudioSource::isLooped() const
 
 void AudioSource::setLooped(bool looped)
 {
-    AL_CHECK( alSourcei(_alSource, AL_LOOPING, (looped) ? AL_TRUE : AL_FALSE) );
+    AL_CHECK(alSourcei(_alSource, AL_LOOPING, (looped && !isStreamed()) ? AL_TRUE : AL_FALSE));
     if (AL_LAST_ERROR())
     {
         GP_ERROR("Failed to set audio source's looped attribute with error: %d", AL_LAST_ERROR());
@@ -274,7 +293,7 @@ void AudioSource::transformChanged(Transform* transform, long cookie)
     }
 }
 
-AudioSource* AudioSource::clone(NodeCloneContext &context) const
+AudioSource* AudioSource::clone(NodeCloneContext& context)
 {
     GP_ASSERT(_buffer);
 
@@ -282,7 +301,7 @@ AudioSource* AudioSource::clone(NodeCloneContext &context) const
     AL_CHECK( alGenSources(1, &alSource) );
     if (AL_LAST_ERROR())
     {
-        GP_ERROR("Error generating audio source.");
+        GP_ERROR("Unable to cloning audio.");
         return NULL;
     }
     AudioSource* audioClone = new AudioSource(_buffer, alSource);
@@ -301,6 +320,45 @@ AudioSource* AudioSource::clone(NodeCloneContext &context) const
         }
     }
     return audioClone;
+}
+
+bool AudioSource::streamDataIfNeeded()
+{
+    GP_ASSERT( isStreamed() );
+    if( getState() != PLAYING )
+        return false;
+
+    int queuedBuffers;
+    alGetSourcei(_alSource, AL_BUFFERS_QUEUED, &queuedBuffers);
+ 
+    int buffersNeeded = std::min<int>(_buffer->_buffersNeededCount, AudioBuffer::STREAMING_BUFFER_QUEUE_SIZE);
+    if (queuedBuffers < buffersNeeded)
+    {
+        while (queuedBuffers < buffersNeeded)
+        {
+            if (!_buffer->streamData(_buffer->_alBufferQueue[queuedBuffers], _looped))
+                return false;
+            
+            AL_CHECK( alSourceQueueBuffers(_alSource, 1, &_buffer->_alBufferQueue[queuedBuffers]) );
+            queuedBuffers++;
+        }
+    }
+    else
+    {
+        int processedBuffers;
+        alGetSourcei(_alSource, AL_BUFFERS_PROCESSED, &processedBuffers);
+ 
+        while (processedBuffers-- > 0)
+        {
+            ALuint bufferID;
+            AL_CHECK( alSourceUnqueueBuffers(_alSource, 1, &bufferID) );
+            if (!_buffer->streamData(bufferID, _looped))
+                return false;
+            
+            AL_CHECK( alSourceQueueBuffers(_alSource, 1, &bufferID) );
+        }
+    }
+    return true;
 }
 
 }

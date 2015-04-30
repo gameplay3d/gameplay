@@ -13,7 +13,7 @@ namespace gameplay
 /**
  * Defines a button control. 
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Button : public Label
 {
@@ -62,9 +62,14 @@ protected:
     void initialize(const char* typeName, Theme::Style* style, Properties* properties);
 
     /**
-     * @see Control::getType
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "Button"
+     * @see ScriptTarget::getTypeName()
      */
-    const char* getType() const;
+    const char* getTypeName() const;
 
     /**
      * Gets the data binding index for this control.

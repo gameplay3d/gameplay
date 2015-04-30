@@ -12,7 +12,7 @@ namespace gameplay
  * 
  * This is capable of rendering text within its border.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class Label : public Control
 {
@@ -33,6 +33,16 @@ public:
     static Label* create(const char* id, Theme::Style* style = NULL);
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "Label"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Set the text for this label to display.
      *
      * @param text The text to display.
@@ -45,11 +55,6 @@ public:
      * @return The text displayed by this label.
      */
     const char* getText();
-
-    /**
-     * @see Control::getType
-     */
-    const char* getType() const;
 
     /**
      * Add a listener to be notified of specific events affecting

@@ -1,6 +1,8 @@
 #ifndef TERRAIN_H_
 #define TERRAIN_H_
 
+#include "Ref.h"
+#include "Drawable.h"
 #include "Transform.h"
 #include "Properties.h"
 #include "HeightField.h"
@@ -11,7 +13,6 @@
 namespace gameplay
 {
 
-class Node;
 class TerrainPatch;
 class TerrainAutoBindingResolver;
 
@@ -78,9 +79,9 @@ class TerrainAutoBindingResolver;
  * approaches. In practice, the skirts are often not noticeable at all unless the LOD variation
  * is very large and the terrain is excessively hilly on the edge of a LOD transition.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-Terrain
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Terrain
  */
-class Terrain : public Ref, private Transform::Listener
+class Terrain : public Ref, public Drawable, private Transform::Listener
 {
     friend class Node;
     friend class PhysicsController;
@@ -176,13 +177,6 @@ public:
                            const char* materialPath = NULL);
 
     /**
-     * Returns the node that this terrain is bound to.
-     *
-     * @return The node this terrain is bound to, or NULL if the terrain is not bound to a node.
-     */
-    Node* getNode() const;
-
-    /**
      * Determines if the specified terrain flag is currently set.
      */
     bool isFlagSet(Flags flag) const;
@@ -229,53 +223,61 @@ public:
     float getHeight(float x, float z) const;
 
     /**
-     * Draws the terrain.
+     * Sets the detail textures information for a terrain layer.
      *
-     * @param wireframe True to draw the terrain as wireframe, false to draw it solid (default).
-     * @return The number of draw calls taken to drawn the terrain
+     * A detail layer includes a color texture, a repeat count across the terrain for the texture and
+     * a region of the texture to use.
+     *
+     * Optionally, a layer can also include a blend texture, which is used to instruct the terrain how
+     * to blend the new layer with the layer underneath it. Blend maps use only a single channel of a
+     * texture and are best supplied by packing the blend map for a layer into the alpha channel of
+     * the color texture. Blend maps are always stretched over the entire terrain
+     *
+     * The lowest/base layer of the terrain should not include a blend map, since there is no lower
+     * level to blend with. All other layers should normally include a blend map. However, since no
+     * blend map will result in the texture completely masking the layer underneath it.
+     *
+     * Detail layers can be applied globally (to the entire terrain), or to one or more specific
+     * patches in the terrain. Patches are specified by row and column number, which is dependent
+     * on the patch size configuration of your terrain. For layers that span the entire terrain,
+     * the repeat count is relative to the entire terrain. For layers that span only specific
+     * patches, the repeat count is relative to those patches only.
+     *
+     * @param index Layer index number. Layer indexes do not necessarily need to be sequential and
+     *      are used simply to uniquely identify layers, where higher numbers specify higher-level
+     *      layers.
+     * @param texturePath Path to the color texture for this layer.
+     * @param textureRepeat Repeat count for the color texture across the terrain or patches.
+     * @param blendPath Path to the blend texture for this layer (optional).
+     * @param blendChannel Channel of the blend texture to sample for the blend map (0 == R, 1 == G, 2 == B, 3 == A).
+     * @param row Specifies the row index of patches to use this layer (optional, -1 means all rows).
+     * @param column Specifies the column index of patches to use this layer (optional, -1 means all columns).
+     *
+     * @return True if the layer was successfully set, false otherwise. The most common reason for failure is an
+     *      invalid texture path.
+     *
+     * @script{ignore}
+     */
+    bool setLayer(int index, const char* texturePath, const Vector2& textureRepeat = Vector2::one(),
+                  const char* blendPath = NULL, int blendChannel = 0,
+                  int row = -1, int column = -1);
+
+    /**
+     * @see Drawable#draw
      */
     unsigned int draw(bool wireframe = false);
 
+protected:
+
     /**
-    * Sets the detail textures information for a terrain layer.
-    *
-    * A detail layer includes a color texture, a repeat count across the terrain for the texture and
-    * a region of the texture to use.
-    *
-    * Optionally, a layer can also include a blend texture, which is used to instruct the terrain how
-    * to blend the new layer with the layer underneath it. Blend maps use only a single channel of a
-    * texture and are best supplied by packing the blend map for a layer into the alpha channel of
-    * the color texture. Blend maps are always stretched over the entire terrain
-    *
-    * The lowest/base layer of the terrain should not include a blend map, since there is no lower
-    * level to blend with. All other layers should normally include a blend map. However, since no
-    * blend map will result in the texture completely masking the layer underneath it.
-    *
-    * Detail layers can be applied globally (to the entire terrain), or to one or more specific
-    * patches in the terrain. Patches are specified by row and column number, which is dependent
-    * on the patch size configuration of your terrain. For layers that span the entire terrain,
-    * the repeat count is relative to the entire terrain. For layers that span only specific
-    * patches, the repeat count is relative to those patches only.
-    *
-    * @param index Layer index number. Layer indexes do not necessarily need to be sequential and
-    *      are used simply to uniquely identify layers, where higher numbers specify higher-level
-    *      layers.
-    * @param texturePath Path to the color texture for this layer.
-    * @param textureRepeat Repeat count for the color texture across the terrain or patches.
-    * @param blendPath Path to the blend texture for this layer (optional).
-    * @param blendChannel Channel of the blend texture to sample for the blend map (0 == R, 1 == G, 2 == B, 3 == A).
-    * @param row Specifies the row index of patches to use this layer (optional, -1 means all rows).
-    * @param column Specifies the column index of patches to use this layer (optional, -1 means all columns).
-    *
-    * @return True if the layer was successfully set, false otherwise. The most common reason for failure is an
-    *      invalid texture path.
-    *
-    * @script{ignore}
-    */
-    bool setLayer(int index,
-        const char* texturePath, const Vector2& textureRepeat = Vector2::one(),
-        const char* blendPath = NULL, int blendChannel = 0,
-        int row = -1, int column = -1);
+     * @see Drawable::setNode
+     */
+    void setNode(Node* node);
+
+    /**
+     * @see Drawable::clone
+     */
+    Drawable* clone(NodeCloneContext& context);
 
 private:
 
@@ -312,11 +314,6 @@ private:
     static Terrain* create(const char* path, Properties* properties);
 
     /**
-     * Sets the node that the terrain is attached to.
-     */
-    void setNode(Node* node);
-
-    /**
      * @see Transform::Listener::transformChanged.
      */
     void transformChanged(Transform* transform, long cookie);
@@ -334,7 +331,6 @@ private:
 
     std::string _materialPath;
     HeightField* _heightfield;
-    Node* _node;
     Vector3 _localScale;
     std::vector<TerrainPatch*> _patches;
     Texture::Sampler* _normalMap;

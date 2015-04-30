@@ -42,7 +42,7 @@ private:
     Matrix _viewProjectionMatrix;
     Vector2 _touchPoint;
     Vector2 _tilt;
-    std::list<Font::Text*> _text;
+    std::list<Text*> _text;
 };
 
 #endif

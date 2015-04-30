@@ -9,8 +9,8 @@ namespace gameplay
 
 class Bundle;
 class Model;
-class Joint;
 class Node;
+class Joint;
 
 /**
  * Defines the skin for a mesh.

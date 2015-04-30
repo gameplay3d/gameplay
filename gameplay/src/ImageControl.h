@@ -15,7 +15,7 @@ namespace gameplay
  *
  * This allows forms to display seperate images from arbitrary files not specified in the theme.
  *
- * @see http://blackberry.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
+ * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-UI_Forms
  */
 class ImageControl : public Control
 {
@@ -34,6 +34,16 @@ public:
      * @script{create}
      */
     static ImageControl* create(const char* id, Theme::Style* style = NULL);
+
+    /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * Child controls should override this function to return the correct type name.
+     *
+     * @return The type name of this class: "ImageControl"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
 
     /**
      * Set the path of the image for this ImageControl to display.
@@ -93,8 +103,6 @@ public:
      * @return The destination region of this ImageControl.
      */
     const Rectangle& getRegionDst() const;
-
-    const char* getType() const;
 
 protected:
 

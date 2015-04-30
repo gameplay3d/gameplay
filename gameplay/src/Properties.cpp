@@ -80,7 +80,7 @@ Properties* Properties::create(const char* url)
     std::vector<std::string> namespacePath;
     calculateNamespacePath(urlString, fileString, namespacePath);
 
-    std::auto_ptr<Stream> stream(FileSystem::open(fileString.c_str()));
+    std::unique_ptr<Stream> stream(FileSystem::open(fileString.c_str()));
     if (stream.get() == NULL)
     {
         GP_WARN("Failed to open file '%s'.", fileString.c_str());
@@ -688,7 +688,7 @@ Properties::Type Properties::getType(const char* name) const
     // Parse the value to determine the format
     unsigned int commaCount = 0;
     char* valuePtr = const_cast<char*>(value);
-    while (valuePtr = strchr(valuePtr, ','))
+    while ((valuePtr = strchr(valuePtr, ',')))
     {
         valuePtr++;
         commaCount++;

@@ -141,6 +141,33 @@ float Curve::getEndTime() const
     return _points[_pointCount-1].time;
 }
 
+float Curve::getPointTime(unsigned int index) const
+{
+    assert(index < _pointCount);
+    return _points[index].time;
+}
+
+
+Curve::InterpolationType Curve::getPointInterpolation(unsigned int index) const
+{
+    assert(index < _pointCount);
+    return _points[index].type;;
+}
+
+void Curve::getPointValues(unsigned int index, float* value, float* inValue, float* outValue) const
+{
+    assert(index < _pointCount);
+    
+    if (value)
+        memcpy(value, _points[index].value, _componentSize);
+    
+    if (inValue)
+        memcpy(inValue, _points[index].inValue, _componentSize);
+    
+    if (outValue)
+        memcpy(outValue, _points[index].outValue, _componentSize);
+}
+
 void Curve::setPoint(unsigned int index, float time, float* value, InterpolationType type)
 {
     setPoint(index, time, value, type, NULL, NULL);

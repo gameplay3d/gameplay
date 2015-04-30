@@ -26,6 +26,7 @@ class SpriteBatch
 {
     friend class Bundle;
     friend class Font;
+    friend class Text;
 
 public:
 
@@ -262,6 +263,43 @@ public:
     void draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, bool positionIsCenter = false);
 
     /**
+     * Sprite vertex structure used for batching.
+     */
+    struct SpriteVertex
+    {
+        /** Vertex position x */
+        float x;
+        /** Vertex position y */
+        float y;
+        /** Vertex position z */
+        float z;
+        /** Vertex texture u */
+        float u;
+        /** Vertex texture v */
+        float v;
+        /** Vertex color red component */
+        float r;
+        /** Vertex color green component */
+        float g;
+        /** Vertex color blue component */
+        float b;
+        /** Vertex color alpha component */
+        float a;
+    };
+    
+    /**
+     * Draws an array of vertices.
+     *
+     * This is for more advanced usage.
+     *
+     * @param vertices The vertices to draw.
+     * @param vertexCount The number of vertices within the vertex array.
+     * @param indices The vertex indices.
+     * @param indexCount The number of indices within the index array.
+     */
+    void draw(SpriteBatch::SpriteVertex* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount);
+    
+    /**
      * Finishes sprite drawing.
      *
      * This method flushes the batch and commits rendering of all sprites that were
@@ -318,22 +356,6 @@ public:
 private:
 
     /**
-     * Sprite vertex structure used for batching.
-     */
-    struct SpriteVertex
-    {
-        float x;        
-        float y;
-        float z;
-        float u;
-        float v;
-        float r;
-        float g;
-        float b;
-        float a;
-    };
-
-    /**
      * Constructor.
      */
     SpriteBatch();
@@ -378,21 +400,6 @@ private:
      */
     void addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip, SpriteBatch::SpriteVertex* vertices);
 
-    /**
-     * Draws an array of vertices.
-     *
-     * @param vertices The vertices to draw.
-     * @param vertexCount The number of vertices within the vertex array.
-     * @param indices The vertex indices.
-     * @param indexCount The number of indices within the index array.
-     */
-    void draw(SpriteBatch::SpriteVertex* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount);
-
-    /**
-     * Clip position and size to fit within clip region.
-     *
-     * @return true if any part of sprite intersects with the clip region and therefore needs drawing, false otherwise.
-     */
     bool clipSprite(const Rectangle& clip, float& x, float& y, float& width, float& height, float& u1, float& v1, float& u2, float& v2);
 
     MeshBatch* _batch;

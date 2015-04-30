@@ -66,6 +66,11 @@ uniform vec3 u_cameraPosition;
 
 #endif
 
+#if defined(CLIP_PLANE)
+uniform mat4 u_worldMatrix;
+uniform vec4 u_clipPlane;
+#endif
+
 ///////////////////////////////////////////////////////////
 // Varyings
 #if defined(LIGHTMAP)
@@ -106,6 +111,9 @@ varying vec3 v_cameraDirection;
 #include "skinning-none.vert" 
 #endif
 
+#if defined(CLIP_PLANE)
+varying float v_clipDistance;
+#endif
 
 void main()
 {
@@ -134,4 +142,8 @@ void main()
     #if defined(VERTEX_COLOR)
 	v_color = a_color;
     #endif
+    
+    #if defined(CLIP_PLANE)
+    v_clipDistance = dot(u_worldMatrix * position, u_clipPlane);
+    #endif    
 }

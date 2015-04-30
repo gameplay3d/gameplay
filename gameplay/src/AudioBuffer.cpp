@@ -9,7 +9,7 @@ namespace gameplay
 static std::vector<AudioBuffer*> __buffers;
 
 // Callbacks for loading an ogg file using Stream
-static size_t readStream(void *ptr, size_t size, size_t nmemb, void *datasource)
+static size_t readStream(void* ptr, size_t size, size_t nmemb, void* datasource)
 {
     GP_ASSERT(datasource);
     Stream* stream = reinterpret_cast<Stream*>(datasource);
@@ -31,69 +31,92 @@ static int closeStream(void *datasource)
     return 0;
 }
 
-static long tellStream(void *datasource)
+static long tellStream(void* datasource)
 {
     GP_ASSERT(datasource);
     Stream* stream = reinterpret_cast<Stream*>(datasource);
     return stream->position();
 }
 
-AudioBuffer::AudioBuffer(const char* path, ALuint buffer)
-    : _filePath(path), _alBuffer(buffer)
+AudioBuffer::AudioBuffer(const char* path, ALuint* buffer, bool streamed)
+: _filePath(path), _streamed(streamed), _buffersNeededCount(0)
 {
+    memcpy(_alBufferQueue, buffer, sizeof(_alBufferQueue));
 }
 
 AudioBuffer::~AudioBuffer()
 {
     // Remove the buffer from the cache.
     unsigned int bufferCount = (unsigned int)__buffers.size();
-    for (unsigned int i = 0; i < bufferCount; i++)
+
+    if (!_streamed)
     {
-        if (this == __buffers[i])
+        unsigned int bufferCount = (unsigned int)__buffers.size();
+        for (unsigned int i = 0; i < bufferCount; i++)
         {
-            __buffers.erase(__buffers.begin() + i);
-            break;
+            if (this == __buffers[i])
+            {
+                __buffers.erase(__buffers.begin() + i);
+                break;
+            }
         }
     }
-
-    if (_alBuffer)
+    else if (_streamStateOgg.get())
     {
-        AL_CHECK( alDeleteBuffers(1, &_alBuffer) );
-        _alBuffer = 0;
+        ov_clear(&_streamStateOgg->oggFile);
+    }
+
+    for (int i = 0; i < STREAMING_BUFFER_QUEUE_SIZE; i++)
+    {
+        if (_alBufferQueue[i])
+        {
+            AL_CHECK(alDeleteBuffers(1, &_alBufferQueue[i]));
+            _alBufferQueue[i] = 0;
+        }
     }
 }
 
-AudioBuffer* AudioBuffer::create(const char* path)
+AudioBuffer* AudioBuffer::create(const char* path, bool streamed)
 {
     GP_ASSERT(path);
 
-    // Search the cache for a stream from this file.
-    unsigned int bufferCount = (unsigned int)__buffers.size();
     AudioBuffer* buffer = NULL;
-    for (unsigned int i = 0; i < bufferCount; i++)
+    if (!streamed)
     {
-        buffer = __buffers[i];
-        GP_ASSERT(buffer);
-        if (buffer->_filePath.compare(path) == 0)
+        unsigned int bufferCount = (unsigned int)__buffers.size();
+        for (unsigned int i = 0; i < bufferCount; i++)
         {
-            buffer->addRef();
-            return buffer;
+            buffer = __buffers[i];
+            GP_ASSERT(buffer);
+            if (buffer->_filePath.compare(path) == 0)
+            {
+                buffer->addRef();
+                return buffer;
+            }
         }
     }
+    ALuint alBuffer[STREAMING_BUFFER_QUEUE_SIZE];
+    memset(alBuffer, 0, sizeof(alBuffer));
 
-    ALuint alBuffer;
-
-    // Load audio data into a buffer.
-    AL_CHECK( alGenBuffers(1, &alBuffer) );
-    if (AL_LAST_ERROR())
+    // Create 1 buffer for non-streamed sounds or full queue for streamed ones.
+    unsigned int queueSize = streamed ? STREAMING_BUFFER_QUEUE_SIZE : 1;
+    for (unsigned int i = 0; i < queueSize; i++)
     {
-        GP_ERROR("Failed to create OpenAL buffer; alGenBuffers error: %d", AL_LAST_ERROR());
-        AL_CHECK( alDeleteBuffers(1, &alBuffer) );
-        return NULL;
+        // Load audio data into a buffer.
+        AL_CHECK(alGenBuffers(1, &alBuffer[i]));
+        if (AL_LAST_ERROR())
+        {
+            GP_ERROR("Failed to create OpenAL buffer; alGenBuffers error: %d", AL_LAST_ERROR());
+            AL_CHECK(alDeleteBuffers(1, &alBuffer[i]));
+            return NULL;
+        }
     }
     
+    std::unique_ptr<AudioStreamStateWav> streamStateWav;
+    std::unique_ptr<AudioStreamStateOgg> streamStateOgg;
+
     // Load sound file.
-    std::auto_ptr<Stream> stream(FileSystem::open(path));
+    std::unique_ptr<Stream> stream(FileSystem::open(path));
     if (stream.get() == NULL || !stream->canRead())
     {
         GP_ERROR("Failed to load audio file %s.", path);
@@ -111,7 +134,9 @@ AudioBuffer* AudioBuffer::create(const char* path)
     // Check the file format
     if (memcmp(header, "RIFF", 4) == 0)
     {
-        if (!AudioBuffer::loadWav(stream.get(), alBuffer))
+        // Fill at least one buffer with sound data.
+        streamStateWav.reset(new AudioStreamStateWav());
+        if (!AudioBuffer::loadWav(stream.get(), alBuffer[0], streamed, streamStateWav.get()))
         {
             GP_ERROR("Invalid wave file: %s", path);
             goto cleanup;
@@ -119,7 +144,9 @@ AudioBuffer* AudioBuffer::create(const char* path)
     }
     else if (memcmp(header, "OggS", 4) == 0)
     {
-        if (!AudioBuffer::loadOgg(stream.get(), alBuffer))
+        // Fill at least one buffer with sound data.
+        streamStateOgg.reset(new AudioStreamStateOgg());
+        if (!AudioBuffer::loadOgg(stream.get(), alBuffer[0], streamed, streamStateOgg.get()))
         {
             GP_ERROR("Invalid ogg file: %s", path);
             goto cleanup;
@@ -131,20 +158,31 @@ AudioBuffer* AudioBuffer::create(const char* path)
         goto cleanup;
     }
 
-    buffer = new AudioBuffer(path, alBuffer);
+    buffer = new AudioBuffer(path, alBuffer, streamed);
 
-    // Add the buffer to the cache.
-    __buffers.push_back(buffer);
+    buffer->_fileStream.reset(stream.release());
+    buffer->_streamStateWav.reset(streamStateWav.release());
+    buffer->_streamStateOgg.reset(streamStateOgg.release());
+    if (buffer->_streamStateWav.get())
+        buffer->_buffersNeededCount = (buffer->_streamStateWav->dataSize + STREAMING_BUFFER_SIZE - 1) / STREAMING_BUFFER_SIZE;
+    else if (buffer->_streamStateOgg.get())
+        buffer->_buffersNeededCount = (buffer->_streamStateOgg->dataSize + STREAMING_BUFFER_SIZE - 1) / STREAMING_BUFFER_SIZE;
+
+    if (!streamed)
+        __buffers.push_back(buffer);
 
     return buffer;
     
 cleanup:
-    if (alBuffer)
-        AL_CHECK( alDeleteBuffers(1, &alBuffer) );
+    for (unsigned int i = 0; i < STREAMING_BUFFER_QUEUE_SIZE; i++)
+    {
+        if (alBuffer[i])
+            AL_CHECK(alDeleteBuffers(1, &alBuffer[i]));
+    }
     return NULL;
 }
 
-bool AudioBuffer::loadWav(Stream* stream, ALuint buffer)
+bool AudioBuffer::loadWav(Stream* stream, ALuint buffer, bool streamed, AudioStreamStateWav* streamState)
 {
     GP_ASSERT(stream);
 
@@ -275,6 +313,19 @@ bool AudioBuffer::loadWav(Stream* stream, ALuint buffer)
                 return false;
             }
 
+            if (streamed)
+            {
+                // Save streaming state for later use.
+                streamState->dataStart = stream->position();
+                streamState->dataSize = dataSize;
+                streamState->format = format;
+                streamState->frequency = frequency;
+            
+                // Limit data size to STREAMING_BUFFER_SIZE.
+                if (dataSize > STREAMING_BUFFER_SIZE)
+                    dataSize = STREAMING_BUFFER_SIZE;
+            }
+
             char* data = new char[dataSize];
             if (stream->read(data, sizeof(char), dataSize) != dataSize)
             {
@@ -330,11 +381,10 @@ bool AudioBuffer::loadWav(Stream* stream, ALuint buffer)
     return false;
 }
 
-bool AudioBuffer::loadOgg(Stream* stream, ALuint buffer)
+bool AudioBuffer::loadOgg(Stream* stream, ALuint buffer, bool streamed, AudioStreamStateOgg* streamState)
 {
     GP_ASSERT(stream);
 
-    OggVorbis_File ogg_file;
     vorbis_info* info;
     ALenum format;
     long result;
@@ -349,13 +399,13 @@ bool AudioBuffer::loadOgg(Stream* stream, ALuint buffer)
     callbacks.close_func = closeStream;
     callbacks.tell_func = tellStream;
 
-    if ((result = ov_open_callbacks(stream, &ogg_file, NULL, 0, callbacks)) < 0)
+    if ((result = ov_open_callbacks(stream, &streamState->oggFile, NULL, 0, callbacks)) < 0)
     {
         GP_ERROR("Failed to open ogg file.");
         return false;
     }
 
-    info = ov_info(&ogg_file, -1);
+    info = ov_info(&streamState->oggFile, -1);
     GP_ASSERT(info);
     if (info->channels == 1)
         format = AL_FORMAT_MONO16;
@@ -363,12 +413,26 @@ bool AudioBuffer::loadOgg(Stream* stream, ALuint buffer)
         format = AL_FORMAT_STEREO16;
 
     // size = #samples * #channels * 2 (for 16 bit).
-    long data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
+    long data_size = ov_pcm_total(&streamState->oggFile, -1) * info->channels * 2;
+
+    if (streamed)
+    {
+        // Save streaming state for later use.
+        streamState->dataStart = ov_pcm_tell(&streamState->oggFile);
+        streamState->dataSize = data_size;
+        streamState->format = format;
+        streamState->frequency = info->rate;
+        
+        // Limit data size to STREAMING_BUFFER_SIZE.
+        if (data_size > STREAMING_BUFFER_SIZE)
+            data_size = STREAMING_BUFFER_SIZE;
+    }
+
     char* data = new char[data_size];
 
     while (size < data_size)
     {
-        result = ov_read(&ogg_file, data + size, data_size - size, 0, 2, 1, &section);
+        result = ov_read(&streamState->oggFile, data + size, data_size - size, 0, 2, 1, &section);
         if (result > 0)
         {
             size += result;
@@ -392,12 +456,61 @@ bool AudioBuffer::loadOgg(Stream* stream, ALuint buffer)
         return false;
     }
 
-    AL_CHECK( alBufferData(buffer, format, data, data_size, info->rate) );
+    AL_CHECK(alBufferData(buffer, format, data, size, info->rate));
 
     SAFE_DELETE_ARRAY(data);
-    ov_clear(&ogg_file);
+
+    if (!streamed)
+        ov_clear(&streamState->oggFile);
 
     return true;
+}
+
+bool AudioBuffer::streamData(ALuint buffer, bool looped)
+{
+    static char buffers[STREAMING_BUFFER_SIZE];
+    
+    if (_streamStateWav.get())
+    {
+        ALsizei bytesRead = _fileStream->read(buffers, sizeof(char), STREAMING_BUFFER_SIZE);
+        if (bytesRead != STREAMING_BUFFER_SIZE)
+        {
+            if (looped)
+                _fileStream->seek(_streamStateWav->dataStart, SEEK_SET);
+        }
+        if (bytesRead > 0)
+            AL_CHECK(alBufferData(buffer, _streamStateWav->format, buffers, bytesRead, _streamStateWav->frequency));
+        
+        return bytesRead > 0 || looped;
+    }
+    else if (_streamStateOgg.get())
+    {
+        int section;
+        int result = 0;
+        ALsizei bytesRead = 0;
+
+        while (bytesRead < STREAMING_BUFFER_SIZE)
+        {
+            result = ov_read(&_streamStateOgg->oggFile, buffers + bytesRead, STREAMING_BUFFER_SIZE - bytesRead, 0, 2, 1, &section);
+            if (result > 0)
+            {
+                bytesRead += result;
+            }
+            else
+            {
+                if (looped)
+                    ov_pcm_seek(&_streamStateOgg->oggFile, _streamStateOgg->dataStart);
+                break;
+            }
+        }
+
+        if (bytesRead > 0)
+            AL_CHECK(alBufferData(buffer, _streamStateOgg->format, buffers, bytesRead, _streamStateOgg->frequency));
+        
+        return (bytesRead > 0) || looped;
+    }
+    
+    return false;
 }
 
 }

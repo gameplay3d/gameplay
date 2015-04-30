@@ -13,6 +13,7 @@
 #import <OpenGL/OpenGL.h>
 #import <mach/mach_time.h>
 #import <Foundation/Foundation.h>
+#import <Availability.h>
 #import <GameKit/GameKit.h>
 
 // These should probably be moved to a platform common file
@@ -22,8 +23,6 @@
 #define MICROSOFT_XBOX360_PRODUCT_ID    0x028e
 #define STEELSERIES_VENDOR_ID           0x1038
 #define STEELSERIES_FREE_PRODUCT_ID     0x1412
-#define FRUCTEL_VENDOR_ID               0x25B6
-#define FRUCTEL_GAMETEL_PRODUCT_ID      0x0001
 
 using namespace std;
 using namespace gameplay;
@@ -334,7 +333,6 @@ double getMachTimeInMilliseconds()
 
 - (NSString*)identifierName;
 - (NSString*)productName;
-- (NSString*)manufacturerName;
 - (NSString*)serialNumber;
 - (int)versionNumber;
 - (int)vendorID;
@@ -546,7 +544,6 @@ double getMachTimeInMilliseconds()
 {
     NSString* idName = NULL;
     if(idName == NULL) idName = [self productName];
-    if(idName == NULL) idName = [self manufacturerName];
     if(idName == NULL) idName = [self serialNumber];
     if(idName == NULL) idName = [NSString stringWithFormat:@"%d-%d", [self vendorID], [self productID]];
     return idName;
@@ -560,16 +557,6 @@ double getMachTimeInMilliseconds()
         return NULL;
     }
     return (NSString*)productName;
-}
-
-- (NSString*)manufacturerName
-{
-    CFStringRef manufacturerName = (CFStringRef)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDManufacturerKey));
-    if(manufacturerName == NULL || CFGetTypeID(manufacturerName) != CFStringGetTypeID())
-    {
-        return NULL;
-    }
-    return (NSString*)manufacturerName;
 }
 
 - (NSString*)serialNumber
@@ -745,14 +732,19 @@ double getMachTimeInMilliseconds()
     [[NSApplication sharedApplication] terminate:self];
 }
 
-- (void)windowDidResize:(NSNotification*)notification
+- (void)reshape
 {
     [gameLock lock];
+    
     NSSize size = [ [ _window contentView ] frame ].size;
     __width = size.width;
     __height = size.height;
+    CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
+    GLint dim[2] = {__width, __height};
+    CGLSetParameter(cglContext, kCGLCPSurfaceBackingSize, dim);
+    CGLEnable(cglContext, kCGLCESurfaceBackingSize);
+    
     gameplay::Platform::resizeEventInternal((unsigned int)__width, (unsigned int)__height);
-
     
     [gameLock unlock];
 }
@@ -781,9 +773,6 @@ double getMachTimeInMilliseconds()
                                                     [gamepad numberOfButtons],
                                                     [gamepad numberOfSticks],
                                                     [gamepad numberOfTriggerButtons],
-                                                    [gamepad vendorID],
-                                                    [gamepad productID],
-                                                    [[gamepad manufacturerName] cStringUsingEncoding:NSASCIIStringEncoding],
                                                     [[gamepad productName] cStringUsingEncoding:NSASCIIStringEncoding]);
 
             [__activeGamepads setObject:locationID forKey:locationID];
@@ -844,8 +833,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSOpenGLPixelFormatAttribute windowedAttrs[] = 
     {
         NSOpenGLPFAMultisample,
-        NSOpenGLPFASampleBuffers, samples ? 1 : 0,
-        NSOpenGLPFASamples, samples,
+        NSOpenGLPFASampleBuffers, static_cast<NSOpenGLPixelFormatAttribute>(samples ? 1 : 0),
+        NSOpenGLPFASamples, static_cast<NSOpenGLPixelFormatAttribute>(samples),
         NSOpenGLPFAAccelerated,
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAColorSize, 32,
@@ -857,11 +846,13 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSOpenGLPixelFormatAttribute fullscreenAttrs[] = 
     {
         NSOpenGLPFAMultisample,
-        NSOpenGLPFASampleBuffers, samples ? 1 : 0,
-        NSOpenGLPFASamples, samples,
+        NSOpenGLPFASampleBuffers, static_cast<NSOpenGLPixelFormatAttribute>(samples ? 1 : 0),
+        NSOpenGLPFASamples, static_cast<NSOpenGLPixelFormatAttribute>(samples),
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAScreenMask, (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
+    #if (__MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_7)
         NSOpenGLPFAFullScreen,
+    #endif
         NSOpenGLPFAColorSize, 32,
         NSOpenGLPFADepthSize, 24,
         NSOpenGLPFAAlphaSize, 8,
@@ -1147,7 +1138,7 @@ bool getMousePointForEvent(NSPoint& point, NSEvent* event)
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
 
     [__view->gameLock lock];
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_WHEEL, point.x, __height - point.y, (int)([event deltaY] * 10.0f));
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_WHEEL, point.x, __height - point.y, (int)([event deltaY]));
     [__view->gameLock unlock];
 }
 
@@ -2049,51 +2040,25 @@ void Platform::pollGamepadState(Gamepad* gamepad)
             Gamepad::BUTTON_MENU1
         };
         
-        static const int GametelMapping103[12] = {
-            Gamepad::BUTTON_B,
-            Gamepad::BUTTON_X,
-            Gamepad::BUTTON_Y,
-            Gamepad::BUTTON_A,
-            Gamepad::BUTTON_L1,
-            Gamepad::BUTTON_R1,
-            Gamepad::BUTTON_MENU1,
-            Gamepad::BUTTON_MENU2,
-            Gamepad::BUTTON_RIGHT,
-            Gamepad::BUTTON_LEFT,
-            Gamepad::BUTTON_DOWN,
-            Gamepad::BUTTON_UP
-        };
-        
         const int* mapping = NULL;
         float axisDeadZone = 0.0f;
-        if (gamepad->_vendorId == SONY_USB_VENDOR_ID &&
-            gamepad->_productId == SONY_USB_PS3_PRODUCT_ID)
+        if ([gp vendorID] == SONY_USB_VENDOR_ID &&
+            [gp productID] == SONY_USB_PS3_PRODUCT_ID)
         {
             mapping = PS3Mapping;
             axisDeadZone = 0.07f;
         }
-        else if (gamepad->_vendorId == MICROSOFT_VENDOR_ID &&
-                 gamepad->_productId == MICROSOFT_XBOX360_PRODUCT_ID)
+        else if ([gp vendorID] == MICROSOFT_VENDOR_ID &&
+                 [gp productID] == MICROSOFT_XBOX360_PRODUCT_ID)
         {
             mapping = XBox360Mapping;
             axisDeadZone = 0.2f;
         }
-        else if (gamepad->_vendorId == STEELSERIES_VENDOR_ID &&
-                 gamepad->_productId == STEELSERIES_FREE_PRODUCT_ID)
+        else if ([gp vendorID] == STEELSERIES_VENDOR_ID &&
+                 [gp productID] == STEELSERIES_FREE_PRODUCT_ID)
         {
             mapping = SteelSeriesFreeMapping;
             axisDeadZone = 0.005f;
-        }
-        else if (gamepad->_vendorId == FRUCTEL_VENDOR_ID &&
-                 gamepad->_productId == FRUCTEL_GAMETEL_PRODUCT_ID)
-        {
-            int ver = [gp versionNumber];
-            int major = ver >> 8;
-            int minor = ver & 0x00ff;
-            if (major >= 1 && minor > 1)
-            {
-                mapping = GametelMapping103;
-            }
         }
         
         unsigned int buttons = 0;

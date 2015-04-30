@@ -15,6 +15,8 @@ class TTFGlyph
 public:
     unsigned int index;
     unsigned int width;
+    int bearingX;
+    unsigned int advance;
     float uvCoords[4];
 };
 
