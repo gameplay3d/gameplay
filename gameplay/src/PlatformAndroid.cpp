@@ -44,6 +44,7 @@ static int __orientationAngle = 90;
 static bool __multiSampling = false;
 static bool __multiTouch = false;
 static int __primaryTouchId = -1;
+static bool __keyboardIsVisible = false;
 
 // OpenGL VAO functions.
 static const char* __glExtensions;
@@ -430,6 +431,8 @@ static void displayKeyboard(android_app* state, bool show)
     
     // Finished with the JVM.
     jvm->DetachCurrentThread(); 
+
+    __keyboardIsVisible = show;
 }
 
 // Gets the Keyboard::Key enumeration constant that corresponds to the given Android key code.
@@ -757,6 +760,18 @@ static float clampFuzz(float value, float fuzz)
 // Process the next input event.
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
 {
+    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY
+        && AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN
+        && AKeyEvent_getKeyCode(event) == AKEYCODE_BACK
+        && __keyboardIsVisible
+        )
+    {
+        Game::getInstance()->displayKeyboard(false);
+        return 1;
+    }
+
+	Game::getInstance()->handlePlatformEvent(event);
+
     int32_t deviceId = AInputEvent_getDeviceId(event);
     int32_t source = AInputEvent_getSource(event);
 
@@ -1241,6 +1256,37 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
     }
 }
 
+// Patch andoid_native_app_glue.c process_input function since it freezes app when user tries to hide keyboard
+// See: http://stackoverflow.com/questions/15913080/crash-when-closing-soft-keyboard-while-using-native-activity
+#include <android/log.h>
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "threaded_app", __VA_ARGS__))
+#define LOGV(...)  ((void)0)
+static void process_input( struct android_app* app, struct android_poll_source* source)
+{
+    AInputEvent* event = NULL;
+    if (AInputQueue_getEvent(app->inputQueue, &event) >= 0)
+    {
+        int type = AInputEvent_getType(event);
+        LOGV("New input event: type=%d\n", AInputEvent_getType(event));
+
+        bool skip_predispatch
+            =  AInputEvent_getType(event)  == AINPUT_EVENT_TYPE_KEY
+            && AKeyEvent_getKeyCode(event) == AKEYCODE_BACK;
+
+        // skip predispatch (all it does is send to the IME)
+        if (!skip_predispatch && AInputQueue_preDispatchEvent(app->inputQueue, event))
+            return;
+
+        int32_t handled = 0;
+        if (app->onInputEvent != NULL)
+            handled = app->onInputEvent(app, event);
+        AInputQueue_finishEvent(app->inputQueue, event, handled);
+    } else {
+        LOGE("Failure reading next input event: %s\n", strerror(errno));
+    }
+}
+
+
 Platform::Platform(Game* game)
     : _game(game)
 {
@@ -1312,6 +1358,9 @@ int Platform::enterMessagePump()
     __state->onAppCmd = engine_handle_cmd;
     __state->onInputEvent = engine_handle_input;
     
+    // Apply patch to native process_input function
+    __state->inputPollSource.process = process_input;
+
     // Prepare to monitor accelerometer.
     __sensorManager = ASensorManager_getInstance();
     __accelerometerSensor = ASensorManager_getDefaultSensor(__sensorManager, ASENSOR_TYPE_ACCELEROMETER);
