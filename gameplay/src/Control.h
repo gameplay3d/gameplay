@@ -170,6 +170,11 @@ public:
             RIGHT_CLICK     = 0x40,
 
             /**
+             * Event triggered when a control is activated in another manner (such as pressing enter in text control)
+             */
+            ACTIVATED       = 0x80,
+
+            /**
              * Event triggered when a control gains focus.
              */
             FOCUS_GAINED    = 0x200,
