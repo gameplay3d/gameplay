@@ -973,6 +973,11 @@ void Control::addListener(Control::Listener* listener, int eventFlags)
     {
         addSpecificListener(listener, Control::Listener::TEXT_CHANGED);
     }
+
+    if ((eventFlags & Control::Listener::ACTIVATED) == Control::Listener::ACTIVATED)
+    {
+        addSpecificListener(listener, Control::Listener::ACTIVATED);
+    }
 }
 
 void Control::removeListener(Control::Listener* listener)
