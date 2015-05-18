@@ -73,6 +73,7 @@ Theme* Theme::getDefault()
         if (!__defaultTheme)
         {
             // Create an empty theme so that UI's with no theme don't just crash
+            GP_WARN("Creating default (empty) UI Theme.");
             __defaultTheme = new Theme();
             unsigned int color = 0x00000000;
             __defaultTheme->_texture = Texture::create(Texture::RGBA, 1, 1, (unsigned char*)&color, false);
