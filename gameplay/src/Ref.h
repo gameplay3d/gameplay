@@ -43,6 +43,41 @@ public:
      */
     unsigned int getRefCount() const;
 
+    /**
+     * Temporarily hold a refcount on the stack, safely releasing when needed.
+     */
+    class Hold {
+        public:
+            /**
+             * Acquire and hold a reference to a given Ref object.
+             *
+             * The reference will go away when this object leaves scope.
+             */
+            Hold(Ref *r) : r_(r) {
+                r_->addRef();
+            }
+            ~Hold() {
+                if (r_) {
+                    r_->release();
+                }
+            }
+            Hold() = delete;
+            Hold(Hold const &) = delete;
+            Hold &operator=(Hold const &) = delete;
+
+            /**
+             * Remove the reference without releasing the object.
+             *
+             * @return the object, with the reference held.
+             */
+            Ref *unset() {
+                Ref *ret = r_;
+                r_ = nullptr;
+                return ret;
+            }
+        private:
+            Ref *r_;
+    };
 protected:
 
     /**

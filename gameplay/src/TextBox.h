@@ -112,6 +112,11 @@ public:
 
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
+    /**
+     * Update the text being edited.
+     */
+    void setText(char const *text) override;
+
 protected:
 
     /**
