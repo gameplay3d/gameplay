@@ -973,6 +973,11 @@ void Control::addListener(Control::Listener* listener, int eventFlags)
     {
         addSpecificListener(listener, Control::Listener::TEXT_CHANGED);
     }
+
+    if ((eventFlags & Control::Listener::ACTIVATED) == Control::Listener::ACTIVATED)
+    {
+        addSpecificListener(listener, Control::Listener::ACTIVATED);
+    }
 }
 
 void Control::removeListener(Control::Listener* listener)
@@ -1055,7 +1060,7 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
     // This method runs untrusted code by notifying listeners of events.
     // If the user calls exit() or otherwise releases this control, we
     // need to keep it alive until the method returns.
-    addRef();
+    Ref::Hold ref(this);
 
     controlEvent(eventType);
 
@@ -1074,8 +1079,6 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
     }
 
     fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Control, controlEvent), dynamic_cast<void*>(this), eventType);
-
-    release();
 }
 
 void Control::controlEvent(Control::Listener::EventType evt)
