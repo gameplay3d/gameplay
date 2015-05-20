@@ -47,7 +47,7 @@ public:
      *
      * @param text The text to display.
      */
-    void setText(const char* text);
+    virtual void setText(const char* text);
 
     /**
      * Get the text displayed by this label.
