@@ -1060,7 +1060,7 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
     // This method runs untrusted code by notifying listeners of events.
     // If the user calls exit() or otherwise releases this control, we
     // need to keep it alive until the method returns.
-    Ref::Hold ref(this);
+    this->addRef();
 
     controlEvent(eventType);
 
@@ -1079,6 +1079,8 @@ void Control::notifyListeners(Control::Listener::EventType eventType)
     }
 
     fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(Control, controlEvent), dynamic_cast<void*>(this), eventType);
+
+    this->release();
 }
 
 void Control::controlEvent(Control::Listener::EventType evt)

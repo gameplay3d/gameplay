@@ -588,7 +588,7 @@ bool AnimationClip::update(float elapsedTime)
 
 void AnimationClip::onBegin()
 {
-    Ref::Hold ref(this);
+    this->addRef();
 
     // Initialize animation to play.
     setClipStateBit(CLIP_IS_STARTED_BIT);
@@ -621,11 +621,13 @@ void AnimationClip::onBegin()
 
     // Fire script begin event
     fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(AnimationClip, clipBegin), this);
+
+    this->release();
 }
 
 void AnimationClip::onEnd()
 {
-    Ref::Hold ref(this);
+    this->addRef();
 
     _blendWeight = 1.0f;
     resetClipStateBit(CLIP_ALL_BITS);
@@ -644,6 +646,8 @@ void AnimationClip::onEnd()
 
     // Fire script end event
     fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(AnimationClip, clipEnd), this);
+
+    this->release();
 }
 
 bool AnimationClip::isClipStateBitSet(unsigned char bit) const
