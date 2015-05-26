@@ -67,6 +67,7 @@ Container::~Container()
     std::vector<Control*>::iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
+        (*it)->_parent = nullptr;
         SAFE_RELEASE((*it));
     }
     SAFE_RELEASE(_layout);

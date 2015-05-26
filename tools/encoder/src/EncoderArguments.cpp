@@ -387,6 +387,10 @@ EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
     {
         return FILEFORMAT_TTF;
     }
+    if (ext.compare("otf") == 0)
+    {
+        return FILEFORMAT_OTF;
+    }
     if (ext.compare("gpb") == 0)
     {
         return FILEFORMAT_GPB;

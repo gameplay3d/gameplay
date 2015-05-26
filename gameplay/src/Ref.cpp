@@ -32,11 +32,13 @@ Ref::~Ref()
 
 void Ref::addRef()
 {
+    GP_ASSERT(_refCount > 0 && _refCount < 1000000);
     ++_refCount;
 }
 
 void Ref::release()
 {
+    GP_ASSERT(_refCount > 0 && _refCount < 1000000);
     if ((--_refCount) <= 0)
     {
 #ifdef GP_USE_MEM_LEAK_DETECTION
