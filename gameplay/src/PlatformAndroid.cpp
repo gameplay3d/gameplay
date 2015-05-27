@@ -44,7 +44,7 @@ static int __orientationAngle = 90;
 static bool __multiSampling = false;
 static bool __multiTouch = false;
 static int __primaryTouchId = -1;
-static bool __keyboardIsVisible = false;
+static bool __displayKeyboard = false;
 
 // OpenGL VAO functions.
 static const char* __glExtensions;
@@ -431,8 +431,6 @@ static void displayKeyboard(android_app* state, bool show)
     
     // Finished with the JVM.
     jvm->DetachCurrentThread(); 
-
-    __keyboardIsVisible = show;
 }
 
 // Gets the Keyboard::Key enumeration constant that corresponds to the given Android key code.
@@ -763,7 +761,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY
         && AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN
         && AKeyEvent_getKeyCode(event) == AKEYCODE_BACK
-        && __keyboardIsVisible
+        && __displayKeyboard
         )
     {
         Game::getInstance()->displayKeyboard(false);
@@ -1448,6 +1446,9 @@ int Platform::enterMessagePump()
                 }
             }
         }
+
+        // Display the keyboard.
+        gameplay::displayKeyboard(__state, __displayKeyboard);
     }
     return 0;
 }
@@ -1649,7 +1650,10 @@ bool Platform::isCursorVisible()
 
 void Platform::displayKeyboard(bool display)
 {
-    gameplay::displayKeyboard(__state, display);
+    if (display)
+        __displayKeyboard = true;
+    else
+        __displayKeyboard = false;
 }
 
 void Platform::shutdownInternal()
