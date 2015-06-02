@@ -262,6 +262,7 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale,
     if (normalMapPath)
     {
         terrain->_normalMap = Texture::Sampler::create(normalMapPath, true);
+        terrain->_normalMap->setWrapMode(Texture::CLAMP, Texture::CLAMP);
         GP_ASSERT( terrain->_normalMap->getTexture()->getType() == Texture::TEXTURE_2D );
     }
 
