@@ -5,10 +5,10 @@
 GamePlay is an open-source, cross-platform native C++ game framework for creating 2D/3D mobile and desktop games.
 
 - [Website](http://www.gameplay3d.io/)
-- [Community Group](https://groups.google.com/d/forum/gameplay3d-developers)
 - [Wiki](https://github.com/gameplay3d/GamePlay/wiki)
 - [API](http://gameplay3d.github.io/GamePlay/api/index.html)
 - [Development Guide](https://github.com/gameplay3d/GamePlay/wiki#wiki-Development_Guide)
+- [Community Group](https://groups.google.com/d/forum/gameplay3d-developers)
 
 ## Supported Platforms
 - [Windows](https://github.com/gameplay3d/GamePlay/wiki/Visual-Studio-Setup) 
