@@ -26,12 +26,6 @@ Open-source under [Apache 2.0 license](http://www.tldrlegal.com/license/apache-l
 
 ## Bug Reporting
 Please log bugs under [Issues](https://github.com/gameplay3d/GamePlay/issues) on github.
-If you are unsure if your problem is a bug then post on the [Help Forum](http://www.gameplay3d.io/forums/viewforum.php?f=3).
-
-## Feature Requests
-Please post feature requests on the [Feature Request Forum](http://www.gameplay3d.io/forums/viewforum.php?f=4). 
-
-Approved feature requests will be added to the github backlog issues list. 
 
 ## Disclaimer
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
