@@ -97,6 +97,20 @@ const char* Transform::getTypeName() const
     return "Transform";
 }
 
+void Transform::alignToVector(const gameplay::Vector3 &normal)
+{
+    if (normal.lengthSquared() == 0.0f)
+        return;
+
+    Vector3 up = getUpVector();
+    Vector3 cross = up;
+    cross.cross(normal);
+    if (cross.lengthSquared() > 0.0f) {
+        float angle = Vector3::angle(up, normal);
+        rotate(cross, angle);
+    }
+}
+
 const Matrix& Transform::getMatrix() const
 {
     if (_matrixDirtyBits & (DIRTY_TRANSLATION | DIRTY_ROTATION | DIRTY_SCALE))
