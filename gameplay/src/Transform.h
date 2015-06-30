@@ -185,6 +185,14 @@ public:
     const char* getTypeName() const;
 
     /**
+     * Rotates this transform so that the up vector aligns with specified
+     * normal.
+     *
+     * @param normal The normal to align to.
+     */
+    void alignToVector(const Vector3& normal);
+
+    /**
      * Gets the matrix corresponding to this transform.
      *
      * The matrix returned from this method is mathematically equivalent
