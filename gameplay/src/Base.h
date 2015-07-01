@@ -182,6 +182,8 @@ extern int strcmpnocase(const char* s1, const char* s2);
 #ifdef __ANDROID__
     #include <AL/al.h>
     #include <AL/alc.h>
+    #define AL_ALEXT_PROTOTYPES
+    #include <AL/alext.h>
 #elif WIN32
     #define AL_LIBTYPE_STATIC
     #include <AL/al.h>
