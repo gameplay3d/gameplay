@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "FrameBuffer.h"
 #include "Game.h"
+#include "Enums.h"
 
 #define FRAMEBUFFER_ID_DEFAULT "org.gameplay3d.framebuffer.default"
 
@@ -76,13 +77,13 @@ FrameBuffer* FrameBuffer::create(const char* id)
     return create(id, 0, 0);
 }
 
-FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned int height)
+FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned int height, Texture::Format format)
 {
     RenderTarget* renderTarget = NULL;
     if (width > 0 && height > 0)
     {
         // Create a default RenderTarget with same ID.
-        renderTarget = RenderTarget::create(id, width, height);
+        renderTarget = RenderTarget::create(id, width, height, format);
         if (renderTarget == NULL)
         {
             GP_ERROR("Failed to create render target for frame buffer.");
@@ -195,8 +196,17 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index, GLen
 
         // Now set this target as the color attachment corresponding to index.
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
-        GLenum attachment = GL_COLOR_ATTACHMENT0 + index;
-        GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0) );
+        GLenum attachment;
+        if (target->getTexture()->getFormat() == Texture::DEPTH) {
+        	attachment = GL_DEPTH_ATTACHMENT;
+        	GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0));
+        	glDrawBuffer(GL_NONE);
+        	glReadBuffer(GL_NONE);
+        } else {
+            attachment = GL_COLOR_ATTACHMENT0 + index;
+        	GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0) );
+        }
+
         GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
         {
@@ -256,7 +266,7 @@ void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
         GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
         {
-            GP_ERROR("Framebuffer status incomplete: 0x%x", fboStatus);
+            GP_ERROR("Framebuffer status incomplete: %s", glEnumToString(fboStatus));
         }
 
         // Restore the FBO binding
@@ -274,9 +284,9 @@ bool FrameBuffer::isDefault() const
     return (this == _defaultFrameBuffer);
 }
 
-FrameBuffer* FrameBuffer::bind()
+FrameBuffer* FrameBuffer::bind(GLenum type)
 {
-    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
+    GL_ASSERT( glBindFramebuffer(type, _handle) );
     FrameBuffer* previousFrameBuffer = _currentFrameBuffer;
     _currentFrameBuffer = this;
     return previousFrameBuffer;
@@ -303,9 +313,9 @@ Image* FrameBuffer::createScreenshot(Image::Format format)
     return screenshot;
 }
 
-FrameBuffer* FrameBuffer::bindDefault()
+FrameBuffer* FrameBuffer::bindDefault(GLenum type)
 {
-    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _defaultFrameBuffer->_handle) );
+    GL_ASSERT( glBindFramebuffer(type, _defaultFrameBuffer->_handle) );
     _currentFrameBuffer = _defaultFrameBuffer;
     return _defaultFrameBuffer;
 }
