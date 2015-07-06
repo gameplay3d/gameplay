@@ -26,7 +26,8 @@ public:
         UNKNOWN = 0,
         RGB     = GL_RGB,
         RGBA    = GL_RGBA,
-        ALPHA   = GL_ALPHA
+        ALPHA   = GL_ALPHA,
+        DEPTH	= GL_DEPTH_COMPONENT,
     };
 
     /**
