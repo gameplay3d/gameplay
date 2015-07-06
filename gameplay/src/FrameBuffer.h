@@ -59,7 +59,7 @@ public:
      * @return A newly created FrameBuffer.
      * @script{create}
      */
-    static FrameBuffer* create(const char* id, unsigned int width, unsigned int height);
+    static FrameBuffer* create(const char* id, unsigned int width, unsigned int height, Texture::Format format = Texture::RGBA);
 
     /**
      * Get a named FrameBuffer from its ID.
@@ -159,7 +159,7 @@ public:
      *
      * @ return The currently bound framebuffer.
      */
-    FrameBuffer* bind();
+    FrameBuffer* bind(GLenum type = GL_FRAMEBUFFER);
 
     /**
      * Records a screenshot of what is stored on the current FrameBuffer.
@@ -183,7 +183,7 @@ public:
      *
      * @ return The default framebuffer.
      */
-    static FrameBuffer* bindDefault();
+    static FrameBuffer* bindDefault(GLenum type = GL_FRAMEBUFFER);
 
     /**
      * Gets the currently bound FrameBuffer.
