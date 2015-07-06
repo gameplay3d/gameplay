@@ -183,9 +183,12 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     if (type == Texture::TEXTURE_2D)
     {
         // Texture 2D
-    	if (format == Texture::DEPTH) {
+        if (format == Texture::DEPTH)
+        {
     		GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, data) );
-    	} else {
+        }
+        else
+        {
     		GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
     	}
     }
@@ -222,14 +225,17 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
 
     // Set initial minification filter based on whether or not mipmaping was enabled.
     Filter minFilter;
-    if (format == Texture::DEPTH) {
+    if (format == Texture::DEPTH)
+    {
     	minFilter = NEAREST;
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST) );
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST) );
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE) );
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_NONE) );
-    } else {
+    }
+    else
+    {
     	minFilter = generateMipmaps ? NEAREST_MIPMAP_LINEAR : LINEAR;
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter) );
     }

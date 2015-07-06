@@ -196,12 +196,15 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index, GLen
         // Now set this target as the color attachment corresponding to index.
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
         GLenum attachment;
-        if (target->getTexture()->getFormat() == Texture::DEPTH) {
+        if (target->getTexture()->getFormat() == Texture::DEPTH)
+        {
         	attachment = GL_DEPTH_ATTACHMENT;
         	GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0));
         	glDrawBuffer(GL_NONE);
         	glReadBuffer(GL_NONE);
-        } else {
+        }
+        else
+        {
             attachment = GL_COLOR_ATTACHMENT0 + index;
         	GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0) );
         }

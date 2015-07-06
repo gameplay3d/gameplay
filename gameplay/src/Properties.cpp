@@ -1288,7 +1288,8 @@ bool Properties::write(const char *path)
         return false;
     }
 
-    for (auto n = _namespaces.begin(); n != _namespaces.end(); n++) {
+    for (auto n = _namespaces.begin(); n != _namespaces.end(); n++)
+    {
         if (n != _namespaces.begin())
             stream->write("\n", 1, 1);
         Properties *p = *n;
@@ -1307,7 +1308,8 @@ void Properties::_write(std::shared_ptr<Stream> stream, std::string prepend)
 
     //TODO use carriage returns on a windows machine?
 
-    if (this->_id.length() > 0) {
+    if (this->_id.length() > 0)
+    {
         name += " " + this->_id;
     }
     name += "\n";
@@ -1317,7 +1319,8 @@ void Properties::_write(std::shared_ptr<Stream> stream, std::string prepend)
 
     prepend += "    ";
 
-    for (auto n = _properties.begin(); n != _properties.end(); n++) {
+    for (auto n = _properties.begin(); n != _properties.end(); n++)
+    {
         Property p = *n;
         stream->write(prepend.c_str(), prepend.length(), 1);
         stream->write(p.name.c_str(), p.name.length(), 1);
@@ -1326,7 +1329,8 @@ void Properties::_write(std::shared_ptr<Stream> stream, std::string prepend)
         stream->write("\n", 1, 1);
     }
 
-    for (auto n = _namespaces.begin(); n != _namespaces.end(); n++) {
+    for (auto n = _namespaces.begin(); n != _namespaces.end(); n++)
+    {
         if (n != _namespaces.begin() || _properties.size() > 0)
             stream->write("\n", 1, 1);
         Properties *p = *n;
