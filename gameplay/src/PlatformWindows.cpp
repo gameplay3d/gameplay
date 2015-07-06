@@ -821,6 +821,11 @@ Platform* Platform::create(Game* game)
         {
             // Read window title.
             const char* title = config->getString("title");
+            if (!title)
+            {
+                title = game->getGameName().c_str();
+            }
+            
             if (title)
             {
                 int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);

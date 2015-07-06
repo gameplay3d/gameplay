@@ -619,6 +619,21 @@ public:
      */
     bool launchURL(const char *url) const;
 
+    /**
+     * Returns the name of the game
+     *
+     * @return The name of the game
+     */
+    std::string getGameName() const;
+
+    /**
+     * Returns the producer of the game
+     *
+     * @return The producer of the game
+     */
+    std::string getGameProducer() const;
+
+
 protected:
 
     /**
@@ -766,6 +781,8 @@ private:
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
     ScriptController* _scriptController;            // Controls the scripting engine.
     ScriptTarget* _scriptTarget;                // Script target for the game
+    std::string _gameName;                      // Name of game
+    std::string _gameProducer;                   // Producer of game
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 
