@@ -1,7 +1,6 @@
 #include "Base.h"
 #include "FrameBuffer.h"
 #include "Game.h"
-#include "Enums.h"
 
 #define FRAMEBUFFER_ID_DEFAULT "org.gameplay3d.framebuffer.default"
 
