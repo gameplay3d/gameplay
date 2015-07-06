@@ -266,7 +266,7 @@ void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
         GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
         {
-            GP_ERROR("Framebuffer status incomplete: %s", glEnumToString(fboStatus));
+            GP_ERROR("Framebuffer status incomplete: 0x%x", fboStatus);
         }
 
         // Restore the FBO binding
