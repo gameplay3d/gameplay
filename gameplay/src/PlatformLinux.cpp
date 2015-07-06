@@ -1002,6 +1002,8 @@ bool isBlackListed(unsigned int vendorId, unsigned int productId)
         case 0x0e0f: //virtual machine devices
             if (productId == 0x0003) // Virtual Mouse
                 return true;
+        case 0x0000: //non-existant device -- not sure why this happens, but it does
+        	return true;
     }
     return false;
 }
@@ -1127,6 +1129,7 @@ int Platform::enterMessagePump()
     static bool shiftDown = false;
     static bool capsOn = false;
     static XEvent evt;
+    static bool visible = true;
 
     // Get the initial time.
     clock_gettime(CLOCK_REALTIME, &__timespec);
@@ -1136,17 +1139,9 @@ int Platform::enterMessagePump()
     // Run the game.
     _game->run();
 
-    // Setup select for message handling (to allow non-blocking)
-    int x11_fd = ConnectionNumber(__display);
-
-    pollfd xpolls[1];
-    xpolls[0].fd = x11_fd;
-    xpolls[0].events = POLLIN|POLLPRI;
-
     // Message loop.
     while (true)
     {
-        poll( xpolls, 1, 16 );
         // handle all pending events in one block
         while (XPending(__display))
         {
@@ -1316,6 +1311,12 @@ int Platform::enterMessagePump()
                         }
                     }
                     break;
+                case MapNotify:
+                	visible = true;
+                	break;
+                case UnmapNotify:
+                	visible = false;
+                	break;
 
                 default:
                     break;
@@ -1331,6 +1332,13 @@ int Platform::enterMessagePump()
                 break;
 
             _game->frame();
+        }
+
+        if (!visible && __vsync) {
+        	// glXSwapBuffers may not block on vsync properly if the window is obscured/offdesktop --
+        	// if vsync enabled, do an artificial slowdown - 15ms is largely arbitrary
+        	// if the we have disabled vsync, we don't care, run full speed anyway.
+        	usleep(15000.0);
         }
 
         glXSwapBuffers(__display, __window);
