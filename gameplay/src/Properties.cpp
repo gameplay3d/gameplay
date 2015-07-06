@@ -1281,7 +1281,7 @@ bool Properties::write(const char *path)
     // Calculate the file and full namespace path from the specified url.
     std::string fileString(path);
 
-    std::shared_ptr<Stream> stream(FileSystem::open(fileString.c_str(), FileSystem::WRITE));
+    std::unique_ptr<Stream> stream(FileSystem::open(fileString.c_str(), FileSystem::WRITE));
     if (stream.get() == NULL)
     {
         GP_WARN("Failed to open file '%s'.", fileString.c_str());
@@ -1300,7 +1300,7 @@ bool Properties::write(const char *path)
     return true;
 }
 
-void Properties::_write(std::shared_ptr<Stream> stream, std::string prepend)
+void Properties::_write(std::unique_ptr<Stream> &stream, std::string prepend)
 {
     std::string name = prepend + std::string(this->_namespace);
     std::string open = prepend + "{\n";

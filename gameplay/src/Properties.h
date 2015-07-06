@@ -558,7 +558,7 @@ private:
     void mergeWith(Properties* overrides);
 
     // Called by write()
-    void _write(std::shared_ptr<Stream> stream, std::string prepend);
+    void _write(std::unique_ptr<Stream> &stream, std::string prepend);
 
     // Clones the Properties object.
     Properties* clone();

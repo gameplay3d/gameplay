@@ -706,7 +706,7 @@ Platform* Platform::create(Game* game)
         XSendEvent(__display, DefaultRootWindow(__display), false, SubstructureNotifyMask | SubstructureRedirectMask, &xev);
     }
 
-    XStoreName(__display, __window, title ? title : game->getGameName().c_str());
+    XStoreName(__display, __window, title ? title : "");
 
     __context = glXCreateContext(__display, visualInfo, NULL, True);
     if (!__context)

@@ -70,8 +70,6 @@ Game::Game()
     GP_ASSERT(__gameInstance == NULL);
 
     __gameInstance = this;
-    _gameProducer = std::string("Gameplay3D");
-    _gameName = std::string("Gameplay3D");
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
 
@@ -764,17 +762,6 @@ Properties* Game::getConfig() const
 
     return _properties;
 }
-
-std::string Game::getGameName() const
-{
-    return _gameName;
-}
-
-std::string Game::getGameProducer() const
-{
-    return _gameProducer;
-}
-
 
 void Game::loadConfig()
 {
