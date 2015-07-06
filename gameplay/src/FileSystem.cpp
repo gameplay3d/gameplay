@@ -133,6 +133,7 @@ public:
     virtual long int position();
     virtual bool seek(long int offset, int origin);
     virtual bool rewind();
+    virtual void flush();
 
     static FileStream* create(const char* filePath, const char* mode);
 
@@ -169,6 +170,7 @@ public:
     virtual long int position();
     virtual bool seek(long int offset, int origin);
     virtual bool rewind();
+    virtual void flush();
 
     static FileStreamAndroid* create(const char* filePath, const char* mode);
 
@@ -577,7 +579,10 @@ std::string FileSystem::getDirectoryName(const char* path)
 
 std::string FileSystem::getExtension(const char* path)
 {
-    const char* str = strrchr(path, '.');
+    std::string fullPath;
+    getFullPath(path, fullPath);
+
+    const char* str = strrchr(fullPath.c_str(), '.');
     if (str == NULL)
         return "";
 
@@ -713,6 +718,12 @@ bool FileStream::rewind()
         return true;
     }
     return false;
+}
+
+void FileStream::flush()
+{
+    if (_file)
+        fflush(_file);
 }
 
 ////////////////////////////////
@@ -860,6 +871,11 @@ bool FileStreamAndroid::rewind()
         return AAsset_seek(_asset, 0, SEEK_SET) != -1;
     }
     return false;
+}
+
+void FileStreamAndroid::flush()
+{
+    //deliberate noop -- only used for reading assets
 }
 
 #endif

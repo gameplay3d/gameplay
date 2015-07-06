@@ -155,6 +155,12 @@ public:
      */
     virtual bool rewind() = 0;
 
+    /**
+     * Flushes the buffer.
+     *
+     */
+    virtual void flush() = 0;
+
 protected:
     Stream() {};
 private:

@@ -6,6 +6,8 @@
 namespace gameplay
 {
 
+class Stream;
+
 /**
  * Defines an image buffer of RGB or RGBA color data.
  *
@@ -24,14 +26,32 @@ public:
         RGBA
     };
 
+    enum FileFormat
+    {
+        AUTO,
+        PNG,
+    };
+
     /**
      * Creates an image from the image file at the given path.
      *
      * @param path The path to the image file.
+     * @param type the type of image to read
      * @return The newly created image.
      * @script{create}
      */
-    static Image* create(const char* path);
+    static Image* create(const char* path, FileFormat type = AUTO);
+
+    /**
+     *
+     * Creates an image from a stream
+     *
+     * @param stream The stream pointing to the image
+     * @param type The type of image to read
+     * @return The newly created image.
+     * @script{create}
+     */
+    static Image * create(std::unique_ptr<Stream> &stream, FileFormat type);
 
     /**
      * Creates an image from the data provided
@@ -44,6 +64,24 @@ public:
      * @script{create}
      */
     static Image* create(unsigned int width, unsigned int height, Format format, unsigned char* data = NULL);
+
+    /**
+     * Writes an image to disk
+     * @param path The path to the image file.
+     * @param type the type of image to read
+     * @return True if successful, false otherwise
+     */
+    bool write(const char* path, FileFormat type = AUTO);
+
+    /**
+     * Writes an image to a stream
+     * @param path The stream to write to
+     * @param type the type of image to write
+     * @return True if successful, false otherwise
+     */
+    bool write(std::unique_ptr<Stream> &stream, FileFormat type);
+
+
 
     /**
      * Gets the image's raw pixel data.
@@ -85,6 +123,16 @@ private:
      * Destructor.
      */
     ~Image();
+
+    /*
+     * PNG creator
+     */
+    static Image* createPNG(const char* desc, std::unique_ptr<Stream> &stream);
+
+    /*
+     * PNG writer
+     */
+    bool writePNG(const char* desc, std::unique_ptr<Stream> &stream);
 
     /**
      * Hidden copy assignment operator.
