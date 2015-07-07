@@ -25,13 +25,34 @@ import android.view.OrientationEventListener;
  * that are not offered directly the gameplay3d framework such as platform events, access to 
  * android user-interface, life-cycle events for saving game state and custom plug-ins/extensions.
  */
-public class GamePlayNativeActivity extends NativeActivity
-    implements InputManager.InputDeviceListener {
+public class GamePlayNativeActivity extends NativeActivity {
     
     static {
         System.loadLibrary("gameplay");
     }
-    
+
+    private class GamePlayInputDeviceListener
+        implements InputManager.InputDeviceListener {
+        @Override
+        public void onInputDeviceAdded(int deviceId) {
+            getGamepadDevice(deviceId);
+        }
+
+        @Override
+        public void onInputDeviceRemoved(int deviceId) {
+            InputDevice device = _gamepadDevices.get(deviceId);
+            if (device != null) {
+                _gamepadDevices.remove(deviceId);
+                Log.v(TAG, "Gamepad disconnected:id=" + deviceId);
+                gamepadEventDisconnectedImpl(deviceId);
+            }
+        }
+
+        @Override
+        public void onInputDeviceChanged(int deviceId) {
+        }
+    }
+
     private static final String TAG = "GamePlayNativeActivity";
     
     @Override
@@ -39,7 +60,11 @@ public class GamePlayNativeActivity extends NativeActivity
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         _gamepadDevices = new SparseArray<InputDevice>();
-        _inputManager = (InputManager)getSystemService(Context.INPUT_SERVICE);
+        Log.v(TAG, "Build version: " + Build.VERSION.SDK_INT);
+        if (Build.VERSION.SDK_INT >= 16) {
+            _inputManager = (InputManager)getSystemService(Context.INPUT_SERVICE);
+            _inputDeviceListener = new GamePlayInputDeviceListener();
+        }
 
         if (Build.VERSION.SDK_INT >= 19)
         {
@@ -77,37 +102,22 @@ public class GamePlayNativeActivity extends NativeActivity
     protected void onResume() {
         super.onResume();
         orientationListener.enable();
-        _inputManager.registerInputDeviceListener(this, null);
-        int[] ids = InputDevice.getDeviceIds();
-        for (int i = 0; i < ids.length; i++) {
-            getGamepadDevice(ids[i]);
+        if (_inputManager != null) {
+            _inputManager.registerInputDeviceListener(_inputDeviceListener, null);
+            int[] ids = InputDevice.getDeviceIds();
+            for (int i = 0; i < ids.length; i++) {
+                getGamepadDevice(ids[i]);
+            }
         }
     }
     
     @Override
     protected void onPause() {
         orientationListener.disable();
-        _inputManager.unregisterInputDeviceListener(this);
-        super.onPause();
-    }
-    
-    @Override
-    public void onInputDeviceAdded(int deviceId) {
-        getGamepadDevice(deviceId);
-    }
-
-    @Override
-    public void onInputDeviceRemoved(int deviceId) {
-        InputDevice device = _gamepadDevices.get(deviceId);
-        if (device != null) {
-            _gamepadDevices.remove(deviceId);
-            Log.v(TAG, "Gamepad disconnected:id=" + deviceId);
-            gamepadEventDisconnectedImpl(deviceId);
+        if (_inputManager != null) {
+            _inputManager.unregisterInputDeviceListener(_inputDeviceListener);
         }
-    }
-    
-    @Override
-    public void onInputDeviceChanged(int deviceId) {
+        super.onPause();
     }
     
     private void onGamepadConnected(int deviceId, String deviceName) {
@@ -143,7 +153,8 @@ public class GamePlayNativeActivity extends NativeActivity
     private static native void gamepadEventDisconnectedImpl(int deviceId);
     private static native void screenOrientationChanged(int orientation);
     
-    private InputManager _inputManager;
+    private InputManager _inputManager = null;
     private SparseArray<InputDevice> _gamepadDevices;
     private OrientationEventListener orientationListener;
+    GamePlayInputDeviceListener _inputDeviceListener = null;
 }
