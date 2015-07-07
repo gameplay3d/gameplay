@@ -368,11 +368,16 @@ void TMXLayer::setupTiles()
 
 void TMXLayer::setTile(unsigned int x, unsigned int y, unsigned int gid)
 {
-    bool flipHorz = (gid & FLIPPED_HORIZONTALLY_FLAG) != 0;
-    bool flipVert = (gid & FLIPPED_VERTICALLY_FLAG) != 0;
-    bool flipDiag = (gid & FLIPPED_DIAGONALLY_FLAG) != 0;
-    unsigned int flaglessGid = gid & ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG);
-    _tiles[x + y * _width] = { flaglessGid, flipHorz, flipVert, flipDiag };
+    struct layer_tile tile = {
+        .gid = gid & ~(FLIPPED_HORIZONTALLY_FLAG |
+                       FLIPPED_VERTICALLY_FLAG |
+                       FLIPPED_DIAGONALLY_FLAG),
+        .horz_flip = (gid & FLIPPED_HORIZONTALLY_FLAG) != 0,
+        .vert_flip = (gid & FLIPPED_VERTICALLY_FLAG) != 0,
+        .diag_flip = (gid & FLIPPED_DIAGONALLY_FLAG) != 0,
+    };
+
+    _tiles[x + y * _width] = tile;
 }
 
 const TMXLayer::layer_tile& TMXLayer::getTileStruct(unsigned int x, unsigned int y) const

@@ -72,7 +72,7 @@ private:
 /**
  * Types of layers
  */
-enum TMXLayerType
+enum class TMXLayerType
 {
     NormalLayer,
     ImageLayer,
