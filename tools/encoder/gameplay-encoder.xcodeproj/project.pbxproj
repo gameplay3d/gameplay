@@ -59,6 +59,8 @@
 		43BD156A1A581FBE003CA5FF /* libgameplay-deps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BD15691A581FBE003CA5FF /* libgameplay-deps.a */; };
 		B661733F16A61CE40083A307 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661733D16A61CE40083A307 /* Image.cpp */; };
 		B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */; };
+		C0575FA21B4C5C3A007B96B0 /* TMXSceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0575F9E1B4C5C3A007B96B0 /* TMXSceneEncoder.cpp */; };
+		C0575FA31B4C5C3A007B96B0 /* TMXTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0575FA01B4C5C3A007B96B0 /* TMXTypes.cpp */; };
 		C076C905174F6D2E00645678 /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C8FF174F6D2E00645678 /* Constants.cpp */; };
 		C076C906174F6D2E00645678 /* FBXUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C901174F6D2E00645678 /* FBXUtil.cpp */; };
 		C076C907174F6D2E00645678 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C903174F6D2E00645678 /* Sampler.cpp */; };
@@ -177,6 +179,10 @@
 		B661733E16A61CE40083A307 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = src/Image.h; sourceTree = SOURCE_ROOT; };
 		B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalMapGenerator.cpp; path = src/NormalMapGenerator.cpp; sourceTree = SOURCE_ROOT; };
 		B661734216A61CFA0083A307 /* NormalMapGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NormalMapGenerator.h; path = src/NormalMapGenerator.h; sourceTree = SOURCE_ROOT; };
+		C0575F9E1B4C5C3A007B96B0 /* TMXSceneEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TMXSceneEncoder.cpp; path = src/TMXSceneEncoder.cpp; sourceTree = SOURCE_ROOT; };
+		C0575F9F1B4C5C3A007B96B0 /* TMXSceneEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMXSceneEncoder.h; path = src/TMXSceneEncoder.h; sourceTree = SOURCE_ROOT; };
+		C0575FA01B4C5C3A007B96B0 /* TMXTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TMXTypes.cpp; path = src/TMXTypes.cpp; sourceTree = SOURCE_ROOT; };
+		C0575FA11B4C5C3A007B96B0 /* TMXTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMXTypes.h; path = src/TMXTypes.h; sourceTree = SOURCE_ROOT; };
 		C076C8FF174F6D2E00645678 /* Constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Constants.cpp; path = src/Constants.cpp; sourceTree = SOURCE_ROOT; };
 		C076C900174F6D2E00645678 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = src/Constants.h; sourceTree = SOURCE_ROOT; };
 		C076C901174F6D2E00645678 /* FBXUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FBXUtil.cpp; path = src/FBXUtil.cpp; sourceTree = SOURCE_ROOT; };
@@ -324,6 +330,10 @@
 				42C8EDFD14724CD700E43619 /* Transform.h */,
 				42C8EDFE14724CD700E43619 /* TTFFontEncoder.cpp */,
 				42C8EDFF14724CD700E43619 /* TTFFontEncoder.h */,
+				C0575F9E1B4C5C3A007B96B0 /* TMXSceneEncoder.cpp */,
+				C0575F9F1B4C5C3A007B96B0 /* TMXSceneEncoder.h */,
+				C0575FA11B4C5C3A007B96B0 /* TMXTypes.h */,
+				C0575FA01B4C5C3A007B96B0 /* TMXTypes.cpp */,
 				42C8EE0014724CD700E43619 /* Vector2.cpp */,
 				42C8EE0114724CD700E43619 /* Vector2.h */,
 				42783420148D6F7500A6E27F /* Vector2.inl */,
@@ -420,6 +430,7 @@
 				42C8EE1A14724CD700E43619 /* GPBFile.cpp in Sources */,
 				42C8EE1B14724CD700E43619 /* Light.cpp in Sources */,
 				42C8EE1D14724CD700E43619 /* main.cpp in Sources */,
+				C0575FA21B4C5C3A007B96B0 /* TMXSceneEncoder.cpp in Sources */,
 				42C8EE1E14724CD700E43619 /* Material.cpp in Sources */,
 				42C8EE1F14724CD700E43619 /* MaterialParameter.cpp in Sources */,
 				42C8EE2014724CD700E43619 /* Matrix.cpp in Sources */,
@@ -448,6 +459,7 @@
 				4251B12C152D044B002F6199 /* Curve.cpp in Sources */,
 				F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */,
 				B661733F16A61CE40083A307 /* Image.cpp in Sources */,
+				C0575FA31B4C5C3A007B96B0 /* TMXTypes.cpp in Sources */,
 				B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */,
 				C076C905174F6D2E00645678 /* Constants.cpp in Sources */,
 				C076C906174F6D2E00645678 /* FBXUtil.cpp in Sources */,
@@ -462,8 +474,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -473,7 +485,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_LINK_WITH_DYNAMIC_LIBRARIES = NO;
@@ -483,7 +495,6 @@
 					USE_FBX,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -510,8 +521,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -522,11 +533,10 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_LINK_WITH_DYNAMIC_LIBRARIES = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_FBX;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -551,10 +561,7 @@
 		42475CF1147208A100610A6A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
-				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
@@ -575,10 +582,7 @@
 		42475CF2147208A100610A6A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
-				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
