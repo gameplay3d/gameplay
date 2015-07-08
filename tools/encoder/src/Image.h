@@ -60,6 +60,17 @@ public:
     void setData(void* data);
 
     /**
+     * Draws the given image inside this one.
+     * Must match pixel format and fit inside with the given offset.
+     * 
+     * @param image Image to paste inside this image
+     * @param x X-offset
+     * @param y Y-offset
+     * @return true on sucess
+     */
+    bool paste(const Image *image, int x, int y);
+
+    /**
      * Gets the image's format.
      * 
      * @return The image's format.
