@@ -61,6 +61,7 @@
 		B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */; };
 		C0575FA21B4C5C3A007B96B0 /* TMXSceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0575F9E1B4C5C3A007B96B0 /* TMXSceneEncoder.cpp */; };
 		C0575FA31B4C5C3A007B96B0 /* TMXTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0575FA01B4C5C3A007B96B0 /* TMXTypes.cpp */; };
+		C0575FA61B4C6C15007B96B0 /* TexturePacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0575FA41B4C6C14007B96B0 /* TexturePacker.cpp */; };
 		C076C905174F6D2E00645678 /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C8FF174F6D2E00645678 /* Constants.cpp */; };
 		C076C906174F6D2E00645678 /* FBXUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C901174F6D2E00645678 /* FBXUtil.cpp */; };
 		C076C907174F6D2E00645678 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C076C903174F6D2E00645678 /* Sampler.cpp */; };
@@ -183,6 +184,8 @@
 		C0575F9F1B4C5C3A007B96B0 /* TMXSceneEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMXSceneEncoder.h; path = src/TMXSceneEncoder.h; sourceTree = SOURCE_ROOT; };
 		C0575FA01B4C5C3A007B96B0 /* TMXTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TMXTypes.cpp; path = src/TMXTypes.cpp; sourceTree = SOURCE_ROOT; };
 		C0575FA11B4C5C3A007B96B0 /* TMXTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMXTypes.h; path = src/TMXTypes.h; sourceTree = SOURCE_ROOT; };
+		C0575FA41B4C6C14007B96B0 /* TexturePacker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TexturePacker.cpp; path = src/TexturePacker.cpp; sourceTree = SOURCE_ROOT; };
+		C0575FA51B4C6C14007B96B0 /* TexturePacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TexturePacker.h; path = src/TexturePacker.h; sourceTree = SOURCE_ROOT; };
 		C076C8FF174F6D2E00645678 /* Constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Constants.cpp; path = src/Constants.cpp; sourceTree = SOURCE_ROOT; };
 		C076C900174F6D2E00645678 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = src/Constants.h; sourceTree = SOURCE_ROOT; };
 		C076C901174F6D2E00645678 /* FBXUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FBXUtil.cpp; path = src/FBXUtil.cpp; sourceTree = SOURCE_ROOT; };
@@ -326,6 +329,8 @@
 				42C8EDF914724CD700E43619 /* Scene.h */,
 				42C8EDFA14724CD700E43619 /* StringUtil.cpp */,
 				42C8EDFB14724CD700E43619 /* StringUtil.h */,
+				C0575FA41B4C6C14007B96B0 /* TexturePacker.cpp */,
+				C0575FA51B4C6C14007B96B0 /* TexturePacker.h */,
 				42C8EDFC14724CD700E43619 /* Transform.cpp */,
 				42C8EDFD14724CD700E43619 /* Transform.h */,
 				42C8EDFE14724CD700E43619 /* TTFFontEncoder.cpp */,
@@ -440,6 +445,7 @@
 				42C8EE2414724CD700E43619 /* MeshSubSet.cpp in Sources */,
 				42C8EE2514724CD700E43619 /* Model.cpp in Sources */,
 				42C8EE2614724CD700E43619 /* Node.cpp in Sources */,
+				C0575FA61B4C6C15007B96B0 /* TexturePacker.cpp in Sources */,
 				42C8EE2714724CD700E43619 /* Object.cpp in Sources */,
 				42C8EE2814724CD700E43619 /* Quaternion.cpp in Sources */,
 				42C8EE2914724CD700E43619 /* Reference.cpp in Sources */,
