@@ -198,15 +198,19 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index, GLen
         GLenum attachment;
         if (target->getTexture()->getFormat() == Texture::DEPTH)
         {
-        	attachment = GL_DEPTH_ATTACHMENT;
-        	GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0));
-        	glDrawBuffer(GL_NONE);
-        	glReadBuffer(GL_NONE);
+            attachment = GL_DEPTH_ATTACHMENT;
+            GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0));
+#ifndef OPENGL_ES            
+            glDrawBuffer(GL_NONE);
+            glReadBuffer(GL_NONE);
+#elif defined(GL_ES_VERSION_3_0) && GL_ES_VERSION_3_0
+            glDrawBuffers(0, NULL);
+#endif
         }
         else
         {
             attachment = GL_COLOR_ATTACHMENT0 + index;
-        	GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0) );
+            GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, _renderTargets[index]->getTexture()->getHandle(), 0) );
         }
 
         GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);

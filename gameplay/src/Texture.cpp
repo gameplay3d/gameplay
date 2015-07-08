@@ -185,7 +185,11 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
         // Texture 2D
         if (format == Texture::DEPTH)
         {
+#if !defined(OPENGL_ES) || defined(GL_ES_VERSION_3_0) && GL_ES_VERSION_3_0
     		GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, data) );
+#else
+    		GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, data) );
+#endif    		
         }
         else
         {
@@ -232,7 +236,9 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST) );
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE) );
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
+#if !defined(OPENGL_ES) || defined(GL_ES_VERSION_3_0) && GL_ES_VERSION_3_0
     	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_NONE) );
+#endif    	
     }
     else
     {
