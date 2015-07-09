@@ -70,6 +70,7 @@ public:
     int getY() const { return _y; }
     int getWidth() { return _width; }
     int getHeight() { return _height; }
+    int getPerimeter() { return _width + _height; }
     void setX(int x) { _x = x; }
     void setY(int y) { _y = y; }
     const Image* getImage() const { return _image; };
@@ -251,6 +252,13 @@ bool TexturePacker::parse(string fileName)
         return false;
     }
 
+    struct AtlasItem {
+        TextureAtlas *atlas;
+        ImageFile *ifile;
+    };
+
+    vector<AtlasItem> atlasItems;
+
     TextureAtlas *currentAtlas = NULL;
     string currentNode = "";
     string originalLine;
@@ -310,13 +318,8 @@ bool TexturePacker::parse(string fileName)
                         ifile->getFileName().c_str());
                     return false;
                 }
-                if (!currentAtlas->pack(ifile))
-                {
-                    LOG(1, "Could not pack image file - %s\n",
-                        ifile->getFileName().c_str());
-                    delete ifile;
-                    return false;
-                }
+                struct AtlasItem ai = { .atlas = currentAtlas, .ifile = ifile };
+                atlasItems.push_back(ai);
                 break;
             }
             case LineType::Node:
@@ -366,16 +369,6 @@ bool TexturePacker::parse(string fileName)
                     return false;
                 }
 
-                TextureAtlas *atlas = (*atlasIter).second;
-
-                const ImageFile *ifile = atlas->findImageFile(textureFile);
-                if (!ifile)
-                {
-                    LOG(1, "TextureAtlas %s doesn't have %s.\n",
-                        textureAtlas.c_str(), textureFile.c_str());
-                    return false;
-                }
-
                 struct UVMapInfo uvmapinfo = {
                     .nodeId = currentNode,
                     .texCoordIndex = index,
@@ -387,6 +380,34 @@ bool TexturePacker::parse(string fileName)
                 break;
             }
         }
+    }
+
+    //Sort from biggest to smallest
+    sort(atlasItems.begin(), atlasItems.end(),
+         [](const AtlasItem a1, const AtlasItem a2){
+             return a1.ifile->getPerimeter() > a2.ifile->getPerimeter();
+         });
+
+    bool failed = false;
+    vector<AtlasItem>::const_iterator iter;
+    for (iter = atlasItems.cbegin(); iter < atlasItems.cend(); ++iter)
+    {
+        const AtlasItem& ai = (*iter);
+
+        if (failed) // In case of failure only clean the remaining ImageFiles
+        {           // Rest will be cleaned when the TextureAtlas is destroyed.
+            delete ai.ifile;
+            continue;
+        }
+
+        if (!ai.atlas->pack(ai.ifile))
+        {
+            LOG(1, "Failed to pack image: %s\n",
+                ai.ifile->getFileName().c_str());
+            failed = true;
+        }
+
+        LOG(1, "\tPacked %s!\n", ai.ifile->getFileName().c_str());
     }
 
     return true;
