@@ -404,13 +404,14 @@ bool TexturePacker::parse(string fileName)
         {
             LOG(1, "Failed to pack image: %s\n",
                 ai.ifile->getFileName().c_str());
+            delete ai.ifile;
             failed = true;
         }
 
         LOG(1, "\tPacked %s!\n", ai.ifile->getFileName().c_str());
     }
 
-    return true;
+    return !failed;
 }
 
 bool TexturePacker::write()
