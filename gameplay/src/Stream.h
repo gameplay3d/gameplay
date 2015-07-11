@@ -161,8 +161,16 @@ public:
      */
     virtual void flush() = 0;
 
+    /**
+     *
+     * Returns a description of the stream
+     *
+     * @return Description of stream.
+     */
+    virtual std::string desc() = 0;
+
 protected:
-    Stream() {};
+    Stream() {}
 private:
     Stream(const Stream&);            // Hidden copy constructor.
     Stream& operator=(const Stream&); // Hidden copy assignment operator.
