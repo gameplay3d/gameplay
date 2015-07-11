@@ -134,6 +134,7 @@ public:
     virtual bool seek(long int offset, int origin);
     virtual bool rewind();
     virtual void flush();
+    virtual std::string desc();
 
     static FileStream* create(const char* filePath, const char* mode);
 
@@ -142,6 +143,7 @@ private:
 
 private:
     FILE* _file;
+    std::string _path;
     bool _canRead;
     bool _canWrite;
 };
@@ -171,6 +173,7 @@ public:
     virtual bool seek(long int offset, int origin);
     virtual bool rewind();
     virtual void flush();
+    virtual std::string desc();
 
     static FileStreamAndroid* create(const char* filePath, const char* mode);
 
@@ -178,6 +181,7 @@ private:
     FileStreamAndroid(AAsset* asset);
 
 private:
+    std::string _path;
     AAsset* _asset;
 };
 
@@ -579,10 +583,7 @@ std::string FileSystem::getDirectoryName(const char* path)
 
 std::string FileSystem::getExtension(const char* path)
 {
-    std::string fullPath;
-    getFullPath(path, fullPath);
-
-    const char* str = strrchr(fullPath.c_str(), '.');
+    const char* str = strrchr(path, '.');
     if (str == NULL)
         return "";
 
@@ -625,6 +626,7 @@ FileStream* FileStream::create(const char* filePath, const char* mode)
                 stream->_canWrite = true;
             ++s;
         }
+        stream->_path = filePath;
 
         return stream;
     }
@@ -726,6 +728,11 @@ void FileStream::flush()
         fflush(_file);
 }
 
+std::string FileStream::desc()
+{
+    return _path;
+}
+
 ////////////////////////////////
 
 #ifdef __ANDROID__
@@ -747,6 +754,7 @@ FileStreamAndroid* FileStreamAndroid::create(const char* filePath, const char* m
     if (asset)
     {
         FileStreamAndroid* stream = new FileStreamAndroid(asset);
+        stream->_path = filePath;
         return stream;
     }
     return NULL;
@@ -876,6 +884,11 @@ bool FileStreamAndroid::rewind()
 void FileStreamAndroid::flush()
 {
     //deliberate noop -- only used for reading assets
+}
+
+std::string FileStreamAndroid::desc()
+{
+    return _path;
 }
 
 #endif
