@@ -450,7 +450,7 @@ void TexturePacker::updateUV(gameplay::TexturePacker::UVMapInfo uvmapinfo)
         v.texCoord[index].x = x;
 
         float y = v.texCoord[index].y;
-        y = oY + y*(1.0f - rY);
+        y = oY + y*rY;
         v.texCoord[index].y = y;
     }
 }
