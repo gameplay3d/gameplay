@@ -315,7 +315,7 @@ bool TexturePacker::parse(string fileName)
                 if (!ifile)
                 {
                     LOG(1, "Cannot open image file - %s\n",
-                        ifile->getFileName().c_str());
+                        l.sparams[0].c_str());
                     return false;
                 }
                 struct AtlasItem ai = { .atlas = currentAtlas, .ifile = ifile };
