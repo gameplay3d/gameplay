@@ -26,12 +26,6 @@ public:
         RGBA
     };
 
-    enum FileFormat
-    {
-        AUTO,
-        PNG,
-    };
-
     /**
      * Creates an image from the image file at the given path.
      *
@@ -40,18 +34,17 @@ public:
      * @return The newly created image.
      * @script{create}
      */
-    static Image* create(const char* path, FileFormat type = AUTO);
+    static Image* create(const char* path);
 
     /**
-     *
      * Creates an image from a stream
      *
      * @param stream The stream pointing to the image
-     * @param type The type of image to read
+     * @param desc The type of image to read
      * @return The newly created image.
      * @script{create}
      */
-    static Image * create(std::unique_ptr<Stream> &stream, FileFormat type);
+    static Image * create(Stream* stream);
 
     /**
      * Creates an image from the data provided
@@ -68,20 +61,17 @@ public:
     /**
      * Writes an image to disk
      * @param path The path to the image file.
-     * @param type the type of image to read
      * @return True if successful, false otherwise
      */
-    bool write(const char* path, FileFormat type = AUTO);
+    bool write(const char* path);
 
     /**
      * Writes an image to a stream
-     * @param path The stream to write to
-     * @param type the type of image to write
+     * @param stream The stream to write to
+     * @param desc
      * @return True if successful, false otherwise
      */
-    bool write(std::unique_ptr<Stream> &stream, FileFormat type);
-
-
+    bool write(Stream* stream);
 
     /**
      * Gets the image's raw pixel data.
@@ -123,16 +113,6 @@ private:
      * Destructor.
      */
     ~Image();
-
-    /*
-     * PNG creator
-     */
-    static Image* createPNG(const char* desc, std::unique_ptr<Stream> &stream);
-
-    /*
-     * PNG writer
-     */
-    bool writePNG(const char* desc, std::unique_ptr<Stream> &stream);
 
     /**
      * Hidden copy assignment operator.
