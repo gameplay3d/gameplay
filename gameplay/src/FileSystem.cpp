@@ -133,6 +133,8 @@ public:
     virtual long int position();
     virtual bool seek(long int offset, int origin);
     virtual bool rewind();
+    virtual void flush();
+    virtual std::string desc();
 
     static FileStream* create(const char* filePath, const char* mode);
 
@@ -141,6 +143,7 @@ private:
 
 private:
     FILE* _file;
+    std::string _path;
     bool _canRead;
     bool _canWrite;
 };
@@ -169,6 +172,8 @@ public:
     virtual long int position();
     virtual bool seek(long int offset, int origin);
     virtual bool rewind();
+    virtual void flush();
+    virtual std::string desc();
 
     static FileStreamAndroid* create(const char* filePath, const char* mode);
 
@@ -176,6 +181,7 @@ private:
     FileStreamAndroid(AAsset* asset);
 
 private:
+    std::string _path;
     AAsset* _asset;
 };
 
@@ -620,6 +626,7 @@ FileStream* FileStream::create(const char* filePath, const char* mode)
                 stream->_canWrite = true;
             ++s;
         }
+        stream->_path = filePath;
 
         return stream;
     }
@@ -715,6 +722,17 @@ bool FileStream::rewind()
     return false;
 }
 
+void FileStream::flush()
+{
+    if (_file)
+        fflush(_file);
+}
+
+std::string FileStream::desc()
+{
+    return _path;
+}
+
 ////////////////////////////////
 
 #ifdef __ANDROID__
@@ -736,6 +754,7 @@ FileStreamAndroid* FileStreamAndroid::create(const char* filePath, const char* m
     if (asset)
     {
         FileStreamAndroid* stream = new FileStreamAndroid(asset);
+        stream->_path = filePath;
         return stream;
     }
     return NULL;
@@ -860,6 +879,16 @@ bool FileStreamAndroid::rewind()
         return AAsset_seek(_asset, 0, SEEK_SET) != -1;
     }
     return false;
+}
+
+void FileStreamAndroid::flush()
+{
+    //deliberate noop -- only used for reading assets
+}
+
+std::string FileStreamAndroid::desc()
+{
+    return _path;
 }
 
 #endif
