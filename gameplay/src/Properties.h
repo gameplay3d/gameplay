@@ -435,6 +435,15 @@ public:
     void setVariable(const char* name, const char* value);
 
     /**
+     * Writes this namespace out to a file
+     *
+     * @param path The file to write to
+     *
+     * @return True, if successful, false otherwise
+     */
+    bool write(const char *path);
+
+    /**
      * Attempts to parse the specified string as a Vector2 value.
      *
      * On error, false is returned and the output is set to all zero values.
@@ -547,6 +556,9 @@ private:
 
     // Called by resolveInheritance().
     void mergeWith(Properties* overrides);
+
+    // Called by write()
+    void writeInner(Stream* stream, std::string prepend);
 
     // Clones the Properties object.
     Properties* clone();
