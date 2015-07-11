@@ -400,15 +400,15 @@ bool TexturePacker::parse(string fileName)
             continue;
         }
 
-        if (!ai.atlas->pack(ai.ifile))
+        if (ai.atlas->pack(ai.ifile))
         {
+            LOG(1, "\tPacked %s!\n", ai.ifile->getFileName().c_str());
+        } else {
             LOG(1, "Failed to pack image: %s\n",
                 ai.ifile->getFileName().c_str());
             delete ai.ifile;
             failed = true;
         }
-
-        LOG(1, "\tPacked %s!\n", ai.ifile->getFileName().c_str());
     }
 
     return !failed;
