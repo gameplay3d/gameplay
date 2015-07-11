@@ -49,51 +49,29 @@ static void flushStream(png_structp png)
     }
 }
 
-Image* Image::create(const char* path, FileFormat type)
+Image* Image::create(const char* path)
 {
     GP_ASSERT(path);
-    char desc[256];
-    std::snprintf(desc, 255, "file '%s'", path);
 
-    if ((FileSystem::getExtension(path) == ".PNG" && type == AUTO) || type == PNG) {
-        // Open the file.
-        std::unique_ptr<Stream> stream(FileSystem::open(path));
-        if (stream.get() == NULL || !stream->canRead())
-        {
-            GP_ERROR("Failed to open image %s.", desc);
-            return NULL;
-        }
-        return createPNG(desc, stream);
-    }
+    std::unique_ptr<Stream> stream(FileSystem::open(path));
 
-    if (type == AUTO) {
-        GP_ERROR("Unable to identify filetype for image %s", desc);
-        return NULL;
-    }
-
-    GP_ERROR("Unsupported image type.");
-    return NULL;
-}
-
-Image* Image::create(std::unique_ptr<Stream> &stream, FileFormat type)
-{
-    switch(type)
+    if (stream.get() == NULL || !stream->canRead())
     {
-    case PNG:
-        return createPNG("stream", stream);
-    case AUTO:
-        GP_ERROR("AUTO is unsupported for streams.");
+        GP_ERROR("Failed to open image %s.", stream->desc().c_str());
         return NULL;
     }
+
+    return create(stream.get());
 }
 
-Image* Image::createPNG(const char *desc, std::unique_ptr<Stream> &stream)
+Image* Image::create(Stream* stream)
 {
    // Verify PNG signature.
     unsigned char sig[8];
+
     if (stream->read(sig, 1, 8) != 8 || png_sig_cmp(sig, 0, 8) != 0)
     {
-        GP_ERROR("Failed to load %s; not a valid PNG.", desc);
+        GP_ERROR("Failed to load '%s'; not a valid PNG.", stream->desc().c_str());
         return NULL;
     }
 
@@ -101,7 +79,7 @@ Image* Image::createPNG(const char *desc, std::unique_ptr<Stream> &stream)
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, pngError, pngWarn);
     if (png == NULL)
     {
-        GP_ERROR("Failed to create PNG structure for reading PNG %s.", desc);
+        GP_ERROR("Failed to create PNG structure for reading PNG '%s'.", stream->desc().c_str());
         return NULL;
     }
 
@@ -109,7 +87,7 @@ Image* Image::createPNG(const char *desc, std::unique_ptr<Stream> &stream)
     png_infop info = png_create_info_struct(png);
     if (info == NULL)
     {
-        GP_ERROR("Failed to create PNG info structure for PNG %s.", desc);
+        GP_ERROR("Failed to create PNG info structure for PNG '%s'.", stream->desc().c_str());
         png_destroy_read_struct(&png, NULL, NULL);
         return NULL;
     }
@@ -117,13 +95,13 @@ Image* Image::createPNG(const char *desc, std::unique_ptr<Stream> &stream)
     // Set up error handling (required without using custom error handlers above).
     if (setjmp(png_jmpbuf(png)))
     {
-        GP_ERROR("Failed to set up error handling for reading PNG %s.", desc);
+        GP_ERROR("Failed to set up error handling for reading PNG '%s'.", stream->desc().c_str());
         png_destroy_read_struct(&png, &info, NULL);
         return NULL;
     }
 
     // Initialize file io.
-    png_set_read_fn(png, stream.get(), readStream);
+    png_set_read_fn(png, stream, readStream);
 
     // Indicate that we already read the first 8 bytes (signature).
     png_set_sig_bytes(png, 8);
@@ -147,7 +125,7 @@ Image* Image::createPNG(const char *desc, std::unique_ptr<Stream> &stream)
         break;
 
     default:
-        GP_ERROR("Unsupported PNG color type (%d) for image %s.", (int)colorType, desc);
+        GP_ERROR("Unsupported PNG color type (%d) for image '%s'.", (int)colorType, stream->desc().c_str());
         png_destroy_read_struct(&png, &info, NULL);
         return NULL;
     }
@@ -200,54 +178,27 @@ Image* Image::create(unsigned int width, unsigned int height, Image::Format form
     return image;
 }
 
-bool Image::write(const char *path, FileFormat type)
+bool Image::write(const char *path)
 {
     GP_ASSERT(path);
-    char desc[256];
-    std::snprintf(desc, 255, "file '%s'", path);
 
-    if ((FileSystem::getExtension(path) == ".PNG" && type == AUTO) || type == PNG) {
-        // Open the file.
-        std::unique_ptr<Stream> stream(FileSystem::open(path, FileSystem::WRITE));
-        if (stream.get() == NULL || !stream->canWrite())
-        {
-            GP_ERROR("Failed to open image %s.", desc);
-            return NULL;
-        }
-        return writePNG(desc, stream);
-    }
-
-    if (type == AUTO) {
-        GP_ERROR("Unable to identify filetype for image %s", desc);
-        return false;
-    }
-
-    GP_ERROR("Unsupported image type.");
-    return false;
-}
-
-bool Image::write(std::unique_ptr<Stream> &stream, FileFormat type)
-{
-    switch(type)
+    std::unique_ptr<Stream> stream(FileSystem::open(path, FileSystem::WRITE));
+    if (stream.get() == NULL || !stream->canWrite())
     {
-    case PNG:
-        return writePNG("stream", stream);
-    case AUTO:
-        GP_ERROR("AUTO is unsupported for streams.");
-        return false;
+        GP_ERROR("Failed to open image '%s'.", path);
+        return NULL;
     }
+
+    return write(stream.get());
 }
 
-
-bool Image::writePNG(const char *desc, std::unique_ptr<Stream> &stream)
+bool Image::write(Stream* stream)
 {
-    GP_WARN("writePNG");
-    GP_WARN("%d, %d", _width, _height);
     // Initialize png write struct (last three parameters use stderr+longjump if NULL).
     png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, pngError, pngWarn);
     if (png == NULL)
     {
-        GP_ERROR("Failed to create PNG structure for writing PNG %s.", desc);
+        GP_ERROR("Failed to create PNG structure for writing PNG '%s'.", stream->desc().c_str());
         return NULL;
     }
 
@@ -255,13 +206,13 @@ bool Image::writePNG(const char *desc, std::unique_ptr<Stream> &stream)
     png_infop info = png_create_info_struct(png);
     if (info == NULL)
     {
-        GP_ERROR("Failed to create PNG info structure for PNG %s.", desc);
+        GP_ERROR("Failed to create PNG info structure for PNG '%s'.", stream->desc().c_str());
         png_destroy_write_struct(&png, NULL);
         return NULL;
     }
 
     // Initialize file io.
-    png_set_write_fn(png, stream.get(), writeStream, flushStream);
+    png_set_write_fn(png, stream, writeStream, flushStream);
 
     int type;
     size_t stride;
@@ -271,12 +222,10 @@ bool Image::writePNG(const char *desc, std::unique_ptr<Stream> &stream)
     case RGB:
         type = PNG_COLOR_TYPE_RGB;
         stride = 3 * _width;
-        GP_WARN("RGB");
         break;
     case RGBA:
         type = PNG_COLOR_TYPE_RGBA;
         stride = 4 * _width;
-        GP_WARN("RGBA");
         break;
     }
 
@@ -292,19 +241,19 @@ bool Image::writePNG(const char *desc, std::unique_ptr<Stream> &stream)
       );
     png_write_info(png, info);
 
-      // To remove the alpha channel for PNG_COLOR_TYPE_RGB format,
-      // Use png_set_filler().
-      //png_set_filler(png, 0, PNG_FILLER_AFTER);
+    // To remove the alpha channel for PNG_COLOR_TYPE_RGB format,
+    // Use png_set_filler().
+    //png_set_filler(png, 0, PNG_FILLER_AFTER);
 
-      png_bytepp rows = new png_bytep[_height];
-      for(int i=0; i<_height;i++)
-      {
-          rows[i] = _data + (stride * (_height - 1 - i));
-      }
+    png_bytepp rows = new png_bytep[_height];
+    for(int i=0; i<_height;i++)
+    {
+        rows[i] = _data + (stride * (_height - 1 - i));
+    }
 
-      png_write_image(png, rows);
-      png_write_end(png, NULL);
-      delete rows;
+    png_write_image(png, rows);
+    png_write_end(png, NULL);
+    delete rows;
 }
 
 Image::Image() : _data(NULL), _format(RGB), _width(0), _height(0)
