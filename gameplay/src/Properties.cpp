@@ -1270,4 +1270,75 @@ bool Properties::parseColor(const char* str, Vector4* out)
     return false;
 }
 
+bool Properties::write(const char *path)
+{
+    if (!path || strlen(path) == 0)
+    {
+        GP_ERROR("Empty path!");
+        return false;
+    }
+
+    // Calculate the file and full namespace path from the specified url.
+    std::string fileString(path);
+
+    std::unique_ptr<Stream> stream(FileSystem::open(fileString.c_str(), FileSystem::WRITE));
+    if (stream.get() == NULL)
+    {
+        GP_WARN("Failed to open file '%s'.", fileString.c_str());
+        return false;
+    }
+
+    for (auto n = _namespaces.begin(); n != _namespaces.end(); n++)
+    {
+        if (n != _namespaces.begin())
+            stream->write("\n", 1, 1);
+        Properties *p = *n;
+        p->writeInner(stream.get(), "");
+    }
+
+    stream->close();
+    return true;
+}
+
+void Properties::writeInner(Stream* stream, std::string prepend)
+{
+    std::string name = prepend + std::string(this->_namespace);
+    std::string open = prepend + "{\n";
+    std::string close = prepend + "}\n";
+
+    //TODO use carriage returns on a windows machine?
+
+    if (this->_id.length() > 0)
+    {
+        name += " " + this->_id;
+    }
+    name += "\n";
+
+    stream->write(name.c_str(), name.length(), 1);
+    stream->write(open.c_str(), open.length(), 1);
+
+    prepend += "    ";
+
+    for (auto n = _properties.begin(); n != _properties.end(); n++)
+    {
+        Property p = *n;
+        stream->write(prepend.c_str(), prepend.length(), 1);
+        stream->write(p.name.c_str(), p.name.length(), 1);
+        stream->write(" = ", 3, 1);
+        stream->write(p.value.c_str(), p.value.length(), 1);
+        stream->write("\n", 1, 1);
+    }
+
+    for (auto n = _namespaces.begin(); n != _namespaces.end(); n++)
+    {
+        if (n != _namespaces.begin() || _properties.size() > 0)
+            stream->write("\n", 1, 1);
+        Properties *p = *n;
+        p->writeInner(stream, prepend);
+    }
+    stream->write(close.c_str(), close.length(), 1);
+
+}
+
+
 }
