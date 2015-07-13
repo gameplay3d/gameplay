@@ -18,8 +18,8 @@
 
  #node idInGPBFile
  node item1
-	 uvmap 0, diffuse.png, item1.png #uvmap texCoordIndex, outputFile, inputFile
-	 uvmap 1, normal.png, itemN1.png
+     uvmap 0, diffuse.png, item1.png #uvmap texCoordIndex, outputFile, inputFile
+     uvmap 1, normal.png, itemN1.png
  node item2
      uvmap 0, diffuse.png, item1.png
      uvmap 1, normal.png, itemN2.png
