@@ -111,6 +111,8 @@ set(APP_SRC
     src/Scene.h
     src/StringUtil.cpp
     src/StringUtil.h
+    src/TexturePacker.h
+    src/TexturePacker.cpp
     src/Thread.h
     src/Transform.cpp
     src/Transform.h
