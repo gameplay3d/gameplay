@@ -35,4 +35,25 @@ material duck
             }
         }
     }
+
+    technique depth
+    {
+        pass
+        {
+            // uniforms
+            u_depthRange = DEPTH_RANGE
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+
+            // shaders
+            vertexShader = res/shaders/depth.vert
+            fragmentShader = res/shaders/depth.frag
+
+            // render state
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
 }

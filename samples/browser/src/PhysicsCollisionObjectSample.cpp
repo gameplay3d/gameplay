@@ -5,8 +5,11 @@
     ADD_SAMPLE("Physics", "Collision 3D", PhysicsCollisionObjectSample, 1);
 #endif
 
+#define SHADOW_MAP_SIZE 512
+
 PhysicsCollisionObjectSample::PhysicsCollisionObjectSample()
-    : _font(NULL), _scene(NULL), _lightNode(NULL), _form(NULL), _objectType(SPHERE), _throw(true), _drawDebug(0), _wireFrame(false)
+    : _font(NULL), _scene(NULL), _lightNode(NULL), _form(NULL), _objectType(SPHERE), _throw(true), _drawDebug(0), _wireFrame(false),
+      _shadowMapFB(NULL)
 {
     const char* paths[] = {"res/common/physics.physics#ball","res/common/physics.physics#box", "res/common/physics.physics#capsule", "res/common/physics.physics#duck"};
     _collisionObjectPaths.assign(paths, paths + 4);
@@ -27,6 +30,9 @@ void PhysicsCollisionObjectSample::initialize()
     // Use the aspect ratio of the display instead of the aspect ratio defined in the scene file.
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
     _lightNode = _scene->findNode("directionalLight");
+    _lightNode->setTranslation(0.0f, 5.0f, 0.0f);
+    _lightNode->setRotation(Quaternion::identity());
+    _lightNode->rotate(Vector3::unitX(), -MATH_PIOVER2);
     _scene->visit(this, &PhysicsCollisionObjectSample::bindLights);
 
     _form = Form::create("res/common/physics.form");
@@ -36,6 +42,29 @@ void PhysicsCollisionObjectSample::initialize()
     Button* shapeButton = static_cast<Button*>(_form->getControl("shapeButton"));
     shapeButton->addListener(this, Control::Listener::CLICK);
     shapeButton->setTextColor(_colors[_objectType]);
+
+    // Shadow mapping
+    _shadowMapFB = FrameBuffer::create("shadowMap", SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
+    DepthStencilTarget *dst = DepthStencilTarget::create("shadowMap", DepthStencilTarget::DEPTH,
+                                                         SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
+    _shadowViewport.set(0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
+    _shadowMapFB->setDepthStencilTarget(dst);
+    SAFE_RELEASE(dst);
+    RenderTarget *rt = _shadowMapFB->getRenderTarget();
+    GP_ASSERT(rt);
+    Texture *tex = rt->getTexture();
+    GP_ASSERT(tex);
+    _shadowSampler = Texture::Sampler::create(tex);
+    GP_ASSERT(_shadowSampler);
+    _shadowSampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
+    _shadowSampler->setFilterMode(Texture::LINEAR, Texture::LINEAR);
+
+    Node *shadowCamNode = Node::create("shadowCam");
+    _lightNode->addChild(shadowCamNode);
+    _shadowCam = Camera::createOrthographic(20, 20, getAspectRatio(), 0.0f, 50.0f);
+    shadowCamNode->setCamera(_shadowCam);
+    _depthRange.set(_shadowCam->getNearPlane(), 1.0f / (_shadowCam->getFarPlane() - _shadowCam->getNearPlane()));
+    SAFE_RELEASE(shadowCamNode);
 }
 
 void PhysicsCollisionObjectSample::finalize()
@@ -43,6 +72,9 @@ void PhysicsCollisionObjectSample::finalize()
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_form);
+    SAFE_RELEASE(_shadowMapFB);
+    SAFE_RELEASE(_shadowSampler);
+    SAFE_RELEASE(_shadowCam);
 }
 
 void PhysicsCollisionObjectSample::update(float elapsedTime)
@@ -53,6 +85,9 @@ void PhysicsCollisionObjectSample::render(float elapsedTime)
 {
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0);
+
+    // Draw the shadow map
+    drawShadowMap();
 
     // Visit all the nodes in the scene, drawing the models/mesh.
     _scene->visit(this, &PhysicsCollisionObjectSample::drawScene);
@@ -128,7 +163,8 @@ bool PhysicsCollisionObjectSample::bindLights(Node* node)
         Material* material = model->getMaterial();
         if (material)
         {
-            MaterialParameter* ambientColorParam = material->getParameter("u_ambientColor");
+            Technique *tech = material->getTechniqueByIndex(0);
+            MaterialParameter* ambientColorParam = tech->getParameter("u_ambientColor");
             if (ambientColorParam)
             {
                 ambientColorParam->setValue(_scene->getAmbientColor());
@@ -136,8 +172,8 @@ bool PhysicsCollisionObjectSample::bindLights(Node* node)
 
             if (_lightNode && _lightNode->getLight())
             {
-                MaterialParameter* lightDirectionParam = material->getParameter("u_directionalLightDirection[0]");
-                MaterialParameter* lightColorParam = material->getParameter("u_directionalLightColor[0]");
+                MaterialParameter* lightDirectionParam = tech->getParameter("u_directionalLightDirection[0]");
+                MaterialParameter* lightColorParam = tech->getParameter("u_directionalLightColor[0]");
                 if (lightDirectionParam)
                 {
                     lightDirectionParam->bindValue(_lightNode, &Node::getForwardVectorView);
@@ -231,4 +267,68 @@ void PhysicsCollisionObjectSample::controlEvent(Control* control, EventType evt)
         button->setText(_nodeNames[_objectType]);
         button->setTextColor(_colors[_objectType]);
     }
+}
+
+bool PhysicsCollisionObjectSample::resolveAutoBinding(const char *autoBinding, Node *node, MaterialParameter *parameter)
+{
+    if (strcmp(autoBinding, "DEPTH_RANGE") == 0)
+    {
+        parameter->bindValue(this, &PhysicsCollisionObjectSample::getDepthRange);
+        return true;
+    }
+    else if (strcmp(autoBinding, "PIXEL_OFFSET") == 0)
+    {
+        parameter->bindValue(this, &PhysicsCollisionObjectSample::getPixelOffset);
+        return true;
+    }
+    else if (strcmp(autoBinding, "SHADOW_MAP") == 0)
+    {
+        parameter->bindValue(this, &PhysicsCollisionObjectSample::getShadowSampler);
+        return true;
+    }
+    else if (strcmp(autoBinding, "SHADOW_TEXTURE_MATRIX") == 0)
+    {
+        parameter->bindValue(this, &PhysicsCollisionObjectSample::getShadowMatrix);
+        return true;
+    }
+
+    return false;
+}
+
+bool PhysicsCollisionObjectSample::drawShadowNode(Node *node)
+{
+    Model* model = dynamic_cast<Model*>(node->getDrawable());
+    if (!node->hasTag("noShadowCast") && model && model->getMaterial() &&
+        model->getMaterial()->getTechnique("depth") &&
+        node->getBoundingSphere().intersects(_shadowCam->getFrustum())) {
+        Material* material = model->getMaterial();
+
+        Technique *oldTech = material->getTechnique();
+        material->setTechnique("depth");
+        model->draw();
+        material->setTechnique(oldTech->getId());
+    }
+
+    return true;
+}
+
+void PhysicsCollisionObjectSample::drawShadowMap()
+{
+    const Matrix biasMatrix (0.5f, 0.0f, 0.0f, 0.5f,
+                             0.0f, 0.5f, 0.0f, 0.5f,
+                             0.0f, 0.0f, 0.5f, 0.5f,
+                             0.0f, 0.0f, 0.0f, 1.0f);
+    Matrix::multiply(biasMatrix, _shadowCam->getViewProjectionMatrix(), &_shadowMatrix);
+    Camera *oldCamera = _scene->getActiveCamera();
+    Rectangle oldViewPort = getViewport();
+    _scene->setActiveCamera(_shadowCam);
+    setViewport(_shadowViewport);
+
+    FrameBuffer *oldBuffer = _shadowMapFB->bind();
+    clear(Game::CLEAR_COLOR_DEPTH, Vector4::one(), 1.0f, 0);
+    _scene->visit(this, &PhysicsCollisionObjectSample::drawShadowNode);
+
+    oldBuffer->bind();
+    setViewport(oldViewPort);
+    _scene->setActiveCamera(oldCamera);
 }
