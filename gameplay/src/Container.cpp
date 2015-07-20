@@ -1138,33 +1138,34 @@ void Container::updateScroll()
     }
 
     // Stop scrolling when the far edge is reached.
+    Vector2 lastScrollPosition(_scrollPosition);
+
     if (-_scrollPosition.x > _totalWidth - clipWidth)
     {
         _scrollPosition.x = -(_totalWidth - clipWidth);
         _scrollingVelocity.x = 0;
-        dirty = true;
     }
     
     if (-_scrollPosition.y > _totalHeight - clipHeight)
     {
         _scrollPosition.y = -(_totalHeight - clipHeight);
         _scrollingVelocity.y = 0;
-        dirty = true;
     }
 
     if (_scrollPosition.x > 0)
     {
         _scrollPosition.x = 0;
         _scrollingVelocity.x = 0;
-        dirty = true;
     }
 
     if (_scrollPosition.y > 0)
     {
         _scrollPosition.y = 0;
         _scrollingVelocity.y = 0;
-        dirty = true;
     }
+
+    if (_scrollPosition != lastScrollPosition)
+        dirty = true;
 
     float scrollWidth = 0;
     if (clipWidth < _totalWidth)
