@@ -768,8 +768,6 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
         return 1;
     }
 
-    Game::getInstance()->handlePlatformEvent(event);
-
     int32_t deviceId = AInputEvent_getDeviceId(event);
     int32_t source = AInputEvent_getSource(event);
 
