@@ -768,7 +768,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
         return 1;
     }
 
-	Game::getInstance()->handlePlatformEvent(event);
+    Game::getInstance()->handlePlatformEvent(event);
 
     int32_t deviceId = AInputEvent_getDeviceId(event);
     int32_t source = AInputEvent_getSource(event);
@@ -1262,7 +1262,8 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
 static void process_input( struct android_app* app, struct android_poll_source* source)
 {
     AInputEvent* event = NULL;
-    if (AInputQueue_getEvent(app->inputQueue, &event) >= 0)
+
+    while(AInputQueue_getEvent(app->inputQueue, &event) >= 0)
     {
         int type = AInputEvent_getType(event);
         LOGV("New input event: type=%d\n", AInputEvent_getType(event));
@@ -1279,8 +1280,6 @@ static void process_input( struct android_app* app, struct android_poll_source* 
         if (app->onInputEvent != NULL)
             handled = app->onInputEvent(app, event);
         AInputQueue_finishEvent(app->inputQueue, event, handled);
-    } else {
-        LOGE("Failure reading next input event: %s\n", strerror(errno));
     }
 }
 
