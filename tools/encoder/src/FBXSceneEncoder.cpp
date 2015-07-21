@@ -1243,7 +1243,8 @@ Mesh* FBXSceneEncoder::loadMesh(FbxMesh* fbxMesh)
     const size_t meshpartsSize = meshParts.size();
     for (size_t i = 0; i < meshpartsSize; ++i)
     {
-        mesh->addMeshPart(meshParts[i]);
+        if (meshParts[i]->getIndicesCount() > 0)
+            mesh->addMeshPart(meshParts[i]);
     }
 
     // The order that the vertex elements are add to the list matters.
