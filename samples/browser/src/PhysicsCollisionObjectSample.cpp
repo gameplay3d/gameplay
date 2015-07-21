@@ -63,7 +63,7 @@ void PhysicsCollisionObjectSample::initialize()
     _lightNode->addChild(shadowCamNode);
     _shadowCam = Camera::createOrthographic(20, 20, getAspectRatio(), 0.0f, 50.0f);
     shadowCamNode->setCamera(_shadowCam);
-    _depthRange.set(_shadowCam->getNearPlane(), 1.0f / (_shadowCam->getFarPlane() - _shadowCam->getNearPlane()));
+    _shadowDepthRange.set(_shadowCam->getNearPlane(), 1.0f / (_shadowCam->getFarPlane() - _shadowCam->getNearPlane()));
     SAFE_RELEASE(shadowCamNode);
 }
 
@@ -271,14 +271,14 @@ void PhysicsCollisionObjectSample::controlEvent(Control* control, EventType evt)
 
 bool PhysicsCollisionObjectSample::resolveAutoBinding(const char *autoBinding, Node *node, MaterialParameter *parameter)
 {
-    if (strcmp(autoBinding, "DEPTH_RANGE") == 0)
+    if (strcmp(autoBinding, "SHADOW_DEPTH_RANGE") == 0)
     {
-        parameter->bindValue(this, &PhysicsCollisionObjectSample::getDepthRange);
+        parameter->bindValue(this, &PhysicsCollisionObjectSample::getShadowDepthRange);
         return true;
     }
-    else if (strcmp(autoBinding, "PIXEL_OFFSET") == 0)
+    else if (strcmp(autoBinding, "SHADOW_PIXEL_OFFSET") == 0)
     {
-        parameter->bindValue(this, &PhysicsCollisionObjectSample::getPixelOffset);
+        parameter->bindValue(this, &PhysicsCollisionObjectSample::getShadowPixelOffset);
         return true;
     }
     else if (strcmp(autoBinding, "SHADOW_MAP") == 0)

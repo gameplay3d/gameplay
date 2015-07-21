@@ -71,14 +71,14 @@ private:
     FrameBuffer *_shadowMapFB;
     Texture::Sampler *_shadowSampler;
     Texture::Sampler* getShadowSampler() const { return _shadowSampler; }
-    Vector2 _depthRange;
+    Vector2 _shadowDepthRange;
     Camera *_shadowCam;
     Rectangle _shadowViewport;
     Matrix _shadowMatrix;
     Matrix getShadowMatrix() const { return _shadowMatrix; }
-    Vector2 getDepthRange() const { return _depthRange; }
-    float _pixelOffset;
-    float getPixelOffset() const { return _pixelOffset; }
+    Vector2 getShadowDepthRange() const { return _shadowDepthRange; }
+    float _shadowPixelOffset;
+    float getShadowPixelOffset() const { return _shadowPixelOffset; }
     bool drawShadowNode(Node *node);
     void drawShadowMap();
 };

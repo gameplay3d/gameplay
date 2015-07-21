@@ -25,7 +25,7 @@ material colored
         pass
         {
             // uniforms
-            u_depthRange = DEPTH_RANGE
+            u_depthRange = SHADOW_DEPTH_RANGE
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 
             // shaders
@@ -51,8 +51,8 @@ material floor : colored
             defines = DIRECTIONAL_LIGHT_COUNT 1;SHADOW_MAPPING
             u_worldMatrix = WORLD_MATRIX
             u_shadowMap = SHADOW_MAP
-            u_pixelOffset = PIXEL_OFFSET
-            u_depthRange = DEPTH_RANGE
+            u_pixelOffset = SHADOW_PIXEL_OFFSET
+            u_depthRange = SHADOW_DEPTH_RANGE
             u_shadowTextureMatrix = SHADOW_TEXTURE_MATRIX
 
             u_diffuseColor = 0.5, 0.5, 0.5, 1
