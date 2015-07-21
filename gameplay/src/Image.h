@@ -6,6 +6,8 @@
 namespace gameplay
 {
 
+class Stream;
+
 /**
  * Defines an image buffer of RGB or RGBA color data.
  *
@@ -28,10 +30,21 @@ public:
      * Creates an image from the image file at the given path.
      *
      * @param path The path to the image file.
+     * @param type the type of image to read
      * @return The newly created image.
      * @script{create}
      */
     static Image* create(const char* path);
+
+    /**
+     * Creates an image from a stream
+     *
+     * @param stream The stream pointing to the image
+     * @param desc The type of image to read
+     * @return The newly created image.
+     * @script{create}
+     */
+    static Image * create(Stream* stream);
 
     /**
      * Creates an image from the data provided
@@ -44,6 +57,21 @@ public:
      * @script{create}
      */
     static Image* create(unsigned int width, unsigned int height, Format format, unsigned char* data = NULL);
+
+    /**
+     * Writes an image to disk
+     * @param path The path to the image file.
+     * @return True if successful, false otherwise
+     */
+    bool write(const char* path);
+
+    /**
+     * Writes an image to a stream
+     * @param stream The stream to write to
+     * @param desc
+     * @return True if successful, false otherwise
+     */
+    bool write(Stream* stream);
 
     /**
      * Gets the image's raw pixel data.
