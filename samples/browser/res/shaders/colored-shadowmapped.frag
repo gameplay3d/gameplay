@@ -146,14 +146,14 @@ float getShadowValue()
     float finalCenterDepth = centerdepth + depthAdjust;
     // PCF
     depths += depthAdjust;
-    float final = step(finalCenterDepth, shadowUV.z) * 0.5 + 0.5;
+    float final = step(finalCenterDepth, shadowUV.z);
     bvec4 vecCmp = greaterThan(depths, vec4(shadowUV.z));
-    final += float(vecCmp.x) * 0.5 + 0.5;
-    final += float(vecCmp.y) * 0.5 + 0.5;
-    final += float(vecCmp.z) * 0.5 + 0.5;
-    final += float(vecCmp.w) * 0.5 + 0.5;
-    final *= 0.2;
-    return final;
+    final += float(vecCmp.x);
+    final += float(vecCmp.y);
+    final += float(vecCmp.z);
+    final += float(vecCmp.w);
+    final *= 0.1;
+    return final + 0.6;
 }
 #endif
 
