@@ -425,6 +425,7 @@ const Vector2& Container::getScrollPosition() const
 void Container::setScrollPosition(const Vector2& scrollPosition)
 {
     _scrollPosition = scrollPosition;
+    setDirty(DIRTY_BOUNDS);
     setChildrenDirty(DIRTY_BOUNDS, true);
 }
 
@@ -553,7 +554,7 @@ void Container::updateBounds()
             for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
                 Control* ctrl = _controls[i];
-                if (ctrl->isVisible() && !ctrl->isXPercentage() && !ctrl->isWidthPercentage())
+                if (ctrl->isVisible() && !ctrl->isWidthPercentage())
                 {
                     float w = ctrl->getWidth() + ctrl->getMargin().right;
                     if (!ctrl->isXPercentage())
@@ -573,7 +574,7 @@ void Container::updateBounds()
             for (size_t i = 0, count = _controls.size(); i < count; ++i)
             {
                 Control* ctrl = _controls[i];
-                if (ctrl->isVisible() && !ctrl->isYPercentage() && !ctrl->isHeightPercentage())
+                if (ctrl->isVisible() && !ctrl->isHeightPercentage())
                 {
                     float h = ctrl->getHeight() + ctrl->getMargin().bottom;
                     if (!ctrl->isYPercentage())
