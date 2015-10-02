@@ -163,6 +163,26 @@ void Image::setData(void* data)
     memcpy(_data, data, _width * _height * _bpp);
 }
 
+bool Image::paste(const Image *image, int x, int y)
+{
+    if (image->getFormat() != _format) {
+        LOG(1, "Formats don't match.\n");
+        return false;
+    }
+    if (_width < x + image->_width ||
+        _height < y + image->_height) {
+        LOG(1, "Image doesn't fit.\n");
+        return false;
+    }
+
+    int stride = _width * _bpp;
+    int lineSize = image->_width * _bpp;
+    for (int i = 0; i < image->_height; ++i) {
+        memcpy(_data + stride*(i+y) + x*_bpp, image->_data + lineSize*i, lineSize);
+    }
+    return true;
+}
+
 Image::Format Image::getFormat() const
 {
     return _format;

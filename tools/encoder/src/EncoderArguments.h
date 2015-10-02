@@ -146,6 +146,16 @@ public:
      * This option is only applicable for normal map generation.
      */
     const Vector3& getHeightmapWorldSize() const;
+
+    /**
+     * Returns true if texture packing is enabled
+     */
+    bool getTexturePacking() const;
+
+    /**
+     * Returns the input file for texture packer
+     */
+    const std::string& getTexturePackerInput() const;
     
     /**
      * Returns true if an error occurred while parsing the command line arguments.
@@ -230,6 +240,9 @@ private:
     std::vector<std::string> _groupAnimationAnimationId;
     std::vector<HeightmapOption> _heightmaps;
     std::set<std::string> _tangentBinormalId;
+
+    std::string _texturePackerInput;
+    bool _texturePacking;
 
 };
 

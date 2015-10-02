@@ -5,6 +5,7 @@
 #include "FBXSceneEncoder.h"
 #include "FBXUtil.h"
 #include "Sampler.h"
+#include "TexturePacker.h"
 
 using namespace gameplay;
 using std::string;
@@ -72,6 +73,21 @@ void FBXSceneEncoder::write(const string& filepath, const EncoderArguments& argu
     if (_autoGroupAnimations)
     {
         _gamePlayFile.groupMeshSkinAnimations();
+    }
+
+    if (arguments.getTexturePacking())
+    {
+        TexturePacker tp(&_gamePlayFile);
+        LOG(1, "Packing textures and adjusting texture coordinates from: %s\n",
+            arguments.getTexturePackerInput().c_str());
+        if (tp.parse(arguments.getTexturePackerInput()))
+        {
+            LOG(1, "Texture packing successful, writing result.\n");
+            tp.write();
+        } else
+        {
+            LOG(1, "Skipping texture packing.\n");
+        };
     }
     
     string outputFilePath = arguments.getOutputFilePath();

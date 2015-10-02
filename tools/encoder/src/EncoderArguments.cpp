@@ -29,7 +29,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _optimizeAnimations(false),
     _animationGrouping(ANIMATIONGROUP_PROMPT),
     _outputMaterial(false),
-    _generateTextureGutter(false)
+    _generateTextureGutter(false),
+    _texturePacking(false)
 {
     __instance = this;
 
@@ -216,6 +217,16 @@ const Vector3& EncoderArguments::getHeightmapWorldSize() const
     return _heightmapWorldSize;
 }
 
+bool EncoderArguments::getTexturePacking() const
+{
+    return _texturePacking;
+}
+
+const std::string& EncoderArguments::getTexturePackerInput() const
+{
+    return _texturePackerInput;
+}
+
 bool EncoderArguments::parseErrorOccured() const
 {
     return _parseError;
@@ -271,6 +282,8 @@ void EncoderArguments::printUsage() const
     "  -m\t\tOutput material file for scene.\n" \
     "  -tb <node id>\n" \
         "\t\tGenerates tangents and binormals for the given node.\n" \
+    "  -tp <input file>\n" \
+        "\t\tGenerates texture atlas from given textures and adjusts the UV coordinates for meshes.\n" \
     "  -oa\n" \
         "\t\tOptimizes animations by analyzing animation channel data and\n" \
         "\t\tremoving any channels that contain default/identity values\n" \
@@ -680,6 +693,18 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             {
                 _tangentBinormalId.insert(nodeId);
             }
+        }
+        else if (str.compare("-tp") == 0)
+        {
+            if ((*index + 1) >= options.size())
+            {
+                LOG(1, "Error: texture packer requires input file.\n");
+                _parseError = true;
+                return;
+            }
+            (*index)++;
+            _texturePackerInput = options[*index];
+            _texturePacking = true;
         }
         else if (str.compare("-textureGutter:none") == 0 || str.compare("-tg:none") == 0)
         {
