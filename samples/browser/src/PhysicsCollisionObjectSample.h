@@ -9,7 +9,7 @@ using namespace gameplay;
 /**
  * Sample loading a physics scene from .scene file with .physics bindings
  */
-class PhysicsCollisionObjectSample : public Sample, Control::Listener
+class PhysicsCollisionObjectSample : public Sample, Control::Listener, RenderState::AutoBindingResolver
 {
 public:
 
@@ -20,6 +20,8 @@ public:
     void keyEvent(Keyboard::KeyEvent evt, int key);
 
     void controlEvent(Control* control, EventType evt);
+
+    bool resolveAutoBinding(const char* autoBinding, Node* node, MaterialParameter* parameter);
 
 protected:
 
@@ -55,6 +57,7 @@ private:
     Scene* _scene;
     Node* _lightNode;
     Form* _form;
+
     int _objectType;
     bool _throw;
     int _drawDebug;
@@ -63,6 +66,21 @@ private:
     std::vector<const char*> _nodeIds;
     std::vector<const char*> _nodeNames;
     std::vector<Vector4> _colors;
+
+    //Shadow mapping stuff
+    FrameBuffer *_shadowMapFB;
+    Texture::Sampler *_shadowSampler;
+    Texture::Sampler* getShadowSampler() const { return _shadowSampler; }
+    Vector2 _shadowDepthRange;
+    Camera *_shadowCam;
+    Rectangle _shadowViewport;
+    Matrix _shadowMatrix;
+    Matrix getShadowMatrix() const { return _shadowMatrix; }
+    Vector2 getShadowDepthRange() const { return _shadowDepthRange; }
+    float _shadowPixelOffset;
+    float getShadowPixelOffset() const { return _shadowPixelOffset; }
+    bool drawShadowNode(Node *node);
+    void drawShadowMap();
 };
 
 #endif

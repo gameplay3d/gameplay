@@ -15,8 +15,13 @@ scene
 	{
 		material = res/common/physics.material#floor
 		collisionObject = res/common/physics.physics#staticBox
+
+        tags
+        {
+            noShadowCast
+        }
 	}
-	
+
 	node wall01
 	{
 		material = res/common/physics.material#floor

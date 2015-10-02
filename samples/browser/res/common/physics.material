@@ -7,11 +7,32 @@ material colored
             vertexShader = res/shaders/colored.vert
             fragmentShader = res/shaders/colored.frag
             defines = DIRECTIONAL_LIGHT_COUNT 1
-            
+
             // uniforms
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
             u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
-            
+
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+
+    technique depth
+    {
+        pass
+        {
+            // uniforms
+            u_depthRange = SHADOW_DEPTH_RANGE
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+
+            // shaders
+            vertexShader = res/shaders/depth.vert
+            fragmentShader = res/shaders/depth.frag
+
+            // render state
             renderState
             {
                 cullFace = true
@@ -27,7 +48,16 @@ material floor : colored
     {
         pass
         {
+            defines = DIRECTIONAL_LIGHT_COUNT 1;SHADOW_MAPPING
+            u_worldMatrix = WORLD_MATRIX
+            u_shadowMap = SHADOW_MAP
+            u_pixelOffset = SHADOW_PIXEL_OFFSET
+            u_depthRange = SHADOW_DEPTH_RANGE
+            u_shadowTextureMatrix = SHADOW_TEXTURE_MATRIX
+
             u_diffuseColor = 0.5, 0.5, 0.5, 1
+            vertexShader = res/shaders/colored-shadowmapped.vert
+            fragmentShader = res/shaders/colored-shadowmapped.frag
         }
     }
 }
