@@ -220,6 +220,7 @@ using std::va_list;
     #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
+    #define GP_USE_VAO
 #elif WIN32
         #define WIN32_LEAN_AND_MEAN
         #define GLEW_STATIC
