@@ -1132,14 +1132,14 @@ bool Control::updateBoundsInternal(const Vector2& offset)
         _dirtyBits &= ~DIRTY_STATE;
     }
 
-    // Clear our dirty bounds bit
-    bool dirtyBounds = (_dirtyBits & DIRTY_BOUNDS) != 0;
-    _dirtyBits &= ~DIRTY_BOUNDS;
-
     // If we are a container, always update child bounds first
     bool changed = false;
     if (isContainer())
         changed = static_cast<Container*>(this)->updateChildBounds();
+
+    // Clear our dirty bounds bit
+    bool dirtyBounds = (_dirtyBits & DIRTY_BOUNDS) != 0;
+    _dirtyBits &= ~DIRTY_BOUNDS;
 
     if (dirtyBounds)
     {
@@ -1172,12 +1172,14 @@ void Control::updateBounds()
 
     const Rectangle parentAbsoluteBounds = _parent ? _parent->_viewportBounds : Rectangle(0, 0, game->getViewport().width, game->getViewport().height);
 
+    const Theme::Margin& margin = _style->getMargin();
+
     // Calculate local unclipped bounds.
     _bounds.set(_relativeBounds);
     if (isXPercentage())
-        _bounds.x *= parentAbsoluteBounds.width;
+        _bounds.x = _bounds.x * parentAbsoluteBounds.width + margin.left;
     if (isYPercentage())
-        _bounds.y *= parentAbsoluteBounds.height;
+        _bounds.y = _bounds.y * parentAbsoluteBounds.height + margin.top;
     if (isWidthPercentage())
         _bounds.width *= parentAbsoluteBounds.width;
     if (isHeightPercentage())
@@ -1212,7 +1214,7 @@ void Control::updateBounds()
         }
         else if ((_alignment & Control::ALIGN_VCENTER) == Control::ALIGN_VCENTER)
         {
-            _bounds.y = clipHeight * 0.5f - _bounds.height * 0.5f;
+            _bounds.y = clipHeight * 0.5f - _bounds.height * 0.5f + (margin.top - margin.bottom) * 0.5f;
         }
         else if ((_alignment & Control::ALIGN_TOP) == Control::ALIGN_TOP)
         {
@@ -1226,7 +1228,7 @@ void Control::updateBounds()
         }
         else if ((_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
         {
-            _bounds.x = clipWidth * 0.5f - _bounds.width * 0.5f;
+            _bounds.x = clipWidth * 0.5f - _bounds.width * 0.5f + (margin.left - margin.right) * 0.5f;
         }
         else if ((_alignment & Control::ALIGN_LEFT) == Control::ALIGN_LEFT)
         {
