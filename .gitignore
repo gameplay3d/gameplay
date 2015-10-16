@@ -44,6 +44,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /tools/encoder/Release
 /tools/encoder/gameplay-encoder.xcodeproj/xcuserdata
 /tools/encoder/gameplay-encoder.xcodeproj/project.xcworkspace/
+/tools/encoder/gameplay-encoder.vcxproj.user
 
 /tools/luagen
 /tools/luagen/Release

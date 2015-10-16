@@ -843,7 +843,7 @@ void FBXSceneEncoder::loadLight(FbxNode* fbxNode, Node* node)
 void FBXSceneEncoder::loadModel(FbxNode* fbxNode, Node* node)
 {
     FbxMesh* fbxMesh = fbxNode->GetMesh();
-    if (!fbxMesh)
+	if (!fbxMesh || fbxMesh->GetPolygonVertexCount() == 0)
     {
         return;
     }
