@@ -25,6 +25,7 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _parseError(false),
     _fontPreview(false),
     _fontFormat(Font::BITMAP),
+	_fontExtended(false),
     _textOutput(false),
     _optimizeAnimations(false),
     _animationGrouping(ANIMATIONGROUP_PROMPT),
@@ -310,6 +311,7 @@ void EncoderArguments::printUsage() const
     "  -s <sizes>\tComma-separated list of font sizes (in pixels).\n" \
     "  -p\t\tOutput font preview.\n" \
     "  -f\t\tFormat of font. -f:b (BITMAP), -f:d (DISTANCE_FIELD).\n" \
+	"  -e\tExport extra glyphs for extended ASCII. Allows accented letters." \
     "\n");
     exit(8);
 }
@@ -356,6 +358,11 @@ const char* EncoderArguments::getNodeId() const
 std::vector<unsigned int> EncoderArguments::getFontSizes() const
 {
     return _fontSizes;
+}
+
+bool EncoderArguments::getFontExtended() const
+{
+	return _fontExtended;
 }
 
 EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
@@ -426,6 +433,9 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             _fontFormat = Font::DISTANCE_FIELD;
         }
         break;
+	case 'e':
+		_fontExtended = true;
+		break;
     case 'g':
         if (str.compare("-groupAnimations:auto") == 0 || str.compare("-g:auto") == 0)
         {

@@ -2,9 +2,10 @@
 #include FT_FREETYPE_H
 #include "Font.h"
 
-#define START_INDEX     32
-#define END_INDEX       127
-#define GLYPH_PADDING   4
+#define START_INDEX			32
+#define END_INDEX			127
+#define END_EXTENDED_INDEX	255
+#define GLYPH_PADDING		4
 
 namespace gameplay
 {
@@ -31,6 +32,6 @@ public:
  * 
  * @return 0 if successful, -1 if error.
  */
-int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsigned int>& fontSize, const char* id, bool fontpreview, Font::FontFormat fontFormat);
+int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsigned int>& fontSize, const char* id, bool fontpreview, Font::FontFormat fontFormat, bool extended);
 
 }
