@@ -2,10 +2,9 @@
 #include FT_FREETYPE_H
 #include "Font.h"
 
-#define START_INDEX			32
-#define END_INDEX			127
-#define END_EXTENDED_INDEX	255
-#define GLYPH_PADDING		4
+#define GLYPH_INDEX_START		32
+#define GLYPH_INDEX_END			255
+#define GLYPH_PADDING			4
 
 namespace gameplay
 {
@@ -29,9 +28,12 @@ public:
  * @param fontSizes List of sizes to generate for the font.
  * @param id ID string of the font in the ref table.
  * @param fontpreview True if the pgm font preview file should be written. (For debugging)
+ * @param fontFormat font format
+ * @param indexStart Start of the range of glyphs to be generated
+ * @param indexEnd End of the range of glyphs to be generated
  * 
  * @return 0 if successful, -1 if error.
  */
-int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsigned int>& fontSize, const char* id, bool fontpreview, Font::FontFormat fontFormat, bool extended);
+int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsigned int>& fontSize, const char* id, bool fontpreview, Font::FontFormat fontFormat, unsigned int indexStart, unsigned int indexEnd);
 
 }

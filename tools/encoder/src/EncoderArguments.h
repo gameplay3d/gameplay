@@ -166,7 +166,8 @@ public:
 
     std::vector<unsigned int> getFontSizes() const;
 
-	bool getFontExtended() const;
+	unsigned int getFontIndexStart() const;
+	unsigned int getFontIndexEnd() const;
 
     bool fontPreviewEnabled() const;
 
@@ -220,7 +221,8 @@ private:
 
     bool _parseError;
     std::vector<unsigned int> _fontSizes;
-	bool _fontExtended;
+	unsigned int _fontIndexStart;
+	unsigned int _fontIndexEnd;
     bool _fontPreview;
     Font::FontFormat _fontFormat;
     bool _textOutput;
