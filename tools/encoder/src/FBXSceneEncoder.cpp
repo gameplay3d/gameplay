@@ -737,9 +737,13 @@ void FBXSceneEncoder::loadCamera(FbxNode* fbxNode, Node* node)
         id.append("_Camera");
         camera->setId(id);
     }
+
+	// Clip planes have to by divided by the forward scale of the camera (x-axis) to get right values
+	float scale = (float)fbxCamera->GetNode()->LclScaling.Get()[0];
+
     camera->setAspectRatio(getAspectRatio(fbxCamera));
-    camera->setNearPlane((float)fbxCamera->NearPlane.Get());
-    camera->setFarPlane((float)fbxCamera->FarPlane.Get());
+	camera->setNearPlane((float)fbxCamera->NearPlane.Get() / scale);
+	camera->setFarPlane((float)fbxCamera->FarPlane.Get() / scale);
 
     if (fbxCamera->ProjectionType.Get() == FbxCamera::eOrthogonal)
     {
