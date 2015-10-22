@@ -2,6 +2,7 @@
 
 #include "EncoderArguments.h"
 #include "StringUtil.h"
+#include "TTFFontEncoder.h"
 
 #ifdef WIN32
     #define PATH_MAX    _MAX_PATH
@@ -25,6 +26,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _parseError(false),
     _fontPreview(false),
     _fontFormat(Font::BITMAP),
+	_fontIndexStart(GLYPH_INDEX_START),
+	_fontIndexEnd(GLYPH_INDEX_END),
     _textOutput(false),
     _optimizeAnimations(false),
     _animationGrouping(ANIMATIONGROUP_PROMPT),
@@ -310,6 +313,7 @@ void EncoderArguments::printUsage() const
     "  -s <sizes>\tComma-separated list of font sizes (in pixels).\n" \
     "  -p\t\tOutput font preview.\n" \
     "  -f\t\tFormat of font. -f:b (BITMAP), -f:d (DISTANCE_FIELD).\n" \
+	"  -e start,end\tSet the glyph range to be generated. Eg: -e 48,57 to export only numbers.\n" \
     "\n");
     exit(8);
 }
@@ -356,6 +360,16 @@ const char* EncoderArguments::getNodeId() const
 std::vector<unsigned int> EncoderArguments::getFontSizes() const
 {
     return _fontSizes;
+}
+
+unsigned int EncoderArguments::getFontIndexStart() const
+{
+	return _fontIndexStart;
+}
+
+unsigned int EncoderArguments::getFontIndexEnd() const
+{
+	return _fontIndexEnd;
 }
 
 EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
@@ -426,6 +440,53 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             _fontFormat = Font::DISTANCE_FIELD;
         }
         break;
+	case 'e':
+		{
+			std::string range;
+
+			(*index)++;
+			if (*index < options.size())
+			{
+				if (std::count(options[*index].begin(), options[*index].end(), ',') > 1)
+				{
+					LOG(1, "Error: invalid format for range argument: -e %s", options[*index].c_str());
+					_parseError = true;
+					return;
+				}
+
+				range = options[*index];
+			}
+
+			if (range.empty())
+			{
+				LOG(1, "Error: invalid format for argument: -e");
+				_parseError = true;
+				return;
+			}
+
+			// Parse comma-separated range
+			size_t middle = range.find(',');
+
+			if (middle > 0)
+			{
+				_fontIndexStart = atoi(std::string(range, 0, middle).c_str());
+				_fontIndexEnd = atoi(std::string(range, middle + 1, range.length() - 1).c_str());
+
+				if (_fontIndexStart > _fontIndexEnd)
+				{
+					LOG(1, "Error: invalid range provided: %s", range.c_str());
+					_parseError = true;
+					return;
+				}
+			}
+			else
+			{
+				LOG(1, "Error: invalid range provided: %s", range.c_str());
+				_parseError = true;
+				return;
+			}
+		}
+		break;
     case 'g':
         if (str.compare("-groupAnimations:auto") == 0 || str.compare("-g:auto") == 0)
         {

@@ -3,6 +3,8 @@
 #include "GPBFile.h"
 #include "StringUtil.h"
 
+#include <vector>
+
 namespace gameplay
 {
 
@@ -111,7 +113,7 @@ unsigned char* createDistanceFields(unsigned char* img, unsigned int width, unsi
 struct FontData
 {
     // Array of glyphs for a font
-    TTFGlyph glyphArray[END_INDEX - START_INDEX];
+	std::vector<TTFGlyph> glyphArray;
 
     // Stores final height of a row required to render all glyphs
     int fontSize;
@@ -135,7 +137,7 @@ struct FontData
     }
 };
  
-int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsigned int>& fontSizes, const char* id, bool fontpreview = false, Font::FontFormat fontFormat = Font::BITMAP)
+int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsigned int>& fontSizes, const char* id, bool fontpreview = false, Font::FontFormat fontFormat = Font::BITMAP, unsigned int indexStart = GLYPH_INDEX_START, unsigned int indexEnd = GLYPH_INDEX_END)
 {
     // Initialize freetype library.
     FT_Library library;
@@ -163,8 +165,9 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
 
         FontData* font = new FontData();
         font->fontSize = fontSize;
+		font->glyphArray.resize(indexEnd - indexStart + 1);
 
-        TTFGlyph* glyphArray = font->glyphArray;
+        std::vector<TTFGlyph>& glyphArray = font->glyphArray;
 
         int rowSize = 0;
         int glyphSize = 0;
@@ -195,7 +198,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
             actualfontHeight = 0;
 
             // Find the width of the image.
-            for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
+			for (unsigned char ascii = indexStart; ascii < indexEnd; ++ascii)
             {
                 // Load glyph image into the slot (erase previous one)
                 error = FT_Load_Char(face, ascii, loadFlags);
@@ -255,7 +258,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
 
             // Find out the squared texture size that would fit all the require font glyphs.
             i = 0;
-            for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
+			for (unsigned char ascii = indexStart; ascii < indexEnd; ++ascii)
             {
                 // Load glyph image into the slot (erase the previous one).
                 error = FT_Load_Char(face, ascii, loadFlags);
@@ -290,7 +293,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
                 // Move Y back to the top of the row.
                 penY = row * rowSize;
 
-                if (ascii == (END_INDEX - 1))
+                if (ascii == (indexEnd - 1))
                 {
                     textureSizeFound = true;
                 }
@@ -320,7 +323,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
         penY = 0;
         row = 0;
         i = 0;
-        for (unsigned char ascii = START_INDEX; ascii < END_INDEX; ++ascii)
+		for (unsigned char ascii = indexStart; ascii <= indexEnd; ++ascii)
         {
             // Load glyph image into the slot (erase the previous one).
             error = FT_Load_Char(face, ascii, loadFlags);
@@ -415,7 +418,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, std::vector<unsig
         writeString(gpbFp, "");
 
         // Glyphs.
-        unsigned int glyphSetSize = END_INDEX - START_INDEX;
+        unsigned int glyphSetSize = indexEnd - indexStart;
         writeUint(gpbFp, glyphSetSize);
         for (unsigned int j = 0; j < glyphSetSize; j++)
         {

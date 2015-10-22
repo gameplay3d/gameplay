@@ -331,7 +331,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
         GP_ASSERT(_batch);
         for (size_t i = startIndex; i < length; i += (size_t)iteration)
         {
-            char c = 0;
+            unsigned char c = 0;
             if (rightToLeft)
             {
                 c = cursor[i];
