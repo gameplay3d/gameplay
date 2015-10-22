@@ -571,17 +571,26 @@ void FBXSceneEncoder::transformNode(FbxNode* fbxNode, Node* node)
         }
         else if(fbxNode->GetCamera())
         {
-            // TODO: use the EvaluateLocalTransform() function for the transformations for the camera
-            /*
-             * the current implementation ignores pre- and postrotation among others (usually happens with fbx-export from blender)
-             *
-             * Some info for a future implementation:
-             * according to the fbx-documentation the camera's forward vector
-             * points along a node's positive X axis.
-             * so we have to correct it if we use the EvaluateLocalTransform-function
-             * just rotating it by 90° around the Y axis (similar to above) doesn't work
-             */
-            matrix.SetTRS(fbxNode->LclTranslation.Get(), fbxNode->LclRotation.Get(), fbxNode->LclScaling.Get());
+			/*
+			* according to the fbx-documentation the camera's forward vector
+			* points along a node's positive X axis.
+			* so we have to rotate it by 90 around the Y-axis to correct it.
+			*/
+			if (fbxNode->RotationActive.Get())
+			{
+				const FbxVector4& postRotation = fbxNode->PostRotation.Get();
+				fbxNode->SetPostRotation(FbxNode::eSourcePivot, FbxVector4(postRotation.mData[0],
+					postRotation.mData[1] + 90.0,
+					postRotation.mData[2]));
+			}
+			else
+			{
+				// usually for the fbx-exporter in Blender 2.75
+				// if rotation is deactivated we have to rotate the local transform in 90°
+				rotateAdjust.SetR(FbxVector4(0, 90.0, 0.0));
+			}
+
+			matrix = fbxNode->EvaluateLocalTransform() * rotateAdjust;
         }
         
         copyMatrix(matrix, m);
