@@ -119,6 +119,13 @@ public:
          */
         static Sampler* create(const char* path, bool generateMipmaps = false);
 
+		/**
+		* Set the default texture which look like a chess pattern but with pink and purple squares.
+		*
+		* @return The new sampler.
+		*/
+		static Sampler* setDefaultTexture();
+
         /**
          * Sets the wrap mode for this sampler.
          *

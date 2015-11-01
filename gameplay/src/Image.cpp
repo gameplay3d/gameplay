@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "FileSystem.h"
 #include "Image.h"
+#include "defaultTex.h"
 
 namespace gameplay
 {
@@ -12,6 +13,40 @@ static void readStream(png_structp png, png_bytep data, png_size_t length)
     {
         png_error(png, "Error reading PNG.");
     }
+}
+
+Image* Image::setDefaultTexture()
+{
+	Image* image = new Image();
+	image->_width = 256;
+	image->_height = 256;
+	image->_format = Image::RGBA;
+	image->_data = defaultTexture;
+
+	return image;
+
+	/*
+	std::ofstream file;
+	file.open("defaultTex.h");
+
+	int imageBuffer=stride * image->_height;
+
+	file << "const int textureSize =" << imageBuffer << ";" << std::endl;
+	file << "unsigned char defaultTexture[textureSize] = {";
+
+	for (size_t i = 0; i < imageBuffer; i++)
+	{
+	if (i != imageBuffer-1)
+	{
+	file << "'" << image->_data[i] << "'" << ",";
+	}
+	else if (i == imageBuffer-1)
+	{
+	file << "'" << image->_data[i] << "'" << "};";
+	}
+	}
+	file.close();
+	*/
 }
 
 Image* Image::create(const char* path)

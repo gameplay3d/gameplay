@@ -1209,6 +1209,16 @@ bool Texture::isCompressed() const
     return _compressed;
 }
 
+Texture::Sampler* Texture::Sampler::setDefaultTexture()
+{
+	Texture* texture = NULL;
+	Image* image = Image::setDefaultTexture();
+	if (image)
+		texture = Texture::create(image, true);
+
+	return texture ? new Sampler(texture) : NULL;
+}
+
 Texture::Sampler::Sampler(Texture* texture)
     : _texture(texture), _wrapS(Texture::REPEAT), _wrapT(Texture::REPEAT), _wrapR(Texture::REPEAT)
 {

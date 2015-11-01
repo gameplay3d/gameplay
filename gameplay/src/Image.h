@@ -45,6 +45,13 @@ public:
      */
     static Image* create(unsigned int width, unsigned int height, Format format, unsigned char* data = NULL);
 
+	/**
+	* Used to create the default texture
+	*
+	* @return default texture image
+	*/
+	static Image* setDefaultTexture();
+
     /**
      * Gets the image's raw pixel data.
      *

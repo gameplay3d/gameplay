@@ -60,6 +60,13 @@ public:
      */
     Texture::Sampler* getSampler(unsigned int index = 0) const;
 
+	/**
+	* Sets the default texture for shader programs
+	*
+	* @return the default texture
+	*/
+	Texture::Sampler* setDefaultTexture();
+
     /**
      * Sets the value of this parameter to a float value.
      */
