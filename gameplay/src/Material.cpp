@@ -136,9 +136,15 @@ Material* Material::create(const char* vshPath, const char* fshPath, const char*
 
     material->_currentTechnique = technique;
 
-	if (material->getParameter("u_diffuseTexture"))
+	for (size_t i = 0; i < material->_techniques.size(); i++)
 	{
-		material->getParameter("u_diffuseTexture")->setDefaultTexture();
+		for (size_t j = 0; j < material->_techniques[i]->getPassCount(); j++)
+		{
+			if (material->_techniques[i]->getPassByIndex(j)->getEffect()->getUniform("u_diffuseTexture"))
+			{
+				material->getParameter("u_diffuseTexture")->setDefaultTexture();
+			}
+		}
 	}
 
     return material;
