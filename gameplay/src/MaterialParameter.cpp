@@ -89,6 +89,18 @@ Texture::Sampler* MaterialParameter::getSampler(unsigned int index) const
     return NULL;
 }
 
+Texture::Sampler * MaterialParameter::setDefaultTexture()
+{
+	clearValue();
+	Texture::Sampler* sampler = Texture::Sampler::setDefaultTexture();
+	if (sampler)
+	{
+		_value.samplerValue = sampler;
+		_type = MaterialParameter::SAMPLER;
+	}
+	return sampler;
+}
+
 void MaterialParameter::setValue(float value)
 {
     clearValue();
