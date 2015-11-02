@@ -12,9 +12,9 @@ GamePlay is an open-source, cross-platform native C++ game framework for creatin
 
 ## Supported Platforms
 - [Windows](https://github.com/gameplay3d/GamePlay/wiki/Visual-Studio-Setup) 
-- [Linux](https://github.com/gameplay3d/GamePlay/wiki/CMake Setup - Linux)
-- [MacOSX](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup)
-- [iOS](https://github.com/gameplay3d/GamePlay/wiki/Apple-Xcode-Setup)
+- [MacOSX](https://github.com/gameplay3d/GamePlay/wiki/Xcode-Setup)
+- [Linux](https://github.com/gameplay3d/GamePlay/wiki/CMake-Linux-Setup)
+- [iOS](https://github.com/gameplay3d/GamePlay/wiki/Xcode-Setup)
 - [Android](https://github.com/gameplay3d/GamePlay/wiki/Android-NDK-Setup)
 
 ## Roadmap for 'next' branch
