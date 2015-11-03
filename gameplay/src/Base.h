@@ -182,6 +182,8 @@ extern int strcmpnocase(const char* s1, const char* s2);
 #ifdef __ANDROID__
     #include <AL/al.h>
     #include <AL/alc.h>
+    #define AL_ALEXT_PROTOTYPES
+    #include <AL/alext.h>
 #elif WIN32
     #define AL_LIBTYPE_STATIC
     #include <AL/al.h>
@@ -218,6 +220,7 @@ using std::va_list;
     #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
+    #define GP_USE_VAO
 #elif WIN32
         #define WIN32_LEAN_AND_MEAN
         #define GLEW_STATIC

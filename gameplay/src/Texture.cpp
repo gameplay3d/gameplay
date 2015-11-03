@@ -161,11 +161,85 @@ Texture* Texture::create(Image* image, bool generateMipmaps)
     }
 }
 
+GLint Texture::getFormatInternal(Format format)
+{
+    switch (format)
+    {
+        case Texture::RGB888:
+        case Texture::RGB565:
+            return GL_RGB;
+        case Texture::RGBA8888:
+        case Texture::RGBA4444:
+        case Texture::RGBA5551:
+            return GL_RGBA;
+        case Texture::ALPHA:
+            return GL_ALPHA;
+        case Texture::DEPTH:
+#if !defined(OPENGL_ES) || defined(GL_ES_VERSION_3_0)
+            return GL_DEPTH_COMPONENT32F;
+#else
+            return GL_DEPTH_COMPONENT;
+#endif
+        default:
+            return 0;
+    }
+}
+
+GLenum Texture::getFormatTexel(Format format)
+{
+    switch (format)
+    {
+        case Texture::RGB888:
+        case Texture::RGBA8888:
+        case Texture::ALPHA:
+            return GL_UNSIGNED_BYTE;
+        case Texture::RGB565:
+            return GL_UNSIGNED_SHORT_5_6_5;
+        case Texture::RGBA4444:
+            return GL_UNSIGNED_SHORT_4_4_4_4;
+        case Texture::RGBA5551:
+            return GL_UNSIGNED_SHORT_5_5_5_1;
+        case Texture::DEPTH:
+#if !defined(OPENGL_ES) || defined(GL_ES_VERSION_3_0)
+            return GL_FLOAT;
+#else
+            return GL_UNSIGNED_INT;
+#endif
+        default:
+            return 0;
+    }
+}
+
+size_t Texture::getFormatBPP(Format format)
+{
+        switch (format)
+        {
+            case Texture::RGB565:
+            case Texture::RGBA4444:
+            case Texture::RGBA5551:
+                return 2;
+            case Texture::RGB888:
+                return 3;
+            case Texture::RGBA8888:
+                return 4;
+            case Texture::ALPHA:
+                return 1;
+            default:
+                return 0;
+        }
+}
+
 Texture* Texture::create(Format format, unsigned int width, unsigned int height, const unsigned char* data, bool generateMipmaps, Texture::Type type)
 {
     GP_ASSERT( type == Texture::TEXTURE_2D || type == Texture::TEXTURE_CUBE );
 
     GLenum target = (GLenum)type;
+
+    GLint internalFormat = getFormatInternal(format);
+    GP_ASSERT( internalFormat != 0 );
+
+    GLenum texelType = getFormatTexel(format);
+    GP_ASSERT( texelType != 0 );
 
     // Create the texture.
     GLuint textureId;
@@ -180,45 +254,49 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
 #endif
 
     // Load the texture
+    size_t bpp = getFormatBPP(format);
     if (type == Texture::TEXTURE_2D)
     {
-        // Texture 2D
-        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
+        GLenum f = (format == Texture::DEPTH) ? GL_DEPTH_COMPONENT : internalFormat;
+        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, f, texelType, data) );
     }
     else
     {
         // Get texture size
         unsigned int textureSize = width * height;
-        switch (format)
+        if (bpp == 0)
         {
-            case Texture::RGB:
-                textureSize *= 3;
-                break;
-            case Texture::RGBA:
-                textureSize *= 4;
-                break;
-            case Texture::ALPHA:
-                break;
-            case Texture::UNKNOWN:
-                if (data)
-                {
-                    glDeleteTextures(1, &textureId);
-                    GP_ERROR("Failed to determine texture size because format is UNKNOWN.");
-                    return NULL;
-                }
-                break;
+            glDeleteTextures(1, &textureId);
+            GP_ERROR("Failed to determine texture size because format is UNKNOWN.");
+            return NULL;
         }
+        textureSize *= bpp;
         // Texture Cube
         for (unsigned int i = 0; i < 6; i++)
         {
             const unsigned char* texturePtr = (data == NULL) ? NULL : &data[i * textureSize];
-            GL_ASSERT( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, texturePtr) );
+            GL_ASSERT( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, width, height, 0, internalFormat, texelType, texturePtr) );
         }
     }
 
     // Set initial minification filter based on whether or not mipmaping was enabled.
-    Filter minFilter = generateMipmaps ? NEAREST_MIPMAP_LINEAR : LINEAR;
-    GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter) );
+    Filter minFilter;
+    if (format == Texture::DEPTH)
+    {
+    	minFilter = NEAREST;
+    	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST) );
+    	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST) );
+    	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE) );
+    	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
+#if !defined(OPENGL_ES) || defined(GL_ES_VERSION_3_0) && GL_ES_VERSION_3_0
+    	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_NONE) );
+#endif    	
+    }
+    else
+    {
+    	minFilter = generateMipmaps ? NEAREST_MIPMAP_LINEAR : LINEAR;
+    	GL_ASSERT( glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter) );
+    }
 
     Texture* texture = new Texture();
     texture->_handle = textureId;
@@ -227,10 +305,12 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     texture->_width = width;
     texture->_height = height;
     texture->_minFilter = minFilter;
+    texture->_internalFormat = internalFormat;
+    texture->_texelType = texelType;
+    texture->_bpp = bpp;
     if (generateMipmaps)
-    {
         texture->generateMipmaps();
-    }
+
 
     // Restore the texture id
     GL_ASSERT( glBindTexture((GLenum)__currentTextureType, __currentTextureId) );
@@ -264,6 +344,9 @@ Texture* Texture::create(TextureHandle handle, int width, int height, Format for
     texture->_format = format;
     texture->_width = width;
     texture->_height = height;
+    texture->_internalFormat = getFormatInternal(format);
+    texture->_texelType = getFormatTexel(format);
+    texture->_bpp = getFormatBPP(format);
 
     return texture;
 }
@@ -279,27 +362,17 @@ void Texture::setData(const unsigned char* data)
 
     if (_type == Texture::TEXTURE_2D)
     {
-        GL_ASSERT( glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, _width, _height, (GLenum)_format, GL_UNSIGNED_BYTE, data) );
+        GL_ASSERT( glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, _width, _height, _internalFormat, _texelType, data) );
     }
     else
     {
         // Get texture size
         unsigned int textureSize = _width * _height;
-        switch (_format)
-        {
-            case Texture::RGB:
-                textureSize *= 3;
-                break;
-            case Texture::RGBA:
-                textureSize *= 4;
-                break;
-            case Texture::ALPHA:
-                break;
-        }
+        textureSize *= _bpp;
         // Texture Cube
         for (unsigned int i = 0; i < 6; i++)
         {
-            GL_ASSERT( glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, _width, _height, (GLenum)_format, GL_UNSIGNED_BYTE, &data[i * textureSize]) );
+            GL_ASSERT( glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, _width, _height, _internalFormat, _texelType, &data[i * textureSize]) );
         }
     }
 

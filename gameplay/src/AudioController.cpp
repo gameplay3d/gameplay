@@ -81,11 +81,17 @@ void AudioController::pause()
         _pausingSource = NULL;
         itr++;
     }
+#ifdef ALC_SOFT_pause_device
+    alcDevicePauseSOFT(_alcDevice);
+#endif
 }
 
 void AudioController::resume()
 {   
     alcMakeContextCurrent(_alcContext);
+#ifdef ALC_SOFT_pause_device
+    alcDeviceResumeSOFT(_alcDevice);
+#endif
 
     std::set<AudioSource*>::iterator itr = _playingSources.begin();
 

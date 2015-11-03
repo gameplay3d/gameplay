@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "FBXSceneEncoder.h"
+#include "TMXSceneEncoder.h"
 #include "TTFFontEncoder.h"
 #include "GPBDecoder.h"
 #include "EncoderArguments.h"
@@ -99,11 +100,6 @@ int main(int argc, const char** argv)
 
     switch (arguments.getFileFormat())
     {
-    case EncoderArguments::FILEFORMAT_DAE:
-        {
-            LOG(1, "Error: Collada support has been removed. Convert your DAE file to FBX.\n");
-            return -1;
-        }
     case EncoderArguments::FILEFORMAT_FBX:
         {
             std::string realpath(arguments.getFilePath());
@@ -111,7 +107,14 @@ int main(int argc, const char** argv)
             fbxEncoder.write(realpath, arguments);
             break;
         }
+    case EncoderArguments::FILEFORMAT_TMX:
+        {
+            TMXSceneEncoder tmxEncoder;
+            tmxEncoder.write(arguments);
+            break;
+        }
     case EncoderArguments::FILEFORMAT_TTF:
+    case EncoderArguments::FILEFORMAT_OTF:
         {
             std::vector<unsigned int> fontSizes = arguments.getFontSizes();
             

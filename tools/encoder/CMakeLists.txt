@@ -27,7 +27,7 @@ set(APP_LIBRARIES
     pthread
 )
 
-add_definitions(-lstdc++ -ldl -lfbxsdk -lgameplay-deps -lfreetype -lpthread)
+add_definitions(-std=c++11 -lstdc++ -ldl -lfbxsdk -lgameplay-deps -lfreetype -lpthread)
 
 set( APP_NAME gameplay-encoder )
 
@@ -116,6 +116,10 @@ set(APP_SRC
     src/Transform.h
     src/TTFFontEncoder.cpp
     src/TTFFontEncoder.h
+    src/TMXSceneEncoder.cpp
+    src/TMXSceneEncoder.h
+    src/TMXTypes.cpp
+    src/TMXTypes.h
     src/Vector2.cpp
     src/Vector2.h
     src/Vector2.inl

@@ -1,3 +1,4 @@
+#ifndef GP_NO_PLATFORM
 #ifdef WIN32
 
 #include "gameplay.h"
@@ -22,4 +23,5 @@ extern "C" int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LP
     return result;
 }
 
+#endif
 #endif

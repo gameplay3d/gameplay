@@ -24,9 +24,15 @@ public:
     enum Format
     {
         UNKNOWN = 0,
-        RGB     = GL_RGB,
-        RGBA    = GL_RGBA,
-        ALPHA   = GL_ALPHA
+        RGB,
+        RGB888 = RGB,
+        RGB565,
+        RGBA,
+        RGBA8888 = RGBA,
+        RGBA4444,
+        RGBA5551,
+        ALPHA,
+        DEPTH,
     };
 
     /**
@@ -325,6 +331,9 @@ private:
     static GLubyte* readCompressedPVRTCLegacy(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount, unsigned int* faceCount, GLenum faces[6]);
 
     static int getMaskByteIndex(unsigned int mask);
+    static GLint getFormatInternal(Format format);
+    static GLenum getFormatTexel(Format format);
+    static size_t getFormatBPP(Format format);
 
     std::string _path;
     TextureHandle _handle;
@@ -340,6 +349,10 @@ private:
     Wrap _wrapR;
     Filter _minFilter;
     Filter _magFilter;
+
+    GLint _internalFormat;
+    GLenum _texelType;
+    size_t _bpp;
 };
 
 }

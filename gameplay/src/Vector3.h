@@ -5,7 +5,6 @@ namespace gameplay
 {
 
 class Matrix;
-class Quaternion;
 
 /**
  * Defines a 3-element floating point vector.

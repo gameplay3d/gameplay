@@ -1,3 +1,4 @@
+#ifndef GP_NO_PLATFORM
 #ifdef __APPLE__
 
 #import <Foundation/Foundation.h>
@@ -25,4 +26,5 @@ int main(int argc, char** argv)
     return result;
 }
 
+#endif
 #endif

@@ -4,6 +4,8 @@
 #include <exception>
 #include <cstdio>
 #include <cstdarg>
+#include <thread>
+#include <mutex>
 
 #ifdef WIN32
 #include <windows.h>
@@ -30,6 +32,12 @@ struct MemoryAllocationRecord
 
 MemoryAllocationRecord* __memoryAllocations = 0;
 int __memoryAllocationCount = 0;
+
+static std::mutex& getMemoryAllocationMutex()
+{
+    static std::mutex m;
+    return m;
+}
 
 void* debugAlloc(std::size_t size, const char* file, int line);
 void debugFree(void* p);
@@ -105,6 +113,7 @@ void* debugAlloc(std::size_t size, const char* file, int line)
     // Move memory pointer past record
     mem += sizeof(MemoryAllocationRecord);
 
+    std::lock_guard<std::mutex> lock(getMemoryAllocationMutex());
     rec->address = (unsigned long)mem;
     rec->size = (unsigned int)size;
     rec->file = file;
@@ -194,6 +203,7 @@ void debugFree(void* p)
     }
 
     // Link this item out
+    std::lock_guard<std::mutex> lock(getMemoryAllocationMutex());
     if (__memoryAllocations == rec)
         __memoryAllocations = rec->next;
     if (rec->prev)

@@ -70,7 +70,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_GAMEPAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>GAMEPLAY_PATH\gameplay\src;GAMEPLAY_PATH\external-deps\include;$(MSBuildProgramFiles32)\Microsoft DirectX SDK (June 2010)\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>GAMEPLAY_PATH\gameplay\src;GAMEPLAY_PATH\external-deps\include;$(DXSDK_DIR)include;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -78,7 +78,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OpenGL32.lib;GLU32.lib;gameplay.lib;gameplay-deps.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lib\windows\x86_64\Debug;GAMEPLAY_PATH\gameplay\Debug;$(MSBuildProgramFiles32)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>GAMEPLAY_PATH\external-deps\lib\windows\x86_64\Debug;GAMEPLAY_PATH\gameplay\Debug;$(DXSDK_DIR)Lib\x64</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>

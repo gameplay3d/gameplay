@@ -99,7 +99,8 @@ Scene* SceneLoader::loadInternal(const char* url)
         SceneNodeProperty::SCRIPT |
         SceneNodeProperty::SPRITE |
         SceneNodeProperty::TILESET |
-        SceneNodeProperty::TEXT);
+        SceneNodeProperty::TEXT |
+        SceneNodeProperty::ENABLED);
     applyNodeProperties(sceneProperties, SceneNodeProperty::COLLISION_OBJECT);
 
     // Apply node tags
@@ -438,6 +439,9 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         }
         case SceneNodeProperty::SCRIPT:
             node->addScript(snp._value.c_str());
+            break;
+        case SceneNodeProperty::ENABLED:
+            node->setEnabled(snp._value.compare("true") == 0);
             break;
         default:
             GP_ERROR("Unsupported node property type (%d).", snp._type);
@@ -851,6 +855,10 @@ void SceneLoader::parseNode(Properties* ns, SceneNode* parent, const std::string
         else if (strcmp(name, "script") == 0)
         {
             addSceneNodeProperty(sceneNode, SceneNodeProperty::SCRIPT, ns->getString());
+        }
+        else if (strcmp(name, "enabled") == 0)
+        {
+            addSceneNodeProperty(sceneNode, SceneNodeProperty::ENABLED, ns->getString());
         }
         else
         {

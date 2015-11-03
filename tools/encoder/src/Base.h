@@ -38,6 +38,9 @@ using std::endl;
     #pragma warning( disable : 4267 )
     #pragma warning( disable : 4311 )
     #pragma warning( disable : 4390 )
+    #pragma warning( disable : 4456 )
+    #pragma warning( disable : 4458 )
+    #pragma warning( disable : 4477 )
     #pragma warning( disable : 4701 )
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )
@@ -100,6 +103,9 @@ void fillArray(float values[], float value, size_t length);
  * @return Base file name.
  */
 std::string getBaseName(const std::string& filepath);
+
+std::string base64_encode(unsigned char const*, unsigned int len);
+std::string base64_decode(std::string const& s);
 
 #define ISZERO(x) (fabs(x) < MATH_EPSILON)
 #define ISONE(x) ((x - 1.0f) < MATH_EPSILON)

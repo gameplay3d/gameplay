@@ -53,7 +53,8 @@ void SpriteSample::initialize()
     // Setup player text
     Node* playerTextNode = _scene->findNode("text");
     playerTextNode->addRef();
-    _scene->removeNode(playerTextNode); //XXX This is because SceneLoader doesn't support loading child nodes for other nodes
+    _scene->removeNode(playerTextNode);
+    //XXX This is because SceneLoader doesn't support loading child nodes for other nodes
     _playerNode->addChild(playerTextNode);
 
     playerTextNode->translateY(_playerSprite->getHeight());
@@ -61,6 +62,7 @@ void SpriteSample::initialize()
     playerText->setJustify(Font::ALIGN_TOP_HCENTER);
     playerText->setWidth(_playerSprite->getWidth());
     SAFE_RELEASE(playerTextNode);
+
 
     // Custom Effect in sprite
     Effect* waterEffect = Effect::createFromFile("res/shaders/sprite.vert", "res/common/sprites/water2d.frag");

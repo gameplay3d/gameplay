@@ -61,7 +61,8 @@ private:
             SCRIPT = 2048,
             SPRITE = 4096,
             TILESET = 8192,
-            TEXT = 16384
+            TEXT = 16384,
+            ENABLED = 32768
         };
 
         SceneNodeProperty(Type type, const std::string& value, int index, bool isUrl);

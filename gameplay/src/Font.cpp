@@ -1371,9 +1371,11 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
                 }
 
                 // Check against inLocation.
+                //  Note: g.width is smaller than g.advance, so if I only check against g.width, I will 
+                //  miss locations towards the right of the character.
                 if (destIndex == (int)charIndex ||
                     (destIndex == -1 &&
-                    inLocation.x >= xPos && inLocation.x < floor(xPos + g.width*scale + spacing) &&
+                    inLocation.x >= xPos && inLocation.x < floor(xPos + g.advance*scale + spacing) &&
                     inLocation.y >= yPos && inLocation.y < yPos + size))
                 {
                     outLocation->x = xPos;
