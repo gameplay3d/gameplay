@@ -1,9 +1,7 @@
-## v4.0.0
-
-- Adds support for Visual Studio 2015.
 
 ## v3.0.0
 
+- Adds support for Visual Studio 2015.
 - Adds support for 2D Sprite, TileSet and Text.
 - Adds support for node instance scripts.
 - Adds support for C++11.
