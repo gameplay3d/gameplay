@@ -1,5 +1,6 @@
 ## v4.0.0
-- TODO
+
+- Adds support for Visual Studio 2015.
 
 ## v3.0.0
 

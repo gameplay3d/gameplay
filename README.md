@@ -13,7 +13,7 @@ GamePlay is an open-source, cross-platform, C++ game framework/engine for creati
 ## Supported Platforms
 - [Windows](https://github.com/gameplay3d/GamePlay/wiki/Visual-Studio-Setup)
 - [MacOSX](https://github.com/gameplay3d/GamePlay/wiki/Xcode-Setup)
-- [Linux](https://github.com/gameplay3d/GamePlay/wiki/CMakeLinux-Setup)
+- [Linux](https://github.com/gameplay3d/GamePlay/wiki/CMake-Linux-Setup)
 - [iOS](https://github.com/gameplay3d/GamePlay/wiki/Xcode-Setup)
 - [Android](https://github.com/gameplay3d/GamePlay/wiki/Android-NDK-Setup)
 
