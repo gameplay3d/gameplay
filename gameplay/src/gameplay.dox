@@ -2,17 +2,17 @@
  *
  * \section intro Introduction
  *
- * The gameplay framework is a cross-platform, C++, 3D game framework that includes a runtime library, tools,
+ * The gameplay framework is a cross-platform, C++, 2D/3D game framework that includes a runtime library, tools,
  * and learning content that allows indie developers to write games for mobile and desktop platforms
  * without worrying about platform details.
  *
  * \section License
  *
- * The project is open sourced under the Apache 2.0 license.
+ * The project is open-source under the Apache 2.0 license.
  *
  * \section Project Features
  *
- * The framework offers a well-defined, 3D game framework that's designed to get the most out of today's mobile and desktop platforms. 
+ * The framework offers a well-defined, 2D/3D game framework that's designed to get the most out of today's mobile and desktop platforms. 
  * Its purpose is to help you create stunning, world-class, games that harness the power and performance of the platform without
  * being concerned about the platform details. This is accomplished through a set of C++ classes that
  * are built on top of the OS, providing access to the hardware, graphics, and audio libraries

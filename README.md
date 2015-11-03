@@ -6,7 +6,7 @@ GamePlay is an open-source, cross-platform, C++ game framework/engine for creati
 
 - [Website](http://www.gameplay3d.io/)
 - [Wiki](https://github.com/gameplay3d/GamePlay/wiki)
-- [API Reference](http://gameplay3d.github.io/GamePlay/api/index.html)
+- [API](http://gameplay3d.github.io/GamePlay/api/index.html)
 - [Development Guide](https://github.com/gameplay3d/GamePlay/wiki#wiki-Development_Guide)
 - [Community Group](https://groups.google.com/d/forum/gameplay3d-developers)
 
