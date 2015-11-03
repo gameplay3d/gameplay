@@ -118,7 +118,7 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
     bool spriteAnimated = sprite->getBool("animated");
     bool spriteLooped = sprite->getBool("looped");
     int spriteFrameCount = sprite->getInt("frameCount");
-    int spriteFrameRandomOffset = sprite->getInt("frameRandomOffset");
+    int spriteFrameRandomOffset = min(sprite->getInt("frameRandomOffset"), spriteFrameCount);
     float spriteFrameDuration = sprite->getFloat("frameDuration");
 
     // Emitter properties.
