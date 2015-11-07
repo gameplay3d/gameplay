@@ -1,9 +1,11 @@
 ## v4.0.0
 
-- Adds support for Visual Studio 2015.
+- TODO
 
 ## v3.0.0
 
+- Adds support for Visual Studio 2015.
+- Adds support for FBX SDK 2016.1.2
 - Adds support for 2D Sprite, TileSet and Text.
 - Adds support for node instance scripts.
 - Adds support for C++11.
@@ -13,7 +15,6 @@
 - Adds support for QTCreator for Linux and MacOSX.
 - Adds support for Eclipse for Linux.
 - Adds support for Eclipse for Android.
-- Adds updates to FBX SDK 2015.1
 - Adds support for Bullet Physics 2.82
 - Adds support for cubemap textures.
 - Adds support for font kerning.
