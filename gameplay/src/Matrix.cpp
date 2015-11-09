@@ -517,7 +517,7 @@ bool Matrix::decompose(Vector3* scale, Quaternion* rotation, Vector3* translatio
     // Now calculate the rotation from the resulting matrix (axes).
     float trace = xaxis.x + yaxis.y + zaxis.z + 1.0f;
 
-    if (trace > MATH_EPSILON)
+    if (trace > 1.0f)
     {
         float s = 0.5f / sqrt(trace);
         rotation->w = 0.25f / s;
