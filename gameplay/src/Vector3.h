@@ -432,6 +432,14 @@ public:
      */
     inline const Vector3 operator/(float x) const;
 
+	/**
+	* Divide this vector by the given value.
+	*
+	* @param x The value to divide by.
+	* @return This vector, after the division occurs.
+	*/
+	inline Vector3& operator/=(float x);
+
     /**
      * Determines if this vector is less than the given vector.
      * 

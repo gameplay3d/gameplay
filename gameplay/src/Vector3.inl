@@ -55,6 +55,12 @@ inline const Vector3 Vector3::operator/(const float x) const
     return Vector3(this->x / x, this->y / x, this->z / x);
 }
 
+inline Vector3& Vector3::operator/=(float x)
+{
+	scale(1.0f / x);
+	return *this;
+}
+
 inline bool Vector3::operator<(const Vector3& v) const
 {
     if (x == v.x)
