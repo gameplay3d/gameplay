@@ -646,7 +646,7 @@ bool initializeGL(WindowCreationParams* params)
     wglMakeCurrent(hdc, tempContext);
 
     // Initialize GLEW
-    if (GLEW_OK != glewInit())
+    if (GLEW_OK != glewInit() || !GLEW_VERSION_4_4 != 0)
     {
         wglDeleteContext(tempContext);
         DestroyWindow(hwnd);
@@ -731,8 +731,8 @@ bool initializeGL(WindowCreationParams* params)
     // Create our new GL context
     int attribs[] =
     {
-        WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-        WGL_CONTEXT_MINOR_VERSION_ARB, 1,
+        WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
+        WGL_CONTEXT_MINOR_VERSION_ARB, 4,
         0
     };
 
@@ -791,6 +791,16 @@ bool initializeGL(WindowCreationParams* params)
         glRenderbufferStorage = glRenderbufferStorageEXT;
         glRenderbufferStorageMultisample = glRenderbufferStorageMultisampleEXT;
     }
+
+    const char * GlVendor   = (const char *)glGetString(GL_VENDOR);
+    const char * GlRenderer = (const char *)glGetString(GL_RENDERER);
+    const char * GlVersion  = (const char *)glGetString(GL_VERSION);
+    const char * GlShaderVersion = (const char *) glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+    GP_WARN("GL Vendor   <%s>",GlVendor);
+    GP_WARN("GL Renderer <%s>",GlRenderer);
+    GP_WARN("GL Version  <%s>",GlVersion);
+    GP_WARN("GL Shaders  <%s>",GlShaderVersion);
 
     return true;
 }

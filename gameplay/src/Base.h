@@ -305,6 +305,7 @@ typedef unsigned long GamepadHandle;
     { \
         gl_code; \
         __gl_error_code = glGetError(); \
+        if(__gl_error_code != GL_NO_ERROR) GP_WARN( "__gl_error_code = 0x%x\n", __gl_error_code ); \
         GP_ASSERT(__gl_error_code == GL_NO_ERROR); \
     } while(0)
 #endif
