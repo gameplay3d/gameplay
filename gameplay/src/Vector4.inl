@@ -55,6 +55,12 @@ inline const Vector4 Vector4::operator/(const float x) const
     return Vector4(this->x / x, this->y / x, this->z / x, this->w / x);
 }
 
+inline Vector4& Vector4::operator/=(float x)
+{
+    scale(1.0f / x);
+    return *this;
+}
+
 inline bool Vector4::operator<(const Vector4& v) const
 {
     if (x == v.x)
@@ -70,6 +76,23 @@ inline bool Vector4::operator<(const Vector4& v) const
         return y < v.y;
     }
     return x < v.x;
+}
+
+inline bool Vector4::operator>(const Vector4& v) const
+{
+    if (x == v.x)
+    {
+        if (y == v.y)
+        {
+            if (z == v.z)
+            {
+                return w > v.w;
+            }
+            return z > v.z;
+        }
+        return y > v.y;
+    }
+    return x > v.x;
 }
 
 inline bool Vector4::operator==(const Vector4& v) const

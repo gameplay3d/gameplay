@@ -54,6 +54,12 @@ inline const Vector2 Vector2::operator/(const float x) const
     return Vector2(this->x / x, this->y / x);
 }
 
+inline Vector2& Vector2::operator/=(float x)
+{
+    scale(1.0f / x);
+    return *this;
+}
+
 inline bool Vector2::operator<(const Vector2& v) const
 {
     if (x == v.x)
@@ -61,6 +67,15 @@ inline bool Vector2::operator<(const Vector2& v) const
         return y < v.y;
     }
     return x < v.x;
+}
+
+inline bool Vector2::operator>(const Vector2& v) const
+{
+    if (x == v.x)
+    {
+        return y > v.y;
+    }
+    return x > v.x;
 }
 
 inline bool Vector2::operator==(const Vector2& v) const

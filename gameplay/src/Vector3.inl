@@ -57,8 +57,8 @@ inline const Vector3 Vector3::operator/(const float x) const
 
 inline Vector3& Vector3::operator/=(float x)
 {
-	scale(1.0f / x);
-	return *this;
+    scale(1.0f / x);
+    return *this;
 }
 
 inline bool Vector3::operator<(const Vector3& v) const
@@ -72,6 +72,19 @@ inline bool Vector3::operator<(const Vector3& v) const
         return y < v.y;
     }
     return x < v.x;
+}
+
+inline bool Vector3::operator>(const Vector3& v) const
+{
+    if (x == v.x)
+    {
+        if (y == v.y)
+        {
+            return z > v.z;
+        }
+        return y > v.y;
+    }
+    return x > v.x;
 }
 
 inline bool Vector3::operator==(const Vector3& v) const
