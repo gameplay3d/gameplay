@@ -764,7 +764,7 @@ public:
 
     /**
      * Transforms the specified vector by this matrix by
-     * treating the fourth (w) coordinate as zero.
+     * treating the fourth (w) coordinate as one.
      *
      * The result of the transformation is stored directly into vector.
      *

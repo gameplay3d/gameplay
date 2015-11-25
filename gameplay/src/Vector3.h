@@ -433,6 +433,14 @@ public:
     inline const Vector3 operator/(float x) const;
 
     /**
+    * Divide this vector by the given value.
+    *
+    * @param x The value to divide by.
+    * @return This vector, after the division occurs.
+    */
+    inline Vector3& operator/=(float x);
+
+    /**
      * Determines if this vector is less than the given vector.
      * 
      * @param v The vector to compare against.
@@ -440,6 +448,15 @@ public:
      * @return True if this vector is less than the given vector, false otherwise.
      */
     inline bool operator<(const Vector3& v) const;
+
+    /**
+    * Determines if this vector is greater than the given vector.
+    *
+    * @param v The vector to compare against.
+    *
+    * @return True if this vector is greater than the given vector, false otherwise.
+    */
+    inline bool operator>(const Vector3& v) const;
 
     /**
      * Determines if this vector is equal to the given vector.

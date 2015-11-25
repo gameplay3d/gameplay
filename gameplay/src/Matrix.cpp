@@ -906,12 +906,12 @@ void Matrix::transformPoint(const Vector3& point, Vector3* dst) const
 void Matrix::transformVector(Vector3* vector) const
 {
     GP_ASSERT(vector);
-    transformVector(vector->x, vector->y, vector->z, 0.0f, vector);
+    transformVector(vector->x, vector->y, vector->z, 1.0f, vector);
 }
 
 void Matrix::transformVector(const Vector3& vector, Vector3* dst) const
 {
-    transformVector(vector.x, vector.y, vector.z, 0.0f, dst);
+    transformVector(vector.x, vector.y, vector.z, 1.0f, dst);
 }
 
 void Matrix::transformVector(float x, float y, float z, float w, Vector3* dst) const
