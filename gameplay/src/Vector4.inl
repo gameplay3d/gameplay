@@ -57,7 +57,11 @@ inline const Vector4 Vector4::operator/(const float x) const
 
 inline Vector4& Vector4::operator/=(float x)
 {
-    scale(1.0f / x);
+    this->x /= x;
+    this->y /= x;
+    this->z /= x;
+    this->w /= x;
+
     return *this;
 }
 

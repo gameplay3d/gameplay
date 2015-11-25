@@ -56,7 +56,9 @@ inline const Vector2 Vector2::operator/(const float x) const
 
 inline Vector2& Vector2::operator/=(float x)
 {
-    scale(1.0f / x);
+    this->x /= x;
+    this->y /= x;
+
     return *this;
 }
 

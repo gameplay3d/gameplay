@@ -57,7 +57,10 @@ inline const Vector3 Vector3::operator/(const float x) const
 
 inline Vector3& Vector3::operator/=(float x)
 {
-    scale(1.0f / x);
+    this->x /= x;
+    this->y /= x;
+    this->z /= x;
+
     return *this;
 }
 
