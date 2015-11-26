@@ -180,6 +180,10 @@ private:
     unsigned short* _indicesPtr;
     bool _started;
 
+#ifdef GP_USE_VAO
+    Model * _model;
+#endif
+
 };
 
 }

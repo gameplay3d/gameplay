@@ -276,8 +276,15 @@ void Mesh::setVertexData(const float* vertexData, unsigned int vertexStart, unsi
         {
             vertexCount = _vertexCount - vertexStart;
         }
-
-        GL_ASSERT( glBufferSubData(GL_ARRAY_BUFFER, vertexStart * _vertexFormat.getVertexSize(), vertexCount * _vertexFormat.getVertexSize(), vertexData) );
+        else if (vertexCount > _vertexCount || vertexStart == 0 && vertexCount < _vertexCount)
+        {
+            _vertexCount = vertexCount;
+            GL_ASSERT(glBufferData(GL_ARRAY_BUFFER, _vertexFormat.getVertexSize() * _vertexCount, vertexData, _dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW));
+        }
+        else
+        {
+            GL_ASSERT(glBufferSubData(GL_ARRAY_BUFFER, vertexStart * _vertexFormat.getVertexSize(), vertexCount * _vertexFormat.getVertexSize(), vertexData));
+        }
     }
 }
 
