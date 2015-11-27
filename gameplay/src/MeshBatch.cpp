@@ -280,8 +280,7 @@ void MeshBatch::draw()
 
 #ifdef GP_USE_VAO
      _model->draw();
-    return;
-#endif
+#else
 
     // Not using VBOs, so unbind the element array buffer.
     // ARRAY_BUFFER will be unbound automatically during pass->bind().
@@ -312,6 +311,8 @@ void MeshBatch::draw()
 
         pass->unbind();
     }
+
+#endif
 }
     
 

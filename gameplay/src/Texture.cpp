@@ -1188,7 +1188,9 @@ void Texture::generateMipmaps()
     {
         GLenum target = (GLenum)_type;
         GL_ASSERT( glBindTexture(target, _handle) );
-        //GL_ASSERT( glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST) );
+#ifdef OPENGL_ES
+        GL_ASSERT( glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST) );
+#endif
         if( std::addressof(glGenerateMipmap) )
             GL_ASSERT( glGenerateMipmap(target) );
 

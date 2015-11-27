@@ -739,8 +739,8 @@ bool initializeGL(WindowCreationParams* params)
         WGL_CONTEXT_MAJOR_VERSION_ARB, GP_GL_VERSION_MAJOR,
         WGL_CONTEXT_MINOR_VERSION_ARB, GP_GL_VERSION_MINOR,
         //WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,            // force forward compatibility mode
-        WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,    // force compatibility profile
-        //WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,           // force core profile
+        //WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,    // force compatibility profile
+        //WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,           // force core profile (default value)
         0
     };
 
