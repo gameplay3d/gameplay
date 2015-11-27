@@ -1,8 +1,10 @@
 #include "Base.h"
 #include "MeshBatch.h"
 #include "Material.h"
+
 #ifdef GP_USE_VAO
 #include "Model.h"
+#include "MeshPart.h"
 #endif
 
 namespace gameplay
@@ -14,6 +16,15 @@ MeshBatch::MeshBatch(const VertexFormat& vertexFormat, Mesh::PrimitiveType primi
 {
 #ifdef GP_USE_VAO
     _model = Model::create(Mesh::createMesh(vertexFormat, initialCapacity, true));
+    if(indexed)
+    {
+        _model->getMesh()->addPart(_primitiveType, Mesh::INDEX16, initialCapacity, true);
+        _model->setMaterial(material, 0);
+    }
+    else
+    {
+        _model->setMaterial(material);
+    }
     _model->getMesh()->release();
 #endif
 
@@ -48,9 +59,6 @@ MeshBatch* MeshBatch::create(const VertexFormat& vertexFormat, Mesh::PrimitiveTy
     GP_ASSERT(material);
 
     MeshBatch* batch = new MeshBatch(vertexFormat, primitiveType, material, indexed, initialCapacity, growSize);
-#ifdef GP_USE_VAO
-    batch->_model->setMaterial(material);
-#endif
 
     material->addRef();
 
@@ -136,8 +144,6 @@ void MeshBatch::updateVertexAttributeBinding()
 #else
             VertexAttributeBinding* b = VertexAttributeBinding::create(_vertexFormat, _vertices, p->getEffect());
 #endif
-
-            //VertexAttributeBinding* b = VertexAttributeBinding::create(_vertexFormat, _vertices, p->getEffect());
             p->setVertexAttributeBinding(b);
             SAFE_RELEASE(b);
         }
@@ -261,6 +267,8 @@ void MeshBatch::finish()
 {
 #ifdef GP_USE_VAO
     _model->getMesh()->setVertexData(reinterpret_cast<const float*>(_vertices), 0, _vertexCount);
+    if(_indexed)
+        _model->getMesh()->getPart(0)->setIndexData(reinterpret_cast<const float*>(_indices), 0, _indexCount);
 #endif
     _started = false;
 }
@@ -270,17 +278,14 @@ void MeshBatch::draw()
     if (_vertexCount == 0 || (_indexed && _indexCount == 0))
         return; // nothing to draw
 
+#ifdef GP_USE_VAO
+     _model->draw();
+    return;
+#endif
+
     // Not using VBOs, so unbind the element array buffer.
     // ARRAY_BUFFER will be unbound automatically during pass->bind().
     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0 ) );
-
-#ifdef GP_USE_VAO
-    if (!_indexed)
-    {
-        _model->draw();
-        return;
-    }
-#endif
 
     GP_ASSERT(_material);
     if (_indexed)
