@@ -11,7 +11,7 @@
 #ifdef WIN32
 #define FONT_FSH "res/shaders/fontgl4.frag"  // use red component as alpha channel
 #else
-#define FONT_FSH "res/shaders/fontg.frag"
+#define FONT_FSH "res/shaders/font.frag"
 #endif
 
 namespace gameplay
