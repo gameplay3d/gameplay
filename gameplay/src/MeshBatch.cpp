@@ -16,6 +16,7 @@ MeshBatch::MeshBatch(const VertexFormat& vertexFormat, Mesh::PrimitiveType primi
 {
 #ifdef GP_USE_VAO
     _model = Model::create(Mesh::createMesh(vertexFormat, initialCapacity, true));
+    _model->getMesh()->setPrimitiveType(primitiveType);
     if(indexed)
     {
         _model->getMesh()->addPart(_primitiveType, Mesh::INDEX16, initialCapacity, true);
