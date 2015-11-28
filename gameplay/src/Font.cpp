@@ -8,7 +8,11 @@
 
 // Default font shaders
 #define FONT_VSH "res/shaders/font.vert"
-#define FONT_FSH "res/shaders/font.frag"
+#ifdef WIN32
+#define FONT_FSH "res/shaders/fontgl4.frag"  // use red component as alpha channel
+#else
+#define FONT_FSH "res/shaders/fontg.frag"
+#endif
 
 namespace gameplay
 {
