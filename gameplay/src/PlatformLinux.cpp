@@ -708,7 +708,17 @@ Platform* Platform::create(Game* game)
 
     XStoreName(__display, __window, title ? title : "");
 
+    const int attribs[] = {
+           GLX_CONTEXT_MAJOR_VERSION_ARB, 4,
+           GLX_CONTEXT_MINOR_VERSION_ARB, 3,
+           0
+       };
+
+#ifdef GP_GL4
+    __context = glXCreateContextAttribsARB(__display, configs[0], NULL, True, attribs);
+#else
     __context = glXCreateContext(__display, visualInfo, NULL, True);
+#endif
     if (!__context)
     {
         perror("glXCreateContext");
@@ -716,7 +726,7 @@ Platform* Platform::create(Game* game)
     }
     glXMakeCurrent(__display, __window, __context);
 
-    // Use OpenGL 2.x with GLEW
+    // init glew
     glewExperimental = GL_TRUE;
     GLenum glewStatus = glewInit();
     if (glewStatus != GLEW_OK)
@@ -736,6 +746,16 @@ Platform* Platform::create(Game* game)
         glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
     else if(glXSwapIntervalMESA)
         glXSwapIntervalMESA(__vsync ? 1 : 0);
+
+    const char * GlVendor   = (const char *)glGetString(GL_VENDOR);
+    const char * GlRenderer = (const char *)glGetString(GL_RENDERER);
+    const char * GlVersion  = (const char *)glGetString(GL_VERSION);
+    const char * GlShaderVersion = (const char *) glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+    GP_WARN("GL Vendor   <%s>",GlVendor);
+    GP_WARN("GL Renderer <%s>",GlRenderer);
+    GP_WARN("GL Version  <%s>",GlVersion);
+    GP_WARN("GL Shaders  <%s>",GlShaderVersion);
 
     return platform;
 }

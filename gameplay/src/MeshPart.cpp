@@ -118,8 +118,15 @@ void MeshPart::setIndexData(const void* indexData, unsigned int indexStart, unsi
         {
             indexCount = _indexCount - indexStart;
         }
-
-        GL_ASSERT( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexStart * indexSize, indexCount * indexSize, indexData) );
+        else if (indexCount > _indexCount || indexStart == 0 && indexCount < _indexCount)
+        {
+            _indexCount = indexCount;
+            GL_ASSERT(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * _indexCount, indexData, _dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW));
+        }
+        else
+        {
+            GL_ASSERT(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexStart * indexSize, indexCount * indexSize, indexData));
+        }
     }
 }
 

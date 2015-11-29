@@ -173,7 +173,11 @@ GLint Texture::getFormatInternal(Format format)
         case Texture::RGBA5551:
             return GL_RGBA;
         case Texture::ALPHA:
+#ifdef GP_GL4
+            return GL_RED;
+#else
             return GL_ALPHA;
+#endif
         case Texture::DEPTH:
 #if !defined(OPENGL_ES) || defined(GL_ES_VERSION_3_0)
             return GL_DEPTH_COMPONENT32F;
@@ -1188,7 +1192,9 @@ void Texture::generateMipmaps()
     {
         GLenum target = (GLenum)_type;
         GL_ASSERT( glBindTexture(target, _handle) );
+#ifdef OPENGL_ES
         GL_ASSERT( glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST) );
+#endif
         if( std::addressof(glGenerateMipmap) )
             GL_ASSERT( glGenerateMipmap(target) );
 

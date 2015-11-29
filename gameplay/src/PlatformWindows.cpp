@@ -25,6 +25,10 @@ using gameplay::print;
 #define DEFAULT_DEPTH_BUFFER_SIZE 24
 #define DEFAULT_STENCIL_BUFFER_SIZE 8
 
+// Default opengl context version
+#define GP_GL_VERSION_MAJOR 4
+#define GP_GL_VERSION_MINOR 3
+
 static double __timeTicksPerMillis;
 static double __timeStart;
 static double __timeAbsolute;
@@ -598,6 +602,7 @@ bool initializeGL(WindowCreationParams* params)
     // function for querying GL extensions is a GL extension itself.
     HWND hwnd = NULL;
     HDC hdc = NULL;
+    bool fallbackDefaultContext = false;
 
     if (params)
     {
@@ -731,33 +736,74 @@ bool initializeGL(WindowCreationParams* params)
     // Create our new GL context
     int attribs[] =
     {
-        WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-        WGL_CONTEXT_MINOR_VERSION_ARB, 1,
+        WGL_CONTEXT_MAJOR_VERSION_ARB, GP_GL_VERSION_MAJOR,
+        WGL_CONTEXT_MINOR_VERSION_ARB, GP_GL_VERSION_MINOR,
+        //WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,            // force forward compatibility mode
+        //WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,    // force compatibility profile
+        //WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,           // force core profile (default value)
         0
     };
 
     if (!(__hrc = wglCreateContextAttribsARB(__hdc, 0, attribs) ) )
     {
-        wglDeleteContext(tempContext);
-        GP_ERROR("Failed to create OpenGL context.");
-        return false;
+        GP_WARN("Failed to create OpenGL %d.%d context. Fallback to default supported context.", GP_GL_VERSION_MAJOR, GP_GL_VERSION_MINOR);
+        fallbackDefaultContext = true;
     }
 
-    // Delete the old/temporary context and window
-    wglDeleteContext(tempContext);
-
-    // Make the new context current
-    if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
+    // try to create requested context
+    if(!fallbackDefaultContext)
     {
-        GP_ERROR("Failed to make the window current.");
-        return false;
+        // requested context successfully created
+
+        // Delete the old/temporary context and window
+        wglDeleteContext(tempContext);
+
+        // Make the new context current
+        if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
+        {
+            GP_ERROR("Failed to make the window current.");
+            return false;
+        }
+
+        // glew init for new created context
+        glewExperimental = GL_TRUE;
+        if (GLEW_OK != glewInit())
+        {
+            GP_ERROR("Failed to initialize GLEW.");
+            return false;
+        }
+
+        // glew may trigger GL_INVALID_ENUM error (issue with core profile and glew).
+        // calling glGetError here allow to reset the gl error flag.
+        __gl_error_code = glGetError();
+        if(__gl_error_code && __gl_error_code != GL_INVALID_ENUM)
+        {
+            // error is not GL_INVALID_ENUM : we have another problem
+            GP_ERROR("glew init return error : 0x%x", __gl_error_code);
+            return false;
+        }
     }
+
     } else    // fallback to OpenGL 2.0 if wglChoosePixelFormatARB or wglCreateContextAttribsARB is NULL.
     {
         // Context is already here, just use it.
         __hrc = tempContext;
         __hwnd = hwnd;
         __hdc = hdc;
+    }
+
+
+    if(fallbackDefaultContext)
+    {
+        // We failed to create opengl 4 context.
+        // Previous context is already here so just use it with final window.
+        __hrc = tempContext;
+
+        if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
+        {
+            GP_ERROR("Failed to make the window current.");
+            return false;
+        }
     }
 
     // Vertical sync.
@@ -791,6 +837,16 @@ bool initializeGL(WindowCreationParams* params)
         glRenderbufferStorage = glRenderbufferStorageEXT;
         glRenderbufferStorageMultisample = glRenderbufferStorageMultisampleEXT;
     }
+
+    const char * GlVendor   = (const char *)glGetString(GL_VENDOR);
+    const char * GlRenderer = (const char *)glGetString(GL_RENDERER);
+    const char * GlVersion  = (const char *)glGetString(GL_VERSION);
+    const char * GlShaderVersion = (const char *) glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+    GP_WARN("GL Vendor   <%s>",GlVendor);
+    GP_WARN("GL Renderer <%s>",GlRenderer);
+    GP_WARN("GL Version  <%s>",GlVersion);
+    GP_WARN("GL Shaders  <%s>",GlShaderVersion);
 
     return true;
 }

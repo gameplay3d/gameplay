@@ -8,7 +8,11 @@
 
 // Default font shaders
 #define FONT_VSH "res/shaders/font.vert"
+#ifdef GP_GL4
+#define FONT_FSH "res/shaders/fontgl4.frag"  // use red component as alpha channel
+#else
 #define FONT_FSH "res/shaders/font.frag"
+#endif
 
 namespace gameplay
 {
