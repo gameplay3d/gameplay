@@ -139,6 +139,31 @@ Material* Material::create(const char* vshPath, const char* fshPath, const char*
     return material;
 }
 
+Material* Material::create(Effect::ShaderItem * items, int count, const char* defines)
+{
+    GP_ASSERT(items);
+
+    // Create a new material with a single technique and pass for the given effect
+    Material* material = new Material();
+
+    Technique* technique = new Technique(NULL, material);
+    material->_techniques.push_back(technique);
+
+    Pass* pass = new Pass(NULL, technique);
+    if (!pass->initialize(items, count, defines))
+    {
+        //GP_WARN("Failed to create pass for material: vertexShader = %s, fragmentShader = %s, defines = %s", vshPath, fshPath, defines ? defines : "");
+        SAFE_RELEASE(pass);
+        SAFE_RELEASE(material);
+        return NULL;
+    }
+    technique->_passes.push_back(pass);
+
+    material->_currentTechnique = technique;
+
+    return material;
+}
+
 unsigned int Material::getTechniqueCount() const
 {
     return (unsigned int)_techniques.size();

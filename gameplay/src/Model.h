@@ -99,6 +99,26 @@ public:
     /**
      * Sets a material to be used for drawing this Model.
      *
+     * A Material is created from the given shader items list.
+     * The Material is applied for the MeshPart at the given index in this Model's
+     * Mesh. A partIndex of -1 sets a shared Material for all mesh parts, whereas a
+     * value of 0 or greater sets the Material for the specified mesh part only.
+     *
+     * Mesh parts will use an explicitly set part material, if set; otherwise they
+     * will use the globally set material.
+     *
+     * @param items The pointer to the shader items list.
+     * @param count The number of items inside the shader item list.
+     * @param defines A new-line delimited list of preprocessor defines. May be NULL.
+     * @param partIndex The index of the mesh part to set the material for (-1 for shared material).
+     *
+     * @return The newly created and bound Material, or NULL if the Material could not be created.
+     */
+    Material* setMaterial(Effect::ShaderItem *items, int count, const char* defines = NULL, int partIndex = -1);
+
+    /**
+     * Sets a material to be used for drawing this Model.
+     *
      * A Material is created from the specified material file.
      * The Material is applied for the MeshPart at the given index in this Model's
      * Mesh. A partIndex of -1 sets a shared Material for all mesh parts, whereas a

@@ -12,6 +12,13 @@ namespace gameplay
 static std::map<std::string, Effect*> __effectCache;
 static Effect* __currentEffect = NULL;
 
+// struct used to compile shader from items
+struct ShaderSourceItem
+{
+    std::vector<std::string> src;   // Array of strings containing the differents shader sources code for a given shader type
+    Effect::ShaderItem * item;      // pointer to item
+};
+
 Effect::Effect() : _program(0)
 {
 }
@@ -224,6 +231,229 @@ static void writeShaderToErrorFile(const char* filePath, const char* source)
     {
         stream->write(source, 1, strlen(source));
     }
+}
+
+bool checkCompileError(GLuint shader, ShaderSourceItem* srcItem)
+{
+    char* infoLog = NULL;
+    GLint length;
+    GLint success;
+
+    // get shader type name
+    const char *shaderType;
+    switch(srcItem->item->shaderType)
+    {
+    case GL_VERTEX_SHADER:
+        shaderType = "vertex shader";
+        break;
+    case GL_FRAGMENT_SHADER:
+        shaderType = "fragment shader";
+        break;
+    case GL_GEOMETRY_SHADER:
+        shaderType = "geometry shader";
+        break;
+    case GL_TESS_CONTROL_SHADER:
+        shaderType = "tess control shader";
+        break;
+    case GL_TESS_EVALUATION_SHADER:
+        shaderType = "tess evaluation shader";
+        break;
+    case GL_COMPUTE_SHADER:
+        shaderType = "compute shader";
+        break;
+    }
+
+    // check if shader compiled
+    GL_ASSERT( glGetShaderiv(shader, GL_COMPILE_STATUS, &success) );
+    if (success != GL_TRUE)
+    {
+        GL_ASSERT( glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length) );
+        if (length == 0)
+        {
+            length = 4096;
+        }
+        if (length > 0)
+        {
+            infoLog = new char[length];
+            GL_ASSERT( glGetShaderInfoLog(shader, length, NULL, infoLog) );
+            infoLog[length-1] = '\0';
+        }
+
+        std::string fullSource;
+        for(int i=0; i<srcItem->src.size(); i++)
+            fullSource += srcItem->src[i];
+
+        // Write out the expanded shader file.
+        if (srcItem->item->itemType == Effect::ITEM_FILE && srcItem->item->source)
+            writeShaderToErrorFile(srcItem->item->source, fullSource.c_str());
+
+        GP_ERROR("Compile failed for '%s' :\n%s\n%s\n", shaderType, fullSource.c_str(), infoLog == NULL ? "" : infoLog);
+        SAFE_DELETE_ARRAY(infoLog);
+
+        // Clean up.
+        GL_ASSERT( glDeleteShader(shader) );
+        shader = 0;
+
+        return false;
+    }
+
+    return true;
+}
+
+GLuint compileProgram(ShaderSourceItem* src, int32_t count)
+{
+    GLuint program;
+    GL_ASSERT( program = glCreateProgram() );
+
+    int32_t i;
+    for(i = 0; i < count; i++)
+    {
+        GLuint shader;
+        GL_ASSERT( shader = glCreateShader(src[i].item->shaderType));
+
+        int nbr = src[i].src.size();
+        const char** sourceItems = new const char*[nbr];
+        for(int j=0; j<nbr; j++)
+            sourceItems[j] = src[i].src[j].c_str();
+
+        GL_ASSERT( glShaderSource(shader, nbr, sourceItems, NULL) );
+
+        SAFE_DELETE_ARRAY(sourceItems);
+
+        // compil
+        GL_ASSERT( glCompileShader(shader) );
+
+        if(!checkCompileError(shader, &src[i]))
+            return 0;
+
+        GL_ASSERT( glAttachShader(program,shader) );
+
+        // can be deleted since the program will keep a reference
+        GL_ASSERT( glDeleteShader(shader) );
+    }
+
+    // link
+    GL_ASSERT( glLinkProgram(program) );
+
+    // check if program linked
+    GLint success = 0;
+    GL_ASSERT( glGetProgramiv(program, GL_LINK_STATUS, &success) );
+
+    if(!success)
+    {
+        GLint bufLength = 0;
+        GL_ASSERT( glGetProgramiv(program,GL_INFO_LOG_LENGTH,&bufLength) );
+        if(bufLength)
+        {
+            char* buf = new char[bufLength];
+            if(buf)
+            {
+                GL_ASSERT( glGetProgramInfoLog(program,bufLength,NULL,buf) );
+                GP_ERROR("Could not link program:\n%s\n",buf);
+                SAFE_DELETE_ARRAY(buf);
+            }
+        }
+        GL_ASSERT( glDeleteProgram(program) );
+        program = 0;
+    }
+
+    return program;
+}
+
+Effect * Effect::QueryAndStoreAttributes(Effect* effect)
+{
+    GLint length;
+
+    // Query and store vertex attribute meta-data from the program.
+    // NOTE: Rather than using glBindAttribLocation to explicitly specify our own
+    // preferred attribute locations, we're going to query the locations that were
+    // automatically bound by the GPU. While it can sometimes be convenient to use
+    // glBindAttribLocation, some vendors actually reserve certain attribute indices
+    // and therefore using this function can create compatibility issues between
+    // different hardware vendors.
+    GLint activeAttributes;
+    GL_ASSERT( glGetProgramiv(effect->_program, GL_ACTIVE_ATTRIBUTES, &activeAttributes) );
+    if (activeAttributes > 0)
+    {
+        GL_ASSERT( glGetProgramiv(effect->_program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &length) );
+        if (length > 0)
+        {
+            GLchar* attribName = new GLchar[length + 1];
+            GLint attribSize;
+            GLenum attribType;
+            GLint attribLocation;
+            for (int i = 0; i < activeAttributes; ++i)
+            {
+                // Query attribute info.
+                GL_ASSERT( glGetActiveAttrib(effect->_program, i, length, NULL, &attribSize, &attribType, attribName) );
+                attribName[length] = '\0';
+
+                // Query the pre-assigned attribute location.
+                GL_ASSERT( attribLocation = glGetAttribLocation(effect->_program, attribName) );
+
+                // Assign the vertex attribute mapping for the effect.
+                effect->_vertexAttributes[attribName] = attribLocation;
+            }
+            SAFE_DELETE_ARRAY(attribName);
+        }
+    }
+
+    // Query and store uniforms from the program.
+    GLint activeUniforms;
+    GL_ASSERT( glGetProgramiv(effect->_program, GL_ACTIVE_UNIFORMS, &activeUniforms) );
+    if (activeUniforms > 0)
+    {
+        GL_ASSERT( glGetProgramiv(effect->_program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &length) );
+        if (length > 0)
+        {
+            GLchar* uniformName = new GLchar[length + 1];
+            GLint uniformSize;
+            GLenum uniformType;
+            GLint uniformLocation;
+            unsigned int samplerIndex = 0;
+            for (int i = 0; i < activeUniforms; ++i)
+            {
+                // Query uniform info.
+                GL_ASSERT( glGetActiveUniform(effect->_program, i, length, NULL, &uniformSize, &uniformType, uniformName) );
+                uniformName[length] = '\0';  // null terminate
+                if (length > 3)
+                {
+                    // If this is an array uniform, strip array indexers off it since GL does not
+                    // seem to be consistent across different drivers/implementations in how it returns
+                    // array uniforms. On some systems it will return "u_matrixArray", while on others
+                    // it will return "u_matrixArray[0]".
+                    char* c = strrchr(uniformName, '[');
+                    if (c)
+                    {
+                        *c = '\0';
+                    }
+                }
+
+                // Query the pre-assigned uniform location.
+                GL_ASSERT( uniformLocation = glGetUniformLocation(effect->_program, uniformName) );
+
+                Uniform* uniform = new Uniform();
+                uniform->_effect = effect;
+                uniform->_name = uniformName;
+                uniform->_location = uniformLocation;
+                uniform->_type = uniformType;
+                if (uniformType == GL_SAMPLER_2D || uniformType == GL_SAMPLER_CUBE)
+                {
+                    uniform->_index = samplerIndex;
+                    samplerIndex += uniformSize;
+                }
+                else
+                {
+                    uniform->_index = 0;
+                }
+
+                effect->_uniforms[uniformName] = uniform;
+            }
+            SAFE_DELETE_ARRAY(uniformName);
+        }
+    }
+
+    return effect;
 }
 
 Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, const char* fshPath, const char* fshSource, const char* defines)
@@ -453,6 +683,124 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
             }
             SAFE_DELETE_ARRAY(uniformName);
         }
+    }
+
+    return effect;
+}
+
+// djb2 hash
+unsigned long djb2hash(const char *str)
+{
+    unsigned long hash = 5381;
+    int c;
+
+    while (c = *str++)
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+    return hash;
+}
+
+Effect* Effect::createFromItems(Effect::ShaderItem * items, int count, const char* defines)
+{
+    for(int i=0; i<count; i++)
+    {
+        GP_ASSERT(items[i].source);
+    }
+
+    // Search the effect cache for an identical effect that is already loaded.
+    std::string uniqueId = "";
+    for(int i=0; i<count; i++)
+    {
+        if(items[i].itemType == ItemType::ITEM_FILE)
+            uniqueId += items[i].source;
+        else
+            uniqueId += "item#" + std::to_string(djb2hash(items[i].source));
+        uniqueId += ';';
+    }
+    if (defines)
+    {
+        uniqueId += defines;
+    }
+    std::map<std::string, Effect*>::const_iterator itr = __effectCache.find(uniqueId);
+    if (itr != __effectCache.end())
+    {
+        // Found an exiting effect with this id, so increase its ref count and return it.
+        GP_ASSERT(itr->second);
+        itr->second->addRef();
+        return itr->second;
+    }
+
+    // Replace all comma separated definitions with #define prefix and \n suffix
+    std::string definesStr = "";
+    replaceDefines(defines, definesStr);
+
+
+    ShaderSourceItem *srcItems = new ShaderSourceItem[count];
+
+    for(int i=0; i<count; i++)
+    {
+        GLchar* buffer = 0;
+
+        if(items[i].itemType == ITEM_FILE)
+            buffer = FileSystem::readAll(items[i].source);
+        else if(items[i].itemType == ITEM_SOURCE)
+        {
+            int len = strlen(items[i].source) + 1;
+            buffer = new char[len];
+            strcpy(buffer, items[i].source);
+        }
+        else
+            GP_ERROR("Failed to create shader from item : unsupported item[%d]", i);
+
+        GP_ASSERT(buffer != 0);
+
+        srcItems[i].src.push_back("#version 430");
+        srcItems[i].src.push_back(definesStr);
+        srcItems[i].src.push_back("\n");
+        std::string vshSourceStr = "";
+
+        // Replace the #include "xxxxx.xxx" with the sources that come from file paths
+        replaceIncludes(items[i].source, buffer, vshSourceStr);
+        if (buffer && strlen(buffer) != 0)
+            vshSourceStr += "\n";
+
+        srcItems[i].src.push_back(vshSourceStr);
+        srcItems[i].item = &items[i];
+
+        SAFE_DELETE_ARRAY(buffer);
+
+    }
+
+    GLuint program = compileProgram(srcItems, count);
+
+    SAFE_DELETE_ARRAY(srcItems);
+
+    if(!program)
+    {
+        GP_WARN("Failed to compile shader from items :");
+        for(int i=0; i<count; i++)
+            GP_WARN("'%s'", items[i].source);
+        return NULL;
+    }
+
+    // Create and return the new Effect.
+    Effect* effect = new Effect();
+    effect->_program = program;
+
+    QueryAndStoreAttributes(effect);
+
+    if (effect == NULL)
+    {
+        GP_WARN("Failed to create effect from shaders items :");
+        for(int i=0; i<count; i++)
+            GP_WARN("'%s'", items[i].source);
+        GP_ERROR("");
+    }
+    else
+    {
+        // Store this effect in the cache.
+        effect->_id = uniqueId;
+        __effectCache[uniqueId] = effect;
     }
 
     return effect;
