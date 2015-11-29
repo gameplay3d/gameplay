@@ -226,10 +226,12 @@ using std::va_list;
         #define GLEW_STATIC
         #include <GL/glew.h>
         #define GP_USE_VAO
+        #define GP_GL4
 #elif __linux__
         #define GLEW_STATIC
         #include <GL/glew.h>
         #define GP_USE_VAO
+        #define GP_GL4
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
