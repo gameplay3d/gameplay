@@ -259,7 +259,7 @@ bool checkCompileError(GLuint shader, ShaderSourceItem* srcItem)
     case Effect::ShaderType::TESS_EVALUATION_SHADER:
         shaderType = "tess evaluation shader";
         break;
-    case Effect::ShaderType::GL_COMPUTE_SHADER:
+    case Effect::ShaderType::COMPUTE_SHADER:
         shaderType = "compute shader";
         break;
 #endif
