@@ -243,24 +243,28 @@ bool checkCompileError(GLuint shader, ShaderSourceItem* srcItem)
     const char *shaderType;
     switch(srcItem->item->shaderType)
     {
-    case GL_VERTEX_SHADER:
+    case Effect::ShaderType::VERTEX_SHADER:
         shaderType = "vertex shader";
         break;
-    case GL_FRAGMENT_SHADER:
+    case Effect::ShaderType::FRAGMENT_SHADER:
         shaderType = "fragment shader";
         break;
-    case GL_GEOMETRY_SHADER:
+#ifdef GP_GL4
+    case Effect::ShaderType::GEOMETRY_SHADER:
         shaderType = "geometry shader";
         break;
-    case GL_TESS_CONTROL_SHADER:
+    case Effect::ShaderType::TESS_CONTROL_SHADER:
         shaderType = "tess control shader";
         break;
-    case GL_TESS_EVALUATION_SHADER:
+    case Effect::ShaderType::TESS_EVALUATION_SHADER:
         shaderType = "tess evaluation shader";
         break;
-    case GL_COMPUTE_SHADER:
+    case Effect::ShaderType::GL_COMPUTE_SHADER:
         shaderType = "compute shader";
         break;
+#endif
+    default:
+        GP_ERROR("Unknown shader type.");
     }
 
     // check if shader compiled
@@ -287,7 +291,11 @@ bool checkCompileError(GLuint shader, ShaderSourceItem* srcItem)
         if (srcItem->item->itemType == Effect::ITEM_FILE && srcItem->item->source)
             writeShaderToErrorFile(srcItem->item->source, fullSource.c_str());
 
-        GP_ERROR("Compile failed for '%s' :\n%s\n%s\n", shaderType, fullSource.c_str(), infoLog == NULL ? "" : infoLog);
+        if(srcItem->item->itemType == Effect::ITEM_SOURCE)
+            GP_ERROR("Compile failed for '%s' :\n%s\n%s\n", shaderType, fullSource.c_str(), infoLog == NULL ? "" : infoLog);
+        else
+            GP_ERROR("Compile failed for '%s' : %s\n%s\n", shaderType, srcItem->item->source, infoLog == NULL ? "" : infoLog);
+
         SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
@@ -754,7 +762,9 @@ Effect* Effect::createFromItems(Effect::ShaderItem * items, int count, const cha
 
         GP_ASSERT(buffer != 0);
 
-        srcItems[i].src.push_back("#version 430");
+#ifdef GP_GL4
+        srcItems[i].src.push_back("#version 430\n");
+#endif
         srcItems[i].src.push_back(definesStr);
         srcItems[i].src.push_back("\n");
         std::string vshSourceStr = "";
