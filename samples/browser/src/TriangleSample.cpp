@@ -66,7 +66,14 @@ void TriangleSample::initialize()
     // Create a material from the built-in "colored-unlit" vertex and fragment shaders.
     // This sample doesn't use lighting so the unlit shader is used.
     // This sample uses vertex color so VERTEX_COLOR is defined. Look at the shader source files to see the supported defines.
-    _model->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
+    //_model->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "VERTEX_COLOR");
+
+    Effect::ShaderItem shaderItems[] = {
+        Effect::ITEM_FILE, "res/shaders/colored.vert", Effect::VERTEX_SHADER,
+        Effect::ITEM_FILE, "res/shaders/colored.frag", Effect::FRAGMENT_SHADER,
+    };
+
+    _model->setMaterial(shaderItems, 2, "VERTEX_COLOR");
 }
 
 void TriangleSample::finalize()

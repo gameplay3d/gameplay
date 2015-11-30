@@ -105,6 +105,21 @@ public:
     static Material* create(const char* vshPath, const char* fshPath, const char* defines = NULL);
 
     /**
+     * Creates a material using the specified shader items list.
+     *
+     * The returned material has a single technique and a single pass for the
+     * given effect.
+     *
+     * @param items The pointer to the shader items list.
+     * @param count The number of items inside the shader item list.
+     * @param defines New-line delimited list of preprocessor defines.
+     *
+     * @return A new Material.
+     * @script{create}
+     */
+    static Material* create(Effect::ShaderItem *items, int count, const char* defines = NULL);
+
+    /**
      * Returns the number of techniques in the material.
      *
      * @return The technique count.

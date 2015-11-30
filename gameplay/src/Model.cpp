@@ -183,6 +183,26 @@ Material* Model::setMaterial(const char* vshPath, const char* fshPath, const cha
     return material;
 }
 
+Material* Model::setMaterial(Effect::ShaderItem * items, int count, const char* defines, int partIndex)
+{
+    // Try to create a Material with the given parameters.
+    Material* material = Material::create(items, count, defines);
+    if (material == NULL)
+    {
+        GP_ERROR("Failed to create material for model.");
+        return NULL;
+    }
+
+    // Assign the material to us.
+    setMaterial(material, partIndex);
+
+    // Release the material since we now have a reference to it.
+    material->release();
+
+    return material;
+}
+
+
 Material* Model::setMaterial(const char* materialPath, int partIndex)
 {
     // Try to create a Material from the specified material file.

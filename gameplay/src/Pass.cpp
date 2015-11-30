@@ -38,6 +38,24 @@ bool Pass::initialize(const char* vshPath, const char* fshPath, const char* defi
     return true;
 }
 
+bool Pass::initialize(Effect::ShaderItem *items, int count, const char* defines)
+{
+    GP_ASSERT(items);
+
+    SAFE_RELEASE(_effect);
+    SAFE_RELEASE(_vaBinding);
+
+    // Attempt to create/load the effect.
+    _effect = Effect::createFromItems(items, count, defines);
+    if (_effect == NULL)
+    {
+        //GP_WARN("Failed to create effect for pass. vertexShader = %s, fragmentShader = %s, defines = %s", vshPath, fshPath, defines ? defines : "");
+        return false;
+    }
+
+    return true;
+}
+
 const char* Pass::getId() const
 {
     return _id.c_str();

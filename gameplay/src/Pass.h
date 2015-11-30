@@ -91,6 +91,11 @@ private:
     bool initialize(const char* vshPath, const char* fshPath, const char* defines);
 
     /**
+     * Creates a new pass for the given shaders.
+     */
+    bool initialize(Effect::ShaderItem *items, int count, const char* defines);
+
+    /**
      * Hidden copy assignment operator.
      */
     Pass& operator=(const Pass&);

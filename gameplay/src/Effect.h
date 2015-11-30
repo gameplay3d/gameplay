@@ -28,6 +28,41 @@ class Effect: public Ref
 public:
 
     /**
+     * Defines supported shader types.
+     */
+    enum ShaderType
+    {
+        VERTEX_SHADER = GL_VERTEX_SHADER,
+        FRAGMENT_SHADER = GL_FRAGMENT_SHADER,
+#ifdef GP_GL4
+        GEOMETRY_SHADER = GL_GEOMETRY_SHADER,
+        TESS_CONTROL_SHADER = GL_TESS_CONTROL_SHADER,
+        TESS_EVALUATION_SHADER = GL_TESS_EVALUATION_SHADER,
+        COMPUTE_SHADER = GL_COMPUTE_SHADER
+#endif
+    };
+
+    /**
+     * Shader item type
+     */
+    enum ItemType
+    {
+        ITEM_FILE = 0,
+        ITEM_SOURCE
+    };
+
+    /**
+     * Shader item
+     */
+    struct ShaderItem
+    {
+        ItemType itemType;      // The item type of source (is it a file or source code)
+        const char* source;     // According itemType it can be a file path or source code containing shader code
+        ShaderType shaderType;  // The shader type (vertex, fragment, ...)
+
+    };
+
+    /**
      * Creates an effect using the specified vertex and fragment shader.
      *
      * @param vshPath The path to the vertex shader file.
@@ -37,6 +72,17 @@ public:
      * @return The created effect.
      */
     static Effect* createFromFile(const char* vshPath, const char* fshPath, const char* defines = NULL);
+
+    /**
+     * Creates an effect using the specified shader item list.
+     *
+     * @param items The pointer to the shader items list.
+     * @param count The number of items inside the shader item list.
+     * @param defines A new-line delimited list of preprocessor defines. May be NULL.
+     *
+     * @return The created effect.
+     */
+    static Effect* createFromItems(ShaderItem *items, int count, const char* defines = NULL);
 
     /**
      * Creates an effect from the given vertex and fragment shader source code.
@@ -240,6 +286,7 @@ private:
     Effect& operator=(const Effect&);
 
     static Effect* createFromSource(const char* vshPath, const char* vshSource, const char* fshPath, const char* fshSource, const char* defines = NULL);
+    static Effect * QueryAndStoreAttributes(Effect* effect);
 
     GLuint _program;
     std::string _id;
