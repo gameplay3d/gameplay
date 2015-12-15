@@ -71,7 +71,7 @@
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;$(DXSDK_DIR)include;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,7 +104,7 @@ copy .\game.dxt.config .\game.config</Command>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_GAMEPAD;GP_USE_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;$(MSBuildProgramFiles32)\Microsoft DirectX SDK (June 2010)\include;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

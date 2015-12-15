@@ -75,7 +75,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_GAMEPAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;$(DXSDK_DIR)include;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,7 +106,7 @@ copy .\game.dxt.config .\game.config</Command>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessToFile>false</PreprocessToFile>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

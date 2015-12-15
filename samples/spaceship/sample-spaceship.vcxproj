@@ -66,7 +66,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_GAMEPAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;$(DXSDK_DIR)include;</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -101,7 +101,7 @@ copy ..\..\gameplay\res\logo_powered_white.png res</Command>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GP_USE_GAMEPAD;GP_USE_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\gameplay\src;..\..\external-deps\include;$(MSBuildProgramFiles32)\Microsoft DirectX SDK (June 2010)\include;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
