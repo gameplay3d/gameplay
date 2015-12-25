@@ -1,3 +1,10 @@
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(GAMEPLAY_PLATFORM_SRC
+            src/PlatformMacOSX.mm
+            )
+else(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(GAMEPLAY_PLATFORM_SRC )
+endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 set(GAMEPLAY_SRC
     src/AbsoluteLayout.cpp
@@ -80,6 +87,7 @@ set(GAMEPLAY_SRC
     src/Gamepad.h
     src/gameplay-main-android.cpp
     src/gameplay-main-linux.cpp
+    src/gameplay-main-macosx.mm
     src/gameplay-main-windows.cpp
     src/Gesture.h
     src/HeightField.cpp
@@ -165,6 +173,7 @@ set(GAMEPLAY_SRC
     src/PlatformAndroid.cpp
     src/PlatformLinux.cpp
     src/PlatformWindows.cpp
+    ${GAMEPLAY_PLATFORM_SRC}
     src/Properties.cpp
     src/Properties.h
     src/Quaternion.cpp
