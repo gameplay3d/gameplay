@@ -20,7 +20,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     COPY_RES_MAC(GAMEPLAY_RES ${CMAKE_SOURCE_DIR}/gameplay
             res/shaders/* res/ui/* res/logo_powered_white.png)
     set(Apple_Resources
-            ../../gameplay/res/logo_powered_white.png
             ${GAME_RES}
             ${GAMEPLAY_RES}
             game.config)
