@@ -62,22 +62,23 @@ macro(MAKE_ABSOLUTE RESULT REL_PATH)
     endforeach()
 endmacro()
 
-macro(COPY_RES_MAC RESULT BASE_SRC_PATH REL_PATH)
+# Build a list of resource files matching a list of regular expression within a given path
+# and mark their correct Mac OS X destination, keeping the relative position to a base path
+#   RESULT name of the global variable into which the result is built
+#   BASE_SRC_PATH the base path under which the structure is replicated in the bundle
+#   REL_PATH a pattern to be matched and searched recursively.
+macro(COPY_RES_MAC RESULT BASE_SRC_PATH)
 	set(${RESULT})
-	MESSAGE("COPY_RES_MAC with base ${BASE_SRC_PATH} and rel ${REL_PATH}")
-	#foreach(PATTERN ${ARGN} )
-            file(GLOB_RECURSE XX RELATIVE ${BASE_SRC_PATH} ${BASE_SRC_PATH}/${REL_PATH}/${PATTERN})
-            MESSAGE("XX is ${XX}")
+	foreach(PATTERN ${ARGN} )
+            file(GLOB_RECURSE XX RELATIVE ${BASE_SRC_PATH} ${BASE_SRC_PATH}/${PATTERN})
             foreach(FNAME ${XX})
-                list(APPEND ${RESULT} ${BASE_SRC_PATH}/${XX})
-                MESSAGE("Working on ${FNAME}")
-                get_filename_component(YY ${FNAME} DIRECTORY )
-                MESSAGE("Directory is ${YY} for ${BASE_SRC_PATH}/${FNAME}")
-                SET_SOURCE_FILES_PROPERTIES(
+                list(APPEND ${RESULT} ${BASE_SRC_PATH}/${FNAME})
+                get_filename_component(DIR ${FNAME} DIRECTORY )
+                set_source_files_properties(
                             ${BASE_SRC_PATH}/${FNAME}
                             PROPERTIES
-                            MACOSX_PACKAGE_LOCATION Resources/${YY}
+                            MACOSX_PACKAGE_LOCATION Resources/${DIR}
                     )
             endforeach()
-    #endforeach()
+    endforeach()
 endmacro()
