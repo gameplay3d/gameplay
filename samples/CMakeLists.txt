@@ -36,7 +36,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
             ${IOKIT_LIBRARY}
             "-framework Foundation"
             "-framework Cocoa")
-    SET(EXEC_TYPE MACOSX_BUNDLE)
     link_directories(${CMAKE_SOURCE_DIR}/external-deps/lib/macosx/x86_64)
     set(GAMEPLAY_LIBRARIES
             stdc++

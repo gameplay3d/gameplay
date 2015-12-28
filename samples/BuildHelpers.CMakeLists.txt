@@ -49,3 +49,35 @@ macro(COPY_RES_EXTRA GAME_NAME REL_DIR)
     COPY_RES_FILES( ${GAME_NAME} ${GAME_NAME}_EXTRA_RES ${REL_DIR} "${SRC_FILES}" )
     add_dependencies( ${GAME_NAME}_ASSETS ${GAME_NAME}_EXTRA_RES )
 endmacro()
+
+# Build a list of file matching a list of regular expression within a given path
+#   RESULT name of the global variable into which the result is built
+#   REL_PATH the path under which the files are to be found
+#   ARGN list of patterns
+macro(MAKE_ABSOLUTE RESULT REL_PATH)
+    set(${RESULT})
+    foreach(SRC_FILE ${ARGN} )
+        file(GLOB XX ${REL_PATH}/${SRC_FILE})
+        list(APPEND ${RESULT} ${XX})
+    endforeach()
+endmacro()
+
+macro(COPY_RES_MAC RESULT BASE_SRC_PATH REL_PATH)
+	set(${RESULT})
+	MESSAGE("COPY_RES_MAC with base ${BASE_SRC_PATH} and rel ${REL_PATH}")
+	#foreach(PATTERN ${ARGN} )
+            file(GLOB_RECURSE XX RELATIVE ${BASE_SRC_PATH} ${BASE_SRC_PATH}/${REL_PATH}/${PATTERN})
+            MESSAGE("XX is ${XX}")
+            foreach(FNAME ${XX})
+                list(APPEND ${RESULT} ${BASE_SRC_PATH}/${XX})
+                MESSAGE("Working on ${FNAME}")
+                get_filename_component(YY ${FNAME} DIRECTORY )
+                MESSAGE("Directory is ${YY} for ${BASE_SRC_PATH}/${FNAME}")
+                SET_SOURCE_FILES_PROPERTIES(
+                            ${BASE_SRC_PATH}/${FNAME}
+                            PROPERTIES
+                            MACOSX_PACKAGE_LOCATION Resources/${YY}
+                    )
+            endforeach()
+    #endforeach()
+endmacro()
