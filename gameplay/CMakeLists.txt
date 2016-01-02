@@ -1,6 +1,7 @@
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GAMEPLAY_PLATFORM_SRC
             src/PlatformMacOSX.mm
+            src/gameplay-main-macosx.mm
             )
 else(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GAMEPLAY_PLATFORM_SRC )
@@ -87,7 +88,6 @@ set(GAMEPLAY_SRC
     src/Gamepad.h
     src/gameplay-main-android.cpp
     src/gameplay-main-linux.cpp
-    src/gameplay-main-macosx.mm
     src/gameplay-main-windows.cpp
     src/Gesture.h
     src/HeightField.cpp
