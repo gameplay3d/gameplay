@@ -93,7 +93,7 @@ set_target_properties(${GAME_NAME} PROPERTIES
     CLEAN_DIRECT_OUTPUT 1
 )
 
-if(!${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
     source_group(res FILES ${GAME_RES} ${GAMEPLAY_RES} ${GAMEPLAY_RES_SHADERS} ${GAMEPLAY_RES_UI})
     source_group(src FILES ${GAME_SRC})
@@ -104,4 +104,4 @@ if(!${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
             res/shaders/*
             res/ui/*
             )
-endif(!${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

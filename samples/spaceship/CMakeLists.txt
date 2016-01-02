@@ -35,7 +35,7 @@ add_executable(${GAME_NAME} ${EXEC_TYPE}
 
 target_link_libraries(${GAME_NAME} ${GAMEPLAY_LIBRARIES})
 
-if(!${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
     set_target_properties(${GAME_NAME} PROPERTIES
             OUTPUT_NAME "${GAME_NAME}"
@@ -51,4 +51,4 @@ if(!${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
             res/shaders/*
             res/ui/*
             )
-endif(!${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

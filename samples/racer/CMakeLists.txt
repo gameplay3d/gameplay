@@ -5,12 +5,12 @@ set(GAME_SRC
         src/RacerGame.h
         )
 
-if(!${APPLE})
+if(NOT ${APPLE})
     set_target_properties(${GAME_NAME} PROPERTIES
             OUTPUT_NAME "${GAME_NAME}"
             CLEAN_DIRECT_OUTPUT 1
             )
-endif(!${APPLE})
+endif(NOT ${APPLE})
 
 source_group(res FILES ${GAME_RES} ${GAMEPLAY_RES} ${GAMEPLAY_RES_SHADERS} ${GAMEPLAY_RES_UI})
 source_group(src FILES ${GAME_SRC})
@@ -44,7 +44,7 @@ add_executable(${GAME_NAME} ${EXEC_TYPE}
         )
 target_link_libraries(${GAME_NAME} ${GAMEPLAY_LIBRARIES})
 
-if(!${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 
     COPY_RES( ${GAME_NAME} )
@@ -54,6 +54,6 @@ if(!${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
             res/ui/*
             )
 
-endif(!${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 # Just use the PNG config file (most compatible)
 configure_file( game.png.config game.config COPYONLY )
