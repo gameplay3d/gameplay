@@ -185,11 +185,11 @@ set_target_properties(${GAME_NAME} PROPERTIES
 #processing to the the res files in the future like zipping or preparation to
 #per platfom format.
 IF (TARGET_OS STREQUAL "OSX")
-	SET(TARGET_RESOURCE_DIR "$<TARGET_FILE_DIR:${GAME_NAME}>/../Resources/res")
+	SET(TARGET_RESOURCE_BASE_DIR "$<TARGET_FILE_DIR:${GAME_NAME}>/../Resources")
 ELSE(TARGET_OS STREQUAL "OSX")
-	SET(TARGET_RESOURCE_DIR "$<TARGET_FILE_DIR:${GAME_NAME}>/../Resources/res")
+	SET(TARGET_RESOURCE_BASE_DIR "$<TARGET_FILE_DIR:${GAME_NAME}>")
 ENDIF(TARGET_OS STREQUAL "OSX")
 
-copy_files(CopyRes * "${CMAKE_SOURCE_DIR}/res" "${TARGET_RESOURCE_DIR}" 1)
-copy_files(CopyShaders * "${GAMEPLAY_SRC_PATH}/gameplay/res/shaders" "${TARGET_RESOURCE_DIR}/shaders" 1)
-copy_files(CopyConfig *.config "${CMAKE_SOURCE_DIR}" "${TARGET_RESOURCE_DIR}" 0)
+copy_files(CopyRes * "${CMAKE_SOURCE_DIR}/res" "${TARGET_RESOURCE_BASE_DIR}/res" 1)
+copy_files(CopyShaders * "${GAMEPLAY_SRC_PATH}/gameplay/res/shaders" "${TARGET_RESOURCE_BASE_DIR}/res/shaders" 1)
+copy_files(CopyConfig *.config "${CMAKE_SOURCE_DIR}" "${TARGET_RESOURCE_BASE_DIR}" 0)
