@@ -665,6 +665,39 @@ protected:
      */
     void setBoundsDirty();
 
+    /**
+     * Returns the first child node that matches the given ID.
+     *
+     * This method checks the specified ID against its immediate child nodes
+     * but does not check the ID against itself.
+     * If recursive is true, it also traverses the Node's hierarchy with a breadth first search.
+     *
+     * @param id The ID of the child to find.
+     * @param recursive True to search recursively all the node's children, false for only direct children.
+     * @param exactMatch true if only nodes whose ID exactly matches the specified ID are returned,
+     *        or false if nodes that start with the given ID are returned.
+     * @param skipSkin Set true to skip skin hierarchy, initial find may set false to include skin hierarchy.
+     *
+     * @return The Node found or NULL if not found.
+     */
+    Node* findNode(const char* id, bool recursive, bool exactMatch, bool skipSkin) const;
+
+
+    /**
+     * Returns all child nodes that match the given ID.
+     *
+     * @param id The ID of the node to find.
+     * @param nodes A vector of nodes to be populated with matches.
+     * @param recursive true if a recursive search should be performed, false otherwise.
+     * @param exactMatch true if only nodes whose ID exactly matches the specified ID are returned,
+     *        or false if nodes that start with the given ID are returned.
+     * @param skipSkin Set true to skip skin hierarchy, initial find may set false to include skin hierarchy.
+     * 
+     * @return The number of matches found.
+     * @script{ignore}
+     */
+    unsigned int findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch, bool skipSkin) const;
+
 private:
 
     /**
