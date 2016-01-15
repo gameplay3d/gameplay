@@ -219,22 +219,31 @@ Node* Node::getRootNode() const
 
 Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
 {
+    return findNode(id, recursive, exactMatch, false);
+}
+
+Node* Node::findNode(const char* id, bool recursive, bool exactMatch, bool skipSkin) const
+{
     GP_ASSERT(id);
 
-    // If the drawable is a model with a mesh skin, search the skin's hierarchy as well.
-    Node* rootNode = NULL;
-    Model* model = dynamic_cast<Model*>(_drawable);
-    if (model)
+    // If not skipSkin hierarchy, try searching the skin hierarchy
+    if (!skipSkin)
     {
-        if (model->getSkin() != NULL && (rootNode = model->getSkin()->_rootNode) != NULL)
+        // If the drawable is a model with a mesh skin, search the skin's hierarchy as well.
+        Node* rootNode = NULL;
+        Model* model = dynamic_cast<Model*>(_drawable);
+        if (model)
         {
-            if ((exactMatch && rootNode->_id == id) || (!exactMatch && rootNode->_id.find(id) == 0))
-                return rootNode;
-
-            Node* match = rootNode->findNode(id, true, exactMatch);
-            if (match)
+            if (model->getSkin() != NULL && (rootNode = model->getSkin()->_rootNode) != NULL)
             {
-                return match;
+                if ((exactMatch && rootNode->_id == id) || (!exactMatch && rootNode->_id.find(id) == 0))
+                    return rootNode;
+
+                Node* match = rootNode->findNode(id, true, exactMatch, true);
+                if (match)
+                {
+                    return match;
+                }
             }
         }
     }
@@ -252,7 +261,7 @@ Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
     {
         for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
         {
-            Node* match = child->findNode(id, true, exactMatch);
+            Node* match = child->findNode(id, true, exactMatch, skipSkin);
             if (match)
             {
                 return match;
@@ -264,24 +273,34 @@ Node* Node::findNode(const char* id, bool recursive, bool exactMatch) const
 
 unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch) const
 {
+    return findNodes(id, nodes, recursive, exactMatch, false);
+}
+
+unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool recursive, bool exactMatch, bool skipSkin) const
+{
     GP_ASSERT(id);
 
     // If the drawable is a model with a mesh skin, search the skin's hierarchy as well.
     unsigned int count = 0;
-    Node* rootNode = NULL;
-    Model* model = dynamic_cast<Model*>(_drawable);
-    if (model)
+
+    if (!skipSkin)
     {
-        if (model->getSkin() != NULL && (rootNode = model->getSkin()->_rootNode) != NULL)
+        Node* rootNode = NULL;
+        Model* model = dynamic_cast<Model*>(_drawable);
+        if (model)
         {
-            if ((exactMatch && rootNode->_id == id) || (!exactMatch && rootNode->_id.find(id) == 0))
+            if (model->getSkin() != NULL && (rootNode = model->getSkin()->_rootNode) != NULL)
             {
-                nodes.push_back(rootNode);
-                ++count;
+                if ((exactMatch && rootNode->_id == id) || (!exactMatch && rootNode->_id.find(id) == 0))
+                {
+                    nodes.push_back(rootNode);
+                    ++count;
+                }
+                count += rootNode->findNodes(id, nodes, recursive, exactMatch, true);
             }
-            count += rootNode->findNodes(id, nodes, true, exactMatch);
         }
     }
+
     // Search immediate children first.
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
     {
@@ -297,7 +316,7 @@ unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool rec
     {
         for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
         {
-            count += child->findNodes(id, nodes, true, exactMatch);
+            count += child->findNodes(id, nodes, recursive, exactMatch, skipSkin);
         }
     }
 
