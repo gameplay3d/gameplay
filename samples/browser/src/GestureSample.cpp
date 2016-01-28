@@ -60,7 +60,7 @@ void GestureSample::initialize()
         registerGesture(Gesture::GESTURE_DROP);
         GP_ASSERT(isGestureRegistered(Gesture::GESTURE_DROP));
 	}
-    GP_ASSERT(anySupported == isGestureSupported(Gesture::GESTURE_ANY_SUPPORTED));
+    //GP_ASSERT(anySupported == isGestureSupported(Gesture::GESTURE_ANY_SUPPORTED));
 }
 
 void GestureSample::finalize()

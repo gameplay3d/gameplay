@@ -8,6 +8,7 @@ TARGET = sample-character
 TEMPLATE = app
 CONFIG += c++11
 CONFIG -= qt
+CONFIG(debug, debug|release): DEFINES += _DEBUG
 
 SOURCES += src/CharacterGame.cpp
 
@@ -40,8 +41,7 @@ linux: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/ui ../res$
 linux: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/../../gameplay/res/logo_powered_white.png ../res$$escape_expand(\n\t))
 linux: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/game.dxt.config game.config$$escape_expand(\n\t))
 
-macx: QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
-macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -stdlib=libc++ -w -arch x86_64
+macx: QMAKE_CXXFLAGS += -x c++  -x objective-c++ -stdlib=libc++ -w -arch x86_64
 macx: LIBS += -L$$PWD/../../gameplay/Debug/ -lgameplay
 macx: LIBS += -L$$PWD/../../external-deps/lib/macosx/x86_64/ -lgameplay-deps
 macx: LIBS += -F/System/Library/Frameworks -framework GameKit
@@ -50,7 +50,8 @@ macx: LIBS += -F/System/Library/Frameworks -framework QuartzCore
 macx: LIBS += -F/System/Library/Frameworks -framework OpenAL
 macx: LIBS += -F/System/Library/Frameworks -framework OpenGL
 macx: LIBS += -F/System/Library/Frameworks -framework Cocoa
-macx: QMAKE_ += $$quote(rsync -rau $$PWD/../../gameplay/res/shaders ../res$$escape_expand(\n\t))
+macx: LIBS += -F/System/Library/Frameworks -framework Foundation
+macx: QMAKE_POST_LINK  += $$quote(rsync -rau $$PWD/../../gameplay/res/shaders ../res$$escape_expand(\n\t))
 macx: QMAKE_POST_LINK += $$quote(rsync -rau $$PWD/../../gameplay/res/ui ../res$$escape_expand(\n\t))
 macx: QMAKE_POST_LINK += $$quote(cp -rf $$PWD/../../gameplay/res/logo_powered_white.png ../res$$escape_expand(\n\t))
 macx
@@ -78,6 +79,7 @@ win32: LIBS += -L$$(DXSDK_DIR)Lib\x64 -lXInput
 win32: INCLUDEPATH += $$(DXSDK_DIR)Include
 win32: QMAKE_CXXFLAGS_WARN_ON -= -w34100
 win32: QMAKE_CXXFLAGS_WARN_ON -= -w34189
+win32: QMAKE_CXXFLAGS_WARN_ON -= -w4302
 win32: QMAKE_POST_LINK += $$quote(xcopy ..\..\..\gameplay\res\shaders res\shaders\* /s /y /d$$escape_expand(\n\t))
 win32: QMAKE_POST_LINK += $$quote(xcopy ..\..\..\gameplay\res\ui res\ui\* /s /y /d$$escape_expand(\n\t))
 win32: QMAKE_POST_LINK += $$quote(copy ..\..\..\gameplay\res\logo_powered_white.png res$$escape_expand(\n\t))
