@@ -3,12 +3,11 @@
 # Project created by QtCreator
 #
 #-------------------------------------------------
-
 QT       -= core gui
-
 TARGET = gameplay-encoder
 CONFIG   += console
 CONFIG   -= app_bundle
+CONFIG(debug, debug|release): DEFINES += _DEBUG
 
 TEMPLATE = app
 
@@ -53,6 +52,8 @@ SOURCES += src/Mesh.cpp \
     src/StringUtil.cpp \
     src/Transform.cpp \
     src/TTFFontEncoder.cpp \
+    src/TMXSceneEncoder.cpp \
+    src/TMXTypes.cpp \
     src/Vector2.cpp \
     src/Vector3.cpp \
     src/Vector4.cpp \
@@ -103,6 +104,8 @@ HEADERS += src/AnimationChannel.h \
     src/Thread.h \
     src/Transform.h \
     src/TTFFontEncoder.h \
+    src/TMXSceneEncoder.h \
+    src/TMXTypes.h \
     src/Vector2.h \
     src/Vector2.inl \
     src/Vector3.h \
@@ -112,23 +115,32 @@ HEADERS += src/AnimationChannel.h \
     src/VertexElement.h \
     src/Vertex.h
 
+DEFINES += USE_FBX
 INCLUDEPATH += $$PWD/../../external-deps/include
-linux:!android: INCLUDEPATH += /usr/include/fbxsdk
-linux:!android: INCLUDEPATH += /usr/include
 
-DEPENDPATH += INCLUDEPATH
 
-linux:!android: DEFINES += USE_FBX
-linux:!android: DEFINES += __linux__
+linux: DEFINES += __linux__
+linux: QMAKE_CXXFLAGS += -std=c++11 -lstdc++ -pthread -w
+linux: INCLUDEPATH += /usr/include/fbxsdk
+linux: INCLUDEPATH += /usr/include
+linux: LIBS += -L$$PWD/../../external-deps/lib/linux/x86_64/ -lgameplay-deps -lfreetype
+linux: LIBS += -L/usr/lib/gcc4/x64/release -lfbxsdk
+linux: LIBS += -lstdc++ -ldl -lpthread
 
-linux:!android: QMAKE_CXXFLAGS += -std=c++11 -lstdc++ -pthread -w
+macx: QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
+macx: INCLUDEPATH += "/Applications/Autodesk/FBX SDK/2015.1/include"
+macx: LIBS += -L$$PWD/../../external-deps/lib/macosx/x86_64/ -lgameplay-deps
+macx: LIBS += -L$$PWD/../../external-deps/lib/macosx/x86_64/ -lfreetype
+macx: LIBS += -L"/Applications/Autodesk/FBX SDK/2015.1/lib/clang/release/" -lfbxsdk-static
+macx: LIBS += -F/System/Library/Frameworks -framework Cocoa
+macx: LIBS += -F/System/Library/Frameworks -framework SystemConfiguration
+macx: LIBS += -F/System/Library/Frameworks -framework Foundation
+macx: LIBS += -lm -lbz2 -lxml2 -liconv
 
-linux:!android: LIBS += -L$$PWD/../../external-deps/lib/linux/x86_64/ -lgameplay-deps -lfreetype
-linux:!android: LIBS += -L/usr/lib/gcc4/x64/release -lfbxsdk
-linux:!android: LIBS += -lstdc++
-linux:!android: LIBS += -ldl
-linux:!android: LIBS += -lpthread
-
-linux:!android: PRE_TARGETDEPS += $$PWD/../../external-deps/lib/linux/x86_64/libgameplay-deps.a
-linux:!android: PRE_TARGETDEPS += $$PWD/../../external-deps/lib/linux/x86_64/libfreetype.a
-linux:!android: PRE_TARGETDEPS += /usr/lib/gcc4/x64/release/libfbxsdk.a
+win32: DEFINES += WIN32 _WINDOWS _UNICODE UNICODE
+win32: CONFIG(debug, debug|release): LIBS += -L$$PWD/../../external-deps/lib/windows/x86_64/Debug/ -lgameplay-deps
+win32: CONFIG(release, debug|release): LIBS += -L$$PWD/../../external-deps/lib/windows/x86_64/Release/ -lgameplay-deps
+win32: LIBS += -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32
+win32: QMAKE_CXXFLAGS_WARN_ON -= -w34100
+win32: QMAKE_CXXFLAGS_WARN_ON -= -w34189
+win32: QMAKE_CXXFLAGS_WARN_ON -= -w4302
