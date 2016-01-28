@@ -350,6 +350,7 @@ HEADERS += src/AbsoluteLayout.h \
     src/PhysicsVehicleWheel.h \
     src/Plane.h \
     src/Platform.h \
+    src/Properties.h \
     src/Quaternion.h \
     src/RadioButton.h \
     src/Ray.h \
@@ -520,8 +521,7 @@ HEADERS += src/AbsoluteLayout.h \
     src/lua/lua_VertexAttributeBinding.h \
     src/lua/lua_VertexFormat.h \
     src/lua/lua_VertexFormatElement.h \
-    src/lua/lua_VerticalLayout.h \
-    src/Properties.h
+    src/lua/lua_VerticalLayout.h
 
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include
