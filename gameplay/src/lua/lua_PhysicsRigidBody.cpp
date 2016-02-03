@@ -21,59 +21,13 @@
 #include "ScriptTarget.h"
 #include "Terrain.h"
 #include "Transform.h"
+#include "PhysicsCollisionObject.h"
+#include "Transform.h"
 
 namespace gameplay
 {
 
-void luaRegister_PhysicsRigidBody()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addCollisionListener", lua_PhysicsRigidBody_addCollisionListener},
-        {"applyForce", lua_PhysicsRigidBody_applyForce},
-        {"applyImpulse", lua_PhysicsRigidBody_applyImpulse},
-        {"applyTorque", lua_PhysicsRigidBody_applyTorque},
-        {"applyTorqueImpulse", lua_PhysicsRigidBody_applyTorqueImpulse},
-        {"collidesWith", lua_PhysicsRigidBody_collidesWith},
-        {"getAngularDamping", lua_PhysicsRigidBody_getAngularDamping},
-        {"getAngularFactor", lua_PhysicsRigidBody_getAngularFactor},
-        {"getAngularVelocity", lua_PhysicsRigidBody_getAngularVelocity},
-        {"getAnisotropicFriction", lua_PhysicsRigidBody_getAnisotropicFriction},
-        {"getCollisionShape", lua_PhysicsRigidBody_getCollisionShape},
-        {"getFriction", lua_PhysicsRigidBody_getFriction},
-        {"getGravity", lua_PhysicsRigidBody_getGravity},
-        {"getHeight", lua_PhysicsRigidBody_getHeight},
-        {"getLinearDamping", lua_PhysicsRigidBody_getLinearDamping},
-        {"getLinearFactor", lua_PhysicsRigidBody_getLinearFactor},
-        {"getLinearVelocity", lua_PhysicsRigidBody_getLinearVelocity},
-        {"getMass", lua_PhysicsRigidBody_getMass},
-        {"getNode", lua_PhysicsRigidBody_getNode},
-        {"getRestitution", lua_PhysicsRigidBody_getRestitution},
-        {"getShapeType", lua_PhysicsRigidBody_getShapeType},
-        {"getType", lua_PhysicsRigidBody_getType},
-        {"isDynamic", lua_PhysicsRigidBody_isDynamic},
-        {"isEnabled", lua_PhysicsRigidBody_isEnabled},
-        {"isKinematic", lua_PhysicsRigidBody_isKinematic},
-        {"isStatic", lua_PhysicsRigidBody_isStatic},
-        {"removeCollisionListener", lua_PhysicsRigidBody_removeCollisionListener},
-        {"setAngularFactor", lua_PhysicsRigidBody_setAngularFactor},
-        {"setAngularVelocity", lua_PhysicsRigidBody_setAngularVelocity},
-        {"setAnisotropicFriction", lua_PhysicsRigidBody_setAnisotropicFriction},
-        {"setDamping", lua_PhysicsRigidBody_setDamping},
-        {"setEnabled", lua_PhysicsRigidBody_setEnabled},
-        {"setFriction", lua_PhysicsRigidBody_setFriction},
-        {"setGravity", lua_PhysicsRigidBody_setGravity},
-        {"setKinematic", lua_PhysicsRigidBody_setKinematic},
-        {"setLinearFactor", lua_PhysicsRigidBody_setLinearFactor},
-        {"setLinearVelocity", lua_PhysicsRigidBody_setLinearVelocity},
-        {"setRestitution", lua_PhysicsRigidBody_setRestitution},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("PhysicsRigidBody", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static PhysicsRigidBody* getInstance(lua_State* state)
 {
@@ -82,7 +36,7 @@ static PhysicsRigidBody* getInstance(lua_State* state)
     return (PhysicsRigidBody*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsRigidBody_addCollisionListener(lua_State* state)
+static int lua_PhysicsRigidBody_addCollisionListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -192,7 +146,7 @@ int lua_PhysicsRigidBody_addCollisionListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_applyForce(lua_State* state)
+static int lua_PhysicsRigidBody_applyForce(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -268,7 +222,7 @@ int lua_PhysicsRigidBody_applyForce(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_applyImpulse(lua_State* state)
+static int lua_PhysicsRigidBody_applyImpulse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -344,7 +298,7 @@ int lua_PhysicsRigidBody_applyImpulse(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_applyTorque(lua_State* state)
+static int lua_PhysicsRigidBody_applyTorque(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -386,7 +340,7 @@ int lua_PhysicsRigidBody_applyTorque(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_applyTorqueImpulse(lua_State* state)
+static int lua_PhysicsRigidBody_applyTorqueImpulse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -428,7 +382,7 @@ int lua_PhysicsRigidBody_applyTorqueImpulse(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_collidesWith(lua_State* state)
+static int lua_PhysicsRigidBody_collidesWith(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -473,7 +427,7 @@ int lua_PhysicsRigidBody_collidesWith(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getAngularDamping(lua_State* state)
+static int lua_PhysicsRigidBody_getAngularDamping(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -508,7 +462,7 @@ int lua_PhysicsRigidBody_getAngularDamping(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getAngularFactor(lua_State* state)
+static int lua_PhysicsRigidBody_getAngularFactor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -552,7 +506,7 @@ int lua_PhysicsRigidBody_getAngularFactor(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getAngularVelocity(lua_State* state)
+static int lua_PhysicsRigidBody_getAngularVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -596,7 +550,7 @@ int lua_PhysicsRigidBody_getAngularVelocity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getAnisotropicFriction(lua_State* state)
+static int lua_PhysicsRigidBody_getAnisotropicFriction(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -640,7 +594,7 @@ int lua_PhysicsRigidBody_getAnisotropicFriction(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getCollisionShape(lua_State* state)
+static int lua_PhysicsRigidBody_getCollisionShape(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -684,7 +638,7 @@ int lua_PhysicsRigidBody_getCollisionShape(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getFriction(lua_State* state)
+static int lua_PhysicsRigidBody_getFriction(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -719,7 +673,7 @@ int lua_PhysicsRigidBody_getFriction(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getGravity(lua_State* state)
+static int lua_PhysicsRigidBody_getGravity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -763,7 +717,7 @@ int lua_PhysicsRigidBody_getGravity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getHeight(lua_State* state)
+static int lua_PhysicsRigidBody_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -806,7 +760,7 @@ int lua_PhysicsRigidBody_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getLinearDamping(lua_State* state)
+static int lua_PhysicsRigidBody_getLinearDamping(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -841,7 +795,7 @@ int lua_PhysicsRigidBody_getLinearDamping(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getLinearFactor(lua_State* state)
+static int lua_PhysicsRigidBody_getLinearFactor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -885,7 +839,7 @@ int lua_PhysicsRigidBody_getLinearFactor(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getLinearVelocity(lua_State* state)
+static int lua_PhysicsRigidBody_getLinearVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -929,7 +883,7 @@ int lua_PhysicsRigidBody_getLinearVelocity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getMass(lua_State* state)
+static int lua_PhysicsRigidBody_getMass(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -964,7 +918,7 @@ int lua_PhysicsRigidBody_getMass(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getNode(lua_State* state)
+static int lua_PhysicsRigidBody_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1008,7 +962,7 @@ int lua_PhysicsRigidBody_getNode(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getRestitution(lua_State* state)
+static int lua_PhysicsRigidBody_getRestitution(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1043,7 +997,7 @@ int lua_PhysicsRigidBody_getRestitution(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getShapeType(lua_State* state)
+static int lua_PhysicsRigidBody_getShapeType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1078,7 +1032,7 @@ int lua_PhysicsRigidBody_getShapeType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_getType(lua_State* state)
+static int lua_PhysicsRigidBody_getType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1113,7 +1067,7 @@ int lua_PhysicsRigidBody_getType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_isDynamic(lua_State* state)
+static int lua_PhysicsRigidBody_isDynamic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1148,7 +1102,7 @@ int lua_PhysicsRigidBody_isDynamic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_isEnabled(lua_State* state)
+static int lua_PhysicsRigidBody_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1183,7 +1137,7 @@ int lua_PhysicsRigidBody_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_isKinematic(lua_State* state)
+static int lua_PhysicsRigidBody_isKinematic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1218,7 +1172,7 @@ int lua_PhysicsRigidBody_isKinematic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_isStatic(lua_State* state)
+static int lua_PhysicsRigidBody_isStatic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1253,7 +1207,7 @@ int lua_PhysicsRigidBody_isStatic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_removeCollisionListener(lua_State* state)
+static int lua_PhysicsRigidBody_removeCollisionListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1363,7 +1317,7 @@ int lua_PhysicsRigidBody_removeCollisionListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setAngularFactor(lua_State* state)
+static int lua_PhysicsRigidBody_setAngularFactor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1434,7 +1388,7 @@ int lua_PhysicsRigidBody_setAngularFactor(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setAngularVelocity(lua_State* state)
+static int lua_PhysicsRigidBody_setAngularVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1505,7 +1459,7 @@ int lua_PhysicsRigidBody_setAngularVelocity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setAnisotropicFriction(lua_State* state)
+static int lua_PhysicsRigidBody_setAnisotropicFriction(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1576,7 +1530,7 @@ int lua_PhysicsRigidBody_setAnisotropicFriction(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setDamping(lua_State* state)
+static int lua_PhysicsRigidBody_setDamping(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1616,7 +1570,7 @@ int lua_PhysicsRigidBody_setDamping(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setEnabled(lua_State* state)
+static int lua_PhysicsRigidBody_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1652,7 +1606,7 @@ int lua_PhysicsRigidBody_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setFriction(lua_State* state)
+static int lua_PhysicsRigidBody_setFriction(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1688,7 +1642,7 @@ int lua_PhysicsRigidBody_setFriction(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setGravity(lua_State* state)
+static int lua_PhysicsRigidBody_setGravity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1759,7 +1713,7 @@ int lua_PhysicsRigidBody_setGravity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setKinematic(lua_State* state)
+static int lua_PhysicsRigidBody_setKinematic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1795,7 +1749,7 @@ int lua_PhysicsRigidBody_setKinematic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setLinearFactor(lua_State* state)
+static int lua_PhysicsRigidBody_setLinearFactor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1866,7 +1820,7 @@ int lua_PhysicsRigidBody_setLinearFactor(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setLinearVelocity(lua_State* state)
+static int lua_PhysicsRigidBody_setLinearVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1937,7 +1891,7 @@ int lua_PhysicsRigidBody_setLinearVelocity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBody_setRestitution(lua_State* state)
+static int lua_PhysicsRigidBody_setRestitution(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1971,6 +1925,107 @@ int lua_PhysicsRigidBody_setRestitution(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of PhysicsRigidBody
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    PhysicsRigidBody* ptrObject = reinterpret_cast<PhysicsRigidBody*>(ptr);
+
+    if (strcmp(typeName, "PhysicsCollisionObject") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsCollisionObject*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Transform::Listener") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Transform::Listener*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_PhysicsRigidBody_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_PhysicsRigidBody_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    PhysicsRigidBody* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_PhysicsRigidBody()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addCollisionListener", lua_PhysicsRigidBody_addCollisionListener},
+        {"applyForce", lua_PhysicsRigidBody_applyForce},
+        {"applyImpulse", lua_PhysicsRigidBody_applyImpulse},
+        {"applyTorque", lua_PhysicsRigidBody_applyTorque},
+        {"applyTorqueImpulse", lua_PhysicsRigidBody_applyTorqueImpulse},
+        {"collidesWith", lua_PhysicsRigidBody_collidesWith},
+        {"getAngularDamping", lua_PhysicsRigidBody_getAngularDamping},
+        {"getAngularFactor", lua_PhysicsRigidBody_getAngularFactor},
+        {"getAngularVelocity", lua_PhysicsRigidBody_getAngularVelocity},
+        {"getAnisotropicFriction", lua_PhysicsRigidBody_getAnisotropicFriction},
+        {"getCollisionShape", lua_PhysicsRigidBody_getCollisionShape},
+        {"getFriction", lua_PhysicsRigidBody_getFriction},
+        {"getGravity", lua_PhysicsRigidBody_getGravity},
+        {"getHeight", lua_PhysicsRigidBody_getHeight},
+        {"getLinearDamping", lua_PhysicsRigidBody_getLinearDamping},
+        {"getLinearFactor", lua_PhysicsRigidBody_getLinearFactor},
+        {"getLinearVelocity", lua_PhysicsRigidBody_getLinearVelocity},
+        {"getMass", lua_PhysicsRigidBody_getMass},
+        {"getNode", lua_PhysicsRigidBody_getNode},
+        {"getRestitution", lua_PhysicsRigidBody_getRestitution},
+        {"getShapeType", lua_PhysicsRigidBody_getShapeType},
+        {"getType", lua_PhysicsRigidBody_getType},
+        {"isDynamic", lua_PhysicsRigidBody_isDynamic},
+        {"isEnabled", lua_PhysicsRigidBody_isEnabled},
+        {"isKinematic", lua_PhysicsRigidBody_isKinematic},
+        {"isStatic", lua_PhysicsRigidBody_isStatic},
+        {"removeCollisionListener", lua_PhysicsRigidBody_removeCollisionListener},
+        {"setAngularFactor", lua_PhysicsRigidBody_setAngularFactor},
+        {"setAngularVelocity", lua_PhysicsRigidBody_setAngularVelocity},
+        {"setAnisotropicFriction", lua_PhysicsRigidBody_setAnisotropicFriction},
+        {"setDamping", lua_PhysicsRigidBody_setDamping},
+        {"setEnabled", lua_PhysicsRigidBody_setEnabled},
+        {"setFriction", lua_PhysicsRigidBody_setFriction},
+        {"setGravity", lua_PhysicsRigidBody_setGravity},
+        {"setKinematic", lua_PhysicsRigidBody_setKinematic},
+        {"setLinearFactor", lua_PhysicsRigidBody_setLinearFactor},
+        {"setLinearVelocity", lua_PhysicsRigidBody_setLinearVelocity},
+        {"setRestitution", lua_PhysicsRigidBody_setRestitution},
+        {"to", lua_PhysicsRigidBody_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("PhysicsRigidBody", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("PhysicsRigidBody", __convertTo);
 }
 
 }

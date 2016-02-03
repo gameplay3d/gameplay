@@ -12,41 +12,12 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Terrain.h"
+#include "ScriptTarget.h"
 
 namespace gameplay
 {
 
-void luaRegister_PhysicsController()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addScript", lua_PhysicsController_addScript},
-        {"addScriptCallback", lua_PhysicsController_addScriptCallback},
-        {"addStatusListener", lua_PhysicsController_addStatusListener},
-        {"clearScripts", lua_PhysicsController_clearScripts},
-        {"createFixedConstraint", lua_PhysicsController_createFixedConstraint},
-        {"createGenericConstraint", lua_PhysicsController_createGenericConstraint},
-        {"createHingeConstraint", lua_PhysicsController_createHingeConstraint},
-        {"createSocketConstraint", lua_PhysicsController_createSocketConstraint},
-        {"createSpringConstraint", lua_PhysicsController_createSpringConstraint},
-        {"drawDebug", lua_PhysicsController_drawDebug},
-        {"getGravity", lua_PhysicsController_getGravity},
-        {"getScriptEvent", lua_PhysicsController_getScriptEvent},
-        {"getTypeName", lua_PhysicsController_getTypeName},
-        {"hasScriptListener", lua_PhysicsController_hasScriptListener},
-        {"rayTest", lua_PhysicsController_rayTest},
-        {"removeScript", lua_PhysicsController_removeScript},
-        {"removeScriptCallback", lua_PhysicsController_removeScriptCallback},
-        {"removeStatusListener", lua_PhysicsController_removeStatusListener},
-        {"setGravity", lua_PhysicsController_setGravity},
-        {"sweepTest", lua_PhysicsController_sweepTest},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("PhysicsController", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static PhysicsController* getInstance(lua_State* state)
 {
@@ -55,7 +26,7 @@ static PhysicsController* getInstance(lua_State* state)
     return (PhysicsController*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsController_addScript(lua_State* state)
+static int lua_PhysicsController_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -103,7 +74,7 @@ int lua_PhysicsController_addScript(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_addScriptCallback(lua_State* state)
+static int lua_PhysicsController_addScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -149,7 +120,7 @@ int lua_PhysicsController_addScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_addStatusListener(lua_State* state)
+static int lua_PhysicsController_addStatusListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -191,7 +162,7 @@ int lua_PhysicsController_addStatusListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_clearScripts(lua_State* state)
+static int lua_PhysicsController_clearScripts(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -223,7 +194,7 @@ int lua_PhysicsController_clearScripts(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_createFixedConstraint(lua_State* state)
+static int lua_PhysicsController_createFixedConstraint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -323,7 +294,7 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_createGenericConstraint(lua_State* state)
+static int lua_PhysicsController_createGenericConstraint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -662,7 +633,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_createHingeConstraint(lua_State* state)
+static int lua_PhysicsController_createHingeConstraint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -964,7 +935,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_createSocketConstraint(lua_State* state)
+static int lua_PhysicsController_createSocketConstraint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1205,7 +1176,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_createSpringConstraint(lua_State* state)
+static int lua_PhysicsController_createSpringConstraint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1337,7 +1308,7 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_drawDebug(lua_State* state)
+static int lua_PhysicsController_drawDebug(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1379,7 +1350,7 @@ int lua_PhysicsController_drawDebug(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_getGravity(lua_State* state)
+static int lua_PhysicsController_getGravity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1423,7 +1394,7 @@ int lua_PhysicsController_getGravity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_getScriptEvent(lua_State* state)
+static int lua_PhysicsController_getScriptEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1471,7 +1442,7 @@ int lua_PhysicsController_getScriptEvent(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_getTypeName(lua_State* state)
+static int lua_PhysicsController_getTypeName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1506,7 +1477,7 @@ int lua_PhysicsController_getTypeName(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_hasScriptListener(lua_State* state)
+static int lua_PhysicsController_hasScriptListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1569,7 +1540,7 @@ int lua_PhysicsController_hasScriptListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_rayTest(lua_State* state)
+static int lua_PhysicsController_rayTest(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1710,7 +1681,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_removeScript(lua_State* state)
+static int lua_PhysicsController_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1749,7 +1720,7 @@ int lua_PhysicsController_removeScript(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_removeScriptCallback(lua_State* state)
+static int lua_PhysicsController_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1795,7 +1766,7 @@ int lua_PhysicsController_removeScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_removeStatusListener(lua_State* state)
+static int lua_PhysicsController_removeStatusListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1837,7 +1808,7 @@ int lua_PhysicsController_removeStatusListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_setGravity(lua_State* state)
+static int lua_PhysicsController_setGravity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1879,7 +1850,7 @@ int lua_PhysicsController_setGravity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsController_sweepTest(lua_State* state)
+static int lua_PhysicsController_sweepTest(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2036,6 +2007,85 @@ int lua_PhysicsController_sweepTest(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of PhysicsController
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    PhysicsController* ptrObject = reinterpret_cast<PhysicsController*>(ptr);
+
+    if (strcmp(typeName, "ScriptTarget") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<ScriptTarget*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_PhysicsController_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_PhysicsController_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    PhysicsController* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_PhysicsController()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addScript", lua_PhysicsController_addScript},
+        {"addScriptCallback", lua_PhysicsController_addScriptCallback},
+        {"addStatusListener", lua_PhysicsController_addStatusListener},
+        {"clearScripts", lua_PhysicsController_clearScripts},
+        {"createFixedConstraint", lua_PhysicsController_createFixedConstraint},
+        {"createGenericConstraint", lua_PhysicsController_createGenericConstraint},
+        {"createHingeConstraint", lua_PhysicsController_createHingeConstraint},
+        {"createSocketConstraint", lua_PhysicsController_createSocketConstraint},
+        {"createSpringConstraint", lua_PhysicsController_createSpringConstraint},
+        {"drawDebug", lua_PhysicsController_drawDebug},
+        {"getGravity", lua_PhysicsController_getGravity},
+        {"getScriptEvent", lua_PhysicsController_getScriptEvent},
+        {"getTypeName", lua_PhysicsController_getTypeName},
+        {"hasScriptListener", lua_PhysicsController_hasScriptListener},
+        {"rayTest", lua_PhysicsController_rayTest},
+        {"removeScript", lua_PhysicsController_removeScript},
+        {"removeScriptCallback", lua_PhysicsController_removeScriptCallback},
+        {"removeStatusListener", lua_PhysicsController_removeStatusListener},
+        {"setGravity", lua_PhysicsController_setGravity},
+        {"sweepTest", lua_PhysicsController_sweepTest},
+        {"to", lua_PhysicsController_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("PhysicsController", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("PhysicsController", __convertTo);
 }
 
 }

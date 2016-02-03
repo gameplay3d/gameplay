@@ -168,9 +168,7 @@ Script* ScriptTarget::addScript(const char* path)
     // Automatically call the 'attached' event if it is defined within the script
     if (sc->functionExists("attached", script))
     {
-        char args[256];
-        sprintf(args, "<%s>", getTypeName());
-        sc->executeFunction<void>(script, "attached", args, dynamic_cast<void*>(this));
+        sc->executeFunction<void>(script, "attached", "<ScriptTarget>", NULL, (void*)this);
     }
 
     return script;
@@ -435,7 +433,7 @@ template<> void ScriptTarget::fireScriptEvent<void>(const Event* event, ...)
         for (size_t i = 0, count = callbacks.size(); i < count; ++i)
         {
             CallbackFunction& cb = callbacks[i];
-            sc->executeFunction<void>(cb.script, cb.function.c_str(), event->args.c_str(), &list);
+            sc->executeFunction<void>(cb.script, cb.function.c_str(), event->args.c_str(), NULL, &list);
         }
     }
 
@@ -461,8 +459,10 @@ template<> bool ScriptTarget::fireScriptEvent<bool>(const Event* event, ...)
         for (size_t i = 0, count = callbacks.size(); i < count; ++i)
         {
             CallbackFunction& cb = callbacks[i];
-            if (sc->executeFunction<bool>(cb.script, cb.function.c_str(), event->args.c_str(), &list))
+            bool result = false;
+            if (sc->executeFunction<bool>(cb.script, cb.function.c_str(), event->args.c_str(), &result, &list) && result)
             {
+                // Handled, break out early
                 va_end(list);
                 return true;
             }

@@ -5,19 +5,6 @@
 namespace gameplay
 {
 
-// Lua bindings for SpriteBatch::SpriteVertex.
-int lua_SpriteBatchSpriteVertex__gc(lua_State* state);
-int lua_SpriteBatchSpriteVertex__init(lua_State* state);
-int lua_SpriteBatchSpriteVertex_a(lua_State* state);
-int lua_SpriteBatchSpriteVertex_b(lua_State* state);
-int lua_SpriteBatchSpriteVertex_g(lua_State* state);
-int lua_SpriteBatchSpriteVertex_r(lua_State* state);
-int lua_SpriteBatchSpriteVertex_u(lua_State* state);
-int lua_SpriteBatchSpriteVertex_v(lua_State* state);
-int lua_SpriteBatchSpriteVertex_x(lua_State* state);
-int lua_SpriteBatchSpriteVertex_y(lua_State* state);
-int lua_SpriteBatchSpriteVertex_z(lua_State* state);
-
 void luaRegister_SpriteBatchSpriteVertex();
 
 }

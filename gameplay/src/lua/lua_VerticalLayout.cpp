@@ -9,29 +9,12 @@
 #include "Layout.h"
 #include "Ref.h"
 #include "VerticalLayout.h"
+#include "Layout.h"
 
 namespace gameplay
 {
 
-void luaRegister_VerticalLayout()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_VerticalLayout_addRef},
-        {"getBottomToTop", lua_VerticalLayout_getBottomToTop},
-        {"getRefCount", lua_VerticalLayout_getRefCount},
-        {"getSpacing", lua_VerticalLayout_getSpacing},
-        {"getType", lua_VerticalLayout_getType},
-        {"release", lua_VerticalLayout_release},
-        {"setBottomToTop", lua_VerticalLayout_setBottomToTop},
-        {"setSpacing", lua_VerticalLayout_setSpacing},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("VerticalLayout", lua_members, NULL, lua_VerticalLayout__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static VerticalLayout* getInstance(lua_State* state)
 {
@@ -40,7 +23,7 @@ static VerticalLayout* getInstance(lua_State* state)
     return (VerticalLayout*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_VerticalLayout__gc(lua_State* state)
+static int lua_VerticalLayout__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -78,7 +61,7 @@ int lua_VerticalLayout__gc(lua_State* state)
     return 0;
 }
 
-int lua_VerticalLayout_addRef(lua_State* state)
+static int lua_VerticalLayout_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -110,7 +93,7 @@ int lua_VerticalLayout_addRef(lua_State* state)
     return 0;
 }
 
-int lua_VerticalLayout_getBottomToTop(lua_State* state)
+static int lua_VerticalLayout_getBottomToTop(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -145,7 +128,7 @@ int lua_VerticalLayout_getBottomToTop(lua_State* state)
     return 0;
 }
 
-int lua_VerticalLayout_getRefCount(lua_State* state)
+static int lua_VerticalLayout_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -180,7 +163,7 @@ int lua_VerticalLayout_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_VerticalLayout_getSpacing(lua_State* state)
+static int lua_VerticalLayout_getSpacing(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -215,7 +198,7 @@ int lua_VerticalLayout_getSpacing(lua_State* state)
     return 0;
 }
 
-int lua_VerticalLayout_getType(lua_State* state)
+static int lua_VerticalLayout_getType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -250,7 +233,7 @@ int lua_VerticalLayout_getType(lua_State* state)
     return 0;
 }
 
-int lua_VerticalLayout_release(lua_State* state)
+static int lua_VerticalLayout_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -282,7 +265,7 @@ int lua_VerticalLayout_release(lua_State* state)
     return 0;
 }
 
-int lua_VerticalLayout_setBottomToTop(lua_State* state)
+static int lua_VerticalLayout_setBottomToTop(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -318,7 +301,7 @@ int lua_VerticalLayout_setBottomToTop(lua_State* state)
     return 0;
 }
 
-int lua_VerticalLayout_setSpacing(lua_State* state)
+static int lua_VerticalLayout_setSpacing(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -352,6 +335,73 @@ int lua_VerticalLayout_setSpacing(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of VerticalLayout
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    VerticalLayout* ptrObject = reinterpret_cast<VerticalLayout*>(ptr);
+
+    if (strcmp(typeName, "Layout") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Layout*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_VerticalLayout_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_VerticalLayout_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    VerticalLayout* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_VerticalLayout()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_VerticalLayout_addRef},
+        {"getBottomToTop", lua_VerticalLayout_getBottomToTop},
+        {"getRefCount", lua_VerticalLayout_getRefCount},
+        {"getSpacing", lua_VerticalLayout_getSpacing},
+        {"getType", lua_VerticalLayout_getType},
+        {"release", lua_VerticalLayout_release},
+        {"setBottomToTop", lua_VerticalLayout_setBottomToTop},
+        {"setSpacing", lua_VerticalLayout_setSpacing},
+        {"to", lua_VerticalLayout_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("VerticalLayout", lua_members, NULL, lua_VerticalLayout__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("VerticalLayout", __convertTo);
 }
 
 }

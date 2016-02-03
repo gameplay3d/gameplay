@@ -7,39 +7,12 @@
 #include "Game.h"
 #include "Quaternion.h"
 #include "Ref.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_Curve()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_Curve_addRef},
-        {"evaluate", lua_Curve_evaluate},
-        {"getComponentCount", lua_Curve_getComponentCount},
-        {"getEndTime", lua_Curve_getEndTime},
-        {"getPointCount", lua_Curve_getPointCount},
-        {"getPointInterpolation", lua_Curve_getPointInterpolation},
-        {"getPointTime", lua_Curve_getPointTime},
-        {"getPointValues", lua_Curve_getPointValues},
-        {"getRefCount", lua_Curve_getRefCount},
-        {"getStartTime", lua_Curve_getStartTime},
-        {"release", lua_Curve_release},
-        {"setPoint", lua_Curve_setPoint},
-        {"setTangent", lua_Curve_setTangent},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_Curve_static_create},
-        {"lerp", lua_Curve_static_lerp},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Curve", lua_members, NULL, lua_Curve__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Curve* getInstance(lua_State* state)
 {
@@ -48,7 +21,7 @@ static Curve* getInstance(lua_State* state)
     return (Curve*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Curve__gc(lua_State* state)
+static int lua_Curve__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -86,7 +59,7 @@ int lua_Curve__gc(lua_State* state)
     return 0;
 }
 
-int lua_Curve_addRef(lua_State* state)
+static int lua_Curve_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -118,7 +91,7 @@ int lua_Curve_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Curve_evaluate(lua_State* state)
+static int lua_Curve_evaluate(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -198,7 +171,7 @@ int lua_Curve_evaluate(lua_State* state)
     return 0;
 }
 
-int lua_Curve_getComponentCount(lua_State* state)
+static int lua_Curve_getComponentCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -233,7 +206,7 @@ int lua_Curve_getComponentCount(lua_State* state)
     return 0;
 }
 
-int lua_Curve_getEndTime(lua_State* state)
+static int lua_Curve_getEndTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -268,7 +241,7 @@ int lua_Curve_getEndTime(lua_State* state)
     return 0;
 }
 
-int lua_Curve_getPointCount(lua_State* state)
+static int lua_Curve_getPointCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -303,7 +276,7 @@ int lua_Curve_getPointCount(lua_State* state)
     return 0;
 }
 
-int lua_Curve_getPointInterpolation(lua_State* state)
+static int lua_Curve_getPointInterpolation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -342,7 +315,7 @@ int lua_Curve_getPointInterpolation(lua_State* state)
     return 0;
 }
 
-int lua_Curve_getPointTime(lua_State* state)
+static int lua_Curve_getPointTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -381,7 +354,7 @@ int lua_Curve_getPointTime(lua_State* state)
     return 0;
 }
 
-int lua_Curve_getPointValues(lua_State* state)
+static int lua_Curve_getPointValues(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -429,7 +402,7 @@ int lua_Curve_getPointValues(lua_State* state)
     return 0;
 }
 
-int lua_Curve_getRefCount(lua_State* state)
+static int lua_Curve_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -464,7 +437,7 @@ int lua_Curve_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Curve_getStartTime(lua_State* state)
+static int lua_Curve_getStartTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -499,7 +472,7 @@ int lua_Curve_getStartTime(lua_State* state)
     return 0;
 }
 
-int lua_Curve_release(lua_State* state)
+static int lua_Curve_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -531,7 +504,7 @@ int lua_Curve_release(lua_State* state)
     return 0;
 }
 
-int lua_Curve_setPoint(lua_State* state)
+static int lua_Curve_setPoint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -623,7 +596,7 @@ int lua_Curve_setPoint(lua_State* state)
     return 0;
 }
 
-int lua_Curve_setTangent(lua_State* state)
+static int lua_Curve_setTangent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -671,7 +644,7 @@ int lua_Curve_setTangent(lua_State* state)
     return 0;
 }
 
-int lua_Curve_static_create(lua_State* state)
+static int lua_Curve_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -721,7 +694,7 @@ int lua_Curve_static_create(lua_State* state)
     return 0;
 }
 
-int lua_Curve_static_lerp(lua_State* state)
+static int lua_Curve_static_lerp(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -764,6 +737,83 @@ int lua_Curve_static_lerp(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Curve
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Curve* ptrObject = reinterpret_cast<Curve*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Curve_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Curve_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Curve* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Curve()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_Curve_addRef},
+        {"evaluate", lua_Curve_evaluate},
+        {"getComponentCount", lua_Curve_getComponentCount},
+        {"getEndTime", lua_Curve_getEndTime},
+        {"getPointCount", lua_Curve_getPointCount},
+        {"getPointInterpolation", lua_Curve_getPointInterpolation},
+        {"getPointTime", lua_Curve_getPointTime},
+        {"getPointValues", lua_Curve_getPointValues},
+        {"getRefCount", lua_Curve_getRefCount},
+        {"getStartTime", lua_Curve_getStartTime},
+        {"release", lua_Curve_release},
+        {"setPoint", lua_Curve_setPoint},
+        {"setTangent", lua_Curve_setTangent},
+        {"to", lua_Curve_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_Curve_static_create},
+        {"lerp", lua_Curve_static_lerp},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Curve", lua_members, NULL, lua_Curve__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Curve", __convertTo);
 }
 
 }

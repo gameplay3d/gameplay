@@ -5,9 +5,6 @@
 namespace gameplay
 {
 
-// Lua bindings for AnimationController.
-int lua_AnimationController_stopAllAnimations(lua_State* state);
-
 void luaRegister_AnimationController();
 
 }

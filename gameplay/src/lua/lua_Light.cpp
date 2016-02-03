@@ -7,44 +7,12 @@
 #include "Light.h"
 #include "Node.h"
 #include "Ref.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_Light()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_Light_addRef},
-        {"getColor", lua_Light_getColor},
-        {"getInnerAngle", lua_Light_getInnerAngle},
-        {"getInnerAngleCos", lua_Light_getInnerAngleCos},
-        {"getLightType", lua_Light_getLightType},
-        {"getNode", lua_Light_getNode},
-        {"getOuterAngle", lua_Light_getOuterAngle},
-        {"getOuterAngleCos", lua_Light_getOuterAngleCos},
-        {"getRange", lua_Light_getRange},
-        {"getRangeInverse", lua_Light_getRangeInverse},
-        {"getRefCount", lua_Light_getRefCount},
-        {"release", lua_Light_release},
-        {"setColor", lua_Light_setColor},
-        {"setInnerAngle", lua_Light_setInnerAngle},
-        {"setOuterAngle", lua_Light_setOuterAngle},
-        {"setRange", lua_Light_setRange},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_Light_static_create},
-        {"createDirectional", lua_Light_static_createDirectional},
-        {"createPoint", lua_Light_static_createPoint},
-        {"createSpot", lua_Light_static_createSpot},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Light", lua_members, NULL, lua_Light__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Light* getInstance(lua_State* state)
 {
@@ -53,7 +21,7 @@ static Light* getInstance(lua_State* state)
     return (Light*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Light__gc(lua_State* state)
+static int lua_Light__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -91,7 +59,7 @@ int lua_Light__gc(lua_State* state)
     return 0;
 }
 
-int lua_Light_addRef(lua_State* state)
+static int lua_Light_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -123,7 +91,7 @@ int lua_Light_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Light_getColor(lua_State* state)
+static int lua_Light_getColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -167,7 +135,7 @@ int lua_Light_getColor(lua_State* state)
     return 0;
 }
 
-int lua_Light_getInnerAngle(lua_State* state)
+static int lua_Light_getInnerAngle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -202,7 +170,7 @@ int lua_Light_getInnerAngle(lua_State* state)
     return 0;
 }
 
-int lua_Light_getInnerAngleCos(lua_State* state)
+static int lua_Light_getInnerAngleCos(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -237,7 +205,7 @@ int lua_Light_getInnerAngleCos(lua_State* state)
     return 0;
 }
 
-int lua_Light_getLightType(lua_State* state)
+static int lua_Light_getLightType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -272,7 +240,7 @@ int lua_Light_getLightType(lua_State* state)
     return 0;
 }
 
-int lua_Light_getNode(lua_State* state)
+static int lua_Light_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -316,7 +284,7 @@ int lua_Light_getNode(lua_State* state)
     return 0;
 }
 
-int lua_Light_getOuterAngle(lua_State* state)
+static int lua_Light_getOuterAngle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -351,7 +319,7 @@ int lua_Light_getOuterAngle(lua_State* state)
     return 0;
 }
 
-int lua_Light_getOuterAngleCos(lua_State* state)
+static int lua_Light_getOuterAngleCos(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -386,7 +354,7 @@ int lua_Light_getOuterAngleCos(lua_State* state)
     return 0;
 }
 
-int lua_Light_getRange(lua_State* state)
+static int lua_Light_getRange(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -421,7 +389,7 @@ int lua_Light_getRange(lua_State* state)
     return 0;
 }
 
-int lua_Light_getRangeInverse(lua_State* state)
+static int lua_Light_getRangeInverse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -456,7 +424,7 @@ int lua_Light_getRangeInverse(lua_State* state)
     return 0;
 }
 
-int lua_Light_getRefCount(lua_State* state)
+static int lua_Light_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -491,7 +459,7 @@ int lua_Light_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Light_release(lua_State* state)
+static int lua_Light_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -523,7 +491,7 @@ int lua_Light_release(lua_State* state)
     return 0;
 }
 
-int lua_Light_setColor(lua_State* state)
+static int lua_Light_setColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -594,7 +562,7 @@ int lua_Light_setColor(lua_State* state)
     return 0;
 }
 
-int lua_Light_setInnerAngle(lua_State* state)
+static int lua_Light_setInnerAngle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -630,7 +598,7 @@ int lua_Light_setInnerAngle(lua_State* state)
     return 0;
 }
 
-int lua_Light_setOuterAngle(lua_State* state)
+static int lua_Light_setOuterAngle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -666,7 +634,7 @@ int lua_Light_setOuterAngle(lua_State* state)
     return 0;
 }
 
-int lua_Light_setRange(lua_State* state)
+static int lua_Light_setRange(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -702,7 +670,7 @@ int lua_Light_setRange(lua_State* state)
     return 0;
 }
 
-int lua_Light_static_create(lua_State* state)
+static int lua_Light_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -754,7 +722,7 @@ int lua_Light_static_create(lua_State* state)
     return 0;
 }
 
-int lua_Light_static_createDirectional(lua_State* state)
+static int lua_Light_static_createDirectional(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -845,7 +813,7 @@ int lua_Light_static_createDirectional(lua_State* state)
     return 0;
 }
 
-int lua_Light_static_createPoint(lua_State* state)
+static int lua_Light_static_createPoint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -944,7 +912,7 @@ int lua_Light_static_createPoint(lua_State* state)
     return 0;
 }
 
-int lua_Light_static_createSpot(lua_State* state)
+static int lua_Light_static_createSpot(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1057,6 +1025,88 @@ int lua_Light_static_createSpot(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Light
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Light* ptrObject = reinterpret_cast<Light*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Light_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Light_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Light* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Light()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_Light_addRef},
+        {"getColor", lua_Light_getColor},
+        {"getInnerAngle", lua_Light_getInnerAngle},
+        {"getInnerAngleCos", lua_Light_getInnerAngleCos},
+        {"getLightType", lua_Light_getLightType},
+        {"getNode", lua_Light_getNode},
+        {"getOuterAngle", lua_Light_getOuterAngle},
+        {"getOuterAngleCos", lua_Light_getOuterAngleCos},
+        {"getRange", lua_Light_getRange},
+        {"getRangeInverse", lua_Light_getRangeInverse},
+        {"getRefCount", lua_Light_getRefCount},
+        {"release", lua_Light_release},
+        {"setColor", lua_Light_setColor},
+        {"setInnerAngle", lua_Light_setInnerAngle},
+        {"setOuterAngle", lua_Light_setOuterAngle},
+        {"setRange", lua_Light_setRange},
+        {"to", lua_Light_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_Light_static_create},
+        {"createDirectional", lua_Light_static_createDirectional},
+        {"createPoint", lua_Light_static_createPoint},
+        {"createSpot", lua_Light_static_createSpot},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Light", lua_members, NULL, lua_Light__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Light", __convertTo);
 }
 
 }

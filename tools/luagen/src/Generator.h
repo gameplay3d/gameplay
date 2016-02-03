@@ -56,6 +56,14 @@ public:
     static vector<string> getScopePath(string classname, string ns = string());
 
     /**
+     * Retrieves the ref id of the specified classname.
+     *
+     * @param classname The classname to lookup the ref id for.
+     * @return The ref id, or an empty string if it could not be found.
+     */
+    string getRefId(string classname);
+
+    /**
      * Retrieves the class/struct/enum name for the given ref id.
      * 
      * @param refId The ref id.
@@ -101,11 +109,41 @@ public:
     bool isRef(string classname);
 
     /**
-     * Checks whether the given class has any public derived classes.
+     * Checks whether the given class ref ID has any public derived classes.
+     *
+     * @param refId The class reference ID.
+     * @return True if the class has any derived classes, false otherwise.
      */
-    bool hasDerivedClasses(string classname);
+    bool hasDerivedClasses(string refId);
 
-protected:
+    /**
+     * Gets the set off all classes that derives from the given class.
+     *
+     * @param derived List to fill with derived class names.
+     * @param classname The real class name to search for derived classes.
+     */
+    void getAllDerived(set<string>& derived, string classname);
+
+    /**
+     * Gets the list of relatives (base or derived classes) of the given class name.
+     *
+     * @param classname The name of the class to search for.
+     *
+     * @return The set of related classes.
+     */
+    const set<string>& getClassRelatives(const string& classname);
+
+    /**
+     * Returns the include file for the given class name.
+     *
+     * @param classname Class to lookup.
+     *
+     * @return The include file for the given class.
+     */
+    string getInclude(const string& classname);
+
+private:
+
     /**
      * Constructor.
      */
@@ -184,22 +222,24 @@ protected:
     // Resolves all unrecognized types.
     void resolveTypes();
 
+    // Builds map of hierarchy pairs for all classes
+    void buildClassHierarchyPairs();
+
     // Generates the bindings to C++ header and source files.
     void generateBindings(string* bindingNS);
-    
-    // Gets the set off all classes that derives from the given class.
-    void getAllDerived(set<string>& derived, string classname);
 
     // Gets the included files for a cpp file.
     void getIncludes(XMLElement* e, string filename);
 
-private:
+    void addDerivedIncludes(const ClassBinding* c, set<string>* baseIncludes);
+
     static Generator* __instance;
 
     const char* _file;
     map<string, string> _refIds;
     string _outDir;
     map<string, ClassBinding> _classes;
+    map<string, set<string>> _classHierarchyPairs;
     vector<string> _topLevelBaseClasses;
     map<string, set<string> > _includes;
     map<string, vector<FunctionBinding> > _functions;

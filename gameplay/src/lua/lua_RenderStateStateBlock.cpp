@@ -4,50 +4,19 @@
 #include "lua_RenderStateStateBlock.h"
 #include "Base.h"
 #include "Game.h"
+#include "Material.h"
 #include "Node.h"
 #include "Pass.h"
 #include "Ref.h"
 #include "RenderState.h"
 #include "Scene.h"
 #include "Technique.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_RenderStateStateBlock()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_RenderStateStateBlock_addRef},
-        {"bind", lua_RenderStateStateBlock_bind},
-        {"getRefCount", lua_RenderStateStateBlock_getRefCount},
-        {"release", lua_RenderStateStateBlock_release},
-        {"setBlend", lua_RenderStateStateBlock_setBlend},
-        {"setBlendDst", lua_RenderStateStateBlock_setBlendDst},
-        {"setBlendSrc", lua_RenderStateStateBlock_setBlendSrc},
-        {"setCullFace", lua_RenderStateStateBlock_setCullFace},
-        {"setCullFaceSide", lua_RenderStateStateBlock_setCullFaceSide},
-        {"setDepthFunction", lua_RenderStateStateBlock_setDepthFunction},
-        {"setDepthTest", lua_RenderStateStateBlock_setDepthTest},
-        {"setDepthWrite", lua_RenderStateStateBlock_setDepthWrite},
-        {"setFrontFace", lua_RenderStateStateBlock_setFrontFace},
-        {"setState", lua_RenderStateStateBlock_setState},
-        {"setStencilFunction", lua_RenderStateStateBlock_setStencilFunction},
-        {"setStencilOperation", lua_RenderStateStateBlock_setStencilOperation},
-        {"setStencilTest", lua_RenderStateStateBlock_setStencilTest},
-        {"setStencilWrite", lua_RenderStateStateBlock_setStencilWrite},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_RenderStateStateBlock_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-    scopePath.push_back("RenderState");
-
-    gameplay::ScriptUtil::registerClass("RenderStateStateBlock", lua_members, NULL, lua_RenderStateStateBlock__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static RenderState::StateBlock* getInstance(lua_State* state)
 {
@@ -56,7 +25,7 @@ static RenderState::StateBlock* getInstance(lua_State* state)
     return (RenderState::StateBlock*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_RenderStateStateBlock__gc(lua_State* state)
+static int lua_RenderStateStateBlock__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -94,7 +63,7 @@ int lua_RenderStateStateBlock__gc(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_addRef(lua_State* state)
+static int lua_RenderStateStateBlock_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -126,7 +95,7 @@ int lua_RenderStateStateBlock_addRef(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_bind(lua_State* state)
+static int lua_RenderStateStateBlock_bind(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -158,7 +127,7 @@ int lua_RenderStateStateBlock_bind(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_getRefCount(lua_State* state)
+static int lua_RenderStateStateBlock_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -193,7 +162,7 @@ int lua_RenderStateStateBlock_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_release(lua_State* state)
+static int lua_RenderStateStateBlock_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -225,7 +194,7 @@ int lua_RenderStateStateBlock_release(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setBlend(lua_State* state)
+static int lua_RenderStateStateBlock_setBlend(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -261,7 +230,7 @@ int lua_RenderStateStateBlock_setBlend(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setBlendDst(lua_State* state)
+static int lua_RenderStateStateBlock_setBlendDst(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -297,7 +266,7 @@ int lua_RenderStateStateBlock_setBlendDst(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setBlendSrc(lua_State* state)
+static int lua_RenderStateStateBlock_setBlendSrc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -333,7 +302,7 @@ int lua_RenderStateStateBlock_setBlendSrc(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setCullFace(lua_State* state)
+static int lua_RenderStateStateBlock_setCullFace(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -369,7 +338,7 @@ int lua_RenderStateStateBlock_setCullFace(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setCullFaceSide(lua_State* state)
+static int lua_RenderStateStateBlock_setCullFaceSide(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -405,7 +374,7 @@ int lua_RenderStateStateBlock_setCullFaceSide(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setDepthFunction(lua_State* state)
+static int lua_RenderStateStateBlock_setDepthFunction(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -441,7 +410,7 @@ int lua_RenderStateStateBlock_setDepthFunction(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setDepthTest(lua_State* state)
+static int lua_RenderStateStateBlock_setDepthTest(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -477,7 +446,7 @@ int lua_RenderStateStateBlock_setDepthTest(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setDepthWrite(lua_State* state)
+static int lua_RenderStateStateBlock_setDepthWrite(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -513,7 +482,7 @@ int lua_RenderStateStateBlock_setDepthWrite(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setFrontFace(lua_State* state)
+static int lua_RenderStateStateBlock_setFrontFace(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -549,7 +518,7 @@ int lua_RenderStateStateBlock_setFrontFace(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setState(lua_State* state)
+static int lua_RenderStateStateBlock_setState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -589,7 +558,7 @@ int lua_RenderStateStateBlock_setState(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setStencilFunction(lua_State* state)
+static int lua_RenderStateStateBlock_setStencilFunction(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -633,7 +602,7 @@ int lua_RenderStateStateBlock_setStencilFunction(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setStencilOperation(lua_State* state)
+static int lua_RenderStateStateBlock_setStencilOperation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -677,7 +646,7 @@ int lua_RenderStateStateBlock_setStencilOperation(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setStencilTest(lua_State* state)
+static int lua_RenderStateStateBlock_setStencilTest(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -713,7 +682,7 @@ int lua_RenderStateStateBlock_setStencilTest(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_setStencilWrite(lua_State* state)
+static int lua_RenderStateStateBlock_setStencilWrite(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -749,7 +718,7 @@ int lua_RenderStateStateBlock_setStencilWrite(lua_State* state)
     return 0;
 }
 
-int lua_RenderStateStateBlock_static_create(lua_State* state)
+static int lua_RenderStateStateBlock_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -784,6 +753,88 @@ int lua_RenderStateStateBlock_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of RenderState::StateBlock
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    RenderState::StateBlock* ptrObject = reinterpret_cast<RenderState::StateBlock*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_RenderStateStateBlock_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_RenderStateStateBlock_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    RenderState::StateBlock* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_RenderStateStateBlock()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_RenderStateStateBlock_addRef},
+        {"bind", lua_RenderStateStateBlock_bind},
+        {"getRefCount", lua_RenderStateStateBlock_getRefCount},
+        {"release", lua_RenderStateStateBlock_release},
+        {"setBlend", lua_RenderStateStateBlock_setBlend},
+        {"setBlendDst", lua_RenderStateStateBlock_setBlendDst},
+        {"setBlendSrc", lua_RenderStateStateBlock_setBlendSrc},
+        {"setCullFace", lua_RenderStateStateBlock_setCullFace},
+        {"setCullFaceSide", lua_RenderStateStateBlock_setCullFaceSide},
+        {"setDepthFunction", lua_RenderStateStateBlock_setDepthFunction},
+        {"setDepthTest", lua_RenderStateStateBlock_setDepthTest},
+        {"setDepthWrite", lua_RenderStateStateBlock_setDepthWrite},
+        {"setFrontFace", lua_RenderStateStateBlock_setFrontFace},
+        {"setState", lua_RenderStateStateBlock_setState},
+        {"setStencilFunction", lua_RenderStateStateBlock_setStencilFunction},
+        {"setStencilOperation", lua_RenderStateStateBlock_setStencilOperation},
+        {"setStencilTest", lua_RenderStateStateBlock_setStencilTest},
+        {"setStencilWrite", lua_RenderStateStateBlock_setStencilWrite},
+        {"to", lua_RenderStateStateBlock_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_RenderStateStateBlock_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+    scopePath.push_back("RenderState");
+
+    gameplay::ScriptUtil::registerClass("RenderStateStateBlock", lua_members, NULL, lua_RenderStateStateBlock__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("RenderStateStateBlock", __convertTo);
 }
 
 }

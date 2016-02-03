@@ -5,11 +5,6 @@
 namespace gameplay
 {
 
-// Lua bindings for Drawable.
-int lua_Drawable__gc(lua_State* state);
-int lua_Drawable_draw(lua_State* state);
-int lua_Drawable_getNode(lua_State* state);
-
 void luaRegister_Drawable();
 
 }

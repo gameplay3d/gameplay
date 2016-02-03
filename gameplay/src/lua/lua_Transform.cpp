@@ -4,112 +4,29 @@
 #include "lua_Transform.h"
 #include "Animation.h"
 #include "AnimationTarget.h"
+#include "AudioSource.h"
 #include "Base.h"
+#include "Camera.h"
 #include "Game.h"
+#include "Joint.h"
 #include "MaterialParameter.h"
+#include "MeshSkin.h"
 #include "Node.h"
+#include "PhysicsCharacter.h"
+#include "PhysicsGhostObject.h"
+#include "PhysicsRigidBody.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Terrain.h"
 #include "Transform.h"
+#include "AnimationTarget.h"
+#include "Node.h"
+#include "ScriptTarget.h"
 
 namespace gameplay
 {
 
-void luaRegister_Transform()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addListener", lua_Transform_addListener},
-        {"addScript", lua_Transform_addScript},
-        {"addScriptCallback", lua_Transform_addScriptCallback},
-        {"clearScripts", lua_Transform_clearScripts},
-        {"createAnimation", lua_Transform_createAnimation},
-        {"createAnimationFromBy", lua_Transform_createAnimationFromBy},
-        {"createAnimationFromTo", lua_Transform_createAnimationFromTo},
-        {"destroyAnimation", lua_Transform_destroyAnimation},
-        {"getAnimation", lua_Transform_getAnimation},
-        {"getAnimationPropertyComponentCount", lua_Transform_getAnimationPropertyComponentCount},
-        {"getAnimationPropertyValue", lua_Transform_getAnimationPropertyValue},
-        {"getBackVector", lua_Transform_getBackVector},
-        {"getDownVector", lua_Transform_getDownVector},
-        {"getForwardVector", lua_Transform_getForwardVector},
-        {"getLeftVector", lua_Transform_getLeftVector},
-        {"getMatrix", lua_Transform_getMatrix},
-        {"getRightVector", lua_Transform_getRightVector},
-        {"getRotation", lua_Transform_getRotation},
-        {"getScale", lua_Transform_getScale},
-        {"getScaleX", lua_Transform_getScaleX},
-        {"getScaleY", lua_Transform_getScaleY},
-        {"getScaleZ", lua_Transform_getScaleZ},
-        {"getScriptEvent", lua_Transform_getScriptEvent},
-        {"getTranslation", lua_Transform_getTranslation},
-        {"getTranslationX", lua_Transform_getTranslationX},
-        {"getTranslationY", lua_Transform_getTranslationY},
-        {"getTranslationZ", lua_Transform_getTranslationZ},
-        {"getTypeName", lua_Transform_getTypeName},
-        {"getUpVector", lua_Transform_getUpVector},
-        {"hasScriptListener", lua_Transform_hasScriptListener},
-        {"isStatic", lua_Transform_isStatic},
-        {"removeListener", lua_Transform_removeListener},
-        {"removeScript", lua_Transform_removeScript},
-        {"removeScriptCallback", lua_Transform_removeScriptCallback},
-        {"rotate", lua_Transform_rotate},
-        {"rotateX", lua_Transform_rotateX},
-        {"rotateY", lua_Transform_rotateY},
-        {"rotateZ", lua_Transform_rotateZ},
-        {"scale", lua_Transform_scale},
-        {"scaleX", lua_Transform_scaleX},
-        {"scaleY", lua_Transform_scaleY},
-        {"scaleZ", lua_Transform_scaleZ},
-        {"set", lua_Transform_set},
-        {"setAnimationPropertyValue", lua_Transform_setAnimationPropertyValue},
-        {"setIdentity", lua_Transform_setIdentity},
-        {"setRotation", lua_Transform_setRotation},
-        {"setScale", lua_Transform_setScale},
-        {"setScaleX", lua_Transform_setScaleX},
-        {"setScaleY", lua_Transform_setScaleY},
-        {"setScaleZ", lua_Transform_setScaleZ},
-        {"setTranslation", lua_Transform_setTranslation},
-        {"setTranslationX", lua_Transform_setTranslationX},
-        {"setTranslationY", lua_Transform_setTranslationY},
-        {"setTranslationZ", lua_Transform_setTranslationZ},
-        {"transformPoint", lua_Transform_transformPoint},
-        {"transformVector", lua_Transform_transformVector},
-        {"translate", lua_Transform_translate},
-        {"translateForward", lua_Transform_translateForward},
-        {"translateLeft", lua_Transform_translateLeft},
-        {"translateSmooth", lua_Transform_translateSmooth},
-        {"translateUp", lua_Transform_translateUp},
-        {"translateX", lua_Transform_translateX},
-        {"translateY", lua_Transform_translateY},
-        {"translateZ", lua_Transform_translateZ},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"ANIMATE_ROTATE", lua_Transform_static_ANIMATE_ROTATE},
-        {"ANIMATE_ROTATE_TRANSLATE", lua_Transform_static_ANIMATE_ROTATE_TRANSLATE},
-        {"ANIMATE_SCALE", lua_Transform_static_ANIMATE_SCALE},
-        {"ANIMATE_SCALE_ROTATE", lua_Transform_static_ANIMATE_SCALE_ROTATE},
-        {"ANIMATE_SCALE_ROTATE_TRANSLATE", lua_Transform_static_ANIMATE_SCALE_ROTATE_TRANSLATE},
-        {"ANIMATE_SCALE_TRANSLATE", lua_Transform_static_ANIMATE_SCALE_TRANSLATE},
-        {"ANIMATE_SCALE_UNIT", lua_Transform_static_ANIMATE_SCALE_UNIT},
-        {"ANIMATE_SCALE_X", lua_Transform_static_ANIMATE_SCALE_X},
-        {"ANIMATE_SCALE_Y", lua_Transform_static_ANIMATE_SCALE_Y},
-        {"ANIMATE_SCALE_Z", lua_Transform_static_ANIMATE_SCALE_Z},
-        {"ANIMATE_TRANSLATE", lua_Transform_static_ANIMATE_TRANSLATE},
-        {"ANIMATE_TRANSLATE_X", lua_Transform_static_ANIMATE_TRANSLATE_X},
-        {"ANIMATE_TRANSLATE_Y", lua_Transform_static_ANIMATE_TRANSLATE_Y},
-        {"ANIMATE_TRANSLATE_Z", lua_Transform_static_ANIMATE_TRANSLATE_Z},
-        {"isTransformChangedSuspended", lua_Transform_static_isTransformChangedSuspended},
-        {"resumeTransformChanged", lua_Transform_static_resumeTransformChanged},
-        {"suspendTransformChanged", lua_Transform_static_suspendTransformChanged},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Transform", lua_members, lua_Transform__init, lua_Transform__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Transform* getInstance(lua_State* state)
 {
@@ -118,7 +35,7 @@ static Transform* getInstance(lua_State* state)
     return (Transform*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Transform__gc(lua_State* state)
+static int lua_Transform__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -156,7 +73,7 @@ int lua_Transform__gc(lua_State* state)
     return 0;
 }
 
-int lua_Transform__init(lua_State* state)
+static int lua_Transform__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -317,7 +234,7 @@ int lua_Transform__init(lua_State* state)
     return 0;
 }
 
-int lua_Transform_addListener(lua_State* state)
+static int lua_Transform_addListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -387,7 +304,7 @@ int lua_Transform_addListener(lua_State* state)
     return 0;
 }
 
-int lua_Transform_addScript(lua_State* state)
+static int lua_Transform_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -435,7 +352,7 @@ int lua_Transform_addScript(lua_State* state)
     return 0;
 }
 
-int lua_Transform_addScriptCallback(lua_State* state)
+static int lua_Transform_addScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -481,7 +398,7 @@ int lua_Transform_addScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_Transform_clearScripts(lua_State* state)
+static int lua_Transform_clearScripts(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -513,7 +430,7 @@ int lua_Transform_clearScripts(lua_State* state)
     return 0;
 }
 
-int lua_Transform_createAnimation(lua_State* state)
+static int lua_Transform_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -716,7 +633,7 @@ int lua_Transform_createAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Transform_createAnimationFromBy(lua_State* state)
+static int lua_Transform_createAnimationFromBy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -784,7 +701,7 @@ int lua_Transform_createAnimationFromBy(lua_State* state)
     return 0;
 }
 
-int lua_Transform_createAnimationFromTo(lua_State* state)
+static int lua_Transform_createAnimationFromTo(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -852,7 +769,7 @@ int lua_Transform_createAnimationFromTo(lua_State* state)
     return 0;
 }
 
-int lua_Transform_destroyAnimation(lua_State* state)
+static int lua_Transform_destroyAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -902,7 +819,7 @@ int lua_Transform_destroyAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getAnimation(lua_State* state)
+static int lua_Transform_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -976,7 +893,7 @@ int lua_Transform_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getAnimationPropertyComponentCount(lua_State* state)
+static int lua_Transform_getAnimationPropertyComponentCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1015,7 +932,7 @@ int lua_Transform_getAnimationPropertyComponentCount(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getAnimationPropertyValue(lua_State* state)
+static int lua_Transform_getAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1061,7 +978,7 @@ int lua_Transform_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getBackVector(lua_State* state)
+static int lua_Transform_getBackVector(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1132,7 +1049,7 @@ int lua_Transform_getBackVector(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getDownVector(lua_State* state)
+static int lua_Transform_getDownVector(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1203,7 +1120,7 @@ int lua_Transform_getDownVector(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getForwardVector(lua_State* state)
+static int lua_Transform_getForwardVector(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1274,7 +1191,7 @@ int lua_Transform_getForwardVector(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getLeftVector(lua_State* state)
+static int lua_Transform_getLeftVector(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1345,7 +1262,7 @@ int lua_Transform_getLeftVector(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getMatrix(lua_State* state)
+static int lua_Transform_getMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1389,7 +1306,7 @@ int lua_Transform_getMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getRightVector(lua_State* state)
+static int lua_Transform_getRightVector(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1460,7 +1377,7 @@ int lua_Transform_getRightVector(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getRotation(lua_State* state)
+static int lua_Transform_getRotation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1570,7 +1487,7 @@ int lua_Transform_getRotation(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getScale(lua_State* state)
+static int lua_Transform_getScale(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1641,7 +1558,7 @@ int lua_Transform_getScale(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getScaleX(lua_State* state)
+static int lua_Transform_getScaleX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1676,7 +1593,7 @@ int lua_Transform_getScaleX(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getScaleY(lua_State* state)
+static int lua_Transform_getScaleY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1711,7 +1628,7 @@ int lua_Transform_getScaleY(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getScaleZ(lua_State* state)
+static int lua_Transform_getScaleZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1746,7 +1663,7 @@ int lua_Transform_getScaleZ(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getScriptEvent(lua_State* state)
+static int lua_Transform_getScriptEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1794,7 +1711,7 @@ int lua_Transform_getScriptEvent(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getTranslation(lua_State* state)
+static int lua_Transform_getTranslation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1865,7 +1782,7 @@ int lua_Transform_getTranslation(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getTranslationX(lua_State* state)
+static int lua_Transform_getTranslationX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1900,7 +1817,7 @@ int lua_Transform_getTranslationX(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getTranslationY(lua_State* state)
+static int lua_Transform_getTranslationY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1935,7 +1852,7 @@ int lua_Transform_getTranslationY(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getTranslationZ(lua_State* state)
+static int lua_Transform_getTranslationZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1970,7 +1887,7 @@ int lua_Transform_getTranslationZ(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getTypeName(lua_State* state)
+static int lua_Transform_getTypeName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2005,7 +1922,7 @@ int lua_Transform_getTypeName(lua_State* state)
     return 0;
 }
 
-int lua_Transform_getUpVector(lua_State* state)
+static int lua_Transform_getUpVector(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2076,7 +1993,7 @@ int lua_Transform_getUpVector(lua_State* state)
     return 0;
 }
 
-int lua_Transform_hasScriptListener(lua_State* state)
+static int lua_Transform_hasScriptListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2139,7 +2056,7 @@ int lua_Transform_hasScriptListener(lua_State* state)
     return 0;
 }
 
-int lua_Transform_isStatic(lua_State* state)
+static int lua_Transform_isStatic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2174,7 +2091,7 @@ int lua_Transform_isStatic(lua_State* state)
     return 0;
 }
 
-int lua_Transform_removeListener(lua_State* state)
+static int lua_Transform_removeListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2216,7 +2133,7 @@ int lua_Transform_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_Transform_removeScript(lua_State* state)
+static int lua_Transform_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2255,7 +2172,7 @@ int lua_Transform_removeScript(lua_State* state)
     return 0;
 }
 
-int lua_Transform_removeScriptCallback(lua_State* state)
+static int lua_Transform_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2301,7 +2218,7 @@ int lua_Transform_removeScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_Transform_rotate(lua_State* state)
+static int lua_Transform_rotate(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2422,7 +2339,7 @@ int lua_Transform_rotate(lua_State* state)
     return 0;
 }
 
-int lua_Transform_rotateX(lua_State* state)
+static int lua_Transform_rotateX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2458,7 +2375,7 @@ int lua_Transform_rotateX(lua_State* state)
     return 0;
 }
 
-int lua_Transform_rotateY(lua_State* state)
+static int lua_Transform_rotateY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2494,7 +2411,7 @@ int lua_Transform_rotateY(lua_State* state)
     return 0;
 }
 
-int lua_Transform_rotateZ(lua_State* state)
+static int lua_Transform_rotateZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2530,7 +2447,7 @@ int lua_Transform_rotateZ(lua_State* state)
     return 0;
 }
 
-int lua_Transform_scale(lua_State* state)
+static int lua_Transform_scale(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2616,7 +2533,7 @@ int lua_Transform_scale(lua_State* state)
     return 0;
 }
 
-int lua_Transform_scaleX(lua_State* state)
+static int lua_Transform_scaleX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2652,7 +2569,7 @@ int lua_Transform_scaleX(lua_State* state)
     return 0;
 }
 
-int lua_Transform_scaleY(lua_State* state)
+static int lua_Transform_scaleY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2688,7 +2605,7 @@ int lua_Transform_scaleY(lua_State* state)
     return 0;
 }
 
-int lua_Transform_scaleZ(lua_State* state)
+static int lua_Transform_scaleZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2724,7 +2641,7 @@ int lua_Transform_scaleZ(lua_State* state)
     return 0;
 }
 
-int lua_Transform_set(lua_State* state)
+static int lua_Transform_set(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2878,7 +2795,7 @@ int lua_Transform_set(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setAnimationPropertyValue(lua_State* state)
+static int lua_Transform_setAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2956,7 +2873,7 @@ int lua_Transform_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setIdentity(lua_State* state)
+static int lua_Transform_setIdentity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2988,7 +2905,7 @@ int lua_Transform_setIdentity(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setRotation(lua_State* state)
+static int lua_Transform_setRotation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3109,7 +3026,7 @@ int lua_Transform_setRotation(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setScale(lua_State* state)
+static int lua_Transform_setScale(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3195,7 +3112,7 @@ int lua_Transform_setScale(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setScaleX(lua_State* state)
+static int lua_Transform_setScaleX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3231,7 +3148,7 @@ int lua_Transform_setScaleX(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setScaleY(lua_State* state)
+static int lua_Transform_setScaleY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3267,7 +3184,7 @@ int lua_Transform_setScaleY(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setScaleZ(lua_State* state)
+static int lua_Transform_setScaleZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3303,7 +3220,7 @@ int lua_Transform_setScaleZ(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setTranslation(lua_State* state)
+static int lua_Transform_setTranslation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3374,7 +3291,7 @@ int lua_Transform_setTranslation(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setTranslationX(lua_State* state)
+static int lua_Transform_setTranslationX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3410,7 +3327,7 @@ int lua_Transform_setTranslationX(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setTranslationY(lua_State* state)
+static int lua_Transform_setTranslationY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3446,7 +3363,7 @@ int lua_Transform_setTranslationY(lua_State* state)
     return 0;
 }
 
-int lua_Transform_setTranslationZ(lua_State* state)
+static int lua_Transform_setTranslationZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3482,7 +3399,7 @@ int lua_Transform_setTranslationZ(lua_State* state)
     return 0;
 }
 
-int lua_Transform_static_ANIMATE_ROTATE(lua_State* state)
+static int lua_Transform_static_ANIMATE_ROTATE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3499,7 +3416,7 @@ int lua_Transform_static_ANIMATE_ROTATE(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_ROTATE_TRANSLATE(lua_State* state)
+static int lua_Transform_static_ANIMATE_ROTATE_TRANSLATE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3516,7 +3433,7 @@ int lua_Transform_static_ANIMATE_ROTATE_TRANSLATE(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_SCALE(lua_State* state)
+static int lua_Transform_static_ANIMATE_SCALE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3533,7 +3450,7 @@ int lua_Transform_static_ANIMATE_SCALE(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_SCALE_ROTATE(lua_State* state)
+static int lua_Transform_static_ANIMATE_SCALE_ROTATE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3550,7 +3467,7 @@ int lua_Transform_static_ANIMATE_SCALE_ROTATE(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_SCALE_ROTATE_TRANSLATE(lua_State* state)
+static int lua_Transform_static_ANIMATE_SCALE_ROTATE_TRANSLATE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3567,7 +3484,7 @@ int lua_Transform_static_ANIMATE_SCALE_ROTATE_TRANSLATE(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_SCALE_TRANSLATE(lua_State* state)
+static int lua_Transform_static_ANIMATE_SCALE_TRANSLATE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3584,7 +3501,7 @@ int lua_Transform_static_ANIMATE_SCALE_TRANSLATE(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_SCALE_UNIT(lua_State* state)
+static int lua_Transform_static_ANIMATE_SCALE_UNIT(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3601,7 +3518,7 @@ int lua_Transform_static_ANIMATE_SCALE_UNIT(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_SCALE_X(lua_State* state)
+static int lua_Transform_static_ANIMATE_SCALE_X(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3618,7 +3535,7 @@ int lua_Transform_static_ANIMATE_SCALE_X(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_SCALE_Y(lua_State* state)
+static int lua_Transform_static_ANIMATE_SCALE_Y(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3635,7 +3552,7 @@ int lua_Transform_static_ANIMATE_SCALE_Y(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_SCALE_Z(lua_State* state)
+static int lua_Transform_static_ANIMATE_SCALE_Z(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3652,7 +3569,7 @@ int lua_Transform_static_ANIMATE_SCALE_Z(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_TRANSLATE(lua_State* state)
+static int lua_Transform_static_ANIMATE_TRANSLATE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3669,7 +3586,7 @@ int lua_Transform_static_ANIMATE_TRANSLATE(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_TRANSLATE_X(lua_State* state)
+static int lua_Transform_static_ANIMATE_TRANSLATE_X(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3686,7 +3603,7 @@ int lua_Transform_static_ANIMATE_TRANSLATE_X(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_TRANSLATE_Y(lua_State* state)
+static int lua_Transform_static_ANIMATE_TRANSLATE_Y(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3703,7 +3620,7 @@ int lua_Transform_static_ANIMATE_TRANSLATE_Y(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_ANIMATE_TRANSLATE_Z(lua_State* state)
+static int lua_Transform_static_ANIMATE_TRANSLATE_Z(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -3720,7 +3637,7 @@ int lua_Transform_static_ANIMATE_TRANSLATE_Z(lua_State* state)
     return 1;
 }
 
-int lua_Transform_static_isTransformChangedSuspended(lua_State* state)
+static int lua_Transform_static_isTransformChangedSuspended(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3748,7 +3665,7 @@ int lua_Transform_static_isTransformChangedSuspended(lua_State* state)
     return 0;
 }
 
-int lua_Transform_static_resumeTransformChanged(lua_State* state)
+static int lua_Transform_static_resumeTransformChanged(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3773,7 +3690,7 @@ int lua_Transform_static_resumeTransformChanged(lua_State* state)
     return 0;
 }
 
-int lua_Transform_static_suspendTransformChanged(lua_State* state)
+static int lua_Transform_static_suspendTransformChanged(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3798,7 +3715,7 @@ int lua_Transform_static_suspendTransformChanged(lua_State* state)
     return 0;
 }
 
-int lua_Transform_transformPoint(lua_State* state)
+static int lua_Transform_transformPoint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3871,7 +3788,7 @@ int lua_Transform_transformPoint(lua_State* state)
     return 0;
 }
 
-int lua_Transform_transformVector(lua_State* state)
+static int lua_Transform_transformVector(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3984,7 +3901,7 @@ int lua_Transform_transformVector(lua_State* state)
     return 0;
 }
 
-int lua_Transform_translate(lua_State* state)
+static int lua_Transform_translate(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4055,7 +3972,7 @@ int lua_Transform_translate(lua_State* state)
     return 0;
 }
 
-int lua_Transform_translateForward(lua_State* state)
+static int lua_Transform_translateForward(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4091,7 +4008,7 @@ int lua_Transform_translateForward(lua_State* state)
     return 0;
 }
 
-int lua_Transform_translateLeft(lua_State* state)
+static int lua_Transform_translateLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4127,7 +4044,7 @@ int lua_Transform_translateLeft(lua_State* state)
     return 0;
 }
 
-int lua_Transform_translateSmooth(lua_State* state)
+static int lua_Transform_translateSmooth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4177,7 +4094,7 @@ int lua_Transform_translateSmooth(lua_State* state)
     return 0;
 }
 
-int lua_Transform_translateUp(lua_State* state)
+static int lua_Transform_translateUp(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4213,7 +4130,7 @@ int lua_Transform_translateUp(lua_State* state)
     return 0;
 }
 
-int lua_Transform_translateX(lua_State* state)
+static int lua_Transform_translateX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4249,7 +4166,7 @@ int lua_Transform_translateX(lua_State* state)
     return 0;
 }
 
-int lua_Transform_translateY(lua_State* state)
+static int lua_Transform_translateY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4285,7 +4202,7 @@ int lua_Transform_translateY(lua_State* state)
     return 0;
 }
 
-int lua_Transform_translateZ(lua_State* state)
+static int lua_Transform_translateZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4319,6 +4236,157 @@ int lua_Transform_translateZ(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Transform
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Transform* ptrObject = reinterpret_cast<Transform*>(ptr);
+
+    if (strcmp(typeName, "AnimationTarget") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<AnimationTarget*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Node") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Node*>(ptrObject));
+    }
+    else if (strcmp(typeName, "ScriptTarget") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<ScriptTarget*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Transform_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Transform_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Transform* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Transform()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addListener", lua_Transform_addListener},
+        {"addScript", lua_Transform_addScript},
+        {"addScriptCallback", lua_Transform_addScriptCallback},
+        {"clearScripts", lua_Transform_clearScripts},
+        {"createAnimation", lua_Transform_createAnimation},
+        {"createAnimationFromBy", lua_Transform_createAnimationFromBy},
+        {"createAnimationFromTo", lua_Transform_createAnimationFromTo},
+        {"destroyAnimation", lua_Transform_destroyAnimation},
+        {"getAnimation", lua_Transform_getAnimation},
+        {"getAnimationPropertyComponentCount", lua_Transform_getAnimationPropertyComponentCount},
+        {"getAnimationPropertyValue", lua_Transform_getAnimationPropertyValue},
+        {"getBackVector", lua_Transform_getBackVector},
+        {"getDownVector", lua_Transform_getDownVector},
+        {"getForwardVector", lua_Transform_getForwardVector},
+        {"getLeftVector", lua_Transform_getLeftVector},
+        {"getMatrix", lua_Transform_getMatrix},
+        {"getRightVector", lua_Transform_getRightVector},
+        {"getRotation", lua_Transform_getRotation},
+        {"getScale", lua_Transform_getScale},
+        {"getScaleX", lua_Transform_getScaleX},
+        {"getScaleY", lua_Transform_getScaleY},
+        {"getScaleZ", lua_Transform_getScaleZ},
+        {"getScriptEvent", lua_Transform_getScriptEvent},
+        {"getTranslation", lua_Transform_getTranslation},
+        {"getTranslationX", lua_Transform_getTranslationX},
+        {"getTranslationY", lua_Transform_getTranslationY},
+        {"getTranslationZ", lua_Transform_getTranslationZ},
+        {"getTypeName", lua_Transform_getTypeName},
+        {"getUpVector", lua_Transform_getUpVector},
+        {"hasScriptListener", lua_Transform_hasScriptListener},
+        {"isStatic", lua_Transform_isStatic},
+        {"removeListener", lua_Transform_removeListener},
+        {"removeScript", lua_Transform_removeScript},
+        {"removeScriptCallback", lua_Transform_removeScriptCallback},
+        {"rotate", lua_Transform_rotate},
+        {"rotateX", lua_Transform_rotateX},
+        {"rotateY", lua_Transform_rotateY},
+        {"rotateZ", lua_Transform_rotateZ},
+        {"scale", lua_Transform_scale},
+        {"scaleX", lua_Transform_scaleX},
+        {"scaleY", lua_Transform_scaleY},
+        {"scaleZ", lua_Transform_scaleZ},
+        {"set", lua_Transform_set},
+        {"setAnimationPropertyValue", lua_Transform_setAnimationPropertyValue},
+        {"setIdentity", lua_Transform_setIdentity},
+        {"setRotation", lua_Transform_setRotation},
+        {"setScale", lua_Transform_setScale},
+        {"setScaleX", lua_Transform_setScaleX},
+        {"setScaleY", lua_Transform_setScaleY},
+        {"setScaleZ", lua_Transform_setScaleZ},
+        {"setTranslation", lua_Transform_setTranslation},
+        {"setTranslationX", lua_Transform_setTranslationX},
+        {"setTranslationY", lua_Transform_setTranslationY},
+        {"setTranslationZ", lua_Transform_setTranslationZ},
+        {"transformPoint", lua_Transform_transformPoint},
+        {"transformVector", lua_Transform_transformVector},
+        {"translate", lua_Transform_translate},
+        {"translateForward", lua_Transform_translateForward},
+        {"translateLeft", lua_Transform_translateLeft},
+        {"translateSmooth", lua_Transform_translateSmooth},
+        {"translateUp", lua_Transform_translateUp},
+        {"translateX", lua_Transform_translateX},
+        {"translateY", lua_Transform_translateY},
+        {"translateZ", lua_Transform_translateZ},
+        {"to", lua_Transform_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"ANIMATE_ROTATE", lua_Transform_static_ANIMATE_ROTATE},
+        {"ANIMATE_ROTATE_TRANSLATE", lua_Transform_static_ANIMATE_ROTATE_TRANSLATE},
+        {"ANIMATE_SCALE", lua_Transform_static_ANIMATE_SCALE},
+        {"ANIMATE_SCALE_ROTATE", lua_Transform_static_ANIMATE_SCALE_ROTATE},
+        {"ANIMATE_SCALE_ROTATE_TRANSLATE", lua_Transform_static_ANIMATE_SCALE_ROTATE_TRANSLATE},
+        {"ANIMATE_SCALE_TRANSLATE", lua_Transform_static_ANIMATE_SCALE_TRANSLATE},
+        {"ANIMATE_SCALE_UNIT", lua_Transform_static_ANIMATE_SCALE_UNIT},
+        {"ANIMATE_SCALE_X", lua_Transform_static_ANIMATE_SCALE_X},
+        {"ANIMATE_SCALE_Y", lua_Transform_static_ANIMATE_SCALE_Y},
+        {"ANIMATE_SCALE_Z", lua_Transform_static_ANIMATE_SCALE_Z},
+        {"ANIMATE_TRANSLATE", lua_Transform_static_ANIMATE_TRANSLATE},
+        {"ANIMATE_TRANSLATE_X", lua_Transform_static_ANIMATE_TRANSLATE_X},
+        {"ANIMATE_TRANSLATE_Y", lua_Transform_static_ANIMATE_TRANSLATE_Y},
+        {"ANIMATE_TRANSLATE_Z", lua_Transform_static_ANIMATE_TRANSLATE_Z},
+        {"isTransformChangedSuspended", lua_Transform_static_isTransformChangedSuspended},
+        {"resumeTransformChanged", lua_Transform_static_resumeTransformChanged},
+        {"suspendTransformChanged", lua_Transform_static_suspendTransformChanged},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Transform", lua_members, lua_Transform__init, lua_Transform__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Transform", __convertTo);
 }
 
 }

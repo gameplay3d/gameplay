@@ -2,31 +2,24 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Layout.h"
+#include "AbsoluteLayout.h"
 #include "Base.h"
 #include "Container.h"
 #include "Control.h"
+#include "FlowLayout.h"
 #include "Game.h"
 #include "Layout.h"
 #include "Ref.h"
+#include "VerticalLayout.h"
+#include "AbsoluteLayout.h"
+#include "FlowLayout.h"
+#include "Ref.h"
+#include "VerticalLayout.h"
 
 namespace gameplay
 {
 
-void luaRegister_Layout()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_Layout_addRef},
-        {"getRefCount", lua_Layout_getRefCount},
-        {"getType", lua_Layout_getType},
-        {"release", lua_Layout_release},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Layout", lua_members, NULL, lua_Layout__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Layout* getInstance(lua_State* state)
 {
@@ -35,7 +28,7 @@ static Layout* getInstance(lua_State* state)
     return (Layout*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Layout__gc(lua_State* state)
+static int lua_Layout__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -73,7 +66,7 @@ int lua_Layout__gc(lua_State* state)
     return 0;
 }
 
-int lua_Layout_addRef(lua_State* state)
+static int lua_Layout_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -105,7 +98,7 @@ int lua_Layout_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Layout_getRefCount(lua_State* state)
+static int lua_Layout_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -140,7 +133,7 @@ int lua_Layout_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Layout_getType(lua_State* state)
+static int lua_Layout_getType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -175,7 +168,7 @@ int lua_Layout_getType(lua_State* state)
     return 0;
 }
 
-int lua_Layout_release(lua_State* state)
+static int lua_Layout_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -205,6 +198,81 @@ int lua_Layout_release(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Layout
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Layout* ptrObject = reinterpret_cast<Layout*>(ptr);
+
+    if (strcmp(typeName, "AbsoluteLayout") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<AbsoluteLayout*>(ptrObject));
+    }
+    else if (strcmp(typeName, "FlowLayout") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<FlowLayout*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+    else if (strcmp(typeName, "VerticalLayout") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<VerticalLayout*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Layout_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Layout_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Layout* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Layout()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_Layout_addRef},
+        {"getRefCount", lua_Layout_getRefCount},
+        {"getType", lua_Layout_getType},
+        {"release", lua_Layout_release},
+        {"to", lua_Layout_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Layout", lua_members, NULL, lua_Layout__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Layout", __convertTo);
 }
 
 }

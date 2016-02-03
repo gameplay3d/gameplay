@@ -81,7 +81,7 @@ class TerrainAutoBindingResolver;
  *
  * @see http://gameplay3d.github.io/GamePlay/docs/file-formats.html#wiki-Terrain
  */
-class Terrain : public Ref, public Drawable, private Transform::Listener
+class Terrain : public Ref, public Drawable, public Transform::Listener
 {
     friend class Node;
     friend class PhysicsController;

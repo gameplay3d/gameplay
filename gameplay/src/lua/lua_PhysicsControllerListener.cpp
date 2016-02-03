@@ -16,20 +16,6 @@
 namespace gameplay
 {
 
-void luaRegister_PhysicsControllerListener()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"statusEvent", lua_PhysicsControllerListener_statusEvent},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("PhysicsController");
-
-    gameplay::ScriptUtil::registerClass("PhysicsControllerListener", lua_members, NULL, NULL, lua_statics, scopePath);
-}
-
 static PhysicsController::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsControllerListener");
@@ -37,7 +23,7 @@ static PhysicsController::Listener* getInstance(lua_State* state)
     return (PhysicsController::Listener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsControllerListener_statusEvent(lua_State* state)
+static int lua_PhysicsControllerListener_statusEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -71,6 +57,21 @@ int lua_PhysicsControllerListener_statusEvent(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_PhysicsControllerListener()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"statusEvent", lua_PhysicsControllerListener_statusEvent},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("PhysicsController");
+
+    gameplay::ScriptUtil::registerClass("PhysicsControllerListener", lua_members, NULL, NULL, lua_statics, scopePath);
+
 }
 
 }

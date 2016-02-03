@@ -71,6 +71,14 @@ string Generator::getIdentifier(string refId)
     return refId;
 }
 
+string Generator::getRefId(string classname)
+{
+    map<string, ClassBinding>::iterator itr = _classes.find(classname);
+    if (itr == _classes.end())
+        return string();
+    return itr->second.refId;
+}
+
 string Generator::getClassNameAndNamespace(string classname, string* ns)
 {
     size_t index = classname.find("::");
@@ -251,6 +259,9 @@ void Generator::run(string inDir, string outDir, string* bindingNS)
     // Resolve all inherited include files.
     resolveInheritedIncludes();
 
+    // Build class hierarchy pairs
+    buildClassHierarchyPairs();
+
     // Generate the script bindings.
     generateBindings(bindingNS);
 
@@ -417,12 +428,12 @@ void Generator::getClass(XMLElement* classNode, const string& name)
     // Create the class binding object that we will store the function bindings in (name -> binding).
     ClassBinding classBinding(name, refId);
 
-    // Store the mapping between the ref id and the class's fully qualified name.
-    Generator::getInstance()->setIdentifier(refId, classBinding.classname);
-
     // Check if we should ignore this class.
     if (getScriptFlag(classNode) == "ignore")
         return;
+
+    // Store the mapping between the ref id and the class's fully qualified name.
+    Generator::getInstance()->setIdentifier(refId, classBinding.classname);
 
     // Get the include header for the original class declaration.
     XMLElement* includeElement = classNode->FirstChildElement("includes");
@@ -1260,7 +1271,7 @@ void Generator::resolveIncludes(const ClassBinding& c)
                 derivedIncludes.insert(*iter);
             }
         }
-        
+
         derived.push_back(cb);
     }
 
@@ -1271,6 +1282,28 @@ void Generator::resolveIncludes(const ClassBinding& c)
     }
 }
 
+void Generator::addDerivedIncludes(const ClassBinding* c, set<string>* baseIncludes)
+{
+    for (unsigned int i = 0, count = c->derived.size(); i < count; ++i)
+    {
+        string derivedClassName = getIdentifier(c->derived[i]);
+        if (_classes.find(derivedClassName) == _classes.end())
+            continue;
+
+        ClassBinding* derivedClass = &_classes[derivedClassName];
+        if (derivedClass)
+        {
+            baseIncludes->insert(derivedClass->include);
+            addDerivedIncludes(derivedClass, baseIncludes);
+
+            if (_includes.find(derivedClass->include) != _includes.end())
+            {
+                addDerivedIncludes(derivedClass, &_includes[derivedClass->include]);
+            }
+        }
+    }
+}
+
 void Generator::resolveInheritedIncludes()
 {
     // Go through the class inheritance tree and update each class's 
@@ -1278,6 +1311,17 @@ void Generator::resolveInheritedIncludes()
     for (unsigned int i = 0; i < _topLevelBaseClasses.size(); i++)
     {
         resolveIncludes(_classes[_topLevelBaseClasses[i]]);
+    }
+
+    // Add derived classes (recursively) to the list of base class includes.
+    // This is neccessary for the auto-generated conversion functions for bases classes.
+    for (unsigned int i = 0; i < _topLevelBaseClasses.size(); i++)
+    {
+        ClassBinding& c = _classes[_topLevelBaseClasses[i]];
+        if (_includes.find(c.include) != _includes.end())
+        {
+            addDerivedIncludes(&c, &_includes[c.include]);
+        }
     }
 }
 
@@ -1356,6 +1400,29 @@ void Generator::resolveTypes()
     }
 }
 
+void Generator::buildClassHierarchyPairs()
+{
+    for (map<string, ClassBinding>::iterator iter = _classes.begin(); iter != _classes.end(); ++iter)
+    {
+        const string& baseClassName = iter->first;
+        const vector<string>& derived = iter->second.derived;
+
+        for (size_t i = 0, count = derived.size(); i < count; ++i)
+        {
+            // If the derived class is not in the ref table, it's a hidden/protected class,
+            // so we don't generate it
+            if (_refIds.find(derived[i]) == _refIds.end())
+                continue;
+
+            const string& derviedClassName = getIdentifier(derived[i]);
+
+            // Add pairs in both direction (base->derived and derived->base)
+            _classHierarchyPairs[baseClassName].insert(derviedClassName);
+            _classHierarchyPairs[derviedClassName].insert(baseClassName);
+        }
+    }
+}
+
 void Generator::generateBindings(string* bindingNS)
 {
     bool generatingGameplay = false;
@@ -1398,17 +1465,9 @@ void Generator::generateBindings(string* bindingNS)
         }
     }
 
-    // Go through all the classes and if they have any derived classes, add them to the list of base classes.
-    vector<string> baseClasses;
-    for (map<string, ClassBinding>::iterator iter = _classes.begin(); iter != _classes.end(); iter++)
-    {
-        if (iter->second.derived.size() > 0)
-            baseClasses.push_back(iter->first);
-    }
-
     // Write out the global bindings file.
     cout << "Generating global bindings...\n";
-    if (baseClasses.size() > 0 || _functions.size() > 0 || _enums.size() > 0)
+    if (_classHierarchyPairs.size() > 0 || _functions.size() > 0 || _enums.size() > 0)
     {
         // Calculate if there are global function bindings to write out.
         bool generateGlobalFunctionBindings = false;
@@ -1469,8 +1528,14 @@ void Generator::generateBindings(string* bindingNS)
                 global << "\n";
             }
 
-            // Write out the signature of the function used to register the global functions with Lua.
+            // Write out global register function signature
             global << "void luaRegister_" << LUA_GLOBAL_FILENAME << "();\n\n";
+
+            // Write out function to get class relatives
+            global << "const std::vector<std::string>& luaGetClassRelatives(const char* type);\n\n";
+
+            // Write out userdata pointer conversion function
+            global << "void* luaConvertObjectPointer(void* ptr, const char* fromType, const char* toType);\n\n";
 
             if (bindingNS)
                 global << "}\n\n";
@@ -1486,6 +1551,7 @@ void Generator::generateBindings(string* bindingNS)
 
             // Add unique set of global includes
             vector<string> globalIncludes;
+            globalIncludes.push_back("Base.h");
             globalIncludes.push_back("ScriptController.h");
             globalIncludes.push_back(string(LUA_GLOBAL_FILENAME) + ".h");
 
@@ -1509,6 +1575,12 @@ void Generator::generateBindings(string* bindingNS)
                 }
             }
 
+            /*for (std::map<string, ClassBinding>::iterator itr = _classes.begin(); itr != _classes.end(); ++itr)
+            {
+                if (std::find(globalIncludes.begin(), globalIncludes.end(), itr->second.include) == globalIncludes.end())
+                    globalIncludes.push_back(itr->second.include);
+            }*/
+
             for (vector<string>::iterator itr = globalIncludes.begin(); itr != globalIncludes.end(); ++itr)
             {
                 global << "#include \"" << *itr << "\"\n";
@@ -1521,10 +1593,26 @@ void Generator::generateBindings(string* bindingNS)
                 global << "{\n\n";
             }
 
+            // Write the single global implementation of the function to register conversion functions
+            global << "static std::unordered_map<std::string, void*(*)(void*, const char*)> __conversionFunctions;\n\n";
+
+            global << "void " << LUA_GLOBAL_REGISTER_CONVERSION_FUNCTION << "(const char* className, void*(*func)(void*, const char*))\n";
+            global << "{\n";
+            global << "    __conversionFunctions[className] = func;\n";
+            global << "}\n\n";
+
+            // Write out function to store class hierarchy pairs
+            global << "static std::map<std::string, std::vector<std::string> > __hierarchyPairs;\n\n";
+
+            global << "static void setHierarchyPair(const std::string& type1, const std::string& type2)\n";
+            global << "{\n";
+            global << "    __hierarchyPairs[type1].push_back(type2);\n";
+            global << "}\n\n";
+
             // Write out the function used to register all global bindings with Lua.
             global << "void luaRegister_" << LUA_GLOBAL_FILENAME << "()\n";
             global << "{\n";
-        
+
             if (generateGlobalFunctionBindings)
             {
                 // Bind the non-member functions.
@@ -1535,17 +1623,16 @@ void Generator::generateBindings(string* bindingNS)
                 }
             }
 
+            global << "\n";
+
             // Generate the hierarchy map.
-            if (baseClasses.size() > 0)
+            for (std::map<string, set<string> >::iterator iter1 = _classHierarchyPairs.begin(); iter1 != _classHierarchyPairs.end(); ++iter1)
             {
-                for (unsigned int i = 0, count = baseClasses.size(); i < count; i++)
+                for (set<string>::iterator iter2 = iter1->second.begin(); iter2 != iter1->second.end(); ++iter2)
                 {
-                    set<string> derived;
-                    getAllDerived(derived, baseClasses[i]);
-                    for (set<string>::iterator iter = derived.begin(); iter != derived.end(); iter++)
+                    if (generatingGameplay || (!generatingGameplay && _namespaces["gameplay"].find(*iter2) == _namespaces["gameplay"].end()))
                     {
-                        if (generatingGameplay || (!generatingGameplay &&  _namespaces["gameplay"].find(*iter) == _namespaces["gameplay"].end()))
-                            global << "    gameplay::ScriptUtil::setGlobalHierarchyPair(\"" << baseClasses[i] << "\", \"" << *iter << "\");\n";
+                        global << "    setHierarchyPair(\"" << iter1->first << "\", \"" << *iter2 << "\");\n";
                     }
                 }
             }
@@ -1579,7 +1666,29 @@ void Generator::generateBindings(string* bindingNS)
                 }
             }
             global << "}\n\n";
-            
+
+            // Write out function to get class relatives list
+            global << "const std::vector<std::string>& luaGetClassRelatives(const char* type)\n";
+            global << "{\n";
+            global << "    return __hierarchyPairs[type];\n";
+            global << "}\n\n";
+
+            // Write out function to get userdata object pointers
+            global << "void* luaConvertObjectPointer(void* ptr, const char* fromType, const char* toType)\n";
+            global << "{\n";
+            global << "    // Need to convert object pointers as follows:\n";
+            global << "    //  1) First, cast from void* to the pre-determined type\n";
+            global << "    //  2) Next, static_cast to the requested relative type\n";
+            global << "    //  3) Finally, cast back to void* so the resulting pointer can be safely cast to the requested type by the caller\n\n";
+
+            global << "    // Try to find a conversion function registered for fromType\n";
+            global << "    std::unordered_map<std::string, void*(*)(void*, const char*)>::iterator itr = __conversionFunctions.find(fromType);\n";
+            global << "    if (itr == __conversionFunctions.end())\n";
+            global << "        return NULL; // no known conversion\n\n";
+
+            global << "    return itr->second(ptr, toType);\n";
+            global << "}\n\n";
+
             // Write out the binding functions.
             if (generateGlobalFunctionBindings)
             {
@@ -1616,23 +1725,49 @@ void Generator::generateBindings(string* bindingNS)
     writeFile(luaAllHStr, luaAllH.str());
 }
 
-void Generator::getAllDerived(set<string>& derived, string classname)
+void Generator::getAllDerived(set<string>& out, string classname)
 {
-    for (unsigned int i = 0, count = _classes[classname].derived.size(); i < count; i++)
+    const map<string, ClassBinding>::iterator itr = _classes.find(classname);
+    if (itr == _classes.end())
+        return;
+
+    const vector<string>& derived = itr->second.derived;
+    for (unsigned int i = 0, count = derived.size(); i < count; i++)
     {
         // If the derived class is not in the ref ID table, then it
         // is a hidden (protected, private, etc.) class, so don't include it.
-        if (_refIds.find(_classes[classname].derived[i]) != _refIds.end())
+        if (_refIds.find(derived[i]) != _refIds.end())
         {
-            string derivedClassName = getIdentifier(_classes[classname].derived[i]);
-            derived.insert(derivedClassName);
-            getAllDerived(derived, derivedClassName);
+            string derivedClassName = getIdentifier(derived[i]);
+            out.insert(derivedClassName);
+            getAllDerived(out, derivedClassName);
         }
     }
 }
 
-bool Generator::hasDerivedClasses(string classname)
+const set<string>& Generator::getClassRelatives(const string& classname)
 {
+    static set<string> empty;
+
+    const map<string, set<string> >::iterator itr = _classHierarchyPairs.find(classname);
+    if (itr == _classHierarchyPairs.end())
+        return empty;
+
+    return itr->second;
+}
+
+string Generator::getInclude(const string& classname)
+{
+    map<string, ClassBinding>::iterator itr = _classes.find(classname);
+    if (itr == _classes.end())
+        return string();
+
+    return itr->second.include;
+}
+
+bool Generator::hasDerivedClasses(string refId)
+{
+    string classname = getIdentifier(refId);
     map<string, ClassBinding>::iterator itr = _classes.find(classname);
     if (itr != _classes.end())
     {

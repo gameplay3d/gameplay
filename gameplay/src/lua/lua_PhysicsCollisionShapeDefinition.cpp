@@ -16,20 +16,6 @@
 namespace gameplay
 {
 
-void luaRegister_PhysicsCollisionShapeDefinition()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"isEmpty", lua_PhysicsCollisionShapeDefinition_isEmpty},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("PhysicsCollisionShape");
-
-    gameplay::ScriptUtil::registerClass("PhysicsCollisionShapeDefinition", lua_members, lua_PhysicsCollisionShapeDefinition__init, lua_PhysicsCollisionShapeDefinition__gc, lua_statics, scopePath);
-}
-
 static PhysicsCollisionShape::Definition* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionShapeDefinition");
@@ -37,7 +23,7 @@ static PhysicsCollisionShape::Definition* getInstance(lua_State* state)
     return (PhysicsCollisionShape::Definition*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsCollisionShapeDefinition__gc(lua_State* state)
+static int lua_PhysicsCollisionShapeDefinition__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -75,7 +61,7 @@ int lua_PhysicsCollisionShapeDefinition__gc(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionShapeDefinition__init(lua_State* state)
+static int lua_PhysicsCollisionShapeDefinition__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -146,7 +132,7 @@ int lua_PhysicsCollisionShapeDefinition__init(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionShapeDefinition_isEmpty(lua_State* state)
+static int lua_PhysicsCollisionShapeDefinition_isEmpty(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -179,6 +165,21 @@ int lua_PhysicsCollisionShapeDefinition_isEmpty(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_PhysicsCollisionShapeDefinition()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"isEmpty", lua_PhysicsCollisionShapeDefinition_isEmpty},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("PhysicsCollisionShape");
+
+    gameplay::ScriptUtil::registerClass("PhysicsCollisionShapeDefinition", lua_members, lua_PhysicsCollisionShapeDefinition__init, lua_PhysicsCollisionShapeDefinition__gc, lua_statics, scopePath);
+
 }
 
 }

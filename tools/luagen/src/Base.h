@@ -17,6 +17,7 @@ using namespace std;
 #define SCOPE_REPLACEMENT ""
 #define SCOPE_REPLACEMENT_SIZE strlen(SCOPE_REPLACEMENT)
 #define REF_CLASS_NAME "Ref"
+#define LUA_GLOBAL_REGISTER_CONVERSION_FUNCTION "luaGlobal_Register_Conversion_Function"
 
 #ifdef WIN32
 #include <windows.h>

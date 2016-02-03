@@ -8,38 +8,6 @@
 namespace gameplay
 {
 
-void luaRegister_Rectangle()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"bottom", lua_Rectangle_bottom},
-        {"contains", lua_Rectangle_contains},
-        {"height", lua_Rectangle_height},
-        {"inflate", lua_Rectangle_inflate},
-        {"intersects", lua_Rectangle_intersects},
-        {"isEmpty", lua_Rectangle_isEmpty},
-        {"left", lua_Rectangle_left},
-        {"right", lua_Rectangle_right},
-        {"set", lua_Rectangle_set},
-        {"setPosition", lua_Rectangle_setPosition},
-        {"top", lua_Rectangle_top},
-        {"width", lua_Rectangle_width},
-        {"x", lua_Rectangle_x},
-        {"y", lua_Rectangle_y},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"combine", lua_Rectangle_static_combine},
-        {"empty", lua_Rectangle_static_empty},
-        {"intersect", lua_Rectangle_static_intersect},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Rectangle", lua_members, lua_Rectangle__init, lua_Rectangle__gc, lua_statics, scopePath);
-}
-
 static Rectangle* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Rectangle");
@@ -47,7 +15,7 @@ static Rectangle* getInstance(lua_State* state)
     return (Rectangle*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Rectangle__gc(lua_State* state)
+static int lua_Rectangle__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -85,7 +53,7 @@ int lua_Rectangle__gc(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle__init(lua_State* state)
+static int lua_Rectangle__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -234,7 +202,7 @@ int lua_Rectangle__init(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_bottom(lua_State* state)
+static int lua_Rectangle_bottom(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -269,7 +237,7 @@ int lua_Rectangle_bottom(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_contains(lua_State* state)
+static int lua_Rectangle_contains(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -378,7 +346,7 @@ int lua_Rectangle_contains(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_height(lua_State* state)
+static int lua_Rectangle_height(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -407,7 +375,7 @@ int lua_Rectangle_height(lua_State* state)
     }
 }
 
-int lua_Rectangle_inflate(lua_State* state)
+static int lua_Rectangle_inflate(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -447,7 +415,7 @@ int lua_Rectangle_inflate(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_intersects(lua_State* state)
+static int lua_Rectangle_intersects(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -528,7 +496,7 @@ int lua_Rectangle_intersects(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_isEmpty(lua_State* state)
+static int lua_Rectangle_isEmpty(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -563,7 +531,7 @@ int lua_Rectangle_isEmpty(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_left(lua_State* state)
+static int lua_Rectangle_left(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -598,7 +566,7 @@ int lua_Rectangle_left(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_right(lua_State* state)
+static int lua_Rectangle_right(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -633,7 +601,7 @@ int lua_Rectangle_right(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_set(lua_State* state)
+static int lua_Rectangle_set(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -708,7 +676,7 @@ int lua_Rectangle_set(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_setPosition(lua_State* state)
+static int lua_Rectangle_setPosition(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -748,7 +716,7 @@ int lua_Rectangle_setPosition(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_static_combine(lua_State* state)
+static int lua_Rectangle_static_combine(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -808,7 +776,7 @@ int lua_Rectangle_static_combine(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_static_empty(lua_State* state)
+static int lua_Rectangle_static_empty(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -845,7 +813,7 @@ int lua_Rectangle_static_empty(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_static_intersect(lua_State* state)
+static int lua_Rectangle_static_intersect(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -908,7 +876,7 @@ int lua_Rectangle_static_intersect(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_top(lua_State* state)
+static int lua_Rectangle_top(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -943,7 +911,7 @@ int lua_Rectangle_top(lua_State* state)
     return 0;
 }
 
-int lua_Rectangle_width(lua_State* state)
+static int lua_Rectangle_width(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -972,7 +940,7 @@ int lua_Rectangle_width(lua_State* state)
     }
 }
 
-int lua_Rectangle_x(lua_State* state)
+static int lua_Rectangle_x(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -1001,7 +969,7 @@ int lua_Rectangle_x(lua_State* state)
     }
 }
 
-int lua_Rectangle_y(lua_State* state)
+static int lua_Rectangle_y(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -1028,6 +996,39 @@ int lua_Rectangle_y(lua_State* state)
 
         return 1;
     }
+}
+
+void luaRegister_Rectangle()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"bottom", lua_Rectangle_bottom},
+        {"contains", lua_Rectangle_contains},
+        {"height", lua_Rectangle_height},
+        {"inflate", lua_Rectangle_inflate},
+        {"intersects", lua_Rectangle_intersects},
+        {"isEmpty", lua_Rectangle_isEmpty},
+        {"left", lua_Rectangle_left},
+        {"right", lua_Rectangle_right},
+        {"set", lua_Rectangle_set},
+        {"setPosition", lua_Rectangle_setPosition},
+        {"top", lua_Rectangle_top},
+        {"width", lua_Rectangle_width},
+        {"x", lua_Rectangle_x},
+        {"y", lua_Rectangle_y},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"combine", lua_Rectangle_static_combine},
+        {"empty", lua_Rectangle_static_empty},
+        {"intersect", lua_Rectangle_static_intersect},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Rectangle", lua_members, lua_Rectangle__init, lua_Rectangle__gc, lua_statics, scopePath);
+
 }
 
 }

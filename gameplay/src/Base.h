@@ -22,6 +22,7 @@
 #include <set>
 #include <stack>
 #include <map>
+#include <unordered_map>
 #include <queue>
 #include <algorithm>
 #include <limits>
@@ -116,7 +117,7 @@ extern int strcmpnocase(const char* s1, const char* s2);
     #pragma warning( disable : 4244 )
     #pragma warning( disable : 4267 )
     #pragma warning( disable : 4311 )
-	#pragma warning( disable : 4316 )
+    #pragma warning( disable : 4316 )
     #pragma warning( disable : 4390 )
     #pragma warning( disable : 4800 )
     #pragma warning( disable : 4996 )

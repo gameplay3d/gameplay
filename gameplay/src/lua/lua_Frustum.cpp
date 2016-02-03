@@ -10,30 +10,6 @@
 namespace gameplay
 {
 
-void luaRegister_Frustum()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getBottom", lua_Frustum_getBottom},
-        {"getCorners", lua_Frustum_getCorners},
-        {"getFar", lua_Frustum_getFar},
-        {"getFarCorners", lua_Frustum_getFarCorners},
-        {"getLeft", lua_Frustum_getLeft},
-        {"getMatrix", lua_Frustum_getMatrix},
-        {"getNear", lua_Frustum_getNear},
-        {"getNearCorners", lua_Frustum_getNearCorners},
-        {"getRight", lua_Frustum_getRight},
-        {"getTop", lua_Frustum_getTop},
-        {"intersects", lua_Frustum_intersects},
-        {"set", lua_Frustum_set},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Frustum", lua_members, lua_Frustum__init, lua_Frustum__gc, lua_statics, scopePath);
-}
-
 static Frustum* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Frustum");
@@ -41,7 +17,7 @@ static Frustum* getInstance(lua_State* state)
     return (Frustum*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Frustum__gc(lua_State* state)
+static int lua_Frustum__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -79,7 +55,7 @@ int lua_Frustum__gc(lua_State* state)
     return 0;
 }
 
-int lua_Frustum__init(lua_State* state)
+static int lua_Frustum__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -178,7 +154,7 @@ int lua_Frustum__init(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getBottom(lua_State* state)
+static int lua_Frustum_getBottom(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -222,7 +198,7 @@ int lua_Frustum_getBottom(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getCorners(lua_State* state)
+static int lua_Frustum_getCorners(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -264,7 +240,7 @@ int lua_Frustum_getCorners(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getFar(lua_State* state)
+static int lua_Frustum_getFar(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -308,7 +284,7 @@ int lua_Frustum_getFar(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getFarCorners(lua_State* state)
+static int lua_Frustum_getFarCorners(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -350,7 +326,7 @@ int lua_Frustum_getFarCorners(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getLeft(lua_State* state)
+static int lua_Frustum_getLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -394,7 +370,7 @@ int lua_Frustum_getLeft(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getMatrix(lua_State* state)
+static int lua_Frustum_getMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -436,7 +412,7 @@ int lua_Frustum_getMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getNear(lua_State* state)
+static int lua_Frustum_getNear(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -480,7 +456,7 @@ int lua_Frustum_getNear(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getNearCorners(lua_State* state)
+static int lua_Frustum_getNearCorners(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -522,7 +498,7 @@ int lua_Frustum_getNearCorners(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getRight(lua_State* state)
+static int lua_Frustum_getRight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -566,7 +542,7 @@ int lua_Frustum_getRight(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_getTop(lua_State* state)
+static int lua_Frustum_getTop(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -610,7 +586,7 @@ int lua_Frustum_getTop(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_intersects(lua_State* state)
+static int lua_Frustum_intersects(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -771,7 +747,7 @@ int lua_Frustum_intersects(lua_State* state)
     return 0;
 }
 
-int lua_Frustum_set(lua_State* state)
+static int lua_Frustum_set(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -829,6 +805,31 @@ int lua_Frustum_set(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_Frustum()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getBottom", lua_Frustum_getBottom},
+        {"getCorners", lua_Frustum_getCorners},
+        {"getFar", lua_Frustum_getFar},
+        {"getFarCorners", lua_Frustum_getFarCorners},
+        {"getLeft", lua_Frustum_getLeft},
+        {"getMatrix", lua_Frustum_getMatrix},
+        {"getNear", lua_Frustum_getNear},
+        {"getNearCorners", lua_Frustum_getNearCorners},
+        {"getRight", lua_Frustum_getRight},
+        {"getTop", lua_Frustum_getTop},
+        {"intersects", lua_Frustum_intersects},
+        {"set", lua_Frustum_set},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Frustum", lua_members, lua_Frustum__init, lua_Frustum__gc, lua_statics, scopePath);
+
 }
 
 }

@@ -5,9 +5,6 @@
 namespace gameplay
 {
 
-// Lua bindings for Theme::Style.
-int lua_ThemeStyle_getTheme(lua_State* state);
-
 void luaRegister_ThemeStyle();
 
 }

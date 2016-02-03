@@ -11,94 +11,13 @@
 #include "Quaternion.h"
 #include "Ref.h"
 #include "Scene.h"
+#include "Drawable.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_ParticleEmitter()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_ParticleEmitter_addRef},
-        {"draw", lua_ParticleEmitter_draw},
-        {"emitOnce", lua_ParticleEmitter_emitOnce},
-        {"getAcceleration", lua_ParticleEmitter_getAcceleration},
-        {"getAccelerationVariance", lua_ParticleEmitter_getAccelerationVariance},
-        {"getBlendMode", lua_ParticleEmitter_getBlendMode},
-        {"getColorEnd", lua_ParticleEmitter_getColorEnd},
-        {"getColorEndVariance", lua_ParticleEmitter_getColorEndVariance},
-        {"getColorStart", lua_ParticleEmitter_getColorStart},
-        {"getColorStartVariance", lua_ParticleEmitter_getColorStartVariance},
-        {"getEmissionRate", lua_ParticleEmitter_getEmissionRate},
-        {"getEnergyMax", lua_ParticleEmitter_getEnergyMax},
-        {"getEnergyMin", lua_ParticleEmitter_getEnergyMin},
-        {"getNode", lua_ParticleEmitter_getNode},
-        {"getOrbitAcceleration", lua_ParticleEmitter_getOrbitAcceleration},
-        {"getOrbitPosition", lua_ParticleEmitter_getOrbitPosition},
-        {"getOrbitVelocity", lua_ParticleEmitter_getOrbitVelocity},
-        {"getParticleCountMax", lua_ParticleEmitter_getParticleCountMax},
-        {"getParticlesCount", lua_ParticleEmitter_getParticlesCount},
-        {"getPosition", lua_ParticleEmitter_getPosition},
-        {"getPositionVariance", lua_ParticleEmitter_getPositionVariance},
-        {"getRefCount", lua_ParticleEmitter_getRefCount},
-        {"getRotationAxis", lua_ParticleEmitter_getRotationAxis},
-        {"getRotationAxisVariance", lua_ParticleEmitter_getRotationAxisVariance},
-        {"getRotationPerParticleSpeedMax", lua_ParticleEmitter_getRotationPerParticleSpeedMax},
-        {"getRotationPerParticleSpeedMin", lua_ParticleEmitter_getRotationPerParticleSpeedMin},
-        {"getRotationSpeedMax", lua_ParticleEmitter_getRotationSpeedMax},
-        {"getRotationSpeedMin", lua_ParticleEmitter_getRotationSpeedMin},
-        {"getSizeEndMax", lua_ParticleEmitter_getSizeEndMax},
-        {"getSizeEndMin", lua_ParticleEmitter_getSizeEndMin},
-        {"getSizeStartMax", lua_ParticleEmitter_getSizeStartMax},
-        {"getSizeStartMin", lua_ParticleEmitter_getSizeStartMin},
-        {"getSpriteFrameCount", lua_ParticleEmitter_getSpriteFrameCount},
-        {"getSpriteFrameDuration", lua_ParticleEmitter_getSpriteFrameDuration},
-        {"getSpriteFrameRandomOffset", lua_ParticleEmitter_getSpriteFrameRandomOffset},
-        {"getSpriteHeight", lua_ParticleEmitter_getSpriteHeight},
-        {"getSpriteWidth", lua_ParticleEmitter_getSpriteWidth},
-        {"getTexture", lua_ParticleEmitter_getTexture},
-        {"getVelocity", lua_ParticleEmitter_getVelocity},
-        {"getVelocityVariance", lua_ParticleEmitter_getVelocityVariance},
-        {"isActive", lua_ParticleEmitter_isActive},
-        {"isEllipsoid", lua_ParticleEmitter_isEllipsoid},
-        {"isSpriteAnimated", lua_ParticleEmitter_isSpriteAnimated},
-        {"isSpriteLooped", lua_ParticleEmitter_isSpriteLooped},
-        {"isStarted", lua_ParticleEmitter_isStarted},
-        {"release", lua_ParticleEmitter_release},
-        {"setAcceleration", lua_ParticleEmitter_setAcceleration},
-        {"setBlendMode", lua_ParticleEmitter_setBlendMode},
-        {"setColor", lua_ParticleEmitter_setColor},
-        {"setEllipsoid", lua_ParticleEmitter_setEllipsoid},
-        {"setEmissionRate", lua_ParticleEmitter_setEmissionRate},
-        {"setEnergy", lua_ParticleEmitter_setEnergy},
-        {"setOrbit", lua_ParticleEmitter_setOrbit},
-        {"setParticleCountMax", lua_ParticleEmitter_setParticleCountMax},
-        {"setPosition", lua_ParticleEmitter_setPosition},
-        {"setRotation", lua_ParticleEmitter_setRotation},
-        {"setRotationPerParticle", lua_ParticleEmitter_setRotationPerParticle},
-        {"setSize", lua_ParticleEmitter_setSize},
-        {"setSpriteAnimated", lua_ParticleEmitter_setSpriteAnimated},
-        {"setSpriteFrameCoords", lua_ParticleEmitter_setSpriteFrameCoords},
-        {"setSpriteFrameDuration", lua_ParticleEmitter_setSpriteFrameDuration},
-        {"setSpriteFrameRandomOffset", lua_ParticleEmitter_setSpriteFrameRandomOffset},
-        {"setSpriteLooped", lua_ParticleEmitter_setSpriteLooped},
-        {"setSpriteTexCoords", lua_ParticleEmitter_setSpriteTexCoords},
-        {"setTexture", lua_ParticleEmitter_setTexture},
-        {"setVelocity", lua_ParticleEmitter_setVelocity},
-        {"start", lua_ParticleEmitter_start},
-        {"stop", lua_ParticleEmitter_stop},
-        {"update", lua_ParticleEmitter_update},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_ParticleEmitter_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("ParticleEmitter", lua_members, NULL, lua_ParticleEmitter__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static ParticleEmitter* getInstance(lua_State* state)
 {
@@ -107,7 +26,7 @@ static ParticleEmitter* getInstance(lua_State* state)
     return (ParticleEmitter*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_ParticleEmitter__gc(lua_State* state)
+static int lua_ParticleEmitter__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -145,7 +64,7 @@ int lua_ParticleEmitter__gc(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_addRef(lua_State* state)
+static int lua_ParticleEmitter_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -177,7 +96,7 @@ int lua_ParticleEmitter_addRef(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_draw(lua_State* state)
+static int lua_ParticleEmitter_draw(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -233,7 +152,7 @@ int lua_ParticleEmitter_draw(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_emitOnce(lua_State* state)
+static int lua_ParticleEmitter_emitOnce(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -269,7 +188,7 @@ int lua_ParticleEmitter_emitOnce(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getAcceleration(lua_State* state)
+static int lua_ParticleEmitter_getAcceleration(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -313,7 +232,7 @@ int lua_ParticleEmitter_getAcceleration(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getAccelerationVariance(lua_State* state)
+static int lua_ParticleEmitter_getAccelerationVariance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -357,7 +276,7 @@ int lua_ParticleEmitter_getAccelerationVariance(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getBlendMode(lua_State* state)
+static int lua_ParticleEmitter_getBlendMode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -392,7 +311,7 @@ int lua_ParticleEmitter_getBlendMode(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getColorEnd(lua_State* state)
+static int lua_ParticleEmitter_getColorEnd(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -436,7 +355,7 @@ int lua_ParticleEmitter_getColorEnd(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getColorEndVariance(lua_State* state)
+static int lua_ParticleEmitter_getColorEndVariance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -480,7 +399,7 @@ int lua_ParticleEmitter_getColorEndVariance(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getColorStart(lua_State* state)
+static int lua_ParticleEmitter_getColorStart(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -524,7 +443,7 @@ int lua_ParticleEmitter_getColorStart(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getColorStartVariance(lua_State* state)
+static int lua_ParticleEmitter_getColorStartVariance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -568,7 +487,7 @@ int lua_ParticleEmitter_getColorStartVariance(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getEmissionRate(lua_State* state)
+static int lua_ParticleEmitter_getEmissionRate(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -603,7 +522,7 @@ int lua_ParticleEmitter_getEmissionRate(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getEnergyMax(lua_State* state)
+static int lua_ParticleEmitter_getEnergyMax(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -638,7 +557,7 @@ int lua_ParticleEmitter_getEnergyMax(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getEnergyMin(lua_State* state)
+static int lua_ParticleEmitter_getEnergyMin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -673,7 +592,7 @@ int lua_ParticleEmitter_getEnergyMin(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getNode(lua_State* state)
+static int lua_ParticleEmitter_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -717,7 +636,7 @@ int lua_ParticleEmitter_getNode(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getOrbitAcceleration(lua_State* state)
+static int lua_ParticleEmitter_getOrbitAcceleration(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -752,7 +671,7 @@ int lua_ParticleEmitter_getOrbitAcceleration(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getOrbitPosition(lua_State* state)
+static int lua_ParticleEmitter_getOrbitPosition(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -787,7 +706,7 @@ int lua_ParticleEmitter_getOrbitPosition(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getOrbitVelocity(lua_State* state)
+static int lua_ParticleEmitter_getOrbitVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -822,7 +741,7 @@ int lua_ParticleEmitter_getOrbitVelocity(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getParticleCountMax(lua_State* state)
+static int lua_ParticleEmitter_getParticleCountMax(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -857,7 +776,7 @@ int lua_ParticleEmitter_getParticleCountMax(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getParticlesCount(lua_State* state)
+static int lua_ParticleEmitter_getParticlesCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -892,7 +811,7 @@ int lua_ParticleEmitter_getParticlesCount(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getPosition(lua_State* state)
+static int lua_ParticleEmitter_getPosition(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -936,7 +855,7 @@ int lua_ParticleEmitter_getPosition(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getPositionVariance(lua_State* state)
+static int lua_ParticleEmitter_getPositionVariance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -980,7 +899,7 @@ int lua_ParticleEmitter_getPositionVariance(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getRefCount(lua_State* state)
+static int lua_ParticleEmitter_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1015,7 +934,7 @@ int lua_ParticleEmitter_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getRotationAxis(lua_State* state)
+static int lua_ParticleEmitter_getRotationAxis(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1059,7 +978,7 @@ int lua_ParticleEmitter_getRotationAxis(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getRotationAxisVariance(lua_State* state)
+static int lua_ParticleEmitter_getRotationAxisVariance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1103,7 +1022,7 @@ int lua_ParticleEmitter_getRotationAxisVariance(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getRotationPerParticleSpeedMax(lua_State* state)
+static int lua_ParticleEmitter_getRotationPerParticleSpeedMax(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1138,7 +1057,7 @@ int lua_ParticleEmitter_getRotationPerParticleSpeedMax(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getRotationPerParticleSpeedMin(lua_State* state)
+static int lua_ParticleEmitter_getRotationPerParticleSpeedMin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1173,7 +1092,7 @@ int lua_ParticleEmitter_getRotationPerParticleSpeedMin(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getRotationSpeedMax(lua_State* state)
+static int lua_ParticleEmitter_getRotationSpeedMax(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1208,7 +1127,7 @@ int lua_ParticleEmitter_getRotationSpeedMax(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getRotationSpeedMin(lua_State* state)
+static int lua_ParticleEmitter_getRotationSpeedMin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1243,7 +1162,7 @@ int lua_ParticleEmitter_getRotationSpeedMin(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getSizeEndMax(lua_State* state)
+static int lua_ParticleEmitter_getSizeEndMax(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1278,7 +1197,7 @@ int lua_ParticleEmitter_getSizeEndMax(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getSizeEndMin(lua_State* state)
+static int lua_ParticleEmitter_getSizeEndMin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1313,7 +1232,7 @@ int lua_ParticleEmitter_getSizeEndMin(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getSizeStartMax(lua_State* state)
+static int lua_ParticleEmitter_getSizeStartMax(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1348,7 +1267,7 @@ int lua_ParticleEmitter_getSizeStartMax(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getSizeStartMin(lua_State* state)
+static int lua_ParticleEmitter_getSizeStartMin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1383,7 +1302,7 @@ int lua_ParticleEmitter_getSizeStartMin(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getSpriteFrameCount(lua_State* state)
+static int lua_ParticleEmitter_getSpriteFrameCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1418,7 +1337,7 @@ int lua_ParticleEmitter_getSpriteFrameCount(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getSpriteFrameDuration(lua_State* state)
+static int lua_ParticleEmitter_getSpriteFrameDuration(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1453,7 +1372,7 @@ int lua_ParticleEmitter_getSpriteFrameDuration(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getSpriteFrameRandomOffset(lua_State* state)
+static int lua_ParticleEmitter_getSpriteFrameRandomOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1488,7 +1407,7 @@ int lua_ParticleEmitter_getSpriteFrameRandomOffset(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getSpriteHeight(lua_State* state)
+static int lua_ParticleEmitter_getSpriteHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1523,7 +1442,7 @@ int lua_ParticleEmitter_getSpriteHeight(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getSpriteWidth(lua_State* state)
+static int lua_ParticleEmitter_getSpriteWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1558,7 +1477,7 @@ int lua_ParticleEmitter_getSpriteWidth(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getTexture(lua_State* state)
+static int lua_ParticleEmitter_getTexture(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1602,7 +1521,7 @@ int lua_ParticleEmitter_getTexture(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getVelocity(lua_State* state)
+static int lua_ParticleEmitter_getVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1646,7 +1565,7 @@ int lua_ParticleEmitter_getVelocity(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_getVelocityVariance(lua_State* state)
+static int lua_ParticleEmitter_getVelocityVariance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1690,7 +1609,7 @@ int lua_ParticleEmitter_getVelocityVariance(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_isActive(lua_State* state)
+static int lua_ParticleEmitter_isActive(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1725,7 +1644,7 @@ int lua_ParticleEmitter_isActive(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_isEllipsoid(lua_State* state)
+static int lua_ParticleEmitter_isEllipsoid(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1760,7 +1679,7 @@ int lua_ParticleEmitter_isEllipsoid(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_isSpriteAnimated(lua_State* state)
+static int lua_ParticleEmitter_isSpriteAnimated(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1795,7 +1714,7 @@ int lua_ParticleEmitter_isSpriteAnimated(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_isSpriteLooped(lua_State* state)
+static int lua_ParticleEmitter_isSpriteLooped(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1830,7 +1749,7 @@ int lua_ParticleEmitter_isSpriteLooped(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_isStarted(lua_State* state)
+static int lua_ParticleEmitter_isStarted(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1865,7 +1784,7 @@ int lua_ParticleEmitter_isStarted(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_release(lua_State* state)
+static int lua_ParticleEmitter_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1897,7 +1816,7 @@ int lua_ParticleEmitter_release(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setAcceleration(lua_State* state)
+static int lua_ParticleEmitter_setAcceleration(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1949,7 +1868,7 @@ int lua_ParticleEmitter_setAcceleration(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setBlendMode(lua_State* state)
+static int lua_ParticleEmitter_setBlendMode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1985,7 +1904,7 @@ int lua_ParticleEmitter_setBlendMode(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setColor(lua_State* state)
+static int lua_ParticleEmitter_setColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2057,7 +1976,7 @@ int lua_ParticleEmitter_setColor(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setEllipsoid(lua_State* state)
+static int lua_ParticleEmitter_setEllipsoid(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2093,7 +2012,7 @@ int lua_ParticleEmitter_setEllipsoid(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setEmissionRate(lua_State* state)
+static int lua_ParticleEmitter_setEmissionRate(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2129,7 +2048,7 @@ int lua_ParticleEmitter_setEmissionRate(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setEnergy(lua_State* state)
+static int lua_ParticleEmitter_setEnergy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2169,7 +2088,7 @@ int lua_ParticleEmitter_setEnergy(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setOrbit(lua_State* state)
+static int lua_ParticleEmitter_setOrbit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2213,7 +2132,7 @@ int lua_ParticleEmitter_setOrbit(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setParticleCountMax(lua_State* state)
+static int lua_ParticleEmitter_setParticleCountMax(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2249,7 +2168,7 @@ int lua_ParticleEmitter_setParticleCountMax(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setPosition(lua_State* state)
+static int lua_ParticleEmitter_setPosition(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2301,7 +2220,7 @@ int lua_ParticleEmitter_setPosition(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setRotation(lua_State* state)
+static int lua_ParticleEmitter_setRotation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2361,7 +2280,7 @@ int lua_ParticleEmitter_setRotation(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setRotationPerParticle(lua_State* state)
+static int lua_ParticleEmitter_setRotationPerParticle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2401,7 +2320,7 @@ int lua_ParticleEmitter_setRotationPerParticle(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setSize(lua_State* state)
+static int lua_ParticleEmitter_setSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2449,7 +2368,7 @@ int lua_ParticleEmitter_setSize(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setSpriteAnimated(lua_State* state)
+static int lua_ParticleEmitter_setSpriteAnimated(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2485,7 +2404,7 @@ int lua_ParticleEmitter_setSpriteAnimated(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setSpriteFrameCoords(lua_State* state)
+static int lua_ParticleEmitter_setSpriteFrameCoords(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2560,7 +2479,7 @@ int lua_ParticleEmitter_setSpriteFrameCoords(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setSpriteFrameDuration(lua_State* state)
+static int lua_ParticleEmitter_setSpriteFrameDuration(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2596,7 +2515,7 @@ int lua_ParticleEmitter_setSpriteFrameDuration(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setSpriteFrameRandomOffset(lua_State* state)
+static int lua_ParticleEmitter_setSpriteFrameRandomOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2632,7 +2551,7 @@ int lua_ParticleEmitter_setSpriteFrameRandomOffset(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setSpriteLooped(lua_State* state)
+static int lua_ParticleEmitter_setSpriteLooped(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2668,7 +2587,7 @@ int lua_ParticleEmitter_setSpriteLooped(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setSpriteTexCoords(lua_State* state)
+static int lua_ParticleEmitter_setSpriteTexCoords(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2708,7 +2627,7 @@ int lua_ParticleEmitter_setSpriteTexCoords(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setTexture(lua_State* state)
+static int lua_ParticleEmitter_setTexture(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2773,7 +2692,7 @@ int lua_ParticleEmitter_setTexture(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_setVelocity(lua_State* state)
+static int lua_ParticleEmitter_setVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2825,7 +2744,7 @@ int lua_ParticleEmitter_setVelocity(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_start(lua_State* state)
+static int lua_ParticleEmitter_start(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2857,7 +2776,7 @@ int lua_ParticleEmitter_start(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_static_create(lua_State* state)
+static int lua_ParticleEmitter_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2973,7 +2892,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_stop(lua_State* state)
+static int lua_ParticleEmitter_stop(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3005,7 +2924,7 @@ int lua_ParticleEmitter_stop(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_update(lua_State* state)
+static int lua_ParticleEmitter_update(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3039,6 +2958,142 @@ int lua_ParticleEmitter_update(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of ParticleEmitter
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    ParticleEmitter* ptrObject = reinterpret_cast<ParticleEmitter*>(ptr);
+
+    if (strcmp(typeName, "Drawable") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Drawable*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_ParticleEmitter_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_ParticleEmitter_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    ParticleEmitter* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_ParticleEmitter()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_ParticleEmitter_addRef},
+        {"draw", lua_ParticleEmitter_draw},
+        {"emitOnce", lua_ParticleEmitter_emitOnce},
+        {"getAcceleration", lua_ParticleEmitter_getAcceleration},
+        {"getAccelerationVariance", lua_ParticleEmitter_getAccelerationVariance},
+        {"getBlendMode", lua_ParticleEmitter_getBlendMode},
+        {"getColorEnd", lua_ParticleEmitter_getColorEnd},
+        {"getColorEndVariance", lua_ParticleEmitter_getColorEndVariance},
+        {"getColorStart", lua_ParticleEmitter_getColorStart},
+        {"getColorStartVariance", lua_ParticleEmitter_getColorStartVariance},
+        {"getEmissionRate", lua_ParticleEmitter_getEmissionRate},
+        {"getEnergyMax", lua_ParticleEmitter_getEnergyMax},
+        {"getEnergyMin", lua_ParticleEmitter_getEnergyMin},
+        {"getNode", lua_ParticleEmitter_getNode},
+        {"getOrbitAcceleration", lua_ParticleEmitter_getOrbitAcceleration},
+        {"getOrbitPosition", lua_ParticleEmitter_getOrbitPosition},
+        {"getOrbitVelocity", lua_ParticleEmitter_getOrbitVelocity},
+        {"getParticleCountMax", lua_ParticleEmitter_getParticleCountMax},
+        {"getParticlesCount", lua_ParticleEmitter_getParticlesCount},
+        {"getPosition", lua_ParticleEmitter_getPosition},
+        {"getPositionVariance", lua_ParticleEmitter_getPositionVariance},
+        {"getRefCount", lua_ParticleEmitter_getRefCount},
+        {"getRotationAxis", lua_ParticleEmitter_getRotationAxis},
+        {"getRotationAxisVariance", lua_ParticleEmitter_getRotationAxisVariance},
+        {"getRotationPerParticleSpeedMax", lua_ParticleEmitter_getRotationPerParticleSpeedMax},
+        {"getRotationPerParticleSpeedMin", lua_ParticleEmitter_getRotationPerParticleSpeedMin},
+        {"getRotationSpeedMax", lua_ParticleEmitter_getRotationSpeedMax},
+        {"getRotationSpeedMin", lua_ParticleEmitter_getRotationSpeedMin},
+        {"getSizeEndMax", lua_ParticleEmitter_getSizeEndMax},
+        {"getSizeEndMin", lua_ParticleEmitter_getSizeEndMin},
+        {"getSizeStartMax", lua_ParticleEmitter_getSizeStartMax},
+        {"getSizeStartMin", lua_ParticleEmitter_getSizeStartMin},
+        {"getSpriteFrameCount", lua_ParticleEmitter_getSpriteFrameCount},
+        {"getSpriteFrameDuration", lua_ParticleEmitter_getSpriteFrameDuration},
+        {"getSpriteFrameRandomOffset", lua_ParticleEmitter_getSpriteFrameRandomOffset},
+        {"getSpriteHeight", lua_ParticleEmitter_getSpriteHeight},
+        {"getSpriteWidth", lua_ParticleEmitter_getSpriteWidth},
+        {"getTexture", lua_ParticleEmitter_getTexture},
+        {"getVelocity", lua_ParticleEmitter_getVelocity},
+        {"getVelocityVariance", lua_ParticleEmitter_getVelocityVariance},
+        {"isActive", lua_ParticleEmitter_isActive},
+        {"isEllipsoid", lua_ParticleEmitter_isEllipsoid},
+        {"isSpriteAnimated", lua_ParticleEmitter_isSpriteAnimated},
+        {"isSpriteLooped", lua_ParticleEmitter_isSpriteLooped},
+        {"isStarted", lua_ParticleEmitter_isStarted},
+        {"release", lua_ParticleEmitter_release},
+        {"setAcceleration", lua_ParticleEmitter_setAcceleration},
+        {"setBlendMode", lua_ParticleEmitter_setBlendMode},
+        {"setColor", lua_ParticleEmitter_setColor},
+        {"setEllipsoid", lua_ParticleEmitter_setEllipsoid},
+        {"setEmissionRate", lua_ParticleEmitter_setEmissionRate},
+        {"setEnergy", lua_ParticleEmitter_setEnergy},
+        {"setOrbit", lua_ParticleEmitter_setOrbit},
+        {"setParticleCountMax", lua_ParticleEmitter_setParticleCountMax},
+        {"setPosition", lua_ParticleEmitter_setPosition},
+        {"setRotation", lua_ParticleEmitter_setRotation},
+        {"setRotationPerParticle", lua_ParticleEmitter_setRotationPerParticle},
+        {"setSize", lua_ParticleEmitter_setSize},
+        {"setSpriteAnimated", lua_ParticleEmitter_setSpriteAnimated},
+        {"setSpriteFrameCoords", lua_ParticleEmitter_setSpriteFrameCoords},
+        {"setSpriteFrameDuration", lua_ParticleEmitter_setSpriteFrameDuration},
+        {"setSpriteFrameRandomOffset", lua_ParticleEmitter_setSpriteFrameRandomOffset},
+        {"setSpriteLooped", lua_ParticleEmitter_setSpriteLooped},
+        {"setSpriteTexCoords", lua_ParticleEmitter_setSpriteTexCoords},
+        {"setTexture", lua_ParticleEmitter_setTexture},
+        {"setVelocity", lua_ParticleEmitter_setVelocity},
+        {"start", lua_ParticleEmitter_start},
+        {"stop", lua_ParticleEmitter_stop},
+        {"update", lua_ParticleEmitter_update},
+        {"to", lua_ParticleEmitter_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_ParticleEmitter_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("ParticleEmitter", lua_members, NULL, lua_ParticleEmitter__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("ParticleEmitter", __convertTo);
 }
 
 }

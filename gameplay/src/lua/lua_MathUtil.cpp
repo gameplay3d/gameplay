@@ -8,22 +8,6 @@
 namespace gameplay
 {
 
-void luaRegister_MathUtil()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"smooth", lua_MathUtil_static_smooth},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("MathUtil", lua_members, NULL, lua_MathUtil__gc, lua_statics, scopePath);
-}
-
 static MathUtil* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "MathUtil");
@@ -31,7 +15,7 @@ static MathUtil* getInstance(lua_State* state)
     return (MathUtil*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_MathUtil__gc(lua_State* state)
+static int lua_MathUtil__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -69,7 +53,7 @@ int lua_MathUtil__gc(lua_State* state)
     return 0;
 }
 
-int lua_MathUtil_static_smooth(lua_State* state)
+static int lua_MathUtil_static_smooth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -151,6 +135,23 @@ int lua_MathUtil_static_smooth(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_MathUtil()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"smooth", lua_MathUtil_static_smooth},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("MathUtil", lua_members, NULL, lua_MathUtil__gc, lua_statics, scopePath);
+
 }
 
 }

@@ -7,18 +7,6 @@
 namespace gameplay
 {
 
-void luaRegister_Keyboard()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Keyboard", lua_members, NULL, lua_Keyboard__gc, lua_statics, scopePath);
-}
-
 static Keyboard* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Keyboard");
@@ -26,7 +14,7 @@ static Keyboard* getInstance(lua_State* state)
     return (Keyboard*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Keyboard__gc(lua_State* state)
+static int lua_Keyboard__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -62,6 +50,19 @@ int lua_Keyboard__gc(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_Keyboard()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Keyboard", lua_members, NULL, lua_Keyboard__gc, lua_statics, scopePath);
+
 }
 
 }

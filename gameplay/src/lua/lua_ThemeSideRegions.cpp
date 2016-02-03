@@ -12,27 +12,6 @@
 namespace gameplay
 {
 
-void luaRegister_ThemeSideRegions()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"bottom", lua_ThemeSideRegions_bottom},
-        {"left", lua_ThemeSideRegions_left},
-        {"right", lua_ThemeSideRegions_right},
-        {"top", lua_ThemeSideRegions_top},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"empty", lua_ThemeSideRegions_static_empty},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-    scopePath.push_back("Theme");
-
-    gameplay::ScriptUtil::registerClass("ThemeSideRegions", lua_members, lua_ThemeSideRegions__init, lua_ThemeSideRegions__gc, lua_statics, scopePath);
-}
-
 static Theme::SideRegions* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "ThemeSideRegions");
@@ -40,7 +19,7 @@ static Theme::SideRegions* getInstance(lua_State* state)
     return (Theme::SideRegions*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_ThemeSideRegions__gc(lua_State* state)
+static int lua_ThemeSideRegions__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -78,7 +57,7 @@ int lua_ThemeSideRegions__gc(lua_State* state)
     return 0;
 }
 
-int lua_ThemeSideRegions__init(lua_State* state)
+static int lua_ThemeSideRegions__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -115,7 +94,7 @@ int lua_ThemeSideRegions__init(lua_State* state)
     return 0;
 }
 
-int lua_ThemeSideRegions_bottom(lua_State* state)
+static int lua_ThemeSideRegions_bottom(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -144,7 +123,7 @@ int lua_ThemeSideRegions_bottom(lua_State* state)
     }
 }
 
-int lua_ThemeSideRegions_left(lua_State* state)
+static int lua_ThemeSideRegions_left(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -173,7 +152,7 @@ int lua_ThemeSideRegions_left(lua_State* state)
     }
 }
 
-int lua_ThemeSideRegions_right(lua_State* state)
+static int lua_ThemeSideRegions_right(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -202,7 +181,7 @@ int lua_ThemeSideRegions_right(lua_State* state)
     }
 }
 
-int lua_ThemeSideRegions_static_empty(lua_State* state)
+static int lua_ThemeSideRegions_static_empty(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -239,7 +218,7 @@ int lua_ThemeSideRegions_static_empty(lua_State* state)
     return 0;
 }
 
-int lua_ThemeSideRegions_top(lua_State* state)
+static int lua_ThemeSideRegions_top(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -266,6 +245,28 @@ int lua_ThemeSideRegions_top(lua_State* state)
 
         return 1;
     }
+}
+
+void luaRegister_ThemeSideRegions()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"bottom", lua_ThemeSideRegions_bottom},
+        {"left", lua_ThemeSideRegions_left},
+        {"right", lua_ThemeSideRegions_right},
+        {"top", lua_ThemeSideRegions_top},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"empty", lua_ThemeSideRegions_static_empty},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+    scopePath.push_back("Theme");
+
+    gameplay::ScriptUtil::registerClass("ThemeSideRegions", lua_members, lua_ThemeSideRegions__init, lua_ThemeSideRegions__gc, lua_statics, scopePath);
+
 }
 
 }

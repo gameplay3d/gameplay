@@ -8,32 +8,12 @@
 #include "PhysicsConstraint.h"
 #include "PhysicsHingeConstraint.h"
 #include "PhysicsRigidBody.h"
+#include "PhysicsConstraint.h"
 
 namespace gameplay
 {
 
-void luaRegister_PhysicsHingeConstraint()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getBreakingImpulse", lua_PhysicsHingeConstraint_getBreakingImpulse},
-        {"isEnabled", lua_PhysicsHingeConstraint_isEnabled},
-        {"setBreakingImpulse", lua_PhysicsHingeConstraint_setBreakingImpulse},
-        {"setEnabled", lua_PhysicsHingeConstraint_setEnabled},
-        {"setLimits", lua_PhysicsHingeConstraint_setLimits},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"centerOfMassMidpoint", lua_PhysicsHingeConstraint_static_centerOfMassMidpoint},
-        {"getRotationOffset", lua_PhysicsHingeConstraint_static_getRotationOffset},
-        {"getTranslationOffset", lua_PhysicsHingeConstraint_static_getTranslationOffset},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("PhysicsHingeConstraint", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static PhysicsHingeConstraint* getInstance(lua_State* state)
 {
@@ -42,7 +22,7 @@ static PhysicsHingeConstraint* getInstance(lua_State* state)
     return (PhysicsHingeConstraint*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsHingeConstraint_getBreakingImpulse(lua_State* state)
+static int lua_PhysicsHingeConstraint_getBreakingImpulse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -77,7 +57,7 @@ int lua_PhysicsHingeConstraint_getBreakingImpulse(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsHingeConstraint_isEnabled(lua_State* state)
+static int lua_PhysicsHingeConstraint_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -112,7 +92,7 @@ int lua_PhysicsHingeConstraint_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsHingeConstraint_setBreakingImpulse(lua_State* state)
+static int lua_PhysicsHingeConstraint_setBreakingImpulse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -148,7 +128,7 @@ int lua_PhysicsHingeConstraint_setBreakingImpulse(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsHingeConstraint_setEnabled(lua_State* state)
+static int lua_PhysicsHingeConstraint_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -184,7 +164,7 @@ int lua_PhysicsHingeConstraint_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsHingeConstraint_setLimits(lua_State* state)
+static int lua_PhysicsHingeConstraint_setLimits(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -250,7 +230,7 @@ int lua_PhysicsHingeConstraint_setLimits(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsHingeConstraint_static_centerOfMassMidpoint(lua_State* state)
+static int lua_PhysicsHingeConstraint_static_centerOfMassMidpoint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -312,7 +292,7 @@ int lua_PhysicsHingeConstraint_static_centerOfMassMidpoint(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsHingeConstraint_static_getRotationOffset(lua_State* state)
+static int lua_PhysicsHingeConstraint_static_getRotationOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -374,7 +354,7 @@ int lua_PhysicsHingeConstraint_static_getRotationOffset(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsHingeConstraint_static_getTranslationOffset(lua_State* state)
+static int lua_PhysicsHingeConstraint_static_getTranslationOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -434,6 +414,76 @@ int lua_PhysicsHingeConstraint_static_getTranslationOffset(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of PhysicsHingeConstraint
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    PhysicsHingeConstraint* ptrObject = reinterpret_cast<PhysicsHingeConstraint*>(ptr);
+
+    if (strcmp(typeName, "PhysicsConstraint") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsConstraint*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_PhysicsHingeConstraint_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_PhysicsHingeConstraint_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    PhysicsHingeConstraint* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_PhysicsHingeConstraint()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getBreakingImpulse", lua_PhysicsHingeConstraint_getBreakingImpulse},
+        {"isEnabled", lua_PhysicsHingeConstraint_isEnabled},
+        {"setBreakingImpulse", lua_PhysicsHingeConstraint_setBreakingImpulse},
+        {"setEnabled", lua_PhysicsHingeConstraint_setEnabled},
+        {"setLimits", lua_PhysicsHingeConstraint_setLimits},
+        {"to", lua_PhysicsHingeConstraint_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"centerOfMassMidpoint", lua_PhysicsHingeConstraint_static_centerOfMassMidpoint},
+        {"getRotationOffset", lua_PhysicsHingeConstraint_static_getRotationOffset},
+        {"getTranslationOffset", lua_PhysicsHingeConstraint_static_getTranslationOffset},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("PhysicsHingeConstraint", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("PhysicsHingeConstraint", __convertTo);
 }
 
 }

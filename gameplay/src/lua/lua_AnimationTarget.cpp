@@ -5,32 +5,34 @@
 #include "Animation.h"
 #include "AnimationTarget.h"
 #include "Base.h"
+#include "Button.h"
+#include "CheckBox.h"
+#include "Container.h"
+#include "Control.h"
+#include "Form.h"
 #include "Game.h"
+#include "ImageControl.h"
+#include "Joint.h"
+#include "JoystickControl.h"
+#include "Label.h"
 #include "MaterialParameter.h"
 #include "Node.h"
+#include "RadioButton.h"
+#include "Slider.h"
+#include "Sprite.h"
+#include "Text.h"
+#include "TextBox.h"
+#include "Transform.h"
+#include "Control.h"
+#include "MaterialParameter.h"
+#include "Sprite.h"
+#include "Text.h"
+#include "Transform.h"
 
 namespace gameplay
 {
 
-void luaRegister_AnimationTarget()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"createAnimation", lua_AnimationTarget_createAnimation},
-        {"createAnimationFromBy", lua_AnimationTarget_createAnimationFromBy},
-        {"createAnimationFromTo", lua_AnimationTarget_createAnimationFromTo},
-        {"destroyAnimation", lua_AnimationTarget_destroyAnimation},
-        {"getAnimation", lua_AnimationTarget_getAnimation},
-        {"getAnimationPropertyComponentCount", lua_AnimationTarget_getAnimationPropertyComponentCount},
-        {"getAnimationPropertyValue", lua_AnimationTarget_getAnimationPropertyValue},
-        {"setAnimationPropertyValue", lua_AnimationTarget_setAnimationPropertyValue},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("AnimationTarget", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static AnimationTarget* getInstance(lua_State* state)
 {
@@ -39,7 +41,7 @@ static AnimationTarget* getInstance(lua_State* state)
     return (AnimationTarget*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AnimationTarget_createAnimation(lua_State* state)
+static int lua_AnimationTarget_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -242,7 +244,7 @@ int lua_AnimationTarget_createAnimation(lua_State* state)
     return 0;
 }
 
-int lua_AnimationTarget_createAnimationFromBy(lua_State* state)
+static int lua_AnimationTarget_createAnimationFromBy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -310,7 +312,7 @@ int lua_AnimationTarget_createAnimationFromBy(lua_State* state)
     return 0;
 }
 
-int lua_AnimationTarget_createAnimationFromTo(lua_State* state)
+static int lua_AnimationTarget_createAnimationFromTo(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -378,7 +380,7 @@ int lua_AnimationTarget_createAnimationFromTo(lua_State* state)
     return 0;
 }
 
-int lua_AnimationTarget_destroyAnimation(lua_State* state)
+static int lua_AnimationTarget_destroyAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -428,7 +430,7 @@ int lua_AnimationTarget_destroyAnimation(lua_State* state)
     return 0;
 }
 
-int lua_AnimationTarget_getAnimation(lua_State* state)
+static int lua_AnimationTarget_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -502,7 +504,7 @@ int lua_AnimationTarget_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_AnimationTarget_getAnimationPropertyComponentCount(lua_State* state)
+static int lua_AnimationTarget_getAnimationPropertyComponentCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -541,7 +543,7 @@ int lua_AnimationTarget_getAnimationPropertyComponentCount(lua_State* state)
     return 0;
 }
 
-int lua_AnimationTarget_getAnimationPropertyValue(lua_State* state)
+static int lua_AnimationTarget_getAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -587,7 +589,7 @@ int lua_AnimationTarget_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_AnimationTarget_setAnimationPropertyValue(lua_State* state)
+static int lua_AnimationTarget_setAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -663,6 +665,89 @@ int lua_AnimationTarget_setAnimationPropertyValue(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of AnimationTarget
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    AnimationTarget* ptrObject = reinterpret_cast<AnimationTarget*>(ptr);
+
+    if (strcmp(typeName, "Control") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Control*>(ptrObject));
+    }
+    else if (strcmp(typeName, "MaterialParameter") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<MaterialParameter*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Sprite") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Sprite*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Text") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Text*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Transform") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Transform*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_AnimationTarget_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_AnimationTarget_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    AnimationTarget* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_AnimationTarget()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"createAnimation", lua_AnimationTarget_createAnimation},
+        {"createAnimationFromBy", lua_AnimationTarget_createAnimationFromBy},
+        {"createAnimationFromTo", lua_AnimationTarget_createAnimationFromTo},
+        {"destroyAnimation", lua_AnimationTarget_destroyAnimation},
+        {"getAnimation", lua_AnimationTarget_getAnimation},
+        {"getAnimationPropertyComponentCount", lua_AnimationTarget_getAnimationPropertyComponentCount},
+        {"getAnimationPropertyValue", lua_AnimationTarget_getAnimationPropertyValue},
+        {"setAnimationPropertyValue", lua_AnimationTarget_setAnimationPropertyValue},
+        {"to", lua_AnimationTarget_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("AnimationTarget", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("AnimationTarget", __convertTo);
 }
 
 }

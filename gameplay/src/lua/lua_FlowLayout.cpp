@@ -9,28 +9,12 @@
 #include "Game.h"
 #include "Layout.h"
 #include "Ref.h"
+#include "Layout.h"
 
 namespace gameplay
 {
 
-void luaRegister_FlowLayout()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_FlowLayout_addRef},
-        {"getHorizontalSpacing", lua_FlowLayout_getHorizontalSpacing},
-        {"getRefCount", lua_FlowLayout_getRefCount},
-        {"getType", lua_FlowLayout_getType},
-        {"getVerticalSpacing", lua_FlowLayout_getVerticalSpacing},
-        {"release", lua_FlowLayout_release},
-        {"setSpacing", lua_FlowLayout_setSpacing},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("FlowLayout", lua_members, NULL, lua_FlowLayout__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static FlowLayout* getInstance(lua_State* state)
 {
@@ -39,7 +23,7 @@ static FlowLayout* getInstance(lua_State* state)
     return (FlowLayout*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_FlowLayout__gc(lua_State* state)
+static int lua_FlowLayout__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -77,7 +61,7 @@ int lua_FlowLayout__gc(lua_State* state)
     return 0;
 }
 
-int lua_FlowLayout_addRef(lua_State* state)
+static int lua_FlowLayout_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -109,7 +93,7 @@ int lua_FlowLayout_addRef(lua_State* state)
     return 0;
 }
 
-int lua_FlowLayout_getHorizontalSpacing(lua_State* state)
+static int lua_FlowLayout_getHorizontalSpacing(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -144,7 +128,7 @@ int lua_FlowLayout_getHorizontalSpacing(lua_State* state)
     return 0;
 }
 
-int lua_FlowLayout_getRefCount(lua_State* state)
+static int lua_FlowLayout_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -179,7 +163,7 @@ int lua_FlowLayout_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_FlowLayout_getType(lua_State* state)
+static int lua_FlowLayout_getType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -214,7 +198,7 @@ int lua_FlowLayout_getType(lua_State* state)
     return 0;
 }
 
-int lua_FlowLayout_getVerticalSpacing(lua_State* state)
+static int lua_FlowLayout_getVerticalSpacing(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -249,7 +233,7 @@ int lua_FlowLayout_getVerticalSpacing(lua_State* state)
     return 0;
 }
 
-int lua_FlowLayout_release(lua_State* state)
+static int lua_FlowLayout_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -281,7 +265,7 @@ int lua_FlowLayout_release(lua_State* state)
     return 0;
 }
 
-int lua_FlowLayout_setSpacing(lua_State* state)
+static int lua_FlowLayout_setSpacing(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -319,6 +303,72 @@ int lua_FlowLayout_setSpacing(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of FlowLayout
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    FlowLayout* ptrObject = reinterpret_cast<FlowLayout*>(ptr);
+
+    if (strcmp(typeName, "Layout") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Layout*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_FlowLayout_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_FlowLayout_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    FlowLayout* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_FlowLayout()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_FlowLayout_addRef},
+        {"getHorizontalSpacing", lua_FlowLayout_getHorizontalSpacing},
+        {"getRefCount", lua_FlowLayout_getRefCount},
+        {"getType", lua_FlowLayout_getType},
+        {"getVerticalSpacing", lua_FlowLayout_getVerticalSpacing},
+        {"release", lua_FlowLayout_release},
+        {"setSpacing", lua_FlowLayout_setSpacing},
+        {"to", lua_FlowLayout_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("FlowLayout", lua_members, NULL, lua_FlowLayout__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("FlowLayout", __convertTo);
 }
 
 }

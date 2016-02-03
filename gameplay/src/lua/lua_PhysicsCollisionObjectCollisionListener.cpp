@@ -17,20 +17,6 @@
 namespace gameplay
 {
 
-void luaRegister_PhysicsCollisionObjectCollisionListener()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"collisionEvent", lua_PhysicsCollisionObjectCollisionListener_collisionEvent},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("PhysicsCollisionObject");
-
-    gameplay::ScriptUtil::registerClass("PhysicsCollisionObjectCollisionListener", lua_members, NULL, lua_PhysicsCollisionObjectCollisionListener__gc, lua_statics, scopePath);
-}
-
 static PhysicsCollisionObject::CollisionListener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionObjectCollisionListener");
@@ -38,7 +24,7 @@ static PhysicsCollisionObject::CollisionListener* getInstance(lua_State* state)
     return (PhysicsCollisionObject::CollisionListener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
+static int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -76,7 +62,7 @@ int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
+static int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -206,6 +192,21 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_PhysicsCollisionObjectCollisionListener()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"collisionEvent", lua_PhysicsCollisionObjectCollisionListener_collisionEvent},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("PhysicsCollisionObject");
+
+    gameplay::ScriptUtil::registerClass("PhysicsCollisionObjectCollisionListener", lua_members, NULL, lua_PhysicsCollisionObjectCollisionListener__gc, lua_statics, scopePath);
+
 }
 
 }
