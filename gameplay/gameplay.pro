@@ -9,8 +9,7 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG += c++11
 CONFIG -= qt
-
-#DEFINES += GP_NO_PLATFORM
+CONFIG(debug, debug|release): DEFINES += _DEBUG
 
 SOURCES += src/AbsoluteLayout.cpp \
     src/AIAgent.cpp \
@@ -548,18 +547,19 @@ linux: INCLUDEPATH += /usr/include/harfbuzz
 
 macx: OBJECTIVE_SOURCES += src/PlatformMacOSX.mm
 macx: OBJECTIVE_SOURCES += src/gameplay-main-macosx.mm
-macx: QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
-macx: QMAKE_OBJECTIVE_CFLAGS += -x objective-c++ -stdlib=libc++ -w -arch x86_64
+macx: QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w -arch x86_64
 macx: LIBS += -F/System/Library/Frameworks -framework GameKit
 macx: LIBS += -F/System/Library/Frameworks -framework IOKit
 macx: LIBS += -F/System/Library/Frameworks -framework QuartzCore
 macx: LIBS += -F/System/Library/Frameworks -framework OpenAL
 macx: LIBS += -F/System/Library/Frameworks -framework OpenGL
 macx: LIBS += -F/System/Library/Frameworks -framework Cocoa
+macx: LIBS += -F/System/Library/Frameworks -framework Foundation
 
 win32: SOURCES += src/PlatformWindows.cpp
 win32: SOURCES += src/gameplay-main-windows.cpp
 win32: DEFINES += WIN32 _UNICODE UNICODE
-win32: INCLUDEPATH += $$(DXSDK_DIR)Include
+win32: INCLUDEPATH += $$(DXSDK_DIR)/Include
 win32: QMAKE_CXXFLAGS_WARN_ON -= -w34100
 win32: QMAKE_CXXFLAGS_WARN_ON -= -w34189
+win32: QMAKE_CXXFLAGS_WARN_ON -= -w4302
