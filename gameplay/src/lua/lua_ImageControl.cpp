@@ -15,139 +15,12 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Theme.h"
+#include "Control.h"
 
 namespace gameplay
 {
 
-void luaRegister_ImageControl()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addListener", lua_ImageControl_addListener},
-        {"addRef", lua_ImageControl_addRef},
-        {"addScript", lua_ImageControl_addScript},
-        {"addScriptCallback", lua_ImageControl_addScriptCallback},
-        {"canFocus", lua_ImageControl_canFocus},
-        {"clearScripts", lua_ImageControl_clearScripts},
-        {"createAnimation", lua_ImageControl_createAnimation},
-        {"createAnimationFromBy", lua_ImageControl_createAnimationFromBy},
-        {"createAnimationFromTo", lua_ImageControl_createAnimationFromTo},
-        {"destroyAnimation", lua_ImageControl_destroyAnimation},
-        {"getAbsoluteBounds", lua_ImageControl_getAbsoluteBounds},
-        {"getAlignment", lua_ImageControl_getAlignment},
-        {"getAnimation", lua_ImageControl_getAnimation},
-        {"getAnimationPropertyComponentCount", lua_ImageControl_getAnimationPropertyComponentCount},
-        {"getAnimationPropertyValue", lua_ImageControl_getAnimationPropertyValue},
-        {"getAutoSize", lua_ImageControl_getAutoSize},
-        {"getBorder", lua_ImageControl_getBorder},
-        {"getBounds", lua_ImageControl_getBounds},
-        {"getClip", lua_ImageControl_getClip},
-        {"getClipBounds", lua_ImageControl_getClipBounds},
-        {"getConsumeInputEvents", lua_ImageControl_getConsumeInputEvents},
-        {"getCursorColor", lua_ImageControl_getCursorColor},
-        {"getCursorRegion", lua_ImageControl_getCursorRegion},
-        {"getCursorUVs", lua_ImageControl_getCursorUVs},
-        {"getFocusIndex", lua_ImageControl_getFocusIndex},
-        {"getFont", lua_ImageControl_getFont},
-        {"getFontSize", lua_ImageControl_getFontSize},
-        {"getHeight", lua_ImageControl_getHeight},
-        {"getId", lua_ImageControl_getId},
-        {"getImageColor", lua_ImageControl_getImageColor},
-        {"getImageRegion", lua_ImageControl_getImageRegion},
-        {"getImageUVs", lua_ImageControl_getImageUVs},
-        {"getMargin", lua_ImageControl_getMargin},
-        {"getOpacity", lua_ImageControl_getOpacity},
-        {"getPadding", lua_ImageControl_getPadding},
-        {"getParent", lua_ImageControl_getParent},
-        {"getRefCount", lua_ImageControl_getRefCount},
-        {"getRegionDst", lua_ImageControl_getRegionDst},
-        {"getRegionSrc", lua_ImageControl_getRegionSrc},
-        {"getScriptEvent", lua_ImageControl_getScriptEvent},
-        {"getSkinColor", lua_ImageControl_getSkinColor},
-        {"getSkinRegion", lua_ImageControl_getSkinRegion},
-        {"getState", lua_ImageControl_getState},
-        {"getStyle", lua_ImageControl_getStyle},
-        {"getTextAlignment", lua_ImageControl_getTextAlignment},
-        {"getTextColor", lua_ImageControl_getTextColor},
-        {"getTextRightToLeft", lua_ImageControl_getTextRightToLeft},
-        {"getTheme", lua_ImageControl_getTheme},
-        {"getTopLevelForm", lua_ImageControl_getTopLevelForm},
-        {"getTypeName", lua_ImageControl_getTypeName},
-        {"getWidth", lua_ImageControl_getWidth},
-        {"getX", lua_ImageControl_getX},
-        {"getY", lua_ImageControl_getY},
-        {"getZIndex", lua_ImageControl_getZIndex},
-        {"hasFocus", lua_ImageControl_hasFocus},
-        {"hasScriptListener", lua_ImageControl_hasScriptListener},
-        {"isChild", lua_ImageControl_isChild},
-        {"isContainer", lua_ImageControl_isContainer},
-        {"isEnabled", lua_ImageControl_isEnabled},
-        {"isEnabledInHierarchy", lua_ImageControl_isEnabledInHierarchy},
-        {"isHeightPercentage", lua_ImageControl_isHeightPercentage},
-        {"isVisible", lua_ImageControl_isVisible},
-        {"isVisibleInHierarchy", lua_ImageControl_isVisibleInHierarchy},
-        {"isWidthPercentage", lua_ImageControl_isWidthPercentage},
-        {"isXPercentage", lua_ImageControl_isXPercentage},
-        {"isYPercentage", lua_ImageControl_isYPercentage},
-        {"release", lua_ImageControl_release},
-        {"removeListener", lua_ImageControl_removeListener},
-        {"removeScript", lua_ImageControl_removeScript},
-        {"removeScriptCallback", lua_ImageControl_removeScriptCallback},
-        {"setAlignment", lua_ImageControl_setAlignment},
-        {"setAnimationPropertyValue", lua_ImageControl_setAnimationPropertyValue},
-        {"setAutoSize", lua_ImageControl_setAutoSize},
-        {"setBorder", lua_ImageControl_setBorder},
-        {"setBounds", lua_ImageControl_setBounds},
-        {"setCanFocus", lua_ImageControl_setCanFocus},
-        {"setConsumeInputEvents", lua_ImageControl_setConsumeInputEvents},
-        {"setCursorColor", lua_ImageControl_setCursorColor},
-        {"setCursorRegion", lua_ImageControl_setCursorRegion},
-        {"setEnabled", lua_ImageControl_setEnabled},
-        {"setFocus", lua_ImageControl_setFocus},
-        {"setFocusIndex", lua_ImageControl_setFocusIndex},
-        {"setFont", lua_ImageControl_setFont},
-        {"setFontSize", lua_ImageControl_setFontSize},
-        {"setHeight", lua_ImageControl_setHeight},
-        {"setId", lua_ImageControl_setId},
-        {"setImage", lua_ImageControl_setImage},
-        {"setImageColor", lua_ImageControl_setImageColor},
-        {"setImageRegion", lua_ImageControl_setImageRegion},
-        {"setMargin", lua_ImageControl_setMargin},
-        {"setOpacity", lua_ImageControl_setOpacity},
-        {"setPadding", lua_ImageControl_setPadding},
-        {"setPosition", lua_ImageControl_setPosition},
-        {"setRegionDst", lua_ImageControl_setRegionDst},
-        {"setRegionSrc", lua_ImageControl_setRegionSrc},
-        {"setSize", lua_ImageControl_setSize},
-        {"setSkinColor", lua_ImageControl_setSkinColor},
-        {"setSkinRegion", lua_ImageControl_setSkinRegion},
-        {"setStyle", lua_ImageControl_setStyle},
-        {"setTextAlignment", lua_ImageControl_setTextAlignment},
-        {"setTextColor", lua_ImageControl_setTextColor},
-        {"setTextRightToLeft", lua_ImageControl_setTextRightToLeft},
-        {"setVisible", lua_ImageControl_setVisible},
-        {"setWidth", lua_ImageControl_setWidth},
-        {"setX", lua_ImageControl_setX},
-        {"setY", lua_ImageControl_setY},
-        {"setZIndex", lua_ImageControl_setZIndex},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"ANIMATE_OPACITY", lua_ImageControl_static_ANIMATE_OPACITY},
-        {"ANIMATE_POSITION", lua_ImageControl_static_ANIMATE_POSITION},
-        {"ANIMATE_POSITION_X", lua_ImageControl_static_ANIMATE_POSITION_X},
-        {"ANIMATE_POSITION_Y", lua_ImageControl_static_ANIMATE_POSITION_Y},
-        {"ANIMATE_SIZE", lua_ImageControl_static_ANIMATE_SIZE},
-        {"ANIMATE_SIZE_HEIGHT", lua_ImageControl_static_ANIMATE_SIZE_HEIGHT},
-        {"ANIMATE_SIZE_WIDTH", lua_ImageControl_static_ANIMATE_SIZE_WIDTH},
-        {"create", lua_ImageControl_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("ImageControl", lua_members, NULL, lua_ImageControl__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static ImageControl* getInstance(lua_State* state)
 {
@@ -156,7 +29,7 @@ static ImageControl* getInstance(lua_State* state)
     return (ImageControl*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_ImageControl__gc(lua_State* state)
+static int lua_ImageControl__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -194,7 +67,7 @@ int lua_ImageControl__gc(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_addListener(lua_State* state)
+static int lua_ImageControl_addListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -240,7 +113,7 @@ int lua_ImageControl_addListener(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_addRef(lua_State* state)
+static int lua_ImageControl_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -272,7 +145,7 @@ int lua_ImageControl_addRef(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_addScript(lua_State* state)
+static int lua_ImageControl_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -320,7 +193,7 @@ int lua_ImageControl_addScript(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_addScriptCallback(lua_State* state)
+static int lua_ImageControl_addScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -366,7 +239,7 @@ int lua_ImageControl_addScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_canFocus(lua_State* state)
+static int lua_ImageControl_canFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -401,7 +274,7 @@ int lua_ImageControl_canFocus(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_clearScripts(lua_State* state)
+static int lua_ImageControl_clearScripts(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -433,7 +306,7 @@ int lua_ImageControl_clearScripts(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_createAnimation(lua_State* state)
+static int lua_ImageControl_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -636,7 +509,7 @@ int lua_ImageControl_createAnimation(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_createAnimationFromBy(lua_State* state)
+static int lua_ImageControl_createAnimationFromBy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -704,7 +577,7 @@ int lua_ImageControl_createAnimationFromBy(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_createAnimationFromTo(lua_State* state)
+static int lua_ImageControl_createAnimationFromTo(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -772,7 +645,7 @@ int lua_ImageControl_createAnimationFromTo(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_destroyAnimation(lua_State* state)
+static int lua_ImageControl_destroyAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -822,7 +695,7 @@ int lua_ImageControl_destroyAnimation(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getAbsoluteBounds(lua_State* state)
+static int lua_ImageControl_getAbsoluteBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -866,7 +739,7 @@ int lua_ImageControl_getAbsoluteBounds(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getAlignment(lua_State* state)
+static int lua_ImageControl_getAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -901,7 +774,7 @@ int lua_ImageControl_getAlignment(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getAnimation(lua_State* state)
+static int lua_ImageControl_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -975,7 +848,7 @@ int lua_ImageControl_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getAnimationPropertyComponentCount(lua_State* state)
+static int lua_ImageControl_getAnimationPropertyComponentCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1014,7 +887,7 @@ int lua_ImageControl_getAnimationPropertyComponentCount(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getAnimationPropertyValue(lua_State* state)
+static int lua_ImageControl_getAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1060,7 +933,7 @@ int lua_ImageControl_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getAutoSize(lua_State* state)
+static int lua_ImageControl_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1095,7 +968,7 @@ int lua_ImageControl_getAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getBorder(lua_State* state)
+static int lua_ImageControl_getBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1169,7 +1042,7 @@ int lua_ImageControl_getBorder(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getBounds(lua_State* state)
+static int lua_ImageControl_getBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1213,7 +1086,7 @@ int lua_ImageControl_getBounds(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getClip(lua_State* state)
+static int lua_ImageControl_getClip(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1257,7 +1130,7 @@ int lua_ImageControl_getClip(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getClipBounds(lua_State* state)
+static int lua_ImageControl_getClipBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1301,7 +1174,7 @@ int lua_ImageControl_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getConsumeInputEvents(lua_State* state)
+static int lua_ImageControl_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1336,7 +1209,7 @@ int lua_ImageControl_getConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getCursorColor(lua_State* state)
+static int lua_ImageControl_getCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1384,7 +1257,7 @@ int lua_ImageControl_getCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getCursorRegion(lua_State* state)
+static int lua_ImageControl_getCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1432,7 +1305,7 @@ int lua_ImageControl_getCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getCursorUVs(lua_State* state)
+static int lua_ImageControl_getCursorUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1480,7 +1353,7 @@ int lua_ImageControl_getCursorUVs(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getFocusIndex(lua_State* state)
+static int lua_ImageControl_getFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1515,7 +1388,7 @@ int lua_ImageControl_getFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getFont(lua_State* state)
+static int lua_ImageControl_getFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1589,7 +1462,7 @@ int lua_ImageControl_getFont(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getFontSize(lua_State* state)
+static int lua_ImageControl_getFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1645,7 +1518,7 @@ int lua_ImageControl_getFontSize(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getHeight(lua_State* state)
+static int lua_ImageControl_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1680,7 +1553,7 @@ int lua_ImageControl_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getId(lua_State* state)
+static int lua_ImageControl_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1715,7 +1588,7 @@ int lua_ImageControl_getId(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getImageColor(lua_State* state)
+static int lua_ImageControl_getImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1767,7 +1640,7 @@ int lua_ImageControl_getImageColor(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getImageRegion(lua_State* state)
+static int lua_ImageControl_getImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1819,7 +1692,7 @@ int lua_ImageControl_getImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getImageUVs(lua_State* state)
+static int lua_ImageControl_getImageUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1871,7 +1744,7 @@ int lua_ImageControl_getImageUVs(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getMargin(lua_State* state)
+static int lua_ImageControl_getMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1915,7 +1788,7 @@ int lua_ImageControl_getMargin(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getOpacity(lua_State* state)
+static int lua_ImageControl_getOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1971,7 +1844,7 @@ int lua_ImageControl_getOpacity(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getPadding(lua_State* state)
+static int lua_ImageControl_getPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2015,7 +1888,7 @@ int lua_ImageControl_getPadding(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getParent(lua_State* state)
+static int lua_ImageControl_getParent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2059,7 +1932,7 @@ int lua_ImageControl_getParent(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getRefCount(lua_State* state)
+static int lua_ImageControl_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2094,7 +1967,7 @@ int lua_ImageControl_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getRegionDst(lua_State* state)
+static int lua_ImageControl_getRegionDst(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2138,7 +2011,7 @@ int lua_ImageControl_getRegionDst(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getRegionSrc(lua_State* state)
+static int lua_ImageControl_getRegionSrc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2182,7 +2055,7 @@ int lua_ImageControl_getRegionSrc(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getScriptEvent(lua_State* state)
+static int lua_ImageControl_getScriptEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2230,7 +2103,7 @@ int lua_ImageControl_getScriptEvent(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getSkinColor(lua_State* state)
+static int lua_ImageControl_getSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2304,7 +2177,7 @@ int lua_ImageControl_getSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getSkinRegion(lua_State* state)
+static int lua_ImageControl_getSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2378,7 +2251,7 @@ int lua_ImageControl_getSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getState(lua_State* state)
+static int lua_ImageControl_getState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2413,7 +2286,7 @@ int lua_ImageControl_getState(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getStyle(lua_State* state)
+static int lua_ImageControl_getStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2457,7 +2330,7 @@ int lua_ImageControl_getStyle(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getTextAlignment(lua_State* state)
+static int lua_ImageControl_getTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2513,7 +2386,7 @@ int lua_ImageControl_getTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getTextColor(lua_State* state)
+static int lua_ImageControl_getTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2587,7 +2460,7 @@ int lua_ImageControl_getTextColor(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getTextRightToLeft(lua_State* state)
+static int lua_ImageControl_getTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2643,7 +2516,7 @@ int lua_ImageControl_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getTheme(lua_State* state)
+static int lua_ImageControl_getTheme(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2687,7 +2560,7 @@ int lua_ImageControl_getTheme(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getTopLevelForm(lua_State* state)
+static int lua_ImageControl_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2731,7 +2604,7 @@ int lua_ImageControl_getTopLevelForm(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getTypeName(lua_State* state)
+static int lua_ImageControl_getTypeName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2766,7 +2639,7 @@ int lua_ImageControl_getTypeName(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getWidth(lua_State* state)
+static int lua_ImageControl_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2801,7 +2674,7 @@ int lua_ImageControl_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getX(lua_State* state)
+static int lua_ImageControl_getX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2836,7 +2709,7 @@ int lua_ImageControl_getX(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getY(lua_State* state)
+static int lua_ImageControl_getY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2871,7 +2744,7 @@ int lua_ImageControl_getY(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_getZIndex(lua_State* state)
+static int lua_ImageControl_getZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2906,7 +2779,7 @@ int lua_ImageControl_getZIndex(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_hasFocus(lua_State* state)
+static int lua_ImageControl_hasFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2941,7 +2814,7 @@ int lua_ImageControl_hasFocus(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_hasScriptListener(lua_State* state)
+static int lua_ImageControl_hasScriptListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3004,7 +2877,7 @@ int lua_ImageControl_hasScriptListener(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isChild(lua_State* state)
+static int lua_ImageControl_isChild(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3049,7 +2922,7 @@ int lua_ImageControl_isChild(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isContainer(lua_State* state)
+static int lua_ImageControl_isContainer(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3084,7 +2957,7 @@ int lua_ImageControl_isContainer(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isEnabled(lua_State* state)
+static int lua_ImageControl_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3119,7 +2992,7 @@ int lua_ImageControl_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isEnabledInHierarchy(lua_State* state)
+static int lua_ImageControl_isEnabledInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3154,7 +3027,7 @@ int lua_ImageControl_isEnabledInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isHeightPercentage(lua_State* state)
+static int lua_ImageControl_isHeightPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3189,7 +3062,7 @@ int lua_ImageControl_isHeightPercentage(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isVisible(lua_State* state)
+static int lua_ImageControl_isVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3224,7 +3097,7 @@ int lua_ImageControl_isVisible(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isVisibleInHierarchy(lua_State* state)
+static int lua_ImageControl_isVisibleInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3259,7 +3132,7 @@ int lua_ImageControl_isVisibleInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isWidthPercentage(lua_State* state)
+static int lua_ImageControl_isWidthPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3294,7 +3167,7 @@ int lua_ImageControl_isWidthPercentage(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isXPercentage(lua_State* state)
+static int lua_ImageControl_isXPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3329,7 +3202,7 @@ int lua_ImageControl_isXPercentage(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_isYPercentage(lua_State* state)
+static int lua_ImageControl_isYPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3364,7 +3237,7 @@ int lua_ImageControl_isYPercentage(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_release(lua_State* state)
+static int lua_ImageControl_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3396,7 +3269,7 @@ int lua_ImageControl_release(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_removeListener(lua_State* state)
+static int lua_ImageControl_removeListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3438,7 +3311,7 @@ int lua_ImageControl_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_removeScript(lua_State* state)
+static int lua_ImageControl_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3477,7 +3350,7 @@ int lua_ImageControl_removeScript(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_removeScriptCallback(lua_State* state)
+static int lua_ImageControl_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3523,7 +3396,7 @@ int lua_ImageControl_removeScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setAlignment(lua_State* state)
+static int lua_ImageControl_setAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3559,7 +3432,7 @@ int lua_ImageControl_setAlignment(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setAnimationPropertyValue(lua_State* state)
+static int lua_ImageControl_setAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3637,7 +3510,7 @@ int lua_ImageControl_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setAutoSize(lua_State* state)
+static int lua_ImageControl_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3673,7 +3546,7 @@ int lua_ImageControl_setAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setBorder(lua_State* state)
+static int lua_ImageControl_setBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3755,7 +3628,7 @@ int lua_ImageControl_setBorder(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setBounds(lua_State* state)
+static int lua_ImageControl_setBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3797,7 +3670,7 @@ int lua_ImageControl_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setCanFocus(lua_State* state)
+static int lua_ImageControl_setCanFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3833,7 +3706,7 @@ int lua_ImageControl_setCanFocus(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setConsumeInputEvents(lua_State* state)
+static int lua_ImageControl_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3869,7 +3742,7 @@ int lua_ImageControl_setConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setCursorColor(lua_State* state)
+static int lua_ImageControl_setCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3915,7 +3788,7 @@ int lua_ImageControl_setCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setCursorRegion(lua_State* state)
+static int lua_ImageControl_setCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3961,7 +3834,7 @@ int lua_ImageControl_setCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setEnabled(lua_State* state)
+static int lua_ImageControl_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3997,7 +3870,7 @@ int lua_ImageControl_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setFocus(lua_State* state)
+static int lua_ImageControl_setFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4032,7 +3905,7 @@ int lua_ImageControl_setFocus(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setFocusIndex(lua_State* state)
+static int lua_ImageControl_setFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4068,7 +3941,7 @@ int lua_ImageControl_setFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setFont(lua_State* state)
+static int lua_ImageControl_setFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4138,7 +4011,7 @@ int lua_ImageControl_setFont(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setFontSize(lua_State* state)
+static int lua_ImageControl_setFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4196,7 +4069,7 @@ int lua_ImageControl_setFontSize(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setHeight(lua_State* state)
+static int lua_ImageControl_setHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4254,7 +4127,7 @@ int lua_ImageControl_setHeight(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setId(lua_State* state)
+static int lua_ImageControl_setId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4290,7 +4163,7 @@ int lua_ImageControl_setId(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setImage(lua_State* state)
+static int lua_ImageControl_setImage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4326,7 +4199,7 @@ int lua_ImageControl_setImage(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setImageColor(lua_State* state)
+static int lua_ImageControl_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4404,7 +4277,7 @@ int lua_ImageControl_setImageColor(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setImageRegion(lua_State* state)
+static int lua_ImageControl_setImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4482,7 +4355,7 @@ int lua_ImageControl_setImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setMargin(lua_State* state)
+static int lua_ImageControl_setMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4530,7 +4403,7 @@ int lua_ImageControl_setMargin(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setOpacity(lua_State* state)
+static int lua_ImageControl_setOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4588,7 +4461,7 @@ int lua_ImageControl_setOpacity(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setPadding(lua_State* state)
+static int lua_ImageControl_setPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4636,7 +4509,7 @@ int lua_ImageControl_setPadding(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setPosition(lua_State* state)
+static int lua_ImageControl_setPosition(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4676,7 +4549,7 @@ int lua_ImageControl_setPosition(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setRegionDst(lua_State* state)
+static int lua_ImageControl_setRegionDst(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4751,7 +4624,7 @@ int lua_ImageControl_setRegionDst(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setRegionSrc(lua_State* state)
+static int lua_ImageControl_setRegionSrc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4826,7 +4699,7 @@ int lua_ImageControl_setRegionSrc(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setSize(lua_State* state)
+static int lua_ImageControl_setSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4866,7 +4739,7 @@ int lua_ImageControl_setSize(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setSkinColor(lua_State* state)
+static int lua_ImageControl_setSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4936,7 +4809,7 @@ int lua_ImageControl_setSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setSkinRegion(lua_State* state)
+static int lua_ImageControl_setSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5006,7 +4879,7 @@ int lua_ImageControl_setSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setStyle(lua_State* state)
+static int lua_ImageControl_setStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5048,7 +4921,7 @@ int lua_ImageControl_setStyle(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setTextAlignment(lua_State* state)
+static int lua_ImageControl_setTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5106,7 +4979,7 @@ int lua_ImageControl_setTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setTextColor(lua_State* state)
+static int lua_ImageControl_setTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5176,7 +5049,7 @@ int lua_ImageControl_setTextColor(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setTextRightToLeft(lua_State* state)
+static int lua_ImageControl_setTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5234,7 +5107,7 @@ int lua_ImageControl_setTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setVisible(lua_State* state)
+static int lua_ImageControl_setVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5270,7 +5143,7 @@ int lua_ImageControl_setVisible(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setWidth(lua_State* state)
+static int lua_ImageControl_setWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5328,7 +5201,7 @@ int lua_ImageControl_setWidth(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setX(lua_State* state)
+static int lua_ImageControl_setX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5386,7 +5259,7 @@ int lua_ImageControl_setX(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setY(lua_State* state)
+static int lua_ImageControl_setY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5444,7 +5317,7 @@ int lua_ImageControl_setY(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_setZIndex(lua_State* state)
+static int lua_ImageControl_setZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5480,7 +5353,7 @@ int lua_ImageControl_setZIndex(lua_State* state)
     return 0;
 }
 
-int lua_ImageControl_static_ANIMATE_OPACITY(lua_State* state)
+static int lua_ImageControl_static_ANIMATE_OPACITY(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5497,7 +5370,7 @@ int lua_ImageControl_static_ANIMATE_OPACITY(lua_State* state)
     return 1;
 }
 
-int lua_ImageControl_static_ANIMATE_POSITION(lua_State* state)
+static int lua_ImageControl_static_ANIMATE_POSITION(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5514,7 +5387,7 @@ int lua_ImageControl_static_ANIMATE_POSITION(lua_State* state)
     return 1;
 }
 
-int lua_ImageControl_static_ANIMATE_POSITION_X(lua_State* state)
+static int lua_ImageControl_static_ANIMATE_POSITION_X(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5531,7 +5404,7 @@ int lua_ImageControl_static_ANIMATE_POSITION_X(lua_State* state)
     return 1;
 }
 
-int lua_ImageControl_static_ANIMATE_POSITION_Y(lua_State* state)
+static int lua_ImageControl_static_ANIMATE_POSITION_Y(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5548,7 +5421,7 @@ int lua_ImageControl_static_ANIMATE_POSITION_Y(lua_State* state)
     return 1;
 }
 
-int lua_ImageControl_static_ANIMATE_SIZE(lua_State* state)
+static int lua_ImageControl_static_ANIMATE_SIZE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5565,7 +5438,7 @@ int lua_ImageControl_static_ANIMATE_SIZE(lua_State* state)
     return 1;
 }
 
-int lua_ImageControl_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
+static int lua_ImageControl_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5582,7 +5455,7 @@ int lua_ImageControl_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
     return 1;
 }
 
-int lua_ImageControl_static_ANIMATE_SIZE_WIDTH(lua_State* state)
+static int lua_ImageControl_static_ANIMATE_SIZE_WIDTH(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5599,7 +5472,7 @@ int lua_ImageControl_static_ANIMATE_SIZE_WIDTH(lua_State* state)
     return 1;
 }
 
-int lua_ImageControl_static_create(lua_State* state)
+static int lua_ImageControl_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5681,6 +5554,183 @@ int lua_ImageControl_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of ImageControl
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    ImageControl* ptrObject = reinterpret_cast<ImageControl*>(ptr);
+
+    if (strcmp(typeName, "Control") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Control*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_ImageControl_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_ImageControl_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    ImageControl* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_ImageControl()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addListener", lua_ImageControl_addListener},
+        {"addRef", lua_ImageControl_addRef},
+        {"addScript", lua_ImageControl_addScript},
+        {"addScriptCallback", lua_ImageControl_addScriptCallback},
+        {"canFocus", lua_ImageControl_canFocus},
+        {"clearScripts", lua_ImageControl_clearScripts},
+        {"createAnimation", lua_ImageControl_createAnimation},
+        {"createAnimationFromBy", lua_ImageControl_createAnimationFromBy},
+        {"createAnimationFromTo", lua_ImageControl_createAnimationFromTo},
+        {"destroyAnimation", lua_ImageControl_destroyAnimation},
+        {"getAbsoluteBounds", lua_ImageControl_getAbsoluteBounds},
+        {"getAlignment", lua_ImageControl_getAlignment},
+        {"getAnimation", lua_ImageControl_getAnimation},
+        {"getAnimationPropertyComponentCount", lua_ImageControl_getAnimationPropertyComponentCount},
+        {"getAnimationPropertyValue", lua_ImageControl_getAnimationPropertyValue},
+        {"getAutoSize", lua_ImageControl_getAutoSize},
+        {"getBorder", lua_ImageControl_getBorder},
+        {"getBounds", lua_ImageControl_getBounds},
+        {"getClip", lua_ImageControl_getClip},
+        {"getClipBounds", lua_ImageControl_getClipBounds},
+        {"getConsumeInputEvents", lua_ImageControl_getConsumeInputEvents},
+        {"getCursorColor", lua_ImageControl_getCursorColor},
+        {"getCursorRegion", lua_ImageControl_getCursorRegion},
+        {"getCursorUVs", lua_ImageControl_getCursorUVs},
+        {"getFocusIndex", lua_ImageControl_getFocusIndex},
+        {"getFont", lua_ImageControl_getFont},
+        {"getFontSize", lua_ImageControl_getFontSize},
+        {"getHeight", lua_ImageControl_getHeight},
+        {"getId", lua_ImageControl_getId},
+        {"getImageColor", lua_ImageControl_getImageColor},
+        {"getImageRegion", lua_ImageControl_getImageRegion},
+        {"getImageUVs", lua_ImageControl_getImageUVs},
+        {"getMargin", lua_ImageControl_getMargin},
+        {"getOpacity", lua_ImageControl_getOpacity},
+        {"getPadding", lua_ImageControl_getPadding},
+        {"getParent", lua_ImageControl_getParent},
+        {"getRefCount", lua_ImageControl_getRefCount},
+        {"getRegionDst", lua_ImageControl_getRegionDst},
+        {"getRegionSrc", lua_ImageControl_getRegionSrc},
+        {"getScriptEvent", lua_ImageControl_getScriptEvent},
+        {"getSkinColor", lua_ImageControl_getSkinColor},
+        {"getSkinRegion", lua_ImageControl_getSkinRegion},
+        {"getState", lua_ImageControl_getState},
+        {"getStyle", lua_ImageControl_getStyle},
+        {"getTextAlignment", lua_ImageControl_getTextAlignment},
+        {"getTextColor", lua_ImageControl_getTextColor},
+        {"getTextRightToLeft", lua_ImageControl_getTextRightToLeft},
+        {"getTheme", lua_ImageControl_getTheme},
+        {"getTopLevelForm", lua_ImageControl_getTopLevelForm},
+        {"getTypeName", lua_ImageControl_getTypeName},
+        {"getWidth", lua_ImageControl_getWidth},
+        {"getX", lua_ImageControl_getX},
+        {"getY", lua_ImageControl_getY},
+        {"getZIndex", lua_ImageControl_getZIndex},
+        {"hasFocus", lua_ImageControl_hasFocus},
+        {"hasScriptListener", lua_ImageControl_hasScriptListener},
+        {"isChild", lua_ImageControl_isChild},
+        {"isContainer", lua_ImageControl_isContainer},
+        {"isEnabled", lua_ImageControl_isEnabled},
+        {"isEnabledInHierarchy", lua_ImageControl_isEnabledInHierarchy},
+        {"isHeightPercentage", lua_ImageControl_isHeightPercentage},
+        {"isVisible", lua_ImageControl_isVisible},
+        {"isVisibleInHierarchy", lua_ImageControl_isVisibleInHierarchy},
+        {"isWidthPercentage", lua_ImageControl_isWidthPercentage},
+        {"isXPercentage", lua_ImageControl_isXPercentage},
+        {"isYPercentage", lua_ImageControl_isYPercentage},
+        {"release", lua_ImageControl_release},
+        {"removeListener", lua_ImageControl_removeListener},
+        {"removeScript", lua_ImageControl_removeScript},
+        {"removeScriptCallback", lua_ImageControl_removeScriptCallback},
+        {"setAlignment", lua_ImageControl_setAlignment},
+        {"setAnimationPropertyValue", lua_ImageControl_setAnimationPropertyValue},
+        {"setAutoSize", lua_ImageControl_setAutoSize},
+        {"setBorder", lua_ImageControl_setBorder},
+        {"setBounds", lua_ImageControl_setBounds},
+        {"setCanFocus", lua_ImageControl_setCanFocus},
+        {"setConsumeInputEvents", lua_ImageControl_setConsumeInputEvents},
+        {"setCursorColor", lua_ImageControl_setCursorColor},
+        {"setCursorRegion", lua_ImageControl_setCursorRegion},
+        {"setEnabled", lua_ImageControl_setEnabled},
+        {"setFocus", lua_ImageControl_setFocus},
+        {"setFocusIndex", lua_ImageControl_setFocusIndex},
+        {"setFont", lua_ImageControl_setFont},
+        {"setFontSize", lua_ImageControl_setFontSize},
+        {"setHeight", lua_ImageControl_setHeight},
+        {"setId", lua_ImageControl_setId},
+        {"setImage", lua_ImageControl_setImage},
+        {"setImageColor", lua_ImageControl_setImageColor},
+        {"setImageRegion", lua_ImageControl_setImageRegion},
+        {"setMargin", lua_ImageControl_setMargin},
+        {"setOpacity", lua_ImageControl_setOpacity},
+        {"setPadding", lua_ImageControl_setPadding},
+        {"setPosition", lua_ImageControl_setPosition},
+        {"setRegionDst", lua_ImageControl_setRegionDst},
+        {"setRegionSrc", lua_ImageControl_setRegionSrc},
+        {"setSize", lua_ImageControl_setSize},
+        {"setSkinColor", lua_ImageControl_setSkinColor},
+        {"setSkinRegion", lua_ImageControl_setSkinRegion},
+        {"setStyle", lua_ImageControl_setStyle},
+        {"setTextAlignment", lua_ImageControl_setTextAlignment},
+        {"setTextColor", lua_ImageControl_setTextColor},
+        {"setTextRightToLeft", lua_ImageControl_setTextRightToLeft},
+        {"setVisible", lua_ImageControl_setVisible},
+        {"setWidth", lua_ImageControl_setWidth},
+        {"setX", lua_ImageControl_setX},
+        {"setY", lua_ImageControl_setY},
+        {"setZIndex", lua_ImageControl_setZIndex},
+        {"to", lua_ImageControl_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"ANIMATE_OPACITY", lua_ImageControl_static_ANIMATE_OPACITY},
+        {"ANIMATE_POSITION", lua_ImageControl_static_ANIMATE_POSITION},
+        {"ANIMATE_POSITION_X", lua_ImageControl_static_ANIMATE_POSITION_X},
+        {"ANIMATE_POSITION_Y", lua_ImageControl_static_ANIMATE_POSITION_Y},
+        {"ANIMATE_SIZE", lua_ImageControl_static_ANIMATE_SIZE},
+        {"ANIMATE_SIZE_HEIGHT", lua_ImageControl_static_ANIMATE_SIZE_HEIGHT},
+        {"ANIMATE_SIZE_WIDTH", lua_ImageControl_static_ANIMATE_SIZE_WIDTH},
+        {"create", lua_ImageControl_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("ImageControl", lua_members, NULL, lua_ImageControl__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("ImageControl", __convertTo);
 }
 
 }

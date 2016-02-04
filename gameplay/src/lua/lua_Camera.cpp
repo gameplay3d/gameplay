@@ -4,6 +4,7 @@
 #include "lua_Camera.h"
 #include "Animation.h"
 #include "AnimationTarget.h"
+#include "AudioListener.h"
 #include "Base.h"
 #include "Camera.h"
 #include "Game.h"
@@ -13,58 +14,15 @@
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "TerrainPatch.h"
+#include "Transform.h"
+#include "Ref.h"
 #include "Transform.h"
 
 namespace gameplay
 {
 
-void luaRegister_Camera()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addListener", lua_Camera_addListener},
-        {"addRef", lua_Camera_addRef},
-        {"getAspectRatio", lua_Camera_getAspectRatio},
-        {"getCameraType", lua_Camera_getCameraType},
-        {"getFarPlane", lua_Camera_getFarPlane},
-        {"getFieldOfView", lua_Camera_getFieldOfView},
-        {"getFrustum", lua_Camera_getFrustum},
-        {"getInverseViewMatrix", lua_Camera_getInverseViewMatrix},
-        {"getInverseViewProjectionMatrix", lua_Camera_getInverseViewProjectionMatrix},
-        {"getNearPlane", lua_Camera_getNearPlane},
-        {"getNode", lua_Camera_getNode},
-        {"getProjectionMatrix", lua_Camera_getProjectionMatrix},
-        {"getRefCount", lua_Camera_getRefCount},
-        {"getViewMatrix", lua_Camera_getViewMatrix},
-        {"getViewProjectionMatrix", lua_Camera_getViewProjectionMatrix},
-        {"getZoomX", lua_Camera_getZoomX},
-        {"getZoomY", lua_Camera_getZoomY},
-        {"pickRay", lua_Camera_pickRay},
-        {"project", lua_Camera_project},
-        {"release", lua_Camera_release},
-        {"removeListener", lua_Camera_removeListener},
-        {"resetProjectionMatrix", lua_Camera_resetProjectionMatrix},
-        {"setAspectRatio", lua_Camera_setAspectRatio},
-        {"setFarPlane", lua_Camera_setFarPlane},
-        {"setFieldOfView", lua_Camera_setFieldOfView},
-        {"setNearPlane", lua_Camera_setNearPlane},
-        {"setProjectionMatrix", lua_Camera_setProjectionMatrix},
-        {"setZoomX", lua_Camera_setZoomX},
-        {"setZoomY", lua_Camera_setZoomY},
-        {"unproject", lua_Camera_unproject},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_Camera_static_create},
-        {"createOrthographic", lua_Camera_static_createOrthographic},
-        {"createPerspective", lua_Camera_static_createPerspective},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Camera", lua_members, NULL, lua_Camera__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Camera* getInstance(lua_State* state)
 {
@@ -73,7 +31,7 @@ static Camera* getInstance(lua_State* state)
     return (Camera*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Camera__gc(lua_State* state)
+static int lua_Camera__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -111,7 +69,7 @@ int lua_Camera__gc(lua_State* state)
     return 0;
 }
 
-int lua_Camera_addListener(lua_State* state)
+static int lua_Camera_addListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -153,7 +111,7 @@ int lua_Camera_addListener(lua_State* state)
     return 0;
 }
 
-int lua_Camera_addRef(lua_State* state)
+static int lua_Camera_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -185,7 +143,7 @@ int lua_Camera_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getAspectRatio(lua_State* state)
+static int lua_Camera_getAspectRatio(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -220,7 +178,7 @@ int lua_Camera_getAspectRatio(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getCameraType(lua_State* state)
+static int lua_Camera_getCameraType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -255,7 +213,7 @@ int lua_Camera_getCameraType(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getFarPlane(lua_State* state)
+static int lua_Camera_getFarPlane(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -290,7 +248,7 @@ int lua_Camera_getFarPlane(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getFieldOfView(lua_State* state)
+static int lua_Camera_getFieldOfView(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -325,7 +283,7 @@ int lua_Camera_getFieldOfView(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getFrustum(lua_State* state)
+static int lua_Camera_getFrustum(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -369,7 +327,7 @@ int lua_Camera_getFrustum(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getInverseViewMatrix(lua_State* state)
+static int lua_Camera_getInverseViewMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -413,7 +371,7 @@ int lua_Camera_getInverseViewMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getInverseViewProjectionMatrix(lua_State* state)
+static int lua_Camera_getInverseViewProjectionMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -457,7 +415,7 @@ int lua_Camera_getInverseViewProjectionMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getNearPlane(lua_State* state)
+static int lua_Camera_getNearPlane(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -492,7 +450,7 @@ int lua_Camera_getNearPlane(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getNode(lua_State* state)
+static int lua_Camera_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -536,7 +494,7 @@ int lua_Camera_getNode(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getProjectionMatrix(lua_State* state)
+static int lua_Camera_getProjectionMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -580,7 +538,7 @@ int lua_Camera_getProjectionMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getRefCount(lua_State* state)
+static int lua_Camera_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -615,7 +573,7 @@ int lua_Camera_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getViewMatrix(lua_State* state)
+static int lua_Camera_getViewMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -659,7 +617,7 @@ int lua_Camera_getViewMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getViewProjectionMatrix(lua_State* state)
+static int lua_Camera_getViewProjectionMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -703,7 +661,7 @@ int lua_Camera_getViewProjectionMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getZoomX(lua_State* state)
+static int lua_Camera_getZoomX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -738,7 +696,7 @@ int lua_Camera_getZoomX(lua_State* state)
     return 0;
 }
 
-int lua_Camera_getZoomY(lua_State* state)
+static int lua_Camera_getZoomY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -773,7 +731,7 @@ int lua_Camera_getZoomY(lua_State* state)
     return 0;
 }
 
-int lua_Camera_pickRay(lua_State* state)
+static int lua_Camera_pickRay(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -833,7 +791,7 @@ int lua_Camera_pickRay(lua_State* state)
     return 0;
 }
 
-int lua_Camera_project(lua_State* state)
+static int lua_Camera_project(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -921,7 +879,7 @@ int lua_Camera_project(lua_State* state)
     return 0;
 }
 
-int lua_Camera_release(lua_State* state)
+static int lua_Camera_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -953,7 +911,7 @@ int lua_Camera_release(lua_State* state)
     return 0;
 }
 
-int lua_Camera_removeListener(lua_State* state)
+static int lua_Camera_removeListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -995,7 +953,7 @@ int lua_Camera_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_Camera_resetProjectionMatrix(lua_State* state)
+static int lua_Camera_resetProjectionMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1027,7 +985,7 @@ int lua_Camera_resetProjectionMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Camera_setAspectRatio(lua_State* state)
+static int lua_Camera_setAspectRatio(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1063,7 +1021,7 @@ int lua_Camera_setAspectRatio(lua_State* state)
     return 0;
 }
 
-int lua_Camera_setFarPlane(lua_State* state)
+static int lua_Camera_setFarPlane(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1099,7 +1057,7 @@ int lua_Camera_setFarPlane(lua_State* state)
     return 0;
 }
 
-int lua_Camera_setFieldOfView(lua_State* state)
+static int lua_Camera_setFieldOfView(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1135,7 +1093,7 @@ int lua_Camera_setFieldOfView(lua_State* state)
     return 0;
 }
 
-int lua_Camera_setNearPlane(lua_State* state)
+static int lua_Camera_setNearPlane(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1171,7 +1129,7 @@ int lua_Camera_setNearPlane(lua_State* state)
     return 0;
 }
 
-int lua_Camera_setProjectionMatrix(lua_State* state)
+static int lua_Camera_setProjectionMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1213,7 +1171,7 @@ int lua_Camera_setProjectionMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Camera_setZoomX(lua_State* state)
+static int lua_Camera_setZoomX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1249,7 +1207,7 @@ int lua_Camera_setZoomX(lua_State* state)
     return 0;
 }
 
-int lua_Camera_setZoomY(lua_State* state)
+static int lua_Camera_setZoomY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1285,7 +1243,7 @@ int lua_Camera_setZoomY(lua_State* state)
     return 0;
 }
 
-int lua_Camera_static_create(lua_State* state)
+static int lua_Camera_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1337,7 +1295,7 @@ int lua_Camera_static_create(lua_State* state)
     return 0;
 }
 
-int lua_Camera_static_createOrthographic(lua_State* state)
+static int lua_Camera_static_createOrthographic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1399,7 +1357,7 @@ int lua_Camera_static_createOrthographic(lua_State* state)
     return 0;
 }
 
-int lua_Camera_static_createPerspective(lua_State* state)
+static int lua_Camera_static_createPerspective(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1457,7 +1415,7 @@ int lua_Camera_static_createPerspective(lua_State* state)
     return 0;
 }
 
-int lua_Camera_unproject(lua_State* state)
+static int lua_Camera_unproject(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1519,6 +1477,105 @@ int lua_Camera_unproject(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Camera
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Camera* ptrObject = reinterpret_cast<Camera*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Transform::Listener") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Transform::Listener*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Camera_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Camera_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Camera* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Camera()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addListener", lua_Camera_addListener},
+        {"addRef", lua_Camera_addRef},
+        {"getAspectRatio", lua_Camera_getAspectRatio},
+        {"getCameraType", lua_Camera_getCameraType},
+        {"getFarPlane", lua_Camera_getFarPlane},
+        {"getFieldOfView", lua_Camera_getFieldOfView},
+        {"getFrustum", lua_Camera_getFrustum},
+        {"getInverseViewMatrix", lua_Camera_getInverseViewMatrix},
+        {"getInverseViewProjectionMatrix", lua_Camera_getInverseViewProjectionMatrix},
+        {"getNearPlane", lua_Camera_getNearPlane},
+        {"getNode", lua_Camera_getNode},
+        {"getProjectionMatrix", lua_Camera_getProjectionMatrix},
+        {"getRefCount", lua_Camera_getRefCount},
+        {"getViewMatrix", lua_Camera_getViewMatrix},
+        {"getViewProjectionMatrix", lua_Camera_getViewProjectionMatrix},
+        {"getZoomX", lua_Camera_getZoomX},
+        {"getZoomY", lua_Camera_getZoomY},
+        {"pickRay", lua_Camera_pickRay},
+        {"project", lua_Camera_project},
+        {"release", lua_Camera_release},
+        {"removeListener", lua_Camera_removeListener},
+        {"resetProjectionMatrix", lua_Camera_resetProjectionMatrix},
+        {"setAspectRatio", lua_Camera_setAspectRatio},
+        {"setFarPlane", lua_Camera_setFarPlane},
+        {"setFieldOfView", lua_Camera_setFieldOfView},
+        {"setNearPlane", lua_Camera_setNearPlane},
+        {"setProjectionMatrix", lua_Camera_setProjectionMatrix},
+        {"setZoomX", lua_Camera_setZoomX},
+        {"setZoomY", lua_Camera_setZoomY},
+        {"unproject", lua_Camera_unproject},
+        {"to", lua_Camera_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_Camera_static_create},
+        {"createOrthographic", lua_Camera_static_createOrthographic},
+        {"createPerspective", lua_Camera_static_createPerspective},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Camera", lua_members, NULL, lua_Camera__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Camera", __convertTo);
 }
 
 }

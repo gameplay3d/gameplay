@@ -11,20 +11,6 @@
 namespace gameplay
 {
 
-void luaRegister_AIAgentListener()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"messageReceived", lua_AIAgentListener_messageReceived},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("AIAgent");
-
-    gameplay::ScriptUtil::registerClass("AIAgentListener", lua_members, NULL, lua_AIAgentListener__gc, lua_statics, scopePath);
-}
-
 static AIAgent::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AIAgentListener");
@@ -32,7 +18,7 @@ static AIAgent::Listener* getInstance(lua_State* state)
     return (AIAgent::Listener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AIAgentListener__gc(lua_State* state)
+static int lua_AIAgentListener__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -70,7 +56,7 @@ int lua_AIAgentListener__gc(lua_State* state)
     return 0;
 }
 
-int lua_AIAgentListener_messageReceived(lua_State* state)
+static int lua_AIAgentListener_messageReceived(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -113,6 +99,21 @@ int lua_AIAgentListener_messageReceived(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_AIAgentListener()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"messageReceived", lua_AIAgentListener_messageReceived},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("AIAgent");
+
+    gameplay::ScriptUtil::registerClass("AIAgentListener", lua_members, NULL, lua_AIAgentListener__gc, lua_statics, scopePath);
+
 }
 
 }

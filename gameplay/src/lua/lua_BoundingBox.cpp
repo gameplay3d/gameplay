@@ -10,31 +10,6 @@
 namespace gameplay
 {
 
-void luaRegister_BoundingBox()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getCenter", lua_BoundingBox_getCenter},
-        {"getCorners", lua_BoundingBox_getCorners},
-        {"intersects", lua_BoundingBox_intersects},
-        {"isEmpty", lua_BoundingBox_isEmpty},
-        {"max", lua_BoundingBox_max},
-        {"merge", lua_BoundingBox_merge},
-        {"min", lua_BoundingBox_min},
-        {"set", lua_BoundingBox_set},
-        {"transform", lua_BoundingBox_transform},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"empty", lua_BoundingBox_static_empty},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("BoundingBox", lua_members, lua_BoundingBox__init, lua_BoundingBox__gc, lua_statics, scopePath);
-}
-
 static BoundingBox* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "BoundingBox");
@@ -42,7 +17,7 @@ static BoundingBox* getInstance(lua_State* state)
     return (BoundingBox*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_BoundingBox__gc(lua_State* state)
+static int lua_BoundingBox__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -80,7 +55,7 @@ int lua_BoundingBox__gc(lua_State* state)
     return 0;
 }
 
-int lua_BoundingBox__init(lua_State* state)
+static int lua_BoundingBox__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -243,7 +218,7 @@ int lua_BoundingBox__init(lua_State* state)
     return 0;
 }
 
-int lua_BoundingBox_getCenter(lua_State* state)
+static int lua_BoundingBox_getCenter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -314,7 +289,7 @@ int lua_BoundingBox_getCenter(lua_State* state)
     return 0;
 }
 
-int lua_BoundingBox_getCorners(lua_State* state)
+static int lua_BoundingBox_getCorners(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -356,7 +331,7 @@ int lua_BoundingBox_getCorners(lua_State* state)
     return 0;
 }
 
-int lua_BoundingBox_intersects(lua_State* state)
+static int lua_BoundingBox_intersects(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -485,7 +460,7 @@ int lua_BoundingBox_intersects(lua_State* state)
     return 0;
 }
 
-int lua_BoundingBox_isEmpty(lua_State* state)
+static int lua_BoundingBox_isEmpty(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -520,7 +495,7 @@ int lua_BoundingBox_isEmpty(lua_State* state)
     return 0;
 }
 
-int lua_BoundingBox_max(lua_State* state)
+static int lua_BoundingBox_max(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -564,7 +539,7 @@ int lua_BoundingBox_max(lua_State* state)
     }
 }
 
-int lua_BoundingBox_merge(lua_State* state)
+static int lua_BoundingBox_merge(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -624,7 +599,7 @@ int lua_BoundingBox_merge(lua_State* state)
     return 0;
 }
 
-int lua_BoundingBox_min(lua_State* state)
+static int lua_BoundingBox_min(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -668,7 +643,7 @@ int lua_BoundingBox_min(lua_State* state)
     }
 }
 
-int lua_BoundingBox_set(lua_State* state)
+static int lua_BoundingBox_set(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -800,7 +775,7 @@ int lua_BoundingBox_set(lua_State* state)
     return 0;
 }
 
-int lua_BoundingBox_static_empty(lua_State* state)
+static int lua_BoundingBox_static_empty(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -837,7 +812,7 @@ int lua_BoundingBox_static_empty(lua_State* state)
     return 0;
 }
 
-int lua_BoundingBox_transform(lua_State* state)
+static int lua_BoundingBox_transform(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -877,6 +852,32 @@ int lua_BoundingBox_transform(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_BoundingBox()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getCenter", lua_BoundingBox_getCenter},
+        {"getCorners", lua_BoundingBox_getCorners},
+        {"intersects", lua_BoundingBox_intersects},
+        {"isEmpty", lua_BoundingBox_isEmpty},
+        {"max", lua_BoundingBox_max},
+        {"merge", lua_BoundingBox_merge},
+        {"min", lua_BoundingBox_min},
+        {"set", lua_BoundingBox_set},
+        {"transform", lua_BoundingBox_transform},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"empty", lua_BoundingBox_static_empty},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("BoundingBox", lua_members, lua_BoundingBox__init, lua_BoundingBox__gc, lua_statics, scopePath);
+
 }
 
 }

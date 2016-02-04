@@ -5,146 +5,30 @@
 #include "Animation.h"
 #include "AnimationTarget.h"
 #include "Base.h"
+#include "Button.h"
+#include "CheckBox.h"
 #include "Control.h"
 #include "Form.h"
 #include "Game.h"
 #include "Label.h"
 #include "MaterialParameter.h"
 #include "Node.h"
+#include "RadioButton.h"
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Slider.h"
+#include "TextBox.h"
 #include "Theme.h"
+#include "Button.h"
+#include "Control.h"
+#include "Slider.h"
+#include "TextBox.h"
 
 namespace gameplay
 {
 
-void luaRegister_Label()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addListener", lua_Label_addListener},
-        {"addRef", lua_Label_addRef},
-        {"addScript", lua_Label_addScript},
-        {"addScriptCallback", lua_Label_addScriptCallback},
-        {"canFocus", lua_Label_canFocus},
-        {"clearScripts", lua_Label_clearScripts},
-        {"createAnimation", lua_Label_createAnimation},
-        {"createAnimationFromBy", lua_Label_createAnimationFromBy},
-        {"createAnimationFromTo", lua_Label_createAnimationFromTo},
-        {"destroyAnimation", lua_Label_destroyAnimation},
-        {"getAbsoluteBounds", lua_Label_getAbsoluteBounds},
-        {"getAlignment", lua_Label_getAlignment},
-        {"getAnimation", lua_Label_getAnimation},
-        {"getAnimationPropertyComponentCount", lua_Label_getAnimationPropertyComponentCount},
-        {"getAnimationPropertyValue", lua_Label_getAnimationPropertyValue},
-        {"getAutoSize", lua_Label_getAutoSize},
-        {"getBorder", lua_Label_getBorder},
-        {"getBounds", lua_Label_getBounds},
-        {"getClip", lua_Label_getClip},
-        {"getClipBounds", lua_Label_getClipBounds},
-        {"getConsumeInputEvents", lua_Label_getConsumeInputEvents},
-        {"getCursorColor", lua_Label_getCursorColor},
-        {"getCursorRegion", lua_Label_getCursorRegion},
-        {"getCursorUVs", lua_Label_getCursorUVs},
-        {"getFocusIndex", lua_Label_getFocusIndex},
-        {"getFont", lua_Label_getFont},
-        {"getFontSize", lua_Label_getFontSize},
-        {"getHeight", lua_Label_getHeight},
-        {"getId", lua_Label_getId},
-        {"getImageColor", lua_Label_getImageColor},
-        {"getImageRegion", lua_Label_getImageRegion},
-        {"getImageUVs", lua_Label_getImageUVs},
-        {"getMargin", lua_Label_getMargin},
-        {"getOpacity", lua_Label_getOpacity},
-        {"getPadding", lua_Label_getPadding},
-        {"getParent", lua_Label_getParent},
-        {"getRefCount", lua_Label_getRefCount},
-        {"getScriptEvent", lua_Label_getScriptEvent},
-        {"getSkinColor", lua_Label_getSkinColor},
-        {"getSkinRegion", lua_Label_getSkinRegion},
-        {"getState", lua_Label_getState},
-        {"getStyle", lua_Label_getStyle},
-        {"getText", lua_Label_getText},
-        {"getTextAlignment", lua_Label_getTextAlignment},
-        {"getTextColor", lua_Label_getTextColor},
-        {"getTextRightToLeft", lua_Label_getTextRightToLeft},
-        {"getTheme", lua_Label_getTheme},
-        {"getTopLevelForm", lua_Label_getTopLevelForm},
-        {"getTypeName", lua_Label_getTypeName},
-        {"getWidth", lua_Label_getWidth},
-        {"getX", lua_Label_getX},
-        {"getY", lua_Label_getY},
-        {"getZIndex", lua_Label_getZIndex},
-        {"hasFocus", lua_Label_hasFocus},
-        {"hasScriptListener", lua_Label_hasScriptListener},
-        {"isChild", lua_Label_isChild},
-        {"isContainer", lua_Label_isContainer},
-        {"isEnabled", lua_Label_isEnabled},
-        {"isEnabledInHierarchy", lua_Label_isEnabledInHierarchy},
-        {"isHeightPercentage", lua_Label_isHeightPercentage},
-        {"isVisible", lua_Label_isVisible},
-        {"isVisibleInHierarchy", lua_Label_isVisibleInHierarchy},
-        {"isWidthPercentage", lua_Label_isWidthPercentage},
-        {"isXPercentage", lua_Label_isXPercentage},
-        {"isYPercentage", lua_Label_isYPercentage},
-        {"release", lua_Label_release},
-        {"removeListener", lua_Label_removeListener},
-        {"removeScript", lua_Label_removeScript},
-        {"removeScriptCallback", lua_Label_removeScriptCallback},
-        {"setAlignment", lua_Label_setAlignment},
-        {"setAnimationPropertyValue", lua_Label_setAnimationPropertyValue},
-        {"setAutoSize", lua_Label_setAutoSize},
-        {"setBorder", lua_Label_setBorder},
-        {"setBounds", lua_Label_setBounds},
-        {"setCanFocus", lua_Label_setCanFocus},
-        {"setConsumeInputEvents", lua_Label_setConsumeInputEvents},
-        {"setCursorColor", lua_Label_setCursorColor},
-        {"setCursorRegion", lua_Label_setCursorRegion},
-        {"setEnabled", lua_Label_setEnabled},
-        {"setFocus", lua_Label_setFocus},
-        {"setFocusIndex", lua_Label_setFocusIndex},
-        {"setFont", lua_Label_setFont},
-        {"setFontSize", lua_Label_setFontSize},
-        {"setHeight", lua_Label_setHeight},
-        {"setId", lua_Label_setId},
-        {"setImageColor", lua_Label_setImageColor},
-        {"setImageRegion", lua_Label_setImageRegion},
-        {"setMargin", lua_Label_setMargin},
-        {"setOpacity", lua_Label_setOpacity},
-        {"setPadding", lua_Label_setPadding},
-        {"setPosition", lua_Label_setPosition},
-        {"setSize", lua_Label_setSize},
-        {"setSkinColor", lua_Label_setSkinColor},
-        {"setSkinRegion", lua_Label_setSkinRegion},
-        {"setStyle", lua_Label_setStyle},
-        {"setText", lua_Label_setText},
-        {"setTextAlignment", lua_Label_setTextAlignment},
-        {"setTextColor", lua_Label_setTextColor},
-        {"setTextRightToLeft", lua_Label_setTextRightToLeft},
-        {"setVisible", lua_Label_setVisible},
-        {"setWidth", lua_Label_setWidth},
-        {"setX", lua_Label_setX},
-        {"setY", lua_Label_setY},
-        {"setZIndex", lua_Label_setZIndex},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"ANIMATE_OPACITY", lua_Label_static_ANIMATE_OPACITY},
-        {"ANIMATE_POSITION", lua_Label_static_ANIMATE_POSITION},
-        {"ANIMATE_POSITION_X", lua_Label_static_ANIMATE_POSITION_X},
-        {"ANIMATE_POSITION_Y", lua_Label_static_ANIMATE_POSITION_Y},
-        {"ANIMATE_SIZE", lua_Label_static_ANIMATE_SIZE},
-        {"ANIMATE_SIZE_HEIGHT", lua_Label_static_ANIMATE_SIZE_HEIGHT},
-        {"ANIMATE_SIZE_WIDTH", lua_Label_static_ANIMATE_SIZE_WIDTH},
-        {"create", lua_Label_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Label", lua_members, NULL, lua_Label__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Label* getInstance(lua_State* state)
 {
@@ -153,7 +37,7 @@ static Label* getInstance(lua_State* state)
     return (Label*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Label__gc(lua_State* state)
+static int lua_Label__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -191,7 +75,7 @@ int lua_Label__gc(lua_State* state)
     return 0;
 }
 
-int lua_Label_addListener(lua_State* state)
+static int lua_Label_addListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -237,7 +121,7 @@ int lua_Label_addListener(lua_State* state)
     return 0;
 }
 
-int lua_Label_addRef(lua_State* state)
+static int lua_Label_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -269,7 +153,7 @@ int lua_Label_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Label_addScript(lua_State* state)
+static int lua_Label_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -317,7 +201,7 @@ int lua_Label_addScript(lua_State* state)
     return 0;
 }
 
-int lua_Label_addScriptCallback(lua_State* state)
+static int lua_Label_addScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -363,7 +247,7 @@ int lua_Label_addScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_Label_canFocus(lua_State* state)
+static int lua_Label_canFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -398,7 +282,7 @@ int lua_Label_canFocus(lua_State* state)
     return 0;
 }
 
-int lua_Label_clearScripts(lua_State* state)
+static int lua_Label_clearScripts(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -430,7 +314,7 @@ int lua_Label_clearScripts(lua_State* state)
     return 0;
 }
 
-int lua_Label_createAnimation(lua_State* state)
+static int lua_Label_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -633,7 +517,7 @@ int lua_Label_createAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Label_createAnimationFromBy(lua_State* state)
+static int lua_Label_createAnimationFromBy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -701,7 +585,7 @@ int lua_Label_createAnimationFromBy(lua_State* state)
     return 0;
 }
 
-int lua_Label_createAnimationFromTo(lua_State* state)
+static int lua_Label_createAnimationFromTo(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -769,7 +653,7 @@ int lua_Label_createAnimationFromTo(lua_State* state)
     return 0;
 }
 
-int lua_Label_destroyAnimation(lua_State* state)
+static int lua_Label_destroyAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -819,7 +703,7 @@ int lua_Label_destroyAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Label_getAbsoluteBounds(lua_State* state)
+static int lua_Label_getAbsoluteBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -863,7 +747,7 @@ int lua_Label_getAbsoluteBounds(lua_State* state)
     return 0;
 }
 
-int lua_Label_getAlignment(lua_State* state)
+static int lua_Label_getAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -898,7 +782,7 @@ int lua_Label_getAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Label_getAnimation(lua_State* state)
+static int lua_Label_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -972,7 +856,7 @@ int lua_Label_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Label_getAnimationPropertyComponentCount(lua_State* state)
+static int lua_Label_getAnimationPropertyComponentCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1011,7 +895,7 @@ int lua_Label_getAnimationPropertyComponentCount(lua_State* state)
     return 0;
 }
 
-int lua_Label_getAnimationPropertyValue(lua_State* state)
+static int lua_Label_getAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1057,7 +941,7 @@ int lua_Label_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_Label_getAutoSize(lua_State* state)
+static int lua_Label_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1092,7 +976,7 @@ int lua_Label_getAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_Label_getBorder(lua_State* state)
+static int lua_Label_getBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1166,7 +1050,7 @@ int lua_Label_getBorder(lua_State* state)
     return 0;
 }
 
-int lua_Label_getBounds(lua_State* state)
+static int lua_Label_getBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1210,7 +1094,7 @@ int lua_Label_getBounds(lua_State* state)
     return 0;
 }
 
-int lua_Label_getClip(lua_State* state)
+static int lua_Label_getClip(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1254,7 +1138,7 @@ int lua_Label_getClip(lua_State* state)
     return 0;
 }
 
-int lua_Label_getClipBounds(lua_State* state)
+static int lua_Label_getClipBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1298,7 +1182,7 @@ int lua_Label_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_Label_getConsumeInputEvents(lua_State* state)
+static int lua_Label_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1333,7 +1217,7 @@ int lua_Label_getConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_Label_getCursorColor(lua_State* state)
+static int lua_Label_getCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1381,7 +1265,7 @@ int lua_Label_getCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_Label_getCursorRegion(lua_State* state)
+static int lua_Label_getCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1429,7 +1313,7 @@ int lua_Label_getCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_Label_getCursorUVs(lua_State* state)
+static int lua_Label_getCursorUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1477,7 +1361,7 @@ int lua_Label_getCursorUVs(lua_State* state)
     return 0;
 }
 
-int lua_Label_getFocusIndex(lua_State* state)
+static int lua_Label_getFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1512,7 +1396,7 @@ int lua_Label_getFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_Label_getFont(lua_State* state)
+static int lua_Label_getFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1586,7 +1470,7 @@ int lua_Label_getFont(lua_State* state)
     return 0;
 }
 
-int lua_Label_getFontSize(lua_State* state)
+static int lua_Label_getFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1642,7 +1526,7 @@ int lua_Label_getFontSize(lua_State* state)
     return 0;
 }
 
-int lua_Label_getHeight(lua_State* state)
+static int lua_Label_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1677,7 +1561,7 @@ int lua_Label_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_Label_getId(lua_State* state)
+static int lua_Label_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1712,7 +1596,7 @@ int lua_Label_getId(lua_State* state)
     return 0;
 }
 
-int lua_Label_getImageColor(lua_State* state)
+static int lua_Label_getImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1764,7 +1648,7 @@ int lua_Label_getImageColor(lua_State* state)
     return 0;
 }
 
-int lua_Label_getImageRegion(lua_State* state)
+static int lua_Label_getImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1816,7 +1700,7 @@ int lua_Label_getImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_Label_getImageUVs(lua_State* state)
+static int lua_Label_getImageUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1868,7 +1752,7 @@ int lua_Label_getImageUVs(lua_State* state)
     return 0;
 }
 
-int lua_Label_getMargin(lua_State* state)
+static int lua_Label_getMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1912,7 +1796,7 @@ int lua_Label_getMargin(lua_State* state)
     return 0;
 }
 
-int lua_Label_getOpacity(lua_State* state)
+static int lua_Label_getOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1968,7 +1852,7 @@ int lua_Label_getOpacity(lua_State* state)
     return 0;
 }
 
-int lua_Label_getPadding(lua_State* state)
+static int lua_Label_getPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2012,7 +1896,7 @@ int lua_Label_getPadding(lua_State* state)
     return 0;
 }
 
-int lua_Label_getParent(lua_State* state)
+static int lua_Label_getParent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2056,7 +1940,7 @@ int lua_Label_getParent(lua_State* state)
     return 0;
 }
 
-int lua_Label_getRefCount(lua_State* state)
+static int lua_Label_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2091,7 +1975,7 @@ int lua_Label_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Label_getScriptEvent(lua_State* state)
+static int lua_Label_getScriptEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2139,7 +2023,7 @@ int lua_Label_getScriptEvent(lua_State* state)
     return 0;
 }
 
-int lua_Label_getSkinColor(lua_State* state)
+static int lua_Label_getSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2213,7 +2097,7 @@ int lua_Label_getSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_Label_getSkinRegion(lua_State* state)
+static int lua_Label_getSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2287,7 +2171,7 @@ int lua_Label_getSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_Label_getState(lua_State* state)
+static int lua_Label_getState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2322,7 +2206,7 @@ int lua_Label_getState(lua_State* state)
     return 0;
 }
 
-int lua_Label_getStyle(lua_State* state)
+static int lua_Label_getStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2366,7 +2250,7 @@ int lua_Label_getStyle(lua_State* state)
     return 0;
 }
 
-int lua_Label_getText(lua_State* state)
+static int lua_Label_getText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2401,7 +2285,7 @@ int lua_Label_getText(lua_State* state)
     return 0;
 }
 
-int lua_Label_getTextAlignment(lua_State* state)
+static int lua_Label_getTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2457,7 +2341,7 @@ int lua_Label_getTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Label_getTextColor(lua_State* state)
+static int lua_Label_getTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2531,7 +2415,7 @@ int lua_Label_getTextColor(lua_State* state)
     return 0;
 }
 
-int lua_Label_getTextRightToLeft(lua_State* state)
+static int lua_Label_getTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2587,7 +2471,7 @@ int lua_Label_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_Label_getTheme(lua_State* state)
+static int lua_Label_getTheme(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2631,7 +2515,7 @@ int lua_Label_getTheme(lua_State* state)
     return 0;
 }
 
-int lua_Label_getTopLevelForm(lua_State* state)
+static int lua_Label_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2675,7 +2559,7 @@ int lua_Label_getTopLevelForm(lua_State* state)
     return 0;
 }
 
-int lua_Label_getTypeName(lua_State* state)
+static int lua_Label_getTypeName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2710,7 +2594,7 @@ int lua_Label_getTypeName(lua_State* state)
     return 0;
 }
 
-int lua_Label_getWidth(lua_State* state)
+static int lua_Label_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2745,7 +2629,7 @@ int lua_Label_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_Label_getX(lua_State* state)
+static int lua_Label_getX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2780,7 +2664,7 @@ int lua_Label_getX(lua_State* state)
     return 0;
 }
 
-int lua_Label_getY(lua_State* state)
+static int lua_Label_getY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2815,7 +2699,7 @@ int lua_Label_getY(lua_State* state)
     return 0;
 }
 
-int lua_Label_getZIndex(lua_State* state)
+static int lua_Label_getZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2850,7 +2734,7 @@ int lua_Label_getZIndex(lua_State* state)
     return 0;
 }
 
-int lua_Label_hasFocus(lua_State* state)
+static int lua_Label_hasFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2885,7 +2769,7 @@ int lua_Label_hasFocus(lua_State* state)
     return 0;
 }
 
-int lua_Label_hasScriptListener(lua_State* state)
+static int lua_Label_hasScriptListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2948,7 +2832,7 @@ int lua_Label_hasScriptListener(lua_State* state)
     return 0;
 }
 
-int lua_Label_isChild(lua_State* state)
+static int lua_Label_isChild(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2993,7 +2877,7 @@ int lua_Label_isChild(lua_State* state)
     return 0;
 }
 
-int lua_Label_isContainer(lua_State* state)
+static int lua_Label_isContainer(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3028,7 +2912,7 @@ int lua_Label_isContainer(lua_State* state)
     return 0;
 }
 
-int lua_Label_isEnabled(lua_State* state)
+static int lua_Label_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3063,7 +2947,7 @@ int lua_Label_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_Label_isEnabledInHierarchy(lua_State* state)
+static int lua_Label_isEnabledInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3098,7 +2982,7 @@ int lua_Label_isEnabledInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_Label_isHeightPercentage(lua_State* state)
+static int lua_Label_isHeightPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3133,7 +3017,7 @@ int lua_Label_isHeightPercentage(lua_State* state)
     return 0;
 }
 
-int lua_Label_isVisible(lua_State* state)
+static int lua_Label_isVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3168,7 +3052,7 @@ int lua_Label_isVisible(lua_State* state)
     return 0;
 }
 
-int lua_Label_isVisibleInHierarchy(lua_State* state)
+static int lua_Label_isVisibleInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3203,7 +3087,7 @@ int lua_Label_isVisibleInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_Label_isWidthPercentage(lua_State* state)
+static int lua_Label_isWidthPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3238,7 +3122,7 @@ int lua_Label_isWidthPercentage(lua_State* state)
     return 0;
 }
 
-int lua_Label_isXPercentage(lua_State* state)
+static int lua_Label_isXPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3273,7 +3157,7 @@ int lua_Label_isXPercentage(lua_State* state)
     return 0;
 }
 
-int lua_Label_isYPercentage(lua_State* state)
+static int lua_Label_isYPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3308,7 +3192,7 @@ int lua_Label_isYPercentage(lua_State* state)
     return 0;
 }
 
-int lua_Label_release(lua_State* state)
+static int lua_Label_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3340,7 +3224,7 @@ int lua_Label_release(lua_State* state)
     return 0;
 }
 
-int lua_Label_removeListener(lua_State* state)
+static int lua_Label_removeListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3382,7 +3266,7 @@ int lua_Label_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_Label_removeScript(lua_State* state)
+static int lua_Label_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3421,7 +3305,7 @@ int lua_Label_removeScript(lua_State* state)
     return 0;
 }
 
-int lua_Label_removeScriptCallback(lua_State* state)
+static int lua_Label_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3467,7 +3351,7 @@ int lua_Label_removeScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_Label_setAlignment(lua_State* state)
+static int lua_Label_setAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3503,7 +3387,7 @@ int lua_Label_setAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Label_setAnimationPropertyValue(lua_State* state)
+static int lua_Label_setAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3581,7 +3465,7 @@ int lua_Label_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_Label_setAutoSize(lua_State* state)
+static int lua_Label_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3617,7 +3501,7 @@ int lua_Label_setAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_Label_setBorder(lua_State* state)
+static int lua_Label_setBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3699,7 +3583,7 @@ int lua_Label_setBorder(lua_State* state)
     return 0;
 }
 
-int lua_Label_setBounds(lua_State* state)
+static int lua_Label_setBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3741,7 +3625,7 @@ int lua_Label_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_Label_setCanFocus(lua_State* state)
+static int lua_Label_setCanFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3777,7 +3661,7 @@ int lua_Label_setCanFocus(lua_State* state)
     return 0;
 }
 
-int lua_Label_setConsumeInputEvents(lua_State* state)
+static int lua_Label_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3813,7 +3697,7 @@ int lua_Label_setConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_Label_setCursorColor(lua_State* state)
+static int lua_Label_setCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3859,7 +3743,7 @@ int lua_Label_setCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_Label_setCursorRegion(lua_State* state)
+static int lua_Label_setCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3905,7 +3789,7 @@ int lua_Label_setCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_Label_setEnabled(lua_State* state)
+static int lua_Label_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3941,7 +3825,7 @@ int lua_Label_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_Label_setFocus(lua_State* state)
+static int lua_Label_setFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3976,7 +3860,7 @@ int lua_Label_setFocus(lua_State* state)
     return 0;
 }
 
-int lua_Label_setFocusIndex(lua_State* state)
+static int lua_Label_setFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4012,7 +3896,7 @@ int lua_Label_setFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_Label_setFont(lua_State* state)
+static int lua_Label_setFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4082,7 +3966,7 @@ int lua_Label_setFont(lua_State* state)
     return 0;
 }
 
-int lua_Label_setFontSize(lua_State* state)
+static int lua_Label_setFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4140,7 +4024,7 @@ int lua_Label_setFontSize(lua_State* state)
     return 0;
 }
 
-int lua_Label_setHeight(lua_State* state)
+static int lua_Label_setHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4198,7 +4082,7 @@ int lua_Label_setHeight(lua_State* state)
     return 0;
 }
 
-int lua_Label_setId(lua_State* state)
+static int lua_Label_setId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4234,7 +4118,7 @@ int lua_Label_setId(lua_State* state)
     return 0;
 }
 
-int lua_Label_setImageColor(lua_State* state)
+static int lua_Label_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4312,7 +4196,7 @@ int lua_Label_setImageColor(lua_State* state)
     return 0;
 }
 
-int lua_Label_setImageRegion(lua_State* state)
+static int lua_Label_setImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4390,7 +4274,7 @@ int lua_Label_setImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_Label_setMargin(lua_State* state)
+static int lua_Label_setMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4438,7 +4322,7 @@ int lua_Label_setMargin(lua_State* state)
     return 0;
 }
 
-int lua_Label_setOpacity(lua_State* state)
+static int lua_Label_setOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4496,7 +4380,7 @@ int lua_Label_setOpacity(lua_State* state)
     return 0;
 }
 
-int lua_Label_setPadding(lua_State* state)
+static int lua_Label_setPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4544,7 +4428,7 @@ int lua_Label_setPadding(lua_State* state)
     return 0;
 }
 
-int lua_Label_setPosition(lua_State* state)
+static int lua_Label_setPosition(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4584,7 +4468,7 @@ int lua_Label_setPosition(lua_State* state)
     return 0;
 }
 
-int lua_Label_setSize(lua_State* state)
+static int lua_Label_setSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4624,7 +4508,7 @@ int lua_Label_setSize(lua_State* state)
     return 0;
 }
 
-int lua_Label_setSkinColor(lua_State* state)
+static int lua_Label_setSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4694,7 +4578,7 @@ int lua_Label_setSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_Label_setSkinRegion(lua_State* state)
+static int lua_Label_setSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4764,7 +4648,7 @@ int lua_Label_setSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_Label_setStyle(lua_State* state)
+static int lua_Label_setStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4806,7 +4690,7 @@ int lua_Label_setStyle(lua_State* state)
     return 0;
 }
 
-int lua_Label_setText(lua_State* state)
+static int lua_Label_setText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4842,7 +4726,7 @@ int lua_Label_setText(lua_State* state)
     return 0;
 }
 
-int lua_Label_setTextAlignment(lua_State* state)
+static int lua_Label_setTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4900,7 +4784,7 @@ int lua_Label_setTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Label_setTextColor(lua_State* state)
+static int lua_Label_setTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4970,7 +4854,7 @@ int lua_Label_setTextColor(lua_State* state)
     return 0;
 }
 
-int lua_Label_setTextRightToLeft(lua_State* state)
+static int lua_Label_setTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5028,7 +4912,7 @@ int lua_Label_setTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_Label_setVisible(lua_State* state)
+static int lua_Label_setVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5064,7 +4948,7 @@ int lua_Label_setVisible(lua_State* state)
     return 0;
 }
 
-int lua_Label_setWidth(lua_State* state)
+static int lua_Label_setWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5122,7 +5006,7 @@ int lua_Label_setWidth(lua_State* state)
     return 0;
 }
 
-int lua_Label_setX(lua_State* state)
+static int lua_Label_setX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5180,7 +5064,7 @@ int lua_Label_setX(lua_State* state)
     return 0;
 }
 
-int lua_Label_setY(lua_State* state)
+static int lua_Label_setY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5238,7 +5122,7 @@ int lua_Label_setY(lua_State* state)
     return 0;
 }
 
-int lua_Label_setZIndex(lua_State* state)
+static int lua_Label_setZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5274,7 +5158,7 @@ int lua_Label_setZIndex(lua_State* state)
     return 0;
 }
 
-int lua_Label_static_ANIMATE_OPACITY(lua_State* state)
+static int lua_Label_static_ANIMATE_OPACITY(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5291,7 +5175,7 @@ int lua_Label_static_ANIMATE_OPACITY(lua_State* state)
     return 1;
 }
 
-int lua_Label_static_ANIMATE_POSITION(lua_State* state)
+static int lua_Label_static_ANIMATE_POSITION(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5308,7 +5192,7 @@ int lua_Label_static_ANIMATE_POSITION(lua_State* state)
     return 1;
 }
 
-int lua_Label_static_ANIMATE_POSITION_X(lua_State* state)
+static int lua_Label_static_ANIMATE_POSITION_X(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5325,7 +5209,7 @@ int lua_Label_static_ANIMATE_POSITION_X(lua_State* state)
     return 1;
 }
 
-int lua_Label_static_ANIMATE_POSITION_Y(lua_State* state)
+static int lua_Label_static_ANIMATE_POSITION_Y(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5342,7 +5226,7 @@ int lua_Label_static_ANIMATE_POSITION_Y(lua_State* state)
     return 1;
 }
 
-int lua_Label_static_ANIMATE_SIZE(lua_State* state)
+static int lua_Label_static_ANIMATE_SIZE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5359,7 +5243,7 @@ int lua_Label_static_ANIMATE_SIZE(lua_State* state)
     return 1;
 }
 
-int lua_Label_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
+static int lua_Label_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5376,7 +5260,7 @@ int lua_Label_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
     return 1;
 }
 
-int lua_Label_static_ANIMATE_SIZE_WIDTH(lua_State* state)
+static int lua_Label_static_ANIMATE_SIZE_WIDTH(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5393,7 +5277,7 @@ int lua_Label_static_ANIMATE_SIZE_WIDTH(lua_State* state)
     return 1;
 }
 
-int lua_Label_static_create(lua_State* state)
+static int lua_Label_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5475,6 +5359,192 @@ int lua_Label_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Label
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Label* ptrObject = reinterpret_cast<Label*>(ptr);
+
+    if (strcmp(typeName, "Button") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Button*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Control") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Control*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Slider") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Slider*>(ptrObject));
+    }
+    else if (strcmp(typeName, "TextBox") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<TextBox*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Label_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Label_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Label* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Label()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addListener", lua_Label_addListener},
+        {"addRef", lua_Label_addRef},
+        {"addScript", lua_Label_addScript},
+        {"addScriptCallback", lua_Label_addScriptCallback},
+        {"canFocus", lua_Label_canFocus},
+        {"clearScripts", lua_Label_clearScripts},
+        {"createAnimation", lua_Label_createAnimation},
+        {"createAnimationFromBy", lua_Label_createAnimationFromBy},
+        {"createAnimationFromTo", lua_Label_createAnimationFromTo},
+        {"destroyAnimation", lua_Label_destroyAnimation},
+        {"getAbsoluteBounds", lua_Label_getAbsoluteBounds},
+        {"getAlignment", lua_Label_getAlignment},
+        {"getAnimation", lua_Label_getAnimation},
+        {"getAnimationPropertyComponentCount", lua_Label_getAnimationPropertyComponentCount},
+        {"getAnimationPropertyValue", lua_Label_getAnimationPropertyValue},
+        {"getAutoSize", lua_Label_getAutoSize},
+        {"getBorder", lua_Label_getBorder},
+        {"getBounds", lua_Label_getBounds},
+        {"getClip", lua_Label_getClip},
+        {"getClipBounds", lua_Label_getClipBounds},
+        {"getConsumeInputEvents", lua_Label_getConsumeInputEvents},
+        {"getCursorColor", lua_Label_getCursorColor},
+        {"getCursorRegion", lua_Label_getCursorRegion},
+        {"getCursorUVs", lua_Label_getCursorUVs},
+        {"getFocusIndex", lua_Label_getFocusIndex},
+        {"getFont", lua_Label_getFont},
+        {"getFontSize", lua_Label_getFontSize},
+        {"getHeight", lua_Label_getHeight},
+        {"getId", lua_Label_getId},
+        {"getImageColor", lua_Label_getImageColor},
+        {"getImageRegion", lua_Label_getImageRegion},
+        {"getImageUVs", lua_Label_getImageUVs},
+        {"getMargin", lua_Label_getMargin},
+        {"getOpacity", lua_Label_getOpacity},
+        {"getPadding", lua_Label_getPadding},
+        {"getParent", lua_Label_getParent},
+        {"getRefCount", lua_Label_getRefCount},
+        {"getScriptEvent", lua_Label_getScriptEvent},
+        {"getSkinColor", lua_Label_getSkinColor},
+        {"getSkinRegion", lua_Label_getSkinRegion},
+        {"getState", lua_Label_getState},
+        {"getStyle", lua_Label_getStyle},
+        {"getText", lua_Label_getText},
+        {"getTextAlignment", lua_Label_getTextAlignment},
+        {"getTextColor", lua_Label_getTextColor},
+        {"getTextRightToLeft", lua_Label_getTextRightToLeft},
+        {"getTheme", lua_Label_getTheme},
+        {"getTopLevelForm", lua_Label_getTopLevelForm},
+        {"getTypeName", lua_Label_getTypeName},
+        {"getWidth", lua_Label_getWidth},
+        {"getX", lua_Label_getX},
+        {"getY", lua_Label_getY},
+        {"getZIndex", lua_Label_getZIndex},
+        {"hasFocus", lua_Label_hasFocus},
+        {"hasScriptListener", lua_Label_hasScriptListener},
+        {"isChild", lua_Label_isChild},
+        {"isContainer", lua_Label_isContainer},
+        {"isEnabled", lua_Label_isEnabled},
+        {"isEnabledInHierarchy", lua_Label_isEnabledInHierarchy},
+        {"isHeightPercentage", lua_Label_isHeightPercentage},
+        {"isVisible", lua_Label_isVisible},
+        {"isVisibleInHierarchy", lua_Label_isVisibleInHierarchy},
+        {"isWidthPercentage", lua_Label_isWidthPercentage},
+        {"isXPercentage", lua_Label_isXPercentage},
+        {"isYPercentage", lua_Label_isYPercentage},
+        {"release", lua_Label_release},
+        {"removeListener", lua_Label_removeListener},
+        {"removeScript", lua_Label_removeScript},
+        {"removeScriptCallback", lua_Label_removeScriptCallback},
+        {"setAlignment", lua_Label_setAlignment},
+        {"setAnimationPropertyValue", lua_Label_setAnimationPropertyValue},
+        {"setAutoSize", lua_Label_setAutoSize},
+        {"setBorder", lua_Label_setBorder},
+        {"setBounds", lua_Label_setBounds},
+        {"setCanFocus", lua_Label_setCanFocus},
+        {"setConsumeInputEvents", lua_Label_setConsumeInputEvents},
+        {"setCursorColor", lua_Label_setCursorColor},
+        {"setCursorRegion", lua_Label_setCursorRegion},
+        {"setEnabled", lua_Label_setEnabled},
+        {"setFocus", lua_Label_setFocus},
+        {"setFocusIndex", lua_Label_setFocusIndex},
+        {"setFont", lua_Label_setFont},
+        {"setFontSize", lua_Label_setFontSize},
+        {"setHeight", lua_Label_setHeight},
+        {"setId", lua_Label_setId},
+        {"setImageColor", lua_Label_setImageColor},
+        {"setImageRegion", lua_Label_setImageRegion},
+        {"setMargin", lua_Label_setMargin},
+        {"setOpacity", lua_Label_setOpacity},
+        {"setPadding", lua_Label_setPadding},
+        {"setPosition", lua_Label_setPosition},
+        {"setSize", lua_Label_setSize},
+        {"setSkinColor", lua_Label_setSkinColor},
+        {"setSkinRegion", lua_Label_setSkinRegion},
+        {"setStyle", lua_Label_setStyle},
+        {"setText", lua_Label_setText},
+        {"setTextAlignment", lua_Label_setTextAlignment},
+        {"setTextColor", lua_Label_setTextColor},
+        {"setTextRightToLeft", lua_Label_setTextRightToLeft},
+        {"setVisible", lua_Label_setVisible},
+        {"setWidth", lua_Label_setWidth},
+        {"setX", lua_Label_setX},
+        {"setY", lua_Label_setY},
+        {"setZIndex", lua_Label_setZIndex},
+        {"to", lua_Label_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"ANIMATE_OPACITY", lua_Label_static_ANIMATE_OPACITY},
+        {"ANIMATE_POSITION", lua_Label_static_ANIMATE_POSITION},
+        {"ANIMATE_POSITION_X", lua_Label_static_ANIMATE_POSITION_X},
+        {"ANIMATE_POSITION_Y", lua_Label_static_ANIMATE_POSITION_Y},
+        {"ANIMATE_SIZE", lua_Label_static_ANIMATE_SIZE},
+        {"ANIMATE_SIZE_HEIGHT", lua_Label_static_ANIMATE_SIZE_HEIGHT},
+        {"ANIMATE_SIZE_WIDTH", lua_Label_static_ANIMATE_SIZE_WIDTH},
+        {"create", lua_Label_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Label", lua_members, NULL, lua_Label__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Label", __convertTo);
 }
 
 }

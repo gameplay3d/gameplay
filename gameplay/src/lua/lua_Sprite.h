@@ -5,48 +5,6 @@
 namespace gameplay
 {
 
-// Lua bindings for Sprite.
-int lua_Sprite__gc(lua_State* state);
-int lua_Sprite_addRef(lua_State* state);
-int lua_Sprite_computeFrames(lua_State* state);
-int lua_Sprite_createAnimation(lua_State* state);
-int lua_Sprite_createAnimationFromBy(lua_State* state);
-int lua_Sprite_createAnimationFromTo(lua_State* state);
-int lua_Sprite_destroyAnimation(lua_State* state);
-int lua_Sprite_draw(lua_State* state);
-int lua_Sprite_getAnchor(lua_State* state);
-int lua_Sprite_getAnimation(lua_State* state);
-int lua_Sprite_getBlendMode(lua_State* state);
-int lua_Sprite_getColor(lua_State* state);
-int lua_Sprite_getFlip(lua_State* state);
-int lua_Sprite_getFrameCount(lua_State* state);
-int lua_Sprite_getFrameIndex(lua_State* state);
-int lua_Sprite_getFramePadding(lua_State* state);
-int lua_Sprite_getFrameSource(lua_State* state);
-int lua_Sprite_getFrameStride(lua_State* state);
-int lua_Sprite_getHeight(lua_State* state);
-int lua_Sprite_getMaterial(lua_State* state);
-int lua_Sprite_getNode(lua_State* state);
-int lua_Sprite_getOffset(lua_State* state);
-int lua_Sprite_getOpacity(lua_State* state);
-int lua_Sprite_getRefCount(lua_State* state);
-int lua_Sprite_getSampler(lua_State* state);
-int lua_Sprite_getStateBlock(lua_State* state);
-int lua_Sprite_getWidth(lua_State* state);
-int lua_Sprite_release(lua_State* state);
-int lua_Sprite_setAnchor(lua_State* state);
-int lua_Sprite_setBlendMode(lua_State* state);
-int lua_Sprite_setColor(lua_State* state);
-int lua_Sprite_setFlip(lua_State* state);
-int lua_Sprite_setFrameIndex(lua_State* state);
-int lua_Sprite_setFrameSource(lua_State* state);
-int lua_Sprite_setOffset(lua_State* state);
-int lua_Sprite_setOpacity(lua_State* state);
-int lua_Sprite_static_ANIMATE_COLOR(lua_State* state);
-int lua_Sprite_static_ANIMATE_KEYFRAME(lua_State* state);
-int lua_Sprite_static_ANIMATE_OPACITY(lua_State* state);
-int lua_Sprite_static_create(lua_State* state);
-
 void luaRegister_Sprite();
 
 }

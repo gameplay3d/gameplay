@@ -11,21 +11,6 @@
 namespace gameplay
 {
 
-void luaRegister_Uniform()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getEffect", lua_Uniform_getEffect},
-        {"getName", lua_Uniform_getName},
-        {"getType", lua_Uniform_getType},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Uniform", lua_members, NULL, NULL, lua_statics, scopePath);
-}
-
 static Uniform* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Uniform");
@@ -33,7 +18,7 @@ static Uniform* getInstance(lua_State* state)
     return (Uniform*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Uniform_getEffect(lua_State* state)
+static int lua_Uniform_getEffect(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -77,7 +62,7 @@ int lua_Uniform_getEffect(lua_State* state)
     return 0;
 }
 
-int lua_Uniform_getName(lua_State* state)
+static int lua_Uniform_getName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -112,7 +97,7 @@ int lua_Uniform_getName(lua_State* state)
     return 0;
 }
 
-int lua_Uniform_getType(lua_State* state)
+static int lua_Uniform_getType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -146,6 +131,22 @@ int lua_Uniform_getType(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_Uniform()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getEffect", lua_Uniform_getEffect},
+        {"getName", lua_Uniform_getName},
+        {"getType", lua_Uniform_getType},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Uniform", lua_members, NULL, NULL, lua_statics, scopePath);
+
 }
 
 }

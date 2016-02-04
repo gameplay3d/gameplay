@@ -11,33 +11,6 @@
 namespace gameplay
 {
 
-void luaRegister_FileSystem()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"createFileFromAsset", lua_FileSystem_static_createFileFromAsset},
-        {"fileExists", lua_FileSystem_static_fileExists},
-        {"getAssetPath", lua_FileSystem_static_getAssetPath},
-        {"getDirectoryName", lua_FileSystem_static_getDirectoryName},
-        {"getExtension", lua_FileSystem_static_getExtension},
-        {"getResourcePath", lua_FileSystem_static_getResourcePath},
-        {"isAbsolutePath", lua_FileSystem_static_isAbsolutePath},
-        {"loadResourceAliases", lua_FileSystem_static_loadResourceAliases},
-        {"readAll", lua_FileSystem_static_readAll},
-        {"resolvePath", lua_FileSystem_static_resolvePath},
-        {"setAssetPath", lua_FileSystem_static_setAssetPath},
-        {"setResourcePath", lua_FileSystem_static_setResourcePath},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("FileSystem", lua_members, NULL, lua_FileSystem__gc, lua_statics, scopePath);
-}
-
 static FileSystem* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "FileSystem");
@@ -45,7 +18,7 @@ static FileSystem* getInstance(lua_State* state)
     return (FileSystem*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_FileSystem__gc(lua_State* state)
+static int lua_FileSystem__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -83,7 +56,7 @@ int lua_FileSystem__gc(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_createFileFromAsset(lua_State* state)
+static int lua_FileSystem_static_createFileFromAsset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -117,7 +90,7 @@ int lua_FileSystem_static_createFileFromAsset(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_fileExists(lua_State* state)
+static int lua_FileSystem_static_fileExists(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -154,7 +127,7 @@ int lua_FileSystem_static_fileExists(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_getAssetPath(lua_State* state)
+static int lua_FileSystem_static_getAssetPath(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -182,7 +155,7 @@ int lua_FileSystem_static_getAssetPath(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_getDirectoryName(lua_State* state)
+static int lua_FileSystem_static_getDirectoryName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -219,7 +192,7 @@ int lua_FileSystem_static_getDirectoryName(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_getExtension(lua_State* state)
+static int lua_FileSystem_static_getExtension(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -256,7 +229,7 @@ int lua_FileSystem_static_getExtension(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_getResourcePath(lua_State* state)
+static int lua_FileSystem_static_getResourcePath(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -284,7 +257,7 @@ int lua_FileSystem_static_getResourcePath(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_isAbsolutePath(lua_State* state)
+static int lua_FileSystem_static_isAbsolutePath(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -321,7 +294,7 @@ int lua_FileSystem_static_isAbsolutePath(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_loadResourceAliases(lua_State* state)
+static int lua_FileSystem_static_loadResourceAliases(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -374,7 +347,7 @@ int lua_FileSystem_static_loadResourceAliases(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_readAll(lua_State* state)
+static int lua_FileSystem_static_readAll(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -434,7 +407,7 @@ int lua_FileSystem_static_readAll(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_resolvePath(lua_State* state)
+static int lua_FileSystem_static_resolvePath(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -471,7 +444,7 @@ int lua_FileSystem_static_resolvePath(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_setAssetPath(lua_State* state)
+static int lua_FileSystem_static_setAssetPath(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -505,7 +478,7 @@ int lua_FileSystem_static_setAssetPath(lua_State* state)
     return 0;
 }
 
-int lua_FileSystem_static_setResourcePath(lua_State* state)
+static int lua_FileSystem_static_setResourcePath(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -537,6 +510,34 @@ int lua_FileSystem_static_setResourcePath(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_FileSystem()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"createFileFromAsset", lua_FileSystem_static_createFileFromAsset},
+        {"fileExists", lua_FileSystem_static_fileExists},
+        {"getAssetPath", lua_FileSystem_static_getAssetPath},
+        {"getDirectoryName", lua_FileSystem_static_getDirectoryName},
+        {"getExtension", lua_FileSystem_static_getExtension},
+        {"getResourcePath", lua_FileSystem_static_getResourcePath},
+        {"isAbsolutePath", lua_FileSystem_static_isAbsolutePath},
+        {"loadResourceAliases", lua_FileSystem_static_loadResourceAliases},
+        {"readAll", lua_FileSystem_static_readAll},
+        {"resolvePath", lua_FileSystem_static_resolvePath},
+        {"setAssetPath", lua_FileSystem_static_setAssetPath},
+        {"setResourcePath", lua_FileSystem_static_setResourcePath},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("FileSystem", lua_members, NULL, lua_FileSystem__gc, lua_statics, scopePath);
+
 }
 
 }

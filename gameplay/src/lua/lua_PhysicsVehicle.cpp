@@ -14,61 +14,12 @@
 #include "PhysicsVehicle.h"
 #include "PhysicsVehicleWheel.h"
 #include "ScriptController.h"
+#include "PhysicsCollisionObject.h"
 
 namespace gameplay
 {
 
-void luaRegister_PhysicsVehicle()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addCollisionListener", lua_PhysicsVehicle_addCollisionListener},
-        {"addWheel", lua_PhysicsVehicle_addWheel},
-        {"collidesWith", lua_PhysicsVehicle_collidesWith},
-        {"getBoostGain", lua_PhysicsVehicle_getBoostGain},
-        {"getBoostSpeed", lua_PhysicsVehicle_getBoostSpeed},
-        {"getBrakedownFull", lua_PhysicsVehicle_getBrakedownFull},
-        {"getBrakedownStart", lua_PhysicsVehicle_getBrakedownStart},
-        {"getBrakingForce", lua_PhysicsVehicle_getBrakingForce},
-        {"getCollisionShape", lua_PhysicsVehicle_getCollisionShape},
-        {"getDownforce", lua_PhysicsVehicle_getDownforce},
-        {"getDrivedownFull", lua_PhysicsVehicle_getDrivedownFull},
-        {"getDrivedownStart", lua_PhysicsVehicle_getDrivedownStart},
-        {"getDrivingForce", lua_PhysicsVehicle_getDrivingForce},
-        {"getNode", lua_PhysicsVehicle_getNode},
-        {"getRigidBody", lua_PhysicsVehicle_getRigidBody},
-        {"getShapeType", lua_PhysicsVehicle_getShapeType},
-        {"getSpeedKph", lua_PhysicsVehicle_getSpeedKph},
-        {"getSpeedSmoothKph", lua_PhysicsVehicle_getSpeedSmoothKph},
-        {"getSteerdownGain", lua_PhysicsVehicle_getSteerdownGain},
-        {"getSteerdownSpeed", lua_PhysicsVehicle_getSteerdownSpeed},
-        {"getSteeringGain", lua_PhysicsVehicle_getSteeringGain},
-        {"getType", lua_PhysicsVehicle_getType},
-        {"getWheel", lua_PhysicsVehicle_getWheel},
-        {"getWheelCount", lua_PhysicsVehicle_getWheelCount},
-        {"isDynamic", lua_PhysicsVehicle_isDynamic},
-        {"isEnabled", lua_PhysicsVehicle_isEnabled},
-        {"isKinematic", lua_PhysicsVehicle_isKinematic},
-        {"isStatic", lua_PhysicsVehicle_isStatic},
-        {"removeCollisionListener", lua_PhysicsVehicle_removeCollisionListener},
-        {"reset", lua_PhysicsVehicle_reset},
-        {"setBoost", lua_PhysicsVehicle_setBoost},
-        {"setBrakedown", lua_PhysicsVehicle_setBrakedown},
-        {"setBrakingForce", lua_PhysicsVehicle_setBrakingForce},
-        {"setDownforce", lua_PhysicsVehicle_setDownforce},
-        {"setDrivedown", lua_PhysicsVehicle_setDrivedown},
-        {"setDrivingForce", lua_PhysicsVehicle_setDrivingForce},
-        {"setEnabled", lua_PhysicsVehicle_setEnabled},
-        {"setSteerdown", lua_PhysicsVehicle_setSteerdown},
-        {"setSteeringGain", lua_PhysicsVehicle_setSteeringGain},
-        {"update", lua_PhysicsVehicle_update},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("PhysicsVehicle", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static PhysicsVehicle* getInstance(lua_State* state)
 {
@@ -77,7 +28,7 @@ static PhysicsVehicle* getInstance(lua_State* state)
     return (PhysicsVehicle*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsVehicle_addCollisionListener(lua_State* state)
+static int lua_PhysicsVehicle_addCollisionListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -187,7 +138,7 @@ int lua_PhysicsVehicle_addCollisionListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_addWheel(lua_State* state)
+static int lua_PhysicsVehicle_addWheel(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -229,7 +180,7 @@ int lua_PhysicsVehicle_addWheel(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_collidesWith(lua_State* state)
+static int lua_PhysicsVehicle_collidesWith(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -274,7 +225,7 @@ int lua_PhysicsVehicle_collidesWith(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getBoostGain(lua_State* state)
+static int lua_PhysicsVehicle_getBoostGain(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -309,7 +260,7 @@ int lua_PhysicsVehicle_getBoostGain(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getBoostSpeed(lua_State* state)
+static int lua_PhysicsVehicle_getBoostSpeed(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -344,7 +295,7 @@ int lua_PhysicsVehicle_getBoostSpeed(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getBrakedownFull(lua_State* state)
+static int lua_PhysicsVehicle_getBrakedownFull(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -379,7 +330,7 @@ int lua_PhysicsVehicle_getBrakedownFull(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getBrakedownStart(lua_State* state)
+static int lua_PhysicsVehicle_getBrakedownStart(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -414,7 +365,7 @@ int lua_PhysicsVehicle_getBrakedownStart(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getBrakingForce(lua_State* state)
+static int lua_PhysicsVehicle_getBrakingForce(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -449,7 +400,7 @@ int lua_PhysicsVehicle_getBrakingForce(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getCollisionShape(lua_State* state)
+static int lua_PhysicsVehicle_getCollisionShape(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -493,7 +444,7 @@ int lua_PhysicsVehicle_getCollisionShape(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getDownforce(lua_State* state)
+static int lua_PhysicsVehicle_getDownforce(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -528,7 +479,7 @@ int lua_PhysicsVehicle_getDownforce(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getDrivedownFull(lua_State* state)
+static int lua_PhysicsVehicle_getDrivedownFull(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -563,7 +514,7 @@ int lua_PhysicsVehicle_getDrivedownFull(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getDrivedownStart(lua_State* state)
+static int lua_PhysicsVehicle_getDrivedownStart(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -598,7 +549,7 @@ int lua_PhysicsVehicle_getDrivedownStart(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getDrivingForce(lua_State* state)
+static int lua_PhysicsVehicle_getDrivingForce(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -633,7 +584,7 @@ int lua_PhysicsVehicle_getDrivingForce(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getNode(lua_State* state)
+static int lua_PhysicsVehicle_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -677,7 +628,7 @@ int lua_PhysicsVehicle_getNode(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getRigidBody(lua_State* state)
+static int lua_PhysicsVehicle_getRigidBody(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -721,7 +672,7 @@ int lua_PhysicsVehicle_getRigidBody(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getShapeType(lua_State* state)
+static int lua_PhysicsVehicle_getShapeType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -756,7 +707,7 @@ int lua_PhysicsVehicle_getShapeType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getSpeedKph(lua_State* state)
+static int lua_PhysicsVehicle_getSpeedKph(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -791,7 +742,7 @@ int lua_PhysicsVehicle_getSpeedKph(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getSpeedSmoothKph(lua_State* state)
+static int lua_PhysicsVehicle_getSpeedSmoothKph(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -826,7 +777,7 @@ int lua_PhysicsVehicle_getSpeedSmoothKph(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getSteerdownGain(lua_State* state)
+static int lua_PhysicsVehicle_getSteerdownGain(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -861,7 +812,7 @@ int lua_PhysicsVehicle_getSteerdownGain(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getSteerdownSpeed(lua_State* state)
+static int lua_PhysicsVehicle_getSteerdownSpeed(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -896,7 +847,7 @@ int lua_PhysicsVehicle_getSteerdownSpeed(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getSteeringGain(lua_State* state)
+static int lua_PhysicsVehicle_getSteeringGain(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -931,7 +882,7 @@ int lua_PhysicsVehicle_getSteeringGain(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getType(lua_State* state)
+static int lua_PhysicsVehicle_getType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -966,7 +917,7 @@ int lua_PhysicsVehicle_getType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getWheel(lua_State* state)
+static int lua_PhysicsVehicle_getWheel(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1014,7 +965,7 @@ int lua_PhysicsVehicle_getWheel(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_getWheelCount(lua_State* state)
+static int lua_PhysicsVehicle_getWheelCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1049,7 +1000,7 @@ int lua_PhysicsVehicle_getWheelCount(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_isDynamic(lua_State* state)
+static int lua_PhysicsVehicle_isDynamic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1084,7 +1035,7 @@ int lua_PhysicsVehicle_isDynamic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_isEnabled(lua_State* state)
+static int lua_PhysicsVehicle_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1119,7 +1070,7 @@ int lua_PhysicsVehicle_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_isKinematic(lua_State* state)
+static int lua_PhysicsVehicle_isKinematic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1154,7 +1105,7 @@ int lua_PhysicsVehicle_isKinematic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_isStatic(lua_State* state)
+static int lua_PhysicsVehicle_isStatic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1189,7 +1140,7 @@ int lua_PhysicsVehicle_isStatic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_removeCollisionListener(lua_State* state)
+static int lua_PhysicsVehicle_removeCollisionListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1299,7 +1250,7 @@ int lua_PhysicsVehicle_removeCollisionListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_reset(lua_State* state)
+static int lua_PhysicsVehicle_reset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1331,7 +1282,7 @@ int lua_PhysicsVehicle_reset(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_setBoost(lua_State* state)
+static int lua_PhysicsVehicle_setBoost(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1371,7 +1322,7 @@ int lua_PhysicsVehicle_setBoost(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_setBrakedown(lua_State* state)
+static int lua_PhysicsVehicle_setBrakedown(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1411,7 +1362,7 @@ int lua_PhysicsVehicle_setBrakedown(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_setBrakingForce(lua_State* state)
+static int lua_PhysicsVehicle_setBrakingForce(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1447,7 +1398,7 @@ int lua_PhysicsVehicle_setBrakingForce(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_setDownforce(lua_State* state)
+static int lua_PhysicsVehicle_setDownforce(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1483,7 +1434,7 @@ int lua_PhysicsVehicle_setDownforce(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_setDrivedown(lua_State* state)
+static int lua_PhysicsVehicle_setDrivedown(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1523,7 +1474,7 @@ int lua_PhysicsVehicle_setDrivedown(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_setDrivingForce(lua_State* state)
+static int lua_PhysicsVehicle_setDrivingForce(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1559,7 +1510,7 @@ int lua_PhysicsVehicle_setDrivingForce(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_setEnabled(lua_State* state)
+static int lua_PhysicsVehicle_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1595,7 +1546,7 @@ int lua_PhysicsVehicle_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_setSteerdown(lua_State* state)
+static int lua_PhysicsVehicle_setSteerdown(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1635,7 +1586,7 @@ int lua_PhysicsVehicle_setSteerdown(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_setSteeringGain(lua_State* state)
+static int lua_PhysicsVehicle_setSteeringGain(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1671,7 +1622,7 @@ int lua_PhysicsVehicle_setSteeringGain(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicle_update(lua_State* state)
+static int lua_PhysicsVehicle_update(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1717,6 +1668,105 @@ int lua_PhysicsVehicle_update(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of PhysicsVehicle
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    PhysicsVehicle* ptrObject = reinterpret_cast<PhysicsVehicle*>(ptr);
+
+    if (strcmp(typeName, "PhysicsCollisionObject") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsCollisionObject*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_PhysicsVehicle_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_PhysicsVehicle_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    PhysicsVehicle* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_PhysicsVehicle()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addCollisionListener", lua_PhysicsVehicle_addCollisionListener},
+        {"addWheel", lua_PhysicsVehicle_addWheel},
+        {"collidesWith", lua_PhysicsVehicle_collidesWith},
+        {"getBoostGain", lua_PhysicsVehicle_getBoostGain},
+        {"getBoostSpeed", lua_PhysicsVehicle_getBoostSpeed},
+        {"getBrakedownFull", lua_PhysicsVehicle_getBrakedownFull},
+        {"getBrakedownStart", lua_PhysicsVehicle_getBrakedownStart},
+        {"getBrakingForce", lua_PhysicsVehicle_getBrakingForce},
+        {"getCollisionShape", lua_PhysicsVehicle_getCollisionShape},
+        {"getDownforce", lua_PhysicsVehicle_getDownforce},
+        {"getDrivedownFull", lua_PhysicsVehicle_getDrivedownFull},
+        {"getDrivedownStart", lua_PhysicsVehicle_getDrivedownStart},
+        {"getDrivingForce", lua_PhysicsVehicle_getDrivingForce},
+        {"getNode", lua_PhysicsVehicle_getNode},
+        {"getRigidBody", lua_PhysicsVehicle_getRigidBody},
+        {"getShapeType", lua_PhysicsVehicle_getShapeType},
+        {"getSpeedKph", lua_PhysicsVehicle_getSpeedKph},
+        {"getSpeedSmoothKph", lua_PhysicsVehicle_getSpeedSmoothKph},
+        {"getSteerdownGain", lua_PhysicsVehicle_getSteerdownGain},
+        {"getSteerdownSpeed", lua_PhysicsVehicle_getSteerdownSpeed},
+        {"getSteeringGain", lua_PhysicsVehicle_getSteeringGain},
+        {"getType", lua_PhysicsVehicle_getType},
+        {"getWheel", lua_PhysicsVehicle_getWheel},
+        {"getWheelCount", lua_PhysicsVehicle_getWheelCount},
+        {"isDynamic", lua_PhysicsVehicle_isDynamic},
+        {"isEnabled", lua_PhysicsVehicle_isEnabled},
+        {"isKinematic", lua_PhysicsVehicle_isKinematic},
+        {"isStatic", lua_PhysicsVehicle_isStatic},
+        {"removeCollisionListener", lua_PhysicsVehicle_removeCollisionListener},
+        {"reset", lua_PhysicsVehicle_reset},
+        {"setBoost", lua_PhysicsVehicle_setBoost},
+        {"setBrakedown", lua_PhysicsVehicle_setBrakedown},
+        {"setBrakingForce", lua_PhysicsVehicle_setBrakingForce},
+        {"setDownforce", lua_PhysicsVehicle_setDownforce},
+        {"setDrivedown", lua_PhysicsVehicle_setDrivedown},
+        {"setDrivingForce", lua_PhysicsVehicle_setDrivingForce},
+        {"setEnabled", lua_PhysicsVehicle_setEnabled},
+        {"setSteerdown", lua_PhysicsVehicle_setSteerdown},
+        {"setSteeringGain", lua_PhysicsVehicle_setSteeringGain},
+        {"update", lua_PhysicsVehicle_update},
+        {"to", lua_PhysicsVehicle_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("PhysicsVehicle", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("PhysicsVehicle", __convertTo);
 }
 
 }

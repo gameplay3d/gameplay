@@ -11,37 +11,12 @@
 #include "RenderState.h"
 #include "Scene.h"
 #include "Technique.h"
+#include "RenderState.h"
 
 namespace gameplay
 {
 
-void luaRegister_Technique()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addParameter", lua_Technique_addParameter},
-        {"addRef", lua_Technique_addRef},
-        {"getId", lua_Technique_getId},
-        {"getParameter", lua_Technique_getParameter},
-        {"getParameterByIndex", lua_Technique_getParameterByIndex},
-        {"getParameterCount", lua_Technique_getParameterCount},
-        {"getPass", lua_Technique_getPass},
-        {"getPassByIndex", lua_Technique_getPassByIndex},
-        {"getPassCount", lua_Technique_getPassCount},
-        {"getRefCount", lua_Technique_getRefCount},
-        {"getStateBlock", lua_Technique_getStateBlock},
-        {"release", lua_Technique_release},
-        {"removeParameter", lua_Technique_removeParameter},
-        {"setNodeBinding", lua_Technique_setNodeBinding},
-        {"setParameterAutoBinding", lua_Technique_setParameterAutoBinding},
-        {"setStateBlock", lua_Technique_setStateBlock},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Technique", lua_members, NULL, lua_Technique__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Technique* getInstance(lua_State* state)
 {
@@ -50,7 +25,7 @@ static Technique* getInstance(lua_State* state)
     return (Technique*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Technique__gc(lua_State* state)
+static int lua_Technique__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -88,7 +63,7 @@ int lua_Technique__gc(lua_State* state)
     return 0;
 }
 
-int lua_Technique_addParameter(lua_State* state)
+static int lua_Technique_addParameter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -130,7 +105,7 @@ int lua_Technique_addParameter(lua_State* state)
     return 0;
 }
 
-int lua_Technique_addRef(lua_State* state)
+static int lua_Technique_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -162,7 +137,7 @@ int lua_Technique_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Technique_getId(lua_State* state)
+static int lua_Technique_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -197,7 +172,7 @@ int lua_Technique_getId(lua_State* state)
     return 0;
 }
 
-int lua_Technique_getParameter(lua_State* state)
+static int lua_Technique_getParameter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -245,7 +220,7 @@ int lua_Technique_getParameter(lua_State* state)
     return 0;
 }
 
-int lua_Technique_getParameterByIndex(lua_State* state)
+static int lua_Technique_getParameterByIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -293,7 +268,7 @@ int lua_Technique_getParameterByIndex(lua_State* state)
     return 0;
 }
 
-int lua_Technique_getParameterCount(lua_State* state)
+static int lua_Technique_getParameterCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -328,7 +303,7 @@ int lua_Technique_getParameterCount(lua_State* state)
     return 0;
 }
 
-int lua_Technique_getPass(lua_State* state)
+static int lua_Technique_getPass(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -376,7 +351,7 @@ int lua_Technique_getPass(lua_State* state)
     return 0;
 }
 
-int lua_Technique_getPassByIndex(lua_State* state)
+static int lua_Technique_getPassByIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -424,7 +399,7 @@ int lua_Technique_getPassByIndex(lua_State* state)
     return 0;
 }
 
-int lua_Technique_getPassCount(lua_State* state)
+static int lua_Technique_getPassCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -459,7 +434,7 @@ int lua_Technique_getPassCount(lua_State* state)
     return 0;
 }
 
-int lua_Technique_getRefCount(lua_State* state)
+static int lua_Technique_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -494,7 +469,7 @@ int lua_Technique_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Technique_getStateBlock(lua_State* state)
+static int lua_Technique_getStateBlock(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -538,7 +513,7 @@ int lua_Technique_getStateBlock(lua_State* state)
     return 0;
 }
 
-int lua_Technique_release(lua_State* state)
+static int lua_Technique_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -570,7 +545,7 @@ int lua_Technique_release(lua_State* state)
     return 0;
 }
 
-int lua_Technique_removeParameter(lua_State* state)
+static int lua_Technique_removeParameter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -606,7 +581,7 @@ int lua_Technique_removeParameter(lua_State* state)
     return 0;
 }
 
-int lua_Technique_setNodeBinding(lua_State* state)
+static int lua_Technique_setNodeBinding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -648,7 +623,7 @@ int lua_Technique_setNodeBinding(lua_State* state)
     return 0;
 }
 
-int lua_Technique_setParameterAutoBinding(lua_State* state)
+static int lua_Technique_setParameterAutoBinding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -710,7 +685,7 @@ int lua_Technique_setParameterAutoBinding(lua_State* state)
     return 0;
 }
 
-int lua_Technique_setStateBlock(lua_State* state)
+static int lua_Technique_setStateBlock(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -750,6 +725,81 @@ int lua_Technique_setStateBlock(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Technique
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Technique* ptrObject = reinterpret_cast<Technique*>(ptr);
+
+    if (strcmp(typeName, "RenderState") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<RenderState*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Technique_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Technique_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Technique* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Technique()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addParameter", lua_Technique_addParameter},
+        {"addRef", lua_Technique_addRef},
+        {"getId", lua_Technique_getId},
+        {"getParameter", lua_Technique_getParameter},
+        {"getParameterByIndex", lua_Technique_getParameterByIndex},
+        {"getParameterCount", lua_Technique_getParameterCount},
+        {"getPass", lua_Technique_getPass},
+        {"getPassByIndex", lua_Technique_getPassByIndex},
+        {"getPassCount", lua_Technique_getPassCount},
+        {"getRefCount", lua_Technique_getRefCount},
+        {"getStateBlock", lua_Technique_getStateBlock},
+        {"release", lua_Technique_release},
+        {"removeParameter", lua_Technique_removeParameter},
+        {"setNodeBinding", lua_Technique_setNodeBinding},
+        {"setParameterAutoBinding", lua_Technique_setParameterAutoBinding},
+        {"setStateBlock", lua_Technique_setStateBlock},
+        {"to", lua_Technique_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Technique", lua_members, NULL, lua_Technique__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Technique", __convertTo);
 }
 
 }

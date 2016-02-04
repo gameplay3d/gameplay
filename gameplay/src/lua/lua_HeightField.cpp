@@ -8,34 +8,12 @@
 #include "HeightField.h"
 #include "Image.h"
 #include "Ref.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_HeightField()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_HeightField_addRef},
-        {"getArray", lua_HeightField_getArray},
-        {"getColumnCount", lua_HeightField_getColumnCount},
-        {"getHeight", lua_HeightField_getHeight},
-        {"getRefCount", lua_HeightField_getRefCount},
-        {"getRowCount", lua_HeightField_getRowCount},
-        {"release", lua_HeightField_release},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_HeightField_static_create},
-        {"createFromImage", lua_HeightField_static_createFromImage},
-        {"createFromRAW", lua_HeightField_static_createFromRAW},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("HeightField", lua_members, NULL, lua_HeightField__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static HeightField* getInstance(lua_State* state)
 {
@@ -44,7 +22,7 @@ static HeightField* getInstance(lua_State* state)
     return (HeightField*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_HeightField__gc(lua_State* state)
+static int lua_HeightField__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -82,7 +60,7 @@ int lua_HeightField__gc(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_addRef(lua_State* state)
+static int lua_HeightField_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -114,7 +92,7 @@ int lua_HeightField_addRef(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_getArray(lua_State* state)
+static int lua_HeightField_getArray(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -148,7 +126,7 @@ int lua_HeightField_getArray(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_getColumnCount(lua_State* state)
+static int lua_HeightField_getColumnCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -183,7 +161,7 @@ int lua_HeightField_getColumnCount(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_getHeight(lua_State* state)
+static int lua_HeightField_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -226,7 +204,7 @@ int lua_HeightField_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_getRefCount(lua_State* state)
+static int lua_HeightField_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -261,7 +239,7 @@ int lua_HeightField_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_getRowCount(lua_State* state)
+static int lua_HeightField_getRowCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -296,7 +274,7 @@ int lua_HeightField_getRowCount(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_release(lua_State* state)
+static int lua_HeightField_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -328,7 +306,7 @@ int lua_HeightField_release(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_static_create(lua_State* state)
+static int lua_HeightField_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -378,7 +356,7 @@ int lua_HeightField_static_create(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_static_createFromImage(lua_State* state)
+static int lua_HeightField_static_createFromImage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -492,7 +470,7 @@ int lua_HeightField_static_createFromImage(lua_State* state)
     return 0;
 }
 
-int lua_HeightField_static_createFromRAW(lua_State* state)
+static int lua_HeightField_static_createFromRAW(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -628,6 +606,78 @@ int lua_HeightField_static_createFromRAW(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of HeightField
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    HeightField* ptrObject = reinterpret_cast<HeightField*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_HeightField_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_HeightField_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    HeightField* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_HeightField()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_HeightField_addRef},
+        {"getArray", lua_HeightField_getArray},
+        {"getColumnCount", lua_HeightField_getColumnCount},
+        {"getHeight", lua_HeightField_getHeight},
+        {"getRefCount", lua_HeightField_getRefCount},
+        {"getRowCount", lua_HeightField_getRowCount},
+        {"release", lua_HeightField_release},
+        {"to", lua_HeightField_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_HeightField_static_create},
+        {"createFromImage", lua_HeightField_static_createFromImage},
+        {"createFromRAW", lua_HeightField_static_createFromRAW},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("HeightField", lua_members, NULL, lua_HeightField__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("HeightField", __convertTo);
 }
 
 }

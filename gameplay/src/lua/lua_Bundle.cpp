@@ -10,37 +10,12 @@
 #include "MeshPart.h"
 #include "Ref.h"
 #include "Scene.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_Bundle()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_Bundle_addRef},
-        {"contains", lua_Bundle_contains},
-        {"getObjectCount", lua_Bundle_getObjectCount},
-        {"getObjectId", lua_Bundle_getObjectId},
-        {"getRefCount", lua_Bundle_getRefCount},
-        {"getVersionMajor", lua_Bundle_getVersionMajor},
-        {"getVersionMinor", lua_Bundle_getVersionMinor},
-        {"loadFont", lua_Bundle_loadFont},
-        {"loadMesh", lua_Bundle_loadMesh},
-        {"loadNode", lua_Bundle_loadNode},
-        {"loadScene", lua_Bundle_loadScene},
-        {"release", lua_Bundle_release},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_Bundle_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Bundle", lua_members, NULL, lua_Bundle__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Bundle* getInstance(lua_State* state)
 {
@@ -49,7 +24,7 @@ static Bundle* getInstance(lua_State* state)
     return (Bundle*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Bundle__gc(lua_State* state)
+static int lua_Bundle__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -87,7 +62,7 @@ int lua_Bundle__gc(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_addRef(lua_State* state)
+static int lua_Bundle_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -119,7 +94,7 @@ int lua_Bundle_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_contains(lua_State* state)
+static int lua_Bundle_contains(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -158,7 +133,7 @@ int lua_Bundle_contains(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_getObjectCount(lua_State* state)
+static int lua_Bundle_getObjectCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -193,7 +168,7 @@ int lua_Bundle_getObjectCount(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_getObjectId(lua_State* state)
+static int lua_Bundle_getObjectId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -232,7 +207,7 @@ int lua_Bundle_getObjectId(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_getRefCount(lua_State* state)
+static int lua_Bundle_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -267,7 +242,7 @@ int lua_Bundle_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_getVersionMajor(lua_State* state)
+static int lua_Bundle_getVersionMajor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -302,7 +277,7 @@ int lua_Bundle_getVersionMajor(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_getVersionMinor(lua_State* state)
+static int lua_Bundle_getVersionMinor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -337,7 +312,7 @@ int lua_Bundle_getVersionMinor(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_loadFont(lua_State* state)
+static int lua_Bundle_loadFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -385,7 +360,7 @@ int lua_Bundle_loadFont(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_loadMesh(lua_State* state)
+static int lua_Bundle_loadMesh(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -433,7 +408,7 @@ int lua_Bundle_loadMesh(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_loadNode(lua_State* state)
+static int lua_Bundle_loadNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -481,7 +456,7 @@ int lua_Bundle_loadNode(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_loadScene(lua_State* state)
+static int lua_Bundle_loadScene(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -555,7 +530,7 @@ int lua_Bundle_loadScene(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_release(lua_State* state)
+static int lua_Bundle_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -587,7 +562,7 @@ int lua_Bundle_release(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_static_create(lua_State* state)
+static int lua_Bundle_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -631,6 +606,81 @@ int lua_Bundle_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Bundle
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Bundle* ptrObject = reinterpret_cast<Bundle*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Bundle_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Bundle_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Bundle* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Bundle()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_Bundle_addRef},
+        {"contains", lua_Bundle_contains},
+        {"getObjectCount", lua_Bundle_getObjectCount},
+        {"getObjectId", lua_Bundle_getObjectId},
+        {"getRefCount", lua_Bundle_getRefCount},
+        {"getVersionMajor", lua_Bundle_getVersionMajor},
+        {"getVersionMinor", lua_Bundle_getVersionMinor},
+        {"loadFont", lua_Bundle_loadFont},
+        {"loadMesh", lua_Bundle_loadMesh},
+        {"loadNode", lua_Bundle_loadNode},
+        {"loadScene", lua_Bundle_loadScene},
+        {"release", lua_Bundle_release},
+        {"to", lua_Bundle_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_Bundle_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Bundle", lua_members, NULL, lua_Bundle__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Bundle", __convertTo);
 }
 
 }

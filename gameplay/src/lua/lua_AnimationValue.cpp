@@ -8,22 +8,6 @@
 namespace gameplay
 {
 
-void luaRegister_AnimationValue()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getFloat", lua_AnimationValue_getFloat},
-        {"getFloats", lua_AnimationValue_getFloats},
-        {"setFloat", lua_AnimationValue_setFloat},
-        {"setFloats", lua_AnimationValue_setFloats},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("AnimationValue", lua_members, NULL, NULL, lua_statics, scopePath);
-}
-
 static AnimationValue* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AnimationValue");
@@ -31,7 +15,7 @@ static AnimationValue* getInstance(lua_State* state)
     return (AnimationValue*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AnimationValue_getFloat(lua_State* state)
+static int lua_AnimationValue_getFloat(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -70,7 +54,7 @@ int lua_AnimationValue_getFloat(lua_State* state)
     return 0;
 }
 
-int lua_AnimationValue_getFloats(lua_State* state)
+static int lua_AnimationValue_getFloats(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -114,7 +98,7 @@ int lua_AnimationValue_getFloats(lua_State* state)
     return 0;
 }
 
-int lua_AnimationValue_setFloat(lua_State* state)
+static int lua_AnimationValue_setFloat(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -154,7 +138,7 @@ int lua_AnimationValue_setFloat(lua_State* state)
     return 0;
 }
 
-int lua_AnimationValue_setFloats(lua_State* state)
+static int lua_AnimationValue_setFloats(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -196,6 +180,23 @@ int lua_AnimationValue_setFloats(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_AnimationValue()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getFloat", lua_AnimationValue_getFloat},
+        {"getFloats", lua_AnimationValue_getFloats},
+        {"setFloat", lua_AnimationValue_setFloat},
+        {"setFloats", lua_AnimationValue_setFloats},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("AnimationValue", lua_members, NULL, NULL, lua_statics, scopePath);
+
 }
 
 }

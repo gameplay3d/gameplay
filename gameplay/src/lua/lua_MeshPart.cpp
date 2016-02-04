@@ -8,24 +8,6 @@
 namespace gameplay
 {
 
-void luaRegister_MeshPart()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getIndexBuffer", lua_MeshPart_getIndexBuffer},
-        {"getIndexCount", lua_MeshPart_getIndexCount},
-        {"getIndexFormat", lua_MeshPart_getIndexFormat},
-        {"getMeshIndex", lua_MeshPart_getMeshIndex},
-        {"getPrimitiveType", lua_MeshPart_getPrimitiveType},
-        {"isDynamic", lua_MeshPart_isDynamic},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("MeshPart", lua_members, NULL, lua_MeshPart__gc, lua_statics, scopePath);
-}
-
 static MeshPart* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "MeshPart");
@@ -33,7 +15,7 @@ static MeshPart* getInstance(lua_State* state)
     return (MeshPart*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_MeshPart__gc(lua_State* state)
+static int lua_MeshPart__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -71,7 +53,7 @@ int lua_MeshPart__gc(lua_State* state)
     return 0;
 }
 
-int lua_MeshPart_getIndexBuffer(lua_State* state)
+static int lua_MeshPart_getIndexBuffer(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -115,7 +97,7 @@ int lua_MeshPart_getIndexBuffer(lua_State* state)
     return 0;
 }
 
-int lua_MeshPart_getIndexCount(lua_State* state)
+static int lua_MeshPart_getIndexCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -150,7 +132,7 @@ int lua_MeshPart_getIndexCount(lua_State* state)
     return 0;
 }
 
-int lua_MeshPart_getIndexFormat(lua_State* state)
+static int lua_MeshPart_getIndexFormat(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -185,7 +167,7 @@ int lua_MeshPart_getIndexFormat(lua_State* state)
     return 0;
 }
 
-int lua_MeshPart_getMeshIndex(lua_State* state)
+static int lua_MeshPart_getMeshIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -220,7 +202,7 @@ int lua_MeshPart_getMeshIndex(lua_State* state)
     return 0;
 }
 
-int lua_MeshPart_getPrimitiveType(lua_State* state)
+static int lua_MeshPart_getPrimitiveType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -255,7 +237,7 @@ int lua_MeshPart_getPrimitiveType(lua_State* state)
     return 0;
 }
 
-int lua_MeshPart_isDynamic(lua_State* state)
+static int lua_MeshPart_isDynamic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -288,6 +270,25 @@ int lua_MeshPart_isDynamic(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_MeshPart()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getIndexBuffer", lua_MeshPart_getIndexBuffer},
+        {"getIndexCount", lua_MeshPart_getIndexCount},
+        {"getIndexFormat", lua_MeshPart_getIndexFormat},
+        {"getMeshIndex", lua_MeshPart_getMeshIndex},
+        {"getPrimitiveType", lua_MeshPart_getPrimitiveType},
+        {"isDynamic", lua_MeshPart_isDynamic},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("MeshPart", lua_members, NULL, lua_MeshPart__gc, lua_statics, scopePath);
+
 }
 
 }

@@ -27,22 +27,6 @@
 namespace gameplay
 {
 
-void luaRegister_NodeCloneContext()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"findClonedAnimation", lua_NodeCloneContext_findClonedAnimation},
-        {"findClonedNode", lua_NodeCloneContext_findClonedNode},
-        {"registerClonedAnimation", lua_NodeCloneContext_registerClonedAnimation},
-        {"registerClonedNode", lua_NodeCloneContext_registerClonedNode},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("NodeCloneContext", lua_members, lua_NodeCloneContext__init, lua_NodeCloneContext__gc, lua_statics, scopePath);
-}
-
 static NodeCloneContext* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "NodeCloneContext");
@@ -50,7 +34,7 @@ static NodeCloneContext* getInstance(lua_State* state)
     return (NodeCloneContext*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_NodeCloneContext__gc(lua_State* state)
+static int lua_NodeCloneContext__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -88,7 +72,7 @@ int lua_NodeCloneContext__gc(lua_State* state)
     return 0;
 }
 
-int lua_NodeCloneContext__init(lua_State* state)
+static int lua_NodeCloneContext__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -125,7 +109,7 @@ int lua_NodeCloneContext__init(lua_State* state)
     return 0;
 }
 
-int lua_NodeCloneContext_findClonedAnimation(lua_State* state)
+static int lua_NodeCloneContext_findClonedAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -179,7 +163,7 @@ int lua_NodeCloneContext_findClonedAnimation(lua_State* state)
     return 0;
 }
 
-int lua_NodeCloneContext_findClonedNode(lua_State* state)
+static int lua_NodeCloneContext_findClonedNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -233,7 +217,7 @@ int lua_NodeCloneContext_findClonedNode(lua_State* state)
     return 0;
 }
 
-int lua_NodeCloneContext_registerClonedAnimation(lua_State* state)
+static int lua_NodeCloneContext_registerClonedAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -285,7 +269,7 @@ int lua_NodeCloneContext_registerClonedAnimation(lua_State* state)
     return 0;
 }
 
-int lua_NodeCloneContext_registerClonedNode(lua_State* state)
+static int lua_NodeCloneContext_registerClonedNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -335,6 +319,23 @@ int lua_NodeCloneContext_registerClonedNode(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_NodeCloneContext()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"findClonedAnimation", lua_NodeCloneContext_findClonedAnimation},
+        {"findClonedNode", lua_NodeCloneContext_findClonedNode},
+        {"registerClonedAnimation", lua_NodeCloneContext_registerClonedAnimation},
+        {"registerClonedNode", lua_NodeCloneContext_registerClonedNode},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("NodeCloneContext", lua_members, lua_NodeCloneContext__init, lua_NodeCloneContext__gc, lua_statics, scopePath);
+
 }
 
 }

@@ -13,22 +13,6 @@
 namespace gameplay
 {
 
-void luaRegister_AIStateListener()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"stateEnter", lua_AIStateListener_stateEnter},
-        {"stateExit", lua_AIStateListener_stateExit},
-        {"stateUpdate", lua_AIStateListener_stateUpdate},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("AIState");
-
-    gameplay::ScriptUtil::registerClass("AIStateListener", lua_members, lua_AIStateListener__init, lua_AIStateListener__gc, lua_statics, scopePath);
-}
-
 static AIState::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AIStateListener");
@@ -36,7 +20,7 @@ static AIState::Listener* getInstance(lua_State* state)
     return (AIState::Listener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AIStateListener__gc(lua_State* state)
+static int lua_AIStateListener__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -74,7 +58,7 @@ int lua_AIStateListener__gc(lua_State* state)
     return 0;
 }
 
-int lua_AIStateListener__init(lua_State* state)
+static int lua_AIStateListener__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -111,7 +95,7 @@ int lua_AIStateListener__init(lua_State* state)
     return 0;
 }
 
-int lua_AIStateListener_stateEnter(lua_State* state)
+static int lua_AIStateListener_stateEnter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -163,7 +147,7 @@ int lua_AIStateListener_stateEnter(lua_State* state)
     return 0;
 }
 
-int lua_AIStateListener_stateExit(lua_State* state)
+static int lua_AIStateListener_stateExit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -215,7 +199,7 @@ int lua_AIStateListener_stateExit(lua_State* state)
     return 0;
 }
 
-int lua_AIStateListener_stateUpdate(lua_State* state)
+static int lua_AIStateListener_stateUpdate(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -269,6 +253,23 @@ int lua_AIStateListener_stateUpdate(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_AIStateListener()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"stateEnter", lua_AIStateListener_stateEnter},
+        {"stateExit", lua_AIStateListener_stateExit},
+        {"stateUpdate", lua_AIStateListener_stateUpdate},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("AIState");
+
+    gameplay::ScriptUtil::registerClass("AIStateListener", lua_members, lua_AIStateListener__init, lua_AIStateListener__gc, lua_statics, scopePath);
+
 }
 
 }

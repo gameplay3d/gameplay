@@ -76,13 +76,8 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
 {
     GP_ASSERT(bindings.size() > 0);
 
-    if (bindings[0].getFunctionName() == "lua_AudioListener_static_getInstance")
-    {
-        int i = 0;
-    }
-
     // Print the function signature.
-    o << "int " << bindings[0].getFunctionName() << "(lua_State* state)\n";
+    o << "static int " << bindings[0].getFunctionName() << "(lua_State* state)\n";
     o << "{\n";
 
     if (bindings.size() == 1 && bindings[0].type == FunctionBinding::MEMBER_VARIABLE)
@@ -130,10 +125,7 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                if (Generator::getInstance()->hasDerivedClasses(bindings[0].returnParam.info))
-                    o << "        void* returnPtr = dynamic_cast<void*>(instance->" << bindings[0].name << ");\n";
-                else
-                    o << "        void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
+                o << "        void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
                 o << "        void* returnPtr = (void*)new " << bindings[0].returnParam << "(instance->" << bindings[0].name << ");\n";
@@ -152,7 +144,6 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         }
         outputReturnValue(o, bindings[0], 2);
         o << "    }\n";
-        o << "}\n\n";
     }
     else if (bindings.size() == 1 && 
         (bindings[0].type == FunctionBinding::STATIC_VARIABLE ||
@@ -205,10 +196,7 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                if (Generator::getInstance()->hasDerivedClasses(bindings[0].returnParam.info))
-                    o << "        void* returnPtr = dynamic_cast<void*>(";
-                else
-                    o << "        void* returnPtr = ((void*)";
+                o << "        void* returnPtr = ((void*)";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
                 o << bindings[0].name << ");\n";
@@ -239,7 +227,6 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         }
         outputReturnValue(o, bindings[0], 2);
         o << "    }\n";
-        o << "}\n\n";
     }
     else if (bindings.size() == 1 && bindings[0].type == FunctionBinding::MEMBER_CONSTANT)
     {
@@ -258,10 +245,7 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                if (Generator::getInstance()->hasDerivedClasses(bindings[0].returnParam.info))
-                    o << "    void* returnPtr = dynamic_cast<void*>(instance->" << bindings[0].name << ");\n";
-                else
-                    o << "    void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
+                o << "    void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
                 o << "    void* returnPtr = (void*)new " << bindings[0].returnParam << "(instance->" << bindings[0].name << ");\n";
@@ -279,7 +263,6 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             o << "    " << bindings[0].returnParam << " result = instance->" << bindings[0].name << ";\n";
         }
         outputReturnValue(o, bindings[0], 1);
-        o << "}\n\n";
     }
     else if (bindings.size() == 1 && 
         (bindings[0].type == FunctionBinding::STATIC_CONSTANT ||
@@ -299,10 +282,7 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                if (Generator::getInstance()->hasDerivedClasses(bindings[0].returnParam.info))
-                    o << "    void* returnPtr = dynamic_cast<void*>(";
-                else
-                    o << "    void* returnPtr = ((void*)";
+                o << "    void* returnPtr = ((void*)";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
                 o << bindings[0].name << ");\n";
@@ -332,7 +312,6 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
             o << bindings[0].name << ";\n";
         }
         outputReturnValue(o, bindings[0], 1);
-        o << "}\n\n";
     }
     else
     {
@@ -353,11 +332,11 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
                 }
             }
         }
-        
+
         // Get the parameter count.
         o << "    // Get the number of parameters.\n";
         o << "    int paramCount = lua_gettop(state);\n\n";
-        
+
         // Retrieve all the parameters and attempt to match them to a valid binding,
         // notifying the user if the number of parameters is invalid.
         o << "    // Attempt to match the parameters to a valid binding.\n";
@@ -388,14 +367,14 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
                 indent(o, 3);
                 o << "lua_error(state);\n";
             }
-            
+
             o << "            break;\n";
             o << "        }\n";
         }
-        
+
         o << "        default:\n";
         o << "        {\n";
-        o << "            lua_pushstring(state, \"Invalid number of parameters (expected "; 
+        o << "            lua_pushstring(state, \"Invalid number of parameters (expected ";
         for (iter = paramCounts.begin(), checkCount = 1; iter != paramCounts.end(); iter++)
         {
             if (checkCount == paramCounts.size() && paramCounts.size() > 1)
@@ -412,8 +391,9 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         o << "        }\n";
         o << "    }\n";
         o << "    return 0;\n";
-        o << "}\n\n";
     }
+
+    o << "}\n\n";
 }
 
 bool FunctionBinding::signaturesMatch(const FunctionBinding& b1, const FunctionBinding& b2)
@@ -653,10 +633,7 @@ static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b,
             switch (b.returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                if (Generator::getInstance()->hasDerivedClasses(b.returnParam.info))
-                    o << "void* returnPtr = dynamic_cast<void*>(";
-                else
-                    o << "void* returnPtr = ((void*)";
+                o << "void* returnPtr = ((void*)";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
                 o << "void* returnPtr = (void*)new " << b.returnParam << "(";

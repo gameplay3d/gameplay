@@ -5,9 +5,6 @@
 namespace gameplay
 {
 
-// Lua bindings for Keyboard.
-int lua_Keyboard__gc(lua_State* state);
-
 void luaRegister_Keyboard();
 
 }

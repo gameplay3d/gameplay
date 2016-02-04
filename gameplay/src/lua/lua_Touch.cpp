@@ -7,22 +7,6 @@
 namespace gameplay
 {
 
-void luaRegister_Touch()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"MAX_TOUCH_POINTS", lua_Touch_static_MAX_TOUCH_POINTS},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Touch", lua_members, NULL, lua_Touch__gc, lua_statics, scopePath);
-}
-
 static Touch* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Touch");
@@ -30,7 +14,7 @@ static Touch* getInstance(lua_State* state)
     return (Touch*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Touch__gc(lua_State* state)
+static int lua_Touch__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -68,7 +52,7 @@ int lua_Touch__gc(lua_State* state)
     return 0;
 }
 
-int lua_Touch_static_MAX_TOUCH_POINTS(lua_State* state)
+static int lua_Touch_static_MAX_TOUCH_POINTS(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -83,6 +67,23 @@ int lua_Touch_static_MAX_TOUCH_POINTS(lua_State* state)
     lua_pushunsigned(state, result);
 
     return 1;
+}
+
+void luaRegister_Touch()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"MAX_TOUCH_POINTS", lua_Touch_static_MAX_TOUCH_POINTS},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Touch", lua_members, NULL, lua_Touch__gc, lua_statics, scopePath);
+
 }
 
 }

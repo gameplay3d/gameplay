@@ -10,42 +10,12 @@
 #include "Material.h"
 #include "Ref.h"
 #include "Text.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_Font()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_Font_addRef},
-        {"drawText", lua_Font_drawText},
-        {"finish", lua_Font_finish},
-        {"getCharacterSpacing", lua_Font_getCharacterSpacing},
-        {"getFormat", lua_Font_getFormat},
-        {"getIndexAtLocation", lua_Font_getIndexAtLocation},
-        {"getLocationAtIndex", lua_Font_getLocationAtIndex},
-        {"getRefCount", lua_Font_getRefCount},
-        {"getSize", lua_Font_getSize},
-        {"getSizeCount", lua_Font_getSizeCount},
-        {"getSpriteBatch", lua_Font_getSpriteBatch},
-        {"isCharacterSupported", lua_Font_isCharacterSupported},
-        {"measureText", lua_Font_measureText},
-        {"release", lua_Font_release},
-        {"setCharacterSpacing", lua_Font_setCharacterSpacing},
-        {"start", lua_Font_start},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_Font_static_create},
-        {"getJustify", lua_Font_static_getJustify},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Font", lua_members, NULL, lua_Font__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Font* getInstance(lua_State* state)
 {
@@ -54,7 +24,7 @@ static Font* getInstance(lua_State* state)
     return (Font*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Font__gc(lua_State* state)
+static int lua_Font__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -92,7 +62,7 @@ int lua_Font__gc(lua_State* state)
     return 0;
 }
 
-int lua_Font_addRef(lua_State* state)
+static int lua_Font_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -124,7 +94,7 @@ int lua_Font_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Font_drawText(lua_State* state)
+static int lua_Font_drawText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -652,7 +622,7 @@ int lua_Font_drawText(lua_State* state)
     return 0;
 }
 
-int lua_Font_finish(lua_State* state)
+static int lua_Font_finish(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -684,7 +654,7 @@ int lua_Font_finish(lua_State* state)
     return 0;
 }
 
-int lua_Font_getCharacterSpacing(lua_State* state)
+static int lua_Font_getCharacterSpacing(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -719,7 +689,7 @@ int lua_Font_getCharacterSpacing(lua_State* state)
     return 0;
 }
 
-int lua_Font_getFormat(lua_State* state)
+static int lua_Font_getFormat(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -754,7 +724,7 @@ int lua_Font_getFormat(lua_State* state)
     return 0;
 }
 
-int lua_Font_getIndexAtLocation(lua_State* state)
+static int lua_Font_getIndexAtLocation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1016,7 +986,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
     return 0;
 }
 
-int lua_Font_getLocationAtIndex(lua_State* state)
+static int lua_Font_getLocationAtIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1242,7 +1212,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
     return 0;
 }
 
-int lua_Font_getRefCount(lua_State* state)
+static int lua_Font_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1277,7 +1247,7 @@ int lua_Font_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Font_getSize(lua_State* state)
+static int lua_Font_getSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1333,7 +1303,7 @@ int lua_Font_getSize(lua_State* state)
     return 0;
 }
 
-int lua_Font_getSizeCount(lua_State* state)
+static int lua_Font_getSizeCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1368,7 +1338,7 @@ int lua_Font_getSizeCount(lua_State* state)
     return 0;
 }
 
-int lua_Font_getSpriteBatch(lua_State* state)
+static int lua_Font_getSpriteBatch(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1416,7 +1386,7 @@ int lua_Font_getSpriteBatch(lua_State* state)
     return 0;
 }
 
-int lua_Font_isCharacterSupported(lua_State* state)
+static int lua_Font_isCharacterSupported(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1455,7 +1425,7 @@ int lua_Font_isCharacterSupported(lua_State* state)
     return 0;
 }
 
-int lua_Font_measureText(lua_State* state)
+static int lua_Font_measureText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1680,7 +1650,7 @@ int lua_Font_measureText(lua_State* state)
     return 0;
 }
 
-int lua_Font_release(lua_State* state)
+static int lua_Font_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1712,7 +1682,7 @@ int lua_Font_release(lua_State* state)
     return 0;
 }
 
-int lua_Font_setCharacterSpacing(lua_State* state)
+static int lua_Font_setCharacterSpacing(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1748,7 +1718,7 @@ int lua_Font_setCharacterSpacing(lua_State* state)
     return 0;
 }
 
-int lua_Font_start(lua_State* state)
+static int lua_Font_start(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1780,7 +1750,7 @@ int lua_Font_start(lua_State* state)
     return 0;
 }
 
-int lua_Font_static_create(lua_State* state)
+static int lua_Font_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1858,7 +1828,7 @@ int lua_Font_static_create(lua_State* state)
     return 0;
 }
 
-int lua_Font_static_getJustify(lua_State* state)
+static int lua_Font_static_getJustify(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1893,6 +1863,86 @@ int lua_Font_static_getJustify(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Font
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Font* ptrObject = reinterpret_cast<Font*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Font_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Font_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Font* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Font()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_Font_addRef},
+        {"drawText", lua_Font_drawText},
+        {"finish", lua_Font_finish},
+        {"getCharacterSpacing", lua_Font_getCharacterSpacing},
+        {"getFormat", lua_Font_getFormat},
+        {"getIndexAtLocation", lua_Font_getIndexAtLocation},
+        {"getLocationAtIndex", lua_Font_getLocationAtIndex},
+        {"getRefCount", lua_Font_getRefCount},
+        {"getSize", lua_Font_getSize},
+        {"getSizeCount", lua_Font_getSizeCount},
+        {"getSpriteBatch", lua_Font_getSpriteBatch},
+        {"isCharacterSupported", lua_Font_isCharacterSupported},
+        {"measureText", lua_Font_measureText},
+        {"release", lua_Font_release},
+        {"setCharacterSpacing", lua_Font_setCharacterSpacing},
+        {"start", lua_Font_start},
+        {"to", lua_Font_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_Font_static_create},
+        {"getJustify", lua_Font_static_getJustify},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Font", lua_members, NULL, lua_Font__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Font", __convertTo);
 }
 
 }

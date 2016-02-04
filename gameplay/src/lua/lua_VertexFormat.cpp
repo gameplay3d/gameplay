@@ -8,25 +8,6 @@
 namespace gameplay
 {
 
-void luaRegister_VertexFormat()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getElement", lua_VertexFormat_getElement},
-        {"getElementCount", lua_VertexFormat_getElementCount},
-        {"getVertexSize", lua_VertexFormat_getVertexSize},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"toString", lua_VertexFormat_static_toString},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("VertexFormat", lua_members, lua_VertexFormat__init, lua_VertexFormat__gc, lua_statics, scopePath);
-}
-
 static VertexFormat* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "VertexFormat");
@@ -34,7 +15,7 @@ static VertexFormat* getInstance(lua_State* state)
     return (VertexFormat*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_VertexFormat__gc(lua_State* state)
+static int lua_VertexFormat__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -72,7 +53,7 @@ int lua_VertexFormat__gc(lua_State* state)
     return 0;
 }
 
-int lua_VertexFormat__init(lua_State* state)
+static int lua_VertexFormat__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -128,7 +109,7 @@ int lua_VertexFormat__init(lua_State* state)
     return 0;
 }
 
-int lua_VertexFormat_getElement(lua_State* state)
+static int lua_VertexFormat_getElement(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -176,7 +157,7 @@ int lua_VertexFormat_getElement(lua_State* state)
     return 0;
 }
 
-int lua_VertexFormat_getElementCount(lua_State* state)
+static int lua_VertexFormat_getElementCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -211,7 +192,7 @@ int lua_VertexFormat_getElementCount(lua_State* state)
     return 0;
 }
 
-int lua_VertexFormat_getVertexSize(lua_State* state)
+static int lua_VertexFormat_getVertexSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -246,7 +227,7 @@ int lua_VertexFormat_getVertexSize(lua_State* state)
     return 0;
 }
 
-int lua_VertexFormat_static_toString(lua_State* state)
+static int lua_VertexFormat_static_toString(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -281,6 +262,26 @@ int lua_VertexFormat_static_toString(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_VertexFormat()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getElement", lua_VertexFormat_getElement},
+        {"getElementCount", lua_VertexFormat_getElementCount},
+        {"getVertexSize", lua_VertexFormat_getVertexSize},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"toString", lua_VertexFormat_static_toString},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("VertexFormat", lua_members, lua_VertexFormat__init, lua_VertexFormat__gc, lua_statics, scopePath);
+
 }
 
 }

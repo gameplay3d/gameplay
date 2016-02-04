@@ -7,25 +7,6 @@
 namespace gameplay
 {
 
-void luaRegister_Gesture()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"SWIPE_DIRECTION_DOWN", lua_Gesture_static_SWIPE_DIRECTION_DOWN},
-        {"SWIPE_DIRECTION_LEFT", lua_Gesture_static_SWIPE_DIRECTION_LEFT},
-        {"SWIPE_DIRECTION_RIGHT", lua_Gesture_static_SWIPE_DIRECTION_RIGHT},
-        {"SWIPE_DIRECTION_UP", lua_Gesture_static_SWIPE_DIRECTION_UP},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Gesture", lua_members, NULL, lua_Gesture__gc, lua_statics, scopePath);
-}
-
 static Gesture* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Gesture");
@@ -33,7 +14,7 @@ static Gesture* getInstance(lua_State* state)
     return (Gesture*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Gesture__gc(lua_State* state)
+static int lua_Gesture__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -71,7 +52,7 @@ int lua_Gesture__gc(lua_State* state)
     return 0;
 }
 
-int lua_Gesture_static_SWIPE_DIRECTION_DOWN(lua_State* state)
+static int lua_Gesture_static_SWIPE_DIRECTION_DOWN(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -88,7 +69,7 @@ int lua_Gesture_static_SWIPE_DIRECTION_DOWN(lua_State* state)
     return 1;
 }
 
-int lua_Gesture_static_SWIPE_DIRECTION_LEFT(lua_State* state)
+static int lua_Gesture_static_SWIPE_DIRECTION_LEFT(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -105,7 +86,7 @@ int lua_Gesture_static_SWIPE_DIRECTION_LEFT(lua_State* state)
     return 1;
 }
 
-int lua_Gesture_static_SWIPE_DIRECTION_RIGHT(lua_State* state)
+static int lua_Gesture_static_SWIPE_DIRECTION_RIGHT(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -122,7 +103,7 @@ int lua_Gesture_static_SWIPE_DIRECTION_RIGHT(lua_State* state)
     return 1;
 }
 
-int lua_Gesture_static_SWIPE_DIRECTION_UP(lua_State* state)
+static int lua_Gesture_static_SWIPE_DIRECTION_UP(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -137,6 +118,26 @@ int lua_Gesture_static_SWIPE_DIRECTION_UP(lua_State* state)
     lua_pushinteger(state, result);
 
     return 1;
+}
+
+void luaRegister_Gesture()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"SWIPE_DIRECTION_DOWN", lua_Gesture_static_SWIPE_DIRECTION_DOWN},
+        {"SWIPE_DIRECTION_LEFT", lua_Gesture_static_SWIPE_DIRECTION_LEFT},
+        {"SWIPE_DIRECTION_RIGHT", lua_Gesture_static_SWIPE_DIRECTION_RIGHT},
+        {"SWIPE_DIRECTION_UP", lua_Gesture_static_SWIPE_DIRECTION_UP},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Gesture", lua_members, NULL, lua_Gesture__gc, lua_statics, scopePath);
+
 }
 
 }

@@ -25,28 +25,6 @@
 namespace gameplay
 {
 
-void luaRegister_PhysicsRigidBodyParameters()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"angularDamping", lua_PhysicsRigidBodyParameters_angularDamping},
-        {"angularFactor", lua_PhysicsRigidBodyParameters_angularFactor},
-        {"anisotropicFriction", lua_PhysicsRigidBodyParameters_anisotropicFriction},
-        {"friction", lua_PhysicsRigidBodyParameters_friction},
-        {"kinematic", lua_PhysicsRigidBodyParameters_kinematic},
-        {"linearDamping", lua_PhysicsRigidBodyParameters_linearDamping},
-        {"linearFactor", lua_PhysicsRigidBodyParameters_linearFactor},
-        {"mass", lua_PhysicsRigidBodyParameters_mass},
-        {"restitution", lua_PhysicsRigidBodyParameters_restitution},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("PhysicsRigidBody");
-
-    gameplay::ScriptUtil::registerClass("PhysicsRigidBodyParameters", lua_members, lua_PhysicsRigidBodyParameters__init, lua_PhysicsRigidBodyParameters__gc, lua_statics, scopePath);
-}
-
 static PhysicsRigidBody::Parameters* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsRigidBodyParameters");
@@ -54,7 +32,7 @@ static PhysicsRigidBody::Parameters* getInstance(lua_State* state)
     return (PhysicsRigidBody::Parameters*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsRigidBodyParameters__gc(lua_State* state)
+static int lua_PhysicsRigidBodyParameters__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -92,7 +70,7 @@ int lua_PhysicsRigidBodyParameters__gc(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBodyParameters__init(lua_State* state)
+static int lua_PhysicsRigidBodyParameters__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -570,7 +548,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsRigidBodyParameters_angularDamping(lua_State* state)
+static int lua_PhysicsRigidBodyParameters_angularDamping(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -599,7 +577,7 @@ int lua_PhysicsRigidBodyParameters_angularDamping(lua_State* state)
     }
 }
 
-int lua_PhysicsRigidBodyParameters_angularFactor(lua_State* state)
+static int lua_PhysicsRigidBodyParameters_angularFactor(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -643,7 +621,7 @@ int lua_PhysicsRigidBodyParameters_angularFactor(lua_State* state)
     }
 }
 
-int lua_PhysicsRigidBodyParameters_anisotropicFriction(lua_State* state)
+static int lua_PhysicsRigidBodyParameters_anisotropicFriction(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -687,7 +665,7 @@ int lua_PhysicsRigidBodyParameters_anisotropicFriction(lua_State* state)
     }
 }
 
-int lua_PhysicsRigidBodyParameters_friction(lua_State* state)
+static int lua_PhysicsRigidBodyParameters_friction(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -716,7 +694,7 @@ int lua_PhysicsRigidBodyParameters_friction(lua_State* state)
     }
 }
 
-int lua_PhysicsRigidBodyParameters_kinematic(lua_State* state)
+static int lua_PhysicsRigidBodyParameters_kinematic(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -745,7 +723,7 @@ int lua_PhysicsRigidBodyParameters_kinematic(lua_State* state)
     }
 }
 
-int lua_PhysicsRigidBodyParameters_linearDamping(lua_State* state)
+static int lua_PhysicsRigidBodyParameters_linearDamping(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -774,7 +752,7 @@ int lua_PhysicsRigidBodyParameters_linearDamping(lua_State* state)
     }
 }
 
-int lua_PhysicsRigidBodyParameters_linearFactor(lua_State* state)
+static int lua_PhysicsRigidBodyParameters_linearFactor(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -818,7 +796,7 @@ int lua_PhysicsRigidBodyParameters_linearFactor(lua_State* state)
     }
 }
 
-int lua_PhysicsRigidBodyParameters_mass(lua_State* state)
+static int lua_PhysicsRigidBodyParameters_mass(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -847,7 +825,7 @@ int lua_PhysicsRigidBodyParameters_mass(lua_State* state)
     }
 }
 
-int lua_PhysicsRigidBodyParameters_restitution(lua_State* state)
+static int lua_PhysicsRigidBodyParameters_restitution(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -874,6 +852,29 @@ int lua_PhysicsRigidBodyParameters_restitution(lua_State* state)
 
         return 1;
     }
+}
+
+void luaRegister_PhysicsRigidBodyParameters()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"angularDamping", lua_PhysicsRigidBodyParameters_angularDamping},
+        {"angularFactor", lua_PhysicsRigidBodyParameters_angularFactor},
+        {"anisotropicFriction", lua_PhysicsRigidBodyParameters_anisotropicFriction},
+        {"friction", lua_PhysicsRigidBodyParameters_friction},
+        {"kinematic", lua_PhysicsRigidBodyParameters_kinematic},
+        {"linearDamping", lua_PhysicsRigidBodyParameters_linearDamping},
+        {"linearFactor", lua_PhysicsRigidBodyParameters_linearFactor},
+        {"mass", lua_PhysicsRigidBodyParameters_mass},
+        {"restitution", lua_PhysicsRigidBodyParameters_restitution},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("PhysicsRigidBody");
+
+    gameplay::ScriptUtil::registerClass("PhysicsRigidBodyParameters", lua_members, lua_PhysicsRigidBodyParameters__init, lua_PhysicsRigidBodyParameters__gc, lua_statics, scopePath);
+
 }
 
 }

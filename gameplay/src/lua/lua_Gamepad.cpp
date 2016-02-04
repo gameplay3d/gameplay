@@ -13,29 +13,6 @@
 namespace gameplay
 {
 
-void luaRegister_Gamepad()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"draw", lua_Gamepad_draw},
-        {"getButtonCount", lua_Gamepad_getButtonCount},
-        {"getForm", lua_Gamepad_getForm},
-        {"getJoystickCount", lua_Gamepad_getJoystickCount},
-        {"getJoystickValues", lua_Gamepad_getJoystickValues},
-        {"getName", lua_Gamepad_getName},
-        {"getTriggerCount", lua_Gamepad_getTriggerCount},
-        {"getTriggerValue", lua_Gamepad_getTriggerValue},
-        {"isButtonDown", lua_Gamepad_isButtonDown},
-        {"isVirtual", lua_Gamepad_isVirtual},
-        {"update", lua_Gamepad_update},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Gamepad", lua_members, NULL, NULL, lua_statics, scopePath);
-}
-
 static Gamepad* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Gamepad");
@@ -43,7 +20,7 @@ static Gamepad* getInstance(lua_State* state)
     return (Gamepad*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Gamepad_draw(lua_State* state)
+static int lua_Gamepad_draw(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -75,7 +52,7 @@ int lua_Gamepad_draw(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_getButtonCount(lua_State* state)
+static int lua_Gamepad_getButtonCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -110,7 +87,7 @@ int lua_Gamepad_getButtonCount(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_getForm(lua_State* state)
+static int lua_Gamepad_getForm(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -154,7 +131,7 @@ int lua_Gamepad_getForm(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_getJoystickCount(lua_State* state)
+static int lua_Gamepad_getJoystickCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -189,7 +166,7 @@ int lua_Gamepad_getJoystickCount(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_getJoystickValues(lua_State* state)
+static int lua_Gamepad_getJoystickValues(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -235,7 +212,7 @@ int lua_Gamepad_getJoystickValues(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_getName(lua_State* state)
+static int lua_Gamepad_getName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -270,7 +247,7 @@ int lua_Gamepad_getName(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_getTriggerCount(lua_State* state)
+static int lua_Gamepad_getTriggerCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -305,7 +282,7 @@ int lua_Gamepad_getTriggerCount(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_getTriggerValue(lua_State* state)
+static int lua_Gamepad_getTriggerValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -344,7 +321,7 @@ int lua_Gamepad_getTriggerValue(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_isButtonDown(lua_State* state)
+static int lua_Gamepad_isButtonDown(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -383,7 +360,7 @@ int lua_Gamepad_isButtonDown(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_isVirtual(lua_State* state)
+static int lua_Gamepad_isVirtual(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -418,7 +395,7 @@ int lua_Gamepad_isVirtual(lua_State* state)
     return 0;
 }
 
-int lua_Gamepad_update(lua_State* state)
+static int lua_Gamepad_update(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -452,6 +429,30 @@ int lua_Gamepad_update(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_Gamepad()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"draw", lua_Gamepad_draw},
+        {"getButtonCount", lua_Gamepad_getButtonCount},
+        {"getForm", lua_Gamepad_getForm},
+        {"getJoystickCount", lua_Gamepad_getJoystickCount},
+        {"getJoystickValues", lua_Gamepad_getJoystickValues},
+        {"getName", lua_Gamepad_getName},
+        {"getTriggerCount", lua_Gamepad_getTriggerCount},
+        {"getTriggerValue", lua_Gamepad_getTriggerValue},
+        {"isButtonDown", lua_Gamepad_isButtonDown},
+        {"isVirtual", lua_Gamepad_isVirtual},
+        {"update", lua_Gamepad_update},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Gamepad", lua_members, NULL, NULL, lua_statics, scopePath);
+
 }
 
 }

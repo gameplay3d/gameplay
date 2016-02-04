@@ -9,39 +9,12 @@
 #include "PhysicsFixedConstraint.h"
 #include "PhysicsGenericConstraint.h"
 #include "PhysicsRigidBody.h"
+#include "PhysicsGenericConstraint.h"
 
 namespace gameplay
 {
 
-void luaRegister_PhysicsFixedConstraint()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getBreakingImpulse", lua_PhysicsFixedConstraint_getBreakingImpulse},
-        {"getRotationOffsetA", lua_PhysicsFixedConstraint_getRotationOffsetA},
-        {"getRotationOffsetB", lua_PhysicsFixedConstraint_getRotationOffsetB},
-        {"getTranslationOffsetA", lua_PhysicsFixedConstraint_getTranslationOffsetA},
-        {"getTranslationOffsetB", lua_PhysicsFixedConstraint_getTranslationOffsetB},
-        {"isEnabled", lua_PhysicsFixedConstraint_isEnabled},
-        {"setBreakingImpulse", lua_PhysicsFixedConstraint_setBreakingImpulse},
-        {"setEnabled", lua_PhysicsFixedConstraint_setEnabled},
-        {"setRotationOffsetA", lua_PhysicsFixedConstraint_setRotationOffsetA},
-        {"setRotationOffsetB", lua_PhysicsFixedConstraint_setRotationOffsetB},
-        {"setTranslationOffsetA", lua_PhysicsFixedConstraint_setTranslationOffsetA},
-        {"setTranslationOffsetB", lua_PhysicsFixedConstraint_setTranslationOffsetB},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"centerOfMassMidpoint", lua_PhysicsFixedConstraint_static_centerOfMassMidpoint},
-        {"getRotationOffset", lua_PhysicsFixedConstraint_static_getRotationOffset},
-        {"getTranslationOffset", lua_PhysicsFixedConstraint_static_getTranslationOffset},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("PhysicsFixedConstraint", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static PhysicsFixedConstraint* getInstance(lua_State* state)
 {
@@ -50,7 +23,7 @@ static PhysicsFixedConstraint* getInstance(lua_State* state)
     return (PhysicsFixedConstraint*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsFixedConstraint_getBreakingImpulse(lua_State* state)
+static int lua_PhysicsFixedConstraint_getBreakingImpulse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -85,7 +58,7 @@ int lua_PhysicsFixedConstraint_getBreakingImpulse(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_getRotationOffsetA(lua_State* state)
+static int lua_PhysicsFixedConstraint_getRotationOffsetA(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -129,7 +102,7 @@ int lua_PhysicsFixedConstraint_getRotationOffsetA(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_getRotationOffsetB(lua_State* state)
+static int lua_PhysicsFixedConstraint_getRotationOffsetB(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -173,7 +146,7 @@ int lua_PhysicsFixedConstraint_getRotationOffsetB(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_getTranslationOffsetA(lua_State* state)
+static int lua_PhysicsFixedConstraint_getTranslationOffsetA(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -217,7 +190,7 @@ int lua_PhysicsFixedConstraint_getTranslationOffsetA(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_getTranslationOffsetB(lua_State* state)
+static int lua_PhysicsFixedConstraint_getTranslationOffsetB(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -261,7 +234,7 @@ int lua_PhysicsFixedConstraint_getTranslationOffsetB(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_isEnabled(lua_State* state)
+static int lua_PhysicsFixedConstraint_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -296,7 +269,7 @@ int lua_PhysicsFixedConstraint_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_setBreakingImpulse(lua_State* state)
+static int lua_PhysicsFixedConstraint_setBreakingImpulse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -332,7 +305,7 @@ int lua_PhysicsFixedConstraint_setBreakingImpulse(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_setEnabled(lua_State* state)
+static int lua_PhysicsFixedConstraint_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -368,7 +341,7 @@ int lua_PhysicsFixedConstraint_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_setRotationOffsetA(lua_State* state)
+static int lua_PhysicsFixedConstraint_setRotationOffsetA(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -410,7 +383,7 @@ int lua_PhysicsFixedConstraint_setRotationOffsetA(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_setRotationOffsetB(lua_State* state)
+static int lua_PhysicsFixedConstraint_setRotationOffsetB(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -452,7 +425,7 @@ int lua_PhysicsFixedConstraint_setRotationOffsetB(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_setTranslationOffsetA(lua_State* state)
+static int lua_PhysicsFixedConstraint_setTranslationOffsetA(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -494,7 +467,7 @@ int lua_PhysicsFixedConstraint_setTranslationOffsetA(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_setTranslationOffsetB(lua_State* state)
+static int lua_PhysicsFixedConstraint_setTranslationOffsetB(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -536,7 +509,7 @@ int lua_PhysicsFixedConstraint_setTranslationOffsetB(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_static_centerOfMassMidpoint(lua_State* state)
+static int lua_PhysicsFixedConstraint_static_centerOfMassMidpoint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -598,7 +571,7 @@ int lua_PhysicsFixedConstraint_static_centerOfMassMidpoint(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_static_getRotationOffset(lua_State* state)
+static int lua_PhysicsFixedConstraint_static_getRotationOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -660,7 +633,7 @@ int lua_PhysicsFixedConstraint_static_getRotationOffset(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsFixedConstraint_static_getTranslationOffset(lua_State* state)
+static int lua_PhysicsFixedConstraint_static_getTranslationOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -720,6 +693,83 @@ int lua_PhysicsFixedConstraint_static_getTranslationOffset(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of PhysicsFixedConstraint
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    PhysicsFixedConstraint* ptrObject = reinterpret_cast<PhysicsFixedConstraint*>(ptr);
+
+    if (strcmp(typeName, "PhysicsGenericConstraint") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsGenericConstraint*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_PhysicsFixedConstraint_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_PhysicsFixedConstraint_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    PhysicsFixedConstraint* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_PhysicsFixedConstraint()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getBreakingImpulse", lua_PhysicsFixedConstraint_getBreakingImpulse},
+        {"getRotationOffsetA", lua_PhysicsFixedConstraint_getRotationOffsetA},
+        {"getRotationOffsetB", lua_PhysicsFixedConstraint_getRotationOffsetB},
+        {"getTranslationOffsetA", lua_PhysicsFixedConstraint_getTranslationOffsetA},
+        {"getTranslationOffsetB", lua_PhysicsFixedConstraint_getTranslationOffsetB},
+        {"isEnabled", lua_PhysicsFixedConstraint_isEnabled},
+        {"setBreakingImpulse", lua_PhysicsFixedConstraint_setBreakingImpulse},
+        {"setEnabled", lua_PhysicsFixedConstraint_setEnabled},
+        {"setRotationOffsetA", lua_PhysicsFixedConstraint_setRotationOffsetA},
+        {"setRotationOffsetB", lua_PhysicsFixedConstraint_setRotationOffsetB},
+        {"setTranslationOffsetA", lua_PhysicsFixedConstraint_setTranslationOffsetA},
+        {"setTranslationOffsetB", lua_PhysicsFixedConstraint_setTranslationOffsetB},
+        {"to", lua_PhysicsFixedConstraint_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"centerOfMassMidpoint", lua_PhysicsFixedConstraint_static_centerOfMassMidpoint},
+        {"getRotationOffset", lua_PhysicsFixedConstraint_static_getRotationOffset},
+        {"getTranslationOffset", lua_PhysicsFixedConstraint_static_getTranslationOffset},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("PhysicsFixedConstraint", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("PhysicsFixedConstraint", __convertTo);
 }
 
 }

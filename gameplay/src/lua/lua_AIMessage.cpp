@@ -8,40 +8,6 @@
 namespace gameplay
 {
 
-void luaRegister_AIMessage()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getBoolean", lua_AIMessage_getBoolean},
-        {"getDouble", lua_AIMessage_getDouble},
-        {"getFloat", lua_AIMessage_getFloat},
-        {"getId", lua_AIMessage_getId},
-        {"getInt", lua_AIMessage_getInt},
-        {"getLong", lua_AIMessage_getLong},
-        {"getParameterCount", lua_AIMessage_getParameterCount},
-        {"getParameterType", lua_AIMessage_getParameterType},
-        {"getReceiver", lua_AIMessage_getReceiver},
-        {"getSender", lua_AIMessage_getSender},
-        {"getString", lua_AIMessage_getString},
-        {"setBoolean", lua_AIMessage_setBoolean},
-        {"setDouble", lua_AIMessage_setDouble},
-        {"setFloat", lua_AIMessage_setFloat},
-        {"setInt", lua_AIMessage_setInt},
-        {"setLong", lua_AIMessage_setLong},
-        {"setString", lua_AIMessage_setString},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_AIMessage_static_create},
-        {"destroy", lua_AIMessage_static_destroy},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("AIMessage", lua_members, NULL, NULL, lua_statics, scopePath);
-}
-
 static AIMessage* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AIMessage");
@@ -49,7 +15,7 @@ static AIMessage* getInstance(lua_State* state)
     return (AIMessage*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AIMessage_getBoolean(lua_State* state)
+static int lua_AIMessage_getBoolean(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -88,7 +54,7 @@ int lua_AIMessage_getBoolean(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getDouble(lua_State* state)
+static int lua_AIMessage_getDouble(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -127,7 +93,7 @@ int lua_AIMessage_getDouble(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getFloat(lua_State* state)
+static int lua_AIMessage_getFloat(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -166,7 +132,7 @@ int lua_AIMessage_getFloat(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getId(lua_State* state)
+static int lua_AIMessage_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -201,7 +167,7 @@ int lua_AIMessage_getId(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getInt(lua_State* state)
+static int lua_AIMessage_getInt(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -240,7 +206,7 @@ int lua_AIMessage_getInt(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getLong(lua_State* state)
+static int lua_AIMessage_getLong(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -279,7 +245,7 @@ int lua_AIMessage_getLong(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getParameterCount(lua_State* state)
+static int lua_AIMessage_getParameterCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -314,7 +280,7 @@ int lua_AIMessage_getParameterCount(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getParameterType(lua_State* state)
+static int lua_AIMessage_getParameterType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -353,7 +319,7 @@ int lua_AIMessage_getParameterType(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getReceiver(lua_State* state)
+static int lua_AIMessage_getReceiver(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -388,7 +354,7 @@ int lua_AIMessage_getReceiver(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getSender(lua_State* state)
+static int lua_AIMessage_getSender(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -423,7 +389,7 @@ int lua_AIMessage_getSender(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_getString(lua_State* state)
+static int lua_AIMessage_getString(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -462,7 +428,7 @@ int lua_AIMessage_getString(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_setBoolean(lua_State* state)
+static int lua_AIMessage_setBoolean(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -502,7 +468,7 @@ int lua_AIMessage_setBoolean(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_setDouble(lua_State* state)
+static int lua_AIMessage_setDouble(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -542,7 +508,7 @@ int lua_AIMessage_setDouble(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_setFloat(lua_State* state)
+static int lua_AIMessage_setFloat(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -582,7 +548,7 @@ int lua_AIMessage_setFloat(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_setInt(lua_State* state)
+static int lua_AIMessage_setInt(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -622,7 +588,7 @@ int lua_AIMessage_setInt(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_setLong(lua_State* state)
+static int lua_AIMessage_setLong(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -662,7 +628,7 @@ int lua_AIMessage_setLong(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_setString(lua_State* state)
+static int lua_AIMessage_setString(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -702,7 +668,7 @@ int lua_AIMessage_setString(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_static_create(lua_State* state)
+static int lua_AIMessage_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -760,7 +726,7 @@ int lua_AIMessage_static_create(lua_State* state)
     return 0;
 }
 
-int lua_AIMessage_static_destroy(lua_State* state)
+static int lua_AIMessage_static_destroy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -798,6 +764,41 @@ int lua_AIMessage_static_destroy(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_AIMessage()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getBoolean", lua_AIMessage_getBoolean},
+        {"getDouble", lua_AIMessage_getDouble},
+        {"getFloat", lua_AIMessage_getFloat},
+        {"getId", lua_AIMessage_getId},
+        {"getInt", lua_AIMessage_getInt},
+        {"getLong", lua_AIMessage_getLong},
+        {"getParameterCount", lua_AIMessage_getParameterCount},
+        {"getParameterType", lua_AIMessage_getParameterType},
+        {"getReceiver", lua_AIMessage_getReceiver},
+        {"getSender", lua_AIMessage_getSender},
+        {"getString", lua_AIMessage_getString},
+        {"setBoolean", lua_AIMessage_setBoolean},
+        {"setDouble", lua_AIMessage_setDouble},
+        {"setFloat", lua_AIMessage_setFloat},
+        {"setInt", lua_AIMessage_setInt},
+        {"setLong", lua_AIMessage_setLong},
+        {"setString", lua_AIMessage_setString},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_AIMessage_static_create},
+        {"destroy", lua_AIMessage_static_destroy},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("AIMessage", lua_members, NULL, NULL, lua_statics, scopePath);
+
 }
 
 }

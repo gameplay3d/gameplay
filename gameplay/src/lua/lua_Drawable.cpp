@@ -4,24 +4,26 @@
 #include "lua_Drawable.h"
 #include "Base.h"
 #include "Drawable.h"
+#include "Form.h"
+#include "Model.h"
 #include "Node.h"
+#include "ParticleEmitter.h"
+#include "Sprite.h"
+#include "Terrain.h"
+#include "Text.h"
+#include "TileSet.h"
+#include "Form.h"
+#include "Model.h"
+#include "ParticleEmitter.h"
+#include "Sprite.h"
+#include "Terrain.h"
+#include "Text.h"
+#include "TileSet.h"
 
 namespace gameplay
 {
 
-void luaRegister_Drawable()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"draw", lua_Drawable_draw},
-        {"getNode", lua_Drawable_getNode},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Drawable", lua_members, NULL, lua_Drawable__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Drawable* getInstance(lua_State* state)
 {
@@ -30,7 +32,7 @@ static Drawable* getInstance(lua_State* state)
     return (Drawable*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Drawable__gc(lua_State* state)
+static int lua_Drawable__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -68,7 +70,7 @@ int lua_Drawable__gc(lua_State* state)
     return 0;
 }
 
-int lua_Drawable_draw(lua_State* state)
+static int lua_Drawable_draw(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -124,7 +126,7 @@ int lua_Drawable_draw(lua_State* state)
     return 0;
 }
 
-int lua_Drawable_getNode(lua_State* state)
+static int lua_Drawable_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -166,6 +168,91 @@ int lua_Drawable_getNode(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Drawable
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Drawable* ptrObject = reinterpret_cast<Drawable*>(ptr);
+
+    if (strcmp(typeName, "Form") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Form*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Model") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Model*>(ptrObject));
+    }
+    else if (strcmp(typeName, "ParticleEmitter") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<ParticleEmitter*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Sprite") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Sprite*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Terrain") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Terrain*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Text") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Text*>(ptrObject));
+    }
+    else if (strcmp(typeName, "TileSet") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<TileSet*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Drawable_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Drawable_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Drawable* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Drawable()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"draw", lua_Drawable_draw},
+        {"getNode", lua_Drawable_getNode},
+        {"to", lua_Drawable_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Drawable", lua_members, NULL, lua_Drawable__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Drawable", __convertTo);
 }
 
 }

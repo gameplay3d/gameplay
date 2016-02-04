@@ -15,145 +15,12 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Theme.h"
+#include "Control.h"
 
 namespace gameplay
 {
 
-void luaRegister_JoystickControl()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addListener", lua_JoystickControl_addListener},
-        {"addRef", lua_JoystickControl_addRef},
-        {"addScript", lua_JoystickControl_addScript},
-        {"addScriptCallback", lua_JoystickControl_addScriptCallback},
-        {"canFocus", lua_JoystickControl_canFocus},
-        {"clearScripts", lua_JoystickControl_clearScripts},
-        {"createAnimation", lua_JoystickControl_createAnimation},
-        {"createAnimationFromBy", lua_JoystickControl_createAnimationFromBy},
-        {"createAnimationFromTo", lua_JoystickControl_createAnimationFromTo},
-        {"destroyAnimation", lua_JoystickControl_destroyAnimation},
-        {"getAbsoluteBounds", lua_JoystickControl_getAbsoluteBounds},
-        {"getAlignment", lua_JoystickControl_getAlignment},
-        {"getAnimation", lua_JoystickControl_getAnimation},
-        {"getAnimationPropertyComponentCount", lua_JoystickControl_getAnimationPropertyComponentCount},
-        {"getAnimationPropertyValue", lua_JoystickControl_getAnimationPropertyValue},
-        {"getAutoSize", lua_JoystickControl_getAutoSize},
-        {"getBorder", lua_JoystickControl_getBorder},
-        {"getBounds", lua_JoystickControl_getBounds},
-        {"getClip", lua_JoystickControl_getClip},
-        {"getClipBounds", lua_JoystickControl_getClipBounds},
-        {"getConsumeInputEvents", lua_JoystickControl_getConsumeInputEvents},
-        {"getCursorColor", lua_JoystickControl_getCursorColor},
-        {"getCursorRegion", lua_JoystickControl_getCursorRegion},
-        {"getCursorUVs", lua_JoystickControl_getCursorUVs},
-        {"getFocusIndex", lua_JoystickControl_getFocusIndex},
-        {"getFont", lua_JoystickControl_getFont},
-        {"getFontSize", lua_JoystickControl_getFontSize},
-        {"getHeight", lua_JoystickControl_getHeight},
-        {"getId", lua_JoystickControl_getId},
-        {"getImageColor", lua_JoystickControl_getImageColor},
-        {"getImageRegion", lua_JoystickControl_getImageRegion},
-        {"getImageUVs", lua_JoystickControl_getImageUVs},
-        {"getIndex", lua_JoystickControl_getIndex},
-        {"getInnerRegionSize", lua_JoystickControl_getInnerRegionSize},
-        {"getMargin", lua_JoystickControl_getMargin},
-        {"getOpacity", lua_JoystickControl_getOpacity},
-        {"getOuterRegionSize", lua_JoystickControl_getOuterRegionSize},
-        {"getPadding", lua_JoystickControl_getPadding},
-        {"getParent", lua_JoystickControl_getParent},
-        {"getRadius", lua_JoystickControl_getRadius},
-        {"getRefCount", lua_JoystickControl_getRefCount},
-        {"getScriptEvent", lua_JoystickControl_getScriptEvent},
-        {"getSkinColor", lua_JoystickControl_getSkinColor},
-        {"getSkinRegion", lua_JoystickControl_getSkinRegion},
-        {"getState", lua_JoystickControl_getState},
-        {"getStyle", lua_JoystickControl_getStyle},
-        {"getTextAlignment", lua_JoystickControl_getTextAlignment},
-        {"getTextColor", lua_JoystickControl_getTextColor},
-        {"getTextRightToLeft", lua_JoystickControl_getTextRightToLeft},
-        {"getTheme", lua_JoystickControl_getTheme},
-        {"getTopLevelForm", lua_JoystickControl_getTopLevelForm},
-        {"getTypeName", lua_JoystickControl_getTypeName},
-        {"getValue", lua_JoystickControl_getValue},
-        {"getWidth", lua_JoystickControl_getWidth},
-        {"getX", lua_JoystickControl_getX},
-        {"getY", lua_JoystickControl_getY},
-        {"getZIndex", lua_JoystickControl_getZIndex},
-        {"hasFocus", lua_JoystickControl_hasFocus},
-        {"hasScriptListener", lua_JoystickControl_hasScriptListener},
-        {"isChild", lua_JoystickControl_isChild},
-        {"isContainer", lua_JoystickControl_isContainer},
-        {"isEnabled", lua_JoystickControl_isEnabled},
-        {"isEnabledInHierarchy", lua_JoystickControl_isEnabledInHierarchy},
-        {"isHeightPercentage", lua_JoystickControl_isHeightPercentage},
-        {"isRadiusPercentage", lua_JoystickControl_isRadiusPercentage},
-        {"isRelative", lua_JoystickControl_isRelative},
-        {"isVisible", lua_JoystickControl_isVisible},
-        {"isVisibleInHierarchy", lua_JoystickControl_isVisibleInHierarchy},
-        {"isWidthPercentage", lua_JoystickControl_isWidthPercentage},
-        {"isXPercentage", lua_JoystickControl_isXPercentage},
-        {"isYPercentage", lua_JoystickControl_isYPercentage},
-        {"release", lua_JoystickControl_release},
-        {"removeListener", lua_JoystickControl_removeListener},
-        {"removeScript", lua_JoystickControl_removeScript},
-        {"removeScriptCallback", lua_JoystickControl_removeScriptCallback},
-        {"setAlignment", lua_JoystickControl_setAlignment},
-        {"setAnimationPropertyValue", lua_JoystickControl_setAnimationPropertyValue},
-        {"setAutoSize", lua_JoystickControl_setAutoSize},
-        {"setBorder", lua_JoystickControl_setBorder},
-        {"setBounds", lua_JoystickControl_setBounds},
-        {"setCanFocus", lua_JoystickControl_setCanFocus},
-        {"setConsumeInputEvents", lua_JoystickControl_setConsumeInputEvents},
-        {"setCursorColor", lua_JoystickControl_setCursorColor},
-        {"setCursorRegion", lua_JoystickControl_setCursorRegion},
-        {"setEnabled", lua_JoystickControl_setEnabled},
-        {"setFocus", lua_JoystickControl_setFocus},
-        {"setFocusIndex", lua_JoystickControl_setFocusIndex},
-        {"setFont", lua_JoystickControl_setFont},
-        {"setFontSize", lua_JoystickControl_setFontSize},
-        {"setHeight", lua_JoystickControl_setHeight},
-        {"setId", lua_JoystickControl_setId},
-        {"setImageColor", lua_JoystickControl_setImageColor},
-        {"setImageRegion", lua_JoystickControl_setImageRegion},
-        {"setInnerRegionSize", lua_JoystickControl_setInnerRegionSize},
-        {"setMargin", lua_JoystickControl_setMargin},
-        {"setOpacity", lua_JoystickControl_setOpacity},
-        {"setOuterRegionSize", lua_JoystickControl_setOuterRegionSize},
-        {"setPadding", lua_JoystickControl_setPadding},
-        {"setPosition", lua_JoystickControl_setPosition},
-        {"setRadius", lua_JoystickControl_setRadius},
-        {"setRelative", lua_JoystickControl_setRelative},
-        {"setSize", lua_JoystickControl_setSize},
-        {"setSkinColor", lua_JoystickControl_setSkinColor},
-        {"setSkinRegion", lua_JoystickControl_setSkinRegion},
-        {"setStyle", lua_JoystickControl_setStyle},
-        {"setTextAlignment", lua_JoystickControl_setTextAlignment},
-        {"setTextColor", lua_JoystickControl_setTextColor},
-        {"setTextRightToLeft", lua_JoystickControl_setTextRightToLeft},
-        {"setVisible", lua_JoystickControl_setVisible},
-        {"setWidth", lua_JoystickControl_setWidth},
-        {"setX", lua_JoystickControl_setX},
-        {"setY", lua_JoystickControl_setY},
-        {"setZIndex", lua_JoystickControl_setZIndex},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"ANIMATE_OPACITY", lua_JoystickControl_static_ANIMATE_OPACITY},
-        {"ANIMATE_POSITION", lua_JoystickControl_static_ANIMATE_POSITION},
-        {"ANIMATE_POSITION_X", lua_JoystickControl_static_ANIMATE_POSITION_X},
-        {"ANIMATE_POSITION_Y", lua_JoystickControl_static_ANIMATE_POSITION_Y},
-        {"ANIMATE_SIZE", lua_JoystickControl_static_ANIMATE_SIZE},
-        {"ANIMATE_SIZE_HEIGHT", lua_JoystickControl_static_ANIMATE_SIZE_HEIGHT},
-        {"ANIMATE_SIZE_WIDTH", lua_JoystickControl_static_ANIMATE_SIZE_WIDTH},
-        {"create", lua_JoystickControl_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("JoystickControl", lua_members, NULL, lua_JoystickControl__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static JoystickControl* getInstance(lua_State* state)
 {
@@ -162,7 +29,7 @@ static JoystickControl* getInstance(lua_State* state)
     return (JoystickControl*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_JoystickControl__gc(lua_State* state)
+static int lua_JoystickControl__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -200,7 +67,7 @@ int lua_JoystickControl__gc(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_addListener(lua_State* state)
+static int lua_JoystickControl_addListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -246,7 +113,7 @@ int lua_JoystickControl_addListener(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_addRef(lua_State* state)
+static int lua_JoystickControl_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -278,7 +145,7 @@ int lua_JoystickControl_addRef(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_addScript(lua_State* state)
+static int lua_JoystickControl_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -326,7 +193,7 @@ int lua_JoystickControl_addScript(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_addScriptCallback(lua_State* state)
+static int lua_JoystickControl_addScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -372,7 +239,7 @@ int lua_JoystickControl_addScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_canFocus(lua_State* state)
+static int lua_JoystickControl_canFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -407,7 +274,7 @@ int lua_JoystickControl_canFocus(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_clearScripts(lua_State* state)
+static int lua_JoystickControl_clearScripts(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -439,7 +306,7 @@ int lua_JoystickControl_clearScripts(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_createAnimation(lua_State* state)
+static int lua_JoystickControl_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -642,7 +509,7 @@ int lua_JoystickControl_createAnimation(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_createAnimationFromBy(lua_State* state)
+static int lua_JoystickControl_createAnimationFromBy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -710,7 +577,7 @@ int lua_JoystickControl_createAnimationFromBy(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_createAnimationFromTo(lua_State* state)
+static int lua_JoystickControl_createAnimationFromTo(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -778,7 +645,7 @@ int lua_JoystickControl_createAnimationFromTo(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_destroyAnimation(lua_State* state)
+static int lua_JoystickControl_destroyAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -828,7 +695,7 @@ int lua_JoystickControl_destroyAnimation(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getAbsoluteBounds(lua_State* state)
+static int lua_JoystickControl_getAbsoluteBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -872,7 +739,7 @@ int lua_JoystickControl_getAbsoluteBounds(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getAlignment(lua_State* state)
+static int lua_JoystickControl_getAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -907,7 +774,7 @@ int lua_JoystickControl_getAlignment(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getAnimation(lua_State* state)
+static int lua_JoystickControl_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -981,7 +848,7 @@ int lua_JoystickControl_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getAnimationPropertyComponentCount(lua_State* state)
+static int lua_JoystickControl_getAnimationPropertyComponentCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1020,7 +887,7 @@ int lua_JoystickControl_getAnimationPropertyComponentCount(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getAnimationPropertyValue(lua_State* state)
+static int lua_JoystickControl_getAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1066,7 +933,7 @@ int lua_JoystickControl_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getAutoSize(lua_State* state)
+static int lua_JoystickControl_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1101,7 +968,7 @@ int lua_JoystickControl_getAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getBorder(lua_State* state)
+static int lua_JoystickControl_getBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1175,7 +1042,7 @@ int lua_JoystickControl_getBorder(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getBounds(lua_State* state)
+static int lua_JoystickControl_getBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1219,7 +1086,7 @@ int lua_JoystickControl_getBounds(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getClip(lua_State* state)
+static int lua_JoystickControl_getClip(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1263,7 +1130,7 @@ int lua_JoystickControl_getClip(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getClipBounds(lua_State* state)
+static int lua_JoystickControl_getClipBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1307,7 +1174,7 @@ int lua_JoystickControl_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getConsumeInputEvents(lua_State* state)
+static int lua_JoystickControl_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1342,7 +1209,7 @@ int lua_JoystickControl_getConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getCursorColor(lua_State* state)
+static int lua_JoystickControl_getCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1390,7 +1257,7 @@ int lua_JoystickControl_getCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getCursorRegion(lua_State* state)
+static int lua_JoystickControl_getCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1438,7 +1305,7 @@ int lua_JoystickControl_getCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getCursorUVs(lua_State* state)
+static int lua_JoystickControl_getCursorUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1486,7 +1353,7 @@ int lua_JoystickControl_getCursorUVs(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getFocusIndex(lua_State* state)
+static int lua_JoystickControl_getFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1521,7 +1388,7 @@ int lua_JoystickControl_getFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getFont(lua_State* state)
+static int lua_JoystickControl_getFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1595,7 +1462,7 @@ int lua_JoystickControl_getFont(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getFontSize(lua_State* state)
+static int lua_JoystickControl_getFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1651,7 +1518,7 @@ int lua_JoystickControl_getFontSize(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getHeight(lua_State* state)
+static int lua_JoystickControl_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1686,7 +1553,7 @@ int lua_JoystickControl_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getId(lua_State* state)
+static int lua_JoystickControl_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1721,7 +1588,7 @@ int lua_JoystickControl_getId(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getImageColor(lua_State* state)
+static int lua_JoystickControl_getImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1773,7 +1640,7 @@ int lua_JoystickControl_getImageColor(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getImageRegion(lua_State* state)
+static int lua_JoystickControl_getImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1825,7 +1692,7 @@ int lua_JoystickControl_getImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getImageUVs(lua_State* state)
+static int lua_JoystickControl_getImageUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1877,7 +1744,7 @@ int lua_JoystickControl_getImageUVs(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getIndex(lua_State* state)
+static int lua_JoystickControl_getIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1912,7 +1779,7 @@ int lua_JoystickControl_getIndex(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getInnerRegionSize(lua_State* state)
+static int lua_JoystickControl_getInnerRegionSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2020,7 +1887,7 @@ int lua_JoystickControl_getInnerRegionSize(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getMargin(lua_State* state)
+static int lua_JoystickControl_getMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2064,7 +1931,7 @@ int lua_JoystickControl_getMargin(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getOpacity(lua_State* state)
+static int lua_JoystickControl_getOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2120,7 +1987,7 @@ int lua_JoystickControl_getOpacity(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getOuterRegionSize(lua_State* state)
+static int lua_JoystickControl_getOuterRegionSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2228,7 +2095,7 @@ int lua_JoystickControl_getOuterRegionSize(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getPadding(lua_State* state)
+static int lua_JoystickControl_getPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2272,7 +2139,7 @@ int lua_JoystickControl_getPadding(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getParent(lua_State* state)
+static int lua_JoystickControl_getParent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2316,7 +2183,7 @@ int lua_JoystickControl_getParent(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getRadius(lua_State* state)
+static int lua_JoystickControl_getRadius(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2351,7 +2218,7 @@ int lua_JoystickControl_getRadius(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getRefCount(lua_State* state)
+static int lua_JoystickControl_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2386,7 +2253,7 @@ int lua_JoystickControl_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getScriptEvent(lua_State* state)
+static int lua_JoystickControl_getScriptEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2434,7 +2301,7 @@ int lua_JoystickControl_getScriptEvent(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getSkinColor(lua_State* state)
+static int lua_JoystickControl_getSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2508,7 +2375,7 @@ int lua_JoystickControl_getSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getSkinRegion(lua_State* state)
+static int lua_JoystickControl_getSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2582,7 +2449,7 @@ int lua_JoystickControl_getSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getState(lua_State* state)
+static int lua_JoystickControl_getState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2617,7 +2484,7 @@ int lua_JoystickControl_getState(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getStyle(lua_State* state)
+static int lua_JoystickControl_getStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2661,7 +2528,7 @@ int lua_JoystickControl_getStyle(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getTextAlignment(lua_State* state)
+static int lua_JoystickControl_getTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2717,7 +2584,7 @@ int lua_JoystickControl_getTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getTextColor(lua_State* state)
+static int lua_JoystickControl_getTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2791,7 +2658,7 @@ int lua_JoystickControl_getTextColor(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getTextRightToLeft(lua_State* state)
+static int lua_JoystickControl_getTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2847,7 +2714,7 @@ int lua_JoystickControl_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getTheme(lua_State* state)
+static int lua_JoystickControl_getTheme(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2891,7 +2758,7 @@ int lua_JoystickControl_getTheme(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getTopLevelForm(lua_State* state)
+static int lua_JoystickControl_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2935,7 +2802,7 @@ int lua_JoystickControl_getTopLevelForm(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getTypeName(lua_State* state)
+static int lua_JoystickControl_getTypeName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2970,7 +2837,7 @@ int lua_JoystickControl_getTypeName(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getValue(lua_State* state)
+static int lua_JoystickControl_getValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3014,7 +2881,7 @@ int lua_JoystickControl_getValue(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getWidth(lua_State* state)
+static int lua_JoystickControl_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3049,7 +2916,7 @@ int lua_JoystickControl_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getX(lua_State* state)
+static int lua_JoystickControl_getX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3084,7 +2951,7 @@ int lua_JoystickControl_getX(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getY(lua_State* state)
+static int lua_JoystickControl_getY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3119,7 +2986,7 @@ int lua_JoystickControl_getY(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_getZIndex(lua_State* state)
+static int lua_JoystickControl_getZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3154,7 +3021,7 @@ int lua_JoystickControl_getZIndex(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_hasFocus(lua_State* state)
+static int lua_JoystickControl_hasFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3189,7 +3056,7 @@ int lua_JoystickControl_hasFocus(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_hasScriptListener(lua_State* state)
+static int lua_JoystickControl_hasScriptListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3252,7 +3119,7 @@ int lua_JoystickControl_hasScriptListener(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isChild(lua_State* state)
+static int lua_JoystickControl_isChild(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3297,7 +3164,7 @@ int lua_JoystickControl_isChild(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isContainer(lua_State* state)
+static int lua_JoystickControl_isContainer(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3332,7 +3199,7 @@ int lua_JoystickControl_isContainer(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isEnabled(lua_State* state)
+static int lua_JoystickControl_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3367,7 +3234,7 @@ int lua_JoystickControl_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isEnabledInHierarchy(lua_State* state)
+static int lua_JoystickControl_isEnabledInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3402,7 +3269,7 @@ int lua_JoystickControl_isEnabledInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isHeightPercentage(lua_State* state)
+static int lua_JoystickControl_isHeightPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3437,7 +3304,7 @@ int lua_JoystickControl_isHeightPercentage(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isRadiusPercentage(lua_State* state)
+static int lua_JoystickControl_isRadiusPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3472,7 +3339,7 @@ int lua_JoystickControl_isRadiusPercentage(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isRelative(lua_State* state)
+static int lua_JoystickControl_isRelative(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3507,7 +3374,7 @@ int lua_JoystickControl_isRelative(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isVisible(lua_State* state)
+static int lua_JoystickControl_isVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3542,7 +3409,7 @@ int lua_JoystickControl_isVisible(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isVisibleInHierarchy(lua_State* state)
+static int lua_JoystickControl_isVisibleInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3577,7 +3444,7 @@ int lua_JoystickControl_isVisibleInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isWidthPercentage(lua_State* state)
+static int lua_JoystickControl_isWidthPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3612,7 +3479,7 @@ int lua_JoystickControl_isWidthPercentage(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isXPercentage(lua_State* state)
+static int lua_JoystickControl_isXPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3647,7 +3514,7 @@ int lua_JoystickControl_isXPercentage(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_isYPercentage(lua_State* state)
+static int lua_JoystickControl_isYPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3682,7 +3549,7 @@ int lua_JoystickControl_isYPercentage(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_release(lua_State* state)
+static int lua_JoystickControl_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3714,7 +3581,7 @@ int lua_JoystickControl_release(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_removeListener(lua_State* state)
+static int lua_JoystickControl_removeListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3756,7 +3623,7 @@ int lua_JoystickControl_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_removeScript(lua_State* state)
+static int lua_JoystickControl_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3795,7 +3662,7 @@ int lua_JoystickControl_removeScript(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_removeScriptCallback(lua_State* state)
+static int lua_JoystickControl_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3841,7 +3708,7 @@ int lua_JoystickControl_removeScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setAlignment(lua_State* state)
+static int lua_JoystickControl_setAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3877,7 +3744,7 @@ int lua_JoystickControl_setAlignment(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setAnimationPropertyValue(lua_State* state)
+static int lua_JoystickControl_setAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3955,7 +3822,7 @@ int lua_JoystickControl_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setAutoSize(lua_State* state)
+static int lua_JoystickControl_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3991,7 +3858,7 @@ int lua_JoystickControl_setAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setBorder(lua_State* state)
+static int lua_JoystickControl_setBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4073,7 +3940,7 @@ int lua_JoystickControl_setBorder(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setBounds(lua_State* state)
+static int lua_JoystickControl_setBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4115,7 +3982,7 @@ int lua_JoystickControl_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setCanFocus(lua_State* state)
+static int lua_JoystickControl_setCanFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4151,7 +4018,7 @@ int lua_JoystickControl_setCanFocus(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setConsumeInputEvents(lua_State* state)
+static int lua_JoystickControl_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4187,7 +4054,7 @@ int lua_JoystickControl_setConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setCursorColor(lua_State* state)
+static int lua_JoystickControl_setCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4233,7 +4100,7 @@ int lua_JoystickControl_setCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setCursorRegion(lua_State* state)
+static int lua_JoystickControl_setCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4279,7 +4146,7 @@ int lua_JoystickControl_setCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setEnabled(lua_State* state)
+static int lua_JoystickControl_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4315,7 +4182,7 @@ int lua_JoystickControl_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setFocus(lua_State* state)
+static int lua_JoystickControl_setFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4350,7 +4217,7 @@ int lua_JoystickControl_setFocus(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setFocusIndex(lua_State* state)
+static int lua_JoystickControl_setFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4386,7 +4253,7 @@ int lua_JoystickControl_setFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setFont(lua_State* state)
+static int lua_JoystickControl_setFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4456,7 +4323,7 @@ int lua_JoystickControl_setFont(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setFontSize(lua_State* state)
+static int lua_JoystickControl_setFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4514,7 +4381,7 @@ int lua_JoystickControl_setFontSize(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setHeight(lua_State* state)
+static int lua_JoystickControl_setHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4572,7 +4439,7 @@ int lua_JoystickControl_setHeight(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setId(lua_State* state)
+static int lua_JoystickControl_setId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4608,7 +4475,7 @@ int lua_JoystickControl_setId(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setImageColor(lua_State* state)
+static int lua_JoystickControl_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4686,7 +4553,7 @@ int lua_JoystickControl_setImageColor(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setImageRegion(lua_State* state)
+static int lua_JoystickControl_setImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4764,7 +4631,7 @@ int lua_JoystickControl_setImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setInnerRegionSize(lua_State* state)
+static int lua_JoystickControl_setInnerRegionSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4866,7 +4733,7 @@ int lua_JoystickControl_setInnerRegionSize(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setMargin(lua_State* state)
+static int lua_JoystickControl_setMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4914,7 +4781,7 @@ int lua_JoystickControl_setMargin(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setOpacity(lua_State* state)
+static int lua_JoystickControl_setOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4972,7 +4839,7 @@ int lua_JoystickControl_setOpacity(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setOuterRegionSize(lua_State* state)
+static int lua_JoystickControl_setOuterRegionSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5074,7 +4941,7 @@ int lua_JoystickControl_setOuterRegionSize(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setPadding(lua_State* state)
+static int lua_JoystickControl_setPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5122,7 +4989,7 @@ int lua_JoystickControl_setPadding(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setPosition(lua_State* state)
+static int lua_JoystickControl_setPosition(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5162,7 +5029,7 @@ int lua_JoystickControl_setPosition(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setRadius(lua_State* state)
+static int lua_JoystickControl_setRadius(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5220,7 +5087,7 @@ int lua_JoystickControl_setRadius(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setRelative(lua_State* state)
+static int lua_JoystickControl_setRelative(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5256,7 +5123,7 @@ int lua_JoystickControl_setRelative(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setSize(lua_State* state)
+static int lua_JoystickControl_setSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5296,7 +5163,7 @@ int lua_JoystickControl_setSize(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setSkinColor(lua_State* state)
+static int lua_JoystickControl_setSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5366,7 +5233,7 @@ int lua_JoystickControl_setSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setSkinRegion(lua_State* state)
+static int lua_JoystickControl_setSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5436,7 +5303,7 @@ int lua_JoystickControl_setSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setStyle(lua_State* state)
+static int lua_JoystickControl_setStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5478,7 +5345,7 @@ int lua_JoystickControl_setStyle(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setTextAlignment(lua_State* state)
+static int lua_JoystickControl_setTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5536,7 +5403,7 @@ int lua_JoystickControl_setTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setTextColor(lua_State* state)
+static int lua_JoystickControl_setTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5606,7 +5473,7 @@ int lua_JoystickControl_setTextColor(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setTextRightToLeft(lua_State* state)
+static int lua_JoystickControl_setTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5664,7 +5531,7 @@ int lua_JoystickControl_setTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setVisible(lua_State* state)
+static int lua_JoystickControl_setVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5700,7 +5567,7 @@ int lua_JoystickControl_setVisible(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setWidth(lua_State* state)
+static int lua_JoystickControl_setWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5758,7 +5625,7 @@ int lua_JoystickControl_setWidth(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setX(lua_State* state)
+static int lua_JoystickControl_setX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5816,7 +5683,7 @@ int lua_JoystickControl_setX(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setY(lua_State* state)
+static int lua_JoystickControl_setY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5874,7 +5741,7 @@ int lua_JoystickControl_setY(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_setZIndex(lua_State* state)
+static int lua_JoystickControl_setZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5910,7 +5777,7 @@ int lua_JoystickControl_setZIndex(lua_State* state)
     return 0;
 }
 
-int lua_JoystickControl_static_ANIMATE_OPACITY(lua_State* state)
+static int lua_JoystickControl_static_ANIMATE_OPACITY(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5927,7 +5794,7 @@ int lua_JoystickControl_static_ANIMATE_OPACITY(lua_State* state)
     return 1;
 }
 
-int lua_JoystickControl_static_ANIMATE_POSITION(lua_State* state)
+static int lua_JoystickControl_static_ANIMATE_POSITION(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5944,7 +5811,7 @@ int lua_JoystickControl_static_ANIMATE_POSITION(lua_State* state)
     return 1;
 }
 
-int lua_JoystickControl_static_ANIMATE_POSITION_X(lua_State* state)
+static int lua_JoystickControl_static_ANIMATE_POSITION_X(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5961,7 +5828,7 @@ int lua_JoystickControl_static_ANIMATE_POSITION_X(lua_State* state)
     return 1;
 }
 
-int lua_JoystickControl_static_ANIMATE_POSITION_Y(lua_State* state)
+static int lua_JoystickControl_static_ANIMATE_POSITION_Y(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5978,7 +5845,7 @@ int lua_JoystickControl_static_ANIMATE_POSITION_Y(lua_State* state)
     return 1;
 }
 
-int lua_JoystickControl_static_ANIMATE_SIZE(lua_State* state)
+static int lua_JoystickControl_static_ANIMATE_SIZE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5995,7 +5862,7 @@ int lua_JoystickControl_static_ANIMATE_SIZE(lua_State* state)
     return 1;
 }
 
-int lua_JoystickControl_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
+static int lua_JoystickControl_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -6012,7 +5879,7 @@ int lua_JoystickControl_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
     return 1;
 }
 
-int lua_JoystickControl_static_ANIMATE_SIZE_WIDTH(lua_State* state)
+static int lua_JoystickControl_static_ANIMATE_SIZE_WIDTH(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -6029,7 +5896,7 @@ int lua_JoystickControl_static_ANIMATE_SIZE_WIDTH(lua_State* state)
     return 1;
 }
 
-int lua_JoystickControl_static_create(lua_State* state)
+static int lua_JoystickControl_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -6111,6 +5978,189 @@ int lua_JoystickControl_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of JoystickControl
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    JoystickControl* ptrObject = reinterpret_cast<JoystickControl*>(ptr);
+
+    if (strcmp(typeName, "Control") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Control*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_JoystickControl_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_JoystickControl_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    JoystickControl* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_JoystickControl()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addListener", lua_JoystickControl_addListener},
+        {"addRef", lua_JoystickControl_addRef},
+        {"addScript", lua_JoystickControl_addScript},
+        {"addScriptCallback", lua_JoystickControl_addScriptCallback},
+        {"canFocus", lua_JoystickControl_canFocus},
+        {"clearScripts", lua_JoystickControl_clearScripts},
+        {"createAnimation", lua_JoystickControl_createAnimation},
+        {"createAnimationFromBy", lua_JoystickControl_createAnimationFromBy},
+        {"createAnimationFromTo", lua_JoystickControl_createAnimationFromTo},
+        {"destroyAnimation", lua_JoystickControl_destroyAnimation},
+        {"getAbsoluteBounds", lua_JoystickControl_getAbsoluteBounds},
+        {"getAlignment", lua_JoystickControl_getAlignment},
+        {"getAnimation", lua_JoystickControl_getAnimation},
+        {"getAnimationPropertyComponentCount", lua_JoystickControl_getAnimationPropertyComponentCount},
+        {"getAnimationPropertyValue", lua_JoystickControl_getAnimationPropertyValue},
+        {"getAutoSize", lua_JoystickControl_getAutoSize},
+        {"getBorder", lua_JoystickControl_getBorder},
+        {"getBounds", lua_JoystickControl_getBounds},
+        {"getClip", lua_JoystickControl_getClip},
+        {"getClipBounds", lua_JoystickControl_getClipBounds},
+        {"getConsumeInputEvents", lua_JoystickControl_getConsumeInputEvents},
+        {"getCursorColor", lua_JoystickControl_getCursorColor},
+        {"getCursorRegion", lua_JoystickControl_getCursorRegion},
+        {"getCursorUVs", lua_JoystickControl_getCursorUVs},
+        {"getFocusIndex", lua_JoystickControl_getFocusIndex},
+        {"getFont", lua_JoystickControl_getFont},
+        {"getFontSize", lua_JoystickControl_getFontSize},
+        {"getHeight", lua_JoystickControl_getHeight},
+        {"getId", lua_JoystickControl_getId},
+        {"getImageColor", lua_JoystickControl_getImageColor},
+        {"getImageRegion", lua_JoystickControl_getImageRegion},
+        {"getImageUVs", lua_JoystickControl_getImageUVs},
+        {"getIndex", lua_JoystickControl_getIndex},
+        {"getInnerRegionSize", lua_JoystickControl_getInnerRegionSize},
+        {"getMargin", lua_JoystickControl_getMargin},
+        {"getOpacity", lua_JoystickControl_getOpacity},
+        {"getOuterRegionSize", lua_JoystickControl_getOuterRegionSize},
+        {"getPadding", lua_JoystickControl_getPadding},
+        {"getParent", lua_JoystickControl_getParent},
+        {"getRadius", lua_JoystickControl_getRadius},
+        {"getRefCount", lua_JoystickControl_getRefCount},
+        {"getScriptEvent", lua_JoystickControl_getScriptEvent},
+        {"getSkinColor", lua_JoystickControl_getSkinColor},
+        {"getSkinRegion", lua_JoystickControl_getSkinRegion},
+        {"getState", lua_JoystickControl_getState},
+        {"getStyle", lua_JoystickControl_getStyle},
+        {"getTextAlignment", lua_JoystickControl_getTextAlignment},
+        {"getTextColor", lua_JoystickControl_getTextColor},
+        {"getTextRightToLeft", lua_JoystickControl_getTextRightToLeft},
+        {"getTheme", lua_JoystickControl_getTheme},
+        {"getTopLevelForm", lua_JoystickControl_getTopLevelForm},
+        {"getTypeName", lua_JoystickControl_getTypeName},
+        {"getValue", lua_JoystickControl_getValue},
+        {"getWidth", lua_JoystickControl_getWidth},
+        {"getX", lua_JoystickControl_getX},
+        {"getY", lua_JoystickControl_getY},
+        {"getZIndex", lua_JoystickControl_getZIndex},
+        {"hasFocus", lua_JoystickControl_hasFocus},
+        {"hasScriptListener", lua_JoystickControl_hasScriptListener},
+        {"isChild", lua_JoystickControl_isChild},
+        {"isContainer", lua_JoystickControl_isContainer},
+        {"isEnabled", lua_JoystickControl_isEnabled},
+        {"isEnabledInHierarchy", lua_JoystickControl_isEnabledInHierarchy},
+        {"isHeightPercentage", lua_JoystickControl_isHeightPercentage},
+        {"isRadiusPercentage", lua_JoystickControl_isRadiusPercentage},
+        {"isRelative", lua_JoystickControl_isRelative},
+        {"isVisible", lua_JoystickControl_isVisible},
+        {"isVisibleInHierarchy", lua_JoystickControl_isVisibleInHierarchy},
+        {"isWidthPercentage", lua_JoystickControl_isWidthPercentage},
+        {"isXPercentage", lua_JoystickControl_isXPercentage},
+        {"isYPercentage", lua_JoystickControl_isYPercentage},
+        {"release", lua_JoystickControl_release},
+        {"removeListener", lua_JoystickControl_removeListener},
+        {"removeScript", lua_JoystickControl_removeScript},
+        {"removeScriptCallback", lua_JoystickControl_removeScriptCallback},
+        {"setAlignment", lua_JoystickControl_setAlignment},
+        {"setAnimationPropertyValue", lua_JoystickControl_setAnimationPropertyValue},
+        {"setAutoSize", lua_JoystickControl_setAutoSize},
+        {"setBorder", lua_JoystickControl_setBorder},
+        {"setBounds", lua_JoystickControl_setBounds},
+        {"setCanFocus", lua_JoystickControl_setCanFocus},
+        {"setConsumeInputEvents", lua_JoystickControl_setConsumeInputEvents},
+        {"setCursorColor", lua_JoystickControl_setCursorColor},
+        {"setCursorRegion", lua_JoystickControl_setCursorRegion},
+        {"setEnabled", lua_JoystickControl_setEnabled},
+        {"setFocus", lua_JoystickControl_setFocus},
+        {"setFocusIndex", lua_JoystickControl_setFocusIndex},
+        {"setFont", lua_JoystickControl_setFont},
+        {"setFontSize", lua_JoystickControl_setFontSize},
+        {"setHeight", lua_JoystickControl_setHeight},
+        {"setId", lua_JoystickControl_setId},
+        {"setImageColor", lua_JoystickControl_setImageColor},
+        {"setImageRegion", lua_JoystickControl_setImageRegion},
+        {"setInnerRegionSize", lua_JoystickControl_setInnerRegionSize},
+        {"setMargin", lua_JoystickControl_setMargin},
+        {"setOpacity", lua_JoystickControl_setOpacity},
+        {"setOuterRegionSize", lua_JoystickControl_setOuterRegionSize},
+        {"setPadding", lua_JoystickControl_setPadding},
+        {"setPosition", lua_JoystickControl_setPosition},
+        {"setRadius", lua_JoystickControl_setRadius},
+        {"setRelative", lua_JoystickControl_setRelative},
+        {"setSize", lua_JoystickControl_setSize},
+        {"setSkinColor", lua_JoystickControl_setSkinColor},
+        {"setSkinRegion", lua_JoystickControl_setSkinRegion},
+        {"setStyle", lua_JoystickControl_setStyle},
+        {"setTextAlignment", lua_JoystickControl_setTextAlignment},
+        {"setTextColor", lua_JoystickControl_setTextColor},
+        {"setTextRightToLeft", lua_JoystickControl_setTextRightToLeft},
+        {"setVisible", lua_JoystickControl_setVisible},
+        {"setWidth", lua_JoystickControl_setWidth},
+        {"setX", lua_JoystickControl_setX},
+        {"setY", lua_JoystickControl_setY},
+        {"setZIndex", lua_JoystickControl_setZIndex},
+        {"to", lua_JoystickControl_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"ANIMATE_OPACITY", lua_JoystickControl_static_ANIMATE_OPACITY},
+        {"ANIMATE_POSITION", lua_JoystickControl_static_ANIMATE_POSITION},
+        {"ANIMATE_POSITION_X", lua_JoystickControl_static_ANIMATE_POSITION_X},
+        {"ANIMATE_POSITION_Y", lua_JoystickControl_static_ANIMATE_POSITION_Y},
+        {"ANIMATE_SIZE", lua_JoystickControl_static_ANIMATE_SIZE},
+        {"ANIMATE_SIZE_HEIGHT", lua_JoystickControl_static_ANIMATE_SIZE_HEIGHT},
+        {"ANIMATE_SIZE_WIDTH", lua_JoystickControl_static_ANIMATE_SIZE_WIDTH},
+        {"create", lua_JoystickControl_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("JoystickControl", lua_members, NULL, lua_JoystickControl__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("JoystickControl", __convertTo);
 }
 
 }

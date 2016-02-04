@@ -8,21 +8,6 @@
 namespace gameplay
 {
 
-void luaRegister_VertexFormatElement()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"size", lua_VertexFormatElement_size},
-        {"usage", lua_VertexFormatElement_usage},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("VertexFormat");
-
-    gameplay::ScriptUtil::registerClass("VertexFormatElement", lua_members, lua_VertexFormatElement__init, lua_VertexFormatElement__gc, lua_statics, scopePath);
-}
-
 static VertexFormat::Element* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "VertexFormatElement");
@@ -30,7 +15,7 @@ static VertexFormat::Element* getInstance(lua_State* state)
     return (VertexFormat::Element*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_VertexFormatElement__gc(lua_State* state)
+static int lua_VertexFormatElement__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -68,7 +53,7 @@ int lua_VertexFormatElement__gc(lua_State* state)
     return 0;
 }
 
-int lua_VertexFormatElement__init(lua_State* state)
+static int lua_VertexFormatElement__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -140,7 +125,7 @@ int lua_VertexFormatElement__init(lua_State* state)
     return 0;
 }
 
-int lua_VertexFormatElement_size(lua_State* state)
+static int lua_VertexFormatElement_size(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -169,7 +154,7 @@ int lua_VertexFormatElement_size(lua_State* state)
     }
 }
 
-int lua_VertexFormatElement_usage(lua_State* state)
+static int lua_VertexFormatElement_usage(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -196,6 +181,22 @@ int lua_VertexFormatElement_usage(lua_State* state)
 
         return 1;
     }
+}
+
+void luaRegister_VertexFormatElement()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"size", lua_VertexFormatElement_size},
+        {"usage", lua_VertexFormatElement_usage},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("VertexFormat");
+
+    gameplay::ScriptUtil::registerClass("VertexFormatElement", lua_members, lua_VertexFormatElement__init, lua_VertexFormatElement__gc, lua_statics, scopePath);
+
 }
 
 }

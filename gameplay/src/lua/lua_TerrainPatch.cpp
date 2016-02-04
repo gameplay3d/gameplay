@@ -11,25 +11,12 @@
 #include "Scene.h"
 #include "Terrain.h"
 #include "TerrainPatch.h"
+#include "Camera.h"
 
 namespace gameplay
 {
 
-void luaRegister_TerrainPatch()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"cameraChanged", lua_TerrainPatch_cameraChanged},
-        {"getBoundingBox", lua_TerrainPatch_getBoundingBox},
-        {"getMaterial", lua_TerrainPatch_getMaterial},
-        {"getMaterialCount", lua_TerrainPatch_getMaterialCount},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("TerrainPatch", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static TerrainPatch* getInstance(lua_State* state)
 {
@@ -38,7 +25,7 @@ static TerrainPatch* getInstance(lua_State* state)
     return (TerrainPatch*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_TerrainPatch_cameraChanged(lua_State* state)
+static int lua_TerrainPatch_cameraChanged(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -80,7 +67,7 @@ int lua_TerrainPatch_cameraChanged(lua_State* state)
     return 0;
 }
 
-int lua_TerrainPatch_getBoundingBox(lua_State* state)
+static int lua_TerrainPatch_getBoundingBox(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -128,7 +115,7 @@ int lua_TerrainPatch_getBoundingBox(lua_State* state)
     return 0;
 }
 
-int lua_TerrainPatch_getMaterial(lua_State* state)
+static int lua_TerrainPatch_getMaterial(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -202,7 +189,7 @@ int lua_TerrainPatch_getMaterial(lua_State* state)
     return 0;
 }
 
-int lua_TerrainPatch_getMaterialCount(lua_State* state)
+static int lua_TerrainPatch_getMaterialCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -235,6 +222,69 @@ int lua_TerrainPatch_getMaterialCount(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of TerrainPatch
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    TerrainPatch* ptrObject = reinterpret_cast<TerrainPatch*>(ptr);
+
+    if (strcmp(typeName, "Camera::Listener") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Camera::Listener*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_TerrainPatch_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_TerrainPatch_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    TerrainPatch* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_TerrainPatch()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"cameraChanged", lua_TerrainPatch_cameraChanged},
+        {"getBoundingBox", lua_TerrainPatch_getBoundingBox},
+        {"getMaterial", lua_TerrainPatch_getMaterial},
+        {"getMaterialCount", lua_TerrainPatch_getMaterialCount},
+        {"to", lua_TerrainPatch_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("TerrainPatch", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("TerrainPatch", __convertTo);
 }
 
 }

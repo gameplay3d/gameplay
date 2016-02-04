@@ -5,9 +5,6 @@
 namespace gameplay
 {
 
-// Lua bindings for Mouse.
-int lua_Mouse__gc(lua_State* state);
-
 void luaRegister_Mouse();
 
 }

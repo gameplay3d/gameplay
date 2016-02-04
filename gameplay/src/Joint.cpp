@@ -35,6 +35,11 @@ Node::Type Joint::getType() const
     return Node::JOINT;
 }
 
+const char* Joint::getTypeName() const
+{
+    return "Joint";
+}
+
 Scene* Joint::getScene() const
 {
     // Overrides Node::getScene() to search the node our skins.

@@ -12,63 +12,14 @@
 #include "Ref.h"
 #include "Scene.h"
 #include "Sprite.h"
+#include "AnimationTarget.h"
+#include "Drawable.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_Sprite()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_Sprite_addRef},
-        {"computeFrames", lua_Sprite_computeFrames},
-        {"createAnimation", lua_Sprite_createAnimation},
-        {"createAnimationFromBy", lua_Sprite_createAnimationFromBy},
-        {"createAnimationFromTo", lua_Sprite_createAnimationFromTo},
-        {"destroyAnimation", lua_Sprite_destroyAnimation},
-        {"draw", lua_Sprite_draw},
-        {"getAnchor", lua_Sprite_getAnchor},
-        {"getAnimation", lua_Sprite_getAnimation},
-        {"getBlendMode", lua_Sprite_getBlendMode},
-        {"getColor", lua_Sprite_getColor},
-        {"getFlip", lua_Sprite_getFlip},
-        {"getFrameCount", lua_Sprite_getFrameCount},
-        {"getFrameIndex", lua_Sprite_getFrameIndex},
-        {"getFramePadding", lua_Sprite_getFramePadding},
-        {"getFrameSource", lua_Sprite_getFrameSource},
-        {"getFrameStride", lua_Sprite_getFrameStride},
-        {"getHeight", lua_Sprite_getHeight},
-        {"getMaterial", lua_Sprite_getMaterial},
-        {"getNode", lua_Sprite_getNode},
-        {"getOffset", lua_Sprite_getOffset},
-        {"getOpacity", lua_Sprite_getOpacity},
-        {"getRefCount", lua_Sprite_getRefCount},
-        {"getSampler", lua_Sprite_getSampler},
-        {"getStateBlock", lua_Sprite_getStateBlock},
-        {"getWidth", lua_Sprite_getWidth},
-        {"release", lua_Sprite_release},
-        {"setAnchor", lua_Sprite_setAnchor},
-        {"setBlendMode", lua_Sprite_setBlendMode},
-        {"setColor", lua_Sprite_setColor},
-        {"setFlip", lua_Sprite_setFlip},
-        {"setFrameIndex", lua_Sprite_setFrameIndex},
-        {"setFrameSource", lua_Sprite_setFrameSource},
-        {"setOffset", lua_Sprite_setOffset},
-        {"setOpacity", lua_Sprite_setOpacity},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"ANIMATE_COLOR", lua_Sprite_static_ANIMATE_COLOR},
-        {"ANIMATE_KEYFRAME", lua_Sprite_static_ANIMATE_KEYFRAME},
-        {"ANIMATE_OPACITY", lua_Sprite_static_ANIMATE_OPACITY},
-        {"create", lua_Sprite_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Sprite", lua_members, NULL, lua_Sprite__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Sprite* getInstance(lua_State* state)
 {
@@ -77,7 +28,7 @@ static Sprite* getInstance(lua_State* state)
     return (Sprite*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Sprite__gc(lua_State* state)
+static int lua_Sprite__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -115,7 +66,7 @@ int lua_Sprite__gc(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_addRef(lua_State* state)
+static int lua_Sprite_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -147,7 +98,7 @@ int lua_Sprite_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_computeFrames(lua_State* state)
+static int lua_Sprite_computeFrames(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -219,7 +170,7 @@ int lua_Sprite_computeFrames(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_createAnimation(lua_State* state)
+static int lua_Sprite_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -422,7 +373,7 @@ int lua_Sprite_createAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_createAnimationFromBy(lua_State* state)
+static int lua_Sprite_createAnimationFromBy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -490,7 +441,7 @@ int lua_Sprite_createAnimationFromBy(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_createAnimationFromTo(lua_State* state)
+static int lua_Sprite_createAnimationFromTo(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -558,7 +509,7 @@ int lua_Sprite_createAnimationFromTo(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_destroyAnimation(lua_State* state)
+static int lua_Sprite_destroyAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -608,7 +559,7 @@ int lua_Sprite_destroyAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_draw(lua_State* state)
+static int lua_Sprite_draw(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -664,7 +615,7 @@ int lua_Sprite_draw(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getAnchor(lua_State* state)
+static int lua_Sprite_getAnchor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -708,7 +659,7 @@ int lua_Sprite_getAnchor(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getAnimation(lua_State* state)
+static int lua_Sprite_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -782,7 +733,7 @@ int lua_Sprite_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getBlendMode(lua_State* state)
+static int lua_Sprite_getBlendMode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -817,7 +768,7 @@ int lua_Sprite_getBlendMode(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getColor(lua_State* state)
+static int lua_Sprite_getColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -861,7 +812,7 @@ int lua_Sprite_getColor(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getFlip(lua_State* state)
+static int lua_Sprite_getFlip(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -896,7 +847,7 @@ int lua_Sprite_getFlip(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getFrameCount(lua_State* state)
+static int lua_Sprite_getFrameCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -931,7 +882,7 @@ int lua_Sprite_getFrameCount(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getFrameIndex(lua_State* state)
+static int lua_Sprite_getFrameIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -966,7 +917,7 @@ int lua_Sprite_getFrameIndex(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getFramePadding(lua_State* state)
+static int lua_Sprite_getFramePadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1001,7 +952,7 @@ int lua_Sprite_getFramePadding(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getFrameSource(lua_State* state)
+static int lua_Sprite_getFrameSource(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1049,7 +1000,7 @@ int lua_Sprite_getFrameSource(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getFrameStride(lua_State* state)
+static int lua_Sprite_getFrameStride(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1084,7 +1035,7 @@ int lua_Sprite_getFrameStride(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getHeight(lua_State* state)
+static int lua_Sprite_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1119,7 +1070,7 @@ int lua_Sprite_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getMaterial(lua_State* state)
+static int lua_Sprite_getMaterial(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1163,7 +1114,7 @@ int lua_Sprite_getMaterial(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getNode(lua_State* state)
+static int lua_Sprite_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1207,7 +1158,7 @@ int lua_Sprite_getNode(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getOffset(lua_State* state)
+static int lua_Sprite_getOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1242,7 +1193,7 @@ int lua_Sprite_getOffset(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getOpacity(lua_State* state)
+static int lua_Sprite_getOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1277,7 +1228,7 @@ int lua_Sprite_getOpacity(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getRefCount(lua_State* state)
+static int lua_Sprite_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1312,7 +1263,7 @@ int lua_Sprite_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getSampler(lua_State* state)
+static int lua_Sprite_getSampler(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1356,7 +1307,7 @@ int lua_Sprite_getSampler(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getStateBlock(lua_State* state)
+static int lua_Sprite_getStateBlock(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1400,7 +1351,7 @@ int lua_Sprite_getStateBlock(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getWidth(lua_State* state)
+static int lua_Sprite_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1435,7 +1386,7 @@ int lua_Sprite_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_release(lua_State* state)
+static int lua_Sprite_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1467,7 +1418,7 @@ int lua_Sprite_release(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_setAnchor(lua_State* state)
+static int lua_Sprite_setAnchor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1509,7 +1460,7 @@ int lua_Sprite_setAnchor(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_setBlendMode(lua_State* state)
+static int lua_Sprite_setBlendMode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1545,7 +1496,7 @@ int lua_Sprite_setBlendMode(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_setColor(lua_State* state)
+static int lua_Sprite_setColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1587,7 +1538,7 @@ int lua_Sprite_setColor(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_setFlip(lua_State* state)
+static int lua_Sprite_setFlip(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1623,7 +1574,7 @@ int lua_Sprite_setFlip(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_setFrameIndex(lua_State* state)
+static int lua_Sprite_setFrameIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1659,7 +1610,7 @@ int lua_Sprite_setFrameIndex(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_setFrameSource(lua_State* state)
+static int lua_Sprite_setFrameSource(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1705,7 +1656,7 @@ int lua_Sprite_setFrameSource(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_setOffset(lua_State* state)
+static int lua_Sprite_setOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1741,7 +1692,7 @@ int lua_Sprite_setOffset(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_setOpacity(lua_State* state)
+static int lua_Sprite_setOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1777,7 +1728,7 @@ int lua_Sprite_setOpacity(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_static_ANIMATE_COLOR(lua_State* state)
+static int lua_Sprite_static_ANIMATE_COLOR(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -1794,7 +1745,7 @@ int lua_Sprite_static_ANIMATE_COLOR(lua_State* state)
     return 1;
 }
 
-int lua_Sprite_static_ANIMATE_KEYFRAME(lua_State* state)
+static int lua_Sprite_static_ANIMATE_KEYFRAME(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -1811,7 +1762,7 @@ int lua_Sprite_static_ANIMATE_KEYFRAME(lua_State* state)
     return 1;
 }
 
-int lua_Sprite_static_ANIMATE_OPACITY(lua_State* state)
+static int lua_Sprite_static_ANIMATE_OPACITY(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -1828,7 +1779,7 @@ int lua_Sprite_static_ANIMATE_OPACITY(lua_State* state)
     return 1;
 }
 
-int lua_Sprite_static_create(lua_State* state)
+static int lua_Sprite_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2170,6 +2121,115 @@ int lua_Sprite_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Sprite
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Sprite* ptrObject = reinterpret_cast<Sprite*>(ptr);
+
+    if (strcmp(typeName, "AnimationTarget") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<AnimationTarget*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Drawable") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Drawable*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Sprite_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Sprite_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Sprite* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Sprite()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_Sprite_addRef},
+        {"computeFrames", lua_Sprite_computeFrames},
+        {"createAnimation", lua_Sprite_createAnimation},
+        {"createAnimationFromBy", lua_Sprite_createAnimationFromBy},
+        {"createAnimationFromTo", lua_Sprite_createAnimationFromTo},
+        {"destroyAnimation", lua_Sprite_destroyAnimation},
+        {"draw", lua_Sprite_draw},
+        {"getAnchor", lua_Sprite_getAnchor},
+        {"getAnimation", lua_Sprite_getAnimation},
+        {"getBlendMode", lua_Sprite_getBlendMode},
+        {"getColor", lua_Sprite_getColor},
+        {"getFlip", lua_Sprite_getFlip},
+        {"getFrameCount", lua_Sprite_getFrameCount},
+        {"getFrameIndex", lua_Sprite_getFrameIndex},
+        {"getFramePadding", lua_Sprite_getFramePadding},
+        {"getFrameSource", lua_Sprite_getFrameSource},
+        {"getFrameStride", lua_Sprite_getFrameStride},
+        {"getHeight", lua_Sprite_getHeight},
+        {"getMaterial", lua_Sprite_getMaterial},
+        {"getNode", lua_Sprite_getNode},
+        {"getOffset", lua_Sprite_getOffset},
+        {"getOpacity", lua_Sprite_getOpacity},
+        {"getRefCount", lua_Sprite_getRefCount},
+        {"getSampler", lua_Sprite_getSampler},
+        {"getStateBlock", lua_Sprite_getStateBlock},
+        {"getWidth", lua_Sprite_getWidth},
+        {"release", lua_Sprite_release},
+        {"setAnchor", lua_Sprite_setAnchor},
+        {"setBlendMode", lua_Sprite_setBlendMode},
+        {"setColor", lua_Sprite_setColor},
+        {"setFlip", lua_Sprite_setFlip},
+        {"setFrameIndex", lua_Sprite_setFrameIndex},
+        {"setFrameSource", lua_Sprite_setFrameSource},
+        {"setOffset", lua_Sprite_setOffset},
+        {"setOpacity", lua_Sprite_setOpacity},
+        {"to", lua_Sprite_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"ANIMATE_COLOR", lua_Sprite_static_ANIMATE_COLOR},
+        {"ANIMATE_KEYFRAME", lua_Sprite_static_ANIMATE_KEYFRAME},
+        {"ANIMATE_OPACITY", lua_Sprite_static_ANIMATE_OPACITY},
+        {"create", lua_Sprite_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Sprite", lua_members, NULL, lua_Sprite__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Sprite", __convertTo);
 }
 
 }

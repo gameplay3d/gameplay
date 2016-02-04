@@ -10,6 +10,10 @@ int lua__strcmpnocase(lua_State* state);
 
 void luaRegister_lua_Global();
 
+const std::vector<std::string>& luaGetClassRelatives(const char* type);
+
+void* luaConvertObjectPointer(void* ptr, const char* fromType, const char* toType);
+
 }
 
 #endif

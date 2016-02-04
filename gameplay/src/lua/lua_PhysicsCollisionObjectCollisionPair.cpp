@@ -17,21 +17,6 @@
 namespace gameplay
 {
 
-void luaRegister_PhysicsCollisionObjectCollisionPair()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"objectA", lua_PhysicsCollisionObjectCollisionPair_objectA},
-        {"objectB", lua_PhysicsCollisionObjectCollisionPair_objectB},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("PhysicsCollisionObject");
-
-    gameplay::ScriptUtil::registerClass("PhysicsCollisionObjectCollisionPair", lua_members, lua_PhysicsCollisionObjectCollisionPair__init, lua_PhysicsCollisionObjectCollisionPair__gc, lua_statics, scopePath);
-}
-
 static PhysicsCollisionObject::CollisionPair* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionObjectCollisionPair");
@@ -39,7 +24,7 @@ static PhysicsCollisionObject::CollisionPair* getInstance(lua_State* state)
     return (PhysicsCollisionObject::CollisionPair*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsCollisionObjectCollisionPair__gc(lua_State* state)
+static int lua_PhysicsCollisionObjectCollisionPair__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -77,7 +62,7 @@ int lua_PhysicsCollisionObjectCollisionPair__gc(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObjectCollisionPair__init(lua_State* state)
+static int lua_PhysicsCollisionObjectCollisionPair__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -139,7 +124,7 @@ int lua_PhysicsCollisionObjectCollisionPair__init(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObjectCollisionPair_objectA(lua_State* state)
+static int lua_PhysicsCollisionObjectCollisionPair_objectA(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -183,7 +168,7 @@ int lua_PhysicsCollisionObjectCollisionPair_objectA(lua_State* state)
     }
 }
 
-int lua_PhysicsCollisionObjectCollisionPair_objectB(lua_State* state)
+static int lua_PhysicsCollisionObjectCollisionPair_objectB(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -225,6 +210,22 @@ int lua_PhysicsCollisionObjectCollisionPair_objectB(lua_State* state)
 
         return 1;
     }
+}
+
+void luaRegister_PhysicsCollisionObjectCollisionPair()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"objectA", lua_PhysicsCollisionObjectCollisionPair_objectA},
+        {"objectB", lua_PhysicsCollisionObjectCollisionPair_objectB},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("PhysicsCollisionObject");
+
+    gameplay::ScriptUtil::registerClass("PhysicsCollisionObjectCollisionPair", lua_members, lua_PhysicsCollisionObjectCollisionPair__init, lua_PhysicsCollisionObjectCollisionPair__gc, lua_statics, scopePath);
+
 }
 
 }

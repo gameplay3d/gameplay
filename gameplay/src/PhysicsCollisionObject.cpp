@@ -325,6 +325,7 @@ void PhysicsCollisionObject::ScriptListener::collisionEvent(PhysicsCollisionObje
 {
     Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), 
         "[PhysicsCollisionObject::CollisionListener::EventType]<PhysicsCollisionObject::CollisionPair><Vector3><Vector3>",
+        NULL,
         type, &collisionPair, &contactPointA, &contactPointB);
 }
 

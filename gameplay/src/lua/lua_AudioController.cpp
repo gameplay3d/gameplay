@@ -11,18 +11,6 @@
 namespace gameplay
 {
 
-void luaRegister_AudioController()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("AudioController", lua_members, NULL, lua_AudioController__gc, lua_statics, scopePath);
-}
-
 static AudioController* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AudioController");
@@ -30,7 +18,7 @@ static AudioController* getInstance(lua_State* state)
     return (AudioController*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AudioController__gc(lua_State* state)
+static int lua_AudioController__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -66,6 +54,19 @@ int lua_AudioController__gc(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_AudioController()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("AudioController", lua_members, NULL, lua_AudioController__gc, lua_statics, scopePath);
+
 }
 
 }

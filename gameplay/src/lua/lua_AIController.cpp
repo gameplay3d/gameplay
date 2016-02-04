@@ -9,20 +9,6 @@
 namespace gameplay
 {
 
-void luaRegister_AIController()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"findAgent", lua_AIController_findAgent},
-        {"sendMessage", lua_AIController_sendMessage},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("AIController", lua_members, NULL, NULL, lua_statics, scopePath);
-}
-
 static AIController* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AIController");
@@ -30,7 +16,7 @@ static AIController* getInstance(lua_State* state)
     return (AIController*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AIController_findAgent(lua_State* state)
+static int lua_AIController_findAgent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -78,7 +64,7 @@ int lua_AIController_findAgent(lua_State* state)
     return 0;
 }
 
-int lua_AIController_sendMessage(lua_State* state)
+static int lua_AIController_sendMessage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -146,6 +132,21 @@ int lua_AIController_sendMessage(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_AIController()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"findAgent", lua_AIController_findAgent},
+        {"sendMessage", lua_AIController_sendMessage},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("AIController", lua_members, NULL, NULL, lua_statics, scopePath);
+
 }
 
 }

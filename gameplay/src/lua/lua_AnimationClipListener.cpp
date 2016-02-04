@@ -15,20 +15,6 @@
 namespace gameplay
 {
 
-void luaRegister_AnimationClipListener()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"animationEvent", lua_AnimationClipListener_animationEvent},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("AnimationClip");
-
-    gameplay::ScriptUtil::registerClass("AnimationClipListener", lua_members, NULL, lua_AnimationClipListener__gc, lua_statics, scopePath);
-}
-
 static AnimationClip::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AnimationClipListener");
@@ -36,7 +22,7 @@ static AnimationClip::Listener* getInstance(lua_State* state)
     return (AnimationClip::Listener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AnimationClipListener__gc(lua_State* state)
+static int lua_AnimationClipListener__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -74,7 +60,7 @@ int lua_AnimationClipListener__gc(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClipListener_animationEvent(lua_State* state)
+static int lua_AnimationClipListener_animationEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -118,6 +104,21 @@ int lua_AnimationClipListener_animationEvent(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_AnimationClipListener()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"animationEvent", lua_AnimationClipListener_animationEvent},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("AnimationClip");
+
+    gameplay::ScriptUtil::registerClass("AnimationClipListener", lua_members, NULL, lua_AnimationClipListener__gc, lua_statics, scopePath);
+
 }
 
 }

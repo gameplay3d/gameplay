@@ -12,34 +12,6 @@
 namespace gameplay
 {
 
-void luaRegister_Plane()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"distance", lua_Plane_distance},
-        {"getDistance", lua_Plane_getDistance},
-        {"getNormal", lua_Plane_getNormal},
-        {"intersects", lua_Plane_intersects},
-        {"isParallel", lua_Plane_isParallel},
-        {"set", lua_Plane_set},
-        {"setDistance", lua_Plane_setDistance},
-        {"setNormal", lua_Plane_setNormal},
-        {"transform", lua_Plane_transform},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"INTERSECTS_BACK", lua_Plane_static_INTERSECTS_BACK},
-        {"INTERSECTS_FRONT", lua_Plane_static_INTERSECTS_FRONT},
-        {"INTERSECTS_INTERSECTING", lua_Plane_static_INTERSECTS_INTERSECTING},
-        {"intersection", lua_Plane_static_intersection},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Plane", lua_members, lua_Plane__init, lua_Plane__gc, lua_statics, scopePath);
-}
-
 static Plane* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Plane");
@@ -47,7 +19,7 @@ static Plane* getInstance(lua_State* state)
     return (Plane*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Plane__gc(lua_State* state)
+static int lua_Plane__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -85,7 +57,7 @@ int lua_Plane__gc(lua_State* state)
     return 0;
 }
 
-int lua_Plane__init(lua_State* state)
+static int lua_Plane__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -237,7 +209,7 @@ int lua_Plane__init(lua_State* state)
     return 0;
 }
 
-int lua_Plane_distance(lua_State* state)
+static int lua_Plane_distance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -282,7 +254,7 @@ int lua_Plane_distance(lua_State* state)
     return 0;
 }
 
-int lua_Plane_getDistance(lua_State* state)
+static int lua_Plane_getDistance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -317,7 +289,7 @@ int lua_Plane_getDistance(lua_State* state)
     return 0;
 }
 
-int lua_Plane_getNormal(lua_State* state)
+static int lua_Plane_getNormal(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -361,7 +333,7 @@ int lua_Plane_getNormal(lua_State* state)
     return 0;
 }
 
-int lua_Plane_intersects(lua_State* state)
+static int lua_Plane_intersects(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -490,7 +462,7 @@ int lua_Plane_intersects(lua_State* state)
     return 0;
 }
 
-int lua_Plane_isParallel(lua_State* state)
+static int lua_Plane_isParallel(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -535,7 +507,7 @@ int lua_Plane_isParallel(lua_State* state)
     return 0;
 }
 
-int lua_Plane_set(lua_State* state)
+static int lua_Plane_set(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -605,7 +577,7 @@ int lua_Plane_set(lua_State* state)
     return 0;
 }
 
-int lua_Plane_setDistance(lua_State* state)
+static int lua_Plane_setDistance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -641,7 +613,7 @@ int lua_Plane_setDistance(lua_State* state)
     return 0;
 }
 
-int lua_Plane_setNormal(lua_State* state)
+static int lua_Plane_setNormal(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -712,7 +684,7 @@ int lua_Plane_setNormal(lua_State* state)
     return 0;
 }
 
-int lua_Plane_static_INTERSECTS_BACK(lua_State* state)
+static int lua_Plane_static_INTERSECTS_BACK(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -729,7 +701,7 @@ int lua_Plane_static_INTERSECTS_BACK(lua_State* state)
     return 1;
 }
 
-int lua_Plane_static_INTERSECTS_FRONT(lua_State* state)
+static int lua_Plane_static_INTERSECTS_FRONT(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -746,7 +718,7 @@ int lua_Plane_static_INTERSECTS_FRONT(lua_State* state)
     return 1;
 }
 
-int lua_Plane_static_INTERSECTS_INTERSECTING(lua_State* state)
+static int lua_Plane_static_INTERSECTS_INTERSECTING(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -763,7 +735,7 @@ int lua_Plane_static_INTERSECTS_INTERSECTING(lua_State* state)
     return 1;
 }
 
-int lua_Plane_static_intersection(lua_State* state)
+static int lua_Plane_static_intersection(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -833,7 +805,7 @@ int lua_Plane_static_intersection(lua_State* state)
     return 0;
 }
 
-int lua_Plane_transform(lua_State* state)
+static int lua_Plane_transform(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -873,6 +845,35 @@ int lua_Plane_transform(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_Plane()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"distance", lua_Plane_distance},
+        {"getDistance", lua_Plane_getDistance},
+        {"getNormal", lua_Plane_getNormal},
+        {"intersects", lua_Plane_intersects},
+        {"isParallel", lua_Plane_isParallel},
+        {"set", lua_Plane_set},
+        {"setDistance", lua_Plane_setDistance},
+        {"setNormal", lua_Plane_setNormal},
+        {"transform", lua_Plane_transform},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"INTERSECTS_BACK", lua_Plane_static_INTERSECTS_BACK},
+        {"INTERSECTS_FRONT", lua_Plane_static_INTERSECTS_FRONT},
+        {"INTERSECTS_INTERSECTING", lua_Plane_static_INTERSECTS_INTERSECTING},
+        {"intersection", lua_Plane_static_intersection},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Plane", lua_members, lua_Plane__init, lua_Plane__gc, lua_statics, scopePath);
+
 }
 
 }

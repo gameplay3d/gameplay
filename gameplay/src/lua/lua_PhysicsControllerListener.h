@@ -5,9 +5,6 @@
 namespace gameplay
 {
 
-// Lua bindings for PhysicsController::Listener.
-int lua_PhysicsControllerListener_statusEvent(lua_State* state);
-
 void luaRegister_PhysicsControllerListener();
 
 }

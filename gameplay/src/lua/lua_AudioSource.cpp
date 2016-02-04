@@ -15,44 +15,13 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Transform.h"
+#include "Ref.h"
+#include "Transform.h"
 
 namespace gameplay
 {
 
-void luaRegister_AudioSource()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_AudioSource_addRef},
-        {"getGain", lua_AudioSource_getGain},
-        {"getNode", lua_AudioSource_getNode},
-        {"getPitch", lua_AudioSource_getPitch},
-        {"getRefCount", lua_AudioSource_getRefCount},
-        {"getState", lua_AudioSource_getState},
-        {"getVelocity", lua_AudioSource_getVelocity},
-        {"isLooped", lua_AudioSource_isLooped},
-        {"isStreamed", lua_AudioSource_isStreamed},
-        {"pause", lua_AudioSource_pause},
-        {"play", lua_AudioSource_play},
-        {"release", lua_AudioSource_release},
-        {"resume", lua_AudioSource_resume},
-        {"rewind", lua_AudioSource_rewind},
-        {"setGain", lua_AudioSource_setGain},
-        {"setLooped", lua_AudioSource_setLooped},
-        {"setPitch", lua_AudioSource_setPitch},
-        {"setVelocity", lua_AudioSource_setVelocity},
-        {"stop", lua_AudioSource_stop},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_AudioSource_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("AudioSource", lua_members, NULL, lua_AudioSource__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static AudioSource* getInstance(lua_State* state)
 {
@@ -61,7 +30,7 @@ static AudioSource* getInstance(lua_State* state)
     return (AudioSource*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AudioSource__gc(lua_State* state)
+static int lua_AudioSource__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -99,7 +68,7 @@ int lua_AudioSource__gc(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_addRef(lua_State* state)
+static int lua_AudioSource_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -131,7 +100,7 @@ int lua_AudioSource_addRef(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_getGain(lua_State* state)
+static int lua_AudioSource_getGain(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -166,7 +135,7 @@ int lua_AudioSource_getGain(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_getNode(lua_State* state)
+static int lua_AudioSource_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -210,7 +179,7 @@ int lua_AudioSource_getNode(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_getPitch(lua_State* state)
+static int lua_AudioSource_getPitch(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -245,7 +214,7 @@ int lua_AudioSource_getPitch(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_getRefCount(lua_State* state)
+static int lua_AudioSource_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -280,7 +249,7 @@ int lua_AudioSource_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_getState(lua_State* state)
+static int lua_AudioSource_getState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -315,7 +284,7 @@ int lua_AudioSource_getState(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_getVelocity(lua_State* state)
+static int lua_AudioSource_getVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -359,7 +328,7 @@ int lua_AudioSource_getVelocity(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_isLooped(lua_State* state)
+static int lua_AudioSource_isLooped(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -394,7 +363,7 @@ int lua_AudioSource_isLooped(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_isStreamed(lua_State* state)
+static int lua_AudioSource_isStreamed(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -429,7 +398,7 @@ int lua_AudioSource_isStreamed(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_pause(lua_State* state)
+static int lua_AudioSource_pause(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -461,7 +430,7 @@ int lua_AudioSource_pause(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_play(lua_State* state)
+static int lua_AudioSource_play(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -493,7 +462,7 @@ int lua_AudioSource_play(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_release(lua_State* state)
+static int lua_AudioSource_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -525,7 +494,7 @@ int lua_AudioSource_release(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_resume(lua_State* state)
+static int lua_AudioSource_resume(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -557,7 +526,7 @@ int lua_AudioSource_resume(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_rewind(lua_State* state)
+static int lua_AudioSource_rewind(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -589,7 +558,7 @@ int lua_AudioSource_rewind(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_setGain(lua_State* state)
+static int lua_AudioSource_setGain(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -625,7 +594,7 @@ int lua_AudioSource_setGain(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_setLooped(lua_State* state)
+static int lua_AudioSource_setLooped(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -661,7 +630,7 @@ int lua_AudioSource_setLooped(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_setPitch(lua_State* state)
+static int lua_AudioSource_setPitch(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -697,7 +666,7 @@ int lua_AudioSource_setPitch(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_setVelocity(lua_State* state)
+static int lua_AudioSource_setVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -768,7 +737,7 @@ int lua_AudioSource_setVelocity(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_static_create(lua_State* state)
+static int lua_AudioSource_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -880,7 +849,7 @@ int lua_AudioSource_static_create(lua_State* state)
     return 0;
 }
 
-int lua_AudioSource_stop(lua_State* state)
+static int lua_AudioSource_stop(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -910,6 +879,92 @@ int lua_AudioSource_stop(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of AudioSource
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    AudioSource* ptrObject = reinterpret_cast<AudioSource*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Transform::Listener") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Transform::Listener*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_AudioSource_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_AudioSource_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    AudioSource* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_AudioSource()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_AudioSource_addRef},
+        {"getGain", lua_AudioSource_getGain},
+        {"getNode", lua_AudioSource_getNode},
+        {"getPitch", lua_AudioSource_getPitch},
+        {"getRefCount", lua_AudioSource_getRefCount},
+        {"getState", lua_AudioSource_getState},
+        {"getVelocity", lua_AudioSource_getVelocity},
+        {"isLooped", lua_AudioSource_isLooped},
+        {"isStreamed", lua_AudioSource_isStreamed},
+        {"pause", lua_AudioSource_pause},
+        {"play", lua_AudioSource_play},
+        {"release", lua_AudioSource_release},
+        {"resume", lua_AudioSource_resume},
+        {"rewind", lua_AudioSource_rewind},
+        {"setGain", lua_AudioSource_setGain},
+        {"setLooped", lua_AudioSource_setLooped},
+        {"setPitch", lua_AudioSource_setPitch},
+        {"setVelocity", lua_AudioSource_setVelocity},
+        {"stop", lua_AudioSource_stop},
+        {"to", lua_AudioSource_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_AudioSource_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("AudioSource", lua_members, NULL, lua_AudioSource__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("AudioSource", __convertTo);
 }
 
 }

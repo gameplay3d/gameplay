@@ -2,28 +2,28 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_ScriptTargetEventRegistry.h"
+#include "AnimationClip.h"
 #include "Base.h"
+#include "Button.h"
+#include "CheckBox.h"
+#include "Container.h"
+#include "Control.h"
+#include "Form.h"
+#include "ImageControl.h"
+#include "Joint.h"
+#include "JoystickControl.h"
+#include "Label.h"
+#include "Node.h"
+#include "PhysicsController.h"
+#include "RadioButton.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Slider.h"
+#include "TextBox.h"
+#include "Transform.h"
 
 namespace gameplay
 {
-
-void luaRegister_ScriptTargetEventRegistry()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addEvent", lua_ScriptTargetEventRegistry_addEvent},
-        {"getEvent", lua_ScriptTargetEventRegistry_getEvent},
-        {"getEventCount", lua_ScriptTargetEventRegistry_getEventCount},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("ScriptTarget");
-
-    gameplay::ScriptUtil::registerClass("ScriptTargetEventRegistry", lua_members, lua_ScriptTargetEventRegistry__init, lua_ScriptTargetEventRegistry__gc, lua_statics, scopePath);
-}
 
 static ScriptTarget::EventRegistry* getInstance(lua_State* state)
 {
@@ -32,7 +32,7 @@ static ScriptTarget::EventRegistry* getInstance(lua_State* state)
     return (ScriptTarget::EventRegistry*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_ScriptTargetEventRegistry__gc(lua_State* state)
+static int lua_ScriptTargetEventRegistry__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -70,7 +70,7 @@ int lua_ScriptTargetEventRegistry__gc(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTargetEventRegistry__init(lua_State* state)
+static int lua_ScriptTargetEventRegistry__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -107,7 +107,7 @@ int lua_ScriptTargetEventRegistry__init(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTargetEventRegistry_addEvent(lua_State* state)
+static int lua_ScriptTargetEventRegistry_addEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -189,7 +189,7 @@ int lua_ScriptTargetEventRegistry_addEvent(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTargetEventRegistry_getEvent(lua_State* state)
+static int lua_ScriptTargetEventRegistry_getEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -267,7 +267,7 @@ int lua_ScriptTargetEventRegistry_getEvent(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTargetEventRegistry_getEventCount(lua_State* state)
+static int lua_ScriptTargetEventRegistry_getEventCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -300,6 +300,23 @@ int lua_ScriptTargetEventRegistry_getEventCount(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_ScriptTargetEventRegistry()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addEvent", lua_ScriptTargetEventRegistry_addEvent},
+        {"getEvent", lua_ScriptTargetEventRegistry_getEvent},
+        {"getEventCount", lua_ScriptTargetEventRegistry_getEventCount},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("ScriptTarget");
+
+    gameplay::ScriptUtil::registerClass("ScriptTargetEventRegistry", lua_members, lua_ScriptTargetEventRegistry__init, lua_ScriptTargetEventRegistry__gc, lua_statics, scopePath);
+
 }
 
 }

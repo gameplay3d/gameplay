@@ -16,150 +16,12 @@
 #include "ScriptTarget.h"
 #include "Slider.h"
 #include "Theme.h"
+#include "Label.h"
 
 namespace gameplay
 {
 
-void luaRegister_Slider()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addListener", lua_Slider_addListener},
-        {"addRef", lua_Slider_addRef},
-        {"addScript", lua_Slider_addScript},
-        {"addScriptCallback", lua_Slider_addScriptCallback},
-        {"canFocus", lua_Slider_canFocus},
-        {"clearScripts", lua_Slider_clearScripts},
-        {"createAnimation", lua_Slider_createAnimation},
-        {"createAnimationFromBy", lua_Slider_createAnimationFromBy},
-        {"createAnimationFromTo", lua_Slider_createAnimationFromTo},
-        {"destroyAnimation", lua_Slider_destroyAnimation},
-        {"getAbsoluteBounds", lua_Slider_getAbsoluteBounds},
-        {"getAlignment", lua_Slider_getAlignment},
-        {"getAnimation", lua_Slider_getAnimation},
-        {"getAnimationPropertyComponentCount", lua_Slider_getAnimationPropertyComponentCount},
-        {"getAnimationPropertyValue", lua_Slider_getAnimationPropertyValue},
-        {"getAutoSize", lua_Slider_getAutoSize},
-        {"getBorder", lua_Slider_getBorder},
-        {"getBounds", lua_Slider_getBounds},
-        {"getClip", lua_Slider_getClip},
-        {"getClipBounds", lua_Slider_getClipBounds},
-        {"getConsumeInputEvents", lua_Slider_getConsumeInputEvents},
-        {"getCursorColor", lua_Slider_getCursorColor},
-        {"getCursorRegion", lua_Slider_getCursorRegion},
-        {"getCursorUVs", lua_Slider_getCursorUVs},
-        {"getFocusIndex", lua_Slider_getFocusIndex},
-        {"getFont", lua_Slider_getFont},
-        {"getFontSize", lua_Slider_getFontSize},
-        {"getHeight", lua_Slider_getHeight},
-        {"getId", lua_Slider_getId},
-        {"getImageColor", lua_Slider_getImageColor},
-        {"getImageRegion", lua_Slider_getImageRegion},
-        {"getImageUVs", lua_Slider_getImageUVs},
-        {"getMargin", lua_Slider_getMargin},
-        {"getMax", lua_Slider_getMax},
-        {"getMin", lua_Slider_getMin},
-        {"getOpacity", lua_Slider_getOpacity},
-        {"getPadding", lua_Slider_getPadding},
-        {"getParent", lua_Slider_getParent},
-        {"getRefCount", lua_Slider_getRefCount},
-        {"getScriptEvent", lua_Slider_getScriptEvent},
-        {"getSkinColor", lua_Slider_getSkinColor},
-        {"getSkinRegion", lua_Slider_getSkinRegion},
-        {"getState", lua_Slider_getState},
-        {"getStep", lua_Slider_getStep},
-        {"getStyle", lua_Slider_getStyle},
-        {"getText", lua_Slider_getText},
-        {"getTextAlignment", lua_Slider_getTextAlignment},
-        {"getTextColor", lua_Slider_getTextColor},
-        {"getTextRightToLeft", lua_Slider_getTextRightToLeft},
-        {"getTheme", lua_Slider_getTheme},
-        {"getTopLevelForm", lua_Slider_getTopLevelForm},
-        {"getTypeName", lua_Slider_getTypeName},
-        {"getValue", lua_Slider_getValue},
-        {"getValueTextAlignment", lua_Slider_getValueTextAlignment},
-        {"getValueTextPrecision", lua_Slider_getValueTextPrecision},
-        {"getWidth", lua_Slider_getWidth},
-        {"getX", lua_Slider_getX},
-        {"getY", lua_Slider_getY},
-        {"getZIndex", lua_Slider_getZIndex},
-        {"hasFocus", lua_Slider_hasFocus},
-        {"hasScriptListener", lua_Slider_hasScriptListener},
-        {"isChild", lua_Slider_isChild},
-        {"isContainer", lua_Slider_isContainer},
-        {"isEnabled", lua_Slider_isEnabled},
-        {"isEnabledInHierarchy", lua_Slider_isEnabledInHierarchy},
-        {"isHeightPercentage", lua_Slider_isHeightPercentage},
-        {"isValueTextVisible", lua_Slider_isValueTextVisible},
-        {"isVisible", lua_Slider_isVisible},
-        {"isVisibleInHierarchy", lua_Slider_isVisibleInHierarchy},
-        {"isWidthPercentage", lua_Slider_isWidthPercentage},
-        {"isXPercentage", lua_Slider_isXPercentage},
-        {"isYPercentage", lua_Slider_isYPercentage},
-        {"release", lua_Slider_release},
-        {"removeListener", lua_Slider_removeListener},
-        {"removeScript", lua_Slider_removeScript},
-        {"removeScriptCallback", lua_Slider_removeScriptCallback},
-        {"setAlignment", lua_Slider_setAlignment},
-        {"setAnimationPropertyValue", lua_Slider_setAnimationPropertyValue},
-        {"setAutoSize", lua_Slider_setAutoSize},
-        {"setBorder", lua_Slider_setBorder},
-        {"setBounds", lua_Slider_setBounds},
-        {"setCanFocus", lua_Slider_setCanFocus},
-        {"setConsumeInputEvents", lua_Slider_setConsumeInputEvents},
-        {"setCursorColor", lua_Slider_setCursorColor},
-        {"setCursorRegion", lua_Slider_setCursorRegion},
-        {"setEnabled", lua_Slider_setEnabled},
-        {"setFocus", lua_Slider_setFocus},
-        {"setFocusIndex", lua_Slider_setFocusIndex},
-        {"setFont", lua_Slider_setFont},
-        {"setFontSize", lua_Slider_setFontSize},
-        {"setHeight", lua_Slider_setHeight},
-        {"setId", lua_Slider_setId},
-        {"setImageColor", lua_Slider_setImageColor},
-        {"setImageRegion", lua_Slider_setImageRegion},
-        {"setMargin", lua_Slider_setMargin},
-        {"setMax", lua_Slider_setMax},
-        {"setMin", lua_Slider_setMin},
-        {"setOpacity", lua_Slider_setOpacity},
-        {"setPadding", lua_Slider_setPadding},
-        {"setPosition", lua_Slider_setPosition},
-        {"setSize", lua_Slider_setSize},
-        {"setSkinColor", lua_Slider_setSkinColor},
-        {"setSkinRegion", lua_Slider_setSkinRegion},
-        {"setStep", lua_Slider_setStep},
-        {"setStyle", lua_Slider_setStyle},
-        {"setText", lua_Slider_setText},
-        {"setTextAlignment", lua_Slider_setTextAlignment},
-        {"setTextColor", lua_Slider_setTextColor},
-        {"setTextRightToLeft", lua_Slider_setTextRightToLeft},
-        {"setValue", lua_Slider_setValue},
-        {"setValueTextAlignment", lua_Slider_setValueTextAlignment},
-        {"setValueTextPrecision", lua_Slider_setValueTextPrecision},
-        {"setValueTextVisible", lua_Slider_setValueTextVisible},
-        {"setVisible", lua_Slider_setVisible},
-        {"setWidth", lua_Slider_setWidth},
-        {"setX", lua_Slider_setX},
-        {"setY", lua_Slider_setY},
-        {"setZIndex", lua_Slider_setZIndex},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"ANIMATE_OPACITY", lua_Slider_static_ANIMATE_OPACITY},
-        {"ANIMATE_POSITION", lua_Slider_static_ANIMATE_POSITION},
-        {"ANIMATE_POSITION_X", lua_Slider_static_ANIMATE_POSITION_X},
-        {"ANIMATE_POSITION_Y", lua_Slider_static_ANIMATE_POSITION_Y},
-        {"ANIMATE_SIZE", lua_Slider_static_ANIMATE_SIZE},
-        {"ANIMATE_SIZE_HEIGHT", lua_Slider_static_ANIMATE_SIZE_HEIGHT},
-        {"ANIMATE_SIZE_WIDTH", lua_Slider_static_ANIMATE_SIZE_WIDTH},
-        {"create", lua_Slider_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Slider", lua_members, NULL, lua_Slider__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Slider* getInstance(lua_State* state)
 {
@@ -168,7 +30,7 @@ static Slider* getInstance(lua_State* state)
     return (Slider*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Slider__gc(lua_State* state)
+static int lua_Slider__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -206,7 +68,7 @@ int lua_Slider__gc(lua_State* state)
     return 0;
 }
 
-int lua_Slider_addListener(lua_State* state)
+static int lua_Slider_addListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -252,7 +114,7 @@ int lua_Slider_addListener(lua_State* state)
     return 0;
 }
 
-int lua_Slider_addRef(lua_State* state)
+static int lua_Slider_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -284,7 +146,7 @@ int lua_Slider_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Slider_addScript(lua_State* state)
+static int lua_Slider_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -332,7 +194,7 @@ int lua_Slider_addScript(lua_State* state)
     return 0;
 }
 
-int lua_Slider_addScriptCallback(lua_State* state)
+static int lua_Slider_addScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -378,7 +240,7 @@ int lua_Slider_addScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_Slider_canFocus(lua_State* state)
+static int lua_Slider_canFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -413,7 +275,7 @@ int lua_Slider_canFocus(lua_State* state)
     return 0;
 }
 
-int lua_Slider_clearScripts(lua_State* state)
+static int lua_Slider_clearScripts(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -445,7 +307,7 @@ int lua_Slider_clearScripts(lua_State* state)
     return 0;
 }
 
-int lua_Slider_createAnimation(lua_State* state)
+static int lua_Slider_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -648,7 +510,7 @@ int lua_Slider_createAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Slider_createAnimationFromBy(lua_State* state)
+static int lua_Slider_createAnimationFromBy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -716,7 +578,7 @@ int lua_Slider_createAnimationFromBy(lua_State* state)
     return 0;
 }
 
-int lua_Slider_createAnimationFromTo(lua_State* state)
+static int lua_Slider_createAnimationFromTo(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -784,7 +646,7 @@ int lua_Slider_createAnimationFromTo(lua_State* state)
     return 0;
 }
 
-int lua_Slider_destroyAnimation(lua_State* state)
+static int lua_Slider_destroyAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -834,7 +696,7 @@ int lua_Slider_destroyAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getAbsoluteBounds(lua_State* state)
+static int lua_Slider_getAbsoluteBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -878,7 +740,7 @@ int lua_Slider_getAbsoluteBounds(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getAlignment(lua_State* state)
+static int lua_Slider_getAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -913,7 +775,7 @@ int lua_Slider_getAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getAnimation(lua_State* state)
+static int lua_Slider_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -987,7 +849,7 @@ int lua_Slider_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getAnimationPropertyComponentCount(lua_State* state)
+static int lua_Slider_getAnimationPropertyComponentCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1026,7 +888,7 @@ int lua_Slider_getAnimationPropertyComponentCount(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getAnimationPropertyValue(lua_State* state)
+static int lua_Slider_getAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1072,7 +934,7 @@ int lua_Slider_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getAutoSize(lua_State* state)
+static int lua_Slider_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1107,7 +969,7 @@ int lua_Slider_getAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getBorder(lua_State* state)
+static int lua_Slider_getBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1181,7 +1043,7 @@ int lua_Slider_getBorder(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getBounds(lua_State* state)
+static int lua_Slider_getBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1225,7 +1087,7 @@ int lua_Slider_getBounds(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getClip(lua_State* state)
+static int lua_Slider_getClip(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1269,7 +1131,7 @@ int lua_Slider_getClip(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getClipBounds(lua_State* state)
+static int lua_Slider_getClipBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1313,7 +1175,7 @@ int lua_Slider_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getConsumeInputEvents(lua_State* state)
+static int lua_Slider_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1348,7 +1210,7 @@ int lua_Slider_getConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getCursorColor(lua_State* state)
+static int lua_Slider_getCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1396,7 +1258,7 @@ int lua_Slider_getCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getCursorRegion(lua_State* state)
+static int lua_Slider_getCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1444,7 +1306,7 @@ int lua_Slider_getCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getCursorUVs(lua_State* state)
+static int lua_Slider_getCursorUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1492,7 +1354,7 @@ int lua_Slider_getCursorUVs(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getFocusIndex(lua_State* state)
+static int lua_Slider_getFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1527,7 +1389,7 @@ int lua_Slider_getFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getFont(lua_State* state)
+static int lua_Slider_getFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1601,7 +1463,7 @@ int lua_Slider_getFont(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getFontSize(lua_State* state)
+static int lua_Slider_getFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1657,7 +1519,7 @@ int lua_Slider_getFontSize(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getHeight(lua_State* state)
+static int lua_Slider_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1692,7 +1554,7 @@ int lua_Slider_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getId(lua_State* state)
+static int lua_Slider_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1727,7 +1589,7 @@ int lua_Slider_getId(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getImageColor(lua_State* state)
+static int lua_Slider_getImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1779,7 +1641,7 @@ int lua_Slider_getImageColor(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getImageRegion(lua_State* state)
+static int lua_Slider_getImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1831,7 +1693,7 @@ int lua_Slider_getImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getImageUVs(lua_State* state)
+static int lua_Slider_getImageUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1883,7 +1745,7 @@ int lua_Slider_getImageUVs(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getMargin(lua_State* state)
+static int lua_Slider_getMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1927,7 +1789,7 @@ int lua_Slider_getMargin(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getMax(lua_State* state)
+static int lua_Slider_getMax(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1962,7 +1824,7 @@ int lua_Slider_getMax(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getMin(lua_State* state)
+static int lua_Slider_getMin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1997,7 +1859,7 @@ int lua_Slider_getMin(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getOpacity(lua_State* state)
+static int lua_Slider_getOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2053,7 +1915,7 @@ int lua_Slider_getOpacity(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getPadding(lua_State* state)
+static int lua_Slider_getPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2097,7 +1959,7 @@ int lua_Slider_getPadding(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getParent(lua_State* state)
+static int lua_Slider_getParent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2141,7 +2003,7 @@ int lua_Slider_getParent(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getRefCount(lua_State* state)
+static int lua_Slider_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2176,7 +2038,7 @@ int lua_Slider_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getScriptEvent(lua_State* state)
+static int lua_Slider_getScriptEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2224,7 +2086,7 @@ int lua_Slider_getScriptEvent(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getSkinColor(lua_State* state)
+static int lua_Slider_getSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2298,7 +2160,7 @@ int lua_Slider_getSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getSkinRegion(lua_State* state)
+static int lua_Slider_getSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2372,7 +2234,7 @@ int lua_Slider_getSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getState(lua_State* state)
+static int lua_Slider_getState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2407,7 +2269,7 @@ int lua_Slider_getState(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getStep(lua_State* state)
+static int lua_Slider_getStep(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2442,7 +2304,7 @@ int lua_Slider_getStep(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getStyle(lua_State* state)
+static int lua_Slider_getStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2486,7 +2348,7 @@ int lua_Slider_getStyle(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getText(lua_State* state)
+static int lua_Slider_getText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2521,7 +2383,7 @@ int lua_Slider_getText(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getTextAlignment(lua_State* state)
+static int lua_Slider_getTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2577,7 +2439,7 @@ int lua_Slider_getTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getTextColor(lua_State* state)
+static int lua_Slider_getTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2651,7 +2513,7 @@ int lua_Slider_getTextColor(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getTextRightToLeft(lua_State* state)
+static int lua_Slider_getTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2707,7 +2569,7 @@ int lua_Slider_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getTheme(lua_State* state)
+static int lua_Slider_getTheme(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2751,7 +2613,7 @@ int lua_Slider_getTheme(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getTopLevelForm(lua_State* state)
+static int lua_Slider_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2795,7 +2657,7 @@ int lua_Slider_getTopLevelForm(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getTypeName(lua_State* state)
+static int lua_Slider_getTypeName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2830,7 +2692,7 @@ int lua_Slider_getTypeName(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getValue(lua_State* state)
+static int lua_Slider_getValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2865,7 +2727,7 @@ int lua_Slider_getValue(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getValueTextAlignment(lua_State* state)
+static int lua_Slider_getValueTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2900,7 +2762,7 @@ int lua_Slider_getValueTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getValueTextPrecision(lua_State* state)
+static int lua_Slider_getValueTextPrecision(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2935,7 +2797,7 @@ int lua_Slider_getValueTextPrecision(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getWidth(lua_State* state)
+static int lua_Slider_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2970,7 +2832,7 @@ int lua_Slider_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getX(lua_State* state)
+static int lua_Slider_getX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3005,7 +2867,7 @@ int lua_Slider_getX(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getY(lua_State* state)
+static int lua_Slider_getY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3040,7 +2902,7 @@ int lua_Slider_getY(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getZIndex(lua_State* state)
+static int lua_Slider_getZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3075,7 +2937,7 @@ int lua_Slider_getZIndex(lua_State* state)
     return 0;
 }
 
-int lua_Slider_hasFocus(lua_State* state)
+static int lua_Slider_hasFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3110,7 +2972,7 @@ int lua_Slider_hasFocus(lua_State* state)
     return 0;
 }
 
-int lua_Slider_hasScriptListener(lua_State* state)
+static int lua_Slider_hasScriptListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3173,7 +3035,7 @@ int lua_Slider_hasScriptListener(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isChild(lua_State* state)
+static int lua_Slider_isChild(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3218,7 +3080,7 @@ int lua_Slider_isChild(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isContainer(lua_State* state)
+static int lua_Slider_isContainer(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3253,7 +3115,7 @@ int lua_Slider_isContainer(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isEnabled(lua_State* state)
+static int lua_Slider_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3288,7 +3150,7 @@ int lua_Slider_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isEnabledInHierarchy(lua_State* state)
+static int lua_Slider_isEnabledInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3323,7 +3185,7 @@ int lua_Slider_isEnabledInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isHeightPercentage(lua_State* state)
+static int lua_Slider_isHeightPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3358,7 +3220,7 @@ int lua_Slider_isHeightPercentage(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isValueTextVisible(lua_State* state)
+static int lua_Slider_isValueTextVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3393,7 +3255,7 @@ int lua_Slider_isValueTextVisible(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isVisible(lua_State* state)
+static int lua_Slider_isVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3428,7 +3290,7 @@ int lua_Slider_isVisible(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isVisibleInHierarchy(lua_State* state)
+static int lua_Slider_isVisibleInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3463,7 +3325,7 @@ int lua_Slider_isVisibleInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isWidthPercentage(lua_State* state)
+static int lua_Slider_isWidthPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3498,7 +3360,7 @@ int lua_Slider_isWidthPercentage(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isXPercentage(lua_State* state)
+static int lua_Slider_isXPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3533,7 +3395,7 @@ int lua_Slider_isXPercentage(lua_State* state)
     return 0;
 }
 
-int lua_Slider_isYPercentage(lua_State* state)
+static int lua_Slider_isYPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3568,7 +3430,7 @@ int lua_Slider_isYPercentage(lua_State* state)
     return 0;
 }
 
-int lua_Slider_release(lua_State* state)
+static int lua_Slider_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3600,7 +3462,7 @@ int lua_Slider_release(lua_State* state)
     return 0;
 }
 
-int lua_Slider_removeListener(lua_State* state)
+static int lua_Slider_removeListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3642,7 +3504,7 @@ int lua_Slider_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_Slider_removeScript(lua_State* state)
+static int lua_Slider_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3681,7 +3543,7 @@ int lua_Slider_removeScript(lua_State* state)
     return 0;
 }
 
-int lua_Slider_removeScriptCallback(lua_State* state)
+static int lua_Slider_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3727,7 +3589,7 @@ int lua_Slider_removeScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setAlignment(lua_State* state)
+static int lua_Slider_setAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3763,7 +3625,7 @@ int lua_Slider_setAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setAnimationPropertyValue(lua_State* state)
+static int lua_Slider_setAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3841,7 +3703,7 @@ int lua_Slider_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setAutoSize(lua_State* state)
+static int lua_Slider_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3877,7 +3739,7 @@ int lua_Slider_setAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setBorder(lua_State* state)
+static int lua_Slider_setBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3959,7 +3821,7 @@ int lua_Slider_setBorder(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setBounds(lua_State* state)
+static int lua_Slider_setBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4001,7 +3863,7 @@ int lua_Slider_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setCanFocus(lua_State* state)
+static int lua_Slider_setCanFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4037,7 +3899,7 @@ int lua_Slider_setCanFocus(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setConsumeInputEvents(lua_State* state)
+static int lua_Slider_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4073,7 +3935,7 @@ int lua_Slider_setConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setCursorColor(lua_State* state)
+static int lua_Slider_setCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4119,7 +3981,7 @@ int lua_Slider_setCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setCursorRegion(lua_State* state)
+static int lua_Slider_setCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4165,7 +4027,7 @@ int lua_Slider_setCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setEnabled(lua_State* state)
+static int lua_Slider_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4201,7 +4063,7 @@ int lua_Slider_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setFocus(lua_State* state)
+static int lua_Slider_setFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4236,7 +4098,7 @@ int lua_Slider_setFocus(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setFocusIndex(lua_State* state)
+static int lua_Slider_setFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4272,7 +4134,7 @@ int lua_Slider_setFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setFont(lua_State* state)
+static int lua_Slider_setFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4342,7 +4204,7 @@ int lua_Slider_setFont(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setFontSize(lua_State* state)
+static int lua_Slider_setFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4400,7 +4262,7 @@ int lua_Slider_setFontSize(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setHeight(lua_State* state)
+static int lua_Slider_setHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4458,7 +4320,7 @@ int lua_Slider_setHeight(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setId(lua_State* state)
+static int lua_Slider_setId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4494,7 +4356,7 @@ int lua_Slider_setId(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setImageColor(lua_State* state)
+static int lua_Slider_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4572,7 +4434,7 @@ int lua_Slider_setImageColor(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setImageRegion(lua_State* state)
+static int lua_Slider_setImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4650,7 +4512,7 @@ int lua_Slider_setImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setMargin(lua_State* state)
+static int lua_Slider_setMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4698,7 +4560,7 @@ int lua_Slider_setMargin(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setMax(lua_State* state)
+static int lua_Slider_setMax(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4734,7 +4596,7 @@ int lua_Slider_setMax(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setMin(lua_State* state)
+static int lua_Slider_setMin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4770,7 +4632,7 @@ int lua_Slider_setMin(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setOpacity(lua_State* state)
+static int lua_Slider_setOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4828,7 +4690,7 @@ int lua_Slider_setOpacity(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setPadding(lua_State* state)
+static int lua_Slider_setPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4876,7 +4738,7 @@ int lua_Slider_setPadding(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setPosition(lua_State* state)
+static int lua_Slider_setPosition(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4916,7 +4778,7 @@ int lua_Slider_setPosition(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setSize(lua_State* state)
+static int lua_Slider_setSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4956,7 +4818,7 @@ int lua_Slider_setSize(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setSkinColor(lua_State* state)
+static int lua_Slider_setSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5026,7 +4888,7 @@ int lua_Slider_setSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setSkinRegion(lua_State* state)
+static int lua_Slider_setSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5096,7 +4958,7 @@ int lua_Slider_setSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setStep(lua_State* state)
+static int lua_Slider_setStep(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5132,7 +4994,7 @@ int lua_Slider_setStep(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setStyle(lua_State* state)
+static int lua_Slider_setStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5174,7 +5036,7 @@ int lua_Slider_setStyle(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setText(lua_State* state)
+static int lua_Slider_setText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5210,7 +5072,7 @@ int lua_Slider_setText(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setTextAlignment(lua_State* state)
+static int lua_Slider_setTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5268,7 +5130,7 @@ int lua_Slider_setTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setTextColor(lua_State* state)
+static int lua_Slider_setTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5338,7 +5200,7 @@ int lua_Slider_setTextColor(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setTextRightToLeft(lua_State* state)
+static int lua_Slider_setTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5396,7 +5258,7 @@ int lua_Slider_setTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setValue(lua_State* state)
+static int lua_Slider_setValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5432,7 +5294,7 @@ int lua_Slider_setValue(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setValueTextAlignment(lua_State* state)
+static int lua_Slider_setValueTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5468,7 +5330,7 @@ int lua_Slider_setValueTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setValueTextPrecision(lua_State* state)
+static int lua_Slider_setValueTextPrecision(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5504,7 +5366,7 @@ int lua_Slider_setValueTextPrecision(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setValueTextVisible(lua_State* state)
+static int lua_Slider_setValueTextVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5540,7 +5402,7 @@ int lua_Slider_setValueTextVisible(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setVisible(lua_State* state)
+static int lua_Slider_setVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5576,7 +5438,7 @@ int lua_Slider_setVisible(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setWidth(lua_State* state)
+static int lua_Slider_setWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5634,7 +5496,7 @@ int lua_Slider_setWidth(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setX(lua_State* state)
+static int lua_Slider_setX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5692,7 +5554,7 @@ int lua_Slider_setX(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setY(lua_State* state)
+static int lua_Slider_setY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5750,7 +5612,7 @@ int lua_Slider_setY(lua_State* state)
     return 0;
 }
 
-int lua_Slider_setZIndex(lua_State* state)
+static int lua_Slider_setZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5786,7 +5648,7 @@ int lua_Slider_setZIndex(lua_State* state)
     return 0;
 }
 
-int lua_Slider_static_ANIMATE_OPACITY(lua_State* state)
+static int lua_Slider_static_ANIMATE_OPACITY(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5803,7 +5665,7 @@ int lua_Slider_static_ANIMATE_OPACITY(lua_State* state)
     return 1;
 }
 
-int lua_Slider_static_ANIMATE_POSITION(lua_State* state)
+static int lua_Slider_static_ANIMATE_POSITION(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5820,7 +5682,7 @@ int lua_Slider_static_ANIMATE_POSITION(lua_State* state)
     return 1;
 }
 
-int lua_Slider_static_ANIMATE_POSITION_X(lua_State* state)
+static int lua_Slider_static_ANIMATE_POSITION_X(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5837,7 +5699,7 @@ int lua_Slider_static_ANIMATE_POSITION_X(lua_State* state)
     return 1;
 }
 
-int lua_Slider_static_ANIMATE_POSITION_Y(lua_State* state)
+static int lua_Slider_static_ANIMATE_POSITION_Y(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5854,7 +5716,7 @@ int lua_Slider_static_ANIMATE_POSITION_Y(lua_State* state)
     return 1;
 }
 
-int lua_Slider_static_ANIMATE_SIZE(lua_State* state)
+static int lua_Slider_static_ANIMATE_SIZE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5871,7 +5733,7 @@ int lua_Slider_static_ANIMATE_SIZE(lua_State* state)
     return 1;
 }
 
-int lua_Slider_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
+static int lua_Slider_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5888,7 +5750,7 @@ int lua_Slider_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
     return 1;
 }
 
-int lua_Slider_static_ANIMATE_SIZE_WIDTH(lua_State* state)
+static int lua_Slider_static_ANIMATE_SIZE_WIDTH(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5905,7 +5767,7 @@ int lua_Slider_static_ANIMATE_SIZE_WIDTH(lua_State* state)
     return 1;
 }
 
-int lua_Slider_static_create(lua_State* state)
+static int lua_Slider_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5987,6 +5849,194 @@ int lua_Slider_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Slider
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Slider* ptrObject = reinterpret_cast<Slider*>(ptr);
+
+    if (strcmp(typeName, "Label") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Label*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Slider_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Slider_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Slider* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Slider()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addListener", lua_Slider_addListener},
+        {"addRef", lua_Slider_addRef},
+        {"addScript", lua_Slider_addScript},
+        {"addScriptCallback", lua_Slider_addScriptCallback},
+        {"canFocus", lua_Slider_canFocus},
+        {"clearScripts", lua_Slider_clearScripts},
+        {"createAnimation", lua_Slider_createAnimation},
+        {"createAnimationFromBy", lua_Slider_createAnimationFromBy},
+        {"createAnimationFromTo", lua_Slider_createAnimationFromTo},
+        {"destroyAnimation", lua_Slider_destroyAnimation},
+        {"getAbsoluteBounds", lua_Slider_getAbsoluteBounds},
+        {"getAlignment", lua_Slider_getAlignment},
+        {"getAnimation", lua_Slider_getAnimation},
+        {"getAnimationPropertyComponentCount", lua_Slider_getAnimationPropertyComponentCount},
+        {"getAnimationPropertyValue", lua_Slider_getAnimationPropertyValue},
+        {"getAutoSize", lua_Slider_getAutoSize},
+        {"getBorder", lua_Slider_getBorder},
+        {"getBounds", lua_Slider_getBounds},
+        {"getClip", lua_Slider_getClip},
+        {"getClipBounds", lua_Slider_getClipBounds},
+        {"getConsumeInputEvents", lua_Slider_getConsumeInputEvents},
+        {"getCursorColor", lua_Slider_getCursorColor},
+        {"getCursorRegion", lua_Slider_getCursorRegion},
+        {"getCursorUVs", lua_Slider_getCursorUVs},
+        {"getFocusIndex", lua_Slider_getFocusIndex},
+        {"getFont", lua_Slider_getFont},
+        {"getFontSize", lua_Slider_getFontSize},
+        {"getHeight", lua_Slider_getHeight},
+        {"getId", lua_Slider_getId},
+        {"getImageColor", lua_Slider_getImageColor},
+        {"getImageRegion", lua_Slider_getImageRegion},
+        {"getImageUVs", lua_Slider_getImageUVs},
+        {"getMargin", lua_Slider_getMargin},
+        {"getMax", lua_Slider_getMax},
+        {"getMin", lua_Slider_getMin},
+        {"getOpacity", lua_Slider_getOpacity},
+        {"getPadding", lua_Slider_getPadding},
+        {"getParent", lua_Slider_getParent},
+        {"getRefCount", lua_Slider_getRefCount},
+        {"getScriptEvent", lua_Slider_getScriptEvent},
+        {"getSkinColor", lua_Slider_getSkinColor},
+        {"getSkinRegion", lua_Slider_getSkinRegion},
+        {"getState", lua_Slider_getState},
+        {"getStep", lua_Slider_getStep},
+        {"getStyle", lua_Slider_getStyle},
+        {"getText", lua_Slider_getText},
+        {"getTextAlignment", lua_Slider_getTextAlignment},
+        {"getTextColor", lua_Slider_getTextColor},
+        {"getTextRightToLeft", lua_Slider_getTextRightToLeft},
+        {"getTheme", lua_Slider_getTheme},
+        {"getTopLevelForm", lua_Slider_getTopLevelForm},
+        {"getTypeName", lua_Slider_getTypeName},
+        {"getValue", lua_Slider_getValue},
+        {"getValueTextAlignment", lua_Slider_getValueTextAlignment},
+        {"getValueTextPrecision", lua_Slider_getValueTextPrecision},
+        {"getWidth", lua_Slider_getWidth},
+        {"getX", lua_Slider_getX},
+        {"getY", lua_Slider_getY},
+        {"getZIndex", lua_Slider_getZIndex},
+        {"hasFocus", lua_Slider_hasFocus},
+        {"hasScriptListener", lua_Slider_hasScriptListener},
+        {"isChild", lua_Slider_isChild},
+        {"isContainer", lua_Slider_isContainer},
+        {"isEnabled", lua_Slider_isEnabled},
+        {"isEnabledInHierarchy", lua_Slider_isEnabledInHierarchy},
+        {"isHeightPercentage", lua_Slider_isHeightPercentage},
+        {"isValueTextVisible", lua_Slider_isValueTextVisible},
+        {"isVisible", lua_Slider_isVisible},
+        {"isVisibleInHierarchy", lua_Slider_isVisibleInHierarchy},
+        {"isWidthPercentage", lua_Slider_isWidthPercentage},
+        {"isXPercentage", lua_Slider_isXPercentage},
+        {"isYPercentage", lua_Slider_isYPercentage},
+        {"release", lua_Slider_release},
+        {"removeListener", lua_Slider_removeListener},
+        {"removeScript", lua_Slider_removeScript},
+        {"removeScriptCallback", lua_Slider_removeScriptCallback},
+        {"setAlignment", lua_Slider_setAlignment},
+        {"setAnimationPropertyValue", lua_Slider_setAnimationPropertyValue},
+        {"setAutoSize", lua_Slider_setAutoSize},
+        {"setBorder", lua_Slider_setBorder},
+        {"setBounds", lua_Slider_setBounds},
+        {"setCanFocus", lua_Slider_setCanFocus},
+        {"setConsumeInputEvents", lua_Slider_setConsumeInputEvents},
+        {"setCursorColor", lua_Slider_setCursorColor},
+        {"setCursorRegion", lua_Slider_setCursorRegion},
+        {"setEnabled", lua_Slider_setEnabled},
+        {"setFocus", lua_Slider_setFocus},
+        {"setFocusIndex", lua_Slider_setFocusIndex},
+        {"setFont", lua_Slider_setFont},
+        {"setFontSize", lua_Slider_setFontSize},
+        {"setHeight", lua_Slider_setHeight},
+        {"setId", lua_Slider_setId},
+        {"setImageColor", lua_Slider_setImageColor},
+        {"setImageRegion", lua_Slider_setImageRegion},
+        {"setMargin", lua_Slider_setMargin},
+        {"setMax", lua_Slider_setMax},
+        {"setMin", lua_Slider_setMin},
+        {"setOpacity", lua_Slider_setOpacity},
+        {"setPadding", lua_Slider_setPadding},
+        {"setPosition", lua_Slider_setPosition},
+        {"setSize", lua_Slider_setSize},
+        {"setSkinColor", lua_Slider_setSkinColor},
+        {"setSkinRegion", lua_Slider_setSkinRegion},
+        {"setStep", lua_Slider_setStep},
+        {"setStyle", lua_Slider_setStyle},
+        {"setText", lua_Slider_setText},
+        {"setTextAlignment", lua_Slider_setTextAlignment},
+        {"setTextColor", lua_Slider_setTextColor},
+        {"setTextRightToLeft", lua_Slider_setTextRightToLeft},
+        {"setValue", lua_Slider_setValue},
+        {"setValueTextAlignment", lua_Slider_setValueTextAlignment},
+        {"setValueTextPrecision", lua_Slider_setValueTextPrecision},
+        {"setValueTextVisible", lua_Slider_setValueTextVisible},
+        {"setVisible", lua_Slider_setVisible},
+        {"setWidth", lua_Slider_setWidth},
+        {"setX", lua_Slider_setX},
+        {"setY", lua_Slider_setY},
+        {"setZIndex", lua_Slider_setZIndex},
+        {"to", lua_Slider_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"ANIMATE_OPACITY", lua_Slider_static_ANIMATE_OPACITY},
+        {"ANIMATE_POSITION", lua_Slider_static_ANIMATE_POSITION},
+        {"ANIMATE_POSITION_X", lua_Slider_static_ANIMATE_POSITION_X},
+        {"ANIMATE_POSITION_Y", lua_Slider_static_ANIMATE_POSITION_Y},
+        {"ANIMATE_SIZE", lua_Slider_static_ANIMATE_SIZE},
+        {"ANIMATE_SIZE_HEIGHT", lua_Slider_static_ANIMATE_SIZE_HEIGHT},
+        {"ANIMATE_SIZE_WIDTH", lua_Slider_static_ANIMATE_SIZE_WIDTH},
+        {"create", lua_Slider_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Slider", lua_members, NULL, lua_Slider__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Slider", __convertTo);
 }
 
 }
