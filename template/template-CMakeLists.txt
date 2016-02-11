@@ -19,6 +19,10 @@ IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
     ADD_DEFINITIONS(-std=c++11)
     SET(TARGET_OS "LINUX")
     SET(TARGET_OS_DIR "linux")
+ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+    ADD_DEFINITIONS(-std=c++11)
+    SET(TARGET_OS "OSX")
+    SET(TARGET_OS_DIR "Mac")
 ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Windows")
     IF(MSVC)
         ADD_DEFINITIONS(-DMSVC)
@@ -109,7 +113,46 @@ IF (TARGET_OS STREQUAL "LINUX")
 	append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "gtk-x11-2.0" "" )
 	append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "gobject-2.0" "" )
 	append_gameplay_ext_lib(GAMEPLAY_LIBRARIES "glib-2.0" "" )
-
+ELSEIF (TARGET_OS STREQUAL "OSX")
+    find_package(OpenGL REQUIRED)
+    FIND_LIBRARY(AGL_LIBRARY AGL)
+    FIND_LIBRARY(APP_SERVICES_LIBRARY ApplicationServices )
+    FIND_LIBRARY(ATBOX_LIBRARY AudioToolbox)
+    FIND_LIBRARY(CARBON_LIBRARY Carbon)
+    FIND_LIBRARY(CAUDIO_LIBRARY CoreAudio)
+    FIND_LIBRARY(COREVIDEO_LIBRARY CoreVideo)
+    FIND_LIBRARY(CFOUNDATION_LIBRARY CoreFoundation)
+    FIND_LIBRARY(CSERVICES_LIBRARY CoreServices)
+    FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
+    FIND_LIBRARY(QUICKTIME_LIBRARY QuickTime )
+    FIND_LIBRARY(IOKIT_LIBRARY IOKit )
+    FIND_LIBRARY(AVF_LIBRARY AVFoundation)
+    FIND_LIBRARY(OAL_LIBRARY OpenAL)
+    FIND_LIBRARY(GKIT_LIBRARY GameKit)
+    SET(FRAMEWORK_LIBRS
+        ${AGL_LIBRARY}
+        ${APP_SERVICES_LIBRARY}
+        ${ATBOX_LIBRARY}
+        ${CARBON_LIBRARY}
+        ${CAUDIO_LIBRARY}
+        ${COREVIDEO_LIBRARY}
+        ${CFOUNDATION_LIBRARY}
+        ${CSERVICES_LIBRARY}
+        ${OAL_LIBRARY}
+        ${OPENGL_LIBRARIES}
+        ${GKIT_LIBRARY}
+        ${IOKIT_LIBRARY}
+        "-framework Foundation"
+        "-framework Cocoa")
+    set(GAMEPLAY_LIBRARIES ${GAMEPLAY_LIBRARIES}
+        stdc++
+        gameplay
+        gameplay-deps
+        m
+        dl
+        pthread
+        ${FRAMEWORK_LIBRS}
+        )
 ELSEIF (TARGET_OS STREQUAL "WINDOWS")
 	set(GAMEPLAY_LIBRARIES ${GAMEPLAY_LIBRARIES} "OpenGL32")
 	set(GAMEPLAY_LIBRARIES ${GAMEPLAY_LIBRARIES} "GLU32")
@@ -126,6 +169,7 @@ set(GAME_SRC
 
 add_executable(${GAME_NAME}
 	WIN32
+	MACOSX_BUNDLE
     ${GAME_SRC}
 )
 
@@ -140,6 +184,12 @@ set_target_properties(${GAME_NAME} PROPERTIES
 #TODO: Copy res files to the bin dir, it is done that way so we can make post
 #processing to the the res files in the future like zipping or preparation to
 #per platfom format.
-copy_files(CopyRes * "${CMAKE_SOURCE_DIR}/res" "$<TARGET_FILE_DIR:${GAME_NAME}>/res" 1)
-copy_files(CopyShaders * "${GAMEPLAY_SRC_PATH}/gameplay/res/shaders" "$<TARGET_FILE_DIR:${GAME_NAME}>/res/shaders" 1)
-copy_files(CopyConfig *.config "${CMAKE_SOURCE_DIR}" "$<TARGET_FILE_DIR:${GAME_NAME}>" 0)
+IF (TARGET_OS STREQUAL "OSX")
+	SET(TARGET_RESOURCE_BASE_DIR "$<TARGET_FILE_DIR:${GAME_NAME}>/../Resources")
+ELSE(TARGET_OS STREQUAL "OSX")
+	SET(TARGET_RESOURCE_BASE_DIR "$<TARGET_FILE_DIR:${GAME_NAME}>")
+ENDIF(TARGET_OS STREQUAL "OSX")
+
+copy_files(CopyRes * "${CMAKE_SOURCE_DIR}/res" "${TARGET_RESOURCE_BASE_DIR}/res" 1)
+copy_files(CopyShaders * "${GAMEPLAY_SRC_PATH}/gameplay/res/shaders" "${TARGET_RESOURCE_BASE_DIR}/res/shaders" 1)
+copy_files(CopyConfig *.config "${CMAKE_SOURCE_DIR}" "${TARGET_RESOURCE_BASE_DIR}" 0)

@@ -49,3 +49,36 @@ macro(COPY_RES_EXTRA GAME_NAME REL_DIR)
     COPY_RES_FILES( ${GAME_NAME} ${GAME_NAME}_EXTRA_RES ${REL_DIR} "${SRC_FILES}" )
     add_dependencies( ${GAME_NAME}_ASSETS ${GAME_NAME}_EXTRA_RES )
 endmacro()
+
+# Build a list of file matching a list of regular expression within a given path
+#   RESULT name of the global variable into which the result is built
+#   REL_PATH the path under which the files are to be found
+#   ARGN list of patterns
+macro(MAKE_ABSOLUTE RESULT REL_PATH)
+    set(${RESULT})
+    foreach(SRC_FILE ${ARGN} )
+        file(GLOB XX ${REL_PATH}/${SRC_FILE})
+        list(APPEND ${RESULT} ${XX})
+    endforeach()
+endmacro()
+
+# Build a list of resource files matching a list of regular expression within a given path
+# and mark their correct Mac OS X destination, keeping the relative position to a base path
+#   RESULT name of the global variable into which the result is built
+#   BASE_SRC_PATH the base path under which the structure is replicated in the bundle
+#   REL_PATH a pattern to be matched and searched recursively.
+macro(COPY_RES_MAC RESULT BASE_SRC_PATH)
+	set(${RESULT})
+	foreach(PATTERN ${ARGN} )
+            file(GLOB_RECURSE XX RELATIVE ${BASE_SRC_PATH} ${BASE_SRC_PATH}/${PATTERN})
+            foreach(FNAME ${XX})
+                list(APPEND ${RESULT} ${BASE_SRC_PATH}/${FNAME})
+                get_filename_component(DIR ${FNAME} DIRECTORY )
+                set_source_files_properties(
+                            ${BASE_SRC_PATH}/${FNAME}
+                            PROPERTIES
+                            MACOSX_PACKAGE_LOCATION Resources/${DIR}
+                    )
+            endforeach()
+    endforeach()
+endmacro()
