@@ -174,7 +174,7 @@ template<typename T> bool ScriptController::executeFunction(Script* script, cons
     bool success = executeFunctionHelper(1, func, NULL, NULL, script);
     if (out && success)
         *out = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
-    lua_settop(top);
+    lua_settop(_lua, top);
     return success;
 }
 
@@ -204,7 +204,7 @@ template<typename T> bool ScriptController::executeFunction(const char* func, co
     bool success = executeFunctionHelper(1, func, args, list, (Script*)NULL);
     if (out && success)
         *out = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
-    lua_settop(top);
+    lua_settop(_lua, top);
     return success;
 }
 
