@@ -1,0 +1,23 @@
+language: cpp
+before_script:
+  - ./install.sh
+  - mkdir build
+  - cd build
+  - cmake ..
+script: make
+compiler:
+  - gcc
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - libglu1-mesa-dev
+    - libogg-dev
+    - libopenal-dev
+    - lib32z1-dev
+    - libgtk2.0-dev
+notifications:
+  email: false
+sudo: required
+dist: trusty
