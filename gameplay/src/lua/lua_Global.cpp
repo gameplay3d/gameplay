@@ -1109,7 +1109,7 @@ void* luaConvertObjectPointer(void* ptr, const char* fromType, const char* toTyp
     return itr->second(ptr, toType);
 }
 
-static int lua__strcmpnocase(lua_State* state)
+int lua__strcmpnocase(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
