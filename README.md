@@ -18,7 +18,6 @@ GamePlay is an open-source, cross-platform, C++ game framework/engine for creati
 - [Android](https://github.com/gameplay3d/GamePlay/wiki/Android-NDK-Setup)
 
 ## Roadmap for 'next' branch
-- [4.0.0](https://github.com/gameplay3d/GamePlay/milestones/4.0.0)
 - [backlog](https://github.com/gameplay3d/GamePlay/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 ## License
