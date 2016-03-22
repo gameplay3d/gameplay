@@ -261,11 +261,11 @@ void Mesh::setPrimitiveType(PrimitiveType type)
     _primitiveType = type;
 }
 
-void* Mesh::mapVertexBuffer(MapAccess access)
+void* Mesh::mapVertexBuffer()
 {
     GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer) );
 
-    return (void*)glMapBuffer(GL_ARRAY_BUFFER, access);
+    return (void*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 }
 
 bool Mesh::unmapVertexBuffer()

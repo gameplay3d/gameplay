@@ -78,10 +78,9 @@ public:
      * index buffer become corrupted while the buffer was mapped. The corruption results from screen
      * resolution change or window system specific events. In this case, the data must be resubmitted.
      *
-     * @param access The access for which the data can be use. Ex. read, write, read_write.
      * @return The mapped index buffer
      */
-    void* mapIndexBuffer(Mesh::MapAccess access);
+    void* mapIndexBuffer();
 
     /**
      * Unmaps the index buffer.

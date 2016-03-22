@@ -48,16 +48,6 @@ public:
     };
 
     /**
-     * Defines mapping access/usage.
-     */
-    enum MapAccess
-    {
-        MAP_READ_ONLY = GL_READ_ONLY,
-        MAP_WRITE_ONLY = GL_WRITE_ONLY,
-        MAP_READ_WRITE = GL_READ_WRITE
-    };
-
-    /**
      * Constructs a new mesh with the specified vertex format.
      *
      * @param vertexFormat The vertex format.
@@ -231,10 +221,9 @@ public:
      * vertex buffer become corrupted while the buffer was mapped. The corruption results from screen
      * resolution change or window system specific events. In this case, the data must be resubmitted.
      *
-     * @param access The access for which the data can be use. Ex. read, write, read_write.
      * @return The mapped vertex buffer
      */
-    void* mapVertexBuffer(Mesh::MapAccess access);
+    void* mapVertexBuffer();
 
     /**
      * Unmaps the vertex buffer.
