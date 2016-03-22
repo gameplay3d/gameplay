@@ -218,6 +218,9 @@ using std::va_list;
     extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    extern PFNGLMAPBUFFEROESPROC glMapBuffer;
+    extern PFNGLUNMAPBUFFEROESPROC glUnmapBuffer;
+    #define GL_WRITE_ONLY GL_WRITE_ONLY_OES
     #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
@@ -240,6 +243,9 @@ using std::va_list;
         #define glDeleteVertexArrays glDeleteVertexArraysOES
         #define glGenVertexArrays glGenVertexArraysOES
         #define glIsVertexArray glIsVertexArrayOES
+        #define glMapBuffer glMapBufferOES
+        #define glUnmapBuffer glUnmapBufferOES
+        #define GL_WRITE_ONLY GL_WRITE_ONLY_OES
         #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
