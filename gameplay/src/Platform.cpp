@@ -81,31 +81,43 @@ void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
 void Platform::gamepadButtonPressedEventInternal(GamepadHandle handle, Gamepad::ButtonMapping mapping)
 {
     Gamepad* gamepad = Gamepad::getGamepad(handle);
-    unsigned int newButtons = gamepad->_buttons | (1 << mapping);
-    gamepad->setButtons(newButtons);
-    Form::gamepadButtonEventInternal(gamepad);
+    if (gamepad)
+    {
+        unsigned int newButtons = gamepad->_buttons | (1 << mapping);
+        gamepad->setButtons(newButtons);
+        Form::gamepadButtonEventInternal(gamepad);
+    }
 }
 
 void Platform::gamepadButtonReleasedEventInternal(GamepadHandle handle, Gamepad::ButtonMapping mapping)
 {
     Gamepad* gamepad = Gamepad::getGamepad(handle);
-    unsigned int newButtons = gamepad->_buttons & ~(1 << mapping);
-    gamepad->setButtons(newButtons);
-    Form::gamepadButtonEventInternal(gamepad);
+    if (gamepad)
+    {
+        unsigned int newButtons = gamepad->_buttons & ~(1 << mapping);
+        gamepad->setButtons(newButtons);
+        Form::gamepadButtonEventInternal(gamepad);
+    }
 }
 
 void Platform::gamepadTriggerChangedEventInternal(GamepadHandle handle, unsigned int index, float value)
 {
     Gamepad* gamepad = Gamepad::getGamepad(handle);
-    gamepad->setTriggerValue(index, value);
-    Form::gamepadTriggerEventInternal(gamepad, index);
+    if (gamepad)
+    {
+        gamepad->setTriggerValue(index, value);
+        Form::gamepadTriggerEventInternal(gamepad, index);
+    }
 }
 
 void Platform::gamepadJoystickChangedEventInternal(GamepadHandle handle, unsigned int index, float x, float y)
 {
     Gamepad* gamepad = Gamepad::getGamepad(handle);
-    gamepad->setJoystickValue(index, x, y);
-    Form::gamepadJoystickEventInternal(gamepad, index);
+    if (gamepad)
+    {
+        gamepad->setJoystickValue(index, x, y);
+        Form::gamepadJoystickEventInternal(gamepad, index);
+    }
 }
 
 }
