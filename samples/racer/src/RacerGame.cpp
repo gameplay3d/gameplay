@@ -75,7 +75,7 @@ void RacerGame::initialize()
 
     // Load and initialize game script
     getScriptController()->loadScript("res/common/racer.lua");
-    getScriptController()->executeFunction<void>("setScene", "<Scene>", _scene);
+    getScriptController()->executeFunction<void>("setScene", "<Scene>", NULL, _scene);
 
     Node* carNode = _scene->findNode("carbody");
     if (carNode && carNode->getCollisionObject()->getType() == PhysicsCollisionObject::VEHICLE)
@@ -426,7 +426,7 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_F:
             __flythruCamera = !__flythruCamera;
-            getScriptController()->executeFunction<void>("toggleCamera");
+            getScriptController()->executeFunction<void>("toggleCamera", NULL);
             break;
         case Keyboard::KEY_B:
             __drawDebug = !__drawDebug;

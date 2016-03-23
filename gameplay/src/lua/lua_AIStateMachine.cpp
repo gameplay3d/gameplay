@@ -11,24 +11,6 @@
 namespace gameplay
 {
 
-void luaRegister_AIStateMachine()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addState", lua_AIStateMachine_addState},
-        {"getActiveState", lua_AIStateMachine_getActiveState},
-        {"getAgent", lua_AIStateMachine_getAgent},
-        {"getState", lua_AIStateMachine_getState},
-        {"removeState", lua_AIStateMachine_removeState},
-        {"setState", lua_AIStateMachine_setState},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("AIStateMachine", lua_members, NULL, NULL, lua_statics, scopePath);
-}
-
 static AIStateMachine* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AIStateMachine");
@@ -36,7 +18,7 @@ static AIStateMachine* getInstance(lua_State* state)
     return (AIStateMachine*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AIStateMachine_addState(lua_State* state)
+static int lua_AIStateMachine_addState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -105,7 +87,7 @@ int lua_AIStateMachine_addState(lua_State* state)
     return 0;
 }
 
-int lua_AIStateMachine_getActiveState(lua_State* state)
+static int lua_AIStateMachine_getActiveState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -149,7 +131,7 @@ int lua_AIStateMachine_getActiveState(lua_State* state)
     return 0;
 }
 
-int lua_AIStateMachine_getAgent(lua_State* state)
+static int lua_AIStateMachine_getAgent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -193,7 +175,7 @@ int lua_AIStateMachine_getAgent(lua_State* state)
     return 0;
 }
 
-int lua_AIStateMachine_getState(lua_State* state)
+static int lua_AIStateMachine_getState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -241,7 +223,7 @@ int lua_AIStateMachine_getState(lua_State* state)
     return 0;
 }
 
-int lua_AIStateMachine_removeState(lua_State* state)
+static int lua_AIStateMachine_removeState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -283,7 +265,7 @@ int lua_AIStateMachine_removeState(lua_State* state)
     return 0;
 }
 
-int lua_AIStateMachine_setState(lua_State* state)
+static int lua_AIStateMachine_setState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -353,6 +335,25 @@ int lua_AIStateMachine_setState(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_AIStateMachine()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addState", lua_AIStateMachine_addState},
+        {"getActiveState", lua_AIStateMachine_getActiveState},
+        {"getAgent", lua_AIStateMachine_getAgent},
+        {"getState", lua_AIStateMachine_getState},
+        {"removeState", lua_AIStateMachine_removeState},
+        {"setState", lua_AIStateMachine_setState},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("AIStateMachine", lua_members, NULL, NULL, lua_statics, scopePath);
+
 }
 
 }

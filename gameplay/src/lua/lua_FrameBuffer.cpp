@@ -6,44 +6,12 @@
 #include "FrameBuffer.h"
 #include "Game.h"
 #include "Ref.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_FrameBuffer()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_FrameBuffer_addRef},
-        {"bind", lua_FrameBuffer_bind},
-        {"getDepthStencilTarget", lua_FrameBuffer_getDepthStencilTarget},
-        {"getHeight", lua_FrameBuffer_getHeight},
-        {"getId", lua_FrameBuffer_getId},
-        {"getRefCount", lua_FrameBuffer_getRefCount},
-        {"getRenderTarget", lua_FrameBuffer_getRenderTarget},
-        {"getRenderTargetCount", lua_FrameBuffer_getRenderTargetCount},
-        {"getWidth", lua_FrameBuffer_getWidth},
-        {"isDefault", lua_FrameBuffer_isDefault},
-        {"release", lua_FrameBuffer_release},
-        {"setDepthStencilTarget", lua_FrameBuffer_setDepthStencilTarget},
-        {"setRenderTarget", lua_FrameBuffer_setRenderTarget},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"bindDefault", lua_FrameBuffer_static_bindDefault},
-        {"create", lua_FrameBuffer_static_create},
-        {"createScreenshot", lua_FrameBuffer_static_createScreenshot},
-        {"getCurrent", lua_FrameBuffer_static_getCurrent},
-        {"getFrameBuffer", lua_FrameBuffer_static_getFrameBuffer},
-        {"getMaxRenderTargets", lua_FrameBuffer_static_getMaxRenderTargets},
-        {"getScreenshot", lua_FrameBuffer_static_getScreenshot},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("FrameBuffer", lua_members, NULL, lua_FrameBuffer__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static FrameBuffer* getInstance(lua_State* state)
 {
@@ -52,7 +20,7 @@ static FrameBuffer* getInstance(lua_State* state)
     return (FrameBuffer*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_FrameBuffer__gc(lua_State* state)
+static int lua_FrameBuffer__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -90,7 +58,7 @@ int lua_FrameBuffer__gc(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_addRef(lua_State* state)
+static int lua_FrameBuffer_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -122,7 +90,7 @@ int lua_FrameBuffer_addRef(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_bind(lua_State* state)
+static int lua_FrameBuffer_bind(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -156,9 +124,40 @@ int lua_FrameBuffer_bind(lua_State* state)
             lua_error(state);
             break;
         }
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNONE)
+            {
+                // Get parameter 1 off the stack.
+                GP_WARN("Attempting to get parameter 1 with unrecognized type GLenum as an unsigned integer.");
+                GLenum param1 = (GLenum)luaL_checkunsigned(state, 2);
+
+                FrameBuffer* instance = getInstance(state);
+                void* returnPtr = ((void*)instance->bind(param1));
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "FrameBuffer");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_FrameBuffer_bind - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
             lua_error(state);
             break;
         }
@@ -166,7 +165,7 @@ int lua_FrameBuffer_bind(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_getDepthStencilTarget(lua_State* state)
+static int lua_FrameBuffer_getDepthStencilTarget(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -210,7 +209,7 @@ int lua_FrameBuffer_getDepthStencilTarget(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_getHeight(lua_State* state)
+static int lua_FrameBuffer_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -245,7 +244,7 @@ int lua_FrameBuffer_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_getId(lua_State* state)
+static int lua_FrameBuffer_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -280,7 +279,7 @@ int lua_FrameBuffer_getId(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_getRefCount(lua_State* state)
+static int lua_FrameBuffer_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -315,7 +314,7 @@ int lua_FrameBuffer_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_getRenderTarget(lua_State* state)
+static int lua_FrameBuffer_getRenderTarget(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -389,7 +388,7 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_getRenderTargetCount(lua_State* state)
+static int lua_FrameBuffer_getRenderTargetCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -424,7 +423,7 @@ int lua_FrameBuffer_getRenderTargetCount(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_getWidth(lua_State* state)
+static int lua_FrameBuffer_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -459,7 +458,7 @@ int lua_FrameBuffer_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_isDefault(lua_State* state)
+static int lua_FrameBuffer_isDefault(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -494,7 +493,7 @@ int lua_FrameBuffer_isDefault(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_release(lua_State* state)
+static int lua_FrameBuffer_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -526,7 +525,7 @@ int lua_FrameBuffer_release(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_setDepthStencilTarget(lua_State* state)
+static int lua_FrameBuffer_setDepthStencilTarget(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -568,7 +567,7 @@ int lua_FrameBuffer_setDepthStencilTarget(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_setRenderTarget(lua_State* state)
+static int lua_FrameBuffer_setRenderTarget(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -692,7 +691,7 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_static_bindDefault(lua_State* state)
+static int lua_FrameBuffer_static_bindDefault(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -719,9 +718,38 @@ int lua_FrameBuffer_static_bindDefault(lua_State* state)
             return 1;
             break;
         }
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TNONE)
+            {
+                // Get parameter 1 off the stack.
+                GP_WARN("Attempting to get parameter 1 with unrecognized type GLenum as an unsigned integer.");
+                GLenum param1 = (GLenum)luaL_checkunsigned(state, 1);
+
+                void* returnPtr = ((void*)FrameBuffer::bindDefault(param1));
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "FrameBuffer");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_FrameBuffer_static_bindDefault - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
             lua_error(state);
             break;
         }
@@ -729,7 +757,7 @@ int lua_FrameBuffer_static_bindDefault(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_static_create(lua_State* state)
+static int lua_FrameBuffer_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -807,9 +835,52 @@ int lua_FrameBuffer_static_create(lua_State* state)
             lua_error(state);
             break;
         }
+        case 4:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                    // Get parameter 2 off the stack.
+                    unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                    // Get parameter 4 off the stack.
+                    Texture::Format param4 = (Texture::Format)luaL_checkint(state, 4);
+
+                    void* returnPtr = ((void*)FrameBuffer::create(param1, param2, param3, param4));
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "FrameBuffer");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_FrameBuffer_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1 or 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1, 3 or 4).");
             lua_error(state);
             break;
         }
@@ -817,7 +888,7 @@ int lua_FrameBuffer_static_create(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_static_createScreenshot(lua_State* state)
+static int lua_FrameBuffer_static_createScreenshot(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -882,7 +953,7 @@ int lua_FrameBuffer_static_createScreenshot(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_static_getCurrent(lua_State* state)
+static int lua_FrameBuffer_static_getCurrent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -919,7 +990,7 @@ int lua_FrameBuffer_static_getCurrent(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_static_getFrameBuffer(lua_State* state)
+static int lua_FrameBuffer_static_getFrameBuffer(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -965,7 +1036,7 @@ int lua_FrameBuffer_static_getFrameBuffer(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_static_getMaxRenderTargets(lua_State* state)
+static int lua_FrameBuffer_static_getMaxRenderTargets(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -993,7 +1064,7 @@ int lua_FrameBuffer_static_getMaxRenderTargets(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_static_getScreenshot(lua_State* state)
+static int lua_FrameBuffer_static_getScreenshot(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1031,6 +1102,88 @@ int lua_FrameBuffer_static_getScreenshot(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of FrameBuffer
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    FrameBuffer* ptrObject = reinterpret_cast<FrameBuffer*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_FrameBuffer_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_FrameBuffer_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    FrameBuffer* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_FrameBuffer()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_FrameBuffer_addRef},
+        {"bind", lua_FrameBuffer_bind},
+        {"getDepthStencilTarget", lua_FrameBuffer_getDepthStencilTarget},
+        {"getHeight", lua_FrameBuffer_getHeight},
+        {"getId", lua_FrameBuffer_getId},
+        {"getRefCount", lua_FrameBuffer_getRefCount},
+        {"getRenderTarget", lua_FrameBuffer_getRenderTarget},
+        {"getRenderTargetCount", lua_FrameBuffer_getRenderTargetCount},
+        {"getWidth", lua_FrameBuffer_getWidth},
+        {"isDefault", lua_FrameBuffer_isDefault},
+        {"release", lua_FrameBuffer_release},
+        {"setDepthStencilTarget", lua_FrameBuffer_setDepthStencilTarget},
+        {"setRenderTarget", lua_FrameBuffer_setRenderTarget},
+        {"to", lua_FrameBuffer_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"bindDefault", lua_FrameBuffer_static_bindDefault},
+        {"create", lua_FrameBuffer_static_create},
+        {"createScreenshot", lua_FrameBuffer_static_createScreenshot},
+        {"getCurrent", lua_FrameBuffer_static_getCurrent},
+        {"getFrameBuffer", lua_FrameBuffer_static_getFrameBuffer},
+        {"getMaxRenderTargets", lua_FrameBuffer_static_getMaxRenderTargets},
+        {"getScreenshot", lua_FrameBuffer_static_getScreenshot},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("FrameBuffer", lua_members, NULL, lua_FrameBuffer__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("FrameBuffer", __convertTo);
 }
 
 }

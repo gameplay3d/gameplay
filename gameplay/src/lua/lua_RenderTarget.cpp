@@ -6,33 +6,12 @@
 #include "Game.h"
 #include "Ref.h"
 #include "RenderTarget.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_RenderTarget()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_RenderTarget_addRef},
-        {"getHeight", lua_RenderTarget_getHeight},
-        {"getId", lua_RenderTarget_getId},
-        {"getRefCount", lua_RenderTarget_getRefCount},
-        {"getTexture", lua_RenderTarget_getTexture},
-        {"getWidth", lua_RenderTarget_getWidth},
-        {"release", lua_RenderTarget_release},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_RenderTarget_static_create},
-        {"getRenderTarget", lua_RenderTarget_static_getRenderTarget},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("RenderTarget", lua_members, NULL, lua_RenderTarget__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static RenderTarget* getInstance(lua_State* state)
 {
@@ -41,7 +20,7 @@ static RenderTarget* getInstance(lua_State* state)
     return (RenderTarget*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_RenderTarget__gc(lua_State* state)
+static int lua_RenderTarget__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -79,7 +58,7 @@ int lua_RenderTarget__gc(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_addRef(lua_State* state)
+static int lua_RenderTarget_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -111,7 +90,7 @@ int lua_RenderTarget_addRef(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_getHeight(lua_State* state)
+static int lua_RenderTarget_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -146,7 +125,7 @@ int lua_RenderTarget_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_getId(lua_State* state)
+static int lua_RenderTarget_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -181,7 +160,7 @@ int lua_RenderTarget_getId(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_getRefCount(lua_State* state)
+static int lua_RenderTarget_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -216,7 +195,7 @@ int lua_RenderTarget_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_getTexture(lua_State* state)
+static int lua_RenderTarget_getTexture(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -260,7 +239,7 @@ int lua_RenderTarget_getTexture(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_getWidth(lua_State* state)
+static int lua_RenderTarget_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -295,7 +274,7 @@ int lua_RenderTarget_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_release(lua_State* state)
+static int lua_RenderTarget_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -327,7 +306,7 @@ int lua_RenderTarget_release(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_static_create(lua_State* state)
+static int lua_RenderTarget_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -412,9 +391,52 @@ int lua_RenderTarget_static_create(lua_State* state)
             lua_error(state);
             break;
         }
+        case 4:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+                    // Get parameter 2 off the stack.
+                    unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                    // Get parameter 4 off the stack.
+                    Texture::Format param4 = (Texture::Format)luaL_checkint(state, 4);
+
+                    void* returnPtr = ((void*)RenderTarget::create(param1, param2, param3, param4));
+                    if (returnPtr)
+                    {
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "RenderTarget");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_RenderTarget_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2, 3 or 4).");
             lua_error(state);
             break;
         }
@@ -422,7 +444,7 @@ int lua_RenderTarget_static_create(lua_State* state)
     return 0;
 }
 
-int lua_RenderTarget_static_getRenderTarget(lua_State* state)
+static int lua_RenderTarget_static_getRenderTarget(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -466,6 +488,77 @@ int lua_RenderTarget_static_getRenderTarget(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of RenderTarget
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    RenderTarget* ptrObject = reinterpret_cast<RenderTarget*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_RenderTarget_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_RenderTarget_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    RenderTarget* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_RenderTarget()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_RenderTarget_addRef},
+        {"getHeight", lua_RenderTarget_getHeight},
+        {"getId", lua_RenderTarget_getId},
+        {"getRefCount", lua_RenderTarget_getRefCount},
+        {"getTexture", lua_RenderTarget_getTexture},
+        {"getWidth", lua_RenderTarget_getWidth},
+        {"release", lua_RenderTarget_release},
+        {"to", lua_RenderTarget_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_RenderTarget_static_create},
+        {"getRenderTarget", lua_RenderTarget_static_getRenderTarget},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("RenderTarget", lua_members, NULL, lua_RenderTarget__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("RenderTarget", __convertTo);
 }
 
 }

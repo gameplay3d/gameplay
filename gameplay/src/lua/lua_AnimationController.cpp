@@ -10,19 +10,6 @@
 namespace gameplay
 {
 
-void luaRegister_AnimationController()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"stopAllAnimations", lua_AnimationController_stopAllAnimations},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("AnimationController", lua_members, NULL, NULL, lua_statics, scopePath);
-}
-
 static AnimationController* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AnimationController");
@@ -30,7 +17,7 @@ static AnimationController* getInstance(lua_State* state)
     return (AnimationController*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AnimationController_stopAllAnimations(lua_State* state)
+static int lua_AnimationController_stopAllAnimations(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -60,6 +47,20 @@ int lua_AnimationController_stopAllAnimations(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_AnimationController()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"stopAllAnimations", lua_AnimationController_stopAllAnimations},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("AnimationController", lua_members, NULL, NULL, lua_statics, scopePath);
+
 }
 
 }

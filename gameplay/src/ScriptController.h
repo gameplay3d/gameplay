@@ -42,24 +42,26 @@ public:
      * Calls a zero-parameter global function.
      * 
      * @param func The name of the function to call.
-     * 
-     * @return The return value of the executed Lua function.
+     * @param out Pointer to populate with the return value if the function succeeds, or NULL.
+     *
+     * @return True if the function is successfully executed, false otherwise.
      *
      * @script{ignore}
      */
-    template<typename T> T executeFunction(const char* func);
+    template<typename T> bool executeFunction(const char* func, T* out);
 
     /**
      * Calls a zero-parameter function.
      * 
      * @param script The script to execute the function on, or NULL for the global script environment.
      * @param func The name of the function to call.
-     * 
-     * @return The return value of the executed Lua function.
+     * @param out Pointer to populate with the return value if the function succeeds, or NULL.
+     *
+     * @return True if the function is successfully executed, false otherwise.
      *
      * @script{ignore}
      */
-    template<typename T> T executeFunction(Script* script, const char* func);
+    template<typename T> bool executeFunction(Script* script, const char* func, T* out);
 
     /**
      * Calls a global function using the given parameters.
@@ -81,13 +83,14 @@ public:
      *      - 'p' - pointer
      *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
+     * @param out Pointer to populate with the return value if the function succeeds, or NULL.
      * @param ... Parameters to pass to the script fucntion, as specified by the args parameter.
      *
-     * @return The return value of the executed Lua function.
+     * @return True if the function is successfully executed, false otherwise.
      *
      * @script{ignore}
      */
-    template<typename T> T executeFunction(const char* func, const char* args, ...);
+    template<typename T> bool executeFunction(const char* func, const char* args, T* out, ...);
 
     /**
      * Calls the a function from the specified script, using the given parameters.
@@ -110,13 +113,14 @@ public:
      *      - 'p' - pointer
      *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
+     * @param out Pointer to populate with the return value if the function succeeds, or NULL.
      * @param ... Parameters to pass to the script fucntion, as specified by the args parameter.
      * 
-     * @return The return value of the executed Lua function.
+     * @return True if the function is successfully executed, false otherwise.
      *
      * @script{ignore}
      */
-    template<typename T> T executeFunction(Script* script, const char* func, const char* args, ...);
+    template<typename T> bool executeFunction(Script* script, const char* func, const char* args, T* out, ...);
 
     /**
      * Calls the specified global Lua function using the given parameters.
@@ -138,13 +142,14 @@ public:
      *      - 'p' - pointer
      *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
+     * @param out Pointer to populate with the return value if the function succeeds, or NULL.
      * @param list The variable argument list containing the function's parameters, or NULL for an empty parameter list.
      *
-     * @return The return value of the executed Lua function.
+     * @return True if the function is successfully executed, false otherwise.
      *
      * @script{ignore}
      */
-    template<typename T> T executeFunction(const char* func, const char* args, va_list* list);
+    template<typename T> bool executeFunction(const char* func, const char* args, T* out, va_list* list);
 
     /**
      * Calls the specified global Lua function using the given parameters.
@@ -167,13 +172,14 @@ public:
      *      - 'p' - pointer
      *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
+     * @param out Pointer to populate with the return value if the function succeeds, or NULL.
      * @param list The variable argument list containing the function's parameters, or NULL for an empty parameter list.
      *
-     * @return The return value of the executed Lua function.
+     * @return True if the function is successfully executed, false otherwise.
      *
      * @script{ignore}
      */
-    template<typename T> T executeFunction(Script* script, const char* func, const char* args, va_list* list);
+    template<typename T> bool executeFunction(Script* script, const char* func, const char* args, T* out, va_list* list);
 
     /**
      * Gets the global boolean script variable with the given name.
@@ -620,7 +626,11 @@ private:
     /**
      * Calls the specified Lua function using the given parameters.
      * 
-     * @param resultCount The expected number of returned values.
+     * Note that this function may push one or more nested tables onto the stack, as neccessary
+     * to execute the function. It will also push 'resultCount' results onto the stack.
+     * The caller must ensure the stack is cleaned up afterwards.
+     *
+     * @param resultCount The expected number of returned values that will be pushed onto the stack.
      * @param func The name of the function to call.
      * @param args The optional argument signature of the function, as a string of the form
      *      'xxx', where each 'x' is a parameter type and must be one of:
@@ -641,8 +651,9 @@ private:
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @param list The variable argument list.
      * @param script Optional script to execute the function in, or NULL for to execute it in the global environment.
+     * @return True if the function is executed and results were pushed, false if an error occurred (in which case nothing is pushed).
      */
-    void executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list, Script* script = NULL);
+    bool executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list, Script* script = NULL);
 
     /**
      * Converts a Gameplay userdata value to the type with the given class name.
@@ -686,173 +697,172 @@ private:
 
     lua_State* _lua;
     unsigned int _returnCount;
-    std::map<std::string, std::vector<std::string> > _hierarchy;
     std::map<std::string, std::vector<Script*> > _scripts;
     std::vector<Script*> _envStack;
     std::list<ScriptTimeListener*> _timeListeners;
 };
 
 /** Template specialization. */
-template<> void ScriptController::executeFunction<void>(const char* func);
+template<> bool ScriptController::executeFunction<void>(const char* func, void* out);
 /** Template specialization. */
-template<> bool ScriptController::executeFunction<bool>(const char* func);
+template<> bool ScriptController::executeFunction<bool>(const char* func, bool* out);
 /** Template specialization. */
-template<> char ScriptController::executeFunction<char>(const char* func);
+template<> bool ScriptController::executeFunction<char>(const char* func, char* out);
 /** Template specialization. */
-template<> short ScriptController::executeFunction<short>(const char* func);
+template<> bool ScriptController::executeFunction<short>(const char* func, short* out);
 /** Template specialization. */
-template<> int ScriptController::executeFunction<int>(const char* func);
+template<> bool ScriptController::executeFunction<int>(const char* func, int* out);
 /** Template specialization. */
-template<> long ScriptController::executeFunction<long>(const char* func);
+template<> bool ScriptController::executeFunction<long>(const char* func, long* out);
 /** Template specialization. */
-template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func);
+template<> bool ScriptController::executeFunction<unsigned char>(const char* func, unsigned char* out);
 /** Template specialization. */
-template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func);
+template<> bool ScriptController::executeFunction<unsigned short>(const char* func, unsigned short* out);
 /** Template specialization. */
-template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func);
+template<> bool ScriptController::executeFunction<unsigned int>(const char* func, unsigned int* out);
 /** Template specialization. */
-template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func);
+template<> bool ScriptController::executeFunction<unsigned long>(const char* func, unsigned long* out);
 /** Template specialization. */
-template<> float ScriptController::executeFunction<float>(const char* func);
+template<> bool ScriptController::executeFunction<float>(const char* func, float* out);
 /** Template specialization. */
-template<> double ScriptController::executeFunction<double>(const char* func);
+template<> bool ScriptController::executeFunction<double>(const char* func, double* out);
 /** Template specialization. */
-template<> std::string ScriptController::executeFunction<std::string>(const char* func);
+template<> bool ScriptController::executeFunction<std::string>(const char* func, std::string* out);
 
 /** Template specialization. */
-template<> void ScriptController::executeFunction<void>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<void>(Script* script, const char* func, void* out);
 /** Template specialization. */
-template<> bool ScriptController::executeFunction<bool>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<bool>(Script* script, const char* func, bool* out);
 /** Template specialization. */
-template<> char ScriptController::executeFunction<char>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<char>(Script* script, const char* func, char* out);
 /** Template specialization. */
-template<> short ScriptController::executeFunction<short>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<short>(Script* script, const char* func, short* out);
 /** Template specialization. */
-template<> int ScriptController::executeFunction<int>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<int>(Script* script, const char* func, int* out);
 /** Template specialization. */
-template<> long ScriptController::executeFunction<long>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<long>(Script* script, const char* func, long* out);
 /** Template specialization. */
-template<> unsigned char ScriptController::executeFunction<unsigned char>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<unsigned char>(Script* script, const char* func, unsigned char* out);
 /** Template specialization. */
-template<> unsigned short ScriptController::executeFunction<unsigned short>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<unsigned short>(Script* script, const char* func, unsigned short* out);
 /** Template specialization. */
-template<> unsigned int ScriptController::executeFunction<unsigned int>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<unsigned int>(Script* script, const char* func, unsigned int* out);
 /** Template specialization. */
-template<> unsigned long ScriptController::executeFunction<unsigned long>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<unsigned long>(Script* script, const char* func, unsigned long* out);
 /** Template specialization. */
-template<> float ScriptController::executeFunction<float>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<float>(Script* script, const char* func, float* out);
 /** Template specialization. */
-template<> double ScriptController::executeFunction<double>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<double>(Script* script, const char* func, double* out);
 /** Template specialization. */
-template<> std::string ScriptController::executeFunction<std::string>(Script* script, const char* func);
+template<> bool ScriptController::executeFunction<std::string>(Script* script, const char* func, std::string* out);
 
 /** Template specialization. */
-template<> void ScriptController::executeFunction<void>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<void>(const char* func, const char* args, void* out, ...);
 /** Template specialization. */
-template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, bool* out, ...);
 /** Template specialization. */
-template<> char ScriptController::executeFunction<char>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<char>(const char* func, const char* args, char* out, ...);
 /** Template specialization. */
-template<> short ScriptController::executeFunction<short>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<short>(const char* func, const char* args, short* out, ...);
 /** Template specialization. */
-template<> int ScriptController::executeFunction<int>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<int>(const char* func, const char* args, int* out, ...);
 /** Template specialization. */
-template<> long ScriptController::executeFunction<long>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<long>(const char* func, const char* args, long* out, ...);
 /** Template specialization. */
-template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<unsigned char>(const char* func, const char* args, unsigned char* out, ...);
 /** Template specialization. */
-template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<unsigned short>(const char* func, const char* args, unsigned short* out, ...);
 /** Template specialization. */
-template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<unsigned int>(const char* func, const char* args, unsigned int* out, ...);
 /** Template specialization. */
-template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<unsigned long>(const char* func, const char* args, unsigned long* out, ...);
 /** Template specialization. */
-template<> float ScriptController::executeFunction<float>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<float>(const char* func, const char* args, float* out, ...);
 /** Template specialization. */
-template<> double ScriptController::executeFunction<double>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<double>(const char* func, const char* args, double* out, ...);
 /** Template specialization. */
-template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<std::string>(const char* func, const char* args, std::string* out, ...);
 
 /** Template specialization. */
-template<> void ScriptController::executeFunction<void>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<void>(Script* script, const char* func, const char* args, void* out, ...);
 /** Template specialization. */
-template<> bool ScriptController::executeFunction<bool>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<bool>(Script* script, const char* func, const char* args, bool* out, ...);
 /** Template specialization. */
-template<> char ScriptController::executeFunction<char>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<char>(Script* script, const char* func, const char* args, char* out, ...);
 /** Template specialization. */
-template<> short ScriptController::executeFunction<short>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<short>(Script* script, const char* func, const char* args, short* out, ...);
 /** Template specialization. */
-template<> int ScriptController::executeFunction<int>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<int>(Script* script, const char* func, const char* args, int* out, ...);
 /** Template specialization. */
-template<> long ScriptController::executeFunction<long>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<long>(Script* script, const char* func, const char* args, long* out, ...);
 /** Template specialization. */
-template<> unsigned char ScriptController::executeFunction<unsigned char>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<unsigned char>(Script* script, const char* func, const char* args, unsigned char* out, ...);
 /** Template specialization. */
-template<> unsigned short ScriptController::executeFunction<unsigned short>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<unsigned short>(Script* script, const char* func, const char* args, unsigned short* out, ...);
 /** Template specialization. */
-template<> unsigned int ScriptController::executeFunction<unsigned int>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<unsigned int>(Script* script, const char* func, const char* args, unsigned int* out, ...);
 /** Template specialization. */
-template<> unsigned long ScriptController::executeFunction<unsigned long>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<unsigned long>(Script* script, const char* func, const char* args, unsigned long* out, ...);
 /** Template specialization. */
-template<> float ScriptController::executeFunction<float>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<float>(Script* script, const char* func, const char* args, float* out, ...);
 /** Template specialization. */
-template<> double ScriptController::executeFunction<double>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<double>(Script* script, const char* func, const char* args, double* out, ...);
 /** Template specialization. */
-template<> std::string ScriptController::executeFunction<std::string>(Script* script, const char* func, const char* args, ...);
+template<> bool ScriptController::executeFunction<std::string>(Script* script, const char* func, const char* args, std::string* out, ...);
 
 /** Template specialization. */
-template<> void ScriptController::executeFunction<void>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<void>(const char* func, const char* args, void* out, va_list* list);
 /** Template specialization. */
-template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, bool* out, va_list* list);
 /** Template specialization. */
-template<> char ScriptController::executeFunction<char>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<char>(const char* func, const char* args, char* out, va_list* list);
 /** Template specialization. */
-template<> short ScriptController::executeFunction<short>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<short>(const char* func, const char* args, short* out, va_list* list);
 /** Template specialization. */
-template<> int ScriptController::executeFunction<int>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<int>(const char* func, const char* args, int* out, va_list* list);
 /** Template specialization. */
-template<> long ScriptController::executeFunction<long>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<long>(const char* func, const char* args, long* out, va_list* list);
 /** Template specialization. */
-template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<unsigned char>(const char* func, const char* args, unsigned char* out, va_list* list);
 /** Template specialization. */
-template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<unsigned short>(const char* func, const char* args, unsigned short* out, va_list* list);
 /** Template specialization. */
-template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<unsigned int>(const char* func, const char* args, unsigned int* out, va_list* list);
 /** Template specialization. */
-template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<unsigned long>(const char* func, const char* args, unsigned long* out, va_list* list);
 /** Template specialization. */
-template<> float ScriptController::executeFunction<float>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<float>(const char* func, const char* args, float* out, va_list* list);
 /** Template specialization. */
-template<> double ScriptController::executeFunction<double>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<double>(const char* func, const char* args, double* out, va_list* list);
 /** Template specialization. */
-template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<std::string>(const char* func, const char* args, std::string* out, va_list* list);
 
 /** Template specialization. */
-template<> void ScriptController::executeFunction<void>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<void>(Script* script, const char* func, const char* args, void* out, va_list* list);
 /** Template specialization. */
-template<> bool ScriptController::executeFunction<bool>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<bool>(Script* script, const char* func, const char* args, bool* out, va_list* list);
 /** Template specialization. */
-template<> char ScriptController::executeFunction<char>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<char>(Script* script, const char* func, const char* args, char* out, va_list* list);
 /** Template specialization. */
-template<> short ScriptController::executeFunction<short>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<short>(Script* script, const char* func, const char* args, short* out, va_list* list);
 /** Template specialization. */
-template<> int ScriptController::executeFunction<int>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<int>(Script* script, const char* func, const char* args, int* out, va_list* list);
 /** Template specialization. */
-template<> long ScriptController::executeFunction<long>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<long>(Script* script, const char* func, const char* args, long* out, va_list* list);
 /** Template specialization. */
-template<> unsigned char ScriptController::executeFunction<unsigned char>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<unsigned char>(Script* script, const char* func, const char* args, unsigned char* out, va_list* list);
 /** Template specialization. */
-template<> unsigned short ScriptController::executeFunction<unsigned short>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<unsigned short>(Script* script, const char* func, const char* args, unsigned short* out, va_list* list);
 /** Template specialization. */
-template<> unsigned int ScriptController::executeFunction<unsigned int>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<unsigned int>(Script* script, const char* func, const char* args, unsigned int* out, va_list* list);
 /** Template specialization. */
-template<> unsigned long ScriptController::executeFunction<unsigned long>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<unsigned long>(Script* script, const char* func, const char* args, unsigned long* out, va_list* list);
 /** Template specialization. */
-template<> float ScriptController::executeFunction<float>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<float>(Script* script, const char* func, const char* args, float* out, va_list* list);
 /** Template specialization. */
-template<> double ScriptController::executeFunction<double>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<double>(Script* script, const char* func, const char* args, double* out, va_list* list);
 /** Template specialization. */
-template<> std::string ScriptController::executeFunction<std::string>(Script* script, const char* func, const char* args, va_list* list);
+template<> bool ScriptController::executeFunction<std::string>(Script* script, const char* func, const char* args, std::string* out, va_list* list);
 
 /**
  * Functions and structures used by the generated Lua script bindings.
@@ -1014,14 +1024,6 @@ public:
     static void registerFunction(const char* luaFunction, lua_CFunction cppFunction);
 
     /**
-     * Sets an inheritance pair within the global inheritance hierarchy (base, derived).
-     * 
-     * @param base The base class of the inheritance pair.
-     * @param derived The derived class of the inheritance pair.
-     */
-    static void setGlobalHierarchyPair(const std::string& base, const std::string& derived);
-
-    /**
      * Gets a pointer to a bool (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
      * 
      * @param index The stack index.
@@ -1113,9 +1115,11 @@ public:
 
     /**
      * Gets an object pointer of the given type for the given stack index.
+     *
+     * This method supports both objects and arrays/tables of objects.
      * 
-     * @param type The type of object pointer to retrieve.
      * @param index The stack index.
+     * @param type The type of object pointer to retrieve.
      * @param nonNull Whether the pointer must be non-null (e.g. if the parameter we 
      *      are retrieving is actually a reference or by-value parameter).
      * @param success An out parameter that is set to true if the Lua parameter was successfully
@@ -1126,6 +1130,21 @@ public:
      */
     template <typename T>
     static LuaArray<T> getObjectPointer(int index, const char* type, bool nonNull, bool* success);
+
+    /**
+     * Gets a raw pointer that points to the correct address for the given type interface.
+     *
+     * This method requires that the type at the specified stack index is of type userdata
+     * and is in the inheritence chain of the given type. If either of these are not true,
+     * NULL will be returned.
+     *
+     * @param index The stack index.
+     * @param type The type of object pointer to retrieve.
+     *
+     * @return The raw pointer or <code>NULL</code> if the data at the stack index
+     *        is not an object of the given type.
+     */
+    static void* getUserDataObjectPointer(int index, const char* type);
 
     /**
      * Gets a string for the given stack index.

@@ -10,48 +10,6 @@
 namespace gameplay
 {
 
-void luaRegister_Properties()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"exists", lua_Properties_exists},
-        {"getBool", lua_Properties_getBool},
-        {"getColor", lua_Properties_getColor},
-        {"getFloat", lua_Properties_getFloat},
-        {"getId", lua_Properties_getId},
-        {"getInt", lua_Properties_getInt},
-        {"getLong", lua_Properties_getLong},
-        {"getMatrix", lua_Properties_getMatrix},
-        {"getNamespace", lua_Properties_getNamespace},
-        {"getNextNamespace", lua_Properties_getNextNamespace},
-        {"getNextProperty", lua_Properties_getNextProperty},
-        {"getQuaternionFromAxisAngle", lua_Properties_getQuaternionFromAxisAngle},
-        {"getString", lua_Properties_getString},
-        {"getType", lua_Properties_getType},
-        {"getVariable", lua_Properties_getVariable},
-        {"getVector2", lua_Properties_getVector2},
-        {"getVector3", lua_Properties_getVector3},
-        {"getVector4", lua_Properties_getVector4},
-        {"rewind", lua_Properties_rewind},
-        {"setString", lua_Properties_setString},
-        {"setVariable", lua_Properties_setVariable},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_Properties_static_create},
-        {"parseAxisAngle", lua_Properties_static_parseAxisAngle},
-        {"parseColor", lua_Properties_static_parseColor},
-        {"parseVector2", lua_Properties_static_parseVector2},
-        {"parseVector3", lua_Properties_static_parseVector3},
-        {"parseVector4", lua_Properties_static_parseVector4},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Properties", lua_members, NULL, lua_Properties__gc, lua_statics, scopePath);
-}
-
 static Properties* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Properties");
@@ -59,7 +17,7 @@ static Properties* getInstance(lua_State* state)
     return (Properties*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Properties__gc(lua_State* state)
+static int lua_Properties__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -97,7 +55,7 @@ int lua_Properties__gc(lua_State* state)
     return 0;
 }
 
-int lua_Properties_exists(lua_State* state)
+static int lua_Properties_exists(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -136,7 +94,7 @@ int lua_Properties_exists(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getBool(lua_State* state)
+static int lua_Properties_getBool(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -217,7 +175,7 @@ int lua_Properties_getBool(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getColor(lua_State* state)
+static int lua_Properties_getColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -291,7 +249,7 @@ int lua_Properties_getColor(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getFloat(lua_State* state)
+static int lua_Properties_getFloat(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -347,7 +305,7 @@ int lua_Properties_getFloat(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getId(lua_State* state)
+static int lua_Properties_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -382,7 +340,7 @@ int lua_Properties_getId(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getInt(lua_State* state)
+static int lua_Properties_getInt(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -438,7 +396,7 @@ int lua_Properties_getInt(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getLong(lua_State* state)
+static int lua_Properties_getLong(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -494,7 +452,7 @@ int lua_Properties_getLong(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getMatrix(lua_State* state)
+static int lua_Properties_getMatrix(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -543,7 +501,7 @@ int lua_Properties_getMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getNamespace(lua_State* state)
+static int lua_Properties_getNamespace(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -692,7 +650,7 @@ int lua_Properties_getNamespace(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getNextNamespace(lua_State* state)
+static int lua_Properties_getNextNamespace(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -736,7 +694,7 @@ int lua_Properties_getNextNamespace(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getNextProperty(lua_State* state)
+static int lua_Properties_getNextProperty(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -771,7 +729,7 @@ int lua_Properties_getNextProperty(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getQuaternionFromAxisAngle(lua_State* state)
+static int lua_Properties_getQuaternionFromAxisAngle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -820,7 +778,7 @@ int lua_Properties_getQuaternionFromAxisAngle(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getString(lua_State* state)
+static int lua_Properties_getString(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -901,7 +859,7 @@ int lua_Properties_getString(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getType(lua_State* state)
+static int lua_Properties_getType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -957,7 +915,7 @@ int lua_Properties_getType(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getVariable(lua_State* state)
+static int lua_Properties_getVariable(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1021,7 +979,7 @@ int lua_Properties_getVariable(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getVector2(lua_State* state)
+static int lua_Properties_getVector2(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1070,7 +1028,7 @@ int lua_Properties_getVector2(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getVector3(lua_State* state)
+static int lua_Properties_getVector3(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1119,7 +1077,7 @@ int lua_Properties_getVector3(lua_State* state)
     return 0;
 }
 
-int lua_Properties_getVector4(lua_State* state)
+static int lua_Properties_getVector4(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1168,7 +1126,7 @@ int lua_Properties_getVector4(lua_State* state)
     return 0;
 }
 
-int lua_Properties_rewind(lua_State* state)
+static int lua_Properties_rewind(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1200,7 +1158,7 @@ int lua_Properties_rewind(lua_State* state)
     return 0;
 }
 
-int lua_Properties_setString(lua_State* state)
+static int lua_Properties_setString(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1243,7 +1201,7 @@ int lua_Properties_setString(lua_State* state)
     return 0;
 }
 
-int lua_Properties_setVariable(lua_State* state)
+static int lua_Properties_setVariable(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1283,7 +1241,7 @@ int lua_Properties_setVariable(lua_State* state)
     return 0;
 }
 
-int lua_Properties_static_create(lua_State* state)
+static int lua_Properties_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1329,7 +1287,7 @@ int lua_Properties_static_create(lua_State* state)
     return 0;
 }
 
-int lua_Properties_static_parseAxisAngle(lua_State* state)
+static int lua_Properties_static_parseAxisAngle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1376,7 +1334,7 @@ int lua_Properties_static_parseAxisAngle(lua_State* state)
     return 0;
 }
 
-int lua_Properties_static_parseColor(lua_State* state)
+static int lua_Properties_static_parseColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1446,7 +1404,7 @@ int lua_Properties_static_parseColor(lua_State* state)
     return 0;
 }
 
-int lua_Properties_static_parseVector2(lua_State* state)
+static int lua_Properties_static_parseVector2(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1493,7 +1451,7 @@ int lua_Properties_static_parseVector2(lua_State* state)
     return 0;
 }
 
-int lua_Properties_static_parseVector3(lua_State* state)
+static int lua_Properties_static_parseVector3(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1540,7 +1498,7 @@ int lua_Properties_static_parseVector3(lua_State* state)
     return 0;
 }
 
-int lua_Properties_static_parseVector4(lua_State* state)
+static int lua_Properties_static_parseVector4(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1585,6 +1543,49 @@ int lua_Properties_static_parseVector4(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_Properties()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"exists", lua_Properties_exists},
+        {"getBool", lua_Properties_getBool},
+        {"getColor", lua_Properties_getColor},
+        {"getFloat", lua_Properties_getFloat},
+        {"getId", lua_Properties_getId},
+        {"getInt", lua_Properties_getInt},
+        {"getLong", lua_Properties_getLong},
+        {"getMatrix", lua_Properties_getMatrix},
+        {"getNamespace", lua_Properties_getNamespace},
+        {"getNextNamespace", lua_Properties_getNextNamespace},
+        {"getNextProperty", lua_Properties_getNextProperty},
+        {"getQuaternionFromAxisAngle", lua_Properties_getQuaternionFromAxisAngle},
+        {"getString", lua_Properties_getString},
+        {"getType", lua_Properties_getType},
+        {"getVariable", lua_Properties_getVariable},
+        {"getVector2", lua_Properties_getVector2},
+        {"getVector3", lua_Properties_getVector3},
+        {"getVector4", lua_Properties_getVector4},
+        {"rewind", lua_Properties_rewind},
+        {"setString", lua_Properties_setString},
+        {"setVariable", lua_Properties_setVariable},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_Properties_static_create},
+        {"parseAxisAngle", lua_Properties_static_parseAxisAngle},
+        {"parseColor", lua_Properties_static_parseColor},
+        {"parseVector2", lua_Properties_static_parseVector2},
+        {"parseVector3", lua_Properties_static_parseVector3},
+        {"parseVector4", lua_Properties_static_parseVector4},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Properties", lua_members, NULL, lua_Properties__gc, lua_statics, scopePath);
+
 }
 
 }

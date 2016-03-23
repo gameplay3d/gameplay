@@ -35,6 +35,14 @@ public:
     Scene* getScene() const;
 
     /**
+     * Extends ScriptTarget::getTypeName() to return the type name of this class.
+     *
+     * @return The type name of this class: "Joint"
+     * @see ScriptTarget::getTypeName()
+     */
+    const char* getTypeName() const;
+
+    /**
      * Returns the inverse bind pose matrix for this joint.
      * 
      * @return Inverse bind pose matrix.

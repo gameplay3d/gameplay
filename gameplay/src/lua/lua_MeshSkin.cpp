@@ -14,32 +14,12 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Transform.h"
+#include "Transform.h"
 
 namespace gameplay
 {
 
-void luaRegister_MeshSkin()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getBindShape", lua_MeshSkin_getBindShape},
-        {"getJoint", lua_MeshSkin_getJoint},
-        {"getJointCount", lua_MeshSkin_getJointCount},
-        {"getJointIndex", lua_MeshSkin_getJointIndex},
-        {"getMatrixPalette", lua_MeshSkin_getMatrixPalette},
-        {"getMatrixPaletteSize", lua_MeshSkin_getMatrixPaletteSize},
-        {"getModel", lua_MeshSkin_getModel},
-        {"getRootJoint", lua_MeshSkin_getRootJoint},
-        {"setBindShape", lua_MeshSkin_setBindShape},
-        {"setRootJoint", lua_MeshSkin_setRootJoint},
-        {"transformChanged", lua_MeshSkin_transformChanged},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("MeshSkin", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static MeshSkin* getInstance(lua_State* state)
 {
@@ -48,7 +28,7 @@ static MeshSkin* getInstance(lua_State* state)
     return (MeshSkin*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_MeshSkin_getBindShape(lua_State* state)
+static int lua_MeshSkin_getBindShape(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -92,7 +72,7 @@ int lua_MeshSkin_getBindShape(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_getJoint(lua_State* state)
+static int lua_MeshSkin_getJoint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -170,7 +150,7 @@ int lua_MeshSkin_getJoint(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_getJointCount(lua_State* state)
+static int lua_MeshSkin_getJointCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -205,7 +185,7 @@ int lua_MeshSkin_getJointCount(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_getJointIndex(lua_State* state)
+static int lua_MeshSkin_getJointIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -250,7 +230,7 @@ int lua_MeshSkin_getJointIndex(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_getMatrixPalette(lua_State* state)
+static int lua_MeshSkin_getMatrixPalette(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -294,7 +274,7 @@ int lua_MeshSkin_getMatrixPalette(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_getMatrixPaletteSize(lua_State* state)
+static int lua_MeshSkin_getMatrixPaletteSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -329,7 +309,7 @@ int lua_MeshSkin_getMatrixPaletteSize(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_getModel(lua_State* state)
+static int lua_MeshSkin_getModel(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -373,7 +353,7 @@ int lua_MeshSkin_getModel(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_getRootJoint(lua_State* state)
+static int lua_MeshSkin_getRootJoint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -417,7 +397,7 @@ int lua_MeshSkin_getRootJoint(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_setBindShape(lua_State* state)
+static int lua_MeshSkin_setBindShape(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -453,7 +433,7 @@ int lua_MeshSkin_setBindShape(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_setRootJoint(lua_State* state)
+static int lua_MeshSkin_setRootJoint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -495,7 +475,7 @@ int lua_MeshSkin_setRootJoint(lua_State* state)
     return 0;
 }
 
-int lua_MeshSkin_transformChanged(lua_State* state)
+static int lua_MeshSkin_transformChanged(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -539,6 +519,76 @@ int lua_MeshSkin_transformChanged(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of MeshSkin
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    MeshSkin* ptrObject = reinterpret_cast<MeshSkin*>(ptr);
+
+    if (strcmp(typeName, "Transform::Listener") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Transform::Listener*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_MeshSkin_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_MeshSkin_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    MeshSkin* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_MeshSkin()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getBindShape", lua_MeshSkin_getBindShape},
+        {"getJoint", lua_MeshSkin_getJoint},
+        {"getJointCount", lua_MeshSkin_getJointCount},
+        {"getJointIndex", lua_MeshSkin_getJointIndex},
+        {"getMatrixPalette", lua_MeshSkin_getMatrixPalette},
+        {"getMatrixPaletteSize", lua_MeshSkin_getMatrixPaletteSize},
+        {"getModel", lua_MeshSkin_getModel},
+        {"getRootJoint", lua_MeshSkin_getRootJoint},
+        {"setBindShape", lua_MeshSkin_setBindShape},
+        {"setRootJoint", lua_MeshSkin_setRootJoint},
+        {"transformChanged", lua_MeshSkin_transformChanged},
+        {"to", lua_MeshSkin_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("MeshSkin", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("MeshSkin", __convertTo);
 }
 
 }

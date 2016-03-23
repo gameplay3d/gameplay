@@ -82,9 +82,16 @@ IndexBufferHandle MeshPart::getIndexBuffer() const
     return _indexBuffer;
 }
 
-bool MeshPart::isDynamic() const
+void* MeshPart::mapIndexBuffer()
 {
-    return _dynamic;
+    GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer) );
+
+    return (void*)glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY);
+}
+
+bool MeshPart::unmapIndexBuffer()
+{
+    return glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
 }
 
 void MeshPart::setIndexData(const void* indexData, unsigned int indexStart, unsigned int indexCount)
@@ -121,6 +128,11 @@ void MeshPart::setIndexData(const void* indexData, unsigned int indexStart, unsi
 
         GL_ASSERT( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexStart * indexSize, indexCount * indexSize, indexData) );
     }
+}
+
+bool MeshPart::isDynamic() const
+{
+    return _dynamic;
 }
 
 }

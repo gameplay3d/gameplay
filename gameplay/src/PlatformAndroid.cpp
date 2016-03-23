@@ -52,6 +52,8 @@ PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
 PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
+PFNGLMAPBUFFEROESPROC glMapBuffer = NULL;
+PFNGLUNMAPBUFFEROESPROC glUnmapBuffer = NULL;
 
 #define GESTURE_TAP_DURATION_MAX			200
 #define GESTURE_LONG_TAP_DURATION_MIN   	GESTURE_TAP_DURATION_MAX
@@ -329,6 +331,8 @@ static bool initEGL()
         glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
         glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
         glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress("glIsVertexArrayOES");
+        glMapBuffer = (PFNGLMAPBUFFEROESPROC)eglGetProcAddress("glMapBufferOES");
+        glUnmapBuffer = (PFNGLUNMAPBUFFEROESPROC)eglGetProcAddress("glUnmapBufferOES");
     }
     
     return true;

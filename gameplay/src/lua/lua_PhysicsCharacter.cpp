@@ -19,48 +19,12 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Transform.h"
+#include "PhysicsGhostObject.h"
 
 namespace gameplay
 {
 
-void luaRegister_PhysicsCharacter()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addCollisionListener", lua_PhysicsCharacter_addCollisionListener},
-        {"collidesWith", lua_PhysicsCharacter_collidesWith},
-        {"getCollisionShape", lua_PhysicsCharacter_getCollisionShape},
-        {"getCurrentVelocity", lua_PhysicsCharacter_getCurrentVelocity},
-        {"getMaxSlopeAngle", lua_PhysicsCharacter_getMaxSlopeAngle},
-        {"getMaxStepHeight", lua_PhysicsCharacter_getMaxStepHeight},
-        {"getNode", lua_PhysicsCharacter_getNode},
-        {"getShapeType", lua_PhysicsCharacter_getShapeType},
-        {"getType", lua_PhysicsCharacter_getType},
-        {"isDynamic", lua_PhysicsCharacter_isDynamic},
-        {"isEnabled", lua_PhysicsCharacter_isEnabled},
-        {"isKinematic", lua_PhysicsCharacter_isKinematic},
-        {"isPhysicsEnabled", lua_PhysicsCharacter_isPhysicsEnabled},
-        {"isStatic", lua_PhysicsCharacter_isStatic},
-        {"jump", lua_PhysicsCharacter_jump},
-        {"removeCollisionListener", lua_PhysicsCharacter_removeCollisionListener},
-        {"resetVelocityState", lua_PhysicsCharacter_resetVelocityState},
-        {"rotate", lua_PhysicsCharacter_rotate},
-        {"setEnabled", lua_PhysicsCharacter_setEnabled},
-        {"setForwardVelocity", lua_PhysicsCharacter_setForwardVelocity},
-        {"setMaxSlopeAngle", lua_PhysicsCharacter_setMaxSlopeAngle},
-        {"setMaxStepHeight", lua_PhysicsCharacter_setMaxStepHeight},
-        {"setPhysicsEnabled", lua_PhysicsCharacter_setPhysicsEnabled},
-        {"setRightVelocity", lua_PhysicsCharacter_setRightVelocity},
-        {"setRotation", lua_PhysicsCharacter_setRotation},
-        {"setVelocity", lua_PhysicsCharacter_setVelocity},
-        {"transformChanged", lua_PhysicsCharacter_transformChanged},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("PhysicsCharacter", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static PhysicsCharacter* getInstance(lua_State* state)
 {
@@ -69,7 +33,7 @@ static PhysicsCharacter* getInstance(lua_State* state)
     return (PhysicsCharacter*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsCharacter_addCollisionListener(lua_State* state)
+static int lua_PhysicsCharacter_addCollisionListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -179,7 +143,7 @@ int lua_PhysicsCharacter_addCollisionListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_collidesWith(lua_State* state)
+static int lua_PhysicsCharacter_collidesWith(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -224,7 +188,7 @@ int lua_PhysicsCharacter_collidesWith(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_getCollisionShape(lua_State* state)
+static int lua_PhysicsCharacter_getCollisionShape(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -268,7 +232,7 @@ int lua_PhysicsCharacter_getCollisionShape(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_getCurrentVelocity(lua_State* state)
+static int lua_PhysicsCharacter_getCurrentVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -312,7 +276,7 @@ int lua_PhysicsCharacter_getCurrentVelocity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_getMaxSlopeAngle(lua_State* state)
+static int lua_PhysicsCharacter_getMaxSlopeAngle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -347,7 +311,7 @@ int lua_PhysicsCharacter_getMaxSlopeAngle(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_getMaxStepHeight(lua_State* state)
+static int lua_PhysicsCharacter_getMaxStepHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -382,7 +346,7 @@ int lua_PhysicsCharacter_getMaxStepHeight(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_getNode(lua_State* state)
+static int lua_PhysicsCharacter_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -426,7 +390,7 @@ int lua_PhysicsCharacter_getNode(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_getShapeType(lua_State* state)
+static int lua_PhysicsCharacter_getShapeType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -461,7 +425,7 @@ int lua_PhysicsCharacter_getShapeType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_getType(lua_State* state)
+static int lua_PhysicsCharacter_getType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -496,7 +460,7 @@ int lua_PhysicsCharacter_getType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_isDynamic(lua_State* state)
+static int lua_PhysicsCharacter_isDynamic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -531,7 +495,7 @@ int lua_PhysicsCharacter_isDynamic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_isEnabled(lua_State* state)
+static int lua_PhysicsCharacter_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -566,7 +530,7 @@ int lua_PhysicsCharacter_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_isKinematic(lua_State* state)
+static int lua_PhysicsCharacter_isKinematic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -601,7 +565,7 @@ int lua_PhysicsCharacter_isKinematic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_isPhysicsEnabled(lua_State* state)
+static int lua_PhysicsCharacter_isPhysicsEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -636,7 +600,7 @@ int lua_PhysicsCharacter_isPhysicsEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_isStatic(lua_State* state)
+static int lua_PhysicsCharacter_isStatic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -671,7 +635,7 @@ int lua_PhysicsCharacter_isStatic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_jump(lua_State* state)
+static int lua_PhysicsCharacter_jump(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -729,7 +693,7 @@ int lua_PhysicsCharacter_jump(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_removeCollisionListener(lua_State* state)
+static int lua_PhysicsCharacter_removeCollisionListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -839,7 +803,7 @@ int lua_PhysicsCharacter_removeCollisionListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_resetVelocityState(lua_State* state)
+static int lua_PhysicsCharacter_resetVelocityState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -871,7 +835,7 @@ int lua_PhysicsCharacter_resetVelocityState(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_rotate(lua_State* state)
+static int lua_PhysicsCharacter_rotate(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -941,7 +905,7 @@ int lua_PhysicsCharacter_rotate(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_setEnabled(lua_State* state)
+static int lua_PhysicsCharacter_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -977,7 +941,7 @@ int lua_PhysicsCharacter_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_setForwardVelocity(lua_State* state)
+static int lua_PhysicsCharacter_setForwardVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1027,7 +991,7 @@ int lua_PhysicsCharacter_setForwardVelocity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_setMaxSlopeAngle(lua_State* state)
+static int lua_PhysicsCharacter_setMaxSlopeAngle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1063,7 +1027,7 @@ int lua_PhysicsCharacter_setMaxSlopeAngle(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_setMaxStepHeight(lua_State* state)
+static int lua_PhysicsCharacter_setMaxStepHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1099,7 +1063,7 @@ int lua_PhysicsCharacter_setMaxStepHeight(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_setPhysicsEnabled(lua_State* state)
+static int lua_PhysicsCharacter_setPhysicsEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1135,7 +1099,7 @@ int lua_PhysicsCharacter_setPhysicsEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_setRightVelocity(lua_State* state)
+static int lua_PhysicsCharacter_setRightVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1185,7 +1149,7 @@ int lua_PhysicsCharacter_setRightVelocity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_setRotation(lua_State* state)
+static int lua_PhysicsCharacter_setRotation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1255,7 +1219,7 @@ int lua_PhysicsCharacter_setRotation(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_setVelocity(lua_State* state)
+static int lua_PhysicsCharacter_setVelocity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1326,7 +1290,7 @@ int lua_PhysicsCharacter_setVelocity(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCharacter_transformChanged(lua_State* state)
+static int lua_PhysicsCharacter_transformChanged(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1370,6 +1334,92 @@ int lua_PhysicsCharacter_transformChanged(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of PhysicsCharacter
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    PhysicsCharacter* ptrObject = reinterpret_cast<PhysicsCharacter*>(ptr);
+
+    if (strcmp(typeName, "PhysicsGhostObject") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsGhostObject*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_PhysicsCharacter_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_PhysicsCharacter_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    PhysicsCharacter* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_PhysicsCharacter()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addCollisionListener", lua_PhysicsCharacter_addCollisionListener},
+        {"collidesWith", lua_PhysicsCharacter_collidesWith},
+        {"getCollisionShape", lua_PhysicsCharacter_getCollisionShape},
+        {"getCurrentVelocity", lua_PhysicsCharacter_getCurrentVelocity},
+        {"getMaxSlopeAngle", lua_PhysicsCharacter_getMaxSlopeAngle},
+        {"getMaxStepHeight", lua_PhysicsCharacter_getMaxStepHeight},
+        {"getNode", lua_PhysicsCharacter_getNode},
+        {"getShapeType", lua_PhysicsCharacter_getShapeType},
+        {"getType", lua_PhysicsCharacter_getType},
+        {"isDynamic", lua_PhysicsCharacter_isDynamic},
+        {"isEnabled", lua_PhysicsCharacter_isEnabled},
+        {"isKinematic", lua_PhysicsCharacter_isKinematic},
+        {"isPhysicsEnabled", lua_PhysicsCharacter_isPhysicsEnabled},
+        {"isStatic", lua_PhysicsCharacter_isStatic},
+        {"jump", lua_PhysicsCharacter_jump},
+        {"removeCollisionListener", lua_PhysicsCharacter_removeCollisionListener},
+        {"resetVelocityState", lua_PhysicsCharacter_resetVelocityState},
+        {"rotate", lua_PhysicsCharacter_rotate},
+        {"setEnabled", lua_PhysicsCharacter_setEnabled},
+        {"setForwardVelocity", lua_PhysicsCharacter_setForwardVelocity},
+        {"setMaxSlopeAngle", lua_PhysicsCharacter_setMaxSlopeAngle},
+        {"setMaxStepHeight", lua_PhysicsCharacter_setMaxStepHeight},
+        {"setPhysicsEnabled", lua_PhysicsCharacter_setPhysicsEnabled},
+        {"setRightVelocity", lua_PhysicsCharacter_setRightVelocity},
+        {"setRotation", lua_PhysicsCharacter_setRotation},
+        {"setVelocity", lua_PhysicsCharacter_setVelocity},
+        {"transformChanged", lua_PhysicsCharacter_transformChanged},
+        {"to", lua_PhysicsCharacter_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("PhysicsCharacter", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("PhysicsCharacter", __convertTo);
 }
 
 }

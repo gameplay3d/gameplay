@@ -9,55 +9,12 @@
 #include "PhysicsGenericConstraint.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsSpringConstraint.h"
+#include "PhysicsGenericConstraint.h"
 
 namespace gameplay
 {
 
-void luaRegister_PhysicsSpringConstraint()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"getBreakingImpulse", lua_PhysicsSpringConstraint_getBreakingImpulse},
-        {"getRotationOffsetA", lua_PhysicsSpringConstraint_getRotationOffsetA},
-        {"getRotationOffsetB", lua_PhysicsSpringConstraint_getRotationOffsetB},
-        {"getTranslationOffsetA", lua_PhysicsSpringConstraint_getTranslationOffsetA},
-        {"getTranslationOffsetB", lua_PhysicsSpringConstraint_getTranslationOffsetB},
-        {"isEnabled", lua_PhysicsSpringConstraint_isEnabled},
-        {"setAngularDampingX", lua_PhysicsSpringConstraint_setAngularDampingX},
-        {"setAngularDampingY", lua_PhysicsSpringConstraint_setAngularDampingY},
-        {"setAngularDampingZ", lua_PhysicsSpringConstraint_setAngularDampingZ},
-        {"setAngularLowerLimit", lua_PhysicsSpringConstraint_setAngularLowerLimit},
-        {"setAngularStrengthX", lua_PhysicsSpringConstraint_setAngularStrengthX},
-        {"setAngularStrengthY", lua_PhysicsSpringConstraint_setAngularStrengthY},
-        {"setAngularStrengthZ", lua_PhysicsSpringConstraint_setAngularStrengthZ},
-        {"setAngularUpperLimit", lua_PhysicsSpringConstraint_setAngularUpperLimit},
-        {"setBreakingImpulse", lua_PhysicsSpringConstraint_setBreakingImpulse},
-        {"setEnabled", lua_PhysicsSpringConstraint_setEnabled},
-        {"setLinearDampingX", lua_PhysicsSpringConstraint_setLinearDampingX},
-        {"setLinearDampingY", lua_PhysicsSpringConstraint_setLinearDampingY},
-        {"setLinearDampingZ", lua_PhysicsSpringConstraint_setLinearDampingZ},
-        {"setLinearLowerLimit", lua_PhysicsSpringConstraint_setLinearLowerLimit},
-        {"setLinearStrengthX", lua_PhysicsSpringConstraint_setLinearStrengthX},
-        {"setLinearStrengthY", lua_PhysicsSpringConstraint_setLinearStrengthY},
-        {"setLinearStrengthZ", lua_PhysicsSpringConstraint_setLinearStrengthZ},
-        {"setLinearUpperLimit", lua_PhysicsSpringConstraint_setLinearUpperLimit},
-        {"setRotationOffsetA", lua_PhysicsSpringConstraint_setRotationOffsetA},
-        {"setRotationOffsetB", lua_PhysicsSpringConstraint_setRotationOffsetB},
-        {"setTranslationOffsetA", lua_PhysicsSpringConstraint_setTranslationOffsetA},
-        {"setTranslationOffsetB", lua_PhysicsSpringConstraint_setTranslationOffsetB},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"centerOfMassMidpoint", lua_PhysicsSpringConstraint_static_centerOfMassMidpoint},
-        {"getRotationOffset", lua_PhysicsSpringConstraint_static_getRotationOffset},
-        {"getTranslationOffset", lua_PhysicsSpringConstraint_static_getTranslationOffset},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("PhysicsSpringConstraint", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static PhysicsSpringConstraint* getInstance(lua_State* state)
 {
@@ -66,7 +23,7 @@ static PhysicsSpringConstraint* getInstance(lua_State* state)
     return (PhysicsSpringConstraint*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsSpringConstraint_getBreakingImpulse(lua_State* state)
+static int lua_PhysicsSpringConstraint_getBreakingImpulse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -101,7 +58,7 @@ int lua_PhysicsSpringConstraint_getBreakingImpulse(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_getRotationOffsetA(lua_State* state)
+static int lua_PhysicsSpringConstraint_getRotationOffsetA(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -145,7 +102,7 @@ int lua_PhysicsSpringConstraint_getRotationOffsetA(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_getRotationOffsetB(lua_State* state)
+static int lua_PhysicsSpringConstraint_getRotationOffsetB(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -189,7 +146,7 @@ int lua_PhysicsSpringConstraint_getRotationOffsetB(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_getTranslationOffsetA(lua_State* state)
+static int lua_PhysicsSpringConstraint_getTranslationOffsetA(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -233,7 +190,7 @@ int lua_PhysicsSpringConstraint_getTranslationOffsetA(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_getTranslationOffsetB(lua_State* state)
+static int lua_PhysicsSpringConstraint_getTranslationOffsetB(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -277,7 +234,7 @@ int lua_PhysicsSpringConstraint_getTranslationOffsetB(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_isEnabled(lua_State* state)
+static int lua_PhysicsSpringConstraint_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -312,7 +269,7 @@ int lua_PhysicsSpringConstraint_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setAngularDampingX(lua_State* state)
+static int lua_PhysicsSpringConstraint_setAngularDampingX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -348,7 +305,7 @@ int lua_PhysicsSpringConstraint_setAngularDampingX(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setAngularDampingY(lua_State* state)
+static int lua_PhysicsSpringConstraint_setAngularDampingY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -384,7 +341,7 @@ int lua_PhysicsSpringConstraint_setAngularDampingY(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setAngularDampingZ(lua_State* state)
+static int lua_PhysicsSpringConstraint_setAngularDampingZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -420,7 +377,7 @@ int lua_PhysicsSpringConstraint_setAngularDampingZ(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setAngularLowerLimit(lua_State* state)
+static int lua_PhysicsSpringConstraint_setAngularLowerLimit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -462,7 +419,7 @@ int lua_PhysicsSpringConstraint_setAngularLowerLimit(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setAngularStrengthX(lua_State* state)
+static int lua_PhysicsSpringConstraint_setAngularStrengthX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -498,7 +455,7 @@ int lua_PhysicsSpringConstraint_setAngularStrengthX(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setAngularStrengthY(lua_State* state)
+static int lua_PhysicsSpringConstraint_setAngularStrengthY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -534,7 +491,7 @@ int lua_PhysicsSpringConstraint_setAngularStrengthY(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setAngularStrengthZ(lua_State* state)
+static int lua_PhysicsSpringConstraint_setAngularStrengthZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -570,7 +527,7 @@ int lua_PhysicsSpringConstraint_setAngularStrengthZ(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setAngularUpperLimit(lua_State* state)
+static int lua_PhysicsSpringConstraint_setAngularUpperLimit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -612,7 +569,7 @@ int lua_PhysicsSpringConstraint_setAngularUpperLimit(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setBreakingImpulse(lua_State* state)
+static int lua_PhysicsSpringConstraint_setBreakingImpulse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -648,7 +605,7 @@ int lua_PhysicsSpringConstraint_setBreakingImpulse(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setEnabled(lua_State* state)
+static int lua_PhysicsSpringConstraint_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -684,7 +641,7 @@ int lua_PhysicsSpringConstraint_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setLinearDampingX(lua_State* state)
+static int lua_PhysicsSpringConstraint_setLinearDampingX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -720,7 +677,7 @@ int lua_PhysicsSpringConstraint_setLinearDampingX(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setLinearDampingY(lua_State* state)
+static int lua_PhysicsSpringConstraint_setLinearDampingY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -756,7 +713,7 @@ int lua_PhysicsSpringConstraint_setLinearDampingY(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setLinearDampingZ(lua_State* state)
+static int lua_PhysicsSpringConstraint_setLinearDampingZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -792,7 +749,7 @@ int lua_PhysicsSpringConstraint_setLinearDampingZ(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setLinearLowerLimit(lua_State* state)
+static int lua_PhysicsSpringConstraint_setLinearLowerLimit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -834,7 +791,7 @@ int lua_PhysicsSpringConstraint_setLinearLowerLimit(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setLinearStrengthX(lua_State* state)
+static int lua_PhysicsSpringConstraint_setLinearStrengthX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -870,7 +827,7 @@ int lua_PhysicsSpringConstraint_setLinearStrengthX(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setLinearStrengthY(lua_State* state)
+static int lua_PhysicsSpringConstraint_setLinearStrengthY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -906,7 +863,7 @@ int lua_PhysicsSpringConstraint_setLinearStrengthY(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setLinearStrengthZ(lua_State* state)
+static int lua_PhysicsSpringConstraint_setLinearStrengthZ(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -942,7 +899,7 @@ int lua_PhysicsSpringConstraint_setLinearStrengthZ(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setLinearUpperLimit(lua_State* state)
+static int lua_PhysicsSpringConstraint_setLinearUpperLimit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -984,7 +941,7 @@ int lua_PhysicsSpringConstraint_setLinearUpperLimit(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setRotationOffsetA(lua_State* state)
+static int lua_PhysicsSpringConstraint_setRotationOffsetA(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1026,7 +983,7 @@ int lua_PhysicsSpringConstraint_setRotationOffsetA(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setRotationOffsetB(lua_State* state)
+static int lua_PhysicsSpringConstraint_setRotationOffsetB(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1068,7 +1025,7 @@ int lua_PhysicsSpringConstraint_setRotationOffsetB(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setTranslationOffsetA(lua_State* state)
+static int lua_PhysicsSpringConstraint_setTranslationOffsetA(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1110,7 +1067,7 @@ int lua_PhysicsSpringConstraint_setTranslationOffsetA(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_setTranslationOffsetB(lua_State* state)
+static int lua_PhysicsSpringConstraint_setTranslationOffsetB(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1152,7 +1109,7 @@ int lua_PhysicsSpringConstraint_setTranslationOffsetB(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_static_centerOfMassMidpoint(lua_State* state)
+static int lua_PhysicsSpringConstraint_static_centerOfMassMidpoint(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1214,7 +1171,7 @@ int lua_PhysicsSpringConstraint_static_centerOfMassMidpoint(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_static_getRotationOffset(lua_State* state)
+static int lua_PhysicsSpringConstraint_static_getRotationOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1276,7 +1233,7 @@ int lua_PhysicsSpringConstraint_static_getRotationOffset(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsSpringConstraint_static_getTranslationOffset(lua_State* state)
+static int lua_PhysicsSpringConstraint_static_getTranslationOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1336,6 +1293,99 @@ int lua_PhysicsSpringConstraint_static_getTranslationOffset(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of PhysicsSpringConstraint
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    PhysicsSpringConstraint* ptrObject = reinterpret_cast<PhysicsSpringConstraint*>(ptr);
+
+    if (strcmp(typeName, "PhysicsGenericConstraint") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsGenericConstraint*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_PhysicsSpringConstraint_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_PhysicsSpringConstraint_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    PhysicsSpringConstraint* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_PhysicsSpringConstraint()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"getBreakingImpulse", lua_PhysicsSpringConstraint_getBreakingImpulse},
+        {"getRotationOffsetA", lua_PhysicsSpringConstraint_getRotationOffsetA},
+        {"getRotationOffsetB", lua_PhysicsSpringConstraint_getRotationOffsetB},
+        {"getTranslationOffsetA", lua_PhysicsSpringConstraint_getTranslationOffsetA},
+        {"getTranslationOffsetB", lua_PhysicsSpringConstraint_getTranslationOffsetB},
+        {"isEnabled", lua_PhysicsSpringConstraint_isEnabled},
+        {"setAngularDampingX", lua_PhysicsSpringConstraint_setAngularDampingX},
+        {"setAngularDampingY", lua_PhysicsSpringConstraint_setAngularDampingY},
+        {"setAngularDampingZ", lua_PhysicsSpringConstraint_setAngularDampingZ},
+        {"setAngularLowerLimit", lua_PhysicsSpringConstraint_setAngularLowerLimit},
+        {"setAngularStrengthX", lua_PhysicsSpringConstraint_setAngularStrengthX},
+        {"setAngularStrengthY", lua_PhysicsSpringConstraint_setAngularStrengthY},
+        {"setAngularStrengthZ", lua_PhysicsSpringConstraint_setAngularStrengthZ},
+        {"setAngularUpperLimit", lua_PhysicsSpringConstraint_setAngularUpperLimit},
+        {"setBreakingImpulse", lua_PhysicsSpringConstraint_setBreakingImpulse},
+        {"setEnabled", lua_PhysicsSpringConstraint_setEnabled},
+        {"setLinearDampingX", lua_PhysicsSpringConstraint_setLinearDampingX},
+        {"setLinearDampingY", lua_PhysicsSpringConstraint_setLinearDampingY},
+        {"setLinearDampingZ", lua_PhysicsSpringConstraint_setLinearDampingZ},
+        {"setLinearLowerLimit", lua_PhysicsSpringConstraint_setLinearLowerLimit},
+        {"setLinearStrengthX", lua_PhysicsSpringConstraint_setLinearStrengthX},
+        {"setLinearStrengthY", lua_PhysicsSpringConstraint_setLinearStrengthY},
+        {"setLinearStrengthZ", lua_PhysicsSpringConstraint_setLinearStrengthZ},
+        {"setLinearUpperLimit", lua_PhysicsSpringConstraint_setLinearUpperLimit},
+        {"setRotationOffsetA", lua_PhysicsSpringConstraint_setRotationOffsetA},
+        {"setRotationOffsetB", lua_PhysicsSpringConstraint_setRotationOffsetB},
+        {"setTranslationOffsetA", lua_PhysicsSpringConstraint_setTranslationOffsetA},
+        {"setTranslationOffsetB", lua_PhysicsSpringConstraint_setTranslationOffsetB},
+        {"to", lua_PhysicsSpringConstraint_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"centerOfMassMidpoint", lua_PhysicsSpringConstraint_static_centerOfMassMidpoint},
+        {"getRotationOffset", lua_PhysicsSpringConstraint_static_getRotationOffset},
+        {"getTranslationOffset", lua_PhysicsSpringConstraint_static_getTranslationOffset},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("PhysicsSpringConstraint", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("PhysicsSpringConstraint", __convertTo);
 }
 
 }

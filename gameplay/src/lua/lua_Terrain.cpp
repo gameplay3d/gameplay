@@ -16,36 +16,14 @@
 #include "Terrain.h"
 #include "TerrainPatch.h"
 #include "Transform.h"
+#include "Drawable.h"
+#include "Ref.h"
+#include "Transform.h"
 
 namespace gameplay
 {
 
-void luaRegister_Terrain()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_Terrain_addRef},
-        {"draw", lua_Terrain_draw},
-        {"getBoundingBox", lua_Terrain_getBoundingBox},
-        {"getHeight", lua_Terrain_getHeight},
-        {"getNode", lua_Terrain_getNode},
-        {"getPatch", lua_Terrain_getPatch},
-        {"getPatchCount", lua_Terrain_getPatchCount},
-        {"getRefCount", lua_Terrain_getRefCount},
-        {"isFlagSet", lua_Terrain_isFlagSet},
-        {"release", lua_Terrain_release},
-        {"setFlag", lua_Terrain_setFlag},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_Terrain_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Terrain", lua_members, NULL, lua_Terrain__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Terrain* getInstance(lua_State* state)
 {
@@ -54,7 +32,7 @@ static Terrain* getInstance(lua_State* state)
     return (Terrain*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Terrain__gc(lua_State* state)
+static int lua_Terrain__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -92,7 +70,7 @@ int lua_Terrain__gc(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_addRef(lua_State* state)
+static int lua_Terrain_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -124,7 +102,7 @@ int lua_Terrain_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_draw(lua_State* state)
+static int lua_Terrain_draw(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -180,7 +158,7 @@ int lua_Terrain_draw(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_getBoundingBox(lua_State* state)
+static int lua_Terrain_getBoundingBox(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -224,7 +202,7 @@ int lua_Terrain_getBoundingBox(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_getHeight(lua_State* state)
+static int lua_Terrain_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -267,7 +245,7 @@ int lua_Terrain_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_getNode(lua_State* state)
+static int lua_Terrain_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -311,7 +289,7 @@ int lua_Terrain_getNode(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_getPatch(lua_State* state)
+static int lua_Terrain_getPatch(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -359,7 +337,7 @@ int lua_Terrain_getPatch(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_getPatchCount(lua_State* state)
+static int lua_Terrain_getPatchCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -394,7 +372,7 @@ int lua_Terrain_getPatchCount(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_getRefCount(lua_State* state)
+static int lua_Terrain_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -429,7 +407,7 @@ int lua_Terrain_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_isFlagSet(lua_State* state)
+static int lua_Terrain_isFlagSet(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -468,7 +446,7 @@ int lua_Terrain_isFlagSet(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_release(lua_State* state)
+static int lua_Terrain_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -500,7 +478,7 @@ int lua_Terrain_release(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_setFlag(lua_State* state)
+static int lua_Terrain_setFlag(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -540,7 +518,7 @@ int lua_Terrain_setFlag(lua_State* state)
     return 0;
 }
 
-int lua_Terrain_static_create(lua_State* state)
+static int lua_Terrain_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -949,6 +927,88 @@ int lua_Terrain_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Terrain
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Terrain* ptrObject = reinterpret_cast<Terrain*>(ptr);
+
+    if (strcmp(typeName, "Drawable") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Drawable*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Transform::Listener") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Transform::Listener*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Terrain_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Terrain_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Terrain* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Terrain()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_Terrain_addRef},
+        {"draw", lua_Terrain_draw},
+        {"getBoundingBox", lua_Terrain_getBoundingBox},
+        {"getHeight", lua_Terrain_getHeight},
+        {"getNode", lua_Terrain_getNode},
+        {"getPatch", lua_Terrain_getPatch},
+        {"getPatchCount", lua_Terrain_getPatchCount},
+        {"getRefCount", lua_Terrain_getRefCount},
+        {"isFlagSet", lua_Terrain_isFlagSet},
+        {"release", lua_Terrain_release},
+        {"setFlag", lua_Terrain_setFlag},
+        {"to", lua_Terrain_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_Terrain_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Terrain", lua_members, NULL, lua_Terrain__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Terrain", __convertTo);
 }
 
 }

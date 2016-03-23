@@ -201,13 +201,45 @@ public:
     void setPrimitiveType(Mesh::PrimitiveType type);
 
     /**
+     * Maps the vertex buffer for the specified access.
+     *
+     * Mapping vertex data causes a synchronizing issue. To avoid gpu idle
+     * If GPU is still working with the buffer object, mapVertexBuffer will not
+     * return until GPU finishes its job with the corresponding buffer object.
+     *
+     * To avoid waiting (idle), you can call first setVertexBuffer with NULL pointer,
+     * then call mapVertexBuffer(). In this case, the previous data will be discarded
+     * and mapVertexBuffer() returns a new allocated pointer immediately even if GPU is
+     * still working with the previous data.
+     *
+     * However, this method is valid only if you want to update entire data set because
+     * you discard the previous data. If you want to change only portion of data or to
+     * read data, you better not release the previous data.
+     *
+     * After modifying the data of VBO, it must be unmapped the buffer object from the client's
+     * memory. unmapVertexBuffer returns true if success. When it returns false, the contents of
+     * vertex buffer become corrupted while the buffer was mapped. The corruption results from screen
+     * resolution change or window system specific events. In this case, the data must be resubmitted.
+     *
+     * @return The mapped vertex buffer
+     */
+    void* mapVertexBuffer();
+
+    /**
+     * Unmaps the vertex buffer.
+     *
+     * @return false if unmapping buffer was unsuccessful
+     */
+    bool unmapVertexBuffer();
+
+    /**
      * Sets the specified vertex data into the mapped vertex buffer.
      *
      * @param vertexData The vertex data to be set.
      * @param vertexStart The index of the starting vertex (0 by default).
      * @param vertexCount The number of vertices to be set (default is 0, for all vertices).
      */
-    void setVertexData(const float* vertexData, unsigned int vertexStart = 0, unsigned int vertexCount = 0);
+    void setVertexData(const void* vertexData, unsigned int vertexStart = 0, unsigned int vertexCount = 0);
 
     /**
      * Creates and adds a new part of primitive data defining how the vertices are connected.

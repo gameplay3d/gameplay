@@ -11,63 +11,13 @@
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Ref.h"
+#include "ScriptTarget.h"
 
 namespace gameplay
 {
 
-void luaRegister_AnimationClip()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addBeginListener", lua_AnimationClip_addBeginListener},
-        {"addEndListener", lua_AnimationClip_addEndListener},
-        {"addListener", lua_AnimationClip_addListener},
-        {"addRef", lua_AnimationClip_addRef},
-        {"addScript", lua_AnimationClip_addScript},
-        {"addScriptCallback", lua_AnimationClip_addScriptCallback},
-        {"clearScripts", lua_AnimationClip_clearScripts},
-        {"crossFade", lua_AnimationClip_crossFade},
-        {"getActiveDuration", lua_AnimationClip_getActiveDuration},
-        {"getAnimation", lua_AnimationClip_getAnimation},
-        {"getBlendWeight", lua_AnimationClip_getBlendWeight},
-        {"getDuration", lua_AnimationClip_getDuration},
-        {"getElapsedTime", lua_AnimationClip_getElapsedTime},
-        {"getEndTime", lua_AnimationClip_getEndTime},
-        {"getId", lua_AnimationClip_getId},
-        {"getLoopBlendTime", lua_AnimationClip_getLoopBlendTime},
-        {"getRefCount", lua_AnimationClip_getRefCount},
-        {"getRepeatCount", lua_AnimationClip_getRepeatCount},
-        {"getScriptEvent", lua_AnimationClip_getScriptEvent},
-        {"getSpeed", lua_AnimationClip_getSpeed},
-        {"getStartTime", lua_AnimationClip_getStartTime},
-        {"getTypeName", lua_AnimationClip_getTypeName},
-        {"hasScriptListener", lua_AnimationClip_hasScriptListener},
-        {"isPlaying", lua_AnimationClip_isPlaying},
-        {"pause", lua_AnimationClip_pause},
-        {"play", lua_AnimationClip_play},
-        {"release", lua_AnimationClip_release},
-        {"removeBeginListener", lua_AnimationClip_removeBeginListener},
-        {"removeEndListener", lua_AnimationClip_removeEndListener},
-        {"removeListener", lua_AnimationClip_removeListener},
-        {"removeScript", lua_AnimationClip_removeScript},
-        {"removeScriptCallback", lua_AnimationClip_removeScriptCallback},
-        {"setActiveDuration", lua_AnimationClip_setActiveDuration},
-        {"setBlendWeight", lua_AnimationClip_setBlendWeight},
-        {"setLoopBlendTime", lua_AnimationClip_setLoopBlendTime},
-        {"setRepeatCount", lua_AnimationClip_setRepeatCount},
-        {"setSpeed", lua_AnimationClip_setSpeed},
-        {"stop", lua_AnimationClip_stop},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"REPEAT_INDEFINITE", lua_AnimationClip_static_REPEAT_INDEFINITE},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("AnimationClip", lua_members, NULL, lua_AnimationClip__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static AnimationClip* getInstance(lua_State* state)
 {
@@ -76,7 +26,7 @@ static AnimationClip* getInstance(lua_State* state)
     return (AnimationClip*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_AnimationClip__gc(lua_State* state)
+static int lua_AnimationClip__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -114,7 +64,7 @@ int lua_AnimationClip__gc(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_addBeginListener(lua_State* state)
+static int lua_AnimationClip_addBeginListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -156,7 +106,7 @@ int lua_AnimationClip_addBeginListener(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_addEndListener(lua_State* state)
+static int lua_AnimationClip_addEndListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -198,7 +148,7 @@ int lua_AnimationClip_addEndListener(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_addListener(lua_State* state)
+static int lua_AnimationClip_addListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -244,7 +194,7 @@ int lua_AnimationClip_addListener(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_addRef(lua_State* state)
+static int lua_AnimationClip_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -276,7 +226,7 @@ int lua_AnimationClip_addRef(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_addScript(lua_State* state)
+static int lua_AnimationClip_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -324,7 +274,7 @@ int lua_AnimationClip_addScript(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_addScriptCallback(lua_State* state)
+static int lua_AnimationClip_addScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -370,7 +320,7 @@ int lua_AnimationClip_addScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_clearScripts(lua_State* state)
+static int lua_AnimationClip_clearScripts(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -402,7 +352,7 @@ int lua_AnimationClip_clearScripts(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_crossFade(lua_State* state)
+static int lua_AnimationClip_crossFade(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -448,7 +398,7 @@ int lua_AnimationClip_crossFade(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getActiveDuration(lua_State* state)
+static int lua_AnimationClip_getActiveDuration(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -483,7 +433,7 @@ int lua_AnimationClip_getActiveDuration(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getAnimation(lua_State* state)
+static int lua_AnimationClip_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -527,7 +477,7 @@ int lua_AnimationClip_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getBlendWeight(lua_State* state)
+static int lua_AnimationClip_getBlendWeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -562,7 +512,7 @@ int lua_AnimationClip_getBlendWeight(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getDuration(lua_State* state)
+static int lua_AnimationClip_getDuration(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -597,7 +547,7 @@ int lua_AnimationClip_getDuration(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getElapsedTime(lua_State* state)
+static int lua_AnimationClip_getElapsedTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -632,7 +582,7 @@ int lua_AnimationClip_getElapsedTime(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getEndTime(lua_State* state)
+static int lua_AnimationClip_getEndTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -667,7 +617,7 @@ int lua_AnimationClip_getEndTime(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getId(lua_State* state)
+static int lua_AnimationClip_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -702,7 +652,7 @@ int lua_AnimationClip_getId(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getLoopBlendTime(lua_State* state)
+static int lua_AnimationClip_getLoopBlendTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -737,7 +687,7 @@ int lua_AnimationClip_getLoopBlendTime(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getRefCount(lua_State* state)
+static int lua_AnimationClip_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -772,7 +722,7 @@ int lua_AnimationClip_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getRepeatCount(lua_State* state)
+static int lua_AnimationClip_getRepeatCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -807,7 +757,7 @@ int lua_AnimationClip_getRepeatCount(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getScriptEvent(lua_State* state)
+static int lua_AnimationClip_getScriptEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -855,7 +805,7 @@ int lua_AnimationClip_getScriptEvent(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getSpeed(lua_State* state)
+static int lua_AnimationClip_getSpeed(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -890,7 +840,7 @@ int lua_AnimationClip_getSpeed(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getStartTime(lua_State* state)
+static int lua_AnimationClip_getStartTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -925,7 +875,7 @@ int lua_AnimationClip_getStartTime(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getTypeName(lua_State* state)
+static int lua_AnimationClip_getTypeName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -960,7 +910,7 @@ int lua_AnimationClip_getTypeName(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_hasScriptListener(lua_State* state)
+static int lua_AnimationClip_hasScriptListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1023,7 +973,7 @@ int lua_AnimationClip_hasScriptListener(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_isPlaying(lua_State* state)
+static int lua_AnimationClip_isPlaying(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1058,7 +1008,7 @@ int lua_AnimationClip_isPlaying(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_pause(lua_State* state)
+static int lua_AnimationClip_pause(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1090,7 +1040,7 @@ int lua_AnimationClip_pause(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_play(lua_State* state)
+static int lua_AnimationClip_play(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1122,7 +1072,7 @@ int lua_AnimationClip_play(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_release(lua_State* state)
+static int lua_AnimationClip_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1154,7 +1104,7 @@ int lua_AnimationClip_release(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_removeBeginListener(lua_State* state)
+static int lua_AnimationClip_removeBeginListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1196,7 +1146,7 @@ int lua_AnimationClip_removeBeginListener(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_removeEndListener(lua_State* state)
+static int lua_AnimationClip_removeEndListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1238,7 +1188,7 @@ int lua_AnimationClip_removeEndListener(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_removeListener(lua_State* state)
+static int lua_AnimationClip_removeListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1284,7 +1234,7 @@ int lua_AnimationClip_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_removeScript(lua_State* state)
+static int lua_AnimationClip_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1323,7 +1273,7 @@ int lua_AnimationClip_removeScript(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_removeScriptCallback(lua_State* state)
+static int lua_AnimationClip_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1369,7 +1319,7 @@ int lua_AnimationClip_removeScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_setActiveDuration(lua_State* state)
+static int lua_AnimationClip_setActiveDuration(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1405,7 +1355,7 @@ int lua_AnimationClip_setActiveDuration(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_setBlendWeight(lua_State* state)
+static int lua_AnimationClip_setBlendWeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1441,7 +1391,7 @@ int lua_AnimationClip_setBlendWeight(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_setLoopBlendTime(lua_State* state)
+static int lua_AnimationClip_setLoopBlendTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1477,7 +1427,7 @@ int lua_AnimationClip_setLoopBlendTime(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_setRepeatCount(lua_State* state)
+static int lua_AnimationClip_setRepeatCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1513,7 +1463,7 @@ int lua_AnimationClip_setRepeatCount(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_setSpeed(lua_State* state)
+static int lua_AnimationClip_setSpeed(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1549,7 +1499,7 @@ int lua_AnimationClip_setSpeed(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_static_REPEAT_INDEFINITE(lua_State* state)
+static int lua_AnimationClip_static_REPEAT_INDEFINITE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -1566,7 +1516,7 @@ int lua_AnimationClip_static_REPEAT_INDEFINITE(lua_State* state)
     return 1;
 }
 
-int lua_AnimationClip_stop(lua_State* state)
+static int lua_AnimationClip_stop(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1596,6 +1546,111 @@ int lua_AnimationClip_stop(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of AnimationClip
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    AnimationClip* ptrObject = reinterpret_cast<AnimationClip*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+    else if (strcmp(typeName, "ScriptTarget") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<ScriptTarget*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_AnimationClip_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_AnimationClip_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    AnimationClip* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_AnimationClip()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addBeginListener", lua_AnimationClip_addBeginListener},
+        {"addEndListener", lua_AnimationClip_addEndListener},
+        {"addListener", lua_AnimationClip_addListener},
+        {"addRef", lua_AnimationClip_addRef},
+        {"addScript", lua_AnimationClip_addScript},
+        {"addScriptCallback", lua_AnimationClip_addScriptCallback},
+        {"clearScripts", lua_AnimationClip_clearScripts},
+        {"crossFade", lua_AnimationClip_crossFade},
+        {"getActiveDuration", lua_AnimationClip_getActiveDuration},
+        {"getAnimation", lua_AnimationClip_getAnimation},
+        {"getBlendWeight", lua_AnimationClip_getBlendWeight},
+        {"getDuration", lua_AnimationClip_getDuration},
+        {"getElapsedTime", lua_AnimationClip_getElapsedTime},
+        {"getEndTime", lua_AnimationClip_getEndTime},
+        {"getId", lua_AnimationClip_getId},
+        {"getLoopBlendTime", lua_AnimationClip_getLoopBlendTime},
+        {"getRefCount", lua_AnimationClip_getRefCount},
+        {"getRepeatCount", lua_AnimationClip_getRepeatCount},
+        {"getScriptEvent", lua_AnimationClip_getScriptEvent},
+        {"getSpeed", lua_AnimationClip_getSpeed},
+        {"getStartTime", lua_AnimationClip_getStartTime},
+        {"getTypeName", lua_AnimationClip_getTypeName},
+        {"hasScriptListener", lua_AnimationClip_hasScriptListener},
+        {"isPlaying", lua_AnimationClip_isPlaying},
+        {"pause", lua_AnimationClip_pause},
+        {"play", lua_AnimationClip_play},
+        {"release", lua_AnimationClip_release},
+        {"removeBeginListener", lua_AnimationClip_removeBeginListener},
+        {"removeEndListener", lua_AnimationClip_removeEndListener},
+        {"removeListener", lua_AnimationClip_removeListener},
+        {"removeScript", lua_AnimationClip_removeScript},
+        {"removeScriptCallback", lua_AnimationClip_removeScriptCallback},
+        {"setActiveDuration", lua_AnimationClip_setActiveDuration},
+        {"setBlendWeight", lua_AnimationClip_setBlendWeight},
+        {"setLoopBlendTime", lua_AnimationClip_setLoopBlendTime},
+        {"setRepeatCount", lua_AnimationClip_setRepeatCount},
+        {"setSpeed", lua_AnimationClip_setSpeed},
+        {"stop", lua_AnimationClip_stop},
+        {"to", lua_AnimationClip_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"REPEAT_INDEFINITE", lua_AnimationClip_static_REPEAT_INDEFINITE},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("AnimationClip", lua_members, NULL, lua_AnimationClip__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("AnimationClip", __convertTo);
 }
 
 }

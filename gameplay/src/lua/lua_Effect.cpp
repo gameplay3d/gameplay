@@ -7,36 +7,12 @@
 #include "FileSystem.h"
 #include "Game.h"
 #include "Ref.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_Effect()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_Effect_addRef},
-        {"bind", lua_Effect_bind},
-        {"getId", lua_Effect_getId},
-        {"getRefCount", lua_Effect_getRefCount},
-        {"getUniform", lua_Effect_getUniform},
-        {"getUniformCount", lua_Effect_getUniformCount},
-        {"getVertexAttribute", lua_Effect_getVertexAttribute},
-        {"release", lua_Effect_release},
-        {"setValue", lua_Effect_setValue},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"createFromFile", lua_Effect_static_createFromFile},
-        {"createFromSource", lua_Effect_static_createFromSource},
-        {"getCurrentEffect", lua_Effect_static_getCurrentEffect},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Effect", lua_members, NULL, lua_Effect__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Effect* getInstance(lua_State* state)
 {
@@ -45,7 +21,7 @@ static Effect* getInstance(lua_State* state)
     return (Effect*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Effect__gc(lua_State* state)
+static int lua_Effect__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -83,7 +59,7 @@ int lua_Effect__gc(lua_State* state)
     return 0;
 }
 
-int lua_Effect_addRef(lua_State* state)
+static int lua_Effect_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -115,7 +91,7 @@ int lua_Effect_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Effect_bind(lua_State* state)
+static int lua_Effect_bind(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -147,7 +123,7 @@ int lua_Effect_bind(lua_State* state)
     return 0;
 }
 
-int lua_Effect_getId(lua_State* state)
+static int lua_Effect_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -182,7 +158,7 @@ int lua_Effect_getId(lua_State* state)
     return 0;
 }
 
-int lua_Effect_getRefCount(lua_State* state)
+static int lua_Effect_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -217,7 +193,7 @@ int lua_Effect_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Effect_getUniform(lua_State* state)
+static int lua_Effect_getUniform(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -295,7 +271,7 @@ int lua_Effect_getUniform(lua_State* state)
     return 0;
 }
 
-int lua_Effect_getUniformCount(lua_State* state)
+static int lua_Effect_getUniformCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -330,7 +306,7 @@ int lua_Effect_getUniformCount(lua_State* state)
     return 0;
 }
 
-int lua_Effect_getVertexAttribute(lua_State* state)
+static int lua_Effect_getVertexAttribute(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -378,7 +354,7 @@ int lua_Effect_getVertexAttribute(lua_State* state)
     return 0;
 }
 
-int lua_Effect_release(lua_State* state)
+static int lua_Effect_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -410,7 +386,7 @@ int lua_Effect_release(lua_State* state)
     return 0;
 }
 
-int lua_Effect_setValue(lua_State* state)
+static int lua_Effect_setValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -921,7 +897,7 @@ int lua_Effect_setValue(lua_State* state)
     return 0;
 }
 
-int lua_Effect_static_createFromFile(lua_State* state)
+static int lua_Effect_static_createFromFile(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1007,7 +983,7 @@ int lua_Effect_static_createFromFile(lua_State* state)
     return 0;
 }
 
-int lua_Effect_static_createFromSource(lua_State* state)
+static int lua_Effect_static_createFromSource(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1093,7 +1069,7 @@ int lua_Effect_static_createFromSource(lua_State* state)
     return 0;
 }
 
-int lua_Effect_static_getCurrentEffect(lua_State* state)
+static int lua_Effect_static_getCurrentEffect(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1128,6 +1104,80 @@ int lua_Effect_static_getCurrentEffect(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Effect
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Effect* ptrObject = reinterpret_cast<Effect*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Effect_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Effect_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Effect* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Effect()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_Effect_addRef},
+        {"bind", lua_Effect_bind},
+        {"getId", lua_Effect_getId},
+        {"getRefCount", lua_Effect_getRefCount},
+        {"getUniform", lua_Effect_getUniform},
+        {"getUniformCount", lua_Effect_getUniformCount},
+        {"getVertexAttribute", lua_Effect_getVertexAttribute},
+        {"release", lua_Effect_release},
+        {"setValue", lua_Effect_setValue},
+        {"to", lua_Effect_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"createFromFile", lua_Effect_static_createFromFile},
+        {"createFromSource", lua_Effect_static_createFromSource},
+        {"getCurrentEffect", lua_Effect_static_getCurrentEffect},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Effect", lua_members, NULL, lua_Effect__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Effect", __convertTo);
 }
 
 }

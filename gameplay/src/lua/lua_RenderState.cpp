@@ -4,39 +4,22 @@
 #include "lua_RenderState.h"
 #include "Base.h"
 #include "Game.h"
+#include "Material.h"
 #include "Node.h"
 #include "Pass.h"
 #include "Ref.h"
 #include "RenderState.h"
 #include "Scene.h"
 #include "Technique.h"
+#include "Material.h"
+#include "Pass.h"
+#include "Ref.h"
+#include "Technique.h"
 
 namespace gameplay
 {
 
-void luaRegister_RenderState()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addParameter", lua_RenderState_addParameter},
-        {"addRef", lua_RenderState_addRef},
-        {"getParameter", lua_RenderState_getParameter},
-        {"getParameterByIndex", lua_RenderState_getParameterByIndex},
-        {"getParameterCount", lua_RenderState_getParameterCount},
-        {"getRefCount", lua_RenderState_getRefCount},
-        {"getStateBlock", lua_RenderState_getStateBlock},
-        {"release", lua_RenderState_release},
-        {"removeParameter", lua_RenderState_removeParameter},
-        {"setNodeBinding", lua_RenderState_setNodeBinding},
-        {"setParameterAutoBinding", lua_RenderState_setParameterAutoBinding},
-        {"setStateBlock", lua_RenderState_setStateBlock},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("RenderState", lua_members, NULL, lua_RenderState__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static RenderState* getInstance(lua_State* state)
 {
@@ -45,7 +28,7 @@ static RenderState* getInstance(lua_State* state)
     return (RenderState*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_RenderState__gc(lua_State* state)
+static int lua_RenderState__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -83,7 +66,7 @@ int lua_RenderState__gc(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_addParameter(lua_State* state)
+static int lua_RenderState_addParameter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -125,7 +108,7 @@ int lua_RenderState_addParameter(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_addRef(lua_State* state)
+static int lua_RenderState_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -157,7 +140,7 @@ int lua_RenderState_addRef(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_getParameter(lua_State* state)
+static int lua_RenderState_getParameter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -205,7 +188,7 @@ int lua_RenderState_getParameter(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_getParameterByIndex(lua_State* state)
+static int lua_RenderState_getParameterByIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -253,7 +236,7 @@ int lua_RenderState_getParameterByIndex(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_getParameterCount(lua_State* state)
+static int lua_RenderState_getParameterCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -288,7 +271,7 @@ int lua_RenderState_getParameterCount(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_getRefCount(lua_State* state)
+static int lua_RenderState_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -323,7 +306,7 @@ int lua_RenderState_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_getStateBlock(lua_State* state)
+static int lua_RenderState_getStateBlock(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -367,7 +350,7 @@ int lua_RenderState_getStateBlock(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_release(lua_State* state)
+static int lua_RenderState_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -399,7 +382,7 @@ int lua_RenderState_release(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_removeParameter(lua_State* state)
+static int lua_RenderState_removeParameter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -435,7 +418,7 @@ int lua_RenderState_removeParameter(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_setNodeBinding(lua_State* state)
+static int lua_RenderState_setNodeBinding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -477,7 +460,7 @@ int lua_RenderState_setNodeBinding(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_setParameterAutoBinding(lua_State* state)
+static int lua_RenderState_setParameterAutoBinding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -539,7 +522,7 @@ int lua_RenderState_setParameterAutoBinding(lua_State* state)
     return 0;
 }
 
-int lua_RenderState_setStateBlock(lua_State* state)
+static int lua_RenderState_setStateBlock(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -579,6 +562,89 @@ int lua_RenderState_setStateBlock(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of RenderState
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    RenderState* ptrObject = reinterpret_cast<RenderState*>(ptr);
+
+    if (strcmp(typeName, "Material") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Material*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Pass") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Pass*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Technique") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Technique*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_RenderState_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_RenderState_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    RenderState* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_RenderState()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addParameter", lua_RenderState_addParameter},
+        {"addRef", lua_RenderState_addRef},
+        {"getParameter", lua_RenderState_getParameter},
+        {"getParameterByIndex", lua_RenderState_getParameterByIndex},
+        {"getParameterCount", lua_RenderState_getParameterCount},
+        {"getRefCount", lua_RenderState_getRefCount},
+        {"getStateBlock", lua_RenderState_getStateBlock},
+        {"release", lua_RenderState_release},
+        {"removeParameter", lua_RenderState_removeParameter},
+        {"setNodeBinding", lua_RenderState_setNodeBinding},
+        {"setParameterAutoBinding", lua_RenderState_setParameterAutoBinding},
+        {"setStateBlock", lua_RenderState_setStateBlock},
+        {"to", lua_RenderState_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("RenderState", lua_members, NULL, lua_RenderState__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("RenderState", __convertTo);
 }
 
 }

@@ -12,47 +12,12 @@
 #include "Scene.h"
 #include "SceneLoader.h"
 #include "Terrain.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_Scene()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addNode", lua_Scene_addNode},
-        {"addRef", lua_Scene_addRef},
-        {"bindAudioListenerToCamera", lua_Scene_bindAudioListenerToCamera},
-        {"findNode", lua_Scene_findNode},
-        {"getActiveCamera", lua_Scene_getActiveCamera},
-        {"getAmbientColor", lua_Scene_getAmbientColor},
-        {"getFirstNode", lua_Scene_getFirstNode},
-        {"getId", lua_Scene_getId},
-        {"getNext", lua_Scene_getNext},
-        {"getNodeCount", lua_Scene_getNodeCount},
-        {"getRefCount", lua_Scene_getRefCount},
-        {"release", lua_Scene_release},
-        {"removeAllNodes", lua_Scene_removeAllNodes},
-        {"removeNode", lua_Scene_removeNode},
-        {"reset", lua_Scene_reset},
-        {"setActiveCamera", lua_Scene_setActiveCamera},
-        {"setAmbientColor", lua_Scene_setAmbientColor},
-        {"setId", lua_Scene_setId},
-        {"update", lua_Scene_update},
-        {"visit", lua_Scene_visit},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_Scene_static_create},
-        {"getScene", lua_Scene_static_getScene},
-        {"load", lua_Scene_static_load},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Scene", lua_members, NULL, lua_Scene__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Scene* getInstance(lua_State* state)
 {
@@ -61,7 +26,7 @@ static Scene* getInstance(lua_State* state)
     return (Scene*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Scene__gc(lua_State* state)
+static int lua_Scene__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -99,7 +64,7 @@ int lua_Scene__gc(lua_State* state)
     return 0;
 }
 
-int lua_Scene_addNode(lua_State* state)
+static int lua_Scene_addNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -197,7 +162,7 @@ int lua_Scene_addNode(lua_State* state)
     return 0;
 }
 
-int lua_Scene_addRef(lua_State* state)
+static int lua_Scene_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -229,7 +194,7 @@ int lua_Scene_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Scene_bindAudioListenerToCamera(lua_State* state)
+static int lua_Scene_bindAudioListenerToCamera(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -265,7 +230,7 @@ int lua_Scene_bindAudioListenerToCamera(lua_State* state)
     return 0;
 }
 
-int lua_Scene_findNode(lua_State* state)
+static int lua_Scene_findNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -385,7 +350,7 @@ int lua_Scene_findNode(lua_State* state)
     return 0;
 }
 
-int lua_Scene_getActiveCamera(lua_State* state)
+static int lua_Scene_getActiveCamera(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -429,7 +394,7 @@ int lua_Scene_getActiveCamera(lua_State* state)
     return 0;
 }
 
-int lua_Scene_getAmbientColor(lua_State* state)
+static int lua_Scene_getAmbientColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -473,7 +438,7 @@ int lua_Scene_getAmbientColor(lua_State* state)
     return 0;
 }
 
-int lua_Scene_getFirstNode(lua_State* state)
+static int lua_Scene_getFirstNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -517,7 +482,7 @@ int lua_Scene_getFirstNode(lua_State* state)
     return 0;
 }
 
-int lua_Scene_getId(lua_State* state)
+static int lua_Scene_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -552,7 +517,7 @@ int lua_Scene_getId(lua_State* state)
     return 0;
 }
 
-int lua_Scene_getNext(lua_State* state)
+static int lua_Scene_getNext(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -596,7 +561,7 @@ int lua_Scene_getNext(lua_State* state)
     return 0;
 }
 
-int lua_Scene_getNodeCount(lua_State* state)
+static int lua_Scene_getNodeCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -631,7 +596,7 @@ int lua_Scene_getNodeCount(lua_State* state)
     return 0;
 }
 
-int lua_Scene_getRefCount(lua_State* state)
+static int lua_Scene_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -666,7 +631,7 @@ int lua_Scene_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Scene_release(lua_State* state)
+static int lua_Scene_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -698,7 +663,7 @@ int lua_Scene_release(lua_State* state)
     return 0;
 }
 
-int lua_Scene_removeAllNodes(lua_State* state)
+static int lua_Scene_removeAllNodes(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -730,7 +695,7 @@ int lua_Scene_removeAllNodes(lua_State* state)
     return 0;
 }
 
-int lua_Scene_removeNode(lua_State* state)
+static int lua_Scene_removeNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -772,7 +737,7 @@ int lua_Scene_removeNode(lua_State* state)
     return 0;
 }
 
-int lua_Scene_reset(lua_State* state)
+static int lua_Scene_reset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -804,7 +769,7 @@ int lua_Scene_reset(lua_State* state)
     return 0;
 }
 
-int lua_Scene_setActiveCamera(lua_State* state)
+static int lua_Scene_setActiveCamera(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -846,7 +811,7 @@ int lua_Scene_setActiveCamera(lua_State* state)
     return 0;
 }
 
-int lua_Scene_setAmbientColor(lua_State* state)
+static int lua_Scene_setAmbientColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -890,7 +855,7 @@ int lua_Scene_setAmbientColor(lua_State* state)
     return 0;
 }
 
-int lua_Scene_setId(lua_State* state)
+static int lua_Scene_setId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -926,7 +891,7 @@ int lua_Scene_setId(lua_State* state)
     return 0;
 }
 
-int lua_Scene_static_create(lua_State* state)
+static int lua_Scene_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -991,7 +956,7 @@ int lua_Scene_static_create(lua_State* state)
     return 0;
 }
 
-int lua_Scene_static_getScene(lua_State* state)
+static int lua_Scene_static_getScene(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1056,7 +1021,7 @@ int lua_Scene_static_getScene(lua_State* state)
     return 0;
 }
 
-int lua_Scene_static_load(lua_State* state)
+static int lua_Scene_static_load(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1102,7 +1067,7 @@ int lua_Scene_static_load(lua_State* state)
     return 0;
 }
 
-int lua_Scene_update(lua_State* state)
+static int lua_Scene_update(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1138,7 +1103,7 @@ int lua_Scene_update(lua_State* state)
     return 0;
 }
 
-int lua_Scene_visit(lua_State* state)
+static int lua_Scene_visit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1172,6 +1137,91 @@ int lua_Scene_visit(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Scene
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Scene* ptrObject = reinterpret_cast<Scene*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Scene_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Scene_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Scene* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Scene()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addNode", lua_Scene_addNode},
+        {"addRef", lua_Scene_addRef},
+        {"bindAudioListenerToCamera", lua_Scene_bindAudioListenerToCamera},
+        {"findNode", lua_Scene_findNode},
+        {"getActiveCamera", lua_Scene_getActiveCamera},
+        {"getAmbientColor", lua_Scene_getAmbientColor},
+        {"getFirstNode", lua_Scene_getFirstNode},
+        {"getId", lua_Scene_getId},
+        {"getNext", lua_Scene_getNext},
+        {"getNodeCount", lua_Scene_getNodeCount},
+        {"getRefCount", lua_Scene_getRefCount},
+        {"release", lua_Scene_release},
+        {"removeAllNodes", lua_Scene_removeAllNodes},
+        {"removeNode", lua_Scene_removeNode},
+        {"reset", lua_Scene_reset},
+        {"setActiveCamera", lua_Scene_setActiveCamera},
+        {"setAmbientColor", lua_Scene_setAmbientColor},
+        {"setId", lua_Scene_setId},
+        {"update", lua_Scene_update},
+        {"visit", lua_Scene_visit},
+        {"to", lua_Scene_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_Scene_static_create},
+        {"getScene", lua_Scene_static_getScene},
+        {"load", lua_Scene_static_load},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Scene", lua_members, NULL, lua_Scene__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Scene", __convertTo);
 }
 
 }

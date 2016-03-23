@@ -16,81 +16,6 @@
 namespace gameplay
 {
 
-void luaRegister_Game()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"canExit", lua_Game_canExit},
-        {"clear", lua_Game_clear},
-        {"clearSchedule", lua_Game_clearSchedule},
-        {"displayKeyboard", lua_Game_displayKeyboard},
-        {"exit", lua_Game_exit},
-        {"frame", lua_Game_frame},
-        {"gamepadEvent", lua_Game_gamepadEvent},
-        {"gestureDragEvent", lua_Game_gestureDragEvent},
-        {"gestureDropEvent", lua_Game_gestureDropEvent},
-        {"gestureLongTapEvent", lua_Game_gestureLongTapEvent},
-        {"gesturePinchEvent", lua_Game_gesturePinchEvent},
-        {"gestureSwipeEvent", lua_Game_gestureSwipeEvent},
-        {"gestureTapEvent", lua_Game_gestureTapEvent},
-        {"getAIController", lua_Game_getAIController},
-        {"getAccelerometerValues", lua_Game_getAccelerometerValues},
-        {"getAnimationController", lua_Game_getAnimationController},
-        {"getAspectRatio", lua_Game_getAspectRatio},
-        {"getAudioController", lua_Game_getAudioController},
-        {"getAudioListener", lua_Game_getAudioListener},
-        {"getConfig", lua_Game_getConfig},
-        {"getFrameRate", lua_Game_getFrameRate},
-        {"getGamepad", lua_Game_getGamepad},
-        {"getGamepadCount", lua_Game_getGamepadCount},
-        {"getHeight", lua_Game_getHeight},
-        {"getPhysicsController", lua_Game_getPhysicsController},
-        {"getScriptController", lua_Game_getScriptController},
-        {"getSensorValues", lua_Game_getSensorValues},
-        {"getState", lua_Game_getState},
-        {"getViewport", lua_Game_getViewport},
-        {"getWidth", lua_Game_getWidth},
-        {"hasAccelerometer", lua_Game_hasAccelerometer},
-        {"hasMouse", lua_Game_hasMouse},
-        {"isCursorVisible", lua_Game_isCursorVisible},
-        {"isGestureRegistered", lua_Game_isGestureRegistered},
-        {"isGestureSupported", lua_Game_isGestureSupported},
-        {"isInitialized", lua_Game_isInitialized},
-        {"isMouseCaptured", lua_Game_isMouseCaptured},
-        {"isMultiSampling", lua_Game_isMultiSampling},
-        {"isMultiTouch", lua_Game_isMultiTouch},
-        {"keyEvent", lua_Game_keyEvent},
-        {"launchURL", lua_Game_launchURL},
-        {"mouseEvent", lua_Game_mouseEvent},
-        {"pause", lua_Game_pause},
-        {"registerGesture", lua_Game_registerGesture},
-        {"resizeEvent", lua_Game_resizeEvent},
-        {"resume", lua_Game_resume},
-        {"run", lua_Game_run},
-        {"schedule", lua_Game_schedule},
-        {"setCursorVisible", lua_Game_setCursorVisible},
-        {"setMouseCaptured", lua_Game_setMouseCaptured},
-        {"setMultiSampling", lua_Game_setMultiSampling},
-        {"setMultiTouch", lua_Game_setMultiTouch},
-        {"setViewport", lua_Game_setViewport},
-        {"touchEvent", lua_Game_touchEvent},
-        {"unregisterGesture", lua_Game_unregisterGesture},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"getAbsoluteTime", lua_Game_static_getAbsoluteTime},
-        {"getGameTime", lua_Game_static_getGameTime},
-        {"getInstance", lua_Game_static_getInstance},
-        {"isVsync", lua_Game_static_isVsync},
-        {"setVsync", lua_Game_static_setVsync},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Game", lua_members, lua_Game__init, lua_Game__gc, lua_statics, scopePath);
-}
-
 static Game* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Game");
@@ -98,7 +23,7 @@ static Game* getInstance(lua_State* state)
     return (Game*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Game__gc(lua_State* state)
+static int lua_Game__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -136,7 +61,7 @@ int lua_Game__gc(lua_State* state)
     return 0;
 }
 
-int lua_Game__init(lua_State* state)
+static int lua_Game__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -173,7 +98,7 @@ int lua_Game__init(lua_State* state)
     return 0;
 }
 
-int lua_Game_canExit(lua_State* state)
+static int lua_Game_canExit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -208,7 +133,7 @@ int lua_Game_canExit(lua_State* state)
     return 0;
 }
 
-int lua_Game_clear(lua_State* state)
+static int lua_Game_clear(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -307,7 +232,7 @@ int lua_Game_clear(lua_State* state)
     return 0;
 }
 
-int lua_Game_clearSchedule(lua_State* state)
+static int lua_Game_clearSchedule(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -339,7 +264,7 @@ int lua_Game_clearSchedule(lua_State* state)
     return 0;
 }
 
-int lua_Game_displayKeyboard(lua_State* state)
+static int lua_Game_displayKeyboard(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -375,7 +300,7 @@ int lua_Game_displayKeyboard(lua_State* state)
     return 0;
 }
 
-int lua_Game_exit(lua_State* state)
+static int lua_Game_exit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -407,7 +332,7 @@ int lua_Game_exit(lua_State* state)
     return 0;
 }
 
-int lua_Game_frame(lua_State* state)
+static int lua_Game_frame(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -439,7 +364,7 @@ int lua_Game_frame(lua_State* state)
     return 0;
 }
 
-int lua_Game_gamepadEvent(lua_State* state)
+static int lua_Game_gamepadEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -485,7 +410,7 @@ int lua_Game_gamepadEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_gestureDragEvent(lua_State* state)
+static int lua_Game_gestureDragEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -525,7 +450,7 @@ int lua_Game_gestureDragEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_gestureDropEvent(lua_State* state)
+static int lua_Game_gestureDropEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -565,7 +490,7 @@ int lua_Game_gestureDropEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_gestureLongTapEvent(lua_State* state)
+static int lua_Game_gestureLongTapEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -609,7 +534,7 @@ int lua_Game_gestureLongTapEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_gesturePinchEvent(lua_State* state)
+static int lua_Game_gesturePinchEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -653,7 +578,7 @@ int lua_Game_gesturePinchEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_gestureSwipeEvent(lua_State* state)
+static int lua_Game_gestureSwipeEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -697,7 +622,7 @@ int lua_Game_gestureSwipeEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_gestureTapEvent(lua_State* state)
+static int lua_Game_gestureTapEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -737,7 +662,7 @@ int lua_Game_gestureTapEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_getAIController(lua_State* state)
+static int lua_Game_getAIController(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -781,7 +706,7 @@ int lua_Game_getAIController(lua_State* state)
     return 0;
 }
 
-int lua_Game_getAccelerometerValues(lua_State* state)
+static int lua_Game_getAccelerometerValues(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -821,7 +746,7 @@ int lua_Game_getAccelerometerValues(lua_State* state)
     return 0;
 }
 
-int lua_Game_getAnimationController(lua_State* state)
+static int lua_Game_getAnimationController(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -865,7 +790,7 @@ int lua_Game_getAnimationController(lua_State* state)
     return 0;
 }
 
-int lua_Game_getAspectRatio(lua_State* state)
+static int lua_Game_getAspectRatio(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -900,7 +825,7 @@ int lua_Game_getAspectRatio(lua_State* state)
     return 0;
 }
 
-int lua_Game_getAudioController(lua_State* state)
+static int lua_Game_getAudioController(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -944,7 +869,7 @@ int lua_Game_getAudioController(lua_State* state)
     return 0;
 }
 
-int lua_Game_getAudioListener(lua_State* state)
+static int lua_Game_getAudioListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -988,7 +913,7 @@ int lua_Game_getAudioListener(lua_State* state)
     return 0;
 }
 
-int lua_Game_getConfig(lua_State* state)
+static int lua_Game_getConfig(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1032,7 +957,7 @@ int lua_Game_getConfig(lua_State* state)
     return 0;
 }
 
-int lua_Game_getFrameRate(lua_State* state)
+static int lua_Game_getFrameRate(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1067,7 +992,7 @@ int lua_Game_getFrameRate(lua_State* state)
     return 0;
 }
 
-int lua_Game_getGamepad(lua_State* state)
+static int lua_Game_getGamepad(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1149,7 +1074,7 @@ int lua_Game_getGamepad(lua_State* state)
     return 0;
 }
 
-int lua_Game_getGamepadCount(lua_State* state)
+static int lua_Game_getGamepadCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1184,7 +1109,7 @@ int lua_Game_getGamepadCount(lua_State* state)
     return 0;
 }
 
-int lua_Game_getHeight(lua_State* state)
+static int lua_Game_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1219,7 +1144,7 @@ int lua_Game_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_Game_getPhysicsController(lua_State* state)
+static int lua_Game_getPhysicsController(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1263,7 +1188,7 @@ int lua_Game_getPhysicsController(lua_State* state)
     return 0;
 }
 
-int lua_Game_getScriptController(lua_State* state)
+static int lua_Game_getScriptController(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1307,7 +1232,7 @@ int lua_Game_getScriptController(lua_State* state)
     return 0;
 }
 
-int lua_Game_getSensorValues(lua_State* state)
+static int lua_Game_getSensorValues(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1363,7 +1288,7 @@ int lua_Game_getSensorValues(lua_State* state)
     return 0;
 }
 
-int lua_Game_getState(lua_State* state)
+static int lua_Game_getState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1398,7 +1323,7 @@ int lua_Game_getState(lua_State* state)
     return 0;
 }
 
-int lua_Game_getViewport(lua_State* state)
+static int lua_Game_getViewport(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1442,7 +1367,7 @@ int lua_Game_getViewport(lua_State* state)
     return 0;
 }
 
-int lua_Game_getWidth(lua_State* state)
+static int lua_Game_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1477,7 +1402,7 @@ int lua_Game_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_Game_hasAccelerometer(lua_State* state)
+static int lua_Game_hasAccelerometer(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1512,7 +1437,7 @@ int lua_Game_hasAccelerometer(lua_State* state)
     return 0;
 }
 
-int lua_Game_hasMouse(lua_State* state)
+static int lua_Game_hasMouse(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1547,7 +1472,7 @@ int lua_Game_hasMouse(lua_State* state)
     return 0;
 }
 
-int lua_Game_isCursorVisible(lua_State* state)
+static int lua_Game_isCursorVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1582,7 +1507,7 @@ int lua_Game_isCursorVisible(lua_State* state)
     return 0;
 }
 
-int lua_Game_isGestureRegistered(lua_State* state)
+static int lua_Game_isGestureRegistered(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1621,7 +1546,7 @@ int lua_Game_isGestureRegistered(lua_State* state)
     return 0;
 }
 
-int lua_Game_isGestureSupported(lua_State* state)
+static int lua_Game_isGestureSupported(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1660,7 +1585,7 @@ int lua_Game_isGestureSupported(lua_State* state)
     return 0;
 }
 
-int lua_Game_isInitialized(lua_State* state)
+static int lua_Game_isInitialized(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1695,7 +1620,7 @@ int lua_Game_isInitialized(lua_State* state)
     return 0;
 }
 
-int lua_Game_isMouseCaptured(lua_State* state)
+static int lua_Game_isMouseCaptured(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1730,7 +1655,7 @@ int lua_Game_isMouseCaptured(lua_State* state)
     return 0;
 }
 
-int lua_Game_isMultiSampling(lua_State* state)
+static int lua_Game_isMultiSampling(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1765,7 +1690,7 @@ int lua_Game_isMultiSampling(lua_State* state)
     return 0;
 }
 
-int lua_Game_isMultiTouch(lua_State* state)
+static int lua_Game_isMultiTouch(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1800,7 +1725,7 @@ int lua_Game_isMultiTouch(lua_State* state)
     return 0;
 }
 
-int lua_Game_keyEvent(lua_State* state)
+static int lua_Game_keyEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1840,7 +1765,7 @@ int lua_Game_keyEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_launchURL(lua_State* state)
+static int lua_Game_launchURL(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1879,7 +1804,7 @@ int lua_Game_launchURL(lua_State* state)
     return 0;
 }
 
-int lua_Game_mouseEvent(lua_State* state)
+static int lua_Game_mouseEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1930,7 +1855,7 @@ int lua_Game_mouseEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_pause(lua_State* state)
+static int lua_Game_pause(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1962,7 +1887,7 @@ int lua_Game_pause(lua_State* state)
     return 0;
 }
 
-int lua_Game_registerGesture(lua_State* state)
+static int lua_Game_registerGesture(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1998,7 +1923,7 @@ int lua_Game_registerGesture(lua_State* state)
     return 0;
 }
 
-int lua_Game_resizeEvent(lua_State* state)
+static int lua_Game_resizeEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2038,7 +1963,7 @@ int lua_Game_resizeEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_resume(lua_State* state)
+static int lua_Game_resume(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2070,7 +1995,7 @@ int lua_Game_resume(lua_State* state)
     return 0;
 }
 
-int lua_Game_run(lua_State* state)
+static int lua_Game_run(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2105,7 +2030,7 @@ int lua_Game_run(lua_State* state)
     return 0;
 }
 
-int lua_Game_schedule(lua_State* state)
+static int lua_Game_schedule(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2145,7 +2070,7 @@ int lua_Game_schedule(lua_State* state)
     return 0;
 }
 
-int lua_Game_setCursorVisible(lua_State* state)
+static int lua_Game_setCursorVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2181,7 +2106,7 @@ int lua_Game_setCursorVisible(lua_State* state)
     return 0;
 }
 
-int lua_Game_setMouseCaptured(lua_State* state)
+static int lua_Game_setMouseCaptured(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2217,7 +2142,7 @@ int lua_Game_setMouseCaptured(lua_State* state)
     return 0;
 }
 
-int lua_Game_setMultiSampling(lua_State* state)
+static int lua_Game_setMultiSampling(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2253,7 +2178,7 @@ int lua_Game_setMultiSampling(lua_State* state)
     return 0;
 }
 
-int lua_Game_setMultiTouch(lua_State* state)
+static int lua_Game_setMultiTouch(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2289,7 +2214,7 @@ int lua_Game_setMultiTouch(lua_State* state)
     return 0;
 }
 
-int lua_Game_setViewport(lua_State* state)
+static int lua_Game_setViewport(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2331,7 +2256,7 @@ int lua_Game_setViewport(lua_State* state)
     return 0;
 }
 
-int lua_Game_static_getAbsoluteTime(lua_State* state)
+static int lua_Game_static_getAbsoluteTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2359,7 +2284,7 @@ int lua_Game_static_getAbsoluteTime(lua_State* state)
     return 0;
 }
 
-int lua_Game_static_getGameTime(lua_State* state)
+static int lua_Game_static_getGameTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2387,7 +2312,7 @@ int lua_Game_static_getGameTime(lua_State* state)
     return 0;
 }
 
-int lua_Game_static_getInstance(lua_State* state)
+static int lua_Game_static_getInstance(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2424,7 +2349,7 @@ int lua_Game_static_getInstance(lua_State* state)
     return 0;
 }
 
-int lua_Game_static_isVsync(lua_State* state)
+static int lua_Game_static_isVsync(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2452,7 +2377,7 @@ int lua_Game_static_isVsync(lua_State* state)
     return 0;
 }
 
-int lua_Game_static_setVsync(lua_State* state)
+static int lua_Game_static_setVsync(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2486,7 +2411,7 @@ int lua_Game_static_setVsync(lua_State* state)
     return 0;
 }
 
-int lua_Game_touchEvent(lua_State* state)
+static int lua_Game_touchEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2534,7 +2459,7 @@ int lua_Game_touchEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_unregisterGesture(lua_State* state)
+static int lua_Game_unregisterGesture(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2568,6 +2493,82 @@ int lua_Game_unregisterGesture(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_Game()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"canExit", lua_Game_canExit},
+        {"clear", lua_Game_clear},
+        {"clearSchedule", lua_Game_clearSchedule},
+        {"displayKeyboard", lua_Game_displayKeyboard},
+        {"exit", lua_Game_exit},
+        {"frame", lua_Game_frame},
+        {"gamepadEvent", lua_Game_gamepadEvent},
+        {"gestureDragEvent", lua_Game_gestureDragEvent},
+        {"gestureDropEvent", lua_Game_gestureDropEvent},
+        {"gestureLongTapEvent", lua_Game_gestureLongTapEvent},
+        {"gesturePinchEvent", lua_Game_gesturePinchEvent},
+        {"gestureSwipeEvent", lua_Game_gestureSwipeEvent},
+        {"gestureTapEvent", lua_Game_gestureTapEvent},
+        {"getAIController", lua_Game_getAIController},
+        {"getAccelerometerValues", lua_Game_getAccelerometerValues},
+        {"getAnimationController", lua_Game_getAnimationController},
+        {"getAspectRatio", lua_Game_getAspectRatio},
+        {"getAudioController", lua_Game_getAudioController},
+        {"getAudioListener", lua_Game_getAudioListener},
+        {"getConfig", lua_Game_getConfig},
+        {"getFrameRate", lua_Game_getFrameRate},
+        {"getGamepad", lua_Game_getGamepad},
+        {"getGamepadCount", lua_Game_getGamepadCount},
+        {"getHeight", lua_Game_getHeight},
+        {"getPhysicsController", lua_Game_getPhysicsController},
+        {"getScriptController", lua_Game_getScriptController},
+        {"getSensorValues", lua_Game_getSensorValues},
+        {"getState", lua_Game_getState},
+        {"getViewport", lua_Game_getViewport},
+        {"getWidth", lua_Game_getWidth},
+        {"hasAccelerometer", lua_Game_hasAccelerometer},
+        {"hasMouse", lua_Game_hasMouse},
+        {"isCursorVisible", lua_Game_isCursorVisible},
+        {"isGestureRegistered", lua_Game_isGestureRegistered},
+        {"isGestureSupported", lua_Game_isGestureSupported},
+        {"isInitialized", lua_Game_isInitialized},
+        {"isMouseCaptured", lua_Game_isMouseCaptured},
+        {"isMultiSampling", lua_Game_isMultiSampling},
+        {"isMultiTouch", lua_Game_isMultiTouch},
+        {"keyEvent", lua_Game_keyEvent},
+        {"launchURL", lua_Game_launchURL},
+        {"mouseEvent", lua_Game_mouseEvent},
+        {"pause", lua_Game_pause},
+        {"registerGesture", lua_Game_registerGesture},
+        {"resizeEvent", lua_Game_resizeEvent},
+        {"resume", lua_Game_resume},
+        {"run", lua_Game_run},
+        {"schedule", lua_Game_schedule},
+        {"setCursorVisible", lua_Game_setCursorVisible},
+        {"setMouseCaptured", lua_Game_setMouseCaptured},
+        {"setMultiSampling", lua_Game_setMultiSampling},
+        {"setMultiTouch", lua_Game_setMultiTouch},
+        {"setViewport", lua_Game_setViewport},
+        {"touchEvent", lua_Game_touchEvent},
+        {"unregisterGesture", lua_Game_unregisterGesture},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"getAbsoluteTime", lua_Game_static_getAbsoluteTime},
+        {"getGameTime", lua_Game_static_getGameTime},
+        {"getInstance", lua_Game_static_getInstance},
+        {"isVsync", lua_Game_static_isVsync},
+        {"setVsync", lua_Game_static_setVsync},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Game", lua_members, lua_Game__init, lua_Game__gc, lua_statics, scopePath);
+
 }
 
 }

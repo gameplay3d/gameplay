@@ -5,32 +5,27 @@
 #include "Animation.h"
 #include "AnimationTarget.h"
 #include "Base.h"
+#include "Button.h"
+#include "CheckBox.h"
+#include "Container.h"
 #include "Control.h"
 #include "Form.h"
 #include "Game.h"
+#include "ImageControl.h"
+#include "JoystickControl.h"
+#include "Label.h"
 #include "MaterialParameter.h"
 #include "Node.h"
+#include "RadioButton.h"
 #include "Ref.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Slider.h"
+#include "TextBox.h"
 #include "Theme.h"
 
 namespace gameplay
 {
-
-void luaRegister_ControlListener()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"controlEvent", lua_ControlListener_controlEvent},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("Control");
-
-    gameplay::ScriptUtil::registerClass("ControlListener", lua_members, NULL, lua_ControlListener__gc, lua_statics, scopePath);
-}
 
 static Control::Listener* getInstance(lua_State* state)
 {
@@ -39,7 +34,7 @@ static Control::Listener* getInstance(lua_State* state)
     return (Control::Listener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_ControlListener__gc(lua_State* state)
+static int lua_ControlListener__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -77,7 +72,7 @@ int lua_ControlListener__gc(lua_State* state)
     return 0;
 }
 
-int lua_ControlListener_controlEvent(lua_State* state)
+static int lua_ControlListener_controlEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -121,6 +116,21 @@ int lua_ControlListener_controlEvent(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_ControlListener()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"controlEvent", lua_ControlListener_controlEvent},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("Control");
+
+    gameplay::ScriptUtil::registerClass("ControlListener", lua_members, NULL, lua_ControlListener__gc, lua_statics, scopePath);
+
 }
 
 }

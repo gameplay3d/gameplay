@@ -136,67 +136,8 @@ ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type
         lua_pushnil(sc->_lua);
         for (; lua_next(sc->_lua, index) != 0 && i < size; i++)
         {
-            // Process each item in the array - make sure they are of valid types.
-            void* p = lua_touserdata(sc->_lua, -1);
-            if (p == NULL)
-            {
-                arr.set(i, (T*)NULL);
-            }
-            else
-            {
-                bool foundMatch = false;
-
-                // Push array element metatable.
-                if (lua_getmetatable(sc->_lua, -1))
-                {
-                    // Push param type metatable.
-                    luaL_getmetatable(sc->_lua, type);
-                    if (lua_rawequal(sc->_lua, -1, -2))
-                    {
-                        // Pop param type metatable.
-                        lua_pop(sc->_lua, 1);
-
-                        // Matched the declared parameter type.
-                        arr.set(i, (T*)((ScriptUtil::LuaObject*)p)->instance);
-                        foundMatch = true;
-                    }
-                    else
-                    {
-                        // Pop param type metatable.
-                        lua_pop(sc->_lua, 1);
-
-                        // Check if it matches any of the derived types' metatables.
-                        const std::vector<std::string>& types = sc->_hierarchy[type];
-                        for (size_t k = 0, count = types.size(); k < count; k++)
-                        {
-                            // Push dervied type metatable.
-                            luaL_getmetatable(sc->_lua, types[k].c_str());
-                            if (lua_rawequal(sc->_lua, -1, -2))
-                            {
-                                // Pop derived type metatable.
-                                lua_pop(sc->_lua, 1);
-
-                                // Matched a derived type.
-                                arr.set(i, (T*)((ScriptUtil::LuaObject*)p)->instance);
-                                foundMatch = true;
-                                break;
-                            }
-                            // Pop derived type metatable
-                            lua_pop(sc->_lua, 1);
-                        }
-                    }
-
-                    // Pop array element metatable.
-                    lua_pop(sc->_lua, 1);
-                }
-
-                if (!foundMatch)
-                {
-                    GP_WARN("Invalid type passed for an array element for parameter index %d.", index);
-                    arr.set(i, (T*)NULL);
-                    *success = false;
-                }
-            }
+            void* p = getUserDataObjectPointer(-1, type);
+            arr.set(i, (T*)p);
 
             // Pop 'value' and key 'key' for lua_next.
             lua_pop(sc->_lua, 1);
@@ -206,113 +147,77 @@ ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type
     }
 
     // Type is not nil and not a table, so it should be USERDATA.
-    void* p = lua_touserdata(sc->_lua, index);
-    if (p != NULL)
+    void* p = getUserDataObjectPointer(index, type);
+    if (p == NULL && nonNull)
     {
-        // Push object metatable.
-        if (lua_getmetatable(sc->_lua, index))
-        {
-            // Push param type metatable.
-            luaL_getmetatable(sc->_lua, type);
-            if (lua_rawequal(sc->_lua, -1, -2))
-            {
-                // Pop both metatables.
-                lua_pop(sc->_lua, 2);
-
-                T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
-                if (ptr == NULL && nonNull)
-                {
-                    GP_WARN("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
-                    return LuaArray<T>((T*)NULL);
-                }
-
-                // Type is valid.
-                *success = true;
-                return LuaArray<T>(ptr);
-            }
-            // Pop param type metable.
-            lua_pop(sc->_lua, 1);
-
-            // Check if it matches any of the derived types' metatables.
-            const std::vector<std::string>& types = sc->_hierarchy[type];
-            for (size_t i = 0, count = types.size(); i < count; i++)
-            {
-                // Push derived type metatable.
-                luaL_getmetatable(sc->_lua, types[i].c_str());
-                if (lua_rawequal(sc->_lua, -1, -2))
-                {
-                    // Pop both metatables.
-                    lua_pop(sc->_lua, 2);
-
-                    T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
-                    if (ptr == NULL && nonNull)
-                    {
-                        GP_WARN("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
-                        return LuaArray<T>((T*)NULL);
-                    }
-
-                    // Type is valid (matches a derived type).
-                    *success = true;
-                    return LuaArray<T>(ptr);
-                }
-                // Pop derived type metatable.
-                lua_pop(sc->_lua, 1);
-            }
-
-            // Pop object metatable.
-            lua_pop(sc->_lua, 1);
-        }
+        GP_WARN("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
+        return LuaArray<T>((T*)NULL);
+    }
+    else
+    {
+        *success = true;
     }
 
-    // If we made it here, type was not nil, and it could not be mapped to a valid object pointer.
-    //GP_WARN("Failed to retrieve a valid object pointer of type '%s' for parameter %d.", type, index);
-
-    return LuaArray<T>((T*)NULL);
+    return LuaArray<T>((T*)p);
 }
 
-template<typename T> T ScriptController::executeFunction(const char* func)
+template<typename T> bool ScriptController::executeFunction(const char* func, T* out)
 {
-    return executeFunction<T>((Script*)NULL, func);
+    return executeFunction<T>((Script*)NULL, func, out);
 }
 
-template<typename T> T ScriptController::executeFunction(Script* script, const char* func)
+template<typename T> bool ScriptController::executeFunction(Script* script, const char* func, T* out)
 {
-    executeFunctionHelper(1, func, NULL, NULL, script);
-    T value = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
-    lua_pop(_lua, -1);
-    return value;
+    // Userdata / object type expected - all other return types have template specializations.
+    // Non-userdata types will return NULL.
+    int top = lua_gettop(_lua);
+    bool success = executeFunctionHelper(1, func, NULL, NULL, script);
+    if (out && success)
+        *out = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
+    lua_settop(_lua, top);
+    return success;
 }
 
-template<typename T> T ScriptController::executeFunction(const char* func, const char* args, ...)
-{
-    va_list list;
-    va_start(list, args);
-    T value = executeFunction<T>((Script*)NULL, func, args, list);
-    va_end(list);
-    return value;
-}
-
-template<typename T> T ScriptController::executeFunction(Script* script, const char* func, const char* args, ...)
+template<typename T> bool ScriptController::executeFunction(const char* func, const char* args, T* out, ...)
 {
     va_list list;
-    va_start(list, args);
-    T value = executeFunction<T>(script, func, args, list);
+    va_start(list, out);
+    bool success = executeFunction<T>((Script*)NULL, func, args, out, list);
     va_end(list);
-    return value;
+    return success;
 }
 
-template<typename T> T ScriptController::executeFunction(const char* func, const char* args, va_list* list)
+template<typename T> bool ScriptController::executeFunction(Script* script, const char* func, const char* args, T* out, ...)
 {
-    return executeFunctionHelper(1, func, args, list, (Script*)NULL);
+    va_list list;
+    va_start(list, out);
+    bool success = executeFunction<T>(script, func, args, out, list);
+    va_end(list);
+    return success;
 }
 
-template<typename T> T ScriptController::executeFunction(Script* script, const char* func, const char* args, va_list* list)
+template<typename T> bool ScriptController::executeFunction(const char* func, const char* args, T* out, va_list* list)
 {
-    executeFunctionHelper(1, func, args, list, script);
+    // Userdata / object type expected - all other return types have template specializations.
+    // Non-userdata types will return NULL.
+    int top = lua_gettop(_lua);
+    bool success = executeFunctionHelper(1, func, args, list, (Script*)NULL);
+    if (out && success)
+        *out = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
+    lua_settop(_lua, top);
+    return success;
+}
 
-    T value = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
-    lua_pop(_lua, -1);
-    return value;
+template<typename T> bool ScriptController::executeFunction(Script* script, const char* func, const char* args, T* out, va_list* list)
+{
+    // Userdata / object type expected - all other return types have template specializations.
+    // Non-userdata types will return NULL.
+    int top = lua_gettop(_lua);
+    bool success = executeFunctionHelper(1, func, args, list, script);
+    if (out && success)
+        *out = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
+    lua_settop(_lua, top);
+    return success;
 }
 
 }

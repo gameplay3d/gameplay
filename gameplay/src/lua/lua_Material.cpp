@@ -14,41 +14,12 @@
 #include "RenderState.h"
 #include "Scene.h"
 #include "Technique.h"
+#include "RenderState.h"
 
 namespace gameplay
 {
 
-void luaRegister_Material()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addParameter", lua_Material_addParameter},
-        {"addRef", lua_Material_addRef},
-        {"getParameter", lua_Material_getParameter},
-        {"getParameterByIndex", lua_Material_getParameterByIndex},
-        {"getParameterCount", lua_Material_getParameterCount},
-        {"getRefCount", lua_Material_getRefCount},
-        {"getStateBlock", lua_Material_getStateBlock},
-        {"getTechnique", lua_Material_getTechnique},
-        {"getTechniqueByIndex", lua_Material_getTechniqueByIndex},
-        {"getTechniqueCount", lua_Material_getTechniqueCount},
-        {"release", lua_Material_release},
-        {"removeParameter", lua_Material_removeParameter},
-        {"setNodeBinding", lua_Material_setNodeBinding},
-        {"setParameterAutoBinding", lua_Material_setParameterAutoBinding},
-        {"setStateBlock", lua_Material_setStateBlock},
-        {"setTechnique", lua_Material_setTechnique},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_Material_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Material", lua_members, NULL, lua_Material__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Material* getInstance(lua_State* state)
 {
@@ -57,7 +28,7 @@ static Material* getInstance(lua_State* state)
     return (Material*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Material__gc(lua_State* state)
+static int lua_Material__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -95,7 +66,7 @@ int lua_Material__gc(lua_State* state)
     return 0;
 }
 
-int lua_Material_addParameter(lua_State* state)
+static int lua_Material_addParameter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -137,7 +108,7 @@ int lua_Material_addParameter(lua_State* state)
     return 0;
 }
 
-int lua_Material_addRef(lua_State* state)
+static int lua_Material_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -169,7 +140,7 @@ int lua_Material_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Material_getParameter(lua_State* state)
+static int lua_Material_getParameter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -217,7 +188,7 @@ int lua_Material_getParameter(lua_State* state)
     return 0;
 }
 
-int lua_Material_getParameterByIndex(lua_State* state)
+static int lua_Material_getParameterByIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -265,7 +236,7 @@ int lua_Material_getParameterByIndex(lua_State* state)
     return 0;
 }
 
-int lua_Material_getParameterCount(lua_State* state)
+static int lua_Material_getParameterCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -300,7 +271,7 @@ int lua_Material_getParameterCount(lua_State* state)
     return 0;
 }
 
-int lua_Material_getRefCount(lua_State* state)
+static int lua_Material_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -335,7 +306,7 @@ int lua_Material_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Material_getStateBlock(lua_State* state)
+static int lua_Material_getStateBlock(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -379,7 +350,7 @@ int lua_Material_getStateBlock(lua_State* state)
     return 0;
 }
 
-int lua_Material_getTechnique(lua_State* state)
+static int lua_Material_getTechnique(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -459,7 +430,7 @@ int lua_Material_getTechnique(lua_State* state)
     return 0;
 }
 
-int lua_Material_getTechniqueByIndex(lua_State* state)
+static int lua_Material_getTechniqueByIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -507,7 +478,7 @@ int lua_Material_getTechniqueByIndex(lua_State* state)
     return 0;
 }
 
-int lua_Material_getTechniqueCount(lua_State* state)
+static int lua_Material_getTechniqueCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -542,7 +513,7 @@ int lua_Material_getTechniqueCount(lua_State* state)
     return 0;
 }
 
-int lua_Material_release(lua_State* state)
+static int lua_Material_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -574,7 +545,7 @@ int lua_Material_release(lua_State* state)
     return 0;
 }
 
-int lua_Material_removeParameter(lua_State* state)
+static int lua_Material_removeParameter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -610,7 +581,7 @@ int lua_Material_removeParameter(lua_State* state)
     return 0;
 }
 
-int lua_Material_setNodeBinding(lua_State* state)
+static int lua_Material_setNodeBinding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -652,7 +623,7 @@ int lua_Material_setNodeBinding(lua_State* state)
     return 0;
 }
 
-int lua_Material_setParameterAutoBinding(lua_State* state)
+static int lua_Material_setParameterAutoBinding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -714,7 +685,7 @@ int lua_Material_setParameterAutoBinding(lua_State* state)
     return 0;
 }
 
-int lua_Material_setStateBlock(lua_State* state)
+static int lua_Material_setStateBlock(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -756,7 +727,7 @@ int lua_Material_setStateBlock(lua_State* state)
     return 0;
 }
 
-int lua_Material_setTechnique(lua_State* state)
+static int lua_Material_setTechnique(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -792,7 +763,7 @@ int lua_Material_setTechnique(lua_State* state)
     return 0;
 }
 
-int lua_Material_static_create(lua_State* state)
+static int lua_Material_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -969,6 +940,85 @@ int lua_Material_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Material
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Material* ptrObject = reinterpret_cast<Material*>(ptr);
+
+    if (strcmp(typeName, "RenderState") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<RenderState*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Material_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Material_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Material* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Material()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addParameter", lua_Material_addParameter},
+        {"addRef", lua_Material_addRef},
+        {"getParameter", lua_Material_getParameter},
+        {"getParameterByIndex", lua_Material_getParameterByIndex},
+        {"getParameterCount", lua_Material_getParameterCount},
+        {"getRefCount", lua_Material_getRefCount},
+        {"getStateBlock", lua_Material_getStateBlock},
+        {"getTechnique", lua_Material_getTechnique},
+        {"getTechniqueByIndex", lua_Material_getTechniqueByIndex},
+        {"getTechniqueCount", lua_Material_getTechniqueCount},
+        {"release", lua_Material_release},
+        {"removeParameter", lua_Material_removeParameter},
+        {"setNodeBinding", lua_Material_setNodeBinding},
+        {"setParameterAutoBinding", lua_Material_setParameterAutoBinding},
+        {"setStateBlock", lua_Material_setStateBlock},
+        {"setTechnique", lua_Material_setTechnique},
+        {"to", lua_Material_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_Material_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Material", lua_members, NULL, lua_Material__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Material", __convertTo);
 }
 
 }

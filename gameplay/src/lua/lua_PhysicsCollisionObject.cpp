@@ -13,33 +13,15 @@
 #include "PhysicsVehicle.h"
 #include "PhysicsVehicleWheel.h"
 #include "ScriptController.h"
+#include "PhysicsGhostObject.h"
+#include "PhysicsRigidBody.h"
+#include "PhysicsVehicle.h"
+#include "PhysicsVehicleWheel.h"
 
 namespace gameplay
 {
 
-void luaRegister_PhysicsCollisionObject()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addCollisionListener", lua_PhysicsCollisionObject_addCollisionListener},
-        {"collidesWith", lua_PhysicsCollisionObject_collidesWith},
-        {"getCollisionShape", lua_PhysicsCollisionObject_getCollisionShape},
-        {"getNode", lua_PhysicsCollisionObject_getNode},
-        {"getShapeType", lua_PhysicsCollisionObject_getShapeType},
-        {"getType", lua_PhysicsCollisionObject_getType},
-        {"isDynamic", lua_PhysicsCollisionObject_isDynamic},
-        {"isEnabled", lua_PhysicsCollisionObject_isEnabled},
-        {"isKinematic", lua_PhysicsCollisionObject_isKinematic},
-        {"isStatic", lua_PhysicsCollisionObject_isStatic},
-        {"removeCollisionListener", lua_PhysicsCollisionObject_removeCollisionListener},
-        {"setEnabled", lua_PhysicsCollisionObject_setEnabled},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("PhysicsCollisionObject", lua_members, NULL, lua_PhysicsCollisionObject__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static PhysicsCollisionObject* getInstance(lua_State* state)
 {
@@ -48,7 +30,7 @@ static PhysicsCollisionObject* getInstance(lua_State* state)
     return (PhysicsCollisionObject*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsCollisionObject__gc(lua_State* state)
+static int lua_PhysicsCollisionObject__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -86,7 +68,7 @@ int lua_PhysicsCollisionObject__gc(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_addCollisionListener(lua_State* state)
+static int lua_PhysicsCollisionObject_addCollisionListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -196,7 +178,7 @@ int lua_PhysicsCollisionObject_addCollisionListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_collidesWith(lua_State* state)
+static int lua_PhysicsCollisionObject_collidesWith(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -241,7 +223,7 @@ int lua_PhysicsCollisionObject_collidesWith(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_getCollisionShape(lua_State* state)
+static int lua_PhysicsCollisionObject_getCollisionShape(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -285,7 +267,7 @@ int lua_PhysicsCollisionObject_getCollisionShape(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_getNode(lua_State* state)
+static int lua_PhysicsCollisionObject_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -329,7 +311,7 @@ int lua_PhysicsCollisionObject_getNode(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_getShapeType(lua_State* state)
+static int lua_PhysicsCollisionObject_getShapeType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -364,7 +346,7 @@ int lua_PhysicsCollisionObject_getShapeType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_getType(lua_State* state)
+static int lua_PhysicsCollisionObject_getType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -399,7 +381,7 @@ int lua_PhysicsCollisionObject_getType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_isDynamic(lua_State* state)
+static int lua_PhysicsCollisionObject_isDynamic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -434,7 +416,7 @@ int lua_PhysicsCollisionObject_isDynamic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_isEnabled(lua_State* state)
+static int lua_PhysicsCollisionObject_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -469,7 +451,7 @@ int lua_PhysicsCollisionObject_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_isKinematic(lua_State* state)
+static int lua_PhysicsCollisionObject_isKinematic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -504,7 +486,7 @@ int lua_PhysicsCollisionObject_isKinematic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_isStatic(lua_State* state)
+static int lua_PhysicsCollisionObject_isStatic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -539,7 +521,7 @@ int lua_PhysicsCollisionObject_isStatic(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_removeCollisionListener(lua_State* state)
+static int lua_PhysicsCollisionObject_removeCollisionListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -649,7 +631,7 @@ int lua_PhysicsCollisionObject_removeCollisionListener(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsCollisionObject_setEnabled(lua_State* state)
+static int lua_PhysicsCollisionObject_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -683,6 +665,89 @@ int lua_PhysicsCollisionObject_setEnabled(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of PhysicsCollisionObject
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    PhysicsCollisionObject* ptrObject = reinterpret_cast<PhysicsCollisionObject*>(ptr);
+
+    if (strcmp(typeName, "PhysicsGhostObject") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsGhostObject*>(ptrObject));
+    }
+    else if (strcmp(typeName, "PhysicsRigidBody") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsRigidBody*>(ptrObject));
+    }
+    else if (strcmp(typeName, "PhysicsVehicle") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsVehicle*>(ptrObject));
+    }
+    else if (strcmp(typeName, "PhysicsVehicleWheel") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsVehicleWheel*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_PhysicsCollisionObject_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_PhysicsCollisionObject_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    PhysicsCollisionObject* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_PhysicsCollisionObject()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addCollisionListener", lua_PhysicsCollisionObject_addCollisionListener},
+        {"collidesWith", lua_PhysicsCollisionObject_collidesWith},
+        {"getCollisionShape", lua_PhysicsCollisionObject_getCollisionShape},
+        {"getNode", lua_PhysicsCollisionObject_getNode},
+        {"getShapeType", lua_PhysicsCollisionObject_getShapeType},
+        {"getType", lua_PhysicsCollisionObject_getType},
+        {"isDynamic", lua_PhysicsCollisionObject_isDynamic},
+        {"isEnabled", lua_PhysicsCollisionObject_isEnabled},
+        {"isKinematic", lua_PhysicsCollisionObject_isKinematic},
+        {"isStatic", lua_PhysicsCollisionObject_isStatic},
+        {"removeCollisionListener", lua_PhysicsCollisionObject_removeCollisionListener},
+        {"setEnabled", lua_PhysicsCollisionObject_setEnabled},
+        {"to", lua_PhysicsCollisionObject_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("PhysicsCollisionObject", lua_members, NULL, lua_PhysicsCollisionObject__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("PhysicsCollisionObject", __convertTo);
 }
 
 }

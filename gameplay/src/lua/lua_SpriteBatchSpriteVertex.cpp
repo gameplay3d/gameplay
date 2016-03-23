@@ -10,28 +10,6 @@
 namespace gameplay
 {
 
-void luaRegister_SpriteBatchSpriteVertex()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"a", lua_SpriteBatchSpriteVertex_a},
-        {"b", lua_SpriteBatchSpriteVertex_b},
-        {"g", lua_SpriteBatchSpriteVertex_g},
-        {"r", lua_SpriteBatchSpriteVertex_r},
-        {"u", lua_SpriteBatchSpriteVertex_u},
-        {"v", lua_SpriteBatchSpriteVertex_v},
-        {"x", lua_SpriteBatchSpriteVertex_x},
-        {"y", lua_SpriteBatchSpriteVertex_y},
-        {"z", lua_SpriteBatchSpriteVertex_z},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("SpriteBatch");
-
-    gameplay::ScriptUtil::registerClass("SpriteBatchSpriteVertex", lua_members, lua_SpriteBatchSpriteVertex__init, lua_SpriteBatchSpriteVertex__gc, lua_statics, scopePath);
-}
-
 static SpriteBatch::SpriteVertex* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "SpriteBatchSpriteVertex");
@@ -39,7 +17,7 @@ static SpriteBatch::SpriteVertex* getInstance(lua_State* state)
     return (SpriteBatch::SpriteVertex*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_SpriteBatchSpriteVertex__gc(lua_State* state)
+static int lua_SpriteBatchSpriteVertex__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -77,7 +55,7 @@ int lua_SpriteBatchSpriteVertex__gc(lua_State* state)
     return 0;
 }
 
-int lua_SpriteBatchSpriteVertex__init(lua_State* state)
+static int lua_SpriteBatchSpriteVertex__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -114,7 +92,7 @@ int lua_SpriteBatchSpriteVertex__init(lua_State* state)
     return 0;
 }
 
-int lua_SpriteBatchSpriteVertex_a(lua_State* state)
+static int lua_SpriteBatchSpriteVertex_a(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -143,7 +121,7 @@ int lua_SpriteBatchSpriteVertex_a(lua_State* state)
     }
 }
 
-int lua_SpriteBatchSpriteVertex_b(lua_State* state)
+static int lua_SpriteBatchSpriteVertex_b(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -172,7 +150,7 @@ int lua_SpriteBatchSpriteVertex_b(lua_State* state)
     }
 }
 
-int lua_SpriteBatchSpriteVertex_g(lua_State* state)
+static int lua_SpriteBatchSpriteVertex_g(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -201,7 +179,7 @@ int lua_SpriteBatchSpriteVertex_g(lua_State* state)
     }
 }
 
-int lua_SpriteBatchSpriteVertex_r(lua_State* state)
+static int lua_SpriteBatchSpriteVertex_r(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -230,7 +208,7 @@ int lua_SpriteBatchSpriteVertex_r(lua_State* state)
     }
 }
 
-int lua_SpriteBatchSpriteVertex_u(lua_State* state)
+static int lua_SpriteBatchSpriteVertex_u(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -259,7 +237,7 @@ int lua_SpriteBatchSpriteVertex_u(lua_State* state)
     }
 }
 
-int lua_SpriteBatchSpriteVertex_v(lua_State* state)
+static int lua_SpriteBatchSpriteVertex_v(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -288,7 +266,7 @@ int lua_SpriteBatchSpriteVertex_v(lua_State* state)
     }
 }
 
-int lua_SpriteBatchSpriteVertex_x(lua_State* state)
+static int lua_SpriteBatchSpriteVertex_x(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -317,7 +295,7 @@ int lua_SpriteBatchSpriteVertex_x(lua_State* state)
     }
 }
 
-int lua_SpriteBatchSpriteVertex_y(lua_State* state)
+static int lua_SpriteBatchSpriteVertex_y(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -346,7 +324,7 @@ int lua_SpriteBatchSpriteVertex_y(lua_State* state)
     }
 }
 
-int lua_SpriteBatchSpriteVertex_z(lua_State* state)
+static int lua_SpriteBatchSpriteVertex_z(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -373,6 +351,29 @@ int lua_SpriteBatchSpriteVertex_z(lua_State* state)
 
         return 1;
     }
+}
+
+void luaRegister_SpriteBatchSpriteVertex()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"a", lua_SpriteBatchSpriteVertex_a},
+        {"b", lua_SpriteBatchSpriteVertex_b},
+        {"g", lua_SpriteBatchSpriteVertex_g},
+        {"r", lua_SpriteBatchSpriteVertex_r},
+        {"u", lua_SpriteBatchSpriteVertex_u},
+        {"v", lua_SpriteBatchSpriteVertex_v},
+        {"x", lua_SpriteBatchSpriteVertex_x},
+        {"y", lua_SpriteBatchSpriteVertex_y},
+        {"z", lua_SpriteBatchSpriteVertex_z},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("SpriteBatch");
+
+    gameplay::ScriptUtil::registerClass("SpriteBatchSpriteVertex", lua_members, lua_SpriteBatchSpriteVertex__init, lua_SpriteBatchSpriteVertex__gc, lua_statics, scopePath);
+
 }
 
 }

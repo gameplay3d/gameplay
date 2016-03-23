@@ -524,11 +524,13 @@ private:
     Properties();
 
     /**
-     * Constructs the Properties class from a file.
-     *
-     * @param stream The stream used for reading the properties from file.
+     * Constructor.
      */
     Properties(Stream* stream);
+
+    /**
+     * Constructor.
+     */
     Properties(const Properties& copy);
 
     /**
@@ -538,21 +540,20 @@ private:
 
     void readProperties(Stream* stream);
 
+    void setDirectoryPath(const std::string* path);
+
+    void setDirectoryPath(const std::string& path);
+
     void skipWhiteSpace(Stream* stream);
 
     char* trimWhiteSpace(char* str);
 
-    // Called after create(); copies info from parents into derived namespaces.
-    void resolveInheritance(const char* id = NULL);
-
-    // Called by resolveInheritance().
-    void mergeWith(Properties* overrides);
-
-    // Clones the Properties object.
     Properties* clone();
 
-    void setDirectoryPath(const std::string* path);
-    void setDirectoryPath(const std::string& path);
+    void mergeWith(Properties* overrides);
+
+    // Called after create(); copies info from parents into derived namespaces.
+    void resolveInheritance(const char* id = NULL);
 
     std::string _namespace;
     std::string _id;

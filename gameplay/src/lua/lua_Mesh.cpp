@@ -10,48 +10,12 @@
 #include "MeshPart.h"
 #include "Model.h"
 #include "Ref.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_Mesh()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addPart", lua_Mesh_addPart},
-        {"addRef", lua_Mesh_addRef},
-        {"getBoundingBox", lua_Mesh_getBoundingBox},
-        {"getBoundingSphere", lua_Mesh_getBoundingSphere},
-        {"getPart", lua_Mesh_getPart},
-        {"getPartCount", lua_Mesh_getPartCount},
-        {"getPrimitiveType", lua_Mesh_getPrimitiveType},
-        {"getRefCount", lua_Mesh_getRefCount},
-        {"getUrl", lua_Mesh_getUrl},
-        {"getVertexBuffer", lua_Mesh_getVertexBuffer},
-        {"getVertexCount", lua_Mesh_getVertexCount},
-        {"getVertexFormat", lua_Mesh_getVertexFormat},
-        {"getVertexSize", lua_Mesh_getVertexSize},
-        {"isDynamic", lua_Mesh_isDynamic},
-        {"release", lua_Mesh_release},
-        {"setBoundingBox", lua_Mesh_setBoundingBox},
-        {"setBoundingSphere", lua_Mesh_setBoundingSphere},
-        {"setPrimitiveType", lua_Mesh_setPrimitiveType},
-        {"setVertexData", lua_Mesh_setVertexData},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"createBoundingBox", lua_Mesh_static_createBoundingBox},
-        {"createLines", lua_Mesh_static_createLines},
-        {"createMesh", lua_Mesh_static_createMesh},
-        {"createQuad", lua_Mesh_static_createQuad},
-        {"createQuadFullscreen", lua_Mesh_static_createQuadFullscreen},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Mesh", lua_members, NULL, lua_Mesh__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Mesh* getInstance(lua_State* state)
 {
@@ -60,7 +24,7 @@ static Mesh* getInstance(lua_State* state)
     return (Mesh*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Mesh__gc(lua_State* state)
+static int lua_Mesh__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -98,7 +62,7 @@ int lua_Mesh__gc(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_addPart(lua_State* state)
+static int lua_Mesh_addPart(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -196,7 +160,7 @@ int lua_Mesh_addPart(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_addRef(lua_State* state)
+static int lua_Mesh_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -228,7 +192,7 @@ int lua_Mesh_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getBoundingBox(lua_State* state)
+static int lua_Mesh_getBoundingBox(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -272,7 +236,7 @@ int lua_Mesh_getBoundingBox(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getBoundingSphere(lua_State* state)
+static int lua_Mesh_getBoundingSphere(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -316,7 +280,7 @@ int lua_Mesh_getBoundingSphere(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getPart(lua_State* state)
+static int lua_Mesh_getPart(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -364,7 +328,7 @@ int lua_Mesh_getPart(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getPartCount(lua_State* state)
+static int lua_Mesh_getPartCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -399,7 +363,7 @@ int lua_Mesh_getPartCount(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getPrimitiveType(lua_State* state)
+static int lua_Mesh_getPrimitiveType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -434,7 +398,7 @@ int lua_Mesh_getPrimitiveType(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getRefCount(lua_State* state)
+static int lua_Mesh_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -469,7 +433,7 @@ int lua_Mesh_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getUrl(lua_State* state)
+static int lua_Mesh_getUrl(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -504,7 +468,7 @@ int lua_Mesh_getUrl(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getVertexBuffer(lua_State* state)
+static int lua_Mesh_getVertexBuffer(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -548,7 +512,7 @@ int lua_Mesh_getVertexBuffer(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getVertexCount(lua_State* state)
+static int lua_Mesh_getVertexCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -583,7 +547,7 @@ int lua_Mesh_getVertexCount(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getVertexFormat(lua_State* state)
+static int lua_Mesh_getVertexFormat(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -627,7 +591,7 @@ int lua_Mesh_getVertexFormat(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_getVertexSize(lua_State* state)
+static int lua_Mesh_getVertexSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -662,7 +626,7 @@ int lua_Mesh_getVertexSize(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_isDynamic(lua_State* state)
+static int lua_Mesh_isDynamic(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -697,7 +661,7 @@ int lua_Mesh_isDynamic(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_release(lua_State* state)
+static int lua_Mesh_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -729,7 +693,7 @@ int lua_Mesh_release(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_setBoundingBox(lua_State* state)
+static int lua_Mesh_setBoundingBox(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -771,7 +735,7 @@ int lua_Mesh_setBoundingBox(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_setBoundingSphere(lua_State* state)
+static int lua_Mesh_setBoundingSphere(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -813,7 +777,7 @@ int lua_Mesh_setBoundingSphere(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_setPrimitiveType(lua_State* state)
+static int lua_Mesh_setPrimitiveType(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -849,7 +813,7 @@ int lua_Mesh_setPrimitiveType(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_setVertexData(lua_State* state)
+static int lua_Mesh_setVertexData(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -933,7 +897,7 @@ int lua_Mesh_setVertexData(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_static_createBoundingBox(lua_State* state)
+static int lua_Mesh_static_createBoundingBox(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -985,7 +949,7 @@ int lua_Mesh_static_createBoundingBox(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_static_createLines(lua_State* state)
+static int lua_Mesh_static_createLines(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1041,7 +1005,7 @@ int lua_Mesh_static_createLines(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_static_createMesh(lua_State* state)
+static int lua_Mesh_static_createMesh(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1139,7 +1103,7 @@ int lua_Mesh_static_createMesh(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_static_createQuad(lua_State* state)
+static int lua_Mesh_static_createQuad(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1461,7 +1425,7 @@ int lua_Mesh_static_createQuad(lua_State* state)
     return 0;
 }
 
-int lua_Mesh_static_createQuadFullscreen(lua_State* state)
+static int lua_Mesh_static_createQuadFullscreen(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1496,6 +1460,92 @@ int lua_Mesh_static_createQuadFullscreen(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Mesh
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Mesh* ptrObject = reinterpret_cast<Mesh*>(ptr);
+
+    if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Mesh_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Mesh_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Mesh* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Mesh()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addPart", lua_Mesh_addPart},
+        {"addRef", lua_Mesh_addRef},
+        {"getBoundingBox", lua_Mesh_getBoundingBox},
+        {"getBoundingSphere", lua_Mesh_getBoundingSphere},
+        {"getPart", lua_Mesh_getPart},
+        {"getPartCount", lua_Mesh_getPartCount},
+        {"getPrimitiveType", lua_Mesh_getPrimitiveType},
+        {"getRefCount", lua_Mesh_getRefCount},
+        {"getUrl", lua_Mesh_getUrl},
+        {"getVertexBuffer", lua_Mesh_getVertexBuffer},
+        {"getVertexCount", lua_Mesh_getVertexCount},
+        {"getVertexFormat", lua_Mesh_getVertexFormat},
+        {"getVertexSize", lua_Mesh_getVertexSize},
+        {"isDynamic", lua_Mesh_isDynamic},
+        {"release", lua_Mesh_release},
+        {"setBoundingBox", lua_Mesh_setBoundingBox},
+        {"setBoundingSphere", lua_Mesh_setBoundingSphere},
+        {"setPrimitiveType", lua_Mesh_setPrimitiveType},
+        {"setVertexData", lua_Mesh_setVertexData},
+        {"to", lua_Mesh_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"createBoundingBox", lua_Mesh_static_createBoundingBox},
+        {"createLines", lua_Mesh_static_createLines},
+        {"createMesh", lua_Mesh_static_createMesh},
+        {"createQuad", lua_Mesh_static_createQuad},
+        {"createQuadFullscreen", lua_Mesh_static_createQuadFullscreen},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Mesh", lua_members, NULL, lua_Mesh__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Mesh", __convertTo);
 }
 
 }

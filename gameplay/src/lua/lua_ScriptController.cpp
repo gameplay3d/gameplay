@@ -9,25 +9,6 @@
 namespace gameplay
 {
 
-void luaRegister_ScriptController()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"functionExists", lua_ScriptController_functionExists},
-        {"getCurrentScript", lua_ScriptController_getCurrentScript},
-        {"loadScript", lua_ScriptController_loadScript},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"print", lua_ScriptController_static_print},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("ScriptController", lua_members, NULL, NULL, lua_statics, scopePath);
-}
-
 static ScriptController* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "ScriptController");
@@ -35,7 +16,7 @@ static ScriptController* getInstance(lua_State* state)
     return (ScriptController*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_ScriptController_functionExists(lua_State* state)
+static int lua_ScriptController_functionExists(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -105,7 +86,7 @@ int lua_ScriptController_functionExists(lua_State* state)
     return 0;
 }
 
-int lua_ScriptController_getCurrentScript(lua_State* state)
+static int lua_ScriptController_getCurrentScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -149,7 +130,7 @@ int lua_ScriptController_getCurrentScript(lua_State* state)
     return 0;
 }
 
-int lua_ScriptController_loadScript(lua_State* state)
+static int lua_ScriptController_loadScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -269,7 +250,7 @@ int lua_ScriptController_loadScript(lua_State* state)
     return 0;
 }
 
-int lua_ScriptController_static_print(lua_State* state)
+static int lua_ScriptController_static_print(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -327,6 +308,26 @@ int lua_ScriptController_static_print(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_ScriptController()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"functionExists", lua_ScriptController_functionExists},
+        {"getCurrentScript", lua_ScriptController_getCurrentScript},
+        {"loadScript", lua_ScriptController_loadScript},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"print", lua_ScriptController_static_print},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("ScriptController", lua_members, NULL, NULL, lua_statics, scopePath);
+
 }
 
 }

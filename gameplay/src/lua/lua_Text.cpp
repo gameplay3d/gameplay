@@ -13,56 +13,14 @@
 #include "Ref.h"
 #include "Scene.h"
 #include "Text.h"
+#include "AnimationTarget.h"
+#include "Drawable.h"
+#include "Ref.h"
 
 namespace gameplay
 {
 
-void luaRegister_Text()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addRef", lua_Text_addRef},
-        {"createAnimation", lua_Text_createAnimation},
-        {"createAnimationFromBy", lua_Text_createAnimationFromBy},
-        {"createAnimationFromTo", lua_Text_createAnimationFromTo},
-        {"destroyAnimation", lua_Text_destroyAnimation},
-        {"draw", lua_Text_draw},
-        {"getAnimation", lua_Text_getAnimation},
-        {"getClip", lua_Text_getClip},
-        {"getColor", lua_Text_getColor},
-        {"getHeight", lua_Text_getHeight},
-        {"getJustify", lua_Text_getJustify},
-        {"getNode", lua_Text_getNode},
-        {"getOpacity", lua_Text_getOpacity},
-        {"getRefCount", lua_Text_getRefCount},
-        {"getRightToLeft", lua_Text_getRightToLeft},
-        {"getSize", lua_Text_getSize},
-        {"getText", lua_Text_getText},
-        {"getWidth", lua_Text_getWidth},
-        {"getWrap", lua_Text_getWrap},
-        {"release", lua_Text_release},
-        {"setClip", lua_Text_setClip},
-        {"setColor", lua_Text_setColor},
-        {"setHeight", lua_Text_setHeight},
-        {"setJustify", lua_Text_setJustify},
-        {"setOpacity", lua_Text_setOpacity},
-        {"setRightToLeft", lua_Text_setRightToLeft},
-        {"setText", lua_Text_setText},
-        {"setWidth", lua_Text_setWidth},
-        {"setWrap", lua_Text_setWrap},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"ANIMATE_COLOR", lua_Text_static_ANIMATE_COLOR},
-        {"ANIMATE_OPACITY", lua_Text_static_ANIMATE_OPACITY},
-        {"create", lua_Text_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Text", lua_members, NULL, lua_Text__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static Text* getInstance(lua_State* state)
 {
@@ -71,7 +29,7 @@ static Text* getInstance(lua_State* state)
     return (Text*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Text__gc(lua_State* state)
+static int lua_Text__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -109,7 +67,7 @@ int lua_Text__gc(lua_State* state)
     return 0;
 }
 
-int lua_Text_addRef(lua_State* state)
+static int lua_Text_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -141,7 +99,7 @@ int lua_Text_addRef(lua_State* state)
     return 0;
 }
 
-int lua_Text_createAnimation(lua_State* state)
+static int lua_Text_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -344,7 +302,7 @@ int lua_Text_createAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Text_createAnimationFromBy(lua_State* state)
+static int lua_Text_createAnimationFromBy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -412,7 +370,7 @@ int lua_Text_createAnimationFromBy(lua_State* state)
     return 0;
 }
 
-int lua_Text_createAnimationFromTo(lua_State* state)
+static int lua_Text_createAnimationFromTo(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -480,7 +438,7 @@ int lua_Text_createAnimationFromTo(lua_State* state)
     return 0;
 }
 
-int lua_Text_destroyAnimation(lua_State* state)
+static int lua_Text_destroyAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -530,7 +488,7 @@ int lua_Text_destroyAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Text_draw(lua_State* state)
+static int lua_Text_draw(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -586,7 +544,7 @@ int lua_Text_draw(lua_State* state)
     return 0;
 }
 
-int lua_Text_getAnimation(lua_State* state)
+static int lua_Text_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -660,7 +618,7 @@ int lua_Text_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_Text_getClip(lua_State* state)
+static int lua_Text_getClip(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -704,7 +662,7 @@ int lua_Text_getClip(lua_State* state)
     return 0;
 }
 
-int lua_Text_getColor(lua_State* state)
+static int lua_Text_getColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -748,7 +706,7 @@ int lua_Text_getColor(lua_State* state)
     return 0;
 }
 
-int lua_Text_getHeight(lua_State* state)
+static int lua_Text_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -783,7 +741,7 @@ int lua_Text_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_Text_getJustify(lua_State* state)
+static int lua_Text_getJustify(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -818,7 +776,7 @@ int lua_Text_getJustify(lua_State* state)
     return 0;
 }
 
-int lua_Text_getNode(lua_State* state)
+static int lua_Text_getNode(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -862,7 +820,7 @@ int lua_Text_getNode(lua_State* state)
     return 0;
 }
 
-int lua_Text_getOpacity(lua_State* state)
+static int lua_Text_getOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -897,7 +855,7 @@ int lua_Text_getOpacity(lua_State* state)
     return 0;
 }
 
-int lua_Text_getRefCount(lua_State* state)
+static int lua_Text_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -932,7 +890,7 @@ int lua_Text_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_Text_getRightToLeft(lua_State* state)
+static int lua_Text_getRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -967,7 +925,7 @@ int lua_Text_getRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_Text_getSize(lua_State* state)
+static int lua_Text_getSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1002,7 +960,7 @@ int lua_Text_getSize(lua_State* state)
     return 0;
 }
 
-int lua_Text_getText(lua_State* state)
+static int lua_Text_getText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1037,7 +995,7 @@ int lua_Text_getText(lua_State* state)
     return 0;
 }
 
-int lua_Text_getWidth(lua_State* state)
+static int lua_Text_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1072,7 +1030,7 @@ int lua_Text_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_Text_getWrap(lua_State* state)
+static int lua_Text_getWrap(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1107,7 +1065,7 @@ int lua_Text_getWrap(lua_State* state)
     return 0;
 }
 
-int lua_Text_release(lua_State* state)
+static int lua_Text_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1139,7 +1097,7 @@ int lua_Text_release(lua_State* state)
     return 0;
 }
 
-int lua_Text_setClip(lua_State* state)
+static int lua_Text_setClip(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1181,7 +1139,7 @@ int lua_Text_setClip(lua_State* state)
     return 0;
 }
 
-int lua_Text_setColor(lua_State* state)
+static int lua_Text_setColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1223,7 +1181,7 @@ int lua_Text_setColor(lua_State* state)
     return 0;
 }
 
-int lua_Text_setHeight(lua_State* state)
+static int lua_Text_setHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1259,7 +1217,7 @@ int lua_Text_setHeight(lua_State* state)
     return 0;
 }
 
-int lua_Text_setJustify(lua_State* state)
+static int lua_Text_setJustify(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1295,7 +1253,7 @@ int lua_Text_setJustify(lua_State* state)
     return 0;
 }
 
-int lua_Text_setOpacity(lua_State* state)
+static int lua_Text_setOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1331,7 +1289,7 @@ int lua_Text_setOpacity(lua_State* state)
     return 0;
 }
 
-int lua_Text_setRightToLeft(lua_State* state)
+static int lua_Text_setRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1367,7 +1325,7 @@ int lua_Text_setRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_Text_setText(lua_State* state)
+static int lua_Text_setText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1403,7 +1361,7 @@ int lua_Text_setText(lua_State* state)
     return 0;
 }
 
-int lua_Text_setWidth(lua_State* state)
+static int lua_Text_setWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1439,7 +1397,7 @@ int lua_Text_setWidth(lua_State* state)
     return 0;
 }
 
-int lua_Text_setWrap(lua_State* state)
+static int lua_Text_setWrap(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1475,7 +1433,7 @@ int lua_Text_setWrap(lua_State* state)
     return 0;
 }
 
-int lua_Text_static_ANIMATE_COLOR(lua_State* state)
+static int lua_Text_static_ANIMATE_COLOR(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -1492,7 +1450,7 @@ int lua_Text_static_ANIMATE_COLOR(lua_State* state)
     return 1;
 }
 
-int lua_Text_static_ANIMATE_OPACITY(lua_State* state)
+static int lua_Text_static_ANIMATE_OPACITY(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -1509,7 +1467,7 @@ int lua_Text_static_ANIMATE_OPACITY(lua_State* state)
     return 1;
 }
 
-int lua_Text_static_create(lua_State* state)
+static int lua_Text_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1682,6 +1640,108 @@ int lua_Text_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of Text
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    Text* ptrObject = reinterpret_cast<Text*>(ptr);
+
+    if (strcmp(typeName, "AnimationTarget") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<AnimationTarget*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Drawable") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Drawable*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Ref") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Ref*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_Text_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_Text_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    Text* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_Text()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addRef", lua_Text_addRef},
+        {"createAnimation", lua_Text_createAnimation},
+        {"createAnimationFromBy", lua_Text_createAnimationFromBy},
+        {"createAnimationFromTo", lua_Text_createAnimationFromTo},
+        {"destroyAnimation", lua_Text_destroyAnimation},
+        {"draw", lua_Text_draw},
+        {"getAnimation", lua_Text_getAnimation},
+        {"getClip", lua_Text_getClip},
+        {"getColor", lua_Text_getColor},
+        {"getHeight", lua_Text_getHeight},
+        {"getJustify", lua_Text_getJustify},
+        {"getNode", lua_Text_getNode},
+        {"getOpacity", lua_Text_getOpacity},
+        {"getRefCount", lua_Text_getRefCount},
+        {"getRightToLeft", lua_Text_getRightToLeft},
+        {"getSize", lua_Text_getSize},
+        {"getText", lua_Text_getText},
+        {"getWidth", lua_Text_getWidth},
+        {"getWrap", lua_Text_getWrap},
+        {"release", lua_Text_release},
+        {"setClip", lua_Text_setClip},
+        {"setColor", lua_Text_setColor},
+        {"setHeight", lua_Text_setHeight},
+        {"setJustify", lua_Text_setJustify},
+        {"setOpacity", lua_Text_setOpacity},
+        {"setRightToLeft", lua_Text_setRightToLeft},
+        {"setText", lua_Text_setText},
+        {"setWidth", lua_Text_setWidth},
+        {"setWrap", lua_Text_setWrap},
+        {"to", lua_Text_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"ANIMATE_COLOR", lua_Text_static_ANIMATE_COLOR},
+        {"ANIMATE_OPACITY", lua_Text_static_ANIMATE_OPACITY},
+        {"create", lua_Text_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Text", lua_members, NULL, lua_Text__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("Text", __convertTo);
 }
 
 }

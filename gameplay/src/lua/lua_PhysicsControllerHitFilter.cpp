@@ -16,21 +16,6 @@
 namespace gameplay
 {
 
-void luaRegister_PhysicsControllerHitFilter()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"filter", lua_PhysicsControllerHitFilter_filter},
-        {"hit", lua_PhysicsControllerHitFilter_hit},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-    scopePath.push_back("PhysicsController");
-
-    gameplay::ScriptUtil::registerClass("PhysicsControllerHitFilter", lua_members, lua_PhysicsControllerHitFilter__init, lua_PhysicsControllerHitFilter__gc, lua_statics, scopePath);
-}
-
 static PhysicsController::HitFilter* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsControllerHitFilter");
@@ -38,7 +23,7 @@ static PhysicsController::HitFilter* getInstance(lua_State* state)
     return (PhysicsController::HitFilter*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_PhysicsControllerHitFilter__gc(lua_State* state)
+static int lua_PhysicsControllerHitFilter__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -76,7 +61,7 @@ int lua_PhysicsControllerHitFilter__gc(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsControllerHitFilter__init(lua_State* state)
+static int lua_PhysicsControllerHitFilter__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -113,7 +98,7 @@ int lua_PhysicsControllerHitFilter__init(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsControllerHitFilter_filter(lua_State* state)
+static int lua_PhysicsControllerHitFilter_filter(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -158,7 +143,7 @@ int lua_PhysicsControllerHitFilter_filter(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsControllerHitFilter_hit(lua_State* state)
+static int lua_PhysicsControllerHitFilter_hit(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -201,6 +186,22 @@ int lua_PhysicsControllerHitFilter_hit(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_PhysicsControllerHitFilter()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"filter", lua_PhysicsControllerHitFilter_filter},
+        {"hit", lua_PhysicsControllerHitFilter_hit},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+    scopePath.push_back("PhysicsController");
+
+    gameplay::ScriptUtil::registerClass("PhysicsControllerHitFilter", lua_members, lua_PhysicsControllerHitFilter__init, lua_PhysicsControllerHitFilter__gc, lua_statics, scopePath);
+
 }
 
 }

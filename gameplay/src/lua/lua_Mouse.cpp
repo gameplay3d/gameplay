@@ -7,18 +7,6 @@
 namespace gameplay
 {
 
-void luaRegister_Mouse()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("Mouse", lua_members, NULL, lua_Mouse__gc, lua_statics, scopePath);
-}
-
 static Mouse* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Mouse");
@@ -26,7 +14,7 @@ static Mouse* getInstance(lua_State* state)
     return (Mouse*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_Mouse__gc(lua_State* state)
+static int lua_Mouse__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -62,6 +50,19 @@ int lua_Mouse__gc(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_Mouse()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("Mouse", lua_members, NULL, lua_Mouse__gc, lua_statics, scopePath);
+
 }
 
 }

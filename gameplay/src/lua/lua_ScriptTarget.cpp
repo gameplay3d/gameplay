@@ -2,32 +2,34 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_ScriptTarget.h"
+#include "AnimationClip.h"
 #include "Base.h"
+#include "Button.h"
+#include "CheckBox.h"
+#include "Container.h"
+#include "Control.h"
+#include "Form.h"
+#include "ImageControl.h"
+#include "Joint.h"
+#include "JoystickControl.h"
+#include "Label.h"
+#include "Node.h"
+#include "PhysicsController.h"
+#include "RadioButton.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Slider.h"
+#include "TextBox.h"
+#include "Transform.h"
+#include "AnimationClip.h"
+#include "Control.h"
+#include "PhysicsController.h"
+#include "Transform.h"
 
 namespace gameplay
 {
 
-void luaRegister_ScriptTarget()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addScript", lua_ScriptTarget_addScript},
-        {"addScriptCallback", lua_ScriptTarget_addScriptCallback},
-        {"clearScripts", lua_ScriptTarget_clearScripts},
-        {"getScriptEvent", lua_ScriptTarget_getScriptEvent},
-        {"getTypeName", lua_ScriptTarget_getTypeName},
-        {"hasScriptListener", lua_ScriptTarget_hasScriptListener},
-        {"removeScript", lua_ScriptTarget_removeScript},
-        {"removeScriptCallback", lua_ScriptTarget_removeScriptCallback},
-        {NULL, NULL}
-    };
-    const luaL_Reg* lua_statics = NULL;
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("ScriptTarget", lua_members, NULL, NULL, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static ScriptTarget* getInstance(lua_State* state)
 {
@@ -36,7 +38,7 @@ static ScriptTarget* getInstance(lua_State* state)
     return (ScriptTarget*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_ScriptTarget_addScript(lua_State* state)
+static int lua_ScriptTarget_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -84,7 +86,7 @@ int lua_ScriptTarget_addScript(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTarget_addScriptCallback(lua_State* state)
+static int lua_ScriptTarget_addScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -130,7 +132,7 @@ int lua_ScriptTarget_addScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTarget_clearScripts(lua_State* state)
+static int lua_ScriptTarget_clearScripts(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -162,7 +164,7 @@ int lua_ScriptTarget_clearScripts(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTarget_getScriptEvent(lua_State* state)
+static int lua_ScriptTarget_getScriptEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -210,7 +212,7 @@ int lua_ScriptTarget_getScriptEvent(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTarget_getTypeName(lua_State* state)
+static int lua_ScriptTarget_getTypeName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -245,7 +247,7 @@ int lua_ScriptTarget_getTypeName(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTarget_hasScriptListener(lua_State* state)
+static int lua_ScriptTarget_hasScriptListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -308,7 +310,7 @@ int lua_ScriptTarget_hasScriptListener(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTarget_removeScript(lua_State* state)
+static int lua_ScriptTarget_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -347,7 +349,7 @@ int lua_ScriptTarget_removeScript(lua_State* state)
     return 0;
 }
 
-int lua_ScriptTarget_removeScriptCallback(lua_State* state)
+static int lua_ScriptTarget_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -391,6 +393,85 @@ int lua_ScriptTarget_removeScriptCallback(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of ScriptTarget
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    ScriptTarget* ptrObject = reinterpret_cast<ScriptTarget*>(ptr);
+
+    if (strcmp(typeName, "AnimationClip") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<AnimationClip*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Control") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Control*>(ptrObject));
+    }
+    else if (strcmp(typeName, "PhysicsController") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<PhysicsController*>(ptrObject));
+    }
+    else if (strcmp(typeName, "Transform") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Transform*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_ScriptTarget_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_ScriptTarget_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    ScriptTarget* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_ScriptTarget()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addScript", lua_ScriptTarget_addScript},
+        {"addScriptCallback", lua_ScriptTarget_addScriptCallback},
+        {"clearScripts", lua_ScriptTarget_clearScripts},
+        {"getScriptEvent", lua_ScriptTarget_getScriptEvent},
+        {"getTypeName", lua_ScriptTarget_getTypeName},
+        {"hasScriptListener", lua_ScriptTarget_hasScriptListener},
+        {"removeScript", lua_ScriptTarget_removeScript},
+        {"removeScriptCallback", lua_ScriptTarget_removeScriptCallback},
+        {"to", lua_ScriptTarget_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg* lua_statics = NULL;
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("ScriptTarget", lua_members, NULL, NULL, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("ScriptTarget", __convertTo);
 }
 
 }

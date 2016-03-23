@@ -18,140 +18,12 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Theme.h"
+#include "Button.h"
 
 namespace gameplay
 {
 
-void luaRegister_RadioButton()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"addListener", lua_RadioButton_addListener},
-        {"addRef", lua_RadioButton_addRef},
-        {"addScript", lua_RadioButton_addScript},
-        {"addScriptCallback", lua_RadioButton_addScriptCallback},
-        {"canFocus", lua_RadioButton_canFocus},
-        {"clearScripts", lua_RadioButton_clearScripts},
-        {"createAnimation", lua_RadioButton_createAnimation},
-        {"createAnimationFromBy", lua_RadioButton_createAnimationFromBy},
-        {"createAnimationFromTo", lua_RadioButton_createAnimationFromTo},
-        {"destroyAnimation", lua_RadioButton_destroyAnimation},
-        {"getAbsoluteBounds", lua_RadioButton_getAbsoluteBounds},
-        {"getAlignment", lua_RadioButton_getAlignment},
-        {"getAnimation", lua_RadioButton_getAnimation},
-        {"getAnimationPropertyComponentCount", lua_RadioButton_getAnimationPropertyComponentCount},
-        {"getAnimationPropertyValue", lua_RadioButton_getAnimationPropertyValue},
-        {"getAutoSize", lua_RadioButton_getAutoSize},
-        {"getBorder", lua_RadioButton_getBorder},
-        {"getBounds", lua_RadioButton_getBounds},
-        {"getClip", lua_RadioButton_getClip},
-        {"getClipBounds", lua_RadioButton_getClipBounds},
-        {"getConsumeInputEvents", lua_RadioButton_getConsumeInputEvents},
-        {"getCursorColor", lua_RadioButton_getCursorColor},
-        {"getCursorRegion", lua_RadioButton_getCursorRegion},
-        {"getCursorUVs", lua_RadioButton_getCursorUVs},
-        {"getFocusIndex", lua_RadioButton_getFocusIndex},
-        {"getFont", lua_RadioButton_getFont},
-        {"getFontSize", lua_RadioButton_getFontSize},
-        {"getGroupId", lua_RadioButton_getGroupId},
-        {"getHeight", lua_RadioButton_getHeight},
-        {"getId", lua_RadioButton_getId},
-        {"getImageColor", lua_RadioButton_getImageColor},
-        {"getImageRegion", lua_RadioButton_getImageRegion},
-        {"getImageUVs", lua_RadioButton_getImageUVs},
-        {"getMargin", lua_RadioButton_getMargin},
-        {"getOpacity", lua_RadioButton_getOpacity},
-        {"getPadding", lua_RadioButton_getPadding},
-        {"getParent", lua_RadioButton_getParent},
-        {"getRefCount", lua_RadioButton_getRefCount},
-        {"getScriptEvent", lua_RadioButton_getScriptEvent},
-        {"getSkinColor", lua_RadioButton_getSkinColor},
-        {"getSkinRegion", lua_RadioButton_getSkinRegion},
-        {"getState", lua_RadioButton_getState},
-        {"getStyle", lua_RadioButton_getStyle},
-        {"getText", lua_RadioButton_getText},
-        {"getTextAlignment", lua_RadioButton_getTextAlignment},
-        {"getTextColor", lua_RadioButton_getTextColor},
-        {"getTextRightToLeft", lua_RadioButton_getTextRightToLeft},
-        {"getTheme", lua_RadioButton_getTheme},
-        {"getTopLevelForm", lua_RadioButton_getTopLevelForm},
-        {"getTypeName", lua_RadioButton_getTypeName},
-        {"getWidth", lua_RadioButton_getWidth},
-        {"getX", lua_RadioButton_getX},
-        {"getY", lua_RadioButton_getY},
-        {"getZIndex", lua_RadioButton_getZIndex},
-        {"hasFocus", lua_RadioButton_hasFocus},
-        {"hasScriptListener", lua_RadioButton_hasScriptListener},
-        {"isChild", lua_RadioButton_isChild},
-        {"isContainer", lua_RadioButton_isContainer},
-        {"isEnabled", lua_RadioButton_isEnabled},
-        {"isEnabledInHierarchy", lua_RadioButton_isEnabledInHierarchy},
-        {"isHeightPercentage", lua_RadioButton_isHeightPercentage},
-        {"isSelected", lua_RadioButton_isSelected},
-        {"isVisible", lua_RadioButton_isVisible},
-        {"isVisibleInHierarchy", lua_RadioButton_isVisibleInHierarchy},
-        {"isWidthPercentage", lua_RadioButton_isWidthPercentage},
-        {"isXPercentage", lua_RadioButton_isXPercentage},
-        {"isYPercentage", lua_RadioButton_isYPercentage},
-        {"release", lua_RadioButton_release},
-        {"removeListener", lua_RadioButton_removeListener},
-        {"removeScript", lua_RadioButton_removeScript},
-        {"removeScriptCallback", lua_RadioButton_removeScriptCallback},
-        {"setAlignment", lua_RadioButton_setAlignment},
-        {"setAnimationPropertyValue", lua_RadioButton_setAnimationPropertyValue},
-        {"setAutoSize", lua_RadioButton_setAutoSize},
-        {"setBorder", lua_RadioButton_setBorder},
-        {"setBounds", lua_RadioButton_setBounds},
-        {"setCanFocus", lua_RadioButton_setCanFocus},
-        {"setConsumeInputEvents", lua_RadioButton_setConsumeInputEvents},
-        {"setCursorColor", lua_RadioButton_setCursorColor},
-        {"setCursorRegion", lua_RadioButton_setCursorRegion},
-        {"setEnabled", lua_RadioButton_setEnabled},
-        {"setFocus", lua_RadioButton_setFocus},
-        {"setFocusIndex", lua_RadioButton_setFocusIndex},
-        {"setFont", lua_RadioButton_setFont},
-        {"setFontSize", lua_RadioButton_setFontSize},
-        {"setGroupId", lua_RadioButton_setGroupId},
-        {"setHeight", lua_RadioButton_setHeight},
-        {"setId", lua_RadioButton_setId},
-        {"setImageColor", lua_RadioButton_setImageColor},
-        {"setImageRegion", lua_RadioButton_setImageRegion},
-        {"setMargin", lua_RadioButton_setMargin},
-        {"setOpacity", lua_RadioButton_setOpacity},
-        {"setPadding", lua_RadioButton_setPadding},
-        {"setPosition", lua_RadioButton_setPosition},
-        {"setSelected", lua_RadioButton_setSelected},
-        {"setSize", lua_RadioButton_setSize},
-        {"setSkinColor", lua_RadioButton_setSkinColor},
-        {"setSkinRegion", lua_RadioButton_setSkinRegion},
-        {"setStyle", lua_RadioButton_setStyle},
-        {"setText", lua_RadioButton_setText},
-        {"setTextAlignment", lua_RadioButton_setTextAlignment},
-        {"setTextColor", lua_RadioButton_setTextColor},
-        {"setTextRightToLeft", lua_RadioButton_setTextRightToLeft},
-        {"setVisible", lua_RadioButton_setVisible},
-        {"setWidth", lua_RadioButton_setWidth},
-        {"setX", lua_RadioButton_setX},
-        {"setY", lua_RadioButton_setY},
-        {"setZIndex", lua_RadioButton_setZIndex},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"ANIMATE_OPACITY", lua_RadioButton_static_ANIMATE_OPACITY},
-        {"ANIMATE_POSITION", lua_RadioButton_static_ANIMATE_POSITION},
-        {"ANIMATE_POSITION_X", lua_RadioButton_static_ANIMATE_POSITION_X},
-        {"ANIMATE_POSITION_Y", lua_RadioButton_static_ANIMATE_POSITION_Y},
-        {"ANIMATE_SIZE", lua_RadioButton_static_ANIMATE_SIZE},
-        {"ANIMATE_SIZE_HEIGHT", lua_RadioButton_static_ANIMATE_SIZE_HEIGHT},
-        {"ANIMATE_SIZE_WIDTH", lua_RadioButton_static_ANIMATE_SIZE_WIDTH},
-        {"create", lua_RadioButton_static_create},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("RadioButton", lua_members, NULL, lua_RadioButton__gc, lua_statics, scopePath);
-}
+extern void luaGlobal_Register_Conversion_Function(const char* className, void*(*func)(void*, const char*));
 
 static RadioButton* getInstance(lua_State* state)
 {
@@ -160,7 +32,7 @@ static RadioButton* getInstance(lua_State* state)
     return (RadioButton*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_RadioButton__gc(lua_State* state)
+static int lua_RadioButton__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -198,7 +70,7 @@ int lua_RadioButton__gc(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_addListener(lua_State* state)
+static int lua_RadioButton_addListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -244,7 +116,7 @@ int lua_RadioButton_addListener(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_addRef(lua_State* state)
+static int lua_RadioButton_addRef(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -276,7 +148,7 @@ int lua_RadioButton_addRef(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_addScript(lua_State* state)
+static int lua_RadioButton_addScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -324,7 +196,7 @@ int lua_RadioButton_addScript(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_addScriptCallback(lua_State* state)
+static int lua_RadioButton_addScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -370,7 +242,7 @@ int lua_RadioButton_addScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_canFocus(lua_State* state)
+static int lua_RadioButton_canFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -405,7 +277,7 @@ int lua_RadioButton_canFocus(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_clearScripts(lua_State* state)
+static int lua_RadioButton_clearScripts(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -437,7 +309,7 @@ int lua_RadioButton_clearScripts(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_createAnimation(lua_State* state)
+static int lua_RadioButton_createAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -640,7 +512,7 @@ int lua_RadioButton_createAnimation(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_createAnimationFromBy(lua_State* state)
+static int lua_RadioButton_createAnimationFromBy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -708,7 +580,7 @@ int lua_RadioButton_createAnimationFromBy(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_createAnimationFromTo(lua_State* state)
+static int lua_RadioButton_createAnimationFromTo(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -776,7 +648,7 @@ int lua_RadioButton_createAnimationFromTo(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_destroyAnimation(lua_State* state)
+static int lua_RadioButton_destroyAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -826,7 +698,7 @@ int lua_RadioButton_destroyAnimation(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getAbsoluteBounds(lua_State* state)
+static int lua_RadioButton_getAbsoluteBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -870,7 +742,7 @@ int lua_RadioButton_getAbsoluteBounds(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getAlignment(lua_State* state)
+static int lua_RadioButton_getAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -905,7 +777,7 @@ int lua_RadioButton_getAlignment(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getAnimation(lua_State* state)
+static int lua_RadioButton_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -979,7 +851,7 @@ int lua_RadioButton_getAnimation(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getAnimationPropertyComponentCount(lua_State* state)
+static int lua_RadioButton_getAnimationPropertyComponentCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1018,7 +890,7 @@ int lua_RadioButton_getAnimationPropertyComponentCount(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getAnimationPropertyValue(lua_State* state)
+static int lua_RadioButton_getAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1064,7 +936,7 @@ int lua_RadioButton_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getAutoSize(lua_State* state)
+static int lua_RadioButton_getAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1099,7 +971,7 @@ int lua_RadioButton_getAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getBorder(lua_State* state)
+static int lua_RadioButton_getBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1173,7 +1045,7 @@ int lua_RadioButton_getBorder(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getBounds(lua_State* state)
+static int lua_RadioButton_getBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1217,7 +1089,7 @@ int lua_RadioButton_getBounds(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getClip(lua_State* state)
+static int lua_RadioButton_getClip(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1261,7 +1133,7 @@ int lua_RadioButton_getClip(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getClipBounds(lua_State* state)
+static int lua_RadioButton_getClipBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1305,7 +1177,7 @@ int lua_RadioButton_getClipBounds(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getConsumeInputEvents(lua_State* state)
+static int lua_RadioButton_getConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1340,7 +1212,7 @@ int lua_RadioButton_getConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getCursorColor(lua_State* state)
+static int lua_RadioButton_getCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1388,7 +1260,7 @@ int lua_RadioButton_getCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getCursorRegion(lua_State* state)
+static int lua_RadioButton_getCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1436,7 +1308,7 @@ int lua_RadioButton_getCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getCursorUVs(lua_State* state)
+static int lua_RadioButton_getCursorUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1484,7 +1356,7 @@ int lua_RadioButton_getCursorUVs(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getFocusIndex(lua_State* state)
+static int lua_RadioButton_getFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1519,7 +1391,7 @@ int lua_RadioButton_getFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getFont(lua_State* state)
+static int lua_RadioButton_getFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1593,7 +1465,7 @@ int lua_RadioButton_getFont(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getFontSize(lua_State* state)
+static int lua_RadioButton_getFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1649,7 +1521,7 @@ int lua_RadioButton_getFontSize(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getGroupId(lua_State* state)
+static int lua_RadioButton_getGroupId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1684,7 +1556,7 @@ int lua_RadioButton_getGroupId(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getHeight(lua_State* state)
+static int lua_RadioButton_getHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1719,7 +1591,7 @@ int lua_RadioButton_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getId(lua_State* state)
+static int lua_RadioButton_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1754,7 +1626,7 @@ int lua_RadioButton_getId(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getImageColor(lua_State* state)
+static int lua_RadioButton_getImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1806,7 +1678,7 @@ int lua_RadioButton_getImageColor(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getImageRegion(lua_State* state)
+static int lua_RadioButton_getImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1858,7 +1730,7 @@ int lua_RadioButton_getImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getImageUVs(lua_State* state)
+static int lua_RadioButton_getImageUVs(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1910,7 +1782,7 @@ int lua_RadioButton_getImageUVs(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getMargin(lua_State* state)
+static int lua_RadioButton_getMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1954,7 +1826,7 @@ int lua_RadioButton_getMargin(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getOpacity(lua_State* state)
+static int lua_RadioButton_getOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2010,7 +1882,7 @@ int lua_RadioButton_getOpacity(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getPadding(lua_State* state)
+static int lua_RadioButton_getPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2054,7 +1926,7 @@ int lua_RadioButton_getPadding(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getParent(lua_State* state)
+static int lua_RadioButton_getParent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2098,7 +1970,7 @@ int lua_RadioButton_getParent(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getRefCount(lua_State* state)
+static int lua_RadioButton_getRefCount(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2133,7 +2005,7 @@ int lua_RadioButton_getRefCount(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getScriptEvent(lua_State* state)
+static int lua_RadioButton_getScriptEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2181,7 +2053,7 @@ int lua_RadioButton_getScriptEvent(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getSkinColor(lua_State* state)
+static int lua_RadioButton_getSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2255,7 +2127,7 @@ int lua_RadioButton_getSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getSkinRegion(lua_State* state)
+static int lua_RadioButton_getSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2329,7 +2201,7 @@ int lua_RadioButton_getSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getState(lua_State* state)
+static int lua_RadioButton_getState(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2364,7 +2236,7 @@ int lua_RadioButton_getState(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getStyle(lua_State* state)
+static int lua_RadioButton_getStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2408,7 +2280,7 @@ int lua_RadioButton_getStyle(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getText(lua_State* state)
+static int lua_RadioButton_getText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2443,7 +2315,7 @@ int lua_RadioButton_getText(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getTextAlignment(lua_State* state)
+static int lua_RadioButton_getTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2499,7 +2371,7 @@ int lua_RadioButton_getTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getTextColor(lua_State* state)
+static int lua_RadioButton_getTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2573,7 +2445,7 @@ int lua_RadioButton_getTextColor(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getTextRightToLeft(lua_State* state)
+static int lua_RadioButton_getTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2629,7 +2501,7 @@ int lua_RadioButton_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getTheme(lua_State* state)
+static int lua_RadioButton_getTheme(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2673,7 +2545,7 @@ int lua_RadioButton_getTheme(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getTopLevelForm(lua_State* state)
+static int lua_RadioButton_getTopLevelForm(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2717,7 +2589,7 @@ int lua_RadioButton_getTopLevelForm(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getTypeName(lua_State* state)
+static int lua_RadioButton_getTypeName(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2752,7 +2624,7 @@ int lua_RadioButton_getTypeName(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getWidth(lua_State* state)
+static int lua_RadioButton_getWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2787,7 +2659,7 @@ int lua_RadioButton_getWidth(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getX(lua_State* state)
+static int lua_RadioButton_getX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2822,7 +2694,7 @@ int lua_RadioButton_getX(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getY(lua_State* state)
+static int lua_RadioButton_getY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2857,7 +2729,7 @@ int lua_RadioButton_getY(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_getZIndex(lua_State* state)
+static int lua_RadioButton_getZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2892,7 +2764,7 @@ int lua_RadioButton_getZIndex(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_hasFocus(lua_State* state)
+static int lua_RadioButton_hasFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2927,7 +2799,7 @@ int lua_RadioButton_hasFocus(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_hasScriptListener(lua_State* state)
+static int lua_RadioButton_hasScriptListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2990,7 +2862,7 @@ int lua_RadioButton_hasScriptListener(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isChild(lua_State* state)
+static int lua_RadioButton_isChild(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3035,7 +2907,7 @@ int lua_RadioButton_isChild(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isContainer(lua_State* state)
+static int lua_RadioButton_isContainer(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3070,7 +2942,7 @@ int lua_RadioButton_isContainer(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isEnabled(lua_State* state)
+static int lua_RadioButton_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3105,7 +2977,7 @@ int lua_RadioButton_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isEnabledInHierarchy(lua_State* state)
+static int lua_RadioButton_isEnabledInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3140,7 +3012,7 @@ int lua_RadioButton_isEnabledInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isHeightPercentage(lua_State* state)
+static int lua_RadioButton_isHeightPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3175,7 +3047,7 @@ int lua_RadioButton_isHeightPercentage(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isSelected(lua_State* state)
+static int lua_RadioButton_isSelected(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3210,7 +3082,7 @@ int lua_RadioButton_isSelected(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isVisible(lua_State* state)
+static int lua_RadioButton_isVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3245,7 +3117,7 @@ int lua_RadioButton_isVisible(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isVisibleInHierarchy(lua_State* state)
+static int lua_RadioButton_isVisibleInHierarchy(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3280,7 +3152,7 @@ int lua_RadioButton_isVisibleInHierarchy(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isWidthPercentage(lua_State* state)
+static int lua_RadioButton_isWidthPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3315,7 +3187,7 @@ int lua_RadioButton_isWidthPercentage(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isXPercentage(lua_State* state)
+static int lua_RadioButton_isXPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3350,7 +3222,7 @@ int lua_RadioButton_isXPercentage(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_isYPercentage(lua_State* state)
+static int lua_RadioButton_isYPercentage(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3385,7 +3257,7 @@ int lua_RadioButton_isYPercentage(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_release(lua_State* state)
+static int lua_RadioButton_release(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3417,7 +3289,7 @@ int lua_RadioButton_release(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_removeListener(lua_State* state)
+static int lua_RadioButton_removeListener(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3459,7 +3331,7 @@ int lua_RadioButton_removeListener(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_removeScript(lua_State* state)
+static int lua_RadioButton_removeScript(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3498,7 +3370,7 @@ int lua_RadioButton_removeScript(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_removeScriptCallback(lua_State* state)
+static int lua_RadioButton_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3544,7 +3416,7 @@ int lua_RadioButton_removeScriptCallback(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setAlignment(lua_State* state)
+static int lua_RadioButton_setAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3580,7 +3452,7 @@ int lua_RadioButton_setAlignment(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setAnimationPropertyValue(lua_State* state)
+static int lua_RadioButton_setAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3658,7 +3530,7 @@ int lua_RadioButton_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setAutoSize(lua_State* state)
+static int lua_RadioButton_setAutoSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3694,7 +3566,7 @@ int lua_RadioButton_setAutoSize(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setBorder(lua_State* state)
+static int lua_RadioButton_setBorder(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3776,7 +3648,7 @@ int lua_RadioButton_setBorder(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setBounds(lua_State* state)
+static int lua_RadioButton_setBounds(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3818,7 +3690,7 @@ int lua_RadioButton_setBounds(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setCanFocus(lua_State* state)
+static int lua_RadioButton_setCanFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3854,7 +3726,7 @@ int lua_RadioButton_setCanFocus(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setConsumeInputEvents(lua_State* state)
+static int lua_RadioButton_setConsumeInputEvents(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3890,7 +3762,7 @@ int lua_RadioButton_setConsumeInputEvents(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setCursorColor(lua_State* state)
+static int lua_RadioButton_setCursorColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3936,7 +3808,7 @@ int lua_RadioButton_setCursorColor(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setCursorRegion(lua_State* state)
+static int lua_RadioButton_setCursorRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3982,7 +3854,7 @@ int lua_RadioButton_setCursorRegion(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setEnabled(lua_State* state)
+static int lua_RadioButton_setEnabled(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4018,7 +3890,7 @@ int lua_RadioButton_setEnabled(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setFocus(lua_State* state)
+static int lua_RadioButton_setFocus(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4053,7 +3925,7 @@ int lua_RadioButton_setFocus(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setFocusIndex(lua_State* state)
+static int lua_RadioButton_setFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4089,7 +3961,7 @@ int lua_RadioButton_setFocusIndex(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setFont(lua_State* state)
+static int lua_RadioButton_setFont(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4159,7 +4031,7 @@ int lua_RadioButton_setFont(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setFontSize(lua_State* state)
+static int lua_RadioButton_setFontSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4217,7 +4089,7 @@ int lua_RadioButton_setFontSize(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setGroupId(lua_State* state)
+static int lua_RadioButton_setGroupId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4253,7 +4125,7 @@ int lua_RadioButton_setGroupId(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setHeight(lua_State* state)
+static int lua_RadioButton_setHeight(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4311,7 +4183,7 @@ int lua_RadioButton_setHeight(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setId(lua_State* state)
+static int lua_RadioButton_setId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4347,7 +4219,7 @@ int lua_RadioButton_setId(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setImageColor(lua_State* state)
+static int lua_RadioButton_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4425,7 +4297,7 @@ int lua_RadioButton_setImageColor(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setImageRegion(lua_State* state)
+static int lua_RadioButton_setImageRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4503,7 +4375,7 @@ int lua_RadioButton_setImageRegion(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setMargin(lua_State* state)
+static int lua_RadioButton_setMargin(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4551,7 +4423,7 @@ int lua_RadioButton_setMargin(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setOpacity(lua_State* state)
+static int lua_RadioButton_setOpacity(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4609,7 +4481,7 @@ int lua_RadioButton_setOpacity(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setPadding(lua_State* state)
+static int lua_RadioButton_setPadding(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4657,7 +4529,7 @@ int lua_RadioButton_setPadding(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setPosition(lua_State* state)
+static int lua_RadioButton_setPosition(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4697,7 +4569,7 @@ int lua_RadioButton_setPosition(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setSelected(lua_State* state)
+static int lua_RadioButton_setSelected(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4733,7 +4605,7 @@ int lua_RadioButton_setSelected(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setSize(lua_State* state)
+static int lua_RadioButton_setSize(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4773,7 +4645,7 @@ int lua_RadioButton_setSize(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setSkinColor(lua_State* state)
+static int lua_RadioButton_setSkinColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4843,7 +4715,7 @@ int lua_RadioButton_setSkinColor(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setSkinRegion(lua_State* state)
+static int lua_RadioButton_setSkinRegion(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4913,7 +4785,7 @@ int lua_RadioButton_setSkinRegion(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setStyle(lua_State* state)
+static int lua_RadioButton_setStyle(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4955,7 +4827,7 @@ int lua_RadioButton_setStyle(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setText(lua_State* state)
+static int lua_RadioButton_setText(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -4991,7 +4863,7 @@ int lua_RadioButton_setText(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setTextAlignment(lua_State* state)
+static int lua_RadioButton_setTextAlignment(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5049,7 +4921,7 @@ int lua_RadioButton_setTextAlignment(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setTextColor(lua_State* state)
+static int lua_RadioButton_setTextColor(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5119,7 +4991,7 @@ int lua_RadioButton_setTextColor(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setTextRightToLeft(lua_State* state)
+static int lua_RadioButton_setTextRightToLeft(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5177,7 +5049,7 @@ int lua_RadioButton_setTextRightToLeft(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setVisible(lua_State* state)
+static int lua_RadioButton_setVisible(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5213,7 +5085,7 @@ int lua_RadioButton_setVisible(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setWidth(lua_State* state)
+static int lua_RadioButton_setWidth(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5271,7 +5143,7 @@ int lua_RadioButton_setWidth(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setX(lua_State* state)
+static int lua_RadioButton_setX(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5329,7 +5201,7 @@ int lua_RadioButton_setX(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setY(lua_State* state)
+static int lua_RadioButton_setY(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5387,7 +5259,7 @@ int lua_RadioButton_setY(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_setZIndex(lua_State* state)
+static int lua_RadioButton_setZIndex(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5423,7 +5295,7 @@ int lua_RadioButton_setZIndex(lua_State* state)
     return 0;
 }
 
-int lua_RadioButton_static_ANIMATE_OPACITY(lua_State* state)
+static int lua_RadioButton_static_ANIMATE_OPACITY(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5440,7 +5312,7 @@ int lua_RadioButton_static_ANIMATE_OPACITY(lua_State* state)
     return 1;
 }
 
-int lua_RadioButton_static_ANIMATE_POSITION(lua_State* state)
+static int lua_RadioButton_static_ANIMATE_POSITION(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5457,7 +5329,7 @@ int lua_RadioButton_static_ANIMATE_POSITION(lua_State* state)
     return 1;
 }
 
-int lua_RadioButton_static_ANIMATE_POSITION_X(lua_State* state)
+static int lua_RadioButton_static_ANIMATE_POSITION_X(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5474,7 +5346,7 @@ int lua_RadioButton_static_ANIMATE_POSITION_X(lua_State* state)
     return 1;
 }
 
-int lua_RadioButton_static_ANIMATE_POSITION_Y(lua_State* state)
+static int lua_RadioButton_static_ANIMATE_POSITION_Y(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5491,7 +5363,7 @@ int lua_RadioButton_static_ANIMATE_POSITION_Y(lua_State* state)
     return 1;
 }
 
-int lua_RadioButton_static_ANIMATE_SIZE(lua_State* state)
+static int lua_RadioButton_static_ANIMATE_SIZE(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5508,7 +5380,7 @@ int lua_RadioButton_static_ANIMATE_SIZE(lua_State* state)
     return 1;
 }
 
-int lua_RadioButton_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
+static int lua_RadioButton_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5525,7 +5397,7 @@ int lua_RadioButton_static_ANIMATE_SIZE_HEIGHT(lua_State* state)
     return 1;
 }
 
-int lua_RadioButton_static_ANIMATE_SIZE_WIDTH(lua_State* state)
+static int lua_RadioButton_static_ANIMATE_SIZE_WIDTH(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 0)
@@ -5542,7 +5414,7 @@ int lua_RadioButton_static_ANIMATE_SIZE_WIDTH(lua_State* state)
     return 1;
 }
 
-int lua_RadioButton_static_create(lua_State* state)
+static int lua_RadioButton_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -5624,6 +5496,184 @@ int lua_RadioButton_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+// Provides support for conversion to all known relative types of RadioButton
+static void* __convertTo(void* ptr, const char* typeName)
+{
+    RadioButton* ptrObject = reinterpret_cast<RadioButton*>(ptr);
+
+    if (strcmp(typeName, "Button") == 0)
+    {
+        return reinterpret_cast<void*>(static_cast<Button*>(ptrObject));
+    }
+
+    // No conversion available for 'typeName'
+    return NULL;
+}
+
+static int lua_RadioButton_to(lua_State* state)
+{
+    // There should be only a single parameter (this instance)
+    if (lua_gettop(state) != 2 || lua_type(state, 1) != LUA_TUSERDATA || lua_type(state, 2) != LUA_TSTRING)
+    {
+        lua_pushstring(state, "lua_RadioButton_to - Invalid number of parameters (expected 2).");
+        lua_error(state);
+        return 0;
+    }
+
+    RadioButton* instance = getInstance(state);
+    const char* typeName = gameplay::ScriptUtil::getString(2, false);
+    void* result = __convertTo((void*)instance, typeName);
+
+    if (result)
+    {
+        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+        object->instance = (void*)result;
+        object->owns = false;
+        luaL_getmetatable(state, typeName);
+        lua_setmetatable(state, -2);
+    }
+    else
+    {
+        lua_pushnil(state);
+    }
+
+    return 1;
+}
+
+void luaRegister_RadioButton()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"addListener", lua_RadioButton_addListener},
+        {"addRef", lua_RadioButton_addRef},
+        {"addScript", lua_RadioButton_addScript},
+        {"addScriptCallback", lua_RadioButton_addScriptCallback},
+        {"canFocus", lua_RadioButton_canFocus},
+        {"clearScripts", lua_RadioButton_clearScripts},
+        {"createAnimation", lua_RadioButton_createAnimation},
+        {"createAnimationFromBy", lua_RadioButton_createAnimationFromBy},
+        {"createAnimationFromTo", lua_RadioButton_createAnimationFromTo},
+        {"destroyAnimation", lua_RadioButton_destroyAnimation},
+        {"getAbsoluteBounds", lua_RadioButton_getAbsoluteBounds},
+        {"getAlignment", lua_RadioButton_getAlignment},
+        {"getAnimation", lua_RadioButton_getAnimation},
+        {"getAnimationPropertyComponentCount", lua_RadioButton_getAnimationPropertyComponentCount},
+        {"getAnimationPropertyValue", lua_RadioButton_getAnimationPropertyValue},
+        {"getAutoSize", lua_RadioButton_getAutoSize},
+        {"getBorder", lua_RadioButton_getBorder},
+        {"getBounds", lua_RadioButton_getBounds},
+        {"getClip", lua_RadioButton_getClip},
+        {"getClipBounds", lua_RadioButton_getClipBounds},
+        {"getConsumeInputEvents", lua_RadioButton_getConsumeInputEvents},
+        {"getCursorColor", lua_RadioButton_getCursorColor},
+        {"getCursorRegion", lua_RadioButton_getCursorRegion},
+        {"getCursorUVs", lua_RadioButton_getCursorUVs},
+        {"getFocusIndex", lua_RadioButton_getFocusIndex},
+        {"getFont", lua_RadioButton_getFont},
+        {"getFontSize", lua_RadioButton_getFontSize},
+        {"getGroupId", lua_RadioButton_getGroupId},
+        {"getHeight", lua_RadioButton_getHeight},
+        {"getId", lua_RadioButton_getId},
+        {"getImageColor", lua_RadioButton_getImageColor},
+        {"getImageRegion", lua_RadioButton_getImageRegion},
+        {"getImageUVs", lua_RadioButton_getImageUVs},
+        {"getMargin", lua_RadioButton_getMargin},
+        {"getOpacity", lua_RadioButton_getOpacity},
+        {"getPadding", lua_RadioButton_getPadding},
+        {"getParent", lua_RadioButton_getParent},
+        {"getRefCount", lua_RadioButton_getRefCount},
+        {"getScriptEvent", lua_RadioButton_getScriptEvent},
+        {"getSkinColor", lua_RadioButton_getSkinColor},
+        {"getSkinRegion", lua_RadioButton_getSkinRegion},
+        {"getState", lua_RadioButton_getState},
+        {"getStyle", lua_RadioButton_getStyle},
+        {"getText", lua_RadioButton_getText},
+        {"getTextAlignment", lua_RadioButton_getTextAlignment},
+        {"getTextColor", lua_RadioButton_getTextColor},
+        {"getTextRightToLeft", lua_RadioButton_getTextRightToLeft},
+        {"getTheme", lua_RadioButton_getTheme},
+        {"getTopLevelForm", lua_RadioButton_getTopLevelForm},
+        {"getTypeName", lua_RadioButton_getTypeName},
+        {"getWidth", lua_RadioButton_getWidth},
+        {"getX", lua_RadioButton_getX},
+        {"getY", lua_RadioButton_getY},
+        {"getZIndex", lua_RadioButton_getZIndex},
+        {"hasFocus", lua_RadioButton_hasFocus},
+        {"hasScriptListener", lua_RadioButton_hasScriptListener},
+        {"isChild", lua_RadioButton_isChild},
+        {"isContainer", lua_RadioButton_isContainer},
+        {"isEnabled", lua_RadioButton_isEnabled},
+        {"isEnabledInHierarchy", lua_RadioButton_isEnabledInHierarchy},
+        {"isHeightPercentage", lua_RadioButton_isHeightPercentage},
+        {"isSelected", lua_RadioButton_isSelected},
+        {"isVisible", lua_RadioButton_isVisible},
+        {"isVisibleInHierarchy", lua_RadioButton_isVisibleInHierarchy},
+        {"isWidthPercentage", lua_RadioButton_isWidthPercentage},
+        {"isXPercentage", lua_RadioButton_isXPercentage},
+        {"isYPercentage", lua_RadioButton_isYPercentage},
+        {"release", lua_RadioButton_release},
+        {"removeListener", lua_RadioButton_removeListener},
+        {"removeScript", lua_RadioButton_removeScript},
+        {"removeScriptCallback", lua_RadioButton_removeScriptCallback},
+        {"setAlignment", lua_RadioButton_setAlignment},
+        {"setAnimationPropertyValue", lua_RadioButton_setAnimationPropertyValue},
+        {"setAutoSize", lua_RadioButton_setAutoSize},
+        {"setBorder", lua_RadioButton_setBorder},
+        {"setBounds", lua_RadioButton_setBounds},
+        {"setCanFocus", lua_RadioButton_setCanFocus},
+        {"setConsumeInputEvents", lua_RadioButton_setConsumeInputEvents},
+        {"setCursorColor", lua_RadioButton_setCursorColor},
+        {"setCursorRegion", lua_RadioButton_setCursorRegion},
+        {"setEnabled", lua_RadioButton_setEnabled},
+        {"setFocus", lua_RadioButton_setFocus},
+        {"setFocusIndex", lua_RadioButton_setFocusIndex},
+        {"setFont", lua_RadioButton_setFont},
+        {"setFontSize", lua_RadioButton_setFontSize},
+        {"setGroupId", lua_RadioButton_setGroupId},
+        {"setHeight", lua_RadioButton_setHeight},
+        {"setId", lua_RadioButton_setId},
+        {"setImageColor", lua_RadioButton_setImageColor},
+        {"setImageRegion", lua_RadioButton_setImageRegion},
+        {"setMargin", lua_RadioButton_setMargin},
+        {"setOpacity", lua_RadioButton_setOpacity},
+        {"setPadding", lua_RadioButton_setPadding},
+        {"setPosition", lua_RadioButton_setPosition},
+        {"setSelected", lua_RadioButton_setSelected},
+        {"setSize", lua_RadioButton_setSize},
+        {"setSkinColor", lua_RadioButton_setSkinColor},
+        {"setSkinRegion", lua_RadioButton_setSkinRegion},
+        {"setStyle", lua_RadioButton_setStyle},
+        {"setText", lua_RadioButton_setText},
+        {"setTextAlignment", lua_RadioButton_setTextAlignment},
+        {"setTextColor", lua_RadioButton_setTextColor},
+        {"setTextRightToLeft", lua_RadioButton_setTextRightToLeft},
+        {"setVisible", lua_RadioButton_setVisible},
+        {"setWidth", lua_RadioButton_setWidth},
+        {"setX", lua_RadioButton_setX},
+        {"setY", lua_RadioButton_setY},
+        {"setZIndex", lua_RadioButton_setZIndex},
+        {"to", lua_RadioButton_to},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"ANIMATE_OPACITY", lua_RadioButton_static_ANIMATE_OPACITY},
+        {"ANIMATE_POSITION", lua_RadioButton_static_ANIMATE_POSITION},
+        {"ANIMATE_POSITION_X", lua_RadioButton_static_ANIMATE_POSITION_X},
+        {"ANIMATE_POSITION_Y", lua_RadioButton_static_ANIMATE_POSITION_Y},
+        {"ANIMATE_SIZE", lua_RadioButton_static_ANIMATE_SIZE},
+        {"ANIMATE_SIZE_HEIGHT", lua_RadioButton_static_ANIMATE_SIZE_HEIGHT},
+        {"ANIMATE_SIZE_WIDTH", lua_RadioButton_static_ANIMATE_SIZE_WIDTH},
+        {"create", lua_RadioButton_static_create},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("RadioButton", lua_members, NULL, lua_RadioButton__gc, lua_statics, scopePath);
+
+    luaGlobal_Register_Conversion_Function("RadioButton", __convertTo);
 }
 
 }

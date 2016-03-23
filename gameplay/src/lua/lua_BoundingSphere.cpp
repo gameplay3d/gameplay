@@ -9,29 +9,6 @@
 namespace gameplay
 {
 
-void luaRegister_BoundingSphere()
-{
-    const luaL_Reg lua_members[] = 
-    {
-        {"center", lua_BoundingSphere_center},
-        {"intersects", lua_BoundingSphere_intersects},
-        {"isEmpty", lua_BoundingSphere_isEmpty},
-        {"merge", lua_BoundingSphere_merge},
-        {"radius", lua_BoundingSphere_radius},
-        {"set", lua_BoundingSphere_set},
-        {"transform", lua_BoundingSphere_transform},
-        {NULL, NULL}
-    };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"empty", lua_BoundingSphere_static_empty},
-        {NULL, NULL}
-    };
-    std::vector<std::string> scopePath;
-
-    gameplay::ScriptUtil::registerClass("BoundingSphere", lua_members, lua_BoundingSphere__init, lua_BoundingSphere__gc, lua_statics, scopePath);
-}
-
 static BoundingSphere* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "BoundingSphere");
@@ -39,7 +16,7 @@ static BoundingSphere* getInstance(lua_State* state)
     return (BoundingSphere*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
-int lua_BoundingSphere__gc(lua_State* state)
+static int lua_BoundingSphere__gc(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -77,7 +54,7 @@ int lua_BoundingSphere__gc(lua_State* state)
     return 0;
 }
 
-int lua_BoundingSphere__init(lua_State* state)
+static int lua_BoundingSphere__init(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -186,7 +163,7 @@ int lua_BoundingSphere__init(lua_State* state)
     return 0;
 }
 
-int lua_BoundingSphere_center(lua_State* state)
+static int lua_BoundingSphere_center(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -230,7 +207,7 @@ int lua_BoundingSphere_center(lua_State* state)
     }
 }
 
-int lua_BoundingSphere_intersects(lua_State* state)
+static int lua_BoundingSphere_intersects(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -359,7 +336,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
     return 0;
 }
 
-int lua_BoundingSphere_isEmpty(lua_State* state)
+static int lua_BoundingSphere_isEmpty(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -394,7 +371,7 @@ int lua_BoundingSphere_isEmpty(lua_State* state)
     return 0;
 }
 
-int lua_BoundingSphere_merge(lua_State* state)
+static int lua_BoundingSphere_merge(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -454,7 +431,7 @@ int lua_BoundingSphere_merge(lua_State* state)
     return 0;
 }
 
-int lua_BoundingSphere_radius(lua_State* state)
+static int lua_BoundingSphere_radius(lua_State* state)
 {
     // Validate the number of parameters.
     if (lua_gettop(state) > 2)
@@ -483,7 +460,7 @@ int lua_BoundingSphere_radius(lua_State* state)
     }
 }
 
-int lua_BoundingSphere_set(lua_State* state)
+static int lua_BoundingSphere_set(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -571,7 +548,7 @@ int lua_BoundingSphere_set(lua_State* state)
     return 0;
 }
 
-int lua_BoundingSphere_static_empty(lua_State* state)
+static int lua_BoundingSphere_static_empty(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -608,7 +585,7 @@ int lua_BoundingSphere_static_empty(lua_State* state)
     return 0;
 }
 
-int lua_BoundingSphere_transform(lua_State* state)
+static int lua_BoundingSphere_transform(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -648,6 +625,30 @@ int lua_BoundingSphere_transform(lua_State* state)
         }
     }
     return 0;
+}
+
+void luaRegister_BoundingSphere()
+{
+    const luaL_Reg lua_members[] = 
+    {
+        {"center", lua_BoundingSphere_center},
+        {"intersects", lua_BoundingSphere_intersects},
+        {"isEmpty", lua_BoundingSphere_isEmpty},
+        {"merge", lua_BoundingSphere_merge},
+        {"radius", lua_BoundingSphere_radius},
+        {"set", lua_BoundingSphere_set},
+        {"transform", lua_BoundingSphere_transform},
+        {NULL, NULL}
+    };
+    const luaL_Reg lua_statics[] = 
+    {
+        {"empty", lua_BoundingSphere_static_empty},
+        {NULL, NULL}
+    };
+    std::vector<std::string> scopePath;
+
+    gameplay::ScriptUtil::registerClass("BoundingSphere", lua_members, lua_BoundingSphere__init, lua_BoundingSphere__gc, lua_statics, scopePath);
+
 }
 
 }
