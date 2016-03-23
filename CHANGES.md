@@ -1,7 +1,3 @@
-## v4.0.0
-
-- TODO
-
 ## v3.0.0
 
 - Adds support for Visual Studio 2015.
@@ -19,16 +15,20 @@
 - Adds support for cubemap textures.
 - Adds support for font kerning.
 - Adds support for Android x86.
+- Adds support for CMake on MacOSX.
 - Adds support for gamepads on Android.
 - Adds supoprt for Android extensions through custom native activity.
 - Adds water sample to browser.
 - Adds audio player sample to browser. 
 - Adds GamePlay-deps repository for cross-platform Cmake dependency builds.
+- Adds map/unmap buffer for Mesh and MeshPart.
 - Fixes to Scene Graph for merging Drawables on Node.
 - Fixes from setUserPointer to setUserObject(Ref*)
 - Fixes for virtual gamepad scaling.
 - Fixes Image to support grayscale PNGs.
 - Fixes Android to build with arm instead of thumb.
+- Fixes Android crash when gamepads disconnected.
+- Fixes for lua script bindings.
 
 ## v2.0.0
 
