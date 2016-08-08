@@ -9,6 +9,7 @@
 #include "ScriptController.h"
 #include <unistd.h>
 #include <IOKit/hid/IOHIDLib.h>
+#include <Availability.h>
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
 #import <OpenGL/OpenGL.h>
@@ -841,7 +842,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         NSOpenGLPFAColorSize, 32,
         NSOpenGLPFADepthSize, 24,
         NSOpenGLPFAAlphaSize, 8,
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
         NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersionLegacy,
+#endif
         0
     };
     NSOpenGLPixelFormatAttribute fullscreenAttrs[] = 
@@ -857,7 +860,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         NSOpenGLPFAColorSize, 32,
         NSOpenGLPFADepthSize, 24,
         NSOpenGLPFAAlphaSize, 8,
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
         NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersionLegacy,
+#endif
         0
     };
     NSOpenGLPixelFormatAttribute* attrs = __fullscreen ? fullscreenAttrs : windowedAttrs;
