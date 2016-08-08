@@ -1,14 +1,14 @@
 #ifndef GP_NO_PLATFORM
 #ifdef __APPLE__
 
-#include "Base.h"
-#include "Platform.h"
-#include "FileSystem.h"
-#include "Game.h"
-#include "Form.h"
-#include "ScriptController.h"
-#include <unistd.h>
-#include <sys/time.h>
+#import "Base.h"
+#import "Platform.h"
+#import "FileSystem.h"
+#import "Game.h"
+#import "Form.h"
+#import "ScriptController.h"
+#import <unistd.h>
+#import <sys/time.h>
 #import <UIKit/UIKit.h>
 #import <GameKit/GameKit.h>
 #import <QuartzCore/QuartzCore.h>
