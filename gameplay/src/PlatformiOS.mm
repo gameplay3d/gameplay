@@ -204,7 +204,11 @@ int getUnicode(int key);
         
         // Set the resource path and initalize the game
         NSString* bundlePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/"];
-        FileSystem::setResourcePath([bundlePath fileSystemRepresentation]); 
+        FileSystem::setResourcePath([bundlePath fileSystemRepresentation]);
+        
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsPath = [[paths objectAtIndex:0] stringByAppendingString:@"/"];
+        FileSystem::setExternalPath([documentsPath fileSystemRepresentation]);
     }
     return self;
 }

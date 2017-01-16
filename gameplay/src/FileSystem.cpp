@@ -30,7 +30,6 @@ extern AAssetManager* __assetManager;
 namespace gameplay
 {
 
-#ifdef __ANDROID__
 #include <unistd.h>
 
 static void makepath(std::string path, int mode)
@@ -45,7 +44,7 @@ static void makepath(std::string path, int mode)
         
         if (index + 1 >= path.length() || index == -1)
             break;
-            
+        
         path = path.substr(index + 1);
     }
     
@@ -67,6 +66,7 @@ static void makepath(std::string path, int mode)
     }
     return;
 }
+#ifdef __ANDROID__
 
 /**
  * Returns true if the file exists in the android read-only asset directory.
@@ -88,6 +88,7 @@ static bool androidFileExists(const char* filePath)
 /** @script{ignore} */
 static std::string __resourcePath("./");
 static std::string __assetPath("");
+static std::string __externalPath("");
 static std::map<std::string, std::string> __aliases;
 
 /**
@@ -98,7 +99,7 @@ static std::map<std::string, std::string> __aliases;
  * @param path The path to resolve.
  * @param fullPath The full resolved path. (out param)
  */
-static void getFullPath(const char* path, std::string& fullPath)
+static void getFullPath(const char* path, std::string& fullPath, bool external = false)
 {
     if (FileSystem::isAbsolutePath(path))
     {
@@ -106,7 +107,8 @@ static void getFullPath(const char* path, std::string& fullPath)
     }
     else
     {
-        fullPath.assign(__resourcePath);
+        if(external) fullPath.assign(__externalPath);
+        else fullPath.assign(__resourcePath);
         fullPath += FileSystem::resolvePath(path);
     }
 }
@@ -194,8 +196,22 @@ FileSystem::~FileSystem()
 void FileSystem::setResourcePath(const char* path)
 {
     __resourcePath = path == NULL ? "" : path;
+    if(__externalPath.compare("./") == 0 || __externalPath.length() == 0) {
+        __externalPath = __resourcePath;
+    }
 }
-
+    
+void FileSystem::setExternalPath(const char* path)
+{
+    __externalPath = path == NULL ? "" : path;
+}
+    
+const char* FileSystem::getExternalPath()
+{
+    return __externalPath.c_str();
+}
+    
+    
 const char* FileSystem::getResourcePath()
 {
     return __resourcePath.c_str();
@@ -340,7 +356,7 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
 #endif
 }
 
-bool FileSystem::fileExists(const char* filePath)
+bool FileSystem::fileExists(const char* filePath, bool external)
 {
     GP_ASSERT(filePath);
 
@@ -356,15 +372,17 @@ bool FileSystem::fileExists(const char* filePath)
     }
 #endif
 
-    getFullPath(filePath, fullPath);
+    getFullPath(filePath, fullPath, external);
 
     gp_stat_struct s;
     return stat(fullPath.c_str(), &s) == 0;
 
 }
 
-Stream* FileSystem::open(const char* path, size_t streamMode)
+Stream* FileSystem::open(const char* path, size_t streamMode, bool external)
 {
+    bool useExternal = (streamMode & WRITE) != 0 || external;
+    
     char modeStr[] = "rb";
     if ((streamMode & WRITE) != 0)
         modeStr[0] = 'w';
@@ -372,7 +390,7 @@ Stream* FileSystem::open(const char* path, size_t streamMode)
     std::string fullPath(__resourcePath);
     fullPath += resolvePath(path);
 
-    if ((streamMode & WRITE) != 0)
+    if (useExternal)
     {
         // Open a file on the SD card
         size_t index = fullPath.rfind('/');
@@ -403,7 +421,16 @@ Stream* FileSystem::open(const char* path, size_t streamMode)
     }
 #else
     std::string fullPath;
-    getFullPath(path, fullPath);
+    getFullPath(path, fullPath, useExternal);
+    if(useExternal && __externalPath.compare(__resourcePath) != 0) {
+        size_t index = fullPath.rfind('/');
+        if(index != std::string::npos) {
+            std::string directoryPath = fullPath.substr(0, index);
+            gp_stat_struct s;
+            if(stat(directoryPath.c_str(), &s) != 0)
+                makepath(directoryPath, 0777);
+        }
+    }
     FileStream* stream = FileStream::create(fullPath.c_str(), modeStr);
     return stream;
 #endif
@@ -423,12 +450,12 @@ FILE* FileSystem::openFile(const char* filePath, const char* mode)
     return fp;
 }
 
-char* FileSystem::readAll(const char* filePath, int* fileSize)
+char* FileSystem::readAll(const char* filePath, int* fileSize, bool external)
 {
     GP_ASSERT(filePath);
 
     // Open file for reading.
-    std::unique_ptr<Stream> stream(open(filePath));
+    std::unique_ptr<Stream> stream(open(filePath, READ, external));
     if (stream.get() == NULL)
     {
         GP_ERROR("Failed to load file: %s", filePath);
@@ -623,6 +650,7 @@ FileStream* FileStream::create(const char* filePath, const char* mode)
 
         return stream;
     }
+    else perror("Error");
     return NULL;
 }
 
