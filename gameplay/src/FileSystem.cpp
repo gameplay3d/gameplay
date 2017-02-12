@@ -29,7 +29,7 @@ extern AAssetManager* __assetManager;
 
 namespace gameplay
 {
-
+#ifndef WIN32
 #include <unistd.h>
 
 static void makepath(std::string path, int mode)
@@ -66,6 +66,7 @@ static void makepath(std::string path, int mode)
     }
     return;
 }
+#endif
 #ifdef __ANDROID__
 
 /**
@@ -422,6 +423,7 @@ Stream* FileSystem::open(const char* path, size_t streamMode, bool external)
 #else
     std::string fullPath;
     getFullPath(path, fullPath, useExternal);
+#ifndef WIN32
     if(useExternal && __externalPath.compare(__resourcePath) != 0) {
         size_t index = fullPath.rfind('/');
         if(index != std::string::npos) {
@@ -431,6 +433,7 @@ Stream* FileSystem::open(const char* path, size_t streamMode, bool external)
                 makepath(directoryPath, 0777);
         }
     }
+#endif
     FileStream* stream = FileStream::create(fullPath.c_str(), modeStr);
     return stream;
 #endif
