@@ -52,6 +52,11 @@ public:
      * @param path The path to the root of the resources folder.
      */
     static void setResourcePath(const char* path);
+    
+    
+    static void setExternalPath(const char* path);
+    
+    static const char* getExternalPath();
 
     /**
      * Returns the currently set resource path.
@@ -144,7 +149,7 @@ public:
      * 
      * @return <code>true</code> if the file exists; <code>false</code> otherwise.
      */
-    static bool fileExists(const char* filePath);
+    static bool fileExists(const char* filePath, bool external = false);
 
     /**
      * Opens a byte stream for the given resource path.
@@ -160,7 +165,7 @@ public:
      *
      * @script{ignore}
      */
-    static Stream* open(const char* path, size_t streamMode = READ);
+    static Stream* open(const char* path, size_t streamMode = READ, bool external = false);
 
     /**
      * Opens the specified file.
@@ -190,7 +195,7 @@ public:
      * @return A newly allocated (NULL-terminated) character array containing the
      *      contents of the file, or NULL if the file could not be read.
      */
-    static char* readAll(const char* filePath, int* fileSize = NULL);
+    static char* readAll(const char* filePath, int* fileSize = NULL, bool external = false);
 
     /**
      * Determines if the file path is an absolute path for the current platform.
