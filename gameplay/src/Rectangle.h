@@ -1,6 +1,4 @@
-#ifndef RECTANGLE_H_
-#define RECTANGLE_H_
-
+#pragma once
 
 namespace gameplay
 {
@@ -15,30 +13,34 @@ public:
     /**
      * Specifies the x-coordinate of the rectangle.
      */
-    float x;
+    float x = 0.0f;
 
     /**
      * Specifies the y-coordinate of the rectangle.
      */
-    float y;
+    float y = 0.0f;
 
     /**
      * Specifies the width of the rectangle.
      */
-    float width;
+    float width = 0.0f;
 
     /**
      * Specifies the height of the rectangle.
      */
-    float height;
+    float height = 0.0f;
 
     /**
-     * Constructs a new rectangle initialized to all zeros.
+     * Constructor.
+	 * 
+	 * The x, y, width and height values are set to zero.
      */
     Rectangle();
 
     /**
-     * Constructs a new rectangle with the x = 0, y = 0 and the specified width and height.
+     * Constructor.
+	 *
+	 * The x and y values are set to zero.
      *
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
@@ -46,7 +48,7 @@ public:
     Rectangle(float width, float height);
 
     /**
-     * Constructs a new rectangle with the specified x, y, width and height.
+     * Constructor.
      *
      * @param x The x-coordinate of the rectangle.
      * @param y The y-coordinate of the rectangle.
@@ -56,7 +58,7 @@ public:
     Rectangle(float x, float y, float width, float height);
 
     /**
-     * Constructs a new rectangle that is a copy of the specified rectangle.
+     * Constructor.
      *
      * @param copy The rectangle to copy.
      */
@@ -68,7 +70,7 @@ public:
     ~Rectangle();
 
     /**
-     * Returns a rectangle with all of its values set to zero.
+     * Gets a rectangle with all of its values set to zero.
      *
      * @return The empty rectangle with all of its values set to zero.
      */
@@ -107,35 +109,35 @@ public:
     void setPosition(float x, float y);
 
     /**
-     * Returns the x-coordinate of the left side of the rectangle.
+     * Gets the x-coordinate of the left side of the rectangle.
      *
      * @return The x-coordinate of the left side of the rectangle.
      */
-    float left() const;
+    float getLeft() const;
 
     /**
-     * Returns the y-coordinate of the top of the rectangle.
+     * Gets the y-coordinate of the top of the rectangle.
      *
      * @return The y-coordinate of the top of the rectangle.
      */
-    float top() const;
+    float getTop() const;
 
     /**
-     * Returns the x-coordinate of the right side of the rectangle.
+     * Gets the x-coordinate of the right side of the rectangle.
      *
      * @return The x-coordinate of the right side of the rectangle.
      */
-    float right() const;
+    float getRight() const;
 
     /**
-     * Returns the y-coordinate of the bottom of the rectangle.
+     * Gets the y-coordinate of the bottom of the rectangle.
      *
      * @return The y-coordinate of the bottom of the rectangle.
      */
-    float bottom() const;
+    float getBottom() const;
 
     /**
-     * Determines whether this rectangle contains a specified point.
+     * Tests whether this rectangle contains a specified point.
      *
      * @param x The x-coordinate of the point.
      * @param y The y-coordinate of the point.
@@ -145,7 +147,7 @@ public:
     bool contains(float x, float y) const;
 
     /**
-     * Determines whether this rectangle contains a specified rectangle.
+     * Tests whether this rectangle contains a specified rectangle.
      *
      * @param x The x-coordinate of the rectangle.
      * @param y The y-coordinate of the rectangle.
@@ -158,7 +160,7 @@ public:
     bool contains(float x, float y, float width, float height) const;
 
     /**
-     * Determines whether this rectangle contains a specified rectangle.
+     * Tests whether this rectangle contains a specified rectangle.
      *
      * @param r The rectangle.
      * 
@@ -168,7 +170,7 @@ public:
     bool contains(const Rectangle& r) const;
 
     /**
-     * Determines whether a specified rectangle intersects with this rectangle.
+     * Tests whether a specified rectangle intersects with this rectangle.
      * Rectangles intersect if there is a common point that is contained in both rectangles.
      *
      * @param x The x-coordinate of the rectangle.
@@ -181,7 +183,7 @@ public:
     bool intersects(float x, float y, float width, float height) const;
 
     /**
-     * Determines whether a specified rectangle intersects with this rectangle.
+     * Tests whether a specified rectangle intersects with this rectangle.
      *
      * @param r The rectangle.
      * 
@@ -191,18 +193,18 @@ public:
     bool intersects(const Rectangle& r) const;
 
     /**
-     * Computes the intersection of two rectangles and returns the result.
+     * Tests the intersection of two rectangles and returns the result.
      *
      * @param r1 The first rectangle.
      * @param r2 The second rectangle.
      * @param dst Populated with the resulting intersection, or Rectangle.empty if they do not intersect.
      *
-     * @return True if the two rectangles intersect, false otherwise.
+     * @return true if the two rectangles intersect, false otherwise.
      */
     static bool intersect(const Rectangle& r1, const Rectangle& r2, Rectangle* dst);
 
     /**
-     * Returns a new rectangle that exactly contains two other rectangles.
+     * Updates a rectangle that exactly contains the two other rectangles.
      *
      * @param r1 The first rectangle to contain.
      * @param r2 The second rectangle to contain.
@@ -211,7 +213,7 @@ public:
     static void combine(const Rectangle& r1, const Rectangle& r2, Rectangle* dst);
 
     /**
-     * Pushes the edges of the Rectangle out by the horizontal and vertical values specified.
+     * Inflates the edges of the Rectangle out by the horizontal and vertical values specified.
      *
      * Each corner of the Rectangle is pushed away from the center of the rectangle
      * by the specified amounts. This results in the width and height of the Rectangle
@@ -225,19 +227,17 @@ public:
     /**
      * operator =
      */
-    Rectangle& operator = (const Rectangle& r);
+    Rectangle& operator=(const Rectangle& r);
 
     /**
      * operator ==
      */
-    bool operator == (const Rectangle& r) const;
+    bool operator==(const Rectangle& r) const;
 
     /**
      * operator !=
      */
-    bool operator != (const Rectangle& r) const;
+    bool operator!=(const Rectangle& r) const;
 };
 
 }
-
-#endif

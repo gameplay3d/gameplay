@@ -110,16 +110,6 @@ bool Frustum::intersects(float x, float y, float z) const
     return intersects(Vector3(x, y, z));
 }
 
-bool Frustum::intersects(const BoundingSphere& sphere) const
-{
-    return sphere.intersects(*this);
-}
-
-bool Frustum::intersects(const BoundingBox& box) const
-{
-    return box.intersects(*this);
-}
-
 float Frustum::intersects(const Plane& plane) const
 {
     return plane.intersects(*this);
@@ -128,6 +118,16 @@ float Frustum::intersects(const Plane& plane) const
 float Frustum::intersects(const Ray& ray) const
 {
     return ray.intersects(*this);
+}
+
+bool Frustum::intersects(const BoundingSphere& sphere) const
+{
+    return sphere.intersects(*this);
+}
+
+bool Frustum::intersects(const BoundingBox& box) const
+{
+    return box.intersects(*this);
 }
 
 void Frustum::set(const Frustum& frustum)
@@ -157,6 +157,22 @@ void Frustum::set(const Matrix& matrix)
 
     // Update the planes.
     updatePlanes();
+}
+
+Frustum& Frustum::operator=(const Frustum& f)
+{
+    if(&f == this)
+        return *this;
+
+    _near = f._near;
+    _far = f._far;
+    _bottom = f._bottom;
+    _top = f._top;
+    _left = f._left;
+    _right = f._right;
+    _matrix = f._matrix;
+
+    return *this;
 }
 
 }

@@ -1,5 +1,4 @@
-#ifndef LOGGER_H_
-#define LOGGER_H_
+#pragma once
 
 namespace gameplay
 {
@@ -64,11 +63,10 @@ public:
      * When a call to log is made with the given level, the specified C function will
      * be called to handle the request.
      *
-     * Passing NULL for logFunction restores the default log behavior for this level.
+     * Passing nullptr for logFunction restores the default log behavior for this level.
      *
      * @param level Log level to set logging callback for.
      * @param logFunction Pointer to a C function to call for each log request at the given log level.
-     * @script{ignore}
      */
     static void set(Level level, void (*logFunction) (Level, const char*));
 
@@ -78,7 +76,7 @@ public:
      * When a call to log is made with the given level, the specified 
      * Lua function will be called to handle the request.
      *
-     * Passing NULL for logFunction restores the default log behavior for this level.
+     * Passing nullptr for logFunction restores the default log behavior for this level.
      *
      * @param level Log level.
      * @param logFunction The Lua function to call for each log request at the given log level.
@@ -87,38 +85,18 @@ public:
 
 private:
 
-    struct State
-    {
-        State();
-        void (*logFunctionC) (Level, const char*);
-        const char* logFunctionLua;
-        bool enabled;
-    };
-
-    /**
-     * Hidden constructor.
-     */
     Logger();
-
-    /**
-     * Hidden destructor.
-     */
+    Logger(const Logger& copy);
     ~Logger();
 
-    /**
-     * Hidden copy constructor.
-     */
-    Logger(const Logger& copy);
-
-    /**
-     * Hidden copy assignment operator.
-     */
-    Logger& operator=(const Logger&);
-
+	struct State
+	{
+		State();
+		void(*logFunctionC) (Level, const char*);
+		bool enabled;
+	};
     static State _state[3];
 
 };
 
 }
-
-#endif

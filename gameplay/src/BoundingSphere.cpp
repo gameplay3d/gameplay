@@ -5,8 +5,8 @@
 namespace gameplay
 {
 
-BoundingSphere::BoundingSphere()
-    : radius(0)
+BoundingSphere::BoundingSphere() :
+    radius(0)
 {
 }
 
@@ -106,15 +106,15 @@ float BoundingSphere::intersects(const Plane& plane) const
 
     if (fabsf(distance) <= radius)
     {
-        return Plane::INTERSECTS_INTERSECTING;
+        return (float)Plane::INTERSECTS_INTERSECTING;
     }
     else if (distance > 0.0f)
     {
-        return Plane::INTERSECTS_FRONT;
+        return (float)Plane::INTERSECTS_FRONT;
     }
     else
     {
-        return Plane::INTERSECTS_BACK;
+        return (float)Plane::INTERSECTS_BACK;
     }
 }
 
@@ -139,7 +139,7 @@ float BoundingSphere::intersects(const Ray& ray) const
     // If the discriminant is negative, then there is no intersection.
     if (discriminant < 0.0f)
     {
-        return Ray::INTERSECTS_NONE;
+        return (float)Ray::INTERSECTS_NONE;
     }
     else
     {
@@ -294,11 +294,10 @@ void BoundingSphere::transform(const Matrix& matrix)
     matrix.transformPoint(center, &center);
 
     // Scale the sphere's radius by the scale fo the matrix
-    Vector3 scale;
-    matrix.decompose(&scale, NULL, NULL);
+	Vector3 scale = matrix.getScale();
     float r = radius * scale.x;
-    r = max(r, radius * scale.y);
-    r = max(r, radius * scale.z);
+    r = std::max(r, radius * scale.y);
+    r = std::max(r, radius * scale.z);
     radius = r;
 }
 
@@ -319,6 +318,30 @@ bool BoundingSphere::contains(const BoundingSphere& sphere, Vector3* points, uns
         }
     }
     return true;
+}
+
+BoundingSphere& BoundingSphere::operator=(const BoundingSphere& b)
+{
+    if(&b == this)
+        return *this;
+
+    this->center = b.center;
+    this->radius = b.radius;
+
+    return *this;
+}
+
+BoundingSphere& BoundingSphere::operator*=(const Matrix& matrix)
+{
+    transform(matrix);
+    return *this;
+}
+
+const BoundingSphere operator*(const Matrix& matrix, const BoundingSphere& sphere)
+{
+    BoundingSphere s(sphere);
+    s.transform(matrix);
+    return s;
 }
 
 }

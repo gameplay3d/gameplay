@@ -1,5 +1,4 @@
-#ifndef BOUNDINGBOX_H_
-#define BOUNDINGBOX_H_
+#pragma once
 
 #include "Frustum.h"
 
@@ -16,20 +15,20 @@ public:
     /**
      * The minimum point.
      */
-    Vector3 min;
+    Vector3 min = Vector3::zero();
 
     /**
      * The maximum point.
      */
-    Vector3 max;
+    Vector3 max = Vector3::zero();
 
     /**
-     * Constructs an empty bounding box at the origin.
+     * Constructor.
      */
     BoundingBox();
 
     /**
-     * Constructs a new bounding box from the specified values.
+     * Constructor.
      *
      * @param min The minimum point of the bounding box.
      * @param max The maximum point of the bounding box.
@@ -37,21 +36,9 @@ public:
     BoundingBox(const Vector3& min, const Vector3& max);
 
     /**
-     * Constructs a new bounding box from the specified values.
-     * 
-     * @param minX The x coordinate of the minimum point of the bounding box.
-     * @param minY The y coordinate of the minimum point of the bounding box.
-     * @param minZ The z coordinate of the minimum point of the bounding box.
-     * @param maxX The x coordinate of the maximum point of the bounding box.
-     * @param maxY The y coordinate of the maximum point of the bounding box.
-     * @param maxZ The z coordinate of the maximum point of the bounding box.
-     */
-    BoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
-
-    /**
-     * Constructs a new bounding box from the given bounding box.
+     * Constructor.
      *
-     * @param copy The bounding box to copy.
+     * @param copy The sphere copy.
      */
     BoundingBox(const BoundingBox& copy);
 
@@ -61,7 +48,7 @@ public:
     ~BoundingBox();
 
     /**
-     * Returns an empty bounding box.
+     * Gets an empty bounding box.
      */
     static const BoundingBox& empty();
 
@@ -176,18 +163,6 @@ public:
     void set(const Vector3& min, const Vector3& max);
 
     /**
-     * Sets this bounding box to the specified values.
-     * 
-     * @param minX The x coordinate of the minimum point of the bounding box.
-     * @param minY The y coordinate of the minimum point of the bounding box.
-     * @param minZ The z coordinate of the minimum point of the bounding box.
-     * @param maxX The x coordinate of the maximum point of the bounding box.
-     * @param maxY The y coordinate of the maximum point of the bounding box.
-     * @param maxZ The z coordinate of the maximum point of the bounding box.
-     */
-    void set(float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
-
-    /**
      * Sets this bounding box to the specified bounding box.
      *
      * @param box The bounding box to set to.
@@ -209,12 +184,17 @@ public:
     void transform(const Matrix& matrix);
 
     /**
+     * @brief operator=
+     */
+    BoundingBox& operator=(const BoundingBox& other);
+
+    /**
      * Transforms this bounding box by the given matrix.
      * 
      * @param matrix The matrix to transform by.
      * @return This bounding box, after the transformation occurs.
      */
-    inline BoundingBox& operator*=(const Matrix& matrix);
+    BoundingBox& operator*=(const Matrix& matrix);
 };
 
 /**
@@ -224,10 +204,6 @@ public:
  * @param box The bounding box to transform.
  * @return The resulting transformed bounding box.
  */
-inline const BoundingBox operator*(const Matrix& matrix, const BoundingBox& box);
+ const BoundingBox operator*(const Matrix& matrix, const BoundingBox& box);
 
 }
-
-#include "BoundingBox.inl"
-
-#endif

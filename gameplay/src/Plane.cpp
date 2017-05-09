@@ -18,11 +18,6 @@ Plane::Plane(const Vector3& normal, float distance)
     set(normal, distance);
 }
 
-Plane::Plane(float normalX, float normalY, float normalZ, float distance)
-{
-    set(Vector3(normalX, normalY, normalZ), distance);
-}
-
 Plane::Plane(const Plane& copy)
 {
     set(copy);
@@ -40,12 +35,6 @@ const Vector3& Plane::getNormal() const
 void Plane::setNormal(const Vector3& normal)
 {
     _normal = normal;
-    normalize();
-}
-
-void Plane::setNormal(float x, float y, float z)
-{
-    _normal.set(x, y, z);
     normalize();
 }
 
@@ -75,7 +64,7 @@ void Plane::intersection(const Plane& p1, const Plane& p2, const Plane& p3, Vect
                 p1._normal.z * p3._normal.y) + p3._normal.x * (p1._normal.y * p2._normal.z - p1._normal.z * p2._normal.y);
 
     // If the determinant is zero, then the planes do not all intersect.
-    if (fabs(det) <= MATH_EPSILON)
+    if (std::fabs(det) <= GP_MATH_EPSILON)
         return;
 
     // Create 3 points, one on each plane.
@@ -112,16 +101,6 @@ void Plane::intersection(const Plane& p1, const Plane& p2, const Plane& p3, Vect
     point->z = (s1 * c1z + s2 * c2z + s3 * c3z) * detI;
 }
 
-float Plane::intersects(const BoundingSphere& sphere) const
-{
-    return sphere.intersects(*this);
-}
-
-float Plane::intersects(const BoundingBox& box) const
-{
-    return box.intersects(*this);
-}
-
 float Plane::intersects(const Frustum& frustum) const
 {
     // Get the corners of the frustum.
@@ -144,10 +123,10 @@ float Plane::intersects(const Frustum& frustum) const
             distance(corners[6]) <= 0.0f ||
             distance(corners[7]) <= 0.0f)
         {
-            return Plane::INTERSECTS_INTERSECTING;
+            return (float)Plane::INTERSECTS_INTERSECTING;
         }
 
-        return Plane::INTERSECTS_FRONT;
+        return (float)Plane::INTERSECTS_FRONT;
     }
     else if (d < 0.0f)
     {
@@ -159,14 +138,14 @@ float Plane::intersects(const Frustum& frustum) const
             distance(corners[6]) >= 0.0f ||
             distance(corners[7]) >= 0.0f)
         {
-            return Plane::INTERSECTS_INTERSECTING;
+            return (float)Plane::INTERSECTS_INTERSECTING;
         }
 
-        return Plane::INTERSECTS_BACK;
+        return (float)Plane::INTERSECTS_BACK;
     }
     else
     {
-        return Plane::INTERSECTS_INTERSECTING;
+        return (float)Plane::INTERSECTS_INTERSECTING;
     }
 }
 
@@ -175,7 +154,7 @@ float Plane::intersects(const Plane& plane) const
     // Check if the planes intersect.
     if ((_normal.x == plane._normal.x && _normal.y == plane._normal.y && _normal.z == plane._normal.z) || !isParallel(plane))
     {
-        return Plane::INTERSECTS_INTERSECTING;
+        return (float)Plane::INTERSECTS_INTERSECTING;
     }
 
     // Calculate the point where the given plane's normal vector intersects the given plane.
@@ -185,11 +164,11 @@ float Plane::intersects(const Plane& plane) const
     // (corresponds directly to the sign of the distance from the point calculated above to this plane).
     if (distance(point) > 0.0f)
     {
-        return Plane::INTERSECTS_FRONT;
+        return (float)Plane::INTERSECTS_FRONT;
     }
     else
     {
-        return Plane::INTERSECTS_BACK;
+        return (float)Plane::INTERSECTS_BACK;
     }
 }
 
@@ -201,7 +180,7 @@ float Plane::intersects(const Ray& ray) const
     // If the origin of the ray lies in the plane, then it intersects.
     if (d == 0.0f)
     {
-        return Plane::INTERSECTS_INTERSECTING;
+        return (float)Plane::INTERSECTS_INTERSECTING;
     }
     else
     {
@@ -214,25 +193,35 @@ float Plane::intersects(const Ray& ray) const
         {
             if (d < 0.0f)
             {
-                return Plane::INTERSECTS_INTERSECTING;
+                return (float)Plane::INTERSECTS_INTERSECTING;
             }
             else
             {
-                return Plane::INTERSECTS_FRONT;
+                return (float)Plane::INTERSECTS_FRONT;
             }
         }
         else
         {
             if (d > 0.0f)
             {
-                return Plane::INTERSECTS_INTERSECTING;
+                return (float)Plane::INTERSECTS_INTERSECTING;
             }
             else
             {
-                return Plane::INTERSECTS_BACK;
+                return (float)Plane::INTERSECTS_BACK;
             }
         }
     }
+}
+
+float Plane::intersects(const BoundingSphere& sphere) const
+{
+    return sphere.intersects(*this);
+}
+
+float Plane::intersects(const BoundingBox& box) const
+{
+    return box.intersects(*this);
 }
 
 bool Plane::isParallel(const Plane& plane) const
@@ -266,7 +255,7 @@ void Plane::transform(const Matrix& matrix)
         float ny = _normal.x * inverted.m[4] + _normal.y * inverted.m[5] + _normal.z * inverted.m[6] + _distance * inverted.m[7];
         float nz = _normal.x * inverted.m[8] + _normal.y * inverted.m[9] + _normal.z * inverted.m[10] + _distance * inverted.m[11];
         float d = _normal.x * inverted.m[12]+ _normal.y * inverted.m[13] + _normal.z * inverted.m[14] + _distance * inverted.m[15];
-        float divisor = sqrt(nx * nx + ny * ny + nz * nz);
+        float divisor = std::sqrt(nx * nx + ny * ny + nz * nz);
         GP_ASSERT(divisor);
         float factor = 1.0f / divisor;
 
@@ -283,7 +272,7 @@ void Plane::normalize()
         return;
 
     // Normalize the plane's normal.
-    float normalizeFactor = 1.0f / sqrt(_normal.x * _normal.x + _normal.y * _normal.y + _normal.z * _normal.z);
+    float normalizeFactor = 1.0f / std::sqrt(_normal.x * _normal.x + _normal.y * _normal.y + _normal.z * _normal.z);
 
     if (normalizeFactor != 1.0f)
     {
@@ -292,6 +281,30 @@ void Plane::normalize()
         _normal.z *= normalizeFactor;
         _distance *= normalizeFactor;
     }
+}
+
+Plane& Plane::operator=(const Plane& p)
+{
+    if(&p == this)
+        return *this;
+
+    _normal = p._normal;
+    _distance = p._distance;
+
+    return *this;
+}
+
+Plane& Plane::operator*=(const Matrix& matrix)
+{
+    transform(matrix);
+    return *this;
+}
+
+const Plane operator*(const Matrix& matrix, const Plane& plane)
+{
+    Plane p(plane);
+    p.transform(matrix);
+    return p;
 }
 
 }

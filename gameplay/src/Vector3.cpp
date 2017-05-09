@@ -1,17 +1,17 @@
 #include "Base.h"
 #include "Vector3.h"
-#include "MathUtil.h"
 
 namespace gameplay
 {
 
 Vector3::Vector3()
-    : x(0.0f), y(0.0f), z(0.0f)
 {
 }
 
-Vector3::Vector3(float x, float y, float z)
-    : x(x), y(y), z(z)
+Vector3::Vector3(float x, float y, float z) : 
+    x(x),
+    y(y),
+    z(z)
 {
 }
 
@@ -37,11 +37,38 @@ Vector3 Vector3::fromColor(unsigned int color)
     for (int i = 2; i >= 0; --i)
     {
         int component = (color >> i*8) & 0x0000ff;
-
         components[componentIndex++] = static_cast<float>(component) / 255.0f;
     }
 
     Vector3 value(components);
+    return value;
+}
+
+Vector3 Vector3::fromColorString(const char* str)
+{
+    Vector3 value = Vector3(0, 0, 0);
+    if (str[0] == '#' && strlen(str) == 7 )
+    {
+        unsigned int color;
+        if (sscanf(str + 1, "%x", &color) == 1)
+            value = Vector3::fromColor(color);
+    }
+    return value;
+}
+
+unsigned int Vector3::toColor() const
+{
+    unsigned char component;
+    unsigned int value = 0;
+    // Red component
+    component = static_cast<unsigned char>(x * 255);
+    value += component << 16;
+    // Green component
+    component = static_cast<unsigned char>(y * 255);
+    value += component << 8;
+    // Blue component
+    component = static_cast<unsigned char>(z * 255);
+    value += component;
     return value;
 }
 
@@ -61,21 +88,39 @@ const Vector3& Vector3::one()
     return value;
 }
 
-const Vector3& Vector3::unitX()
-{
-    static Vector3 value(1.0f, 0.0f, 0.0f);
-    return value;
-}
-
-const Vector3& Vector3::unitY()
+const Vector3& Vector3::up()
 {
     static Vector3 value(0.0f, 1.0f, 0.0f);
     return value;
 }
 
-const Vector3& Vector3::unitZ()
+const Vector3& Vector3::down()
+{
+    static Vector3 value(0.0f, -1.0f, 0.0f);
+    return value;
+}
+
+const Vector3& Vector3::right()
+{
+    static Vector3 value(1.0f, 0.0f, 0.0f);
+    return value;
+}
+
+const Vector3& Vector3::left()
+{
+    static Vector3 value(-1.0f, 0.0f, 0.0f);
+    return value;
+}
+
+const Vector3& Vector3::forward()
 {
     static Vector3 value(0.0f, 0.0f, 1.0f);
+    return value;
+}
+
+const Vector3& Vector3::back()
+{
+    static Vector3 value(0.0f, 0.0f, -1.0f);
     return value;
 }
 
@@ -95,7 +140,7 @@ float Vector3::angle(const Vector3& v1, const Vector3& v2)
     float dy = v1.z * v2.x - v1.x * v2.z;
     float dz = v1.x * v2.y - v1.y * v2.x;
 
-    return atan2f(sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
+    return std::atan2(std::sqrt(dx * dx + dy * dy + dz * dz) + GP_MATH_FLOAT_SMALL, dot(v1, v2));
 }
 
 void Vector3::add(const Vector3& v)
@@ -118,19 +163,14 @@ void Vector3::clamp(const Vector3& min, const Vector3& max)
 {
     GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z));
 
-    // Clamp the x value.
     if (x < min.x)
         x = min.x;
     if (x > max.x)
         x = max.x;
-
-    // Clamp the y value.
     if (y < min.y)
         y = min.y;
     if (y > max.y)
         y = max.y;
-
-    // Clamp the z value.
     if (z < min.z)
         z = min.z;
     if (z > max.z)
@@ -142,21 +182,16 @@ void Vector3::clamp(const Vector3& v, const Vector3& min, const Vector3& max, Ve
     GP_ASSERT(dst);
     GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z));
 
-    // Clamp the x value.
     dst->x = v.x;
     if (dst->x < min.x)
         dst->x = min.x;
     if (dst->x > max.x)
         dst->x = max.x;
-
-    // Clamp the y value.
     dst->y = v.y;
     if (dst->y < min.y)
         dst->y = min.y;
     if (dst->y > max.y)
         dst->y = max.y;
-
-    // Clamp the z value.
     dst->z = v.z;
     if (dst->z < min.z)
         dst->z = min.z;
@@ -172,11 +207,9 @@ void Vector3::cross(const Vector3& v)
 void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
     GP_ASSERT(dst);
-
-    // NOTE: This code assumes Vector3 struct members are contiguous floats in memory.
-    // We might want to revisit this (and other areas of code that make this assumption)
-    // later to guarantee 100% safety/compatibility.
-    MathUtil::crossVector3(&v1.x, &v2.x, &dst->x);
+    dst->x = (v1.y * v2.z) - (v1.z * v2.y);
+    dst->y = (v1.z * v2.x) - (v1.x * v2.z);
+    dst->z = (v1.x * v2.y) - (v1.y * v2.x);
 }
 
 float Vector3::distance(const Vector3& v) const
@@ -185,7 +218,7 @@ float Vector3::distance(const Vector3& v) const
     float dy = v.y - y;
     float dz = v.z - z;
 
-    return sqrt(dx * dx + dy * dy + dz * dz);
+    return std::sqrt(dx * dx + dy * dy + dz * dz);
 }
 
 float Vector3::distanceSquared(const Vector3& v) const
@@ -209,7 +242,7 @@ float Vector3::dot(const Vector3& v1, const Vector3& v2)
 
 float Vector3::length() const
 {
-    return sqrt(x * x + y * y + z * z);
+    return std::sqrt(x * x + y * y + z * z);
 }
 
 float Vector3::lengthSquared() const
@@ -246,9 +279,9 @@ void Vector3::normalize(Vector3* dst) const
     if (n == 1.0f)
         return;
 
-    n = sqrt(n);
+    n = std::sqrt(n);
     // Too close to zero.
-    if (n < MATH_TOLERANCE)
+    if (n < GP_MATH_TOLERANCE)
         return;
 
     n = 1.0f / n;
@@ -316,6 +349,99 @@ void Vector3::smooth(const Vector3& target, float elapsedTime, float responseTim
     {
         *this += (target - *this) * (elapsedTime / (elapsedTime + responseTime));
     }
+}
+
+Vector3& Vector3::operator=(const Vector3& v)
+{
+    if(&v == this)
+        return *this;
+
+    this->x = v.x;
+    this->y = v.y;
+    this->z = v.z;
+
+    return *this;
+}
+
+const Vector3 Vector3::operator+(const Vector3& v) const
+{
+    Vector3 result(*this);
+    result.add(v);
+    return result;
+}
+
+Vector3& Vector3::operator+=(const Vector3& v)
+{
+    add(v);
+    return *this;
+}
+
+const Vector3 Vector3::operator-(const Vector3& v) const
+{
+    Vector3 result(*this);
+    result.subtract(v);
+    return result;
+}
+
+Vector3& Vector3::operator-=(const Vector3& v)
+{
+    subtract(v);
+    return *this;
+}
+
+const Vector3 Vector3::operator-() const
+{
+    Vector3 result(*this);
+    result.negate();
+    return result;
+}
+
+const Vector3 Vector3::operator*(float x) const
+{
+    Vector3 result(*this);
+    result.scale(x);
+    return result;
+}
+
+Vector3& Vector3::operator*=(float x)
+{
+    scale(x);
+    return *this;
+}
+
+const Vector3 Vector3::operator/(const float x) const
+{
+    return Vector3(this->x / x, this->y / x, this->z / x);
+}
+
+bool Vector3::operator<(const Vector3& v) const
+{
+    if (x == v.x)
+    {
+        if (y == v.y)
+        {
+            return z < v.z;
+        }
+        return y < v.y;
+    }
+    return x < v.x;
+}
+
+bool Vector3::operator==(const Vector3& v) const
+{
+    return x == v.x && y == v.y && z == v.z;
+}
+
+bool Vector3::operator!=(const Vector3& v) const
+{
+    return x != v.x || y != v.y || z != v.z;
+}
+
+const Vector3 operator*(float x, const Vector3& v)
+{
+    Vector3 result(v);
+    result.scale(x);
+    return result;
 }
 
 }

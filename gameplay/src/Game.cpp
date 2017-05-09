@@ -1,826 +1,446 @@
 #include "Base.h"
 #include "Game.h"
-#include "Platform.h"
-#include "RenderState.h"
 #include "FileSystem.h"
-#include "FrameBuffer.h"
-#include "SceneLoader.h"
-#include "ControlFactory.h"
-#include "Theme.h"
-#include "Form.h"
-
-/** @script{ignore} */
-GLenum __gl_error_code = GL_NO_ERROR;
-/** @script{ignore} */
-ALenum __al_error_code = AL_NO_ERROR;
+#include "Serializable.h"
+#include "SerializerJson.h"
 
 namespace gameplay
 {
+static const int  GAME_SPLASH_SCREEN_DURATION = 2.0f;
 
-static Game* __gameInstance = NULL;
+static Game* __gameInstance = nullptr;
+std::chrono::time_point<std::chrono::high_resolution_clock> Game::_timeStart = std::chrono::high_resolution_clock::now();
 double Game::_pausedTimeLast = 0.0;
 double Game::_pausedTimeTotal = 0.0;
+std::shared_ptr<SceneObject> Game::_sceneLoadingDefault = std::make_shared<SceneObject>();
 
-/**
-* @script{ignore}
-*/
-class GameScriptTarget : public ScriptTarget
+Game::Game() : 
+	_config(nullptr),
+	_state(Game::STATE_UNINITIALIZED),
+    _width(GP_GRAPHICS_WIDTH),
+    _height(GP_GRAPHICS_HEIGHT),
+	_mouseCapture(false),
+	_cursorVisible(false),
+	_pausedCount(0),
+	_frameLastFPS(0),
+	_frameCount(0),
+	_frameRate(0),
+    _sceneLoading(nullptr),
+	_scene(nullptr),
+    _camera(nullptr)
 {
-    friend class Game;
-
-    GP_SCRIPT_EVENTS_START();
-    GP_SCRIPT_EVENT(initialize, "");
-    GP_SCRIPT_EVENT(finalize, "");
-    GP_SCRIPT_EVENT(update, "f");
-    GP_SCRIPT_EVENT(render, "f");
-    GP_SCRIPT_EVENT(resizeEvent, "ii");
-    GP_SCRIPT_EVENT(keyEvent, "[Keyboard::KeyEvent]i");
-    GP_SCRIPT_EVENT(touchEvent, "[Touch::TouchEvent]iiui");
-    GP_SCRIPT_EVENT(mouseEvent, "[Mouse::MouseEvent]iii");
-    GP_SCRIPT_EVENT(gestureSwipeEvent, "iii");
-    GP_SCRIPT_EVENT(gesturePinchEvent, "iif");
-    GP_SCRIPT_EVENT(gestureTapEvent, "ii");
-    GP_SCRIPT_EVENT(gestureLongTapevent, "iif");
-    GP_SCRIPT_EVENT(gestureDragEvent, "ii");
-    GP_SCRIPT_EVENT(gestureDropEvent, "ii");
-    GP_SCRIPT_EVENT(gamepadEvent, "[Gamepad::GamepadEvent]<Gamepad>");
-    GP_SCRIPT_EVENTS_END();
-
-public:
-
-    GameScriptTarget()
-    {
-        GP_REGISTER_SCRIPT_EVENTS();
-    }
-
-    const char* getTypeName() const
-    {
-        return "GameScriptTarget";
-    }
-};
-
-Game::Game()
-    : _initialized(false), _state(UNINITIALIZED), _pausedCount(0),
-      _frameLastFPS(0), _frameCount(0), _frameRate(0), _width(0), _height(0),
-      _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
-      _animationController(NULL), _audioController(NULL),
-      _physicsController(NULL), _aiController(NULL), _audioListener(NULL),
-      _timeEvents(NULL), _scriptController(NULL), _scriptTarget(NULL)
-{
-    GP_ASSERT(__gameInstance == NULL);
-
-    __gameInstance = this;
-    _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
+	__gameInstance = this;
 }
 
 Game::~Game()
 {
-    SAFE_DELETE(_scriptTarget);
-	SAFE_DELETE(_scriptController);
-
-    // Do not call any virtual functions from the destructor.
-    // Finalization is done from outside this class.
-    SAFE_DELETE(_timeEvents);
-#ifdef GP_USE_MEM_LEAK_DETECTION
-    Ref::printLeaks();
-    printMemoryLeaks();
-#endif
-
-    __gameInstance = NULL;
+	__gameInstance = nullptr;
 }
 
 Game* Game::getInstance()
 {
-    GP_ASSERT(__gameInstance);
     return __gameInstance;
 }
 
-void Game::initialize()
+Game::State Game::getState() const
 {
-    // stub
-}
-
-void Game::finalize()
-{
-    // stub
-}
-
-void Game::update(float elapsedTime)
-{
-    // stub
-}
-
-void Game::render(float elapsedTime)
-{
-    // stub
+    return _state;
 }
 
 double Game::getAbsoluteTime()
 {
-    return Platform::getAbsoluteTime();
+	auto now = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> diff = now - _timeStart;
+	return diff.count();
 }
 
 double Game::getGameTime()
 {
-    return Platform::getAbsoluteTime() - _pausedTimeTotal;
+   return getAbsoluteTime() - _pausedTimeTotal;
 }
 
-void Game::setVsync(bool enable)
+size_t Game::getFrameRate() const
 {
-    Platform::setVsync(enable);
+    return _frameRate;
 }
 
-bool Game::isVsync()
+int Game::getWidth() const
 {
-    return Platform::isVsync();
+    return _width;
 }
 
-int Game::run()
+int Game::getHeight() const
 {
-    if (_state != UNINITIALIZED)
-        return -1;
-
-    loadConfig();
-
-    _width = Platform::getDisplayWidth();
-    _height = Platform::getDisplayHeight();
-
-    // Start up game systems.
-    if (!startup())
-    {
-        shutdown();
-        return -2;
-    }
-
-    return 0;
+    return _height;
 }
 
-bool Game::startup()
+float Game::getAspectRatio() const
 {
-    if (_state != UNINITIALIZED)
-        return false;
-
-    setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
-    RenderState::initialize();
-    FrameBuffer::initialize();
-
-    _animationController = new AnimationController();
-    _animationController->initialize();
-
-    _audioController = new AudioController();
-    _audioController->initialize();
-
-    _physicsController = new PhysicsController();
-    _physicsController->initialize();
-
-    _aiController = new AIController();
-    _aiController->initialize();
-
-    _scriptController = new ScriptController();
-    _scriptController->initialize();
-
-    // Load any gamepads, ui or physical.
-    loadGamepads();
-
-    // Set script handler
-    if (_properties)
-    {
-        const char* scriptPath = _properties->getString("script");
-        if (scriptPath)
-        {
-            _scriptTarget = new GameScriptTarget();
-            _scriptTarget->addScript(scriptPath);
-        }
-        else
-        {
-            // Use the older scripts namespace for loading individual global script callback functions.
-            Properties* sns = _properties->getNamespace("scripts", true);
-            if (sns)
-            {
-                _scriptTarget = new GameScriptTarget();
-
-                // Define a macro to simplify defining the following script callback registrations
-                #define GP_REG_GAME_SCRIPT_CB(e) if (sns->exists(#e)) _scriptTarget->addScriptCallback(GP_GET_SCRIPT_EVENT(GameScriptTarget, e), sns->getString(#e))
-
-                // Register all supported script callbacks if they are defined
-                GP_REG_GAME_SCRIPT_CB(initialize);
-                GP_REG_GAME_SCRIPT_CB(finalize);
-                GP_REG_GAME_SCRIPT_CB(update);
-                GP_REG_GAME_SCRIPT_CB(render);
-                GP_REG_GAME_SCRIPT_CB(resizeEvent);
-                GP_REG_GAME_SCRIPT_CB(keyEvent);
-                GP_REG_GAME_SCRIPT_CB(touchEvent);
-                GP_REG_GAME_SCRIPT_CB(mouseEvent);
-                GP_REG_GAME_SCRIPT_CB(gestureSwipeEvent);
-                GP_REG_GAME_SCRIPT_CB(gesturePinchEvent);
-                GP_REG_GAME_SCRIPT_CB(gestureTapEvent);
-                GP_REG_GAME_SCRIPT_CB(gestureLongTapevent);
-                GP_REG_GAME_SCRIPT_CB(gestureDragEvent);
-                GP_REG_GAME_SCRIPT_CB(gestureDropEvent);
-                GP_REG_GAME_SCRIPT_CB(gamepadEvent);
-            }
-        }
-    }
-
-    _state = RUNNING;
-
-    return true;
-}
-
-void Game::shutdown()
-{
-    // Call user finalization.
-    if (_state != UNINITIALIZED)
-    {
-        GP_ASSERT(_animationController);
-        GP_ASSERT(_audioController);
-        GP_ASSERT(_physicsController);
-        GP_ASSERT(_aiController);
-
-        Platform::signalShutdown();
-
-		// Call user finalize
-        finalize();
-
-        // Call script finalize
-        if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, finalize));
-
-        // Destroy script target so no more script events are fired
-        SAFE_DELETE(_scriptTarget);
-
-		// Shutdown scripting system first so that any objects allocated in script are released before our subsystems are released
-		_scriptController->finalize();
-
-        unsigned int gamepadCount = Gamepad::getGamepadCount();
-        for (unsigned int i = 0; i < gamepadCount; i++)
-        {
-            Gamepad* gamepad = Gamepad::getGamepad(i, false);
-            SAFE_DELETE(gamepad);
-        }
-
-        _animationController->finalize();
-        SAFE_DELETE(_animationController);
-
-        _audioController->finalize();
-        SAFE_DELETE(_audioController);
-
-        _physicsController->finalize();
-        SAFE_DELETE(_physicsController);
-        _aiController->finalize();
-        SAFE_DELETE(_aiController);
-        
-        ControlFactory::finalize();
-
-        Theme::finalize();
-
-        // Note: we do not clean up the script controller here
-        // because users can call Game::exit() from a script.
-
-        SAFE_DELETE(_audioListener);
-
-        FrameBuffer::finalize();
-        RenderState::finalize();
-
-        SAFE_DELETE(_properties);
-
-		_state = UNINITIALIZED;
-    }
+    return (float)_width / (float)_height;
 }
 
 void Game::pause()
 {
-    if (_state == RUNNING)
+    if (_state == Game::STATE_RUNNING)
     {
-        GP_ASSERT(_animationController);
-        GP_ASSERT(_audioController);
-        GP_ASSERT(_physicsController);
-        GP_ASSERT(_aiController);
-        _state = PAUSED;
-        _pausedTimeLast = Platform::getAbsoluteTime();
-        _animationController->pause();
-        _audioController->pause();
-        _physicsController->pause();
-        _aiController->pause();
+        _state = Game::STATE_PAUSED;
+        _pausedTimeLast = getAbsoluteTime();
     }
-
     ++_pausedCount;
 }
 
 void Game::resume()
 {
-    if (_state == PAUSED)
+    if (_state == Game::STATE_PAUSED)
     {
         --_pausedCount;
-
         if (_pausedCount == 0)
         {
-            GP_ASSERT(_animationController);
-            GP_ASSERT(_audioController);
-            GP_ASSERT(_physicsController);
-            GP_ASSERT(_aiController);
-            _state = RUNNING;
-            _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
-            _animationController->resume();
-            _audioController->resume();
-            _physicsController->resume();
-            _aiController->resume();
+            _state = Game::STATE_RUNNING;
+            _pausedTimeTotal += getAbsoluteTime() - _pausedTimeLast;
         }
     }
 }
 
 void Game::exit()
 {
-    // Only perform a full/clean shutdown if GP_USE_MEM_LEAK_DETECTION is defined.
-	// Every modern OS is able to handle reclaiming process memory hundreds of times
-	// faster than it would take us to go through every pointer in the engine and
-	// release them nicely. For large games, shutdown can end up taking long time,
-    // so we'll just call ::exit(0) to force an instant shutdown.
-
-#ifdef GP_USE_MEM_LEAK_DETECTION
-
-    // Schedule a call to shutdown rather than calling it right away.
-	// This handles the case of shutting down the script system from
-	// within a script function (which can cause errors).
-	static ShutdownListener listener;
-	schedule(0, &listener);
-
-#else
-
-    // End the process immediately without a full shutdown
-    ::exit(0);
-
-#endif
+	if (_state != Game::STATE_UNINITIALIZED)
+    {
+        // Signal the platform that we are about to shutdown the game.
+        getPlatform()->shutdown();
+        // Call user finalize
+        onFinalize();
+        // Finalize Sub-Systems
+        _state = Game::STATE_UNINITIALIZED;
+    }
+    std::exit(0);
 }
 
-
-void Game::frame()
+void Game::showSplashScreens(std::vector<SplashScreen> splashScreens)
 {
-    if (!_initialized)
-    {
-        // Perform lazy first time initialization
-        initialize();
-        if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, initialize));
-        _initialized = true;
+}
 
-        // Fire first game resize event
-        Platform::resizeEventInternal(_width, _height);
-    }
+void Game::setLoadingScene(const std::string& url)
+{
+    loadScene(url, false);
+}
 
+std::shared_ptr<SceneObject> Game::getLoadingScene() const
+{
+    return _sceneLoading;
+}
+
+void Game::loadScene(const std::string& url, bool showLoading)
+{
+    // Unload any previous scene
+    if (_scene && (_scene != _sceneLoading) && (_scene != _sceneLoadingDefault))
+        _scene->unload();
+
+    // Set the loading scene and change states
+    _scene = _sceneLoading;
+    _state = Game::STATE_LOADING;
+
+    // 
+	//_scene = dynamic_cast<SceneObject*>(loadAsset(_config->sceneUrl.c_str()));
+	//_scene->onInitialize();
+	
+}
+
+void Game::unloadScene(std::shared_ptr<SceneObject> scene)
+{
+}
+
+void Game::setScene(std::shared_ptr<SceneObject> scene)
+{
+    _scene = scene;
+}
+
+std::shared_ptr<SceneObject> Game::getScene() const
+{
+	return _scene;
+}
+
+void Game::setCamera(std::shared_ptr<Camera> camera)
+{
+    _camera = camera;
+}
+
+std::shared_ptr<Camera> Game::getCamera() const
+{
+    return _camera;
+}
+
+void Game::onInitialize()
+{
+	_config = getConfig();
+	FileSystem::setAssetPath(_config->assetsPath);
+	
+    // Splash screens
+
+    // Loading scene
+
+    // Start scene
+}
+
+void Game::onFinalize()
+{
+	_scene->onFinalize();
+}
+
+void Game::onSceneLoad(std::shared_ptr<SceneObject> scene)
+{
+}
+
+void Game::onResize(int width, int height)
+{
+    _width = width;
+    _height = height;
+}
+
+void Game::onGamepadEvent(Platform::GamepadEvent evt, size_t gamepadIndex)
+{
+	//GP_INFO("evt:%d, gamepadIndex:%d", evt, gamepadIndex);
+}
+
+void Game::onKeyEvent(Platform::KeyboardEvent evt, int key)
+{
+	//GP_INFO("evt:%d, key:%d", evt, key);
+}
+
+void Game::onMouseEvent(Platform::MouseEvent evt, int x, int y, int wheelDelta)
+{
+	//GP_INFO("evt:%d, x:%d, y:%d, wheelDelta:%d",  evt, x, y, wheelDelta);
+}
+
+void Game::onTouchEvent(Platform::TouchEvent evt, int x, int y, size_t touchIndex)
+{
+	//GP_INFO("evt:%d, x:%d, y:%d, wheelDelta:%d",  evt, x, y, touchIndex);
+}
+
+bool Game::isMouseCapture()
+{    
+	return _mouseCapture;
+}
+
+void Game::setMouseCapture(bool capture)
+{
+	_mouseCapture = capture;
+}
+
+bool Game::isCursorVisible()
+{
+	return _cursorVisible;
+}
+
+void Game::setCursorVisible(bool visible)
+{
+	_cursorVisible = visible;
+}
+
+void Game::onUpdate(float elapsedTime)
+{
+}
+
+void Game::onRender(float elapsedTime)
+{
+}
+
+void Game::onFrame()
+{
 	static double lastFrameTime = Game::getGameTime();
-	double frameTime = getGameTime();
+    float elapsedTime = (float)(Game::getGameTime() - lastFrameTime);
 
-    // Fire time events to scheduled TimeListeners
-    fireTimeEvents(frameTime);
-
-    if (_state == Game::RUNNING)
-    {
-        GP_ASSERT(_animationController);
-        GP_ASSERT(_audioController);
-        GP_ASSERT(_physicsController);
-        GP_ASSERT(_aiController);
-
-        // Update Time.
-        float elapsedTime = (frameTime - lastFrameTime);
-        lastFrameTime = frameTime;
-
-        // Update the scheduled and running animations.
-        _animationController->update(elapsedTime);
-
-        // Update the physics.
-        _physicsController->update(elapsedTime);
-
-        // Update AI.
-        _aiController->update(elapsedTime);
-
-        // Update gamepads.
-        Gamepad::updateInternal(elapsedTime);
-
-        // Application Update.
-        update(elapsedTime);
-
-        // Update forms.
-        Form::updateInternal(elapsedTime);
-
-        // Run script update.
-        if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, update), elapsedTime);
-
-        // Audio Rendering.
-        _audioController->update(elapsedTime);
-
-        // Graphics Rendering.
-        render(elapsedTime);
-
-        // Run script render.
-        if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, render), elapsedTime);
-
-        // Update FPS.
-        ++_frameCount;
-        if ((Game::getGameTime() - _frameLastFPS) >= 1000)
+	switch (_state)
+	{
+		case Game::STATE_UNINITIALIZED:
+		{
+            initializeSplash();
+            initializeLoading();
+			onInitialize();
+			_state = Game::STATE_SPLASH;
+			break;
+		}
+        case Game::STATE_SPLASH:
         {
-            _frameRate = _frameCount;
-            _frameCount = 0;
-            _frameLastFPS = getGameTime();
-        }
-    }
-	else if (_state == Game::PAUSED)
-    {
-        // Update gamepads.
-        Gamepad::updateInternal(0);
-
-        // Application Update.
-        update(0);
-
-        // Update forms.
-        Form::updateInternal(0);
-
-        // Script update.
-        if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, update), 0);
-
-        // Graphics Rendering.
-        render(0);
-
-        // Script render.
-        if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, render), 0);
-    }
-}
-
-void Game::renderOnce(const char* function)
-{
-    _scriptController->executeFunction<void>(function, NULL);
-    Platform::swapBuffers();
-}
-
-void Game::updateOnce()
-{
-    GP_ASSERT(_animationController);
-    GP_ASSERT(_audioController);
-    GP_ASSERT(_physicsController);
-    GP_ASSERT(_aiController);
-
-    // Update Time.
-    static double lastFrameTime = getGameTime();
-    double frameTime = getGameTime();
-    float elapsedTime = (frameTime - lastFrameTime);
-    lastFrameTime = frameTime;
-
-    // Update the internal controllers.
-    _animationController->update(elapsedTime);
-    _physicsController->update(elapsedTime);
-    _aiController->update(elapsedTime);
-    _audioController->update(elapsedTime);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, update), elapsedTime);
-}
-
-void Game::setViewport(const Rectangle& viewport)
-{
-    _viewport = viewport;
-    glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height);
-}
-
-void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
-{
-    GLbitfield bits = 0;
-    if (flags & CLEAR_COLOR)
-    {
-        if (clearColor.x != _clearColor.x ||
-            clearColor.y != _clearColor.y ||
-            clearColor.z != _clearColor.z ||
-            clearColor.w != _clearColor.w )
-        {
-            glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-            _clearColor.set(clearColor);
-        }
-        bits |= GL_COLOR_BUFFER_BIT;
-    }
-
-    if (flags & CLEAR_DEPTH)
-    {
-        if (clearDepth != _clearDepth)
-        {
-            glClearDepth(clearDepth);
-            _clearDepth = clearDepth;
-        }
-        bits |= GL_DEPTH_BUFFER_BIT;
-
-        // We need to explicitly call the static enableDepthWrite() method on StateBlock
-        // to ensure depth writing is enabled before clearing the depth buffer (and to
-        // update the global StateBlock render state to reflect this).
-        RenderState::StateBlock::enableDepthWrite();
-    }
-
-    if (flags & CLEAR_STENCIL)
-    {
-        if (clearStencil != _clearStencil)
-        {
-            glClearStencil(clearStencil);
-            _clearStencil = clearStencil;
-        }
-        bits |= GL_STENCIL_BUFFER_BIT;
-    }
-    glClear(bits);
-}
-
-void Game::clear(ClearFlags flags, float red, float green, float blue, float alpha, float clearDepth, int clearStencil)
-{
-    clear(flags, Vector4(red, green, blue, alpha), clearDepth, clearStencil);
-}
-
-AudioListener* Game::getAudioListener()
-{
-    if (_audioListener == NULL)
-    {
-        _audioListener = new AudioListener();
-    }
-    return _audioListener;
-}
-
-void Game::keyEvent(Keyboard::KeyEvent evt, int key)
-{
-    // stub
-}
-
-void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    // stub
-}
-
-bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
-{
-    // stub
-    return false;
-}
-
-void Game::resizeEvent(unsigned int width, unsigned int height)
-{
-    // stub
-}
-
-bool Game::isGestureSupported(Gesture::GestureEvent evt)
-{
-    return Platform::isGestureSupported(evt);
-}
-
-void Game::registerGesture(Gesture::GestureEvent evt)
-{
-    Platform::registerGesture(evt);
-}
-
-void Game::unregisterGesture(Gesture::GestureEvent evt)
-{
-    Platform::unregisterGesture(evt);
-}
-
-bool Game::isGestureRegistered(Gesture::GestureEvent evt)
-{
-    return Platform::isGestureRegistered(evt);
-}
-
-void Game::gestureSwipeEvent(int x, int y, int direction)
-{
-    // stub
-}
-
-void Game::gesturePinchEvent(int x, int y, float scale)
-{
-    // stub
-}
-
-void Game::gestureTapEvent(int x, int y)
-{
-    // stub
-}
-
-void Game::gestureLongTapEvent(int x, int y, float duration)
-{
-    // stub
-}
-
-void Game::gestureDragEvent(int x, int y)
-{
-    // stub
-}
-
-void Game::gestureDropEvent(int x, int y)
-{
-    // stub
-}
-
-void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
-{
-    // stub
-}
-
-void Game::keyEventInternal(Keyboard::KeyEvent evt, int key)
-{
-    keyEvent(evt, key);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, keyEvent), evt, key);
-}
-
-void Game::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    touchEvent(evt, x, y, contactIndex);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, touchEvent), evt, x, y, contactIndex);
-}
-
-bool Game::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
-{
-    if (mouseEvent(evt, x, y, wheelDelta))
-        return true;
-
-    if (_scriptTarget)
-        return _scriptTarget->fireScriptEvent<bool>(GP_GET_SCRIPT_EVENT(GameScriptTarget, mouseEvent), evt, x, y, wheelDelta);
-
-    return false;
-}
-
-void Game::resizeEventInternal(unsigned int width, unsigned int height)
-{
-    // Update the width and height of the game
-    if (_width != width || _height != height)
-    {
-        _width = width;
-        _height = height;
-        resizeEvent(width, height);
-        if (_scriptTarget)
-            _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, resizeEvent), width, height);
-    }
-}
-
-void Game::gestureSwipeEventInternal(int x, int y, int direction)
-{
-    gestureSwipeEvent(x, y, direction);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureSwipeEvent), x, y, direction);
-}
-
-void Game::gesturePinchEventInternal(int x, int y, float scale)
-{
-    gesturePinchEvent(x, y, scale);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gesturePinchEvent), x, y, scale);
-}
-
-void Game::gestureTapEventInternal(int x, int y)
-{
-    gestureTapEvent(x, y);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureTapEvent), x, y);
-}
-
-void Game::gestureLongTapEventInternal(int x, int y, float duration)
-{
-    gestureLongTapEvent(x, y, duration);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureLongTapevent), x, y, duration);
-}
-
-void Game::gestureDragEventInternal(int x, int y)
-{
-    gestureDragEvent(x, y);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureDragEvent), x, y);
-}
-
-void Game::gestureDropEventInternal(int x, int y)
-{
-    gestureDropEvent(x, y);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gestureDropEvent), x, y);
-}
-
-void Game::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
-{
-    gamepadEvent(evt, gamepad);
-    if (_scriptTarget)
-        _scriptTarget->fireScriptEvent<void>(GP_GET_SCRIPT_EVENT(GameScriptTarget, gamepadEvent), evt, gamepad);
-}
-
-void Game::getArguments(int* argc, char*** argv) const
-{
-    Platform::getArguments(argc, argv);
-}
-
-void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)
-{
-    GP_ASSERT(_timeEvents);
-    TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
-    _timeEvents->push(timeEvent);
-}
-
-void Game::schedule(float timeOffset, const char* function)
-{
-    getScriptController()->schedule(timeOffset, function);
-}
-
-void Game::clearSchedule()
-{
-    SAFE_DELETE(_timeEvents);
-    _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
-}
-
-void Game::fireTimeEvents(double frameTime)
-{
-    while (_timeEvents->size() > 0)
-    {
-        const TimeEvent* timeEvent = &_timeEvents->top();
-        if (timeEvent->time > frameTime)
-        {
+            onSplash(elapsedTime);
+            if (_splashScreens.empty())
+                _state = Game::STATE_LOADING;
+            lastFrameTime = updateFrameRate();
             break;
         }
-        if (timeEvent->listener)
-        {
-            timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
-        }
-        _timeEvents->pop();
-    }
+		case Game::STATE_LOADING:
+		{
+            onLoading(elapsedTime);
+			if (_scene->isLoaded())
+				_state = Game::STATE_RUNNING;
+            lastFrameTime = updateFrameRate();
+			break;
+		}
+		case Game::STATE_RUNNING:
+		{
+			onUpdate(elapsedTime);
+			onRender(elapsedTime);
+            lastFrameTime = updateFrameRate();
+			break;
+		}
+		case Game::STATE_PAUSED:
+			break;
+	}
 }
 
-Game::TimeEvent::TimeEvent(double time, TimeListener* timeListener, void* cookie)
-    : time(time), listener(timeListener), cookie(cookie)
+void Game::initializeSplash()
 {
 }
 
-bool Game::TimeEvent::operator<(const TimeEvent& v) const
+void Game::initializeLoading()
 {
-    // The first element of std::priority_queue is the greatest.
-    return time > v.time;
+
 }
 
-Properties* Game::getConfig() const
+void Game::onSplash(float elapsedTime)
 {
-    if (_properties == NULL)
-        const_cast<Game*>(this)->loadConfig();
-
-    return _properties;
 }
 
-void Game::loadConfig()
+void Game::onLoading(float elapsedTime)
 {
-    if (_properties == NULL)
+}
+
+double Game::updateFrameRate()
+{
+    ++_frameCount;
+    double now = Game::getGameTime();
+	if ((now - _frameLastFPS) >= 1000)
+	{
+		_frameRate = _frameCount;
+		_frameCount = 0;
+		_frameLastFPS = now;
+	}
+    return now;
+}
+
+std::shared_ptr<Game::Config> Game::getConfig()
+{
+    if (!_config)
     {
-        // Try to load custom config from file.
-        if (FileSystem::fileExists("game.config"))
+        Serializer* reader = Serializer::createReader(GP_ENGINE_CONFIG);
+        if (reader)
         {
-            _properties = Properties::create("game.config");
+            std::shared_ptr<Serializable> config = reader->readObject(nullptr);
+            _config = std::static_pointer_cast<Game::Config>(config);
+            reader->close();
+             GP_SAFE_DELETE(reader);
+        }
+		else
+		{
+			_config = std::make_shared<Game::Config>();
+			Serializer* writer = SerializerJson::createWriter(GP_ENGINE_CONFIG);
+			writer->writeObject(nullptr, _config);
+			writer->close();
+            GP_SAFE_DELETE(writer);
+		}
+    }
+    return _config;
+}
 
-            // Load filesystem aliases.
-            Properties* aliases = _properties->getNamespace("aliases", true);
-            if (aliases)
+Game::Config::Config() :
+    title(""),
+	graphics(GP_GRAPHICS),
+	width(GP_GRAPHICS_WIDTH),
+	height(GP_GRAPHICS_HEIGHT),
+	fullscreen(GP_GRAPHICS_FULLSCREEN),
+	vsync(GP_GRAPHICS_VSYNC),
+	multisampling(GP_GRAPHICS_MULTISAMPLING),
+	validation(GP_GRAPHICS_VALIDATION),
+	touchSupport(false),
+	accelerometerSupport(false),
+	assetsPath(GP_ASSET_PATH),
+    loadingScene("loading.scene"),
+	mainScene("main.scene")
+{
+}
+
+Game::Config::~Config()
+{
+}
+
+std::shared_ptr<Serializable> Game::Config::createObject()
+{
+    return std::static_pointer_cast<Serializable>(std::make_shared<Game::Config>());
+}
+
+std::string Game::Config::getClassName()
+{
+    return "gameplay::Game::Config";
+}
+
+void Game::Config::onSerialize(Serializer* serializer)
+{
+    serializer->writeString("title", title.c_str(), "");
+	serializer->writeString("graphics", graphics.c_str(), "");
+    serializer->writeInt("width", (unsigned int)width, 0);
+    serializer->writeInt("height", (unsigned int)height, 0);
+    serializer->writeBool("fullscreen", fullscreen, false);
+	serializer->writeBool("vsync", vsync, false);
+	serializer->writeInt("multisampling", (unsigned int)multisampling, 0);
+	serializer->writeBool("validation", validation, GP_GRAPHICS_VALIDATION);
+	serializer->writeBool("touchSupport", touchSupport, false);
+	serializer->writeBool("accelerometerSupport", accelerometerSupport, false);
+	serializer->writeString("assetsPath", assetsPath.c_str(), "./");
+    serializer->writeStringList("splashScreens", splashScreens.size());
+    for (size_t i = 0; i < splashScreens.size(); i++)
+    {
+        std::string splash = std::string(splashScreens[i].url) + ":" + std::to_string(splashScreens[i].duration);
+        serializer->writeString(nullptr, splash.c_str(), "");
+    }
+    serializer->writeString("loadingScene", loadingScene.c_str(), "");
+	serializer->writeString("mainScene", mainScene.c_str(), "");
+}
+
+void Game::Config::onDeserialize(Serializer* serializer)
+{
+    serializer->readString("title", title, "");
+	serializer->readString("graphics", graphics, GP_GRAPHICS);
+    width = serializer->readInt("width", 0);
+    height = serializer->readInt("height", 0);
+	fullscreen = serializer->readBool("fullscreen", false);
+	vsync = serializer->readBool("vsync", false);
+	multisampling = serializer->readInt("multisampling", 0);
+	validation = serializer->readBool("validation", GP_GRAPHICS_VALIDATION);
+	touchSupport = serializer->readBool("touchSupport", false);
+	accelerometerSupport = serializer->readBool("accelerometerSupport", false);
+	serializer->readString("assetsPath", assetsPath, "");
+    size_t splashScreensCount = serializer->readStringList("splashScreens");
+    for (size_t i = 0; i < splashScreensCount; i++)
+    {
+        std::string splash;
+        serializer->readString(nullptr, splash, ""); 
+        if (splash.length() > 0)
+        {
+            SplashScreen splashScreen;
+            size_t semiColonIdx = splash.find(':');
+            if (semiColonIdx == std::string::npos)
             {
-                FileSystem::loadResourceAliases(aliases);
+                splashScreen.url = splash;
+                splashScreen.duration = GAME_SPLASH_SCREEN_DURATION;
             }
-        }
-        else
-        {
-            // Create an empty config
-            _properties = new Properties();
-        }
-    }
-}
-
-void Game::loadGamepads()
-{
-    // Load virtual gamepads.
-    if (_properties)
-    {
-        // Check if there are any virtual gamepads included in the .config file.
-        // If there are, create and initialize them.
-        _properties->rewind();
-        Properties* inner = _properties->getNextNamespace();
-        while (inner != NULL)
-        {
-            std::string spaceName(inner->getNamespace());
-            // This namespace was accidentally named "gamepads" originally but we'll keep this check
-            // for backwards compatibility.
-            if (spaceName == "gamepads" || spaceName == "gamepad")
+            else
             {
-                if (inner->exists("form"))
+                splashScreen.url = splash.substr(0, semiColonIdx);
+                std::string durationStr = splash.substr(semiColonIdx + 1, splash.length() - semiColonIdx);
+                try
                 {
-                    const char* gamepadFormPath = inner->getString("form");
-                    GP_ASSERT(gamepadFormPath);
-                    Gamepad* gamepad = Gamepad::add(gamepadFormPath);
-                    GP_ASSERT(gamepad);
+                    splashScreen.duration = std::stof(durationStr);
+                }
+                catch (...)
+                {
+                    splashScreen.duration = GAME_SPLASH_SCREEN_DURATION;
                 }
             }
-
-            inner = _properties->getNextNamespace();
+            splashScreens.push_back(splashScreen);
         }
     }
-}
-
-void Game::ShutdownListener::timeEvent(long timeDiff, void* cookie)
-{
-	Game::getInstance()->shutdown();
+    serializer->readString("loadingScene", loadingScene, "");
+	serializer->readString("mainScene", mainScene, "");
 }
 
 }
-

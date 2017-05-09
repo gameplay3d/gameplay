@@ -5,17 +5,22 @@ namespace gameplay
 {
 
 Rectangle::Rectangle()
-    : x(0), y(0), width(0), height(0)
 {
 }
 
 Rectangle::Rectangle(float width, float height) :
-    x(0), y(0), width(width), height(height)
+    x(0),
+    y(0),
+    width(width),
+    height(height)
 {
 }
 
 Rectangle::Rectangle(float x, float y, float width, float height) :
-    x(x), y(y), width(width), height(height)
+    x(x),
+    y(y),
+    width(width),
+    height(height)
 {
 }
 
@@ -58,22 +63,22 @@ void Rectangle::setPosition(float x, float y)
     this->y = y;
 }
 
-float Rectangle::left() const
+float Rectangle::getLeft() const
 {
     return x;
 }
 
-float Rectangle::top() const
+float Rectangle::getTop() const
 {
     return y;
 }
 
-float Rectangle::right() const
+float Rectangle::getRight() const
 {
     return x + width;
 }
 
-float Rectangle::bottom() const
+float Rectangle::getBottom() const
 {
     return y + height;
 }
@@ -112,19 +117,18 @@ bool Rectangle::intersect(const Rectangle& r1, const Rectangle& r2, Rectangle* d
 {
     GP_ASSERT(dst);
 
-    float xmin = max(r1.x, r2.x);
-    float xmax = min(r1.right(), r2.right());
+    float xmin = std::max(r1.x, r2.x);
+    float xmax = std::min(r1.getRight(), r2.getRight());
     if (xmax > xmin)
     {
-        float ymin = max(r1.y, r2.y);
-        float ymax = min(r1.bottom(), r2.bottom());
+        float ymin = std::max(r1.y, r2.y);
+        float ymax = std::min(r1.getBottom(), r2.getBottom());
         if (ymax > ymin)
         {
             dst->set(xmin, ymin, xmax - xmin, ymax - ymin);
             return true;
         }
     }
-
     dst->set(0, 0, 0, 0);
     return false;
 }
@@ -133,10 +137,10 @@ void Rectangle::combine(const Rectangle& r1, const Rectangle& r2, Rectangle* dst
 {
     GP_ASSERT(dst);
 
-    dst->x = min(r1.x, r2.x);
-    dst->y = min(r1.y, r2.y);
-    dst->width = max(r1.x + r1.width, r2.x + r2.width) - dst->x;
-    dst->height = max(r1.y + r1.height, r2.y + r2.height) - dst->y;
+    dst->x = std::min(r1.x, r2.x);
+    dst->y = std::min(r1.y, r2.y);
+    dst->width = std::max(r1.x + r1.width, r2.x + r2.width) - dst->x;
+    dst->height = std::max(r1.y + r1.height, r2.y + r2.height) - dst->y;
 }
 
 void Rectangle::inflate(float horizontalAmount, float verticalAmount)
@@ -147,21 +151,25 @@ void Rectangle::inflate(float horizontalAmount, float verticalAmount)
     height += verticalAmount * 2;
 }
 
-Rectangle& Rectangle::operator = (const Rectangle& r)
+Rectangle& Rectangle::operator=(const Rectangle& r)
 {
+    if(&r == this)
+        return *this;
+
     x = r.x;
     y = r.y;
     width = r.width;
     height = r.height;
+
     return *this;
 }
 
-bool Rectangle::operator == (const Rectangle& r) const
+bool Rectangle::operator==(const Rectangle& r) const
 {
     return (x == r.x && width == r.width && y == r.y && height == r.height);
 }
 
-bool Rectangle::operator != (const Rectangle& r) const
+bool Rectangle::operator!=(const Rectangle& r) const
 {
     return (x != r.x || width != r.width || y != r.y || height != r.height);
 }

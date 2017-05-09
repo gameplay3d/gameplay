@@ -1,1749 +1,494 @@
-#ifndef GP_NO_PLATFORM
 #ifdef __linux__
 
 #include "Base.h"
-#include "Platform.h"
-#include "FileSystem.h"
+#include "PlatformLinux.h"
 #include "Game.h"
-#include "Form.h"
-#include "ScriptController.h"
-
-#include <X11/X.h>
-#include <X11/Xlib.h>
-#include <X11/keysym.h>
-#include <sys/time.h>
-#include <GL/glxew.h>
-#include <poll.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <fstream>
-#include <glib.h>
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
-
-#define TOUCH_COUNT_MAX     4
-#define MAX_GAMEPADS 4
-
-using namespace std;
-
-int __argc = 0;
-char** __argv = 0;
-
-enum GamepadAxisInfoFlags
-{
-    GP_AXIS_SKIP = 0x1,
-    GP_AXIS_IS_DPAD = 0x2,
-    GP_AXIS_IS_NEG = 0x4,
-    GP_AXIS_IS_XAXIS = 0x8,
-    GP_AXIS_IS_TRIGGER = 0x10
-};
-
-enum GamepadAxisInfoNormalizeFunction
-{
-    NEG_TO_POS,
-    ZERO_TO_POS
-};
-
-struct GamepadJoystickAxisInfo
-{
-    int axisIndex;
-    unsigned int joystickIndex;
-    unsigned long flags;
-    int mappedPosArg;
-    int mappedNegArg;
-    float deadZone;
-    GamepadAxisInfoNormalizeFunction mapFunc;
-};
-
-struct GamepadInfoEntry
-{
-    unsigned int vendorId;
-    unsigned int productId;
-    const char* productName;
-    unsigned int numberOfJS;
-    unsigned int numberOfAxes;
-    unsigned int numberOfButtons;
-    unsigned int numberOfTriggers;
-
-    GamepadJoystickAxisInfo* axes;
-    long* buttons;
-};
-
-struct ConnectedGamepadDevInfo
-{
-    dev_t deviceId;
-    gameplay::GamepadHandle fd;
-    const GamepadInfoEntry& gamepadInfo;
-};
-
-struct timespec __timespec;
-static double __timeStart;
-static double __timeAbsolute;
-static bool __vsync = WINDOW_VSYNC;
-static bool __mouseCaptured = false;
-static float __mouseCapturePointX = 0;
-static float __mouseCapturePointY = 0;
-static bool __multiSampling = false;
-static bool __cursorVisible = true;
-static Display* __display;
-static Window __window;
-static int __windowSize[2];
-static GLXContext __context;
-static Atom __atomWmDeleteWindow;
-static list<ConnectedGamepadDevInfo> __connectedGamepads;
-
-// Gets the gameplay::Keyboard::Key enumeration constant that corresponds to the given X11 key symbol.
-static gameplay::Keyboard::Key getKey(KeySym sym)
-{
-    switch (sym)
-    {
-        case XK_Sys_Req:
-            return gameplay::Keyboard::KEY_SYSREQ;
-        case XK_Break:
-            return gameplay::Keyboard::KEY_BREAK;
-        case XK_Menu :
-            return gameplay::Keyboard::KEY_MENU;
-        case XK_KP_Enter:
-            return gameplay::Keyboard::KEY_KP_ENTER;
-        case XK_Pause:
-            return gameplay::Keyboard::KEY_PAUSE;
-        case XK_Scroll_Lock:
-            return gameplay::Keyboard::KEY_SCROLL_LOCK;
-        case XK_Print:
-            return gameplay::Keyboard::KEY_PRINT;
-        case XK_Escape:
-            return gameplay::Keyboard::KEY_ESCAPE;
-        case XK_BackSpace:
-            return gameplay::Keyboard::KEY_BACKSPACE;
-        case XK_Tab:
-            return gameplay::Keyboard::KEY_TAB;
-        case XK_Return:
-            return gameplay::Keyboard::KEY_RETURN;
-        case XK_Caps_Lock:
-            return gameplay::Keyboard::KEY_CAPS_LOCK;
-        case XK_Shift_L:
-        case XK_Shift_R:
-            return gameplay::Keyboard::KEY_SHIFT;
-        case XK_Control_L:
-        case XK_Control_R:
-            return gameplay::Keyboard::KEY_CTRL;
-        case XK_Alt_L:
-        case XK_Alt_R:
-            return gameplay::Keyboard::KEY_ALT;
-        case XK_Hyper_L:
-        case XK_Hyper_R:
-            return gameplay::Keyboard::KEY_HYPER;
-        case XK_Insert:
-            return gameplay::Keyboard::KEY_INSERT;
-        case XK_Home:
-            return gameplay::Keyboard::KEY_HOME;
-        case XK_Page_Up:
-            return gameplay::Keyboard::KEY_PG_UP;
-        case XK_Delete:
-            return gameplay::Keyboard::KEY_DELETE;
-        case XK_End:
-            return gameplay::Keyboard::KEY_END;
-        case XK_Page_Down:
-            return gameplay::Keyboard::KEY_PG_DOWN;
-        case XK_Left:
-            return gameplay::Keyboard::KEY_LEFT_ARROW;
-        case XK_Right:
-            return gameplay::Keyboard::KEY_RIGHT_ARROW;
-        case XK_Up:
-            return gameplay::Keyboard::KEY_UP_ARROW;
-        case XK_Down:
-            return gameplay::Keyboard::KEY_DOWN_ARROW;
-        case XK_Num_Lock:
-            return gameplay::Keyboard::KEY_NUM_LOCK;
-        case XK_KP_Add:
-            return gameplay::Keyboard::KEY_KP_PLUS;
-        case XK_KP_Subtract:
-            return gameplay::Keyboard::KEY_KP_MINUS;
-        case XK_KP_Multiply:
-            return gameplay::Keyboard::KEY_KP_MULTIPLY;
-        case XK_KP_Divide:
-            return gameplay::Keyboard::KEY_KP_DIVIDE;
-        case XK_KP_Home:
-            return gameplay::Keyboard::KEY_KP_HOME;
-        case XK_KP_Up:
-            return gameplay::Keyboard::KEY_KP_UP;
-        case XK_KP_Page_Up:
-            return gameplay::Keyboard::KEY_KP_PG_UP;
-        case XK_KP_Left:
-            return gameplay::Keyboard::KEY_KP_LEFT;
-        case XK_KP_5:
-            return gameplay::Keyboard::KEY_KP_FIVE;
-        case XK_KP_Right:
-            return gameplay::Keyboard::KEY_KP_RIGHT;
-        case XK_KP_End:
-            return gameplay::Keyboard::KEY_KP_END;
-        case XK_KP_Down:
-            return gameplay::Keyboard::KEY_KP_DOWN;
-        case XK_KP_Page_Down:
-            return gameplay::Keyboard::KEY_KP_PG_DOWN;
-        case XK_KP_Insert:
-            return gameplay::Keyboard::KEY_KP_INSERT;
-        case XK_KP_Delete:
-            return gameplay::Keyboard::KEY_KP_DELETE;
-        case XK_F1:
-            return gameplay::Keyboard::KEY_F1;
-        case XK_F2:
-            return gameplay::Keyboard::KEY_F2;
-        case XK_F3:
-            return gameplay::Keyboard::KEY_F3;
-        case XK_F4:
-            return gameplay::Keyboard::KEY_F4;
-        case XK_F5:
-            return gameplay::Keyboard::KEY_F5;
-        case XK_F6:
-            return gameplay::Keyboard::KEY_F6;
-        case XK_F7:
-            return gameplay::Keyboard::KEY_F7;
-        case XK_F8:
-            return gameplay::Keyboard::KEY_F8;
-        case XK_F9:
-            return gameplay::Keyboard::KEY_F9;
-        case XK_F10:
-            return gameplay::Keyboard::KEY_F10;
-        case XK_F11:
-            return gameplay::Keyboard::KEY_F11;
-        case XK_F12:
-            return gameplay::Keyboard::KEY_F12;
-        case XK_KP_Space:
-        case XK_space:
-            return gameplay::Keyboard::KEY_SPACE;
-        case XK_parenright:
-            return gameplay::Keyboard::KEY_RIGHT_PARENTHESIS;
-        case XK_0:
-            return gameplay::Keyboard::KEY_ZERO;
-        case XK_exclam:
-            return gameplay::Keyboard::KEY_EXCLAM;
-        case XK_1:
-            return gameplay::Keyboard::KEY_ONE;
-        case XK_at:
-            return gameplay::Keyboard::KEY_AT;
-        case XK_2:
-            return gameplay::Keyboard::KEY_TWO;
-        case XK_numbersign:
-            return gameplay::Keyboard::KEY_NUMBER;
-        case XK_3:
-            return gameplay::Keyboard::KEY_THREE;
-        case XK_dollar:
-            return gameplay::Keyboard::KEY_DOLLAR;
-        case XK_4:
-            return gameplay::Keyboard::KEY_FOUR;
-        case XK_percent:
-        case XK_asciicircum :
-            return gameplay::Keyboard::KEY_CIRCUMFLEX;
-            return gameplay::Keyboard::KEY_PERCENT;
-        case XK_5:
-            return gameplay::Keyboard::KEY_FIVE;
-        case XK_6:
-            return gameplay::Keyboard::KEY_SIX;
-        case XK_ampersand:
-            return gameplay::Keyboard::KEY_AMPERSAND;
-        case XK_7:
-            return gameplay::Keyboard::KEY_SEVEN;
-        case XK_asterisk:
-            return gameplay::Keyboard::KEY_ASTERISK;
-        case XK_8:
-            return gameplay::Keyboard::KEY_EIGHT;
-        case XK_parenleft:
-            return gameplay::Keyboard::KEY_LEFT_PARENTHESIS;
-        case XK_9:
-            return gameplay::Keyboard::KEY_NINE;
-        case XK_equal:
-            return gameplay::Keyboard::KEY_EQUAL;
-        case XK_plus:
-            return gameplay::Keyboard::KEY_PLUS;
-        case XK_less:
-            return gameplay::Keyboard::KEY_LESS_THAN;
-        case XK_comma:
-            return gameplay::Keyboard::KEY_COMMA;
-        case XK_underscore:
-            return gameplay::Keyboard::KEY_UNDERSCORE;
-        case XK_minus:
-            return gameplay::Keyboard::KEY_MINUS;
-        case XK_greater:
-            return gameplay::Keyboard::KEY_GREATER_THAN;
-        case XK_period:
-            return gameplay::Keyboard::KEY_PERIOD;
-        case XK_colon:
-            return gameplay::Keyboard::KEY_COLON;
-        case XK_semicolon:
-            return gameplay::Keyboard::KEY_SEMICOLON;
-        case XK_question:
-            return gameplay::Keyboard::KEY_QUESTION;
-        case XK_slash:
-            return gameplay::Keyboard::KEY_SLASH;
-        case XK_grave:
-            return gameplay::Keyboard::KEY_GRAVE;
-        case XK_asciitilde:
-            return gameplay::Keyboard::KEY_TILDE;
-        case XK_braceleft:
-            return gameplay::Keyboard::KEY_LEFT_BRACE;
-        case XK_bracketleft:
-            return gameplay::Keyboard::KEY_LEFT_BRACKET;
-        case XK_bar:
-            return gameplay::Keyboard::KEY_BAR;
-        case XK_backslash:
-            return gameplay::Keyboard::KEY_BACK_SLASH;
-        case XK_braceright:
-            return gameplay::Keyboard::KEY_RIGHT_BRACE;
-        case XK_bracketright:
-            return gameplay::Keyboard::KEY_RIGHT_BRACKET;
-        case XK_quotedbl:
-            return gameplay::Keyboard::KEY_QUOTE;
-        case XK_apostrophe:
-            return gameplay::Keyboard::KEY_APOSTROPHE;
-        case XK_EuroSign:
-            return gameplay::Keyboard::KEY_EURO;
-        case XK_sterling:
-            return gameplay::Keyboard::KEY_POUND;
-        case XK_yen:
-            return gameplay::Keyboard::KEY_YEN;
-        case XK_periodcentered:
-            return gameplay::Keyboard::KEY_MIDDLE_DOT;
-        case XK_A:
-            return gameplay::Keyboard::KEY_CAPITAL_A;
-        case XK_a:
-            return gameplay::Keyboard::KEY_A;
-        case XK_B:
-            return gameplay::Keyboard::KEY_CAPITAL_B;
-        case XK_b:
-            return gameplay::Keyboard::KEY_B;
-        case XK_C:
-            return gameplay::Keyboard::KEY_CAPITAL_C;
-        case XK_c:
-            return gameplay::Keyboard::KEY_C;
-        case XK_D:
-            return gameplay::Keyboard::KEY_CAPITAL_D;
-        case XK_d:
-            return gameplay::Keyboard::KEY_D;
-        case XK_E:
-            return gameplay::Keyboard::KEY_CAPITAL_E;
-        case XK_e:
-            return gameplay::Keyboard::KEY_E;
-        case XK_F:
-            return gameplay::Keyboard::KEY_CAPITAL_F;
-        case XK_f:
-            return gameplay::Keyboard::KEY_F;
-        case XK_G:
-            return gameplay::Keyboard::KEY_CAPITAL_G;
-        case XK_g:
-            return gameplay::Keyboard::KEY_G;
-        case XK_H:
-            return gameplay::Keyboard::KEY_CAPITAL_H;
-        case XK_h:
-            return gameplay::Keyboard::KEY_H;
-        case XK_I:
-            return gameplay::Keyboard::KEY_CAPITAL_I;
-        case XK_i:
-            return gameplay::Keyboard::KEY_I;
-        case XK_J:
-            return gameplay::Keyboard::KEY_CAPITAL_J;
-        case XK_j:
-            return gameplay::Keyboard::KEY_J;
-        case XK_K:
-            return gameplay::Keyboard::KEY_CAPITAL_K;
-        case XK_k:
-            return gameplay::Keyboard::KEY_K;
-        case XK_L:
-            return gameplay::Keyboard::KEY_CAPITAL_L;
-        case XK_l:
-            return gameplay::Keyboard::KEY_L;
-        case XK_M:
-            return gameplay::Keyboard::KEY_CAPITAL_M;
-        case XK_m:
-            return gameplay::Keyboard::KEY_M;
-        case XK_N:
-            return gameplay::Keyboard::KEY_CAPITAL_N;
-        case XK_n:
-            return gameplay::Keyboard::KEY_N;
-        case XK_O:
-            return gameplay::Keyboard::KEY_CAPITAL_O;
-        case XK_o:
-            return gameplay::Keyboard::KEY_O;
-        case XK_P:
-            return gameplay::Keyboard::KEY_CAPITAL_P;
-        case XK_p:
-            return gameplay::Keyboard::KEY_P;
-        case XK_Q:
-            return gameplay::Keyboard::KEY_CAPITAL_Q;
-        case XK_q:
-            return gameplay::Keyboard::KEY_Q;
-        case XK_R:
-            return gameplay::Keyboard::KEY_CAPITAL_R;
-        case XK_r:
-            return gameplay::Keyboard::KEY_R;
-        case XK_S:
-            return gameplay::Keyboard::KEY_CAPITAL_S;
-        case XK_s:
-            return gameplay::Keyboard::KEY_S;
-        case XK_T:
-            return gameplay::Keyboard::KEY_CAPITAL_T;
-        case XK_t:
-            return gameplay::Keyboard::KEY_T;
-        case XK_U:
-            return gameplay::Keyboard::KEY_CAPITAL_U;
-        case XK_u:
-            return gameplay::Keyboard::KEY_U;
-        case XK_V:
-            return gameplay::Keyboard::KEY_CAPITAL_V;
-        case XK_v:
-            return gameplay::Keyboard::KEY_V;
-        case XK_W:
-            return gameplay::Keyboard::KEY_CAPITAL_W;
-        case XK_w:
-            return gameplay::Keyboard::KEY_W;
-        case XK_X:
-            return gameplay::Keyboard::KEY_CAPITAL_X;
-        case XK_x:
-            return gameplay::Keyboard::KEY_X;
-        case XK_Y:
-            return gameplay::Keyboard::KEY_CAPITAL_Y;
-        case XK_y:
-            return gameplay::Keyboard::KEY_Y;
-        case XK_Z:
-            return gameplay::Keyboard::KEY_CAPITAL_Z;
-        case XK_z:
-            return gameplay::Keyboard::KEY_Z;
-        default:
-            return gameplay::Keyboard::KEY_NONE;
-    }
-}
-
-/**
- * Returns the unicode value for the given keycode or zero if the key is not a valid printable character.
- */
-static int getUnicode(gameplay::Keyboard::Key key)
-{
-    switch (key)
-    {
-        case gameplay::Keyboard::KEY_BACKSPACE:
-            return 0x0008;
-        case gameplay::Keyboard::KEY_TAB:
-            return 0x0009;
-        case gameplay::Keyboard::KEY_RETURN:
-        case gameplay::Keyboard::KEY_KP_ENTER:
-            return 0x000A;
-        case gameplay::Keyboard::KEY_ESCAPE:
-            return 0x001B;
-        case gameplay::Keyboard::KEY_SPACE:
-        case gameplay::Keyboard::KEY_EXCLAM:
-        case gameplay::Keyboard::KEY_QUOTE:
-        case gameplay::Keyboard::KEY_NUMBER:
-        case gameplay::Keyboard::KEY_DOLLAR:
-        case gameplay::Keyboard::KEY_PERCENT:
-        case gameplay::Keyboard::KEY_CIRCUMFLEX:
-        case gameplay::Keyboard::KEY_AMPERSAND:
-        case gameplay::Keyboard::KEY_APOSTROPHE:
-        case gameplay::Keyboard::KEY_LEFT_PARENTHESIS:
-        case gameplay::Keyboard::KEY_RIGHT_PARENTHESIS:
-        case gameplay::Keyboard::KEY_ASTERISK:
-        case gameplay::Keyboard::KEY_PLUS:
-        case gameplay::Keyboard::KEY_COMMA:
-        case gameplay::Keyboard::KEY_MINUS:
-        case gameplay::Keyboard::KEY_PERIOD:
-        case gameplay::Keyboard::KEY_SLASH:
-        case gameplay::Keyboard::KEY_ZERO:
-        case gameplay::Keyboard::KEY_ONE:
-        case gameplay::Keyboard::KEY_TWO:
-        case gameplay::Keyboard::KEY_THREE:
-        case gameplay::Keyboard::KEY_FOUR:
-        case gameplay::Keyboard::KEY_FIVE:
-        case gameplay::Keyboard::KEY_SIX:
-        case gameplay::Keyboard::KEY_SEVEN:
-        case gameplay::Keyboard::KEY_EIGHT:
-        case gameplay::Keyboard::KEY_NINE:
-        case gameplay::Keyboard::KEY_COLON:
-        case gameplay::Keyboard::KEY_SEMICOLON:
-        case gameplay::Keyboard::KEY_LESS_THAN:
-        case gameplay::Keyboard::KEY_EQUAL:
-        case gameplay::Keyboard::KEY_GREATER_THAN:
-        case gameplay::Keyboard::KEY_QUESTION:
-        case gameplay::Keyboard::KEY_AT:
-        case gameplay::Keyboard::KEY_CAPITAL_A:
-        case gameplay::Keyboard::KEY_CAPITAL_B:
-        case gameplay::Keyboard::KEY_CAPITAL_C:
-        case gameplay::Keyboard::KEY_CAPITAL_D:
-        case gameplay::Keyboard::KEY_CAPITAL_E:
-        case gameplay::Keyboard::KEY_CAPITAL_F:
-        case gameplay::Keyboard::KEY_CAPITAL_G:
-        case gameplay::Keyboard::KEY_CAPITAL_H:
-        case gameplay::Keyboard::KEY_CAPITAL_I:
-        case gameplay::Keyboard::KEY_CAPITAL_J:
-        case gameplay::Keyboard::KEY_CAPITAL_K:
-        case gameplay::Keyboard::KEY_CAPITAL_L:
-        case gameplay::Keyboard::KEY_CAPITAL_M:
-        case gameplay::Keyboard::KEY_CAPITAL_N:
-        case gameplay::Keyboard::KEY_CAPITAL_O:
-        case gameplay::Keyboard::KEY_CAPITAL_P:
-        case gameplay::Keyboard::KEY_CAPITAL_Q:
-        case gameplay::Keyboard::KEY_CAPITAL_R:
-        case gameplay::Keyboard::KEY_CAPITAL_S:
-        case gameplay::Keyboard::KEY_CAPITAL_T:
-        case gameplay::Keyboard::KEY_CAPITAL_U:
-        case gameplay::Keyboard::KEY_CAPITAL_V:
-        case gameplay::Keyboard::KEY_CAPITAL_W:
-        case gameplay::Keyboard::KEY_CAPITAL_X:
-        case gameplay::Keyboard::KEY_CAPITAL_Y:
-        case gameplay::Keyboard::KEY_CAPITAL_Z:
-        case gameplay::Keyboard::KEY_LEFT_BRACKET:
-        case gameplay::Keyboard::KEY_BACK_SLASH:
-        case gameplay::Keyboard::KEY_RIGHT_BRACKET:
-        case gameplay::Keyboard::KEY_UNDERSCORE:
-        case gameplay::Keyboard::KEY_GRAVE:
-        case gameplay::Keyboard::KEY_A:
-        case gameplay::Keyboard::KEY_B:
-        case gameplay::Keyboard::KEY_C:
-        case gameplay::Keyboard::KEY_D:
-        case gameplay::Keyboard::KEY_E:
-        case gameplay::Keyboard::KEY_F:
-        case gameplay::Keyboard::KEY_G:
-        case gameplay::Keyboard::KEY_H:
-        case gameplay::Keyboard::KEY_I:
-        case gameplay::Keyboard::KEY_J:
-        case gameplay::Keyboard::KEY_K:
-        case gameplay::Keyboard::KEY_L:
-        case gameplay::Keyboard::KEY_M:
-        case gameplay::Keyboard::KEY_N:
-        case gameplay::Keyboard::KEY_O:
-        case gameplay::Keyboard::KEY_P:
-        case gameplay::Keyboard::KEY_Q:
-        case gameplay::Keyboard::KEY_R:
-        case gameplay::Keyboard::KEY_S:
-        case gameplay::Keyboard::KEY_T:
-        case gameplay::Keyboard::KEY_U:
-        case gameplay::Keyboard::KEY_V:
-        case gameplay::Keyboard::KEY_W:
-        case gameplay::Keyboard::KEY_X:
-        case gameplay::Keyboard::KEY_Y:
-        case gameplay::Keyboard::KEY_Z:
-        case gameplay::Keyboard::KEY_LEFT_BRACE:
-        case gameplay::Keyboard::KEY_BAR:
-        case gameplay::Keyboard::KEY_RIGHT_BRACE:
-        case gameplay::Keyboard::KEY_TILDE:
-            return key;
-        default:
-            return 0;
-    }
-}
-
-// Included here to avoid the naming conflict between KEY_* defined in input.h and the ones defined in gameplay/Keyboard.h 
-#include <linux/joystick.h> 
+#include "Graphics.h"
 
 namespace gameplay
 {
 
-extern void print(const char* format, ...)
+extern Platform* getPlatform()
 {
-    GP_ASSERT(format);
-    va_list argptr;
-    va_start(argptr, format);
-    vfprintf(stderr, format, argptr);
-    va_end(argptr);
-}
-
-extern int strcmpnocase(const char* s1, const char* s2)
-{
-    return strcasecmp(s1, s2);
-}
-
-Platform::Platform(Game* game) : _game(game)
-{
-}
-
-Platform::~Platform()
-{
-}
-
-Platform* Platform::create(Game* game)
-{
-
-    GP_ASSERT(game);
-
-    FileSystem::setResourcePath("./");
-    Platform* platform = new Platform(game);
-
-    // Get the display and initialize
-    __display = XOpenDisplay(NULL);
-    if (__display == NULL)
-    {
-        perror("XOpenDisplay");
-        return NULL;
-    }
-
-    // Get the window configuration values
-    const char *title = NULL;
-    int __x = 0, __y = 0, __width = 1280, __height = 800, __samples = 0;
-    bool fullscreen = false;
-    if (game->getConfig())
-    {
-        Properties* config = game->getConfig()->getNamespace("window", true);
-        if (config)
-        {
-            // Read window title.
-            title = config->getString("title");
-
-            // Read window rect.
-            int x = config->getInt("x");
-            int y = config->getInt("y");
-            int width = config->getInt("width");
-            int height = config->getInt("height");
-            int samples = config->getInt("samples");
-            fullscreen = config->getBool("fullscreen");
-
-            if (fullscreen && width == 0 && height == 0)
-            {
-                // Use the screen resolution if fullscreen is true but width and height were not set in the config
-                int screen_num = DefaultScreen(__display);
-                width = DisplayWidth(__display, screen_num);
-                height = DisplayHeight(__display, screen_num);
-            }
-            if (x != 0) __x = x;
-            if (y != 0) __y = y;
-            if (width != 0) __width = width;
-            if (height != 0) __height = height;
-            if (samples != 0) __samples = samples;
-        }
-    }
-
-    // GLX version
-    GLint majorGLX, minorGLX = 0;
-    glXQueryVersion(__display, &majorGLX, &minorGLX);
-    if (majorGLX == 1 && minorGLX < 2)
-    {
-        perror("GLX 1.2 or greater is required.");
-        XCloseDisplay(__display);
-        return NULL;
-    }
-    else
-    {
-        printf( "GLX version: %d.%d\n", majorGLX , minorGLX);
-    }
-
-    // Get the GLX Functions
-    glXCreateContextAttribsARB = (GLXContext(*)(Display* dpy, GLXFBConfig config, GLXContext share_context, Bool direct,  const int *attrib_list))glXGetProcAddressARB((GLubyte*)"glXCreateContextAttribsARB");
-    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
-    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");
-    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int *value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
-    glXSwapIntervalEXT = (void(*)(Display* dpy, GLXDrawable drawable, int interval))glXGetProcAddressARB((GLubyte*)"glXSwapIntervalEXT");
-    glXSwapIntervalMESA = (int(*)(unsigned int interval))glXGetProcAddressARB((GLubyte*)"glXSwapIntervalMESA");
-
-    // Get the configs
-    int configAttribs[] = 
-    {
-        GLX_RENDER_TYPE,    GLX_RGBA_BIT,
-        GLX_DRAWABLE_TYPE,  GLX_WINDOW_BIT,
-        GLX_X_RENDERABLE,   True,
-        GLX_DEPTH_SIZE,     24,
-        GLX_STENCIL_SIZE,   8,
-        GLX_RED_SIZE,       8,
-        GLX_GREEN_SIZE,     8,
-        GLX_BLUE_SIZE,      8,
-        GLX_DOUBLEBUFFER,   True,
-        GLX_SAMPLE_BUFFERS, __samples > 0 ? 1 : 0,
-        GLX_SAMPLES,        __samples,
-        0
-    };
-    __multiSampling = __samples > 0;
-
-    GLXFBConfig* configs;
-    int configCount = 0;
-    configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
-    if ( configCount == 0 || configs == 0 )
-    {
-        perror( "glXChooseFBConfig" );
-        return NULL;
-    }
-
-    // Create the windows
-    XVisualInfo* visualInfo;
-    visualInfo = glXGetVisualFromFBConfig(__display, configs[0]);
-
-    XSetWindowAttributes winAttribs;
-    long eventMask;
-    eventMask = ExposureMask | VisibilityChangeMask | StructureNotifyMask | 
-                KeyPressMask | KeyReleaseMask | PointerMotionMask | 
-                ButtonPressMask | ButtonReleaseMask | EnterWindowMask | LeaveWindowMask;
-    winAttribs.event_mask = eventMask;
-    winAttribs.border_pixel = 0;
-    winAttribs.bit_gravity = StaticGravity;
-    winAttribs.colormap = XCreateColormap(__display, RootWindow(__display, visualInfo->screen), visualInfo->visual, AllocNone);
-
-    GLint winMask;
-    winMask = CWBorderPixel | CWBitGravity | CWEventMask| CWColormap;
-
-    __window = XCreateWindow(__display, DefaultRootWindow(__display), __x, __y, __width, __height, 0, visualInfo->depth, InputOutput, visualInfo->visual, winMask, &winAttribs);
-
-    // Tell the window manager that it should send the delete window notification through ClientMessage
-    __atomWmDeleteWindow = XInternAtom(__display, "WM_DELETE_WINDOW", False);
-    XSetWMProtocols(__display, __window, &__atomWmDeleteWindow, 1);
-
-    XMapWindow(__display, __window);
-
-    // Send fullscreen atom message to the window; most window managers respect WM_STATE messages
-    // Note: fullscreen mode will use native desktop resolution and won't care about width/height specified
-    if (fullscreen)
-    {
-        XEvent xev;
-        Atom atomWm_state = XInternAtom(__display, "_NET_WM_STATE", False);
-        Atom atomFullscreen = XInternAtom(__display, "_NET_WM_STATE_FULLSCREEN", False);
-
-        memset(&xev, 0, sizeof(xev));
-        xev.type = ClientMessage;
-        xev.xclient.window = __window;
-        xev.xclient.message_type = atomWm_state;
-        xev.xclient.format = 32;
-        xev.xclient.data.l[0] = 1;
-        xev.xclient.data.l[1] = atomFullscreen;
-        xev.xclient.data.l[2] = 0;
-
-        XSendEvent(__display, DefaultRootWindow(__display), false, SubstructureNotifyMask | SubstructureRedirectMask, &xev);
-    }
-
-    XStoreName(__display, __window, title ? title : "");
-
-    __context = glXCreateContext(__display, visualInfo, NULL, True);
-    if (!__context)
-    {
-        perror("glXCreateContext");
-        return NULL;
-    }
-    glXMakeCurrent(__display, __window, __context);
-
-    // Use OpenGL 2.x with GLEW
-    glewExperimental = GL_TRUE;
-    GLenum glewStatus = glewInit();
-    if (glewStatus != GLEW_OK)
-    {
-        perror("glewInit");
-        return NULL;
-    }
-
-    // GL Version
-    int versionGL[2] = {-1, -1};
-    glGetIntegerv(GL_MAJOR_VERSION, versionGL);
-    glGetIntegerv(GL_MINOR_VERSION, versionGL + 1);
-    printf("GL version: %d.%d\n", versionGL[0], versionGL[1]);
-
-    // TODO: Get this workings
-    if (glXSwapIntervalEXT)
-        glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
-    else if(glXSwapIntervalMESA)
-        glXSwapIntervalMESA(__vsync ? 1 : 0);
-
+    static Platform* platform = new PlatformLinux();
     return platform;
 }
 
-void cleanupX11()
-{
-    if (__display)
-    {
-        glXMakeCurrent(__display, None, NULL);
-
-        if (__context)
-            glXDestroyContext(__display, __context);
-        if (__window)
-            XDestroyWindow(__display, __window);
-
-        XCloseDisplay(__display);
-    }
-}
-
-double timespec2millis(struct timespec *a)
-{
-    GP_ASSERT(a);
-    return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
-}
-
-void updateWindowSize()
-{
-    GP_ASSERT(__display);
-    GP_ASSERT(__window);
-    XWindowAttributes windowAttrs;
-    XGetWindowAttributes(__display, __window, &windowAttrs);
-    __windowSize[0] = windowAttrs.width;
-    __windowSize[1] = windowAttrs.height;
-}
-
-
-// Will need to be dynamic, also should be handled in Gamepad class
-static const GamepadInfoEntry gamepadLookupTable[] = 
-{
-    {0x0,0x0,"Microsoft Xbox 360 Controller",2,6,20,2, 
-                                            (GamepadJoystickAxisInfo[]) {
-                                                                    {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                    {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                    {2,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                    {3,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                    {4,2,GP_AXIS_IS_TRIGGER,0,0,2240,ZERO_TO_POS},
-                                                                    {5,2,GP_AXIS_IS_TRIGGER,1,0,2240,ZERO_TO_POS},
-                                                                    {-1,0,0,0,0,0,NEG_TO_POS}
-                                                                },
-                                            (long[]) {
-                                                                        -1,    
-                                                                        -1,  
-                                                                        -1,  
-                                                                        -1, 
-                                                                        -1, 
-                                                                        Gamepad::BUTTON_UP,
-                                                                        Gamepad::BUTTON_DOWN,
-                                                                        Gamepad::BUTTON_LEFT,
-                                                                        Gamepad::BUTTON_RIGHT,
-                                                                        Gamepad::BUTTON_MENU2,
-                                                                        Gamepad::BUTTON_MENU1,
-                                                                        Gamepad::BUTTON_L3,
-                                                                        Gamepad::BUTTON_R3,
-                                                                        Gamepad::BUTTON_L1,
-                                                                        Gamepad::BUTTON_R1,
-                                                                        Gamepad::BUTTON_MENU3,
-                                                                        Gamepad::BUTTON_A,
-                                                                        Gamepad::BUTTON_B,
-                                                                        Gamepad::BUTTON_X,
-                                                                        Gamepad::BUTTON_Y
-                                                                        }
-    },
-    {0x54c,0x268,"Sony PlayStation 3 Controller",2,27,19,2, 
-                                            (GamepadJoystickAxisInfo[]) {
-                                                                    {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                    {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                    {2,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                    {3,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                    {12,1,GP_AXIS_IS_TRIGGER,0,0,2240,ZERO_TO_POS},
-                                                                    {13,2,GP_AXIS_IS_TRIGGER,1,0,2240,ZERO_TO_POS},
-                                                                    {-1,0,0,0,0,0,NEG_TO_POS}
-                                                                },
-                                            (long[]) {
-                                                                        Gamepad::BUTTON_MENU1,    
-                                                                        Gamepad::BUTTON_L3,  
-                                                                        Gamepad::BUTTON_R3,  
-                                                                        Gamepad::BUTTON_MENU2, 
-                                                                        Gamepad::BUTTON_UP, 
-                                                                        Gamepad::BUTTON_RIGHT, 
-                                                                        Gamepad::BUTTON_DOWN,    
-                                                                        Gamepad::BUTTON_LEFT,   
-                                                                        Gamepad::BUTTON_L2,  //Use Trigger Instead of BUTTON_L2? or both should be called
-                                                                        Gamepad::BUTTON_R2,  //Use Trigger Instead of BUTTON_R2? or both should be called                                                                        
-                                                                        Gamepad::BUTTON_L1,
-                                                                        Gamepad::BUTTON_R1,
-                                                                        Gamepad::BUTTON_Y,    
-                                                                        Gamepad::BUTTON_B,  
-                                                                        Gamepad::BUTTON_A,  
-                                                                        Gamepad::BUTTON_X, 
-                                                                        Gamepad::BUTTON_MENU3, 
-                                                                        -1,
-                                                                        -1
-                                                                        }
-    },
-    {0x79,0x6,"Generic USB Controller",2,7,12,0, 
-                                            (GamepadJoystickAxisInfo[]) {
-                                                                    {0,1, GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                    {1,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                    {2,0,GP_AXIS_SKIP,0,0,2240,NEG_TO_POS},
-                                                                    {3,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                    {4,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                    {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,2240,NEG_TO_POS},
-                                                                    {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,2240,NEG_TO_POS},
-                                                                    {-1,0,0,0,0,0,NEG_TO_POS}
-                                                                },
-                                            (long[]) {
-                                                                        Gamepad::BUTTON_Y,    
-                                                                        Gamepad::BUTTON_B,  
-                                                                        Gamepad::BUTTON_A,  
-                                                                        Gamepad::BUTTON_X, 
-                                                                        Gamepad::BUTTON_L1, 
-                                                                        Gamepad::BUTTON_R1, 
-                                                                        Gamepad::BUTTON_L2,    
-                                                                        Gamepad::BUTTON_R2,   
-                                                                        Gamepad::BUTTON_MENU1,   
-                                                                        Gamepad::BUTTON_MENU2,   
-                                                                        Gamepad::BUTTON_L3,
-                                                                        Gamepad::BUTTON_R3,
-                                                                        }
-    }
-};
-
-bool isGamepadDevRegistered(dev_t devId)
-{
-    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end(); ++it)
-    {
-        if (devId == (*it).deviceId) 
-            return true;
-    }
-    return false;
-}
-
-void closeGamepad(const ConnectedGamepadDevInfo& gamepadDevInfo)
-{
-    ::close(gamepadDevInfo.fd);
-}
-
-void unregisterGamepad(GamepadHandle handle)
-{
-    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end(); ++it)
-    {
-        if (handle == (*it).fd)
-        {
-            closeGamepad(*it);
-            __connectedGamepads.erase(it);
-            return;
-        }
-    }
-}
-
-void closeAllGamepads()
-{
-    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end(); ++it)
-    {
-        closeGamepad(*it);
-        __connectedGamepads.erase(it);
-    }
-}
-
-const GamepadInfoEntry& getGamepadMappedInfo(unsigned int vendorId, unsigned int productId, unsigned int numberOfAxes, unsigned int numberOfButtons)
-{
-    for (int i = 0; i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry); i++)
-    {
-        const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
-        if (curEntry.vendorId == vendorId && curEntry.productId == productId)
-        {
-            return curEntry;
-        }
-    }
-
-    for (int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry);i++)
-    {
-        const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
-        if (curEntry.vendorId == 0 && curEntry.productId == 0 && curEntry.numberOfAxes == numberOfAxes && curEntry.numberOfButtons == numberOfButtons)
-        {
-            return curEntry;
-        }
-    }
-
-    return gamepadLookupTable[0];
-}
-
-const GamepadInfoEntry& getGamepadMappedInfo(const GamepadHandle handle)
-{
-    GP_ASSERT(handle >= 0);
-
-    for (list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
-    {
-        if (handle == (*it).fd)
-        {
-            return it->gamepadInfo;
-        }
-    }
-    GP_WARN("Gamepad not connected but yet trying to get its data. Falling back to generic one.");
-    return gamepadLookupTable[0];
-}
-
-const GamepadJoystickAxisInfo* tryGetGamepadMappedAxisInfo(const GamepadInfoEntry& gpinfo, unsigned int axisNumber)
-{
-    if (axisNumber >= 0 && axisNumber < gpinfo.numberOfAxes)
-    {
-        int i = 0;
-        while (true)
-        {
-            const GamepadJoystickAxisInfo* curAxisInfo = &gpinfo.axes[i++];
-            if (curAxisInfo->axisIndex == axisNumber)
-                return curAxisInfo;
-            else if (curAxisInfo->axisIndex < 0)
-                return NULL;
-        }
-    }
-    return NULL;
-}
-
-bool tryGetGamepadMappedButton(const GamepadInfoEntry& gpinfo, unsigned long btnNumber, long& outMap)
-{
-    if (btnNumber >= 0 && btnNumber < gpinfo.numberOfButtons )
-    {
-        if (gpinfo.buttons[btnNumber] >= 0)
-        {
-            outMap = gpinfo.buttons[btnNumber];
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    GP_WARN("Unmapped gamepad button: %u.",btnNumber);
-    return false;
-}
-
-unsigned int readIntegerGamepadIdPropery(const char* sysFSIdPath, const char* propertyName)
-{
-    unsigned int ret = 0;
-    try 
-    {
-        ifstream propStream;
-        propStream.open((string(sysFSIdPath) + propertyName).c_str(),ifstream::in);
-        propStream >> std::hex >> ret;
-        propStream.close();
-    } 
-    catch (exception e) 
-    {
-        GP_WARN("Could not read propery from SysFS for Gamepad: %s", propertyName);
-    }
-    return ret;
-}
-
-bool isBlackListed(unsigned int vendorId, unsigned int productId)
-{
-    switch (vendorId)
-    {
-        case 0x0e0f: //virtual machine devices
-            if (productId == 0x0003) // Virtual Mouse
-                return true;
-    }
-    return false;
-}
-
-void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSIdPath)
-{
-    GP_ASSERT(devPath);
-
-    unsigned int vendorId =readIntegerGamepadIdPropery(sysFSIdPath,"vendor");
-    unsigned int productId =readIntegerGamepadIdPropery(sysFSIdPath,"product");
-
-    if (isBlackListed(vendorId, productId))
-        return;
-
-    GamepadHandle handle = ::open(devPath,O_RDONLY | O_NONBLOCK);
-    if(handle < 0)
-    {
-        GP_WARN("Could not open Gamepad device.");
-        return;
-    }
-
-    if (!(fcntl(handle, F_GETFL) != -1 || errno != EBADF))
-        return;
-
-    char axesNum, btnsNum, name[256];
-    ioctl(handle, JSIOCGNAME(256), name);
-    ioctl (handle, JSIOCGAXES, &axesNum);
-    ioctl (handle, JSIOCGBUTTONS, &btnsNum);
-
-    const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(vendorId, productId, (unsigned int)axesNum, (unsigned int)btnsNum);
-    unsigned int numJS = gpInfo.numberOfJS;
-    unsigned int numTR = gpInfo.numberOfTriggers;
-
-    // Ignore accelerometer devices that register themselves as joysticks. Ensure they have at least 2 buttons.
-    if (btnsNum < 2)
-        return;
-
-    Platform::gamepadEventConnectedInternal(handle, btnsNum, numJS, numTR, name);
-    ConnectedGamepadDevInfo info = {devId,handle,gpInfo}; 
-    __connectedGamepads.push_back(info);
-}
-
-static float normalizeJoystickAxis(int axisValue, int deadZone, bool zeroToOne)
-{
-    int absAxisValue = 0;
-    if (zeroToOne)
-        absAxisValue = (axisValue + 32767) / 2.0;
-    else
-        absAxisValue = abs(axisValue);
-
-    if (absAxisValue < deadZone)
-    {
-        return 0.0f;
-    }
-    else
-    {
-        int maxVal = 0;
-        int value = 0;
-        if(!zeroToOne)
-        {
-            value = axisValue;
-            if (value < 0)
-            {
-                value = -1;
-                maxVal = 32768;
-            }
-            else if (value > 0)
-            {
-                value = 1;
-                maxVal = 32767;
-            }
-            else
-            {
-                return 0.0f;
-            }
-        }
-        else
-        {
-            value = 1;
-            maxVal = 32767;
-        }
-
-        float ret = value * (absAxisValue - deadZone) / (float)(maxVal - deadZone);
-        return ret;
-    }
-}
-
-void enumGamepads()
-{
-    const int maxDevs = 16;
-    const char* devPathFormat = "/dev/input/js%u";
-    const char* sysfsPathFormat = "/sys/class/input/js%u/device/id/";
-    char curDevPath[20];
-
-    for(int i=0;i<maxDevs;i++)
-    {
-        sprintf(curDevPath,devPathFormat,i);
-        struct stat gpstat;
-        if(::stat(curDevPath,&gpstat) == 0)
-        {
-            dev_t devid = gpstat.st_rdev;
-            if(!isGamepadDevRegistered(devid))
-            {
-                char cursysFSPath[35];
-                sprintf(cursysFSPath,sysfsPathFormat,i);
-                handleConnectedGamepad(devid,curDevPath,cursysFSPath);
-            }
-        }
-    }
-}
-
-void gamepadHandlingLoop()
-{
-    enumGamepads();
-}
-
-int Platform::enterMessagePump()
-{
-    GP_ASSERT(_game);
-
-    updateWindowSize();
-
-    static bool shiftDown = false;
-    static bool capsOn = false;
-    static XEvent evt;
-
-    // Get the initial time.
-    clock_gettime(CLOCK_REALTIME, &__timespec);
-    __timeStart = timespec2millis(&__timespec);
-    __timeAbsolute = 0L;
-
-    // Run the game.
-    _game->run();
-
-    // Setup select for message handling (to allow non-blocking)
-    int x11_fd = ConnectionNumber(__display);
-
-    pollfd xpolls[1];
-    xpolls[0].fd = x11_fd;
-    xpolls[0].events = POLLIN|POLLPRI;
-
-    // Message loop.
-    while (true)
-    {
-        poll( xpolls, 1, 16 );
-        // handle all pending events in one block
-        while (XPending(__display))
-        {
-            XNextEvent(__display, &evt);
-
-            switch (evt.type)
-            {
-                case ClientMessage:
-                    {
-                        // Handle destroy window message correctly
-                        if (evt.xclient.data.l[0] == __atomWmDeleteWindow)
-                        {
-                            _game->exit();
-                        }
-                    }
-                    break;
-
-                case Expose:
-                    {
-                        updateWindowSize();
-                    }
-                    break;
-
-                case ConfigureNotify:
-                    {
-                        updateWindowSize();
-                        gameplay::Platform::resizeEventInternal(evt.xconfigure.width, evt.xconfigure.height);
-                    }
-                    break;
-
-                case DestroyNotify :
-                    {
-                        cleanupX11();
-                        exit(0);
-                    }
-                    break;
-
-                case KeyPress:
-                    {
-                        KeySym sym = XLookupKeysym(&evt.xkey, (evt.xkey.state & shiftDown) ? 1 : 0);
-
-
-                        //TempSym needed because XConvertCase operates on two keysyms: One lower and the other upper, we are only interested in the upper case
-                        KeySym tempSym;
-                        if (capsOn && !shiftDown)
-                            XConvertCase(sym,  &tempSym, &sym);
-
-                        Keyboard::Key key = getKey(sym);
-                        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
-
-                        if (key == Keyboard::KEY_CAPS_LOCK)
-                            capsOn = !capsOn;
-                        if (key == Keyboard::KEY_SHIFT)
-                            shiftDown = true;
-
-                        if (int character = getUnicode(key))
-                            gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, character);
-
-                    }
-                    break;
-
-                case KeyRelease:
-                    {
-                        //detect and drop repeating keystrokes (no other way to do this using the event interface)
-                        XEvent next;
-                        if ( XPending(__display) )
-                        {
-                            XPeekEvent(__display,&next);
-                            if ( next.type == KeyPress
-                                    && next.xkey.time == evt.xkey.time
-                                    && next.xkey.keycode == evt.xkey.keycode )
-                            {
-                                XNextEvent(__display,&next);
-                                continue;
-                            }
-                        }
-
-                        KeySym sym = XLookupKeysym(&evt.xkey, 0);
-                        Keyboard::Key key = getKey(sym);
-                        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_RELEASE, key);
-
-                        if (key == Keyboard::KEY_SHIFT)
-                            shiftDown = false;
-                    }
-                    break;
-
-                case ButtonPress:
-                    {
-                        gameplay::Mouse::MouseEvent mouseEvt;
-
-                        if (evt.xbutton.button >= 1 && evt.xbutton.button <= 3)
-                        {
-                            if (evt.xbutton.button == 1)
-                                mouseEvt = gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON;
-                            else if (evt.xbutton.button == 2)
-                                mouseEvt = gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON;
-                            else if (evt.xbutton.button == 3)
-                                mouseEvt = gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON;
-
-                            if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
-                            {
-                                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, evt.xbutton.x, evt.xbutton.y, 0, true);
-                            }
-                        }
-                        else if (evt.xbutton.button >= 4 && evt.xbutton.button <= 5)
-                        {
-                            int wheelDelta;
-                            if (evt.xbutton.button == 4)
-                                wheelDelta = 1;
-                            else if (evt.xbutton.button == 5)
-                                wheelDelta = -1;
-                            else
-                                wheelDelta = 0;
-
-                            gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL, evt.xbutton.x, evt.xbutton.y, wheelDelta);
-                        }
-                    }
-                    break;
-
-                case ButtonRelease:
-                    {
-                        gameplay::Mouse::MouseEvent mouseEvt;
-
-                        if (evt.xbutton.button >= 1 && evt.xbutton.button <= 3)
-                        {
-                            if (evt.xbutton.button == 1)
-                                mouseEvt = gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON;
-                            else if (evt.xbutton.button == 2)
-                                mouseEvt = gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON;
-                            else if (evt.xbutton.button == 3)
-                                mouseEvt = gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON;
-
-                            if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
-                            {
-                                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, evt.xbutton.x, evt.xbutton.y, 0, true);
-                            }
-                        }
-                    }
-                    break;
-
-                case MotionNotify:
-                    {
-                        int x = evt.xmotion.x;
-                        int y = evt.xmotion.y;
-                        if (__mouseCaptured)
-                        {
-                            if (x == __mouseCapturePointX && y == __mouseCapturePointY)
-                            {
-                                // Discard the first MotionNotify following capture since it contains bogus x,y data.
-                                break;
-                            }
-
-                            // Convert to deltas
-                            x -= __mouseCapturePointX;
-                            y -= __mouseCapturePointY;
-
-                            // Warp mouse back to center of screen.
-                            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
-                        }
-
-                        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
-                        {
-                            if (evt.xmotion.state & Button1Mask)
-                            {
-                                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0, true);
-                            }
-                        }
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        gamepadHandlingLoop();
-
-        if (_game)
-        {
-            // Game state will be uninitialized if game was closed through Game::exit()
-            if (_game->getState() == Game::UNINITIALIZED)
-                break;
-
-            _game->frame();
-        }
-
-        glXSwapBuffers(__display, __window);
-    }
-
-    cleanupX11();
-
-    return 0;
-}
-
-void Platform::signalShutdown()
+PlatformLinux::PlatformLinux() :
+	_connection(nullptr),
+	_screen(nullptr),
+	_window(0),
+	_windowDeleteReply(nullptr),
+	_quit(false),
+	_graphics(nullptr)
 {
 }
 
-bool Platform::canExit()
-{
-    return true;
-}
-
-unsigned int Platform::getDisplayWidth()
-{
-    return __windowSize[0];
-}
-
-unsigned int Platform::getDisplayHeight()
-{
-    return __windowSize[1];
-}
-
-double Platform::getAbsoluteTime()
-{
-
-    clock_gettime(CLOCK_REALTIME, &__timespec);
-    double now = timespec2millis(&__timespec);
-    __timeAbsolute = now - __timeStart;
-
-    return __timeAbsolute;
-}
-
-void Platform::setAbsoluteTime(double time)
-{
-    __timeAbsolute = time;
-}
-
-bool Platform::isVsync()
-{
-    return __vsync;
-}
-
-void Platform::setVsync(bool enable)
-{
-    __vsync = enable;
-
-    if (glXSwapIntervalEXT)
-        glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
-    else if(glXSwapIntervalMESA)
-        glXSwapIntervalMESA(__vsync ? 1 : 0);
-}
-
-void Platform::swapBuffers()
-{
-    glXSwapBuffers(__display, __window);
-}
-
-void Platform::sleep(long ms)
-{
-    usleep(ms * 1000);
-}
-
-void Platform::setMultiSampling(bool enabled)
-{
-    if (enabled == __multiSampling)
-    {
-        return;
-    }
-        
-        // TODO
-        __multiSampling = enabled;
-}
-    
-    bool Platform::isMultiSampling()
-    {
-        return __multiSampling;
-    }
-
-void Platform::setMultiTouch(bool enabled)
-{
-    // not supported
-}
-
-bool Platform::isMultiTouch()
-{
-    false;
-}
-
-bool Platform::hasAccelerometer()
-{
-    return false;
-}
-
-void Platform::getAccelerometerValues(float* pitch, float* roll)
-{
-    GP_ASSERT(pitch);
-    GP_ASSERT(roll);
-
-    *pitch = 0;
-    *roll = 0;
-}
-
-void Platform::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
-{
-    if (accelX)
-    {
-        *accelX = 0;
-    }
-
-    if (accelY)
-    {
-        *accelY = 0;
-    }
-
-    if (accelZ)
-    {
-        *accelZ = 0;
-    }
-
-    if (gyroX)
-    {
-        *gyroX = 0;
-    }
-
-    if (gyroY)
-    {
-        *gyroY = 0;
-    }
-
-    if (gyroZ)
-    {
-        *gyroZ = 0;
-    }
-}
-
-void Platform::getArguments(int* argc, char*** argv)
-{
-    if (argc)
-        *argc = __argc;
-    if (argv)
-        *argv = __argv;
-}
-
-bool Platform::hasMouse()
-{
-    return true;
-}
-
-void Platform::setMouseCaptured(bool captured)
-{
-    if (captured != __mouseCaptured)
-    {
-        if (captured)
-        {
-            // Hide the cursor and warp it to the center of the screen
-            __mouseCapturePointX = getDisplayWidth() / 2;
-            __mouseCapturePointY = getDisplayHeight() / 2;
-
-            setCursorVisible(false);
-            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
-        }
-        else
-        {
-            // Restore cursor
-            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
-            setCursorVisible(true);
-        }
-
-        __mouseCaptured = captured;
-    }
-}
-
-bool Platform::isMouseCaptured()
-{
-    return __mouseCaptured;
-}
-
-void Platform::setCursorVisible(bool visible)
-{
-    if (visible != __cursorVisible)
-    {
-        if (visible==false)
-        {
-            Cursor invisibleCursor;
-            Pixmap bitmapNoData;
-            XColor black;
-            static char noData[] = {0, 0, 0, 0, 0, 0, 0, 0};
-            black.red = black.green = black.blue = 0;
-            bitmapNoData = XCreateBitmapFromData(__display, __window, noData, 8, 8);
-            invisibleCursor = XCreatePixmapCursor(__display, bitmapNoData, bitmapNoData, &black, &black, 0, 0);
-
-            XDefineCursor(__display, __window, invisibleCursor);
-            XFreeCursor(__display, invisibleCursor);
-            XFreePixmap(__display, bitmapNoData);
-        }
-        else
-        {
-            XUndefineCursor(__display, __window);
-        }
-        XFlush(__display);
-        __cursorVisible = visible;
-    }
-}
-
-bool Platform::isCursorVisible()
-{
-    return __cursorVisible;
-}
-
-void Platform::displayKeyboard(bool display)
-{
-    // not supported
-}
-
-void Platform::shutdownInternal()
-{
-    closeAllGamepads();
-    Game::getInstance()->shutdown();
-}
-
-bool Platform::isGestureSupported(Gesture::GestureEvent evt)
-{
-    return false;
-}
-
-void Platform::registerGesture(Gesture::GestureEvent evt)
+PlatformLinux::~PlatformLinux()
 {
 }
 
-void Platform::unregisterGesture(Gesture::GestureEvent evt)
+bool PlatformLinux::startup(int argc, char** argv)
+{
+	// Get the game config
+	Game::Config* config = Game::getInstance()->getConfig();
+
+	// Create the xcb connection
+	int screenCount;
+	_connection = xcb_connect(nullptr, &screenCount);
+	if (_connection == nullptr)
+	{
+		printf("Failed to create vulkan icd connection!\n");
+		return false;
+	}
+
+	// Find the screen
+	const xcb_setup_t* setup;
+	setup = xcb_get_setup(_connection);	
+	xcb_screen_iterator_t itr;
+	itr = xcb_setup_roots_iterator(setup);
+	for (int i = 0; i < screenCount; i++)
+	{
+		xcb_screen_next(&itr);
+	}
+	_screen = itr.data;
+
+	// Create the window
+	uint32_t windowAttribMask;
+	uint32_t windowAttribs[32];
+	_window = xcb_generate_id(_connection);
+	windowAttribMask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
+	windowAttribs[0] = _screen->black_pixel;
+	windowAttribs[1] = XCB_EVENT_MASK_KEY_RELEASE |
+					   XCB_EVENT_MASK_KEY_PRESS |
+					   XCB_EVENT_MASK_EXPOSURE |
+					   XCB_EVENT_MASK_STRUCTURE_NOTIFY |
+					   XCB_EVENT_MASK_POINTER_MOTION |
+					   XCB_EVENT_MASK_BUTTON_PRESS |
+					   XCB_EVENT_MASK_BUTTON_RELEASE;
+	xcb_create_window(_connection, 
+					  XCB_COPY_FROM_PARENT, _window, _screen->root, 
+					  config->x, config->y, config->width, config->height, config->fullscreen ? 0 : 1,
+					  XCB_WINDOW_CLASS_INPUT_OUTPUT, _screen->root_visual,
+					  windowAttribMask, windowAttribs);
+
+	// Window destroy event
+	xcb_intern_atom_cookie_t windowProtocolsCookie = xcb_intern_atom(_connection, 1, 12, "WM_PROTOCOLS");
+	xcb_intern_atom_reply_t* windowProtocolsReply = xcb_intern_atom_reply(_connection, windowProtocolsCookie, 0);
+	xcb_intern_atom_cookie_t windowDeleteCookie = xcb_intern_atom(_connection, 0, 16, "WM_DELETE_WINDOW");
+	_windowDeleteReply = xcb_intern_atom_reply(_connection, windowDeleteCookie, 0);
+	xcb_change_property(_connection, 
+						XCB_PROP_MODE_REPLACE, _window, (*windowProtocolsReply).atom, 
+						XCB_ATOM_ATOM, 32, 1, &(*_windowDeleteReply).atom);
+
+	// Set fullscreen mode
+	if (config->fullscreen)
+	{
+		xcb_intern_atom_cookie_t windowStateCookie = xcb_intern_atom(_connection, 1, 13, "_NET_WM_STATE");
+		xcb_intern_atom_reply_t* windowStateReply = xcb_intern_atom_reply(_connection, windowStateCookie, 0);
+		xcb_intern_atom_cookie_t windowStateFullscreenCookie = xcb_intern_atom(_connection, 1, 24, "_NET_WM_STATE_FULLSCREEN");
+		xcb_intern_atom_reply_t* windowStateFullscreenReply = xcb_intern_atom_reply(_connection, windowStateFullscreenCookie, 0);
+		if (windowStateReply != XCB_NONE && windowStateFullscreenReply != XCB_NONE)
+			xcb_change_property(_connection, 
+								XCB_PROP_MODE_REPLACE, _window, (*windowStateReply).atom, 
+								XCB_ATOM_ATOM, 32, 1, &(*windowStateFullscreenReply).atom);
+		else
+			GP_WARN("Fullscreen not supported.");
+	}
+
+	// Set the window title
+	xcb_change_property(_connection, 
+						XCB_PROP_MODE_REPLACE, _window, 
+						XCB_ATOM_WM_NAME, XCB_ATOM_STRING, 8, config->title.size(), config->title.c_str());
+	
+    // Intialize the graphics system
+    Game::getGraphics()->onInitialize((unsigned long)_window, (unsigned long)_connection);
+
+	// Show the window
+	xcb_map_window(_connection, _window);
+	xcb_flush(_connection);
+
+	Game::getInstance()->onInitialize();
+
+	return true;
+}
+
+void PlatformLinux::shutdown()
+{
+	if (_graphics)
+		_graphics->onFinalize();
+
+	Game::getInstance()->onFinalize();
+	xcb_disconnect(_connection);
+}
+
+int PlatformLinux::enterMessagePump()
+{
+	while (!_quit)
+	{
+		xcb_generic_event_t* evt;
+		while ((evt = xcb_poll_for_event(_connection)))
+		{
+			onMessage(evt);
+			free(evt);
+		}
+	}
+	return 0;
+}
+
+void PlatformLinux::onMessage(const xcb_generic_event_t* evt)
+{
+	Game* game = gameplay::Game::getInstance();
+
+	static bool shiftDown = false;
+	static bool capsOn = false;
+
+	switch (evt->response_type & 0x7f)
+	{
+		case XCB_CLIENT_MESSAGE:
+		{
+			if ((*(xcb_client_message_event_t*)evt).data.data32[0] == (*_windowDeleteReply).atom)
+				_quit = true;
+			break;
+		}
+		case XCB_MOTION_NOTIFY:
+		{
+			xcb_motion_notify_event_t* motionEvent = (xcb_motion_notify_event_t*)evt;
+			float x = (float)motionEvent->event_x;
+			float y = (float)motionEvent->event_y;
+			game->mouseEvent(Platform::MOUSE_EVENT_MOVE, x, y, 0);
+			break;
+		}
+		case XCB_BUTTON_PRESS:
+		{
+			xcb_button_press_event_t* pressEvent = (xcb_button_press_event_t*)evt;
+			float x = (float)pressEvent->event_x;
+			float y = (float)pressEvent->event_y;
+			if (pressEvent->detail == XCB_BUTTON_INDEX_1)
+				game->mouseEvent(Platform::MOUSE_EVENT_PRESS_LEFT_BUTTON, x, y, 0);
+			if (pressEvent->detail == XCB_BUTTON_INDEX_2)
+				game->mouseEvent(Platform::MOUSE_EVENT_PRESS_MIDDLE_BUTTON, x, y, 0);
+			if (pressEvent->detail == XCB_BUTTON_INDEX_3)
+				game->mouseEvent(Platform::MOUSE_EVENT_PRESS_RIGHT_BUTTON, x, y, 0);
+
+			break;
+		}
+		case XCB_BUTTON_RELEASE:
+		{
+			xcb_button_press_event_t* pressEvent = (xcb_button_press_event_t*)evt;
+			float x = (float)pressEvent->event_x;
+			float y = (float)pressEvent->event_y;
+			if (pressEvent->detail == XCB_BUTTON_INDEX_1)
+				game->mouseEvent(Platform::MOUSE_EVENT_RELEASE_LEFT_BUTTON, x, y, 0);
+			if (pressEvent->detail == XCB_BUTTON_INDEX_2)
+				game->mouseEvent(Platform::MOUSE_EVENT_RELEASE_MIDDLE_BUTTON, x, y, 0);
+			if (pressEvent->detail == XCB_BUTTON_INDEX_3)
+				game->mouseEvent(Platform::MOUSE_EVENT_RELEASE_RIGHT_BUTTON, x, y, 0);
+			break;
+		}
+		case XCB_KEY_PRESS:
+		{
+			const xcb_key_release_event_t* keyEvent = (const xcb_key_release_event_t *)evt;
+			//if (keyEvent->detail == KEY_SHIFT || keyEvent->detail == KEY_LSHIFT || keyEvent->detail == KEY_RSHIFT)
+			//	shiftDown = true;
+			//if (keyEvent->detail == KEY_CAPITAL)
+			//	capsOn = !capsOn;
+			game->keyEvent(Platform::KEYBOARD_EVENT_PRESS, translateKey(keyEvent->detail, shiftDown ^ capsOn));
+			break;
+		}
+		case XCB_KEY_RELEASE:
+		{
+			const xcb_key_release_event_t* keyEvent = (const xcb_key_release_event_t*)evt;
+			//if (keyEvent->detail == KEY_SHIFT || keyEvent->detail == KEY_LSHIFT || keyEvent->detail == KEY_RSHIFT)
+			//	shiftDown = false;
+			game->keyEvent(Platform::KEYBOARD_EVENT_RELEASE, translateKey(keyEvent->detail, shiftDown ^ capsOn));
+			break;
+		}
+		case XCB_DESTROY_NOTIFY:
+		{
+			_quit = true;
+			break;
+		}
+		case XCB_CONFIGURE_NOTIFY:
+		{
+			/*const xcb_configure_notify_event_t* cfgEvent = (const xcb_configure_notify_event_t*)evt;
+			if ((game->getState() == Game::STATE_RUNNING) && ((cfgEvent->width != width) || (cfgEvent->height != height)))
+			{
+				destWidth = cfgEvent->width;
+				destHeight = cfgEvent->height;
+				
+				// todo: resize event
+			}*/
+			break;
+		}
+
+		default:
+			break;
+	}
+}
+
+unsigned long PlatformLinux::getWindow()
+{
+	return (unsigned long)_window;
+}
+
+unsigned long PlatformLinux::getConnection()
+{
+	return (unsigned long)_connection;
+}
+
+bool PlatformLinux::isGamepadButtonPressed(GamepadButton button, size_t gamepadIndex)
 {
 }
 
-bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+void PlatformLinux::getGamepadAxisValues(float* leftVertical, float* leftHorizontal, float* rightVertical, float* rightHorizontal, size_t gamepadIndex)
 {
-    return false;
 }
 
-void Platform::pollGamepadState(Gamepad* gamepad)
+void PlatformLinux::getGamepadTriggerValues(float* leftTrigger, float* rightTrigger, size_t gamepadIndex)
 {
-    GP_ASSERT(gamepad);
-
-    struct js_event jevent;
-    const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(gamepad->_handle);
-
-    while (read(gamepad->_handle, &jevent, sizeof(struct js_event)) > 0)
-    {
-        switch (jevent.type)
-        {
-            case JS_EVENT_BUTTON:
-            case JS_EVENT_BUTTON | JS_EVENT_INIT:
-                {
-                    long curMappingIndex = -1;
-                    if(tryGetGamepadMappedButton(gpInfo, jevent.number, curMappingIndex))
-                    {
-                        unsigned int buttons = 0;
-                        if (jevent.value)
-                            buttons |= (1 << curMappingIndex);
-                        else
-                            buttons &= ~(1 << curMappingIndex);
-                        gamepad->setButtons(buttons);
-                    }
-                    break;
-                }
-            case JS_EVENT_AXIS:
-            case JS_EVENT_AXIS | JS_EVENT_INIT:
-                {
-                    if(jevent.number < gpInfo.numberOfAxes)
-                    {
-                        const GamepadJoystickAxisInfo* jsInfo = tryGetGamepadMappedAxisInfo(gpInfo,jevent.number);
-                        if(jsInfo)
-                        {
-                            float val = normalizeJoystickAxis(jevent.value,jsInfo->deadZone,jsInfo->mapFunc == ZERO_TO_POS);
-                            if(!(jsInfo->flags & GP_AXIS_SKIP))
-                            {
-                                if((jsInfo->flags & GP_AXIS_IS_NEG))
-                                    val = -1.0f * val;
-
-                                bool not_js_axis = false;
-                                if((jsInfo->flags & GP_AXIS_IS_DPAD))
-                                {
-                                    unsigned int buttons = 0;
-                                    if(jevent.value != 0)
-                                        buttons |= (1 << (jevent.value > 0 ? jsInfo->mappedPosArg : jsInfo->mappedNegArg));
-                                    else
-                                    {
-                                        buttons &= ~(1 << jsInfo->mappedPosArg);
-                                        buttons &= ~(1 << jsInfo->mappedNegArg);
-                                    }
-                                    gamepad->setButtons(buttons);
-                                    not_js_axis = true;
-                                }
-                                if((jsInfo->flags & GP_AXIS_IS_TRIGGER))
-                                {
-                                    gamepad->setTriggerValue(jsInfo->mappedPosArg, val);
-                                    not_js_axis = true;
-                                }
-
-                                if(!not_js_axis)
-                                {
-                                    Vector2 jsVals;
-                                    gamepad->getJoystickValues(jsInfo->joystickIndex,&jsVals);
-                                    if(jsInfo->flags & GP_AXIS_IS_XAXIS)
-                                        jsVals.x = val;
-                                    else
-                                        jsVals.y = val;
-                                    gamepad->setJoystickValue(jsInfo->joystickIndex,jsVals.x,jsVals.y);
-                                }
-                            }
-                        }
-                    }
-                }
-                break;
-
-            default: 
-                GP_WARN("unhandled gamepad event: %x\n", jevent.type);
-        }
-    }
-    if(errno == ENODEV)
-    {
-        unregisterGamepad(gamepad->_handle);
-        gamepadEventDisconnectedInternal(gamepad->_handle);
-    }
 }
 
-bool Platform::launchURL(const char* url)
+void PlatformLinux::getAccelerometerValues(float* pitch, float* roll)
 {
-    if (url == NULL || *url == '\0')
-        return false;
-
-    int len = strlen(url);
-
-    char* cmd = new char[11 + len];
-    sprintf(cmd, "xdg-open %s", url);
-    int r = system(cmd);
-    SAFE_DELETE_ARRAY(cmd);
-
-    return (r == 0);
 }
 
-std::string Platform::displayFileDialog(size_t mode, const char* title, const char* filterDescription, const char* filterExtensions, const char* initialDirectory)
+void PlatformLinux::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
 {
-    std::string filename = "";
+}
 
-    if (!gtk_init_check(NULL,NULL))
-        return "";
+Platform::KeyboardKey PlatformLinux::translateKey(xcb_keycode_t xcbKeyCode, bool shiftDown)
+{
+	switch (xcbKeyCode)
+	{
+		/*case KEY_PAUSE:
+			return gameplay::Platform::KEYBOARD_KEY_PAUSE;
+		case KEY_SCROLL:
+			return gameplay::Platform::KEYBOARD_KEY_SCROLL_LOCK;
+		case KEY_PRINT:
+			return gameplay::Platform::KEYBOARD_KEY_PRINT;
+		case KEY_ESCAPE:
+			return gameplay::Platform::KEYBOARD_KEY_ESCAPE;
+		case KEY_BACK:
+		case KEY_F16:
+			return gameplay::Platform::KEYBOARD_KEY_BACKSPACE;
+		case KEY_TAB:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_BACK_TAB : gameplay::Platform::KEYBOARD_KEY_TAB;
+		case KEY_RETURN:
+			return gameplay::Platform::KEYBOARD_KEY_RETURN;
+		case KEY_CAPITAL:
+			return gameplay::Platform::KEYBOARD_KEY_CAPS_LOCK;
+		case KEY_SHIFT:
+			return gameplay::Platform::KEYBOARD_KEY_SHIFT;
+		case KEY_CONTROL:
+			return gameplay::Platform::KEYBOARD_KEY_CTRL;
+		case KEY_MENU:
+			return gameplay::Platform::KEYBOARD_KEY_ALT;
+		case KEY_APPS:
+			return gameplay::Platform::KEYBOARD_KEY_MENU;
+		case KEY_LSHIFT:
+			return gameplay::Platform::KEYBOARD_KEY_SHIFT;
+		case KEY_RSHIFT:
+			return gameplay::Platform::KEYBOARD_KEY_SHIFT;
+		case KEY_LCONTROL:
+			return gameplay::Platform::KEYBOARD_KEY_CTRL;
+		case KEY_RCONTROL:
+			return gameplay::Platform::KEYBOARD_KEY_CTRL;
+		case KEY_LMENU:
+			return gameplay::Platform::KEYBOARD_KEY_ALT;
+		case KEY_RMENU:
+			return gameplay::Platform::KEYBOARD_KEY_ALT;
+		case KEY_LWIN:
+		case KEY_RWIN:
+			return gameplay::Platform::KEYBOARD_KEY_HYPER;
+		case KEY_BROWSER_SEARCH:
+			return gameplay::Platform::KEYBOARD_KEY_SEARCH;
+		case KEY_INSERT:
+			return gameplay::Platform::KEYBOARD_KEY_INSERT;
+		case KEY_HOME:
+			return gameplay::Platform::KEYBOARD_KEY_HOME;
+		case KEY_PRIOR:
+			return gameplay::Platform::KEYBOARD_KEY_PG_UP;
+		case KEY_DELETE:
+			return gameplay::Platform::KEYBOARD_KEY_DELETE;
+		case KEY_END:
+			return gameplay::Platform::KEYBOARD_KEY_END;
+		case KEY_NEXT:
+			return gameplay::Platform::KEYBOARD_KEY_PG_DOWN;
+		case KEY_LEFT:
+			return gameplay::Platform::KEYBOARD_KEY_LEFT_ARROW;
+		case KEY_RIGHT:
+			return gameplay::Platform::KEYBOARD_KEY_RIGHT_ARROW;
+		case KEY_UP:
+			return gameplay::Platform::KEYBOARD_KEY_UP_ARROW;
+		case KEY_DOWN:
+			return gameplay::Platform::KEYBOARD_KEY_DOWN_ARROW;
+		case KEY_NUMLOCK:
+			return gameplay::Platform::KEYBOARD_KEY_NUM_LOCK;
+		case KEY_ADD:
+			return gameplay::Platform::KEYBOARD_KEY_KP_PLUS;
+		case KEY_SUBTRACT:
+			return gameplay::Platform::KEYBOARD_KEY_KP_MINUS;
+		case KEY_MULTIPLY:
+			return gameplay::Platform::KEYBOARD_KEY_KP_MULTIPLY;
+		case KEY_DIVIDE:
+			return gameplay::Platform::KEYBOARD_KEY_KP_DIVIDE;
+		case KEY_NUMPAD7:
+			return gameplay::Platform::KEYBOARD_KEY_KP_HOME;
+		case KEY_NUMPAD8:
+			return gameplay::Platform::KEYBOARD_KEY_KP_UP;
+		case KEY_NUMPAD9:
+			return gameplay::Platform::KEYBOARD_KEY_KP_PG_UP;
+		case KEY_NUMPAD4:
+			return gameplay::Platform::KEYBOARD_KEY_KP_LEFT;
+		case KEY_NUMPAD5:
+			return gameplay::Platform::KEYBOARD_KEY_KP_FIVE;
+		case KEY_NUMPAD6:
+			return gameplay::Platform::KEYBOARD_KEY_KP_RIGHT;
+		case KEY_NUMPAD1:
+			return gameplay::Platform::KEYBOARD_KEY_KP_END;
+		case KEY_NUMPAD2:
+			return gameplay::Platform::KEYBOARD_KEY_KP_DOWN;
+		case KEY_NUMPAD3:
+			return gameplay::Platform::KEYBOARD_KEY_KP_PG_DOWN;
+		case KEY_NUMPAD0:
+			return gameplay::Platform::KEYBOARD_KEY_KP_INSERT;
+		case KEY_DECIMAL:
+			return gameplay::Platform::KEYBOARD_KEY_KP_DELETE;
+		case KEY_F1:
+			return gameplay::Platform::KEYBOARD_KEY_F1;
+		case KEY_F2:
+			return gameplay::Platform::KEYBOARD_KEY_F2;
+		case KEY_F3:
+			return gameplay::Platform::KEYBOARD_KEY_F3;
+		case KEY_F4:
+			return gameplay::Platform::KEYBOARD_KEY_F4;
+		case KEY_F5:
+			return gameplay::Platform::KEYBOARD_KEY_F5;
+		case KEY_F6:
+			return gameplay::Platform::KEYBOARD_KEY_F6;
+		case KEY_F7:
+			return gameplay::Platform::KEYBOARD_KEY_F7;
+		case KEY_F8:
+			return gameplay::Platform::KEYBOARD_KEY_F8;
+		case KEY_F9:
+			return gameplay::Platform::KEYBOARD_KEY_F9;
+		case KEY_F10:
+			return gameplay::Platform::KEYBOARD_KEY_F10;
+		case KEY_F11:
+			return gameplay::Platform::KEYBOARD_KEY_F11;
+		case KEY_F12:
+			return gameplay::Platform::KEYBOARD_KEY_F12;
+		case KEY_SPACE:
+			return gameplay::Platform::KEYBOARD_KEY_SPACE;
+		case 0x30:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_RIGHT_PARENTHESIS : gameplay::Platform::KEYBOARD_KEY_ZERO;
+		case 0x31:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_EXCLAM : gameplay::Platform::KEYBOARD_KEY_ONE;
+		case 0x32:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_AT : gameplay::Platform::KEYBOARD_KEY_TWO;
+		case 0x33:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_NUMBER : gameplay::Platform::KEYBOARD_KEY_THREE;
+		case 0x34:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_DOLLAR : gameplay::Platform::KEYBOARD_KEY_FOUR;
+		case 0x35:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_PERCENT : gameplay::Platform::KEYBOARD_KEY_FIVE;
+		case 0x36:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CIRCUMFLEX : gameplay::Platform::KEYBOARD_KEY_SIX;
+		case 0x37:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_AMPERSAND : gameplay::Platform::KEYBOARD_KEY_SEVEN;
+		case 0x38:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_ASTERISK : gameplay::Platform::KEYBOARD_KEY_EIGHT;
+		case 0x39:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_LEFT_PARENTHESIS : gameplay::Platform::KEYBOARD_KEY_NINE;
+		case KEY_OEM_PLUS:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_EQUAL : gameplay::Platform::KEYBOARD_KEY_PLUS;
+		case KEY_OEM_COMMA:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_LESS_THAN : gameplay::Platform::KEYBOARD_KEY_COMMA;
+		case KEY_OEM_MINUS:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_UNDERSCORE : gameplay::Platform::KEYBOARD_KEY_MINUS;
+		case KEY_OEM_PERIOD:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_GREATER_THAN : gameplay::Platform::KEYBOARD_KEY_PERIOD;
+		case KEY_OEM_1:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_COLON : gameplay::Platform::KEYBOARD_KEY_SEMICOLON;
+		case KEY_OEM_2:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_QUESTION : gameplay::Platform::KEYBOARD_KEY_SLASH;
+		case KEY_OEM_3:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_TILDE : gameplay::Platform::KEYBOARD_KEY_GRAVE;
+		case KEY_OEM_4:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_LEFT_BRACE : gameplay::Platform::KEYBOARD_KEY_LEFT_BRACKET;
+		case KEY_OEM_5:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_BAR : gameplay::Platform::KEYBOARD_KEY_BACK_SLASH;
+		case KEY_OEM_6:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_RIGHT_BRACE : gameplay::Platform::KEYBOARD_KEY_RIGHT_BRACKET;
+		case KEY_OEM_7:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_QUOTE : gameplay::Platform::KEYBOARD_KEY_APOSTROPHE;
+		case 0x41:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_A : gameplay::Platform::KEYBOARD_KEY_A;
+		case 0x42:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_B : gameplay::Platform::KEYBOARD_KEY_B;
+		case 0x43:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_C : gameplay::Platform::KEYBOARD_KEY_C;
+		case 0x44:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_D : gameplay::Platform::KEYBOARD_KEY_D;
+		case 0x45:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_E : gameplay::Platform::KEYBOARD_KEY_E;
+		case 0x46:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_F : gameplay::Platform::KEYBOARD_KEY_F;
+		case 0x47:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_G : gameplay::Platform::KEYBOARD_KEY_G;
+		case 0x48:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_H : gameplay::Platform::KEYBOARD_KEY_H;
+		case 0x49:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_I : gameplay::Platform::KEYBOARD_KEY_I;
+		case 0x4A:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_J : gameplay::Platform::KEYBOARD_KEY_J;
+		case 0x4B:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_K : gameplay::Platform::KEYBOARD_KEY_K;
+		case 0x4C:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_L : gameplay::Platform::KEYBOARD_KEY_L;
+		case 0x4D:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_M : gameplay::Platform::KEYBOARD_KEY_M;
+		case 0x4E:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_N : gameplay::Platform::KEYBOARD_KEY_N;
+		case 0x4F:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_O : gameplay::Platform::KEYBOARD_KEY_O;
+		case 0x50:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_P : gameplay::Platform::KEYBOARD_KEY_P;
+		case 0x51:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_Q : gameplay::Platform::KEYBOARD_KEY_Q;
+		case 0x52:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_R : gameplay::Platform::KEYBOARD_KEY_R;
+		case 0x53:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_S : gameplay::Platform::KEYBOARD_KEY_S;
+		case 0x54:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_T : gameplay::Platform::KEYBOARD_KEY_T;
+		case 0x55:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_U : gameplay::Platform::KEYBOARD_KEY_U;
+		case 0x56:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_V : gameplay::Platform::KEYBOARD_KEY_V;
+		case 0x57:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_W : gameplay::Platform::KEYBOARD_KEY_W;
+		case 0x58:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_X : gameplay::Platform::KEYBOARD_KEY_X;
+		case 0x59:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_Y : gameplay::Platform::KEYBOARD_KEY_Y;
+		case 0x5A:
+			return shiftDown ? gameplay::Platform::KEYBOARD_KEY_CAPITAL_Z : gameplay::Platform::KEYBOARD_KEY_Z;
+		default:
+		*/
+			return gameplay::Platform::KEYBOARD_KEY_NONE;
+	}
+}
 
-    // Create the dialog in one of two modes, SAVE or OPEN
-    GtkWidget *dialog;
-    dialog = gtk_file_chooser_dialog_new(title, NULL,
-                                         mode == FileSystem::SAVE ? GTK_FILE_CHOOSER_ACTION_SAVE : GTK_FILE_CHOOSER_ACTION_OPEN,
-                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                         mode == FileSystem::SAVE ? _("_Save") : _("_Open"),
-                                         GTK_RESPONSE_ACCEPT, NULL);
-
-    // Filter on extensions
-    GtkFileFilter* filter = gtk_file_filter_new();
-    std::istringstream f(filterExtensions);
-    std::string s;
-    std::string extStr;
-    while (std::getline(f, s, ';'))
-    {
-        extStr = "*.";
-        extStr += s;
-        gtk_file_filter_add_pattern(filter, extStr.c_str());
-    }
-    gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
-
-    // Set initial directory
-    std::string initialDirectoryStr;
-    if (initialDirectory == NULL)
-    {
-        char* currentDir = g_get_current_dir();
-        initialDirectoryStr = currentDir;
-        g_free(currentDir);
-    }
-    else
-    {
-        initialDirectoryStr = initialDirectory;
-    }
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initialDirectoryStr.c_str());
-
-    if (mode == FileSystem::SAVE)
-    {
-        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
-        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "");
-    }
-
-    // Show the dialog
-    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-    {
-        char* szFilename;
-        szFilename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-        filename = szFilename;
-        g_free(szFilename);
-    }
-    gtk_widget_destroy(dialog);
-
-    // Since we are not using gtk_main(), this will let the dialog close
-    while (gtk_events_pending()) 
-        gtk_main_iteration();
-
-    return filename;
+extern void print(const char* format, ...)
+{
+	va_list argptr;
+	va_start(argptr, format);
+	vfprintf(stderr, format, argptr);
+	va_end(argptr);
 }
 
 }
 
-#endif
 #endif
