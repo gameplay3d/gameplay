@@ -35,8 +35,7 @@ HEADERS += \
     src/Project.h \
     src/ProjectSortFilterProxyModel.h \
     src/DockWidgetManager.h \
-    src/DockWidget.h \
-    src/PropertiesCamera.h
+    src/DockWidget.h
 
 FORMS += \
     src/EditorWindow.ui \
