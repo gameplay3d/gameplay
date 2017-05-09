@@ -1,11 +1,6 @@
 #include "Base.h"
 #include "Camera.h"
-#include "Game.h"
-#include "Node.h"
-#include "Game.h"
-#include "PhysicsController.h"
 
-// Camera dirty bits
 #define CAMERA_DIRTY_VIEW 1
 #define CAMERA_DIRTY_PROJ 2
 #define CAMERA_DIRTY_VIEW_PROJ 4
@@ -13,162 +8,51 @@
 #define CAMERA_DIRTY_INV_VIEW_PROJ 16
 #define CAMERA_DIRTY_BOUNDS 32
 #define CAMERA_DIRTY_ALL (CAMERA_DIRTY_VIEW | CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS)
-
-// Other misc camera bits
 #define CAMERA_CUSTOM_PROJECTION 64
+#define CAMERA_FIELD_OF_VIEW 60.0f
+#define CAMERA_ZOOM 1.0f
+#define CAMERA_ASPECT_RATIO GP_GRAPHICS_WIDTH / GP_GRAPHICS_HEIGHT
+#define CAMERA_NEAR_PLANE 0.1f
+#define CAMERA_FAR_PLANE 1000.f
 
 namespace gameplay
 {
 
-Camera::Camera(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
-    : _type(PERSPECTIVE), _fieldOfView(fieldOfView), _aspectRatio(aspectRatio), _nearPlane(nearPlane), _farPlane(farPlane),
-    _bits(CAMERA_DIRTY_ALL), _node(NULL), _listeners(NULL)
+Camera::Camera() : Component(),
+    _mode(MODE_PERSPECTIVE),
+    _fieldOfView(CAMERA_FIELD_OF_VIEW),
+    _aspectRatio(CAMERA_ASPECT_RATIO),
+    _nearPlane(CAMERA_NEAR_PLANE),
+    _farPlane(CAMERA_FAR_PLANE),
+    _zoom(CAMERA_ZOOM),
+    _dirtyBits(CAMERA_DIRTY_ALL)
 {
-}
-
-Camera::Camera(float zoomX, float zoomY, float aspectRatio, float nearPlane, float farPlane)
-    : _type(ORTHOGRAPHIC), _aspectRatio(aspectRatio), _nearPlane(nearPlane), _farPlane(farPlane),
-	_bits(CAMERA_DIRTY_ALL), _node(NULL), _listeners(NULL)
-{
-    // Orthographic camera.
-    _zoom[0] = zoomX;
-    _zoom[1] = zoomY;
 }
 
 Camera::~Camera()
 {
-    SAFE_DELETE(_listeners);
 }
 
-Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
+Camera::Mode Camera::getMode() const
 {
-    return new Camera(fieldOfView, aspectRatio, nearPlane, farPlane);
+    return _mode;
 }
 
-Camera* Camera::createOrthographic(float zoomX, float zoomY, float aspectRatio, float nearPlane, float farPlane)
+void Camera::setMode(Camera::Mode mode)
 {
-    return new Camera(zoomX, zoomY, aspectRatio, nearPlane, farPlane);
-}
-
-Camera* Camera::create(Properties* properties)
-{
-    GP_ASSERT(properties);
-
-    // Read camera type
-    std::string typeStr;
-    if (properties->exists("type"))
-        typeStr = properties->getString("type");
-    Camera::Type type;
-    if (typeStr == "PERSPECTIVE")
-    {
-        type = Camera::PERSPECTIVE;
-    }
-    else if (typeStr == "ORTHOGRAPHIC")
-    {
-        type = Camera::ORTHOGRAPHIC;
-    }
-    else
-    {
-        GP_ERROR("Invalid 'type' parameter for camera definition.");
-        return NULL;
-    }
-
-    // Read common parameters
-    float aspectRatio, nearPlane, farPlane;
-    if (properties->exists("aspectRatio"))
-    {
-        aspectRatio = properties->getFloat("aspectRatio");
-    }
-    else
-    {
-        // Use default aspect ratio
-        aspectRatio = (float)Game::getInstance()->getWidth() / Game::getInstance()->getHeight();
-    }
-
-    if (properties->exists("nearPlane"))
-        nearPlane = properties->getFloat("nearPlane");
-    else
-        nearPlane = 0.2f; // use some reasonable default value
-
-    if (properties->exists("farPlane"))
-        farPlane = properties->getFloat("farPlane");
-    else
-        farPlane = 100; // use some reasonable default value
-
-    Camera* camera = NULL;
-
-    switch (type)
-    {
-    case Camera::PERSPECTIVE:
-        // If field of view is not specified, use a default of 60 degrees
-        camera = createPerspective(
-            properties->exists("fieldOfView") ? properties->getFloat("fieldOfView") : 60.0f,
-            aspectRatio, nearPlane, farPlane);
-        break;
-
-    case Camera::ORTHOGRAPHIC:
-        // If zoomX and zoomY are not specified, use screen width/height
-        camera = createOrthographic(
-            properties->exists("zoomX") ? properties->getFloat("zoomX") : Game::getInstance()->getWidth(),
-            properties->exists("zoomY") ? properties->getFloat("zoomY") : Game::getInstance()->getHeight(),
-            aspectRatio, nearPlane, farPlane);
-        break;
-    }
-
-    return camera;
-}
-
-Camera::Type Camera::getCameraType() const
-{
-    return _type;
+    _mode = mode;
+    _dirtyBits = CAMERA_DIRTY_ALL;
 }
 
 float Camera::getFieldOfView() const
 {
-    GP_ASSERT(_type == Camera::PERSPECTIVE);
-
     return _fieldOfView;
 }
 
 void Camera::setFieldOfView(float fieldOfView)
 {
-    GP_ASSERT(_type == Camera::PERSPECTIVE);
-
     _fieldOfView = fieldOfView;
-    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-    cameraChanged();
-}
-
-float Camera::getZoomX() const
-{
-    GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
-
-    return _zoom[0];
-}
-
-void Camera::setZoomX(float zoomX)
-{
-    GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
-
-    _zoom[0] = zoomX;
-    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-    cameraChanged();
-}
-
-float Camera::getZoomY() const
-{
-    GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
-
-    return _zoom[1];
-}
-
-void Camera::setZoomY(float zoomY)
-{
-    GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
-
-    _zoom[1] = zoomY;
-    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-    cameraChanged();
+    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 float Camera::getAspectRatio() const
@@ -179,8 +63,7 @@ float Camera::getAspectRatio() const
 void Camera::setAspectRatio(float aspectRatio)
 {
     _aspectRatio = aspectRatio;
-    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-    cameraChanged();
+    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 float Camera::getNearPlane() const
@@ -191,8 +74,7 @@ float Camera::getNearPlane() const
 void Camera::setNearPlane(float nearPlane)
 {
     _nearPlane = nearPlane;
-    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-    cameraChanged();
+    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 float Camera::getFarPlane() const
@@ -203,143 +85,105 @@ float Camera::getFarPlane() const
 void Camera::setFarPlane(float farPlane)
 {
     _farPlane = farPlane;
-    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-    cameraChanged();
+   _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
-Node* Camera::getNode() const
+float Camera::getZoom() const
 {
-    return _node;
+    return _zoom;
 }
 
-void Camera::setNode(Node* node)
+void Camera::setZoom(float zoom)
 {
-    if (_node != node)
-    {
-        if (_node)
-        {
-            _node->removeListener(this);
-        }
-
-        // Connect the new node.
-        _node = node;
-
-        if (_node)
-        {
-            _node->addListener(this);
-        }
-
-        _bits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-        cameraChanged();
-    }
+    _zoom = zoom;
+    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 const Matrix& Camera::getViewMatrix() const
 {
-    if (_bits & CAMERA_DIRTY_VIEW)
+    if (_dirtyBits & CAMERA_DIRTY_VIEW)
     {
-        if (_node)
+        if (_object)
         {
             // The view matrix is the inverse of our transform matrix.
-            _node->getWorldMatrix().invert(&_view);
+            _object->getWorldToLocalMatrix().invert(&_viewMatrix);
         }
         else
         {
-            _view.setIdentity();
+            _viewMatrix.setIdentity();
         }
 
-        _bits &= ~CAMERA_DIRTY_VIEW;
+        _dirtyBits &= ~CAMERA_DIRTY_VIEW;
     }
-
-    return _view;
+    return _viewMatrix;
 }
 
 const Matrix& Camera::getInverseViewMatrix() const
 {
-    if (_bits & CAMERA_DIRTY_INV_VIEW)
+    if (_dirtyBits & CAMERA_DIRTY_INV_VIEW)
     {
-        getViewMatrix().invert(&_inverseView);
+        getViewMatrix().invert(&_inverseViewMatrix);
 
-        _bits &= ~CAMERA_DIRTY_INV_VIEW;
+        _dirtyBits &= ~CAMERA_DIRTY_INV_VIEW;
     }
-
-    return _inverseView;
+    return _inverseViewMatrix;
 }
 
 const Matrix& Camera::getProjectionMatrix() const
 {
-    if (!(_bits & CAMERA_CUSTOM_PROJECTION) && (_bits & CAMERA_DIRTY_PROJ))
+    if (!(_dirtyBits & CAMERA_CUSTOM_PROJECTION) && (_dirtyBits & CAMERA_DIRTY_PROJ))
     {
-        if (_type == PERSPECTIVE)
+        if (_mode == MODE_PERSPECTIVE)
         {
-            Matrix::createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane, &_projection);
+            Matrix::createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane, &_projectionMatrix);
         }
         else
         {
             // Create an ortho projection with the origin at the bottom left of the viewport, +X to the right and +Y up.
-            Matrix::createOrthographic(_zoom[0], _zoom[1], _nearPlane, _farPlane, &_projection);
+            Matrix::createOrthographic(_zoom, _zoom, _nearPlane, _farPlane, &_projectionMatrix);
         }
 
-        _bits &= ~CAMERA_DIRTY_PROJ;
+        _dirtyBits &= ~CAMERA_DIRTY_PROJ;
     }
-
-    return _projection;
+    return _projectionMatrix;
 }
 
 void Camera::setProjectionMatrix(const Matrix& matrix)
 {
-    _projection = matrix;
-    _bits |= CAMERA_CUSTOM_PROJECTION;
-    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-
-    cameraChanged();
-}
-
-void Camera::resetProjectionMatrix()
-{
-    if (_bits & CAMERA_CUSTOM_PROJECTION)
-    {
-        _bits &= ~CAMERA_CUSTOM_PROJECTION;
-        _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-
-        cameraChanged();
-    }
+    _projectionMatrix = matrix;
+    _dirtyBits |= CAMERA_CUSTOM_PROJECTION;
+    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 const Matrix& Camera::getViewProjectionMatrix() const
 {
-    if (_bits & CAMERA_DIRTY_VIEW_PROJ)
+    if (_dirtyBits & CAMERA_DIRTY_VIEW_PROJ)
     {
-        Matrix::multiply(getProjectionMatrix(), getViewMatrix(), &_viewProjection);
-
-        _bits &= ~CAMERA_DIRTY_VIEW_PROJ;
+        Matrix::multiply(getProjectionMatrix(), getViewMatrix(), &_viewProjectionMatrix);
+        _dirtyBits &= ~CAMERA_DIRTY_VIEW_PROJ;
     }
-
-    return _viewProjection;
+    return _viewProjectionMatrix;
 }
 
 const Matrix& Camera::getInverseViewProjectionMatrix() const
 {
-    if (_bits & CAMERA_DIRTY_INV_VIEW_PROJ)
+    if (_dirtyBits & CAMERA_DIRTY_INV_VIEW_PROJ)
     {
-        getViewProjectionMatrix().invert(&_inverseViewProjection);
-
-        _bits &= ~CAMERA_DIRTY_INV_VIEW_PROJ;
+        getViewProjectionMatrix().invert(&_inverseViewProjectionMatrix);
+        _dirtyBits &= ~CAMERA_DIRTY_INV_VIEW_PROJ;
     }
-
-    return _inverseViewProjection;
+    return _inverseViewProjectionMatrix;
 }
 
 const Frustum& Camera::getFrustum() const
 {
-    if (_bits & CAMERA_DIRTY_BOUNDS)
+    if (_dirtyBits & CAMERA_DIRTY_BOUNDS)
     {
         // Update our bounding frustum from our view projection matrix.
         _bounds.set(getViewProjectionMatrix());
 
-        _bits &= ~CAMERA_DIRTY_BOUNDS;
+        _dirtyBits &= ~CAMERA_DIRTY_BOUNDS;
     }
-
     return _bounds;
 }
 
@@ -406,7 +250,6 @@ void Camera::unproject(const Rectangle& viewport, float x, float y, float depth,
         screen.y /= screen.w;
         screen.z /= screen.w;
     }
-
     dst->set(screen.x, screen.y, screen.z);
 }
 
@@ -430,70 +273,73 @@ void Camera::pickRay(const Rectangle& viewport, float x, float y, Ray* dst) cons
     dst->set(nearPoint, direction);
 }
 
-Camera* Camera::clone(NodeCloneContext& context)
+std::string Camera::getClassName()
 {
-    Camera* cameraClone = NULL;
-    if (getCameraType() == PERSPECTIVE)
-    {
-        cameraClone = createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
-    }
-    else if (getCameraType() == ORTHOGRAPHIC)
-    {
-        cameraClone = createOrthographic(getZoomX(), getZoomY(), getAspectRatio(), _nearPlane, _farPlane);
-    }
-    GP_ASSERT(cameraClone);
-
-    if (Node* node = context.findClonedNode(getNode()))
-    {
-        cameraClone->setNode(node);
-    }
-    return cameraClone;
+	return "gameplay::Camera";
 }
 
-void Camera::transformChanged(Transform* transform, long cookie)
+void Camera::onSerialize(Serializer* serializer)
 {
-    _bits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
-
-    cameraChanged();
+    serializer->writeEnum("mode", "gameplay::Camera::Mode", _mode, -1);
+    if (_mode == Camera::MODE_PERSPECTIVE)
+        serializer->writeFloat("fieldOfView", _fieldOfView, CAMERA_FIELD_OF_VIEW);
+    else
+        serializer->writeFloat("zoom", _zoom, CAMERA_ZOOM);
+    serializer->writeFloat("aspectRatio", _aspectRatio, CAMERA_ASPECT_RATIO);
+    serializer->writeFloat("nearPlane", _nearPlane, CAMERA_NEAR_PLANE);
+    serializer->writeFloat("farPlane", _farPlane, CAMERA_FAR_PLANE);
 }
 
-void Camera::cameraChanged()
+void Camera::onDeserialize(Serializer* serializer)
 {
-    if (_listeners == NULL)
-        return;
+    _mode = static_cast<Camera::Mode>(serializer->readEnum("mode", "gameplay::Camera::Mode", -1));
+    if (_mode == Camera::MODE_PERSPECTIVE)
+        _fieldOfView = serializer->readFloat("fieldOfView", CAMERA_FIELD_OF_VIEW);
+    else
+        _zoom = serializer->readFloat("zoom", CAMERA_ZOOM);
+    _aspectRatio = serializer->readFloat("aspectRatio", CAMERA_ASPECT_RATIO);
+    _nearPlane = serializer->readFloat("nearPlane", CAMERA_NEAR_PLANE);
+    _farPlane = serializer->readFloat("farPlane", CAMERA_FAR_PLANE);
+}
 
-    for (std::list<Camera::Listener*>::iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
+std::shared_ptr<Serializable> Camera::createObject()
+{
+    return std::static_pointer_cast<Serializable>(std::make_shared<Camera>());
+}
+
+std::string Camera::enumToString(const std::string& enumName, int value)
+{
+    if (enumName.compare("gameplay::Camera::Mode") == 0)
     {
-        Camera::Listener* listener = (*itr);
-        listener->cameraChanged(this);
-    }
-}
-
-void Camera::addListener(Camera::Listener* listener)
-{
-    GP_ASSERT(listener);
-
-    if (_listeners == NULL)
-        _listeners = new std::list<Camera::Listener*>();
-
-    _listeners->push_back(listener);
-}
-
-void Camera::removeListener(Camera::Listener* listener)
-{
-    GP_ASSERT(listener);
-
-    if (_listeners)
-    {
-        for (std::list<Camera::Listener*>::iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
+        switch (value)
         {
-            if ((*itr) == listener)
-            {
-                _listeners->erase(itr);
+            case Camera::MODE_PERSPECTIVE:
+                return "MODE_PERSPECTIVE";
+            case Camera::MODE_ORTHOGRAPHIC:
+                return "MODE_ORTHOGRAPHIC";
+            default:
                 break;
-            }
         }
     }
+    return "MODE_PERSPECTIVE";
+}
+
+int Camera::enumParse(const std::string& enumName, const std::string& str)
+{
+    if (enumName.compare("gameplay::Camera::Mode") == 0)
+    {
+        if (str.compare("MODE_PERSPECTIVE") == 0)
+            return Camera::MODE_PERSPECTIVE;
+        else if (str.compare("MODE_ORTHOGRAPHIC") == 0)
+            return Camera::MODE_ORTHOGRAPHIC;
+    }
+    return Camera::MODE_PERSPECTIVE;
+}
+
+void Camera::setObject(std::shared_ptr<SceneObject> object)
+{
+    Component::setObject(object);
+    _dirtyBits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 }

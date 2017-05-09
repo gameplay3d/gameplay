@@ -1,371 +1,189 @@
 #include "Base.h"
 #include "Light.h"
-#include "Node.h"
+
+#define LIGHT_COLOR Vector3::one()
+#define LIGHT_RANGE 10.0f
+#define LIGHT_INNER_ANGLE 30.0f
+#define LIGHT_OUTER_ANGLE 45.0f
 
 namespace gameplay
 {
-
-Light::Light(Light::Type type, const Vector3& color) :
-    _type(type), _node(NULL)
+Light::Light() : Component(),
+    _type(TYPE_DIRECTIONAL),
+    _color(LIGHT_COLOR),
+    _range(LIGHT_RANGE),
+    _innerAngle(LIGHT_INNER_ANGLE),
+    _innerAngleCos(cos(LIGHT_INNER_ANGLE)),
+    _outerAngle(LIGHT_OUTER_ANGLE),
+    _outerAngleCos(cos(LIGHT_OUTER_ANGLE))
 {
-    _directional = new Directional(color);
-}
-
-Light::Light(Light::Type type, const Vector3& color, float range) :
-    _type(type), _node(NULL)
-{
-    _point = new Point(color, range);
-}
-
-Light::Light(Light::Type type, const Vector3& color, float range, float innerAngle, float outerAngle) :
-    _type(type), _node(NULL)
-{
-    _spot = new Spot(color, range, innerAngle, outerAngle);
 }
 
 Light::~Light()
 {
-    switch (_type)
-    {
-    case DIRECTIONAL:
-        SAFE_DELETE(_directional);
-        break;
-    case POINT:
-        SAFE_DELETE(_point);
-        break;
-    case SPOT:
-        SAFE_DELETE(_spot);
-        break;
-    default:
-        GP_ERROR("Invalid light type (%d).", _type);
-        break;
-    }
 }
 
-Light* Light::createDirectional(const Vector3& color)
-{
-    return new Light(DIRECTIONAL, color);
-}
-
-Light* Light::createDirectional(float red, float green, float blue)
-{
-    return new Light(DIRECTIONAL, Vector3(red, green, blue));
-}
-
-Light* Light::createPoint(const Vector3& color, float range)
-{
-    return new Light(POINT, color, range);
-}
-
-Light* Light::createPoint(float red, float green, float blue, float range)
-{
-    return new Light(POINT, Vector3(red, green, blue), range);
-}
-
-Light* Light::createSpot(const Vector3& color, float range, float innerAngle, float outerAngle)
-{
-    return new Light(SPOT, color, range, innerAngle, outerAngle);
-}
-
-Light* Light::createSpot(float red, float green, float blue, float range, float innerAngle, float outerAngle)
-{
-    return new Light(SPOT, Vector3(red, green, blue), range, innerAngle, outerAngle);
-}
-
-Light* Light::create(Properties* properties)
-{
-    GP_ASSERT(properties);
-
-    // Read light type
-    std::string typeStr;
-    if (properties->exists("type"))
-        typeStr = properties->getString("type");
-    Light::Type type;
-    if (typeStr == "DIRECTIONAL")
-    {
-        type = Light::DIRECTIONAL;
-    }
-    else if (typeStr == "POINT")
-    {
-        type = Light::POINT;
-    }
-    else if (typeStr == "SPOT")
-    {
-        type = Light::SPOT;
-    }
-    else
-    {
-        GP_ERROR("Invalid 'type' parameter for light definition.");
-        return NULL;
-    }
-
-    // Read common parameters
-    Vector3 color;
-    if (!properties->getVector3("color", &color))
-    {
-        GP_ERROR("Missing valid 'color' parameter for light definition.");
-        return NULL;
-    }
-
-    // Read light-specific parameters
-    Light* light = NULL;
-    switch (type)
-    {
-    case DIRECTIONAL:
-        light = createDirectional(color);
-        break;
-    case POINT:
-        {
-            float range = properties->getFloat("range");
-            if (range == 0.0f)
-            {
-                GP_ERROR("Missing valid 'range' parameter for point light definition.");
-                return NULL;
-            }
-            light = createPoint(color, range);
-        }
-        break;
-    case SPOT:
-            float range = properties->getFloat("range");
-            if (range == 0.0f)
-            {
-                GP_ERROR("Missing valid 'range' parameter for spot light definition.");
-                return NULL;
-            }
-            float innerAngle = properties->getFloat("innerAngle");
-            if (innerAngle == 0.0f)
-            {
-                GP_ERROR("Missing valid 'innerAngle' parameter for spot light definition.");
-                return NULL;
-            }
-            float outerAngle = properties->getFloat("outerAngle");
-            if (outerAngle == 0.0f)
-            {
-                GP_ERROR("Missing valid 'outerAngle' parameter for spot light definition.");
-                return NULL;
-            }
-            light = createSpot(color, range, innerAngle, outerAngle);
-        break;
-    }
-
-    return light;
-}
-
-Light::Type Light::getLightType() const
+Light::Type Light::getType() const
 {
     return _type;
 }
 
-Node* Light::getNode() const
+void Light::setType(Light::Type type)
 {
-    return _node;
-}
-
-void Light::setNode(Node* node)
-{
-    // Connect the new node.
-    _node = node;
+    _type = type;
 }
 
 const Vector3& Light::getColor() const
 {
-    switch (_type)
-    {
-    case DIRECTIONAL:
-        GP_ASSERT(_directional);
-        return _directional->color;
-    case POINT:
-        GP_ASSERT(_point);
-        return _point->color;
-    case SPOT:
-        GP_ASSERT(_spot);
-        return _spot->color;
-    default:
-        GP_ERROR("Unsupported light type (%d).", _type);
-        return Vector3::zero();
-
-    }
+    return _color;
 }
 
 void Light::setColor(const Vector3& color)
 {
-    switch (_type)
-    {
-    case DIRECTIONAL:
-        GP_ASSERT(_directional);
-        _directional->color = color;
-        break;
-    case POINT:
-        GP_ASSERT(_point);
-        _point->color = color;
-        break;
-    case SPOT:
-        GP_ASSERT(_spot);
-        _spot->color = color;
-        break;
-    default:
-        GP_ERROR("Unsupported light type (%d).", _type);
-        break;
-    }
-}
-
-void Light::setColor(float red, float green, float blue)
-{
-    setColor(Vector3(red, green, blue));
+    _color = color;
 }
 
 float Light::getRange()  const
 {
-    GP_ASSERT(_type != DIRECTIONAL);
-
-    switch (_type)
-    {
-    case POINT:
-        GP_ASSERT(_point);
-        return _point->range;
-    case SPOT:
-        GP_ASSERT(_spot);
-        return _spot->range;
-    default:
-        GP_ERROR("Unsupported light type (%d).", _type);
-        return 0.0f;
-    }
+    return _range;
 }
     
 void Light::setRange(float range)
 {
-    GP_ASSERT(_type != DIRECTIONAL);
-
-    switch (_type)
-    {
-    case POINT:
-        GP_ASSERT(_point);
-        _point->range = range;
-        _point->rangeInverse = 1.0f / range;
-        break;
-    case SPOT:
-        GP_ASSERT(_spot);
-        _spot->range = range;
-        _spot->rangeInverse = 1.0f / range;
-        break;
-    default:
-        GP_ERROR("Unsupported light type (%d).", _type);
-        break;
-    }
-
-    if (_node)
-        _node->setBoundsDirty();
+    _range = range;
 }
 
 float Light::getRangeInverse() const
 {
-    GP_ASSERT(_type != DIRECTIONAL);
+    return _rangeInverse;
+}
 
-    switch (_type)
-    {
-    case POINT:
-        GP_ASSERT(_point);
-        return _point->rangeInverse;
-    case SPOT:
-        GP_ASSERT(_spot);
-        return _spot->rangeInverse;
-    default:
-        GP_ERROR("Unsupported light type (%d).", _type);
-        return 0.0f;
-    }
+void Light::setRangeInverse(float rangeInverse)
+{
+    _rangeInverse = rangeInverse;
 }
     
 float Light::getInnerAngle()  const
 {
-    GP_ASSERT(_type == SPOT);
-
-    return _spot->innerAngle;
+    return _innerAngle;
 }
 
 void Light::setInnerAngle(float innerAngle)
 {
-    GP_ASSERT(_type == SPOT);
-
-    _spot->innerAngle = innerAngle;
-    _spot->innerAngleCos = cos(innerAngle);
+    _innerAngle = innerAngle;
+    _innerAngleCos = cos(innerAngle);
 }
     
 float Light::getOuterAngle()  const
 {
-    GP_ASSERT(_type == SPOT);
-
-    return _spot->outerAngle;
+    return _outerAngle;
 }
 
 void Light::setOuterAngle(float outerAngle)
 {
-    GP_ASSERT(_type == SPOT);
-
-    _spot->outerAngle = outerAngle;
-    _spot->outerAngleCos = cos(outerAngle);
-
-    if (_node)
-        _node->setBoundsDirty();
+    _outerAngle = outerAngle;
+    _outerAngleCos = cos(outerAngle);
 }
     
 float Light::getInnerAngleCos()  const
 {
-    GP_ASSERT(_type == SPOT);
-
-    return _spot->innerAngleCos;
+    return _innerAngleCos;
 }
     
 float Light::getOuterAngleCos()  const
 {
-    GP_ASSERT(_type == SPOT);
-
-    return _spot->outerAngleCos;
+    return _outerAngleCos;
 }
 
-Light* Light::clone(NodeCloneContext &context)
+std::string Light::getClassName()
 {
-    Light* lightClone = NULL;
-    switch (_type)
+    return "gameplay::Light";
+}
+
+void Light::onSerialize(Serializer* serializer)
+{
+    serializer->writeEnum("type", "gameplay::Light::Type", _type, -1);
+    serializer->writeColor("color", _color, LIGHT_COLOR);
+    switch(_type)
     {
-    case DIRECTIONAL:
-        lightClone = createDirectional(getColor());
-        break;
-    case POINT:
-        lightClone = createPoint(getColor(), getRange());
-        break;
-    case SPOT:
-        lightClone = createSpot(getColor(), getRange(), getInnerAngle(), getOuterAngle());
-        break;
-    default:
-        GP_ERROR("Unsupported light type (%d).", _type);
-        return NULL;
+        case TYPE_POINT:
+        {
+            serializer->writeFloat("range", _range, LIGHT_RANGE);
+            break;
+        }
+        case TYPE_SPOT:
+        {
+            serializer->writeFloat("range", _range, LIGHT_RANGE);
+            serializer->writeFloat("innerAngle", _innerAngle, LIGHT_INNER_ANGLE);
+            serializer->writeFloat("outerAngle", _outerAngle, LIGHT_OUTER_ANGLE);
+            break;
+        }
+        default:
+            break;
     }
-    GP_ASSERT(lightClone);
+}
 
-    if (Node* node = context.findClonedNode(getNode()))
+void Light::onDeserialize(Serializer* serializer)
+{
+    _type = static_cast<Light::Type>(serializer->readEnum("type", "gameplay::Light::Type", -1));
+    Vector3 color = serializer->readColor("color", LIGHT_COLOR);
+    switch(_type)
     {
-        lightClone->setNode(node);
+        case Light::TYPE_POINT:
+        {
+            _range = serializer->readFloat("range", LIGHT_RANGE);
+            break;
+        }
+        case Light::TYPE_SPOT:
+        {
+            _range = serializer->readFloat("range", LIGHT_RANGE);
+            _innerAngle = serializer->readFloat("innerAngle", LIGHT_INNER_ANGLE);
+            _innerAngleCos = cos(_innerAngle);
+            _outerAngle = serializer->readFloat("outerAngle", LIGHT_OUTER_ANGLE);
+            _outerAngleCos = cos(_outerAngle);
+            break;
+        }
+        default:
+            break;
     }
-    return lightClone;
 }
 
-Light::Directional::Directional(const Vector3& color)
-    : color(color)
+std::shared_ptr<Serializable> Light::createObject()
 {
+    return std::static_pointer_cast<Serializable>(std::make_shared<Light>());
 }
 
-Light::Point::Point(const Vector3& color, float range)
-    : color(color), range(range)
+std::string Light::enumToString(const std::string& enumName, int value)
 {
-    rangeInverse = 1.0f / range;
+    if (enumName.compare("gameplay::Light::Type") == 0)
+    {
+        switch (value)
+        {
+            case Light::TYPE_DIRECTIONAL:
+                return "TYPE_DIRECTIONAL";
+            case Light::TYPE_POINT:
+                return "TYPE_POINT";
+            case Light::TYPE_SPOT:
+                return "TYPE_SPOT";
+            default:
+                break;
+        }
+    }
+    return "TYPE_DIRECTIONAL";
 }
 
-Light::Spot::Spot(const Vector3& color, float range, float innerAngle, float outerAngle)
-    : color(color), range(range), innerAngle(innerAngle), outerAngle(outerAngle)
+int Light::enumParse(const std::string& enumName, const std::string& str)
 {
-    rangeInverse = 1.0f / range;
-    innerAngleCos = cos(innerAngle);
-    outerAngleCos = cos(outerAngle);
+    if (enumName.compare("gameplay::Light::Type") == 0)
+    {
+        if (str.compare("TYPE_DIRECTIONAL") == 0)
+            return Light::TYPE_DIRECTIONAL;
+        else if (str.compare("TYPE_POINT") == 0)
+            return Light::TYPE_POINT;
+        else if (str.compare("TYPE_SPOT") == 0)
+            return Light::TYPE_SPOT;
+    }
+    return Light::TYPE_DIRECTIONAL;
 }
 
 }

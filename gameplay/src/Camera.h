@@ -1,142 +1,73 @@
-#ifndef CAMERA_H_
-#define CAMERA_H_
+#pragma once
 
-#include "Ref.h"
-#include "Transform.h"
+#include "Component.h"
 #include "Frustum.h"
 #include "Rectangle.h"
-#include "Properties.h"
+#include "Vector2.h"
+#include "Vector3.h"
+#include "SceneObject.h"
 
 namespace gameplay
 {
 
-class Node;
-class NodeCloneContext;
-
 /**
  * Defines a camera which acts as a view of a scene to be rendered.
  */
-class Camera : public Ref, public Transform::Listener
+class Camera : public Component
 {
-    friend class Node;
+	friend class SceneObject;
+    friend class Serializer::Activator;
 
 public:
 
     /**
-     * The type of camera.
+     * Constructor.
      */
-    enum Type
+    Camera();
+
+    /**
+     * Destructor.
+     */
+	~Camera();
+
+    /**
+     * The camera projection mode.
+     */
+    enum Mode
     {
-        PERSPECTIVE = 1,
-        ORTHOGRAPHIC = 2
+        MODE_PERSPECTIVE,
+        MODE_ORTHOGRAPHIC
     };
 
     /**
-     * Listener interface for camera events.
+     * Gets the projection mode the camera is set to.
+     *
+     * @return The camera mode.
      */
-    class Listener
-    {
-    public:
-
-        virtual ~Listener() { }
-
-        /**
-         * Handles when an camera settings change or the transform changed for the node its attached to.
-         *
-         * @param camera The camera that was changed.
-         */
-        virtual void cameraChanged(Camera* camera) = 0;
-    };
+    Camera::Mode getMode() const;
 
     /**
-     * Creates a perspective camera.
+     * Set the projection mode that the camera is in.
      *
-     * @param fieldOfView The field of view in degrees for the perspective camera (normally in the range of 40-60 degrees).
-     * @param aspectRatio The aspect ratio of the camera (normally the width of the viewport divided by the height of the viewport).
-     * @param nearPlane The near plane distance.
-     * @param farPlane The far plane distance.
-     *
-     * @return The new Camera.
+     * @param mode The mode that the camera is in.
      */
-    static Camera* createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
+    void setMode(Camera::Mode mode);
 
     /**
-     * Creates an orthographic camera.
-     *
-     * @param zoomX The zoom factor along the X-axis of the orthographic projection (the width of the ortho projection).
-     * @param zoomY The zoom factor along the Y-axis of the orthographic projection (the height of the ortho projection).
-     * @param aspectRatio The aspect ratio of the orthographic projection.
-     * @param nearPlane The near plane distance.
-     * @param farPlane The far plane distance.
-     *
-     * @return The new Camera.
-     */
-    static Camera* createOrthographic(float zoomX, float zoomY, float aspectRatio, float nearPlane, float farPlane);
-
-    /**
-     * Creates a camera from a properties definition.
-     *
-     * The properties object must contain a "type" parameter, specifying either PERSPECTIVE or ORTHOGRAPHIC,
-     * as well as values for all required parameters in the Camera::createPerspective and Camera::createOrthographic
-     * methods.
-     *
-     * @param properties The properties definition of the Camera.
-     *
-     * @return The new Camera.
-     */
-    static Camera* create(Properties* properties);
-
-    /**
-     * Gets the type of camera.
-     *
-     * @return The camera type.
-     */
-    Camera::Type getCameraType() const;
-
-    /**
-     * Gets the field of view for a perspective camera.
+     * Gets the field of view for a perspective mode.
      *
      * @return The field of view.
      */
     float getFieldOfView() const;
 
     /**
-     * Sets the field of view.
+     * Sets the field of view for a perspective mode.
+     * 
+     * Normally in the range of 40-60 degrees.
      *
      * @param fieldOfView The field of view.
      */
     void setFieldOfView(float fieldOfView);
-
-    /**
-     * Gets the x-zoom (magnification) for an orthographic camera.
-     * Default is 1.0f.
-     *
-     * @return The magnification (zoom) for x.
-     */
-    float getZoomX() const;
-
-    /**
-     * Sets the x-zoom (magnification) for a orthographic camera.
-     * Default is 1.0f.
-     *
-     * @param zoomX The magnification (zoom) for x.
-     */
-    void setZoomX(float zoomX);
-
-    /**
-     * Gets the y-zoom (magnification) for a orthographic camera.
-     * Default is 1.0f.
-     *
-     * @return The magnification (zoom) for y.
-     */
-    float getZoomY() const;
-
-    /**
-     * Sets the y-zoom (magnification) for a orthographic camera.
-     *
-     * @param zoomY The magnification (zoom) for y.
-     */
-    void setZoomY(float zoomY);
 
     /**
      * Gets the aspect ratio.
@@ -181,11 +112,22 @@ public:
     void setFarPlane(float farPlane);
 
     /**
-     * Gets the node that this camera is attached to.
+     * Gets the zoom (magnification) for orthographic mode.
      *
-     * @return The node that this camera is attached to.
+     * Default is 1.0
+     *
+     * @return The magnification (zoom).
      */
-    Node* getNode() const;
+    float getZoom() const;
+
+    /**
+     * Sets the zoom (magnification) for orthographic mode.
+     *
+     * Default is 1.0f.
+     *
+     * @param zoom The zoom (magnification) .
+     */
+    void setZoom(float zoom);
 
     /**
      * Gets the camera's view matrix.
@@ -223,12 +165,6 @@ public:
     void setProjectionMatrix(const Matrix& matrix);
 
     /**
-     * Resets the camera to use the internally computed projection matrix
-     * instead of any previously specified user-defined matrix.
-     */
-    void resetProjectionMatrix();
-
-    /**
      * Gets the camera's view * projection matrix.
      *
      * @return The camera view * projection matrix.
@@ -256,11 +192,11 @@ public:
      * @param position The world space position.
      * @param x The returned viewport x coordinate.
      * @param y The returned viewport y coordinate.
-     * @param depth The returned pixel depth (can be NULL).
+     * @param depth The returned pixel depth (can be nullptr).
      *
      * @script{ignore}
      */
-    void project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth = NULL) const;
+    void project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth = nullptr) const;
 
     /**
      * Projects the specified world position into the viewport coordinates.
@@ -305,78 +241,54 @@ public:
     void pickRay(const Rectangle& viewport, float x, float y, Ray* dst) const;
 
     /**
-    * Adds a camera listener.
-    *
-    * @param listener The listener to add.
-    */
-    void addListener(Camera::Listener* listener);
+     * @see Serializable::getClassName
+	 */
+    std::string getClassName();
 
-    /**
-     * Removes a camera listener.
-     *
-     * @param listener The listener to remove.
-     */
-    void removeListener(Camera::Listener* listener);
+	/**
+     * @see Serializable::onSerialize
+	 */
+    void onSerialize(Serializer* serializer);
+
+	/**
+     * @see Serializable::onDeserialize
+	 */
+    void onDeserialize(Serializer* serializer);
+
+	/**
+     * @see Serializer::Activator::CreateObjectCallback
+	 */
+    static std::shared_ptr<Serializable> createObject();
+    
+	/**
+     * @see Serializer::Activator::EnumToStringCallback
+	 */
+    static std::string enumToString(const std::string& enumName, int value);
+
+	/**
+     * @see Serializer::Activator::EnumParseCallback
+	 */
+    static int enumParse(const std::string& enumName, const std::string& str);
+
+protected:
+
+    void setObject(std::shared_ptr<SceneObject> object);
 
 private:
 
-    /**
-     * Constructor.
-     */
-    Camera(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
-
-    /**
-     * Constructor.
-     */
-    Camera(float zoomX, float zoomY, float aspectRatio, float nearPlane, float farPlane);
-
-    /**
-     * Destructor.
-     */
-    virtual ~Camera();
-
-    /**
-     * Hidden copy assignment operator.
-     */
-    Camera& operator=(const Camera&);
-
-    /**
-     * Clones the camera and returns a new camera.
-     *
-     * @param context The clone context.
-     * @return The newly created camera.
-     */
-    Camera* clone(NodeCloneContext& context);
-
-    /**
-     * Sets the node associated with this camera.
-     */
-    void setNode(Node* node);
-
-    /**
-     * @see Transform::Listener::transformChanged
-     */
-    void transformChanged(Transform* transform, long cookie);
-
-    void cameraChanged();
-
-    Camera::Type _type;
+    Camera::Mode _mode;
     float _fieldOfView;
-    float _zoom[2];
     float _aspectRatio;
     float _nearPlane;
     float _farPlane;
-    mutable Matrix _view;
-    mutable Matrix _projection;
-    mutable Matrix _viewProjection;
-    mutable Matrix _inverseView;
-    mutable Matrix _inverseViewProjection;
+    float _zoom;
+    mutable Matrix _viewMatrix;
+    mutable Matrix _projectionMatrix;
+    mutable Matrix _viewProjectionMatrix;
+    mutable Matrix _inverseViewMatrix;
+    mutable Matrix _inverseViewProjectionMatrix;
     mutable Frustum _bounds;
-    mutable int _bits;
-    Node* _node;
-    std::list<Camera::Listener*>* _listeners;
+    mutable int _dirtyBits;
 };
 
 }
-
-#endif

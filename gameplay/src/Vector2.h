@@ -1,5 +1,4 @@
-#ifndef VECTOR2_H_
-#define VECTOR2_H_
+#pragma once
 
 namespace gameplay
 {
@@ -16,20 +15,22 @@ public:
     /**
      * The x coordinate.
      */
-    float x;
+    float x = 0.0f;
 
     /**
      * The y coordinate.
      */
-    float y;
+    float y = 0.0f;
 
     /**
-     * Constructs a new vector initialized to all zeros.
+     * Constructor.
+	 *
+	 * The values x and y coordinate values are set to zero.
      */
     Vector2();
 
     /**
-     * Constructs a new vector initialized to the specified values.
+     * Constructor.
      *
      * @param x The x coordinate.
      * @param y The y coordinate.
@@ -37,14 +38,14 @@ public:
     Vector2(float x, float y);
 
     /**
-     * Constructs a new vector from the values in the specified array.
+     * Constructor.
      *
      * @param array An array containing the elements of the vector in the order x, y.
      */
     Vector2(const float* array);
 
     /**
-     * Constructs a vector that describes the direction between the specified points.
+     * Constructor.
      *
      * @param p1 The first point.
      * @param p2 The second point.
@@ -52,7 +53,7 @@ public:
     Vector2(const Vector2& p1, const Vector2& p2);
 
     /**
-     * Constructs a new vector that is a copy of the specified vector.
+     * Constructor.
      *
      * @param copy The vector to copy.
      */
@@ -64,53 +65,66 @@ public:
     ~Vector2();
 
     /**
-     * Returns the zero vector.
+     * Gets the zero vector.
      *
      * @return The 2-element vector of 0s.
      */
     static const Vector2& zero();
 
     /**
-     * Returns the one vector.
+     * Gets the one vector.
      *
      * @return The 2-element vector of 1s.
      */
     static const Vector2& one();
 
     /**
-     * Returns the unit x vector.
+     * Gets the up vector. Equal to Vector2(0, 1).
      *
-     * @return The 2-element unit vector along the x axis.
+     * @return The up vector. Equal to Vector2(0, 1).
      */
-    static const Vector2& unitX();
+    static const Vector2& up();
 
     /**
-     * Returns the unit y vector.
+     * Gets the down vector. Equal to Vector2(0, -1).
      *
-     * @return The 2-element unit vector along the y axis.
+     * @return The down vector. Equal to Vector2(0, -1).
      */
-    static const Vector2& unitY();
+    static const Vector2& down();
 
     /**
-     * Indicates whether this vector contains all zeros.
+     * Gets the right vector. Equal to Vector2(1, 0).
+     *
+     * @return The right vector. Equal to Vector2(1, 0).
+     */
+    static const Vector2& right();
+
+    /**
+     * Gets the left vector. Equal to Vector2(-1, 0).
+     *
+     * @return The left vector. Equal to Vector2(-1, 0).
+     */
+    static const Vector2& left();
+
+    /**
+     * Determines whether this vector contains all zeros.
      *
      * @return true if this vector contains all zeros, false otherwise.
      */
     bool isZero() const;
 
     /**
-     * Indicates whether this vector contains all ones.
+     * Determines whether this vector contains all ones.
      *
      * @return true if this vector contains all ones, false otherwise.
      */
     bool isOne() const;
 
     /**
-     * Returns the angle (in radians) between the specified vectors.
+     * Gets the angle (in radians) computed between the specified vectors.
      *
      * @param v1 The first vector.
      * @param v2 The second vector.
-     * 
      * @return The angle between the two vectors (in radians).
      */
     static float angle(const Vector2& v1, const Vector2& v2);
@@ -150,18 +164,17 @@ public:
     static void clamp(const Vector2& v, const Vector2& min, const Vector2& max, Vector2* dst);
 
     /**
-     * Returns the distance between this vector and v.
+     * Gets the distance computed between this vector and v.
      *
      * @param v The other vector.
-     * 
      * @return The distance between this vector and v.
-     * 
+	 *
      * @see distanceSquared
      */
     float distance(const Vector2& v) const;
 
     /**
-     * Returns the squared distance between this vector and v.
+     * Gets the squared distance computed between this vector and v.
      *
      * When it is not necessary to get the exact distance between
      * two vectors (for example, when simply comparing the
@@ -169,43 +182,40 @@ public:
      * this method instead of distance.
      *
      * @param v The other vector.
-     * 
      * @return The squared distance between this vector and v.
-     * 
+	 *
      * @see distance
      */
     float distanceSquared(const Vector2& v) const;
 
     /**
-     * Returns the dot product of this vector and the specified vector.
+     * Gets the dot product computed for this vector and the specified vector.
      *
      * @param v The vector to compute the dot product with.
-     * 
      * @return The dot product.
      */
     float dot(const Vector2& v) const;
 
     /**
-     * Returns the dot product between the specified vectors.
+     * Gets the dot product computed between the specified vectors.
      *
      * @param v1 The first vector.
      * @param v2 The second vector.
-     * 
      * @return The dot product between the vectors.
      */
     static float dot(const Vector2& v1, const Vector2& v2);
 
     /**
-     * Computes the length of this vector.
+     * Gets the length computed for this vector.
      *
      * @return The length of the vector.
-     * 
+	 *
      * @see lengthSquared
      */
     float length() const;
 
     /**
-     * Returns the squared length of this vector.
+     * Gets the squared length computed for this vector.
      *
      * When it is not necessary to get the exact length of a
      * vector (for example, when simply comparing the lengths of
@@ -331,6 +341,11 @@ public:
     void smooth(const Vector2& target, float elapsedTime, float responseTime);
 
     /**
+     * operator=
+     */
+    Vector2& operator=(const Vector2& v);
+
+    /**
      * Calculates the sum of this vector with the given vector.
      * 
      * Note: this does not modify this vector.
@@ -338,7 +353,7 @@ public:
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline const Vector2 operator+(const Vector2& v) const;
+    const Vector2 operator+(const Vector2& v) const;
 
     /**
      * Adds the given vector to this vector.
@@ -346,17 +361,17 @@ public:
      * @param v The vector to add.
      * @return This vector, after the addition occurs.
      */
-    inline Vector2& operator+=(const Vector2& v);
+    Vector2& operator+=(const Vector2& v);
 
     /**
-     * Calculates the sum of this vector with the given vector.
+     * Substacts this vector with the given vector.
      * 
      * Note: this does not modify this vector.
      * 
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline const Vector2 operator-(const Vector2& v) const;
+    const Vector2 operator-(const Vector2& v) const;
 
     /**
      * Subtracts the given vector from this vector.
@@ -364,26 +379,26 @@ public:
      * @param v The vector to subtract.
      * @return This vector, after the subtraction occurs.
      */
-    inline Vector2& operator-=(const Vector2& v);
+    Vector2& operator-=(const Vector2& v);
 
     /**
-     * Calculates the negation of this vector.
+     * Computes the negation of this vector.
      * 
      * Note: this does not modify this vector.
      * 
      * @return The negation of this vector.
      */
-    inline const Vector2 operator-() const;
+    const Vector2 operator-() const;
 
     /**
-     * Calculates the scalar product of this vector with the given value.
+     * Computes the scalar product of this vector with the given value.
      * 
      * Note: this does not modify this vector.
      * 
      * @param x The value to scale by.
      * @return The scaled vector.
      */
-    inline const Vector2 operator*(float x) const;
+    const Vector2 operator*(float x) const;
 
     /**
      * Scales this vector by the given value.
@@ -391,44 +406,41 @@ public:
      * @param x The value to scale by.
      * @return This vector, after the scale occurs.
      */
-    inline Vector2& operator*=(float x);
+    Vector2& operator*=(float x);
     
     /**
-     * Returns the components of this vector divided by the given constant
+     * Gets the components of this vector divided by the given constant
      *
      * Note: this does not modify this vector.
      *
      * @param x the constant to divide this vector with
      * @return a smaller vector
      */
-    inline const Vector2 operator/(float x) const;
+    const Vector2 operator/(float x) const;
 
     /**
      * Determines if this vector is less than the given vector.
      * 
      * @param v The vector to compare against.
-     * 
      * @return True if this vector is less than the given vector, false otherwise.
      */
-    inline bool operator<(const Vector2& v) const;
+    bool operator<(const Vector2& v) const;
 
     /**
      * Determines if this vector is equal to the given vector.
      * 
      * @param v The vector to compare against.
-     * 
      * @return True if this vector is equal to the given vector, false otherwise.
      */
-    inline bool operator==(const Vector2& v) const;
+    bool operator==(const Vector2& v) const;
 
     /**
      * Determines if this vector is not equal to the given vector.
      * 
      * @param v The vector to compare against.
-     * 
      * @return True if this vector is not equal to the given vector, false otherwise.
      */
-    inline bool operator!=(const Vector2& v) const;
+    bool operator!=(const Vector2& v) const;
 };
 
 /**
@@ -438,10 +450,6 @@ public:
  * @param v The vector to scale.
  * @return The scaled vector.
  */
-inline const Vector2 operator*(float x, const Vector2& v);
+const Vector2 operator*(float x, const Vector2& v);
 
 }
-
-#include "Vector2.inl"
-
-#endif

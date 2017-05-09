@@ -15,11 +15,6 @@ BoundingBox::BoundingBox(const Vector3& min, const Vector3& max)
     set(min, max);
 }
 
-BoundingBox::BoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
-{
-    set(minX, minY, minZ, maxX, maxY, maxZ);
-}
-
 BoundingBox::BoundingBox(const BoundingBox& copy)
 {
     set(copy);
@@ -114,7 +109,7 @@ float BoundingBox::intersects(const Plane& plane) const
     if (fabsf(distance) <= (fabsf(extentX * planeNormal.x) + fabsf(extentY * planeNormal.y) + fabsf(
         extentZ * planeNormal.z)))
     {
-        return Plane::INTERSECTS_INTERSECTING;
+        return (float)Plane::INTERSECTS_INTERSECTING;
     }
 
     return (distance > 0.0f) ? (float)Plane::INTERSECTS_FRONT : (float)Plane::INTERSECTS_BACK;
@@ -127,7 +122,6 @@ float BoundingBox::intersects(const Ray& ray) const
     float dfar = 0.0f;
     float tmin = 0.0f;
     float tmax = 0.0f;
-
     const Vector3& origin = ray.getOrigin();
     const Vector3& direction = ray.getDirection();
 
@@ -145,13 +139,11 @@ float BoundingBox::intersects(const Ray& ray) const
     }
     dnear = tmin;
     dfar = tmax;
-
     // Check if the ray misses the box.
     if (dnear > dfar || dfar < 0.0f)
     {
-        return Ray::INTERSECTS_NONE;
+        return (float)Ray::INTERSECTS_NONE;
     }
-
     // Y direction.
     div = 1.0f / direction.y;
     if (div >= 0.0f)
@@ -164,7 +156,6 @@ float BoundingBox::intersects(const Ray& ray) const
         tmin = (max.y - origin.y) * div;
         tmax = (min.y - origin.y) * div;
     }
-
     // Update the near and far intersection distances.
     if (tmin > dnear)
     {
@@ -177,9 +168,8 @@ float BoundingBox::intersects(const Ray& ray) const
     // Check if the ray misses the box.
     if (dnear > dfar || dfar < 0.0f)
     {
-        return Ray::INTERSECTS_NONE;
+        return (float)Ray::INTERSECTS_NONE;
     }
-
     // Z direction.
     div = 1.0f / direction.z;
     if (div >= 0.0f)
@@ -192,7 +182,6 @@ float BoundingBox::intersects(const Ray& ray) const
         tmin = (max.z - origin.z) * div;
         tmax = (min.z - origin.z) * div;
     }
-
     // Update the near and far intersection distances.
     if (tmin > dnear)
     {
@@ -202,11 +191,10 @@ float BoundingBox::intersects(const Ray& ray) const
     {
         dfar = tmax;
     }
-
     // Check if the ray misses the box.
     if (dnear > dfar || dfar < 0.0f)
     {
-        return Ray::INTERSECTS_NONE;
+        return (float)Ray::INTERSECTS_NONE;
     }
     // The ray intersects the box (and since the direction of a Ray is normalized, dnear is the distance to the ray).
     return dnear;
@@ -223,7 +211,6 @@ void BoundingBox::merge(const BoundingBox& box)
     min.x = std::min(min.x, box.min.x);
     min.y = std::min(min.y, box.min.y);
     min.z = std::min(min.z, box.min.z);
-
     // Calculate the new maximum point.
     max.x = std::max(max.x, box.max.x);
     max.y = std::max(max.y, box.max.y);
@@ -239,7 +226,6 @@ void BoundingBox::merge(const BoundingSphere& sphere)
     min.x = std::min(min.x, center.x - radius);
     min.y = std::min(min.y, center.y - radius);
     min.z = std::min(min.z, center.z - radius);
-
     // Calculate the new maximum point for the merged bounding box.
     max.x = std::max(max.x, center.x + radius);
     max.y = std::max(max.y, center.y + radius);
@@ -250,12 +236,6 @@ void BoundingBox::set(const Vector3& min, const Vector3& max)
 {
     this->min = min;
     this->max = max;
-}
-
-void BoundingBox::set(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
-{
-    min.set(minX, minY, minZ);
-    max.set(maxX, maxY, maxZ);
 }
 
 static void updateMinMax(Vector3* point, Vector3* min, Vector3* max)
@@ -269,31 +249,26 @@ static void updateMinMax(Vector3* point, Vector3* min, Vector3* max)
     {
         min->x = point->x;
     }
-
     // Rightmost point.
     if (point->x > max->x)
     {
         max->x = point->x;
     }
-
     // Lowest point.
     if (point->y < min->y)
     {
         min->y = point->y;
     }
-
     // Highest point.
     if (point->y > max->y)
     {
         max->y = point->y;
     }
-
     // Farthest point.
     if (point->z < min->z)
     {
         min->z = point->z;
     }
-
     // Nearest point.
     if (point->z > max->z)
     {
@@ -346,4 +321,29 @@ void BoundingBox::transform(const Matrix& matrix)
     this->max.z = newMax.z;
 }
 
+BoundingBox& BoundingBox::operator=(const BoundingBox& b)
+{
+    if(&b == this)
+        return *this;
+
+    this->min = b.min;
+    this->max = b.max;
+
+    return *this;
 }
+
+BoundingBox& BoundingBox::operator*=(const Matrix& matrix)
+{
+    transform(matrix);
+    return *this;
+}
+
+const BoundingBox operator*(const Matrix& matrix, const BoundingBox& box)
+{
+    BoundingBox b(box);
+    b.transform(matrix);
+    return b;
+}
+
+}
+

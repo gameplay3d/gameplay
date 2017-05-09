@@ -1,5 +1,4 @@
-#ifndef BOUNDINGSPHERE_H_
-#define BOUNDINGSPHERE_H_
+#pragma once
 
 #include "Frustum.h"
 
@@ -16,20 +15,20 @@ public:
     /**
      * The center point.
      */
-    Vector3 center;
+    Vector3 center = Vector3::zero();
 
     /**
      * The sphere radius.
      */
-    float radius;
+    float radius = 0.0f;
 
     /**
-     *  Constructs a new bounding sphere initialized to all zeros.
+     *  Constructor.
      */
     BoundingSphere();
 
     /**
-     * Constructs a new bounding sphere initialized to the specified values.
+     * Constructor.
      *
      * @param center The center of the sphere.
      * @param radius The radius of the sphere.
@@ -37,7 +36,7 @@ public:
     BoundingSphere(const Vector3& center, float radius);
 
     /**
-     * Constructs a bounding sphere from the given bounding sphere.
+     * Constructor.
      *
      * @param copy The bounding sphere to copy.
      */
@@ -49,7 +48,7 @@ public:
     ~BoundingSphere();
 
     /**
-     * Returns an empty bounding sphere.
+     * Gets the empty bounding sphere.
      */
     static const BoundingSphere& empty();
 
@@ -154,12 +153,17 @@ public:
     void transform(const Matrix& matrix);
 
     /**
+     * @brief operator=
+     */
+    BoundingSphere& operator=(const BoundingSphere& other);
+
+    /**
      * Transforms this bounding sphere by the given matrix.
      * 
      * @param matrix The matrix to transform by.
      * @return This bounding sphere, after the transformation occurs.
      */
-    inline BoundingSphere& operator*=(const Matrix& matrix);
+    BoundingSphere& operator*=(const Matrix& matrix);
 
 private:
 
@@ -175,10 +179,6 @@ private:
  * @param sphere The bounding sphere to transform.
  * @return The resulting transformed bounding sphere.
  */
-inline const BoundingSphere operator*(const Matrix& matrix, const BoundingSphere& sphere);
+const BoundingSphere operator*(const Matrix& matrix, const BoundingSphere& sphere);
 
 }
-
-#include "BoundingSphere.inl"
-
-#endif

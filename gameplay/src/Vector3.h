@@ -1,5 +1,4 @@
-#ifndef VECTOR3_H_
-#define VECTOR3_H_
+#pragma once
 
 namespace gameplay
 {
@@ -9,7 +8,7 @@ class Matrix;
 /**
  * Defines a 3-element floating point vector.
  *
- * When using a vector to represent a surface normal,
+ * When using a vector to represent a surface normal, 
  * the vector should typically be normalized.
  * Other uses of directional vectors may wish to leave
  * the magnitude of the vector intact. When used as a point,
@@ -22,25 +21,27 @@ public:
     /**
      * The x-coordinate.
      */
-    float x;
+    float x = 0.0f;
 
     /**
      * The y-coordinate.
      */
-    float y;
+    float y = 0.0f;
 
     /**
      * The z-coordinate.
      */
-    float z;
+    float z = 0.0f;
 
     /**
-     * Constructs a new vector initialized to all zeros.
+     * Constructor.
+	 * 
+	 * The values x, y and z coordinate values are set to zero.
      */
     Vector3();
 
     /**
-     * Constructs a new vector initialized to the specified values.
+     * Constructor.
      *
      * @param x The x coordinate.
      * @param y The y coordinate.
@@ -49,14 +50,14 @@ public:
     Vector3(float x, float y, float z);
 
     /**
-     * Constructs a new vector from the values in the specified array.
+     * Constructor.
      *
      * @param array An array containing the elements of the vector in the order x, y, z.
      */
     Vector3(const float* array);
 
     /**
-     * Constructs a vector that describes the direction between the specified points.
+     * Constructor.
      *
      * @param p1 The first point.
      * @param p2 The second point.
@@ -64,21 +65,11 @@ public:
     Vector3(const Vector3& p1, const Vector3& p2);
 
     /**
-     * Constructs a new vector that is a copy of the specified vector.
+     * Constructor.
      *
      * @param copy The vector to copy.
      */
     Vector3(const Vector3& copy);
-
-    /**
-     * Creates a new vector from an integer interpreted as an RGB value.
-     * E.g. 0xff0000 represents red or the vector (1, 0, 0).
-     *
-     * @param color The integer to interpret as an RGB value.
-     *
-     * @return A vector corresponding to the interpreted RGB color.
-     */
-    static Vector3 fromColor(unsigned int color);
 
     /**
      * Destructor.
@@ -86,64 +77,109 @@ public:
     ~Vector3();
 
     /**
-     * Returns the zero vector.
+     * Creates a new vector from an integer interpreted as an RGB value.
+     * Ex. 0xff0000 represents red or the vector (1, 0, 0).
+     *
+     * @param color The integer to interpret as an RGB value.
+     * @return A vector corresponding to the interpreted RGB color.
+     */
+    static Vector3 fromColor(unsigned int color);
+
+    /**
+     * Creates a new vector from a hex formatted string interpreted as an RGB value.
+     * Ex. "#ff0000" represents opaque red or the vector (1, 0, 0).
+     *
+     * @param str The hex string to interpret as an RGB value.
+     * @return A vector corresponding to the interpreted RGB color.
+     */
+    static Vector3 fromColorString(const char* str);
+
+    /**
+     * Gets the vector as a packed unsigned integer represented as RGB value.
+     * Ex. 0xff0000 represents opaque red or the vector (1, 0, 0).
+     *
+     * @return The vector as an unsigned integer color value.
+     */
+    unsigned int toColor() const;
+
+    /**
+     * Gets the zero vector.
      *
      * @return The 3-element vector of 0s.
      */
     static const Vector3& zero();
 
     /**
-     * Returns the one vector.
+     * Gets the one vector.
      *
      * @return The 3-element vector of 1s.
      */
     static const Vector3& one();
 
     /**
-     * Returns the unit x vector.
+     * Gets the up vector. Equal to Vector3(0, 1, 0).
      *
-     * @return The 3-element unit vector along the x axis.
+     * @return The up vector. Equal to Vector3(0, 1, 0).
      */
-    static const Vector3& unitX();
+    static const Vector3& up();
 
     /**
-     * Returns the unit y vector.
+     * Gets the down vector. Equal to Vector3(0, -1, 0).
      *
-     * @return The 3-element unit vector along the y axis.
+     * @return The down vector. Equal to Vector3(0, -1, 0).
      */
-    static const Vector3& unitY();
+    static const Vector3& down();
 
     /**
-     * Returns the unit z vector.
+     * Gets the right vector. Equal to Vector3(1, 0, 0).
      *
-     * @return The 3-element unit vector along the z axis.
+     * @return The right vector. Equal to Vector3(1, 0, 0).
      */
-    static const Vector3& unitZ();
+    static const Vector3& right();
 
     /**
-     * Indicates whether this vector contains all zeros.
+     * Gets the left vector. Equal to Vector3(-1, 0, 0).
+     *
+     * @return The left vector. Equal to Vector3(-1, 0, 0).
+     */
+    static const Vector3& left();
+
+    /**
+     * Gets the forward vector. Equal to Vector3(0, 0, 1).
+     *
+     * @return The forward vector. Equal to Vector3(0, 0, 1).
+     */
+    static const Vector3& forward();
+
+    /**
+     * Gets the back vector. Equal to Vector3(0, 0, -1).
+     *
+     * @return The back vector. Equal to Vector3(0, 0, -1).
+     */
+    static const Vector3& back();
+
+    /**
+     * Determines whether this vector contains all zeros.
      *
      * @return true if this vector contains all zeros, false otherwise.
      */
     bool isZero() const;
 
     /**
-     * Indicates whether this vector contains all ones.
+     * Determines whether this vector contains all ones.
      *
      * @return true if this vector contains all ones, false otherwise.
      */
     bool isOne() const;
 
     /**
-     * Returns the angle (in radians) between the specified vectors.
+     * Gets the angle (in radians) computed between the specified vectors.
      *
      * @param v1 The first vector.
      * @param v2 The second vector.
-     * 
      * @return The angle between the two vectors (in radians).
      */
     static float angle(const Vector3& v1, const Vector3& v2);
-
 
     /**
      * Adds the elements of the specified vector to this one.
@@ -196,18 +232,17 @@ public:
     static void cross(const Vector3& v1, const Vector3& v2, Vector3* dst);
 
     /**
-     * Returns the distance between this vector and v.
+     * Gets the distance computed between this vector and v.
      *
      * @param v The other vector.
-     * 
      * @return The distance between this vector and v.
-     * 
+	 *
      * @see distanceSquared
      */
     float distance(const Vector3& v) const;
 
     /**
-     * Returns the squared distance between this vector and v.
+     * Gets the squared distance computed between this vector and v.
      *
      * When it is not necessary to get the exact distance between
      * two vectors (for example, when simply comparing the
@@ -215,18 +250,16 @@ public:
      * this method instead of distance.
      *
      * @param v The other vector.
-     * 
      * @return The squared distance between this vector and v.
-     * 
+	 *
      * @see distance
      */
     float distanceSquared(const Vector3& v) const;
 
     /**
-     * Returns the dot product of this vector and the specified vector.
+     * Gets the dot product computed for this vector and the specified vector.
      *
      * @param v The vector to compute the dot product with.
-     * 
      * @return The dot product.
      */
     float dot(const Vector3& v) const;
@@ -236,22 +269,21 @@ public:
      *
      * @param v1 The first vector.
      * @param v2 The second vector.
-     * 
      * @return The dot product between the vectors.
      */
     static float dot(const Vector3& v1, const Vector3& v2);
 
     /**
-     * Computes the length of this vector.
+     * Gets the length computed for this vector.
      *
      * @return The length of the vector.
-     * 
+	 *
      * @see lengthSquared
      */
     float length() const;
 
     /**
-     * Returns the squared length of this vector.
+     * Gets the squared length computed for this vector.
      *
      * When it is not necessary to get the exact length of a
      * vector (for example, when simply comparing the lengths of
@@ -259,7 +291,7 @@ public:
      * instead of length.
      *
      * @return The squared length of the vector.
-     * 
+	 *
      * @see length
      */
     float lengthSquared() const;
@@ -325,6 +357,9 @@ public:
 
     /**
      * Sets this vector to the directional vector between the specified points.
+	 * 
+	 * @param p1 The first point.
+	 * @param p2 The second point.
      */
     void set(const Vector3& p1, const Vector3& p2);
 
@@ -360,6 +395,11 @@ public:
     void smooth(const Vector3& target, float elapsedTime, float responseTime);
 
     /**
+     * operator=
+     */
+    Vector3& operator=(const Vector3& v);
+
+    /**
      * Calculates the sum of this vector with the given vector.
      * 
      * Note: this does not modify this vector.
@@ -367,7 +407,7 @@ public:
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline const Vector3 operator+(const Vector3& v) const;
+    const Vector3 operator+(const Vector3& v) const;
 
     /**
      * Adds the given vector to this vector.
@@ -375,17 +415,17 @@ public:
      * @param v The vector to add.
      * @return This vector, after the addition occurs.
      */
-    inline Vector3& operator+=(const Vector3& v);
+    Vector3& operator+=(const Vector3& v);
 
     /**
-     * Calculates the difference of this vector with the given vector.
+     * Substracts the difference of this vector with the given vector.
      * 
      * Note: this does not modify this vector.
      * 
      * @param v The vector to subtract.
      * @return The vector difference.
      */
-    inline const Vector3 operator-(const Vector3& v) const;
+    const Vector3 operator-(const Vector3& v) const;
 
     /**
      * Subtracts the given vector from this vector.
@@ -393,26 +433,26 @@ public:
      * @param v The vector to subtract.
      * @return This vector, after the subtraction occurs.
      */
-    inline Vector3& operator-=(const Vector3& v);
+    Vector3& operator-=(const Vector3& v);
 
     /**
-     * Calculates the negation of this vector.
+     * Computes the negation of this vector.
      * 
      * Note: this does not modify this vector.
      * 
      * @return The negation of this vector.
      */
-    inline const Vector3 operator-() const;
+    const Vector3 operator-() const;
 
     /**
-     * Calculates the scalar product of this vector with the given value.
+     * Computes the scalar product of this vector with the given value.
      * 
      * Note: this does not modify this vector.
      * 
      * @param x The value to scale by.
      * @return The scaled vector.
      */
-    inline const Vector3 operator*(float x) const;
+    const Vector3 operator*(float x) const;
 
     /**
      * Scales this vector by the given value.
@@ -420,17 +460,17 @@ public:
      * @param x The value to scale by.
      * @return This vector, after the scale occurs.
      */
-    inline Vector3& operator*=(float x);
+    Vector3& operator*=(float x);
     
     /**
-     * Returns the components of this vector divided by the given constant
+     * Gets the components of this vector divided by the given constant
      *
      * Note: this does not modify this vector.
      *
      * @param x the constant to divide this vector with
      * @return a smaller vector
      */
-    inline const Vector3 operator/(float x) const;
+    const Vector3 operator/(float x) const;
 
     /**
      * Determines if this vector is less than the given vector.
@@ -439,7 +479,7 @@ public:
      * 
      * @return True if this vector is less than the given vector, false otherwise.
      */
-    inline bool operator<(const Vector3& v) const;
+    bool operator<(const Vector3& v) const;
 
     /**
      * Determines if this vector is equal to the given vector.
@@ -448,7 +488,7 @@ public:
      * 
      * @return True if this vector is equal to the given vector, false otherwise.
      */
-    inline bool operator==(const Vector3& v) const;
+    bool operator==(const Vector3& v) const;
 
     /**
      * Determines if this vector is not equal to the given vector.
@@ -457,7 +497,7 @@ public:
      * 
      * @return True if this vector is not equal to the given vector, false otherwise.
      */
-    inline bool operator!=(const Vector3& v) const;
+    bool operator!=(const Vector3& v) const;
 };
 
 /**
@@ -467,10 +507,6 @@ public:
  * @param v The vector to scale.
  * @return The scaled vector.
  */
-inline const Vector3 operator*(float x, const Vector3& v);
+const Vector3 operator*(float x, const Vector3& v);
 
 }
-
-#include "Vector3.inl"
-
-#endif

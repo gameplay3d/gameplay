@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PropertiesTransform</class>
+ <widget class="QFrame" name="PropertiesTransform">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>312</width>
+    <height>140</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QDoubleSpinBox" name="doubleSpinBoxRotationZ">
+   <property name="geometry">
+    <rect>
+     <x>229</x>
+     <y>40</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>-360.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>360.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelSx">
+   <property name="geometry">
+    <rect>
+     <x>49</x>
+     <y>73</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../gameplay-editor.qrc">:/res/images/axis-x.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelPosition">
+   <property name="geometry">
+    <rect>
+     <x>3</x>
+     <y>13</y>
+     <width>47</width>
+     <height>14</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Position</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelPz">
+   <property name="geometry">
+    <rect>
+     <x>219</x>
+     <y>13</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../gameplay-editor.qrc">:/res/images/axis-z.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelRotation">
+   <property name="geometry">
+    <rect>
+     <x>3</x>
+     <y>43</y>
+     <width>47</width>
+     <height>14</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Rotation</string>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBoxRotationY">
+   <property name="geometry">
+    <rect>
+     <x>144</x>
+     <y>40</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>-360.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>360.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelScale">
+   <property name="geometry">
+    <rect>
+     <x>3</x>
+     <y>73</y>
+     <width>47</width>
+     <height>14</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Scale</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelRx">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>43</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../gameplay-editor.qrc">:/res/images/axis-x.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelPx">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>13</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../gameplay-editor.qrc">:/res/images/axis-x.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBoxPositionX">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>10</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>-1000000.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>1000000.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBoxPositionZ">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>10</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>-1000000.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>1000000.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBoxRotationX">
+   <property name="geometry">
+    <rect>
+     <x>61</x>
+     <y>40</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>-360.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>360.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBoxScaleZ">
+   <property name="geometry">
+    <rect>
+     <x>229</x>
+     <y>70</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>-1000000.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>1000000.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBoxScaleX">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>70</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>-1000000.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>1000000.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBoxScaleY">
+   <property name="geometry">
+    <rect>
+     <x>144</x>
+     <y>70</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>-1000000.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>1000000.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelPy">
+   <property name="geometry">
+    <rect>
+     <x>133</x>
+     <y>13</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../gameplay-editor.qrc">:/res/images/axis-y.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBoxPositionY">
+   <property name="geometry">
+    <rect>
+     <x>144</x>
+     <y>10</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>-1000000.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>1000000.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelRy">
+   <property name="geometry">
+    <rect>
+     <x>133</x>
+     <y>43</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../gameplay-editor.qrc">:/res/images/axis-y.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelSy">
+   <property name="geometry">
+    <rect>
+     <x>133</x>
+     <y>73</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../gameplay-editor.qrc">:/res/images/axis-y.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelRz">
+   <property name="geometry">
+    <rect>
+     <x>219</x>
+     <y>43</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../gameplay-editor.qrc">:/res/images/axis-z.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelSz">
+   <property name="geometry">
+    <rect>
+     <x>219</x>
+     <y>73</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../gameplay-editor.qrc">:/res/images/axis-z.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButtonStatic">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>105</y>
+     <width>80</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string> Static</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/static.png</normaloff>:/res/images/static.png</iconset>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButtonMovable">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>105</y>
+     <width>80</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>  Movable</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/movable.png</normaloff>:/res/images/movable.png</iconset>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelMobility">
+   <property name="geometry">
+    <rect>
+     <x>3</x>
+     <y>110</y>
+     <width>47</width>
+     <height>14</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Mobility</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../gameplay-editor.qrc"/>
+ </resources>
+ <connections/>
+</ui>

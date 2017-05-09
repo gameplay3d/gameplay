@@ -1,0 +1,945 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditorWindow</class>
+ <widget class="QMainWindow" name="EditorWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1910</width>
+    <height>1010</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>32</width>
+    <height>32</height>
+   </size>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks|QMainWindow::VerticalTabs</set>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1910</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNewProject"/>
+    <addaction name="actionOpenProject"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="actionSaveAll"/>
+    <addaction name="actionImport"/>
+    <addaction name="separator"/>
+    <addaction name="actionPackage"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionPreferences"/>
+    <addaction name="separator"/>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="separator"/>
+    <addaction name="actionDuplicate"/>
+    <addaction name="actionDelete"/>
+    <addaction name="actionFrame"/>
+    <addaction name="actionFind"/>
+   </widget>
+   <widget class="QMenu" name="menuCreate">
+    <property name="title">
+     <string>Create</string>
+    </property>
+    <addaction name="actionCreateObject"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreateCube"/>
+    <addaction name="actionCreateSphere"/>
+    <addaction name="actionCreateCylinder"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreateCamera"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreateDirectionalLight"/>
+    <addaction name="actionCreatePointLight"/>
+    <addaction name="actionCreateSpotLight"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreateSprite"/>
+    <addaction name="actionCreateText"/>
+    <addaction name="actionCreateUI"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreateTerrain"/>
+    <addaction name="actionCreateParticleEmitter"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreateAudio"/>
+    <addaction name="actionCreateVideo"/>
+   </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionWindowProperties"/>
+    <addaction name="actionWindowScene"/>
+    <addaction name="actionWindowProject"/>
+    <addaction name="actionWindowConsole"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuTarget">
+    <property name="title">
+     <string>Target</string>
+    </property>
+    <addaction name="actionEditor"/>
+    <addaction name="separator"/>
+    <addaction name="actionPC"/>
+    <addaction name="actionAndroid"/>
+    <addaction name="actioniOS"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuCreate"/>
+   <addaction name="menuWindow"/>
+   <addaction name="menuTarget"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="DockWidget" name="dockWidgetProject">
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea|Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Project</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents"/>
+  </widget>
+  <widget class="DockWidget" name="dockWidgetScene">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>320</width>
+     <height>35</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea|Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Scene</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2"/>
+  </widget>
+  <widget class="DockWidget" name="dockWidgetProperties">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>340</width>
+     <height>35</height>
+    </size>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea|Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Properties</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_3"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarTransform">
+   <property name="windowTitle">
+    <string/>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionTransformPan"/>
+   <addaction name="actionTransformMove"/>
+   <addaction name="actionTransformRotate"/>
+   <addaction name="actionTransformScale"/>
+   <addaction name="actionTransformMode"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarRun">
+   <property name="windowTitle">
+    <string/>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionViewFullscreen"/>
+   <addaction name="actionPlay"/>
+  </widget>
+  <action name="actionNewProject">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/file-new.png</normaloff>:/res/images/file-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Project</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+Shift+N</string>
+   </property>
+  </action>
+  <action name="actionOpenProject">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/file-open.png</normaloff>:/res/images/file-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open Project</string>
+   </property>
+   <property name="toolTip">
+    <string>Open Project</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+Shift+O</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/file-save.png</normaloff>:/res/images/file-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="iconText">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+S</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>Save As</string>
+   </property>
+   <property name="iconText">
+    <string>Save As</string>
+   </property>
+   <property name="toolTip">
+    <string>Save As</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionSaveAll">
+   <property name="text">
+    <string>Save All</string>
+   </property>
+   <property name="iconText">
+    <string>Save All</string>
+   </property>
+   <property name="toolTip">
+    <string>Save All</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/preferences.png</normaloff>:/res/images/preferences.png</iconset>
+   </property>
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+Y</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+X</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+V</string>
+   </property>
+  </action>
+  <action name="actionDuplicate">
+   <property name="text">
+    <string>Duplicate</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+D</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+Backspace</string>
+   </property>
+  </action>
+  <action name="actionFrame">
+   <property name="text">
+    <string>Frame (Center)</string>
+   </property>
+   <property name="shortcut">
+    <string>F</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>Find</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+F</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/file-import.png</normaloff>:/res/images/file-import.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import Asset</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+I</string>
+   </property>
+  </action>
+  <action name="actionAdd">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/images/scene-add.png</normaloff>:/res/images/scene-add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add to Scene</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+N</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/images/project-help.png</normaloff>:/res/images/project-help.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+H</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionPlay">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/play.png</normaloff>:/res/images/play.png</iconset>
+   </property>
+   <property name="text">
+    <string>Play Game</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionPackage">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/file-package.png</normaloff>:/res/images/file-package.png</iconset>
+   </property>
+   <property name="text">
+    <string>Package</string>
+   </property>
+   <property name="shortcut">
+    <string>F7</string>
+   </property>
+  </action>
+  <action name="actionTransformPan">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/transform-pan.png</normaloff>:/res/images/transform-pan.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pan (Q)</string>
+   </property>
+   <property name="toolTip">
+    <string>Pan (Q)</string>
+   </property>
+   <property name="shortcut">
+    <string>Q</string>
+   </property>
+  </action>
+  <action name="actionTransformMove">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/transform-move.png</normaloff>:/res/images/transform-move.png</iconset>
+   </property>
+   <property name="text">
+    <string>Move (W)</string>
+   </property>
+   <property name="toolTip">
+    <string>Move (W)</string>
+   </property>
+   <property name="shortcut">
+    <string>W</string>
+   </property>
+  </action>
+  <action name="actionTransformRotate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/transform-rotate.png</normaloff>:/res/images/transform-rotate.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rotate (E)</string>
+   </property>
+   <property name="toolTip">
+    <string>Rotate (E)</string>
+   </property>
+   <property name="shortcut">
+    <string>E</string>
+   </property>
+  </action>
+  <action name="actionTransformScale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/transform-scale.png</normaloff>:/res/images/transform-scale.png</iconset>
+   </property>
+   <property name="text">
+    <string>Scale (R)</string>
+   </property>
+   <property name="toolTip">
+    <string>Scale (R)</string>
+   </property>
+   <property name="shortcut">
+    <string>R</string>
+   </property>
+  </action>
+  <action name="actionTransformMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>World</string>
+   </property>
+   <property name="iconText">
+    <string>World</string>
+   </property>
+   <property name="toolTip">
+    <string>Transform - Mode</string>
+   </property>
+  </action>
+  <action name="actionTransformModeWorld">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/transform-mode-world.png</normaloff>:/res/images/transform-mode-world.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transform - World</string>
+   </property>
+   <property name="toolTip">
+    <string>Transform - World</string>
+   </property>
+  </action>
+  <action name="actionTransformModeLocal">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/transform-mode-local.png</normaloff>:/res/images/transform-mode-local.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transform - Local</string>
+   </property>
+   <property name="toolTip">
+    <string>Transform - Local</string>
+   </property>
+  </action>
+  <action name="actionCreateObject">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-object.png</normaloff>:/res/images/scene-object.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Object</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Object</string>
+   </property>
+  </action>
+  <action name="actionCreateCube">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-shape-cube.png</normaloff>:/res/images/scene-shape-cube.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Cube</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Cube</string>
+   </property>
+  </action>
+  <action name="actionCreateCone">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-shape-cone.png</normaloff>:/res/images/scene-shape-cone.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Cone</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Cone</string>
+   </property>
+  </action>
+  <action name="actionCreateCylinder">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-shape-cylinder.png</normaloff>:/res/images/scene-shape-cylinder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Cylinder</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Cylinder</string>
+   </property>
+  </action>
+  <action name="actionCreateSphere">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-shape-sphere.png</normaloff>:/res/images/scene-shape-sphere.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Sphere</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Sphere</string>
+   </property>
+  </action>
+  <action name="actionCreateCamera">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-camera.png</normaloff>:/res/images/scene-camera.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Camera</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Camera</string>
+   </property>
+  </action>
+  <action name="actionCreateSpotLight">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-light-spot.png</normaloff>:/res/images/scene-light-spot.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Spot Light</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Spot Light</string>
+   </property>
+  </action>
+  <action name="actionCreatePointLight">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-light-point.png</normaloff>:/res/images/scene-light-point.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Point Light</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Point Light</string>
+   </property>
+  </action>
+  <action name="actionCreateDirectionalLight">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-light-directional.png</normaloff>:/res/images/scene-light-directional.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Directional Light</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Directional Light</string>
+   </property>
+  </action>
+  <action name="actionCreateTerrain">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-terrain.png</normaloff>:/res/images/scene-terrain.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Terrain</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Terrain</string>
+   </property>
+  </action>
+  <action name="actionCreateSprite">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-sprite.png</normaloff>:/res/images/scene-sprite.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Sprite</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Sprite</string>
+   </property>
+  </action>
+  <action name="actionCreateText">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-text.png</normaloff>:/res/images/scene-text.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Text</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Text</string>
+   </property>
+  </action>
+  <action name="actionCreateUI">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-ui.png</normaloff>:/res/images/scene-ui.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create UI</string>
+   </property>
+   <property name="toolTip">
+    <string>Create UI</string>
+   </property>
+  </action>
+  <action name="actionCreateParticleEmitter">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-particles.png</normaloff>:/res/images/scene-particles.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Particle Emitter</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Particle Emitter</string>
+   </property>
+  </action>
+  <action name="actionCreateAudio">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-audio.png</normaloff>:/res/images/scene-audio.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Audio</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Audio</string>
+   </property>
+  </action>
+  <action name="actionCreateVideo">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/scene-video.png</normaloff>:/res/images/scene-video.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Video</string>
+   </property>
+   <property name="toolTip">
+    <string>Create Video</string>
+   </property>
+  </action>
+  <action name="actionShading">
+   <property name="text">
+    <string>Shading</string>
+   </property>
+   <property name="toolTip">
+    <string>Shading</string>
+   </property>
+  </action>
+  <action name="actionShadingLit">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/shading-lit.png</normaloff>:/res/images/shading-lit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Shading - Lit</string>
+   </property>
+   <property name="toolTip">
+    <string>Shading - Lit</string>
+   </property>
+  </action>
+  <action name="actionShadingUnlit">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/shading-unlit.png</normaloff>:/res/images/shading-unlit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Shading - Unlit</string>
+   </property>
+   <property name="toolTip">
+    <string>Shading - Unlit</string>
+   </property>
+  </action>
+  <action name="actionShadingWireframe">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/shading-wireframe.png</normaloff>:/res/images/shading-wireframe.png</iconset>
+   </property>
+   <property name="text">
+    <string>Shading - Wireframe</string>
+   </property>
+   <property name="toolTip">
+    <string>Shading - Wireframe</string>
+   </property>
+  </action>
+  <action name="actionShowBounds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Bounds</string>
+   </property>
+   <property name="toolTip">
+    <string>View Bounds</string>
+   </property>
+  </action>
+  <action name="actionShowGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/show-grid.png</normaloff>:/res/images/show-grid.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Grid</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggles Grid</string>
+   </property>
+  </action>
+  <action name="actionViewFullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/fullscreen.png</normaloff>:/res/images/fullscreen.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>View Fullscreen</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionEditor">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Editor</string>
+   </property>
+  </action>
+  <action name="actionPC">
+   <property name="text">
+    <string>PC</string>
+   </property>
+  </action>
+  <action name="actionAndroid">
+   <property name="text">
+    <string>Android</string>
+   </property>
+  </action>
+  <action name="actioniOS">
+   <property name="text">
+    <string>iOS</string>
+   </property>
+  </action>
+  <action name="actionShow">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/show.png</normaloff>:/res/images/show.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show</string>
+   </property>
+   <property name="iconText">
+    <string>Show</string>
+   </property>
+  </action>
+  <action name="actionWindowScene">
+   <property name="text">
+    <string>Scene</string>
+   </property>
+  </action>
+  <action name="actionWindowProject">
+   <property name="text">
+    <string>Project</string>
+   </property>
+   <property name="toolTip">
+    <string>Project</string>
+   </property>
+  </action>
+  <action name="actionWindowConsole">
+   <property name="text">
+    <string>Console</string>
+   </property>
+  </action>
+  <action name="actionWindowProperties">
+   <property name="text">
+    <string>Properties</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>DockWidget</class>
+   <extends>QDockWidget</extends>
+   <header>DockWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../gameplay-editor.qrc"/>
+ </resources>
+ <connections/>
+ <slots>
+  <slot>openProject()</slot>
+  <slot>newProject()</slot>
+  <slot>closeProject()</slot>
+ </slots>
+</ui>

@@ -1,5 +1,4 @@
-#ifndef MATRIX_H_
-#define MATRIX_H_
+#pragma once
 
 #include "Vector3.h"
 #include "Vector4.h"
@@ -46,12 +45,14 @@ class Matrix
 public:
 
     /**
-     * Stores the columns of this 4x4 matrix.
+     * The column major values of this 4x4 matrix.
      * */
     float m[16];
 
     /**
-     * Constructs a matrix initialized to the identity matrix:
+	 * Constructor.
+	 *
+     * The matrix is initialized to the identity matrix:
      *
      * 1  0  0  0
      * 0  1  0  0
@@ -61,7 +62,7 @@ public:
     Matrix();
 
     /**
-     * Constructs a matrix initialized to the specified value.
+     * Constructor.
      *
      * @param m11 The first element of the first row.
      * @param m12 The second element of the first row.
@@ -80,11 +81,13 @@ public:
      * @param m43 The third element of the fourth row.
      * @param m44 The fourth element of the fourth row.
      */
-    Matrix(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
-           float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44);
+    Matrix(float m11, float m12, float m13, float m14, 
+		   float m21, float m22, float m23, float m24,
+           float m31, float m32, float m33, float m34, 
+		   float m41, float m42, float m43, float m44);
 
     /**
-     * Creates a matrix initialized to the specified column-major array.
+     * Constructor.
      *
      * The passed-in array is in column-major order, so the memory layout of the array is as follows:
      *
@@ -98,7 +101,7 @@ public:
     Matrix(const float* m);
 
     /**
-     * Constructs a new matrix by copying the values from the specified matrix.
+     * Constructor.
      *
      * @param copy The matrix to copy.
      */
@@ -110,7 +113,7 @@ public:
     ~Matrix();
 
     /**
-     * Returns the identity matrix:
+     * Gets the identity matrix:
      *
      * 1  0  0  0
      * 0  1  0  0
@@ -122,7 +125,7 @@ public:
     static const Matrix& identity();
 
     /**
-     * Returns the matrix with all zeros.
+     * Gets the matrix with all zeros.
      *
      * @return The matrix with all zeros.
      */
@@ -252,7 +255,7 @@ public:
                                 Matrix* dst);
 
     /**
-     * Fills in an existing Matrix so that it reflects the coordinate system about a specified Plane.
+     * Creates a reflection matrix so that it reflects the coordinate system about a specified Plane.
      *
      * @param plane The Plane about which to create a reflection.
      * @param dst A matrix to store the result in.
@@ -262,20 +265,10 @@ public:
     /**
      * Creates a scale matrix.
      *
-     * @param scale The amount to scale.
+     * @param scale The mount to scale along all axis.  
      * @param dst A matrix to store the result in.
      */
     static void createScale(const Vector3& scale, Matrix* dst);
-
-    /**
-     * Creates a scale matrix.
-     *
-     * @param xScale The amount to scale along the x-axis.
-     * @param yScale The amount to scale along the y-axis.
-     * @param zScale The amount to scale along the z-axis.
-     * @param dst A matrix to store the result in.
-     */
-    static void createScale(float xScale, float yScale, float zScale, Matrix* dst);
 
     /**
      * Creates a rotation matrix from the specified quaternion.
@@ -283,51 +276,7 @@ public:
      * @param quat A quaternion describing a 3D orientation.
      * @param dst A matrix to store the result in.
      */
-    static void createRotation(const Quaternion& quat, Matrix* dst);
-
-    /**
-     * Creates a rotation matrix from the specified axis and angle.
-     *
-     * @param axis A vector describing the axis to rotate about.
-     * @param angle The angle (in radians).
-     * @param dst A matrix to store the result in.
-     */
-    static void createRotation(const Vector3& axis, float angle, Matrix* dst);
-
-    /**
-     * Creates a matrix describing a rotation around the x-axis.
-     *
-     * @param angle The angle of rotation (in radians).
-     * @param dst A matrix to store the result in.
-     */
-    static void createRotationX(float angle, Matrix* dst);
-
-    /**
-     * Creates a matrix describing a rotation around the y-axis.
-     *
-     * @param angle The angle of rotation (in radians).
-     * @param dst A matrix to store the result in.
-     */
-    static void createRotationY(float angle, Matrix* dst);
-
-    /**
-     * Creates a matrix describing a rotation around the z-axis.
-     *
-     * @param angle The angle of rotation (in radians).
-     * @param dst A matrix to store the result in.
-     */
-    static void createRotationZ(float angle, Matrix* dst);
-
-	/**
-	* Creates a matrix describing the yaw, pitch and roll rotations
-	*
-	* @param yaw The yaw angle (in radians)
-	* @param pitch The pitch angle (in radians)
-	* @param roll The roll angle (in radians)
-	* @param dst A matrix to store the result in.
-	*/
-	static void createFromEuler(float yaw, float pitch, float roll, Matrix* dst);
-
+	static void createRotation(const Quaternion& q, Matrix* dst);
 
     /**
      * Creates a translation matrix.
@@ -338,54 +287,54 @@ public:
     static void createTranslation(const Vector3& translation, Matrix* dst);
 
     /**
-     * Creates a translation matrix.
+     * Gets the scalar component of this matrix.
      *
-     * @param xTranslation The translation on the x-axis.
-     * @param yTranslation The translation on the y-axis.
-     * @param zTranslation The translation on the z-axis.
-     * @param dst A matrix to store the result in.
+     * If the scalar component of this matrix has negative parts,
+     * it is not possible to always extract the exact scalar component;
+     * instead, a scale vector that is mathematically equivalent to the
+     * original scale vector is extracted and returned.
+     *
+     * @return The scalar component of this matrix
      */
-    static void createTranslation(float xTranslation, float yTranslation, float zTranslation, Matrix* dst);
+    Vector3 getScale() const;
 
     /**
-     * Adds a scalar value to each component of this matrix.
+     * Gets the Euler angles equivalent to the rotational portion
+     * of the specified matrix. 
+	 *
+	 * The returned Euler angles are in XYZ order an in degrees.
      *
-     * @param scalar The scalar to add.
+     * @return The rotational component of this matrix
      */
-    void add(float scalar);
+    Vector3 getEulerAngles() const;
 
     /**
-     * Adds a scalar value to each component of this matrix and stores the result in dst.
+     * Gets the translational component of this matrix.
      *
-     * @param scalar The scalar value to add.
-     * @param dst A matrix to store the result in.
+     * @return Gets the scalar component of this matrix
      */
-    void add(float scalar, Matrix* dst);
+    Vector3 getTranslation() const;
 
     /**
-     * Adds the specified matrix to this matrix.
+     * Gets the x-axis from the specified 4x4 matrix.
      *
-     * @param m The matrix to add.
+     * @return The x-axis from the specified 4x4 matrix.
      */
-    void add(const Matrix& m);
+    Vector3 getX() const;
 
     /**
-     * Adds the specified matrices and stores the result in dst.
+     * Gets the y-axis from the specified 4x4 matrix.
      *
-     * @param m1 The first matrix.
-     * @param m2 The second matrix.
-     * @param dst The destination matrix to add to.
+     * @return The y-axis from the specified 4x4 matrix.
      */
-    static void add(const Matrix& m1, const Matrix& m2, Matrix* dst);
+    Vector3 getY() const;
 
     /**
-     * Decomposes the scale, rotation and translation components of this matrix.
+     * Gets the z-axis from the specified 4x4 matrix.
      *
-     * @param scale The scale.
-     * @param rotation The rotation.
-     * @param translation The translation.
+     * @return The z-axis from the specified 4x4 matrix.
      */
-    bool decompose(Vector3* scale, Quaternion* rotation, Vector3* translation) const;
+    Vector3 getZ() const;
 
     /**
      * Computes the determinant of this matrix.
@@ -393,76 +342,6 @@ public:
      * @return The determinant.
      */
     float determinant() const;
-
-    /**
-     * Gets the scalar component of this matrix in the specified vector.
-     *
-     * If the scalar component of this matrix has negative parts,
-     * it is not possible to always extract the exact scalar component;
-     * instead, a scale vector that is mathematically equivalent to the
-     * original scale vector is extracted and returned.
-     *
-     * @param scale A vector to receive the scale.
-     */
-    void getScale(Vector3* scale) const;
-
-    /**
-     * Gets the rotational component of this matrix in the specified quaternion.
-     *
-     * @param rotation A quaternion to receive the rotation.
-     * 
-     * @return true if the rotation is successfully extracted, false otherwise.
-     */
-    bool getRotation(Quaternion* rotation) const;
-
-    /**
-     * Gets the translational component of this matrix in the specified vector.
-     *
-     * @param translation A vector to receive the translation.
-     */
-    void getTranslation(Vector3* translation) const;
-
-    /**
-     * Gets the up vector of this matrix.
-     *
-     * @param dst The destination vector.
-     */
-    void getUpVector(Vector3* dst) const;
-
-    /**
-     * Gets the down vector of this matrix.
-     *
-     * @param dst The destination vector.
-     */
-    void getDownVector(Vector3* dst) const;
-
-    /**
-     * Gets the left vector of this matrix.
-     *
-     * @param dst The destination vector.
-     */
-    void getLeftVector(Vector3* dst) const;
-
-    /**
-     * Gets the right vector of this matrix.
-     *
-     * @param dst The destination vector.
-     */
-    void getRightVector(Vector3* dst) const;
-
-    /**
-     * Gets the forward vector of this matrix.
-     *
-     * @param dst The destination vector.
-     */
-    void getForwardVector(Vector3* dst) const;
-
-    /**
-     * Gets the backward vector of this matrix.
-     *
-     * @param dst The destination vector.
-     */
-    void getBackVector(Vector3* dst) const;
 
     /**
      * Inverts this matrix.
@@ -475,17 +354,9 @@ public:
      * Stores the inverse of this matrix in the specified matrix.
      *
      * @param dst A matrix to store the invert of this matrix in.
-     * 
      * @return true if the the matrix can be inverted, false otherwise.
      */
     bool invert(Matrix* dst) const;
-
-    /**
-     * Determines if this matrix is equal to the identity matrix.
-     *
-     * @return true if the matrix is an identity matrix, false otherwise.
-     */
-    bool isIdentity() const;
 
     /**
      * Multiplies the components of this matrix by the specified scalar.
@@ -505,11 +376,11 @@ public:
     /**
      * Multiplies the components of the specified matrix by a scalar and stores the result in dst.
      *
-     * @param m The matrix.
+     * @param matrix The matrix.
      * @param scalar The scalar value.
      * @param dst A matrix to store the result in.
      */
-    static void multiply(const Matrix& m, float scalar, Matrix* dst);
+    static void multiply(const Matrix& matrix, float scalar, Matrix* dst);
 
     /**
      * Multiplies this matrix by the specified one.
@@ -528,18 +399,24 @@ public:
     static void multiply(const Matrix& m1, const Matrix& m2, Matrix* dst);
 
     /**
-     * Negates this matrix.
-     */
-    void negate();
-
-    /**
-     * Negates this matrix and stores the result in dst.
+     * Adds m1 by m2 and stores the result in dst.
      *
+     * @param m1 The first matrix to add.
+     * @param m2 The second matrix to add.
      * @param dst A matrix to store the result in.
      */
-    void negate(Matrix* dst) const;
+    static void add(const Matrix& m1, const Matrix& m2, Matrix* dst);
 
     /**
+     * Subtracts m1 from m2 and stores the result in dst.
+     *
+     * @param m1 The first matrix to add.
+     * @param m2 The second matrix to add.
+     * @param dst A matrix to store the result in.
+     */
+    static void subtract(const Matrix& m1, const Matrix& m2, Matrix* dst);
+
+	/**
      * Post-multiplies this matrix by the matrix corresponding to the
      * specified quaternion rotation.
      *
@@ -547,124 +424,33 @@ public:
      */
     void rotate(const Quaternion& q);
 
+ /**
+     * Post-multiplies this matrix by the matrix corresponding to the
+     * specified translation.
+     *
+     * @param t The translation values along the x, y and z axes.
+     */
+    void translate(const Vector3& t);
+
+    /**
+     * Post-multiplies this matrix by the matrix corresponding to the
+     * specified translation and stores the result in dst.
+     *
+     * @param t The translation values along the x, y and z axes.
+     * @param dst A matrix to store the result in.
+     */
+    void translate(const Vector3& t, Matrix* dst) const;
+
     /**
      * Post-multiplies this matrix by the matrix corresponding to the
      * specified quaternion rotation and stores the result in dst.
      *
-     * @param q The quaternion to rotate by.
+     * @param r The quaternion to rotate by.
      * @param dst A matrix to store the result in.
      */
-    void rotate(const Quaternion& q, Matrix* dst) const;
+    void rotate(const Quaternion& r, Matrix* dst) const;
 
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified rotation about the specified axis.
-     *
-     * @param axis The axis to rotate about.
-     * @param angle The angle (in radians).
-     */
-    void rotate(const Vector3& axis, float angle);
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the specified
-     * rotation about the specified axis and stores the result in dst.
-     *
-     * @param axis The axis to rotate about.
-     * @param angle The angle (in radians).
-     * @param dst A matrix to store the result in.
-     */
-    void rotate(const Vector3& axis, float angle, Matrix* dst) const;
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified rotation around the x-axis.
-     *
-     * @param angle The angle (in radians).
-     */
-    void rotateX(float angle);
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified rotation around the x-axis and stores the result in dst.
-     *
-     * @param angle The angle (in radians).
-     * @param dst A matrix to store the result in.
-     */
-    void rotateX(float angle, Matrix* dst) const;
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified rotation around the y-axis.
-     *
-     * @param angle The angle (in radians).
-     */
-    void rotateY(float angle);
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified rotation around the y-axis and stores the result in dst.
-     *
-     * @param angle The angle (in radians).
-     * @param dst A matrix to store the result in.
-     */
-    void rotateY(float angle, Matrix* dst) const;
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified rotation around the z-axis.
-     *
-     * @param angle The angle (in radians).
-     */
-    void rotateZ(float angle);
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified rotation around the z-axis and stores the result in dst.
-     *
-     * @param angle The angle (in radians).
-     * @param dst A matrix to store the result in.
-     */
-    void rotateZ(float angle, Matrix* dst) const;
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified scale transformation.
-     *
-     * @param value The amount to scale along all axes.
-     */
-    void scale(float value);
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified scale transformation and stores the result in dst.
-     *
-     * @param value The amount to scale along all axes.
-     * @param dst A matrix to store the result in.
-     */
-    void scale(float value, Matrix* dst) const;
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified scale transformation.
-     *
-     * @param xScale The amount to scale along the x-axis.
-     * @param yScale The amount to scale along the y-axis.
-     * @param zScale The amount to scale along the z-axis.
-     */
-    void scale(float xScale, float yScale, float zScale);
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified scale transformation and stores the result in dst.
-     *
-     * @param xScale The amount to scale along the x-axis.
-     * @param yScale The amount to scale along the y-axis.
-     * @param zScale The amount to scale along the z-axis.
-     * @param dst A matrix to store the result in.
-     */
-    void scale(float xScale, float yScale, float zScale, Matrix* dst) const;
-
-    /**
+  /**
      * Post-multiplies this matrix by the matrix corresponding to the
      * specified scale transformation.
      *
@@ -680,6 +466,30 @@ public:
      * @param dst A matrix to store the result in.
      */
     void scale(const Vector3& s, Matrix* dst) const;
+
+    /**
+     * Negates this matrix.
+     */
+    void negate();
+
+    /**
+     * Negates this matrix and stores the result in dst.
+     *
+     * @param dst A matrix to store the result in.
+     */
+    void negate(Matrix* dst) const;
+
+    /**
+     * Transposes this matrix.
+     */
+    void transpose();
+
+    /**
+     * Transposes this matrix and stores the result in dst.
+     *
+     * @param dst A matrix to store the result in.
+     */
+    void transpose(Matrix* dst) const;
 
     /**
      * Sets the values of this matrix.
@@ -701,8 +511,10 @@ public:
      * @param m43 The third element of the fourth row.
      * @param m44 The fourth element of the fourth row.
      */
-    void set(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
-             float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44);
+    void set(float m11, float m12, float m13, float m14, 
+		     float m21, float m22, float m23, float m24,
+             float m31, float m32, float m33, float m34, 
+		     float m41, float m42, float m43, float m44);
 
     /**
      * Sets the values of this matrix to those in the specified column-major array.
@@ -724,27 +536,27 @@ public:
     void setIdentity();
 
     /**
+     * Determines if this matrix is equal to the identity matrix.
+     *
+     * @return true if the matrix is an identity matrix, false otherwise.
+     */
+    bool isIdentity() const;
+
+    /**
      * Sets all elements of the current matrix to zero.
      */
     void setZero();
 
-    /**
-     * Subtracts the specified matrix from the current matrix.
-     *
-     * @param m The matrix to subtract.
-     */
-    void subtract(const Matrix& m);
+	/**
+	 * Set the matrix by applying translation, rotation and scale.
+	 *
+	 * @param t The translation to be applied.
+	 * @param r The rotation to be applied.
+	 * @param s The scale to be applied.
+	 */
+	void set(const Vector3& t, const Quaternion& r, const Vector3& s);
 
-    /**
-     * Subtracts the specified matrix from the current matrix.
-     *
-     * @param m1 The first matrix.
-     * @param m2 The second matrix.
-     * @param dst A matrix to store the result in.
-     */
-    static void subtract(const Matrix& m1, const Matrix& m2, Matrix* dst);
-
-    /**
+	/**
      * Transforms the specified point by this matrix.
      *
      * The result of the transformation is stored directly into point.
@@ -754,13 +566,12 @@ public:
     void transformPoint(Vector3* point) const;
 
     /**
-     * Transforms the specified point by this matrix, and stores
-     * the result in dst.
+     * Transforms the specified point by this matrix.
      *
-     * @param point The point to transform.
+     * @param p The point to transform.
      * @param dst A vector to store the transformed point in.
      */
-    void transformPoint(const Vector3& point, Vector3* dst) const;
+    void transformPoint(const Vector3& p, Vector3* dst) const;
 
     /**
      * Transforms the specified vector by this matrix by
@@ -773,128 +584,42 @@ public:
     void transformVector(Vector3* vector) const;
 
     /**
-     * Transforms the specified vector by this matrix by
-     * treating the fourth (w) coordinate as zero, and stores the
-     * result in dst.
+     * Transforms the specified vector by this matrix.
      *
-     * @param vector The vector to transform.
+     * @param v The vector to transform.
      * @param dst A vector to store the transformed vector in.
      */
-    void transformVector(const Vector3& vector, Vector3* dst) const;
+    void transformVector(const Vector3& v, Vector3* dst) const;
 
     /**
      * Transforms the specified vector by this matrix.
      *
-     * @param x The vector x-coordinate to transform by.
-     * @param y The vector y-coordinate to transform by.
-     * @param z The vector z-coordinate to transform by.
-     * @param w The vector w-coordinate to transform by.
-     * @param dst A vector to store the transformed point in.
+     * @param v The vector to transform.
+     * @param dst A vector to store the transformed vector in.
      */
-    void transformVector(float x, float y, float z, float w, Vector3* dst) const;
+    void transformVector(const Vector4& v, Vector4* dst) const;
 
     /**
-     * Transforms the specified vector by this matrix.
+     * operator =
+     */
+    Matrix& operator=(const Matrix& m);
+
+    /**
+     * Determines if this matrix is equal to the given matrix.
      *
-     * The result of the transformation is stored directly into vector.
+     * @param m The matrix to compare against.
      *
-     * @param vector The vector to transform.
+     * @return True if this matrix is equal to the given matrix, false otherwise.
      */
-    void transformVector(Vector4* vector) const;
+    bool operator==(const Matrix& m) const;
 
     /**
-     * Transforms the specified vector by this matrix.
+     * Determines if this vector is not equal to the given vector.
      *
-     * @param vector The vector to transform.
-     * @param dst A vector to store the transformed point in.
+     * @param m The matrix to compare against.
+     * @return True if this matrix is not equal to the given matrix, false otherwise.
      */
-    void transformVector(const Vector4& vector, Vector4* dst) const;
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified translation.
-     *
-     * @param x The amount to translate along the x-axis.
-     * @param y The amount to translate along the y-axis.
-     * @param z The amount to translate along the z-axis.
-     */
-    void translate(float x, float y, float z);
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified translation and stores the result in dst.
-     *
-     * @param x The amount to translate along the x-axis.
-     * @param y The amount to translate along the y-axis.
-     * @param z The amount to translate along the z-axis.
-     * @param dst A matrix to store the result in.
-     */
-    void translate(float x, float y, float z, Matrix* dst) const;
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified translation.
-     *
-     * @param t The translation values along the x, y and z axes.
-     */
-    void translate(const Vector3& t);
-
-    /**
-     * Post-multiplies this matrix by the matrix corresponding to the
-     * specified translation and stores the result in dst.
-     *
-     * @param t The translation values along the x, y and z axes.
-     * @param dst A matrix to store the result in.
-     */
-    void translate(const Vector3& t, Matrix* dst) const;
-
-    /**
-     * Transposes this matrix.
-     */
-    void transpose();
-
-    /**
-     * Transposes this matrix and stores the result in dst.
-     *
-     * @param dst A matrix to store the result in.
-     */
-    void transpose(Matrix* dst) const;
-
-    /**
-     * Calculates the sum of this matrix with the given matrix.
-     * 
-     * Note: this does not modify this matrix.
-     * 
-     * @param m The matrix to add.
-     * @return The matrix sum.
-     */
-    inline const Matrix operator+(const Matrix& m) const;
-    
-    /**
-     * Adds the given matrix to this matrix.
-     * 
-     * @param m The matrix to add.
-     * @return This matrix, after the addition occurs.
-     */
-    inline Matrix& operator+=(const Matrix& m);
-
-    /**
-     * Calculates the difference of this matrix with the given matrix.
-     * 
-     * Note: this does not modify this matrix.
-     * 
-     * @param m The matrix to subtract.
-     * @return The matrix difference.
-     */
-    inline const Matrix operator-(const Matrix& m) const;
-
-    /**
-     * Subtracts the given matrix from this matrix.
-     * 
-     * @param m The matrix to subtract.
-     * @return This matrix, after the subtraction occurs.
-     */
-    inline Matrix& operator-=(const Matrix& m);
+    bool operator!=(const Matrix& m) const;
 
     /**
      * Calculates the negation of this matrix.
@@ -903,7 +628,7 @@ public:
      * 
      * @return The negation of this matrix.
      */
-    inline const Matrix operator-() const;
+    const Matrix operator-() const;
 
     /**
      * Calculates the matrix product of this matrix with the given matrix.
@@ -913,7 +638,7 @@ public:
      * @param m The matrix to multiply by.
      * @return The matrix product.
      */
-    inline const Matrix operator*(const Matrix& m) const;
+    const Matrix operator*(const Matrix& m) const;
 
     /**
      * Right-multiplies this matrix by the given matrix.
@@ -921,7 +646,7 @@ public:
      * @param m The matrix to multiply by.
      * @return This matrix, after the multiplication occurs.
      */
-    inline Matrix& operator*=(const Matrix& m);
+    Matrix& operator*=(const Matrix& m);
     
 private:
 
@@ -930,52 +655,4 @@ private:
                                       Matrix* dst);
 };
 
-/**
- * Transforms the given vector by the given matrix.
- * 
- * Note: this treats the given vector as a vector and not as a point.
- * 
- * @param v The vector to transform.
- * @param m The matrix to transform by.
- * @return This vector, after the transformation occurs.
- */
-inline Vector3& operator*=(Vector3& v, const Matrix& m);
-
-/**
- * Transforms the given vector by the given matrix.
- * 
- * Note: this treats the given vector as a vector and not as a point.
- * 
- * @param m The matrix to transform by.
- * @param v The vector to transform.
- * @return The resulting transformed vector.
- */
-inline const Vector3 operator*(const Matrix& m, const Vector3& v);
-
-/**
- * Transforms the given vector by the given matrix.
- * 
- * Note: this treats the given vector as a vector and not as a point.
- * 
- * @param v The vector to transform.
- * @param m The matrix to transform by.
- * @return This vector, after the transformation occurs.
- */
-inline Vector4& operator*=(Vector4& v, const Matrix& m);
-
-/**
- * Transforms the given vector by the given matrix.
- * 
- * Note: this treats the given vector as a vector and not as a point.
- * 
- * @param m The matrix to transform by.
- * @param v The vector to transform.
- * @return The resulting transformed vector.
- */
-inline const Vector4 operator*(const Matrix& m, const Vector4& v);
-
 }
-
-#include "Matrix.inl"
-
-#endif

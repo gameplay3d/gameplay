@@ -1,5 +1,4 @@
-#ifndef Stream_H_
-#define Stream_H_
+#pragma once
 
 namespace gameplay
 {
@@ -7,37 +6,37 @@ namespace gameplay
 /**
  * Defines a stream for reading and writing a sequence of bytes.
  * 
- * Use FileSystem::open() to create a stream.
- * 
- * @script{ignore}
+ * Use FileSystem::open() to create a stream from file.
  */
 class Stream
 {
 public:
 
     /**
-     * Destructor. The stream should be closed when it is destroyed.
+     * Destructor. 
+	 *
+	 * The stream will be closed when it is destroyed.
      */
     virtual ~Stream() {};
 
     /**
      * Returns true if this stream can perform read operations.
      * 
-     * @return True if the stream can read, false otherwise.
+     * @return true if the stream can read, false otherwise.
      */
     virtual bool canRead() = 0;
 
     /**
      * Returns true if this stream can perform write operations.
      * 
-     * @return True if the stream can write, false otherwise.
+     * @return true if the stream can write, false otherwise.
      */
     virtual bool canWrite() = 0;
 
     /**
-     * Returns true if this stream can seek.
+     * Determins if this stream can seek.
      * 
-     * @return True if the stream can seek, false otherwise.
+     * @return true if the stream can seek, false otherwise.
      */
     virtual bool canSeek() = 0;
 
@@ -59,7 +58,6 @@ public:
      *              The available size should be at least (<code>size * count</code>) bytes.
      * @param size  The size of each element to be read, in bytes.
      * @param count The number of elements to read.
-     * 
      * @return The number of elements read.
      * 
      * @see canRead()
@@ -71,12 +69,11 @@ public:
      * 
      * A new line is denoted by by either "\n", "\r" or "\r\n".
      * The line break character is included in the string.
-     * The terminating null character is added to the end of the string.
+     * The terminating nullptr character is added to the end of the string.
      * 
      * @param str The array of chars to copy the string to.
      * @param num The maximum number of characters to be copied.
-     * 
-     * @return On success, str is returned. On error, NULL is returned.
+     * @return On success, str is returned. On error, nullptr is returned.
      * 
      * @see canRead()
      */
@@ -94,7 +91,6 @@ public:
      * @param ptr   The pointer to the array of elements to be written.
      * @param size  The size of each element to be written, in bytes.
      * @param count The number of elements to write.
-     * 
      * @return The number of elements written.
      * 
      * @see canWrite()
@@ -102,17 +98,16 @@ public:
     virtual size_t write(const void* ptr, size_t size, size_t count) = 0;
 
     /**
-     * Returns true if the end of the stream has been reached.
+     * Determines if the end of the stream has been reached.
      * 
      * @return True if end of stream reached, false otherwise.
      */
     virtual bool eof() = 0;
 
     /**
-     * Returns the length of the stream in bytes.
+     * Gets the length of the stream in bytes.
      * 
      * Zero is returned if the length of the stream is unknown and/or it cannot be seeked. 
-     * 
      * Example: The length of a network stream is unknown and cannot be seeked.
      * 
      * @return The length of the stream in bytes.
@@ -137,7 +132,6 @@ public:
      *                - <code>SEEK_SET</code> relative to the beginning of the file.
      *                - <code>SEEK_CUR</code> relative to the current position of the file pointer.
      *                - <code>SEEK_END</code> relative to the end of file.
-     * 
      * @return True if successful, false otherwise.
      * 
      * @see canSeek()
@@ -156,12 +150,12 @@ public:
     virtual bool rewind() = 0;
 
 protected:
-    Stream() {};
+
+    Stream() { };
+
 private:
-    Stream(const Stream&);            // Hidden copy constructor.
-    Stream& operator=(const Stream&); // Hidden copy assignment operator.
+
+    Stream(const Stream&);
 };
 
 }
-
-#endif

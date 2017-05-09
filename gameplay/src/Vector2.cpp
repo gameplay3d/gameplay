@@ -5,12 +5,12 @@ namespace gameplay
 {
 
 Vector2::Vector2()
-    : x(0.0f), y(0.0f)
 {
 }
 
-Vector2::Vector2(float x, float y)
-    : x(x), y(y)
+Vector2::Vector2(float x, float y) : 
+    x(x),
+    y(y)
 {
 }
 
@@ -45,17 +45,30 @@ const Vector2& Vector2::one()
     return value;
 }
 
-const Vector2& Vector2::unitX()
+const Vector2& Vector2::up()
+{
+    static Vector2 value(0.0f, 1.0f);
+    return value;
+}
+
+const Vector2& Vector2::down()
+{
+    static Vector2 value(0.0f, -1.0f);
+    return value;
+}
+
+const Vector2& Vector2::right()
 {
     static Vector2 value(1.0f, 0.0f);
     return value;
 }
 
-const Vector2& Vector2::unitY()
+const Vector2& Vector2::left()
 {
-    static Vector2 value(0.0f, 1.0f);
+    static Vector2 value(-1.0f, 0.0f);
     return value;
 }
+
 
 bool Vector2::isZero() const
 {
@@ -70,7 +83,7 @@ bool Vector2::isOne() const
 float Vector2::angle(const Vector2& v1, const Vector2& v2)
 {
     float dz = v1.x * v2.y - v1.y * v2.x;
-    return atan2f(fabsf(dz) + MATH_FLOAT_SMALL, dot(v1, v2));
+    return std::atan2(std::fabs(dz) + GP_MATH_FLOAT_SMALL, dot(v1, v2));
 }
 
 void Vector2::add(const Vector2& v)
@@ -96,7 +109,6 @@ void Vector2::clamp(const Vector2& min, const Vector2& max)
         x = min.x;
     if (x > max.x)
         x = max.x;
-
     // Clamp the y value.
     if (y < min.y)
         y = min.y;
@@ -115,7 +127,6 @@ void Vector2::clamp(const Vector2& v, const Vector2& min, const Vector2& max, Ve
         dst->x = min.x;
     if (dst->x > max.x)
         dst->x = max.x;
-
     // Clamp the y value.
     dst->y = v.y;
     if (dst->y < min.y)
@@ -129,7 +140,7 @@ float Vector2::distance(const Vector2& v) const
     float dx = v.x - x;
     float dy = v.y - y;
 
-    return sqrt(dx * dx + dy * dy);
+    return std::sqrt(dx * dx + dy * dy);
 }
 
 float Vector2::distanceSquared(const Vector2& v) const
@@ -151,7 +162,7 @@ float Vector2::dot(const Vector2& v1, const Vector2& v2)
 
 float Vector2::length() const
 {
-    return sqrt(x * x + y * y);
+    return std::sqrt(x * x + y * y);
 }
 
 float Vector2::lengthSquared() const
@@ -180,17 +191,14 @@ void Vector2::normalize(Vector2* dst) const
         dst->x = x;
         dst->y = y;
     }
-
     float n = x * x + y * y;
     // Already normalized.
     if (n == 1.0f)
         return;
-
-    n = sqrt(n);
+    n = std::sqrt(n);
     // Too close to zero.
-    if (n < MATH_TOLERANCE)
+    if (n < GP_MATH_TOLERANCE)
         return;
-
     n = 1.0f / n;
     dst->x *= n;
     dst->y *= n;
@@ -210,8 +218,8 @@ void Vector2::scale(const Vector2& scale)
 
 void Vector2::rotate(const Vector2& point, float angle)
 {
-    double sinAngle = sin(angle);
-    double cosAngle = cos(angle);
+    double sinAngle = std::sin(angle);
+    double cosAngle = std::cos(angle);
 
     if (point.isZero())
     {
@@ -223,7 +231,6 @@ void Vector2::rotate(const Vector2& point, float angle)
     {
         float tempX = x - point.x;
         float tempY = y - point.y;
-
         x = tempX * cosAngle - tempY * sinAngle + point.x;
         y = tempY * cosAngle + tempX * sinAngle + point.y;
     }
@@ -275,6 +282,92 @@ void Vector2::smooth(const Vector2& target, float elapsedTime, float responseTim
     {
         *this += (target - *this) * (elapsedTime / (elapsedTime + responseTime));
     }
+}
+
+Vector2& Vector2::operator=(const Vector2& v)
+{
+    if(&v == this)
+        return *this;
+
+    this->x = v.x;
+    this->y = v.y;
+
+    return *this;
+}
+
+const Vector2 Vector2::operator+(const Vector2& v) const
+{
+    Vector2 result(*this);
+    result.add(v);
+    return result;
+}
+
+Vector2& Vector2::operator+=(const Vector2& v)
+{
+    add(v);
+    return *this;
+}
+
+const Vector2 Vector2::operator-(const Vector2& v) const
+{
+    Vector2 result(*this);
+    result.subtract(v);
+    return result;
+}
+
+Vector2& Vector2::operator-=(const Vector2& v)
+{
+    subtract(v);
+    return *this;
+}
+
+const Vector2 Vector2::operator-() const
+{
+    Vector2 result(*this);
+    result.negate();
+    return result;
+}
+
+const Vector2 Vector2::operator*(float x) const
+{
+    Vector2 result(*this);
+    result.scale(x);
+    return result;
+}
+
+Vector2& Vector2::operator*=(float x)
+{
+    scale(x);
+    return *this;
+}
+
+const Vector2 Vector2::operator/(const float x) const
+{
+    return Vector2(this->x / x, this->y / x);
+}
+
+bool Vector2::operator<(const Vector2& v) const
+{
+    if (x == v.x)
+        return y < v.y;
+    return x < v.x;
+}
+
+bool Vector2::operator==(const Vector2& v) const
+{
+    return x == v.x && y == v.y;
+}
+
+bool Vector2::operator!=(const Vector2& v) const
+{
+    return x != v.x || y != v.y;
+}
+
+const Vector2 operator*(float x, const Vector2& v)
+{
+    Vector2 result(v);
+    result.scale(x);
+    return result;
 }
 
 }
