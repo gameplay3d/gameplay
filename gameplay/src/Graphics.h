@@ -9,7 +9,7 @@ typedef void* GraphicsPipeline;
 typedef void* GraphicsVertexFormat;
 typedef void* GraphicsBuffer;
 typedef void* GraphicsShader;
-typedef void* GraphicsImage;
+typedef void* GraphicsTexture;
 typedef void* GraphicsConstant;
 
 /**
