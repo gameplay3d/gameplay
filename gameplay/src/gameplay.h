@@ -60,11 +60,11 @@
 
 // Rendering
 #include "Renderer.h"
-#include "RendererText.h"
-#include "RendererSprite.h"
+//#include "RendererText.h"
+//#include "RendererSprite.h"
 //#include "RendererTileSet.h"
 //#include "RendererMesh.h"
-//#include "RendererMeshSkin.h"
+//#include "RendererMeshSkinned.h"
 //#include "RendererParticleEmitter.h"
 //#include "RendererTerrain.h"
 //#include "RendererWater.h"
