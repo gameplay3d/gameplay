@@ -50,6 +50,16 @@ public:
 	 */
     bool isPrepared();
 
+	/**
+	 * @see Graphics::getWidth
+	 */
+    int getWidth();
+
+	/**
+	 * @see Graphics::getHeight
+	 */
+    int getHeight();
+
 private:
 
 	void createInstance();
@@ -63,7 +73,6 @@ private:
 	void createCommandBuffers();
 	void createSynchronizationPrimitives();
 	void createPipelineCache();
-	void createEditor();
 	void buildCommands();
 
 	struct SwapchainSurfaceInfo

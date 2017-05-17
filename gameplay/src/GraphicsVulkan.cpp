@@ -104,8 +104,6 @@ void GraphicsVulkan::initialize(unsigned long window, unsigned long connection)
 	createSynchronizationPrimitives();
 	createPipelineCache();
 
-	createEditor();
-
     _initialized = true;
 	_prepared = true;
 }
@@ -295,6 +293,17 @@ bool GraphicsVulkan::isInitialized()
 bool GraphicsVulkan::isPrepared()
 {
 	return _prepared;
+}
+
+int GraphicsVulkan::getWidth()
+{
+    return _width;
+}
+
+int GraphicsVulkan::getHeight()
+{
+    return _height;
+
 }
 
 void GraphicsVulkan::createDevice()
@@ -523,11 +532,13 @@ void GraphicsVulkan::createSwapchain()
 	SwapchainSurfaceInfo surfaceInfo = querySwapchainSurfaceInfo(_physicalDevice);
 	VkSurfaceFormatKHR surfaceFormat = chooseSurfaceFormat(surfaceInfo.formats);
 	VkPresentModeKHR presentMode = choosePresentMode(surfaceInfo.presentModes);
-	if (surfaceInfo.capabilities.currentExtent.width != (uint32_t) - 1)
+    /*
+	if (surfaceInfo.capabilities.currentExtent.width != (uint32_t) -1)
 	{
 		_width = surfaceInfo.capabilities.currentExtent.width;
 		_height = surfaceInfo.capabilities.currentExtent.height;
 	}
+    */
 
 	// Request the swapchain backbuffer image count 
 	_backBufferCount = surfaceInfo.capabilities.minImageCount;
@@ -789,31 +800,6 @@ void GraphicsVulkan::createPipelineCache()
 	VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
 	pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 	VK_CHECK_RESULT(vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache));
-}
-
-void GraphicsVulkan::createEditor()
-{
-	// Begin commands
-    VK_CHECK_RESULT(vkResetCommandPool(_device, _commandPool, 0));
-    VkCommandBufferBeginInfo beginInfo = {};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-    VK_CHECK_RESULT(vkBeginCommandBuffer(_commandBuffers[_backBufferIndex], &beginInfo));
-
-
-
-
-
-	// End commands
-    VkSubmitInfo endInfo = {};
-    endInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    endInfo.commandBufferCount = 1;
-    endInfo.pCommandBuffers = &_commandBuffers[_backBufferIndex];
-    VK_CHECK_RESULT(vkEndCommandBuffer(_commandBuffers[_backBufferIndex]));
-    VK_CHECK_RESULT(vkQueueSubmit(_queueGraphics, 1, &endInfo, VK_NULL_HANDLE));
-    
-    VK_CHECK_RESULT(vkDeviceWaitIdle(_device));
-
 }
 
 void GraphicsVulkan::buildCommands()

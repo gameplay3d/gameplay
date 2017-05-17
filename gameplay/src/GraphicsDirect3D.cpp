@@ -339,6 +339,17 @@ void GraphicsDirect3D::buildCommands()
 	waitForGpu();
 }
 
+int GraphicsDirect3D::getWidth()
+{
+    return _width;
+}
+
+int GraphicsDirect3D::getHeight()
+{
+    return _height;
+
+}
+
 }
 
 #endif

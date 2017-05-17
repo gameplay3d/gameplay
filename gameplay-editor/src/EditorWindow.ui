@@ -10,6 +10,12 @@
     <height>1010</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string/>
   </property>
@@ -28,7 +34,26 @@
   <property name="dockOptions">
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks|QMainWindow::VerticalTabs</set>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="GameView" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>1024</width>
+     <height>576</height>
+    </size>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -233,7 +258,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionViewFullscreen"/>
+   <addaction name="actionFullscreen"/>
    <addaction name="actionPlay"/>
   </widget>
   <action name="actionNewProject">
@@ -842,9 +867,9 @@
     <string>Toggles Grid</string>
    </property>
   </action>
-  <action name="actionViewFullscreen">
+  <action name="actionFullscreen">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="../gameplay-editor.qrc">
@@ -854,7 +879,7 @@
     <string/>
    </property>
    <property name="toolTip">
-    <string>View Fullscreen</string>
+    <string>Fullscreen</string>
    </property>
   </action>
   <action name="actionExit">
@@ -930,6 +955,12 @@
    <class>DockWidget</class>
    <extends>QDockWidget</extends>
    <header>DockWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameView</class>
+   <extends>QWidget</extends>
+   <header>GameView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

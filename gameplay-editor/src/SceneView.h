@@ -77,7 +77,7 @@ public slots:
     /**
      * Handlers for when an action to add a object is triggered.
      */
-    void onCreateObjectTriggered();
+    void onCreateObject();
 
     /**
      * Handles when the selected object(s) name changes

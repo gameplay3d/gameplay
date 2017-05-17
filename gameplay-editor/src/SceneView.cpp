@@ -172,7 +172,7 @@ void SceneView::onSearchTextChanged(const QString& text)
     _sortFilter->setFilterRegExp(text);
 }
 
-void SceneView::onCreateObjectTriggered()
+void SceneView::onCreateObject()
 {
     // Create an empty object
     auto object = std::make_shared<gameplay::SceneObject>();

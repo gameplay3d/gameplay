@@ -133,7 +133,7 @@ std::shared_ptr<SceneObject> Game::getLoadingScene() const
 void Game::loadScene(const std::string& url, bool showLoading)
 {
     // Unload any previous scene
-    if (_scene && (_scene != _sceneLoading) && (_scene != _sceneLoadingDefault))
+    if (_scene.get() && (_scene != _sceneLoading) && (_scene != _sceneLoadingDefault))
         _scene->unload();
 
     // Set the loading scene and change states
@@ -184,7 +184,8 @@ void Game::onInitialize()
 
 void Game::onFinalize()
 {
-	_scene->onFinalize();
+    if (_scene.get())
+        _scene->onFinalize();
 }
 
 void Game::onSceneLoad(std::shared_ptr<SceneObject> scene)
@@ -271,7 +272,7 @@ void Game::onFrame()
 		case Game::STATE_LOADING:
 		{
             onLoading(elapsedTime);
-			if (_scene->isLoaded())
+            if (_scene.get() && _scene->isLoaded())
 				_state = Game::STATE_RUNNING;
             lastFrameTime = updateFrameRate();
 			break;

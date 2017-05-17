@@ -28,7 +28,8 @@ EditorWindow::EditorWindow(QWidget* parent) : QMainWindow(parent),
     _selectionEnd(nullptr),
     _transformModeButton(nullptr),
     _shadingButton(nullptr),
-    _showButton(nullptr)
+    _showButton(nullptr),
+    _fullscreen(false)
 {
     _dockWidgetManager = new DockWidgetManager(this);
     _ui->setupUi(this);
@@ -78,41 +79,41 @@ EditorWindow::EditorWindow(QWidget* parent) : QMainWindow(parent),
     setTabPosition(Qt::BottomDockWidgetArea, QTabWidget::North);
 
     // Set the game view
-    _gameView = new GameView();
-    setCentralWidget(_gameView);
+    _gameView = _ui->centralWidget;
     _gameView->setEditor(this);
 
     // Set the dock corners
-    setCorner(Qt::TopLeftCorner, Qt::TopDockWidgetArea);
+    setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
     setCorner(Qt::BottomLeftCorner, Qt::BottomDockWidgetArea);
     setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
     setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
-    // Initialize the selection begin and end to offscreen which means no selection.
-    _selectionBegin = new Vector2(-1, -1);
-    _selectionEnd = new Vector2(-1, -1);
-
-    connect(_ui->actionNewProject, SIGNAL(triggered()), this, SLOT(onNewProjectTriggered()));
-    connect(_ui->actionOpenProject, SIGNAL(triggered()), this, SLOT(onOpenProjectTriggered()));
-    connect(_ui->actionTransformPan, SIGNAL(triggered(bool)), this, SLOT(onTransformPanTriggered(bool)));
-    connect(_ui->actionTransformMove, SIGNAL(triggered(bool)), this, SLOT(onTransformMoveTriggered(bool)));
-    connect(_ui->actionTransformRotate, SIGNAL(triggered(bool)), this, SLOT(onTransformRotateTriggered(bool)));
-    connect(_ui->actionTransformScale, SIGNAL(triggered(bool)), this, SLOT(onTransformScaleTriggered(bool)));
-    connect(_ui->actionTransformModeWorld, SIGNAL(triggered()), this, SLOT(onTransformModeWorldTriggered()));
-    connect(_ui->actionTransformModeLocal, SIGNAL(triggered()), this, SLOT(onTransformModeLocalTriggered()));
-    connect(_ui->actionShadingLit, SIGNAL(triggered()), this, SLOT(onShadingLitTriggered()));
-    connect(_ui->actionShadingUnlit, SIGNAL(triggered()), this, SLOT(onShadingUnlitTriggered()));
-    connect(_ui->actionShadingWireframe, SIGNAL(triggered()), this, SLOT(onShadingWireframeTriggered()));
-    connect(_ui->actionShowGrid, SIGNAL(triggered(bool)), this, SLOT(onShowGridTriggered(bool)));
-    connect(_ui->actionShowBounds, SIGNAL(triggered(bool)), this, SLOT(onShowBoundsTriggered(bool)));
+    connect(_ui->actionNewProject, SIGNAL(triggered()), this, SLOT(onNewProject()));
+    connect(_ui->actionOpenProject, SIGNAL(triggered()), this, SLOT(onOpenProject()));
+    connect(_ui->actionTransformPan, SIGNAL(triggered(bool)), this, SLOT(onTransformPan(bool)));
+    connect(_ui->actionTransformMove, SIGNAL(triggered(bool)), this, SLOT(onTransformMove(bool)));
+    connect(_ui->actionTransformRotate, SIGNAL(triggered(bool)), this, SLOT(onTransformRotate(bool)));
+    connect(_ui->actionTransformScale, SIGNAL(triggered(bool)), this, SLOT(onTransformScale(bool)));
+    connect(_ui->actionTransformModeWorld, SIGNAL(triggered()), this, SLOT(onTransformModeWorld()));
+    connect(_ui->actionTransformModeLocal, SIGNAL(triggered()), this, SLOT(onTransformModeLocal()));
+    connect(_ui->actionShadingLit, SIGNAL(triggered()), this, SLOT(onShadingLit()));
+    connect(_ui->actionShadingUnlit, SIGNAL(triggered()), this, SLOT(onShadingUnlit()));
+    connect(_ui->actionShadingWireframe, SIGNAL(triggered()), this, SLOT(onShadingWireframe()));
+    connect(_ui->actionShowGrid, SIGNAL(triggered(bool)), this, SLOT(onShowGrid(bool)));
+    connect(_ui->actionShowBounds, SIGNAL(triggered(bool)), this, SLOT(onShowBounds(bool)));
     connect(_projectView, SIGNAL(sceneOpened(QString)), this, SLOT(onOpenScene(QString)));
     connect(this, SIGNAL(sceneChanged()), _sceneView, SLOT(onSceneChanged()));
     connect(_sceneView, SIGNAL(selectionChanged()), _propertiesView, SLOT(onSelectionChanged()));
-    connect(_ui->actionCreateObject, SIGNAL(triggered()), _sceneView, SLOT(onCreateObjectTriggered()));
+    connect(_ui->actionCreateObject, SIGNAL(triggered()), _sceneView, SLOT(onCreateObject()));
     connect(_propertiesView, SIGNAL(nameChanged()), _sceneView, SLOT(onNameChanged()));
-    connect(_ui->actionWindowProperties, SIGNAL(triggered(bool)), this, SLOT(onWindowPropertiesTriggered(bool)));
-    connect(_ui->actionWindowScene, SIGNAL(triggered(bool)), this, SLOT(onWindowSceneTriggered(bool)));
-    connect(_ui->actionWindowProject, SIGNAL(triggered(bool)), this, SLOT(onWindowProjectTriggered(bool)));
+    connect(_ui->actionWindowProperties, SIGNAL(triggered(bool)), this, SLOT(onWindowProperties(bool)));
+    connect(_ui->actionWindowScene, SIGNAL(triggered(bool)), this, SLOT(onWindowScene(bool)));
+    connect(_ui->actionWindowProject, SIGNAL(triggered(bool)), this, SLOT(onWindowProject(bool)));
+    connect(_ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(onFullscreen()));
+
+    // Initialize the selection begin and end to offscreen which means no selection.
+    _selectionBegin = new Vector2(-1, -1);
+    _selectionEnd = new Vector2(-1, -1);
 
     emit restoringState();
 }
@@ -174,13 +175,13 @@ gameplay::Vector2* EditorWindow::getSelectionEnd() const
     return _selectionEnd;
 }
 
-void EditorWindow::onNewProjectTriggered()
+void EditorWindow::onNewProject()
 {
     _projectWizard->show();
     _projectWizard->onNewProjectPressed();
 }
 
-void EditorWindow::onOpenProjectTriggered()
+void EditorWindow::onOpenProject()
 {
     _projectWizard->readProjects();
     _projectWizard->show();
@@ -211,24 +212,24 @@ void EditorWindow::onOpenScene(const QString& path)
     }
 }
 
-void EditorWindow::onTransformPanTriggered(bool checked)
+void EditorWindow::onTransformPan(bool checked)
 {
 }
 
-void EditorWindow::onTransformMoveTriggered(bool checked)
+void EditorWindow::onTransformMove(bool checked)
 {
 }
 
-void EditorWindow::onTransformRotateTriggered(bool checked)
+void EditorWindow::onTransformRotate(bool checked)
 {
 }
 
-void EditorWindow::onTransformScaleTriggered(bool checked)
+void EditorWindow::onTransformScale(bool checked)
 {
 }
 
 
-void EditorWindow::onTransformModeWorldTriggered()
+void EditorWindow::onTransformModeWorld()
 {
 
     _transformModeButton->setDefaultAction(_ui->actionTransformModeWorld);
@@ -236,54 +237,99 @@ void EditorWindow::onTransformModeWorldTriggered()
     // TODO
 }
 
-void EditorWindow::onTransformModeLocalTriggered()
+void EditorWindow::onTransformModeLocal()
 {
     _transformModeButton->setDefaultAction(_ui->actionTransformModeLocal);
     // TODO:
 }
 
 
-void EditorWindow::onShadingLitTriggered()
+void EditorWindow::onShadingLit()
 {
     _shadingButton->setDefaultAction(_ui->actionShadingLit);
     // TODO:
 }
 
-void EditorWindow::onShadingUnlitTriggered()
+void EditorWindow::onShadingUnlit()
 {
 
     _shadingButton->setDefaultAction(_ui->actionShadingUnlit);
     // TODO:
 }
 
-void EditorWindow::onShadingWireframeTriggered()
+void EditorWindow::onShadingWireframe()
 {
     _shadingButton->setDefaultAction(_ui->actionShadingWireframe);
     // TODO:
 }
 
-void EditorWindow::onShowGridTriggered(bool show)
+void EditorWindow::onShowGrid(bool show)
 {
     // TODO
 }
 
-void EditorWindow::onShowBoundsTriggered(bool show)
+void EditorWindow::onShowBounds(bool show)
 {
-
     // TODO:
 }
 
-void EditorWindow::onWindowPropertiesTriggered(bool visible)
+void EditorWindow::onWindowProperties(bool visible)
 {
     _ui->dockWidgetProperties->show();
 }
 
-void EditorWindow::onWindowSceneTriggered(bool visible)
+void EditorWindow::onWindowScene(bool visible)
 {
     _ui->dockWidgetScene->show();
 }
 
-void EditorWindow::onWindowProjectTriggered(bool visible)
+void EditorWindow::onWindowProject(bool visible)
 {
     _ui->dockWidgetProject->show();
+}
+
+void EditorWindow::onFullscreen()
+{
+    setFullscreen(true);
+}
+
+bool EditorWindow::isFullscreen() const
+{
+    return _fullscreen;
+}
+
+void EditorWindow::setFullscreen(bool fullscreen)
+{
+    if (fullscreen && !_fullscreen)
+    {
+        _savedGeometry = saveGeometry();
+        _savedState = saveState();
+        _ui->centralWidget->setParent(nullptr);
+        _ui->centralWidget->showFullScreen();
+        _ui->centralWidget->setFocus();
+        _fullscreen = true;
+    }
+    else
+    {
+        setCentralWidget(_ui->centralWidget);
+        _ui->centralWidget->showNormal();
+
+        restoreGeometry(_savedGeometry);
+        restoreState(_savedState);
+
+
+        this->adjustSize(); // temp hack
+
+        _fullscreen = false;
+    }
+}
+
+void EditorWindow::resizeEvent(QResizeEvent* evt)
+{
+	QMainWindow::resizeEvent(evt);
+}
+
+bool EditorWindow::event(QEvent *evt) 
+{
+    return QMainWindow::event(evt);
 }

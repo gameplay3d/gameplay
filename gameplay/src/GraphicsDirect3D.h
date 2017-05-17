@@ -54,6 +54,16 @@ public:
 	 */
     bool isPrepared();
 
+	/**
+	 * @see Graphics::getWidth
+	 */
+    int getWidth();
+
+	/**
+	 * @see Graphics::getHeight
+	 */
+    int getHeight();
+
 private:
 
 	void getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter);

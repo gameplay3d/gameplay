@@ -28,7 +28,6 @@ void DockWidget::changeTitleBar(bool useDefault)
         setTitleBarWidget(0);
 	else
         setTitleBarWidget(_emptyTitleBar);
-
 }
 
 void DockWidget::centerTitle(QPoint p)
@@ -39,9 +38,8 @@ void DockWidget::centerTitle(QPoint p)
     move(centreTitlePos);
 }
 
-void DockWidget::closeEvent(QCloseEvent* event)
+void DockWidget::closeEvent(QCloseEvent* evt)
 {
-    event->accept();
+    evt->accept();
     this->hide();
-
 }

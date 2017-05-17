@@ -21,7 +21,7 @@ public:
 
 public slots:
 
-    void onOpenFileTriggered();
+    void onOpenFile();
 
     void onItemDoubleClicked(const QModelIndex& index);
 

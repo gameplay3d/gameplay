@@ -106,43 +106,50 @@ public:
      */
     gameplay::Vector2* getSelectionEnd() const;
 
+
+    bool isFullscreen() const;
+
+    void setFullscreen(bool fullscreen);
+
 public slots:
 
-    void onOpenProjectTriggered();
+    void onOpenProject();
 
-    void onNewProjectTriggered();
+    void onNewProject();
 
     void onOpenProject(const QString& path);
 
     void onOpenScene(const QString& path);
 
-    void onTransformPanTriggered(bool checked);
+    void onTransformPan(bool checked);
 
-    void onTransformMoveTriggered(bool checked);
+    void onTransformMove(bool checked);
 
-    void onTransformRotateTriggered(bool checked);
+    void onTransformRotate(bool checked);
 
-    void onTransformScaleTriggered(bool checked);
+    void onTransformScale(bool checked);
 
-    void onTransformModeWorldTriggered();
+    void onTransformModeWorld();
 
-    void onTransformModeLocalTriggered();
+    void onTransformModeLocal();
 
-    void onShadingLitTriggered();
+    void onShadingLit();
 
-    void onShadingUnlitTriggered();
+    void onShadingUnlit();
 
-    void onShadingWireframeTriggered();
+    void onShadingWireframe();
 
-    void onShowGridTriggered(bool show);
+    void onShowGrid(bool show);
 
-    void onShowBoundsTriggered(bool show);
+    void onShowBounds(bool show);
 
-    void onWindowPropertiesTriggered(bool visible);
+    void onWindowProperties(bool visible);
 
-    void onWindowSceneTriggered(bool visible);
+    void onWindowScene(bool visible);
 
-    void onWindowProjectTriggered(bool visible);
+    void onWindowProject(bool visible);
+
+    void onFullscreen();
 
 signals:
 
@@ -166,6 +173,12 @@ signals:
      */
     void selectionChanged();
 
+protected:
+
+    void resizeEvent(QResizeEvent* evt);
+
+    bool event(QEvent* evt);
+
 private:
     Ui::EditorWindow* _ui;
     DockWidgetManager* _dockWidgetManager;
@@ -183,4 +196,7 @@ private:
     QToolButton* _shadingButton;
     QToolButton* _showButton;
     std::string _assetPath;
+    bool _fullscreen;
+    QByteArray _savedGeometry;
+    QByteArray _savedState;
 };

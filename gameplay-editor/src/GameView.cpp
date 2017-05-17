@@ -6,6 +6,9 @@ GameView::GameView(QWidget* parent) : QWidget(parent),
     _scene(nullptr),
     _wireframe(false)
 {
+    setAttribute(Qt::WA_NativeWindow, true);
+    setAttribute(Qt::WA_PaintOnScreen, true);
+    setAttribute(Qt::WA_OpaquePaintEvent, true);
 }
 
 GameView::~GameView()
@@ -18,69 +21,62 @@ void GameView::setEditor(EditorWindow* editor)
     _editor = editor;
 }
 
-void GameView::assetPathChanged(const QString& path)
-{
-    QString fixedPath(path);
-    fixedPath.append("/");
-    QByteArray ba = fixedPath.toLatin1();
-    const char* str = ba.data();
-    FileSystem::setAssetPath(str);
-}
-
-void GameView::sceneChanged()
+void GameView::onSceneChanged()
 {
     _scene = _editor->getScene();
 }
 
-
 void GameView::onInitialize()
 {
-    // Set the asset path for the editor specific resources.
-    // We will copy the this projects res folder and
-    // All resource use will be Ex. "res/foo.png"
-    FileSystem::setAssetPath("./");
+    Graphics* graphics = Graphics::getGraphics();
+    if (!graphics->isInitialized())
+        graphics->initialize((unsigned long)winId());
 
-    // Initalized the graphics system
-    Graphics::getGraphics()->initialize((unsigned long)winId());
-
-    Logger::log(Logger::LEVEL_INFO, "GameView initialized.\n");
+    Game::onInitialize();
 }
 
 void GameView::onFinalize()
 {
-    Logger::log(Logger::LEVEL_INFO, "GameView finalized.\n");
+    Game::onFinalize();
 }
 
 void GameView::onUpdate(float elapsedTime)
 {
-    //Update tehe scene
+    Game::onUpdate(elapsedTime);
 }
 
 void GameView::onRender(float elapsedTime)
 {
-
-    //clear(
-
-    // draw
+    Game::onRender(elapsedTime);
 }
 
+void GameView::paintEvent(QPaintEvent* evt) 
+{
+    Game::onFrame();
+}
 
-void GameView::mousePressEvent(QMouseEvent* event)
+void GameView::mousePressEvent(QMouseEvent* evt)
 {
     // TODO: Handler here...
 }
 
-void GameView::mouseReleaseEvent(QMouseEvent* event)
+void GameView::mouseReleaseEvent(QMouseEvent* evt)
 {
     // TODO: Handler here...
 }
 
-void GameView::keyPressEvent(QKeyEvent* event)
+void GameView::keyPressEvent(QKeyEvent* evt)
 {
-    // TODO: Handler here...
+    if(evt->key() == Qt::Key_Escape && !evt->isAutoRepeat())
+    {
+        if (_editor->isFullscreen())
+        {
+            _editor->setFullscreen(false);
+        }
+    }
 }
 
-void GameView::keyReleaseEvent(QKeyEvent* event)
+void GameView::keyReleaseEvent(QKeyEvent* evt)
 {
     // TODO: Handler here...
 }

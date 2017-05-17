@@ -15,7 +15,7 @@ ProjectView::ProjectView(QWidget* parent) : QWidget(parent),
 
     connect(_ui->lineEditSearch, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(_ui->treeView, SIGNAL(doubleClicked(QModelIndex)), _ui->treeView, SLOT(onItemDoubleClicked(QModelIndex)));
-    connect(_ui->actionOpenFile, SIGNAL(triggered(bool)), _ui->treeView, SLOT(onOpenFileTriggered()));
+    connect(_ui->actionOpenFile, SIGNAL(triggered(bool)), _ui->treeView, SLOT(onOpenFile()));
 }
 
 ProjectView::~ProjectView()
