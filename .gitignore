@@ -10,6 +10,7 @@ Icon?
 Thumbs.db
 .metadata
 .settings
+/*.db
 /ipch
 /build
 /cmake
@@ -45,3 +46,4 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay-editor/GeneratedFiles
 /gameplay-luagen/Debug
 /gameplay-luagen/Release
+

@@ -19,8 +19,9 @@ void App::onInitialize()
 	Game::onInitialize();
 
     // Set the asset path for saving our assets created
-    FileSystem::setAssetPath("C:/Users/seant/Code");
+    FileSystem::setAssetPath("./");
 
+    /* Quick test
     // Create a test scene
     auto test = std::make_shared<SceneObject>();
 
@@ -61,11 +62,11 @@ void App::onInitialize()
     GP_SAFE_DELETE(writer);
 
     // Load a second test scene from the test.scene file
-    
-    
+    // TODO
+
 
     setScene(test);
-
+    */
 }
 
 void App::onFinalize()

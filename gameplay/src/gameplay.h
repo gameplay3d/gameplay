@@ -29,12 +29,14 @@
 #include "Light.h"
 #include "Animation.h"
 
-// Audio
+#include "Graphics.h"
+#include "Geometry.h"
+#include "Material.h"
+
 #include "Audio.h"
 #include "AudioSource.h"
 #include "AudioListener.h"
 
-// Physics
 #include "Physics.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCollider.h"
@@ -53,12 +55,6 @@
 //#include "PhysicsCharacter.h"
 //#include "PhysicsVehicle.h"
 
-// Graphics
-#include "Graphics.h"
-#include "Geometry.h"
-#include "Material.h"
-
-// Rendering
 #include "Renderer.h"
 //#include "RendererText.h"
 //#include "RendererSprite.h"
@@ -72,7 +68,6 @@
 //#include "RendererVideo.h"
 //#include "RendererUI.h"
 
-// User Interface
 //#include "UITheme.h"
 //#include "UIThemeSet.h"
 //#include "UILayout.h"

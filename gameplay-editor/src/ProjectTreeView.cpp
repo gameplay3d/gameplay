@@ -17,7 +17,7 @@ void ProjectTreeView::onItemDoubleClicked(const QModelIndex& index)
     openSelectedItem();
 }
 
-void ProjectTreeView::onOpenFileTriggered()
+void ProjectTreeView::onOpenFile()
 {
     openSelectedItem();
 }

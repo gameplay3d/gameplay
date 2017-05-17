@@ -8,7 +8,7 @@ using namespace gameplay;
 #include <QKeyEvent>
 
 /**
- * The main game view use to intialize, update and render game scenes.
+ * The main game view to render scenes into viewport(s).
  */
 class GameView : public QWidget, public Game
 {
@@ -34,19 +34,14 @@ public:
     void setEditor(EditorWindow* editor);
 
 public slots:
-    /**
-     * Slots handler for asset path changing.
-     *
-     * @param path The new asset path.
-     */
-    void assetPathChanged(const QString& path);
 
     /**
      * Handler when the scene changes.
      */
-    void sceneChanged();
+    void onSceneChanged();
 
 protected:
+
     /**
      * @see Game::onInitialize
      */
@@ -67,32 +62,30 @@ protected:
      */
     void onRender(float elapsedTime);
 
-
     /**
-     * @see QWidget::paint
+     * @see QWidget::paintEvent
      */
-    void paint();
+    void paintEvent(QPaintEvent* evt);
 
     /**
      * @see QWidget::mousePressEvent
      */
-    void mousePressEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent* evt);
 
     /**
      * @see QWidget::mouseReleaseEvent
      */
-    void mouseReleaseEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* evt);
 
     /**
      * @see QWidget::keyPressEvent
      */
-    void keyPressEvent(QKeyEvent* event);
+    void keyPressEvent(QKeyEvent* evt);
 
     /**
      * @see QWidget::keyReleaseEvent
      */
-    void keyReleaseEvent(QKeyEvent* event);
-
+    void keyReleaseEvent(QKeyEvent* evt);
 
 private:
     EditorWindow* _editor;
