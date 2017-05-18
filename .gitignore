@@ -11,6 +11,7 @@ Thumbs.db
 .metadata
 .settings
 /*.db
+/*.opendb
 /ipch
 /build
 /cmake
@@ -46,4 +47,3 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay-editor/GeneratedFiles
 /gameplay-luagen/Debug
 /gameplay-luagen/Release
-

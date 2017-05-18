@@ -81,4 +81,9 @@ void GameView::keyReleaseEvent(QKeyEvent* evt)
     // TODO: Handler here...
 }
 
+void GameView::resizeEvent(QResizeEvent* evt)
+{
+    QWidget::resizeEvent(evt);
+}
+
 

@@ -87,6 +87,8 @@ protected:
      */
     void keyReleaseEvent(QKeyEvent* evt);
 
+    void resizeEvent(QResizeEvent* evt);
+
 private:
     EditorWindow* _editor;
     gameplay::Graphics* _graphics;

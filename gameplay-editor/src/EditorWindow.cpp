@@ -79,7 +79,7 @@ EditorWindow::EditorWindow(QWidget* parent) : QMainWindow(parent),
     setTabPosition(Qt::BottomDockWidgetArea, QTabWidget::North);
 
     // Set the game view
-    _gameView = _ui->centralWidget;
+    _gameView = _ui->gameView;
     _gameView->setEditor(this);
 
     // Set the dock corners
@@ -304,22 +304,18 @@ void EditorWindow::setFullscreen(bool fullscreen)
     {
         _savedGeometry = saveGeometry();
         _savedState = saveState();
-        _ui->centralWidget->setParent(nullptr);
-        _ui->centralWidget->showFullScreen();
-        _ui->centralWidget->setFocus();
+        _ui->gameView->setParent(nullptr);
+        _ui->gameView->showFullScreen();
+        _ui->gameView->setFocus();
         _fullscreen = true;
     }
     else
     {
-        setCentralWidget(_ui->centralWidget);
-        _ui->centralWidget->showNormal();
 
+        _ui->tabWidget->addTab(_ui->gameView, "Viewport");
+        _ui->gameView->showNormal();
         restoreGeometry(_savedGeometry);
         restoreState(_savedState);
-
-
-        this->adjustSize(); // temp hack
-
         _fullscreen = false;
     }
 }
