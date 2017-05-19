@@ -26,7 +26,6 @@ Thumbs.db
 Makefile
 Makefile.Debug
 Makefile.Release
-gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay/Debug
 /gameplay/Release
 /gameplay/android/NUL
@@ -44,6 +43,7 @@ gameplay.xcworkspace/xcshareddata/gameplay.xccheckout
 /gameplay-app/Release
 /gameplay-editor/Debug
 /gameplay-editor/Release
+/gameplay-editor/gameplay-editor.vcxproj.user
 /gameplay-editor/GeneratedFiles
 /gameplay-luagen/Debug
 /gameplay-luagen/Release
