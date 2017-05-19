@@ -104,7 +104,7 @@ void Light::onSerialize(Serializer* serializer)
 {
     serializer->writeEnum("type", "gameplay::Light::Type", _type, -1);
     serializer->writeColor("color", _color, LIGHT_COLOR);
-    switch(_type)
+    switch (_type)
     {
         case TYPE_POINT:
         {

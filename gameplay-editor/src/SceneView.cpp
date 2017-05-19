@@ -74,7 +74,7 @@ void SceneView::onEditorSelectionChanged()
     gameplay::Vector2* selectionBegin = _editor->getSelectionBegin();
     gameplay::Vector2* selectedEnd = _editor->getSelectionEnd();
 
-    // TODO
+    // TODO:
     // Project the point or region against all the objects in the scene
     // updating the selected objects list.
 

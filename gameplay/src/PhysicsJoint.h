@@ -24,7 +24,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~PhysicsJoint();
+    ~PhysicsJoint();
 };
 
 }

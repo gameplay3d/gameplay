@@ -10,7 +10,8 @@ namespace gameplay
  * Defines a light. 
  *
  * There are 3 types of lights that can be created:
- * directional, point and spot lights.
+ *
+ *     directional, point and spot lights.
  */
 class Light : public Component
 {

@@ -402,7 +402,7 @@ public:
     /**
      * Calculates the sum of this vector with the given vector.
      * 
-     * Note: this does not modify this vector.
+     * This does not modify this vector.
      * 
      * @param v The vector to add.
      * @return The vector sum.
@@ -420,7 +420,7 @@ public:
     /**
      * Substracts the difference of this vector with the given vector.
      * 
-     * Note: this does not modify this vector.
+     * This does not modify this vector.
      * 
      * @param v The vector to subtract.
      * @return The vector difference.
@@ -438,7 +438,7 @@ public:
     /**
      * Computes the negation of this vector.
      * 
-     * Note: this does not modify this vector.
+     * This does not modify this vector.
      * 
      * @return The negation of this vector.
      */
@@ -447,7 +447,7 @@ public:
     /**
      * Computes the scalar product of this vector with the given value.
      * 
-     * Note: this does not modify this vector.
+     * This does not modify this vector.
      * 
      * @param x The value to scale by.
      * @return The scaled vector.
@@ -465,7 +465,7 @@ public:
     /**
      * Gets the components of this vector divided by the given constant
      *
-     * Note: this does not modify this vector.
+     * This does not modify this vector.
      *
      * @param x the constant to divide this vector with
      * @return a smaller vector

@@ -200,7 +200,6 @@ public:
      * quaternion is already unit-length.
      *
      * @param dst A quaternion to store the inverse in.
-     * 
      * @return true if the inverse can be computed, false otherwise.
      */
     bool inverse(Quaternion* dst) const;
@@ -244,11 +243,10 @@ public:
 	* Rotate the specified point by this quaternion
 	* and stores the result in dst
 	*
-	* Note: The point must normalized.
+	* The point must normalized.
 	*
 	* @param point The vector to rotate.
 	* @param dst The vector to store the result.
-
 	*/
 	void rotatePoint(const Vector3& point, Vector3* dst) const;
 
@@ -346,7 +344,7 @@ public:
      * Spherical linear interpolation provides smooth transitions between different
      * orientations and is often useful for animating models or cameras in 3D.
      *
-     * Note: For accurate interpolation, the input quaternions must be at (or close to) unit length.
+     * For accurate interpolation, the input quaternions must be at (or close to) unit length.
      * This method does not automatically normalize the input quaternions, so it is up to the
      * caller to ensure they call normalize beforehand, if necessary.
      *
@@ -363,7 +361,7 @@ public:
      * Spherical spline interpolation provides smooth transitions between different
      * orientations and is often useful for animating models or cameras in 3D.
      *
-     * Note: For accurate interpolation, the input quaternions must be unit.
+     * For accurate interpolation, the input quaternions must be unit.
      * This method does not automatically normalize the input quaternions,
      * so it is up to the caller to ensure they call normalize beforehand, if necessary.
      *
@@ -387,7 +385,7 @@ public:
     /**
      * Calculates the quaternion product of this quaternion with the given quaternion.
      * 
-     * Note: this does not modify this quaternion.
+     * This does not modify this quaternion.
      * 
      * @param q The quaternion to multiply.
      * @return The quaternion product.
@@ -410,7 +408,7 @@ private:
      * Spherical linear interpolation provides smooth transitions between different
      * orientations and is often useful for animating models or cameras in 3D.
      *
-     * Note: For accurate interpolation, the input quaternions must be at (or close to) unit length.
+     * For accurate interpolation, the input quaternions must be at (or close to) unit length.
      * This method does not automatically normalize the input quaternions, so it is up to the
      * caller to ensure they call normalize beforehand, if necessary.
      *

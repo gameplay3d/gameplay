@@ -62,7 +62,7 @@ public:
 	/**
 	 * Sets the object to be static (not moveable).
 	 *
-	 * Note: Editor only.
+	 * Used by editor only.
 	 *
 	 * @param isStatic true if the object is static, false if not.
 	 */

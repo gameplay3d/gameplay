@@ -24,7 +24,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~PhysicsCollider();
+    ~PhysicsCollider();
 
 };
 
