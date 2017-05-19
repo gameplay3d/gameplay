@@ -195,7 +195,7 @@ void SceneObject::rotateLocal(const Vector3& eulerAngles)
 	Quaternion rotation = Quaternion::identity();
 	rotation.set(eulerAngles);
 
-    // todo fix me
+    // TODO: fix me
 	Vector3 testRot;
 	rotation.toEulerAngles(&testRot);
 	_rotation.multiply(rotation);

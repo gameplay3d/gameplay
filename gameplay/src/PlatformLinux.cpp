@@ -217,7 +217,7 @@ void PlatformLinux::onMessage(const xcb_generic_event_t* evt)
 				destWidth = cfgEvent->width;
 				destHeight = cfgEvent->height;
 				
-				// todo: resize event
+				// TODO: resize event
 			}*/
 			break;
 		}

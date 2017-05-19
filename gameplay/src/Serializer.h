@@ -482,7 +482,7 @@ public:
         /**
          * Converts the enum value to a string representation.
          *
-         * Note: Enum strings should be return uppercase.
+         * Enum string values are returned uppercase.
          *
          * @param enumName The enum name to convert.
          * @param value The enum value to be converted to string.
@@ -502,7 +502,7 @@ public:
         /**
          * Registers a callback for functor for instantiating new object for the specified class name.
          *
-         * Note: The className should be namespaced. Ex. gameplay::SceneObject
+         * The className should be namespaced. Ex. gameplay::SceneObject
          *
          * @param className The class name to be registered to create a custom object.
          * @param create The create instance callback used to dynamically create a serializable object.
@@ -512,7 +512,7 @@ public:
         /**
          * Registers an enum for resolving enumerated values to/from strings. 
          *
-         * Note: The enumName should be namespaced. Ex gameplay::Camera::Type
+         * The enumName should be namespaced. Ex gameplay::Camera::Type
          *
          * If the enumeration support bitwise operations, it must return the string representation.
          * 

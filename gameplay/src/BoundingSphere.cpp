@@ -304,13 +304,13 @@ void BoundingSphere::transform(const Matrix& matrix)
 float BoundingSphere::distance(const BoundingSphere& sphere, const Vector3& point)
 {
     return sqrt((point.x - sphere.center.x) * (point.x - sphere.center.x) +
-                 (point.y - sphere.center.y) * (point.y - sphere.center.x) +
-                 (point.z - sphere.center.z) * (point.z - sphere.center.x));
+                (point.y - sphere.center.y) * (point.y - sphere.center.x) +
+                (point.z - sphere.center.z) * (point.z - sphere.center.x));
 }
 
-bool BoundingSphere::contains(const BoundingSphere& sphere, Vector3* points, unsigned int count)
+bool BoundingSphere::contains(const BoundingSphere& sphere, Vector3* points, size_t count)
 {
-    for (unsigned int i = 0; i < count; i++)
+    for (size_t i = 0; i < count; i++)
     {
         if (distance(sphere, points[i]) > sphere.radius)
         {

@@ -234,7 +234,7 @@ void EditorWindow::onTransformModeWorld()
 
     _transformModeButton->setDefaultAction(_ui->actionTransformModeWorld);
 
-    // TODO
+    // TODO:
 }
 
 void EditorWindow::onTransformModeLocal()

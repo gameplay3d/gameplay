@@ -61,10 +61,6 @@ void App::onInitialize()
     writer->close();
     GP_SAFE_DELETE(writer);
 
-    // Load a second test scene from the test.scene file
-    // TODO
-
-
     setScene(test);
     */
 }

@@ -141,7 +141,6 @@ public:
      *
      * @param x The x-coordinate of the point.
      * @param y The y-coordinate of the point.
-     * 
      * @return true if the rectangle contains the point, false otherwise.
      */
     bool contains(float x, float y) const;
@@ -153,9 +152,7 @@ public:
      * @param y The y-coordinate of the rectangle.
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
-     * 
-     * @return true if the rectangle contains the specified rectangle, false
-     * otherwise.
+     * @return true if the rectangle contains the specified rectangle, false otherwise.
      */
     bool contains(float x, float y, float width, float height) const;
 
@@ -163,9 +160,7 @@ public:
      * Tests whether this rectangle contains a specified rectangle.
      *
      * @param r The rectangle.
-     * 
-     * @return true if the rectangle contains the specified rectangle, false
-     * otherwise.
+     * @return true if the rectangle contains the specified rectangle, false otherwise.
      */
     bool contains(const Rectangle& r) const;
 
@@ -177,7 +172,6 @@ public:
      * @param y The y-coordinate of the rectangle.
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
-     * 
      * @return true if the specified Rectangle intersects with this one, false otherwise.
      */
     bool intersects(float x, float y, float width, float height) const;
@@ -198,7 +192,6 @@ public:
      * @param r1 The first rectangle.
      * @param r2 The second rectangle.
      * @param dst Populated with the resulting intersection, or Rectangle.empty if they do not intersect.
-     *
      * @return true if the two rectangles intersect, false otherwise.
      */
     static bool intersect(const Rectangle& r1, const Rectangle& r2, Rectangle* dst);

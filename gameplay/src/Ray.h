@@ -102,7 +102,6 @@ public:
      * Tests whether this ray intersects the specified bounding sphere.
      *
      * @param sphere The bounding sphere to test intersection with.
-     * 
      * @return The distance from the origin of this ray to the bounding object or
      *     INTERSECTS_NONE if this ray does not intersect the bounding object.
      */

@@ -10,9 +10,15 @@ typedef void* AudioBuffer;
  */
 class Audio
 {
+    /**
+     * Constructor.
+     */
     Audio();
 
-    virtual ~Audio();
+    /**
+     * Destructor.
+     */
+    ~Audio();
 };
 
 }

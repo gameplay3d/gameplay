@@ -178,7 +178,7 @@ void GraphicsVulkan::render(float elapsedTime)
 	if (!_prepared)
 		return;
 
-	// todo: run this on secondary thread on on changes
+	// TODO: run this on secondary thread on on changes
 	buildCommands();
 
 	// Get next image in the swap chain (back/front buffer)
@@ -804,7 +804,7 @@ void GraphicsVulkan::createPipelineCache()
 
 void GraphicsVulkan::buildCommands()
 {
-	// todo: change this to builder pattern
+	// TODO: change this to builder pattern
 	VkCommandBufferBeginInfo cmdBufInfo = {};
 	cmdBufInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	cmdBufInfo.pNext = nullptr;

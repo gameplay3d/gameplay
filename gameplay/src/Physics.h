@@ -8,9 +8,15 @@ namespace gameplay
  */
 class Physics
 {
+    /**
+     * Constructor.
+     */
     Physics();
 
-    virtual ~Physics();
+    /**
+     * Destructor.
+     */
+    ~Physics();
 };
 
 }

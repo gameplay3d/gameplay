@@ -49,6 +49,8 @@ public:
 
     /**
      * Gets the empty bounding sphere.
+     *
+     * @return The empty bounding sphere.
      */
     static const BoundingSphere& empty();
 
@@ -56,7 +58,6 @@ public:
      * Tests whether this bounding sphere intersects the specified bounding sphere.
      *
      * @param sphere The bounding sphere to test intersection with.
-     * 
      * @return true if the specified bounding sphere intersects this bounding sphere; false otherwise.
      */
     bool intersects(const BoundingSphere& sphere) const;
@@ -65,7 +66,6 @@ public:
      * Tests whether this bounding sphere intersects the specified bounding box.
      *
      * @param box The bounding box to test intersection with.
-     * 
      * @return true if the specified bounding box intersects this bounding sphere; false otherwise.
      */
     bool intersects(const BoundingBox& box) const;
@@ -74,7 +74,6 @@ public:
      * Tests whether this bounding sphere intersects the specified frustum.
      *
      * @param frustum The frustum to test intersection with.
-     * 
      * @return true if this bounding sphere intersects the specified frustum; false otherwise.
      */
     bool intersects(const Frustum& frustum) const;
@@ -83,7 +82,6 @@ public:
      * Tests whether this bounding sphere intersects the specified plane.
      *
      * @param plane The plane to test intersection with.
-     * 
      * @return Plane::INTERSECTS_BACK INTERSECTS_BACK if this bounding sphere is in the negative half-space of
      *  the plane, Plane::INTERSECTS_FRONT INTERSECTS_FRONT if it is in the positive half-space of the plane,
      *  and Plane::INTERSECTS_INTERSECTING INTERSECTS_INTERSECTING if it intersects the plane.
@@ -160,7 +158,7 @@ public:
     /**
      * Transforms this bounding sphere by the given matrix.
      * 
-     * @param matrix The matrix to transform by.
+     * @param matrix The matrix to transform by.     
      * @return This bounding sphere, after the transformation occurs.
      */
     BoundingSphere& operator*=(const Matrix& matrix);
@@ -169,7 +167,7 @@ private:
 
     float distance(const BoundingSphere& sphere, const Vector3&);
 
-    bool contains(const BoundingSphere& sphere, Vector3* points, unsigned int count);
+    bool contains(const BoundingSphere& sphere, Vector3* points, size_t count);
 };
 
 /**

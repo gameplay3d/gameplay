@@ -14,8 +14,7 @@ public:
      * Types of interpolation.
      *
      * Defines how the points in the curve are connected.
-     *
-     * Note: Interpolation::INTERPOLATION_BEZIER uses control points and InterpolationType::HERMITE uses tangents.
+     * Interpolation::INTERPOLATION_BEZIER uses control points and InterpolationType::HERMITE uses tangents.
      */
     enum Interpolation
     {

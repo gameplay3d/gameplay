@@ -119,7 +119,7 @@ void Vector2::clamp(const Vector2& min, const Vector2& max)
 void Vector2::clamp(const Vector2& v, const Vector2& min, const Vector2& max, Vector2* dst)
 {
     GP_ASSERT(dst);
-    GP_ASSERT(!(min.x > max.x || min.y > max.y ));
+    GP_ASSERT(!((min.x > max.x) || (min.y > max.y )));
 
     // Clamp the x value.
     dst->x = v.x;

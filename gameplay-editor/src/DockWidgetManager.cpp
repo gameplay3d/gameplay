@@ -485,7 +485,7 @@ void sendPlatformMouseEvent(PlatformMouseEvent ev, int x, int y)
 
     void sendPlatformMouseEvent(PlatformMouseEvent ev, int x, int y)
     {
-        // todo:
+        // TODO:
         // Synthesize the Linux (X11) left mouse events here. For example:
         // https://gist.github.com/pioz/726474
         switch (ev)

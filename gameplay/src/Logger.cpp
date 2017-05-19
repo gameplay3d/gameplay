@@ -38,7 +38,7 @@ void Logger::log(Level level, const char* message, ...)
         // Pass one less than size to leave room for nullptr terminator
         int needed = vsnprintf(str, size-1, message, args);
 
-        // NOTE: Some platforms return -1 when vsnprintf runs out of room, while others return
+        // Some platforms return -1 when vsnprintf runs out of room, while others return
         // the number of characters actually needed to fill the buffer.
         if (needed >= 0 && needed < size)
         {

@@ -22,24 +22,36 @@ class Graphics
 {   
 public:
 
+    /**
+     * Defines the type of command processing queue.
+     */
 	enum QueueType
 	{
 		QUEUE_TYPE_DRAW,
 		QUEUE_TYPE_COMPUTE
 	};
 
+    /**
+     * The type of filtering.
+     */
 	enum FilterType
 	{
 		FILTER_TYPE_NEAREST,
 		FILTER_TYPE_LINEAR
 	};
 
+    /**
+     * The type of access when mapping memory.
+     */
 	enum MapAccess
 	{
 		MAP_FLAGS_BIT_READ,
 		MAP_FLAGS_BIT_WRITE
 	};
 
+    /**
+     * The type of topology for a primative.
+     */
 	enum PrimitiveTopology
 	{
 		PRIMITIVE_TOPOLOGY_POINT_LIST,
@@ -79,9 +91,6 @@ public:
 	 */
     virtual void resize(int width, int height) = 0;
 
-	/**
-	 * Handles rendering the current command buffers
-	 */
     virtual void render(float elapsedTime) = 0;
 
     virtual bool isInitialized() = 0;

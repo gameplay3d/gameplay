@@ -624,7 +624,7 @@ public:
     /**
      * Calculates the negation of this matrix.
      * 
-     * Note: this does not modify this matrix.
+     * This does not modify this matrix.
      * 
      * @return The negation of this matrix.
      */
@@ -633,7 +633,7 @@ public:
     /**
      * Calculates the matrix product of this matrix with the given matrix.
      * 
-     * Note: this does not modify this matrix.
+     * This does not modify this matrix.
      * 
      * @param m The matrix to multiply by.
      * @return The matrix product.

@@ -87,7 +87,6 @@ public:
      * Tests whether this bounding box intersects the specified bounding object.
      *
      * @param box The bounding box to test intersection with.
-     * 
      * @return true if the specified bounding box intersects this bounding box; false otherwise.
      */
     bool intersects(const BoundingBox& box) const;
@@ -96,7 +95,6 @@ public:
      * Tests whether this bounding box intersects the specified bounding sphere.
      *
      * @param sphere The bounding sphere to test intersection with.
-     * 
      * @return true if the specified bounding sphere intersects this bounding box; false otherwise.
      */
     bool intersects(const BoundingSphere& sphere) const;
@@ -105,7 +103,6 @@ public:
      * Tests whether this bounding box intersects the specified frustum.
      *
      * @param frustum The frustum to test intersection with.
-     * 
      * @return true if this bounding sphere intersects the specified frustum; false otherwise.
      */
     bool intersects(const Frustum& frustum) const;
@@ -125,7 +122,6 @@ public:
      * Tests whether this bounding box intersects the specified ray.
      *
      * @param ray The ray to test intersection with.
-     * 
      * @return The distance from the origin of the ray to this bounding box or
      *  INTERSECTS_NONE INTERSECTS_NONE if the ray does not intersect this bounding box.
      */

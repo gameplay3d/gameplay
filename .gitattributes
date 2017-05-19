@@ -30,7 +30,7 @@
 *.sln text eol=crlf
 *.vcxproj text eol=crlf
 *.vcxproj.filters text eol=crlf
-.vsxproj.user text eol=crlf
+*.vsxproj.user text eol=crlf
 *.bat text eol=crlf
 
 # Denote all files that are truly binary and should not be modified.
