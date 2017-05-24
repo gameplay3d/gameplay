@@ -140,7 +140,7 @@ GP_ERROR("Invalid json base64 string for propertyName: %s", propertyName);
 - Use existing **GP_XXX** for various compile time change functionality.
 - Use **GP_XXX** as a prefix for all gameplay scoped macros and global constants.
 
-# Assertions
+## Assertions
 - Use **GP_ASSERT** for quick danger checks in start of impl that is checked in debug mode.
 ```cpp
 size_t SerializerJson::readFloatArray(const char* propertyName, float** data)
