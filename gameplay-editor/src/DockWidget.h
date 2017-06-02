@@ -13,10 +13,10 @@ class QPoint;
 class DockWidget : public QDockWidget
 {
     Q_OBJECT
-
-friend class DockWidgetManager;
+    friend class DockWidgetManager;
 
 public:
+
     /**
      * Constructor
      *

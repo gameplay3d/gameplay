@@ -2,7 +2,6 @@
 
 #include "EditorWindow.h"
 #include "gameplay.h"
-using namespace gameplay;
 #include <QWidget>
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -10,10 +9,11 @@ using namespace gameplay;
 /**
  * The main game view to render scenes into viewport(s).
  */
-class GameView : public QWidget, public Game
+class GameView : public QWidget, public gameplay::Game
 {
     Q_OBJECT
 public:
+
     /**
      * Constructor.
      *
@@ -90,6 +90,7 @@ protected:
     void resizeEvent(QResizeEvent* evt);
 
 private:
+
     EditorWindow* _editor;
     gameplay::Graphics* _graphics;
     std::shared_ptr<gameplay::SceneObject> _scene;

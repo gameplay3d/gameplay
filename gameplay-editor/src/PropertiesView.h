@@ -2,26 +2,31 @@
 
 #include "EditorWindow.h"
 #include "SceneView.h"
+#include "PropertiesComponentEditor.h"
 #include "PropertiesTransform.h"
+#include "PropertiesCamera.h"
+#include "gameplay.h"
 #include <QWidget>
 #include <QFrame>
-#include "gameplay.h"
 
-using namespace gameplay;
 
-namespace Ui {
+namespace Ui
+{
 class PropertiesView;
+class PropertiesEditor;
 class PropertiesTransform;
+class PropertiesCamera;
+class PropertiesLight;
 }
 
-
 /**
- * Defines a view for diplaying and editing scene objects.
+ * Defines a view for editing properties associated to a scene object.
  */
 class PropertiesView : public QWidget
 {
     Q_OBJECT
 public:
+
     /**
      * Constructor.
      *
@@ -53,20 +58,32 @@ signals:
     void nameChanged();
 
 public slots:
+
     /**
-     * Handler when the object selected in the scene has changed.
+     * Handler for when an object selected in the scene has changed.
      */
     void onSelectionChanged();
 
+    /**
+     * Handler for when the selected objects name changes.
+     */
     void onNameChanged();
+
+    /**
+     * Handler for when an editor has been resized.
+     */
+    void onEditorsResized();
 
 private:
 
-    void hideAll();
-    void showAll();
+    void hideProperties();
+    void showProperties();
+    void clearPropertyEditors();
+
 
     Ui::PropertiesView* _ui;
     EditorWindow* _editor;
     SceneView* _sceneView;
-    std::list<QFrame*> _componentProperties;
+    gameplay::SceneObject _selectedObject;
+    std::vector<std::shared_ptr<gameplay::Component>> _components;
 };

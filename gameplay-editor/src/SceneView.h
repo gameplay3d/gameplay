@@ -2,12 +2,13 @@
 
 #include "EditorWindow.h"
 #include "SceneSortFilterProxyModel.h"
+#include "gameplay.h"
 #include <QWidget>
 #include <QStandardItem>
 #include <QStandardItemModel>
-#include "gameplay.h"
 
-namespace Ui {
+namespace Ui
+{
 class SceneView;
 }
 
@@ -19,6 +20,7 @@ class SceneView : public QWidget
 {
     Q_OBJECT
 public:
+
     /**
      * Constructor.
      *

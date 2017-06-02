@@ -24,9 +24,9 @@ class DockWidget;
  */
 class DockWidgetManager : public QObject
 {
-Q_OBJECT
-
+    Q_OBJECT
 public:
+
     /**
      * Constructor.
      *

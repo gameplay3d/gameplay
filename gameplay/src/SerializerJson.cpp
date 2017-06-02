@@ -769,14 +769,14 @@ std::shared_ptr<Serializable> SerializerJson::readObject(const char* propertyNam
         }
     }
     
-	std::shared_ptr<Serializable> value = std::dynamic_pointer_cast<Serializable>(Serializer::getActivator()->createObject(className));
+    std::shared_ptr<Serializable> value = std::dynamic_pointer_cast<Serializable>(Serializer::getActivator()->createObject(className));
 	if (value == nullptr)
 	{
-		GP_WARN("Failed to deserialize json object:%s for class:", className);
-		json_free(className);
+        GP_WARN("Failed to deserialize json object:%s for class:", className);
+        json_free(className);
 		return nullptr;
 	}
-	json_free(className);
+    json_free(className);
 
     value->onDeserialize(this);
     

@@ -10,6 +10,7 @@ class Project : public QFileSystemModel, public gameplay::Serializable
 {
     Q_OBJECT
 public:
+
     /**
      * Constructor.
      *
@@ -23,6 +24,7 @@ public:
     ~Project();
 
 public:
+
     /**
      * Creates a new project at the specified path.
      *
@@ -92,6 +94,7 @@ public:
     void onDeserialize(gameplay::Serializer* serializer);
 
 private:
+
     static bool _serializerActivated;
     std::string _path;
     std::string _name;

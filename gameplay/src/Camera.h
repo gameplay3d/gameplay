@@ -1,4 +1,4 @@
-#pragma once
+    #pragma once
 
 #include "Component.h"
 #include "Frustum.h"
@@ -54,14 +54,14 @@ public:
     void setMode(Camera::Mode mode);
 
     /**
-     * Gets the field of view for a perspective mode.
+     * Gets the field of view (perspective mode only).
      *
      * @return The field of view.
      */
     float getFieldOfView() const;
 
     /**
-     * Sets the field of view for a perspective mode.
+     * Sets the field of view (perspective mode only).
      * 
      * Normally in the range of 40-60 degrees.
      *
@@ -70,64 +70,57 @@ public:
     void setFieldOfView(float fieldOfView);
 
     /**
-     * Gets the aspect ratio.
+     * Gets the size (orthographic mode only).
      *
-     * @return The aspect ratio.
+     * Default is 5.0
+     *
+     * @return The size.
      */
-    float getAspectRatio() const;
+    float getSize() const;
 
     /**
-     * Sets the aspect ratio.
+     * Sets the size (orthographic mode only).
      *
-     * @param aspectRatio The aspect ratio.
+     * Default is 5.0f.
+     *
+     * @param size The size.
      */
-    void setAspectRatio(float aspectRatio);
+    void setSize(float size);
 
     /**
      * Gets the near z clipping plane distance.
      *
      * @return The near z clipping plane distance.
      */
-    float getNearPlane() const;
+    float getClipPlaneNear() const;
 
     /**
      * Sets the near z clipping plane distance.
      *
      * @param nearPlane The near z clipping plane distance.
      */
-    void setNearPlane(float nearPlane);
+    void setClipPlaneNear(float nearPlane);
 
     /**
      * Gets the far z clipping plane distance.
      *
      * @return The far z clipping plane distance.
      */
-    float getFarPlane() const;
+    float getClipPlaneFar() const;
 
     /**
      * Sets the far z clipping plane distance.
      *
      * @param farPlane The far z clipping plane distance.
      */
-    void setFarPlane(float farPlane);
+    void setClipPlaneFar(float farPlane);
 
     /**
-     * Gets the zoom (magnification) for orthographic mode.
+     * Resets the camera for the specified mode.
      *
-     * Default is 1.0
-     *
-     * @return The magnification (zoom).
+     * @param mode The mode to reset the camera for.
      */
-    float getZoom() const;
-
-    /**
-     * Sets the zoom (magnification) for orthographic mode.
-     *
-     * Default is 1.0f.
-     *
-     * @param zoom The zoom (magnification) .
-     */
-    void setZoom(float zoom);
+    void reset(Camera::Mode mode);
 
     /**
      * Gets the camera's view matrix.
@@ -241,6 +234,11 @@ public:
     void pickRay(const Rectangle& viewport, float x, float y, Ray* dst) const;
 
     /**
+     * @see Component::getTypeId
+     */
+    Component::TypeId getTypeId();
+
+    /**
      * @see Serializable::getClassName
 	 */
     std::string getClassName();
@@ -278,10 +276,10 @@ private:
 
     Camera::Mode _mode;
     float _fieldOfView;
+    float _size;
+    float _clipPlaneNear;
+    float _clipPlaneFar;
     float _aspectRatio;
-    float _nearPlane;
-    float _farPlane;
-    float _zoom;
     mutable Matrix _viewMatrix;
     mutable Matrix _projectionMatrix;
     mutable Matrix _viewProjectionMatrix;

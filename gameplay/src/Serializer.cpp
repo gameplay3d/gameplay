@@ -21,13 +21,13 @@ Serializer::Activator::~Activator()
 {
 }
     
-void Serializer::Activator::initializeClasses()
+void Serializer::Activator::initializeTypes()
 {
-    // Register any Serializable classes
-	registerClass("gameplay::Game::Config", Game::Config::createObject);
-    registerClass("gameplay::SceneObject", SceneObject::createObject);
-    registerClass("gameplay::Camera", Camera::createObject);
-    registerClass("gameplay::Light", Light::createObject);
+    // Register any Serializable types
+    registerType("gameplay::Game::Config", Game::Config::createObject);
+    registerType("gameplay::SceneObject", SceneObject::createObject);
+    registerType("gameplay::Camera", Camera::createObject);
+    registerType("gameplay::Light", Light::createObject);
 }
 
 void Serializer::Activator::initializeEnums()
@@ -35,6 +35,8 @@ void Serializer::Activator::initializeEnums()
     // Register enums used within serialized objects
     registerEnum("gameplay::Camera::Mode", Camera::enumToString, Camera::enumParse);
     registerEnum("gameplay::Light::Type", Light::enumToString, Light::enumParse);
+    registerEnum("gameplay::Light::Mode", Light::enumToString, Light::enumParse);
+    registerEnum("gameplay::Light::Shadows", Light::enumToString, Light::enumParse);
 }
     
 std::shared_ptr<Serializable> Serializer::Activator::createObject(const std::string& className)
@@ -74,7 +76,7 @@ int Serializer::Activator::enumParse(const std::string& enumName, const std::str
     return 0;
 }
 
-void Serializer::Activator::registerClass(const std::string&  className, CreateObjectCallback createObject)
+void Serializer::Activator::registerType(const std::string&  className, CreateObjectCallback createObject)
 {
     std::map<std::string,CreateObjectCallback>::const_iterator itr = __activator->_classes.find(className);
     if ( itr == __activator->_classes.end() )
@@ -140,7 +142,7 @@ Serializer::Activator* Serializer::getActivator()
     if (!__activator)
     {
         __activator = new Serializer::Activator();
-        __activator->initializeClasses();
+        __activator->initializeTypes();
         __activator->initializeEnums();
     }
     return __activator;

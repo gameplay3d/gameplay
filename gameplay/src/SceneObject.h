@@ -9,7 +9,7 @@
 
 class Camera;
 class Light;
-class GraphicsRenderer;
+class RendererMesh;
 class PhysicsRigidBody;
 class PhysicsCollider;
 class Animation;
@@ -87,6 +87,11 @@ public:
 	 * @see isEnabledInHierarchy to check if the object is actually active in scene.
      */
 	void setEnabled(bool enabled);
+
+    /**
+     * Resets the local position, eulerAngles/rotation and scale.
+     */
+    void resetLocalTransform();
 
 	/**
 	 * Gets the scale in local space.
@@ -347,32 +352,35 @@ public:
      *
      * @param component The component being attached to the object.
      */
-    template <typename T>
-    void attachComponent(std::shared_ptr<T> component);
+    void attachComponent(std::shared_ptr<Component> component);
 
     /**
      * Detaches a component from the object.
      *
      * @param component The component being attached to the object.
      */
-    template <typename T>
-    void detachComponent(std::shared_ptr<T> component);
+    void detachComponent(std::shared_ptr<Component> component);
 
     /**
      * Gets a componenent from the object for the class type.
      *
      * @return The component.
      */
-    template <typename T>
-    std::shared_ptr<T> getComponent();
+    std::shared_ptr<Component> getComponent(Component::TypeId typeId);
 
     /**
      * Gets a componenent from the object for the class type.
      *
-     * @return The component.
+     * @return The components.
      */
-    template <typename T>
-    std::vector<std::shared_ptr<T>> getComponents();
+    void getComponents(Component::TypeId typeId, std::vector<std::shared_ptr<Component>>& components);
+
+    /**
+     * Gets all the componenents from the object.
+     *
+     * @return The components.
+     */
+    void getComponents(std::vector<std::shared_ptr<Component>>& components);
 
     /**
      * Loads the scene and any required resources.

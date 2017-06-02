@@ -563,11 +563,11 @@ std::shared_ptr<Serializable> SerializerBinary::readObject(const char* propertyN
     // The class name for the object being read
     std::string className;
     readLengthPrefixedString(className);
-    
+
     std::shared_ptr<Serializable> value = std::dynamic_pointer_cast<Serializable>(Serializer::getActivator()->createObject(className));
 	if (value == nullptr)
 	{
-		GP_ERROR("Failed to deserialize binary class: %s for propertyName:%s", className.c_str(), propertyName);
+        GP_ERROR("Failed to deserialize binary class: %s for propertyName:%s", className.c_str(), propertyName);
 		return value;
 	}
     

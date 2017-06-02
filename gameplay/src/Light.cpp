@@ -3,19 +3,20 @@
 
 #define LIGHT_COLOR Vector3::one()
 #define LIGHT_RANGE 10.0f
-#define LIGHT_INNER_ANGLE 30.0f
-#define LIGHT_OUTER_ANGLE 45.0f
+#define LIGHT_ANGLE 30.0f
+#define LIGHT_INTENSITY 1.0f
 
 namespace gameplay
 {
 Light::Light() : Component(),
-    _type(TYPE_DIRECTIONAL),
+    _type(Light::TYPE_DIRECTIONAL),
     _color(LIGHT_COLOR),
     _range(LIGHT_RANGE),
-    _innerAngle(LIGHT_INNER_ANGLE),
-    _innerAngleCos(cos(LIGHT_INNER_ANGLE)),
-    _outerAngle(LIGHT_OUTER_ANGLE),
-    _outerAngleCos(cos(LIGHT_OUTER_ANGLE))
+    _angle(LIGHT_ANGLE),
+    _angleCos(cos(LIGHT_ANGLE)),
+    _intensity(1.0f),
+    _lighting(LIGHTING_REALTIME),
+    _shadows(SHADOWS_NONE)
 {
 }
 
@@ -43,6 +44,16 @@ void Light::setColor(const Vector3& color)
     _color = color;
 }
 
+void Light::setIntensity(float intensity)
+{
+    _intensity = intensity;
+}
+
+float Light::getIntensity() const
+{
+    return _intensity;
+}
+
 float Light::getRange()  const
 {
     return _range;
@@ -52,47 +63,72 @@ void Light::setRange(float range)
 {
     _range = range;
 }
-
-float Light::getRangeInverse() const
-{
-    return _rangeInverse;
-}
-
-void Light::setRangeInverse(float rangeInverse)
-{
-    _rangeInverse = rangeInverse;
-}
     
-float Light::getInnerAngle()  const
+float Light::getAngle()  const
 {
-    return _innerAngle;
+    return _angle;
 }
 
-void Light::setInnerAngle(float innerAngle)
+void Light::setAngle(float angle)
 {
-    _innerAngle = innerAngle;
-    _innerAngleCos = cos(innerAngle);
-}
-    
-float Light::getOuterAngle()  const
-{
-    return _outerAngle;
+    _angle = angle;
+    _angleCos = cos(angle);
 }
 
-void Light::setOuterAngle(float outerAngle)
+float Light::getAngleCos()  const
 {
-    _outerAngle = outerAngle;
-    _outerAngleCos = cos(outerAngle);
+    return _angleCos;
 }
-    
-float Light::getInnerAngleCos()  const
+
+Light::Lighting Light::getLighting() const
 {
-    return _innerAngleCos;
+    return _lighting;
 }
-    
-float Light::getOuterAngleCos()  const
+
+void Light::setLighting(Light::Lighting lighting)
 {
-    return _outerAngleCos;
+    _lighting = lighting;
+}
+
+void Light::setShadows(Light::Shadows shadows)
+{
+    _shadows = shadows;
+}
+
+Light::Shadows Light::getShadows() const
+{
+    return _shadows;
+}
+
+void Light::reset(Light::Type type)
+{
+    switch (_type)
+    {
+        case Light::TYPE_DIRECTIONAL:
+        {
+
+            break;
+        }
+        case Light::TYPE_POINT:
+        {
+
+            break;
+        }
+
+        case Light::TYPE_SPOT:
+        {
+
+            break;
+        }
+
+        default:
+            break;
+    }
+}
+
+Component::TypeId Light::getTypeId()
+{
+    return Component::TYPEID_LIGHT;
 }
 
 std::string Light::getClassName()
@@ -104,6 +140,7 @@ void Light::onSerialize(Serializer* serializer)
 {
     serializer->writeEnum("type", "gameplay::Light::Type", _type, -1);
     serializer->writeColor("color", _color, LIGHT_COLOR);
+    serializer->writeFloat("intensity", _intensity, LIGHT_INTENSITY);
     switch (_type)
     {
         case TYPE_POINT:
@@ -111,22 +148,27 @@ void Light::onSerialize(Serializer* serializer)
             serializer->writeFloat("range", _range, LIGHT_RANGE);
             break;
         }
+
         case TYPE_SPOT:
         {
             serializer->writeFloat("range", _range, LIGHT_RANGE);
-            serializer->writeFloat("innerAngle", _innerAngle, LIGHT_INNER_ANGLE);
-            serializer->writeFloat("outerAngle", _outerAngle, LIGHT_OUTER_ANGLE);
+            serializer->writeFloat("angle", _angle, LIGHT_ANGLE);\
             break;
         }
+
         default:
             break;
     }
+
+    serializer->writeEnum("lighting", "gameplay::Light::Lighting", _lighting, Light::LIGHTING_REALTIME);
+    serializer->writeEnum("shadows", "gameplay::Light::Shadows", _shadows, Light::SHADOWS_NONE);
 }
 
 void Light::onDeserialize(Serializer* serializer)
 {
     _type = static_cast<Light::Type>(serializer->readEnum("type", "gameplay::Light::Type", -1));
-    Vector3 color = serializer->readColor("color", LIGHT_COLOR);
+    _color = serializer->readColor("color", LIGHT_COLOR);
+    _intensity = serializer->readFloat("intensity", LIGHT_INTENSITY);
     switch(_type)
     {
         case Light::TYPE_POINT:
@@ -134,18 +176,20 @@ void Light::onDeserialize(Serializer* serializer)
             _range = serializer->readFloat("range", LIGHT_RANGE);
             break;
         }
+
         case Light::TYPE_SPOT:
         {
             _range = serializer->readFloat("range", LIGHT_RANGE);
-            _innerAngle = serializer->readFloat("innerAngle", LIGHT_INNER_ANGLE);
-            _innerAngleCos = cos(_innerAngle);
-            _outerAngle = serializer->readFloat("outerAngle", LIGHT_OUTER_ANGLE);
-            _outerAngleCos = cos(_outerAngle);
+            _angle = serializer->readFloat("angle", LIGHT_ANGLE);
+            _angleCos = cos(_angle);
             break;
         }
+
         default:
             break;
     }
+    _lighting = static_cast<Light::Lighting>(serializer->readEnum("lighting", "gameplay::Light::Lighting", Light::LIGHTING_REALTIME));
+    _shadows = static_cast<Light::Shadows>(serializer->readEnum("shadows", "gameplay::Light::Shadows", Light::SHADOWS_NONE));
 }
 
 std::shared_ptr<Serializable> Light::createObject()
@@ -166,10 +210,36 @@ std::string Light::enumToString(const std::string& enumName, int value)
             case Light::TYPE_SPOT:
                 return "TYPE_SPOT";
             default:
-                break;
+                return "TYPE_DIRECTIONAL";
         }
     }
-    return "TYPE_DIRECTIONAL";
+    else if(enumName.compare("gameplay::Light::Lighting") == 0)
+    {
+        switch (value)
+        {
+            case Light::LIGHTING_REALTIME:
+                return "LIGHTING_REALTIME";
+            case Light::LIGHTING_BAKED:
+                return "LIGHTING_BAKED";
+            default:
+                return "LIGHTING_REALTIME";
+        }
+    }
+    else if(enumName.compare("gameplay::Light::Shadows") == 0)
+    {
+        switch (value)
+        {
+            case Light::SHADOWS_NONE:
+                return "SHADOWS_NONE";
+            case Light::SHADOWS_HARD:
+                return "SHADOWS_HARD";
+            case Light::SHADOWS_SOFT:
+                return "SHADOWS_SOFT";
+            default:
+                return "SHADOWS_NONE";
+        }
+    }
+    return "";
 }
 
 int Light::enumParse(const std::string& enumName, const std::string& str)
@@ -183,7 +253,23 @@ int Light::enumParse(const std::string& enumName, const std::string& str)
         else if (str.compare("TYPE_SPOT") == 0)
             return Light::TYPE_SPOT;
     }
-    return Light::TYPE_DIRECTIONAL;
+    else if (enumName.compare("gameplay::Light::Lighting") == 0)
+    {
+        if (str.compare("LIGHTING_REALTIME") == 0)
+            return Light::LIGHTING_REALTIME;
+        else if (str.compare("LIGHTING_BAKED") == 0)
+            return Light::LIGHTING_BAKED;
+    }
+    else if (enumName.compare("gameplay::Light::Shadows") == 0)
+    {
+        if (str.compare("SHADOWS_NONE") == 0)
+            return Light::SHADOWS_NONE;
+        else if (str.compare("SHADOWS_HARD") == 0)
+            return Light::SHADOWS_HARD;
+        else if (str.compare("SHADOWS_SOFT") == 0)
+            return Light::SHADOWS_SOFT;
+    }
+    return -1;
 }
 
 }

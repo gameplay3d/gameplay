@@ -46,6 +46,14 @@ void SceneObject::setName(const std::string& name)
 	_name = name;
 }
 
+void SceneObject::resetLocalTransform()
+{
+    setLocalPosition(SCENEOBJECT_POSITION);
+    setLocalEulerAngles(SCENEOBJECT_EULER_ANGLES);
+    setLocalScale(SCENEOBJECT_SCALE);
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+}
+
 bool SceneObject::isStatic() const
 {
 	return _static;
@@ -398,63 +406,54 @@ size_t SceneObject::findObjects(const std::string& name, std::vector<std::shared
     return count;
 }
 
-template <typename T>
-void SceneObject::attachComponent(std::shared_ptr<T> component)
-{
-    GP_WARN("Component not support and not added.");
-}
 
-template <>
-void SceneObject::attachComponent(std::shared_ptr<Camera> camera)
+void SceneObject::attachComponent(std::shared_ptr<Component> component)
 {
-    auto existing = getComponent<Camera>();
+    std::shared_ptr<Component> existing = getComponent(component->getTypeId());
     if (!existing)
     {
-        _components.push_back(camera);
+        _components.push_back(component);
     }
 }
 
-template <>
-void SceneObject::attachComponent(std::shared_ptr<Light> light)
+void SceneObject::detachComponent(std::shared_ptr<Component> component)
 {
-    auto existing = getComponent<Light>();
-    if (!existing)
+    auto itr = std::find(_components.begin(), _components.end(), component);
+    if (itr != _components.end())
     {
-        _components.push_back(light);
+        _components.erase(itr);
     }
 }
 
-template <typename T>
-void SceneObject::detachComponent(std::shared_ptr<T> component)
-{
-    GP_WARN("Component not support and not added");
-}
-
-template <typename T>
-std::shared_ptr<T> SceneObject::getComponent()
+std::shared_ptr<Component> SceneObject::getComponent(Component::TypeId typeId)
 {
     for (auto component : _components)
     {
-        if (std::dynamic_pointer_cast<T>(component))
+        if (component->getTypeId() == typeId)
         {
-            return std::dynamic_pointer_cast<T>(component);
+            return component;
         }
     }
     return nullptr;
 }
 
-template <typename T>
-std::vector<std::shared_ptr<T>> SceneObject::getComponents()
+void SceneObject::getComponents(Component::TypeId typeId, std::vector<std::shared_ptr<Component>>& components)
 {
-    std::vector<std::shared_ptr<T>> components;
     for (auto component : _components)
     {
-        if (std::dynamic_pointer_cast<T>(component))
+        if (component->getTypeId() == typeId)
         {
-            components.push_back(std::dynamic_pointer_cast<T>(component));
+            components.push_back(component);
         }
     }
-    return components;
+}
+
+void SceneObject::getComponents(std::vector<std::shared_ptr<Component>>& components)
+{
+    for (auto component : _components)
+    {
+        components.push_back(component);
+    }
 }
 
 void SceneObject::load()
@@ -478,7 +477,7 @@ std::string SceneObject::getClassName()
 void SceneObject::onSerialize(Serializer* serializer)
 {
     serializer->writeString("name", _name.c_str(), SCENEOBJECT_NAME);
-   serializer->writeBool("enabled", isEnabled(), SCENEOBJECT_ENABLED);
+    serializer->writeBool("enabled", isEnabled(), SCENEOBJECT_ENABLED);
     serializer->writeBool("static", isStatic(), SCENEOBJECT_STATIC);
     serializer->writeVector("position", getLocalPosition(), SCENEOBJECT_POSITION);
     serializer->writeVector("eulerAngles", getLocalEulerAngles(), SCENEOBJECT_EULER_ANGLES);

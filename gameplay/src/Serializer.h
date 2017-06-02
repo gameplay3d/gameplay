@@ -472,7 +472,7 @@ public:
         
         
         /**
-         * Creates a new shared object for the specified type name.
+         * Creates a new shared object for the specified class name.
          *
          * @param className The serialized class name of the instance to be created.
          * @return The new object instance.
@@ -500,14 +500,14 @@ public:
         int enumParse(const std::string& enumName, const std::string& str);
         
         /**
-         * Registers a callback for functor for instantiating new object for the specified class name.
+         * Registers a callback for functor for instantiating new object for the specified type name.
          *
          * The className should be namespaced. Ex. gameplay::SceneObject
          *
-         * @param className The class name to be registered to create a custom object.
+         * @param className The type name to be registered to create a custom object.
          * @param create The create instance callback used to dynamically create a serializable object.
          */
-        void registerClass(const std::string& className, CreateObjectCallback create);
+        void registerType(const std::string& className, CreateObjectCallback create);
         
         /**
          * Registers an enum for resolving enumerated values to/from strings. 
@@ -526,7 +526,7 @@ public:
         
         Activator();
         ~Activator();
-        void initializeClasses();
+        void initializeTypes();
         void initializeEnums();
         
         std::map<std::string, CreateObjectCallback> _classes;

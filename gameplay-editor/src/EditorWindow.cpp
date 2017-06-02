@@ -11,7 +11,7 @@
 #include "ui_EditorWindow.h"
 #include <QtWidgets>
 
-#define EDITOR_WINDOW_TITLE "GamePlay Editor"
+#define TYPE_WINDOW_TITLE "GamePlay Editor"
 
 EditorWindow::EditorWindow(QWidget* parent) : QMainWindow(parent), 
     _ui(new Ui::EditorWindow),
@@ -112,8 +112,8 @@ EditorWindow::EditorWindow(QWidget* parent) : QMainWindow(parent),
     connect(_ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(onFullscreen()));
 
     // Initialize the selection begin and end to offscreen which means no selection.
-    _selectionBegin = new Vector2(-1, -1);
-    _selectionEnd = new Vector2(-1, -1);
+    _selectionBegin = new gameplay::Vector2(-1, -1);
+    _selectionEnd = new gameplay::Vector2(-1, -1);
 
     emit restoringState();
 }
@@ -193,7 +193,7 @@ void EditorWindow::onOpenProject(const QString& path)
     std::shared_ptr<Project> project = _projectView->getProject();
     if (project)
     {
-        setWindowTitle(QString(QLatin1String(EDITOR_WINDOW_TITLE)) +
+        setWindowTitle(QString(QLatin1String(TYPE_WINDOW_TITLE)) +
                        QString(QLatin1String(" - ")) +
                        _projectView->getProject()->getName());
     }
