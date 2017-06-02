@@ -19,7 +19,10 @@ SOURCES += \
     src/ProjectSortFilterProxyModel.cpp \
     src/DockWidget.cpp \
     src/DockWidgetManager.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/PropertiesCamera.cpp \
+    src/PropertiesComponentEditor.cpp \
+    src/PropertiesLight.cpp
 
 HEADERS += \
     src/EditorWindow.h \
@@ -35,7 +38,10 @@ HEADERS += \
     src/Project.h \
     src/ProjectSortFilterProxyModel.h \
     src/DockWidgetManager.h \
-    src/DockWidget.h
+    src/DockWidget.h \
+    src/PropertiesCamera.h \
+    src/PropertiesLight.h \
+    src/PropertiesComponentEditor.h
 
 FORMS += \
     src/EditorWindow.ui \
@@ -43,7 +49,10 @@ FORMS += \
     src/PropertiesView.ui \
     src/PropertiesTransform.ui \
     src/ProjectWizard.ui \
-    src/SceneView.ui
+    src/SceneView.ui \
+    src/PropertiesCamera.ui \
+    src/PropertiesLight.ui \
+    src/PropertiesComponentEditor.ui
 
 RESOURCES += gameplay-editor.qrc
 

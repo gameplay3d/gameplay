@@ -24,7 +24,7 @@ public:
      * Gets the class name string for the object.
      *
      * This is used by the Serializer when reading/writing objects.
-     * Class names should be namespaced. Ex: gameplay::SceneObject
+     * The class name should be namespaced. Ex: gameplay::SceneObject
      */
     virtual std::string getClassName() { return "";  }
 

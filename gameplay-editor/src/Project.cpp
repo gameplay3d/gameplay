@@ -38,7 +38,7 @@ std::shared_ptr<Project> Project::create(const QString& path, const QString& nam
     // Create a project file
     if (!_serializerActivated)
     {
-        gameplay::Serializer::getActivator()->registerClass("gameplay::Project", &Project::createObject);
+        gameplay::Serializer::getActivator()->registerType("gameplay::Project", &Project::createObject);
         _serializerActivated = true;
     }
     QString projectFilePath(path + QString("/") + QString(QLatin1String(PROJECT_FILE)));
@@ -64,7 +64,6 @@ std::shared_ptr<Project> Project::create(const QString& path, const QString& nam
     // Add and object with a camera component
     auto camera = std::make_shared<gameplay::Camera>();
     camera->setMode(gameplay::Camera::MODE_PERSPECTIVE);
-    camera->setAspectRatio((float)config->width / (float)config->height);
     auto cameraObject = std::make_shared<gameplay::SceneObject>();
     cameraObject->setName(PROJECT_CAMERA_NAME);
     cameraObject->attachComponent(camera);
@@ -95,7 +94,7 @@ std::shared_ptr<Project> Project::open(const QString& path, QObject* parent)
 {
     if (!_serializerActivated)
     {
-        gameplay::Serializer::getActivator()->registerClass("gameplay::Project", &Project::createObject);
+        gameplay::Serializer::getActivator()->registerType("gameplay::Project", &Project::createObject);
         _serializerActivated = true;
     }
 

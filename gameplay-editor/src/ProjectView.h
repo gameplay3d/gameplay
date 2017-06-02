@@ -4,7 +4,8 @@
 #include "ProjectSortFilterProxyModel.h"
 #include <QWidget>
 
-namespace Ui {
+namespace Ui
+{
 class ProjectView;
 }
 class Project;
@@ -19,6 +20,7 @@ class ProjectView : public QWidget
     friend class ProjectTreeView;
 
 public:
+
     /**
      * Constructor.
      *
@@ -58,6 +60,7 @@ public:
     ProjectSortFilterProxyModel* sortFilter() const;
 
 public slots:
+
     /**
      * Handler for when the search filter text changes.
      *
@@ -66,6 +69,7 @@ public slots:
     void onSearchTextChanged(const QString& text);
 
 signals:
+
     /**
      * Signal emmited with a new scene has been opened.
      *
@@ -74,6 +78,7 @@ signals:
     void sceneOpened(const QString& path);
 
 protected:
+
     /**
      * Gets the ui associated with this view.
      *
@@ -89,6 +94,7 @@ protected:
     void openScene(const QString& path);
 
 private:
+
     Ui::ProjectView* _ui;
     std::shared_ptr<Project> _project;
     ProjectSortFilterProxyModel* _sortFilter;

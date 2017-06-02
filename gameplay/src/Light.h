@@ -31,7 +31,26 @@ public:
     };
 
     /**
-     *
+     * Defines the lighting.
+     */
+    enum Lighting
+    {
+        LIGHTING_REALTIME,
+        LIGHTING_BAKED
+    };
+
+    /**
+     * Defines the shadows to be applied.
+     */
+    enum Shadows
+    {
+        SHADOWS_NONE,
+        SHADOWS_HARD,
+        SHADOWS_SOFT
+    };
+
+    /**
+     * Constructor
      */
     Light();
 
@@ -48,11 +67,11 @@ public:
     void setType(Light::Type type);
 
     /**
-     * Gets the light type.
-     * 
-     * @return The light type.
+     * Gets the type of light.
+     *
+     * @return The type of light.
      */
-    Type getType() const;
+    Light::Type getType() const;
 
     /**
      * Gets the light color.
@@ -67,6 +86,20 @@ public:
      * @param color The light color to set.
      */
     void setColor(const Vector3& color);
+
+    /**
+     * Sets the lighting intensity to be applied.
+     *
+     * @param intensity The lighting intensity to be applied.
+     */
+    void setIntensity(float intensity);
+
+    /**
+     * Gets the lighting intensity to be applied.
+     *
+     * @return The lighting intensity to be applied.
+     */
+    float getIntensity() const;
 
     /**
      * Returns the Range of the point or spot light. 
@@ -89,57 +122,69 @@ public:
      */
     float getRangeInverse() const;
 
-   /**
-     * Sets the range of point or spot light.
-     *
-     * @param range The range of point or spot light.
-     */
-    void setRangeInverse(float rangeInverse);
-
     /**
      * Returns the inner angle the spot light (in radians).
      *
      * @return The inner angle of the spot light (in radians).
      */
-    float getInnerAngle() const;
+    float getAngle() const;
 
     /**
-     * Sets the inner angle of a spot light (in radians).
+     * Sets the angle of a spot light (in degress).
      *
-     * @param innerAngle The angle of spot light (in radians).
+     * @param angle The angle of spot light (in degrees).
      */
-    void setInnerAngle(float innerAngle);
-
-    /**
-     * Returns the outer angle of the spot light (in radians).
-     *
-     * @return The outer angle of the spot light (in radians).
-     */
-    float getOuterAngle() const;
-
-    /**
-     * Sets the outer angle of a spot light (in radians).
-     *
-     * @param outerAngle The angle of spot light (in radians).
-     */
-    void setOuterAngle(float outerAngle);
+    void setAngle(float angle);
 
     /**
      * Returns the cosine of the inner angle of spot light.
      *
      * @return The cosine of the inner angle of spot light.
      */
-    float getInnerAngleCos() const;
+    float getAngleCos() const;
 
     /**
-     * Returns the cosine of the outer angle of spot light.
+     * Sets the lighting to be applied.
      *
-     * @return The cosine of the outer angle of spot light.
+     * @param mode The lighting to be applied.
      */
-    float getOuterAngleCos() const;
+    void setLighting(Light::Lighting lighting);
 
     /**
-     * @see Serializable::getSerializedClassName
+     * Gets the lighting to be applied.
+     *
+     * @return The lighting to be applied.
+     */
+    Light::Lighting getLighting() const;
+
+    /**
+     * Sets the shadows to be applied.
+     *
+     * @param shadows The shadows to be applied.
+     */
+    void setShadows(Light::Shadows shadows);
+
+    /**
+     * Gets the shadows to be applied.
+     *
+     * @return The shadows to be applied.
+     */
+    Light::Shadows getShadows() const;
+
+    /**
+     * Resets the light to the default values for the specified light type.
+     *
+     * @param type The type of light to reset for.
+     */
+    void reset(Light::Type type);
+
+    /**
+     * @see Component::getTypeId
+     */
+    Component::TypeId getTypeId();
+
+    /**
+     * @see Serializable::getClassName
      */
     std::string getClassName();
     
@@ -172,12 +217,12 @@ private:
 
     Light::Type _type;
     Vector3 _color;
+    float _intensity;
     float _range;
-    float _rangeInverse;
-    float _innerAngle;
-    float _innerAngleCos;
-    float _outerAngle;
-    float _outerAngleCos;
+    float _angle;
+    float _angleCos;
+    Light::Lighting _lighting;
+    Light::Shadows _shadows;
 };
 
 }

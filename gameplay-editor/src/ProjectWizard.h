@@ -1,11 +1,11 @@
-#ifndef PROJECTWIZARD_H
-#define PROJECTWIZARD_H
+#pragma once
 
 #include "ProjectWizardItemDelegate.h"
 #include <QDialog>
 #include <QStyledItemDelegate>
 
-namespace Ui {
+namespace Ui
+{
 class ProjectWizard;
 }
 class EditorWindow;
@@ -21,6 +21,7 @@ class ProjectWizard : public QDialog
 {
     Q_OBJECT
 public:
+
     /**
      * Constructor.
      *
@@ -51,6 +52,7 @@ public:
     void readProjects();
 
 public slots:
+
     /**
      * Handles the new project pressed.
      */
@@ -87,6 +89,7 @@ public slots:
     void onProjectDirectoryTextChanged();
 
 signals:
+
     /**
      * Signal emitted when a project is opened.
      *
@@ -95,6 +98,7 @@ signals:
     void projectOpened(const QString& path);
 
 private:
+
     Ui::ProjectWizard* _ui;
     EditorWindow* _editor;
     QStringList _recentProjects;
@@ -102,5 +106,3 @@ private:
     QString _projectDirectory;
     ProjectWizardItemDelegate _itemDelegate;
 };
-
-#endif

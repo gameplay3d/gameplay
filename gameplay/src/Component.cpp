@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 Component::Component() :
-    _object(nullptr)
+    _enabled(true)
 {
 }
 
@@ -13,9 +13,19 @@ Component::~Component()
 {
 }
 
+bool Component::isEnabled() const
+{
+    return _enabled;
+}
+
+void Component::setEnabled(bool enabled)
+{
+    _enabled = enabled;
+}
+
 std::shared_ptr<SceneObject> Component::getObject() const
 {
-    return _object;
+    return _object.lock();
 }
 
 void Component::setObject(std::shared_ptr<SceneObject> object)

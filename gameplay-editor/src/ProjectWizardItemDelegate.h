@@ -1,5 +1,4 @@
-#ifndef PROJECTWIZARDITEM_H
-#define PROJECTWIZARDITEM_H
+#pragma once
 
 #include <QStyledItemDelegate>
 
@@ -10,6 +9,7 @@
 class ProjectWizardItemDelegate : public QStyledItemDelegate
 {
 public:
+
     /**
      * Constructor.
      *
@@ -32,5 +32,3 @@ public:
      */
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
-
-#endif

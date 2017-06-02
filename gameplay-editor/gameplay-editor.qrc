@@ -1,26 +1,31 @@
 <RCC>
     <qresource prefix="/">
+        <file>res/images/arrow-right.png</file>
+        <file>res/images/arrow-down.png</file>
         <file>res/images/attach.png</file>
         <file>res/images/axis-x.png</file>
         <file>res/images/axis-y.png</file>
         <file>res/images/axis-z.png</file>
+        <file>res/images/config.png</file>
         <file>res/images/close.png</file>
+        <file>res/images/delete.png</file>
+        <file>res/images/eyedropper.png</file>
         <file>res/images/icon.png</file>
         <file>res/images/logo.png</file>
-        <file>res/images/config.png</file>
         <file>res/images/help.png</file>
         <file>res/images/file-import.png</file>
         <file>res/images/file-new.png</file>
         <file>res/images/file-open.png</file>
         <file>res/images/file-package.png</file>
         <file>res/images/file-save.png</file>
+        <file>res/images/gears.png</file>
+        <file>res/images/menu.png</file>
         <file>res/images/movable.png</file>
         <file>res/images/pause.png</file>
         <file>res/images/play.png</file>
         <file>res/images/preferences.png</file>
-        <file>res/images/property-header-right.png</file>
-        <file>res/images/property-header-down.png</file>
         <file>res/images/project-new-arrow.png</file>
+        <file>res/images/reset.png</file>
         <file>res/images/scene.png</file>
         <file>res/images/scene-audio.png</file>
         <file>res/images/scene-camera.png</file>

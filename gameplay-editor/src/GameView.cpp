@@ -13,7 +13,7 @@ GameView::GameView(QWidget* parent) : QWidget(parent),
 
 GameView::~GameView()
 {
-    Game::getInstance()->exit();
+    gameplay::Game::getInstance()->exit();
 }
 
 void GameView::setEditor(EditorWindow* editor)
@@ -28,31 +28,31 @@ void GameView::onSceneChanged()
 
 void GameView::onInitialize()
 {
-    Graphics* graphics = Graphics::getGraphics();
+    gameplay::Graphics* graphics = gameplay::Graphics::getGraphics();
     if (!graphics->isInitialized())
         graphics->initialize((unsigned long)winId());
 
-    Game::onInitialize();
+    gameplay::Game::onInitialize();
 }
 
 void GameView::onFinalize()
 {
-    Game::onFinalize();
+    gameplay::Game::onFinalize();
 }
 
 void GameView::onUpdate(float elapsedTime)
 {
-    Game::onUpdate(elapsedTime);
+    gameplay::Game::onUpdate(elapsedTime);
 }
 
 void GameView::onRender(float elapsedTime)
 {
-    Game::onRender(elapsedTime);
+    gameplay::Game::onRender(elapsedTime);
 }
 
 void GameView::paintEvent(QPaintEvent* evt) 
 {
-    Game::onFrame();
+    gameplay::Game::onFrame();
 }
 
 void GameView::mousePressEvent(QMouseEvent* evt)

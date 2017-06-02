@@ -8,6 +8,7 @@
 class SceneSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
+
     /**
      * Constructor.
      *

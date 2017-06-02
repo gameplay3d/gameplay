@@ -12,6 +12,7 @@ class ProjectTreeView : public QTreeView
 {
     Q_OBJECT
 public:
+
     /**
      * Constructor.
      *
@@ -21,11 +22,20 @@ public:
 
 public slots:
 
+    /**
+     * Event fired when a project file is opened.
+     */
     void onOpenFile();
 
+    /**
+     * Event fired when an item is double clicked.
+     *
+     * @param index The mode index for the item double clicked.
+     */
     void onItemDoubleClicked(const QModelIndex& index);
 
 protected:
+
     /**
      * Handler fo context menu events.
      *
@@ -34,6 +44,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent* event);
 
 private:
+
     void openSelectedItem();
 
     ProjectView* _projectView;

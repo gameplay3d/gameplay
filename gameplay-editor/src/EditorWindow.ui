@@ -428,6 +428,10 @@
    </property>
   </action>
   <action name="actionDelete">
+   <property name="icon">
+    <iconset resource="../gameplay-editor.qrc">
+     <normaloff>:/res/images/delete.png</normaloff>:/res/images/delete.png</iconset>
+   </property>
    <property name="text">
     <string>Delete</string>
    </property>

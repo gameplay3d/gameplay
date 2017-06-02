@@ -1,6 +1,5 @@
 #pragma once
 
-// Core
 #include "Base.h"
 #include "Logger.h"
 #include "Platform.h"
@@ -24,14 +23,14 @@
 #include "SerializerBinary.h"
 #include "SerializerJson.h"
 #include "SceneObject.h"
+#include "Component.h"
 #include "Script.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Animation.h"
-
-#include "Graphics.h"
 #include "Geometry.h"
 #include "Material.h"
+#include "Graphics.h"
 
 #include "Audio.h"
 #include "AudioSource.h"
@@ -60,10 +59,11 @@
 //#include "RendererSprite.h"
 //#include "RendererTileSet.h"
 //#include "RendererMesh.h"
-//#include "RendererMeshSkinned.h"
 //#include "RendererParticleEmitter.h"
+//#include "RendererSky.h"
 //#include "RendererTerrain.h"
 //#include "RendererWater.h"
+//#include "RendererTree.h"
 //#include "RendererDecal.h"
 //#include "RendererVideo.h"
 //#include "RendererUI.h"
@@ -71,8 +71,6 @@
 //#include "UITheme.h"
 //#include "UIThemeSet.h"
 //#include "UILayout.h"
-//#include "UILayoutHorizontal.h"
-//#include "UILayoutVertical.h"
 //#include "UIControl.h"
 //#include "UIButton.h"
 //#include "UICheckBox.h"

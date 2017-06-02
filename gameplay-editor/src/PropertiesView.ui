@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>318</width>
-    <height>400</height>
+    <width>324</width>
+    <height>488</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,76 +27,9 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayoutObject">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayoutObject">
-       <item>
-        <widget class="QCheckBox" name="checkBoxEnabled">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEditName">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButtonAttachComponent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string> Component</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../gameplay-editor.qrc">
-           <normaloff>:/res/images/attach.png</normaloff>:/res/images/attach.png</iconset>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="PropertiesTransform" name="frameTransform">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
     <widget class="QScrollArea" name="scrollAreaProperties">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -121,20 +54,114 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>298</width>
-        <height>298</height>
+        <width>304</width>
+        <height>468</height>
        </rect>
       </property>
-      <widget class="QWidget" name="verticalLayoutWidget">
+      <widget class="QWidget" name="propertiesObject" native="true">
+       <property name="geometry">
+        <rect>
+         <x>-8</x>
+         <y>-7</y>
+         <width>311</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <widget class="QPushButton" name="pushButtonAttachComponent">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>10</y>
+          <width>111</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string> Component</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../gameplay-editor.qrc">
+          <normaloff>:/res/images/attach.png</normaloff>:/res/images/attach.png</iconset>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBoxEnabled">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>13</y>
+          <width>16</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEditName">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>10</y>
+          <width>151</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="propertyEditors" native="true">
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>200</y>
          <width>301</width>
-         <height>301</height>
+         <height>261</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayoutComponents"/>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+       </layout>
+      </widget>
+      <widget class="PropertiesTransform" name="propertiesTransform" native="true">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>40</y>
+         <width>301</width>
+         <height>160</height>
+        </rect>
+       </property>
       </widget>
      </widget>
     </widget>
@@ -162,7 +189,7 @@
  <customwidgets>
   <customwidget>
    <class>PropertiesTransform</class>
-   <extends>QFrame</extends>
+   <extends>QWidget</extends>
    <header>PropertiesTransform.h</header>
    <container>1</container>
   </customwidget>

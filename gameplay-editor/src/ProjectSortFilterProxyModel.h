@@ -8,6 +8,7 @@
 class ProjectSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
+
     /**
      * Constructor.
      *

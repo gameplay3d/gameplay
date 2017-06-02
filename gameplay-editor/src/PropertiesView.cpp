@@ -1,11 +1,8 @@
 #include "PropertiesView.h"
 #include "ui_PropertiesView.h"
+#include "ui_PropertiesComponentEditor.h"
 #include "ui_PropertiesTransform.h"
 #include <QMenu>
-#include <QLabel>
-#include <QPushButton>
-#include <QPixmap>
-#include <QSpacerItem>
 
 PropertiesView::PropertiesView(QWidget* parent) : QWidget(),
     _ui(new Ui::PropertiesView),
@@ -22,7 +19,7 @@ PropertiesView::PropertiesView(QWidget* parent) : QWidget(),
 
     connect(_ui->lineEditName, SIGNAL(textChanged(QString)), this, SLOT(onNameChanged()));
 
-    hideAll();
+    hideProperties();
 }
 
 PropertiesView::~PropertiesView()
@@ -48,52 +45,34 @@ void PropertiesView::onSelectionChanged()
 
     if (selectedObject != _editor->getScene().get())
     {
-        showAll();
+        showProperties();
 
         // Object enabled + name
         _ui->checkBoxEnabled->setChecked(selectedObject->isEnabled());
         _ui->lineEditName->setText(QString(selectedObject->getName().c_str()));
 
-        // Object position
-        const Vector3 position = selectedObject->getPosition();
-        _ui->frameTransform->_ui->doubleSpinBoxPositionX->setValue(position.x);
-        _ui->frameTransform->_ui->doubleSpinBoxPositionY->setValue(position.y);
-        _ui->frameTransform->_ui->doubleSpinBoxPositionZ->setValue(position.z);
+        // Set the transform
+        _ui->propertiesTransform->setObject(selectedObject);
+        connect(_ui->propertiesTransform, SIGNAL(opened()), this, SLOT(onEditorsResized()));
 
-        // Object rotation (eulerAngles)
-        const Vector3 eulerAngles = selectedObject->getEulerAngles();
-        _ui->frameTransform->_ui->doubleSpinBoxRotationX->setValue(eulerAngles.x);
-        _ui->frameTransform->_ui->doubleSpinBoxRotationY->setValue(eulerAngles.y);
-        _ui->frameTransform->_ui->doubleSpinBoxRotationZ->setValue(eulerAngles.z);
+        // Clear all the existing component property editors
+        clearPropertyEditors();
 
-        // Object scale
-        const Vector3 localScale = selectedObject->getLocalScale();
-        _ui->frameTransform->_ui->doubleSpinBoxScaleX->setValue(localScale.x);
-        _ui->frameTransform->_ui->doubleSpinBoxScaleY->setValue(localScale.y);
-        _ui->frameTransform->_ui->doubleSpinBoxScaleZ->setValue(localScale.z);
-
-        // Mobility
-        if (selectedObject->isStatic())
+        // Get the attached components
+        std::vector<std::shared_ptr<gameplay::Component>> components;
+        selectedObject->getComponents(components);
+        for (auto component : components)
         {
-            _ui->frameTransform->_ui->pushButtonStatic->setChecked(true);
+            // Create a property editor for each type of component
+            PropertiesComponentEditor* editor = new PropertiesComponentEditor(this);
+            editor->setComponent(component);
+            _ui->propertyEditors->layout()->addWidget(editor);
+            connect(editor, SIGNAL(opened()), this, SLOT(onEditorsResized()));
         }
-        else
-        {
-            _ui->frameTransform->_ui->pushButtonMovable->setChecked(true);
-        }
-
-        // Remove the previous components
-        for (QFrame* frame : _componentProperties)
-        {
-
-        }
-
-        // Add the attached components
-
     }
     else
     {
-        hideAll();
+        hideProperties();
     }
 }
 
@@ -102,27 +81,33 @@ void PropertiesView::onNameChanged()
     emit nameChanged();
 }
 
+void PropertiesView::onEditorsResized()
+{
+    _ui->propertiesTransform->updateGeometry();
+}
+
 QString PropertiesView::getName() const
 {
     return _ui->lineEditName->text();
 }
 
-void PropertiesView::hideAll()
+void PropertiesView::hideProperties()
 {
-    _ui->checkBoxEnabled->hide();
-    _ui->lineEditName->hide();
-    _ui->pushButtonAttachComponent->hide();
-    _ui->frameTransform->hide();
     _ui->scrollAreaProperties->hide();
 }
 
-void PropertiesView::showAll()
+void PropertiesView::showProperties()
 {
-    _ui->checkBoxEnabled->show();
-    _ui->lineEditName->show();
-    _ui->pushButtonAttachComponent->show();
-    _ui->frameTransform->show();
     _ui->scrollAreaProperties->show();
 }
 
-
+void PropertiesView::clearPropertyEditors()
+{
+    QLayout* layout = _ui->propertyEditors->layout();
+    QLayoutItem* item;
+    while ((item = layout->takeAt(0)) != nullptr)
+    {
+      delete item->widget();
+      delete item;
+    }
+}
