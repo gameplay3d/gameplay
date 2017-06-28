@@ -3,12 +3,23 @@
 
 GameView::GameView(QWidget* parent) : QWidget(parent),
     _editor(nullptr),
+    _graphics(nullptr),
     _scene(nullptr),
     _wireframe(false)
 {
     setAttribute(Qt::WA_NativeWindow, true);
     setAttribute(Qt::WA_PaintOnScreen, true);
     setAttribute(Qt::WA_OpaquePaintEvent, true);
+
+    _graphics = gameplay::Graphics::getGraphics();
+    if (!_graphics->isInitialized())
+        _graphics->initialize((unsigned long)winId());
+
+    _graphics->resize(geometry().width(), geometry().height());
+
+    this->connect(&_timer, SIGNAL(timeout()), SLOT(onTimer()));
+
+    _timer.start(0);
 }
 
 GameView::~GameView()
@@ -28,31 +39,36 @@ void GameView::onSceneChanged()
 
 void GameView::onInitialize()
 {
-    gameplay::Graphics* graphics = gameplay::Graphics::getGraphics();
-    if (!graphics->isInitialized())
-        graphics->initialize((unsigned long)winId());
-
-    gameplay::Game::onInitialize();
 }
 
 void GameView::onFinalize()
 {
-    gameplay::Game::onFinalize();
 }
 
 void GameView::onUpdate(float elapsedTime)
 {
-    gameplay::Game::onUpdate(elapsedTime);
 }
 
 void GameView::onRender(float elapsedTime)
 {
-    gameplay::Game::onRender(elapsedTime);
 }
 
-void GameView::paintEvent(QPaintEvent* evt) 
+void GameView::onTimer()
 {
+    if ((_size != geometry().size()) && (QApplication::mouseButtons() == Qt::NoButton))
+    {
+        _size = geometry().size();
+        _graphics->resize(geometry().width(), geometry().height());
+        setGeometry(geometry().x(), geometry().y(), geometry().width(), geometry().height());
+    }
     gameplay::Game::onFrame();
+}
+
+void GameView::paintEvent(QPaintEvent* evt)
+{
+    QPainter p(this);
+	p.setCompositionMode(QPainter::CompositionMode_Clear);
+	p.fillRect(0, 0, width(), height(), Qt::BrushStyle::SolidPattern);
 }
 
 void GameView::mousePressEvent(QMouseEvent* evt)
@@ -81,9 +97,5 @@ void GameView::keyReleaseEvent(QKeyEvent* evt)
     // TODO: Handler here...
 }
 
-void GameView::resizeEvent(QResizeEvent* evt)
-{
-    QWidget::resizeEvent(evt);
-}
 
 

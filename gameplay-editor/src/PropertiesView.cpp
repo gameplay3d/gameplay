@@ -53,7 +53,7 @@ void PropertiesView::onSelectionChanged()
 
         // Set the transform
         _ui->propertiesTransform->setObject(selectedObject);
-        connect(_ui->propertiesTransform, SIGNAL(opened()), this, SLOT(onEditorsResized()));
+        connect(_ui->propertiesTransform, SIGNAL(closed()), this, SLOT(onEditorsResized()));
 
         // Clear all the existing component property editors
         clearPropertyEditors();
@@ -83,7 +83,7 @@ void PropertiesView::onNameChanged()
 
 void PropertiesView::onEditorsResized()
 {
-    _ui->propertiesTransform->updateGeometry();
+    _ui->propertySections->layout();
 }
 
 QString PropertiesView::getName() const

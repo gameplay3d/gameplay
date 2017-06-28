@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QTimer>
+#include <QSize>
 
 /**
  * The main game view to render scenes into viewport(s).
@@ -39,6 +41,10 @@ public slots:
      * Handler when the scene changes.
      */
     void onSceneChanged();
+
+ protected slots:
+
+     void onTimer();
 
 protected:
 
@@ -87,13 +93,13 @@ protected:
      */
     void keyReleaseEvent(QKeyEvent* evt);
 
-    void resizeEvent(QResizeEvent* evt);
-
 private:
 
     EditorWindow* _editor;
     gameplay::Graphics* _graphics;
     std::shared_ptr<gameplay::SceneObject> _scene;
     bool _wireframe;
+    QTimer _timer;
+    QSize _size;
 };
 

@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>328</width>
+    <width>301</width>
     <height>160</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -16,7 +22,7 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBoxRotationZ">
    <property name="geometry">
     <rect>
-     <x>236</x>
+     <x>230</x>
      <y>63</y>
      <width>61</width>
      <height>22</height>
@@ -64,7 +70,7 @@
   <widget class="QLabel" name="labelPz">
    <property name="geometry">
     <rect>
-     <x>226</x>
+     <x>221</x>
      <y>36</y>
      <width>16</width>
      <height>16</height>
@@ -96,7 +102,7 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBoxRotationY">
    <property name="geometry">
     <rect>
-     <x>151</x>
+     <x>150</x>
      <y>63</y>
      <width>61</width>
      <height>22</height>
@@ -179,7 +185,7 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBoxPositionZ">
    <property name="geometry">
     <rect>
-     <x>237</x>
+     <x>231</x>
      <y>33</y>
      <width>61</width>
      <height>22</height>
@@ -211,7 +217,7 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBoxScaleZ">
    <property name="geometry">
     <rect>
-     <x>236</x>
+     <x>230</x>
      <y>93</y>
      <width>61</width>
      <height>22</height>
@@ -243,7 +249,7 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBoxScaleY">
    <property name="geometry">
     <rect>
-     <x>151</x>
+     <x>150</x>
      <y>93</y>
      <width>61</width>
      <height>22</height>
@@ -259,7 +265,7 @@
   <widget class="QLabel" name="labelPy">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>139</x>
      <y>36</y>
      <width>16</width>
      <height>16</height>
@@ -278,7 +284,7 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBoxPositionY">
    <property name="geometry">
     <rect>
-     <x>151</x>
+     <x>150</x>
      <y>33</y>
      <width>61</width>
      <height>22</height>
@@ -294,7 +300,7 @@
   <widget class="QLabel" name="labelRy">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>139</x>
      <y>66</y>
      <width>16</width>
      <height>16</height>
@@ -313,7 +319,7 @@
   <widget class="QLabel" name="labelSy">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>139</x>
      <y>96</y>
      <width>16</width>
      <height>16</height>
@@ -332,7 +338,7 @@
   <widget class="QLabel" name="labelRz">
    <property name="geometry">
     <rect>
-     <x>226</x>
+     <x>220</x>
      <y>66</y>
      <width>16</width>
      <height>16</height>
@@ -351,7 +357,7 @@
   <widget class="QLabel" name="labelSz">
    <property name="geometry">
     <rect>
-     <x>226</x>
+     <x>220</x>
      <y>96</y>
      <width>16</width>
      <height>16</height>
@@ -371,7 +377,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>128</y>
+     <y>125</y>
      <width>80</width>
      <height>22</height>
     </rect>
@@ -394,7 +400,7 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>128</y>
+     <y>125</y>
      <width>80</width>
      <height>22</height>
     </rect>
@@ -414,7 +420,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>133</y>
+     <y>130</y>
      <width>47</width>
      <height>14</height>
     </rect>
@@ -462,22 +468,6 @@
    </property>
    <property name="flat">
     <bool>false</bool>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBoxEnabled">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>5</y>
-     <width>16</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="labelHeaderName">
@@ -595,7 +585,6 @@
   <zorder>pushButtonMovable</zorder>
   <zorder>labelMobility</zorder>
   <zorder>labelHeaderIcon</zorder>
-  <zorder>checkBoxEnabled</zorder>
   <zorder>labelHeaderName</zorder>
   <zorder>toolButtonHeaderOptions</zorder>
   <zorder>toolButtonHeaderExpander</zorder>
