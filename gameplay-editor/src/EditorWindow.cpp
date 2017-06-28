@@ -319,13 +319,3 @@ void EditorWindow::setFullscreen(bool fullscreen)
         _fullscreen = false;
     }
 }
-
-void EditorWindow::resizeEvent(QResizeEvent* evt)
-{
-	QMainWindow::resizeEvent(evt);
-}
-
-bool EditorWindow::event(QEvent *evt) 
-{
-    return QMainWindow::event(evt);
-}

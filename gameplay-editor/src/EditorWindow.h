@@ -25,10 +25,13 @@ class EditorWindow : public QMainWindow
     Q_OBJECT
 public:
 
+
+    /**
+     * The edit mode the editor.
+     */
     enum EditMode
     {
-        EDIT_OBJECT,
-        EDIT_MODEL
+        EDIT_OBJECT
     };
 
     /**
@@ -106,9 +109,18 @@ public:
      */
     gameplay::Vector2* getSelectionEnd() const;
 
-
+    /**
+     * Determines if the editor is in fullscreen or windowed mode.
+     * 
+     * @return true if the editor is in fulscreen, false if windowed.
+     */
     bool isFullscreen() const;
 
+    /**
+     * Set the editor in fullscreen or windowed mode.
+     *
+     * @param fullscreen true to set the editor to fullscreen, false for windowed mode.
+     */
     void setFullscreen(bool fullscreen);
 
 public slots:
@@ -172,12 +184,6 @@ signals:
      * Signal emitted when selection begin or end points change or either become deselected.
      */
     void selectionChanged();
-
-protected:
-
-    void resizeEvent(QResizeEvent* evt);
-
-    bool event(QEvent* evt);
 
 private:
     Ui::EditorWindow* _ui;

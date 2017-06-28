@@ -7,8 +7,7 @@
 PropertiesTransform::PropertiesTransform(QWidget* parent) : QWidget(parent),
     _ui(new Ui::PropertiesTransform),
     _object(nullptr),
-    _expanded(true),
-    _expandedHeight(0)
+    _expanded(true)
 {
     _ui->setupUi(this);
 
@@ -37,9 +36,9 @@ PropertiesTransform::~PropertiesTransform()
 void PropertiesTransform::setObject(gameplay::SceneObject* object)
 {
     _object = object;
-
-    updateProperties();
     _expandedHeight = geometry().height();
+    updateProperties();
+
 }
 
 void PropertiesTransform::updateProperties()
@@ -83,15 +82,15 @@ void PropertiesTransform::onReset(bool)
 
  void PropertiesTransform::onHeaderPressed()
  {
-    _expanded = !_expanded;
     if (_expanded)
     {
-        setGeometry(geometry().x(), geometry().y(), geometry().width(), _expandedHeight);
-        emit opened();
+        setFixedHeight(PROPERTIES_TRANSFORM_HEIGHT_CLOSED);
+        emit closed();
     }
     else
     {
-        setGeometry(geometry().x(), geometry().y(), geometry().width(), PROPERTIES_TRANSFORM_HEIGHT_CLOSED);
-        emit closed();
+        setFixedHeight(_expandedHeight);
+        emit opened();
     }
+    _expanded = !_expanded;
  }
