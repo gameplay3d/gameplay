@@ -1,10 +1,10 @@
 Windows 10 (x86_64)
 -------------------
 - Install Qt 5.9  (Ex. C:\Qt)
-- Set QTDIR envirment variable (Ex. QTDIR=C:\Qt\5.9\msvc2015_64
+- Set QTDIR environment variable (Ex. QTDIR=C:\Qt\5.9\msvc2015_64)
 - Install Visual Studio 2015 + SP3
-- Install Qt extension in Visual Studio 2015 (Goto Tools->Extension and Updates->Online->Search for "Qt Visual Studio Tools"
-- Setup Qt extension in Visual Studio 2015 (Goto Qt VS Tools->Qt Options->Add->Path=C:\Qt\5.9\msvc2015_64
+- Install Qt extension in Visual Studio 2015 (Goto Tools->Extension and Updates->Online->Search for "Qt Visual Studio Tools")
+- Setup Qt extension in Visual Studio 2015 (Goto Qt VS Tools->Qt Options->Add->Path=C:\Qt\5.9\msvc2015_64)
 - Install Windows 10 SDK + Debugging Tools for Windows
 - Install Vulkan SDK
 - Set VULKAN_SDK environment variable (Ex. VULKAN_SDK=C:\VulkanSDK\1.0.51.0)
