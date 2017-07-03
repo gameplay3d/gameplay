@@ -1,5 +1,4 @@
-#ifndef CLASSBINDING_H_
-#define CLASSBINDING_H_
+#pragma once
 
 #include "Base.h"
 #include "FunctionBinding.h"
@@ -47,5 +46,3 @@ struct ClassBinding
     /** Holds the class' namespace (if it has one). */
     string ns;
 };
-
-#endif

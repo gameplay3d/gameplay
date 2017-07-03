@@ -95,11 +95,7 @@ void ClassBinding::write(string dir, const set<string>& includes, string* bindin
             return;
         }
 
-        string includeGuard = string("lua_") + uniquename + string("_H_");
-        transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
-        o << "#ifndef " << includeGuard << "\n";
-        o << "#define " << includeGuard << "\n\n";
-
+        o << "#pragma once\n\n";
         if (bindingNS)
         {
             o << "namespace " << *bindingNS << "\n";
@@ -111,7 +107,6 @@ void ClassBinding::write(string dir, const set<string>& includes, string* bindin
 
         if (bindingNS)
             o << "}\n\n";
-        o << "#endif\n";
 
         writeFile(path, o.str());
     }

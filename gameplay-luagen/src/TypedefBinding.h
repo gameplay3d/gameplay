@@ -1,5 +1,4 @@
-#ifndef TYPEDEFBINDING_H_
-#define TYPEDEFBINDING_H_
+#pragma once
 
 /**
  * Represents a typedef.
@@ -12,5 +11,3 @@ struct TypedefBinding
 {
     string refId;
 };
-
-#endif
