@@ -49,3 +49,4 @@ Makefile.Release
 /gameplay-editor/GeneratedFiles
 /gameplay-luagen/Debug
 /gameplay-luagen/Release
+/gameplay-luagen/xml
