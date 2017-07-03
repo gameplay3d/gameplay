@@ -1,5 +1,4 @@
-#ifndef ENUMBINDING_H
-#define ENUMBINDING_H
+#pragma once
 
 #include "Base.h"
 
@@ -12,5 +11,3 @@ struct EnumBinding
     vector<string> scopePath;
     string include;
 };
-
-#endif

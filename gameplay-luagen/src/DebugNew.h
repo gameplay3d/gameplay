@@ -1,5 +1,4 @@
-#ifndef DEBUGNEW_H_
-#define DEBUGNEW_H_
+#pragma once
 
 #include <new>
 #include <exception>
@@ -38,8 +37,6 @@ void operator delete[](void* p, const char* file, int line) NOEXCEPT;
 #define DEBUG_NEW new (__FILE__, __LINE__)
 #define new DEBUG_NEW
 
-#endif
-
 #if defined(WIN32)
 
 /**
@@ -53,4 +50,5 @@ void setTrackStackTrace(bool trackStackTrace);
  * Toggles stack trace tracking on memory allocations.
  */
 void toggleTrackStackTrace();
+
 #endif

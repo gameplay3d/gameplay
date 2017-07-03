@@ -1,5 +1,4 @@
-#ifndef FUNCTIONBINDING_H_
-#define FUNCTIONBINDING_H_
+#pragma once
 
 #include "Base.h"
 
@@ -163,5 +162,3 @@ struct FunctionBinding
 };
 
 ostream& operator<<(ostream& o, const FunctionBinding::Param& param);
-
-#endif

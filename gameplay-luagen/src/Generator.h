@@ -1,5 +1,4 @@
-#ifndef GENERATOR_H_
-#define GENERATOR_H_
+#pragma once
 
 #include "Base.h"
 #include "ClassBinding.h"
@@ -248,5 +247,3 @@ private:
     map<string, TypedefBinding> _typedefs;
     set<string> __warnings;
 };
-
-#endif
