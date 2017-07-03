@@ -4,6 +4,7 @@
 *.layout
 *.depend
 *.pro.user
+*.vs
 .DS_Store*
 ehthumbs.db
 Icon?
@@ -26,6 +27,7 @@ Thumbs.db
 Makefile
 Makefile.Debug
 Makefile.Release
+/build-gameplay-luagen-*/
 /gameplay/Debug
 /gameplay/Release
 /gameplay/android/NUL
@@ -47,3 +49,4 @@ Makefile.Release
 /gameplay-editor/GeneratedFiles
 /gameplay-luagen/Debug
 /gameplay-luagen/Release
+/gameplay-luagen/xml
