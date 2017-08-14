@@ -23,7 +23,7 @@ const std::vector<const char*> __validationLayers =
 
 GraphicsVulkan::GraphicsVulkan() :
     _initialized(false),
-	_prepared(false),
+    _resized(false),
 	_width(0),
 	_height(0),
 	_fullscreen(false),
@@ -95,7 +95,6 @@ void GraphicsVulkan::initialize(unsigned long window, unsigned long connection)
 	createInstance();
 	createDevice();
 	createSurface(window, connection);
-	createCommandPool();
 	createSwapchain();
 	createCommandBuffers();
 	createDepthStencil();
@@ -105,18 +104,23 @@ void GraphicsVulkan::initialize(unsigned long window, unsigned long connection)
 	createPipelineCache();
 
     _initialized = true;
-	_prepared = true;
+    _resized = true;
 }
 
-void GraphicsVulkan::resize(int width, int height)
+bool GraphicsVulkan::isInitialized()
 {
-	if (!_prepared)
+    return _initialized;
+}
+
+void GraphicsVulkan::onResize(int width, int height)
+{
+    if (!_resized)
 		return;
-	_prepared = false;
+    _resized = false;
 	
 	VK_CHECK_RESULT(vkDeviceWaitIdle(_device));
 
-	// Recreate depth/stencil
+    // Destroy depth/stencil
 	if (_depthStencilImageView != VK_NULL_HANDLE)
 	{
 		vkDestroyImageView(_device, _depthStencilImageView, nullptr);
@@ -134,7 +138,7 @@ void GraphicsVulkan::resize(int width, int height)
 	}
 	createDepthStencil();
 
-	// Recreate framebuffer
+    // Destroy framebuffer
 	for (uint32_t i = 0; i < _backBufferCount; i++)
 	{
 		if (_frameBuffers[i] != VK_NULL_HANDLE)
@@ -143,6 +147,7 @@ void GraphicsVulkan::resize(int width, int height)
 			_frameBuffers[i] = VK_NULL_HANDLE;
 		}
 	}
+    // Destroy the render passes
 	_frameBuffers.clear();
 	if (_renderPass != VK_NULL_HANDLE)
 	{
@@ -164,18 +169,220 @@ void GraphicsVulkan::resize(int width, int height)
 	}
 	createSwapchain();
 
-	// Recreate command buffers
+    // destroy command buffers
 	vkFreeCommandBuffers(_device, _commandPool, static_cast<uint32_t>(_commandBuffers.size()), _commandBuffers.data());
 	_commandBuffers.clear();
 	createCommandBuffers();
 
 	VK_CHECK_RESULT(vkDeviceWaitIdle(_device));
-	_prepared = true;
+    _resized = true;
+}
+
+bool GraphicsVulkan::isResized()
+{
+    return _resized;
+}
+
+int GraphicsVulkan::getWidth()
+{
+    return _width;
+}
+
+int GraphicsVulkan::getHeight()
+{
+    return _height;
+}
+
+GraphicsVulkan::CommandListVulkan::CommandListVulkan()
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::begin()
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::end()
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::beginRenderPass(RenderPass* pass)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::endRenderPass()
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::setViewport(float x, float y, float width, float height, float depthMin, float depthMax)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::setScissor(float x, float y, float width, float height)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::bindPipeline(Pipeline* pipeline)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::bindDescriptorSet(DescriptorSet* set)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::bindIndexBuffer(Buffer* buffer)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::bindVertexBuffers(Buffer** buffers, size_t bufferCount)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::draw(size_t vertexCount, size_t vertexOffset)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::drawInstanced(size_t vertexCount, size_t vertexOffset)
+{
+}
+
+GraphicsVulkan::CommandPoolVulkan::CommandPoolVulkan()
+{
+}
+
+Graphics::CommandList* GraphicsVulkan::CommandPoolVulkan::createCommandList()
+{
+    return nullptr;
+}
+
+void GraphicsVulkan::CommandPoolVulkan::destroyCommandList(Graphics::CommandList* commandList)
+{
+}
+
+Graphics::DescriptorSet* GraphicsVulkan::createDescriptorSet(Descriptor* descriptors, size_t descriptorCount)
+{
+    return nullptr;
+}
+
+Graphics::Buffer* GraphicsVulkan::createVertexBuffer(size_t count, bool hostVisible, VertexLayout vertexLayout)
+{
+    return nullptr;
+}
+
+Graphics::Buffer* GraphicsVulkan::createIndexBuffer(size_t count, bool hostVisible, IndexType indexType)
+{
+    return nullptr;
+}
+
+Graphics::Buffer* GraphicsVulkan::createUniformBuffer(size_t size, bool hostVisible, Buffer::Usage usage)
+{
+    return nullptr;
+}
+
+void GraphicsVulkan::destroyBuffer(Graphics::Buffer* buffer)
+{
+}
+
+Graphics::Texture* GraphicsVulkan::createTexture1D(Graphics::Format format, size_t width, Texture::Usage usage, bool hostVisible)
+{
+    return nullptr;
+}
+
+Graphics::Texture* GraphicsVulkan::createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, Texture::Usage usage, bool hostVisible)
+{
+    return nullptr;
+}
+
+Graphics::Texture* GraphicsVulkan::createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, Texture::Usage usage, bool hostVisible)
+{
+    return nullptr;
+}
+
+void GraphicsVulkan::destroyTexture(Graphics::Texture* texture)
+{
+}
+
+Graphics::Sampler* GraphicsVulkan::createSampler()
+{
+    return nullptr;
+}
+
+void GraphicsVulkan::destroySampler(Graphics::Sampler* sampler)
+{
+}
+
+Graphics::ShaderProgram* GraphicsVulkan::createShaderProgram(size_t vertSize, const void* vertByteCode, const char* vertEntryPoint,
+                                                               size_t tescSize, const void* tescByteCode, const char* tescEntryPoint,
+                                                               size_t teseSize, const void* teseByteCode, const char* teseEntryPoint,
+                                                               size_t geomSize, const void* geomByteCode, const char* geomEntryPoint,
+                                                               size_t fragSize, const void* fragByteCode, const char* fragEntryPoint)
+{
+    return nullptr;
+}
+
+void GraphicsVulkan::destroyShaderProgram(Graphics::ShaderProgram* shaderProgram)
+{
+}
+
+Graphics::RenderPass* GraphicsVulkan::createRenderPass(Graphics::Format colorFormat,
+                                               size_t colorAttachmentCount,
+                                               Graphics::Format depthStencilFormat,
+                                               size_t width, size_t height,
+                                               bool hostVisible)
+{
+    return nullptr;
+}
+
+void GraphicsVulkan::destroyRenderPass(Graphics::RenderPass* renderPass)
+{
+}
+
+Graphics::Pipeline* GraphicsVulkan::createPipeline(Graphics::ShaderProgram* shaderProgram,
+                                                     Graphics::VertexLayout* vertexLayout,
+                                                     Graphics::DescriptorSet* descriptorSet,
+                                                     Graphics::RenderPass* renderPass,
+                                                     Graphics::PrimitiveTopology primitiveTopology,
+                                                     Graphics::RasterizerState rasterizerState,
+                                                     Graphics::DepthStencilState depthStencilState,
+                                                     Graphics::BlendState blendState)
+{
+    return nullptr;
+}
+
+void GraphicsVulkan::destroyPipeline(Graphics::Pipeline* pipeline)
+{
+}
+
+Graphics::CommandPool* GraphicsVulkan::createCommandPool()
+{
+    return nullptr;
+}
+
+void GraphicsVulkan::destroyCommandPool(Graphics::CommandPool* pool)
+{
+}
+
+void GraphicsVulkan::submit(Graphics::CommandList** commandLists, size_t commandListCount)
+{
+}
+
+void GraphicsVulkan::waitIdle()
+{
+}
+
+bool GraphicsVulkan::present()
+{
+    //return vkQueuePresentKHR(_queueGraphics, &presentInfo) == VK_SUCCESS;
+    return true;
+}
+
+void GraphicsVulkan::acquireNextSwapchainImage()
+{
+
 }
 
 void GraphicsVulkan::render(float elapsedTime)
 {
-	if (!_prepared)
+    if (!_resized)
 		return;
 
 	// TODO: run this on secondary thread on on changes
@@ -283,27 +490,6 @@ void GraphicsVulkan::createInstance()
 
 		VK_CHECK_RESULT(vkCreateDebugReportCallbackEXT(_instance, &dbgCreateInfo, nullptr, &_debugMessageCallback));
 	}
-}
-
-bool GraphicsVulkan::isInitialized()
-{
-    return _initialized;
-}
-
-bool GraphicsVulkan::isPrepared()
-{
-	return _prepared;
-}
-
-int GraphicsVulkan::getWidth()
-{
-    return _width;
-}
-
-int GraphicsVulkan::getHeight()
-{
-    return _height;
-
 }
 
 void GraphicsVulkan::createDevice()
@@ -508,15 +694,13 @@ void GraphicsVulkan::createSurface(unsigned long window, unsigned long connectio
 
 	// Get color space
 	_colorSpace = surfaceFormats[0].colorSpace;
-}
 
-void GraphicsVulkan::createCommandPool()
-{
-	VkCommandPoolCreateInfo info = {};
-	info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-	info.queueFamilyIndex = _queueFamilyIndexGraphics;
-	VK_CHECK_RESULT(vkCreateCommandPool(_device, &info, nullptr, &_commandPool));
+    // Create command pool
+    VkCommandPoolCreateInfo info = {};
+    info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    info.queueFamilyIndex = _queueFamilyIndexGraphics;
+    VK_CHECK_RESULT(vkCreateCommandPool(_device, &info, nullptr, &_commandPool));
 }
 
 void GraphicsVulkan::createSwapchain()

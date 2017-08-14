@@ -198,26 +198,6 @@ void Game::onResize(int width, int height)
     _height = height;
 }
 
-void Game::onGamepadEvent(Platform::GamepadEvent evt, size_t gamepadIndex)
-{
-	//GP_INFO("evt:%d, gamepadIndex:%d", evt, gamepadIndex);
-}
-
-void Game::onKeyEvent(Platform::KeyboardEvent evt, int key)
-{
-	//GP_INFO("evt:%d, key:%d", evt, key);
-}
-
-void Game::onMouseEvent(Platform::MouseEvent evt, int x, int y, int wheelDelta)
-{
-	//GP_INFO("evt:%d, x:%d, y:%d, wheelDelta:%d",  evt, x, y, wheelDelta);
-}
-
-void Game::onTouchEvent(Platform::TouchEvent evt, int x, int y, size_t touchIndex)
-{
-	//GP_INFO("evt:%d, x:%d, y:%d, wheelDelta:%d",  evt, x, y, touchIndex);
-}
-
 bool Game::isMouseCapture()
 {    
 	return _mouseCapture;
@@ -352,8 +332,6 @@ Game::Config::Config() :
 	vsync(GP_GRAPHICS_VSYNC),
 	multisampling(GP_GRAPHICS_MULTISAMPLING),
 	validation(GP_GRAPHICS_VALIDATION),
-	touchSupport(false),
-	accelerometerSupport(false),
 	assetsPath(GP_ASSET_PATH),
     loadingScene("loading.scene"),
 	mainScene("main.scene")
@@ -384,8 +362,6 @@ void Game::Config::onSerialize(Serializer* serializer)
 	serializer->writeBool("vsync", vsync, false);
 	serializer->writeInt("multisampling", (unsigned int)multisampling, 0);
 	serializer->writeBool("validation", validation, GP_GRAPHICS_VALIDATION);
-	serializer->writeBool("touchSupport", touchSupport, false);
-	serializer->writeBool("accelerometerSupport", accelerometerSupport, false);
 	serializer->writeString("assetsPath", assetsPath.c_str(), "./");
     serializer->writeStringList("splashScreens", splashScreens.size());
     for (size_t i = 0; i < splashScreens.size(); i++)
@@ -405,10 +381,7 @@ void Game::Config::onDeserialize(Serializer* serializer)
     height = serializer->readInt("height", 0);
 	fullscreen = serializer->readBool("fullscreen", false);
 	vsync = serializer->readBool("vsync", false);
-	multisampling = serializer->readInt("multisampling", 0);
-	validation = serializer->readBool("validation", GP_GRAPHICS_VALIDATION);
-	touchSupport = serializer->readBool("touchSupport", false);
-	accelerometerSupport = serializer->readBool("accelerometerSupport", false);
+    multisampling = serializer->readInt("multisampling", 0);
 	serializer->readString("assetsPath", assetsPath, "");
     size_t splashScreensCount = serializer->readStringList("splashScreens");
     for (size_t i = 0; i < splashScreensCount; i++)

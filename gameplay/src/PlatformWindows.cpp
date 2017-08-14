@@ -148,7 +148,7 @@ bool PlatformWindows::startup(int argc, char** argv)
             if (!_gamepadsConnected[i])
             {
                 _gamepadsConnected[i] = true;
-				Game::getInstance()->onGamepadEvent(Platform::CGAMEPAD_EVENT_CONNECTED, i);
+                //Game::getInstance()->onGamepadEvent(Platform::CGAMEPAD_EVENT_CONNECTED, i);
             }
         }
 		else
@@ -190,12 +190,12 @@ int PlatformWindows::enterMessagePump()
                 if (XInputGetState(i, &_gamepadState[i]) == NO_ERROR && !_gamepadsConnected[i])
                 {                    
                     _gamepadsConnected[i] = true;
-					game->onGamepadEvent(Platform::CGAMEPAD_EVENT_CONNECTED, i);
+                    //game->onGamepadEvent(Platform::CGAMEPAD_EVENT_CONNECTED, i);
                 }
                 else if (XInputGetState(i, &_gamepadState[i]) != NO_ERROR && _gamepadsConnected[i])
                 {
                     _gamepadsConnected[i] = false;
-					game->onGamepadEvent(Platform::CGAMEPAD_EVENT_DISCONNECTED, i);
+                    //game->onGamepadEvent(Platform::CGAMEPAD_EVENT_DISCONNECTED, i);
                 }
             }
             game->onFrame();            
@@ -233,36 +233,36 @@ LRESULT __stdcall PlatformWindows::onMessage(HWND hwnd, UINT msg, WPARAM wParam,
 		case WM_LBUTTONDOWN:
 		{
 			updateCapture(wParam);
-			game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_PRESS_LEFT_BUTTON, x, y, 0);
+            //game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_PRESS_LEFT_BUTTON, x, y, 0);
 			return 0;
 		}
 		case WM_LBUTTONUP:
 		{
-			game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_RELEASE_LEFT_BUTTON, x, y, 0);;
+            //game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_RELEASE_LEFT_BUTTON, x, y, 0);;
 			updateCapture(wParam);
 			return 0;
 		}
 		case WM_RBUTTONDOWN:
 		{
 			updateCapture(lParam);
-			game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_PRESS_RIGHT_BUTTON, x, y, 0);
+            //game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_PRESS_RIGHT_BUTTON, x, y, 0);
 			break;
 		}
 		case WM_RBUTTONUP:
 		{
-			game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_RELEASE_RIGHT_BUTTON, x, y, 0);
+            //game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_RELEASE_RIGHT_BUTTON, x, y, 0);
 			updateCapture(wParam);
 			break;
 		}
 		case WM_MBUTTONDOWN:
 		{
 			updateCapture(wParam);
-			game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_PRESS_MIDDLE_BUTTON, x, y, 0);
+            //game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_PRESS_MIDDLE_BUTTON, x, y, 0);
 			break;
 		}
 		case WM_MBUTTONUP:
 		{
-			game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_RELEASE_MIDDLE_BUTTON, x, y, 0);
+            //game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_RELEASE_MIDDLE_BUTTON, x, y, 0);
 			updateCapture(wParam);
 			break;
 		}
@@ -276,14 +276,14 @@ LRESULT __stdcall PlatformWindows::onMessage(HWND hwnd, UINT msg, WPARAM wParam,
 				y -= mouseCapturePoint.y;
 				warpMouse(mouseCapturePoint.x, mouseCapturePoint.y);
 			}
-			game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_MOVE, x, y, 0);
+            //game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_MOVE, x, y, 0);
 			break;
 		}
 		case WM_MOUSEWHEEL:
 		{
 			tagPOINT point;
 			ScreenToClient((HWND)gameplay::getPlatform()->getWindow(), &point);
-			game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_WHEEL, point.x, point.y, GET_WHEEL_DELTA_WPARAM(wParam) / 120);
+            //game->onMouseEvent(gameplay::Platform::MOUSE_EVENT_WHEEL, point.x, point.y, GET_WHEEL_DELTA_WPARAM(wParam) / 120);
 			break;
 		}
 		case WM_KEYDOWN:
@@ -292,30 +292,30 @@ LRESULT __stdcall PlatformWindows::onMessage(HWND hwnd, UINT msg, WPARAM wParam,
 				shiftDown = true;
 			if (wParam == VK_CAPITAL)
 				capsOn = !capsOn;
-			game->onKeyEvent(gameplay::Platform::KEYBOARD_EVENT_PRESS, translateKey(wParam, shiftDown ^ capsOn));
+            //game->onKeyEvent(gameplay::Platform::KEYBOARD_EVENT_PRESS, translateKey(wParam, shiftDown ^ capsOn));
 			break;
 		}
 		case WM_KEYUP:
 		{
 			if (wParam == VK_SHIFT || wParam == VK_LSHIFT || wParam == VK_RSHIFT)
 				shiftDown = false;
-			game->onKeyEvent(gameplay::Platform::KEYBOARD_EVENT_RELEASE, translateKey(wParam, shiftDown ^ capsOn));
+            //game->onKeyEvent(gameplay::Platform::KEYBOARD_EVENT_RELEASE, translateKey(wParam, shiftDown ^ capsOn));
 			break;
 		}
 		case WM_CHAR:
 		{
-			game->onKeyEvent(gameplay::Platform::KEYBOARD_EVENT_CHAR, wParam);
+            //->onKeyEvent(gameplay::Platform::KEYBOARD_EVENT_CHAR, wParam);
 			break;
 		}
 		case WM_UNICHAR:
 		{
-			game->onKeyEvent(gameplay::Platform::KEYBOARD_EVENT_CHAR, wParam);
+            //game->onKeyEvent(gameplay::Platform::KEYBOARD_EVENT_CHAR, wParam);
 			break;
 		}
 		case WM_SIZE:
 		{
             Graphics* graphics = Graphics::getGraphics();
-			if (graphics && graphics->isPrepared() && wParam != SIZE_MINIMIZED)
+            if (graphics && graphics->isResized() && wParam != SIZE_MINIMIZED)
 			{
 				if (resizing || wParam == SIZE_MAXIMIZED || wParam == SIZE_RESTORED)
 				{
@@ -323,7 +323,7 @@ LRESULT __stdcall PlatformWindows::onMessage(HWND hwnd, UINT msg, WPARAM wParam,
 					GetClientRect(hwnd, &clientRect);
 					size_t width = clientRect.right - clientRect.left;
 					size_t height = clientRect.bottom - clientRect.top;
-                    graphics->resize(width, height);
+                    graphics->onResize(width, height);
 					game->onResize(width, height);
 				}
 			}
@@ -354,27 +354,6 @@ unsigned long PlatformWindows::getWindow()
 unsigned long PlatformWindows::getConnection()
 {
     return (unsigned long)_instance;
-}
-
-bool PlatformWindows::isGamepadButtonPressed(GamepadButton button, size_t gamepadIndex)
-{
-	return false;
-}
-
-void PlatformWindows::getGamepadAxisValues(float* leftVertical, float* leftHorizontal, float* rightVertical, float* rightHorizontal, size_t gamepadIndex)
-{
-}
-
-void PlatformWindows::getGamepadTriggerValues(float* leftTrigger, float* rightTrigger, size_t gamepadIndex)
-{
-}
-
-void PlatformWindows::getAccelerometerValues(float* pitch, float* roll)
-{
-}
-
-void PlatformWindows::getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
-{
 }
 
 Platform::KeyboardKey PlatformWindows::translateKey(WPARAM windowsKeyCode, bool shiftDown)

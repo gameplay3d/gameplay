@@ -51,26 +51,6 @@ public:
 	 * @see Game::onUpdate
 	 */
 	void onRender(float elapsedTime);
-
- 	/**
-	 * @see Game::onGamepadEvent
-	 */
-    void onGamepadEvent(Platform::GamepadEvent evt, size_t gamepadIndex);
-
-	/**
-	 * @see Game::onKeyEvent
-	 */
-    void onKeyEvent(Platform::KeyboardEvent evt, int key);
-
-	/**
-	 * @see Game::onMouseEvent
-	 */
-    void onMouseEvent(Platform::MouseEvent evt, int x, int y, int wheelDelta);
-
-	/**
-	 * @see Game::onTouchEvent
-	 */
-	void onTouchEvent(Platform::TouchEvent evt, int x, int y, size_t touchIndex);
 };
 
 }

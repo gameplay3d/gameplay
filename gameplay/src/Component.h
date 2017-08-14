@@ -28,7 +28,7 @@ public:
         TYPEID_PHYSICS_COLLIDER,
         TYPEID_PHYSICS_RIGIDBODY,
         TYPEID_PHYSICS_JOINT,
-        TYPEID_RENDERER_MESH
+        TYPEID_RENDERER
     };
 
     /**
