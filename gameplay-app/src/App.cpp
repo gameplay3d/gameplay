@@ -85,24 +85,4 @@ void App::onRender(float elapsedTime)
 	Game::onRender(elapsedTime);
 }
 
-void App::onGamepadEvent(Platform::GamepadEvent evt, size_t gamepadIndex)
-{
-	Game::onGamepadEvent(evt, gamepadIndex);
-}
-
-void App::onKeyEvent(Platform::KeyboardEvent evt, int key)
-{
-	Game::onKeyEvent(evt, key);
-}
-
-void App::onMouseEvent(Platform::MouseEvent evt, int x, int y, int wheelDelta)
-{
-	Game::onMouseEvent(evt, x, y, wheelDelta);
-}
-
-void App::onTouchEvent(Platform::TouchEvent evt, int x, int y, size_t touchIndex)
-{
-	Game::onTouchEvent(evt, x, y, touchIndex);
-}
-
 }

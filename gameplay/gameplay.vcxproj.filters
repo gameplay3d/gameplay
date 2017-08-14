@@ -63,9 +63,6 @@
     <ClCompile Include="src\PlatformWindows.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlatformLinux.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -96,34 +93,16 @@
     <ClCompile Include="src\Animation.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PhysicsRigidBody.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PhysicsJoint.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PhysicsCollider.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AudioSource.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Audio.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\AudioListener.cpp">
+    <ClCompile Include="src\AudioOpenAL.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Material.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Geometry.cpp">
+    <ClCompile Include="src\PhysicsPhysX.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -200,12 +179,6 @@
     <ClInclude Include="src\PlatformWindows.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\PlatformLinux.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PlatformMacOS.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Camera.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -233,43 +206,17 @@
     <ClInclude Include="src\Animation.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\PhysicsRigidBody.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PhysicsJoint.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PhysicsCollider.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AudioSource.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Audio.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\AudioListener.h">
+    <ClInclude Include="src\AudioOpenAL.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\gameplay.h">
+    <ClInclude Include="src\PhysicsPhysX.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Material.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Geometry.h">
-      <Filter>src</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\PlatformMacOS.mm">
-      <Filter>src</Filter>
-    </None>
   </ItemGroup>
 </Project>

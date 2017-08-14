@@ -9,8 +9,7 @@ CONFIG(debug, debug|release): DEFINES += _DEBUG
 SOURCES += \
     src/Animation.cpp \
     src/Audio.cpp \
-    src/AudioListener.cpp \
-    src/AudioSource.cpp \
+    src/AudioOpenAL.cpp \
     src/BoundingBox.cpp \
     src/BoundingSphere.cpp \
     src/Camera.cpp \
@@ -19,24 +18,19 @@ SOURCES += \
     src/FileSystem.cpp \
     src/Frustum.cpp \
     src/Game.cpp \
-    src/Geometry.cpp \
     src/Graphics.cpp \
     src/GraphicsDirect3D.cpp \
     src/GraphicsVulkan.cpp \
     src/Light.cpp \
     src/Logger.cpp \
-    src/Material.cpp \
     src/MathUtil.cpp \
     src/Matrix.cpp \
     src/Physics.cpp \
-    src/PhysicsCollider.cpp \
-    src/PhysicsJoint.cpp \
-    src/PhysicsRigidBody.cpp \
+    src/PhysicsPhysX.cpp \
     src/Plane.cpp \
     src/Quaternion.cpp \
     src/Ray.cpp \
     src/Rectangle.cpp \
-    src/Renderer.cpp \
     src/SceneObject.cpp \
     src/Script.cpp \
     src/Serializer.cpp \
@@ -49,8 +43,7 @@ SOURCES += \
 HEADERS += \
     src/Animation.h \
     src/Audio.h \
-    src/AudioListener.h \
-    src/AudioSource.h \
+    src/AudioOpenAL.h \
     src/Base.h \
     src/BoundingBox.h \
     src/BoundingSphere.h \
@@ -60,25 +53,20 @@ HEADERS += \
     src/FileSystem.h \
     src/Frustum.h \
     src/Game.h \
-    src/Geometry.h \
     src/Graphics.h \
     src/GraphicsDirect3D.h \
     src/GraphicsVulkan.h \
     src/Light.h \
     src/Logger.h \
-    src/Material.h \
     src/MathUtil.h \
     src/Matrix.h \
     src/Physics.h \
-    src/PhysicsCollider.h \
-    src/PhysicsJoint.h \
-    src/PhysicsRigidBody.h \
+    src/PhysicsPhysX.h \
     src/Plane.h \
     src/Platform.h \
     src/Quaternion.h \
     src/Ray.h \
     src/Rectangle.h \
-    src/Renderer.h \
     src/SceneObject.h \
     src/Script.h \
     src/Serializer.h \

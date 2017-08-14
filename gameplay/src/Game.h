@@ -233,42 +233,6 @@ public:
 	 * @param elapsedTime
 	 */
 	virtual void onRender(float elapsedTime);
-
-    /**
-     * Gamepad event occurs on gamepad lifecycle changes such as connect/disconnect.
-     *
-     * @param evt The type of event.
-     * @param gamepadIndex The gamepad index.
-     */
-    virtual void onGamepadEvent(Platform::GamepadEvent evt, size_t gamepadIndex);
-
-    /**
-     * Keyboard event occurs when keyboars keys state change.
-     *
-     * @param evt The key event that occurred.
-     * @param key If evt is 
-     */
-    virtual void onKeyEvent(Platform::KeyboardEvent evt, int key);
-
-    /**
-     * Mouse event occurs when the mouse state change.
-     *
-     * @param evt The mouse event that occurred.
-     * @param x The x position of the mouse in pixels. Left edge is zero.
-     * @param y The y position of the mouse in pixels. Top edge is zero.
-     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
-     */
-    virtual void onMouseEvent(Platform::MouseEvent evt, int x, int y, int wheelDelta);
-
-	/**
-	 * Touch event occurs when touch occurs when touch support is enabled.
-	 *
-	 * @param evt The touch event that occurred.
-	 * @param x The x position of the touch in pixels. Left edge is zero.
-	 * @param y The y position of the touch in pixels. Top edge is zero.
-	 * @param touchIndex The order of occurrence for multiple touch contacts starting at zero.
-	 */
-	virtual void onTouchEvent(Platform::TouchEvent evt, int x, int y, size_t touchIndex);
     
     /**
      * Determines whether mouse input is currently set to capture.
@@ -354,8 +318,6 @@ public:
 		bool vsync;
 		size_t multisampling;
 		bool validation;
-		bool touchSupport;
-		bool accelerometerSupport;
 		std::string assetsPath;
         std::vector<SplashScreen> splashScreens;
         std::string loadingScene;

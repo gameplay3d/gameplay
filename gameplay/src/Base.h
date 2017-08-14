@@ -123,7 +123,7 @@
 #define GP_MATH_1_PI                    0.31830988618379067154
 #define GP_MATH_MATRIX_SIZE             (sizeof(float) * 16)
 
-// Graphics
+// Graphics defaults
 #define GP_GRAPHICS_VULKAN              "vulkan"
 #define GP_GRAPHICS_DIRECT3D            "direct3d"
 #define GP_GRAPHICS                     GP_GRAPHICS_VULKAN
@@ -135,7 +135,26 @@
 #define GP_GRAPHICS_VALIDATION			false
 #define GP_GRAPHICS_BACK_BUFFERS		2
 
+// Graphics max limits
+#define GP_GRAPHICS_GPUS_MAX                        4
+#define GP_GRAPHICS_INSTANCE_EXTS_MAX               256
+#define GP_GRAPHICS_DEVICE_EXTS_MAX                 256
+#define GP_GRAPHICS_DESCRIPTORS_MAX                 32
+#define GP_GRAPHICS_DESCRIPTOR_SETS_MAX             8
+#define GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX          256
+#define GP_GRAPHICS_DESCRIPTOR_SETS_MAX             8
+#define GP_GRAPHICS_RENDER_TARGET_ATTACHMENTS_MAX   8
+#define GP_GRAPHICS_SUBMIT_COMMAND_LISTS_MAX        8
+#define GP_GRAPHICS_SUBMIT_WAIT_SEMAPHORES_MAX      8
+#define GP_GRAPHICS_SUBMIT_SIGNAL_SEMAPHORES_MAX    8
+#define GP_GRAPHICS_PRESENT_WAIT_SEMAPHORES_MAX     8
+#define GP_GRAPHICS_VERTEX_BINDINGS_MAX             15
+#define GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX           15
+#define GP_GRAPHICS_MIP_LEVELS_MAX                  0xFFFFFFFF
+
+// Assets
 #define GP_ASSET_PATH                   "./assets"
+
 
 namespace gameplay
 {

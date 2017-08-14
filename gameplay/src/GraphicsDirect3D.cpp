@@ -26,7 +26,7 @@ namespace gameplay
 
 GraphicsDirect3D::GraphicsDirect3D() :
     _initialized(false),
-	_prepared(false),
+    _resized(false),
 	_width(0),
 	_height(0),
 	_fullscreen(false),
@@ -170,28 +170,33 @@ void GraphicsDirect3D::initialize(unsigned long window, unsigned long connection
 	D3D_CHECK_RESULT(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _commandAllocators[_backBufferIndex], nullptr, __uuidof(ID3D12CommandList), (void**)&_commandList));
 	D3D_CHECK_RESULT(_commandList->Close());
 
-	// Create the render targets
-	createRenderTargets();
+    // Create the back buffer (render targets)
+    createBackBuffers();
 
 	// Create a fence and event for synchronization.
 	D3D_CHECK_RESULT(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, __uuidof(ID3D12Fence), (void**)&_fence));
 	_fenceEvent = CreateEventEx(NULL, FALSE, FALSE, EVENT_ALL_ACCESS);
 
     _initialized = true;
-	_prepared = true;
+    _resized = true;
 }
 
-void GraphicsDirect3D::resize(int width, int height)
+bool GraphicsDirect3D::isInitialized()
 {
-	if (!_prepared || (width == _width && height == _height))
+    return _initialized;
+}
+
+void GraphicsDirect3D::onResize(int width, int height)
+{
+    if (!_resized || (width == _width && height == _height))
 		return;
 	
 	// Wait for the gpu to finish processing before resizing
-	waitForGpu();
+    waitIdle();
 
-	_prepared = false;
+    _resized = false;
 	
-	// Release the resources holding references to the swapchain
+    // Release the backbuffers
 	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
 	{
 		SAFE_RELEASE(_renderTargets[i]);
@@ -206,17 +211,222 @@ void GraphicsDirect3D::resize(int width, int height)
 	// Reset the frame index to the current back buffer index.
 	_backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
 
-	createRenderTargets();
+    // Create teh back buffers again
+    createBackBuffers();
 
 	_width = width;
 	_height = height;
 
-	_prepared = true;
+    _resized = true;
+}
+
+bool GraphicsDirect3D::isResized()
+{
+    return _resized;
+}
+
+int GraphicsDirect3D::getWidth()
+{
+    return _width;
+}
+
+int GraphicsDirect3D::getHeight()
+{
+    return _height;
+}
+
+GraphicsDirect3D::CommandListDirect3D::CommandListDirect3D()
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::begin()
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::end()
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::beginRenderPass(RenderPass* pass)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::endRenderPass()
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::setViewport(float x, float y, float width, float height, float depthMin, float depthMax)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::setScissor(float x, float y, float width, float height)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::bindPipeline(Pipeline* pipeline)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::bindDescriptorSet(DescriptorSet* set)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::bindIndexBuffer(Buffer* buffer)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::bindVertexBuffers(Buffer** buffers, size_t bufferCount)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::draw(size_t vertexCount, size_t vertexOffset)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::drawInstanced(size_t vertexCount, size_t vertexOffset)
+{
+}
+
+GraphicsDirect3D::CommandPoolDirect3D::CommandPoolDirect3D()
+{
+}
+
+Graphics::CommandList* GraphicsDirect3D::CommandPoolDirect3D::createCommandList()
+{
+    return nullptr;
+}
+
+void GraphicsDirect3D::CommandPoolDirect3D::destroyCommandList(Graphics::CommandList* commandList)
+{
+}
+
+Graphics::DescriptorSet* GraphicsDirect3D::createDescriptorSet(Descriptor* descriptors, size_t descriptorCount)
+{
+    return nullptr;
+}
+
+Graphics::Buffer* GraphicsDirect3D::createVertexBuffer(size_t count, bool hostVisible, VertexLayout vertexLayout)
+{
+    return nullptr;
+}
+
+Graphics::Buffer* GraphicsDirect3D::createIndexBuffer(size_t count, bool hostVisible, IndexType indexType)
+{
+    return nullptr;
+}
+
+Graphics::Buffer* GraphicsDirect3D::createUniformBuffer(size_t size, bool hostVisible, Buffer::Usage usage)
+{
+    return nullptr;
+}
+
+void GraphicsDirect3D::destroyBuffer(Graphics::Buffer* buffer)
+{
+}
+
+Graphics::Texture* GraphicsDirect3D::createTexture1D(Graphics::Format format, size_t width, Texture::Usage usage, bool hostVisible)
+{
+    return nullptr;
+}
+
+Graphics::Texture* GraphicsDirect3D::createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, Texture::Usage usage, bool hostVisible)
+{
+    return nullptr;
+}
+
+Graphics::Texture* GraphicsDirect3D::createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, Texture::Usage usage, bool hostVisible)
+{
+    return nullptr;
+}
+
+void GraphicsDirect3D::destroyTexture(Graphics::Texture* texture)
+{
+}
+
+Graphics::Sampler* GraphicsDirect3D::createSampler()
+{
+    return nullptr;
+}
+
+void GraphicsDirect3D::destroySampler(Graphics::Sampler* sampler)
+{
+}
+
+Graphics::ShaderProgram* GraphicsDirect3D::createShaderProgram(size_t vertSize, const void* vertByteCode, const char* vertEntryPoint,
+                                                               size_t tescSize, const void* tescByteCode, const char* tescEntryPoint,
+                                                               size_t teseSize, const void* teseByteCode, const char* teseEntryPoint,
+                                                               size_t geomSize, const void* geomByteCode, const char* geomEntryPoint,
+                                                               size_t fragSize, const void* fragByteCode, const char* fragEntryPoint)
+{
+    return nullptr;
+}
+
+void GraphicsDirect3D::destroyShaderProgram(Graphics::ShaderProgram* shaderProgram)
+{
+}
+
+Graphics::RenderPass* GraphicsDirect3D::createRenderPass(Graphics::Format colorFormat,
+                                               size_t colorAttachmentCount,
+                                               Graphics::Format depthStencilFormat,
+                                               size_t width, size_t height,
+                                               bool hostVisible)
+{
+    return nullptr;
+}
+
+void GraphicsDirect3D::destroyRenderPass(Graphics::RenderPass* renderPass)
+{
+}
+
+Graphics::Pipeline* GraphicsDirect3D::createPipeline(Graphics::ShaderProgram* shaderProgram,
+                                                     Graphics::VertexLayout* vertexLayout,
+                                                     Graphics::DescriptorSet* descriptorSet,
+                                                     Graphics::RenderPass* renderPass,
+                                                     Graphics::PrimitiveTopology primitiveTopology,
+                                                     Graphics::RasterizerState rasterizerState,
+                                                     Graphics::DepthStencilState depthStencilState,
+                                                     Graphics::BlendState blendState)
+{
+    return nullptr;
+}
+
+void GraphicsDirect3D::destroyPipeline(Graphics::Pipeline* pipeline)
+{
+}
+
+Graphics::CommandPool* GraphicsDirect3D::createCommandPool()
+{
+    return nullptr;
+}
+
+void GraphicsDirect3D::destroyCommandPool(Graphics::CommandPool* pool)
+{
+}
+
+void GraphicsDirect3D::submit(Graphics::CommandList** commandLists, size_t commandListCount)
+{
+}
+
+void GraphicsDirect3D::waitIdle()
+{
+    D3D_CHECK_RESULT(_commandQueue->Signal(_fence, _fenceValues[_backBufferIndex]));
+    D3D_CHECK_RESULT(_fence->SetEventOnCompletion(_fenceValues[_backBufferIndex], _fenceEvent));
+    WaitForSingleObjectEx(_fenceEvent, INFINITE, FALSE);
+    _fenceValues[_backBufferIndex]++;
+}
+
+bool GraphicsDirect3D::present()
+{
+    return SUCCEEDED(_swapchain->Present(_vsync ? 1 : 0, 0));
+}
+
+void GraphicsDirect3D::acquireNextSwapchainImage()
+{
 }
 
 void GraphicsDirect3D::render(float elapsedTime)
 {
-	if (!_prepared)
+    if (!_resized)
 		return;
 
 	buildCommands();
@@ -231,12 +441,12 @@ void GraphicsDirect3D::render(float elapsedTime)
 	if (FAILED(_swapchain->Present(_vsync ? 1 : 0, 0)))
 		return;
 
+    _backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
+
 	// Signal and increment the fence value.
 	const uint64_t fenceToWaitFor = _fenceValues[_backBufferIndex];
 	if (FAILED(_commandQueue->Signal(_fence, fenceToWaitFor)))
 		return;
-	
-	_backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
 
 	// Wait until the GPU is done rendering.
 	if (_fence->GetCompletedValue() < _fenceValues[_backBufferIndex])
@@ -246,16 +456,6 @@ void GraphicsDirect3D::render(float elapsedTime)
 		WaitForSingleObject(_fenceEvent, INFINITE);
 	}
 	_fenceValues[_backBufferIndex] = fenceToWaitFor + 1;
-}
-
-bool GraphicsDirect3D::isInitialized()
-{
-    return _initialized;
-}
-
-bool GraphicsDirect3D::isPrepared()
-{
-	return _prepared;
 }
 
 void GraphicsDirect3D::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter)
@@ -274,7 +474,7 @@ void GraphicsDirect3D::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1
 	}
 }
 
-void GraphicsDirect3D::createRenderTargets()
+void GraphicsDirect3D::createBackBuffers()
 {
 	uint32_t renderTargetDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTargetViewHandle = _renderTargetViewHeap->GetCPUDescriptorHandleForHeapStart();
@@ -285,15 +485,6 @@ void GraphicsDirect3D::createRenderTargets()
 		renderTargetViewHandle.ptr += renderTargetDescriptorSize;
 	}
 	_backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
-}
-
-
-void GraphicsDirect3D::waitForGpu()
-{
-	D3D_CHECK_RESULT(_commandQueue->Signal(_fence, _fenceValues[_backBufferIndex]));
-	D3D_CHECK_RESULT(_fence->SetEventOnCompletion(_fenceValues[_backBufferIndex], _fenceEvent));
-	WaitForSingleObjectEx(_fenceEvent, INFINITE, FALSE);
-	_fenceValues[_backBufferIndex]++;
 }
 
 void GraphicsDirect3D::buildCommands()
@@ -336,18 +527,7 @@ void GraphicsDirect3D::buildCommands()
 
 	D3D_CHECK_RESULT(_commandList->Close());
 
-	waitForGpu();
-}
-
-int GraphicsDirect3D::getWidth()
-{
-    return _width;
-}
-
-int GraphicsDirect3D::getHeight()
-{
-    return _height;
-
+    waitIdle();
 }
 
 }

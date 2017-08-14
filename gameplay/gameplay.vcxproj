@@ -106,8 +106,7 @@
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Audio.cpp" />
-    <ClCompile Include="src\AudioListener.cpp" />
-    <ClCompile Include="src\AudioSource.cpp" />
+    <ClCompile Include="src\AudioOpenAL.cpp" />
     <ClCompile Include="src\BoundingBox.cpp" />
     <ClCompile Include="src\BoundingSphere.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -118,25 +117,19 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\GraphicsDirect3D.cpp" />
-    <ClCompile Include="src\Geometry.cpp" />
-    <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Physics.cpp" />
-    <ClCompile Include="src\PhysicsCollider.cpp" />
-    <ClCompile Include="src\PhysicsJoint.cpp" />
-    <ClCompile Include="src\PhysicsRigidBody.cpp" />
+    <ClCompile Include="src\PhysicsPhysX.cpp" />
     <ClCompile Include="src\SceneObject.cpp" />
     <ClCompile Include="src\GraphicsVulkan.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\MathUtil.cpp" />
     <ClCompile Include="src\Matrix.cpp" />
     <ClCompile Include="src\Plane.cpp" />
-    <ClCompile Include="src\PlatformLinux.cpp" />
     <ClCompile Include="src\PlatformWindows.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\Rectangle.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Script.cpp" />
     <ClCompile Include="src\Serializer.cpp" />
     <ClCompile Include="src\SerializerBinary.cpp" />
@@ -148,8 +141,7 @@
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Audio.h" />
-    <ClInclude Include="src\AudioListener.h" />
-    <ClInclude Include="src\AudioSource.h" />
+    <ClInclude Include="src\AudioOpenAL.h" />
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\BoundingBox.h" />
     <ClInclude Include="src\BoundingSphere.h" />
@@ -159,16 +151,10 @@
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\gameplay.h" />
-    <ClInclude Include="src\Geometry.h" />
     <ClInclude Include="src\GraphicsDirect3D.h" />
-    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\PhysicsPhysX.h" />
     <ClInclude Include="src\Light.h" />
-    <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Physics.h" />
-    <ClInclude Include="src\PhysicsCollider.h" />
-    <ClInclude Include="src\PhysicsJoint.h" />
-    <ClInclude Include="src\PhysicsRigidBody.h" />
     <ClInclude Include="src\SceneObject.h" />
     <ClInclude Include="src\Graphics.h" />
     <ClInclude Include="src\GraphicsVulkan.h" />
@@ -177,8 +163,6 @@
     <ClInclude Include="src\Matrix.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Platform.h" />
-    <ClInclude Include="src\PlatformLinux.h" />
-    <ClInclude Include="src\PlatformMacOS.h" />
     <ClInclude Include="src\PlatformWindows.h" />
     <ClInclude Include="src\Quaternion.h" />
     <ClInclude Include="src\Ray.h" />
@@ -192,9 +176,6 @@
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\Vector4.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\PlatformMacOS.mm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

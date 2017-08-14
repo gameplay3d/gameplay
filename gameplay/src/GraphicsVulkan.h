@@ -14,6 +14,108 @@ namespace gameplay
 class GraphicsVulkan : public Graphics
 {
 public:
+    /**
+     * Vulkan impl of Graphics::CommandList
+     *
+     * @see Graphics::CommandList
+     */
+    class CommandListVulkan : public CommandList
+    {
+    public:
+        /**
+         * Constructor.
+         */
+        CommandListVulkan();
+
+        /**
+         * @see CommandList::begin
+         */
+        void begin();
+
+        /**
+         * @see CommandList::end
+         */
+        void end();
+
+        /**
+         * @see CommandList::beginRenderPass
+         */
+        void beginRenderPass(RenderPass* pass);
+
+        /**
+         * @see CommandList::endRenderPass
+         */
+        void endRenderPass();
+
+        /**
+         * @see CommandList::setViewport
+         */
+        void setViewport(float x, float y, float width, float height, float depthMin, float depthMax);
+
+        /**
+         * @see CommandList::setScissor
+         */
+        void setScissor(float x, float y, float width, float height);
+
+        /**
+         * @see CommandList::bindPipeline
+         */
+        void bindPipeline(Pipeline* pipeline);
+
+        /**
+         * @see CommandList::bindDescriptorSet
+         */
+        void bindDescriptorSet(DescriptorSet* set);
+
+        /**
+         * @see CommandList::bindIndexBuffer
+         */
+        void bindIndexBuffer(Buffer* buffer);
+
+        /**
+         * @see CommandList::bindVertexBuffers
+         */
+        void bindVertexBuffers(Buffer** buffers, size_t bufferCount);
+
+        /**
+         * @see CommandList::bindVertexBuffers
+         */
+        void draw(size_t vertexCount, size_t vertexOffset);
+
+        /**
+         * @see CommandList::drawInstanced
+         */
+        void drawInstanced(size_t vertexCount, size_t vertexOffset);
+    };
+
+    /**
+     * Vulkan impl of Graphics::CommandPool
+     *
+     * @see Graphics::CommandPool
+     */
+    class CommandPoolVulkan : public CommandPool
+    {
+    public:
+        /**
+         * Constructor.
+         */
+        CommandPoolVulkan();
+
+        /**
+         * Creates a command list.
+         *
+         * @return A command list.
+         */
+        Graphics::CommandList* createCommandList();
+
+        /**
+         * Destroys a command list.
+         *
+         * @param commandList The list of commands to be destroyed.
+         */
+        void destroyCommandList(Graphics::CommandList* commandList);
+    };
+
 
     /**
      * Constructor
@@ -21,7 +123,7 @@ public:
     GraphicsVulkan();
 
 	/**
-	 * Destructor
+     * Destructor
 	 */
     ~GraphicsVulkan();
 
@@ -30,25 +132,20 @@ public:
 	 */
     void initialize(unsigned long window, unsigned long connection = 0);
 
-	/**
-     * @see Graphics::resize
-	 */
-    void resize(int width, int height);
-
-	/**
-     * @see Graphics::render
-	 */
-    void render(float elapsedTime);
-
     /**
      * @see Graphics::isInitialized
      */
     bool isInitialized();
 
 	/**
-	 * @see Graphics::isPrepared
+     * @see Graphics::onResize
 	 */
-    bool isPrepared();
+    void onResize(int width, int height);
+
+    /**
+     * @see Graphics::isResized
+     */
+    bool isResized();
 
 	/**
 	 * @see Graphics::getWidth
@@ -60,12 +157,143 @@ public:
 	 */
     int getHeight();
 
+    /**
+     * @see Graphics::createDescriptorSet
+     */
+    Graphics::DescriptorSet* createDescriptorSet(Descriptor* descriptors, size_t descriptorCount);
+
+    /**
+     * @see Graphics::createVertexBuffer
+     */
+    Graphics::Buffer* createVertexBuffer(size_t count, bool hostVisible, VertexLayout vertexLayout);
+
+    /**
+     * @see Graphics::createIndexBuffer
+     */
+    Graphics::Buffer* createIndexBuffer(size_t count, bool hostVisible, IndexType indexType);
+
+    /**
+     * @see Graphics::createUniformBuffer
+     */
+    Graphics::Buffer* createUniformBuffer(size_t size, bool hostVisible, Buffer::Usage usage);
+
+    /**
+     * @see Graphics::destroyBuffer
+     */
+    void destroyBuffer(Graphics::Buffer* buffer);
+
+    /**
+     * @see Graphics::createTexture1D
+     */
+    Graphics::Texture* createTexture1D(Graphics::Format format, size_t width, Texture::Usage usage, bool hostVisible);
+
+    /**
+     * @see Graphics::createTexture2D
+     */
+    Graphics::Texture* createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, Texture::Usage usage, bool hostVisible);
+
+    /**
+     * @see Graphics::createTexture3D
+     */
+    Graphics::Texture* createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, Texture::Usage usage, bool hostVisible);
+
+    /**
+     * @see Graphics::destroyTexture
+     */
+    void destroyTexture(Graphics::Texture* texture);
+
+    /**
+     * @see Graphics::createSampler
+     */
+    Graphics::Sampler* createSampler();
+
+    /**
+     * @see Graphics::destroySampler
+     */
+    void destroySampler(Graphics::Sampler* sampler);
+
+    /**
+     * @see Graphics::createShaderProgram
+     */
+    Graphics::ShaderProgram* createShaderProgram(size_t vertSize, const void* vertByteCode, const char* vertEntryPoint,
+                                                         size_t tescSize, const void* tescByteCode, const char* tescEntryPoint,
+                                                         size_t teseSize, const void* teseByteCode, const char* teseEntryPoint,
+                                                         size_t geomSize, const void* geomByteCode, const char* geomEntryPoint,
+                                                         size_t fragSize, const void* fragByteCode, const char* fragEntryPoint);
+    /**
+     * @see Graphics::destroyShaderProgram
+     */
+    void destroyShaderProgram(Graphics::ShaderProgram* shaderProgram);
+
+    /**
+     * @see Graphics::createRenderPass
+     */
+    Graphics::RenderPass* createRenderPass(Graphics::Format colorFormat,
+                                                   size_t colorAttachmentCount,
+                                                   Graphics::Format depthStencilFormat,
+                                                   size_t width, size_t height,
+                                                   bool hostVisible);
+    /**
+     * @see Graphics::destroyRenderPass
+     */
+    void destroyRenderPass(Graphics::RenderPass* renderPass);
+
+    /**
+     * @see Graphics::createPipeline
+     */
+    Graphics::Pipeline* createPipeline(Graphics::ShaderProgram* shaderProgram,
+                                       Graphics::VertexLayout* vertexLayout,
+                                       Graphics::DescriptorSet* descriptorSet,
+                                       Graphics::RenderPass* renderPass,
+                                       Graphics::PrimitiveTopology primitiveTopology,
+                                       Graphics::RasterizerState rasterizerState,
+                                       Graphics::DepthStencilState depthStencilState,
+                                       Graphics::BlendState blendState);
+    /**
+     * @see Graphics::destroyPipeline
+     */
+    void destroyPipeline(Graphics::Pipeline* pipeline);
+
+    /**
+     * @see Graphics::createCommandPool
+     */
+    Graphics::CommandPool* createCommandPool();
+
+    /**
+     * @see Graphics::destroyCommandPool
+     */
+    void destroyCommandPool(Graphics::CommandPool* pool);
+
+    /**
+     * @see Graphics::submit
+     */
+    void submit(CommandList** commandLists, size_t commandListCount);
+
+    /**
+     * @see Graphics::waitIdle
+     */
+    void waitIdle();
+
+    /**
+     * @see Graphics::present
+     */
+    bool present();
+
+    /**
+     * @see Graphics::acquireNextSwapchainImage
+     */
+    void acquireNextSwapchainImage();
+
+    /**
+     * @see Graphics::render
+     */
+    void render(float elapsedTime);
+
 private:
 
 	void createInstance();
 	void createDevice();
 	void createSurface(unsigned long window, unsigned long connection);
-	void createCommandPool();
 	void createSwapchain();
 	void createDepthStencil();
 	void createRenderPass();
@@ -97,7 +325,7 @@ private:
 							         const char* layerPrefix, const char* msg, void* userData);
 private:
     bool _initialized;
-	bool _prepared;
+    bool _resized;
 	uint32_t _width;
 	uint32_t _height;
 	bool _fullscreen;
@@ -137,7 +365,6 @@ private:
 	VkCommandPool _commandPool;
 	std::vector<VkCommandBuffer> _commandBuffers;
 	std::vector<VkFence> _fences;
-
 
 	VkDebugReportCallbackEXT _debugMessageCallback;
 	PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT;

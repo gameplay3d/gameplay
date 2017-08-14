@@ -9,7 +9,7 @@
 
 class Camera;
 class Light;
-class RendererMesh;
+class GraphicsRenderer;
 class PhysicsRigidBody;
 class PhysicsCollider;
 class Animation;

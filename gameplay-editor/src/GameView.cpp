@@ -15,7 +15,7 @@ GameView::GameView(QWidget* parent) : QWidget(parent),
     if (!_graphics->isInitialized())
         _graphics->initialize((unsigned long)winId());
 
-    _graphics->resize(geometry().width(), geometry().height());
+    _graphics->onResize(geometry().width(), geometry().height());
 
     this->connect(&_timer, SIGNAL(timeout()), SLOT(onTimer()));
 
@@ -58,7 +58,7 @@ void GameView::onTimer()
     if ((_size != geometry().size()) && (QApplication::mouseButtons() == Qt::NoButton))
     {
         _size = geometry().size();
-        _graphics->resize(geometry().width(), geometry().height());
+        _graphics->onResize(geometry().width(), geometry().height());
         setGeometry(geometry().x(), geometry().y(), geometry().width(), geometry().height());
     }
     gameplay::Game::onFrame();
