@@ -21,7 +21,6 @@
     <None Include="game.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="src\main.mm" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="gameplay-app.rc" />

@@ -25,9 +25,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
-    <None Include="src\main.mm">
-      <Filter>src</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="gameplay-app.rc" />

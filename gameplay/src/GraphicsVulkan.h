@@ -38,14 +38,26 @@ public:
         void end();
 
         /**
-         * @see CommandList::beginRenderPass
+         * @see CommandList::transitionRenderPass
          */
-        void beginRenderPass(RenderPass* pass);
+        void transitionRenderPass(Graphics::RenderPass* pass, 
+                                  Graphics::Texture::Usage textureUsageOld, 
+                                  Graphics::Texture::Usage textureUsageNew);
 
         /**
-         * @see CommandList::endRenderPass
+         * @see CommandList::beginRender
          */
-        void endRenderPass();
+        void beginRender(Graphics::RenderPass* pass);
+
+        /**
+         * @see CommandList::endRender
+         */
+        void endRender(Graphics::RenderPass* pass);
+
+        /**
+         * @see CommandList::clearColor
+         */
+        void clearColor(Graphics::ClearValue clearValue, size_t colorAttachmentIndex);
 
         /**
          * @see CommandList::setViewport
@@ -60,25 +72,25 @@ public:
         /**
          * @see CommandList::bindPipeline
          */
-        void bindPipeline(Pipeline* pipeline);
+        void bindPipeline(Graphics::Pipeline* pipeline);
 
         /**
          * @see CommandList::bindDescriptorSet
          */
-        void bindDescriptorSet(DescriptorSet* set);
+        void bindDescriptorSet(Graphics::DescriptorSet* set);
+
+        /**
+         * @see CommandList::bindVertexBuffers
+         */
+        void bindVertexBuffers(Graphics::Buffer** buffers, size_t bufferCount);
 
         /**
          * @see CommandList::bindIndexBuffer
          */
-        void bindIndexBuffer(Buffer* buffer);
+        void bindIndexBuffer(Graphics::Buffer* buffer);
 
         /**
-         * @see CommandList::bindVertexBuffers
-         */
-        void bindVertexBuffers(Buffer** buffers, size_t bufferCount);
-
-        /**
-         * @see CommandList::bindVertexBuffers
+         * @see CommandList::draw
          */
         void draw(size_t vertexCount, size_t vertexOffset);
 
@@ -86,6 +98,16 @@ public:
          * @see CommandList::drawInstanced
          */
         void drawInstanced(size_t vertexCount, size_t vertexOffset);
+
+        /**
+         * @see CommandList::drawIndexed
+         */
+        void drawIndexed(size_t indexCount, size_t indexOffset);
+
+        /**
+         * @see CommandList::drawIndexedInstanced
+         */
+        void drawIndexedInstanced(size_t indexCount, size_t indexOffset);
     };
 
     /**
@@ -160,22 +182,22 @@ public:
     /**
      * @see Graphics::createDescriptorSet
      */
-    Graphics::DescriptorSet* createDescriptorSet(Descriptor* descriptors, size_t descriptorCount);
+    Graphics::DescriptorSet* createDescriptorSet(Graphics::Descriptor* descriptors, size_t descriptorCount);
 
     /**
      * @see Graphics::createVertexBuffer
      */
-    Graphics::Buffer* createVertexBuffer(size_t count, bool hostVisible, VertexLayout vertexLayout);
+    Graphics::Buffer* createVertexBuffer(size_t count, bool hostVisible, size_t vertexStride);
 
     /**
      * @see Graphics::createIndexBuffer
      */
-    Graphics::Buffer* createIndexBuffer(size_t count, bool hostVisible, IndexType indexType);
+    Graphics::Buffer* createIndexBuffer(size_t count, bool hostVisible, Graphics::IndexType indexType);
 
     /**
      * @see Graphics::createUniformBuffer
      */
-    Graphics::Buffer* createUniformBuffer(size_t size, bool hostVisible, Buffer::Usage usage);
+    Graphics::Buffer* createUniformBuffer(size_t size, bool hostVisible);
 
     /**
      * @see Graphics::destroyBuffer
@@ -185,17 +207,20 @@ public:
     /**
      * @see Graphics::createTexture1D
      */
-    Graphics::Texture* createTexture1D(Graphics::Format format, size_t width, Texture::Usage usage, bool hostVisible);
+    Graphics::Texture* createTexture1D(Graphics::Format format, size_t width, 
+                                       Graphics::Texture::Usage usage, bool hostVisible);
 
     /**
      * @see Graphics::createTexture2D
      */
-    Graphics::Texture* createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, Texture::Usage usage, bool hostVisible);
+    Graphics::Texture* createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, 
+                                       Graphics::Texture::Usage usage, bool hostVisible);
 
     /**
      * @see Graphics::createTexture3D
      */
-    Graphics::Texture* createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, Texture::Usage usage, bool hostVisible);
+    Graphics::Texture* createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, 
+                                       Graphics::Texture::Usage usage, bool hostVisible);
 
     /**
      * @see Graphics::destroyTexture
@@ -205,7 +230,7 @@ public:
     /**
      * @see Graphics::createSampler
      */
-    Graphics::Sampler* createSampler();
+    Graphics::Sampler* createSampler(const Graphics::SamplerState& samplerState);
 
     /**
      * @see Graphics::destroySampler
@@ -215,11 +240,16 @@ public:
     /**
      * @see Graphics::createShaderProgram
      */
-    Graphics::ShaderProgram* createShaderProgram(size_t vertSize, const void* vertByteCode, const char* vertEntryPoint,
-                                                         size_t tescSize, const void* tescByteCode, const char* tescEntryPoint,
-                                                         size_t teseSize, const void* teseByteCode, const char* teseEntryPoint,
-                                                         size_t geomSize, const void* geomByteCode, const char* geomEntryPoint,
-                                                         size_t fragSize, const void* fragByteCode, const char* fragEntryPoint);
+    Graphics::ShaderProgram* createShaderProgram(size_t vertSize, const char* vertByteCode, const char* vertEntryPoint,
+                                                 size_t fragSize, const char* fragByteCode, const char* fragEntryPoint);
+    /**
+     * @see Graphics::createShaderProgram
+     */
+    Graphics::ShaderProgram* createShaderProgram(size_t vertSize, const char* vertByteCode, const char* vertEntryPoint,
+                                                 size_t tescSize, const char* tescByteCode, const char* tescEntryPoint,
+                                                 size_t teseSize, const char* teseByteCode, const char* teseEntryPoint,
+                                                 size_t geomSize, const char* geomByteCode, const char* geomEntryPoint,
+                                                 size_t fragSize, const char* fragByteCode, const char* fragEntryPoint);
     /**
      * @see Graphics::destroyShaderProgram
      */
@@ -228,11 +258,9 @@ public:
     /**
      * @see Graphics::createRenderPass
      */
-    Graphics::RenderPass* createRenderPass(Graphics::Format colorFormat,
-                                                   size_t colorAttachmentCount,
-                                                   Graphics::Format depthStencilFormat,
-                                                   size_t width, size_t height,
-                                                   bool hostVisible);
+    Graphics::RenderPass* createRenderPass(Graphics::Format colorFormat, size_t colorAttachmentCount,
+                                           Graphics::Format depthStencilFormat,
+                                           size_t width, size_t height, bool hostVisible);
     /**
      * @see Graphics::destroyRenderPass
      */
@@ -267,7 +295,13 @@ public:
     /**
      * @see Graphics::submit
      */
-    void submit(CommandList** commandLists, size_t commandListCount);
+    void submit(Graphics::CommandList* commandList, 
+                Graphics::Semaphore* waitSemaphore, 
+                Graphics::Semaphore* signalSemaphore);
+    /**
+     * @see Graphics::present
+     */
+    void present(Graphics::Semaphore* waitSemaphore);
 
     /**
      * @see Graphics::waitIdle
@@ -275,19 +309,30 @@ public:
     void waitIdle();
 
     /**
-     * @see Graphics::present
+     * @see Graphics::getRenderPass
      */
-    bool present();
+    Graphics::RenderPass* getRenderPass(size_t imageIndex);
 
     /**
-     * @see Graphics::acquireNextSwapchainImage
+     * @see Graphics::getImageAcquiredFence
      */
-    void acquireNextSwapchainImage();
+    Fence* getImageAcquiredFence(size_t imageIndex);
 
     /**
-     * @see Graphics::render
+     * @see Graphics::getImageAcquiredSemaphore
      */
-    void render(float elapsedTime);
+    Semaphore* getImageAcquiredSemaphore(size_t imageIndex);
+
+    /**
+     * @see Graphics::getRenderCompleteSemaphore
+     */
+    Semaphore* getRenderCompleteSemaphore(size_t imageIndex);
+
+    /**
+     * @see Graphics::acquireNextImage
+     */
+    void acquireNextImage(Graphics::Semaphore* acquiredImageSemaphore,
+                          Graphics::Fence* acquiredImageFence);
 
 private:
 
