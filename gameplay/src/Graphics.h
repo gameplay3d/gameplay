@@ -8,15 +8,21 @@ namespace gameplay
 
 /**
  * Defines an abstract graphics system.
- *
- * The graphics system manages the gpu instance, device, swapchains, queues.
- *
- * This class describes classes and enumerations to describe graphics commands.
- * Commands are recorded and then submitted for processing.
  */
 class Graphics
 {   
 public:
+
+    /**
+     * Defines the low-level graphics api.
+     */
+    enum Api
+    {
+        API_VULKAN,
+        API_DIRECT3D,
+        API_METAL
+    };
+
     /**
      * Defines a data format for buffers, texture, etc.
      */
@@ -113,29 +119,6 @@ public:
     };
 
     /**
-     * Defines the logic operations.
-     */
-    enum LogicOp
-    {
-        LOGIC_OP_CLEAR = 0,
-        LOGIC_OP_AND,
-        LOGIC_OP_AND_REVERSE,
-        LOGIC_OP_COPY,
-        LOGIC_OP_AND_INVERTED,
-        LOGIC_OP_NO_OP,
-        LOGIC_OP_XOR,
-        LOGIC_OP_OR,
-        LOGIC_OP_NOR,
-        LOGIC_OP_EQUIVALENT,
-        LOGIC_OP_INVERT,
-        LOGIC_OP_OR_REVERSE,
-        LOGIC_OP_COPY_INVERTED,
-        LOGIC_OP_OR_INVERTED,
-        LOGIC_OP_NAND,
-        LOGIC_OP_SET
-    };
-
-    /**
      * Defines the framebuffer blending factors.
      */
     enum BlendFactor
@@ -177,12 +160,21 @@ public:
      * Defines whether the final color values R, G, B and A
      * are written to the framebuffer attachment(s).
      */
-    enum ColorWriteComponent : unsigned int
+    enum ColorWriteMask : unsigned int
     {
         COLOR_WRITE_COMPONENT_RED = 0x00000001,
         COLOR_WRITE_COMPONENT_GREEN = 0x00000002,
         COLOR_WRITE_COMPONENT_BLUE = 0x00000004,
         COLOR_WRITE_COMPONENT_ALPHA = 0x00000008
+    };
+
+    /**
+     * Defines the depth write mask.
+     */
+    enum DepthWriteMask
+    {
+        DEPTH_WRITE_MASK_ZERO,
+        DEPTH_WRITE_MASK_ALL
     };
 
     /**
@@ -198,6 +190,46 @@ public:
     };
 
     /**
+     * Defines a synchronization primitive that can be used to insert 
+     * a dependency from a queue to the host. 
+     */
+    class Fence
+    {
+    };
+
+    /**
+     * Defines a synchronization primitive that can be used 
+     * to insert a dependency between batches submitted to queues.
+     */
+    class Semaphore
+    {
+    };
+
+    /**
+     * Defines the clear value for clearing either 
+     * color or depth/stencil values.
+     */
+    class ClearValue
+    {
+    public:
+        union 
+        {
+            struct
+            {
+                float red;
+                float green;
+                float blue;
+                float alpha;
+            };
+            struct
+            {
+                float depth;
+                unsigned int stencil;
+            };
+        };
+    };
+
+    /**
      * Defines a linear array of data which are used for various
      * purposes by binding them to a graphics or compute
      * pipeline via descriptor sets or via certain commands or
@@ -206,52 +238,41 @@ public:
     class Buffer
     {
     public:
-
         /**
          * Defines the allowed usage for a buffer.
          */
         enum Usage
         {
             USAGE_UNDEFINED = 0,
-            USAGE_TRANSFER_SRC,
-            USAGE_TRANSFER_DST,
-            USAGE_UNIFORM_TEXEL,
-            USAGE_STORAGE_TEXEL,
-            USAGE_UNIFORM,
-            USAGE_STORAGE,
             USAGE_VERTEX,
-            USAGE_INDEX
+            USAGE_INDEX,
+            USAGE_UNIFORM
         };
 
         /**
          * The allowed usage for the buffer.
          */
-        Usage usage;
-
-        /**
-         * The number of elements in the buffer.
-         */
-        size_t count;
-
-        /**
-         * The stride of each element in the buffer.
-         */
-        size_t stride;
+        Usage usage = USAGE_UNDEFINED;
 
         /**
          * The size (in bytes) of the buffer.
          */
-        size_t size;
+        size_t size = 0;
+
+        /**
+         * The stride of each element in the buffer.
+         */
+        size_t stride = 0;
 
         /**
          * If the buffer is visible to the host.
          */
-        bool hostVisible;
+        bool hostVisible = true;
 
         /**
          * The cpu memory address.
          */
-        void* cpuAddress;
+        void* cpuMemoryAddress = nullptr;
     };
 
 
@@ -262,7 +283,6 @@ public:
     class Texture
     {
     public:
-
         /**
          * Defines the type of texture.
          */
@@ -293,47 +313,45 @@ public:
         /**
          * The texture format.
          */
-        Graphics::Format format;
+        Graphics::Format format = FORMAT_UNDEFINED;
 
         /**
          * The width of the the texture.
          */
-        int width;
+        int width = 0;
 
         /**
          * The height of the texture.
          */
-        int height;
+        int height = 0;
 
         /**
          * The depth of the texture.
          */
-        int depth;
+        int depth = 0;
 
         /**
          * The number of mip levels.
          */
-        int mipLevels;
+        int mipLevels = 0;
 
         /**
          * If the texture is visible to the host.
          */
-        bool hostVisible;
+        bool hostVisible = true;
 
         /**
-         * The textures cpu memory address.
+         * The cpu memory address.
          */
-        void* cpuAddress;
+        void* cpuMemoryAddress = nullptr;
     };
 
-
     /**
-     * Defines a filters and behaviour for sampling texture data.
+     * Defines a state definition for sampling texture data.
      */
-    class Sampler
+    class SamplerState
     {
     public:
-
         /**
          * Specify filters used for texture lookups.
          */
@@ -348,84 +366,92 @@ public:
          */
         enum AddressMode
         {
-            ADDRESS_MODE_REPEAT = 0,
-            ADDRESS_MODE_MIRRORED_REPEAT,
-            ADDRESS_MODE_CLAMP_TO_EDGE,
-            ADDRESS_MODE_CLAMP_TO_BORDER,
-            ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE
+            ADDRESS_MODE_WRAP = 0,
+            ADDRESS_MODE_MIRROR,
+            ADDRESS_MODE_CLAMP_EDGE,
+            ADDRESS_MODE_CLAMP_BORDER,
+            ADDRESS_MODE_MIRROR_CLAMP_EDGE
         };
 
         /**
          * The magnification filter to apply to lookups.
          */
-        Filter filterMag;
+        Filter filterMag = FILTER_LINEAR;
 
         /**
          * The minification filter to apply to lookups.
          */
-        Filter filterMin;
+        Filter filterMin = FILTER_LINEAR;
 
         /**
          * The mipmap filter to apply to lookups.
          */
-        Filter filterMipmap;
+        Filter filterMipmap = FILTER_LINEAR;
 
         /**
          *  the addressing mode for outside [0..1] range for U.
          */
-        AddressMode addressModeU;
+        AddressMode addressModeU = ADDRESS_MODE_WRAP;
 
         /**
          *  the addressing mode for outside [0..1] range for V.
          */
-        AddressMode addressModeV;
+        AddressMode addressModeV = ADDRESS_MODE_WRAP;
 
         /**
          *  the addressing mode for outside [0..1] range for W.
          */
-        AddressMode addressModeW;
+        AddressMode addressModeW = ADDRESS_MODE_WRAP;
 
         /**
          * The bias to be added to mipmap LOD calculation and bias provided by image sampling functions
          */
-        float lodMipmapBias;
+        float lodMipmapBias = 0.0f;
 
         /**
          * The value used to clamp the minimum computed level-of-detail value.
          */
-        float lodMin;
+        float lodMin = 0.0f;
 
         /**
          * The value used to clamp the maximum computed level-of-detail value.
          */
-        float lodMax;
+        float lodMax = 3.402823466e+38f;
 
         /**
          * Used to enable anisotropic filtering.
          */
-        bool anisotropyEnabled;
+        bool anisotropyEnabled = false;
 
         /**
          * The value used to clamp the maximum anisotropy filtering amount.
          */
-        float anisotropyMax;
+        unsigned int anisotropyMax = 16;
 
         /**
          * Used to enable comparison against a reference value during lookup.
          */
-        bool compareFuncEnabled;
+        bool compareFuncEnabled = true;
 
         /**
          * The comparison function to apply to fetched data before filtering.
          */
-        CompareFunc compareFunc;
+        Graphics::CompareFunc compareFunc = COMPARE_FUNC_LESS;
 
         /**
          * Whether to use unnormalized or normalized texel coordinates to address texel
          */
-        bool unormCoords;
+        bool unormCoords = false;
     };
 
+    /**
+     * Defines a sampler used for sampling texture data.
+     */
+    class Sampler
+    {
+    public:
+        Graphics::SamplerState state;
+    };
 
     /**
      * Defines a shader program that contains compiled and linked modules for stages.
@@ -433,12 +459,13 @@ public:
     class ShaderProgram
     {
     public:
-
         /**
          * Defines a stage for processing in a pipeline.
          */
         enum Stage
         {
+            STAGE_UNDEFINED = 0x00000000,
+
             /**
              * Defines the vertex processing stage of a pipeline.
              */
@@ -472,19 +499,18 @@ public:
         /**
          * The stages compiled and linked into the shader program.
          */
-        unsigned int stages;
+        unsigned int stages = STAGE_UNDEFINED;
     };
 
 
     /**
-     * Defines an opaque individual (resource) desccriptor that is part of a set.
+     * Defines an opaque resource descriptor.
      */
     class Descriptor
     {
     public:
-
         /**
-         * Defines the type of descriptor.
+         * Defines the type of resource descriptor.
          */
         enum Type
         {
@@ -497,22 +523,22 @@ public:
         /**
          * The type of resource descriptor.
          */
-        Type type;
+        Type type = TYPE_UNDEFINED;
 
         /**
          * The binding index.
          */
-        unsigned int binding;
+        unsigned int binding = 0;
 
         /**
          * The stage the resource is available in.
          */
-        ShaderProgram::Stage stage;
+        Graphics::ShaderProgram::Stage stage = Graphics::ShaderProgram::STAGE_ALL;
 
         /**
          * The number of bound resources.
          */
-        size_t count;
+        size_t count = 0;
 
         /**
          * The uniforms in the descriptor
@@ -532,20 +558,20 @@ public:
 
 
     /**
-     * Defines a heap of (resources) descriptors to be bound.
+     * Defines a set of (resources) descriptors to be bound.
      */
     class DescriptorSet
     {
     public:
         /**
-         * The array of resource
-         */
-        Descriptor* descriptors;
-
-        /**
          * The number of descriptors in the set.
          */
-        size_t count;
+        size_t count = 0;
+
+        /**
+         * The array of resource
+         */
+        Graphics::Descriptor* descriptors = nullptr;
     };
 
 
@@ -560,9 +586,9 @@ public:
          */
         enum Semantic
         {
-            SEMENTIC_UNDEFINED = 0,
-            SEMENTIC_POSITION,
-            SEMENTIC_NORMAL,
+            SEMANTIC_UNDEFINED = 0,
+            SEMANTIC_POSITION,
+            SEMANTIC_NORMAL,
             SEMANTIC_COLOR,
             SEMANTIC_TANGENT,
             SEMANTIC_BINORMAL,
@@ -590,38 +616,39 @@ public:
         /**
          * The semantic.
          */
-        Semantic semantic;
+        Semantic semantic = SEMANTIC_UNDEFINED;
 
         /**
          * The semantic name.
          */
-        std::string semanticName;
+        std::string semanticName = "";
 
         /**
          * The format defining the size and type of the vertex data.
          */
-        Format format;
+        Graphics::Format format = FORMAT_UNDEFINED;
 
         /**
          * The binding index.
          */
-        unsigned int binding;
+        unsigned int binding = 0;
 
         /**
          * The location index.
          */
-        unsigned int location;
+        unsigned int location = 0;
 
         /**
          * The byte size of this attribute relative to the start of an element in the vertex layout.
          */
-        size_t offset;
+        size_t offset = 0;
 
         /**
          * The rate at which vertex attributes are pulled from buffers.
          */
-        InputRate inputRate;
+        InputRate inputRate = INPUT_RATE_PER_VERTEX;
     };
+
 
     /**
      * Defines the layout of vertex attributes.
@@ -632,13 +659,14 @@ public:
         /**
          * The number of vertex attributes in the layout.
          */
-        size_t attributeCount;
+        size_t attributeCount = 0;
 
         /**
          * The vertex attributes to be bound.
          */
-        VertexAttribute attributes[GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX];
+        Graphics::VertexAttribute attributes[GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX];
     };
+
 
     /**
      * Defines a collection of attachments used for
@@ -650,43 +678,44 @@ public:
         /**
          * The width of the render pass and attachments.
          */
-        int width;
+        int width = 0;
 
         /**
          * The height of the render pass and attachments.
          */
-        int height;
+        int height = 0;
 
         /**
          * The sample count of the render pass.
          */
-        SampleCount sampleCount;
+        Graphics::SampleCount sampleCount = SAMPLE_COUNT_1X;
 
         /**
          * The color attachments format.
          */
-        Format colorFormat;
+        Graphics::Format colorFormat = FORMAT_UNDEFINED;
 
         /**
          * The color attachments.
          */
-        Texture* colorAttachments[GP_GRAPHICS_RENDER_TARGET_ATTACHMENTS_MAX];
+        Graphics::Texture* colorAttachments[GP_GRAPHICS_RENDER_TARGET_ATTACHMENTS_MAX];
 
         /**
          * The multi-sapled color attachments.
          */
-        Texture* colorAttachmentsMultisampling[GP_GRAPHICS_RENDER_TARGET_ATTACHMENTS_MAX];
+        Graphics::Texture* colorAttachmentsMultisampling[GP_GRAPHICS_RENDER_TARGET_ATTACHMENTS_MAX];
 
         /**
          * The depth/stencil attachment format.
          */
-        Format depthStencilFormat;
+        Graphics::Format depthStencilFormat = FORMAT_UNDEFINED;
 
         /**
          * The depth/stencil attachment.
          */
-        Texture* depthStencilAttachment;
+        Graphics::Texture* depthStencilAttachment = nullptr;
     };
+
 
     /**
      * Defines how consecutive vertices are organized into primitives,
@@ -699,6 +728,7 @@ public:
         PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
         PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
     };
+
 
     /**
      * Defines the state by which a primitive is converted (rasterized)
@@ -739,38 +769,49 @@ public:
         /**
          * The polygon rasterization mode.
          */
-        PolygonMode polygonMode;
+        PolygonMode polygonMode = POLYGON_MODE_SOLID;
 
         /**
          * The triangle culling mode.
          */
-        CullMode cullMode;
+        CullMode cullMode = CULL_MODE_NONE;
 
         /**
          * The polygon front-facing orientation.
          */
-        FrontFace frontFace;
+        FrontFace frontFace = FRONT_FACE_CW;
 
         /**
          * Whether to bias fragment depth values.
          */
-        unsigned int depthBias;
+        unsigned int depthBias = 0;
 
         /**
          * The maximum (or minimum) depth bias of a fragment.
          */
-        float depthBiasClamp;
+        float depthBiasClamp = 0.0f;
 
         /**
          * Whether to clip the fragment’s depth values instead of clipping primitives to the z planes of the frustum.
          */
-        bool depthClipEnabled;
+        bool depthClipEnabled = true;
 
         /**
          * The width of rasterized line segments.
          */
-        float lineWidth;
+        float lineWidth = 1.0f;
+
+        /**
+         * If multi-sampling is enabled.
+         */
+        bool multisampleEnabled = false;
+
+        /**
+         * Multi sample count.
+         */
+        SampleCount multisampleCount = SAMPLE_COUNT_1X;
     };
+
 
     /**
      * Defines the depth stencil state for the pipeline
@@ -779,74 +820,73 @@ public:
     {
     public:
         /**
-         * Defines the stencil state comparison function and the operations
-         * when stencil test fails, passes or stencil pass but depth fails.
-         * This is use for front and back stencil tests.
+         * Defines the stencil operations.
          */
-        class StencilState
+        class StencilOp
         {
         public:
-            /**
-             *  The comparison function used in the stencil test.
-             */
-            CompareFunc compareFunc;
 
             /**
              * The action performed on samples that fail the stencil test.
              */
-            StencilOp failOp;
+            Graphics::StencilOp stencilFail = STENCIL_OP_KEEP;
 
             /**
-             * The action performed on samples that pass both the depth and stencil tests.
+             * The action performed on samples that fail both the depth and stencil tests.
              */
-            StencilOp passOp;
+            Graphics::StencilOp depthStencilFail = STENCIL_OP_KEEP;
 
             /**
              * The action performed on samples that pass the stencil test and fail the depth test.
              */
-            StencilOp passDepthFailOp;
+            Graphics::StencilOp stencilPass = STENCIL_OP_KEEP;
+
+            /**
+             * The comparison function used in the stencil test.
+             */
+            Graphics::CompareFunc stencilFunc = COMPARE_FUNC_ALWAYS;
         };
 
         /**
          * Whether depth testing is enabled.
          */
-        bool depthTest;
+        bool depthEnable = false;
 
         /**
-         * Whether depth writes are enabled when depthTest is enabled.
+         * The depth write mask.
          */
-        bool depthWrite;
-
+        DepthWriteMask depthWriteMask = DEPTH_WRITE_MASK_ALL;
         /**
          * The comparison function used in the depth test.
          */
-        CompareFunc depthCompareFunc;
+        Graphics::CompareFunc depthFunc = COMPARE_FUNC_LESS;
 
         /**
          * Whether stencil testing is enabled.
          */
-        bool stencilTest;
+        bool stencilEnable = false;
 
         /**
          * Selects the bits of the unsigned integer stencil values participating in the stencil test.
          */
-        unsigned int stencilCompareMask;
+        unsigned char stencilReadMask = 0xff;
 
         /**
          * Selects the bits of the unsigned integer stencil values updated by the stencil test in the stencil framebuffer attachment
          */
-        unsigned int stencilComparWriteMask;
+        unsigned char stencilWriteMask = 0xff;
 
         /**
          * Stencil state of the front stencil test.
          */
-        StencilState stencilStateFront;
+        StencilOp stencilStateFront;
 
         /**
          * Stencil state of the back stencil test.
          */
-        StencilState stencilStateBack;
+        StencilOp stencilStateBack;
     };
+
 
     /**
      * Defines the blending states across all color attachments.
@@ -855,68 +895,46 @@ public:
     {
     public:
         /**
-         * Defines the blend state for the color attachment
+         * Whether blending is enabled for the corresponding color attachment.
+         * If blending is not enabled, the source fragment’s color for that
+         * attachment is passed through unmodified.
          */
-        class ColorBlendState
-        {
-        public:
-            /**
-             * Whether blending is enabled for the corresponding color attachment.
-             * If blending is not enabled, the source fragment’s color for that
-             * attachment is passed through unmodified.
-             */
-            bool blendEnabled;
-
-            /**
-             * Selects which blend factor is used to determine the source factors (Sr,Sg,Sb).
-             */
-            BlendFactor blendSrcColor;
-
-            /**
-             * Selects which blend factor is used to determine the destination factors (Dr,Dg,Db).
-             */
-            BlendFactor blendDstColor;
-
-            /**
-             * Selects which blend operation is used to calculate the RGB values to write to the color attachment.
-             */
-            BlendOp blendOpColor;
-
-            /**
-             * Selects which blend factor is used to determine the source factor Sa.
-             */
-            BlendFactor blendSrcAlpha;
-
-            /**
-             * Selects which blend factor is used to determine the destination factor Da.
-             */
-            BlendFactor blendDstAlpha;
-
-            /**
-             * Selects which blend operation is use to calculate the alpha values to write to the color attachment.
-             */
-            BlendOp blendOpAlpha;
-
-            /**
-             * The bitmask of ColorWriteComponent's specifying which of the R, G, B, and/or A components are enabled for writing.
-             */
-            unsigned int colorWriteMask;
-        };
+        bool blendEnabled = false;
 
         /**
-         * Whether the logic operator is processed.
+         * Selects which blend factor is used to determine the source factors (Sr,Sg,Sb).
          */
-        bool logicOpEnable;
+        Graphics::BlendFactor blendSrcColor = BLEND_FACTOR_ONE;
 
         /**
-         * The logic operator to be applied.
+         * Selects which blend factor is used to determine the destination factors (Dr,Dg,Db).
          */
-        LogicOp logicOp;
+        Graphics::BlendFactor blendDstColor = BLEND_FACTOR_ZERO;
 
         /**
-         * The color blending state for each color attachment.
+         * Selects which blend operation is used to calculate the RGB values to write to the color attachment.
          */
-        ColorBlendState colorBlendStates[GP_GRAPHICS_RENDER_TARGET_ATTACHMENTS_MAX];
+        Graphics::BlendOp blendOpColor = BLEND_OP_ADD;
+
+        /**
+         * Selects which blend factor is used to determine the source factor Sa.
+         */
+        Graphics::BlendFactor blendSrcAlpha = BLEND_FACTOR_ONE;
+
+        /**
+         * Selects which blend factor is used to determine the destination factor Da.
+         */
+        Graphics::BlendFactor blendDstAlpha = BLEND_FACTOR_ZERO;
+
+        /**
+         * Selects which blend operation is use to calculate the alpha values to write to the color attachment.
+         */
+        Graphics::BlendOp blendOpAlpha = BLEND_OP_ADD;
+
+        /**
+         * The bitmask of ColorWriteComponent's specifying which of the R, G, B, and/or A components are enabled for writing.
+         */
+        unsigned int colorWriteMask = 0xf;
     };
 
 
@@ -927,47 +945,47 @@ public:
     class Pipeline
     {
     public:
-
         /**
          * The program used by the render pipeline.
          */
-        ShaderProgram* shaderProgram;
+        Graphics::ShaderProgram* shaderProgram = nullptr;
 
         /**
          * The vertex layout.
          */
-        VertexLayout vertexLayout;
+        Graphics::VertexLayout vertexLayout;
 
         /**
          * The descriptor set of resources bound to the pipeline.
          */
-        DescriptorSet* descriptorSet;
+        Graphics::DescriptorSet* descriptorSet = nullptr;
 
         /**
          * The render pass of attachements to target pipeline output.
          */
-        RenderPass* renderPass;
+        Graphics::RenderPass* renderPass = nullptr;
 
         /**
          * How consecutive vertices are organized into primitives.
          */
-        PrimitiveTopology primitiveTopology;
+        Graphics::PrimitiveTopology primitiveTopology = PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 
         /**
          * The state by which a primitive is converted (rasterized) to a two-dimensional image.
          */
-        RasterizerState rasterizerState;
-
-        /**
-         * @brief depthStencilState
-         */
-        DepthStencilState depthStencilState;
+        Graphics::RasterizerState rasterizerState;
 
         /**
          * The color blending state information.
          */
-        BlendState blendState;
+        Graphics::BlendState blendState[GP_GRAPHICS_RENDER_TARGET_ATTACHMENTS_MAX];
+
+        /**
+         * @brief depthStencilState
+         */
+        Graphics::DepthStencilState depthStencilState;
     };
+
 
     /**
      * Defines a list of encoded commands to be processed by the gpu.
@@ -987,18 +1005,36 @@ public:
         virtual void end() = 0;
 
         /**
+         * Transition in a render pass for attachment and texture usage.
+         *
+         * @param pass The render pass and associated attachments to transition to.
+         * @param textureUsageOld The old texture usage to transition from.
+         * @param textureUsageNew The new texture usage to transition to.
+         */
+        virtual void transitionRenderPass(Graphics::RenderPass* pass, 
+                                          Graphics::Texture::Usage textureUsageOld, 
+                                          Graphics::Texture::Usage textureUsageNew) = 0;
+        /**
          * Begins the render pass and binds the associated attachents.
          *
          * @param pass The render pass.
          */
-        virtual void beginRenderPass(RenderPass* pass) = 0;
+        virtual void beginRender(Graphics::RenderPass* pass) = 0;
 
         /**
          * End the render pass and binds the associated attachents.
          *
          * @param pass The render pass.
          */
-        virtual void endRenderPass(RenderPass* pass) = 0;
+        virtual void endRender(Graphics::RenderPass* pass) = 0;
+
+        /**
+         * Clears the color for the specified color attachment index.
+         *
+         * @param The ClearValue (red, green, blue, alpha) to clear the color attachment.
+         * @param colorAttachmentIndex The index of the color attachment to clear.
+         */
+        virtual void clearColor(Graphics::ClearValue clearValue, size_t colorAttachmentIndex) = 0;
 
         /**
          * Sets the viewport region.
@@ -1027,21 +1063,14 @@ public:
          *
          * @param pipeline The pipeline to be bound for use.
          */
-        virtual void bindPipeline(Pipeline* pipeline) = 0;
+        virtual void bindPipeline(Graphics::Pipeline* pipeline) = 0;
 
         /**
          * Binds the specified descriptor set to a pipeline.
          *
          * @param set The descriptor set to be bound.
          */
-        virtual void bindDescriptorSet(DescriptorSet* set) = 0;
-
-        /**
-         * Binds an index buffer.
-         *
-         * @param buffer The index buffer to be bound.
-         */
-        virtual void bindIndexBuffer(Buffer* buffer) = 0;
+        virtual void bindDescriptorSet(Graphics::DescriptorSet* set) = 0;
 
         /**
          * Binds the specified vertex buffers.
@@ -1049,7 +1078,14 @@ public:
          * @param buffers The vertex buffers to be bound.
          * @param bufferCount The number of vertex buffers to be bound.
          */
-        virtual void bindVertexBuffers(Buffer** buffers, size_t bufferCount) = 0;
+        virtual void bindVertexBuffers(Graphics::Buffer** buffers, size_t bufferCount) = 0;
+
+        /**
+         * Binds an index buffer.
+         *
+         * @param buffer The index buffer to be bound.
+         */
+        virtual void bindIndexBuffer(Graphics::Buffer* buffer) = 0;
 
         /**
          * Draws for the specified number of vertices.
@@ -1060,13 +1096,30 @@ public:
         virtual void draw(size_t vertexCount, size_t vertexOffset) = 0;
 
         /**
+         * Draws for the specified number of indexed vertices.
+         *
+         * @param indexCount The number of indexCount to be drawn.
+         * @param indexOffset The offset of the first index to be drawn.
+         */
+        virtual void drawIndexed(size_t indexCount, size_t indexOffset) = 0;
+
+        /**
          * Draws instanced for the specified number of vertices.
          *
          * @param vertexCount The number of vertices to be drawn.
          * @param vertexOffset The offset of the first vertex to be drawn.
          */
         virtual void drawInstanced(size_t vertexCount, size_t vertexOffset) = 0;
+
+        /**
+         * Draws instanced for the specified number of indexed vertices.
+         *
+         * @param indexCount The number of indexCount to be drawn.
+         * @param indexOffset The offset of the first index to be drawn.
+         */
+        virtual void drawIndexedInstanced(size_t indexCount, size_t indexOffset) = 0;
     };
+
 
     /**
      * Defines a management container for pooling commands.
@@ -1077,7 +1130,7 @@ public:
         /**
          * Creates a command list for processing render commands.
          *
-         * @return A command list.
+         * @return The created command list.
          */
         virtual Graphics::CommandList* createCommandList() = 0;
 
@@ -1089,26 +1142,19 @@ public:
         virtual void destroyCommandList(Graphics::CommandList* commandList) = 0;
     };
 
+
     /**
      * Defines the geometry used for rendering.
      */
     class Geometry
     {
     public:
-        /**
-         * Get the url from which the geometry was loaded from.
-         *
-         * @return The url from which the geometry was loaded from.
-         */
-        std::string getUrl() const;
-
-    private:
-
-        std::string _url;
-        Graphics::Buffer* _vertexBuffer;
-        Graphics::Buffer* _indexBuffer;
-        std::vector<std::pair<size_t, size_t>> _indexParts;
+        std::string url;
+        Graphics::Buffer* vertexBuffer;
+        Graphics::Buffer* indexBuffer;
+        std::vector<std::pair<size_t, size_t>> indexParts;
     };
+
 
     /**
      * Defines the way a surface physically looks.
@@ -1116,20 +1162,7 @@ public:
     class Material
     {
     public:
-
-        /**
-         * Constructor.
-         */
-        Material();
-
-        /**
-         * Destructor.
-         */
-        ~Material();
-
-    private:
-
-         Graphics::Buffer* _uniformBuffer;
+        Graphics::Buffer* uniformBuffer;
     };
 
 
@@ -1140,6 +1173,7 @@ public:
     {
         friend class SceneObject;
         friend class Serializer::Activator;
+
     public:
 
         /**
@@ -1187,8 +1221,9 @@ public:
     private:
 
         Type _type;
-        Graphics::Pipeline* _pipeline;
+        Geometry geometry;
         std::vector<Graphics::Material> _materials;
+        Graphics::Pipeline* _pipeline;
     };
 
 
@@ -1198,6 +1233,13 @@ public:
      * @return The graphics system.
      */
     static Graphics* getGraphics();
+
+    /**
+     * Gets the graphics api.
+     *
+     * @return The graphics api.
+     */
+    static Graphics::Api getApi();
 
 	/**
      * Called by platform or editor to initialize the graphics system.
@@ -1250,37 +1292,34 @@ public:
      * @param url
      * @return
      */
-    std::shared_ptr<Renderer> createRenderer(std::string url);
-
-protected:
+    std::shared_ptr<Graphics::Renderer> loadRenderer(std::string url);
 
     /**
      * Creates a descriptor set.
      *
      * @return The created deescriptor set.
      */
-    virtual Graphics::DescriptorSet* createDescriptorSet(Descriptor* descriptors, size_t descriptorCount) = 0;
+    virtual Graphics::DescriptorSet* createDescriptorSet(Graphics::Descriptor* descriptors, size_t descriptorCount) = 0;
 
     /**
      * Creates a vertex buffer.
      *
-     * @param count The number of vertex elements
+     * @param size The vertex buffer size in bytes
      * @param hostVisible true if the host has visible access to the cpu memory, false if not.
-     * @param vertexAttributes The array of vertex attribute describing the vertex layout.
-     * @param vertexAttributeCount The number of vertex attributes.
+     * @param vertexStride The number of bytes to stride for each vertex element.
      * @return The created vertex buffer.
      */
-    virtual Graphics::Buffer* createVertexBuffer(size_t count, bool hostVisible, VertexLayout vertexLayout) = 0;
+    virtual Graphics::Buffer* createVertexBuffer(size_t size, bool hostVisible, size_t vertexStride) = 0;
 
     /**
      * Creates an index buffer.
      *
-     * @param count The number of indices.
+     * @param size The index buffer size.
      * @param hostVisible true if the host has visible access to the cpu memory, false if not.
      * @param indexType The type of indices.
      * @return The created index buffer.
      */
-    virtual Graphics::Buffer* createIndexBuffer(size_t count, bool hostVisible, IndexType indexType) = 0;
+    virtual Graphics::Buffer* createIndexBuffer(size_t size, bool hostVisible, Graphics::IndexType indexType) = 0;
 
     /**
      * Creates a uniform buffer
@@ -1289,7 +1328,7 @@ protected:
      * @param hostVisible true if the host has visible access to the cpu memory, false if not.
      * @return The created buffer with the specified usage.
      */
-    virtual Graphics::Buffer* createUniformBuffer(size_t size, bool hostVisible, Buffer::Usage usage) = 0;
+    virtual Graphics::Buffer* createUniformBuffer(size_t size, bool hostVisible) = 0;
 
     /**
      * Destroys a buffer.
@@ -1307,7 +1346,8 @@ protected:
      * @param hostVisible If the texture is visible to the host.
      * @return The created texture.
      */
-    virtual Graphics::Texture* createTexture1D(Graphics::Format format, size_t width, Texture::Usage usage, bool hostVisible) = 0;
+    virtual Graphics::Texture* createTexture1D(Graphics::Format format, size_t width, 
+                                               Graphics::Texture::Usage usage, bool hostVisible) = 0;
 
     /**
      * Creates a 2 dimensional texture with the specified format, dimensions and mip levels.
@@ -1320,7 +1360,8 @@ protected:
      * @param hostVisible If the texture is visible to the host.
      * @return The created texture.
      */
-    virtual Graphics::Texture* createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, Texture::Usage usage, bool hostVisible) = 0;
+    virtual Graphics::Texture* createTexture2D(Format format, size_t width, size_t height, size_t mipLevelCount, 
+                                               Graphics::Texture::Usage usage, bool hostVisible) = 0;
 
     /**
      * Creates a 3 dimensional texture with the specified format and dimensions.
@@ -1333,7 +1374,8 @@ protected:
      * @param hostVisible If the texture is visible to the host.
      * @return The created texture.
      */
-    virtual Graphics::Texture* createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, Texture::Usage usage, bool hostVisible) = 0;
+    virtual Graphics::Texture* createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, 
+                                               Graphics::Texture::Usage usage, bool hostVisible) = 0;
 
     /**
      * Destroys a textures.
@@ -1347,7 +1389,7 @@ protected:
      *
      * @return The sampler created.
      */
-    virtual Graphics::Sampler* createSampler() = 0;
+    virtual Graphics::Sampler* createSampler(const Graphics::SamplerState& samplerState) = 0;
 
     /**
      * Destroys a sampler.
@@ -1356,8 +1398,22 @@ protected:
      */
     virtual void destroySampler(Graphics::Sampler* sampler) = 0;
 
+   /**
+     * Creates a shader program with only vertex and fragment shader statges.
+     *
+     * @param vertSize The vertex shader byte code size.
+     * @param vertByteCode The vertex shader byte code.
+     * @param vertEntryPoint The vertex shader entry point.
+     * @param fragSize The fragment shader byte code size.
+     * @param fragByteCode The fragment shader byte code.
+     * @param fragEntryPoint The fragment shader entry point
+     * @return The created shader program.
+     */
+    virtual Graphics::ShaderProgram* createShaderProgram(size_t vertSize, const char* vertByteCode, const char* vertEntryPoint,
+                                                         size_t fragSize, const char* fragByteCode, const char* fragEntryPoint) = 0;
+
     /**
-     * Creates a shader program with the specified shader stage size, byte code and entry points.
+     * Creates a shader program with the specified shader statges.
      *
      * @param vertSize The vertex shader byte code size.
      * @param vertByteCode The vertex shader byte code.
@@ -1376,11 +1432,11 @@ protected:
      * @param fragEntryPoint The fragment shader entry point
      * @return The created shader program.
      */
-    virtual Graphics::ShaderProgram* createShaderProgram(size_t vertSize, const void* vertByteCode, const char* vertEntryPoint,
-                                                         size_t tescSize, const void* tescByteCode, const char* tescEntryPoint,
-                                                         size_t teseSize, const void* teseByteCode, const char* teseEntryPoint,
-                                                         size_t geomSize, const void* geomByteCode, const char* geomEntryPoint,
-                                                         size_t fragSize, const void* fragByteCode, const char* fragEntryPoint) = 0;
+    virtual Graphics::ShaderProgram* createShaderProgram(size_t vertSize, const char* vertByteCode, const char* vertEntryPoint,
+                                                         size_t tescSize, const char* tescByteCode, const char* tescEntryPoint,
+                                                         size_t teseSize, const char* teseByteCode, const char* teseEntryPoint,
+                                                         size_t geomSize, const char* geomByteCode, const char* geomEntryPoint,
+                                                         size_t fragSize, const char* fragByteCode, const char* fragEntryPoint) = 0;
     /**
      * Destroys a shader program.
      *
@@ -1456,14 +1512,19 @@ protected:
      * Submit commands for processing into the queue.
      *
      * @param commandLists The command lists to be processed.
-     * @param commandCount The number of command list to be processed.
+     * @param waitSemaphore The wait semaphore before executing the commands.
+     * @param signalSemaphore the signal semaphore once the commands are executed.
      */
-    virtual void submit(Graphics::CommandList** commandLists, size_t commandListCount) = 0;
+    virtual void submit(Graphics::CommandList* commandList, 
+                        Graphics::Semaphore* waitSemaphore, 
+                        Graphics::Semaphore* signalSemaphore) = 0;
 
     /**
      * Queues the presentation of swap images the platforms target surface.
+     *
+     * @param waitSemaphore The wait semaphore for presentation of swap images. 
      */
-    virtual bool present() = 0;
+    virtual void present(Graphics::Semaphore* waitSemaphore) = 0;
 
     /**
      * Waits idle for an infinite time for all commands in the queue to be processed.
@@ -1471,21 +1532,56 @@ protected:
     virtual void waitIdle() = 0;
 
     /**
-     * Aquires the next swapchain image.
+     * Gets the default render pass for the specified backbuffer image index.
+     *
+     * @param imageIndex The backbuffer image index.
+     * @return The default render pass for the specified  backbuffer image index.
      */
-    virtual void acquireNextSwapchainImage() = 0;
+    virtual Graphics::RenderPass* getRenderPass(size_t imageIndex) = 0;
 
     /**
-     * Called by the Game to render the currently active scene.
+     * Gets the image acquired fence.
      *
-     * TODO: Move to Game::render
-     *
-     * @param elapsedTime The elapsed time since the last render.
+     * @param imageIndex The backbuffer image index.
+     * @return The swapchain image acquired fence.
      */
-    virtual void render(float elapsedTime) = 0;
+    virtual Graphics::Fence* getImageAcquiredFence(size_t imageIndex) = 0;
 
+    /**
+     * Gets the image acquired semaphore.
+     *
+     * @param imageIndex The backbuffer image index.
+     * @return The swapchain image acquired semaphore.
+     */
+    virtual Graphics::Semaphore* getImageAcquiredSemaphore(size_t imageIndex) = 0;
+
+    /**
+     * Gets the render complete semaphore.
+     *
+     * @param imageIndex The backbuffer image index.
+     * @return The render complete semaphore.
+     */
+    virtual Graphics::Semaphore* getRenderCompleteSemaphore(size_t imageIndex) = 0;
+    
+    /**
+     * Aquires the next backbufferimage.
+     *
+     * @param acquiredImageSemaphore The semaphore for next  acquired image.
+     * @param acquiredImageFence The fence for the next acquired .
+     */
+    virtual void acquireNextImage(Graphics::Semaphore* acquiredImageSemaphore, 
+                                  Graphics::Fence* acquiredImageFence) = 0;
+
+    /**
+     * Gets the vertex stride for a specified graphics format.
+     *
+     * @param format The format to get the stride for.
+     * @param The stride in bytes.
+     */
+    size_t getVertexStride(Graphics::Format format);
 
     static Graphics* _graphics;
+    static Graphics::Api _api;
 
 };
 

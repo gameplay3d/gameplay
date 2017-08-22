@@ -235,7 +235,8 @@ int GraphicsDirect3D::getHeight()
     return _height;
 }
 
-GraphicsDirect3D::CommandListDirect3D::CommandListDirect3D()
+GraphicsDirect3D::CommandListDirect3D::CommandListDirect3D(ID3D12Device* device, ID3D12GraphicsCommandList* commandList)
+    :  device(device), commandList(commandList)
 {
 }
 
@@ -247,11 +248,21 @@ void GraphicsDirect3D::CommandListDirect3D::end()
 {
 }
 
-void GraphicsDirect3D::CommandListDirect3D::beginRenderPass(RenderPass* pass)
+void GraphicsDirect3D::CommandListDirect3D::transitionRenderPass(Graphics::RenderPass* pass, 
+                                                                 Graphics::Texture::Usage textureUsageOld, 
+                                                                 Graphics::Texture::Usage textureUsageNew)
 {
 }
 
-void GraphicsDirect3D::CommandListDirect3D::endRenderPass()
+void GraphicsDirect3D::CommandListDirect3D::beginRender(Graphics::RenderPass* pass)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::endRender(Graphics::RenderPass* pass)
+{
+}
+
+void GraphicsDirect3D::CommandListDirect3D::clearColor(Graphics::ClearValue clearValue, size_t colorAttachmentIndex)
 {
 }
 
@@ -263,19 +274,19 @@ void GraphicsDirect3D::CommandListDirect3D::setScissor(float x, float y, float w
 {
 }
 
-void GraphicsDirect3D::CommandListDirect3D::bindPipeline(Pipeline* pipeline)
+void GraphicsDirect3D::CommandListDirect3D::bindPipeline(Graphics::Pipeline* pipeline)
 {
 }
 
-void GraphicsDirect3D::CommandListDirect3D::bindDescriptorSet(DescriptorSet* set)
+void GraphicsDirect3D::CommandListDirect3D::bindDescriptorSet(Graphics::DescriptorSet* set)
 {
 }
 
-void GraphicsDirect3D::CommandListDirect3D::bindIndexBuffer(Buffer* buffer)
+void GraphicsDirect3D::CommandListDirect3D::bindVertexBuffers(Graphics::Buffer** buffers, size_t bufferCount)
 {
 }
 
-void GraphicsDirect3D::CommandListDirect3D::bindVertexBuffers(Buffer** buffers, size_t bufferCount)
+void GraphicsDirect3D::CommandListDirect3D::bindIndexBuffer(Graphics::Buffer* buffer)
 {
 }
 
@@ -287,35 +298,79 @@ void GraphicsDirect3D::CommandListDirect3D::drawInstanced(size_t vertexCount, si
 {
 }
 
-GraphicsDirect3D::CommandPoolDirect3D::CommandPoolDirect3D()
+void GraphicsDirect3D::CommandListDirect3D::drawIndexed(size_t indexCount, size_t indexOffset)
+{
+}
+    
+void GraphicsDirect3D::CommandListDirect3D::drawIndexedInstanced(size_t indexCount, size_t indexOffset)
+{
+}
+
+GraphicsDirect3D::CommandPoolDirect3D::CommandPoolDirect3D(ID3D12Device* device, ID3D12CommandAllocator* commandAllocator)
+    : device(device), commandAllocator(commandAllocator)
 {
 }
 
 Graphics::CommandList* GraphicsDirect3D::CommandPoolDirect3D::createCommandList()
 {
-    return nullptr;
+     Graphics::CommandList* ret = nullptr;
+     ID3D12PipelineState* d3dPipelineState = nullptr;
+     ID3D12GraphicsCommandList* d3dCommandList;
+     if (SUCCEEDED(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, d3dPipelineState, __uuidof(d3dCommandList), (void**)&d3dCommandList)))
+     {
+         ret = new CommandListDirect3D(device, d3dCommandList);
+     }
+     return ret;
 }
 
 void GraphicsDirect3D::CommandPoolDirect3D::destroyCommandList(Graphics::CommandList* commandList)
 {
+    CommandListDirect3D* list = static_cast<CommandListDirect3D*>(commandList);
+    SAFE_RELEASE(list->commandList);
+    GP_SAFE_DELETE(list);
 }
 
-Graphics::DescriptorSet* GraphicsDirect3D::createDescriptorSet(Descriptor* descriptors, size_t descriptorCount)
+Graphics::DescriptorSet* GraphicsDirect3D::createDescriptorSet(Graphics::Descriptor* descriptors, size_t descriptorCount)
+{
+
+    return nullptr;
+}
+
+Graphics::Buffer* GraphicsDirect3D::createVertexBuffer(size_t size, bool hostVisible, size_t vertexStride)
+{
+    D3D12_HEAP_PROPERTIES props = {};
+    props.Type = D3D12_HEAP_TYPE_DEFAULT;
+    props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+    props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+    props.CreationNodeMask = 1;
+    props.VisibleNodeMask = 1;
+
+    D3D12_HEAP_FLAGS flags = D3D12_HEAP_FLAG_NONE;
+
+    D3D12_RESOURCE_DESC desc = {};
+    desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+    desc.Alignment = 0;
+    desc.Width = size;
+    desc.Height = 1;
+    desc.DepthOrArraySize = 1;
+    desc.MipLevels = 1;
+    desc.Format = DXGI_FORMAT_UNKNOWN;
+    desc.SampleDesc.Count = 1;
+    desc.SampleDesc.Quality = 0;
+    desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+    desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+    D3D12_RESOURCE_STATES states = D3D12_RESOURCE_STATE_COPY_DEST;
+
+    return nullptr;
+}
+
+Graphics::Buffer* GraphicsDirect3D::createIndexBuffer(size_t count, bool hostVisible, Graphics::IndexType indexType)
 {
     return nullptr;
 }
 
-Graphics::Buffer* GraphicsDirect3D::createVertexBuffer(size_t count, bool hostVisible, VertexLayout vertexLayout)
-{
-    return nullptr;
-}
-
-Graphics::Buffer* GraphicsDirect3D::createIndexBuffer(size_t count, bool hostVisible, IndexType indexType)
-{
-    return nullptr;
-}
-
-Graphics::Buffer* GraphicsDirect3D::createUniformBuffer(size_t size, bool hostVisible, Buffer::Usage usage)
+Graphics::Buffer* GraphicsDirect3D::createUniformBuffer(size_t size, bool hostVisible)
 {
     return nullptr;
 }
@@ -324,17 +379,20 @@ void GraphicsDirect3D::destroyBuffer(Graphics::Buffer* buffer)
 {
 }
 
-Graphics::Texture* GraphicsDirect3D::createTexture1D(Graphics::Format format, size_t width, Texture::Usage usage, bool hostVisible)
+Graphics::Texture* GraphicsDirect3D::createTexture1D(Graphics::Format format, size_t width, 
+                                                     Graphics::Texture::Usage usage, bool hostVisible)
 {
     return nullptr;
 }
 
-Graphics::Texture* GraphicsDirect3D::createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, Texture::Usage usage, bool hostVisible)
+Graphics::Texture* GraphicsDirect3D::createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, 
+                                                     Graphics::Texture::Usage usage, bool hostVisible)
 {
     return nullptr;
 }
 
-Graphics::Texture* GraphicsDirect3D::createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, Texture::Usage usage, bool hostVisible)
+Graphics::Texture* GraphicsDirect3D::createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, 
+                                                     Graphics::Texture::Usage usage, bool hostVisible)
 {
     return nullptr;
 }
@@ -343,7 +401,7 @@ void GraphicsDirect3D::destroyTexture(Graphics::Texture* texture)
 {
 }
 
-Graphics::Sampler* GraphicsDirect3D::createSampler()
+Graphics::Sampler* GraphicsDirect3D::createSampler(const Graphics::SamplerState& samplerState)
 {
     return nullptr;
 }
@@ -352,11 +410,17 @@ void GraphicsDirect3D::destroySampler(Graphics::Sampler* sampler)
 {
 }
 
-Graphics::ShaderProgram* GraphicsDirect3D::createShaderProgram(size_t vertSize, const void* vertByteCode, const char* vertEntryPoint,
-                                                               size_t tescSize, const void* tescByteCode, const char* tescEntryPoint,
-                                                               size_t teseSize, const void* teseByteCode, const char* teseEntryPoint,
-                                                               size_t geomSize, const void* geomByteCode, const char* geomEntryPoint,
-                                                               size_t fragSize, const void* fragByteCode, const char* fragEntryPoint)
+Graphics::ShaderProgram* GraphicsDirect3D::createShaderProgram(size_t vertSize, const char* vertByteCode, const char* vertEntryPoint,
+                                                               size_t fragSize, const char* fragByteCode, const char* fragEntryPoint)
+{
+    return nullptr;
+}
+
+Graphics::ShaderProgram* GraphicsDirect3D::createShaderProgram(size_t vertSize, const char* vertByteCode, const char* vertEntryPoint,
+                                                               size_t tescSize, const char* tescByteCode, const char* tescEntryPoint,
+                                                               size_t teseSize, const char* teseByteCode, const char* teseEntryPoint,
+                                                               size_t geomSize, const char* geomByteCode, const char* geomEntryPoint,
+                                                               size_t fragSize, const char* fragByteCode, const char* fragEntryPoint)
 {
     return nullptr;
 }
@@ -365,11 +429,9 @@ void GraphicsDirect3D::destroyShaderProgram(Graphics::ShaderProgram* shaderProgr
 {
 }
 
-Graphics::RenderPass* GraphicsDirect3D::createRenderPass(Graphics::Format colorFormat,
-                                               size_t colorAttachmentCount,
+Graphics::RenderPass* GraphicsDirect3D::createRenderPass(Graphics::Format colorFormat, size_t colorAttachmentCount,
                                                Graphics::Format depthStencilFormat,
-                                               size_t width, size_t height,
-                                               bool hostVisible)
+                                               size_t width, size_t height, bool hostVisible)
 {
     return nullptr;
 }
@@ -396,54 +458,42 @@ void GraphicsDirect3D::destroyPipeline(Graphics::Pipeline* pipeline)
 
 Graphics::CommandPool* GraphicsDirect3D::createCommandPool()
 {
-    return nullptr;
+    Graphics::CommandPool* ret;
+    ID3D12CommandAllocator* d3dAllocator;
+    if (SUCCEEDED(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(d3dAllocator), (void**)&d3dAllocator)))
+    {
+        ret = new CommandPoolDirect3D(_device, d3dAllocator);
+    }
+    return ret;
 }
 
 void GraphicsDirect3D::destroyCommandPool(Graphics::CommandPool* pool)
 {
+    CommandPoolDirect3D* commandPool = static_cast<CommandPoolDirect3D*>(pool);
+    SAFE_RELEASE(commandPool->commandAllocator);
+    GP_SAFE_DELETE(commandPool);
 }
 
-void GraphicsDirect3D::submit(Graphics::CommandList** commandLists, size_t commandListCount)
+void GraphicsDirect3D::submit(Graphics::CommandList* commandList,
+                              Graphics::Semaphore* waitSemaphore, 
+                              Graphics::Semaphore* signalSemaphore)
 {
+    GraphicsDirect3D::CommandListDirect3D* dxCommandList = (GraphicsDirect3D::CommandListDirect3D*)commandList;
+    ID3D12CommandList*  commandLists[] = { dxCommandList->commandList };
+
+	// Execute the list of commands.
+	_commandQueue->ExecuteCommandLists(1, commandLists);
+}
+
+
+void GraphicsDirect3D::present(Graphics::Semaphore* waitSemaphore)
+{
+    _swapchain->Present(_vsync ? 1 : 0, 0);
 }
 
 void GraphicsDirect3D::waitIdle()
 {
-    D3D_CHECK_RESULT(_commandQueue->Signal(_fence, _fenceValues[_backBufferIndex]));
-    D3D_CHECK_RESULT(_fence->SetEventOnCompletion(_fenceValues[_backBufferIndex], _fenceEvent));
-    WaitForSingleObjectEx(_fenceEvent, INFINITE, FALSE);
-    _fenceValues[_backBufferIndex]++;
-}
-
-bool GraphicsDirect3D::present()
-{
-    return SUCCEEDED(_swapchain->Present(_vsync ? 1 : 0, 0));
-}
-
-void GraphicsDirect3D::acquireNextSwapchainImage()
-{
-}
-
-void GraphicsDirect3D::render(float elapsedTime)
-{
-    if (!_resized)
-		return;
-
-	buildCommands();
-
-	// Load the command list array (only one command list for now).
-	ID3D12CommandList* commandLists[] = { _commandList };
-
-	// Execute the list of commands.
-	_commandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
-
-	// Present the backbuffer to the screen
-	if (FAILED(_swapchain->Present(_vsync ? 1 : 0, 0)))
-		return;
-
-    _backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
-
-	// Signal and increment the fence value.
+    // Signal and increment the fence value.
 	const uint64_t fenceToWaitFor = _fenceValues[_backBufferIndex];
 	if (FAILED(_commandQueue->Signal(_fence, fenceToWaitFor)))
 		return;
@@ -453,10 +503,41 @@ void GraphicsDirect3D::render(float elapsedTime)
 	{
 		if(FAILED(_fence->SetEventOnCompletion(_fenceValues[_backBufferIndex], _fenceEvent)))
 			return;
+
 		WaitForSingleObject(_fenceEvent, INFINITE);
 	}
 	_fenceValues[_backBufferIndex] = fenceToWaitFor + 1;
 }
+
+Graphics::RenderPass* GraphicsDirect3D::getRenderPass(size_t imageIndex)
+{
+
+    return nullptr;
+}
+
+Graphics::Fence* GraphicsDirect3D::getImageAcquiredFence(size_t imageIndex)
+{
+    return nullptr;
+}
+
+Graphics::Semaphore* GraphicsDirect3D::getImageAcquiredSemaphore(size_t imageIndex)
+{
+    return nullptr;
+}
+
+Graphics::Semaphore* GraphicsDirect3D::getRenderCompleteSemaphore(size_t imageIndex)
+{
+    return nullptr;
+}
+
+void GraphicsDirect3D::acquireNextImage(Graphics::Semaphore* acquiredImageSemaphore, 
+                                        Graphics::Fence* acquiredImageFence)
+{
+    GP_ASSERT(_swapchain);
+
+    _backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
+}
+
 
 void GraphicsDirect3D::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter)
 {

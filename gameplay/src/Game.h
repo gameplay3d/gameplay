@@ -359,6 +359,8 @@ private:
     std::shared_ptr<SceneObject> _sceneLoading;
 	std::shared_ptr<SceneObject> _scene;
     std::shared_ptr<Camera> _camera;
+    Graphics::CommandPool* _commandPool;
+    std::vector<Graphics::CommandList*> _commandLists;
 };
 
 }

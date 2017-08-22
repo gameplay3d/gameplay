@@ -205,11 +205,21 @@ void GraphicsVulkan::CommandListVulkan::end()
 {
 }
 
-void GraphicsVulkan::CommandListVulkan::beginRenderPass(RenderPass* pass)
+void GraphicsVulkan::CommandListVulkan::transitionRenderPass(Graphics::RenderPass* pass, 
+                                                             Graphics::Texture::Usage textureUsageOld, 
+                                                             Graphics::Texture::Usage textureUsageNew)
 {
 }
 
-void GraphicsVulkan::CommandListVulkan::endRenderPass()
+void GraphicsVulkan::CommandListVulkan::beginRender(Graphics::RenderPass* pass)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::endRender(Graphics::RenderPass* pass)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::clearColor(Graphics::ClearValue clearValue, size_t colorAttachmentIndex)
 {
 }
 
@@ -221,19 +231,19 @@ void GraphicsVulkan::CommandListVulkan::setScissor(float x, float y, float width
 {
 }
 
-void GraphicsVulkan::CommandListVulkan::bindPipeline(Pipeline* pipeline)
+void GraphicsVulkan::CommandListVulkan::bindPipeline(Graphics::Pipeline* pipeline)
 {
 }
 
-void GraphicsVulkan::CommandListVulkan::bindDescriptorSet(DescriptorSet* set)
+void GraphicsVulkan::CommandListVulkan::bindDescriptorSet(Graphics::DescriptorSet* set)
 {
 }
 
-void GraphicsVulkan::CommandListVulkan::bindIndexBuffer(Buffer* buffer)
+void GraphicsVulkan::CommandListVulkan::bindVertexBuffers(Graphics::Buffer** buffers, size_t bufferCount)
 {
 }
 
-void GraphicsVulkan::CommandListVulkan::bindVertexBuffers(Buffer** buffers, size_t bufferCount)
+void GraphicsVulkan::CommandListVulkan::bindIndexBuffer(Graphics::Buffer* buffer)
 {
 }
 
@@ -242,6 +252,14 @@ void GraphicsVulkan::CommandListVulkan::draw(size_t vertexCount, size_t vertexOf
 }
 
 void GraphicsVulkan::CommandListVulkan::drawInstanced(size_t vertexCount, size_t vertexOffset)
+{
+}
+
+void GraphicsVulkan::CommandListVulkan::drawIndexed(size_t indexCount, size_t indexOffset)
+{
+}
+    
+void GraphicsVulkan::CommandListVulkan::drawIndexedInstanced(size_t indexCount, size_t indexOffset)
 {
 }
 
@@ -258,22 +276,22 @@ void GraphicsVulkan::CommandPoolVulkan::destroyCommandList(Graphics::CommandList
 {
 }
 
-Graphics::DescriptorSet* GraphicsVulkan::createDescriptorSet(Descriptor* descriptors, size_t descriptorCount)
+Graphics::DescriptorSet* GraphicsVulkan::createDescriptorSet(Graphics::Descriptor* descriptors, size_t descriptorCount)
 {
     return nullptr;
 }
 
-Graphics::Buffer* GraphicsVulkan::createVertexBuffer(size_t count, bool hostVisible, VertexLayout vertexLayout)
+Graphics::Buffer* GraphicsVulkan::createVertexBuffer(size_t count, bool hostVisible, size_t vertexStride)
 {
     return nullptr;
 }
 
-Graphics::Buffer* GraphicsVulkan::createIndexBuffer(size_t count, bool hostVisible, IndexType indexType)
+Graphics::Buffer* GraphicsVulkan::createIndexBuffer(size_t count, bool hostVisible, Graphics::IndexType indexType)
 {
     return nullptr;
 }
 
-Graphics::Buffer* GraphicsVulkan::createUniformBuffer(size_t size, bool hostVisible, Buffer::Usage usage)
+Graphics::Buffer* GraphicsVulkan::createUniformBuffer(size_t size, bool hostVisible)
 {
     return nullptr;
 }
@@ -282,17 +300,20 @@ void GraphicsVulkan::destroyBuffer(Graphics::Buffer* buffer)
 {
 }
 
-Graphics::Texture* GraphicsVulkan::createTexture1D(Graphics::Format format, size_t width, Texture::Usage usage, bool hostVisible)
+Graphics::Texture* GraphicsVulkan::createTexture1D(Graphics::Format format, size_t width, 
+                                                   Graphics::Texture::Usage usage, bool hostVisible)
 {
     return nullptr;
 }
 
-Graphics::Texture* GraphicsVulkan::createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, Texture::Usage usage, bool hostVisible)
+Graphics::Texture* GraphicsVulkan::createTexture2D(Graphics::Format format, size_t width, size_t height, size_t mipLevelCount, 
+                                                   Graphics::Texture::Usage usage, bool hostVisible)
 {
     return nullptr;
 }
 
-Graphics::Texture* GraphicsVulkan::createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, Texture::Usage usage, bool hostVisible)
+Graphics::Texture* GraphicsVulkan::createTexture3D(Graphics::Format format,  size_t width, size_t height, size_t depth, 
+                                                   Graphics::Texture::Usage usage, bool hostVisible)
 {
     return nullptr;
 }
@@ -301,7 +322,7 @@ void GraphicsVulkan::destroyTexture(Graphics::Texture* texture)
 {
 }
 
-Graphics::Sampler* GraphicsVulkan::createSampler()
+Graphics::Sampler* GraphicsVulkan::createSampler(const Graphics::SamplerState& samplerState)
 {
     return nullptr;
 }
@@ -310,12 +331,19 @@ void GraphicsVulkan::destroySampler(Graphics::Sampler* sampler)
 {
 }
 
-Graphics::ShaderProgram* GraphicsVulkan::createShaderProgram(size_t vertSize, const void* vertByteCode, const char* vertEntryPoint,
-                                                               size_t tescSize, const void* tescByteCode, const char* tescEntryPoint,
-                                                               size_t teseSize, const void* teseByteCode, const char* teseEntryPoint,
-                                                               size_t geomSize, const void* geomByteCode, const char* geomEntryPoint,
-                                                               size_t fragSize, const void* fragByteCode, const char* fragEntryPoint)
+Graphics::ShaderProgram* GraphicsVulkan::createShaderProgram(size_t vertSize, const char* vertByteCode, const char* vertEntryPoint,
+                                                             size_t fragSize, const char* fragByteCode, const char* fragEntryPoint)
 {
+    return nullptr;
+}
+
+
+Graphics::ShaderProgram* GraphicsVulkan::createShaderProgram(size_t vertSize, const char* vertByteCode, const char* vertEntryPoint,
+                                                             size_t tescSize, const char* tescByteCode, const char* tescEntryPoint,
+                                                             size_t teseSize, const char* teseByteCode, const char* teseEntryPoint,
+                                                             size_t geomSize, const char* geomByteCode, const char* geomEntryPoint,
+                                                             size_t fragSize, const char* fragByteCode, const char* fragEntryPoint)
+            {
     return nullptr;
 }
 
@@ -337,13 +365,13 @@ void GraphicsVulkan::destroyRenderPass(Graphics::RenderPass* renderPass)
 }
 
 Graphics::Pipeline* GraphicsVulkan::createPipeline(Graphics::ShaderProgram* shaderProgram,
-                                                     Graphics::VertexLayout* vertexLayout,
-                                                     Graphics::DescriptorSet* descriptorSet,
-                                                     Graphics::RenderPass* renderPass,
-                                                     Graphics::PrimitiveTopology primitiveTopology,
-                                                     Graphics::RasterizerState rasterizerState,
-                                                     Graphics::DepthStencilState depthStencilState,
-                                                     Graphics::BlendState blendState)
+                                                   Graphics::VertexLayout* vertexLayout,
+                                                   Graphics::DescriptorSet* descriptorSet,
+                                                   Graphics::RenderPass* renderPass,
+                                                   Graphics::PrimitiveTopology primitiveTopology,
+                                                   Graphics::RasterizerState rasterizerState,
+                                                   Graphics::DepthStencilState depthStencilState,
+                                                   Graphics::BlendState blendState)
 {
     return nullptr;
 }
@@ -361,70 +389,44 @@ void GraphicsVulkan::destroyCommandPool(Graphics::CommandPool* pool)
 {
 }
 
-void GraphicsVulkan::submit(Graphics::CommandList** commandLists, size_t commandListCount)
+void GraphicsVulkan::submit(Graphics::CommandList* commandList,
+                            Graphics::Semaphore* waitSemaphore, 
+                            Graphics::Semaphore* signalSemaphore)
 {
+}
+
+void GraphicsVulkan::present(Graphics::Semaphore* waitSemaphore)
+{
+    //vkQueuePresentKHR(_queueGraphics, &presentInfo) == VK_SUCCESS;
 }
 
 void GraphicsVulkan::waitIdle()
 {
 }
 
-bool GraphicsVulkan::present()
+Graphics::RenderPass* GraphicsVulkan::getRenderPass(size_t imageIndex)
 {
-    //return vkQueuePresentKHR(_queueGraphics, &presentInfo) == VK_SUCCESS;
-    return true;
+    return nullptr;
 }
 
-void GraphicsVulkan::acquireNextSwapchainImage()
+Graphics::Fence* GraphicsVulkan::getImageAcquiredFence(size_t imageIndex)
 {
-
+    return nullptr;
 }
 
-void GraphicsVulkan::render(float elapsedTime)
+Graphics::Semaphore* GraphicsVulkan::getImageAcquiredSemaphore(size_t imageIndex)
 {
-    if (!_resized)
-		return;
+    return nullptr;
+}
 
-	// TODO: run this on secondary thread on on changes
-	buildCommands();
+Graphics::Semaphore* GraphicsVulkan::getRenderCompleteSemaphore(size_t imageIndex)
+{
+    return nullptr;
+}
 
-	// Get next image in the swap chain (back/front buffer)
-	VK_CHECK_RESULT(vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _semaphores.presentComplete, VK_NULL_HANDLE, &_backBufferIndex));
-
-	// Use a fence to wait until the command buffer has finished execution before using it again
-	VK_CHECK_RESULT(vkWaitForFences(_device, 1, &_fences[_backBufferIndex], VK_TRUE, UINT64_MAX));
-	VK_CHECK_RESULT(vkResetFences(_device, 1, &_fences[_backBufferIndex]));
-
-	// Pipeline stage at which the queue submission will wait (via pWaitSemaphores)
-	VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	VkSubmitInfo submitInfo = {};
-	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	submitInfo.pWaitDstStageMask = &waitStageMask;
-	submitInfo.pWaitSemaphores = &_semaphores.presentComplete;
-	submitInfo.waitSemaphoreCount = 1;
-	submitInfo.pSignalSemaphores = &_semaphores.renderComplete;
-	submitInfo.signalSemaphoreCount = 1;
-	submitInfo.pCommandBuffers = &_commandBuffers[_backBufferIndex];
-	submitInfo.commandBufferCount = 1;
-
-	// Submit to the graphics queue passing a wait fence
-	VK_CHECK_RESULT(vkQueueSubmit(_queueGraphics, 1, &submitInfo, _fences[_backBufferIndex]));
-		
-	// Present the current buffer to the swap chain
-	VkPresentInfoKHR presentInfo = {};
-	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-	presentInfo.pNext = nullptr;
-	presentInfo.swapchainCount = 1;
-	presentInfo.pSwapchains = &_swapchain;
-	presentInfo.pImageIndices = &_backBufferIndex;
-
-	// Check if a wait semaphore has been specified to wait for before presenting the image
-	if (_semaphores.renderComplete != VK_NULL_HANDLE)
-	{
-		presentInfo.pWaitSemaphores = &_semaphores.renderComplete;
-		presentInfo.waitSemaphoreCount = 1;
-	}
-	VK_CHECK_RESULT(vkQueuePresentKHR(_queueGraphics, &presentInfo));
+void GraphicsVulkan::acquireNextImage(Graphics::Semaphore* acquiredImageSemaphore, 
+                                      Graphics::Fence* acquiredImageFence)
+{
 }
 
 void GraphicsVulkan::createInstance()
