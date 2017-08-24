@@ -14,12 +14,6 @@ double Game::_pausedTimeLast = 0.0;
 double Game::_pausedTimeTotal = 0.0;
 std::shared_ptr<SceneObject> Game::_sceneLoadingDefault = std::make_shared<SceneObject>();
 
-//  TODO: Some temporary resources just for testing hard coded objects
-Graphics::ShaderProgram* __shaderProgram;
-Graphics::Pipeline* __pipeline;
-Graphics::Buffer* __triangleVertexBuffer;
-Graphics::Buffer* __rectangleVertexBuffer;
-Graphics::Buffer* __rectangleIndexBuffer;
 
 Game::Game() : 
 	_config(nullptr),
@@ -34,8 +28,7 @@ Game::Game() :
 	_frameRate(0),
     _sceneLoading(nullptr),
 	_scene(nullptr),
-    _camera(nullptr),
-    _commandPool(nullptr)
+    _camera(nullptr)
 {
 	__gameInstance = this;
 }
@@ -182,114 +175,7 @@ void Game::onInitialize()
 {
 	_config = getConfig();
 	FileSystem::setAssetPath(_config->assetsPath);
-
-    // Create command pool and command lists for rendering
-    Graphics* graphics = Graphics::getGraphics();
-    if (_commandPool == nullptr)
-    {
-        _commandPool = graphics->createCommandPool();
-        _commandLists.resize(GP_GRAPHICS_BACK_BUFFERS);
-        for (size_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; ++i)
-        {
-            _commandLists[i] = _commandPool->createCommandList();
-        }
-    }
-
-    // TODO: Temp resources for testing triangle/rectangle rendering
-    std::string vert = FileSystem::readAll("res/shaders/hlsl/color.vert.cso");
-    std::string frag = FileSystem::readAll("res/shaders/hlsl/color.frag.cso");
-
-    __shaderProgram = graphics->createShaderProgram(vert.size(), vert.data(), "main",
-                                                    frag.size(), frag.data(), "main");
-    Graphics::VertexLayout vertexLayout;
-    vertexLayout.attributeCount = 2;
-    vertexLayout.attributes[0].semantic = Graphics::VertexAttribute::SEMANTIC_POSITION;
-    vertexLayout.attributes[0].format = Graphics::FORMAT_R32G32B32_FLOAT;
-    vertexLayout.attributes[0].binding = 0;
-    vertexLayout.attributes[0].location = 0;
-    vertexLayout.attributes[0].offset = 0;
-    vertexLayout.attributes[1].semantic = Graphics::VertexAttribute::SEMANTIC_COLOR;
-    vertexLayout.attributes[1].format = Graphics::FORMAT_R32G32B32_FLOAT;
-    vertexLayout.attributes[1].binding = 0;
-    vertexLayout.attributes[1].location = 0;
-    vertexLayout.attributes[1].offset = graphics->getVertexStride(Graphics::FORMAT_R32G32B32_FLOAT);
-
-    Graphics::PrimitiveTopology topology = { Graphics::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
-    Graphics::RasterizerState rasterizerState = {};
-    Graphics::DepthStencilState depthStencilState = {};
-    Graphics::BlendState blendState = {};
-    __pipeline = graphics->createPipeline(__shaderProgram, &vertexLayout, nullptr, graphics->getRenderPass(0), 
-                                         topology, rasterizerState, depthStencilState, blendState);
-
-    // Triangle
-    {
-        std::vector<float> vertexData =
-        {
-            0.00f, -0.25f, 0.0f,	1.0f, 1.0f, 0.0f, 0.0f,
-            -0.25f,  0.25f, 0.0f,	1.0f, 0.0f, 1.0f, 0.0f,
-            0.25f,  0.25f, 0.0f,	1.0f, 0.0f, 0.0f, 1.0f,
-        };
-
-        if (Graphics::getApi() == Graphics::API_DIRECT3D)
-        {
-            // TODO: Move this into Direct3D only
-            // Flip the y so they're the same in both renderer
-            vertexData[7*0 + 1] *= -1.0f;
-            vertexData[7*1 + 1] *= -1.0f;
-            vertexData[7*2 + 1] *= -1.0f;
-        }
-        vertexData[7*0 + 0] += -0.5f;
-        vertexData[7*1 + 0] += -0.5f;
-        vertexData[7*2 + 0] += -0.5f;
-
-        // create triangle vertex buffer
-        size_t vertexDataSize = sizeof(float) * vertexData.size();
-        size_t vertexStride = sizeof(float) * 7;
-        __triangleVertexBuffer = graphics->createVertexBuffer(vertexDataSize, true, vertexStride);
-        //memcpy(__triangleVertexBuffer->cpuMemoryAddress, vertexData.data(), vertexDataSize);
-   }
-
-   // Rectangle
-   {
-        std::vector<float> vertexData =
-        {
-            -0.25f, -0.25f, 0.0f,	1.0f, 1.0f, 0.0f, 0.0f,
-            -0.25f,  0.25f, 0.0f,	1.0f, 0.0f, 1.0f, 0.0f,
-             0.25f,  0.25f, 0.0f,	1.0f, 0.0f, 0.0f, 1.0f,
-             0.25f, -0.25f, 0.0f,	1.0f, 1.0f, 1.0f, 1.0f
-        };
-        if (Graphics::getApi() == Graphics::API_DIRECT3D)
-        {
-            // TODO: Move this into Direct3D only
-            // Flip the y so they're the same in both renderer
-            vertexData[7*0 + 1] *= -1.0f;
-            vertexData[7*1 + 1] *= -1.0f;
-            vertexData[7*2 + 1] *= -1.0f;
-            vertexData[7*3 + 1] *= -1.0f;
-        }
-        vertexData[7*0 + 0] += 0.5f;
-        vertexData[7*1 + 0] += 0.5f;
-        vertexData[7*2 + 0] += 0.5f;
-        vertexData[7*3 + 0] += 0.5f;
-
-        // create rectangle vertex buffer
-        size_t vertexDataSize = sizeof(float) * vertexData.size();
-        size_t vertexStride = sizeof(float) * 7;
-        __rectangleVertexBuffer = graphics->createVertexBuffer(vertexDataSize, true, vertexStride);
-        //memcpy(__rectangleVertexBuffer->cpuMemoryAddress, vertexData.data(), vertexDataSize);
-
-        // create rectangle index buffer
-        std::vector<uint16_t> indexData =
-        {
-            0, 1, 2,
-            0, 2, 3
-        };
-        // Create rectangle index buffer
-        size_t indexDataSize = sizeof(uint16_t) * indexData.size();
-        __rectangleIndexBuffer = graphics->createIndexBuffer(indexDataSize, true, Graphics::INDEX_TYPE_UINT16);
-        //memcpy(__rectangleIndexBuffer->cpuMemoryAddress, indexData.data(), indexDataSize);
-    }
-
+   
     // Splash screens
 
     // Loading scene
@@ -340,46 +226,6 @@ void Game::onUpdate(float elapsedTime)
 void Game::onRender(float elapsedTime)
 {
     Graphics* graphics = Graphics::getGraphics();
-
-    // Get the synchronization primitives for rendering
-    size_t imageIndex = _frameCount % GP_GRAPHICS_BACK_BUFFERS;
-    Graphics::Fence* imageAcquiredFence = graphics->getImageAcquiredFence(imageIndex);
-    Graphics::Semaphore* imageAcquiredSemaphore = graphics->getImageAcquiredSemaphore(imageIndex);
-    Graphics::Semaphore* renderCompleteSemaphore = graphics->getRenderCompleteSemaphore(imageIndex);
-
-    graphics->acquireNextImage(imageAcquiredSemaphore, imageAcquiredFence);
-
-    // Process the command list for this associate swapchain image frame index
-    Graphics::CommandList* commandList = _commandLists[imageIndex];
-    Graphics::RenderPass* renderPass = graphics->getRenderPass(imageIndex);
-
-    // TODO: begin ---
-    // Temporary testing triangle/rectangle rendering
-    commandList->begin();
-
-    commandList->setViewport(0, 0, graphics->getWidth(), graphics->getHeight(), 0.0f, 1.0f);
-    commandList->setScissor(0, 0, graphics->getWidth(), graphics->getHeight());
-    commandList->transitionRenderPass(renderPass, Graphics::Texture::USAGE_PRESENT, Graphics::Texture::USAGE_COLOR_ATTACHMENT);
-    commandList->beginRender(renderPass);
-    Graphics::ClearValue clearValue = {0.0f, 0.0f, 0.0f, 0.0f};
-    commandList->clearColor(clearValue, 0);
-    commandList->bindPipeline(__pipeline);
-    Graphics::Buffer* triangleVertexBuffers[] =  { __triangleVertexBuffer };
-    commandList->bindVertexBuffers(triangleVertexBuffers, 1);
-    commandList->draw(3, 0);
-    Graphics::Buffer* rectangleVertexBuffers[] =  { __rectangleVertexBuffer };
-    commandList->bindVertexBuffers(rectangleVertexBuffers, 1);
-    commandList->bindIndexBuffer(__rectangleIndexBuffer);
-    commandList->drawIndexed(6, 0);
-
-    commandList->endRender(renderPass);
-    commandList->transitionRenderPass(renderPass, Graphics::Texture::USAGE_COLOR_ATTACHMENT, Graphics::Texture::USAGE_PRESENT);
-    commandList->end();
-   // TODO: end ---
-
-    graphics->submit(commandList, imageAcquiredSemaphore, renderCompleteSemaphore);
-    graphics->present(renderCompleteSemaphore);
-    graphics->waitIdle();
 }
 
 void Game::onFrame()
