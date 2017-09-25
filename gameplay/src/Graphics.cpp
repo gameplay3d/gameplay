@@ -1,14 +1,13 @@
 #include "Base.h"
 #include "Graphics.h"
-#include "GraphicsDirect3D.h"
-#include "GraphicsVulkan.h"
+#include "direct3d/GraphicsDirect3D.h"
+#include "vulkan/GraphicsVulkan.h"
 #include "Game.h"
 
 namespace gameplay
 {
 
 Graphics* Graphics::_graphics = nullptr;
-Graphics::Api Graphics::_api = Graphics::API_VULKAN;
 
 Graphics* Graphics::getGraphics()
 {

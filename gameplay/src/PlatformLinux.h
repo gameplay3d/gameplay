@@ -1,5 +1,3 @@
-#ifdef __linux__
-
 #pragma once
 
 #include "Platform.h"
@@ -93,5 +91,3 @@ private:
 };
 
 }
-
-#endif

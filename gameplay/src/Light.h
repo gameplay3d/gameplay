@@ -116,13 +116,6 @@ public:
     void setRange(float range);
 
     /**
-     * Gets the inverse of the range of point or spot light.
-     *
-     * @return The range of the point or spot light.
-     */
-    float getRangeInverse() const;
-
-    /**
      * Returns the inner angle the spot light (in radians).
      *
      * @return The inner angle of the spot light (in radians).
@@ -199,17 +192,17 @@ public:
     void onDeserialize(Serializer* serializer);
 
 	/**
-     * @see Serializer::Activator::CreateObjectCallback
+     * @see Serializer::Activator::createObject
 	 */
     static std::shared_ptr<Serializable> createObject();
     
 	/**
-     * @see Serializer::Activator::EnumToStringCallback
+     * @see Serializer::Activator::enumToString
 	 */
     static std::string enumToString(const std::string& enumName, int value);
 
 	/**
-     * @see Serializer::Activator::EnumParseCallback
+     * @see Serializer::Activator::enumParse
 	 */
     static int enumParse(const std::string& enumName, const std::string& str);
     

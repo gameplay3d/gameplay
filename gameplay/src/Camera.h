@@ -1,4 +1,4 @@
-    #pragma once
+#pragma once
 
 #include "Component.h"
 #include "Frustum.h"
@@ -254,17 +254,17 @@ public:
     void onDeserialize(Serializer* serializer);
 
 	/**
-     * @see Serializer::Activator::CreateObjectCallback
+     * @see Serializer::Activator::createObject
 	 */
     static std::shared_ptr<Serializable> createObject();
     
 	/**
-     * @see Serializer::Activator::EnumToStringCallback
+     * @see Serializer::Activator::enumToString
 	 */
     static std::string enumToString(const std::string& enumName, int value);
 
 	/**
-     * @see Serializer::Activator::EnumParseCallback
+     * @see Serializer::Activator::enumParse
 	 */
     static int enumParse(const std::string& enumName, const std::string& str);
 

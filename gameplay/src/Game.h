@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Platform.h"
 #include "Serializable.h"
 #include "SceneObject.h"
+#include "Platform.h"
 #include "Camera.h"
 
 namespace gameplay
@@ -32,8 +32,9 @@ public:
     /**
      * Defines a splash screen.
      */
-    struct SplashScreen
+    class SplashScreen
     {
+    public:
         std::string url;
         float duration;
     };
@@ -196,24 +197,24 @@ public:
     std::shared_ptr<Camera> getCamera() const;
 
     /**
-     * Initialize event occurs just after the platform starts up priorto first frame event.
+     * Event occurs after the platform starts up and prior to first frame event.
      */
     virtual void onInitialize();
 
     /**
-     * Finalize event occurs when the game is about to exit.
+     * Event occurs when the game is about to exit.
      */
     virtual void onFinalize();
 
     /**
-     * Scene load occurs when the scene is completed loading all the scenes resources.
+     * Event occurs when the scene has completed loading all the scenes resources.
      *
-     * @param scene The scene that has completed loading
+     * @param scene The scene that has completed loading.
      */
     virtual void onSceneLoad(std::shared_ptr<SceneObject> scene);
 
     /**
-     * Resize event occurs when the game platform window has been resized.
+     * Event occurs when the platform window has been resized.
      *
      * @param width The new game window width.
      * @param height The new game window height.
@@ -221,14 +222,14 @@ public:
     virtual void onResize(int width, int height);
 
     /**
-     * Update event called every frame before the scene is updated.
+     * Event occurs every frame before the scene is updated.
 	 *
 	 * @param elapsedTime
      */
     virtual void onUpdate(float elapsedTime);
 
 	/**
-	 * Render event called every frame before the scene is rendered.
+	 * Event occurs every frame before the scene is rendered.
 	 *
 	 * @param elapsedTime
 	 */
@@ -269,7 +270,7 @@ public:
     bool isCursorVisible();
 
     /**
-     * Frame event called every frame when running.
+     * Event occurs every frame from the platform.
      */
     void onFrame();
 
@@ -291,11 +292,6 @@ public:
         ~Config();
 
         /**
-         * @see Serializer::Activator::CreateObjectCallback
-         */
-        static std::shared_ptr<Serializable> createObject();
-
-        /**
          * @see Serializable::getClassName
          */
         std::string getClassName();
@@ -309,6 +305,11 @@ public:
          * @see Serializable::onDeserialize
          */
         void onDeserialize(Serializer* serializer);
+
+        /**
+         * @see Serializer::Activator::createObject
+         */
+        static std::shared_ptr<Serializable> createObject();
 
         std::string title;
 		std::string graphics;

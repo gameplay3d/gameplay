@@ -3,7 +3,6 @@
 #include "gameplay.h"
 #include <QWidget>
 
-
 namespace Ui
 {
 class PropertiesCamera;

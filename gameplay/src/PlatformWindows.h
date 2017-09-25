@@ -1,8 +1,8 @@
-#ifdef _WINDOWS
-
 #pragma once
 
 #include "Platform.h"
+#include "Input.h"
+#include "Graphics.h"
 #include <windows.h>
 #include <windowsx.h>
 #include <shellapi.h>
@@ -57,21 +57,18 @@ public:
 	 */
     unsigned long getConnection();
 
-
 private:
 
     static LRESULT __stdcall onMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    static KeyboardKey translateKey(WPARAM windowsKeyCode, bool shiftDown);
+    static Input::Key translateKey(WPARAM windowsKeyCode, bool shiftDown);
     static void updateCapture(LPARAM param);
     static void warpMouse(int clientX, int clientY);    
 
     HWND _hwnd;
     HINSTANCE _instance;
-    Graphics* _graphics;
+    gameplay::Graphics* _graphics;
     XINPUT_STATE _gamepadState[4];
     bool _gamepadsConnected[4];
 };
 
 }
-
-#endif

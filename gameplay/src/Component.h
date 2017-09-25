@@ -8,7 +8,7 @@ namespace gameplay
 /**
  * Defines a component
  */
-class Component : public std::enable_shared_from_this<Component>, public Serializable
+class Component : public Serializable, std::enable_shared_from_this<Component>
 {
     friend class SceneObject;
     friend class Serializer::Activator;
@@ -25,10 +25,28 @@ public:
         TYPEID_LIGHT,
         TYPEID_ANIMATION,
         TYPEID_AUDIO_SOURCE,
-        TYPEID_PHYSICS_COLLIDER,
+        TYPEID_MODEL,
+		TYPEID_TEXT,
+		TYPEID_TILESET,
+		TYPEID_PATH,
+		TYPEID_PARTICLE_EMITTER,
+		TYPEID_TERRAIN,
+		TYPEID_SKY,
+		TYPEID_WATER,
+		TYPEID_TREE,
+		TYPEID_DECAL,
+		TYPEID_VIDEO,
+		TYPEID_UI,
+        TYPEID_PHYSICS_COLLISION_SHAPE,
         TYPEID_PHYSICS_RIGIDBODY,
-        TYPEID_PHYSICS_JOINT,
-        TYPEID_RENDERER
+		TYPEID_PHYSICS_CHARACTER,
+		TYPEID_PHYSICS_VEHICLE,
+		TYPEID_PHYSICS_CLOTH,
+		TYPEID_PHYSICS_JOINT_FIXED,
+		TYPEID_PHYSICS_JOINT_HINGE,
+		TYPEID_PHYSICS_JOINT_SPRING,
+		TYPEID_PHYSICS_JOINT_SOCKET,
+		TYPEID_PHYSICS_JOINT_GENERIC
     };
 
     /**
@@ -92,6 +110,16 @@ protected:
      * @param object The objet this component is attached to.
      */
     virtual void setObject(std::shared_ptr<SceneObject> object);
+
+    /**
+     * Event occurs when the component is attached to a scene object;
+     */
+    virtual void onAttached();
+
+	/**
+     * Event occurs when the component is detach from a scene object;
+     */
+    virtual void onDetached();
 
     std::weak_ptr<SceneObject> _object;
     bool _enabled;

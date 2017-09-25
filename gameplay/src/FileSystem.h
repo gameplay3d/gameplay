@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 /**
- * Defines a set of functions for interacting with the device file system.
+ * Defines the device file system api.
  */
 class FileSystem
 {

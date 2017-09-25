@@ -1,5 +1,3 @@
-#ifdef __linux__
-
 #include "Base.h"
 #include "PlatformLinux.h"
 #include "Game.h"
@@ -490,5 +488,3 @@ extern void print(const char* format, ...)
 }
 
 }
-
-#endif
