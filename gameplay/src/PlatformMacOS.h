@@ -1,5 +1,3 @@
-#ifdef __APPLE__
-
 #pragma once
 
 #include "Platform.h"
@@ -88,5 +86,3 @@ private:
 };
     
 }
-
-#endif

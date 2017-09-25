@@ -6,6 +6,8 @@
 namespace gameplay
 {
 
+    class Message;
+
 /**
  * Defines an script component.
  */
@@ -24,6 +26,17 @@ public:
      * Destructor
      */
     ~Script();
+
+    static std::shared_ptr<Script> load(const std::string& url);
+
+    virtual void onInitialize();
+
+    virtual void onFinalize();
+
+    virtual void onUpdate(float elapsedTime);
+
+    virtual void onMessage(std::shared_ptr<SceneObject> sender, std::shared_ptr<Message> message, void* data);
+
 };
 
 }

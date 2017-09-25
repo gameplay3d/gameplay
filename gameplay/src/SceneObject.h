@@ -11,7 +11,7 @@ class Camera;
 class Light;
 class GraphicsRenderer;
 class PhysicsRigidBody;
-class PhysicsCollider;
+class PhysicsCollisionShape;
 class Animation;
 class Audio;
 class Script;
@@ -22,7 +22,7 @@ namespace gameplay
 /**
  * Defines an object that is part of a scene in the game.
  */
-class SceneObject : public std::enable_shared_from_this<SceneObject>, public Serializable
+class SceneObject : public Serializable, std::enable_shared_from_this<SceneObject>
 {
     friend class Game;
     friend class Serializer::Activator;
@@ -415,7 +415,7 @@ protected:
     void onDeserialize(Serializer* serializer);
 
 	/**
-     * @see Serializer::Activator::CreateObjectCallback
+     * @see Serializer::Activator::createObject
 	 */
     static std::shared_ptr<Serializable> createObject();
 

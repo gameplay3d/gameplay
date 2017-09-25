@@ -1,17 +1,22 @@
 #pragma once
 
 #include "Component.h"
-#include "SceneObject.h"
+#include "PhysicsCollisionShape.h"
 
 namespace gameplay
 {
+	class Heightfield;
+	class Mesh;
 
 /**
  * Defines an abstract physics system.
  */
 class Physics
 {
+    friend class Game;
+
 public:
+
     /**
      * Gets the physics system.
      *
@@ -19,55 +24,25 @@ public:
      */
     static Physics* getPhysics();
 
-    /**
-     * Called by platform or editor to initialize the physics system.
-     *
-     * Exits application if fails.
-     *
-     * @param window The native window object/handle.
-     * @param connection The native connection to windowing system and application.
-     */
-    virtual void initialize(unsigned long window, unsigned long connection = 0) = 0;
+    std::shared_ptr<PhysicsCollisionShape> createCollisionBox(const Vector3& center, const Vector3& extents);
 
+    std::shared_ptr<PhysicsCollisionShape> createCollisionSphere(const Vector3& center, float radius);
 
-    /**
-     * Defines an physics joint connstrain between 2 rigid bodies.
-     */
-    class Joint
-    {
-    };
+    std::shared_ptr<PhysicsCollisionShape> createCollisionCapsule(const Vector3& center, float radius, float height,
+                                                                  PhysicsCollisionShape::Capsule::Direction direction);
 
-    /**
-     * Defines the physical collision behaviour of a surface.
-     */
-    class Material
-    {
-    };
+    std::shared_ptr<PhysicsCollisionShape> createCollisionHeightfield(std::shared_ptr<Heightfield> heightfield);
 
-    /**
-     * Defines the physical geometry.
-     */
-    class Geometry
-    {
-    };
+    std::shared_ptr<PhysicsCollisionShape> createCollisionMesh(std::shared_ptr<Mesh> mesh);
 
-    /**
-     * Defines the physical collision behaviour of a surface.
-     */
-    class Shape
-    {
-    };
-
-    /**
-     * Defines an physics rigid body used for dynamics
-     */
-    class RigidBody : public Component
-    {
-        friend class SceneObject;
-        //friend class Serializer::Activator;
-    };
+    
 
 private:
+
+    void onInitialize();
+    void onUpdate(float elapsedTime);
+    void onPause();
+    void onResume();
 
     static Physics* _physics;
 };

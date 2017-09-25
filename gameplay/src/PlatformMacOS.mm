@@ -1,5 +1,3 @@
-#ifdef __APPLE__
-
 #include "Base.h"
 #include "PlatformMacOS.h"
 #include "Game.h"
@@ -91,5 +89,3 @@ extern void print(const char* format, ...)
 }
 
 }
-
-#endif

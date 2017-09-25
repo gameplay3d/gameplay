@@ -32,11 +32,6 @@ public:
 	 */
 	void onFinalize();
 
-    /**
-     * @see Game::onSceneLoad
-     */
-    void onSceneLoad();
-
 	/**
 	 * @see Game::onResize
 	 */

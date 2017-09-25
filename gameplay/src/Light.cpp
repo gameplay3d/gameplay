@@ -8,6 +8,7 @@
 
 namespace gameplay
 {
+
 Light::Light() : Component(),
     _type(Light::TYPE_DIRECTIONAL),
     _color(LIGHT_COLOR),

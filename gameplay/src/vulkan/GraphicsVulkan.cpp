@@ -1,7 +1,8 @@
 #include "Base.h"
 #include "GraphicsVulkan.h"
+#include "BufferVulkan.h"
+#include "CommandListVulkan.h"
 #include "Game.h"
-#include "Platform.h"
 
 namespace gameplay
 {
@@ -17,7 +18,7 @@ const std::vector<const char*> __validationLayers =
 	if (res != VK_SUCCESS)																				\
 	{																									\
 		std::cout << "Fatal: VkResult is \"" << getErrorString(res) << "\" in " << __FILE__ << " at line " << __LINE__ << std::endl; \
-		assert(res == VK_SUCCESS);																		\
+		GP_ASSERT(res == VK_SUCCESS);																		\
 	}																									\
 }
 
@@ -58,10 +59,12 @@ GraphicsVulkan::~GraphicsVulkan()
 	vkDeviceWaitIdle(_device);
 	for (uint32_t i = 0; i < _frameBuffers.size(); i++)
 		vkDestroyFence(_device, _fences[i], nullptr);
+
 	vkFreeCommandBuffers(_device, _commandPool, _commandBuffers.size(), _commandBuffers.data());
 	vkDestroyRenderPass(_device, _renderPass, nullptr);
 	for (uint32_t i = 0; i < _frameBuffers.size(); i++)
 		vkDestroyFramebuffer(_device, _frameBuffers[i], nullptr);
+
 	vkDestroyImageView(_device, _depthStencilImageView, nullptr);
 	vkDestroyImage(_device, _depthStencilImage, nullptr);
 	vkFreeMemory(_device, _depthStencilMemory, nullptr);
@@ -79,7 +82,7 @@ GraphicsVulkan::~GraphicsVulkan()
 	vkDestroyInstance(_instance, nullptr);
 }
 
-void GraphicsVulkan::initialize(unsigned long window, unsigned long connection)
+void GraphicsVulkan::onInitialize(unsigned long window, unsigned long connection)
 {
     if (_initialized)
         return;
@@ -99,7 +102,7 @@ void GraphicsVulkan::initialize(unsigned long window, unsigned long connection)
 	createCommandBuffers();
 	createDepthStencil();
 	createRenderPass();
-	createFrameBuffers();
+	createBackBuffers();
 	createSynchronizationPrimitives();
 	createPipelineCache();
 
@@ -155,7 +158,7 @@ void GraphicsVulkan::onResize(int width, int height)
 		_renderPass = VK_NULL_HANDLE;
 	}
 	createRenderPass();
-	createFrameBuffers();
+	createBackBuffers();
 
 	// Recreate swapchain
 	if (_swapchain != VK_NULL_HANDLE) 
@@ -193,17 +196,48 @@ int GraphicsVulkan::getHeight()
     return _height;
 }
 
+std::shared_ptr<Buffer> GraphicsVulkan::createVertexBuffer(const VertexFormat& vertexFormat, size_t size, bool dynamic)
+{
+	VkBuffer bufferVk = nullptr;
+	// TODO
+
+	std::shared_ptr<BufferVulkan> buffer = std::make_shared<BufferVulkan>(Buffer::TYPE_VERTEX, size, dynamic, _device, bufferVk);
+	return std::static_pointer_cast<Buffer>(buffer);
+}
+
+std::shared_ptr<Buffer> GraphicsVulkan::createIndexBuffer(IndexFormat indexFormat, size_t size, bool dynamic)
+{
+	VkBuffer bufferVk = nullptr;
+	// TODO
+
+	std::shared_ptr<BufferVulkan> buffer = std::make_shared<BufferVulkan>(Buffer::TYPE_INDEX, size, dynamic, _device, bufferVk);
+	return std::static_pointer_cast<Buffer>(buffer);
+}
+
+std::shared_ptr<CommandList> GraphicsVulkan::createCommandList()
+{
+	return nullptr;
+}
+
+void GraphicsVulkan::submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count)
+{
+}
+
+bool GraphicsVulkan::beginScene()
+{
+	return true;
+}
+
+void GraphicsVulkan::endScene()
+{
+}
+
 void GraphicsVulkan::present()
 {
 }
 
-void GraphicsVulkan::waitIdle()
+void GraphicsVulkan::flushAndWait()
 {
-}
-
-std::shared_ptr<Graphics::RenderContext> GraphicsVulkan::getRenderContext()
-{
-    return nullptr;
 }
 
 void GraphicsVulkan::createInstance()
@@ -719,7 +753,7 @@ void GraphicsVulkan::createRenderPass()
 	VK_CHECK_RESULT(vkCreateRenderPass(_device, &renderPassInfo, nullptr, &_renderPass));
 }
 
-void GraphicsVulkan::createFrameBuffers()
+void GraphicsVulkan::createBackBuffers()
 {
 	_frameBuffers.resize(_backBufferCount);
 	for (size_t i = 0; i < _backBufferCount; i++)

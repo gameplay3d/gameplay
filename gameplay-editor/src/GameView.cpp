@@ -13,7 +13,7 @@ GameView::GameView(QWidget* parent) : QWidget(parent),
 
     _graphics = gameplay::Graphics::getGraphics();
     if (!_graphics->isInitialized())
-        _graphics->initialize((unsigned long)winId(), 0);
+        _graphics->onInitialize((unsigned long)winId(), 0);
 
     _graphics->onResize(geometry().width(), geometry().height());
 

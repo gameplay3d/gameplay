@@ -1,10 +1,13 @@
 #pragma once
 
-#include "Component.h"
-#include "SceneObject.h"
+#include "VertexFormat.h"
+#include "Buffer.h"
+#include "CommandList.h"
 
 namespace gameplay
 {
+
+	class Mesh;
 
 /**
  * Defines an abstract graphics system.
@@ -23,9 +26,25 @@ public:
         API_METAL
     };
 
-    class RenderContext
-    {
+	/**
+	 * Defines the primitive topology.
+	 */
+	enum PrimitiveTopology
+	{
+		PRIMITIVE_TOPOLOGY_TRIANGLES,
+        PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP,
+        PRIMITIVE_TOPOLOGY_LINES,
+        PRIMITIVE_TOPOLOGY_LINE_STRIP,
+        PRIMITIVE_TOPOLOGY_POINTS
+	};
 
+	/**
+     * Defines supported index formats.
+     */
+    enum IndexFormat
+    {
+        INDEX_FORMAT_UNSIGNED_SHORT,
+        INDEX_FORMAT_UNSIGNED_INT
     };
    
     /**
@@ -40,39 +59,7 @@ public:
      *
      * @return The graphics api.
      */
-    static Graphics::Api getApi();
-
-	/**
-     * Called by platform or editor to initialize the graphics system.
-	 *
-	 * Exits application if fails.
-	 *
-	 * @param window The native window object/handle.
-	 * @param connection The native connection to windowing system and application.
-	 */
-    virtual void initialize(unsigned long window, unsigned long connection) = 0;
-
-    /**
-     * Determines if the graphics system has completed initialization.
-     *
-     * @return true if the graphics system is initialized, false if not.
-     */
-    virtual bool isInitialized() = 0;
-
-	/**
-     * Called by platform or editor on window resize event
-	 *
-	 * @param width The width to resize to.
-	 * @param height The width to resize to.
-	 */
-    virtual void onResize(int width, int height) = 0;
-
-    /**
-     * Determins if the graphics system have completed resizing.
-     *
-     * @return true if if the graphics system have completed resizing, false if not completed.
-     */
-    virtual bool isResized() = 0;
+    Graphics::Api getApi();
 
     /**
      * Gets the width of the graphics sytem presentation images.
@@ -86,27 +73,93 @@ public:
      *
      * @return The height of the graphics sytem presentation images.
      */
-    virtual int getHeight() = 0;    
+    virtual int getHeight() = 0;
+
+	/**
+	 * Creates a vertex buffer.
+	 *
+	 * @return The creates a vertex buffer.
+	 */
+	virtual std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat,  size_t vertexCount, bool dynamic = false) = 0;
+
+	/**
+	 * Creates a vertex buffer.
+	 *
+	 * @return The creates a vertex buffer.
+	 */
+	virtual std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool dynamic = false) = 0;
+
+	/**
+	 * Creates a command list for processing gpu commands.
+	 *
+	 * @return The created command list for processing gpu commands.
+	 */
+	virtual std::shared_ptr<CommandList> createCommandList() = 0;
+
+	/**
+	 * Submits command lists for processing gpu commands.
+	 *
+	 * @param commandList The array of command lists to be submitted.
+	 * @param count The number of commands lists to be submitted.
+	 */
+	virtual void submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count) = 0;
 
     /**
-     * Queues the presentation of swap images the platforms target surface.
-     *
-     * @param waitSemaphore The wait semaphore for presentation of swap images. 
+     * Begin scene rendering.
+	 *
+	 * @return true if read to accept commands, false if fails.
+     */
+	virtual bool beginScene() = 0;
+
+    /**
+     * Ends scene rendering.
+     */
+    virtual void endScene() = 0;
+
+    /**
+     * Presents the contents of the framebuffer to the display.
      */
     virtual void present() = 0;
 
     /**
-     * Waits idles while the pipeline flushes, releases resources and blocks until completed.
+     * Flushes the commands in the queue, releases resources and blocks until completed.
      */
-    virtual void waitIdle() = 0;
+    virtual void flushAndWait() = 0;
 
     /**
-     * Gets the render context.     
+     * Event occurs when the platform requests to initialize graphics.
+	 *
+	 * Exits application if fails.
+	 *
+	 * @param window The native window object/handle.
+	 * @param connection The native connection to windowing system and application.
+	 */
+    virtual void onInitialize(unsigned long window, unsigned long connection) = 0;
+
+    /**
+     * Determines if the graphics system has completed initialization.
+     *
+     * @return true if the graphics system is initialized, false if not.
      */
-    virtual std::shared_ptr<Graphics::RenderContext> getRenderContext() = 0;
+    virtual bool isInitialized() = 0;
+
+	/**
+     * Event occurs when the platform window resizes.
+	 *
+	 * @param width The width to resize to.
+	 * @param height The width to resize to.
+	 */
+    virtual void onResize(int width, int height) = 0;
+
+    /**
+     * Determins if the graphics system have completed resizing.
+     *
+     * @return true if if the graphics system have completed resizing, false if not completed.
+     */
+    virtual bool isResized() = 0;
 
     static Graphics* _graphics;
-    static Graphics::Api _api;
+    Graphics::Api _api;
 
 };
 

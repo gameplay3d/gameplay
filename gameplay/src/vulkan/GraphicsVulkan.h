@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 /**
- * Vulkan 1.x impl of Graphics
+ * Vulkan impl of Graphics
  *
  * @see Graphics
  */
@@ -26,9 +26,9 @@ public:
     ~GraphicsVulkan();
 
 	/**
-     * @see Graphics::initialize
+     * @see Graphics::onInitialize
 	 */
-    void initialize(unsigned long window, unsigned long connection = 0);
+    void onInitialize(unsigned long window, unsigned long connection = 0);
 
     /**
      * @see Graphics::isInitialized
@@ -56,19 +56,43 @@ public:
     int getHeight();
 
     /**
+     * @see Graphics::createVertexBuffer
+     */
+	std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat, size_t size, bool dynamic = false);
+
+    /**
+     * @see Graphics::createIndexBuffer
+     */
+	std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat, size_t size, bool dynamic = false);
+
+	/**
+     * @see Graphics::createCommandList
+     */
+	std::shared_ptr<CommandList> createCommandList();
+
+	/**
+     * @see Graphics::submitCommandLists
+     */
+	void submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count);
+	/**
+     * @see Graphics::beginScene
+     */
+	bool beginScene();
+
+   /**
+    * @see Graphics::endScene
+    */
+    void endScene();
+
+    /**
      * @see Graphics::present
      */
     void present();
 
     /**
-     * @see Graphics::waitIdle
+     * @see Graphics::flushAndWait
      */
-    void waitIdle();
-
-    /**
-     * @see Graphics::getRenderContext
-     */
-    std::shared_ptr<Graphics::RenderContext> getRenderContext();
+    void flushAndWait();
 
 private:
 
@@ -78,7 +102,7 @@ private:
 	void createSwapchain();
 	void createDepthStencil();
 	void createRenderPass();
-	void createFrameBuffers();
+	void createBackBuffers();
 	void createCommandBuffers();
 	void createSynchronizationPrimitives();
 	void createPipelineCache();
