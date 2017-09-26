@@ -2,7 +2,7 @@
 
 #include "Component.h"
 #include "Graphics.h"
-#include "Mesh.h"
+#include "Buffer.h"
 #include "Material.h"
 
 namespace gameplay
@@ -50,26 +50,7 @@ public:
 	 */
 	std::string getUrl() const;
 
-    /**
-     * Gets the Mesh for this Renderer.
-     *
-     * @return The Mesh for this Renderer.
-     */
-	std::shared_ptr<Mesh> getMesh() const;
 
-    /**
-     * Sets the Mesh for this Renderer.
-     *
-     * @return The Mesh for this Renderer.
-     */
-	void setMesh(std::shared_ptr<Mesh> mesh);
-
-    /**
-     * Gets the number of parts in the Mesh for this Model.
-     *
-     * @return The number of parts in the Mesh for this Model.
-     */
-    size_t getMeshPartCount() const;
 
     /**
      * Gets the Material bound to the specified mesh part.
@@ -97,16 +78,16 @@ public:
      * @param material The new material.
      * @param partIndex The index of the mesh part to set the material for (-1 for shared material).
      */
-	void setMaterial(std::shared_ptr<Material> material, int partIndex = -1);
+	void setMaterial(std::shared_ptr<Material> material, int index = -1);
 
     /**
      * Determines if a (non-shared) material is set for the specified part index.
      *
-     * @param partIndex MeshPart index.
+     * @param index MeshPart index.
      *
      * @return true if a material is set for the specified part, false otherwise.
      */
-    bool hasMaterial(size_t partIndex) const;
+    bool hasMaterial(size_t index) const;
 
     /**
      * @see Serializable::onDeserialize
@@ -142,10 +123,10 @@ protected:
 	virtual void onDraw(unsigned int drawFlags) = 0;
 
 	std::string  _url;
-	std::shared_ptr<Mesh> _mesh;
+	std::vector<std::shared_ptr<Buffer>> _mesh;
+	std::vector<std::shared_ptr<Buffer>> _submesh;
 	std::shared_ptr<Material> _materialShared;
 	std::vector<std::shared_ptr<Material>> _materials;
-	int _partCount;
 	bool _loaded;
 };
 

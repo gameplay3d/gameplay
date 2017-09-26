@@ -48,7 +48,6 @@
     <ClCompile Include="src\PhysicsMaterial.cpp" />
     <ClCompile Include="src\PhysicsVehicle.cpp" />
     <ClCompile Include="src\Material.cpp" />
-    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\PhysicsCollisionShape.cpp" />
     <ClCompile Include="src\PhysicsCloth.cpp" />
@@ -57,7 +56,6 @@
     <ClCompile Include="src\PhysicsJointHinge.cpp" />
     <ClCompile Include="src\PhysicsJointSocket.cpp" />
     <ClCompile Include="src\PhysicsJointSpring.cpp" />
-    <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Path.cpp" />
     <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\Tileset.cpp" />
@@ -72,18 +70,20 @@
     <ClCompile Include="src\d3d12\CommandListD3D12.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="src\vk\MeshVK.cpp">
-      <Filter>vk</Filter>
-    </ClCompile>
     <ClCompile Include="src\vk\GraphicsVK.cpp">
       <Filter>vk</Filter>
     </ClCompile>
     <ClCompile Include="src\vk\CommandListVK.cpp">
       <Filter>vk</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12\MeshD3D12.cpp">
+    <ClCompile Include="src\d3d12\BufferD3D12.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
+    <ClCompile Include="src\vk\BufferVK.cpp">
+      <Filter>vk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Buffer.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
@@ -129,7 +129,6 @@
     <ClInclude Include="src\PhysicsMaterial.h" />
     <ClInclude Include="src\PhysicsVehicle.h" />
     <ClInclude Include="src\Material.h" />
-    <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\PhysicsCollisionShape.h" />
     <ClInclude Include="src\PhysicsCloth.h" />
@@ -138,7 +137,6 @@
     <ClInclude Include="src\PhysicsJointHinge.h" />
     <ClInclude Include="src\PhysicsJointSocket.h" />
     <ClInclude Include="src\PhysicsJointSpring.h" />
-    <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Path.h" />
     <ClInclude Include="src\Text.h" />
     <ClInclude Include="src\Tileset.h" />
@@ -153,17 +151,19 @@
     <ClInclude Include="src\d3d12\CommandListD3D12.h">
       <Filter>d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="src\vk\MeshVK.h">
-      <Filter>vk</Filter>
-    </ClInclude>
     <ClInclude Include="src\vk\GraphicsVK.h">
       <Filter>vk</Filter>
     </ClInclude>
     <ClInclude Include="src\vk\CommandListVK.h">
       <Filter>vk</Filter>
     </ClInclude>
-    <ClInclude Include="src\d3d12\MeshD3D12.h">
+    <ClInclude Include="src\d3d12\BufferD3D12.h">
       <Filter>d3d12</Filter>
     </ClInclude>
+    <ClInclude Include="src\vk\BufferVK.h">
+      <Filter>vk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Buffer.h" />
+    <ClInclude Include="src\Mesh.h" />
   </ItemGroup>
 </Project>

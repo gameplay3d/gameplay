@@ -1,7 +1,7 @@
 #include "Base.h"
 #include "Game.h"
 #include "GraphicsVK.h"
-#include "MeshVK.h"
+#include "BufferVK.h"
 #include "CommandListVK.h"
 
 namespace gameplay
@@ -196,13 +196,37 @@ int GraphicsVK::getHeight()
     return _height;
 }
 
-std::shared_ptr<Mesh> GraphicsVK::createMesh(const VertexFormat& vertexFormat, size_t vertexCount, bool dynamic)
+std::shared_ptr<Buffer> GraphicsVK::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible, void* hostMemory)
 {
-	VkBuffer vertexBufferVk = nullptr;
-	// TODO
+	VkBuffer bufferVk = nullptr;
 
-	std::shared_ptr<MeshVK> vertexBuffer = std::make_shared<MeshVK>(vertexFormat, vertexCount, dynamic, _device, vertexBufferVk);
-	return std::static_pointer_cast<Mesh>(vertexBuffer);
+	size_t stride = vertexFormat.getStride();
+	size_t size = vertexFormat.getStride() * vertexCount;
+	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_VERTEX, size, stride, hostVisible, hostMemory, _device, bufferVk);
+	return std::static_pointer_cast<Buffer>(buffer);
+}
+
+std::shared_ptr<Buffer> GraphicsVK::createIndexBuffer(IndexFormat indexFormat, size_t indexCount, bool hostVisible, void* hostMemory)
+{
+	VkBuffer bufferVk = nullptr;
+	size_t stride = sizeof(unsigned int);
+	if (indexFormat == INDEX_FORMAT_UNSIGNED_SHORT)
+		stride = sizeof(unsigned int);
+	size_t size = indexCount * stride;
+	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_INDEX, size, stride, hostVisible, hostMemory, _device, bufferVk);
+	return std::static_pointer_cast<Buffer>(buffer);
+}
+
+std::shared_ptr<Buffer> GraphicsVK::createUniformBuffer(size_t size, bool hostVisible, void* hostMemory)
+{
+	VkBuffer bufferVk = nullptr;
+
+	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_UNIFORM, size, size, hostVisible, hostMemory, _device, bufferVk);
+	return std::static_pointer_cast<Buffer>(buffer);
+}
+
+void GraphicsVK::destroyBuffer(std::shared_ptr<Buffer> buffer)
+{
 }
 
 std::shared_ptr<CommandList> GraphicsVK::createCommandList()

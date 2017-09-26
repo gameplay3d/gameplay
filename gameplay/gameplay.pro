@@ -14,6 +14,7 @@ SOURCES += \
     src/AudioSource.cpp \
     src/BoundingBox.cpp \
     src/BoundingSphere.cpp \
+    src/Buffer.cpp \
     src/Camera.cpp \
     src/CommandList.cpp \
     src/Component.cpp \
@@ -31,7 +32,6 @@ SOURCES += \
     src/MathUtil.cpp \
     src/Matrix.cpp \
     src/Mesh.cpp \
-    src/Model.cpp \
     src/Physics.cpp \
     src/PhysicsCharacter.cpp \
     src/PhysicsCloth.cpp \
@@ -59,7 +59,6 @@ SOURCES += \
     src/Text.cpp \
     src/Texture.cpp \
     src/Tileset.cpp \
-    src/Texture.cpp \
     src/Vector2.cpp \
     src/Vector3.cpp \
     src/Vector4.cpp \
@@ -74,6 +73,7 @@ HEADERS += \
     src/Base.h \
     src/BoundingBox.h \
     src/BoundingSphere.h \
+    src/Buffer.h \
     src/Camera.h \
     src/CommandList.h \
     src/Component.h \
@@ -90,7 +90,6 @@ HEADERS += \
     src/MathUtil.h \
     src/Matrix.h \
     src/Mesh.h \
-    src/Model.h \
     src/Path.h \
     src/Physics.h \
     src/PhysicsCharacter.h \
@@ -135,18 +134,18 @@ win32 {
     DEFINES += VK_USE_PLATFORM_WIN32_KHR
     SOURCES += src/PlatformWindows.cpp
     SOURCES += src/vk/GraphicsVK.cpp
-    SOURCES += src/vk/MeshVK.cpp
+    SOURCES += src/vk/BufferVK.cpp
     SOURCES += src/vk/CommandListVK.cpp
     SOURCES += src/d3d12/GraphicsD3D12.cpp
-    SOURCES += src/d3d12/MeshD3D12.cpp
+    SOURCES += src/d3d12/BufferD3D12.cpp
     SOURCES += src/d3d12/CommandListD3D12.cpp
     HEADERS += src/PlatformWindows.h
     HEADERS += src/vk/GraphicsVK.h
-    HEADERS += src/vk/MeshVK.h
+    HEADERS += src/vk/BufferVK.h
     HEADERS += src/vk/CommandListVK.h
     HEADERS += src/d3d12/GraphicsD3D12.h
     HEADERS += src/d3d12/GraphicsD3D12.h
-    HEADERS += src/d3d12/MeshD3D12.h
+    HEADERS += src/d3d12/BufferD3D12.h
     HEADERS += src/d3d12/CommandListD3D12.h
     INCLUDEPATH += src/vk
     INCLUDEPATH += src/d3d12
@@ -163,11 +162,11 @@ linux {
     DEFINES += VK_USE_PLATFORM_XCB_KHR
     SOURCES += src/PlatformLinux.cpp
     SOURCES += src/vk/GraphicsVK.cpp
-    SOURCES += src/vk/MeshVK.cpp
+    SOURCES += src/vk/BufferVK.cpp
     SOURCES += src/vk/CommandListVK.cpp
     HEADERS += src/PlatformLinux.h
     HEADERS += src/vk/GraphicsVK.h
-    HEADERS += src/vk/MeshVK.h
+    HEADERS += src/vk/BufferVK.h
     HEADERS += src/vk/CommandListVK.h
     INCLUDEPATH += src/vk
     INCLUDEPATH += $$(VULKAN_SDK)/Include
