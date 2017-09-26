@@ -9,21 +9,21 @@ namespace gameplay
 {
 
 /**
- * Defines a Direct3D impl of CommandList.
+ * Defines a Direct3D 12 impl of CommandList.
  */
-class CommandListDirect3D : public CommandList
+class CommandListD3D12 : public CommandList
 {
 public:
 
 	/**
 	 * Constructor.
 	 */
-	CommandListDirect3D();
+	CommandListD3D12();
 
 	/**
 	 * Destructor.
 	 */
-	~CommandListDirect3D();
+	~CommandListD3D12();
 
 	/**
 	 * @see CommandList::clear

@@ -4,29 +4,33 @@
 namespace gameplay
 {
 
-Mesh::Mesh() :
-	_primitiveTopology(Graphics::PRIMITIVE_TOPOLOGY_TRIANGLES),
-	_vertexCount(0),
-	_dynamic(false),
-	_vertexBuffer(nullptr)
-{
-}
-
-Mesh::~Mesh()
-{
-}
-
 Mesh::Part::Part() : 
+	_mesh(nullptr),
 	_primitiveTopology(Graphics::PRIMITIVE_TOPOLOGY_TRIANGLES),
 	_indexFormat(Graphics::INDEX_FORMAT_UNSIGNED_INT),
 	_indexCount(0),
-	_dynamic(false),
-	_indexBuffer(nullptr)
+	_dynamic(false)
+{
+}
+
+Mesh::Part::Part(std::shared_ptr<Mesh> mesh,
+			 Graphics::PrimitiveTopology primitiveTopology, 
+			 Graphics::IndexFormat indexFormat, size_t indexCount, bool dynamic) : 
+	_mesh(mesh),
+	_primitiveTopology(primitiveTopology),
+	_indexFormat(indexFormat),
+	_indexCount(indexCount),
+	_dynamic(dynamic)
 {
 }
 
 Mesh::Part::~Part()
 {
+}
+
+std::shared_ptr<Mesh> Mesh::Part::getMesh() const
+{
+	return _mesh;
 }
 
 Graphics::PrimitiveTopology Mesh::Part::getPrimitiveTopology() const
@@ -49,7 +53,22 @@ bool Mesh::Part::isDynamic() const
 	return _dynamic;
 }
 
-void Mesh::Part::setIndexData(const void* indexData, size_t indexStart, size_t indexCount)
+Mesh::Mesh() :
+	_primitiveTopology(Graphics::PRIMITIVE_TOPOLOGY_TRIANGLES),
+	_vertexCount(0),
+	_dynamic(false)
+{
+}
+
+Mesh::Mesh(const VertexFormat& vertexFormat, size_t vertexCount, bool dynamic) :
+	_primitiveTopology(Graphics::PRIMITIVE_TOPOLOGY_TRIANGLES),
+	_vertexFormat(vertexFormat),
+	_vertexCount(vertexCount),
+	_dynamic(dynamic)
+{
+}
+
+Mesh::~Mesh()
 {
 }
 
@@ -81,15 +100,6 @@ Graphics::PrimitiveTopology Mesh::getPrimitiveTopology() const
 void Mesh::setPrimitiveTopology(Graphics::PrimitiveTopology primitiveTopology)
 {
 	_primitiveTopology = primitiveTopology;
-}
-
-void Mesh::setVertexData(const void* vertexData, size_t vertexStart, size_t vertexCount)
-{
-}
-
-Mesh::Part* Mesh::addPart(Graphics::PrimitiveTopology primitiveTopology, Graphics::IndexFormat indexFormat, size_t indexCount, bool dynamic)
-{
-	return nullptr;
 }
 
 size_t Mesh::getPartCount() const

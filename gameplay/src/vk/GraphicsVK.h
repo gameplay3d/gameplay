@@ -11,19 +11,19 @@ namespace gameplay
  *
  * @see Graphics
  */
-class GraphicsVulkan : public Graphics
+class GraphicsVK : public Graphics
 {
 public:
  
     /**
      * Constructor
      */
-    GraphicsVulkan();
+    GraphicsVK();
 
 	/**
      * Destructor
 	 */
-    ~GraphicsVulkan();
+    ~GraphicsVK();
 
 	/**
      * @see Graphics::onInitialize
@@ -56,14 +56,9 @@ public:
     int getHeight();
 
     /**
-     * @see Graphics::createVertexBuffer
+     * @see Graphics::createMesh
      */
-	std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat, size_t size, bool dynamic = false);
-
-    /**
-     * @see Graphics::createIndexBuffer
-     */
-	std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat, size_t size, bool dynamic = false);
+	std::shared_ptr<Mesh> createMesh(const VertexFormat& vertexFormat, size_t vertexCount, bool dynamic = false);
 
 	/**
      * @see Graphics::createCommandList

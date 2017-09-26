@@ -1,8 +1,8 @@
 #include "Base.h"
-#include "GraphicsDirect3D.h"
-#include "BufferDirect3D.h"
-#include "CommandListDirect3D.h"
 #include "Game.h"
+#include "GraphicsD3D12.h"
+#include "MeshD3D12.h"
+#include "CommandListD3D12.h"
 
 namespace gameplay
 {
@@ -24,7 +24,7 @@ namespace gameplay
 	}							\
 }
 
-GraphicsDirect3D::GraphicsDirect3D() :
+GraphicsD3D12::GraphicsD3D12() :
     _initialized(false),
     _resized(false),
 	_width(0),
@@ -44,7 +44,7 @@ GraphicsDirect3D::GraphicsDirect3D() :
 {
 }
 
-GraphicsDirect3D::~GraphicsDirect3D()
+GraphicsD3D12::~GraphicsD3D12()
 {
 	if(_swapchain)
 		_swapchain->SetFullscreenState(false, nullptr);
@@ -60,7 +60,7 @@ GraphicsDirect3D::~GraphicsDirect3D()
 	SAFE_RELEASE(_device);
 }
 
-void GraphicsDirect3D::onInitialize(unsigned long window, unsigned long connection)
+void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 {
     if (_initialized)
         return;
@@ -181,12 +181,12 @@ void GraphicsDirect3D::onInitialize(unsigned long window, unsigned long connecti
     _resized = true;
 }
 
-bool GraphicsDirect3D::isInitialized()
+bool GraphicsD3D12::isInitialized()
 {
     return _initialized;
 }
 
-void GraphicsDirect3D::onResize(int width, int height)
+void GraphicsD3D12::onResize(int width, int height)
 {
     if (!_resized || (width == _width && height == _height))
 		return;
@@ -220,22 +220,22 @@ void GraphicsDirect3D::onResize(int width, int height)
     _resized = true;
 }
 
-bool GraphicsDirect3D::isResized()
+bool GraphicsD3D12::isResized()
 {
     return _resized;
 }
 
-int GraphicsDirect3D::getWidth()
+int GraphicsD3D12::getWidth()
 {
     return _width;
 }
 
-int GraphicsDirect3D::getHeight()
+int GraphicsD3D12::getHeight()
 {
     return _height;
 }
 
-std::shared_ptr<Buffer> GraphicsDirect3D::createVertexBuffer(const VertexFormat& vertexFormat, size_t size, bool dynamic)
+std::shared_ptr<Mesh> GraphicsD3D12::createMesh(const VertexFormat& vertexFormat, size_t size, bool dynamic)
 {
 	D3D12_HEAP_PROPERTIES heapProps = {};
 	heapProps.Type = dynamic ? D3D12_HEAP_TYPE_UPLOAD : D3D12_HEAP_TYPE_DEFAULT;
@@ -257,82 +257,45 @@ std::shared_ptr<Buffer> GraphicsDirect3D::createVertexBuffer(const VertexFormat&
     resourceDesc.SampleDesc.Quality = 0;
     resourceDesc.Width = size;
 
-	ID3D12Resource* bufferD3D;
-	if (FAILED(_device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, nullptr, IID_PPV_ARGS(&bufferD3D))))
+	ID3D12Resource* vertexBufferD3D;
+	if (FAILED(_device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, nullptr, IID_PPV_ARGS(&vertexBufferD3D))))
 	{
         GP_ERROR( "Failed to create buffer!\n" );
 		return nullptr;
 	}
 
-	std::shared_ptr<BufferDirect3D> buffer = std::make_shared<BufferDirect3D>(Buffer::TYPE_VERTEX, size, dynamic,_device, bufferD3D);
-	buffer->_vertexBufferView.BufferLocation = bufferD3D->GetGPUVirtualAddress();
-	buffer->_vertexBufferView.SizeInBytes = size;
-	buffer->_vertexBufferView.StrideInBytes = vertexFormat.getStride();
+	std::shared_ptr<MeshD3D12> mesh = std::make_shared<MeshD3D12>(vertexFormat, size, dynamic,_device, vertexBufferD3D);
+	mesh->_vertexBufferView.BufferLocation = vertexBufferD3D->GetGPUVirtualAddress();
+	mesh->_vertexBufferView.SizeInBytes = size;
+	mesh->_vertexBufferView.StrideInBytes = vertexFormat.getStride();
 
-	return std::static_pointer_cast<Buffer>(buffer);
+	return std::static_pointer_cast<Mesh>(mesh);
 }
 
-std::shared_ptr<Buffer> GraphicsDirect3D::createIndexBuffer(IndexFormat indexFormat, size_t size, bool dynamic)
-{
-	D3D12_HEAP_PROPERTIES heapProps = {};
-	heapProps.Type = dynamic ? D3D12_HEAP_TYPE_UPLOAD : D3D12_HEAP_TYPE_DEFAULT;
-	heapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	heapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-	heapProps.CreationNodeMask = 1;
-	heapProps.VisibleNodeMask = 1;
-
-	D3D12_RESOURCE_DESC resourceDesc;
-	resourceDesc.Alignment = 0;
-    resourceDesc.DepthOrArraySize = 1;
-    resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-    resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-    resourceDesc.Format = DXGI_FORMAT_UNKNOWN;
-    resourceDesc.Height = 1;
-    resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-    resourceDesc.MipLevels = 1;
-    resourceDesc.SampleDesc.Count = 1;
-    resourceDesc.SampleDesc.Quality = 0;
-    resourceDesc.Width = size;
-
-	ID3D12Resource* bufferD3D;
-	if (FAILED(_device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_INDEX_BUFFER, nullptr, IID_PPV_ARGS(&bufferD3D))))
-	{
-        GP_ERROR( "Failed to create buffer!\n" );
-		return nullptr;
-	}
-
-	std::shared_ptr<BufferDirect3D> buffer = std::make_shared<BufferDirect3D>(Buffer::TYPE_INDEX, size, dynamic, _device, bufferD3D);
-	buffer->_indexBufferView.BufferLocation = bufferD3D->GetGPUVirtualAddress();
-	buffer->_indexBufferView.SizeInBytes = size;
-	buffer->_indexBufferView.Format = (indexFormat == IndexFormat::INDEX_FORMAT_UNSIGNED_INT) ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_R16_UINT;
-
-	return std::static_pointer_cast<Buffer>(buffer);
-}
-
-std::shared_ptr<CommandList> GraphicsDirect3D::createCommandList()
+std::shared_ptr<CommandList> GraphicsD3D12::createCommandList()
 {
 	return nullptr;
 }
 
-void GraphicsDirect3D::submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count)
+void GraphicsD3D12::submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count)
 {
 }
 
-bool GraphicsDirect3D::beginScene()
+bool GraphicsD3D12::beginScene()
 {
 	return true;
 }
 
-void GraphicsDirect3D::endScene()
+void GraphicsD3D12::endScene()
 {
 }
 
-void GraphicsDirect3D::present()
+void GraphicsD3D12::present()
 {
     _swapchain->Present(_vsync ? 1 : 0, 0);
 }
 
-void GraphicsDirect3D::flushAndWait()
+void GraphicsD3D12::flushAndWait()
 {
     // Signal and increment the fence value.
 	const uint64_t fenceToWaitFor = _fenceValues[_backBufferIndex];
@@ -350,7 +313,7 @@ void GraphicsDirect3D::flushAndWait()
 	_fenceValues[_backBufferIndex] = fenceToWaitFor + 1;
 }
 
-void GraphicsDirect3D::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter)
+void GraphicsD3D12::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter)
 {
 	IDXGIAdapter1* adapter;
 	*ppAdapter = nullptr;
@@ -366,7 +329,7 @@ void GraphicsDirect3D::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1
 	}
 }
 
-void GraphicsDirect3D::createBackBuffers()
+void GraphicsD3D12::createBackBuffers()
 {
 	uint32_t renderTargetDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTargetViewHandle = _renderTargetViewHeap->GetCPUDescriptorHandleForHeapStart();
@@ -379,7 +342,7 @@ void GraphicsDirect3D::createBackBuffers()
 	_backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
 }
 
-void GraphicsDirect3D::buildCommands()
+void GraphicsD3D12::buildCommands()
 {
 	// Reset (re-use) the memory associated command allocator.
 	D3D_CHECK_RESULT(_commandAllocators[_backBufferIndex]->Reset());

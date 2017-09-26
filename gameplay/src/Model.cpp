@@ -1,5 +1,8 @@
 #include "Base.h"
 #include "Model.h"
+#include "FileSystem.h"
+#include "Vector3.h"
+#include "Vector2.h"
 
 namespace gameplay
 {
@@ -13,8 +16,6 @@ Model::~Model()
 
 void Model::load(const std::string& url)
 {
-	// TODO
-	Renderer::onLoaded();
 }
 
 Component::TypeId Model::getTypeId()

@@ -2,7 +2,6 @@
 
 #include "Graphics.h"
 #include "VertexFormat.h"
-#include "Buffer.h"
 
 namespace gameplay
 {
@@ -31,7 +30,21 @@ public:
 		/**
 		 * Constructor.
 		 */
+		Part(std::shared_ptr<Mesh> mesh,
+			 Graphics::PrimitiveTopology primitiveTopology, 
+			 Graphics::IndexFormat indexFormat, size_t _indexCount, bool dynamic);
+
+		/**
+		 * Constructor.
+		 */
 		~Part();
+
+		/**
+		 * Gets the mesh used for this part.
+		 *
+		 * @return The mesh used for this part.
+		 */
+		std::shared_ptr<Mesh> getMesh() const;
 
         /**
          * Gets the primitive topology to define how the indices are connected.
@@ -61,6 +74,14 @@ public:
 		 */
 		bool isDynamic() const;
 
+		/** 
+		 * Maps the gpu index buffer to host accessible memory.
+		 *
+		 * @param rangeStart The memory range to start to map.
+		 * @param rangeSize The memory range size to map. 
+		 */
+		virtual void* mapIndexBuffer(size_t rangeStart, size_t rangeSize) = 0;
+
 		/**
 		 * Sets the specified index data into the mapped index buffer.
 		 *
@@ -68,28 +89,40 @@ public:
 		 * @param indexStart The index to start from.
 		 * @param indexCount The number of indices to be set.
 		 */
-		void setIndexData(const void* indexData, size_t indexStart, size_t indexCount);
+		virtual void setIndexData(void* indexData) = 0;
+
+		/**
+		 * Unmaps the previously mapped range of memory.
+		 *
+		 * @return true if the memory was unmapped, false if failed to unmap.
+		 */
+		virtual bool unmapIndexBuffer() = 0;
 
 	protected:
 
+		std::shared_ptr<Mesh> _mesh;
 		Graphics::PrimitiveTopology _primitiveTopology;
 		Graphics::IndexFormat _indexFormat;
 		size_t _indexCount;
 		bool _dynamic;
-		std::shared_ptr<Buffer> _indexBuffer;
 	};
 
 	/**
 	 * Constructor.
 	 */
     Mesh();
+
+	/**
+	 * Constructor.
+	 */
+    Mesh(const VertexFormat& vertexFormat, size_t vertexCount, bool _dynamic);
     
 	/**
 	 * Destructor.
 	 */
     ~Mesh();
 
-   /**
+    /**
      * Gets the vertex format for the mesh.
      *
      * @return The vertex format.
@@ -138,14 +171,29 @@ public:
      */
     void setPrimitiveTopology(Graphics::PrimitiveTopology primitiveTopology);
 
+	/** 
+	 * Maps the gpu vertex buffer to host accessible memory.
+	 *
+	 * @param rangeStart The memory range to start to map.
+	 * @param rangeSize The memory range size to map. 
+	 */
+	virtual void* mapVertexBuffer(size_t rangeStart, size_t rangeSize) = 0;
+
     /**
-     * Sets the specified vertex data into the mapped vertex buffer.
+     * Sets (copies) the specified vertex data into the mapped vertex buffer.
      *
      * @param vertexData The vertex data to be set.
      * @param vertexStart The index of the starting vertex (0 by default).
      * @param vertexCount The number of vertices to be set (default is 0, for all vertices).
      */
-	void setVertexData(const void* vertexData, size_t vertexStart = 0, size_t vertexCount = 0);
+	virtual void setVertexData(void* vertexData) = 0;
+
+	/**
+	 * Unmaps the previously mapped range of memory
+	 *
+	 * @return true if the memory was unmapped, false if failed to unmap.
+	 */
+	virtual bool unmapVertexBuffer() = 0;
 
     /**
      * Creates and adds a new part of primitive data defining how the vertices are connected.
@@ -157,7 +205,7 @@ public:
      * 
      * @return The newly created/added mesh part.
      */
-    Part* addPart(Graphics::PrimitiveTopology primitiveTopology, Graphics::IndexFormat indexFormat, size_t indexCount, bool dynamic = false);
+    virtual Part* addPart(Graphics::PrimitiveTopology primitiveTopology, Graphics::IndexFormat indexFormat, size_t indexCount, bool dynamic = false) = 0;
 
     /**
      * Gets the number of mesh parts contained within the mesh.
@@ -178,9 +226,8 @@ protected:
 
 	Graphics::PrimitiveTopology _primitiveTopology;
     VertexFormat _vertexFormat;
-    unsigned int _vertexCount;
+    size_t _vertexCount;
 	bool _dynamic;
-	std::shared_ptr<Buffer> _vertexBuffer;
 	std::vector<Part*> _parts;
 };
 

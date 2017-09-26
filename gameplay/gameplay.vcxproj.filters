@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="direct3d">
+    <Filter Include="d3d12">
       <UniqueIdentifier>{b39f8ba5-858a-4cc7-972f-d6a94e42d38b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vukan">
+    <Filter Include="vk">
       <UniqueIdentifier>{d8c38a1e-e81e-481f-9bca-e8aea33ebe13}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -44,12 +44,6 @@
     <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
     <ClCompile Include="src\Vector4.cpp" />
-    <ClCompile Include="src\direct3d\GraphicsDirect3D.cpp">
-      <Filter>direct3d</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vulkan\GraphicsVulkan.cpp">
-      <Filter>vukan</Filter>
-    </ClCompile>
     <ClCompile Include="src\PhysicsCharacter.cpp" />
     <ClCompile Include="src\PhysicsMaterial.cpp" />
     <ClCompile Include="src\PhysicsVehicle.cpp" />
@@ -70,21 +64,26 @@
     <ClCompile Include="src\AudioClip.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\CommandList.cpp" />
-    <ClCompile Include="src\direct3d\CommandListDirect3D.cpp">
-      <Filter>direct3d</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vulkan\CommandListVulkan.cpp">
-      <Filter>vukan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vulkan\BufferVulkan.cpp">
-      <Filter>vukan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Buffer.cpp" />
-    <ClCompile Include="src\direct3d\BufferDirect3D.cpp">
-      <Filter>direct3d</Filter>
-    </ClCompile>
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\PhysicsJoint.cpp" />
+    <ClCompile Include="src\d3d12\GraphicsD3D12.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\CommandListD3D12.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vk\MeshVK.cpp">
+      <Filter>vk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vk\GraphicsVK.cpp">
+      <Filter>vk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vk\CommandListVK.cpp">
+      <Filter>vk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\MeshD3D12.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
@@ -126,12 +125,6 @@
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\Vector4.h" />
-    <ClInclude Include="src\direct3d\GraphicsDirect3D.h">
-      <Filter>direct3d</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vulkan\GraphicsVulkan.h">
-      <Filter>vukan</Filter>
-    </ClInclude>
     <ClInclude Include="src\PhysicsCharacter.h" />
     <ClInclude Include="src\PhysicsMaterial.h" />
     <ClInclude Include="src\PhysicsVehicle.h" />
@@ -152,20 +145,25 @@
     <ClInclude Include="src\AudioClip.h" />
     <ClInclude Include="src\Sprite.h" />
     <ClInclude Include="src\CommandList.h" />
-    <ClInclude Include="src\direct3d\CommandListDirect3D.h">
-      <Filter>direct3d</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vulkan\CommandListVulkan.h">
-      <Filter>vukan</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vulkan\BufferVulkan.h">
-      <Filter>vukan</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Buffer.h" />
-    <ClInclude Include="src\direct3d\BufferDirect3D.h">
-      <Filter>direct3d</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VertexFormat.h" />
     <ClInclude Include="src\PhysicsJoint.h" />
+    <ClInclude Include="src\VertexFormat.h" />
+    <ClInclude Include="src\d3d12\GraphicsD3D12.h">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d12\CommandListD3D12.h">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vk\MeshVK.h">
+      <Filter>vk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vk\GraphicsVK.h">
+      <Filter>vk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vk\CommandListVK.h">
+      <Filter>vk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\d3d12\MeshD3D12.h">
+      <Filter>d3d12</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

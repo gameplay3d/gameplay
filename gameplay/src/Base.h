@@ -124,9 +124,10 @@
 #define GP_MATH_MATRIX_SIZE             (sizeof(float) * 16)
 
 // Graphics defaults
-#define GP_GRAPHICS_VULKAN              "vulkan"
-#define GP_GRAPHICS_DIRECT3D            "direct3d"
-#define GP_GRAPHICS                     GP_GRAPHICS_VULKAN
+#define GP_GRAPHICS_VK					"vk"
+#define GP_GRAPHICS_D3D12				"d3d12"
+#define GP_GRAPHICS_MTL					"mtl"
+#define GP_GRAPHICS                     GP_GRAPHICS_VK
 #define GP_GRAPHICS_WIDTH				1920
 #define GP_GRAPHICS_HEIGHT				1080
 #define GP_GRAPHICS_FULLSCREEN			false

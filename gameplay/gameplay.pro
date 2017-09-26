@@ -14,7 +14,6 @@ SOURCES += \
     src/AudioSource.cpp \
     src/BoundingBox.cpp \
     src/BoundingSphere.cpp \
-    src/Buffer.cpp \
     src/Camera.cpp \
     src/CommandList.cpp \
     src/Component.cpp \
@@ -75,7 +74,6 @@ HEADERS += \
     src/Base.h \
     src/BoundingBox.h \
     src/BoundingSphere.h \
-    src/Buffer.h \
     src/Camera.h \
     src/CommandList.h \
     src/Component.h \
@@ -123,7 +121,6 @@ HEADERS += \
     src/Stream.h \
     src/Text.h \
     src/Texture.h \
-    src/Texture.h \
     src/Tileset.h \
     src/Vector2.h \
     src/Vector3.h \
@@ -137,19 +134,22 @@ win32 {
     DEFINES += _WINDOWS WIN32 _UNICODE UNICODE
     DEFINES += VK_USE_PLATFORM_WIN32_KHR
     SOURCES += src/PlatformWindows.cpp
-    SOURCES += src/vulkan/GraphicsVulkan.cpp
-    SOURCES += src/vulkan/BufferVulkan.cpp
-    SOURCES += src/vulkan/CommandListVulkan.cpp
-    SOURCES += src/direct3d/GraphicsDirect3D.cpp
-    SOURCES += src/direct3d/BufferDirect3D.cpp
-    SOURCES += src/direct3d/CommandListDirect3D.cpp
+    SOURCES += src/vk/GraphicsVK.cpp
+    SOURCES += src/vk/MeshVK.cpp
+    SOURCES += src/vk/CommandListVK.cpp
+    SOURCES += src/d3d12/GraphicsD3D12.cpp
+    SOURCES += src/d3d12/MeshD3D12.cpp
+    SOURCES += src/d3d12/CommandListD3D12.cpp
     HEADERS += src/PlatformWindows.h
-    HEADERS += src/vulkan/GraphicsVulkan.h
-    HEADERS += src/vulkan/BufferVulkan.h
-    HEADERS += src/vulkan/CommandListVulkan.h
-    HEADERS += src/direct3d/GraphicsDirect3D.h
-    INCLUDEPATH += src/vulkan
-    INCLUDEPATH += src/direct3d
+    HEADERS += src/vk/GraphicsVK.h
+    HEADERS += src/vk/MeshVK.h
+    HEADERS += src/vk/CommandListVK.h
+    HEADERS += src/d3d12/GraphicsD3D12.h
+    HEADERS += src/d3d12/GraphicsD3D12.h
+    HEADERS += src/d3d12/MeshD3D12.h
+    HEADERS += src/d3d12/CommandListD3D12.h
+    INCLUDEPATH += src/vk
+    INCLUDEPATH += src/d3d12
     INCLUDEPATH += $$(VULKAN_SDK)/Include
     QMAKE_CXXFLAGS_WARN_ON -= -w34100
     QMAKE_CXXFLAGS_WARN_ON -= -w34189
@@ -162,14 +162,14 @@ linux {
     DEFINES += __linux__
     DEFINES += VK_USE_PLATFORM_XCB_KHR
     SOURCES += src/PlatformLinux.cpp
-    SOURCES += src/vulkan/GraphicsVulkan.cpp
-    SOURCES += src/vulkan/BufferVulkan.cpp
-    SOURCES += src/vulkan/CommandListVulkan.cpp
+    SOURCES += src/vk/GraphicsVK.cpp
+    SOURCES += src/vk/MeshVK.cpp
+    SOURCES += src/vk/CommandListVK.cpp
     HEADERS += src/PlatformLinux.h
-    HEADERS += src/vulkan/GraphicsVulkan.h
-    HEADERS += src/vulkan/BufferVulkan.h
-    HEADERS += src/vulkan/CommandListVulkan.h
-    INCLUDEPATH += src/vulkan
+    HEADERS += src/vk/GraphicsVK.h
+    HEADERS += src/vk/MeshVK.h
+    HEADERS += src/vk/CommandListVK.h
+    INCLUDEPATH += src/vk
     INCLUDEPATH += $$(VULKAN_SDK)/Include
     INCLUDEPATH += /usr/include/gtk-2.0
     INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
