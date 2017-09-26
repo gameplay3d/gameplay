@@ -1,7 +1,6 @@
 #pragma once
 
 #include "VertexFormat.h"
-#include "Buffer.h"
 #include "CommandList.h"
 
 namespace gameplay
@@ -21,9 +20,9 @@ public:
      */
     enum Api
     {
-        API_VULKAN,
-        API_DIRECT3D,
-        API_METAL
+        API_VK,
+        API_D3D12,
+        API_MTL
     };
 
 	/**
@@ -76,18 +75,14 @@ public:
     virtual int getHeight() = 0;
 
 	/**
-	 * Creates a vertex buffer.
+	 * Creates a mesh that is a container for the vertex and index data.
 	 *
-	 * @return The creates a vertex buffer.
+	 * @param vertexFormat The format of the vertex data.
+	 * @param vertexCount The number of vertices (not the size in bytes).
+	 * @param dynamic true if you plan to dynamically update the mesh data at runtime, false if static.
+	 * @return The mesh created.
 	 */
-	virtual std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat,  size_t vertexCount, bool dynamic = false) = 0;
-
-	/**
-	 * Creates a vertex buffer.
-	 *
-	 * @return The creates a vertex buffer.
-	 */
-	virtual std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool dynamic = false) = 0;
+	virtual std::shared_ptr<Mesh> createMesh(const VertexFormat& vertexFormat,  size_t vertexCount, bool dynamic = false) = 0;
 
 	/**
 	 * Creates a command list for processing gpu commands.

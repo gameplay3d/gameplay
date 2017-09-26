@@ -13,19 +13,19 @@ namespace gameplay
  * 
  * @see Graphics
  */
-class GraphicsDirect3D : public Graphics
+class GraphicsD3D12 : public Graphics
 {
 public:
 
     /**
      * Constructor.
      */
-    GraphicsDirect3D();
+    GraphicsD3D12();
 
 	/**
 	 * Destructor
 	 */
-    ~GraphicsDirect3D();
+    ~GraphicsD3D12();
 
 	/**
      * @see Graphics::onInitialize
@@ -58,14 +58,9 @@ public:
     int getHeight();
 
     /**
-     * @see Graphics::createVertexBuffer
+     * @see Graphics::createMesh
      */
-	std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat, size_t size, bool dynamic = false);
-
-    /**
-     * @see Graphics::createIndexBuffer
-     */
-	std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat, size_t size, bool dynamic = false);
+	std::shared_ptr<Mesh> createMesh(const VertexFormat& vertexFormat, size_t size, bool dynamic = false);
 
 	/**
      * @see Graphics::createCommandList

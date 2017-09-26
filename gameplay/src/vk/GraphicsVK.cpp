@@ -1,8 +1,8 @@
 #include "Base.h"
-#include "GraphicsVulkan.h"
-#include "BufferVulkan.h"
-#include "CommandListVulkan.h"
 #include "Game.h"
+#include "GraphicsVK.h"
+#include "MeshVK.h"
+#include "CommandListVK.h"
 
 namespace gameplay
 {
@@ -22,7 +22,7 @@ const std::vector<const char*> __validationLayers =
 	}																									\
 }
 
-GraphicsVulkan::GraphicsVulkan() :
+GraphicsVK::GraphicsVK() :
     _initialized(false),
     _resized(false),
 	_width(0),
@@ -54,7 +54,7 @@ GraphicsVulkan::GraphicsVulkan() :
 {
 }
 
-GraphicsVulkan::~GraphicsVulkan()
+GraphicsVK::~GraphicsVK()
 {
 	vkDeviceWaitIdle(_device);
 	for (uint32_t i = 0; i < _frameBuffers.size(); i++)
@@ -82,7 +82,7 @@ GraphicsVulkan::~GraphicsVulkan()
 	vkDestroyInstance(_instance, nullptr);
 }
 
-void GraphicsVulkan::onInitialize(unsigned long window, unsigned long connection)
+void GraphicsVK::onInitialize(unsigned long window, unsigned long connection)
 {
     if (_initialized)
         return;
@@ -110,12 +110,12 @@ void GraphicsVulkan::onInitialize(unsigned long window, unsigned long connection
     _resized = true;
 }
 
-bool GraphicsVulkan::isInitialized()
+bool GraphicsVK::isInitialized()
 {
     return _initialized;
 }
 
-void GraphicsVulkan::onResize(int width, int height)
+void GraphicsVK::onResize(int width, int height)
 {
     if (!_resized)
 		return;
@@ -181,66 +181,57 @@ void GraphicsVulkan::onResize(int width, int height)
     _resized = true;
 }
 
-bool GraphicsVulkan::isResized()
+bool GraphicsVK::isResized()
 {
     return _resized;
 }
 
-int GraphicsVulkan::getWidth()
+int GraphicsVK::getWidth()
 {
     return _width;
 }
 
-int GraphicsVulkan::getHeight()
+int GraphicsVK::getHeight()
 {
     return _height;
 }
 
-std::shared_ptr<Buffer> GraphicsVulkan::createVertexBuffer(const VertexFormat& vertexFormat, size_t size, bool dynamic)
+std::shared_ptr<Mesh> GraphicsVK::createMesh(const VertexFormat& vertexFormat, size_t vertexCount, bool dynamic)
 {
-	VkBuffer bufferVk = nullptr;
+	VkBuffer vertexBufferVk = nullptr;
 	// TODO
 
-	std::shared_ptr<BufferVulkan> buffer = std::make_shared<BufferVulkan>(Buffer::TYPE_VERTEX, size, dynamic, _device, bufferVk);
-	return std::static_pointer_cast<Buffer>(buffer);
+	std::shared_ptr<MeshVK> vertexBuffer = std::make_shared<MeshVK>(vertexFormat, vertexCount, dynamic, _device, vertexBufferVk);
+	return std::static_pointer_cast<Mesh>(vertexBuffer);
 }
 
-std::shared_ptr<Buffer> GraphicsVulkan::createIndexBuffer(IndexFormat indexFormat, size_t size, bool dynamic)
-{
-	VkBuffer bufferVk = nullptr;
-	// TODO
-
-	std::shared_ptr<BufferVulkan> buffer = std::make_shared<BufferVulkan>(Buffer::TYPE_INDEX, size, dynamic, _device, bufferVk);
-	return std::static_pointer_cast<Buffer>(buffer);
-}
-
-std::shared_ptr<CommandList> GraphicsVulkan::createCommandList()
+std::shared_ptr<CommandList> GraphicsVK::createCommandList()
 {
 	return nullptr;
 }
 
-void GraphicsVulkan::submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count)
+void GraphicsVK::submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count)
 {
 }
 
-bool GraphicsVulkan::beginScene()
+bool GraphicsVK::beginScene()
 {
 	return true;
 }
 
-void GraphicsVulkan::endScene()
+void GraphicsVK::endScene()
 {
 }
 
-void GraphicsVulkan::present()
+void GraphicsVK::present()
 {
 }
 
-void GraphicsVulkan::flushAndWait()
+void GraphicsVK::flushAndWait()
 {
 }
 
-void GraphicsVulkan::createInstance()
+void GraphicsVK::createInstance()
 {
 	loadLibrary();
 
@@ -298,14 +289,14 @@ void GraphicsVulkan::createInstance()
 		// Register the debug report callback
 		VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = {};
 		dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-		dbgCreateInfo.pfnCallback = (PFN_vkDebugReportCallbackEXT)GraphicsVulkan::validationDebugReport;
+		dbgCreateInfo.pfnCallback = (PFN_vkDebugReportCallbackEXT)GraphicsVK::validationDebugReport;
 		dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
 
 		VK_CHECK_RESULT(vkCreateDebugReportCallbackEXT(_instance, &dbgCreateInfo, nullptr, &_debugMessageCallback));
 	}
 }
 
-void GraphicsVulkan::createDevice()
+void GraphicsVK::createDevice()
 {
 	// Get the available physical devices
 	uint32_t gpuCount = 0;
@@ -414,7 +405,7 @@ void GraphicsVulkan::createDevice()
 	vkGetDeviceQueue(_device, _queueFamilyIndexGraphics, 0, &_queueGraphics);
 }
 
-void GraphicsVulkan::createSurface(unsigned long window, unsigned long connection)
+void GraphicsVK::createSurface(unsigned long window, unsigned long connection)
 {
 	// Lookup device surface extensions
 	vkGetPhysicalDeviceSurfaceSupportKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceSupportKHR>(vkGetInstanceProcAddr(_instance, "vkGetPhysicalDeviceSurfaceSupportKHR"));
@@ -516,7 +507,7 @@ void GraphicsVulkan::createSurface(unsigned long window, unsigned long connectio
     VK_CHECK_RESULT(vkCreateCommandPool(_device, &info, nullptr, &_commandPool));
 }
 
-void GraphicsVulkan::createSwapchain()
+void GraphicsVK::createSwapchain()
 {
 	vkCreateSwapchainKHR = reinterpret_cast<PFN_vkCreateSwapchainKHR>(vkGetDeviceProcAddr(_device, "vkCreateSwapchainKHR"));
 	vkDestroySwapchainKHR = reinterpret_cast<PFN_vkDestroySwapchainKHR>(vkGetDeviceProcAddr(_device, "vkDestroySwapchainKHR"));
@@ -610,7 +601,7 @@ void GraphicsVulkan::createSwapchain()
 	}
 }
 
-void GraphicsVulkan::createDepthStencil()
+void GraphicsVK::createDepthStencil()
 {
 	// Create a depth stencil image and view
 	VkBool32 validDepthFormat = getDepthStencilFormat(_physicalDevice, &_depthStencilFormat);
@@ -675,7 +666,7 @@ void GraphicsVulkan::createDepthStencil()
 	VK_CHECK_RESULT(vkCreateImageView(_device, &imageViewCreateInfo, nullptr, &_depthStencilImageView));
 }
 
-void GraphicsVulkan::createRenderPass()
+void GraphicsVK::createRenderPass()
 {
 	std::array<VkAttachmentDescription, 2> attachments = {};
 
@@ -753,7 +744,7 @@ void GraphicsVulkan::createRenderPass()
 	VK_CHECK_RESULT(vkCreateRenderPass(_device, &renderPassInfo, nullptr, &_renderPass));
 }
 
-void GraphicsVulkan::createBackBuffers()
+void GraphicsVK::createBackBuffers()
 {
 	_frameBuffers.resize(_backBufferCount);
 	for (size_t i = 0; i < _backBufferCount; i++)
@@ -774,7 +765,7 @@ void GraphicsVulkan::createBackBuffers()
 	}
 }
 
-void GraphicsVulkan::createSynchronizationPrimitives()
+void GraphicsVK::createSynchronizationPrimitives()
 {
 	// Create the semaphores
 	VkSemaphoreCreateInfo semaphoreCreateInfo = {};
@@ -792,14 +783,14 @@ void GraphicsVulkan::createSynchronizationPrimitives()
 		VK_CHECK_RESULT(vkCreateFence(_device, &fenceCreateInfo, nullptr, &fence));
 }
 
-void GraphicsVulkan::createPipelineCache()
+void GraphicsVK::createPipelineCache()
 {
 	VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
 	pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 	VK_CHECK_RESULT(vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache));
 }
 
-void GraphicsVulkan::buildCommands()
+void GraphicsVK::buildCommands()
 {
 	// TODO: change this to builder pattern
 	VkCommandBufferBeginInfo cmdBufInfo = {};
@@ -827,7 +818,7 @@ void GraphicsVulkan::buildCommands()
 	}
 }
 
-void GraphicsVulkan::createCommandBuffers()
+void GraphicsVK::createCommandBuffers()
 {
 	_commandBuffers.resize(_backBufferCount);
 	VkCommandBufferAllocateInfo info = {};
@@ -838,7 +829,7 @@ void GraphicsVulkan::createCommandBuffers()
 	VK_CHECK_RESULT(vkAllocateCommandBuffers(_device, &info, _commandBuffers.data()));
 }
 
-GraphicsVulkan::SwapchainSurfaceInfo GraphicsVulkan::querySwapchainSurfaceInfo(VkPhysicalDevice physicalDevice)
+GraphicsVK::SwapchainSurfaceInfo GraphicsVK::querySwapchainSurfaceInfo(VkPhysicalDevice physicalDevice)
 {
 	// Get the capabilities of the swapchain
 	SwapchainSurfaceInfo swapchainSurfaceInfo;
@@ -864,7 +855,7 @@ GraphicsVulkan::SwapchainSurfaceInfo GraphicsVulkan::querySwapchainSurfaceInfo(V
 	return swapchainSurfaceInfo;
 }
 
-VkSurfaceFormatKHR GraphicsVulkan::chooseSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
+VkSurfaceFormatKHR GraphicsVK::chooseSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 {
 	if (availableFormats.size() == 1 && availableFormats[0].format == VK_FORMAT_UNDEFINED) 
 		return{ VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR };
@@ -877,7 +868,7 @@ VkSurfaceFormatKHR GraphicsVulkan::chooseSurfaceFormat(const std::vector<VkSurfa
 	return availableFormats[0];
 }
 
-VkPresentModeKHR GraphicsVulkan::choosePresentMode(const std::vector<VkPresentModeKHR> availablePresentModes)
+VkPresentModeKHR GraphicsVK::choosePresentMode(const std::vector<VkPresentModeKHR> availablePresentModes)
 {
 	VkPresentModeKHR swapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
 	if (!_vsync)
@@ -899,7 +890,7 @@ VkPresentModeKHR GraphicsVulkan::choosePresentMode(const std::vector<VkPresentMo
 }
 
 
-VkBool32 GraphicsVulkan::getDepthStencilFormat(VkPhysicalDevice physicalDevice, VkFormat* depthStencilFormat)
+VkBool32 GraphicsVK::getDepthStencilFormat(VkPhysicalDevice physicalDevice, VkFormat* depthStencilFormat)
 {
 	std::vector<VkFormat> depthStencilFormats = 
 	{
@@ -922,7 +913,7 @@ VkBool32 GraphicsVulkan::getDepthStencilFormat(VkPhysicalDevice physicalDevice, 
 	return false;
 }
 
-VkBool32 GraphicsVulkan::isDeviceExtensionPresent(VkPhysicalDevice physicalDevice, const char* extensionName)
+VkBool32 GraphicsVK::isDeviceExtensionPresent(VkPhysicalDevice physicalDevice, const char* extensionName)
 {
 	uint32_t extensionCount = 0;
 	std::vector<VkExtensionProperties> extensions;
@@ -937,7 +928,7 @@ VkBool32 GraphicsVulkan::isDeviceExtensionPresent(VkPhysicalDevice physicalDevic
 	return false;
 }
 
-VkBool32 GraphicsVulkan::getMemoryTypeFromProperties(uint32_t typeBits, VkFlags requirements_mask, uint32_t* typeIndex)
+VkBool32 GraphicsVK::getMemoryTypeFromProperties(uint32_t typeBits, VkFlags requirements_mask, uint32_t* typeIndex)
 {
     for (uint32_t i = 0; i < _physicalDeviceMemoryProperties.memoryTypeCount; i++) 
 	{
@@ -954,7 +945,7 @@ VkBool32 GraphicsVulkan::getMemoryTypeFromProperties(uint32_t typeBits, VkFlags 
     return false;
 }
 
-uint32_t GraphicsVulkan::getQueueFamiliyIndex(VkQueueFlagBits queueFlags)
+uint32_t GraphicsVK::getQueueFamiliyIndex(VkQueueFlagBits queueFlags)
 {
 	if (queueFlags & VK_QUEUE_COMPUTE_BIT)
 	{
@@ -978,7 +969,7 @@ uint32_t GraphicsVulkan::getQueueFamiliyIndex(VkQueueFlagBits queueFlags)
 	return 0;
 }
 
-VkBool32 GraphicsVulkan::validationDebugReport(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objType,
+VkBool32 GraphicsVK::validationDebugReport(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objType,
 										       uint64_t srcObject, size_t location, int32_t msgCode,
 										       const char* layerPrefix, const char* msg, void* userData)
 {
@@ -1107,7 +1098,7 @@ void* libVulkan;
 #endif
 
 
-void GraphicsVulkan::loadLibrary()
+void GraphicsVK::loadLibrary()
 {
 #if defined(__ANDROID__)
 	__android_log_print(ANDROID_LOG_INFO, "vulkanandroid", "Loading libvulkan.so...\n");
@@ -1131,14 +1122,14 @@ void GraphicsVulkan::loadLibrary()
 #endif
 }
 
-void GraphicsVulkan::freeLibrary()
+void GraphicsVK::freeLibrary()
 {
 #if defined(__ANDROID__)
 	dlclose(libVulkan);
 #endif
 }
 
-void GraphicsVulkan::loadFunctions()
+void GraphicsVK::loadFunctions()
 {
 #if defined(__ANDROID__)
 	__android_log_print(ANDROID_LOG_INFO, "vulkanandroid", "Loading instance based function pointers...\n");

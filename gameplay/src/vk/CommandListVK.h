@@ -9,19 +9,19 @@ namespace gameplay
 /**
  *  Defines a Vulkan impl of CommandList.
  */
-class CommandListVulkan : public CommandList
+class CommandListVK : public CommandList
 {
 public:
 
 	/**
 	 * Constructor.
 	 */
-	CommandListVulkan();
+	CommandListVK();
 
 	/**
 	 * Destructor.
 	 */
-	~CommandListVulkan();
+	~CommandListVK();
 
 	/**
 	 * @see CommandList::clear

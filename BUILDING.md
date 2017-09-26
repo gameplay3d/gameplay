@@ -7,7 +7,7 @@ Windows 10 (x86_64)
 - Setup Qt extension in Visual Studio 2015 (Goto Qt VS Tools->Qt Options->Add->Path=C:\Qt\5.9\msvc2015_64)
 - Install Windows 10 SDK + Debugging Tools for Windows
 - Install Vulkan SDK
-- Set VULKAN_SDK environment variable (Ex. VULKAN_SDK=C:\VulkanSDK\1.0.51.0)
+- Set VULKAN_SDK environment variable (Ex. VULKAN_SDK=C:\VulkanSDK\1.0.61.1)
 - Run install.bat script for downloading and installing external-deps
 - Open GamePlay.sln
 - Set gameplay-editor as active project

@@ -21,7 +21,7 @@ void App::onInitialize()
     // Set the asset path for saving our assets created
     FileSystem::setAssetPath("./");
 
-    // Quick test
+    /* Quick test
     // Create a test scene
     auto test = std::make_shared<SceneObject>();
 
@@ -64,8 +64,9 @@ void App::onInitialize()
     writer->writeObject(nullptr, test);
     writer->close();
     GP_SAFE_DELETE(writer);
+	
 
-    setScene(test);
+    setScene(test);*/
 }
 
 void App::onFinalize()

@@ -58,8 +58,6 @@ public:
      * @see Serializer::Activator::createObject
 	 */
     static std::shared_ptr<Serializable> createObject();
-
-
 };
 
 }

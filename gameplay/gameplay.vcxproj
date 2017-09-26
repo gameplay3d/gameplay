@@ -21,14 +21,13 @@
     <ClCompile Include="src\AudioSource.cpp" />
     <ClCompile Include="src\BoundingBox.cpp" />
     <ClCompile Include="src\BoundingSphere.cpp" />
-    <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CommandList.cpp" />
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\Curve.cpp" />
-    <ClCompile Include="src\direct3d\CommandListDirect3D.cpp" />
-    <ClCompile Include="src\direct3d\GraphicsDirect3D.cpp" />
-    <ClCompile Include="src\direct3d\BufferDirect3D.cpp" />
+    <ClCompile Include="src\d3d12\CommandListD3D12.cpp" />
+    <ClCompile Include="src\d3d12\GraphicsD3D12.cpp" />
+    <ClCompile Include="src\d3d12\MeshD3D12.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -75,9 +74,9 @@
     <ClCompile Include="src\Vector3.cpp" />
     <ClCompile Include="src\Vector4.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
-    <ClCompile Include="src\vulkan\CommandListVulkan.cpp" />
-    <ClCompile Include="src\vulkan\GraphicsVulkan.cpp" />
-    <ClCompile Include="src\vulkan\BufferVulkan.cpp" />
+    <ClCompile Include="src\vk\CommandListVK.cpp" />
+    <ClCompile Include="src\vk\GraphicsVK.cpp" />
+    <ClCompile Include="src\vk\MeshVK.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
@@ -88,14 +87,13 @@
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\BoundingBox.h" />
     <ClInclude Include="src\BoundingSphere.h" />
-    <ClInclude Include="src\Buffer.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\CommandList.h" />
     <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\Curve.h" />
-    <ClInclude Include="src\direct3d\CommandListDirect3D.h" />
-    <ClInclude Include="src\direct3d\GraphicsDirect3D.h" />
-    <ClInclude Include="src\direct3d\BufferDirect3D.h" />
+    <ClInclude Include="src\d3d12\CommandListD3D12.h" />
+    <ClInclude Include="src\d3d12\GraphicsD3D12.h" />
+    <ClInclude Include="src\d3d12\MeshD3D12.h" />
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
@@ -145,9 +143,9 @@
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\Vector4.h" />
     <ClInclude Include="src\VertexFormat.h" />
-    <ClInclude Include="src\vulkan\CommandListVulkan.h" />
-    <ClInclude Include="src\vulkan\GraphicsVulkan.h" />
-    <ClInclude Include="src\vulkan\BufferVulkan.h" />
+    <ClInclude Include="src\vk\CommandListVK.h" />
+    <ClInclude Include="src\vk\GraphicsVK.h" />
+    <ClInclude Include="src\vk\MeshVK.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1032BA4B-57EB-4348-9E03-29DD63E80E4A}</ProjectGuid>
