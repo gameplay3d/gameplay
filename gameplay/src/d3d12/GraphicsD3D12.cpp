@@ -1,7 +1,7 @@
 #include "Base.h"
 #include "Game.h"
 #include "GraphicsD3D12.h"
-#include "MeshD3D12.h"
+#include "BufferD3D12.h"
 #include "CommandListD3D12.h"
 
 namespace gameplay
@@ -235,41 +235,23 @@ int GraphicsD3D12::getHeight()
     return _height;
 }
 
-std::shared_ptr<Mesh> GraphicsD3D12::createMesh(const VertexFormat& vertexFormat, size_t size, bool dynamic)
+std::shared_ptr<Buffer> GraphicsD3D12::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible, void* hostMemory)
 {
-	D3D12_HEAP_PROPERTIES heapProps = {};
-	heapProps.Type = dynamic ? D3D12_HEAP_TYPE_UPLOAD : D3D12_HEAP_TYPE_DEFAULT;
-	heapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	heapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-	heapProps.CreationNodeMask = 1;
-	heapProps.VisibleNodeMask = 1;
+	return nullptr;
+}
 
-	D3D12_RESOURCE_DESC resourceDesc;
-	resourceDesc.Alignment = 0;
-    resourceDesc.DepthOrArraySize = 1;
-    resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-    resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-    resourceDesc.Format = DXGI_FORMAT_UNKNOWN;
-    resourceDesc.Height = 1;
-    resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-    resourceDesc.MipLevels = 1;
-    resourceDesc.SampleDesc.Count = 1;
-    resourceDesc.SampleDesc.Quality = 0;
-    resourceDesc.Width = size;
+std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(IndexFormat indexFormat, size_t indexCount, bool hostVisible, void* hostMemory)
+{
+	return nullptr;
+}
 
-	ID3D12Resource* vertexBufferD3D;
-	if (FAILED(_device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, nullptr, IID_PPV_ARGS(&vertexBufferD3D))))
-	{
-        GP_ERROR( "Failed to create buffer!\n" );
-		return nullptr;
-	}
+std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, bool hostVisible, void* hostMemory)
+{
+	return nullptr;
+}
 
-	std::shared_ptr<MeshD3D12> mesh = std::make_shared<MeshD3D12>(vertexFormat, size, dynamic,_device, vertexBufferD3D);
-	mesh->_vertexBufferView.BufferLocation = vertexBufferD3D->GetGPUVirtualAddress();
-	mesh->_vertexBufferView.SizeInBytes = size;
-	mesh->_vertexBufferView.StrideInBytes = vertexFormat.getStride();
-
-	return std::static_pointer_cast<Mesh>(mesh);
+void GraphicsD3D12::destroyBuffer(std::shared_ptr<Buffer> buffer)
+{
 }
 
 std::shared_ptr<CommandList> GraphicsD3D12::createCommandList()

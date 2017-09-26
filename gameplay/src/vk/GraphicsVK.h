@@ -55,10 +55,25 @@ public:
 	 */
     int getHeight();
 
-    /**
-     * @see Graphics::createMesh
-     */
-	std::shared_ptr<Mesh> createMesh(const VertexFormat& vertexFormat, size_t vertexCount, bool dynamic = false);
+	/**
+	 * @see Graphics::createVertexBuffer
+	 */
+	std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible, void* hostMemory = nullptr);
+ 	
+	/**
+	 * @see Graphics::createIndexBuffer
+	 */
+	std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool hostVisible, void* hostMemory = nullptr);
+
+	/**
+	 * @see Graphics::createUniformBuffer
+	 */
+	std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible, void* hostMemory = nullptr);
+
+	/**
+	 * @see Graphics::destroyBuffer
+	 */
+	void destroyBuffer(std::shared_ptr<Buffer> buffer);
 
 	/**
      * @see Graphics::createCommandList

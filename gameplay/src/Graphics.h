@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VertexFormat.h"
+#include "Buffer.h"
 #include "CommandList.h"
 
 namespace gameplay
@@ -75,14 +76,40 @@ public:
     virtual int getHeight() = 0;
 
 	/**
-	 * Creates a mesh that is a container for the vertex and index data.
+	 * Creates a vertex buffer.
 	 *
 	 * @param vertexFormat The format of the vertex data.
-	 * @param vertexCount The number of vertices (not the size in bytes).
-	 * @param dynamic true if you plan to dynamically update the mesh data at runtime, false if static.
-	 * @return The mesh created.
+	 * @param vertexCount The number of vertices.
+	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @return The created vertex buffer.
 	 */
-	virtual std::shared_ptr<Mesh> createMesh(const VertexFormat& vertexFormat,  size_t vertexCount, bool dynamic = false) = 0;
+	virtual std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat,  size_t vertexCount, bool hostVisible, void* hostMemory = nullptr) = 0;		
+ 	
+	/**
+	 * Creates a index buffer.
+	 *
+	 * @param indexFormat The format of the index data.
+	 * @param indexCount The number of indices.
+	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @return The created index buffer.
+	 */
+	virtual std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool hostVisible, void* hostMemory = nullptr) = 0;
+
+	/**
+	 * Creates a uniform buffer.
+	 *
+	 * @param size The size of the uniform buffer.
+	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @return The created uniform buffer.
+	 */
+	virtual std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible, void* hostMemory = nullptr) = 0;
+
+	/**
+	 * Destroys a buffer.
+	 *
+	 * @param buffer The buffer to be created.
+	 */
+	virtual void destroyBuffer(std::shared_ptr<Buffer> buffer) = 0;
 
 	/**
 	 * Creates a command list for processing gpu commands.
@@ -98,18 +125,6 @@ public:
 	 * @param count The number of commands lists to be submitted.
 	 */
 	virtual void submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count) = 0;
-
-    /**
-     * Begin scene rendering.
-	 *
-	 * @return true if read to accept commands, false if fails.
-     */
-	virtual bool beginScene() = 0;
-
-    /**
-     * Ends scene rendering.
-     */
-    virtual void endScene() = 0;
 
     /**
      * Presents the contents of the framebuffer to the display.
