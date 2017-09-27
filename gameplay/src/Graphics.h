@@ -83,7 +83,7 @@ public:
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @return The created vertex buffer.
 	 */
-	virtual std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat,  size_t vertexCount, bool hostVisible, void* hostMemory = nullptr) = 0;		
+	virtual std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat,  size_t vertexCount, bool hostVisible) = 0;		
  	
 	/**
 	 * Creates a index buffer.
@@ -93,7 +93,7 @@ public:
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @return The created index buffer.
 	 */
-	virtual std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool hostVisible, void* hostMemory = nullptr) = 0;
+	virtual std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool hostVisible) = 0;
 
 	/**
 	 * Creates a uniform buffer.
@@ -102,7 +102,7 @@ public:
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @return The created uniform buffer.
 	 */
-	virtual std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible, void* hostMemory = nullptr) = 0;
+	virtual std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible) = 0;
 
 	/**
 	 * Destroys a buffer.

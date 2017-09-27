@@ -8,12 +8,11 @@ Buffer::Buffer()
 {
 }
 
-Buffer::Buffer(Usage usage, size_t size, size_t stride, bool hostVisible,  void* hostMemory) :
+Buffer::Buffer(Usage usage, size_t size, size_t stride, bool hostVisible) :
 	_usage(usage), 
 	_size(size), 
 	_stride(stride), 
-	_hostVisible(hostVisible), 
-	_hostMemory(hostMemory)
+	_hostVisible(hostVisible)
 {
 }
 
@@ -40,12 +39,5 @@ bool Buffer::isHostVisible() const
 {
 	return _hostVisible;
 }
-
-void * Buffer::getHostMemory() const
-{
-	return _hostMemory;
-}
-
-
 
 }

@@ -196,32 +196,32 @@ int GraphicsVK::getHeight()
     return _height;
 }
 
-std::shared_ptr<Buffer> GraphicsVK::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible, void* hostMemory)
+std::shared_ptr<Buffer> GraphicsVK::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible)
 {
 	VkBuffer bufferVk = nullptr;
 
 	size_t stride = vertexFormat.getStride();
 	size_t size = vertexFormat.getStride() * vertexCount;
-	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_VERTEX, size, stride, hostVisible, hostMemory, _device, bufferVk);
+	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_VERTEX, size, stride, hostVisible, _device, bufferVk);
 	return std::static_pointer_cast<Buffer>(buffer);
 }
 
-std::shared_ptr<Buffer> GraphicsVK::createIndexBuffer(IndexFormat indexFormat, size_t indexCount, bool hostVisible, void* hostMemory)
+std::shared_ptr<Buffer> GraphicsVK::createIndexBuffer(IndexFormat indexFormat, size_t indexCount, bool hostVisible)
 {
 	VkBuffer bufferVk = nullptr;
 	size_t stride = sizeof(unsigned int);
 	if (indexFormat == INDEX_FORMAT_UNSIGNED_SHORT)
 		stride = sizeof(unsigned int);
 	size_t size = indexCount * stride;
-	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_INDEX, size, stride, hostVisible, hostMemory, _device, bufferVk);
+	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_INDEX, size, stride, hostVisible, _device, bufferVk);
 	return std::static_pointer_cast<Buffer>(buffer);
 }
 
-std::shared_ptr<Buffer> GraphicsVK::createUniformBuffer(size_t size, bool hostVisible, void* hostMemory)
+std::shared_ptr<Buffer> GraphicsVK::createUniformBuffer(size_t size, bool hostVisible)
 {
 	VkBuffer bufferVk = nullptr;
 
-	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_UNIFORM, size, size, hostVisible, hostMemory, _device, bufferVk);
+	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_UNIFORM, size, size, hostVisible, _device, bufferVk);
 	return std::static_pointer_cast<Buffer>(buffer);
 }
 

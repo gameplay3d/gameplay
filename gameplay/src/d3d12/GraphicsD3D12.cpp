@@ -235,19 +235,129 @@ int GraphicsD3D12::getHeight()
     return _height;
 }
 
-std::shared_ptr<Buffer> GraphicsD3D12::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible, void* hostMemory)
+size_t roundUp(uint32_t value, size_t multiple)
 {
-	return nullptr;
+    assert(multiple);
+    return ((value + multiple - 1) / multiple) * multiple;
 }
 
-std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(IndexFormat indexFormat, size_t indexCount, bool hostVisible, void* hostMemory)
+ID3D12Resource* GraphicsD3D12::createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible)
 {
-	return nullptr;
+	if (usage == Buffer::USAGE_UNIFORM)
+		size = roundUp(size, 256);
+    
+	D3D12_HEAP_PROPERTIES heapProps = {};
+	heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
+	heapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapProps.CreationNodeMask = 1;
+	heapProps.VisibleNodeMask = 1;
+
+	D3D12_RESOURCE_DESC resourceDesc = {};
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+	resourceDesc.Format = DXGI_FORMAT_UNKNOWN;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	resourceDesc.Alignment = 0;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.Height = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.SampleDesc.Quality = 0;
+	resourceDesc.Width = size;
+	
+	// Adjust for padding
+    UINT64 paddedSize = 0;
+    _device->GetCopyableFootprints(&resourceDesc, 0, 1, 0, nullptr, nullptr, nullptr, &paddedSize);
+    size = (uint64_t)paddedSize;
+    resourceDesc.Width = paddedSize;
+
+	D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_COPY_DEST;
+	switch (usage) 
+	{
+	case Buffer::USAGE_VERTEX: 
+	case Buffer::USAGE_UNIFORM: 
+        resourceStates = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+		break;
+    case Buffer::USAGE_INDEX: 
+        resourceStates = D3D12_RESOURCE_STATE_INDEX_BUFFER;
+		break;
+    }
+	
+	if (hostVisible) 
+	{
+        heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
+        resourceStates = D3D12_RESOURCE_STATE_GENERIC_READ;
+    }
+
+	ID3D12Resource* resource;
+	if (FAILED(_device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&resource))))
+	{
+		GP_ERROR("Failed to create buffer!\n");
+		return nullptr;
+	}
+	return resource;
 }
 
-std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, bool hostVisible, void* hostMemory)
+std::shared_ptr<Buffer> GraphicsD3D12::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible)
 {
-	return nullptr;
+	size_t stride = vertexFormat.getStride();
+	size_t size = vertexCount * stride;
+	ID3D12Resource* resource = createBuffer(Buffer::USAGE_VERTEX, size, stride, hostVisible);
+	std::shared_ptr<BufferD3D12> buffer = std::make_shared<BufferD3D12>(Buffer::USAGE_VERTEX, size, stride, hostVisible, _device, resource);
+	if (hostVisible) 
+	{
+        D3D12_RANGE readRange = { 0, 0 };
+		if (FAILED(resource->Map(0, &readRange, reinterpret_cast<void**>(&buffer->_hostMemory))))
+		{
+			GP_ERROR("Failed to map host memory.");
+			return nullptr;
+		}
+    }
+	buffer->_vertexBufferView.BufferLocation = resource->GetGPUVirtualAddress();
+	buffer->_vertexBufferView.SizeInBytes = size;
+	buffer->_vertexBufferView.StrideInBytes = stride;
+
+	return std::static_pointer_cast<Buffer>(buffer);
+}
+
+std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(IndexFormat indexFormat, size_t indexCount, bool hostVisible)
+{
+	size_t stride = (indexFormat == INDEX_FORMAT_UNSIGNED_INT) ? sizeof(unsigned int) : sizeof(unsigned short);
+	size_t size = indexCount * stride;
+	ID3D12Resource* resource = createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible);
+	std::shared_ptr<BufferD3D12> buffer = std::make_shared<BufferD3D12>(Buffer::USAGE_INDEX, size, stride, hostVisible, _device, resource);
+	if (hostVisible) 
+	{
+        D3D12_RANGE readRange = { 0, 0 };
+		if (FAILED(resource->Map(0, &readRange, reinterpret_cast<void**>(&buffer->_hostMemory))))
+		{
+			GP_ERROR("Failed to map host memory.");
+			return nullptr;
+		}
+    }
+	buffer->_indexBufferView.BufferLocation = resource->GetGPUVirtualAddress();
+	buffer->_indexBufferView.SizeInBytes = size;
+	buffer->_indexBufferView.Format = (indexFormat == INDEX_FORMAT_UNSIGNED_INT) ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_R16_UINT;
+
+	return std::static_pointer_cast<Buffer>(buffer);
+}
+
+std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, bool hostVisible)
+{
+	ID3D12Resource* resource = createBuffer(Buffer::USAGE_UNIFORM, size, size, hostVisible);
+	std::shared_ptr<BufferD3D12> buffer = std::make_shared<BufferD3D12>(Buffer::USAGE_UNIFORM, size, size, hostVisible, _device, resource);
+	if (hostVisible) 
+	{
+        D3D12_RANGE readRange = { 0, 0 };
+		if (FAILED(resource->Map(0, &readRange, reinterpret_cast<void**>(&buffer->_hostMemory))))
+		{
+			GP_ERROR("Failed to map host memory.");
+			return nullptr;
+		}
+    }
+	buffer->_constantBufferView.BufferLocation = resource->GetGPUVirtualAddress();
+	buffer->_constantBufferView.SizeInBytes = size;
 }
 
 void GraphicsD3D12::destroyBuffer(std::shared_ptr<Buffer> buffer)

@@ -28,7 +28,7 @@ public:
 	/**
 	 * Constructor.
 	 */
-	Buffer(Usage usage, size_t size, size_t stride, bool hostVisible, void* hostMemory = nullptr);
+	Buffer(Usage usage, size_t size, size_t stride, bool hostVisible);
 
 	/**
 	 * Destructor.
@@ -62,11 +62,11 @@ public:
 	bool isHostVisible() const;
 
 	/**
-	 * Gets the pointer to the host memory.
+	 * Gets the pointer to the mapped host memory.
 	 *
-	 * @return The pointto the host memory.
+	 * @return The pointer to the mapped host memory.
 	 */
-	void* getHostMemory() const;
+	virtual void* getHostMemory() const = 0;
 
 protected:
 
@@ -74,7 +74,6 @@ protected:
 	size_t _size;
 	size_t _stride;
 	bool _hostVisible;
-	void* _hostMemory;
 };
 
 }

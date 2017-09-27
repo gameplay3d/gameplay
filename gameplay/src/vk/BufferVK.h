@@ -21,7 +21,7 @@ public:
 	/**
 	 * Constructor.
 	 */
-	BufferVK(Usage usage, size_t size, size_t stride, bool hostVisible, void* hostMemory,
+	BufferVK(Usage usage, size_t size, size_t stride, bool hostVisible,
 		     VkDevice device, 
 		     VkBuffer buffer);
 	/**
@@ -29,8 +29,14 @@ public:
 	 */
 	~BufferVK();
 
+	/**
+	 * @see Buffer::getHostMemory
+	 */
+	void* getHostMemory() const;
+
 	VkDevice _device;
 	VkBuffer _buffer;
+	void* _hostMemory;
 };
 
 }
