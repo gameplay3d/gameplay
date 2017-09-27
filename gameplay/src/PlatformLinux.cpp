@@ -2,6 +2,8 @@
 #include "PlatformLinux.h"
 #include "Game.h"
 #include "Graphics.h"
+#include "Graphics.h"
+#include "vk/GraphicsVK.h"
 
 namespace gameplay
 {
@@ -10,6 +12,17 @@ extern Platform* getPlatform()
 {
     static Platform* platform = new PlatformLinux();
     return platform;
+}
+
+
+Graphics* Graphics::getGraphics()
+{
+    if (!_graphics)
+    {
+        _graphics = new GraphicsVK();
+        _graphics->_api = Graphics::API_VK;
+    }
+    return _graphics;
 }
 
 PlatformLinux::PlatformLinux() :
