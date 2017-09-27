@@ -60,17 +60,17 @@ public:
 	/**
 	 * @see Graphics::createVertexBuffer
 	 */
-	std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible, void* hostMemory = nullptr);
+	std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible);
  	
 	/**
 	 * @see Graphics::createIndexBuffer
 	 */
-	std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool hostVisible, void* hostMemory = nullptr);
+	std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool hostVisible);
 
 	/**
 	 * @see Graphics::createUniformBuffer
 	 */
-	std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible, void* hostMemory = nullptr);
+	std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible);
 
 	/**
 	 * @see Graphics::destroyBuffer
@@ -112,6 +112,7 @@ private:
 	void getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter);
     void createBackBuffers();
 	void buildCommands();
+	ID3D12Resource* createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible);
 
     bool _initialized;
     bool _resized;
