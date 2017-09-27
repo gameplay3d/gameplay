@@ -1431,10 +1431,7 @@ void Generator::generateBindings(string* bindingNS)
 
     string luaAllHStr = _outDir + string(LUA_ALL_BINDINGS_FILENAME) + string(".h");
     ostringstream luaAllH;
-    string includeGuard = string(LUA_ALL_BINDINGS_FILENAME) + string("_H_");
-    transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
-    luaAllH << "#ifndef " << includeGuard << "\n";
-    luaAllH << "#define " << includeGuard << "\n\n";
+    luaAllH << "#pragma once\n\n";
     
     string luaAllCppStr = _outDir + string(LUA_ALL_BINDINGS_FILENAME) + string(".cpp");
     ostringstream luaAllCpp;
@@ -1501,10 +1498,7 @@ void Generator::generateBindings(string* bindingNS)
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".h");
             ostringstream global;
-            includeGuard = string(LUA_GLOBAL_FILENAME) + string("_H_");
-            transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
-            global << "#ifndef " << includeGuard << "\n";
-            global << "#define " << includeGuard << "\n\n";
+            global << "#pragma once\n\n";
 
             luaAllH << "#include \"" << string(LUA_GLOBAL_FILENAME) << ".h\"\n";
             luaAllCpp << "    luaRegister_" << LUA_GLOBAL_FILENAME << "();\n";
@@ -1539,7 +1533,6 @@ void Generator::generateBindings(string* bindingNS)
 
             if (bindingNS)
                 global << "}\n\n";
-            global << "#endif\n";
 
             writeFile(path, global.str());
         }
@@ -1720,7 +1713,6 @@ void Generator::generateBindings(string* bindingNS)
     luaAllH << "void lua_RegisterAllBindings();\n\n";
     if (bindingNS)
         luaAllH<< "}\n\n";
-    luaAllH << "#endif\n";
 
     writeFile(luaAllHStr, luaAllH.str());
 }
