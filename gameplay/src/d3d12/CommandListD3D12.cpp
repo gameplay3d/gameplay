@@ -12,9 +12,12 @@ CommandListD3D12::~CommandListD3D12()
 {
 }
 
-void CommandListD3D12::clear()
+void CommandListD3D12::beginCommands()
 {
 }
 
+void CommandListD3D12::endCommands()
+{
+}
 
 }

@@ -17,6 +17,7 @@ SOURCES += \
     src/Buffer.cpp \
     src/Camera.cpp \
     src/CommandList.cpp \
+    src/CommandPool.cpp \
     src/Component.cpp \
     src/Curve.cpp \
     src/FileSystem.cpp \
@@ -76,6 +77,7 @@ HEADERS += \
     src/Buffer.h \
     src/Camera.h \
     src/CommandList.h \
+    src/CommandPool.h \
     src/Component.h \
     src/Curve.h \
     src/FileSystem.h \
@@ -136,17 +138,21 @@ win32 {
     SOURCES += src/vk/GraphicsVK.cpp
     SOURCES += src/vk/BufferVK.cpp
     SOURCES += src/vk/CommandListVK.cpp
+    SOURCES += src/vk/CommandPoolVK.cpp
     SOURCES += src/d3d12/GraphicsD3D12.cpp
     SOURCES += src/d3d12/BufferD3D12.cpp
     SOURCES += src/d3d12/CommandListD3D12.cpp
+    SOURCES += src/d3d12/CommandPoolD3D12.cpp
     HEADERS += src/PlatformWindows.h
     HEADERS += src/vk/GraphicsVK.h
     HEADERS += src/vk/BufferVK.h
     HEADERS += src/vk/CommandListVK.h
+    HEADERS += src/vk/CommandPoolVK.h
     HEADERS += src/d3d12/GraphicsD3D12.h
     HEADERS += src/d3d12/GraphicsD3D12.h
     HEADERS += src/d3d12/BufferD3D12.h
     HEADERS += src/d3d12/CommandListD3D12.h
+    HEADERS += src/d3d12/CommandPoolD3D12.h
     INCLUDEPATH += src/vk
     INCLUDEPATH += src/d3d12
     INCLUDEPATH += $$(VULKAN_SDK)/Include
@@ -164,10 +170,12 @@ linux {
     SOURCES += src/vk/GraphicsVK.cpp
     SOURCES += src/vk/BufferVK.cpp
     SOURCES += src/vk/CommandListVK.cpp
+    SOURCES += src/vk/CommandPoolVK.cpp
     HEADERS += src/PlatformLinux.h
     HEADERS += src/vk/GraphicsVK.h
     HEADERS += src/vk/BufferVK.h
     HEADERS += src/vk/CommandListVK.h
+    HEADERS += src/vk/CommandPoolVK.h
     INCLUDEPATH += src/vk
     INCLUDEPATH += $$(VULKAN_SDK)/Include
     INCLUDEPATH += /usr/include/gtk-2.0

@@ -76,33 +76,29 @@ public:
 	void destroyBuffer(std::shared_ptr<Buffer> buffer);
 
 	/**
-     * @see Graphics::createCommandList
+     * @see Graphics::createCommandPool
      */
-	std::shared_ptr<CommandList> createCommandList();
+	std::shared_ptr<CommandPool> createCommandPool();
 
 	/**
-     * @see Graphics::submitCommandLists
+     * @see Graphics::destroyCommandPool
      */
-	void submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count);
-	/**
-     * @see Graphics::beginScene
-     */
-	bool beginScene();
+	void destroyCommandPool(std::shared_ptr<CommandPool> commandPool);
 
-   /**
-    * @see Graphics::endScene
-    */
-    void endScene();
+	/**
+     * @see Graphics::submitCommands
+     */
+	void submitCommands(std::shared_ptr<CommandList> commands);
+
+    /**
+     * @see Graphics::flushCommands
+     */
+    void flushCommands();
 
     /**
      * @see Graphics::present
      */
     void present();
-
-    /**
-     * @see Graphics::flushAndWait
-     */
-    void flushAndWait();
 
 private:
 
@@ -117,6 +113,7 @@ private:
 	void createSynchronizationPrimitives();
 	void createPipelineCache();
 	void buildCommands();
+	std::shared_ptr<Buffer> createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible);
 
 	struct SwapchainSurfaceInfo
 	{

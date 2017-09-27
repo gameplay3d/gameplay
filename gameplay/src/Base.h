@@ -120,6 +120,7 @@
 #define GP_MATH_PIX2                    6.28318530717958647693f
 #define GP_MATH_EPSILON                 0.000001f
 #define GP_MATH_CLAMP(x, lo, hi)        ((x < lo) ? lo : ((x > hi) ? hi : x))
+#define GP_MATH_ROUNDUP(value, to)		((value + to - 1) / to) * to
 #define GP_MATH_1_PI                    0.31830988618379067154
 #define GP_MATH_MATRIX_SIZE             (sizeof(float) * 16)
 

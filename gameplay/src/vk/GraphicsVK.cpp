@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "GraphicsVK.h"
 #include "BufferVK.h"
+#include "CommandPoolVK.h"
 #include "CommandListVK.h"
 
 namespace gameplay
@@ -196,62 +197,109 @@ int GraphicsVK::getHeight()
     return _height;
 }
 
+std::shared_ptr<Buffer> GraphicsVK::createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible)
+{
+	if (usage == Buffer::USAGE_UNIFORM) 
+		size = GP_MATH_ROUNDUP(size, 256);
+	
+	VkBufferCreateInfo bufferCreateInfo = {};
+    bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferCreateInfo.pNext = nullptr;
+    bufferCreateInfo.flags = 0;
+    bufferCreateInfo.size = size;
+    bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    bufferCreateInfo.queueFamilyIndexCount = 0;
+    bufferCreateInfo.pQueueFamilyIndices = nullptr;
+	bufferCreateInfo.usage = 0;
+	switch (usage) 
+	{
+	case Buffer::USAGE_VERTEX: 
+		bufferCreateInfo.usage |= VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+		break;
+    case Buffer::USAGE_INDEX: 
+        bufferCreateInfo.usage |= VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+		break;
+	case Buffer::USAGE_UNIFORM: 
+        bufferCreateInfo.usage |= VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+		break;
+    }
+	VkBuffer bufferVK;
+	VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &bufferVK));
+
+	VkMemoryRequirements memReqs = {};
+	vkGetBufferMemoryRequirements(_device, bufferVK, &memReqs);
+	VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    if (hostVisible)
+        memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+	uint32_t memoryTypeIndex = UINT32_MAX;
+	if (!getMemoryTypeFromProperties(memReqs.memoryTypeBits, memFlags, &memoryTypeIndex))
+		GP_ERROR("Failed to find compatible memory for buffer.");
+	
+	VkMemoryAllocateInfo  allocInfo;
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.pNext = nullptr;
+    allocInfo.allocationSize = memReqs.size;
+    allocInfo.memoryTypeIndex = memoryTypeIndex;
+	VkDeviceMemory deviceMemoryVK;
+    VK_CHECK_RESULT(vkAllocateMemory(_device, &allocInfo, nullptr, &deviceMemoryVK));
+	VK_CHECK_RESULT(vkBindBufferMemory(_device, bufferVK, deviceMemoryVK, 0));
+
+	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_VERTEX, size, stride, hostVisible, _device, bufferVK, deviceMemoryVK);
+	
+	 if (hostVisible) 
+		VK_CHECK_RESULT(vkMapMemory(_device, buffer->_deviceMemory, 0, VK_WHOLE_SIZE, 0, &buffer->_hostMemory));
+
+	 buffer->_bufferView.buffer = bufferVK;
+	 buffer->_bufferView.offset = 0;
+	 buffer->_bufferView.range = VK_WHOLE_SIZE;
+
+	return std::static_pointer_cast<Buffer>(buffer);
+}
+
 std::shared_ptr<Buffer> GraphicsVK::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible)
 {
-	VkBuffer bufferVk = nullptr;
-
 	size_t stride = vertexFormat.getStride();
-	size_t size = vertexFormat.getStride() * vertexCount;
-	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_VERTEX, size, stride, hostVisible, _device, bufferVk);
-	return std::static_pointer_cast<Buffer>(buffer);
+	size_t size = vertexCount * stride;
+	return createBuffer(Buffer::USAGE_VERTEX, size, stride, hostVisible);
 }
 
 std::shared_ptr<Buffer> GraphicsVK::createIndexBuffer(IndexFormat indexFormat, size_t indexCount, bool hostVisible)
 {
-	VkBuffer bufferVk = nullptr;
-	size_t stride = sizeof(unsigned int);
-	if (indexFormat == INDEX_FORMAT_UNSIGNED_SHORT)
-		stride = sizeof(unsigned int);
+	size_t stride = (indexFormat == INDEX_FORMAT_UNSIGNED_INT) ? sizeof(unsigned int) : sizeof(unsigned short);
 	size_t size = indexCount * stride;
-	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_INDEX, size, stride, hostVisible, _device, bufferVk);
-	return std::static_pointer_cast<Buffer>(buffer);
+	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible);
 }
 
 std::shared_ptr<Buffer> GraphicsVK::createUniformBuffer(size_t size, bool hostVisible)
 {
-	VkBuffer bufferVk = nullptr;
-
-	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_UNIFORM, size, size, hostVisible, _device, bufferVk);
-	return std::static_pointer_cast<Buffer>(buffer);
+	return createBuffer(Buffer::USAGE_UNIFORM, size, size, hostVisible);
 }
 
 void GraphicsVK::destroyBuffer(std::shared_ptr<Buffer> buffer)
 {
+	std::shared_ptr<BufferVK> bufferVK = std::static_pointer_cast<BufferVK>(buffer);
+	vkDestroyBuffer(_device, bufferVK->_buffer, nullptr);
+	bufferVK.reset();
 }
 
-std::shared_ptr<CommandList> GraphicsVK::createCommandList()
+std::shared_ptr<CommandPool> GraphicsVK::createCommandPool()
 {
 	return nullptr;
 }
 
-void GraphicsVK::submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count)
+void GraphicsVK::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 {
 }
 
-bool GraphicsVK::beginScene()
+void GraphicsVK::submitCommands(std::shared_ptr<CommandList> commands)
 {
-	return true;
 }
 
-void GraphicsVK::endScene()
+void GraphicsVK::flushCommands()
 {
 }
 
 void GraphicsVK::present()
-{
-}
-
-void GraphicsVK::flushAndWait()
 {
 }
 

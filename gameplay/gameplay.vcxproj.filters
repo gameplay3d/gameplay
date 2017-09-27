@@ -61,19 +61,12 @@
     <ClCompile Include="src\Tileset.cpp" />
     <ClCompile Include="src\AudioClip.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
-    <ClCompile Include="src\CommandList.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\PhysicsJoint.cpp" />
     <ClCompile Include="src\d3d12\GraphicsD3D12.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12\CommandListD3D12.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
     <ClCompile Include="src\vk\GraphicsVK.cpp">
-      <Filter>vk</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vk\CommandListVK.cpp">
       <Filter>vk</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12\BufferD3D12.cpp">
@@ -84,6 +77,20 @@
     </ClCompile>
     <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\CommandPool.cpp" />
+    <ClCompile Include="src\d3d12\CommandPoolD3D12.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vk\CommandPooVK.cpp">
+      <Filter>vk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CommandList.cpp" />
+    <ClCompile Include="src\d3d12\CommandListD3D12.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vk\CommandListVK.cpp">
+      <Filter>vk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
@@ -142,19 +149,12 @@
     <ClInclude Include="src\Tileset.h" />
     <ClInclude Include="src\AudioClip.h" />
     <ClInclude Include="src\Sprite.h" />
-    <ClInclude Include="src\CommandList.h" />
     <ClInclude Include="src\PhysicsJoint.h" />
     <ClInclude Include="src\VertexFormat.h" />
     <ClInclude Include="src\d3d12\GraphicsD3D12.h">
       <Filter>d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="src\d3d12\CommandListD3D12.h">
-      <Filter>d3d12</Filter>
-    </ClInclude>
     <ClInclude Include="src\vk\GraphicsVK.h">
-      <Filter>vk</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vk\CommandListVK.h">
       <Filter>vk</Filter>
     </ClInclude>
     <ClInclude Include="src\d3d12\BufferD3D12.h">
@@ -165,5 +165,19 @@
     </ClInclude>
     <ClInclude Include="src\Buffer.h" />
     <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\CommandPool.h" />
+    <ClInclude Include="src\d3d12\CommandPoolD3D12.h">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vk\CommandPoolVK.h">
+      <Filter>vk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CommandList.h" />
+    <ClInclude Include="src\d3d12\CommandListD3D12.h">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vk\CommandListVK.h">
+      <Filter>vk</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

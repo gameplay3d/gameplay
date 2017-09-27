@@ -191,8 +191,8 @@ void GraphicsD3D12::onResize(int width, int height)
     if (!_resized || (width == _width && height == _height))
 		return;
 	
-	// Wait for the gpu to finish processing before resizing
-    flushAndWait();
+	// Wait for the gpu to finish processing cbefore resizing
+    flushCommands();
 
     _resized = false;
 	
@@ -235,16 +235,10 @@ int GraphicsD3D12::getHeight()
     return _height;
 }
 
-size_t roundUp(uint32_t value, size_t multiple)
-{
-    assert(multiple);
-    return ((value + multiple - 1) / multiple) * multiple;
-}
-
-ID3D12Resource* GraphicsD3D12::createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible)
+ID3D12Resource* GraphicsD3D12::createResource(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible)
 {
 	if (usage == Buffer::USAGE_UNIFORM)
-		size = roundUp(size, 256);
+		size = GP_MATH_ROUNDUP(size, 256);
     
 	D3D12_HEAP_PROPERTIES heapProps = {};
 	heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
@@ -303,7 +297,7 @@ std::shared_ptr<Buffer> GraphicsD3D12::createVertexBuffer(const VertexFormat& ve
 {
 	size_t stride = vertexFormat.getStride();
 	size_t size = vertexCount * stride;
-	ID3D12Resource* resource = createBuffer(Buffer::USAGE_VERTEX, size, stride, hostVisible);
+	ID3D12Resource* resource = createResource(Buffer::USAGE_VERTEX, size, stride, hostVisible);
 	std::shared_ptr<BufferD3D12> buffer = std::make_shared<BufferD3D12>(Buffer::USAGE_VERTEX, size, stride, hostVisible, _device, resource);
 	if (hostVisible) 
 	{
@@ -325,7 +319,7 @@ std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(IndexFormat indexFormat
 {
 	size_t stride = (indexFormat == INDEX_FORMAT_UNSIGNED_INT) ? sizeof(unsigned int) : sizeof(unsigned short);
 	size_t size = indexCount * stride;
-	ID3D12Resource* resource = createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible);
+	ID3D12Resource* resource = createResource(Buffer::USAGE_INDEX, size, stride, hostVisible);
 	std::shared_ptr<BufferD3D12> buffer = std::make_shared<BufferD3D12>(Buffer::USAGE_INDEX, size, stride, hostVisible, _device, resource);
 	if (hostVisible) 
 	{
@@ -345,7 +339,7 @@ std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(IndexFormat indexFormat
 
 std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, bool hostVisible)
 {
-	ID3D12Resource* resource = createBuffer(Buffer::USAGE_UNIFORM, size, size, hostVisible);
+	ID3D12Resource* resource = createResource(Buffer::USAGE_UNIFORM, size, size, hostVisible);
 	std::shared_ptr<BufferD3D12> buffer = std::make_shared<BufferD3D12>(Buffer::USAGE_UNIFORM, size, size, hostVisible, _device, resource);
 	if (hostVisible) 
 	{
@@ -358,36 +352,31 @@ std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, bool hos
     }
 	buffer->_constantBufferView.BufferLocation = resource->GetGPUVirtualAddress();
 	buffer->_constantBufferView.SizeInBytes = size;
+
+	return std::static_pointer_cast<Buffer>(buffer);
 }
 
 void GraphicsD3D12::destroyBuffer(std::shared_ptr<Buffer> buffer)
 {
+	std::shared_ptr<BufferD3D12> bufferD3D = std::static_pointer_cast<BufferD3D12>(buffer);
+	SAFE_RELEASE(bufferD3D->_buffer);
+	bufferD3D.reset();
 }
 
-std::shared_ptr<CommandList> GraphicsD3D12::createCommandList()
+std::shared_ptr<CommandPool> GraphicsD3D12::createCommandPool()
 {
 	return nullptr;
 }
 
-void GraphicsD3D12::submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count)
+void GraphicsD3D12::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 {
 }
 
-bool GraphicsD3D12::beginScene()
-{
-	return true;
-}
-
-void GraphicsD3D12::endScene()
+void GraphicsD3D12::submitCommands(std::shared_ptr<CommandList> commands)
 {
 }
 
-void GraphicsD3D12::present()
-{
-    _swapchain->Present(_vsync ? 1 : 0, 0);
-}
-
-void GraphicsD3D12::flushAndWait()
+void GraphicsD3D12::flushCommands()
 {
     // Signal and increment the fence value.
 	const uint64_t fenceToWaitFor = _fenceValues[_backBufferIndex];
@@ -403,6 +392,11 @@ void GraphicsD3D12::flushAndWait()
 		WaitForSingleObject(_fenceEvent, INFINITE);
 	}
 	_fenceValues[_backBufferIndex] = fenceToWaitFor + 1;
+}
+
+void GraphicsD3D12::present()
+{
+    _swapchain->Present(_vsync ? 1 : 0, 0);
 }
 
 void GraphicsD3D12::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter)
@@ -474,7 +468,7 @@ void GraphicsD3D12::buildCommands()
 
 	D3D_CHECK_RESULT(_commandList->Close());
 
-    flushAndWait();
+    flushCommands();
 }
 
 }

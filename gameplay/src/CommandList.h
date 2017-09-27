@@ -4,12 +4,11 @@ namespace gameplay
 {
 
 /**
- * Defines a command list for processing
- * async gpu operations.
- */
+ * Defines a command list for creating and storing async gpu operations.
+ */ 
 class CommandList
 {
-public:
+public:	
 
 	/**
 	 * Constructor.
@@ -21,10 +20,10 @@ public:
 	 */
 	~CommandList();
 
-	/**
-	 * Clears the command list.
-	 */
-	virtual void clear() = 0;
+	virtual void beginCommands() = 0;
+
+	virtual void endCommands() = 0;
+
 };
 
 }
