@@ -23,7 +23,8 @@ public:
 	 */
 	BufferVK(Usage usage, size_t size, size_t stride, bool hostVisible,
 		     VkDevice device, 
-		     VkBuffer buffer);
+		     VkBuffer buffer,
+			 VkDeviceMemory deviceMemory);
 	/**
 	 * Destructor.
 	 */
@@ -36,7 +37,9 @@ public:
 
 	VkDevice _device;
 	VkBuffer _buffer;
+	VkDeviceMemory _deviceMemory;
 	void* _hostMemory;
+    VkDescriptorBufferInfo _bufferView;
 };
 
 }

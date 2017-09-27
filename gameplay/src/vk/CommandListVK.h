@@ -23,10 +23,10 @@ public:
 	 */
 	~CommandListVK();
 
-	/**
-	 * @see CommandList::clear
-	 */
-	void clear();
+	void beginCommands();
+
+	void endCommands();
+
 };
 
 }

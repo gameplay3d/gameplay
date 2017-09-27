@@ -2,6 +2,7 @@
 
 #include "VertexFormat.h"
 #include "Buffer.h"
+#include "CommandPool.h"
 #include "CommandList.h"
 
 namespace gameplay
@@ -112,29 +113,35 @@ public:
 	virtual void destroyBuffer(std::shared_ptr<Buffer> buffer) = 0;
 
 	/**
-	 * Creates a command list for processing gpu commands.
+	 * Creates a command pool for processing gpu commands buffer.
 	 *
 	 * @return The created command list for processing gpu commands.
 	 */
-	virtual std::shared_ptr<CommandList> createCommandList() = 0;
+	virtual std::shared_ptr<CommandPool> createCommandPool() = 0;
 
 	/**
-	 * Submits command lists for processing gpu commands.
+	 * Destroy a command pool.
 	 *
-	 * @param commandList The array of command lists to be submitted.
-	 * @param count The number of commands lists to be submitted.
+	 * @return The created command list for processing gpu commands.
 	 */
-	virtual void submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count) = 0;
+	virtual void destroyCommandPool(std::shared_ptr<CommandPool> pool) = 0;
+
+	/**
+	 * Submits commands for processing gpu commands.
+	 *
+	 * @param commandList The command lists to be submitted.
+	 */
+	virtual void submitCommands(std::shared_ptr<CommandList> cmds) = 0;
+
+    /**
+     * Flushes the commands in the queue, releases resources and blocks until completed.
+     */
+    virtual void flushCommands() = 0;
 
     /**
      * Presents the contents of the framebuffer to the display.
      */
     virtual void present() = 0;
-
-    /**
-     * Flushes the commands in the queue, releases resources and blocks until completed.
-     */
-    virtual void flushAndWait() = 0;
 
     /**
      * Event occurs when the platform requests to initialize graphics.

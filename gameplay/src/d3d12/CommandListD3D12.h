@@ -25,10 +25,10 @@ public:
 	 */
 	~CommandListD3D12();
 
-	/**
-	 * @see CommandList::clear
-	 */
-	void clear();
+	void beginCommands();
+
+	void endCommands();
+
 };
 
 }

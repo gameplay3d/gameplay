@@ -78,41 +78,36 @@ public:
 	void destroyBuffer(std::shared_ptr<Buffer> buffer);
 
 	/**
-     * @see Graphics::createCommandList
+     * @see Graphics::createCommandPool
      */
-	std::shared_ptr<CommandList> createCommandList();
+	std::shared_ptr<CommandPool> createCommandPool();
 
 	/**
-     * @see Graphics::submitCommandLists
+     * @see Graphics::destroyCommandPool
      */
-	void submitCommandLists(std::shared_ptr<CommandList>* commandLists, size_t count);
+	void destroyCommandPool(std::shared_ptr<CommandPool> commandPool);
+
+	/**
+     * @see Graphics::submitCommands
+     */
+	void submitCommands(std::shared_ptr<CommandList> commands);
 
     /**
-     * @see Graphics::beginScene
+     * @see Graphics::flushCommands
      */
-	bool beginScene();
-
-   /**
-    * @see Graphics::endScene
-    */
-    void endScene();
+    void flushCommands();
 
     /**
      * @see Graphics::present
      */
     void present();
 
-    /**
-     * @see Graphics::flushAndWait
-     */
-    void flushAndWait();
-
 private:
 
 	void getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter);
     void createBackBuffers();
 	void buildCommands();
-	ID3D12Resource* createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible);
+	ID3D12Resource* createResource(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible);
 
     bool _initialized;
     bool _resized;

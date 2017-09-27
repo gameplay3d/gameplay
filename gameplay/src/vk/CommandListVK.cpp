@@ -12,9 +12,12 @@ CommandListVK::~CommandListVK()
 {
 }
 
-void CommandListVK::clear()
+void CommandListVK::beginCommands()
 {
 }
 
+void CommandListVK::endCommands()
+{
+}
 
 }
