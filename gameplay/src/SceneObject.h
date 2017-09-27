@@ -22,7 +22,7 @@ namespace gameplay
 /**
  * Defines an object that is part of a scene in the game.
  */
-class SceneObject : public Serializable, std::enable_shared_from_this<SceneObject>
+class SceneObject : public Serializable, public std::enable_shared_from_this<SceneObject>
 {
     friend class Game;
     friend class Serializer::Activator;

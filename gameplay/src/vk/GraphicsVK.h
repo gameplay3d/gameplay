@@ -78,7 +78,7 @@ public:
 	/**
      * @see Graphics::createCommandPool
      */
-	std::shared_ptr<CommandPool> createCommandPool();
+	std::shared_ptr<CommandPool> createCommandPool(bool transient = false);
 
 	/**
      * @see Graphics::destroyCommandPool
