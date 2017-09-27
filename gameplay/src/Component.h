@@ -8,7 +8,7 @@ namespace gameplay
 /**
  * Defines a component
  */
-class Component : public Serializable, std::enable_shared_from_this<Component>
+class Component : public Serializable, public std::enable_shared_from_this<Component>
 {
     friend class SceneObject;
     friend class Serializer::Activator;

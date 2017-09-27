@@ -115,9 +115,10 @@ public:
 	/**
 	 * Creates a command pool for processing gpu commands buffer.
 	 *
+	 * @param transient Indicates the command from this pool are short-lived, false if not short-lived.
 	 * @return The created command list for processing gpu commands.
 	 */
-	virtual std::shared_ptr<CommandPool> createCommandPool() = 0;
+	virtual std::shared_ptr<CommandPool> createCommandPool(bool transient = false) = 0;
 
 	/**
 	 * Destroy a command pool.

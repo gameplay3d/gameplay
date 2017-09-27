@@ -363,7 +363,7 @@ void GraphicsD3D12::destroyBuffer(std::shared_ptr<Buffer> buffer)
 	bufferD3D.reset();
 }
 
-std::shared_ptr<CommandPool> GraphicsD3D12::createCommandPool()
+std::shared_ptr<CommandPool> GraphicsD3D12::createCommandPool(bool transient)
 {
 	return nullptr;
 }

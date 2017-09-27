@@ -282,7 +282,7 @@ void GraphicsVK::destroyBuffer(std::shared_ptr<Buffer> buffer)
 	bufferVK.reset();
 }
 
-std::shared_ptr<CommandPool> GraphicsVK::createCommandPool()
+std::shared_ptr<CommandPool> GraphicsVK::createCommandPool(bool transient)
 {
 	return nullptr;
 }

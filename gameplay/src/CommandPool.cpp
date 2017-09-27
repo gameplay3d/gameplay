@@ -11,4 +11,9 @@ CommandPool::~CommandPool()
 {
 }
 
+bool CommandPool::isTransient() const
+{
+	return _transient;
+}
+
 }
