@@ -21,13 +21,27 @@ public:
 	CommandPoolD3D12();
 
 	/**
+	 * Constructor.
+	 */
+	CommandPoolD3D12(ID3D12Device* device, ID3D12CommandAllocator* commandAllocator);
+
+	/**
 	 * Destructor.
 	 */
 	~CommandPoolD3D12();
 
+	/**
+	 * @see CommandPool::createCommandList
+	 */
+	std::shared_ptr<CommandList> createCommandList(bool secondary = false);
 
-	std::shared_ptr<CommandList> createCommandList();
+	/**
+	 * @see CommandPool::destroyCommandList
+	 */
+	void destroyCommandList(std::shared_ptr<CommandList> commandList);
 
+	ID3D12Device* _device;
+	ID3D12CommandAllocator* _commandAllocator;
 };
 
 }

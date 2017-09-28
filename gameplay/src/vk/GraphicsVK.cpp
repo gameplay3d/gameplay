@@ -284,14 +284,37 @@ void GraphicsVK::destroyBuffer(std::shared_ptr<Buffer> buffer)
 
 std::shared_ptr<CommandPool> GraphicsVK::createCommandPool(bool transient)
 {
-	return nullptr;
+	VkCommandPool poolVK = nullptr;
+	VkCommandPoolCreateInfo createInfo = {};
+	createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+	createInfo.pNext = nullptr;
+	createInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+	createInfo.queueFamilyIndex = _queueFamilyIndexGraphics;
+	if (transient)
+	{
+		createInfo.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+	}
+	if (vkCreateCommandPool(_device, &createInfo, nullptr, &poolVK) != VK_SUCCESS)
+	{
+		GP_ERROR("Failed to crete command pool.");
+		return nullptr;
+	}
+	std::shared_ptr<CommandPoolVK> pool = std::make_shared<CommandPoolVK>(_device, _queueGraphics, poolVK);
+	return std::static_pointer_cast<CommandPool>(pool);
 }
 
 void GraphicsVK::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 {
+	std::shared_ptr<CommandPoolVK> commandPoolVK = std::static_pointer_cast<CommandPoolVK>(commandPool);
+	vkDestroyCommandPool(_device, commandPoolVK->_commandPool, nullptr);
+	commandPool.reset();
 }
 
 void GraphicsVK::submitCommands(std::shared_ptr<CommandList> commands)
+{
+}
+
+void GraphicsVK::submitCommands(std::vector<std::shared_ptr<CommandList>> commands)
 {
 }
 
@@ -402,7 +425,6 @@ void GraphicsVK::createDevice()
 		_physicalDevice = physicalDevice;
 		break;
 	}
-
 	// Get properties various properties of the physical device
 	vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceProperties);
 	vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceMemoryProperties);

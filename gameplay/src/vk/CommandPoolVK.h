@@ -19,12 +19,28 @@ public:
 	CommandPoolVK();
 
 	/**
+	 * Constructor.
+	 */
+	CommandPoolVK(VkDevice device, VkQueue queue, VkCommandPool pool);
+
+	/**
 	 * Destructor.
 	 */
 	~CommandPoolVK();
 
+	/**
+	 * @see CommandPool::createCommandList
+	 */
+	std::shared_ptr<CommandList> createCommandList(bool secondary = false);
 
-	std::shared_ptr<CommandList> createCommandList();
+	/**
+	 * @see CommandPool::destroyCommandList
+	 */
+	void destroyCommandList(std::shared_ptr<CommandList> commandList);
+
+	VkDevice _device;
+	VkQueue _queue;
+	VkCommandPool _commandPool;
 };
 
 }

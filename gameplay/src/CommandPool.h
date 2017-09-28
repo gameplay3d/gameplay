@@ -41,7 +41,7 @@ public:
 	/**
 	 * Destroys a command list.
 	 *
-	 *
+	 * @param commandList The list to be destroyed.
 	 */
 	virtual void destroyCommandList(std::shared_ptr<CommandList> commandList) = 0;
 
