@@ -96,6 +96,15 @@
     x = nullptr; \
 }
 
+#if defined(_WINDOWS) && defined(_MSC_VER)
+#define GP_SAFE_RELEASE(x)			\
+   if(x != nullptr)				\
+   {							\
+      x->Release();				\
+      x = nullptr;				\
+   }
+#endif
+
 // Engine
 #define GP_ENGINE_NAME					"gameplay"
 #define GP_ENGINE_VERSION_MAJOR			4

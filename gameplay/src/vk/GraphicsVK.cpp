@@ -297,7 +297,6 @@ std::shared_ptr<CommandPool> GraphicsVK::createCommandPool(bool transient)
 	if (vkCreateCommandPool(_device, &createInfo, nullptr, &poolVK) != VK_SUCCESS)
 	{
 		GP_ERROR("Failed to crete command pool.");
-		return nullptr;
 	}
 	std::shared_ptr<CommandPoolVK> pool = std::make_shared<CommandPoolVK>(_device, _queueGraphics, poolVK);
 	return std::static_pointer_cast<CommandPool>(pool);
