@@ -128,7 +128,41 @@ public:
 	virtual void destroyCommandPool(std::shared_ptr<CommandPool> pool) = 0;
 
 	/**
-	 * Submits a command list for processing the gpu commands in it.
+	 * Creates a command list that is used for encoding command that are submitted to the gpu.
+	 *
+	 * @param pool The command pool this list is created from.
+	 * @param secondary true if this is a secondary command list with lower processing priority, false if primary.
+	 * @return The created commandlist.
+	 */
+	virtual std::shared_ptr<CommandList> createCommandList(std::shared_ptr<CommandPool> pool, bool secondary) = 0;
+
+	/**
+	 * Creates an array command list that is used for encoding command that are submitted to the gpu.
+	 *
+	 * @param pool The command pool this list is created from.
+	 * @param secondary true if this is a secondary command list with lower processing priority, false if primary.
+	 * @param count The number of command list to be created.
+	 * @param The vector of command list to be added to.
+	 * @return The created commandlist.
+	 */
+	virtual void createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
+									std::vector<std::shared_ptr<CommandList>> out) = 0;
+	/**
+	 * Destroys a command list.
+	 *
+	 * @param commandList The command list to be destroyed.
+	 */
+	virtual void destroyCommandList(std::shared_ptr<CommandList> commandList) = 0;
+
+	/**
+	 * Destroys the command lists.
+	 *
+	 * @param commandList The command lists to be destroyed.
+	 */
+	virtual void destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists) = 0;
+
+	/**
+	 * Submits a vector command lists for processing the gpu commands in them.
 	 *
 	 * @param commands The command list to be submitted.
 	 */
@@ -137,7 +171,7 @@ public:
 	/**
 	 * Submits a vector command lists for processing the gpu commands in them.
 	 *
-	 * @param commands The vector of command lists to be submitted.
+	 * @param commands The command lists to be submitted.
 	 */
 	virtual void submitCommands(std::vector<std::shared_ptr<CommandList>> commands) = 0;
 
