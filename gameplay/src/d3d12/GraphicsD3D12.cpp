@@ -8,13 +8,6 @@
 namespace gameplay
 {
 
-#define SAFE_RELEASE(x)			\
-   if(x != nullptr)				\
-   {							\
-      x->Release();				\
-      x = nullptr;				\
-   }
-
 #define D3D_CHECK_RESULT(f)		\
 {								\
 	HRESULT hr = (f);			\
@@ -49,16 +42,16 @@ GraphicsD3D12::~GraphicsD3D12()
 {
 	if(_swapchain)
 		_swapchain->SetFullscreenState(false, nullptr);
-	SAFE_RELEASE(_fence);
-	SAFE_RELEASE(_commandList);
+	GP_SAFE_RELEASE(_fence);
+	GP_SAFE_RELEASE(_commandList);
 	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
-		SAFE_RELEASE(_commandAllocators[i]);
+		GP_SAFE_RELEASE(_commandAllocators[i]);
 	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
-		SAFE_RELEASE(_renderTargets[i]);
-	SAFE_RELEASE(_renderTargetViewHeap);
-	SAFE_RELEASE(_swapchain);
-	SAFE_RELEASE(_commandQueue);
-	SAFE_RELEASE(_device);
+		GP_SAFE_RELEASE(_renderTargets[i]);
+	GP_SAFE_RELEASE(_renderTargetViewHeap);
+	GP_SAFE_RELEASE(_swapchain);
+	GP_SAFE_RELEASE(_commandQueue);
+	GP_SAFE_RELEASE(_device);
 }
 
 void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
@@ -136,8 +129,8 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 			break;
 		}
 	}
-	SAFE_RELEASE(output);
-	SAFE_RELEASE(adapter);
+	GP_SAFE_RELEASE(output);
+	GP_SAFE_RELEASE(adapter);
 	
 	// Create the swapchain
 	DXGI_SWAP_CHAIN_DESC1 swapchainDesc = {};
@@ -152,7 +145,7 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 	D3D_CHECK_RESULT(factory->CreateSwapChainForHwnd(_commandQueue, _hwnd, &swapchainDesc, nullptr, nullptr, &swapchain));
 	D3D_CHECK_RESULT(swapchain->QueryInterface(__uuidof(IDXGISwapChain4), (void**)&_swapchain));
 
-	SAFE_RELEASE(factory);
+	GP_SAFE_RELEASE(factory);
 
 	// Create a render target description heap for the back buffers
 	_backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
@@ -200,7 +193,7 @@ void GraphicsD3D12::onResize(int width, int height)
     // Release the backbuffers
 	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
 	{
-		SAFE_RELEASE(_renderTargets[i]);
+		GP_SAFE_RELEASE(_renderTargets[i]);
 		_fenceValues[i] = _fenceValues[_backBufferIndex];
 	}
 
@@ -289,7 +282,6 @@ ID3D12Resource* GraphicsD3D12::createResource(Buffer::Usage usage, size_t size, 
 	if (FAILED(_device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&resource))))
 	{
 		GP_ERROR("Failed to create buffer!\n");
-		return nullptr;
 	}
 	return resource;
 }
@@ -306,7 +298,6 @@ std::shared_ptr<Buffer> GraphicsD3D12::createVertexBuffer(const VertexFormat& ve
 		if (FAILED(resource->Map(0, &readRange, reinterpret_cast<void**>(&buffer->_hostMemory))))
 		{
 			GP_ERROR("Failed to map host memory.");
-			return nullptr;
 		}
     }
 	buffer->_vertexBufferView.BufferLocation = resource->GetGPUVirtualAddress();
@@ -328,7 +319,6 @@ std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(IndexFormat indexFormat
 		if (FAILED(resource->Map(0, &readRange, reinterpret_cast<void**>(&buffer->_hostMemory))))
 		{
 			GP_ERROR("Failed to map host memory.");
-			return nullptr;
 		}
     }
 	buffer->_indexBufferView.BufferLocation = resource->GetGPUVirtualAddress();
@@ -348,7 +338,6 @@ std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, bool hos
 		if (FAILED(resource->Map(0, &readRange, reinterpret_cast<void**>(&buffer->_hostMemory))))
 		{
 			GP_ERROR("Failed to map host memory.");
-			return nullptr;
 		}
     }
 	buffer->_constantBufferView.BufferLocation = resource->GetGPUVirtualAddress();
@@ -360,7 +349,7 @@ std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, bool hos
 void GraphicsD3D12::destroyBuffer(std::shared_ptr<Buffer> buffer)
 {
 	std::shared_ptr<BufferD3D12> bufferD3D = std::static_pointer_cast<BufferD3D12>(buffer);
-	SAFE_RELEASE(bufferD3D->_buffer);
+	GP_SAFE_RELEASE(bufferD3D->_buffer);
 	bufferD3D.reset();
 }
 
@@ -371,7 +360,6 @@ std::shared_ptr<CommandPool> GraphicsD3D12::createCommandPool(bool transient)
 											  __uuidof(allocator), reinterpret_cast<void**>(&allocator))))
 	{
 		GP_ERROR("Failed to create command allocator.");
-		return nullptr;
 	}
 	std::shared_ptr<CommandPoolD3D12> pool = std::make_shared<CommandPoolD3D12>(_device, allocator);
 	return std::static_pointer_cast<CommandPool>(pool);
@@ -380,7 +368,7 @@ std::shared_ptr<CommandPool> GraphicsD3D12::createCommandPool(bool transient)
 void GraphicsD3D12::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 {
 	std::shared_ptr<CommandPoolD3D12> commandPoolD3D = std::static_pointer_cast<CommandPoolD3D12>(commandPool);
-	SAFE_RELEASE(commandPoolD3D->_commandAllocator);
+	GP_SAFE_RELEASE(commandPoolD3D->_commandAllocator);
 	commandPoolD3D.reset();
 }
 
