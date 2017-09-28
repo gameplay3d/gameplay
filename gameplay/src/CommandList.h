@@ -4,7 +4,7 @@ namespace gameplay
 {
 
 /**
- * Defines a command list for creating and storing async gpu operations.
+ * Defines a command list for recording and storing gpu commands.
  */ 
 class CommandList
 {
@@ -20,10 +20,15 @@ public:
 	 */
 	~CommandList();
 
+	/**
+	 * Begins recording command into the command list.
+	 */
 	virtual void beginCommands() = 0;
 
+	/**
+	 * Ends recording command into the command list.
+	 */
 	virtual void endCommands() = 0;
-
 };
 
 }

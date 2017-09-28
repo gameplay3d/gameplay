@@ -128,11 +128,18 @@ public:
 	virtual void destroyCommandPool(std::shared_ptr<CommandPool> pool) = 0;
 
 	/**
-	 * Submits commands for processing gpu commands.
+	 * Submits a command list for processing the gpu commands in it.
 	 *
-	 * @param commandList The command lists to be submitted.
+	 * @param commands The command list to be submitted.
 	 */
-	virtual void submitCommands(std::shared_ptr<CommandList> cmds) = 0;
+	virtual void submitCommands(std::shared_ptr<CommandList> commands) = 0;
+
+	/**
+	 * Submits a vector command lists for processing the gpu commands in them.
+	 *
+	 * @param commands The vector of command lists to be submitted.
+	 */
+	virtual void submitCommands(std::vector<std::shared_ptr<CommandList>> commands) = 0;
 
     /**
      * Flushes the commands in the queue, releases resources and blocks until completed.

@@ -77,7 +77,7 @@
     <ClCompile Include="src\Vector4.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\vk\CommandListVK.cpp" />
-    <ClCompile Include="src\vk\CommandPooVK.cpp" />
+    <ClCompile Include="src\vk\CommandPoolVK.cpp" />
     <ClCompile Include="src\vk\GraphicsVK.cpp" />
     <ClCompile Include="src\vk\BufferVK.cpp" />
   </ItemGroup>

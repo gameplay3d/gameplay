@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "GraphicsD3D12.h"
 #include "BufferD3D12.h"
+#include "CommandPoolD3D12.h"
 #include "CommandListD3D12.h"
 
 namespace gameplay
@@ -364,15 +365,30 @@ void GraphicsD3D12::destroyBuffer(std::shared_ptr<Buffer> buffer)
 }
 
 std::shared_ptr<CommandPool> GraphicsD3D12::createCommandPool(bool transient)
-{
-	return nullptr;
+{	
+	ID3D12CommandAllocator* allocator = nullptr;
+	if(FAILED(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
+											  __uuidof(allocator), reinterpret_cast<void**>(&allocator))))
+	{
+		GP_ERROR("Failed to create command allocator.");
+		return nullptr;
+	}
+	std::shared_ptr<CommandPoolD3D12> pool = std::make_shared<CommandPoolD3D12>(_device, allocator);
+	return std::static_pointer_cast<CommandPool>(pool);
 }
 
 void GraphicsD3D12::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 {
+	std::shared_ptr<CommandPoolD3D12> commandPoolD3D = std::static_pointer_cast<CommandPoolD3D12>(commandPool);
+	SAFE_RELEASE(commandPoolD3D->_commandAllocator);
+	commandPoolD3D.reset();
 }
 
 void GraphicsD3D12::submitCommands(std::shared_ptr<CommandList> commands)
+{
+}
+
+void GraphicsD3D12::submitCommands(std::vector<std::shared_ptr<CommandList>> commands)
 {
 }
 

@@ -90,6 +90,11 @@ public:
      */
 	void submitCommands(std::shared_ptr<CommandList> commands);
 
+	/**
+     * @see Graphics::submitCommands
+     */
+	void submitCommands(std::vector<std::shared_ptr<CommandList>> commands);
+
     /**
      * @see Graphics::flushCommands
      */
