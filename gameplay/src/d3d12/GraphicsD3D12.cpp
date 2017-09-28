@@ -361,7 +361,7 @@ std::shared_ptr<CommandPool> GraphicsD3D12::createCommandPool(bool transient)
 	{
 		GP_ERROR("Failed to create command allocator.");
 	}
-	std::shared_ptr<CommandPoolD3D12> pool = std::make_shared<CommandPoolD3D12>(_device, allocator);
+	std::shared_ptr<CommandPoolD3D12> pool = std::make_shared<CommandPoolD3D12>(allocator);
 	return std::static_pointer_cast<CommandPool>(pool);
 }
 
@@ -370,6 +370,47 @@ void GraphicsD3D12::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 	std::shared_ptr<CommandPoolD3D12> commandPoolD3D = std::static_pointer_cast<CommandPoolD3D12>(commandPool);
 	GP_SAFE_RELEASE(commandPoolD3D->_commandAllocator);
 	commandPoolD3D.reset();
+}
+
+std::shared_ptr<CommandList> GraphicsD3D12::createCommandList(std::shared_ptr<CommandPool> pool, bool secondary)
+{
+	std::shared_ptr<CommandPoolD3D12> poolD3D = std::static_pointer_cast<CommandPoolD3D12>(pool);
+	ID3D12GraphicsCommandList* commandListD3D = nullptr;
+	ID3D12PipelineState* initialPipelineState = nullptr;
+	if (FAILED(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, poolD3D->_commandAllocator, initialPipelineState,
+			                              __uuidof(commandListD3D), reinterpret_cast<void**>(&commandListD3D))))
+	{
+		GP_ERROR("Failed to create graphics command list.");
+	}
+    commandListD3D->Close();
+
+	std::shared_ptr<CommandListD3D12> commandList = std::make_shared<CommandListD3D12>(_device, poolD3D->_commandAllocator, commandListD3D);
+	return std::static_pointer_cast<CommandList>(commandList);
+}
+
+void GraphicsD3D12::createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
+									   std::vector<std::shared_ptr<CommandList>> out)
+{
+	for (size_t i = 0; i < count; ++i)
+	{
+		std::shared_ptr<CommandList> commandList = createCommandList(pool, secondary);
+		out.push_back(commandList);
+	}
+}
+
+void GraphicsD3D12::destroyCommandList(std::shared_ptr<CommandList> commandList)
+{
+	std::shared_ptr<CommandListD3D12> commandListD3D = std::static_pointer_cast<CommandListD3D12>(commandList);
+	GP_SAFE_RELEASE(commandListD3D->_commandList);
+	commandList.reset();
+}
+
+void GraphicsD3D12::destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists)
+{
+	for (size_t i = 0; i < commandLists.size(); ++i)
+	{
+		destroyCommandList(commandLists[i]);
+	}
 }
 
 void GraphicsD3D12::submitCommands(std::shared_ptr<CommandList> commands)

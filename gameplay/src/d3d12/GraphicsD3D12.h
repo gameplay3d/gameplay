@@ -88,6 +88,26 @@ public:
 	void destroyCommandPool(std::shared_ptr<CommandPool> commandPool);
 
 	/**
+     * @see Graphics::createCommandLists
+     */
+	std::shared_ptr<CommandList> createCommandList(std::shared_ptr<CommandPool> pool, bool secondary);
+
+	/**
+     * @see Graphics::createCommandLists
+     */
+	void createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
+							std::vector<std::shared_ptr<CommandList>> out);
+	/**
+     * @see Graphics::destroyCommandList
+     */
+	void destroyCommandList(std::shared_ptr<CommandList> commandList);
+
+	/**
+     * @see Graphics::destroyCommandLists
+     */
+	void destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists);
+
+	/**
      * @see Graphics::submitCommands
      */
 	void submitCommands(std::shared_ptr<CommandList> commands);

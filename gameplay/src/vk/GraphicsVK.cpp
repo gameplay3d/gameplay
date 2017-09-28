@@ -298,7 +298,7 @@ std::shared_ptr<CommandPool> GraphicsVK::createCommandPool(bool transient)
 	{
 		GP_ERROR("Failed to crete command pool.");
 	}
-	std::shared_ptr<CommandPoolVK> pool = std::make_shared<CommandPoolVK>(_device, _queueGraphics, poolVK);
+	std::shared_ptr<CommandPoolVK> pool = std::make_shared<CommandPoolVK>(poolVK);
 	return std::static_pointer_cast<CommandPool>(pool);
 }
 
@@ -307,6 +307,49 @@ void GraphicsVK::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 	std::shared_ptr<CommandPoolVK> commandPoolVK = std::static_pointer_cast<CommandPoolVK>(commandPool);
 	vkDestroyCommandPool(_device, commandPoolVK->_commandPool, nullptr);
 	commandPool.reset();
+}
+
+std::shared_ptr<CommandList> GraphicsVK::createCommandList(std::shared_ptr<CommandPool> pool, bool secondary)
+{
+	std::shared_ptr<CommandPoolVK> poolVK = std::static_pointer_cast<CommandPoolVK>(pool);
+	VkCommandBuffer commandBufferVK;
+	VkCommandBufferAllocateInfo allocInfo = {};
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.pNext = nullptr;
+    allocInfo.commandPool = poolVK->_commandPool;
+    allocInfo.level = secondary ? VK_COMMAND_BUFFER_LEVEL_SECONDARY : VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocInfo.commandBufferCount = 1;
+	if (vkAllocateCommandBuffers(_device, &allocInfo, &commandBufferVK) != VK_SUCCESS)
+	{
+		GP_ERROR("Failed to allocate command buffers.");
+	}
+	std::shared_ptr<CommandListVK> commandLst = std::make_shared<CommandListVK>(_device, _commandPool, commandBufferVK);
+	return std::static_pointer_cast<CommandList>(commandLst);
+}
+
+void GraphicsVK::createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
+									std::vector<std::shared_ptr<CommandList>> out)
+{
+	for (size_t i = 0; i < count; ++i)
+	{
+		std::shared_ptr<CommandList> commandList = createCommandList(pool, secondary);
+		out.push_back(commandList);
+	}
+}
+
+void GraphicsVK::destroyCommandList(std::shared_ptr<CommandList> commandList)
+{
+	std::shared_ptr<CommandListVK> commandListVK = std::static_pointer_cast<CommandListVK>(commandList);
+	vkFreeCommandBuffers(_device, _commandPool, 1, &(commandListVK->_commandBuffer));
+	commandList.reset();
+}
+
+void GraphicsVK::destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists)
+{
+	for (size_t i = 0; i < commandLists.size(); ++i)
+	{
+		destroyCommandList(commandLists[i]);
+	}
 }
 
 void GraphicsVK::submitCommands(std::shared_ptr<CommandList> commands)
