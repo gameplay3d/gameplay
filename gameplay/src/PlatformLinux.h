@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Platform.h"
+#include "Input.h"
+#include "Graphics.h"
 #include <xcb/xcb.h>
 #include <linux/joystick.h>
 #include <stdarg.h>
@@ -50,37 +52,10 @@ public:
 	 */
 	unsigned long getConnection();
 
-	/**
-	 * @see Platform::isGamepadButtonPressed
-	 */
-	bool isGamepadButtonPressed(GamepadButton button, size_t gamepadIndex);
-
-	/**
-	 * @see Platform::getGamepadAxisValues
-	 */
-	void getGamepadAxisValues(float* leftVertical, float* leftHorizontal, 
-                              float* rightVertical, float* rightHorizontal, 
-                              size_t gamepadIndex);
-
-	/**
-	 * @see Platform::getGamepadTriggerValues
-	 */
-	void getGamepadTriggerValues(float* leftTrigger, float* rightTrigger, size_t gamepadIndex);
-
-	/**
-	 * @see Platform::getAccelerometerValues
-	 */
-	void getAccelerometerValues(float* pitch, float* roll);
-
-	/**
-	 * @see Platform::getSensorValues
-	 */
-	void getSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
-
 private:
 
-	void handleEvent(const xcb_generic_event_t* evt);
-	KeyboardKey translateKey(xcb_keycode_t xcbKeyCode, bool shiftDown);
+    void onMessage(const xcb_generic_event_t* evt);
+    Input::Key translateKey(xcb_keycode_t xcbKeyCode, bool shiftDown);
 
 	xcb_connection_t* _connection;
 	xcb_screen_t* _screen;

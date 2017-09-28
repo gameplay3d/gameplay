@@ -27,7 +27,7 @@ public:
         KEY_BACKSPACE = 0x0008,
         KEY_TAB = 0x0009,
         KEY_BACK_TAB = 0x0089,
-        KEY_RETURN = 0x000D,
+        KEY_ENTER = 0x000D,
         KEY_CAPS_LOCK = 0x00E5,
         KEY_SHIFT = 0x00E1,
         KEY_CTRL = 0x00E3,

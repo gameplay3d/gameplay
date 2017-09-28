@@ -177,7 +177,7 @@ linux {
     HEADERS += src/vk/CommandListVK.h
     HEADERS += src/vk/CommandPoolVK.h
     INCLUDEPATH += src/vk
-    INCLUDEPATH += $$(VULKAN_SDK)/Include
+    INCLUDEPATH += $$(VULKAN_SDK)/include
     INCLUDEPATH += /usr/include/gtk-2.0
     INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
     INCLUDEPATH += /usr/include/atk-1.0
