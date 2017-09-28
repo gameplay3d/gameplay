@@ -168,8 +168,8 @@ float Heightfield::getHeight(float column, float row) const
     unsigned int x2 = x1 + 1;
     unsigned int y2 = y1 + 1;
     float tmp;
-    float xFactor = modf(column, &tmp);
-    float yFactor = modf(row, &tmp);
+    float xFactor = std::modf(column, &tmp);
+    float yFactor = std::modf(row, &tmp);
     float xFactorI = 1.0f - xFactor;
     float yFactorI = 1.0f - yFactor;
 

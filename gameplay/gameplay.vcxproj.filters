@@ -91,6 +91,7 @@
     <ClCompile Include="src\vk\CommandPoolVK.cpp">
       <Filter>vk</Filter>
     </ClCompile>
+    <ClCompile Include="src\Heightfield.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
@@ -179,5 +180,6 @@
       <Filter>vk</Filter>
     </ClInclude>
     <ClInclude Include="src\CommandList.h" />
+    <ClInclude Include="src\Heightfield.h" />
   </ItemGroup>
 </Project>

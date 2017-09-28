@@ -4,6 +4,7 @@
 
 namespace gameplay
 {
+	class SceneObject;
 
 /**
  * Defines a component

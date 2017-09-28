@@ -398,7 +398,7 @@ std::string FileSystem::getDirectoryName(const std::string& path)
     // dirname() modifies the input string so create a temp string
     std::string dirname;
     char* tempPath = new char[strlen(path.c_str()) + 1];
-    strcpy(tempPath, path);
+    strcpy(tempPath, path.c_str());
     char* dir = ::dirname(tempPath);
     if (dir && strlen(dir) > 0)
     {
