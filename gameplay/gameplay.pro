@@ -126,7 +126,8 @@ HEADERS += \
     src/Vector2.h \
     src/Vector3.h \
     src/Vector4.h \
-    src/VertexFormat.h
+    src/VertexFormat.h \
+    src/Tileset.h
 
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include
@@ -186,8 +187,6 @@ linux {
     INCLUDEPATH += /usr/include/pango-1.0
     INCLUDEPATH += /usr/include/gio-unix-2.0
     INCLUDEPATH += /usr/include/freetype2
-    INCLUDEPATH += /usr/include/glib-2.0
-    INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include
     INCLUDEPATH += /usr/include/pixman-1
     INCLUDEPATH += /usr/include/libpng12
     INCLUDEPATH += /usr/include/harfbuzz

@@ -32,10 +32,10 @@ public:
      */
     ~PhysicsJointFixed();
 
-	/**
-	 * @see PhysicsJoint::getType
-	 */
-	PhysicsJoint::Type PhysicsJointFixed::getType() const;
+    /**
+     * @see PhysicsJoint::getType
+     */
+    PhysicsJoint::Type getType() const;
 
     /**
      * @see Component::getTypeId

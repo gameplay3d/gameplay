@@ -38,7 +38,7 @@
 #include "Mesh.h"
 #include "Sprite.h"
 #include "Text.h"
-#include "TileSet.h"
+#include "Tileset.h"
 #include "Path.h"
 //#include "ParticleEmitter.h"
 //#include "Terrain.h"
