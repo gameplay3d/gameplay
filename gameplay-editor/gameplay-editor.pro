@@ -101,7 +101,7 @@ linux {
     CONFIG(release, debug|release): LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
     LIBS += -L$$PWD/../external-deps/lib/linux/x86_64/ -lgameplay-deps
     LIBS += -lrt -ldl -lX11 -lpthread -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0
-    LIBS += -L$$(VULKAN_SDK)/Bin -lvulkan-1
+    LIBS += -L$$(VULKAN_SDK)/lib/ -lvulkan
 }
 
 macx {
@@ -128,4 +128,3 @@ macx
 
 DISTFILES += \
     game.config
-

@@ -16,17 +16,18 @@ Windows 10
 
 Ubuntu 16.04 LTS (x86_64)
 -------------------------
-- Install POSIX SDK tools                   (sudo apt-get install build-essential gcc g++ curl libogg-dev libopenal-dev libx11-xcb-dev)
+- Install POSIX SDK tools                   (sudo apt-get install build-essential gcc g++ curl libogg-dev libopenal-dev libx11-xcb-dev libgtk2.0-dev libgl1-mesa-dev)
 - Install Qt 5.9+ (Ex. ~/Qt)                (https://www1.qt.io/download-open-source/)
-- Set QTDIR environment variable            (Ex. QTDIR=~\Qt\5.9.1\msvc2015_64)
+- Set QTDIR environment variable            (Ex. QTDIR=~/Qt/5.9.1/gcc_64)
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home#linux)
-- Add the following to system profle        (sudo vi /etc/profile)
+- Add the following to user profle          (vi ~/.profile)
 ```
-export VULKAN_SDK=~/VulkanSDK/1.0.61.1/x86_64 
+export VULKAN_SDK=/home/<user>/VulkanSDK/1.0.61.1/x86_64 
 export PATH=$VULKAN_SDK/bin:$PATH
 export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
 export VK_LAYER_PATH=$VULKAN_SDK/etc/explicit_layer.d
 ```
+- Reboot computer
 - Run GamePlay/install.sh
 - Run Qt Creator
 - Open GamePlay/gameplay/gameplay.pro
@@ -36,7 +37,7 @@ export VK_LAYER_PATH=$VULKAN_SDK/etc/explicit_layer.d
 - Change the long default build paths for Debug and Release to:
 ```
 Debug = "Debug"
-Release ="Release"
+Release = "Release"
 ```
 - Build and Run
 
