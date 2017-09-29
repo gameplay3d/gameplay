@@ -393,7 +393,7 @@ Input::Key PlatformWindows::translateKey(WPARAM windowsKeyCode, bool shiftDown)
 		case VK_TAB:
 			return shiftDown ? gameplay::Input::KEY_BACK_TAB : gameplay::Input::KEY_TAB;
 		case VK_RETURN:
-			return gameplay::Input::KEY_RETURN;
+			return gameplay::Input::KEY_ENTER;
 		case VK_CAPITAL:
 			return gameplay::Input::KEY_CAPS_LOCK;
 		case VK_SHIFT:
