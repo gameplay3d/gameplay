@@ -37,7 +37,7 @@ linux {
     DEFINES += __linux__
     DEFINES += VK_USE_PLATFORM_XCB_KHR
     SOURCES += src/main.cpp
-    INCLUDEPATH += $$(VULKAN_SDK)/Include
+    INCLUDEPATH += $$(VULKAN_SDK)/include
     INCLUDEPATH += /usr/include/gtk-2.0
     INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
     INCLUDEPATH += /usr/include/atk-1.0
@@ -51,12 +51,12 @@ linux {
     INCLUDEPATH += /usr/include/pixman-1
     INCLUDEPATH += /usr/include/libpng12
     INCLUDEPATH += /usr/include/harfbuzz
-    CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/debug/ -lgameplay
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../gameplay/Release/release/ -lgameplay
-    CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/linux/x86_64/Debug/ -lgameplay-deps
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/linux/x86_64/Release/ -lgameplay-deps
-    LIBS += -lm -lrt -ldl -lX11 -lpthread -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0
-    LIBS += -L$$(VULKAN_SDK)/Bin -lvulkan-1
+    CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
+    CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/linux/x86_64/ -lgameplay-deps
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/linux/x86_64/ -lgameplay-deps
+    LIBS += -lm -lrt -ldl -lX11 -lpthread -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0 -lxcb
+    LIBS += -L$$(VULKAN_SDK)/lib/ -lvulkan
     QMAKE_CXXFLAGS += -lstdc++ -pthread -w
 }
 
@@ -64,8 +64,8 @@ macx {
     OBJECTIVE_SOURCES += src/main.mm
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
     CONFIG(release, debug|release):LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
-    CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/Debug/ -lgameplay-deps
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/Release/ -lgameplay-deps
+    CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
     LIBS += -F/System/Library/Frameworks -framework GameKit
     LIBS += -F/System/Library/Frameworks -framework IOKit
     LIBS += -F/System/Library/Frameworks -framework QuartzCore
