@@ -21,7 +21,7 @@ Ubuntu 16.04 LTS (x86_64)
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home#linux)
 - Add the following to user profile         (vi ~/.profile)
 ```
-export VULKAN_SDK=/home/<user>/VulkanSDK/1.0.61.1/x86_64 
+export VULKAN_SDK=~/VulkanSDK/1.0.61.1/x86_64 
 export PATH=$VULKAN_SDK/bin:$PATH
 export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
 export VK_LAYER_PATH=$VULKAN_SDK/etc/explicit_layer.d
