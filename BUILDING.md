@@ -32,8 +32,20 @@ export VK_LAYER_PATH=$VULKAN_SDK/etc/explicit_layer.d
 - Open GamePlay/gameplay/gameplay.pro
 - Open GamePlay/gameplay/gamplay-app.pro 
 - Open GamePlay/gameplay-editor/gameplay-editor.pro
+- For each project "Configure Project" kits by expanding "Desktop Qt 5.9.1 xxxx 64bit"
+- Change the long default build paths for Debug and Release to:
+```
+Debug = "Debug"
+Release ="Release"
+```
 - Build and Run
 
 MacOS High Sierra 
 -----------------
-- TODO
+- Install Xcode 9                           (https://developer.apple.com/xcode/)
+- Run GamePlay/install.sh
+- Run Xcode
+- Open GamePlay/gameplay.xcworkspace
+- Build and Run
+
+
