@@ -133,6 +133,8 @@ private:
     uint32_t _height;
     bool _fullscreen;
     bool _vsync;
+    MTKView* _view;
+    id<MTLDevice> _device;
 };
 
 }
