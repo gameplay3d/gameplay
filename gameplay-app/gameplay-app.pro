@@ -62,14 +62,20 @@ linux {
 
 macx {
     OBJECTIVE_SOURCES += src/main.mm
+    OBJECTIVE_SOURCES += src/AppDelegate.mm
+    OBJECTIVE_SOURCES += src/ViewController.mm
+    HEADERS += src/AppDelegate.h
+    HEADERS += src/ViewController.h
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
     CONFIG(release, debug|release):LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
     CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
-    LIBS += -F/System/Library/Frameworks -framework GameKit
+    LIBS += -F/System/Library/Frameworks -framework Metal
+    LIBS += -F/System/Library/Frameworks -framework MetalKit
+    LIBS += -F/System/Library/Frameworks -framework GameKit 
     LIBS += -F/System/Library/Frameworks -framework IOKit
-    LIBS += -F/System/Library/Frameworks -framework QuartzCore
     LIBS += -F/System/Library/Frameworks -framework OpenAL
+    LIBS += -F/System/Library/Frameworks -framework QuartzCore
     LIBS += -F/System/Library/Frameworks -framework Cocoa
     LIBS += -F/System/Library/Frameworks -framework Foundation
     QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w -arch x86_64

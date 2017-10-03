@@ -60,7 +60,7 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
                 stride = 4;
                 break;
             default:
-                GP_WARN("Unsupported pixel format for heightfield image: %s.", path);
+                GP_WARN("Unsupported pixel format for heightfield image: %s.", path.c_str());
                 return nullptr;
         }
 
@@ -83,7 +83,7 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
         // RAW image (headerless)
         if (width < 2 || height < 2 || heightMax < 0)
         {
-            GP_WARN("Invalid 'width', 'height' or 'heightMax' parameter for RAW heightfield image: %s.", path);
+            GP_WARN("Invalid 'width', 'height' or 'heightMax' parameter for RAW heightfield image: %s.", path.c_str());
             return nullptr;
         }
 
@@ -92,7 +92,7 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
         unsigned char* bytes = (unsigned char*)FileSystem::readAll(path).c_str();
         if (bytes == nullptr)
         {
-            GP_WARN("Falied to read bytes from RAW heightfield image: %s.", path);
+            GP_WARN("Falied to read bytes from RAW heightfield image: %s.", path.c_str());
             return nullptr;
         }
 
@@ -100,7 +100,7 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
         int bits = (fileSize / (width * height)) * 8;
         if (bits != 8 && bits != 16)
         {
-            GP_WARN("Invalid RAW file - must be 8-bit or 16-bit, but found neither: %s.", path);
+            GP_WARN("Invalid RAW file - must be 8-bit or 16-bit, but found neither: %s.", path.c_str());
             GP_SAFE_DELETE_ARRAY(bytes);
             return nullptr;
         }
@@ -136,7 +136,7 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
     }
     else
     {
-        GP_WARN("Unsupported heightfield image format: %s.", path);
+        GP_WARN("Unsupported heightfield image format: %s.", path.c_str());
     }
 
     return heightfield;

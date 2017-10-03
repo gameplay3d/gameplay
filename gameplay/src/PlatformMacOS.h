@@ -53,33 +53,6 @@ public:
      */
     Graphics* getGraphics();
     
-    /**
-     * @see Platform::isGamepadButtonPressed
-     */
-    bool isGamepadButtonPressed(GamepadButton button, size_t gamepadIndex);
-    
-    /**
-     * @see Platform::getGamepadAxisValues
-     */
-    void getGamepadAxisValues(float* leftVertical, float* leftHorizontal,
-                              float* rightVertical, float* rightHorizontal, size_t gamepadIndex);
-    
-    /**
-     * @see Platform::getGamepadTriggerValues
-     */
-    void getGamepadTriggerValues(float* leftTrigger, float* rightTrigger, size_t gamepadIndex);
-    
-    /**
-     * @see Platform::getAccelerometerValues
-     */
-    void getAccelerometerValues(float* pitch, float* roll);
-    
-    /**
-     * @see Platform::getSensorValues
-     */
-    void getSensorValues(float* accelX, float* accelY, float* accelZ,
-                         float* gyroX, float* gyroY, float* gyroZ);
-    
 private:
     
     Graphics* _graphics;

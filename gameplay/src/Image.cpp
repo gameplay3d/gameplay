@@ -59,7 +59,7 @@ std::shared_ptr<Image> Image::create(const std::string& url)
     std::unique_ptr<Stream> stream(FileSystem::open(url));
     if (stream.get() == nullptr || !stream->canRead())
     {
-        GP_ERROR("Failed to open image file '%s'.", url);
+        GP_ERROR("Failed to open image file '%s'.", url.c_str());
         return nullptr;
     }
 
@@ -67,7 +67,7 @@ std::shared_ptr<Image> Image::create(const std::string& url)
     unsigned char sig[8];
     if (stream->read(sig, 1, 8) != 8 || png_sig_cmp(sig, 0, 8) != 0)
     {
-        GP_ERROR("Failed to load file '%s'; not a valid PNG.", url);
+        GP_ERROR("Failed to load file '%s'; not a valid PNG.", url.c_str());
         return nullptr;
     }
 
@@ -75,7 +75,7 @@ std::shared_ptr<Image> Image::create(const std::string& url)
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
     if (png == nullptr)
     {
-        GP_ERROR("Failed to create PNG structure for reading PNG file '%s'.", url);
+        GP_ERROR("Failed to create PNG structure for reading PNG file '%s'.", url.c_str());
         return nullptr;
     }
 
@@ -83,7 +83,7 @@ std::shared_ptr<Image> Image::create(const std::string& url)
     png_infop info = png_create_info_struct(png);
     if (info == nullptr)
     {
-        GP_ERROR("Failed to create PNG info structure for PNG file '%s'.", url);
+        GP_ERROR("Failed to create PNG info structure for PNG file '%s'.", url.c_str());
         png_destroy_read_struct(&png, nullptr, nullptr);
         return nullptr;
     }
@@ -91,7 +91,7 @@ std::shared_ptr<Image> Image::create(const std::string& url)
     // Set up error handling (required without using custom error handlers above).
     if (setjmp(png_jmpbuf(png)))
     {
-        GP_ERROR("Failed to set up error handling for reading PNG file '%s'.", url);
+        GP_ERROR("Failed to set up error handling for reading PNG file '%s'.", url.c_str());
         png_destroy_read_struct(&png, &info, nullptr);
         return nullptr;
     }
@@ -121,7 +121,7 @@ std::shared_ptr<Image> Image::create(const std::string& url)
         break;
 
     default:
-        GP_ERROR("Unsupported PNG color type (%d) for image file '%s'.", (int)colorType, url);
+        GP_ERROR("Unsupported PNG color type (%d) for image file '%s'.", (int)colorType, url.c_str());
         png_destroy_read_struct(&png, &info, nullptr);
         return nullptr;
     }

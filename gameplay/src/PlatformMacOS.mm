@@ -1,10 +1,12 @@
 #include "Base.h"
 #include "PlatformMacOS.h"
 #include "Game.h"
+#include "FileSystem.h"
 #include "Graphics.h"
-#include "GraphicsVulkan.h"
+#include "mtl/GraphicsMTL.h"
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
+
 
 namespace gameplay
 {
@@ -13,6 +15,16 @@ extern Platform* getPlatform()
 {
     static Platform* platform = new PlatformMacOS();
     return platform;
+}
+
+Graphics* Graphics::getGraphics()
+{
+    if (!_graphics)
+    {
+        _graphics = new GraphicsMTL();
+        _graphics->_api = Graphics::API_MTL;
+    }
+    return _graphics;
 }
 
 PlatformMacOS::PlatformMacOS() :
@@ -26,8 +38,15 @@ PlatformMacOS::~PlatformMacOS()
 
 bool PlatformMacOS::startup(int argc, char** argv)
 {
+    NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
+    NSString* path = [bundlePath stringByAppendingString:@"/Contents/Resources/"];
+    FileSystem::setAssetPath([path cStringUsingEncoding:NSASCIIStringEncoding]);
+
     // Get the game config
-    Game::Config* config = Game::getInstance()->getConfig();
+    std::shared_ptr<Game::Config> config = Game::getInstance()->getConfig();
+
+    Graphics::getGraphics()->onInitialize((unsigned long)argc, 0);
+
     return true;
 }
 
@@ -49,35 +68,6 @@ unsigned long PlatformMacOS::getWindow()
 unsigned long PlatformMacOS::getConnection()
 {
     return (unsigned long)0;
-}
-
-Graphics* PlatformMacOS::getGraphics()
-{
-    return _graphics;
-}
-
-bool PlatformMacOS::isGamepadButtonPressed(GamepadButton button, size_t gamepadIndex)
-{
-    return false;
-}
-
-void PlatformMacOS::getGamepadAxisValues(float* leftVertical, float* leftHorizontal,
-                                         float* rightVertical, float* rightHorizontal,
-                                         size_t gamepadIndex)
-{
-}
-
-void PlatformMacOS::getGamepadTriggerValues(float* leftTrigger, float* rightTrigger, size_t gamepadIndex)
-{
-}
-
-void PlatformMacOS::getAccelerometerValues(float* pitch, float* roll)
-{
-}
-
-void PlatformMacOS::getSensorValues(float* accelX, float* accelY, float* accelZ,
-                                    float* gyroX, float* gyroY, float* gyroZ)
-{
 }
 
 extern void print(const char* format, ...)

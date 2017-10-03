@@ -85,7 +85,7 @@ void Serializer::Activator::registerType(const std::string&  className, CreateOb
     }
     else
     {
-        GP_ERROR("className already registered:%s", className);
+        GP_ERROR("className already registered:%s", className.c_str());
     }
 }
     
@@ -98,7 +98,7 @@ void Serializer::Activator::registerEnum(const std::string& enumName, EnumToStri
     }
     else
     {
-        GP_ERROR("enumName already registered:%s", enumName);
+        GP_ERROR("enumName already registered:%s", enumName.c_str());
     }
 }
 

@@ -195,12 +195,22 @@ linux {
 
 macx {
     OBJECTIVE_SOURCES += src/PlatformMacOS.mm
+    OBJECTIVE_SOURCES += src/mtl/GraphicsMTL.mm
+    OBJECTIVE_SOURCES += src/mtl/BufferMTL.mm
+    OBJECTIVE_SOURCES += src/mtl/CommandListMTL.mm
+    OBJECTIVE_SOURCES += src/mtl/CommandPoolMTL.mm
     HEADERS += src/PlatformMacOS.h
+    HEADERS += src/mtl/GraphicsMTL.h
+    HEADERS += src/mtl/BufferMTL.h
+    HEADERS += src/mtl/CommandListMTL.h
+    HEADERS += src/mtl/CommandPoolMTL.h
     QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w -arch x86_64
+    LIBS += -F/System/Library/Frameworks -framework Metal
+    LIBS += -F/System/Library/Frameworks -framework MetalKit
     LIBS += -F/System/Library/Frameworks -framework GameKit
     LIBS += -F/System/Library/Frameworks -framework IOKit
-    LIBS += -F/System/Library/Frameworks -framework QuartzCore
     LIBS += -F/System/Library/Frameworks -framework OpenAL
+    LIBS += -F/System/Library/Frameworks -framework QuartzCore
     LIBS += -F/System/Library/Frameworks -framework Cocoa
     LIBS += -F/System/Library/Frameworks -framework Foundation
 }
