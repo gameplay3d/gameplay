@@ -9,7 +9,7 @@ REM
 
 set prefix=https://github.com/gameplay3d/GamePlay/releases/download/v4.0.0
 
-set filename=gameplay-deps
+set filename=gameplay-deps-windows
 
 echo Downloading %filename%.zip from %prefix%
 %~d0
