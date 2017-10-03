@@ -11,6 +11,15 @@ prefix=https://github.com/gameplay3d/GamePlay/releases/download/v4.0.0
 
 filename=gameplay-deps
 
+
+if [ "$(uname)" == "Darwin" ]; then
+	filename+=-macos
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+	filename+=-linux
+else
+	filename+=-windows
+fi
+
 echo Downloading $filename.zip from $prefix...
 curl -# -LO $prefix/$filename.zip
 echo Extracting $filename.zip... please standby...
