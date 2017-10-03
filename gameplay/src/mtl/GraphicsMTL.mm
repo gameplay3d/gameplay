@@ -1,61 +1,14 @@
 #include "Base.h"
 #include "GraphicsMTL.h"
 #include "Game.h"
-#import <simd/simd.h>
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
 #import <MetalKit/MetalKit.h>
 
-
-@implementation ViewDelegate
-{
-    id <MTLDevice> _device;
-    id <MTLCommandQueue> _commandQueue;
-}
-
-- (nonnull instancetype)initWithMetalKitView:(nonnull MTKView*)mtkView
-{
-    self = [super init];
-    if(self)
-    {
-        _device = mtkView.device;
-        _commandQueue = [_device newCommandQueue];
-    }
-    
-    return self;
-}
-
-- (void)drawInMTKView:(nonnull MTKView *)view
-{
-    //
-    view.clearColor = MTLClearColorMake(0, 0, 0, 1);
-    
-    // Create a new command buffer for each renderpass to the current drawable
-    id <MTLCommandBuffer> commandBuffer = [_commandQueue commandBuffer];
-    
-    MTLRenderPassDescriptor *renderPassDescriptor = view.currentRenderPassDescriptor;
-    if(renderPassDescriptor != nil)
-    {
-        
-        id <MTLRenderCommandEncoder> renderEncoder =
-        [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
-        [renderEncoder endEncoding];
-        [commandBuffer presentDrawable:view.currentDrawable];
-    }
-    
-     [commandBuffer commit];
-}
-
-- (void)mtkView:(MTKView*)view drawableSizeWillChange:(CGSize)size
-{
-}
-@end
-
 namespace gameplay
 {
 
-ViewDelegate* GraphicsMTL::__viewDelegate = nullptr;
     
 GraphicsMTL::GraphicsMTL() :
     _initialized(false),
@@ -71,18 +24,6 @@ GraphicsMTL::~GraphicsMTL()
 
 void GraphicsMTL::onInitialize(unsigned long window, unsigned long connection)
 {
-    NSViewController* viewController = (__bridge NSViewController*)((void*)window);
-    MTKView* mtkView = (MTKView*)viewController.view;
-    id <MTLDevice> mtlDevice = MTLCreateSystemDefaultDevice();
-    mtkView.device = mtlDevice;
-    if(!mtkView.device)
-    {
-        NSLog(@"Metal is not supported on this device.");
-        return;
-    }
-    __viewDelegate = [[ViewDelegate alloc] initWithMetalKitView:mtkView];
-    mtkView.delegate = __viewDelegate;
-    mtkView.preferredFramesPerSecond = 60;
     _initialized = true;
 }
 

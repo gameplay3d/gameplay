@@ -3,10 +3,6 @@
 #include "Graphics.h"
 #import <MetalKit/MetalKit.h>
 
-@interface ViewDelegate : NSObject<MTKViewDelegate>
-- (nonnull instancetype)initWithMetalKitView:(nonnull MTKView*)mtkView;
-@end
-
 namespace gameplay
 {
 
@@ -131,7 +127,6 @@ public:
     
 private:
     
-    static ViewDelegate* __viewDelegate;
     bool _initialized;
     bool _resized;
     uint32_t _width;
