@@ -11,8 +11,13 @@
 @class View;
 
 static View* __view = nullptr;
+static id<MTLDevice> __device = nullptr;
+static NSDate*__timeStart = nullptr;
+static NSTimeInterval __timeLast;
 
-@interface View : MTKView <NSWindowDelegate>
+
+
+@interface View : MTKView <NSWindowDelegate, MTKViewDelegate>
 {
 }
 @end
@@ -20,21 +25,15 @@ static View* __view = nullptr;
 
 @implementation View
 
-  - (instancetype)initWithCoder:(NSCoder*)coder
-  {
-      if ((self = [super initWithCoder:coder]))
-      {
-          // Initialization code here.
-      }
-      return self;
-  }
-
 - (instancetype)initWithFrame:(CGRect)frameRect
                        device:(id<MTLDevice>)device
 {
     if ((self = [super initWithFrame:frameRect device:device]))
     {
-        // Initialization code here.
+        gameplay::Graphics::getGraphics()->onInitialize((unsigned long)self,
+                                                        (unsigned long)device);
+        __timeStart = [NSDate date];
+        __timeLast = [__timeStart timeIntervalSinceNow];
     }
     return self;
 }
@@ -54,25 +53,18 @@ static View* __view = nullptr;
 
 - (void) drawView
 {
-    // TODO: Move to GraphicsMTL::renderScene
-    id<CAMetalDrawable> drawable = self.currentDrawable;
-    id<MTLTexture> texture = drawable.texture;
+    NSTimeInterval timeNow = [__timeStart timeIntervalSinceNow];
+    NSTimeInterval elapsedTime = __timeLast - timeNow;
+    gameplay::Game::getInstance()->onRender((float)elapsedTime);
+    __timeLast = timeNow;
+}
 
-    MTLRenderPassDescriptor* passDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
-    passDescriptor.colorAttachments[0].texture = texture;
-    passDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-    passDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
-    passDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1.0);
-
-    id<MTLCommandQueue> commandQueue = [self.device newCommandQueue];
-    id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
-    id<MTLRenderCommandEncoder> commandEncoder = [commandBuffer renderCommandEncoderWithDescriptor:passDescriptor];
-    [commandEncoder endEncoding];
-
-    [commandBuffer presentDrawable:drawable];
-    [commandBuffer commit];
-
-    [commandQueue release];
+- (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size
+{
+    int width = (int)size.width;
+    int height = (int)size.height;
+    gameplay::Graphics::getGraphics()->onResize(width, height);
+    gameplay::Game::getInstance()->onResize(width, height);
 }
 
 - (void)dealloc
@@ -171,8 +163,8 @@ int PlatformMacOS::enterMessagePump()
     NSAutoreleasePool* pool = [NSAutoreleasePool new];
     NSApplication* app = [NSApplication sharedApplication];
     NSRect viewBounds = NSMakeRect(0, 0, config->width, config->height);
-    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
-    __view = [[View alloc] initWithFrame:viewBounds device:device];
+    __device = MTLCreateSystemDefaultDevice();
+    __view = [[View alloc] initWithFrame:viewBounds device:__device];
 
     // Setup fullscreen vs. windowed mode
     NSWindow* window = nullptr;
@@ -195,9 +187,10 @@ int PlatformMacOS::enterMessagePump()
                    defer:YES];
     }
 
-    [__view setClearColor:MTLClearColorMake(1, 0, 0, 1)];
+    [__view setClearColor:MTLClearColorMake(0, 0, 0, 1)];
     [__view setColorPixelFormat:MTLPixelFormatBGRA8Unorm];
     [__view setDepthStencilPixelFormat:MTLPixelFormatDepth32Float];
+    [__view setDelegate:__view];
 
     [window setAcceptsMouseMovedEvents:YES];
     [window setContentView:__view];
@@ -208,19 +201,17 @@ int PlatformMacOS::enterMessagePump()
     [app run];
     [pool release];
 
-    Graphics::getGraphics()->onInitialize((unsigned long)__view, (unsigned long) device);
-
     return 0;
 }
 
 unsigned long PlatformMacOS::getWindow()
 {
-    return (unsigned long)0;
+    return (unsigned long)__view;
 }
 
 unsigned long PlatformMacOS::getConnection()
 {
-    return (unsigned long)0;
+    return (unsigned long)__device;
 }
 
 extern void print(const char* format, ...)
