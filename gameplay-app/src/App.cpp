@@ -72,28 +72,20 @@ void App::onInitialize()
 void App::onFinalize()
 {
 	Game::onFinalize();
-
-    // Custom finalize here...
 }
 
 void App::onResize(size_t width, size_t height)
 {
 	Game::onResize(width, height);
-
-    // Custom on resize handler here...
 }
 
 void App::onUpdate(float elapsedTime)
 {
 	Game::onUpdate(elapsedTime);
-
-    // Custom update here...
 }
 
 void App::onRender(float elapsedTime)
 {
-    // Custom render here..
-
 	Game::onRender(elapsedTime);
 }
 

@@ -1,17 +1,20 @@
-#include "gameplay.h"
+#import "AppDelegate.h"
+#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 
-#ifdef __APPLE__
+#include <gameplay.h>
 
-#import "Fouundation/Foundation.h""
-
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
-    NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
     gameplay::Platform* platform = gameplay::getPlatform();
-    platform->startup(argc, argv);
-    delete platform;
-    [p release];
-    return result;
-}
 
-#endif
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    NSApplication* application = [NSApplication sharedApplication];
+    AppDelegate* applicationDelegate = [[[AppDelegate alloc] init] autorelease];
+    [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+    [NSApp activateIgnoringOtherApps:YES];
+    [application setDelegate:applicationDelegate];
+    [pool drain];
+    
+    return 0;
+}

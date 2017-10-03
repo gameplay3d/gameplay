@@ -349,14 +349,14 @@ std::string FileSystem::readAll(const std::string& filePath)
     // Open file for reading.
     std::unique_ptr<Stream> stream(open(filePath));
     if (stream.get() == nullptr)
-        GP_ERROR("Failed to load file: %s", filePath);
+        GP_ERROR("Failed to load file: %s", filePath.c_str());
     size_t size = stream->length();
     std::string result;
     result.resize(size);
     size_t read = stream->read(&result[0], 1, size);
     if (read != size)
     {
-        GP_ERROR("Failed to read complete contents of file '%s' (amount read vs. file size: %u < %u).", filePath, read, size);
+        GP_ERROR("Failed to read complete contents of file '%s' (amount read vs. file size: %u < %u).", filePath.c_str(), read, size);
     }
     return result;
 }

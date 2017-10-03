@@ -37,7 +37,7 @@ Serializer* SerializerBinary::create(const std::string& path, Stream* stream)
     unsigned char version[2];
     if (stream->read(version, sizeof(unsigned char), 2) != 2)
     {
-        GP_WARN("Failed to read version from binary file: %s", path);
+        GP_WARN("Failed to read version from binary file: %s", path.c_str());
         return nullptr;
     }
     Serializer* serializer = new SerializerBinary(Type::TYPE_READER, path, stream, version[0], version[1]);
