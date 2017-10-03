@@ -54,6 +54,7 @@ static View* __view = nullptr;
 
 - (void) drawView
 {
+    // TODO: Move to GraphicsMTL::renderScene
     id<CAMetalDrawable> drawable = self.currentDrawable;
     id<MTLTexture> texture = drawable.texture;
 
@@ -61,7 +62,7 @@ static View* __view = nullptr;
     passDescriptor.colorAttachments[0].texture = texture;
     passDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
     passDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
-    passDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 1.0, 0.0, 1.0);
+    passDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1.0);
 
     id<MTLCommandQueue> commandQueue = [self.device newCommandQueue];
     id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
@@ -182,7 +183,7 @@ int PlatformMacOS::enterMessagePump()
                    initWithContentRect:screenBounds
                    styleMask:NSBorderlessWindowMask
                    backing:NSBackingStoreBuffered
-                   defer:NO];
+                   defer:YES];
     }
     else
     {
@@ -191,7 +192,7 @@ int PlatformMacOS::enterMessagePump()
                    initWithContentRect:contentRect
                    styleMask:NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask
                    backing:NSBackingStoreBuffered
-                   defer:NO];
+                   defer:YES];
     }
 
     [__view setClearColor:MTLClearColorMake(1, 0, 0, 1)];
@@ -201,6 +202,7 @@ int PlatformMacOS::enterMessagePump()
     [window setAcceptsMouseMovedEvents:YES];
     [window setContentView:__view];
     [window setDelegate:__view];
+    [window makeKeyAndOrderFront:__view];
     [__view release];
 
     [app run];
