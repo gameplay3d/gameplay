@@ -43,5 +43,15 @@ Release = "Release"
 MacOS High Sierra 
 -----------------
 - Install Xcode 9                           (https://developer.apple.com/xcode/)
+- Install Qt 5.9 (Ex. ~/Qt)                 (https://www1.qt.io/download-open-source/)
 - Run GamePlay/install.sh
-- TBD
+- Open GamePlay/gameplay/gameplay.pro
+- Open GamePlay/gameplay/gamplay-app.pro 
+- Open GamePlay/gameplay-editor/gameplay-editor.pro
+- For each project "Configure Project" kits by expanding "Desktop Qt 5.9.1 Clang 64bit"
+- Change the long default build paths for Debug and Release to:
+```
+Debug = "Debug"
+Release = "Release"
+```
+- Build and Run
