@@ -62,10 +62,6 @@ linux {
 
 macx {
     OBJECTIVE_SOURCES += src/main.mm
-    OBJECTIVE_SOURCES += src/AppDelegate.mm
-    OBJECTIVE_SOURCES += src/ViewController.mm
-    HEADERS += src/AppDelegate.h
-    HEADERS += src/ViewController.h
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
     CONFIG(release, debug|release):LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
