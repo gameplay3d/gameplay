@@ -20,9 +20,6 @@ GamePlay is an open-source, cross-platform, C++ game framework/engine for creati
 ## License
 Open-source under [Apache 2.0 license](http://www.tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29).
 
-## Bug Reporting
-Please log bugs under [Issues](https://github.com/gameplay3d/GamePlay/issues) on github.
-
 ## Disclaimer
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
