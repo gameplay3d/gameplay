@@ -9,11 +9,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay-app", "gameplay-ap
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay-editor", "gameplay-editor\gameplay-editor.vcxproj", "{C772B6BB-133F-341A-B712-B7A1B822AD65}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -28,10 +23,6 @@ Global
 		{0BEE5166-5174-4008-B6C5-7AC9465ED15E}.Debug|x64.Build.0 = Debug|x64
 		{0BEE5166-5174-4008-B6C5-7AC9465ED15E}.Release|x64.ActiveCfg = Release|x64
 		{0BEE5166-5174-4008-B6C5-7AC9465ED15E}.Release|x64.Build.0 = Release|x64
-		{C772B6BB-133F-341A-B712-B7A1B822AD65}.Debug|x64.ActiveCfg = Debug|x64
-		{C772B6BB-133F-341A-B712-B7A1B822AD65}.Debug|x64.Build.0 = Debug|x64
-		{C772B6BB-133F-341A-B712-B7A1B822AD65}.Release|x64.ActiveCfg = Release|x64
-		{C772B6BB-133F-341A-B712-B7A1B822AD65}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
