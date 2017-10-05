@@ -50,8 +50,6 @@ public:
 	 */
 	std::string getUrl() const;
 
-
-
     /**
      * Gets the Material bound to the specified mesh part.
      *
@@ -78,16 +76,15 @@ public:
      * @param material The new material.
      * @param partIndex The index of the mesh part to set the material for (-1 for shared material).
      */
-	void setMaterial(std::shared_ptr<Material> material, int index = -1);
+	void setMaterial(std::shared_ptr<Material> material, int partIndex = -1);
 
     /**
      * Determines if a (non-shared) material is set for the specified part index.
      *
-     * @param index MeshPart index.
-     *
+     * @param partIndex MeshPart index.
      * @return true if a material is set for the specified part, false otherwise.
      */
-    bool hasMaterial(size_t index) const;
+    bool hasMaterial(size_t partIndex) const;
 
     /**
      * @see Serializable::onDeserialize
@@ -109,9 +106,7 @@ public:
 protected:
 
 	/**
-	 * Event occurs when renderer's resource are loaded
-	 *
-	 * @param drawFlags The flags indicating what is rendered.
+	 * Event occurs when renderer's resource are loaded.
 	 */
 	virtual void onLoaded();
 

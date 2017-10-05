@@ -273,7 +273,7 @@ public:
     /**
      * Creates a rotation matrix from the specified quaternion.
      *
-     * @param quat A quaternion describing a 3D orientation.
+     * @param q A quaternion describing a 3D orientation.
      * @param dst A matrix to store the result in.
      */
 	static void createRotation(const Quaternion& q, Matrix* dst);

@@ -65,12 +65,12 @@ size_t Game::getFrameRate() const
     return _frameRate;
 }
 
-int Game::getWidth() const
+size_t Game::getWidth() const
 {
     return _width;
 }
 
-int Game::getHeight() const
+size_t Game::getHeight() const
 {
     return _height;
 }
@@ -193,7 +193,7 @@ void Game::onSceneLoad(std::shared_ptr<SceneObject> scene)
 {
 }
 
-void Game::onResize(int width, int height)
+void Game::onResize(size_t width, size_t height)
 {
     _width = width;
     _height = height;
@@ -358,8 +358,8 @@ void Game::Config::onSerialize(Serializer* serializer)
 {
     serializer->writeString("title", title.c_str(), "");
 	serializer->writeString("graphics", graphics.c_str(), "");
-    serializer->writeInt("width", (uint32_t)width, 0);
-    serializer->writeInt("height", (uint32_t)height, 0);
+    serializer->writeInt("width", width, 0);
+    serializer->writeInt("height", height, 0);
     serializer->writeBool("fullscreen", fullscreen, false);
 	serializer->writeBool("vsync", vsync, false);
 	serializer->writeInt("multisampling", (unsigned int)multisampling, 0);

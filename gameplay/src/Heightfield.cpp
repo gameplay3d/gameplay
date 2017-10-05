@@ -68,10 +68,10 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
         heightfield = std::make_shared<Heightfield>();
         std::vector<float> heights = heightfield->getHeightData();
         unsigned char* data = image->getPixelData().data();
-        int idx;
-        for (int y = image->getHeight()-1, i = 0; y >= 0; --y)
+        size_t idx;
+        for (int y = (int)image->getHeight() - 1, i = 0; y >= 0; --y)
         {
-            for (unsigned int x = 0, w = image->getWidth(); x < w; ++x)
+            for (size_t x = 0, w = image->getWidth(); x < w; ++x)
             {
                 idx = (y*w + x) * stride;
                 heights[i++] = heightMin + getNormalizedHeightPacked(data[idx], data[idx + 1], data[idx + 2]) * heightScale;
@@ -111,12 +111,12 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
         if (bits == 16)
         {
             // 16-bit (0-65535)
-            int idx;
+            unsigned int idx;
             for (unsigned int y = 0, i = 0; y < height; ++y)
             {
                 for (unsigned int x = 0; x < width; ++x, ++i)
                 {
-                    idx = (y * width + x) << 1;
+                    idx = ((y * (int)width + x) << 1);
                     heights[i] = heightMin + ((bytes[idx] | (int)bytes[idx+1] << 8) / 65535.0f) * heightScale;
                 }
             }

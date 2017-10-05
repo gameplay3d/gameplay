@@ -30,8 +30,7 @@ static NSTimeInterval __timeLast;
 {
     if ((self = [super initWithFrame:frameRect device:device]))
     {
-        gameplay::Graphics::getGraphics()->onInitialize((unsigned long)self,
-                                                        (unsigned long)device);
+        gameplay::Graphics::getGraphics()->onInitialize((unsigned long)self, 0);
         __timeStart = [NSDate date];
         __timeLast = [__timeStart timeIntervalSinceNow];
     }
@@ -67,9 +66,8 @@ static NSTimeInterval __timeLast;
     gameplay::Game::getInstance()->onResize(width, height);
 }
 
-- (void)dealloc
+- (void)drawInMTKView:(nonnull MTKView *)view
 {
-    [super dealloc];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -96,7 +94,6 @@ static NSTimeInterval __timeLast;
 {
     puts("keydown!");
 }
-
 @end
 
 @interface FullscreenWindow : NSWindow
@@ -160,7 +157,6 @@ int PlatformMacOS::enterMessagePump()
     //FileSystem::setAssetPath([path cStringUsingEncoding:NSASCIIStringEncoding]);
 
     // Setup the view
-    NSAutoreleasePool* pool = [NSAutoreleasePool new];
     NSApplication* app = [NSApplication sharedApplication];
     NSRect viewBounds = NSMakeRect(0, 0, config->width, config->height);
     __device = MTLCreateSystemDefaultDevice();
@@ -173,7 +169,7 @@ int PlatformMacOS::enterMessagePump()
         NSRect screenBounds = [[NSScreen mainScreen] frame];
         window = [[FullscreenWindow alloc]
                    initWithContentRect:screenBounds
-                   styleMask:NSBorderlessWindowMask
+                   styleMask:NSWindowStyleMaskBorderless
                    backing:NSBackingStoreBuffered
                    defer:YES];
     }
@@ -182,7 +178,7 @@ int PlatformMacOS::enterMessagePump()
         NSRect contentRect = NSMakeRect(0, 0, viewBounds.size.width, viewBounds.size.height);
         window = [[NSWindow alloc]
                    initWithContentRect:contentRect
-                   styleMask:NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask
+                   styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable
                    backing:NSBackingStoreBuffered
                    defer:YES];
     }
@@ -196,10 +192,10 @@ int PlatformMacOS::enterMessagePump()
     [window setContentView:__view];
     [window setDelegate:__view];
     [window makeKeyAndOrderFront:__view];
-    [__view release];
+    //[__view release];
 
     [app run];
-    [pool release];
+    //[pool release];
 
     return 0;
 }

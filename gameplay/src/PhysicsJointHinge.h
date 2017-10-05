@@ -201,7 +201,7 @@ public:
     /**
      * Sets the target velocity for the drive.
      *
-     * @param velocity The target velocity for the drive.
+     * @param targetVelocity The target velocity for the drive.
      */
     void setDriveTargetVelocity(float targetVelocity);
 

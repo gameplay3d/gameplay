@@ -77,10 +77,6 @@ macx {
     QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w -arch x86_64
     QMAKE_INFO_PLIST = gameplay-app.plist
     ICON = gameplay-app.icns
-}
-
-macx
-{
     res.files = res
     res.path = Contents/Resources
     QMAKE_BUNDLE_DATA += res

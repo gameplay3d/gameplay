@@ -123,7 +123,7 @@ public:
 	/**
 	 * Destroy a command pool.
 	 *
-	 * @return The created command list for processing gpu commands.
+     * @param pool The command pool to detroy.
 	 */
 	virtual void destroyCommandPool(std::shared_ptr<CommandPool> pool) = 0;
 
@@ -142,8 +142,7 @@ public:
 	 * @param pool The command pool this list is created from.
 	 * @param secondary true if this is a secondary command list with lower processing priority, false if primary.
 	 * @param count The number of command list to be created.
-	 * @param The vector of command list to be added to.
-	 * @return The created commandlist.
+	 * @param out The vector of command lists to be added into.
 	 */
 	virtual void createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
 									std::vector<std::shared_ptr<CommandList>> out) = 0;
@@ -157,7 +156,7 @@ public:
 	/**
 	 * Destroys the command lists.
 	 *
-	 * @param commandList The command lists to be destroyed.
+	 * @param commandLists The vector of command lists to be destroyed.
 	 */
 	virtual void destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists) = 0;
 

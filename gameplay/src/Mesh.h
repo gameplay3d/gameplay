@@ -30,7 +30,7 @@ public:
 	 * Loads a mesh using data from any supported common interchange format:
 	 * http://assimp.sourceforge.net/main_features_formats.html
 	 *
-	 * @return Loaded mesh.
+	 * @param url The url of the mesh file to load from.
 	 */
 	void load(const std::string& url);
 	
