@@ -204,13 +204,14 @@ macx {
     HEADERS += src/mtl/BufferMTL.h
     HEADERS += src/mtl/CommandListMTL.h
     HEADERS += src/mtl/CommandPoolMTL.h
+    INCLUDEPATH += src/mtl
     QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w -arch x86_64
+    LIBS += -F/System/Library/Frameworks -framework GameController
+    LIBS += -F/System/Library/Frameworks -framework GameKit
     LIBS += -F/System/Library/Frameworks -framework Metal
     LIBS += -F/System/Library/Frameworks -framework MetalKit
-    LIBS += -F/System/Library/Frameworks -framework GameKit
     LIBS += -F/System/Library/Frameworks -framework IOKit
     LIBS += -F/System/Library/Frameworks -framework OpenAL
-    LIBS += -F/System/Library/Frameworks -framework QuartzCore
     LIBS += -F/System/Library/Frameworks -framework Cocoa
     LIBS += -F/System/Library/Frameworks -framework Foundation
 }

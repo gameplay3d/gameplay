@@ -65,9 +65,9 @@ public:
         Vector3 getCenter() const;
 
         /**
-         * Sets the center of the box.
+         * Sets the extents of the box.
          * 
-         * @param center The center of the box.
+         * @param extents The extents of the box.
          */
         void setExtents(const Vector3& extents);
 

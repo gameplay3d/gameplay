@@ -92,14 +92,14 @@ public:
      *
      * @return The game window width.
      */
-	int getWidth() const;
+	size_t getWidth() const;
 
     /**
      * Gets the game window height.
      *
      * @return The game window height.
      */
-	int getHeight() const;
+	size_t getHeight() const;
 
     /**
      * Gets the aspect ratio of the window (width / height).
@@ -219,19 +219,19 @@ public:
      * @param width The new game window width.
      * @param height The new game window height.
      */
-    virtual void onResize(int width, int height);
+    virtual void onResize(size_t width, size_t height);
 
     /**
      * Event occurs every frame before the scene is updated.
 	 *
-	 * @param elapsedTime
+	 * @param elapsedTime The time elapsed (in seconds) since the last onUpdate call.
      */
     virtual void onUpdate(float elapsedTime);
 
 	/**
 	 * Event occurs every frame before the scene is rendered.
 	 *
-	 * @param elapsedTime
+	 * @param elapsedTime The time elapsed (in seconds) since the last onRender call.
 	 */
 	virtual void onRender(float elapsedTime);
     

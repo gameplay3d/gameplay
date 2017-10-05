@@ -126,7 +126,7 @@ public:
     /**
      * Compares two vertex formats for equality.
      *
-     * @param f The vertex format to compare.
+     * @param format The vertex format to compare.
      * @return true if the elements in this VertexFormat matches the specified one, false otherwise.
      */
     bool operator == (const VertexFormat& format) const;
@@ -134,7 +134,7 @@ public:
     /**
      * Compares to vertex formats for inequality.
      *
-     * @param f The vertex format to compare.
+     * @param format The vertex format to compare.
      * @return true if the elements in this VertexFormat are not equal to the specified one, false otherwise.
      */
     bool operator != (const VertexFormat& format) const;

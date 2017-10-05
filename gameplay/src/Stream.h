@@ -17,7 +17,7 @@ public:
 	 *
 	 * The stream will be closed when it is destroyed.
      */
-    ~Stream() { };
+    virtual ~Stream() { };
 
     /**
      * Returns true if this stream can perform read operations.

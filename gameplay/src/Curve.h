@@ -316,7 +316,7 @@ private:
     /**
      * Gets the InterpolationType value for the given string ID
      *
-     * @param interpolationId The string representation of the InterpolationType
+     * @param interpolationStr The string representation of the InterpolationType
      * @return the InterpolationType value; -1 if the string does not represent an InterpolationType.
      */
     static Interpolation getInterpolation(const std::string& interpolationStr);

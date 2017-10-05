@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     QCoreApplication::setApplicationName("GamePlay");
     QCoreApplication::setApplicationVersion("4.0.0");
 
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
 
     QApplication app(argc, argv);
     app.setStyle(QStyleFactory::create("Fusion"));

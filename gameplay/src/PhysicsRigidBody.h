@@ -80,7 +80,7 @@ public:
     /**
      * Sets the rigid body's amount of air resistance when rotating from torque.
      *
-     * @param drag The rigid body's amount of air resistance when rotating from torque.
+     * @param angularVelocity The rigid body's amount of air resistance when rotating from torque.
      */
     void setAngularVelocity(float angularVelocity) const;
 
@@ -108,7 +108,7 @@ public:
     /**
      * Sets the rigid body's amount of air resistance when rotating from torque.
      *
-     * @param drag The rigid body's amount of air resistance when rotating from torque.
+     * @param angularDrag The rigid body's amount of air resistance when rotating from torque.
      */
     void setAngularDrag(float angularDrag) const;
 
@@ -122,7 +122,7 @@ public:
     /**
      * Sets whether the rigid body is affected by gravity.
      *
-     * @return true if the rigid body is affected by gravity, false if not.
+     * @param gravityEnabled true if the rigid body is affected by gravity, false if not.
      */
     void setGravityEnabled(bool gravityEnabled);
 
@@ -136,7 +136,7 @@ public:
     /**
      * Sets whether physics affects the rigidbody.
      *
-     * @return true if the rigid body is kinematic, false if not.
+     * @param kinematic true if the rigid body is kinematic, false if not.
      */
     void setKinematic(bool kinematic);
 

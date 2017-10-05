@@ -92,7 +92,7 @@ public:
      * 
      * @param torque The torque needed to break the joint.
      */
-    void setBreakingTorque(float force);
+    void setBreakingTorque(float torque);
 
     /**
      * Sets the anchor position of the joint around which motion is constraint.

@@ -105,22 +105,22 @@ linux {
 }
 
 macx {
-    QMAKE_CXXFLAGS += -x c++ -stdlib=libc++ -w -arch x86_64
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
     CONFIG(release, debug|release):LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
+    CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
     LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
-    LIBS += -F/System/Library/Frameworks -framework GameKit
+    LIBS += -F/System/Library/Frameworks -framework Metal
+    LIBS += -F/System/Library/Frameworks -framework MetalKit
+    LIBS += -F/System/Library/Frameworks -framework GameKit 
     LIBS += -F/System/Library/Frameworks -framework IOKit
-    LIBS += -F/System/Library/Frameworks -framework QuartzCore
     LIBS += -F/System/Library/Frameworks -framework OpenAL
+    LIBS += -F/System/Library/Frameworks -framework QuartzCore
     LIBS += -F/System/Library/Frameworks -framework Cocoa
     LIBS += -F/System/Library/Frameworks -framework Foundation
+    QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w -arch x86_64
     QMAKE_INFO_PLIST = gameplay-editor.plist
     ICON = gameplay-editor.icns
-}
-
-macx
-{
     res.files = res
     res.path = Contents/Resources
     QMAKE_BUNDLE_DATA += res

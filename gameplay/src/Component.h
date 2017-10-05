@@ -76,7 +76,7 @@ public:
     /**
      * Sets if the component as enabled.
      *
-     * @param  true if the component is active, false if not active.
+     * @param enabled true if the component is active, false if not active.
      */
     void setEnabled(bool enabled);
 

@@ -90,7 +90,7 @@ public:
      * A value from 0.0 - 1.0. A value of 0.0 will not bound. A value of 1.0 will
      * bounce with no loss of energy.
      *
-     * @param bounciness How bouncy the surface is.
+     * @param bounce How bouncy the surface is.
      */
     void setBounce(float bounce);
 

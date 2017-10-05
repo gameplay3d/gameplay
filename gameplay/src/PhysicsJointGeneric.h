@@ -180,7 +180,7 @@ public:
     /**
      * Sets the twist bounce limit for the joint. 
      *
-     * @param extent The twist bounce limit for the joint. 
+     * @param bounce The twist bounce limit for the joint.
      */
     void setTwistLimitBounce(float bounce);
 
@@ -251,7 +251,7 @@ public:
     /**
      * Sets the swing bounce limit for the joint. 
      *
-     * @param extent The swing bounce limit for the joint. 
+     * @param bounce The swing bounce limit for the joint. 
      */
     void setSwingLimitBounce(float bounce);
 

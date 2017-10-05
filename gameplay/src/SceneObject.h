@@ -83,7 +83,7 @@ public:
 	 *
      * An object may be disabled due to parent disabled state in hierarchy.
 	 * 
-     * @param  true if the object is active, false if not active.
+     * @param enabled true if the object is active, false if not active.
 	 * @see isEnabledInHierarchy to check if the object is actually active in scene.
      */
 	void setEnabled(bool enabled);
@@ -371,14 +371,15 @@ public:
     /**
      * Gets a componenent from the object for the class type.
      *
-     * @return The components.
+     * @param typeId The typeid of the components to be searched for.
+     * @param components The vector of components retrived.
      */
     void getComponents(Component::TypeId typeId, std::vector<std::shared_ptr<Component>>& components);
 
     /**
      * Gets all the componenents from the object.
      *
-     * @return The components.
+     * @param components The vector of components retrieived.
      */
     void getComponents(std::vector<std::shared_ptr<Component>>& components);
 

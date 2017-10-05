@@ -9,7 +9,6 @@
 namespace gameplay
 {
 
-    
 GraphicsMTL::GraphicsMTL() :
     _initialized(false),
     _resized(false),
@@ -17,7 +16,6 @@ GraphicsMTL::GraphicsMTL() :
     _height(0),
     _view(nullptr),
     _device(nullptr)
-
 {
 }
 
@@ -27,8 +25,8 @@ GraphicsMTL::~GraphicsMTL()
 
 void GraphicsMTL::onInitialize(unsigned long window, unsigned long connection)
 {
-    _view = (MTKView*)window;
-    _device = (id<MTLDevice>)connection;
+    _view = (__bridge MTKView*)((void*)window);
+    _device = _view.device;
 
     id<CAMetalDrawable> drawable = _view.currentDrawable;
     id<MTLTexture> texture = drawable.texture;
@@ -47,7 +45,6 @@ void GraphicsMTL::onInitialize(unsigned long window, unsigned long connection)
     [commandBuffer presentDrawable:drawable];
     [commandBuffer commit];
 
-    [commandQueue release];
     _initialized = true;
 }
 

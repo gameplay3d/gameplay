@@ -304,7 +304,7 @@ public:
     /**
      * Gets the euler angles from the quaterion rotation.
      *
-     * @return The The euler angles (in degrees).
+     * @param eulerAngles The The euler angles (in degrees).
      */
     void toEulerAngles(Vector3* eulerAngles) const;
 

@@ -43,6 +43,10 @@ std::shared_ptr<Image> Image::create(size_t width, size_t height, Image::Format 
     case Image::FORMAT_RGBA:
         image->_stride = 4;
         break;
+    case Image::FORMAT_UNDEFINED:
+        GP_WARN("Image format unsupported.");
+        return nullptr;
+        break;
     }
     size_t pixelDataSize = width * height * image->_stride;
     image->_pixelData.resize(pixelDataSize);

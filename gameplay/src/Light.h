@@ -139,7 +139,7 @@ public:
     /**
      * Sets the lighting to be applied.
      *
-     * @param mode The lighting to be applied.
+     * @param lighting The lighting to be applied.
      */
     void setLighting(Light::Lighting lighting);
 
