@@ -128,26 +128,26 @@ public:
     /**
      * @see Graphics::createTexture1d
      */
-    std::shared_ptr<Texture> createTexture1d(size_t width, 
-                                            Texture::Usage usage, 
-                                            Texture::PixelFormat pixelFormat, 
-                                            Texture::SampleCount sampleCount, 
-                                            bool hostVisible);
+    std::shared_ptr<Texture> createTexture1d(size_t width,
+                                             Format pixelFormat,
+                                             Texture::Usage usage,
+                                             Texture::SampleCount sampleCount,
+                                             bool hostVisible);
     /**
      * @see Graphics::createTexture2d
      */
     std::shared_ptr<Texture> createTexture2d(size_t width, size_t height, size_t mipLevels,
-                                             Texture::Usage usage, 
-                                             Texture::PixelFormat pixelFormat, 
-                                             Texture::SampleCount sampleCount, 
+                                             Format pixelFormat,
+                                             Texture::Usage usage,
+                                             Texture::SampleCount sampleCount,
                                              bool hostVisible);
     /**
      * @see Graphics::createTexture3d
      */
-    std::shared_ptr<Texture> createTexture3d(size_t width, size_t height, size_t depth, 
-                                             Texture::Usage usage, 
-                                             Texture::PixelFormat pixelFormat, 
-                                             Texture::SampleCount sampleCount,  
+    std::shared_ptr<Texture> createTexture3d(size_t width, size_t height, size_t depth,
+                                             Format pixelFormat,
+                                             Texture::Usage usage,
+                                             Texture::SampleCount sampleCount,
                                              bool hostVisible);
     /**
      * @see Graphics::destroyTexture

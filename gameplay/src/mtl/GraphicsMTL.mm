@@ -116,13 +116,13 @@ void GraphicsMTL::present()
 {
 }
 
-std::shared_ptr<Buffer> GraphicsMTL::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount,
+std::shared_ptr<Buffer> GraphicsMTL::createVertexBuffer(size_t size, size_t vertexStride,
                                                         bool hostVisible)
 {
     return nullptr;
 }
     
-std::shared_ptr<Buffer> GraphicsMTL::createIndexBuffer(IndexFormat indexFormat, size_t indexCount,
+std::shared_ptr<Buffer> GraphicsMTL::createIndexBuffer(size_t size, IndexFormat indexFormat,
                                                        bool hostVisible)
 {
     return nullptr;
@@ -137,27 +137,27 @@ void GraphicsMTL::destroyBuffer(std::shared_ptr<Buffer> buffer)
 {
 }
 
-std::shared_ptr<Texture> GraphicsMTL::createTexture1d(size_t width, 
-                                                     Texture::Usage usage, 
-                                                     Texture::PixelFormat pixelFormat, 
-                                                     Texture::SampleCount sampleCount, 
-                                                     bool hostVisible)
+std::shared_ptr<Texture> GraphicsMTL::createTexture1d(size_t width,
+                                                      Format pixelFormat,
+                                                      Texture::Usage usage,
+                                                      Texture::SampleCount sampleCount,
+                                                      bool hostVisible)
 {
     return nullptr;
 }
 
 std::shared_ptr<Texture> GraphicsMTL::createTexture2d(size_t width, size_t height, size_t mipLevels,
-                                                      Texture::Usage usage, 
-                                                      Texture::PixelFormat pixelFormat, 
+                                                      Format pixelFormat,
+                                                      Texture::Usage usage,
                                                       Texture::SampleCount sampleCount, 
                                                       bool hostVisible)
 {
     return nullptr;
 }
 
-std::shared_ptr<Texture> GraphicsMTL::createTexture3d(size_t width, size_t height, size_t depth, 
-                                                      Texture::Usage usage, 
-                                                      Texture::PixelFormat pixelFormat, 
+std::shared_ptr<Texture> GraphicsMTL::createTexture3d(size_t width, size_t height, size_t depth,
+                                                      Format pixelFormat,
+                                                      Texture::Usage usage,
                                                       Texture::SampleCount sampleCount,  
                                                       bool hostVisible)
 {
