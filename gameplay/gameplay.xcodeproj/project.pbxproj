@@ -19,7 +19,6 @@
 		426A99A01F85D16700E89904 /* AudioListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A991F1F85D15900E89904 /* AudioListener.cpp */; };
 		426A99A11F85D16700E89904 /* PhysicsJointHinge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99201F85D15900E89904 /* PhysicsJointHinge.cpp */; };
 		426A99A21F85D16700E89904 /* Heightfield.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99211F85D15900E89904 /* Heightfield.h */; };
-		426A99A41F85D16700E89904 /* VertexFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99231F85D15900E89904 /* VertexFormat.h */; };
 		426A99A51F85D16700E89904 /* Physics.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99241F85D15900E89904 /* Physics.h */; };
 		426A99A61F85D16700E89904 /* SerializerBinary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99251F85D15900E89904 /* SerializerBinary.cpp */; };
 		426A99A71F85D16700E89904 /* CommandList.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99261F85D15900E89904 /* CommandList.h */; };
@@ -108,7 +107,6 @@
 		426A99FC1F85D16700E89904 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A997C1F85D16100E89904 /* Game.cpp */; };
 		426A99FD1F85D16700E89904 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A997D1F85D16100E89904 /* Matrix.cpp */; };
 		426A99FE1F85D16700E89904 /* Vector2.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A997E1F85D16100E89904 /* Vector2.h */; };
-		426A99FF1F85D16700E89904 /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A997F1F85D16200E89904 /* VertexFormat.cpp */; };
 		426A9A001F85D16700E89904 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99801F85D16200E89904 /* Graphics.cpp */; };
 		426A9A011F85D16700E89904 /* Base.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99811F85D16200E89904 /* Base.h */; };
 		426A9A021F85D16700E89904 /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99821F85D16300E89904 /* Path.cpp */; };
@@ -139,6 +137,12 @@
 		426A9A5E1F85E81B00E89904 /* GraphicsMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A9A561F85E81A00E89904 /* GraphicsMTL.h */; };
 		426A9A5F1F85E81B00E89904 /* GraphicsMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 426A9A571F85E81A00E89904 /* GraphicsMTL.mm */; };
 		426A9A601F85E81B00E89904 /* CommandPoolMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 426A9A581F85E81A00E89904 /* CommandPoolMTL.mm */; };
+		42B71C2D1F87A58200D21066 /* TextureMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42B71C2B1F87A58100D21066 /* TextureMTL.mm */; };
+		42B71C2E1F87A58200D21066 /* TextureMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B71C2C1F87A58200D21066 /* TextureMTL.h */; };
+		42B71C301F87A5A700D21066 /* ClearValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B71C2F1F87A5A700D21066 /* ClearValue.h */; };
+		42B71C321F87A5BA00D21066 /* Format.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B71C311F87A5BA00D21066 /* Format.h */; };
+		42B71C351F87A5E800D21066 /* VertexLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B71C331F87A5E700D21066 /* VertexLayout.cpp */; };
+		42B71C361F87A5E800D21066 /* VertexLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B71C341F87A5E700D21066 /* VertexLayout.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -155,7 +159,6 @@
 		426A991F1F85D15900E89904 /* AudioListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioListener.cpp; path = src/AudioListener.cpp; sourceTree = SOURCE_ROOT; };
 		426A99201F85D15900E89904 /* PhysicsJointHinge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsJointHinge.cpp; path = src/PhysicsJointHinge.cpp; sourceTree = SOURCE_ROOT; };
 		426A99211F85D15900E89904 /* Heightfield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Heightfield.h; path = src/Heightfield.h; sourceTree = SOURCE_ROOT; };
-		426A99231F85D15900E89904 /* VertexFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexFormat.h; path = src/VertexFormat.h; sourceTree = SOURCE_ROOT; };
 		426A99241F85D15900E89904 /* Physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Physics.h; path = src/Physics.h; sourceTree = SOURCE_ROOT; };
 		426A99251F85D15900E89904 /* SerializerBinary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SerializerBinary.cpp; path = src/SerializerBinary.cpp; sourceTree = SOURCE_ROOT; };
 		426A99261F85D15900E89904 /* CommandList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandList.h; path = src/CommandList.h; sourceTree = SOURCE_ROOT; };
@@ -244,7 +247,6 @@
 		426A997C1F85D16100E89904 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = src/Game.cpp; sourceTree = SOURCE_ROOT; };
 		426A997D1F85D16100E89904 /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix.cpp; path = src/Matrix.cpp; sourceTree = SOURCE_ROOT; };
 		426A997E1F85D16100E89904 /* Vector2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector2.h; path = src/Vector2.h; sourceTree = SOURCE_ROOT; };
-		426A997F1F85D16200E89904 /* VertexFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexFormat.cpp; path = src/VertexFormat.cpp; sourceTree = SOURCE_ROOT; };
 		426A99801F85D16200E89904 /* Graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Graphics.cpp; path = src/Graphics.cpp; sourceTree = SOURCE_ROOT; };
 		426A99811F85D16200E89904 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base.h; path = src/Base.h; sourceTree = SOURCE_ROOT; };
 		426A99821F85D16300E89904 /* Path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Path.cpp; path = src/Path.cpp; sourceTree = SOURCE_ROOT; };
@@ -283,6 +285,12 @@
 		426A9A561F85E81A00E89904 /* GraphicsMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicsMTL.h; path = src/mtl/GraphicsMTL.h; sourceTree = SOURCE_ROOT; };
 		426A9A571F85E81A00E89904 /* GraphicsMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GraphicsMTL.mm; path = src/mtl/GraphicsMTL.mm; sourceTree = SOURCE_ROOT; };
 		426A9A581F85E81A00E89904 /* CommandPoolMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CommandPoolMTL.mm; path = src/mtl/CommandPoolMTL.mm; sourceTree = SOURCE_ROOT; };
+		42B71C2B1F87A58100D21066 /* TextureMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextureMTL.mm; path = src/mtl/TextureMTL.mm; sourceTree = SOURCE_ROOT; };
+		42B71C2C1F87A58200D21066 /* TextureMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMTL.h; path = src/mtl/TextureMTL.h; sourceTree = SOURCE_ROOT; };
+		42B71C2F1F87A5A700D21066 /* ClearValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClearValue.h; path = src/ClearValue.h; sourceTree = SOURCE_ROOT; };
+		42B71C311F87A5BA00D21066 /* Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Format.h; path = src/Format.h; sourceTree = SOURCE_ROOT; };
+		42B71C331F87A5E700D21066 /* VertexLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexLayout.cpp; path = src/VertexLayout.cpp; sourceTree = SOURCE_ROOT; };
+		42B71C341F87A5E700D21066 /* VertexLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexLayout.h; path = src/VertexLayout.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -337,6 +345,7 @@
 				426A9A531F85E81A00E89904 /* BufferMTL.mm */,
 				426A991E1F85D15800E89904 /* Camera.cpp */,
 				426A99721F85D16000E89904 /* Camera.h */,
+				42B71C2F1F87A5A700D21066 /* ClearValue.h */,
 				426A998A1F85D16500E89904 /* CommandList.cpp */,
 				426A99261F85D15900E89904 /* CommandList.h */,
 				426A9A521F85E81A00E89904 /* CommandListMTL.h */,
@@ -351,6 +360,7 @@
 				426A99711F85D16000E89904 /* Curve.h */,
 				426A99851F85D16300E89904 /* FileSystem.cpp */,
 				426A99781F85D16100E89904 /* FileSystem.h */,
+				42B71C311F87A5BA00D21066 /* Format.h */,
 				426A99471F85D15C00E89904 /* Frustum.cpp */,
 				426A992A1F85D15900E89904 /* Frustum.h */,
 				426A997C1F85D16100E89904 /* Game.cpp */,
@@ -438,6 +448,8 @@
 				426A996E1F85D16000E89904 /* Text.h */,
 				426A99741F85D16000E89904 /* Texture.cpp */,
 				426A99661F85D15F00E89904 /* Texture.h */,
+				42B71C2C1F87A58200D21066 /* TextureMTL.h */,
+				42B71C2B1F87A58100D21066 /* TextureMTL.mm */,
 				426A991D1F85D15800E89904 /* Tileset.cpp */,
 				426A99391F85D15B00E89904 /* Tileset.h */,
 				426A99631F85D15F00E89904 /* Vector2.cpp */,
@@ -446,8 +458,8 @@
 				426A991B1F85D15800E89904 /* Vector3.h */,
 				426A992B1F85D15900E89904 /* Vector4.cpp */,
 				426A994C1F85D15D00E89904 /* Vector4.h */,
-				426A997F1F85D16200E89904 /* VertexFormat.cpp */,
-				426A99231F85D15900E89904 /* VertexFormat.h */,
+				42B71C331F87A5E700D21066 /* VertexLayout.cpp */,
+				42B71C341F87A5E700D21066 /* VertexLayout.h */,
 			);
 			name = src;
 			path = "New Group";
@@ -479,8 +491,10 @@
 				426A99C91F85D16700E89904 /* PhysicsCharacter.h in Headers */,
 				426A99FE1F85D16700E89904 /* Vector2.h in Headers */,
 				426A99DC1F85D16700E89904 /* Input.h in Headers */,
+				42B71C301F87A5A700D21066 /* ClearValue.h in Headers */,
 				426A99BA1F85D16700E89904 /* Tileset.h in Headers */,
 				426A99AA1F85D16700E89904 /* PhysicsJointFixed.h in Headers */,
+				42B71C361F87A5E800D21066 /* VertexLayout.h in Headers */,
 				426A9A5A1F85E81B00E89904 /* CommandListMTL.h in Headers */,
 				426A99D31F85D16700E89904 /* SceneObject.h in Headers */,
 				426A99FB1F85D16700E89904 /* MathUtil.h in Headers */,
@@ -495,6 +509,7 @@
 				426A99ED1F85D16700E89904 /* Script.h in Headers */,
 				426A99C31F85D16700E89904 /* PhysicsJointSpring.h in Headers */,
 				426A99EC1F85D16700E89904 /* AudioClip.h in Headers */,
+				42B71C321F87A5BA00D21066 /* Format.h in Headers */,
 				426A99AB1F85D16700E89904 /* Frustum.h in Headers */,
 				426A99DD1F85D16700E89904 /* Mesh.h in Headers */,
 				426A99F71F85D16700E89904 /* Platform.h in Headers */,
@@ -519,6 +534,7 @@
 				426A9A041F85D16700E89904 /* PhysicsJointGeneric.h in Headers */,
 				426A99B21F85D16700E89904 /* SerializerJson.h in Headers */,
 				426A99E41F85D16700E89904 /* Material.h in Headers */,
+				42B71C2E1F87A58200D21066 /* TextureMTL.h in Headers */,
 				426A99BE1F85D16700E89904 /* Game.h in Headers */,
 				426A99AE1F85D16700E89904 /* PhysicsMaterial.h in Headers */,
 				426A99E01F85D16700E89904 /* Ray.h in Headers */,
@@ -536,7 +552,6 @@
 				426A99B51F85D16700E89904 /* Graphics.h in Headers */,
 				426A99D21F85D16700E89904 /* Matrix.h in Headers */,
 				426A99C61F85D16700E89904 /* Light.h in Headers */,
-				426A99A41F85D16700E89904 /* VertexFormat.h in Headers */,
 				426A99E91F85D16700E89904 /* Component.h in Headers */,
 				426A99A71F85D16700E89904 /* CommandList.h in Headers */,
 				426A99F81F85D16700E89904 /* FileSystem.h in Headers */,
@@ -608,7 +623,6 @@
 				426A99CE1F85D16700E89904 /* Buffer.cpp in Sources */,
 				426A9A051F85D16700E89904 /* FileSystem.cpp in Sources */,
 				426A9A091F85D16700E89904 /* Quaternion.cpp in Sources */,
-				426A99FF1F85D16700E89904 /* VertexFormat.cpp in Sources */,
 				426A99FD1F85D16700E89904 /* Matrix.cpp in Sources */,
 				426A9A5C1F85E81B00E89904 /* CommandListMTL.mm in Sources */,
 				426A9A5B1F85E81B00E89904 /* BufferMTL.mm in Sources */,
@@ -651,10 +665,12 @@
 				426A99B01F85D16700E89904 /* Input.cpp in Sources */,
 				426A99EF1F85D16700E89904 /* Heightfield.cpp in Sources */,
 				426A99A01F85D16700E89904 /* AudioListener.cpp in Sources */,
+				42B71C351F87A5E800D21066 /* VertexLayout.cpp in Sources */,
 				426A9A5F1F85E81B00E89904 /* GraphicsMTL.mm in Sources */,
 				426A9A161F85D16700E89904 /* SerializerJson.cpp in Sources */,
 				426A99E31F85D16700E89904 /* Vector2.cpp in Sources */,
 				426A999F1F85D16700E89904 /* Camera.cpp in Sources */,
+				42B71C2D1F87A58200D21066 /* TextureMTL.mm in Sources */,
 				426A99B31F85D16700E89904 /* Text.cpp in Sources */,
 				426A99CC1F85D16700E89904 /* PhysicsJoint.cpp in Sources */,
 				426A99971F85D16700E89904 /* PhysicsJointFixed.cpp in Sources */,
