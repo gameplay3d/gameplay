@@ -1,9 +1,10 @@
 #include "Base.h"
 #include "Game.h"
 #include "GraphicsVK.h"
-#include "BufferVK.h"
 #include "CommandPoolVK.h"
 #include "CommandListVK.h"
+#include "BufferVK.h"
+#include "TextureVK.h"
 
 namespace gameplay
 {
@@ -197,91 +198,6 @@ int GraphicsVK::getHeight()
     return _height;
 }
 
-std::shared_ptr<Buffer> GraphicsVK::createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible)
-{
-	if (usage == Buffer::USAGE_UNIFORM) 
-		size = GP_MATH_ROUNDUP(size, 256);
-	
-	VkBufferCreateInfo bufferCreateInfo = {};
-    bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferCreateInfo.pNext = nullptr;
-    bufferCreateInfo.flags = 0;
-    bufferCreateInfo.size = size;
-    bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    bufferCreateInfo.queueFamilyIndexCount = 0;
-    bufferCreateInfo.pQueueFamilyIndices = nullptr;
-	bufferCreateInfo.usage = 0;
-	switch (usage) 
-	{
-	case Buffer::USAGE_VERTEX: 
-		bufferCreateInfo.usage |= VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-		break;
-    case Buffer::USAGE_INDEX: 
-        bufferCreateInfo.usage |= VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
-		break;
-	case Buffer::USAGE_UNIFORM: 
-        bufferCreateInfo.usage |= VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
-		break;
-    }
-	VkBuffer bufferVK;
-	VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &bufferVK));
-
-	VkMemoryRequirements memReqs = {};
-	vkGetBufferMemoryRequirements(_device, bufferVK, &memReqs);
-	VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    if (hostVisible)
-        memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-	uint32_t memoryTypeIndex = UINT32_MAX;
-	if (!getMemoryTypeFromProperties(memReqs.memoryTypeBits, memFlags, &memoryTypeIndex))
-		GP_ERROR("Failed to find compatible memory for buffer.");
-	
-	VkMemoryAllocateInfo  allocInfo;
-    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.pNext = nullptr;
-    allocInfo.allocationSize = memReqs.size;
-    allocInfo.memoryTypeIndex = memoryTypeIndex;
-	VkDeviceMemory deviceMemoryVK;
-    VK_CHECK_RESULT(vkAllocateMemory(_device, &allocInfo, nullptr, &deviceMemoryVK));
-	VK_CHECK_RESULT(vkBindBufferMemory(_device, bufferVK, deviceMemoryVK, 0));
-
-	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_VERTEX, size, stride, hostVisible, _device, bufferVK, deviceMemoryVK);
-	
-	 if (hostVisible) 
-		VK_CHECK_RESULT(vkMapMemory(_device, buffer->_deviceMemory, 0, VK_WHOLE_SIZE, 0, &buffer->_hostMemory));
-
-	 buffer->_bufferView.buffer = bufferVK;
-	 buffer->_bufferView.offset = 0;
-	 buffer->_bufferView.range = VK_WHOLE_SIZE;
-
-	return std::static_pointer_cast<Buffer>(buffer);
-}
-
-std::shared_ptr<Buffer> GraphicsVK::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible)
-{
-	size_t stride = vertexFormat.getStride();
-	size_t size = vertexCount * stride;
-	return createBuffer(Buffer::USAGE_VERTEX, size, stride, hostVisible);
-}
-
-std::shared_ptr<Buffer> GraphicsVK::createIndexBuffer(IndexFormat indexFormat, size_t indexCount, bool hostVisible)
-{
-	size_t stride = (indexFormat == INDEX_FORMAT_UNSIGNED_INT) ? sizeof(unsigned int) : sizeof(unsigned short);
-	size_t size = indexCount * stride;
-	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible);
-}
-
-std::shared_ptr<Buffer> GraphicsVK::createUniformBuffer(size_t size, bool hostVisible)
-{
-	return createBuffer(Buffer::USAGE_UNIFORM, size, size, hostVisible);
-}
-
-void GraphicsVK::destroyBuffer(std::shared_ptr<Buffer> buffer)
-{
-	std::shared_ptr<BufferVK> bufferVK = std::static_pointer_cast<BufferVK>(buffer);
-	vkDestroyBuffer(_device, bufferVK->_buffer, nullptr);
-	bufferVK.reset();
-}
-
 std::shared_ptr<CommandPool> GraphicsVK::createCommandPool(bool transient)
 {
 	VkCommandPool poolVK = nullptr;
@@ -366,6 +282,456 @@ void GraphicsVK::flushCommands()
 
 void GraphicsVK::present()
 {
+}
+
+std::shared_ptr<Buffer> GraphicsVK::createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible)
+{
+	if (usage == Buffer::USAGE_UNIFORM) 
+		size = GP_MATH_ROUNDUP(size, 256);
+	
+	VkBufferCreateInfo bufferCreateInfo = {};
+    bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferCreateInfo.pNext = nullptr;
+    bufferCreateInfo.flags = 0;
+    bufferCreateInfo.size = size;
+    bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    bufferCreateInfo.queueFamilyIndexCount = 0;
+    bufferCreateInfo.pQueueFamilyIndices = nullptr;
+	bufferCreateInfo.usage = 0;
+	switch (usage) 
+	{
+	case Buffer::USAGE_VERTEX: 
+		bufferCreateInfo.usage |= VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+		break;
+    case Buffer::USAGE_INDEX: 
+        bufferCreateInfo.usage |= VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+		break;
+	case Buffer::USAGE_UNIFORM: 
+        bufferCreateInfo.usage |= VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+		break;
+    }
+	VkBuffer bufferVK = nullptr;
+	VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &bufferVK));
+
+	VkMemoryRequirements memReqs = {};
+	vkGetBufferMemoryRequirements(_device, bufferVK, &memReqs);
+	VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    if (hostVisible)
+        memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+	uint32_t memoryTypeIndex = UINT32_MAX;
+	if (!getMemoryTypeFromProperties(memReqs.memoryTypeBits, memFlags, &memoryTypeIndex))
+		GP_ERROR("Failed to find compatible memory for buffer.");
+	
+	VkMemoryAllocateInfo  allocInfo;
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.pNext = nullptr;
+    allocInfo.allocationSize = memReqs.size;
+    allocInfo.memoryTypeIndex = memoryTypeIndex;
+	VkDeviceMemory deviceMemoryVK;
+    VK_CHECK_RESULT(vkAllocateMemory(_device, &allocInfo, nullptr, &deviceMemoryVK));
+	VK_CHECK_RESULT(vkBindBufferMemory(_device, bufferVK, deviceMemoryVK, 0));
+
+	std::shared_ptr<BufferVK> buffer = std::make_shared<BufferVK>(Buffer::USAGE_VERTEX, size, stride, hostVisible, _device, bufferVK, deviceMemoryVK);
+	
+	 if (hostVisible) 
+		VK_CHECK_RESULT(vkMapMemory(_device, buffer->_deviceMemory, 0, VK_WHOLE_SIZE, 0, &buffer->_hostMemory));
+
+	 buffer->_bufferView.buffer = bufferVK;
+	 buffer->_bufferView.offset = 0;
+	 buffer->_bufferView.range = VK_WHOLE_SIZE;
+
+	return std::static_pointer_cast<Buffer>(buffer);
+}
+
+std::shared_ptr<Buffer> GraphicsVK::createVertexBuffer(size_t size, size_t vertexStride, bool hostVisible)
+{
+	return createBuffer(Buffer::USAGE_VERTEX, size, vertexStride, hostVisible);
+}
+
+std::shared_ptr<Buffer> GraphicsVK::createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible)
+{
+	size_t stride = (indexFormat == INDEX_FORMAT_UINT) ? sizeof(unsigned int) : sizeof(unsigned short);
+	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible);
+}
+
+std::shared_ptr<Buffer> GraphicsVK::createUniformBuffer(size_t size, bool hostVisible)
+{
+	return createBuffer(Buffer::USAGE_UNIFORM, size, size, hostVisible);
+}
+
+void GraphicsVK::destroyBuffer(std::shared_ptr<Buffer> buffer)
+{
+	std::shared_ptr<BufferVK> bufferVK = std::static_pointer_cast<BufferVK>(buffer);
+	vkDestroyBuffer(_device, bufferVK->_buffer, nullptr);
+	bufferVK.reset();
+}
+
+std::shared_ptr<Texture> GraphicsVK::createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels, 
+												   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, 
+												   bool hostVisible)
+{
+	VkImageType imageType = VK_IMAGE_TYPE_2D;
+	VkImageViewType imageViewType = VK_IMAGE_VIEW_TYPE_2D;
+    switch (type) 
+	{
+	case Texture::TYPE_1D:
+		imageType = VK_IMAGE_TYPE_1D;
+		imageViewType = VK_IMAGE_VIEW_TYPE_1D;
+		break;
+    case Texture::TYPE_2D: 
+		imageType = VK_IMAGE_TYPE_2D;
+		imageViewType = VK_IMAGE_VIEW_TYPE_2D;
+		break;
+    case Texture::TYPE_3D: 
+		imageType = VK_IMAGE_TYPE_3D; 
+		imageViewType = VK_IMAGE_VIEW_TYPE_3D;
+		break;    
+    }
+
+	VkFormat format = toFormat(pixelFormat);
+
+	VkImageCreateInfo imageCreateInfo = {};
+	imageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageCreateInfo.pNext = nullptr;
+    imageCreateInfo.flags = 0;
+    imageCreateInfo.imageType = imageType;
+    imageCreateInfo.format = format;
+    imageCreateInfo.extent.width = width;
+    imageCreateInfo.extent.height = height;
+    imageCreateInfo.extent.depth = depth;
+    imageCreateInfo.mipLevels = mipLevels;
+    imageCreateInfo.arrayLayers = 1;
+    imageCreateInfo.samples = toSamples(sampleCount);
+    imageCreateInfo.tiling = (hostVisible) ? VK_IMAGE_TILING_LINEAR : VK_IMAGE_TILING_OPTIMAL;
+    imageCreateInfo.usage = toImageUsageFlags(usage);
+    imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    imageCreateInfo.queueFamilyIndexCount = 0;
+    imageCreateInfo.pQueueFamilyIndices = nullptr;
+    imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    if (VK_IMAGE_USAGE_SAMPLED_BIT & imageCreateInfo.usage) 
+	{    
+        imageCreateInfo.usage |= (VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT);
+    }
+
+	VkFormatProperties formatProps = {};
+	vkGetPhysicalDeviceFormatProperties(_physicalDevice, imageCreateInfo.format, &formatProps);
+	VkFormatFeatureFlags formatFeatureFlags = toFormatFeatureFlags(imageCreateInfo.usage);
+
+	if (hostVisible) 
+	{
+        VkFormatFeatureFlags flags = formatProps.linearTilingFeatures & formatFeatureFlags;
+        assert((0 != flags) && "Format is not supported for host visible images");
+    }
+    else 
+	{
+        VkFormatFeatureFlags flags = formatProps.optimalTilingFeatures & formatFeatureFlags;
+        assert((0 != flags) && "Format is not supported for GPU local images (i.e. not host visible images)");
+    }
+
+	// Apply some bounds to the image
+	VkImageFormatProperties imageFormatProps = {};
+    VkResult vkResult = vkGetPhysicalDeviceImageFormatProperties(_physicalDevice, imageCreateInfo.format,
+															     imageCreateInfo.imageType, imageCreateInfo.tiling, 
+															     imageCreateInfo.usage, imageCreateInfo.flags, &imageFormatProps);
+    assert(VK_SUCCESS == vkResult);
+    if (imageCreateInfo.mipLevels > 1) 
+	{
+        mipLevels = GP_MATH_MIN(mipLevels, imageFormatProps.maxMipLevels);
+        imageCreateInfo.mipLevels = mipLevels;
+    }
+
+
+	// Create image
+	VkImage textureVK = nullptr;
+    VK_CHECK_RESULT(vkCreateImage(_device, &imageCreateInfo, nullptr, &textureVK));
+
+	// Find memory requirements
+	VkMemoryRequirements memReqs{};
+    vkGetImageMemoryRequirements(_device,textureVK, &memReqs);
+
+    VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    if (hostVisible) 
+	{
+        memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    }
+	
+	uint32_t memoryTypeIndex = UINT32_MAX;
+    bool found = getMemoryTypeFromProperties(memReqs.memoryTypeBits, memFlags, &memoryTypeIndex);
+    if (!found)
+		GP_ERROR("Failed to find compatible memory for texture.");
+
+	VkMemoryAllocateInfo allocInfo = {};
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.pNext = NULL;
+    allocInfo.allocationSize = memReqs.size;
+    allocInfo.memoryTypeIndex = memoryTypeIndex;
+	
+	VkDeviceMemory deviceMemoryVK;
+    VK_CHECK_RESULT(vkAllocateMemory(_device, &allocInfo, NULL, &deviceMemoryVK));        
+	VK_CHECK_RESULT(vkBindImageMemory(_device, textureVK, deviceMemoryVK, 0));
+
+	std::shared_ptr<TextureVK> texture = std::make_shared<TextureVK>(type, width, height, depth, mipLevels,
+																	pixelFormat, usage, sampleCount, hostVisible,
+																	_device, textureVK, deviceMemoryVK);
+
+	if (hostVisible) 
+		VK_CHECK_RESULT(vkMapMemory(_device, texture->_deviceMemory, 0, VK_WHOLE_SIZE, 0, &texture->_hostMemory));
+
+	// Create image view
+	VkImageViewCreateInfo imageViewCreateinfo = {};
+    imageViewCreateinfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    imageViewCreateinfo.pNext = nullptr;
+    imageViewCreateinfo.flags = 0;
+    imageViewCreateinfo.image = textureVK;
+    imageViewCreateinfo.viewType = imageViewType;
+    imageViewCreateinfo.format = format;
+    imageViewCreateinfo.components.r = VK_COMPONENT_SWIZZLE_R;
+    imageViewCreateinfo.components.g = VK_COMPONENT_SWIZZLE_G;
+    imageViewCreateinfo.components.b = VK_COMPONENT_SWIZZLE_B;
+    imageViewCreateinfo.components.a = VK_COMPONENT_SWIZZLE_A;
+    imageViewCreateinfo.subresourceRange.aspectMask = toImageAspectFlags(format);
+    imageViewCreateinfo.subresourceRange.baseMipLevel = 0;
+    imageViewCreateinfo.subresourceRange.levelCount = mipLevels;
+    imageViewCreateinfo.subresourceRange.baseArrayLayer = 0;
+    imageViewCreateinfo.subresourceRange.layerCount = 1;
+    VK_CHECK_RESULT(vkCreateImageView(_device, &imageViewCreateinfo, nullptr, &(texture->_imageView)));
+
+	texture->_imageAspectFlags = imageViewCreateinfo.subresourceRange.aspectMask;
+	texture->_textureView.imageView = texture->_imageView;
+    texture->_textureView.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+	return std::static_pointer_cast<Texture>(texture);
+}
+
+VkFormat GraphicsVK::toFormat(Format pixelFormat)
+{
+	VkFormat result = VK_FORMAT_UNDEFINED;	
+	switch (pixelFormat) 
+	{
+    case Format::FORMAT_R8_UNORM: 
+		result = VK_FORMAT_R8_UNORM; 
+		break;
+    case Format::FORMAT_R16_UNORM:
+		result = VK_FORMAT_R16_UNORM;
+		break;
+    case Format::FORMAT_R16_FLOAT:
+		result = VK_FORMAT_R16_SFLOAT;
+		break;
+    case Format::FORMAT_R32_UINT: 
+		result = VK_FORMAT_R32_UINT;
+		break;
+    case Format::FORMAT_R32_FLOAT:
+		result = VK_FORMAT_R32_SFLOAT;
+		break;        
+    case Format::FORMAT_R8G8_UNORM:
+		result = VK_FORMAT_R8G8_UNORM;
+		break;
+    case Format::FORMAT_R16G16_UNORM:
+		result = VK_FORMAT_R16G16_UNORM;
+		break;
+    case Format::FORMAT_R16G16_FLOAT:
+		result = VK_FORMAT_R16G16_SFLOAT;
+		break;
+    case Format::FORMAT_R32G32_UINT:
+		result = VK_FORMAT_R32G32_UINT;
+		break;
+    case Format::FORMAT_R32G32_FLOAT:
+		result = VK_FORMAT_R32G32_SFLOAT;
+		break;
+    case Format::FORMAT_R8G8B8_UNORM:
+		result = VK_FORMAT_R8G8B8_UNORM;
+		break;
+    case Format::FORMAT_R16G16B16_UNORM:
+		result = VK_FORMAT_R16G16B16_UNORM;
+		break;
+    case Format::FORMAT_R16G16B16_FLOAT:
+		result = VK_FORMAT_R16G16B16_SFLOAT;
+		break;
+    case Format::FORMAT_R32G32B32_UINT:
+		result = VK_FORMAT_R32G32B32_UINT;
+		break;
+    case Format::FORMAT_R32G32B32_FLOAT:
+		result = VK_FORMAT_R32G32B32_SFLOAT;
+		break;
+    case Format::FORMAT_B8G8R8A8_UNORM:
+		result = VK_FORMAT_B8G8R8A8_UNORM;
+		break;
+    case Format::FORMAT_R8G8B8A8_UNORM:
+		result = VK_FORMAT_R8G8B8A8_UNORM;
+		break;
+    case Format::FORMAT_R16G16B16A16_UNORM:
+		result = VK_FORMAT_R16G16B16A16_UNORM;
+		break;
+    case Format::FORMAT_R16G16B16A16_FLOAT:
+		result = VK_FORMAT_R16G16B16A16_SFLOAT;
+		break;
+    case Format::FORMAT_R32G32B32A32_UINT:
+		result = VK_FORMAT_R32G32B32A32_UINT;
+		break;
+    case Format::FORMAT_R32G32B32A32_FLOAT:
+		result = VK_FORMAT_R32G32B32A32_SFLOAT;
+		break;    
+    case Format::FORMAT_D16_UNORM:
+		result = VK_FORMAT_D16_UNORM;
+		break;
+    case Format::FORMAT_X8_D24_UNORM_PACK32:
+		result = VK_FORMAT_X8_D24_UNORM_PACK32;
+		break;
+    case Format::FORMAT_D32_FLOAT:
+		result = VK_FORMAT_D32_SFLOAT;
+		break;
+    case Format::FORMAT_S8_UINT:
+		result = VK_FORMAT_S8_UINT;
+		break;
+    case Format::FORMAT_D16_UNORM_S8_UINT:
+		result = VK_FORMAT_D16_UNORM_S8_UINT;
+		break;
+    case Format::FORMAT_D24_UNORM_S8_UINT:
+		result = VK_FORMAT_D24_UNORM_S8_UINT;
+		break;
+    case Format::FORMAT_D32_FLOAT_S8_UINT:
+		result = VK_FORMAT_D32_SFLOAT_S8_UINT;
+		break;
+    }
+    return result;
+}
+
+VkSampleCountFlagBits GraphicsVK::toSamples(Texture::SampleCount sampleCount)
+{
+	VkSampleCountFlagBits result = VK_SAMPLE_COUNT_1_BIT;
+    switch (sampleCount) 
+	{
+	case Texture:: SAMPLE_COUNT_1X:
+		result = VK_SAMPLE_COUNT_1_BIT;  
+			break;
+    case Texture:: SAMPLE_COUNT_2X:
+		result = VK_SAMPLE_COUNT_2_BIT;  
+		break;
+    case Texture:: SAMPLE_COUNT_4X:
+		result = VK_SAMPLE_COUNT_4_BIT;  
+		break;
+    case Texture:: SAMPLE_COUNT_8X:
+		result = VK_SAMPLE_COUNT_8_BIT;  
+		break;
+    case Texture:: SAMPLE_COUNT_16X:
+		result = VK_SAMPLE_COUNT_16_BIT; 
+		break;
+    }
+    return result;
+}
+
+VkImageUsageFlags GraphicsVK::toImageUsageFlags(Texture::Usage usage)
+{
+	 VkImageUsageFlags result = 0;
+    if (Texture::USAGE_TRANSFER_SRC == (usage & Texture::USAGE_TRANSFER_SRC))
+	{
+        result |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+    }
+    if (Texture::USAGE_TRANSFER_DST == (usage & Texture::USAGE_TRANSFER_DST))
+	{
+        result |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+    }
+    if (Texture::USAGE_SAMPLED_IMAGE == (usage & Texture::USAGE_SAMPLED_IMAGE))
+	{
+        result |= VK_IMAGE_USAGE_SAMPLED_BIT;
+    }
+    if (Texture::USAGE_STORAGE == (usage & Texture::USAGE_STORAGE))
+	{
+        result |= VK_IMAGE_USAGE_STORAGE_BIT;
+    }
+    if (Texture::USAGE_COLOR_ATTACHMENT == (usage & Texture::USAGE_COLOR_ATTACHMENT))
+	{
+        result |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    }
+    if (Texture::USAGE_DEPTH_STENCIL_ATTACHMENT == (usage & Texture::USAGE_DEPTH_STENCIL_ATTACHMENT))
+	{
+        result |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+    }
+    return result;
+}
+
+VkFormatFeatureFlags GraphicsVK::toFormatFeatureFlags(VkImageUsageFlags usage)
+{
+	VkFormatFeatureFlags result = (VkFormatFeatureFlags)0;
+    if (VK_IMAGE_USAGE_SAMPLED_BIT == (usage & VK_IMAGE_USAGE_SAMPLED_BIT)) 
+	{
+        result |= VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
+    }
+    if (VK_IMAGE_USAGE_STORAGE_BIT == (usage & VK_IMAGE_USAGE_STORAGE_BIT)) {
+        result |= VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT;
+    }
+    if (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT == (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)) {
+        result |= VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
+    }
+    if (VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT == (usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)) {
+        result |= VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
+    }
+    return result;
+}
+
+VkImageAspectFlags GraphicsVK::toImageAspectFlags(VkFormat format)
+{
+    VkImageAspectFlags result = 0;
+    switch (format) 
+	{        
+    case VK_FORMAT_D16_UNORM:
+    case VK_FORMAT_X8_D24_UNORM_PACK32:
+    case VK_FORMAT_D32_SFLOAT:
+        result = VK_IMAGE_ASPECT_DEPTH_BIT;
+        break;        
+    case VK_FORMAT_S8_UINT:
+        result = VK_IMAGE_ASPECT_STENCIL_BIT;
+        break;        
+    case VK_FORMAT_D16_UNORM_S8_UINT:
+    case VK_FORMAT_D24_UNORM_S8_UINT:
+    case VK_FORMAT_D32_SFLOAT_S8_UINT:
+        result = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+        break;
+    default:
+        result = VK_IMAGE_ASPECT_COLOR_BIT;
+        break;
+    }
+    return result;
+}
+
+std::shared_ptr<Texture> GraphicsVK::createTexture1d(size_t width, 
+													Format pixelFormat, 
+													Texture::Usage usage, 
+													Texture::SampleCount sampleCount, 
+													bool hostVisible)
+{
+	return createTexture(Texture::TYPE_1D, width, 1, 1, 1, pixelFormat, usage, sampleCount, hostVisible);
+}
+
+std::shared_ptr<Texture> GraphicsVK::createTexture2d(size_t width, size_t height, size_t mipLevels,
+													 Format pixelFormat,
+													 Texture::Usage usage,
+													 Texture::SampleCount sampleCount,
+													 bool hostVisible)
+{
+	return createTexture(Texture::TYPE_2D, width, height, 1, mipLevels, pixelFormat, usage, sampleCount, hostVisible);
+}
+
+std::shared_ptr<Texture> GraphicsVK::createTexture3d(size_t width, size_t height, size_t depth,
+													 Format pixelFormat,
+													 Texture::Usage usage,
+													 Texture::SampleCount sampleCount,
+													 bool hostVisible)
+{
+	return createTexture(Texture::TYPE_3D, width, height, depth, 1, pixelFormat, usage, sampleCount, hostVisible);
+}
+
+void GraphicsVK::destroyTexture(std::shared_ptr<Texture> texture)
+{
+	std::shared_ptr<TextureVK> textureVK = std::static_pointer_cast<TextureVK>(texture);
+	if (textureVK->_deviceMemory)
+		vkFreeMemory(_device, textureVK->_deviceMemory, nullptr);
+	if (textureVK->_image)
+		vkDestroyImage(_device, textureVK->_image, nullptr);
+	if (textureVK->_imageView)
+		vkDestroyImageView(_device, textureVK->_imageView, nullptr);
+	
+	textureVK.reset();
 }
 
 void GraphicsVK::createInstance()

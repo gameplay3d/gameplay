@@ -72,26 +72,6 @@ int GraphicsMTL::getHeight()
     return _height;
 }
     
-std::shared_ptr<Buffer> GraphicsMTL::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount,
-                                                        bool hostVisible)
-{
-    return nullptr;
-}
-    
-std::shared_ptr<Buffer> GraphicsMTL::createIndexBuffer(IndexFormat indexFormat, size_t indexCount,
-                                                       bool hostVisible)
-{
-    return nullptr;
-}
-    
-std::shared_ptr<Buffer> GraphicsMTL::createUniformBuffer(size_t size, bool hostVisible)
-{
-    return nullptr;
-}
-
-void GraphicsMTL::destroyBuffer(std::shared_ptr<Buffer> buffer)
-{
-}
 
 std::shared_ptr<CommandPool> GraphicsMTL::createCommandPool(bool transient)
 {
@@ -101,7 +81,6 @@ std::shared_ptr<CommandPool> GraphicsMTL::createCommandPool(bool transient)
 void GraphicsMTL::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 {
 }
-    
     
 std::shared_ptr<CommandList> GraphicsMTL::createCommandList(std::shared_ptr<CommandPool> pool, bool secondary)
 {
@@ -134,6 +113,58 @@ void GraphicsMTL::flushCommands()
 }
 
 void GraphicsMTL::present()
+{
+}
+
+std::shared_ptr<Buffer> GraphicsMTL::createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount,
+                                                        bool hostVisible)
+{
+    return nullptr;
+}
+    
+std::shared_ptr<Buffer> GraphicsMTL::createIndexBuffer(IndexFormat indexFormat, size_t indexCount,
+                                                       bool hostVisible)
+{
+    return nullptr;
+}
+    
+std::shared_ptr<Buffer> GraphicsMTL::createUniformBuffer(size_t size, bool hostVisible)
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroyBuffer(std::shared_ptr<Buffer> buffer)
+{
+}
+
+std::shared_ptr<Texture> GraphicsMTL::createTexture1d(size_t width, 
+                                                     Texture::Usage usage, 
+                                                     Texture::PixelFormat pixelFormat, 
+                                                     Texture::SampleCount sampleCount, 
+                                                     bool hostVisible)
+{
+    return nullptr;
+}
+
+std::shared_ptr<Texture> GraphicsMTL::createTexture2d(size_t width, size_t height, size_t mipLevels,
+                                                      Texture::Usage usage, 
+                                                      Texture::PixelFormat pixelFormat, 
+                                                      Texture::SampleCount sampleCount, 
+                                                      bool hostVisible)
+{
+    return nullptr;
+}
+
+std::shared_ptr<Texture> GraphicsMTL::createTexture3d(size_t width, size_t height, size_t depth, 
+                                                      Texture::Usage usage, 
+                                                      Texture::PixelFormat pixelFormat, 
+                                                      Texture::SampleCount sampleCount,  
+                                                      bool hostVisible)
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroyTexture(std::shared_ptr<Texture> texture)
 {
 }
     

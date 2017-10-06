@@ -31,6 +31,7 @@
     <ClCompile Include="src\d3d12\CommandPoolD3D12.cpp" />
     <ClCompile Include="src\d3d12\GraphicsD3D12.cpp" />
     <ClCompile Include="src\d3d12\BufferD3D12.cpp" />
+    <ClCompile Include="src\d3d12\TextureD3D12.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -76,11 +77,12 @@
     <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
     <ClCompile Include="src\Vector4.cpp" />
-    <ClCompile Include="src\VertexFormat.cpp" />
+    <ClCompile Include="src\VertexLayout.cpp" />
     <ClCompile Include="src\vk\CommandListVK.cpp" />
     <ClCompile Include="src\vk\CommandPoolVK.cpp" />
     <ClCompile Include="src\vk\GraphicsVK.cpp" />
     <ClCompile Include="src\vk\BufferVK.cpp" />
+    <ClCompile Include="src\vk\TextureVK.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
@@ -93,6 +95,7 @@
     <ClInclude Include="src\BoundingSphere.h" />
     <ClInclude Include="src\Buffer.h" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\ClearValue.h" />
     <ClInclude Include="src\CommandList.h" />
     <ClInclude Include="src\CommandPool.h" />
     <ClInclude Include="src\Component.h" />
@@ -101,7 +104,9 @@
     <ClInclude Include="src\d3d12\CommandPoolD3D12.h" />
     <ClInclude Include="src\d3d12\GraphicsD3D12.h" />
     <ClInclude Include="src\d3d12\BufferD3D12.h" />
+    <ClInclude Include="src\d3d12\TextureD3D12.h" />
     <ClInclude Include="src\FileSystem.h" />
+    <ClInclude Include="src\Format.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\gameplay.h" />
@@ -149,11 +154,12 @@
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\Vector4.h" />
-    <ClInclude Include="src\VertexFormat.h" />
+    <ClInclude Include="src\VertexLayout.h" />
     <ClInclude Include="src\vk\CommandListVK.h" />
     <ClInclude Include="src\vk\CommandPoolVK.h" />
     <ClInclude Include="src\vk\GraphicsVK.h" />
     <ClInclude Include="src\vk\BufferVK.h" />
+    <ClInclude Include="src\vk\TextureVK.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1032BA4B-57EB-4348-9E03-29DD63E80E4A}</ProjectGuid>

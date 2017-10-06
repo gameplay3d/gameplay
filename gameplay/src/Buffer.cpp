@@ -4,7 +4,11 @@
 namespace gameplay
 {
 
-Buffer::Buffer()
+Buffer::Buffer() :
+	_usage(USAGE_VERTEX), 
+	_size(0), 
+	_stride(0), 
+	_hostVisible(true)
 {
 }
 

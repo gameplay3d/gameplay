@@ -28,7 +28,7 @@
 #include "Input.h"
 #include "Platform.h"
 #include "Graphics.h"
-#include "VertexFormat.h"
+#include "VertexLayout.h"
 #include "Buffer.h"
 #include "Texture.h"
 #include "Material.h"

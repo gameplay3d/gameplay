@@ -58,26 +58,6 @@ public:
     int getHeight();
 
 	/**
-	 * @see Graphics::createVertexBuffer
-	 */
-	std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible);
- 	
-	/**
-	 * @see Graphics::createIndexBuffer
-	 */
-	std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool hostVisible);
-
-	/**
-	 * @see Graphics::createUniformBuffer
-	 */
-	std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible);
-
-	/**
-	 * @see Graphics::destroyBuffer
-	 */
-	void destroyBuffer(std::shared_ptr<Buffer> buffer);
-
-	/**
      * @see Graphics::createCommandPool
      */
 	std::shared_ptr<CommandPool> createCommandPool(bool transient = false);
@@ -127,12 +107,67 @@ public:
      */
     void present();
 
+	/**
+	 * @see Graphics::createVertexBuffer
+	 */
+	std::shared_ptr<Buffer> createVertexBuffer(size_t size, size_t vertexStride, bool hostVisible);
+ 	
+	/**
+	 * @see Graphics::createIndexBuffer
+	 */
+	std::shared_ptr<Buffer> createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible);
+
+	/**
+	 * @see Graphics::createUniformBuffer
+	 */
+	std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible);
+
+	/**
+	 * @see Graphics::destroyBuffer
+	 */
+	void destroyBuffer(std::shared_ptr<Buffer> buffer);
+
+	/**
+	 * @see Graphics::createTexture1d
+	 */
+	std::shared_ptr<Texture> createTexture1d(size_t width,
+											Format pixelFormat,
+											Texture::Usage usage,
+											Texture::SampleCount sampleCount,
+											bool hostVisible);
+	/**
+     * @see Graphics::createTexture2d
+     */
+	std::shared_ptr<Texture> createTexture2d(size_t width, size_t height, size_t mipLevels,
+											 Format pixelFormat,
+											 Texture::Usage usage,
+											 Texture::SampleCount sampleCount,
+											 bool hostVisible);
+	/**
+     * @see Graphics::createTexture3d
+     */
+	std::shared_ptr<Texture> createTexture3d(size_t width, size_t height, size_t depth, 
+											 Format pixelFormat,
+											 Texture::Usage usage, 
+											 Texture::SampleCount sampleCount,  
+											 bool hostVisible);
+	/**
+     * @see Graphics::destroyTexture
+     */
+	void destroyTexture(std::shared_ptr<Texture> texture);
+
 private:
 
 	void getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter);
     void createBackBuffers();
 	void buildCommands();
-	ID3D12Resource* createResource(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible);
+	ID3D12Resource* createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible);
+	ID3D12Resource* createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
+								   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, bool hostVisible,
+								  D3D12_SHADER_RESOURCE_VIEW_DESC* textureView);
+	DXGI_FORMAT toFormat(Format pixelFormat);
+	UINT toSamples(Texture::SampleCount sampleCount);
+	D3D12_RESOURCE_STATES toResourceStates(Texture::Usage usage);
 
     bool _initialized;
     bool _resized;

@@ -56,26 +56,6 @@ public:
     int getHeight();
 
 	/**
-	 * @see Graphics::createVertexBuffer
-	 */
-	std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat, size_t vertexCount, bool hostVisible);
- 	
-	/**
-	 * @see Graphics::createIndexBuffer
-	 */
-	std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool hostVisible);
-
-	/**
-	 * @see Graphics::createUniformBuffer
-	 */
-	std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible);
-
-	/**
-	 * @see Graphics::destroyBuffer
-	 */
-	void destroyBuffer(std::shared_ptr<Buffer> buffer);
-
-	/**
      * @see Graphics::createCommandPool
      */
 	std::shared_ptr<CommandPool> createCommandPool(bool transient = false);
@@ -120,6 +100,55 @@ public:
      */
     void flushCommands();
 
+	/**
+	 * @see Graphics::createVertexBuffer
+	 */
+	std::shared_ptr<Buffer> createVertexBuffer(size_t size, size_t vertexStride, bool hostVisible);
+ 	
+	/**
+	 * @see Graphics::createIndexBuffer
+	 */
+	std::shared_ptr<Buffer> createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible);
+
+	/**
+	 * @see Graphics::createUniformBuffer
+	 */
+	std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible);
+
+	/**
+	 * @see Graphics::destroyBuffer
+	 */
+	void destroyBuffer(std::shared_ptr<Buffer> buffer);
+
+	/**
+	 * @see Graphics::createTexture1d
+	 */
+	std::shared_ptr<Texture> createTexture1d(size_t width, 
+											Format pixelFormat, 
+											Texture::Usage usage, 
+											Texture::SampleCount sampleCount, 
+											bool hostVisible);
+	/**
+     * @see Graphics::createTexture2d
+     */
+	std::shared_ptr<Texture> createTexture2d(size_t width, size_t height, size_t mipLevels,
+											 Format pixelFormat, 
+											 Texture::Usage usage, 
+											 Texture::SampleCount sampleCount, 
+											 bool hostVisible);
+	/**
+     * @see Graphics::createTexture3d
+     */
+	std::shared_ptr<Texture> createTexture3d(size_t width, size_t height, size_t depth, 
+											 Format pixelFormat, 
+											 Texture::Usage usage, 
+											 Texture::SampleCount sampleCount,  
+											 bool hostVisible);
+	/**
+     * @see Graphics::destroyTexture
+     */
+	void destroyTexture(std::shared_ptr<Texture> texture);
+
     /**
      * @see Graphics::present
      */
@@ -139,6 +168,11 @@ private:
 	void createPipelineCache();
 	void buildCommands();
 	std::shared_ptr<Buffer> createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible);
+	std::shared_ptr<Texture> createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
+										   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, bool hostVisible);
+	VkFormat toFormat(Format pixelFormat);
+	VkSampleCountFlagBits toSamples(Texture::SampleCount sampleCount);
+	VkImageUsageFlags toImageUsageFlags(Texture::Usage usage);	
 
 	struct SwapchainSurfaceInfo
 	{
@@ -157,6 +191,8 @@ private:
 	VkBool32 getDepthStencilFormat(VkPhysicalDevice physicalDevice, VkFormat* depthStencilFormat);
 	uint32_t getQueueFamiliyIndex(VkQueueFlagBits queueFlags);
 	VkBool32 getMemoryTypeFromProperties(uint32_t typeBits, VkFlags requirements_mask, uint32_t* typeIndex);
+	VkFormatFeatureFlags toFormatFeatureFlags(VkImageUsageFlags usage);
+	VkImageAspectFlags toImageAspectFlags(VkFormat format);
 	static VkBool32 validationDebugReport(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objType,
 							         uint64_t srcObject, size_t location, int32_t msgCode,
 							         const char* layerPrefix, const char* msg, void* userData);
