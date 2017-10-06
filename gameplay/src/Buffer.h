@@ -4,7 +4,11 @@ namespace gameplay
 {
 
 /**
- * Defines a graphics buffer used for rendering.
+ * Defines an allocation of unformatted memory 
+ * that can contain any type of data. 
+ *
+ * Buffers are often used for vertex, shader 
+ * and compute state data.
  */
 class Buffer
 {

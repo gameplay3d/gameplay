@@ -1,14 +1,13 @@
 #pragma once
 
-#include "VertexFormat.h"
-#include "Buffer.h"
+#include "Format.h"
 #include "CommandPool.h"
 #include "CommandList.h"
+#include "Buffer.h"
+#include "Texture.h"
 
 namespace gameplay
-{
-
-	class Mesh;
+{	
 
 /**
  * Defines an abstract graphics system.
@@ -27,6 +26,7 @@ public:
         API_MTL
     };
 
+
 	/**
 	 * Defines the primitive topology.
 	 */
@@ -40,13 +40,14 @@ public:
 	};
 
 	/**
-     * Defines supported index formats.
+     * Defines index formats.
      */
     enum IndexFormat
     {
-        INDEX_FORMAT_UNSIGNED_SHORT,
-        INDEX_FORMAT_UNSIGNED_INT
+        INDEX_FORMAT_USHORT,
+        INDEX_FORMAT_UINT
     };
+	
    
     /**
      * Gets the graphics system.
@@ -75,42 +76,6 @@ public:
      * @return The height of the graphics sytem presentation images.
      */
     virtual int getHeight() = 0;
-
-	/**
-	 * Creates a vertex buffer.
-	 *
-	 * @param vertexFormat The format of the vertex data.
-	 * @param vertexCount The number of vertices.
-	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
-	 * @return The created vertex buffer.
-	 */
-	virtual std::shared_ptr<Buffer> createVertexBuffer(const VertexFormat& vertexFormat,  size_t vertexCount, bool hostVisible) = 0;		
- 	
-	/**
-	 * Creates a index buffer.
-	 *
-	 * @param indexFormat The format of the index data.
-	 * @param indexCount The number of indices.
-	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
-	 * @return The created index buffer.
-	 */
-	virtual std::shared_ptr<Buffer> createIndexBuffer(IndexFormat indexFormat,  size_t indexCount, bool hostVisible) = 0;
-
-	/**
-	 * Creates a uniform buffer.
-	 *
-	 * @param size The size of the uniform buffer.
-	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
-	 * @return The created uniform buffer.
-	 */
-	virtual std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible) = 0;
-
-	/**
-	 * Destroys a buffer.
-	 *
-	 * @param buffer The buffer to be created.
-	 */
-	virtual void destroyBuffer(std::shared_ptr<Buffer> buffer) = 0;
 
 	/**
 	 * Creates a command pool for processing gpu commands buffer.
@@ -184,6 +149,99 @@ public:
      */
     virtual void present() = 0;
 
+	/**
+	 * Creates a vertex buffer.
+	 *
+	 * @param size The size of the vertex buffer (in bytes).
+	 * @param vertexStride The vertex stride.
+	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @return The created vertex buffer.
+	 */
+	virtual std::shared_ptr<Buffer> createVertexBuffer(size_t size, size_t vertexStride, 
+													   bool hostVisible) = 0;		
+ 	
+	/**
+	 * Creates a index buffer.
+	 *
+	 * @param size The size of the index buffer (in bytes).
+	 * @param indexFormat The format of the index data.
+	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @return The created index buffer.
+	 */
+	virtual std::shared_ptr<Buffer> createIndexBuffer(size_t size, IndexFormat indexFormat, 
+													  bool hostVisible) = 0;
+
+	/**
+	 * Creates a uniform buffer.
+	 *
+	 * @param size The size of the uniform buffer (in bytes).
+	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @return The created uniform buffer.
+	 */
+	virtual std::shared_ptr<Buffer> createUniformBuffer(size_t size, 
+														bool hostVisible) = 0;
+
+	/**
+	 * Destroys a buffer.
+	 *
+	 * @param buffer The buffer to be destroyed.
+	 */
+	virtual void destroyBuffer(std::shared_ptr<Buffer> buffer) = 0;
+
+	/**
+	 * Creates a 1-dimensional texture.
+	 *
+	 * @param width The width of the texture.	 
+	 * @param usage The supported usage for the texture.
+	 * @param pixelFormat The pixel format of the texture.
+	 * @param sampleCount The supported sample counts for texture and used for storage operations.
+	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 */
+	virtual std::shared_ptr<Texture> createTexture1d(size_t width, 
+													Format pixelFormat, 
+													Texture::Usage usage, 
+													Texture::SampleCount sampleCount,  
+													 bool hostVisible) = 0;
+	/**
+	 * Creates a 2-dimensional texture.
+	 *
+	 * @param width The width of the texture.
+	 * @param height The height of the texture.
+	 * @param mipLevels The number of mip levels stored in the texture.
+	 * @param usage The supported usage for the texture.
+	 * @param pixelFormat The pixel format of the texture.
+	 * @param sampleCount The supported sample counts for texture and used for storage operations.
+	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 */
+	virtual std::shared_ptr<Texture> createTexture2d(size_t width, size_t height, size_t mipLevels, 
+													Format pixelFormat, 
+													Texture::Usage usage, 
+													Texture::SampleCount sampleCount, 
+													bool hostVisible) = 0;
+	/**
+	 * Creates a 2-dimensional texture.
+	 *
+	 * @param width The width of the texture.
+	 * @param height The height of the texture.
+	 * @param depth The depth of the texture.
+	 * @param usage The supported usage for the texture.
+	 * @param pixelFormat The pixel format of the texture.
+	 * @param sampleCount The supported sample counts for texture and used for storage operations.
+	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 */
+	virtual std::shared_ptr<Texture> createTexture3d(size_t width, size_t height, size_t depth, 
+													 Format pixelFormat, 
+													 Texture::Usage usage, 
+													 Texture::SampleCount sampleCount, 
+													 bool hostVisible) = 0;
+
+	/**
+	 * Destroys a texture.
+	 *
+	 * @param texture The texture to be destroyed.
+	 */
+	virtual void destroyTexture(std::shared_ptr<Texture> texture) = 0;
+
     /**
      * Event occurs when the platform requests to initialize graphics.
 	 *
@@ -215,6 +273,9 @@ public:
      * @return true if if the graphics system have completed resizing, false if not completed.
      */
     virtual bool isResized() = 0;
+
+
+	static size_t computeMipLevels(size_t width, size_t height);
 
     static Graphics* _graphics;
     Graphics::Api _api;

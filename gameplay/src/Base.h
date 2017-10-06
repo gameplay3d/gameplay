@@ -111,6 +111,9 @@
 #define GP_ENGINE_VERSION_MINOR			0
 #define GP_ENGINE_CONFIG				"game.config"
 
+// Assets
+#define GP_ASSET_PATH                   "./assets"
+
 // Math
 #define GP_MATH_RANDOM()                ((float)rand()/RAND_MAX)
 #define GP_MATH_DEG_TO_RAD(x)           ((x) * GP_MATH_PIOVER180)
@@ -130,6 +133,8 @@
 #define GP_MATH_EPSILON                 0.000001f
 #define GP_MATH_CLAMP(x, lo, hi)        ((x < lo) ? lo : ((x > hi) ? hi : x))
 #define GP_MATH_ROUNDUP(value, to)		((value + to - 1) / to) * to
+#define GP_MATH_MIN(a, b)				a < b ? a : b
+#define GP_MATH_MAX(a, b)				a > b ? a : b
 #define GP_MATH_1_PI                    0.31830988618379067154
 #define GP_MATH_MATRIX_SIZE             (sizeof(float) * 16)
 
@@ -146,7 +151,7 @@
 #define GP_GRAPHICS_VALIDATION			false
 #define GP_GRAPHICS_BACK_BUFFERS		2
 
-// Graphics max limits
+// Graphics limits
 #define GP_GRAPHICS_GPUS_MAX                        4
 #define GP_GRAPHICS_INSTANCE_EXTS_MAX               256
 #define GP_GRAPHICS_DEVICE_EXTS_MAX                 256
@@ -161,9 +166,6 @@
 #define GP_GRAPHICS_VERTEX_BINDINGS_MAX             15
 #define GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX           15
 #define GP_GRAPHICS_MIP_LEVELS_MAX                  0xFFFFFFFF
-
-// Assets
-#define GP_ASSET_PATH                   "./assets"
 
 
 namespace gameplay

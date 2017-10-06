@@ -13,28 +13,32 @@ class BufferMTL : public Buffer
 {
 public:
 
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
     BufferMTL();
 
-	/**
-	 * Constructor.
-	 */
-	BufferMTL(Usage usage, size_t size, size_t stride, bool hostVisible);
+    /**
+     * Constructor.
+     */
+    BufferMTL(Usage usage, size_t size, size_t stride, bool hostVisible,
+              id<MTLDevice> device,
+              id<MTLBuffer> buffer);
 
-	/**
-	 * Destructor.
-	 */
-	~BufferMTL();
+    /**
+     * Destructor.
+     */
+    ~BufferMTL();
 
-	/**
-	 * @see Buffer::getHostMemory
-	 */
-	void* getHostMemory() const;
+    /**
+     * @see Buffer::getHostMemory
+     */
+    void* getHostMemory() const;
 
 
-	void* _hostMemory;
+    id<MTLDevice> _device;
+    id<MTLBuffer> _buffer;
+    void* _hostMemory;
 
 };
 
