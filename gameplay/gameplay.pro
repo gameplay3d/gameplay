@@ -63,7 +63,7 @@ SOURCES += \
     src/Vector2.cpp \
     src/Vector3.cpp \
     src/Vector4.cpp \
-    src/VertexFormat.cpp
+    src/VertexLayout.cpp
 
 HEADERS += \
     src/Animation.h \
@@ -76,11 +76,13 @@ HEADERS += \
     src/BoundingSphere.h \
     src/Buffer.h \
     src/Camera.h \
+    src/ClearValue.h \
     src/CommandList.h \
     src/CommandPool.h \
     src/Component.h \
     src/Curve.h \
     src/FileSystem.h \
+    src/Format.h \
     src/Frustum.h \
     src/Game.h \
     src/Graphics.h \
@@ -126,8 +128,7 @@ HEADERS += \
     src/Vector2.h \
     src/Vector3.h \
     src/Vector4.h \
-    src/VertexFormat.h \
-    src/Tileset.h
+    src/VertexLayout.h
 
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include
