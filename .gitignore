@@ -43,8 +43,11 @@ Makefile.Release
 /gameplay/gameplay.vcxproj.user
 /gameplay-app/Debug
 /gameplay-app/Release
+/gameplay-app/assets
+/gameplay-app/res
 /gameplay-editor/Debug
 /gameplay-editor/Release
+/gameplay-editor/assets
 /gameplay-editor/gameplay-editor.vcxproj.user
 /gameplay-editor/GeneratedFiles
 /gameplay-luagen/Debug

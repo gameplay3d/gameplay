@@ -31,6 +31,7 @@
     <ClCompile Include="src\d3d12\CommandPoolD3D12.cpp" />
     <ClCompile Include="src\d3d12\GraphicsD3D12.cpp" />
     <ClCompile Include="src\d3d12\BufferD3D12.cpp" />
+    <ClCompile Include="src\d3d12\ShaderD3D12.cpp" />
     <ClCompile Include="src\d3d12\TextureD3D12.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
@@ -70,6 +71,7 @@
     <ClCompile Include="src\Serializer.cpp" />
     <ClCompile Include="src\SerializerBinary.cpp" />
     <ClCompile Include="src\SerializerJson.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\Texture.cpp" />
@@ -82,6 +84,7 @@
     <ClCompile Include="src\vk\CommandPoolVK.cpp" />
     <ClCompile Include="src\vk\GraphicsVK.cpp" />
     <ClCompile Include="src\vk\BufferVK.cpp" />
+    <ClCompile Include="src\vk\ShaderVK.cpp" />
     <ClCompile Include="src\vk\TextureVK.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +107,7 @@
     <ClInclude Include="src\d3d12\CommandPoolD3D12.h" />
     <ClInclude Include="src\d3d12\GraphicsD3D12.h" />
     <ClInclude Include="src\d3d12\BufferD3D12.h" />
+    <ClInclude Include="src\d3d12\ShaderD3D12.h" />
     <ClInclude Include="src\d3d12\TextureD3D12.h" />
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\Format.h" />
@@ -146,6 +150,7 @@
     <ClInclude Include="src\Serializer.h" />
     <ClInclude Include="src\SerializerBinary.h" />
     <ClInclude Include="src\SerializerJson.h" />
+    <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Sprite.h" />
     <ClInclude Include="src\Stream.h" />
     <ClInclude Include="src\Text.h" />
@@ -159,6 +164,7 @@
     <ClInclude Include="src\vk\CommandPoolVK.h" />
     <ClInclude Include="src\vk\GraphicsVK.h" />
     <ClInclude Include="src\vk\BufferVK.h" />
+    <ClInclude Include="src\vk\ShaderVK.h" />
     <ClInclude Include="src\vk\TextureVK.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -4,7 +4,9 @@
 #include "CommandListD3D12.h"
 #include "BufferD3D12.h"
 #include "TextureD3D12.h"
+#include "ShaderD3D12.h"
 #include "Game.h"
+#include "FileSystem.h"
 
 
 namespace gameplay
@@ -172,6 +174,7 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 	// Create a fence and event for synchronization.
 	D3D_CHECK_RESULT(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, __uuidof(ID3D12Fence), (void**)&_fence));
 	_fenceEvent = CreateEventEx(NULL, FALSE, FALSE, EVENT_ALL_ACCESS);
+
 
     _initialized = true;
     _resized = true;
@@ -569,6 +572,27 @@ void GraphicsD3D12::destroyTexture(std::shared_ptr<Texture> texture)
 	std::shared_ptr<TextureD3D12> textureD3D = std::static_pointer_cast<TextureD3D12>(texture);
 	GP_SAFE_RELEASE(textureD3D->_texture);
 	textureD3D.reset();
+}
+
+std::shared_ptr<Shader> GraphicsD3D12::createShader(const std::string& url)
+{
+	ID3DBlob* shaderBlob = nullptr;
+	std::string shaderUrl = FileSystem::getHomePath();
+	shaderUrl.append(GP_GRAPHICS_D3D12_SHADER_PATH);
+	shaderUrl.append(url);
+	shaderUrl.append(GP_GRAPHICS_D3D12_SHADER_EXT);
+	std::wstring shaderUrl_wstr = std::wstring(shaderUrl.begin(), shaderUrl.end());
+	LPCWSTR path = shaderUrl_wstr.c_str();
+	D3D_CHECK_RESULT(D3DReadFileToBlob(path, &shaderBlob));
+	std::shared_ptr<ShaderD3D12> shader = std::make_shared<ShaderD3D12>(_device, shaderBlob);	
+	return std::static_pointer_cast<Shader>(shader);
+}
+
+void GraphicsD3D12::destroyShader(std::shared_ptr<Shader> shader)
+{
+	std::shared_ptr<ShaderD3D12> shaderD3D = std::static_pointer_cast<ShaderD3D12>(shader);
+	GP_SAFE_RELEASE(shaderD3D->_shader);
+	shaderD3D.reset();
 }
 
 void GraphicsD3D12::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter)

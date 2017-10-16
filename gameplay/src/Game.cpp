@@ -174,7 +174,7 @@ std::shared_ptr<Camera> Game::getCamera() const
 void Game::onInitialize()
 {
 	_config = getConfig();
-	FileSystem::setAssetPath(_config->assetsPath);
+	FileSystem::setHomePath(_config->homePath);
    
     // Splash screens
 
@@ -334,7 +334,7 @@ Game::Config::Config() :
 	vsync(GP_GRAPHICS_VSYNC),
 	multisampling(GP_GRAPHICS_MULTISAMPLING),
 	validation(GP_GRAPHICS_VALIDATION),
-	assetsPath(GP_ASSET_PATH),
+	homePath(GP_ENGINE_HOME_PATH),
     loadingScene("loading.scene"),
 	mainScene("main.scene")
 {
@@ -364,7 +364,7 @@ void Game::Config::onSerialize(Serializer* serializer)
 	serializer->writeBool("vsync", vsync, false);
 	serializer->writeInt("multisampling", (unsigned int)multisampling, 0);
 	serializer->writeBool("validation", validation, GP_GRAPHICS_VALIDATION);
-	serializer->writeString("assetsPath", assetsPath.c_str(), "./");
+	serializer->writeString("homePath", homePath.c_str(), GP_ENGINE_HOME_PATH);
     serializer->writeStringList("splashScreens", splashScreens.size());
     for (size_t i = 0; i < splashScreens.size(); i++)
     {
@@ -384,7 +384,7 @@ void Game::Config::onDeserialize(Serializer* serializer)
 	fullscreen = serializer->readBool("fullscreen", false);
 	vsync = serializer->readBool("vsync", false);
     multisampling = serializer->readInt("multisampling", 0);
-	serializer->readString("assetsPath", assetsPath, "");
+	serializer->readString("homePath", homePath, "");
     size_t splashScreensCount = serializer->readStringList("splashScreens");
     for (size_t i = 0; i < splashScreensCount; i++)
     {

@@ -156,6 +156,16 @@ public:
      */
 	void destroyTexture(std::shared_ptr<Texture> texture);
 
+	/**
+     * @see Graphics::createShader
+     */
+	std::shared_ptr<Shader> createShader(const std::string& url);
+
+	/**
+     * @see Graphics::destroyShader
+     */
+	void destroyShader(std::shared_ptr<Shader> shader);
+
 private:
 
 	void getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter);
@@ -163,7 +173,7 @@ private:
 	void buildCommands();
 	ID3D12Resource* createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible);
 	ID3D12Resource* createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
-								   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, bool hostVisible,
+								  Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, bool hostVisible,
 								  D3D12_SHADER_RESOURCE_VIEW_DESC* textureView);
 	DXGI_FORMAT toFormat(Format pixelFormat);
 	UINT toSamples(Texture::SampleCount sampleCount);

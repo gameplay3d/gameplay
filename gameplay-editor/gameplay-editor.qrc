@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
+        <file>res/icons/icon.png</file>
+        <file>res/logos/logo.png</file>
         <file>res/images/arrow-right.png</file>
         <file>res/images/arrow-down.png</file>
         <file>res/images/attach.png</file>
@@ -10,8 +12,6 @@
         <file>res/images/close.png</file>
         <file>res/images/delete.png</file>
         <file>res/images/eyedropper.png</file>
-        <file>res/images/icon.png</file>
-        <file>res/images/logo.png</file>
         <file>res/images/help.png</file>
         <file>res/images/file-import.png</file>
         <file>res/images/file-new.png</file>

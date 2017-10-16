@@ -100,6 +100,11 @@ public:
      */
     void flushCommands();
 
+    /**
+     * @see Graphics::present
+     */
+    void present();
+
 	/**
 	 * @see Graphics::createVertexBuffer
 	 */
@@ -149,10 +154,15 @@ public:
      */
 	void destroyTexture(std::shared_ptr<Texture> texture);
 
-    /**
-     * @see Graphics::present
+	/**
+     * @see Graphics::createShader
      */
-    void present();
+	std::shared_ptr<Shader> createShader(const std::string& url);
+
+	/**
+     * @see Graphics::destroyShader
+     */
+	void destroyShader(std::shared_ptr<Shader> shader);
 
 private:
 
