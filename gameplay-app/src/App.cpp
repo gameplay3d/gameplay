@@ -18,9 +18,6 @@ void App::onInitialize()
 {
 	Game::onInitialize();
 
-    // Set the asset path for saving our assets created
-    FileSystem::setAssetPath("./");
-
     /* Quick test
     // Create a test scene
     auto test = std::make_shared<SceneObject>();

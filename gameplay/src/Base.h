@@ -109,10 +109,8 @@
 #define GP_ENGINE_NAME					"gameplay"
 #define GP_ENGINE_VERSION_MAJOR			4
 #define GP_ENGINE_VERSION_MINOR			0
+#define GP_ENGINE_HOME_PATH				"./"
 #define GP_ENGINE_CONFIG				"game.config"
-
-// Assets
-#define GP_ASSET_PATH                   "./assets"
 
 // Math
 #define GP_MATH_RANDOM()                ((float)rand()/RAND_MAX)
@@ -139,10 +137,6 @@
 #define GP_MATH_MATRIX_SIZE             (sizeof(float) * 16)
 
 // Graphics defaults
-#define GP_GRAPHICS_VK					"vk"
-#define GP_GRAPHICS_D3D12				"d3d12"
-#define GP_GRAPHICS_MTL					"mtl"
-#define GP_GRAPHICS                     GP_GRAPHICS_VK
 #define GP_GRAPHICS_WIDTH				1920
 #define GP_GRAPHICS_HEIGHT				1080
 #define GP_GRAPHICS_FULLSCREEN			false
@@ -150,6 +144,16 @@
 #define GP_GRAPHICS_MULTISAMPLING		0
 #define GP_GRAPHICS_VALIDATION			false
 #define GP_GRAPHICS_BACK_BUFFERS		2
+#define GP_GRAPHICS_VK					"vk"
+#define GP_GRAPHICS_VK_SHADER_PATH		"res/shaders/glsl/"
+#define GP_GRAPHICS_VK_SHADER_EXT		".spv"
+#define GP_GRAPHICS_D3D12				"d3d12"
+#define GP_GRAPHICS_D3D12_SHADER_PATH	"res/shaders/hlsl/"
+#define GP_GRAPHICS_D3D12_SHADER_EXT	".cso"
+#define GP_GRAPHICS_MTL					"mtl"
+#define GP_GRAPHICS_MTL_SHADER_PATH		"res/shaders/msl/"
+#define GP_GRAPHICS_MTL_SHADER_EXT		".metallib"
+#define GP_GRAPHICS                     GP_GRAPHICS_VK
 
 // Graphics limits
 #define GP_GRAPHICS_GPUS_MAX                        4

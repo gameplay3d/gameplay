@@ -5,6 +5,7 @@
 #include "CommandList.h"
 #include "Buffer.h"
 #include "Texture.h"
+#include "Shader.h"
 
 namespace gameplay
 {	
@@ -234,13 +235,36 @@ public:
 													 Texture::Usage usage, 
 													 Texture::SampleCount sampleCount, 
 													 bool hostVisible) = 0;
-
 	/**
 	 * Destroys a texture.
 	 *
 	 * @param texture The texture to be destroyed.
 	 */
 	virtual void destroyTexture(std::shared_ptr<Texture> texture) = 0;
+
+	/**
+	 * Creates a shader from graphics api specific 
+	 * byte-code/libraries.
+	 *
+	 * auto vertShader = createShader("nuklear.vert");
+	 *
+	 * Loads:
+	 * vk    -> "res/shaders/glsl/nuklear.vert.spv"
+	 * d3d12 -> "res/shaders/hlsl/nuklear.vert.cso"
+	 * mtl   -> "res/shaders/msl/nuklear.vert.metallib"
+	 *
+	 * @param url The url of the shader to load.
+	 *
+	 * @see Graphics::ShaderStage
+	 */
+	virtual std::shared_ptr<Shader> createShader(const std::string& url) = 0;
+
+	/**
+	 * Destroys the shader.
+	 *
+	 * @param shader The shader to destroy.
+	 */
+	virtual void destroyShader(std::shared_ptr<Shader> shader) = 0;
 
     /**
      * Event occurs when the platform requests to initialize graphics.

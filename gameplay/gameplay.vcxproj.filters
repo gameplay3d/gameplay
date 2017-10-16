@@ -98,6 +98,13 @@
       <Filter>vk</Filter>
     </ClCompile>
     <ClCompile Include="src\VertexLayout.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\d3d12\ShaderD3D12.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vk\ShaderVK.cpp">
+      <Filter>vk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
@@ -195,5 +202,12 @@
     </ClInclude>
     <ClInclude Include="src\VertexLayout.h" />
     <ClInclude Include="src\Format.h" />
+    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\d3d12\ShaderD3D12.h">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vk\ShaderVK.h">
+      <Filter>vk</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

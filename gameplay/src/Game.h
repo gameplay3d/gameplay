@@ -319,7 +319,7 @@ public:
 		bool vsync;
 		size_t multisampling;
 		bool validation;
-		std::string assetsPath;
+		std::string homePath;
         std::vector<SplashScreen> splashScreens;
         std::string loadingScene;
 		std::string mainScene;

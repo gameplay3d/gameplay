@@ -37,32 +37,39 @@ public:
     ~FileSystem();
 
     /**
-     * Sets the path to the root of the assets folder for the game.
+     * Sets the home path for the game.
      *
-     * Once set, all asset/file loading will load from the given path.
-     * The default asser path is "./".
+     * Once set, all file loading will load from the given home path.
+	 *
+     * The default path is "./".
      * 
-     * @param path The path to the root of the assets folder.
+     * @param path The path to the game home folder.
      */
-    static void setAssetPath(const std::string& path);
+    static void setHomePath(const std::string& path);
 
     /**
      * Gets the currently set asset path.
      * 
      * @return The currently set asset path.
      */
-    static std::string getAssetPath();
+    static std::string getHomePath();
+
+	/**
+	 * Gets the absolute directory for a relative path or "" if not resolved.
+	 *
+	 * @param relativePath The relative path to be resolved.
+	 * @return The absolute directory for a relative path or "" if not resolved.
+	 */
+	static std::string getAbsolutePath(const std::string& relativePath);
 
     /**
      * Resolves a filesystem path.
      *
-     * If the specified path is a filesystem alias, the alias will be
+     * If the specified path is a file system alias, the alias will be
      * resolved and the physical file will be returned.
      *
-     * Note that this method does not convert a relative path to an
-     * absolute filesystem path.
-     *
      * @param path Path to resolve.
+	 * @param absolution If you want the returned path as an absolute path.
      * @return The resolved file path.
      */
     static std::string resolvePath(const std::string& path);
@@ -70,7 +77,7 @@ public:
     /**
      * Lists the files in the specified directory and adds the files to the vector. Excludes directories.
      * 
-     * @param dirPath Directory path relative to the path set in <code>setAssetPath(const char*)</code>.
+     * @param dirPath Directory path relative to the path set in <code>setHomePath(const char*)</code>.
      * @param files The vector to append the files to.
      * @return True if successful, false if error.
      */
@@ -129,7 +136,7 @@ public:
      * @param path The file path. May be relative or absolute, forward or back slashes. May be nullptr.
      * @return The directory name with the trailing '/' or emptry string if invalid string or directory.
      */
-    static std::string getDirectoryName(const std::string& path);
+    static std::string getDirectoryPath(const std::string& path);
 
     /**
      * Gets the extension of the given file path.

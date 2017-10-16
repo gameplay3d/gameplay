@@ -77,7 +77,7 @@ static bool androidFileExists(const char* filePath)
 
 #endif
 
-static std::string __assetPath("./");
+static std::string __homePath(GP_ENGINE_HOME_PATH);
 static std::map<std::string, std::string> __aliases;
 
 static void getFullPath(const std::string& path, std::string& fullPath)
@@ -88,7 +88,7 @@ static void getFullPath(const std::string& path, std::string& fullPath)
     }
     else
     {
-        fullPath.assign(__assetPath);
+        fullPath.assign(__homePath);
         fullPath += FileSystem::resolvePath(path);
     }
 }
@@ -170,15 +170,33 @@ FileSystem::~FileSystem()
 {
 }
 
-void FileSystem::setAssetPath(const std::string& path)
+void FileSystem::setHomePath(const std::string& path)
 {
     if (path.length() > 0)
-        __assetPath =  path;
+        __homePath =  path;
 }
 
-std::string FileSystem::getAssetPath()
+std::string FileSystem::getHomePath()
 {
-    return __assetPath;
+    return __homePath;
+}
+
+std::string FileSystem::getAbsolutePath(const std::string& path)
+{
+	#ifdef WIN32
+		char fullPath[_MAX_PATH]; 
+		if (_fullpath(fullPath, path.c_str(), _MAX_PATH) != nullptr)
+		{
+			return std::string(fullPath);
+		}
+	#else
+		char fullPath[PATH_MAX + 1];
+		if (realpath(path.c_str(), fullPath))
+		{
+			return std::string(fullPath);
+		}
+	#endif
+	return "";
 }
 
 std::string FileSystem::resolvePath(const std::string& path)
@@ -191,13 +209,13 @@ std::string FileSystem::resolvePath(const std::string& path)
             return path; 
         return itr->second.c_str();
     }
-    return path;
+    return __homePath + path;
 }
 
 bool FileSystem::listFiles(const std::string& dirPath, std::vector<std::string>& files)
 {
 #ifdef WIN32
-    std::string path(FileSystem::getAssetPath());
+    std::string path(FileSystem::getHomePath());
     if (dirPath.length() > 0)
     {
         path.append(dirPath);
@@ -229,7 +247,7 @@ bool FileSystem::listFiles(const std::string& dirPath, std::vector<std::string>&
     FindClose(hFind);
     return true;
 #else
-    std::string path(FileSystem::getAssetPath());
+    std::string path(FileSystem::getHomePath());
     if (dirPath.length() > 0)
     {
         path.append(dirPath);
@@ -372,7 +390,7 @@ bool FileSystem::isAbsolutePath(const std::string& filePath)
 #endif
 }
 
-std::string FileSystem::getDirectoryName(const std::string& path)
+std::string FileSystem::getDirectoryPath(const std::string& path)
 {
     if (path.length() == 0)
         return "";

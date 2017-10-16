@@ -1,10 +1,12 @@
 #include "Base.h"
-#include "Game.h"
 #include "GraphicsVK.h"
 #include "CommandPoolVK.h"
 #include "CommandListVK.h"
 #include "BufferVK.h"
 #include "TextureVK.h"
+#include "ShaderVK.h"
+#include "Game.h"
+#include "FileSystem.h"
 
 namespace gameplay
 {
@@ -732,6 +734,34 @@ void GraphicsVK::destroyTexture(std::shared_ptr<Texture> texture)
 		vkDestroyImageView(_device, textureVK->_imageView, nullptr);
 	
 	textureVK.reset();
+}
+
+std::shared_ptr<Shader> GraphicsVK::createShader(const std::string& url)
+{
+	std::string shaderUrl = FileSystem::getHomePath();
+	shaderUrl.append(GP_GRAPHICS_VK_SHADER_PATH);
+	shaderUrl.append(url);
+	shaderUrl.append(GP_GRAPHICS_VK_SHADER_EXT);
+	std::string shaderData = FileSystem::readAll(shaderUrl);
+	VkShaderModuleCreateInfo createInfo = {};
+	createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+	createInfo.pNext = nullptr;
+	createInfo.codeSize = shaderData.size();
+	createInfo.pCode = (uint32_t*)shaderData.c_str();
+	createInfo.flags = 0;
+
+	VkShaderModule shaderModule;
+	VK_CHECK_RESULT(vkCreateShaderModule(_device, &createInfo, nullptr, &shaderModule));
+
+	std::shared_ptr<ShaderVK> shader = std::make_shared<ShaderVK>(_device, shaderModule);	
+	return std::static_pointer_cast<Shader>(shader);
+}
+
+void GraphicsVK::destroyShader(std::shared_ptr<Shader> shader)
+{
+	std::shared_ptr<ShaderVK> shaderVK = std::static_pointer_cast<ShaderVK>(shader);
+	vkDestroyShaderModule(_device, shaderVK->_shader, nullptr);
+	shaderVK.reset();
 }
 
 void GraphicsVK::createInstance()
