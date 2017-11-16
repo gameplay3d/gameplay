@@ -18,7 +18,8 @@ void App::onInitialize()
 {
 	Game::onInitialize();
 
-    /* Create a test scene
+    /*
+	// Create a test scene
     auto test = std::make_shared<SceneObject>();
 
     // Create a main camera
@@ -35,9 +36,9 @@ void App::onInitialize()
     cameraObject->attachComponent(camera);
 
     // Set this camera as the main camera
-    this->setCamera(camera);*/
+    this->setCamera(camera);
 
-     /* Create a direcional light
+     // Create a direcional light
     auto lightObject = std::make_shared<SceneObject>();
     lightObject->setName("directionalLight");
     lightObject->setLocalEulerAngles(Vector3(0, 45, 0));
@@ -60,9 +61,9 @@ void App::onInitialize()
     auto writer = SerializerJson::createWriter("test.scene");
     writer->writeObject(nullptr, test);
     writer->close();
-    GP_SAFE_DELETE(writer);*/
+    GP_SAFE_DELETE(writer);
 
-    setScene(test);
+    setScene(test);*/
 }
 
 void App::onFinalize()
