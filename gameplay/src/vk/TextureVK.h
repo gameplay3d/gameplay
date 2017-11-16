@@ -41,8 +41,8 @@ public:
 
 	VkDevice _device;
 	VkImage _image;
+	VkImageView  _imageView;
 	VkDeviceMemory _deviceMemory;
-    VkImageView  _imageView;
 	VkImageAspectFlags  _imageAspectFlags;
     VkDescriptorImageInfo _textureView;
 	void* _hostMemory;

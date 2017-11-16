@@ -3,6 +3,7 @@
 #include "FileSystem.h"
 #include "Serializable.h"
 #include "SerializerJson.h"
+#include "Graphics.h"
 
 namespace gameplay
 {
@@ -144,7 +145,6 @@ void Game::loadScene(const std::string& url, bool showLoading)
     // 
 	//_scene = dynamic_cast<SceneObject*>(loadAsset(_config->sceneUrl.c_str()));
 	//_scene->onInitialize();
-	
 }
 
 void Game::unloadScene(std::shared_ptr<SceneObject> scene)
@@ -175,12 +175,6 @@ void Game::onInitialize()
 {
 	_config = getConfig();
 	FileSystem::setHomePath(_config->homePath);
-   
-    // Splash screens
-
-    // Loading scene
-
-    // Start scene
 }
 
 void Game::onFinalize()
@@ -225,6 +219,12 @@ void Game::onUpdate(float elapsedTime)
 
 void Game::onRender(float elapsedTime)
 {
+	// Deferred rendering here
+	Graphics* graphics = Graphics::getGraphics();
+	
+
+
+
 }
 
 void Game::onFrame()
@@ -238,7 +238,6 @@ void Game::onFrame()
 		{
             initializeSplash();
             initializeLoading();
-			onInitialize();
 			_state = Game::STATE_SPLASH;
 			break;
 		}
@@ -253,7 +252,7 @@ void Game::onFrame()
 		case Game::STATE_LOADING:
 		{
             onLoading(elapsedTime);
-            if (_scene.get() && _scene->isLoaded())
+            //if (_scene.get() && _scene->isLoaded())
 				_state = Game::STATE_RUNNING;
             lastFrameTime = updateFrameRate();
 			break;
@@ -276,7 +275,6 @@ void Game::initializeSplash()
 
 void Game::initializeLoading()
 {
-
 }
 
 void Game::onSplash(float elapsedTime)

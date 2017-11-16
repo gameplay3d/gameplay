@@ -71,48 +71,149 @@ int GraphicsMTL::getHeight()
 {
     return _height;
 }
-    
 
-std::shared_ptr<CommandPool> GraphicsMTL::createCommandPool(bool transient)
+std::shared_ptr<Semaphore> GraphicsMTL::getSemaphore(size_t imageIndex)
 {
     return nullptr;
 }
-    
-void GraphicsMTL::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
-{
-}
-    
-std::shared_ptr<CommandList> GraphicsMTL::createCommandList(std::shared_ptr<CommandPool> pool, bool secondary)
+
+std::shared_ptr<Fence> GraphicsMTL::getFence(size_t imageIndex)
 {
     return nullptr;
 }
-    
-void GraphicsMTL::createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
-                                     std::vector<std::shared_ptr<CommandList>> out)
+
+std::shared_ptr<RenderPass> GraphicsMTL::getRenderPass(size_t imageIndex)
 {
+    return nullptr;
 }
-    
-void GraphicsMTL::destroyCommandList(std::shared_ptr<CommandList> commandList)
-{
-}
-    
-void GraphicsMTL::destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists)
-{
-}
-    
-void GraphicsMTL::submitCommands(std::shared_ptr<CommandList> commands)
+
+void GraphicsMTL::acquireNextImage(std::shared_ptr<Semaphore> signalSemaphore,
+                                   std::shared_ptr<Fence> fence)
 {
 }
 
-void GraphicsMTL::submitCommands(std::vector<std::shared_ptr<CommandList>> commands)
+void GraphicsMTL::present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores)
 {
 }
 
-void GraphicsMTL::flushCommands()
+void GraphicsMTL::waitForFence(std::shared_ptr<Fence> fence)
 {
 }
 
-void GraphicsMTL::present()
+std::shared_ptr<CommandBuffer> GraphicsMTL::createCommandBuffer()
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsMTL::submit(std::shared_ptr<CommandBuffer> commandBuffer,
+                         std::vector<std::shared_ptr<Semaphore>> signalSemaphores,
+                         std::vector<std::shared_ptr<Semaphore>> waitSemaphores)
+{
+}
+
+void GraphicsMTL::cmdBegin(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsMTL::cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsMTL::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsMTL::cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsMTL::cmdSetViewport(std::shared_ptr<CommandBuffer> commandBuffer,
+                                 float x, float, float width, float height, 
+                                 float depthMin, float depthMax)
+{
+}
+
+void GraphicsMTL::cmdSetScissor(std::shared_ptr<CommandBuffer> commandBuffer,
+                                size_t x, size_t y, 
+                                size_t width, size_t height)
+{
+}
+
+void GraphicsMTL::cmdClearColorAttachment(std::shared_ptr<CommandBuffer> commandBuffer,
+                                          size_t attachmentTndex,
+                                          const ClearValue& clearValue)
+{
+}
+
+void GraphicsMTL::cmdBindRenderPipeline(std::shared_ptr<CommandBuffer> commandBuffer,
+                                        std::shared_ptr<RenderPipeline> pipeline)
+{
+}
+
+void GraphicsMTL::cmdBindDescriptorSet(std::shared_ptr<CommandBuffer> commandBuffer,
+                                       std::shared_ptr<RenderPipeline> pipeline, 
+                                       std::shared_ptr<DescriptorSet> descriptorSet)
+{
+}
+
+void GraphicsMTL::cmdBindVertexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+                                      std::shared_ptr<Buffer> vertexBuffer)
+{
+}
+
+void GraphicsMTL::cmdBindVertexBuffers(std::shared_ptr<CommandBuffer> commandBuffer,
+                                       std::vector<std::shared_ptr<Buffer>> vertexBuffers)
+{
+}
+
+void GraphicsMTL::cmdBindIndexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+                                     std::shared_ptr<Buffer> indexBuffer)
+{
+}
+
+void GraphicsMTL::cmdDraw(std::shared_ptr<CommandBuffer> commandBuffer,
+                          size_t vertexCount, size_t vertexStart)
+{
+}
+
+void GraphicsMTL::cmdDrawIndexed(std::shared_ptr<CommandBuffer> commandBuffer,
+                                 size_t indexCount, size_t indexStart)
+{
+}
+
+void GraphicsMTL::cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer,
+                                     std::shared_ptr<Texture> texture, 
+                                     Texture::Usage usagePrev, 
+                                     Texture::Usage usageNext)
+{
+}
+
+void GraphicsMTL::cmdTransitionRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
+                                          std::shared_ptr<RenderPass> renderPass, 
+                                          Texture::Usage usagePrev, 
+                                          Texture::Usage usageNext)
+{
+}
+
+std::shared_ptr<Semaphore> GraphicsMTL::createSemaphore()
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroySemaphore(std::shared_ptr<Semaphore> semaphore)
+{
+}
+
+std::shared_ptr<Fence> GraphicsMTL::createFence()
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroyFence(std::shared_ptr<Fence> fence)
 {
 }
 
@@ -165,6 +266,79 @@ std::shared_ptr<Texture> GraphicsMTL::createTexture3d(size_t width, size_t heigh
 }
 
 void GraphicsMTL::destroyTexture(std::shared_ptr<Texture> texture)
+{
+}
+
+std::shared_ptr<RenderPass> GraphicsMTL::createRenderPass(size_t width, size_t height,
+                                                            size_t colorAttachmentCount,
+                                                            Format colorFormat,
+                                                            Format depthStencilFormat,
+                                                            Texture::SampleCount sampleCount)
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroyRenderPass(std::shared_ptr<RenderPass> renderPass)
+{
+}
+
+std::shared_ptr<Sampler> GraphicsMTL::createSampler(Sampler::Filter filterMag,
+                                                    Sampler::Filter filterMin,
+                                                    Sampler::Filter filterMip,                                                     
+                                                    Sampler::AddressMode addressModeU,
+                                                    Sampler::AddressMode addressModeV,
+                                                    Sampler::AddressMode addressModeW,
+                                                    Sampler::CompareFunc compareFunc,
+                                                    Sampler::BorderColor borderColor,
+                                                    float anisotropyMax,
+                                                    float lodMin,
+                                                    float lodMax,
+                                                    float lodMipBias)
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroySampler(std::shared_ptr<Sampler> sampler)
+{
+}
+
+std::shared_ptr<Shader> GraphicsMTL::createShader(const std::string& url)
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroyShader(std::shared_ptr<Shader> shader)
+{
+}
+
+
+std::shared_ptr<DescriptorSet> GraphicsMTL::createDescriptorSet(const DescriptorSet::Descriptor* descriptors, 
+                                                                  size_t descriptorCount)
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroyDescriptorSet(std::shared_ptr<DescriptorSet> descriptorSet)
+{
+}
+
+std::shared_ptr<RenderPipeline> GraphicsMTL::createRenderPipeline(RenderPipeline::PrimitiveTopology primitiveTopology,
+                                                                  VertexLayout vertexLayout,
+                                                                  RasterizerState rasterizerState,
+                                                                  ColorBlendState colorBlendState,
+                                                                  DepthStencilState depthStencilState,
+                                                                  std::shared_ptr<RenderPass> renderPass,
+                                                                  std::shared_ptr<DescriptorSet> descriptorSet,
+                                                                  std::shared_ptr<Shader> vertShader,
+                                                                  std::shared_ptr<Shader> tescShader,
+                                                                  std::shared_ptr<Shader> teseShader,
+                                                                  std::shared_ptr<Shader> geomShader,
+                                                                  std::shared_ptr<Shader> fragShader)
+{
+    return nullptr;
+}
+
+void GraphicsMTL::destroyRenderPipeline(std::shared_ptr<RenderPipeline> pipeline)
 {
 }
     

@@ -8,7 +8,7 @@ Graphics* Graphics::_graphics = nullptr;
 
 Graphics::Api Graphics::getApi()
 {
-    return _api;
+	return _api;
 }
 
 size_t Graphics::computeMipLevels(size_t width, size_t height)

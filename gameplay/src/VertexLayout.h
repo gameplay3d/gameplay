@@ -5,7 +5,7 @@ namespace gameplay
 	enum class Format;
 
 /**
- * Defines a vertex layout.
+ * Defines a layout of vertex attributes.
  */
 class VertexLayout
 {
@@ -32,7 +32,7 @@ public:
     };
 
     /**
-     * Defines a single vertex attributes a within a vertex layout.     
+     * Defines a single vertex attribute a within a vertex layout.     
      */
     class VertexAttribute
     {
@@ -41,9 +41,9 @@ public:
         Semantic semantic;
         std::string name;
 		Format format;
-		uint32_t binding;
-		uint32_t location;
-		uint32_t offset;
+		unsigned int binding;
+		unsigned int location;
+		unsigned int offset;
 
         /**
          * Constructor.
@@ -60,9 +60,14 @@ public:
         VertexAttribute(Semantic semantic, 
 						const std::string& name, 
 						Format format,
-						uint32_t binding,
-						uint32_t location,
-						uint32_t offset);
+						unsigned int binding,
+						unsigned int location,
+						unsigned int offset);
+
+		/**
+		 * Destructor.
+		 */
+		~VertexAttribute();
 
         /**
          * Compares two vertex attributes for equality.
@@ -140,6 +145,8 @@ public:
      * Gets the string representation of a Semantic enumeration value.
      */
     static std::string toString(Semantic semantic);
+
+	static size_t toStride(Format format);
 
 private:
 

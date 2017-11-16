@@ -85,6 +85,14 @@
 } while (0)
 
 // Memory
+#define GP_SAFE_FREE(x) \
+{ \
+	if(x) \
+	{ \
+		free(x); \
+		x = nullptr; \
+	} \
+}
 #define GP_SAFE_DELETE(x) \
 { \
     delete x; \
@@ -97,11 +105,11 @@
 }
 
 #if defined(_WINDOWS) && defined(_MSC_VER)
-#define GP_SAFE_RELEASE(x)			\
-   if(x != nullptr)				\
-   {							\
-      x->Release();				\
-      x = nullptr;				\
+#define GP_SAFE_RELEASE(x) \
+   if(x != nullptr)	\
+   { \
+      x->Release(); \
+      x = nullptr; \
    }
 #endif
 
@@ -143,7 +151,7 @@
 #define GP_GRAPHICS_VSYNC				true
 #define GP_GRAPHICS_MULTISAMPLING		0
 #define GP_GRAPHICS_VALIDATION			false
-#define GP_GRAPHICS_BACK_BUFFERS		2
+#define GP_GRAPHICS_BACK_BUFFERS		3
 #define GP_GRAPHICS_VK					"vk"
 #define GP_GRAPHICS_VK_SHADER_PATH		"res/shaders/glsl/"
 #define GP_GRAPHICS_VK_SHADER_EXT		".spv"

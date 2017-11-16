@@ -1,10 +1,13 @@
 #include "Base.h"
+#include "Format.h"
 #include "GraphicsVK.h"
-#include "CommandPoolVK.h"
-#include "CommandListVK.h"
 #include "BufferVK.h"
 #include "TextureVK.h"
+#include "RenderPassVK.h"
+#include "SamplerVK.h"
 #include "ShaderVK.h"
+#include "DescriptorSetVK.h"
+#include "RenderPipelineVK.h"
 #include "Game.h"
 #include "FileSystem.h"
 
@@ -39,7 +42,6 @@ GraphicsVK::GraphicsVK() :
 	_surface(VK_NULL_HANDLE),
 	_physicalDevice(VK_NULL_HANDLE),
 	_queueFamilyIndexGraphics(0),
-	_queueGraphics(VK_NULL_HANDLE),
 	_queueIndex(0),
 	_device(VK_NULL_HANDLE),
 	_swapchain(VK_NULL_HANDLE),
@@ -105,10 +107,9 @@ void GraphicsVK::onInitialize(unsigned long window, unsigned long connection)
 	createSwapchain();
 	createCommandBuffers();
 	createDepthStencil();
-	createRenderPass();
+	createFrameBuffer();
 	createBackBuffers();
 	createSynchronizationPrimitives();
-	createPipelineCache();
 
     _initialized = true;
     _resized = true;
@@ -161,7 +162,7 @@ void GraphicsVK::onResize(int width, int height)
 		vkDestroyRenderPass(_device, _renderPass, nullptr);
 		_renderPass = VK_NULL_HANDLE;
 	}
-	createRenderPass();
+	createFrameBuffer();
 	createBackBuffers();
 
 	// Recreate swapchain
@@ -200,89 +201,148 @@ int GraphicsVK::getHeight()
     return _height;
 }
 
-std::shared_ptr<CommandPool> GraphicsVK::createCommandPool(bool transient)
+std::shared_ptr<Semaphore> GraphicsVK::getSemaphore(size_t imageIndex)
 {
-	VkCommandPool poolVK = nullptr;
-	VkCommandPoolCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	createInfo.pNext = nullptr;
-	createInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-	createInfo.queueFamilyIndex = _queueFamilyIndexGraphics;
-	if (transient)
-	{
-		createInfo.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-	}
-	if (vkCreateCommandPool(_device, &createInfo, nullptr, &poolVK) != VK_SUCCESS)
-	{
-		GP_ERROR("Failed to crete command pool.");
-	}
-	std::shared_ptr<CommandPoolVK> pool = std::make_shared<CommandPoolVK>(poolVK);
-	return std::static_pointer_cast<CommandPool>(pool);
+	return nullptr;
 }
 
-void GraphicsVK::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
+std::shared_ptr<Fence> GraphicsVK::getFence(size_t imageIndex)
 {
-	std::shared_ptr<CommandPoolVK> commandPoolVK = std::static_pointer_cast<CommandPoolVK>(commandPool);
-	vkDestroyCommandPool(_device, commandPoolVK->_commandPool, nullptr);
-	commandPool.reset();
+	return nullptr;
 }
 
-std::shared_ptr<CommandList> GraphicsVK::createCommandList(std::shared_ptr<CommandPool> pool, bool secondary)
+std::shared_ptr<RenderPass> GraphicsVK::getRenderPass(size_t imageIndex)
 {
-	std::shared_ptr<CommandPoolVK> poolVK = std::static_pointer_cast<CommandPoolVK>(pool);
-	VkCommandBuffer commandBufferVK;
-	VkCommandBufferAllocateInfo allocInfo = {};
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.pNext = nullptr;
-    allocInfo.commandPool = poolVK->_commandPool;
-    allocInfo.level = secondary ? VK_COMMAND_BUFFER_LEVEL_SECONDARY : VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandBufferCount = 1;
-	if (vkAllocateCommandBuffers(_device, &allocInfo, &commandBufferVK) != VK_SUCCESS)
-	{
-		GP_ERROR("Failed to allocate command buffers.");
-	}
-	std::shared_ptr<CommandListVK> commandLst = std::make_shared<CommandListVK>(_device, _commandPool, commandBufferVK);
-	return std::static_pointer_cast<CommandList>(commandLst);
+	return nullptr;
 }
 
-void GraphicsVK::createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
-									std::vector<std::shared_ptr<CommandList>> out)
-{
-	for (size_t i = 0; i < count; ++i)
-	{
-		std::shared_ptr<CommandList> commandList = createCommandList(pool, secondary);
-		out.push_back(commandList);
-	}
-}
-
-void GraphicsVK::destroyCommandList(std::shared_ptr<CommandList> commandList)
-{
-	std::shared_ptr<CommandListVK> commandListVK = std::static_pointer_cast<CommandListVK>(commandList);
-	vkFreeCommandBuffers(_device, _commandPool, 1, &(commandListVK->_commandBuffer));
-	commandList.reset();
-}
-
-void GraphicsVK::destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists)
-{
-	for (size_t i = 0; i < commandLists.size(); ++i)
-	{
-		destroyCommandList(commandLists[i]);
-	}
-}
-
-void GraphicsVK::submitCommands(std::shared_ptr<CommandList> commands)
+void GraphicsVK::acquireNextImage(std::shared_ptr<Semaphore> signalSemaphore,
+								  std::shared_ptr<Fence> fence)
 {
 }
 
-void GraphicsVK::submitCommands(std::vector<std::shared_ptr<CommandList>> commands)
+void GraphicsVK::present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores)
 {
 }
 
-void GraphicsVK::flushCommands()
+void GraphicsVK::waitForFence(std::shared_ptr<Fence> fence)
 {
 }
 
-void GraphicsVK::present()
+std::shared_ptr<CommandBuffer> GraphicsVK::createCommandBuffer()
+{
+	return nullptr;
+}
+
+void GraphicsVK::destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsVK::submit(std::shared_ptr<CommandBuffer> commandBuffer,
+						std::vector<std::shared_ptr<Semaphore>> signalSemaphores,
+						std::vector<std::shared_ptr<Semaphore>> waitSemaphores)
+{
+}
+
+void GraphicsVK::cmdBegin(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsVK::cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsVK::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsVK::cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsVK::cmdSetViewport(std::shared_ptr<CommandBuffer> commandBuffer,
+								float x, float, float width, float height, 
+								float depthMin, float depthMax)
+{
+}
+
+void GraphicsVK::cmdSetScissor(std::shared_ptr<CommandBuffer> commandBuffer,
+							   size_t x, size_t y, 
+							   size_t width, size_t height)
+{
+}
+
+void GraphicsVK::cmdClearColorAttachment(std::shared_ptr<CommandBuffer> commandBuffer,
+										 size_t attachmentTndex,
+										 const ClearValue& clearValue)
+{
+}
+
+void GraphicsVK::cmdBindRenderPipeline(std::shared_ptr<CommandBuffer> commandBuffer,
+									   std::shared_ptr<RenderPipeline> pipeline)
+{
+}
+
+void GraphicsVK::cmdBindDescriptorSet(std::shared_ptr<CommandBuffer> commandBuffer,
+									  std::shared_ptr<RenderPipeline> pipeline, 
+									  std::shared_ptr<DescriptorSet> descriptorSet)
+{
+}
+
+void GraphicsVK::cmdBindVertexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+									 std::shared_ptr<Buffer> vertexBuffer)
+{
+}
+
+void GraphicsVK::cmdBindVertexBuffers(std::shared_ptr<CommandBuffer> commandBuffer,
+									  std::vector<std::shared_ptr<Buffer>> vertexBuffers)
+{
+}
+
+void GraphicsVK::cmdBindIndexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+								std::shared_ptr<Buffer> indexBuffer)
+{
+}
+
+void GraphicsVK::cmdDraw(std::shared_ptr<CommandBuffer> commandBuffer,
+						size_t vertexCount, size_t vertexStart)
+{
+}
+
+void GraphicsVK::cmdDrawIndexed(std::shared_ptr<CommandBuffer> commandBuffer,
+								size_t indexCount, size_t indexStart)
+{
+}
+
+void GraphicsVK::cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer,
+									std::shared_ptr<Texture> texture, 
+									Texture::Usage usagePrev, 
+									Texture::Usage usageNext)
+{
+}
+
+void GraphicsVK::cmdTransitionRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
+										 std::shared_ptr<RenderPass> renderPass, 
+										 Texture::Usage usagePrev, 
+										 Texture::Usage usageNext)
+{
+}
+
+std::shared_ptr<Semaphore> GraphicsVK::createSemaphore()
+{
+	return nullptr;
+}
+
+void GraphicsVK::destroySemaphore(std::shared_ptr<Semaphore> semaphore)
+{
+}
+
+std::shared_ptr<Fence> GraphicsVK::createFence()
+{
+	return nullptr;
+}
+
+void GraphicsVK::destroyFence(std::shared_ptr<Fence> fence)
 {
 }
 
@@ -435,7 +495,7 @@ std::shared_ptr<Texture> GraphicsVK::createTexture(Texture::Type type, size_t wi
     VkResult vkResult = vkGetPhysicalDeviceImageFormatProperties(_physicalDevice, imageCreateInfo.format,
 															     imageCreateInfo.imageType, imageCreateInfo.tiling, 
 															     imageCreateInfo.usage, imageCreateInfo.flags, &imageFormatProps);
-    assert(VK_SUCCESS == vkResult);
+    GP_ASSERT(VK_SUCCESS == vkResult);
     if (imageCreateInfo.mipLevels > 1) 
 	{
         mipLevels = GP_MATH_MIN(mipLevels, imageFormatProps.maxMipLevels);
@@ -736,6 +796,281 @@ void GraphicsVK::destroyTexture(std::shared_ptr<Texture> texture)
 	textureVK.reset();
 }
 
+std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t height,
+														 size_t colorAttachmentCount,
+														 Format colorFormat,
+														 Format depthStencilFormat,
+														 Texture::SampleCount sampleCount)
+{
+	// Create the render pass
+	VkAttachmentDescription* attachmentDescs = nullptr;
+	VkAttachmentReference* colorAttachmentRefs = nullptr;
+    VkAttachmentReference* resolveAttachmentRefs = nullptr;
+    VkAttachmentReference* depthStencilAttachmentRef = nullptr;
+	size_t depthStencilAttachmentCount = depthStencilFormat == Format::FORMAT_UNDEFINED ? 0 : 1;
+
+	if (sampleCount > Texture::SAMPLE_COUNT_1X)
+	{
+		attachmentDescs = (VkAttachmentDescription*)calloc((2 * colorAttachmentCount) + depthStencilAttachmentCount, sizeof(*attachmentDescs));
+		GP_ASSERT(attachmentDescs != nullptr);
+		if (colorAttachmentCount > 0) 
+		{
+            colorAttachmentRefs = (VkAttachmentReference*)calloc(colorAttachmentCount, sizeof(*colorAttachmentRefs));
+            GP_ASSERT(colorAttachmentRefs != nullptr);
+            resolveAttachmentRefs = (VkAttachmentReference*)calloc(colorAttachmentCount, sizeof(*resolveAttachmentRefs));
+            GP_ASSERT(resolveAttachmentRefs != nullptr);
+        }
+		if (depthStencilAttachmentCount > 0)
+		{
+            depthStencilAttachmentRef = (VkAttachmentReference*)calloc(1, sizeof(*depthStencilAttachmentRef));
+            GP_ASSERT(depthStencilAttachmentRef);
+        }
+        for (size_t i = 0; i < colorAttachmentCount; ++i) 
+		{
+            const size_t colorIndex = 2 * i;
+            const size_t multiSampleIndex = colorIndex + 1;
+            attachmentDescs[colorIndex].flags = 0;
+            attachmentDescs[colorIndex].format = toFormat(colorFormat);
+            attachmentDescs[colorIndex].samples = toSamples(sampleCount);
+            attachmentDescs[colorIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[colorIndex].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[colorIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[colorIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[colorIndex].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachmentDescs[colorIndex].flags = 0;
+
+			attachmentDescs[multiSampleIndex].format = toFormat(colorFormat);
+            attachmentDescs[multiSampleIndex].samples = toSamples(sampleCount);
+            attachmentDescs[multiSampleIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[multiSampleIndex].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[multiSampleIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[multiSampleIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[multiSampleIndex].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachmentDescs[multiSampleIndex].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            colorAttachmentRefs[i].attachment = multiSampleIndex;
+            colorAttachmentRefs[i].layout = attachmentDescs[multiSampleIndex].initialLayout;
+            resolveAttachmentRefs[i].attachment = colorIndex;
+            resolveAttachmentRefs[i].layout = attachmentDescs[colorIndex].initialLayout;
+        }
+	
+        if (depthStencilAttachmentCount > 0)
+		{
+            const uint32_t index = (2 * colorAttachmentCount);
+            attachmentDescs[index].flags = 0;
+            attachmentDescs[index].format = toFormat(depthStencilFormat);
+            attachmentDescs[index].samples = toSamples(sampleCount);
+            attachmentDescs[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[index].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[index].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            attachmentDescs[index].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            depthStencilAttachmentRef[0].attachment = index;
+            depthStencilAttachmentRef[0].layout = attachmentDescs[index].initialLayout;
+        }
+	}
+	else
+	{
+		attachmentDescs = (VkAttachmentDescription*)calloc(colorAttachmentCount + depthStencilAttachmentCount, sizeof(*attachmentDescs));
+        GP_ASSERT(attachmentDescs != nullptr);
+
+        if (colorAttachmentCount > 0) 
+		{
+            colorAttachmentRefs = (VkAttachmentReference*)calloc(colorAttachmentCount, sizeof(*colorAttachmentRefs));
+            GP_ASSERT(colorAttachmentRefs != nullptr);
+        }
+        if (depthStencilAttachmentCount > 0) 
+		{
+            depthStencilAttachmentRef = (VkAttachmentReference*)calloc(1, sizeof(*depthStencilAttachmentRef));
+            GP_ASSERT(depthStencilAttachmentRef != nullptr);
+        }
+        for (uint32_t i = 0; i < colorAttachmentCount; ++i)
+		{
+            const uint32_t colorIndex = i;
+            attachmentDescs[colorIndex].flags = 0;
+            attachmentDescs[colorIndex].format = toFormat(colorFormat);
+            attachmentDescs[colorIndex].samples = toSamples(sampleCount);
+            attachmentDescs[colorIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[colorIndex].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[colorIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[colorIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[colorIndex].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachmentDescs[colorIndex].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            colorAttachmentRefs[i].attachment = colorIndex;
+            colorAttachmentRefs[i].layout = attachmentDescs[colorIndex].initialLayout;
+        }
+
+        if (depthStencilAttachmentCount > 0) 
+		{
+            uint32_t index = colorAttachmentCount;
+            attachmentDescs[index].flags = 0;
+            attachmentDescs[index].format = toFormat(depthStencilFormat);
+            attachmentDescs[index].samples = toSamples(sampleCount);
+            attachmentDescs[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachmentDescs[index].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachmentDescs[index].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            attachmentDescs[index].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+            depthStencilAttachmentRef[0].attachment = index;
+            depthStencilAttachmentRef[0].layout = attachmentDescs[index].initialLayout;
+        }
+	}
+
+	VkSubpassDescription subpass {};
+    subpass.flags = 0;
+    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpass.inputAttachmentCount = 0;
+    subpass.pInputAttachments = nullptr;
+    subpass.colorAttachmentCount = colorAttachmentCount;
+    subpass.pColorAttachments = colorAttachmentRefs;
+    subpass.pResolveAttachments = resolveAttachmentRefs;
+    subpass.pDepthStencilAttachment = depthStencilAttachmentRef;
+    subpass.preserveAttachmentCount = 0;
+    subpass.pPreserveAttachments = nullptr;
+
+	// Create self-dependency in case image or memory barrier is issued within subpass
+	VkSubpassDependency subpassDependency {};
+    subpassDependency.srcSubpass = 0;
+    subpassDependency.dstSubpass = 0;
+    subpassDependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    subpassDependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    subpassDependency.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    subpassDependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    subpassDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+	uint32_t attachmentCount = (sampleCount > Texture::SAMPLE_COUNT_1X) ? (2 * colorAttachmentCount) : colorAttachmentCount;
+    attachmentCount += depthStencilAttachmentCount;
+
+	// Create render pass
+	VkRenderPass renderPassVK = nullptr;
+	{
+		VkRenderPassCreateInfo createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		createInfo.pNext = nullptr;
+		createInfo.flags = 0;
+		createInfo.attachmentCount = attachmentCount;
+		createInfo.pAttachments = attachmentDescs;
+		createInfo.subpassCount = 1;
+		createInfo.pSubpasses = &subpass;
+		createInfo.dependencyCount = 1;
+		createInfo.pDependencies = &subpassDependency;
+		VK_CHECK_RESULT(vkCreateRenderPass(_device, &createInfo, nullptr, &renderPassVK));
+	}
+
+	GP_SAFE_FREE(attachmentDescs);
+	GP_SAFE_FREE(colorAttachmentRefs);
+    GP_SAFE_FREE(resolveAttachmentRefs);
+    GP_SAFE_FREE(depthStencilAttachmentRef);
+
+	std::vector<std::shared_ptr<Texture>> colorAttachments;
+	std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments;
+	std::shared_ptr<Texture> depthStencilAttachment = nullptr;
+
+	// Create the framebuffer
+	VkFramebuffer framebufferVK = nullptr;
+	{
+		size_t imageCount = colorAttachmentCount;
+		if (sampleCount > Texture::SAMPLE_COUNT_1X)
+		{
+			imageCount *= 2;
+		}
+		if (depthStencilFormat != Format::FORMAT_UNDEFINED)
+		{
+			imageCount += 1;
+		}
+
+		// Create the framebuffer textures
+		VkImageView* imageViews = (VkImageView*)calloc(imageCount, sizeof(*imageViews));
+		GP_ASSERT(imageViews != nullptr);
+
+		VkImageView* imageView = imageViews;
+
+		// Color
+		for (size_t i = 0; i < colorAttachmentCount; ++i)
+		{
+			std::shared_ptr<Texture> colorAttachment = createTexture2d(width, height, 1, colorFormat, 
+																	  Texture::USAGE_COLOR_ATTACHMENT, 
+																	  Texture::SAMPLE_COUNT_1X, false);
+		    std::shared_ptr<TextureVK> colorAttachmentVK = std::static_pointer_cast<TextureVK>(colorAttachment);
+			*imageView = colorAttachmentVK->_imageView;
+			++imageView;
+			colorAttachments.push_back(colorAttachment);
+			if (sampleCount > Texture::SAMPLE_COUNT_1X)
+			{
+				std::shared_ptr<Texture> colorMultisampleAttachment = createTexture2d(width, height, 1, colorFormat, 
+																					  Texture::USAGE_COLOR_ATTACHMENT, 
+																					  sampleCount, false);
+				std::shared_ptr<TextureVK> colorMultisampleAttachmentVK = std::static_pointer_cast<TextureVK>(colorMultisampleAttachment);
+				*imageView = colorMultisampleAttachmentVK->_imageView;
+				++imageView;
+				colorMultisampleAttachments.push_back(colorMultisampleAttachment);
+			}
+		}
+		// DepthStencil
+		if (depthStencilFormat != Format::FORMAT_UNDEFINED)
+		{
+			depthStencilAttachment = createTexture2d(width, height, 1, depthStencilFormat, 
+													 Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
+													 Texture::SAMPLE_COUNT_1X, false);
+			std::shared_ptr<TextureVK> depthStencilAttachmentVK = std::static_pointer_cast<TextureVK>(depthStencilAttachment);
+			*imageView = depthStencilAttachmentVK->_imageView;
+			++imageView;
+		}
+
+		// Create the framebuffer
+		VkFramebufferCreateInfo createInfo {};
+		createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		createInfo.pNext = nullptr;
+		createInfo.flags = 0;
+		createInfo.renderPass = renderPassVK;
+		createInfo.attachmentCount = attachmentCount;
+		createInfo.pAttachments = imageViews;
+		createInfo.width = width;
+		createInfo.height = height;
+		createInfo.layers = 1;
+		VK_CHECK_RESULT(vkCreateFramebuffer(_device, &createInfo, nullptr, &framebufferVK));
+		GP_SAFE_FREE(imageViews);
+	}
+
+	std::shared_ptr<RenderPassVK> renderPass = std::make_shared<RenderPassVK>(width, height,
+																			  colorAttachmentCount, colorFormat,
+																			  depthStencilFormat, 
+																			  sampleCount,
+																			  colorAttachments,
+																			  colorMultisampleAttachments,
+																			  depthStencilAttachment,
+																			  _device, renderPassVK, framebufferVK);
+	return std::static_pointer_cast<RenderPass>(renderPass);
+}
+
+void GraphicsVK::destroyRenderPass(std::shared_ptr<RenderPass> renderPass)
+{
+}
+
+std::shared_ptr<Sampler> GraphicsVK::createSampler(Sampler::Filter filterMag,
+												   Sampler::Filter filterMin,
+												   Sampler::Filter filterMip,
+												   Sampler::AddressMode addressModeU,
+												   Sampler::AddressMode addressModeV,
+												   Sampler::AddressMode addressModeW,
+												   Sampler::CompareFunc compareFunc,
+												   Sampler::BorderColor borderColor,
+												   float anisotropyMax,
+												   float lodMin,
+												   float lodMax,
+												   float lodMipBias)
+{
+	return nullptr;
+}
+
+void GraphicsVK::destroySampler(std::shared_ptr<Sampler> sampler)
+{
+}
+
 std::shared_ptr<Shader> GraphicsVK::createShader(const std::string& url)
 {
 	std::string shaderUrl = FileSystem::getHomePath();
@@ -762,6 +1097,37 @@ void GraphicsVK::destroyShader(std::shared_ptr<Shader> shader)
 	std::shared_ptr<ShaderVK> shaderVK = std::static_pointer_cast<ShaderVK>(shader);
 	vkDestroyShaderModule(_device, shaderVK->_shader, nullptr);
 	shaderVK.reset();
+}
+
+std::shared_ptr<DescriptorSet> GraphicsVK::createDescriptorSet(const DescriptorSet::Descriptor* descriptors, 
+																  size_t descriptorCount)
+{
+	return nullptr;
+}
+
+void GraphicsVK::destroyDescriptorSet(std::shared_ptr<DescriptorSet> descriptorSet)
+{
+}
+
+std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline::PrimitiveTopology primitiveTopology,
+																 VertexLayout vertexLayout,
+																 RasterizerState rasterizerState,
+																 ColorBlendState colorBlendState,
+																 DepthStencilState depthStencilState,
+																 std::shared_ptr<RenderPass> renderPass,
+																 std::shared_ptr<DescriptorSet> descriptorSet,
+																 std::shared_ptr<Shader> vertShader,
+																 std::shared_ptr<Shader> tescShader,
+																 std::shared_ptr<Shader> teseShader,
+																 std::shared_ptr<Shader> geomShader,
+																 std::shared_ptr<Shader> fragShader)
+{
+	return nullptr;
+}
+
+void GraphicsVK::destroyRenderPipeline(std::shared_ptr<RenderPipeline> pipeline)
+{
+
 }
 
 void GraphicsVK::createInstance()
@@ -933,8 +1299,11 @@ void GraphicsVK::createDevice()
 	// Create device
 	VK_CHECK_RESULT(vkCreateDevice(_physicalDevice, &deviceCreateInfo, nullptr, &_device));
 
-	// Get the graphics queue
-	vkGetDeviceQueue(_device, _queueFamilyIndexGraphics, 0, &_queueGraphics);
+	// Get the rendering queue
+	VkQueue renderQueue;
+	vkGetDeviceQueue(_device, _queueFamilyIndexGraphics, 0, &renderQueue);
+
+
 }
 
 void GraphicsVK::createSurface(unsigned long window, unsigned long connection)
@@ -1198,7 +1567,7 @@ void GraphicsVK::createDepthStencil()
 	VK_CHECK_RESULT(vkCreateImageView(_device, &imageViewCreateInfo, nullptr, &_depthStencilImageView));
 }
 
-void GraphicsVK::createRenderPass()
+void GraphicsVK::createFrameBuffer()
 {
 	std::array<VkAttachmentDescription, 2> attachments = {};
 
@@ -1313,41 +1682,6 @@ void GraphicsVK::createSynchronizationPrimitives()
 	_fences.resize(_commandBuffers.size());
 	for (auto& fence : _fences)
 		VK_CHECK_RESULT(vkCreateFence(_device, &fenceCreateInfo, nullptr, &fence));
-}
-
-void GraphicsVK::createPipelineCache()
-{
-	VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
-	pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-	VK_CHECK_RESULT(vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache));
-}
-
-void GraphicsVK::buildCommands()
-{
-	// TODO: change this to builder pattern
-	VkCommandBufferBeginInfo cmdBufInfo = {};
-	cmdBufInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	cmdBufInfo.pNext = nullptr;
-
-	VkClearColorValue clearColor = { { 0.0f, 0.0f, 0.0f, 1.0f } };
-	VkClearDepthStencilValue clearDepthStencil = { 1.0f, 0 };
-
-	VkImageSubresourceRange subResourceRange = {};
-	subResourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	subResourceRange.baseMipLevel = 0;
-	subResourceRange.levelCount = 1;
-	subResourceRange.baseArrayLayer = 0;
-	subResourceRange.layerCount = 1;
-
-	for (int32_t i = 0; i < _commandBuffers.size(); ++i)
-	{
-		VK_CHECK_RESULT(vkBeginCommandBuffer(_commandBuffers[i], &cmdBufInfo));
-
-		vkCmdClearColorImage(_commandBuffers[i], _backBufferImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1, &subResourceRange);
-		vkCmdClearDepthStencilImage(_commandBuffers[i], _depthStencilImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearDepthStencil, 1, &subResourceRange);
-
-		VK_CHECK_RESULT(vkEndCommandBuffer(_commandBuffers[i]));
-	}
 }
 
 void GraphicsVK::createCommandBuffers()

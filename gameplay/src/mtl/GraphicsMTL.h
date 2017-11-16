@@ -54,56 +54,160 @@ public:
      * @see Graphics::getHeight
      */
     int getHeight();
-    
+
     /**
-     * @see Graphics::createCommandPool
+     * @see Graphics::getSemaphore
      */
-    std::shared_ptr<CommandPool> createCommandPool(bool transient = false);
-    
+    std::shared_ptr<Semaphore> getSemaphore(size_t imageIndex);
+
     /**
-     * @see Graphics::destroyCommandPool
+     * @see Graphics::getFence
      */
-    void destroyCommandPool(std::shared_ptr<CommandPool> commandPool);
-    
+    std::shared_ptr<Fence> getFence(size_t imageIndex);
+
     /**
-     * @see Graphics::createCommandLists
+     * @see Graphics::getRenderPass
      */
-    std::shared_ptr<CommandList> createCommandList(std::shared_ptr<CommandPool> pool, bool secondary);
-    
+    std::shared_ptr<RenderPass> getRenderPass(size_t imageIndex);
+
     /**
-     * @see Graphics::createCommandLists
+     * @see Graphics::acquireNextImage
      */
-    void createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
-                            std::vector<std::shared_ptr<CommandList>> out);
-    /**
-     * @see Graphics::destroyCommandList
-     */
-    void destroyCommandList(std::shared_ptr<CommandList> commandList);
-    
-    /**
-     * @see Graphics::destroyCommandLists
-     */
-    void destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists);
-    
-    /**
-     * @see Graphics::submitCommands
-     */
-    void submitCommands(std::shared_ptr<CommandList> commands);
-    
-    /**
-     * @see Graphics::submitCommands
-     */
-    void submitCommands(std::vector<std::shared_ptr<CommandList>> commands);
-    
-    /**
-     * @see Graphics::flushCommands
-     */
-    void flushCommands();
-    
+    void acquireNextImage(std::shared_ptr<Semaphore> signalSemaphore,
+                          std::shared_ptr<Fence> fence);
     /**
      * @see Graphics::present
      */
-    void present();
+    void present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores);
+
+    /**
+     * @see Graphics::waitForFence
+     */
+    void waitForFence(std::shared_ptr<Fence> fence);
+
+    /**
+     * @see Graphics::createCommandBuffer
+     */
+    std::shared_ptr<CommandBuffer> createCommandBuffer();
+
+    /**
+     * @see Graphics::destroyCommandBuffer
+     */
+    void destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer);
+
+    /**
+     * @see Graphics::submit
+     */
+    void submit(std::shared_ptr<CommandBuffer> commandBuffer,
+                std::vector<std::shared_ptr<Semaphore>> signalSemaphores,
+                std::vector<std::shared_ptr<Semaphore>> waitSemaphores);
+    /**
+     * @see Graphics::cmdBegin
+     */
+    void cmdBegin(std::shared_ptr<CommandBuffer> commandBuffer);
+
+    /**
+     * @see Graphics::cmdEnd
+     */
+    void cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer);
+
+    /**
+     * @see Graphics::cmdBeginRenderPass
+     */
+    void cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer);
+
+    /**
+     * @see Graphics::cmdEndRenderPass
+     */
+    void cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer);
+
+    /**
+     * @see Graphics::cmdSetViewport
+     */
+    void cmdSetViewport(std::shared_ptr<CommandBuffer> commandBuffer,
+                        float x, float, float width, float height, 
+                        float depthMin, float depthMax);
+    /**
+     * @see Graphics::cmdSetScissor
+     */
+    void cmdSetScissor(std::shared_ptr<CommandBuffer> commandBuffer,
+                       size_t x, size_t y, 
+                       size_t width, size_t height);
+    /**
+     * @see Graphics::cmdClearColorAttachment
+     */
+    void cmdClearColorAttachment(std::shared_ptr<CommandBuffer> commandBuffer,
+                                 size_t attachmentTndex, 
+                                 const ClearValue& clearValue);
+    /**
+     * @see Graphics::cmdBindRenderPipeline
+     */
+    void cmdBindRenderPipeline(std::shared_ptr<CommandBuffer> commandBuffer,
+                               std::shared_ptr<RenderPipeline> pipeline);
+    /**
+     * @see Graphics::cmdBindDescriptorSet
+     */
+    void cmdBindDescriptorSet(std::shared_ptr<CommandBuffer> commandBuffer,
+                              std::shared_ptr<RenderPipeline> pipeline, 
+                              std::shared_ptr<DescriptorSet> descriptorSet);
+    /**
+     * @see Graphics::cmdBindVertexBuffer
+     */
+    void cmdBindVertexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+                             std::shared_ptr<Buffer> vertexBuffer);
+    /**
+     * @see Graphics::cmdBindVertexBuffers
+     */
+    void cmdBindVertexBuffers(std::shared_ptr<CommandBuffer> commandBuffer,
+                              std::vector<std::shared_ptr<Buffer>> vertexBuffers);
+    /**
+     * @see Graphics::cmdBindIndexBuffer
+     */
+    void cmdBindIndexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+                                    std::shared_ptr<Buffer> indexBuffer);
+    /**
+     * @see Graphics::cmdDraw
+     */
+    void cmdDraw(std::shared_ptr<CommandBuffer> commandBuffer,
+                         size_t vertexCount, size_t vertexStart);
+    /**
+     * @see Graphics::cmdTransitionImage
+     */
+    void cmdDrawIndexed(std::shared_ptr<CommandBuffer> commandBuffer,
+                        size_t indexCount, size_t indexStart);
+    /**
+     * @see Graphics::cmdTransitionImage
+     */
+    void cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer,
+                            std::shared_ptr<Texture> texture, 
+                            Texture::Usage usagePrev, 
+                            Texture::Usage usageNext);
+    /**
+     * @see Graphics::cmdTransitionRenderPass
+     */
+    void cmdTransitionRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
+                                 std::shared_ptr<RenderPass> renderPass, 
+                                 Texture::Usage usagePrev, 
+                                 Texture::Usage usageNext);
+    /**
+     * @see Graphics::createSemaphore
+     */
+    std::shared_ptr<Semaphore> createSemaphore();
+
+    /**
+     * @see Graphics::destroySemaphore
+     */
+    void destroySemaphore(std::shared_ptr<Semaphore> semaphore);
+
+    /**
+     * @see Graphics::createFence
+     */
+    std::shared_ptr<Fence> createFence();
+
+    /**
+     * @see Graphics::destroyFence
+     */
+    void destroyFence(std::shared_ptr<Fence> fence);
 
     /**
      * @see Graphics::createVertexBuffer
@@ -153,6 +257,80 @@ public:
      * @see Graphics::destroyTexture
      */
     void destroyTexture(std::shared_ptr<Texture> texture);
+
+    /**
+     * @see Graphics::createRenderPass
+     */
+    std::shared_ptr<RenderPass> createRenderPass(size_t width, size_t height, 
+                                                 size_t colorAttachmentCount,
+                                                 Format colorFormat,
+                                                 Format depthStencilFormat,
+                                                 Texture::SampleCount sampleCount);
+    /**
+     * @see Graphics::destroyRenderPass
+     */
+    void destroyRenderPass(std::shared_ptr<RenderPass> renderPass);
+
+    /**
+     * @see Graphics::createSampler
+     */
+    std::shared_ptr<Sampler> createSampler(Sampler::Filter filterMag,
+                                           Sampler::Filter filterMin,
+                                           Sampler::Filter filterMip,
+                                           Sampler::AddressMode addressModeU,
+                                           Sampler::AddressMode addressModeV,
+                                           Sampler::AddressMode addressModeW,
+                                           Sampler::CompareFunc compareFunc,
+                                           Sampler::BorderColor borderColor,
+                                           float anisotropyMax,
+                                           float lodMin,
+                                           float lodMax,
+                                           float lodMipBias);
+    /**
+     * @see Graphics::destroySampler
+     */
+    void destroySampler(std::shared_ptr<Sampler> sampler);
+
+    /**
+     * @see Graphics::createShader
+     */
+    std::shared_ptr<Shader> createShader(const std::string& url);
+
+    /**
+     * @see Graphics::destroyShader
+     */
+    void destroyShader(std::shared_ptr<Shader> shader);
+
+    /**
+     * @see Graphics::createDescriptorSet
+     */
+    std::shared_ptr<DescriptorSet> createDescriptorSet(const DescriptorSet::Descriptor* descriptors, 
+                                                       size_t descriptorCount);;
+    /**
+     * @see Graphics::destroyDescriptorSet
+     */
+    void destroyDescriptorSet(std::shared_ptr<DescriptorSet> descriptorSet);
+
+    /**
+     * @see Graphics::createRenderPipeline
+     */
+    std::shared_ptr<RenderPipeline> createRenderPipeline(RenderPipeline::PrimitiveTopology primitiveTopology,
+                                                         VertexLayout vertexLayout,
+                                                         RasterizerState rasterizerState,
+                                                         ColorBlendState colorBlendState,
+                                                         DepthStencilState depthStencilState,
+                                                         std::shared_ptr<RenderPass> renderPass,
+                                                         std::shared_ptr<DescriptorSet> descriptorSet,
+                                                         std::shared_ptr<Shader> vertShader,
+                                                         std::shared_ptr<Shader> tescShader,
+                                                         std::shared_ptr<Shader> teseShader,
+                                                         std::shared_ptr<Shader> geomShader,
+                                                         std::shared_ptr<Shader> fragShader);
+    /**
+     * @see Graphics::destroyRenderPipeline
+     */
+    void destroyRenderPipeline(std::shared_ptr<RenderPipeline> pipeline);
+
 private:
     
     bool _initialized;

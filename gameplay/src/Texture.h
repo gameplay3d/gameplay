@@ -128,7 +128,7 @@ public:
 	 *
 	 * @return The number of samples.
 	 */
-	SampleCount getSampleCount() const;
+	Texture::SampleCount getSampleCount() const;
 
 	/**
 	 * Deterines if the buffer has visible access to host memory.
@@ -153,7 +153,7 @@ protected:
 	size_t _mipLevels;
 	Format _pixelFormat;
 	Usage _usage;	
-	SampleCount _sampleCount;
+	Texture::SampleCount _sampleCount;
 	bool _hostVisible;
 };
 

@@ -1,17 +1,26 @@
 #pragma once
 
 #include "Format.h"
-#include "CommandPool.h"
-#include "CommandList.h"
+#include "ClearValue.h"
 #include "Buffer.h"
 #include "Texture.h"
+#include "RenderPass.h"
+#include "Sampler.h"
 #include "Shader.h"
+#include "VertexLayout.h"
+#include "DescriptorSet.h"
+#include "RenderPipeline.h"
+#include "CommandBuffer.h"
+#include "Semaphore.h"
+#include "Fence.h"
 
 namespace gameplay
-{	
+{
 
 /**
  * Defines an abstract graphics system.
+ *
+ * Provides direct gpu for rendering, compute and copy operations.
  */
 class Graphics
 {   
@@ -27,19 +36,6 @@ public:
         API_MTL
     };
 
-
-	/**
-	 * Defines the primitive topology.
-	 */
-	enum PrimitiveTopology
-	{
-		PRIMITIVE_TOPOLOGY_TRIANGLES,
-        PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP,
-        PRIMITIVE_TOPOLOGY_LINES,
-        PRIMITIVE_TOPOLOGY_LINE_STRIP,
-        PRIMITIVE_TOPOLOGY_POINTS
-	};
-
 	/**
      * Defines index formats.
      */
@@ -49,7 +45,6 @@ public:
         INDEX_FORMAT_UINT
     };
 	
-   
     /**
      * Gets the graphics system.
      *
@@ -65,90 +60,99 @@ public:
     Graphics::Api getApi();
 
     /**
-     * Gets the width of the graphics sytem presentation images.
+     * Gets the width of the graphics sytem swap images.
      *
-     * @return The width of the graphics sytem presentation images.
+     * @return The width of the graphics sytem swap images.
      */
     virtual int getWidth() = 0;
 
     /**
-     * Gets the height of the graphics sytem presentation images.
+     * Gets the height of the graphics sytem swap images.
      *
-     * @return The height of the graphics sytem presentation images.
+     * @return The height of the graphics sytem swap images.
      */
     virtual int getHeight() = 0;
 
-	/**
-	 * Creates a command pool for processing gpu commands buffer.
-	 *
-	 * @param transient Indicates the command from this pool are short-lived, false if not short-lived.
-	 * @return The created command list for processing gpu commands.
-	 */
-	virtual std::shared_ptr<CommandPool> createCommandPool(bool transient = false) = 0;
+	virtual std::shared_ptr<Semaphore> getSemaphore(size_t imageIndex) = 0;
 
-	/**
-	 * Destroy a command pool.
-	 *
-     * @param pool The command pool to detroy.
-	 */
-	virtual void destroyCommandPool(std::shared_ptr<CommandPool> pool) = 0;
+	virtual std::shared_ptr<Fence> getFence(size_t imageIndex) = 0;
 
-	/**
-	 * Creates a command list that is used for encoding command that are submitted to the gpu.
-	 *
-	 * @param pool The command pool this list is created from.
-	 * @param secondary true if this is a secondary command list with lower processing priority, false if primary.
-	 * @return The created commandlist.
-	 */
-	virtual std::shared_ptr<CommandList> createCommandList(std::shared_ptr<CommandPool> pool, bool secondary) = 0;
+	virtual std::shared_ptr<RenderPass> getRenderPass(size_t imageIndex) = 0;
 
-	/**
-	 * Creates an array command list that is used for encoding command that are submitted to the gpu.
-	 *
-	 * @param pool The command pool this list is created from.
-	 * @param secondary true if this is a secondary command list with lower processing priority, false if primary.
-	 * @param count The number of command list to be created.
-	 * @param out The vector of command lists to be added into.
-	 */
-	virtual void createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
-									std::vector<std::shared_ptr<CommandList>> out) = 0;
-	/**
-	 * Destroys a command list.
-	 *
-	 * @param commandList The command list to be destroyed.
-	 */
-	virtual void destroyCommandList(std::shared_ptr<CommandList> commandList) = 0;
+	virtual void acquireNextImage(std::shared_ptr<Semaphore> signalSemaphore,
+								  std::shared_ptr<Fence> fence) = 0;
 
-	/**
-	 * Destroys the command lists.
-	 *
-	 * @param commandLists The vector of command lists to be destroyed.
-	 */
-	virtual void destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists) = 0;
+	virtual void present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores) = 0;
 
-	/**
-	 * Submits a vector command lists for processing the gpu commands in them.
-	 *
-	 * @param commands The command list to be submitted.
-	 */
-	virtual void submitCommands(std::shared_ptr<CommandList> commands) = 0;
+	virtual void waitForFence(std::shared_ptr<Fence> fence) = 0;
 
-	/**
-	 * Submits a vector command lists for processing the gpu commands in them.
-	 *
-	 * @param commands The command lists to be submitted.
-	 */
-	virtual void submitCommands(std::vector<std::shared_ptr<CommandList>> commands) = 0;
+	virtual std::shared_ptr<CommandBuffer> createCommandBuffer() = 0;
 
-    /**
-     * Flushes the commands in the queue, releases resources and blocks until completed.
-     */
-    virtual void flushCommands() = 0;
+	virtual void destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
 
-    /**
-     * Presents the contents of the framebuffer to the display.
-     */
-    virtual void present() = 0;
+	virtual void submit(std::shared_ptr<CommandBuffer> commandBuffer,
+						std::vector<std::shared_ptr<Semaphore>> signalSemaphores,
+						std::vector<std::shared_ptr<Semaphore>> waitSemaphores) = 0;
+
+	virtual void cmdBegin(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
+
+	virtual void cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
+
+	virtual void cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
+
+	virtual void cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
+
+	virtual void cmdSetViewport(std::shared_ptr<CommandBuffer> commandBuffer,
+								float x, float, float width, float height, 
+								float depthMin, float depthMax) = 0;
+
+	virtual void cmdSetScissor(std::shared_ptr<CommandBuffer> commandBuffer,
+							   size_t x, size_t y, 
+							   size_t width, size_t height) = 0;
+
+	virtual void cmdClearColorAttachment(std::shared_ptr<CommandBuffer> commandBuffer,
+										 size_t attachmentTndex, 
+										 const ClearValue& clearValue) = 0;
+
+	virtual void cmdBindRenderPipeline(std::shared_ptr<CommandBuffer> commandBuffer,
+									   std::shared_ptr<RenderPipeline> pipeline) = 0;
+
+	virtual void cmdBindDescriptorSet(std::shared_ptr<CommandBuffer> commandBuffer,
+									  std::shared_ptr<RenderPipeline> pipeline, 
+									  std::shared_ptr<DescriptorSet> descriptorSet) = 0;
+
+	virtual void cmdBindVertexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+									  std::shared_ptr<Buffer> vertexBuffer) = 0;
+
+	virtual void cmdBindVertexBuffers(std::shared_ptr<CommandBuffer> commandBuffer,
+									  std::vector<std::shared_ptr<Buffer>> vertexBuffers) = 0;
+
+	virtual void cmdBindIndexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+									std::shared_ptr<Buffer> indexBuffer) = 0;
+
+	virtual void cmdDraw(std::shared_ptr<CommandBuffer> commandBuffer,
+						 size_t vertexCount, size_t vertexStart) = 0;
+
+	virtual void cmdDrawIndexed(std::shared_ptr<CommandBuffer> commandBuffer,
+								size_t indexCount, size_t indexStart) = 0;
+
+	virtual void cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer,
+									std::shared_ptr<Texture> texture, 
+									Texture::Usage usagePrev, 
+									Texture::Usage usageNext) = 0;
+
+    virtual void cmdTransitionRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
+										 std::shared_ptr<RenderPass> renderPass, 
+										 Texture::Usage usagePrev, 
+										 Texture::Usage usageNext) = 0;
+
+	virtual std::shared_ptr<Semaphore> createSemaphore() = 0;
+
+	virtual void destroySemaphore(std::shared_ptr<Semaphore> semaphore) = 0;
+
+	virtual std::shared_ptr<Fence> createFence() = 0;
+
+	virtual void destroyFence(std::shared_ptr<Fence> fence) = 0;
 
 	/**
 	 * Creates a vertex buffer.
@@ -158,9 +162,8 @@ public:
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @return The created vertex buffer.
 	 */
-	virtual std::shared_ptr<Buffer> createVertexBuffer(size_t size, size_t vertexStride, 
-													   bool hostVisible) = 0;		
- 	
+	virtual std::shared_ptr<Buffer> createVertexBuffer(size_t size, size_t vertexStride, bool hostVisible) = 0;	
+
 	/**
 	 * Creates a index buffer.
 	 *
@@ -169,8 +172,7 @@ public:
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @return The created index buffer.
 	 */
-	virtual std::shared_ptr<Buffer> createIndexBuffer(size_t size, IndexFormat indexFormat, 
-													  bool hostVisible) = 0;
+	virtual std::shared_ptr<Buffer> createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible) = 0;
 
 	/**
 	 * Creates a uniform buffer.
@@ -179,8 +181,7 @@ public:
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @return The created uniform buffer.
 	 */
-	virtual std::shared_ptr<Buffer> createUniformBuffer(size_t size, 
-														bool hostVisible) = 0;
+	virtual std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible) = 0;
 
 	/**
 	 * Destroys a buffer.
@@ -199,9 +200,9 @@ public:
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 */
 	virtual std::shared_ptr<Texture> createTexture1d(size_t width, 
-													Format pixelFormat, 
-													Texture::Usage usage, 
-													Texture::SampleCount sampleCount,  
+													 Format pixelFormat, 
+													 Texture::Usage usage, 
+													 Texture::SampleCount sampleCount,  
 													 bool hostVisible) = 0;
 	/**
 	 * Creates a 2-dimensional texture.
@@ -215,10 +216,10 @@ public:
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 */
 	virtual std::shared_ptr<Texture> createTexture2d(size_t width, size_t height, size_t mipLevels, 
-													Format pixelFormat, 
-													Texture::Usage usage, 
-													Texture::SampleCount sampleCount, 
-													bool hostVisible) = 0;
+													 Format pixelFormat, 
+													 Texture::Usage usage, 
+													 Texture::SampleCount sampleCount, 
+													 bool hostVisible) = 0;
 	/**
 	 * Creates a 2-dimensional texture.
 	 *
@@ -243,9 +244,68 @@ public:
 	virtual void destroyTexture(std::shared_ptr<Texture> texture) = 0;
 
 	/**
+	 * Create a render pass.
+	 *
+	 * @param width The width of the attachements.
+	 * @param height The height of the attachments.
+	 * @param colorAttachmentCount The number of color attachments.
+	 * @param colorFormat The format of the color attachment(s).
+	 * @param depthStencilFormat The format of the depth/stencil attachment.
+	 * @param sampleCount The number of samples used when sampling the render pass.
+	 * @return The created RenderPass.
+	 */
+	virtual std::shared_ptr<RenderPass> createRenderPass(size_t width, size_t height, 
+														 size_t colorAttachmentCount,
+														 Format colorFormat,
+														 Format depthStencilFormat,
+														 Texture::SampleCount sampleCount) = 0;
+	/**
+	 * Destroys a render pass.
+	 * 
+	 * @param renderPass The RenderPass to be destroyed.
+	 */
+	virtual void destroyRenderPass(std::shared_ptr<RenderPass> renderPass) = 0;
+
+	/**
+	 * Creates a sampler.
+	 *
+	 * @param filterMag The value specifying the magnification filter to apply to lookups.
+	 * @param filterMin The value specifying the minification filter to apply to lookups.
+	 * @param filterMipMap The value specifying the mip map filter to apply to lookups.
+	 * @param addressModeU The value specifying the addressing mode for outside [0..1] range for U coordinate.
+	 * @param addressModeV The value specifying the addressing mode for outside [0..1] range for V coordinate.
+	 * @param addressModeW The value specifying the addressing mode for outside [0..1] range for W coordinate.
+	 * @param compareFunc The value specifying the comparison function to apply to fetched data before filtering.
+	 * @param borderColor The value specifying the border color used for texture lookup.
+	 * @param anisotropyMax The anisotropy value clamp.
+	 * @param lodMin The minimum value used to clamp the computed level-of-detail value.
+	 * @param lodMax The maximum value used to clamp the computed level-of-detail value.
+	 * @param lodMipBias The bias to be added to mipmap LOD calculation and bias provided by image sampling functions.
+	 */
+	virtual std::shared_ptr<Sampler> createSampler(Sampler::Filter filterMag,
+												   Sampler::Filter filterMin,
+												   Sampler::Filter filterMipMap,
+												   Sampler::AddressMode addressModeU,
+												   Sampler::AddressMode addressModeV,
+												   Sampler::AddressMode addressModeW,
+												   Sampler::CompareFunc compareFunc,
+												   Sampler::BorderColor borderColor,
+												   float anisotropyMax,
+												   float lodMin,
+												   float lodMax,
+												   float lodMipBias) = 0;
+	/**
+	 * Destroys a sampler.
+	 *
+	 * @param sampler The sampler to be destroyed.
+	 */
+	virtual void destroySampler(std::shared_ptr<Sampler> sampler) = 0;
+
+	/**
 	 * Creates a shader from graphics api specific 
 	 * byte-code/libraries.
 	 *
+	 * Example:
 	 * auto vertShader = createShader("nuklear.vert");
 	 *
 	 * Loads:
@@ -254,17 +314,68 @@ public:
 	 * mtl   -> "res/shaders/msl/nuklear.vert.metallib"
 	 *
 	 * @param url The url of the shader to load.
-	 *
-	 * @see Graphics::ShaderStage
+	 * @return The shader that is created.
 	 */
 	virtual std::shared_ptr<Shader> createShader(const std::string& url) = 0;
 
 	/**
 	 * Destroys the shader.
 	 *
-	 * @param shader The shader to destroy.
+	 * @param shader The shader to be destroyed.
 	 */
 	virtual void destroyShader(std::shared_ptr<Shader> shader) = 0;
+
+	/**
+	 * Creates a descriptor set.
+	 *
+	 * @param The array of descriptors.
+	 * @param The number of descriptors being created in the set.
+	 * @return The created descriptor set.
+	 */
+	virtual std::shared_ptr<DescriptorSet> createDescriptorSet(const DescriptorSet::Descriptor* descriptors, 
+															   size_t descriptorCount) = 0;
+
+	/**
+	 * Destroys a descriptor set.
+	 *
+	 * @param descriptorSet The descriptor set to be destroyed.
+	 */
+	virtual void destroyDescriptorSet(std::shared_ptr<DescriptorSet> descriptorSet) = 0;
+
+	/**
+	 * Creates a render pipeline.
+	 *
+	 * @param primitiveTopology The primitive topology for how vertices are connected.
+	 * @param vertexLayout The layout of vertex attributes being input into the pipeline.
+	 * @param rasterizerState The state of how a primitive is converted (rasterized) to a two-dimensional image.
+	 * @param colorBlendState The blending state across all color attachments.
+	 * @param depthStencilState The depth stencil state.
+	 * @param renderPass The render pass to used by the pipeline.
+	 * @param descriptorSet The resource descriptor set to be used by the pipeline.
+	 * @param vertShader The vertex shader.
+	 * @param tescShader The tessellation control shader.
+	 * @param teseShader The tessellation evaluation shader.
+	 * @param geomShader The geometry shader.
+	 * @param fragShader The fragment shader.
+	 */
+	virtual std::shared_ptr<RenderPipeline> createRenderPipeline(RenderPipeline::PrimitiveTopology primitiveTopology,
+																 VertexLayout vertexLayout,
+																 RasterizerState rasterizerState,
+																 ColorBlendState colorBlendState,
+																 DepthStencilState depthStencilState,
+																 std::shared_ptr<RenderPass> renderPass,
+																 std::shared_ptr<DescriptorSet> descriptorSet,
+																 std::shared_ptr<Shader> vertShader,
+																 std::shared_ptr<Shader> tescShader,
+																 std::shared_ptr<Shader> teseShader,
+																 std::shared_ptr<Shader> geomShader,
+																 std::shared_ptr<Shader> fragShader) = 0;
+	/**
+	 * Destroys a render pipeline.
+	 *
+	 * @param pipeline The pipeline to be destroyed.
+	 */
+	virtual void destroyRenderPipeline(std::shared_ptr<RenderPipeline> pipeline) = 0;
 
     /**
      * Event occurs when the platform requests to initialize graphics.
@@ -298,12 +409,12 @@ public:
      */
     virtual bool isResized() = 0;
 
+protected:
 
 	static size_t computeMipLevels(size_t width, size_t height);
 
     static Graphics* _graphics;
     Graphics::Api _api;
-
 };
 
 }

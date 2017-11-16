@@ -20,7 +20,7 @@ Texture::Texture() :
 Texture::Texture(Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
 				 Format pixelFormat, 
 				 Usage usage,
-				 Texture::SampleCount sampleCount, 
+				 SampleCount sampleCount, 
 				 bool hostVisible) :
 	_type(type),
 	_width(width),

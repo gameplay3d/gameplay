@@ -233,7 +233,7 @@ public:
 	 *
 	 * @param elapsedTime The time elapsed (in seconds) since the last onRender call.
 	 */
-	virtual void onRender(float elapsedTime);
+	void onRender(float elapsedTime);
     
     /**
      * Determines whether mouse input is currently set to capture.

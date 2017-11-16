@@ -24,6 +24,7 @@ TextureVK::TextureVK(Type type, size_t width, size_t height, size_t depth, size_
 	Texture(type, width, height, depth, mipLevels, pixelFormat, usage, sampleCount, hostVisible), 
 	_device(device),
 	_image(image),
+	_imageView(nullptr),
 	_deviceMemory(deviceMemory),
 	_hostMemory(nullptr)
 {

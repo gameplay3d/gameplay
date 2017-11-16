@@ -1,10 +1,12 @@
 #include "Base.h"
 #include "GraphicsD3D12.h"
-#include "CommandPoolD3D12.h"
-#include "CommandListD3D12.h"
 #include "BufferD3D12.h"
 #include "TextureD3D12.h"
+#include "RenderPassD3D12.h"
+#include "SamplerD3D12.h"
 #include "ShaderD3D12.h"
+#include "DescriptorSetD3D12.h"
+#include "RenderPipelineD3D12.h"
 #include "Game.h"
 #include "FileSystem.h"
 
@@ -33,12 +35,9 @@ GraphicsD3D12::GraphicsD3D12() :
 	_hwnd(nullptr),
 	_displayMode(0),
 	_device(nullptr),
-	_commandQueue(nullptr),
 	_swapchain(nullptr),
-	_backBufferIndex(0),
-	_renderTargetViewHeap(nullptr),
-	_commandList(nullptr),
-	_fence(nullptr)
+	_backBufferCurrentIndex(0),
+	_renderTargetViewHeap(nullptr)
 {
 }
 
@@ -46,12 +45,17 @@ GraphicsD3D12::~GraphicsD3D12()
 {
 	if(_swapchain)
 		_swapchain->SetFullscreenState(false, nullptr);
-	GP_SAFE_RELEASE(_fence);
-	GP_SAFE_RELEASE(_commandList);
+
 	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
+	{
+		GP_SAFE_RELEASE(_fences[i]);
+		GP_SAFE_RELEASE(_commandLists[i]);
 		GP_SAFE_RELEASE(_commandAllocators[i]);
+	}
 	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
+	{
 		GP_SAFE_RELEASE(_renderTargets[i]);
+	}
 	GP_SAFE_RELEASE(_renderTargetViewHeap);
 	GP_SAFE_RELEASE(_swapchain);
 	GP_SAFE_RELEASE(_commandQueue);
@@ -97,7 +101,7 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 	if (FAILED(D3D12CreateDevice(hardwareAdapter, D3D_FEATURE_LEVEL_11_0, __uuidof(ID3D12Device), (void**)&_device)))
 		GP_ERROR("Failed to create a Direct3D 12 device.");
 
-	//Create command queue
+	// Create render command queue
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc;
 	ZeroMemory(&commandQueueDesc, sizeof(commandQueueDesc));
 	commandQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -105,6 +109,7 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 	commandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	commandQueueDesc.NodeMask = 0;
 	D3D_CHECK_RESULT(_device->CreateCommandQueue(&commandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_commandQueue));
+	
 
 	// Pick the first adapter and ouput
 	IDXGIAdapter* adapter;
@@ -123,7 +128,7 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 		GP_ERROR("Failed to get display mode list for adapter outputs(monitor).");
 	
 	// Find a display mode that matches our config
-	for (size_t i = 0; i<displayModeCount; i++)
+	for (size_t i = 0; i < displayModeCount; i++)
 	{
 		if (_displayModes[i].Height == _height && _displayModes[i].Width == _width)
 		{
@@ -146,35 +151,44 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 	swapchainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapchainDesc.SampleDesc.Count = 1 + _multisampling;
 	IDXGISwapChain1* swapchain;
+
 	D3D_CHECK_RESULT(factory->CreateSwapChainForHwnd(_commandQueue, _hwnd, &swapchainDesc, nullptr, nullptr, &swapchain));
 	D3D_CHECK_RESULT(swapchain->QueryInterface(__uuidof(IDXGISwapChain4), (void**)&_swapchain));
 
 	GP_SAFE_RELEASE(factory);
 
 	// Create a render target description heap for the back buffers
-	_backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
+	_backBufferCurrentIndex = _swapchain->GetCurrentBackBufferIndex();
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+
 	// One extra for the intermediate render target
 	rtvHeapDesc.NumDescriptors = GP_GRAPHICS_BACK_BUFFERS;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	D3D_CHECK_RESULT(_device->CreateDescriptorHeap(&rtvHeapDesc, __uuidof(ID3D12DescriptorHeap), (void**)&_renderTargetViewHeap));
-	
-	// Create a command allocators
-	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
-		D3D_CHECK_RESULT(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(ID3D12CommandAllocator), (void**)&_commandAllocators[i]));
 
-	// Create the command list
-	D3D_CHECK_RESULT(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _commandAllocators[_backBufferIndex], nullptr, __uuidof(ID3D12CommandList), (void**)&_commandList));
-	D3D_CHECK_RESULT(_commandList->Close());
+	// Setup command allocators and lists.
+	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
+	{
+		D3D_CHECK_RESULT(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(ID3D12CommandAllocator), (void**)&_commandAllocators[i]));
+		D3D_CHECK_RESULT(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _commandAllocators[i], nullptr, __uuidof(ID3D12CommandList), (void**)&_commandLists[i]));
+		D3D_CHECK_RESULT(_commandLists[i]->Close());
+	}
 
     // Create the back buffer (render targets)
     createBackBuffers();
 
-	// Create a fence and event for synchronization.
-	D3D_CHECK_RESULT(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, __uuidof(ID3D12Fence), (void**)&_fence));
-	_fenceEvent = CreateEventEx(NULL, FALSE, FALSE, EVENT_ALL_ACCESS);
+	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
+	{
+		// Create a fence and event for synchronization.
+		_fenceEvents[i] = CreateEventEx(NULL, FALSE, FALSE, EVENT_ALL_ACCESS);
+		_fenceValues[0] = 0;
+		D3D_CHECK_RESULT(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, __uuidof(ID3D12Fence), (void**)&_fences[i]));
+	}
+	_fenceValueCurrent = 1;
 
+
+	// Create pipelines
 
     _initialized = true;
     _resized = true;
@@ -190,8 +204,11 @@ void GraphicsD3D12::onResize(int width, int height)
     if (!_resized || (width == _width && height == _height))
 		return;
 	
-	// Wait for the gpu to finish processing cbefore resizing
-    flushCommands();
+	// Wait for the gpu to finish processing on backbuffers before resizing them
+	for (int i = 0; i < GP_GRAPHICS_BACK_BUFFERS; ++i)
+	{
+		waitForFence(_fences[_backBufferCurrentIndex], _fenceValues[_backBufferCurrentIndex], _fenceEvents[_backBufferCurrentIndex]);
+	}
 
     _resized = false;
 	
@@ -199,7 +216,7 @@ void GraphicsD3D12::onResize(int width, int height)
 	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
 	{
 		GP_SAFE_RELEASE(_renderTargets[i]);
-		_fenceValues[i] = _fenceValues[_backBufferIndex];
+		_fenceValues[i] = _fenceValues[_backBufferCurrentIndex];
 	}
 
 	// Resize the swap chain to the desired dimensions.
@@ -208,7 +225,7 @@ void GraphicsD3D12::onResize(int width, int height)
 	D3D_CHECK_RESULT(_swapchain->ResizeBuffers(GP_GRAPHICS_BACK_BUFFERS, width, height, desc.BufferDesc.Format, desc.Flags));
 
 	// Reset the frame index to the current back buffer index.
-	_backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
+	_backBufferCurrentIndex = _swapchain->GetCurrentBackBufferIndex();
 
     // Create teh back buffers again
     createBackBuffers();
@@ -234,95 +251,149 @@ int GraphicsD3D12::getHeight()
     return _height;
 }
 
-std::shared_ptr<CommandPool> GraphicsD3D12::createCommandPool(bool transient)
-{	
-	ID3D12CommandAllocator* allocator = nullptr;
-	if(FAILED(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
-											  __uuidof(allocator), reinterpret_cast<void**>(&allocator))))
-	{
-		GP_ERROR("Failed to create command allocator.");
-	}
-	std::shared_ptr<CommandPoolD3D12> pool = std::make_shared<CommandPoolD3D12>(allocator);
-	return std::static_pointer_cast<CommandPool>(pool);
-}
-
-void GraphicsD3D12::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
+std::shared_ptr<Semaphore> GraphicsD3D12::getSemaphore(size_t imageIndex)
 {
-	std::shared_ptr<CommandPoolD3D12> commandPoolD3D = std::static_pointer_cast<CommandPoolD3D12>(commandPool);
-	GP_SAFE_RELEASE(commandPoolD3D->_commandAllocator);
-	commandPoolD3D.reset();
+	return nullptr;
 }
 
-std::shared_ptr<CommandList> GraphicsD3D12::createCommandList(std::shared_ptr<CommandPool> pool, bool secondary)
+std::shared_ptr<Fence> GraphicsD3D12::getFence(size_t imageIndex)
 {
-	std::shared_ptr<CommandPoolD3D12> poolD3D = std::static_pointer_cast<CommandPoolD3D12>(pool);
-	ID3D12GraphicsCommandList* commandListD3D = nullptr;
-	ID3D12PipelineState* initialPipelineState = nullptr;
-	if (FAILED(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, poolD3D->_commandAllocator, initialPipelineState,
-			                              __uuidof(commandListD3D), reinterpret_cast<void**>(&commandListD3D))))
-	{
-		GP_ERROR("Failed to create graphics command list.");
-	}
-    commandListD3D->Close();
-
-	std::shared_ptr<CommandListD3D12> commandList = std::make_shared<CommandListD3D12>(_device, poolD3D->_commandAllocator, commandListD3D);
-	return std::static_pointer_cast<CommandList>(commandList);
+	return nullptr;
 }
 
-void GraphicsD3D12::createCommandLists(std::shared_ptr<CommandPool> pool, bool secondary, size_t count,
-									   std::vector<std::shared_ptr<CommandList>> out)
+std::shared_ptr<RenderPass> GraphicsD3D12::getRenderPass(size_t imageIndex)
 {
-	for (size_t i = 0; i < count; ++i)
-	{
-		std::shared_ptr<CommandList> commandList = createCommandList(pool, secondary);
-		out.push_back(commandList);
-	}
+	return nullptr;
 }
 
-void GraphicsD3D12::destroyCommandList(std::shared_ptr<CommandList> commandList)
-{
-	std::shared_ptr<CommandListD3D12> commandListD3D = std::static_pointer_cast<CommandListD3D12>(commandList);
-	GP_SAFE_RELEASE(commandListD3D->_commandList);
-	commandList.reset();
-}
-
-void GraphicsD3D12::destroyCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists)
-{
-	for (size_t i = 0; i < commandLists.size(); ++i)
-	{
-		destroyCommandList(commandLists[i]);
-	}
-}
-
-void GraphicsD3D12::submitCommands(std::shared_ptr<CommandList> commands)
+void GraphicsD3D12::acquireNextImage(std::shared_ptr<Semaphore> signalSemaphore,
+								  std::shared_ptr<Fence> fence)
 {
 }
 
-void GraphicsD3D12::submitCommands(std::vector<std::shared_ptr<CommandList>> commands)
+void GraphicsD3D12::present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores)
 {
 }
 
-void GraphicsD3D12::flushCommands()
+void GraphicsD3D12::waitForFence(std::shared_ptr<Fence> fence)
 {
-    // Signal and increment the fence value.
-	const uint64_t fenceToWaitFor = _fenceValues[_backBufferIndex];
-	if (FAILED(_commandQueue->Signal(_fence, fenceToWaitFor)))
-		return;
-
-	// Wait until the GPU is done rendering.
-	if (_fence->GetCompletedValue() < _fenceValues[_backBufferIndex])
-	{
-		if(FAILED(_fence->SetEventOnCompletion(_fenceValues[_backBufferIndex], _fenceEvent)))
-			return;
-
-		WaitForSingleObject(_fenceEvent, INFINITE);
-	}
-	_fenceValues[_backBufferIndex] = fenceToWaitFor + 1;
 }
 
-void GraphicsD3D12::present()
+std::shared_ptr<CommandBuffer> GraphicsD3D12::createCommandBuffer()
 {
-    _swapchain->Present(_vsync ? 1 : 0, 0);
+	return nullptr;
+}
+
+void GraphicsD3D12::destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsD3D12::submit(std::shared_ptr<CommandBuffer> commandBuffer,
+						std::vector<std::shared_ptr<Semaphore>> signalSemaphores,
+						std::vector<std::shared_ptr<Semaphore>> waitSemaphores)
+{
+}
+
+void GraphicsD3D12::cmdBegin(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsD3D12::cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsD3D12::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsD3D12::cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
+{
+}
+
+void GraphicsD3D12::cmdSetViewport(std::shared_ptr<CommandBuffer> commandBuffer,
+								   float x, float, float width, float height, 
+								   float depthMin, float depthMax)
+{
+}
+
+void GraphicsD3D12::cmdSetScissor(std::shared_ptr<CommandBuffer> commandBuffer,
+							      size_t x, size_t y, 
+							      size_t width, size_t height)
+{
+}
+
+void GraphicsD3D12::cmdClearColorAttachment(std::shared_ptr<CommandBuffer> commandBuffer,
+										    size_t attachmentTndex,
+										    const ClearValue& clearValue)
+{
+}
+
+void GraphicsD3D12::cmdBindRenderPipeline(std::shared_ptr<CommandBuffer> commandBuffer,
+									      std::shared_ptr<RenderPipeline> pipeline)
+{
+}
+
+void GraphicsD3D12::cmdBindDescriptorSet(std::shared_ptr<CommandBuffer> commandBuffer,
+									     std::shared_ptr<RenderPipeline> pipeline, 
+									     std::shared_ptr<DescriptorSet> descriptorSet)
+{
+}
+
+void GraphicsD3D12::cmdBindVertexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+									    std::shared_ptr<Buffer> vertexBuffer)
+{
+}
+
+void GraphicsD3D12::cmdBindVertexBuffers(std::shared_ptr<CommandBuffer> commandBuffer,
+									     std::vector<std::shared_ptr<Buffer>> vertexBuffers)
+{
+}
+
+void GraphicsD3D12::cmdBindIndexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
+									   std::shared_ptr<Buffer> indexBuffer)
+{
+}
+
+void GraphicsD3D12::cmdDraw(std::shared_ptr<CommandBuffer> commandBuffer,
+							size_t vertexCount, size_t vertexStart)
+{
+}
+
+void GraphicsD3D12::cmdDrawIndexed(std::shared_ptr<CommandBuffer> commandBuffer,
+								   size_t indexCount, size_t indexStart)
+{
+}
+
+void GraphicsD3D12::cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer,
+									   std::shared_ptr<Texture> texture, 
+									   Texture::Usage usagePrev, 
+									   Texture::Usage usageNext)
+{
+}
+
+void GraphicsD3D12::cmdTransitionRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
+										    std::shared_ptr<RenderPass> renderPass, 
+										    Texture::Usage usagePrev, 
+										    Texture::Usage usageNext)
+{
+}
+
+std::shared_ptr<Semaphore> GraphicsD3D12::createSemaphore()
+{
+	return nullptr;
+}
+
+void GraphicsD3D12::destroySemaphore(std::shared_ptr<Semaphore> semaphore)
+{
+}
+
+std::shared_ptr<Fence> GraphicsD3D12::createFence()
+{
+	return nullptr;
+}
+
+void GraphicsD3D12::destroyFence(std::shared_ptr<Fence> fence)
+{
 }
 
 ID3D12Resource* GraphicsD3D12::createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible)
@@ -574,6 +645,39 @@ void GraphicsD3D12::destroyTexture(std::shared_ptr<Texture> texture)
 	textureD3D.reset();
 }
 
+std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t height,
+														    size_t colorAttachmentCount,
+															Format colorFormat,
+															Format depthStencilFormat,
+															Texture::SampleCount sampleCount)
+{
+	return nullptr;
+}
+
+void GraphicsD3D12::destroyRenderPass(std::shared_ptr<RenderPass> renderPass)
+{
+}
+
+std::shared_ptr<Sampler> GraphicsD3D12::createSampler(Sampler::Filter filterMag,
+													  Sampler::Filter filterMin,
+													  Sampler::Filter filterMip,													 
+													  Sampler::AddressMode addressModeU,
+													  Sampler::AddressMode addressModeV,
+													  Sampler::AddressMode addressModeW,
+													  Sampler::CompareFunc compareFunc,
+													  Sampler::BorderColor borderColor,
+													  float anisotropyMax,
+													  float lodMin,
+													  float lodMax,
+													  float lodMipBias)
+{
+	return nullptr;
+}
+
+void GraphicsD3D12::destroySampler(std::shared_ptr<Sampler> sampler)
+{
+}
+
 std::shared_ptr<Shader> GraphicsD3D12::createShader(const std::string& url)
 {
 	ID3DBlob* shaderBlob = nullptr;
@@ -595,6 +699,38 @@ void GraphicsD3D12::destroyShader(std::shared_ptr<Shader> shader)
 	shaderD3D.reset();
 }
 
+
+std::shared_ptr<DescriptorSet> GraphicsD3D12::createDescriptorSet(const DescriptorSet::Descriptor* descriptors, 
+																  size_t descriptorCount)
+{
+	return nullptr;
+}
+
+void GraphicsD3D12::destroyDescriptorSet(std::shared_ptr<DescriptorSet> descriptorSet)
+{
+}
+
+std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeline::PrimitiveTopology primitiveTopology,
+																	VertexLayout vertexLayout,
+																	RasterizerState rasterizerState,
+																	ColorBlendState colorBlendState,
+																	DepthStencilState depthStencilState,
+																	std::shared_ptr<RenderPass> renderPass,
+																	std::shared_ptr<DescriptorSet> descriptorSet,
+																	std::shared_ptr<Shader> vertShader,
+																	std::shared_ptr<Shader> tescShader,
+																	std::shared_ptr<Shader> teseShader,
+																	std::shared_ptr<Shader> geomShader,
+																	std::shared_ptr<Shader> fragShader)
+{
+	return nullptr;
+}
+
+void GraphicsD3D12::destroyRenderPipeline(std::shared_ptr<RenderPipeline> pipeline)
+{
+
+}
+
 void GraphicsD3D12::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter)
 {
 	IDXGIAdapter1* adapter;
@@ -613,58 +749,36 @@ void GraphicsD3D12::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** 
 
 void GraphicsD3D12::createBackBuffers()
 {
-	uint32_t renderTargetDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	_renderTargetViewDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTargetViewHandle = _renderTargetViewHeap->GetCPUDescriptorHandleForHeapStart();
 	for (uint32_t i = 0; i < GP_GRAPHICS_BACK_BUFFERS; i++)
 	{
 		D3D_CHECK_RESULT(_swapchain->GetBuffer(i, __uuidof(ID3D12Resource), (void**)&_renderTargets[i]));
 		_device->CreateRenderTargetView(_renderTargets[i], NULL, renderTargetViewHandle);
-		renderTargetViewHandle.ptr += renderTargetDescriptorSize;
+		renderTargetViewHandle.ptr += _renderTargetViewDescriptorSize;
 	}
-	_backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
+	_backBufferCurrentIndex = _swapchain->GetCurrentBackBufferIndex();
 }
 
-void GraphicsD3D12::buildCommands()
+void GraphicsD3D12::waitForFence (ID3D12Fence* fence, UINT64 completionValue, HANDLE waitEvent)
 {
-	// Reset (re-use) the memory associated command allocator.
-	D3D_CHECK_RESULT(_commandAllocators[_backBufferIndex]->Reset());
+	if (fence->GetCompletedValue () < completionValue) 
+	{
+		fence->SetEventOnCompletion (completionValue, waitEvent);
+		WaitForSingleObject (waitEvent, INFINITE);
+	}
+}
 
-	// Reset the command list, use empty pipeline state for now since there are no shaders and we are just clearing the screen.
-	if (FAILED(_commandList->Reset(_commandAllocators[_backBufferIndex], nullptr)))
-		return;
+void GraphicsD3D12::present()
+{
+	_swapchain->Present(1, 0);
 
-	// Record commands in the command list starting by setting the resource barrier.
-	D3D12_RESOURCE_BARRIER barrier;
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrier.Transition.pResource = _renderTargets[_backBufferIndex];
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	_commandList->ResourceBarrier(1, &barrier);
+	const auto fenceValue = _fenceValueCurrent;
+	_commandQueue->Signal (_fences[_backBufferCurrentIndex], fenceValue);
+	_fenceValues[_backBufferCurrentIndex] = fenceValue;
+	++_fenceValueCurrent;
 
-	// Get the render target view handle for the current back buffer.
-	uint32_t renderTargetDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	
-	_backBufferIndex = _swapchain->GetCurrentBackBufferIndex();
-	if (_backBufferIndex == 0)
-		_renderTargetViewHandle = _renderTargetViewHeap->GetCPUDescriptorHandleForHeapStart();
-	else
-		_renderTargetViewHandle.ptr += renderTargetDescriptorSize;
-
-	// Set the back buffer as the render target.
-	float clearColor[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-	_commandList->OMSetRenderTargets(1, &_renderTargetViewHandle, FALSE, NULL);
-	_commandList->ClearRenderTargetView(_renderTargetViewHandle, clearColor, 0, NULL);
-
-	// Indicate that the back buffer will now be used to present.
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-	_commandList->ResourceBarrier(1, &barrier);
-
-	D3D_CHECK_RESULT(_commandList->Close());
-
-    flushCommands();
+	_backBufferCurrentIndex = (_backBufferCurrentIndex + 1) % GP_GRAPHICS_BACK_BUFFERS;
 }
 
 DXGI_FORMAT GraphicsD3D12::toFormat(Format pixelFormat)
