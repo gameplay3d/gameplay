@@ -7,7 +7,7 @@ namespace gameplay
 TextureD3D12::TextureD3D12() :
     Texture(),
     _device(nullptr),
-    _texture(nullptr),
+    _resource(nullptr),
     _hostMemory(nullptr)
 {
 }
@@ -15,17 +15,16 @@ TextureD3D12::TextureD3D12() :
 TextureD3D12::TextureD3D12(Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
 						   Format pixelFormat,
 					       Usage usage, 
-						   SampleCount sampleCount, 
+						   SampleCount sampleCount,
+						   const ClearValue& clearValue,
 						   bool hostVisible,
+						   bool hostOwned,
 						   ID3D12Device* device,
-						   ID3D12Resource* texture,
-						   D3D12_SHADER_RESOURCE_VIEW_DESC textureView) : 
-    Texture(type, width, height, depth, mipLevels, pixelFormat, usage, sampleCount, hostVisible), 
+						   ID3D12Resource* resource) : 
+    Texture(type, width, height, depth, mipLevels, pixelFormat, usage, sampleCount, clearValue, hostVisible, hostOwned), 
     _device(device),
-    _texture(texture),
-    _textureView(textureView),
+    _resource(resource),
 	_hostMemory(nullptr)
-
 {
 }
 

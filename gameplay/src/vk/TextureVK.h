@@ -24,11 +24,14 @@ public:
 	TextureVK(Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
 			  Format pixelFormat, 
 			  Usage usage, 
-			  SampleCount sampleCount, 
+			  SampleCount sampleCount,
+			  ClearValue clearValue,
 			  bool hostVisible,
+			  bool hostOwned,
 		      VkDevice device, 
 		      VkImage image,
 			  VkDeviceMemory deviceMemory);
+
 	/**
 	 * Destructor.
 	 */
@@ -41,11 +44,11 @@ public:
 
 	VkDevice _device;
 	VkImage _image;
+	VkImageView  _imageView;
 	VkDeviceMemory _deviceMemory;
-    VkImageView  _imageView;
-	VkImageAspectFlags  _imageAspectFlags;
-    VkDescriptorImageInfo _textureView;
 	void* _hostMemory;
+	VkImageAspectFlags  _imageAspectFlags;
+    VkDescriptorImageInfo _imageViewInfo;
 };
 
 }

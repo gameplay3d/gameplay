@@ -16,14 +16,17 @@ TextureVK::TextureVK() :
 TextureVK::TextureVK(Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
 					 Format pixelFormat,
 					 Usage usage,
-					 SampleCount sampleCount, 
+					 SampleCount sampleCount,
+					 ClearValue clearValue,
 					 bool hostVisible,
+					 bool hostOwned,
 					 VkDevice device, 
 					 VkImage image,
 					 VkDeviceMemory deviceMemory) :
-	Texture(type, width, height, depth, mipLevels, pixelFormat, usage, sampleCount, hostVisible), 
+	Texture(type, width, height, depth, mipLevels, pixelFormat, usage, sampleCount, clearValue, hostOwned, hostVisible), 
 	_device(device),
 	_image(image),
+	_imageView(nullptr),
 	_deviceMemory(deviceMemory),
 	_hostMemory(nullptr)
 {

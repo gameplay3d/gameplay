@@ -1,9 +1,7 @@
 #pragma once
 
 #include "CommandPool.h"
-#include <dxgi1_5.h>
 #include <d3d12.h>
-#include <d3dcompiler.h>
 
 namespace gameplay
 {
@@ -23,13 +21,24 @@ public:
 	/**
 	 * Constructor.
 	 */
-	CommandPoolD3D12(ID3D12CommandAllocator* commandAllocator);
-
+	CommandPoolD3D12(ID3D12Device* device, 
+					 ID3D12CommandAllocator* commandAllocator);
 	/**
 	 * Destructor.
 	 */
 	~CommandPoolD3D12();
 
+    /**
+     * @see CommandPool::createCommandBuffer
+     */
+    std::shared_ptr<CommandBuffer> createCommandBuffer();
+
+    /**
+     * @see CommandPool::destroyCommandBuffer
+     */
+    void destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer);
+
+	ID3D12Device* _device;
 	ID3D12CommandAllocator* _commandAllocator;
 };
 

@@ -85,6 +85,14 @@
 } while (0)
 
 // Memory
+#define GP_SAFE_FREE(x) \
+{ \
+	if(x) \
+	{ \
+		free(x); \
+		x = nullptr; \
+	} \
+}
 #define GP_SAFE_DELETE(x) \
 { \
     delete x; \
@@ -97,11 +105,11 @@
 }
 
 #if defined(_WINDOWS) && defined(_MSC_VER)
-#define GP_SAFE_RELEASE(x)			\
-   if(x != nullptr)				\
-   {							\
-      x->Release();				\
-      x = nullptr;				\
+#define GP_SAFE_RELEASE(x) \
+   if(x != nullptr)	\
+   { \
+      x->Release(); \
+      x = nullptr; \
    }
 #endif
 
@@ -137,23 +145,23 @@
 #define GP_MATH_MATRIX_SIZE             (sizeof(float) * 16)
 
 // Graphics defaults
-#define GP_GRAPHICS_WIDTH				1920
-#define GP_GRAPHICS_HEIGHT				1080
-#define GP_GRAPHICS_FULLSCREEN			false
-#define GP_GRAPHICS_VSYNC				true
-#define GP_GRAPHICS_MULTISAMPLING		0
-#define GP_GRAPHICS_VALIDATION			false
-#define GP_GRAPHICS_BACK_BUFFERS		2
-#define GP_GRAPHICS_VK					"vk"
-#define GP_GRAPHICS_VK_SHADER_PATH		"res/shaders/glsl/"
-#define GP_GRAPHICS_VK_SHADER_EXT		".spv"
-#define GP_GRAPHICS_D3D12				"d3d12"
-#define GP_GRAPHICS_D3D12_SHADER_PATH	"res/shaders/hlsl/"
-#define GP_GRAPHICS_D3D12_SHADER_EXT	".cso"
-#define GP_GRAPHICS_MTL					"mtl"
-#define GP_GRAPHICS_MTL_SHADER_PATH		"res/shaders/msl/"
-#define GP_GRAPHICS_MTL_SHADER_EXT		".metallib"
-#define GP_GRAPHICS                     GP_GRAPHICS_VK
+#define GP_GRAPHICS_WIDTH					1920
+#define GP_GRAPHICS_HEIGHT					1080
+#define GP_GRAPHICS_FULLSCREEN				false
+#define GP_GRAPHICS_VSYNC					true
+#define GP_GRAPHICS_MULTISAMPLING			0
+#define GP_GRAPHICS_VALIDATION				false
+#define GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT	3
+#define GP_GRAPHICS_VK						"vk"
+#define GP_GRAPHICS_VK_SHADER_PATH			"res/shaders/glsl/"
+#define GP_GRAPHICS_VK_SHADER_EXT			".spv"
+#define GP_GRAPHICS_D3D12					"d3d12"
+#define GP_GRAPHICS_D3D12_SHADER_PATH		"res/shaders/hlsl/"
+#define GP_GRAPHICS_D3D12_SHADER_EXT		".cso"
+#define GP_GRAPHICS_MTL						"mtl"
+#define GP_GRAPHICS_MTL_SHADER_PATH			"res/shaders/msl/"
+#define GP_GRAPHICS_MTL_SHADER_EXT			".metallib"
+#define GP_GRAPHICS							GP_GRAPHICS_VK
 
 // Graphics limits
 #define GP_GRAPHICS_GPUS_MAX                        4
@@ -162,8 +170,8 @@
 #define GP_GRAPHICS_DESCRIPTORS_MAX                 32
 #define GP_GRAPHICS_DESCRIPTOR_SETS_MAX             8
 #define GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX          256
-#define GP_GRAPHICS_RENDER_TARGET_ATTACHMENTS_MAX   8
-#define GP_GRAPHICS_SUBMIT_COMMAND_LISTS_MAX        8
+#define GP_GRAPHICS_COLOR_ATTACHMENTS_MAX			8
+#define GP_GRAPHICS_SUBMIT_COMMAND_BUFFERS_MAX      8
 #define GP_GRAPHICS_SUBMIT_WAIT_SEMAPHORES_MAX      8
 #define GP_GRAPHICS_SUBMIT_SIGNAL_SEMAPHORES_MAX    8
 #define GP_GRAPHICS_PRESENT_WAIT_SEMAPHORES_MAX     8

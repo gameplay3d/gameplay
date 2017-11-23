@@ -1,14 +1,13 @@
 #pragma once
 
-#include "CommandList.h"
-
 namespace gameplay
 {
 
+	class CommandBuffer;
+
 /**
- * Defines a command pool for creating and maintaining a 
- * pool of async gpu operations.
- */
+ * Defines a command pool for creating command buffers.
+ */ 
 class CommandPool
 {
 public:	
@@ -24,15 +23,18 @@ public:
 	~CommandPool();
 
 	/**
-	 * Determines if this command pool is for creating transient (short-lived) command lists.
+	 * Creates a command buffer.
 	 *
-	 * @return true if this command pool is for creating transient (short-lived) command lists, false if otherise.
+	 * @return The command buffer created.
 	 */
-	bool isTransient() const;
+	virtual std::shared_ptr<CommandBuffer> createCommandBuffer() = 0;
 
-protected:
-
-	bool _transient;
+	/**
+	 * Destroys a command buffer.
+	 *
+	 * @param commandBuffer The command buffer to be destroyed.
+	 */
+	virtual void destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
 };
 
 }

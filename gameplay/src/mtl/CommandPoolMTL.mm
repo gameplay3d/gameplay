@@ -1,11 +1,18 @@
 #include "Base.h"
 #include "CommandPoolMTL.h"
-#include "CommandListMTL.h"
 
 namespace gameplay
 {
 
-CommandPoolMTL::CommandPoolMTL() 
+CommandPoolMTL::CommandPoolMTL() :
+	CommandPool(),
+	_device(nullptr)
+{
+}
+
+CommandPoolMTL::CommandPoolMTL(id<MTLDevice> device) :
+	CommandPool(),
+	_device(device)
 {
 }
 

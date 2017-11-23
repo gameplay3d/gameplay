@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "VertexLayout.h"
+#include "Format.h"
 
 namespace gameplay
 {
@@ -12,13 +13,14 @@ VertexLayout::VertexLayout(const VertexAttribute* attributes, size_t count) :
 	_stride(0)
 {
     GP_ASSERT(attributes);
+	GP_ASSERT(count < GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX);
 
-    // Copy attributes and compute vertex stride
     for (size_t i = 0; i < count; ++i)
     {
         VertexAttribute attribute;
         memcpy(&attribute, &attributes[i], sizeof(VertexAttribute));
         _attributes.push_back(attribute);
+		_stride += toStride(_attributes[i].format);
     }
 }
 
@@ -61,22 +63,30 @@ bool VertexLayout::operator != (const VertexLayout& layout) const
 }
 
 VertexLayout::VertexAttribute::VertexAttribute() : 
-	semantic(SEMANTIC_POSITION), name(""), binding(0), location(0), offset(0)
+	semantic(SEMANTIC_POSITION), 
+	name(""), 
+	binding(0), 
+	location(0), 
+	offset(0)
 {
 }
 
 VertexLayout::VertexAttribute::VertexAttribute(Semantic semantic,
 											   const std::string& name, 
 											   Format format,
-											   uint32_t binding,
-											   uint32_t location,
-											   uint32_t offset) : 
+											   unsigned int binding,
+											   unsigned int location,
+											   unsigned int offset) : 
 	semantic(semantic), 
 	name(name), 
 	format(format), 
 	binding(binding), 
 	location(location), 
 	offset(offset)
+{
+}
+
+VertexLayout::VertexAttribute::~VertexAttribute()
 {
 }
 
@@ -129,6 +139,65 @@ std::string VertexLayout::toString(Semantic semantic)
     default:
         return "POSITION";
     }
+}
+
+size_t VertexLayout::toStride(Format format)
+{
+    size_t result = 0;
+    switch (format) 
+	{
+	case Format::FORMAT_R8_UNORM: 
+		return 1;
+	case Format::FORMAT_R16_UNORM: 
+		return 2;
+	case Format::FORMAT_R16_FLOAT: 
+		return 2;
+	case Format::FORMAT_R32_UINT: 
+		return 4;
+	case Format::FORMAT_R32_FLOAT: 
+		return 4;
+	case Format::FORMAT_R8G8_UNORM: 
+		return 2;
+	case Format::FORMAT_R16G16_UNORM: 
+		return 2;
+	case Format::FORMAT_R16G16_FLOAT:
+		return 4;
+	case Format::FORMAT_R32G32_UINT: 
+		return 8;
+	case Format::FORMAT_R32G32_FLOAT: 
+		return 8;
+	case Format::FORMAT_R8G8B8_UNORM: 
+		return 3;
+	case Format::FORMAT_R16G16B16_UNORM: 
+		return 6;
+	case Format::FORMAT_R16G16B16_FLOAT: 
+		return 6;
+	case Format::FORMAT_R32G32B32_UINT: 
+		return 12;
+	case Format::FORMAT_R32G32B32_FLOAT: 
+		return 12;
+	case Format::FORMAT_B8G8R8A8_UNORM: 
+		return 4;
+	case Format::FORMAT_R8G8B8A8_UNORM: 
+		return 4;
+	case Format::FORMAT_R16G16B16A16_UNORM: 
+		return 8;
+	case Format::FORMAT_R16G16B16A16_FLOAT: 
+		return 8;
+	case Format::FORMAT_R32G32B32A32_UINT: 
+		return 16;
+	case Format::FORMAT_R32G32B32A32_FLOAT: 
+		return 16;
+	case Format::FORMAT_D16_UNORM: 
+	case Format::FORMAT_X8_D24_UNORM_PACK32:
+	case Format::FORMAT_D32_FLOAT:
+	case Format::FORMAT_S8_UINT:
+	case Format::FORMAT_D16_UNORM_S8_UINT:
+	case Format::FORMAT_D24_UNORM_S8_UINT:
+	case Format::FORMAT_D32_FLOAT_S8_UINT:
+		return 0;
+    }
+    return 0;
 }
 
 }

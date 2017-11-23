@@ -7,21 +7,28 @@ namespace gameplay
 {
 
 /**
- * Defines a Metal impl of CommandPool.
+ * Metal impl of a CommandPool.
  */
-class CommandPoolMTL : public CommandPool
+class CommandPoolrMTL : public CommandPool
 {
 public:
 
-	/**
-	 * Constructor.
-	 */
-	CommandPoolMTL();
+    /**
+     * Constructor.
+     */
+	CommandPoolrMTL();
 
-	/**
+    /**
+     * Constructor.
+     */
+    CommandPoolrMTL(id<MTLDevice> device);
+
+    /**
 	 * Destructor.
-	 */
-	~CommandPoolMTL();
+     */
+    ~FenceMTL();
+
+	id<MTLDevice>  _device;
 };
 
 }

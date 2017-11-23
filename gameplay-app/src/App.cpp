@@ -18,8 +18,8 @@ void App::onInitialize()
 {
 	Game::onInitialize();
 
-    /* Quick test
-    // Create a test scene
+    /*
+	// Create a test scene
     auto test = std::make_shared<SceneObject>();
 
     // Create a main camera
@@ -56,12 +56,12 @@ void App::onInitialize()
 	auto model = std::shared_ptr<Model>();
 	model->load("box.fbx");
 	modelObject->attachComponent(model);
+	
     
     auto writer = SerializerJson::createWriter("test.scene");
     writer->writeObject(nullptr, test);
     writer->close();
     GP_SAFE_DELETE(writer);
-	
 
     setScene(test);*/
 }
@@ -79,11 +79,6 @@ void App::onResize(size_t width, size_t height)
 void App::onUpdate(float elapsedTime)
 {
 	Game::onUpdate(elapsedTime);
-}
-
-void App::onRender(float elapsedTime)
-{
-	Game::onRender(elapsedTime);
 }
 
 }

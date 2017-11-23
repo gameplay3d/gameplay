@@ -21,13 +21,25 @@ public:
 	/**
 	 * Constructor.
 	 */
-	CommandPoolVK(VkCommandPool pool);
+	CommandPoolVK(VkDevice device, 
+				  VkCommandPool commandPool);
 
 	/**
 	 * Destructor.
 	 */
 	~CommandPoolVK();
 
+   /**
+     * @see CommandPool::createCommandBuffer
+     */
+    std::shared_ptr<CommandBuffer> createCommandBuffer();
+
+    /**
+     * @see CommandPool::destroyCommandBuffer
+     */
+    void destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer);
+
+	VkDevice _device;
 	VkCommandPool _commandPool;
 };
 
