@@ -24,18 +24,18 @@ public:
     DescriptorSetVK(const Descriptor* descriptors, 
 					size_t descriptorCount,
 					VkDevice device, 
-                    VkDescriptorSetLayout layout, 
-                    VkDescriptorSet set, 
-                    VkDescriptorPool pool);
+					VkDescriptorPool descriptorPool,
+                    VkDescriptorSetLayout descriptorSetLayout,
+					VkDescriptorSet descriptorSet);
     /**
 	 * Destructor.
      */
     ~DescriptorSetVK();
 
 	VkDevice _device;
-    VkDescriptorSetLayout _layout;
-    VkDescriptorSet _set;
-    VkDescriptorPool _pool;
+	VkDescriptorPool _descriptorPool;
+	VkDescriptorSetLayout _descriptorSetLayout;
+	VkDescriptorSet _descriptorSet;
 };
 
 }

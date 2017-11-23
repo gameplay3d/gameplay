@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Format.h"
+#include "ClearValue.h"
 
 namespace gameplay
 {
@@ -67,7 +68,9 @@ public:
 			Format pixelFormat, 
 			Usage usage, 
 			SampleCount sampleCount, 
-			bool hostVisible);
+			const ClearValue& clearValue,
+			bool hostVisible,
+			bool hostOwn);
 
 	/**
 	 * Destructor.
@@ -131,6 +134,13 @@ public:
 	Texture::SampleCount getSampleCount() const;
 
 	/**
+	 * Gets the clear value.
+	 *
+	 * @return The clear value.
+	 */
+	ClearValue getClearValue() const;
+
+	/**
 	 * Deterines if the buffer has visible access to host memory.
 	 *
 	 * @return true if the buffer has visible access to host memory, false if static
@@ -144,6 +154,13 @@ public:
 	 */
 	virtual void* getHostMemory() const = 0;
 
+	/**
+	 * Is the texture owned by the host.
+	 *
+	 * @return true if host owns the texture and memory. false if swapchain owned.
+	 */
+	bool isHostOwned() const;
+
 protected:
 
 	Type _type;
@@ -154,7 +171,9 @@ protected:
 	Format _pixelFormat;
 	Usage _usage;	
 	Texture::SampleCount _sampleCount;
+	ClearValue _clearValue;
 	bool _hostVisible;
+	bool _hostOwned;
 };
 
 }

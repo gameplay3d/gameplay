@@ -100,12 +100,12 @@ void GraphicsMTL::waitForFence(std::shared_ptr<Fence> fence)
 {
 }
 
-std::shared_ptr<CommandBuffer> GraphicsMTL::createCommandBuffer()
+std::shared_ptr<CommandPool> GraphicsMTL::createCommandPool()
 {
     return nullptr;
 }
 
-void GraphicsMTL::destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer)
+void GraphicsMTL::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 {
 }
 

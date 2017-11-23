@@ -58,51 +58,36 @@ public:
     int getHeight();
 
 	/**
-	 * @see Graphics::getSemaphore
+	 * @see Graphics::acquireNextSwapchainImage
 	 */
-	std::shared_ptr<Semaphore> getSemaphore(size_t imageIndex);
-
-	/**
-	 * @see Graphics::getFence
-	 */
-	std::shared_ptr<Fence> getFence(size_t imageIndex);
-
-	/**
-	 * @see Graphics::getRenderPass
-	 */
-	std::shared_ptr<RenderPass> getRenderPass(size_t imageIndex);
-
-	/**
-	 * @see Graphics::acquireNextImage
-	 */
-	void acquireNextImage(std::shared_ptr<Semaphore> signalSemaphore,
-						  std::shared_ptr<Fence> fence);
+	std::shared_ptr<RenderPass> acquireNextSwapchainImage(std::shared_ptr<Fence> waitFence,
+														  std::shared_ptr<Semaphore> signalSemaphore);
 	/**
 	 * @see Graphics::present
 	 */
 	void present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores);
 
 	/**
-	 * @see Graphics::waitForFence
+	 * @see Graphics::waitIdle
 	 */
-	void waitForFence(std::shared_ptr<Fence> fence);
+	void waitIdle(std::shared_ptr<Fence> waitFence);
 
 	/**
-	 * @see Graphics::createCommandBuffer
+	 * @see Graphics::createCommandPool
 	 */
-	std::shared_ptr<CommandBuffer> createCommandBuffer();
+	std::shared_ptr<CommandPool> createCommandPool();
 
 	/**
-	 * @see Graphics::destroyCommandBuffer
+	 * @see Graphics::destroyCommandPool
 	 */
-	void destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer);
+	void destroyCommandPool(std::shared_ptr<CommandPool> commandPool);
 
 	/**
 	 * @see Graphics::submit
 	 */
-	void submit(std::shared_ptr<CommandBuffer> commandBuffer,
-			    std::vector<std::shared_ptr<Semaphore>> signalSemaphores,
-				std::vector<std::shared_ptr<Semaphore>> waitSemaphores);
+	void submit(std::vector<std::shared_ptr<CommandBuffer>> commandBuffers,
+				std::vector<std::shared_ptr<Semaphore>> waitSemaphores,
+			    std::vector<std::shared_ptr<Semaphore>> signalSemaphores);
 	/**
 	 * @see Graphics::cmdBegin
 	 */
@@ -114,14 +99,15 @@ public:
 	void cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer);
 
 	/**
-	 * @see Graphics::cmdBeginRenderPass
+	 * @see Graphics::cmdBeginRender
 	 */
-	void cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer);
+	void cmdBeginRender(std::shared_ptr<CommandBuffer> commandBuffer,
+						std::shared_ptr<RenderPass> renderPass);
 
 	/**
-	 * @see Graphics::cmdEndRenderPass
+	 * @see Graphics::cmdEndRender
 	 */
-	void cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer);
+	void cmdEndRender(std::shared_ptr<CommandBuffer> commandBuffer);
 
 	/**
 	 * @see Graphics::cmdSetViewport
@@ -145,12 +131,12 @@ public:
 	 * @see Graphics::cmdBindRenderPipeline
 	 */
 	void cmdBindRenderPipeline(std::shared_ptr<CommandBuffer> commandBuffer,
-							   std::shared_ptr<RenderPipeline> pipeline);
+							   std::shared_ptr<RenderPipeline> renderPipeline);
 	/**
 	 * @see Graphics::cmdBindDescriptorSet
 	 */
 	void cmdBindDescriptorSet(std::shared_ptr<CommandBuffer> commandBuffer,
-							  std::shared_ptr<RenderPipeline> pipeline, 
+							  std::shared_ptr<RenderPipeline> renderPipeline, 
 							  std::shared_ptr<DescriptorSet> descriptorSet);
 	/**
 	 * @see Graphics::cmdBindVertexBuffer
@@ -182,15 +168,9 @@ public:
 	 */
 	void cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer,
 							std::shared_ptr<Texture> texture, 
-							Texture::Usage usagePrev, 
-							Texture::Usage usageNext);
-	/**
-	 * @see Graphics::cmdTransitionRenderPass
-	 */
-    void cmdTransitionRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
-								 std::shared_ptr<RenderPass> renderPass, 
-								 Texture::Usage usagePrev, 
-								 Texture::Usage usageNext);
+							Texture::Usage usageOld, 
+							Texture::Usage usageNew);
+
 	/**
 	 * @see Graphics::createSemaphore
 	 */
@@ -238,6 +218,7 @@ public:
 											Format pixelFormat,
 											Texture::Usage usage,
 											Texture::SampleCount sampleCount,
+											const ClearValue& clearValue,
 											bool hostVisible);
 	/**
      * @see Graphics::createTexture2d
@@ -246,6 +227,7 @@ public:
 											 Format pixelFormat,
 											 Texture::Usage usage,
 											 Texture::SampleCount sampleCount,
+											 const ClearValue& clearValue,
 											 bool hostVisible);
 	/**
      * @see Graphics::createTexture3d
@@ -253,13 +235,13 @@ public:
 	std::shared_ptr<Texture> createTexture3d(size_t width, size_t height, size_t depth, 
 											 Format pixelFormat,
 											 Texture::Usage usage, 
-											 Texture::SampleCount sampleCount,  
+											 Texture::SampleCount sampleCount,
+											 const ClearValue& clearValue,
 											 bool hostVisible);
 	/**
      * @see Graphics::destroyTexture
      */
 	void destroyTexture(std::shared_ptr<Texture> texture);
-
 
 	/**
      * @see Graphics::createRenderPass
@@ -283,8 +265,10 @@ public:
 										   Sampler::AddressMode addressModeU,
 										   Sampler::AddressMode addressModeV,
 										   Sampler::AddressMode addressModeW,
-										   Sampler::CompareFunc compareFunc,
 										   Sampler::BorderColor borderColor,
+										   bool compareEnabled,
+										   Sampler::CompareFunc compareFunc,
+										   bool anisotropyEnabled,
 										   float anisotropyMax,
 										   float lodMin,
 										   float lodMax,
@@ -308,7 +292,7 @@ public:
      * @see Graphics::createDescriptorSet
      */
 	std::shared_ptr<DescriptorSet> createDescriptorSet(const DescriptorSet::Descriptor* descriptors, 
-													   size_t descriptorCount);;
+													   size_t descriptorCount);
 	/**
      * @see Graphics::destroyDescriptorSet
      */
@@ -337,16 +321,21 @@ public:
 private:
 
 	void getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter);
-    void createBackBuffers();
-	
-	
+    void createSwapchainImages();
 	void waitForFence(ID3D12Fence* fence, UINT64 completionValue, HANDLE waitEvent);
 	void present();
-	
-	ID3D12Resource* createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible);
-	ID3D12Resource* createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
-								  Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, bool hostVisible,
-								  D3D12_SHADER_RESOURCE_VIEW_DESC* textureView);
+	std::shared_ptr<Buffer> createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible, bool is32bit);
+	std::shared_ptr<Texture> createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
+										   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, const ClearValue& clearValue, bool hostVisible,
+										   ID3D12Resource* resource);
+	std::shared_ptr<RenderPass> createRenderPass(size_t width, size_t height, 
+												 size_t colorAttachmentCount,
+												 Format colorFormat,
+												 Format depthStencilFormat,
+												 Texture::SampleCount sampleCount,
+												 std::vector<std::shared_ptr<Texture>> colorAttachments,
+												 std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
+												 std::shared_ptr<Texture> depthStencilAttachment);
 	DXGI_FORMAT toFormat(Format pixelFormat);
 	UINT toSamples(Texture::SampleCount sampleCount);
 	D3D12_RESOURCE_STATES toResourceStates(Texture::Usage usage);
@@ -363,18 +352,28 @@ private:
 	UINT _displayMode;
 	std::vector<DXGI_MODE_DESC> _displayModes;
 	ID3D12Device* _device;
-	ID3D12CommandQueue* _commandQueue;
+	ID3D12CommandQueue* _queue;
 	IDXGISwapChain4* _swapchain;
-	uint32_t _renderTargetViewDescriptorSize;
-	ID3D12DescriptorHeap* _renderTargetViewHeap;
-	uint32_t _backBufferCurrentIndex;
-	ID3D12CommandAllocator* _commandAllocators[GP_GRAPHICS_BACK_BUFFERS];
-	ID3D12GraphicsCommandList* _commandLists[GP_GRAPHICS_BACK_BUFFERS];
-	ID3D12Resource* _renderTargets[GP_GRAPHICS_BACK_BUFFERS];
-	ID3D12Fence* _fences[GP_GRAPHICS_BACK_BUFFERS];
-	HANDLE _fenceEvents[GP_GRAPHICS_BACK_BUFFERS];
-	uint64_t _fenceValues[GP_GRAPHICS_BACK_BUFFERS];
+	uint32_t _swapchainImagesViewDescriptorSize;
+	ID3D12DescriptorHeap* _swapchainImagesViewHeap;
+	uint32_t _swapchainImageIndex;
+	ID3D12Resource* _swapchainImages[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
+	std::vector<std::shared_ptr<RenderPass>> _renderPasses;
+	std::shared_ptr<RenderPass> _renderPass;
+	ID3D12Fence* _fences[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
+	HANDLE _fenceEvents[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
+	uint64_t _fenceValues[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
 	uint64_t _fenceValueCurrent;
 };
+
+#define D3D_CHECK_RESULT(f)		\
+{								\
+	HRESULT hr = (f);			\
+	if (FAILED(hr))				\
+	{							\
+		std::cout << "Fatal: HRESULT is \"" << std::to_string(hr).c_str() << "\" in " << __FILE__ << " at line " << __LINE__ << std::endl << std::flush; \
+		GP_ASSERT(SUCCEEDED(hr));	\
+	}							\
+}
 
 }

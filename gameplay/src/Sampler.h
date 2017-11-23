@@ -72,8 +72,10 @@ public:
 			AddressMode addressModeU,
 			AddressMode addressModeV,
 			AddressMode addressModeW,
-			CompareFunc compareFunc,
 			BorderColor borderColor,
+			bool compareEnabled,
+			CompareFunc compareFunc,
+			bool anisotropyEnabled,
 			float anisotropyMax,
 			float lodMin,
 			float lodMax,
@@ -92,8 +94,10 @@ protected:
 	AddressMode _addressModeU;
 	AddressMode _addressModeV;
 	AddressMode _addressModeW;
-	CompareFunc _compareFunc;
 	BorderColor _borderColor;
+	bool _compareEnabled;
+	CompareFunc _compareFunc;
+	bool _anisotropyEnabled;
 	float _anisotropyMax;
 	float _lodMin;
 	float _lodMax;

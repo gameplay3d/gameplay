@@ -18,7 +18,7 @@ public:
      */
     enum PolygonMode
     {
-        POLYGON_MODE_SOLID,
+        POLYGON_MODE_FILL,
         POLYGON_MODE_WIREFRAME
     };
 
@@ -30,7 +30,7 @@ public:
         CULL_MODE_NONE,
         CULL_MODE_BACK,
         CULL_MODE_FRONT,
-        CULL_MODE_BOTH
+        CULL_MODE_FRONT_AND_BACK
     };
 
     /**
@@ -38,14 +38,14 @@ public:
      */
     enum FrontFace
     {
-        FRONT_FACE_CCW = 0,
-        FRONT_FACE_CW
+        FRONT_FACE_CW = 0,
+        FRONT_FACE_CCW
     };
 
     /**
      * The polygon rasterization mode.
      */
-    PolygonMode polygonMode = POLYGON_MODE_SOLID;
+    PolygonMode polygonMode = POLYGON_MODE_FILL;
 
     /**
      * The triangle culling mode.

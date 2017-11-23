@@ -22,13 +22,15 @@ public:
      * Constructor.
      */
     SamplerVK(Filter filterMag,
-		      Filter filterMin,
+			  Filter filterMin,
 			  Filter filterMip,
 			  AddressMode addressModeU,
 			  AddressMode addressModeV,
 			  AddressMode addressModeW,
-			  CompareFunc compareFunc,
 			  BorderColor borderColor,
+			  bool compareEnabled,
+			  CompareFunc compareFunc,
+			  bool anisotropyEnabled,
 			  float anisotropyMax,
 			  float lodMin,
 			  float lodMax,

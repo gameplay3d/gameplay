@@ -7,23 +7,24 @@ namespace gameplay
 DescriptorSetVK::DescriptorSetVK() :
 	DescriptorSet(),
 	_device(nullptr),
-    _layout(nullptr),
-    _set(nullptr),
-    _pool(nullptr)
+    _descriptorPool(nullptr),
+    _descriptorSet(nullptr),
+    _descriptorSetLayout(nullptr)
 {
 }
 
 DescriptorSetVK::DescriptorSetVK(const Descriptor* descriptors, 
 								 size_t descriptorCount,
 							     VkDevice device, 
-                                 VkDescriptorSetLayout layout, 
-                                 VkDescriptorSet set, 
-                                 VkDescriptorPool pool) :
+                                 VkDescriptorPool descriptorPool,
+								 VkDescriptorSetLayout descriptorSetLayout, 
+								 VkDescriptorSet descriptorSet) :
 	DescriptorSet(descriptors, descriptorCount),
 	_device(device),
-    _layout(layout),
-    _set(set),
-    _pool(pool)
+    _descriptorPool(descriptorPool),
+	_descriptorSetLayout(descriptorSetLayout),
+	_descriptorSet(descriptorSet)
+    
 {
 }
 

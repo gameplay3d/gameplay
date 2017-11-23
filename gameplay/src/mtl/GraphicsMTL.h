@@ -86,14 +86,14 @@ public:
     void waitForFence(std::shared_ptr<Fence> fence);
 
     /**
-     * @see Graphics::createCommandBuffer
+     * @see Graphics::createCommandPool
      */
-    std::shared_ptr<CommandBuffer> createCommandBuffer();
+    std::shared_ptr<CommandPool> createCommandPool();
 
     /**
-     * @see Graphics::destroyCommandBuffer
+     * @see Graphics::destroyCommandPool
      */
-    void destroyCommandBuffer(std::shared_ptr<CommandBuffer> commandBuffer);
+    void destroyCommandPool(std::shared_ptr<CommandPool> commandPool);
 
     /**
      * @see Graphics::submit

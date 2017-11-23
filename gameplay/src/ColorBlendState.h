@@ -11,6 +11,20 @@ namespace gameplay
  */
 class ColorBlendState
 {
+public:
+
+    /**
+     * Defines the framebuffer blending operations.
+     */
+    enum BlendOp
+    {
+        BLEND_OP_ADD,
+        BLEND_OP_SUBSTRACT,
+        BLEND_OP_REVERSE_SUBTRACT,
+        BLEND_OP_MIN,
+        BLEND_OP_MAX
+    };
+
     /**
      * Defines the framebuffer blending factors.
      */
@@ -38,18 +52,6 @@ class ColorBlendState
     };
 
     /**
-     * Defines the framebuffer blending operations.
-     */
-    enum BlendOp
-    {
-        BLEND_OP_ADD,
-        BLEND_OP_SUBSTRACT,
-        BLEND_OP_REVERSE_SUBTRACT,
-        BLEND_OP_MIN,
-        BLEND_OP_MAX
-    };
-
-    /**
      * Defines whether the final color values R, G, B and A
      * are written to the framebuffer attachment(s).
      */
@@ -61,8 +63,6 @@ class ColorBlendState
         WRITE_MASK_ALPHA = 0x00000008
     };
 
-public:
-
    /**
     * Whether blending is enabled for the corresponding color attachment.
     * If blending is not enabled, the source fragment’s color for that
@@ -73,37 +73,39 @@ public:
     /**
      * Selects which blend factor is used to determine the source factors (Sr,Sg,Sb).
      */
-    BlendFactor blendSrcColor = BLEND_FACTOR_ONE;
+    BlendFactor colorBlendSrc = BLEND_FACTOR_ONE;
 
     /**
      * Selects which blend factor is used to determine the destination factors (Dr,Dg,Db).
      */
-    BlendFactor blendDstColor = BLEND_FACTOR_ZERO;
+    BlendFactor colorBlendDst = BLEND_FACTOR_ZERO;
 
     /**
      * Selects which blend operation is used to calculate the RGB values to write to the color attachment.
      */
-    BlendOp blendOpColor = BLEND_OP_ADD;
-
-    /**
-     * Selects which blend factor is used to determine the source factor Sa.
-     */
-    BlendFactor blendSrcAlpha = BLEND_FACTOR_ONE;
-
-    /**
-     * Selects which blend factor is used to determine the destination factor Da.
-     */
-    BlendFactor blendDstAlpha = BLEND_FACTOR_ZERO;
-
-    /**
-     * Selects which blend operation is use to calculate the alpha values to write to the color attachment.
-     */
-    BlendOp blendOpAlpha = BLEND_OP_ADD;
+    BlendOp colorBlendOp = BLEND_OP_ADD;
 
     /**
      * The WriteMask specifying which of the R, G, B, and/or A components are enabled for writing.
      */
-    unsigned int writeMask = 0xf;
+    unsigned int colorWriteMask = 0xf;
+
+    /**
+     * Selects which blend factor is used to determine the source factor Sa.
+     */
+    BlendFactor alphaBlendSrc = BLEND_FACTOR_ONE;
+
+    /**
+     * Selects which blend factor is used to determine the destination factor Da.
+     */
+    BlendFactor alphaBlendDst = BLEND_FACTOR_ZERO;
+
+    /**
+     * Selects which blend operation is use to calculate the alpha values to write to the color attachment.
+     */
+    BlendOp alphaBlendOp = BLEND_OP_ADD;
+
+
 };
 
 }

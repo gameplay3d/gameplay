@@ -24,9 +24,11 @@
     <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CommandBuffer.cpp" />
+    <ClCompile Include="src\CommandPool.cpp" />
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\d3d12\CommandBufferD3D12.cpp" />
+    <ClCompile Include="src\d3d12\CommandPoolD3D12.cpp" />
     <ClCompile Include="src\d3d12\DescriptorSetD3D12.cpp" />
     <ClCompile Include="src\d3d12\FenceD3D12.cpp" />
     <ClCompile Include="src\d3d12\GraphicsD3D12.cpp" />
@@ -92,6 +94,7 @@
     <ClCompile Include="src\Vector4.cpp" />
     <ClCompile Include="src\VertexLayout.cpp" />
     <ClCompile Include="src\vk\CommandBufferVK.cpp" />
+    <ClCompile Include="src\vk\CommandPoolVK.cpp" />
     <ClCompile Include="src\vk\DescriptorSetVK.cpp" />
     <ClCompile Include="src\vk\FenceVK.cpp" />
     <ClCompile Include="src\vk\GraphicsVK.cpp" />
@@ -117,9 +120,11 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\ClearValue.h" />
     <ClInclude Include="src\CommandBuffer.h" />
+    <ClInclude Include="src\CommandPool.h" />
     <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\d3d12\CommandBufferD3D12.h" />
+    <ClInclude Include="src\d3d12\CommandPoolD3D12.h" />
     <ClInclude Include="src\d3d12\DescriptorSetD3D12.h" />
     <ClInclude Include="src\d3d12\FenceD3D12.h" />
     <ClInclude Include="src\d3d12\GraphicsD3D12.h" />
@@ -191,6 +196,7 @@
     <ClInclude Include="src\Vector4.h" />
     <ClInclude Include="src\VertexLayout.h" />
     <ClInclude Include="src\vk\CommandBufferVK.h" />
+    <ClInclude Include="src\vk\CommandPoolVK.h" />
     <ClInclude Include="src\vk\DescriptorSetVK.h" />
     <ClInclude Include="src\vk\FenceVK.h" />
     <ClInclude Include="src\vk\GraphicsVK.h" />
