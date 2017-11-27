@@ -81,7 +81,7 @@ public:
 	 * @param signalSemaphore The semaphore that will be signalled once the presentation engine releases the image.
 	 * @return The RenderPass hosting the next availble swapchain image.
 	 */
-	virtual std::shared_ptr<RenderPass> acquireNextSwapchainImage(std::shared_ptr<Fence> signalsFence,
+	virtual std::shared_ptr<RenderPass> acquireNextSwapchainImage(std::shared_ptr<Fence> signalFence,
 																  std::shared_ptr<Semaphore> signalSemaphore) = 0;
 
 	/**
@@ -187,7 +187,7 @@ public:
 	 * @param clearValue The value to clear the color attachment.
 	 */
 	virtual void cmdClearColorAttachment(std::shared_ptr<CommandBuffer> commandBuffer,
-										 size_t attachmentTndex, 
+										 size_t attachmentIndex,
 										 const ClearValue& clearValue) = 0;
 	/**
 	 * Records a command that binds the render pipeline for rendering.
@@ -271,7 +271,7 @@ public:
 	/**
 	 * Destroys a semaphore.
 	 * 
-	 * @param The semaphore destroyed.
+	 * @param semaphore The semaphore destroyed.
 	 */
 	virtual void destroySemaphore(std::shared_ptr<Semaphore> semaphore) = 0;
 
@@ -285,7 +285,7 @@ public:
 	/**
 	 * Destroys a fence.
 	 * 
-	 * @param The fence destroyed.
+	 * @param fence The fence destroyed.
 	 */
 	virtual void destroyFence(std::shared_ptr<Fence> fence) = 0;
 
@@ -413,7 +413,6 @@ public:
 	 * @param filterMin The value specifying the minification filter to apply to lookups.
 	 * @param filterMag The value specifying the magnification filter to apply to lookups.
 	 * @param filterMip The value specifying the mipmap filter to apply to lookups.
-	 * @param mipmapMode The mipmap moe to use
 	 * @param addressModeU The value specifying the addressing mode for outside [0..1] range for U coordinate.
 	 * @param addressModeV The value specifying the addressing mode for outside [0..1] range for V coordinate.
 	 * @param addressModeW The value specifying the addressing mode for outside [0..1] range for W coordinate.
@@ -474,8 +473,8 @@ public:
 	/**
 	 * Creates a descriptor set.
 	 *
-	 * @param The array of descriptors.
-	 * @param The number of descriptors being created in the set.
+	 * @param descriptors The array of descriptors.
+	 * @param descriptorCount The number of descriptors being created in the set.
 	 * @return The created descriptor set.
 	 */
 	virtual std::shared_ptr<DescriptorSet> createDescriptorSet(const DescriptorSet::Descriptor* descriptors, 

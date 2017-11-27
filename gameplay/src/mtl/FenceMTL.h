@@ -21,7 +21,7 @@ public:
     /**
      * Constructor.
      */
-    FenceMTL(id<MTLDevice> device, id<MTLLibrary> library, id<MTLFence> fence);
+    FenceMTL(id<MTLDevice> device, id<MTLFence> fence);
 
     /**
 	 * Destructor.

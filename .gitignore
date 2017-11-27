@@ -45,6 +45,7 @@ Makefile.Release
 /gameplay-app/Release
 /gameplay-app/assets
 /gameplay-app/res
+/gameplay-app/gameplay-app.xcodeproj/xcuserdata
 /gameplay-editor/Debug
 /gameplay-editor/Release
 /gameplay-editor/assets

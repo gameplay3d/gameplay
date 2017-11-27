@@ -143,7 +143,6 @@ std::string VertexLayout::toString(Semantic semantic)
 
 size_t VertexLayout::toStride(Format format)
 {
-    size_t result = 0;
     switch (format) 
 	{
 	case Format::FORMAT_R8_UNORM: 
@@ -182,6 +181,7 @@ size_t VertexLayout::toStride(Format format)
 		return 16;
 	case Format::FORMAT_R32G32B32A32_FLOAT: 
 		return 16;
+    case Format::FORMAT_UNDEFINED:
 	case Format::FORMAT_D16_UNORM: 
 	case Format::FORMAT_X8_D24_UNORM_PACK32:
 	case Format::FORMAT_D32_FLOAT:

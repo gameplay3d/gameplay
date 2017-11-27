@@ -220,7 +220,7 @@ void Game::onUpdate(float elapsedTime)
 void Game::onRender(float elapsedTime)
 {
 	// Deferred rendering here
-	Graphics* graphics = Graphics::getGraphics();
+	//Graphics* graphics = Graphics::getGraphics();
 	
 
 

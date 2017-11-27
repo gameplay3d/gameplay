@@ -5,14 +5,14 @@ namespace gameplay
 {
 
 FenceMTL::FenceMTL() :
-	Shader(),
+	Fence(),
 	_device(nullptr),
     _fence(nullptr)
 {
 }
 
 FenceMTL::FenceMTL(id<MTLDevice> device, id<MTLFence> fence) :
-	Shader(),
+	Fence(),
 	_device(device),
 	_fence(fence)
 {

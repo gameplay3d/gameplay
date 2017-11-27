@@ -21,7 +21,7 @@ public:
     /**
      * Constructor.
      */
-    RenderPassMTL(id<MTLDevice> device, id<MTLRenderPassDescriptor> renderPassDescriptor);
+    RenderPassMTL(id<MTLDevice> device, MTLRenderPassDescriptor* renderPassDescriptor);
 
     /**
 	 * Destructor.
@@ -29,7 +29,7 @@ public:
     ~RenderPassMTL();
 
 	id<MTLDevice>  _device;
-    id<MTLRenderPassDescriptor> _renderPassDescriptor;
+    MTLRenderPassDescriptor* _renderPassDescriptor;
 };
 
 }

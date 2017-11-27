@@ -21,15 +21,15 @@ public:
     /**
      * Constructor.
      */
-    CommandBufferMTL(id<MTLDevice> device, id<MTLComamndBuffer> commandBuffer);
+    CommandBufferMTL(id<MTLDevice> device, id<MTLCommandBuffer> commandBuffer);
 
     /**
 	 * Destructor.
      */
-    ~FenceMTL();
+    ~CommandBufferMTL();
 
 	id<MTLDevice>  _device;
-    id<MTLComamndBuffer> _commandBuffer;
+    id<MTLCommandBuffer> _commandBuffer;
 };
 
 }
