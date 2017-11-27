@@ -37,6 +37,11 @@ DescriptorSet::~DescriptorSet()
 {
 }
 
+size_t DescriptorSet::getDescriptorCount() const
+{
+	return _descriptors.size();
+}
+
 const DescriptorSet::Descriptor& DescriptorSet::getDescriptor(size_t index) const
 {
 	GP_ASSERT(index < _descriptors.size());

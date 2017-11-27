@@ -21,8 +21,8 @@ public:
     /**
      * Constructor.
      */
-    SamplerVK(Filter filterMag,
-			  Filter filterMin,
+    SamplerVK(Filter filterMin,
+			  Filter filterMag,
 			  Filter filterMip,
 			  AddressMode addressModeU,
 			  AddressMode addressModeV,

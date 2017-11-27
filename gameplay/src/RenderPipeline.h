@@ -28,8 +28,7 @@ public:
         PRIMITIVE_TOPOLOGY_LINE_LIST,
         PRIMITIVE_TOPOLOGY_LINE_STRIP,
 		PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
-        PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP,
-		PRIMITIVE_TOPOLOGY_TRIANGLE_FAN
+        PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 	};
 
 	/**
@@ -57,6 +56,90 @@ public:
 	 * Destructor.
 	 */
 	~RenderPipeline();
+
+	/**
+	 * Gets the primitive topology.
+	 *
+	 * @return The primitive topology.
+	 */
+	PrimitiveTopology getPrimitiveTopology() const;
+
+	/**
+	 * Gets the vertex layout.
+	 *
+	 * @return The vertex layout.
+	 */
+	VertexLayout getVertexLayout() const;
+
+	/**
+	 * Gets the rasterizer state.
+	 *
+	 * @return The rasterizer state.
+	 */
+	RasterizerState getRasterizerState() const;
+
+	/**
+	 * Gets the color blend state.
+	 *
+	 * @return The color blend state.
+	 */
+	ColorBlendState getColorBlendState() const;
+
+	/**
+	 * Gets the depth stencil state.
+	 *
+	 * @return The depth stencil state.
+	 */
+	DepthStencilState getDepthStencilState() const;
+
+	/**
+	 * Gets the render pass.
+	 *
+	 * @return The render pass.
+	 */
+	std::shared_ptr<RenderPass> getRenderPass() const;
+
+	/**
+	 * Gets the descriptor set.
+	 *
+	 * @return The  descriptor set.
+	 */
+	std::shared_ptr<DescriptorSet> getDescriptorSet() const;
+
+	/**
+	 * Gets the vertex shader.
+	 *
+	 * @return The vertex shader.
+	 */
+	std::shared_ptr<Shader> getVertexShader() const;
+
+	/**
+	 * Gets the tessellation control shader.
+	 *
+	 * @return The tessellation control shader.
+	 */
+	std::shared_ptr<Shader> getTessellationControlShader() const;
+
+	/**
+	 * Gets the tessellation evaluation shader.
+	 *
+	 * @return The tessellation evaluation shader.
+	 */
+	std::shared_ptr<Shader> getTessellationEvaluationShader() const;
+
+	/**
+	 * Gets the geometry shader.
+	 *
+	 * @return The geometry shader.
+	 */
+	std::shared_ptr<Shader> getGeometryShader() const;
+
+	/**
+	 * Gets the fragment shader.
+	 *
+	 * @return The fragment shader.
+	 */
+	std::shared_ptr<Shader> getFragmentShader() const;
 
 protected:
 

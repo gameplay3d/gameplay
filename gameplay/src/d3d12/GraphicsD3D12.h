@@ -113,7 +113,7 @@ public:
 	 * @see Graphics::cmdSetViewport
 	 */
 	void cmdSetViewport(std::shared_ptr<CommandBuffer> commandBuffer,
-						float x, float, float width, float height, 
+						float x, float y, float width, float height, 
 						float depthMin, float depthMax);
 	/**
 	 * @see Graphics::cmdSetScissor
@@ -259,8 +259,8 @@ public:
 	/**
      * @see Graphics::createSampler
      */
-	std::shared_ptr<Sampler> createSampler(Sampler::Filter filterMag,
-										   Sampler::Filter filterMin,
+	std::shared_ptr<Sampler> createSampler(Sampler::Filter filterMin,
+										   Sampler::Filter filterMag,
 										   Sampler::Filter filterMip,
 										   Sampler::AddressMode addressModeU,
 										   Sampler::AddressMode addressModeV,
@@ -316,14 +316,12 @@ public:
 	/**
      * @see Graphics::destroyRenderPipeline
      */
-	void destroyRenderPipeline(std::shared_ptr<RenderPipeline> pipeline);
+	void destroyRenderPipeline(std::shared_ptr<RenderPipeline> renderPipeline);
 
 private:
 
 	void getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter);
     void createSwapchainImages();
-	void waitForFence(ID3D12Fence* fence, UINT64 completionValue, HANDLE waitEvent);
-	void present();
 	std::shared_ptr<Buffer> createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible, bool is32bit);
 	std::shared_ptr<Texture> createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
 										   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, const ClearValue& clearValue, bool hostVisible,
@@ -336,9 +334,19 @@ private:
 												 std::vector<std::shared_ptr<Texture>> colorAttachments,
 												 std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
 												 std::shared_ptr<Texture> depthStencilAttachment);
-	DXGI_FORMAT toFormat(Format pixelFormat);
-	UINT toSamples(Texture::SampleCount sampleCount);
-	D3D12_RESOURCE_STATES toResourceStates(Texture::Usage usage);
+	DXGI_FORMAT toDXGIFormat(Format pixelFormat);
+	UINT toD3D12Samples(Texture::SampleCount sampleCount);
+	D3D12_RESOURCE_STATES toD3D12ResourceStates(Texture::Usage usage);
+	D3D12_FILTER toD3D12Filter(Sampler::Filter minFilter, Sampler::Filter magFilter, Sampler::Filter mipFilter);
+	D3D12_TEXTURE_ADDRESS_MODE toD3D12TextureAddressMode(Sampler::AddressMode addressMode);
+	D3D12_COMPARISON_FUNC toD3D12ComparisonFunc(Sampler::CompareFunc compareFunc);
+	void toD3D12BorderColor(Sampler::BorderColor borderColor, FLOAT d3dBorder[4]);
+	D3D12_BLEND toD3D12Blend(ColorBlendState::BlendFactor blendFactor);
+	D3D12_BLEND_OP toD3D12BlendOp(ColorBlendState::BlendOp blendOp);
+	D3D12_FILL_MODE toD3D12FillMode(RasterizerState::FillMode fillMode);
+	D3D12_CULL_MODE toD3D12CullMode(RasterizerState::CullMode cullMode);
+	D3D12_COMPARISON_FUNC toD3D12ComparisonFunc(DepthStencilState::CompareFunc compareFunc);
+	D3D12_STENCIL_OP toD3D12StencilOp(DepthStencilState::StencilOp stencilOp);
 
     bool _initialized;
     bool _resized;
@@ -353,6 +361,8 @@ private:
 	std::vector<DXGI_MODE_DESC> _displayModes;
 	ID3D12Device* _device;
 	ID3D12CommandQueue* _queue;
+	ID3D12Fence* _queueFence;
+	HANDLE _queueFenceEvent;
 	IDXGISwapChain4* _swapchain;
 	uint32_t _swapchainImagesViewDescriptorSize;
 	ID3D12DescriptorHeap* _swapchainImagesViewHeap;
@@ -360,10 +370,10 @@ private:
 	ID3D12Resource* _swapchainImages[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
 	std::vector<std::shared_ptr<RenderPass>> _renderPasses;
 	std::shared_ptr<RenderPass> _renderPass;
-	ID3D12Fence* _fences[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
-	HANDLE _fenceEvents[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
-	uint64_t _fenceValues[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
-	uint64_t _fenceValueCurrent;
+
+	PFN_D3D12_CREATE_ROOT_SIGNATURE_DESERIALIZER D3D12CreateRootSignatureDeserializer;
+	PFN_D3D12_SERIALIZE_VERSIONED_ROOT_SIGNATURE  D3D12SerializeVersionedRootSignature;
+	PFN_D3D12_CREATE_VERSIONED_ROOT_SIGNATURE_DESERIALIZER D3D12CreateVersionedRootSignatureDeserializer;
 };
 
 #define D3D_CHECK_RESULT(f)		\

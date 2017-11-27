@@ -111,7 +111,7 @@ public:
 	 * @see Graphics::cmdSetViewport
 	 */
 	void cmdSetViewport(std::shared_ptr<CommandBuffer> commandBuffer,
-						float x, float, float width, float height, 
+						float x, float y, float width, float height, 
 						float depthMin, float depthMax);
 	/**
 	 * @see Graphics::cmdSetScissor
@@ -256,8 +256,8 @@ public:
 	/**
      * @see Graphics::createSampler
      */
-	std::shared_ptr<Sampler> createSampler(Sampler::Filter filterMag,
-										   Sampler::Filter filterMin,
+	std::shared_ptr<Sampler> createSampler(Sampler::Filter filterMin,
+										   Sampler::Filter filterMag,
 										   Sampler::Filter filterMip,
 										   Sampler::AddressMode addressModeU,
 										   Sampler::AddressMode addressModeV,
@@ -313,7 +313,7 @@ public:
 	/**
      * @see Graphics::destroyRenderPipeline
      */
-	void destroyRenderPipeline(std::shared_ptr<RenderPipeline> pipeline);
+	void destroyRenderPipeline(std::shared_ptr<RenderPipeline> renderPipeline);
 
 private:
 
@@ -363,8 +363,8 @@ private:
 	VkSamplerAddressMode toVkSamplerAddressMode(Sampler::AddressMode addressMode);
 	VkBorderColor toVkBorderColor(Sampler::BorderColor borderColor);
 	VkCompareOp toVkCompareOp(Sampler::CompareFunc compareFunc);
-	VkShaderStageFlags toVkShaderStageFlags(DescriptorSet::Descriptor::ShaderStage shaderStage);
-	VkPolygonMode toVkPolygonMode(RasterizerState::PolygonMode polygonMode);
+	VkShaderStageFlags toVkShaderStageFlags(DescriptorSet::Descriptor::ShaderStages shaderStages);
+	VkPolygonMode toVkPolygonMode(RasterizerState::FillMode fillMode);
 	VkCullModeFlags toVkCullModeFlags(RasterizerState::CullMode cullMode);
 	VkFrontFace toVkFrontFace(RasterizerState::FrontFace frontFace);
 	VkCompareOp toVkCompareOp(DepthStencilState::CompareFunc compareFunc);

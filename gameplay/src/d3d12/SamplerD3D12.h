@@ -22,8 +22,8 @@ public:
     /**
      * Constructor.
      */
-    SamplerD3D12(Filter filterMag,
-				 Filter filterMin,
+    SamplerD3D12(Filter filterMin,
+			     Filter filterMag,
 			     Filter filterMip,
 			     AddressMode addressModeU,
 			     AddressMode addressModeV,

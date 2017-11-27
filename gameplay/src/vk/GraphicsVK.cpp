@@ -1110,6 +1110,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 	{
 		imageCount += 1;
 	}
+
 	for (size_t i = 0; i < colorAttachmentCount; ++i)
 	{
 		ClearValue clearColor;
@@ -1127,7 +1128,6 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 			std::shared_ptr<Texture> colorMultisampleAttachment = createTexture2d(width, height, 1, colorFormat, 
 																				  Texture::USAGE_COLOR_ATTACHMENT, 
 																				  sampleCount, clearColor, false);
-			std::shared_ptr<TextureVK> colorMultisampleAttachmentVK = std::static_pointer_cast<TextureVK>(colorMultisampleAttachment);
 			colorMultisampleAttachments.push_back(colorMultisampleAttachment);
 		}
 	}
@@ -1137,9 +1137,8 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 		clearDepthStencil.depthStencil.depth = 0.0f;
 		clearDepthStencil.depthStencil.stencil = 0;
 		depthStencilAttachment = createTexture2d(width, height, 1, depthStencilFormat, 
-													Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
-													Texture::SAMPLE_COUNT_1X, clearDepthStencil, false);
-		std::shared_ptr<TextureVK> depthStencilAttachmentVK = std::static_pointer_cast<TextureVK>(depthStencilAttachment);
+												 Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
+												 Texture::SAMPLE_COUNT_1X, clearDepthStencil, false);
 	}
 	return createRenderPass(width, height,
 							colorAttachmentCount,
@@ -1173,8 +1172,8 @@ void GraphicsVK::destroyRenderPass(std::shared_ptr<RenderPass> renderPass)
 	renderPass.reset();
 }
 
-std::shared_ptr<Sampler> GraphicsVK::createSampler(Sampler::Filter filterMag,
-												   Sampler::Filter filterMin,
+std::shared_ptr<Sampler> GraphicsVK::createSampler(Sampler::Filter filterMin,
+												   Sampler::Filter filterMag,
 												   Sampler::Filter filterMip,
 												   Sampler::AddressMode addressModeU,
 												   Sampler::AddressMode addressModeV,
@@ -1192,8 +1191,8 @@ std::shared_ptr<Sampler> GraphicsVK::createSampler(Sampler::Filter filterMag,
     createInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     createInfo.pNext = nullptr;
     createInfo.flags = 0;
+	createInfo.minFilter = toVkFilter(filterMin);
 	createInfo.magFilter = toVkFilter(filterMag);
-    createInfo.minFilter = toVkFilter(filterMin);
     createInfo.mipmapMode = toVkSamplerMipmapMode(filterMip);
     createInfo.addressModeU = toVkSamplerAddressMode(addressModeU);
     createInfo.addressModeV = toVkSamplerAddressMode(addressModeV);
@@ -1295,7 +1294,7 @@ std::shared_ptr<DescriptorSet> GraphicsVK::createDescriptorSet(const DescriptorS
             binding->binding = descriptor->binding;
             binding->descriptorType = (VkDescriptorType)typeIndex;
             binding->descriptorCount = descriptor->count;
-            binding->stageFlags = toVkShaderStageFlags(descriptor->shaderStage);
+            binding->stageFlags = toVkShaderStageFlags(descriptor->shaderStages);
             binding->pImmutableSamplers = nullptr;
 
             poolSizesByType[typeIndex].descriptorCount += descriptor->count;
@@ -1509,9 +1508,6 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     case RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP: 
 		topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP; 
 		break;
-    case RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_FAN: 
-		topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN; 
-		break;
     }
 
 	// InputAssemblyState
@@ -1546,7 +1542,7 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     rasterizerStateCreateInfo.flags = 0;
     rasterizerStateCreateInfo.depthClampEnable = rasterizerState.depthClipEnabled;
     rasterizerStateCreateInfo.rasterizerDiscardEnable = VK_FALSE;
-    rasterizerStateCreateInfo.polygonMode = toVkPolygonMode(rasterizerState.polygonMode);
+    rasterizerStateCreateInfo.polygonMode = toVkPolygonMode(rasterizerState.fillMode);
     rasterizerStateCreateInfo.cullMode = toVkCullModeFlags(rasterizerState.cullMode);
     rasterizerStateCreateInfo.frontFace = toVkFrontFace(rasterizerState.frontFace);
     rasterizerStateCreateInfo.depthBiasEnable = rasterizerState.depthBias == 0 ? VK_FALSE : VK_TRUE;
@@ -1572,11 +1568,11 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     depthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 	depthStencilStateCreateInfo.pNext = nullptr;
     depthStencilStateCreateInfo.flags = 0;
-	depthStencilStateCreateInfo.depthTestEnable = depthStencilState.depthEnable ? VK_TRUE : VK_FALSE;
+	depthStencilStateCreateInfo.depthTestEnable = depthStencilState.depthEnabled ? VK_TRUE : VK_FALSE;
 	depthStencilStateCreateInfo.depthWriteEnable = depthStencilState.depthWrite ? VK_TRUE : VK_FALSE;
 	depthStencilStateCreateInfo.depthCompareOp = toVkCompareOp(depthStencilState.depthFunc);
     depthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
-    depthStencilStateCreateInfo.stencilTestEnable = depthStencilState.stencilEnable ? VK_TRUE : VK_FALSE;
+    depthStencilStateCreateInfo.stencilTestEnable = depthStencilState.stencilEnabled ? VK_TRUE : VK_FALSE;
 	depthStencilStateCreateInfo.front.failOp = toVkStencilOp(depthStencilState.stencilOpStateFront.failOp);
     depthStencilStateCreateInfo.front.passOp = toVkStencilOp(depthStencilState.stencilOpStateFront.passOp);
     depthStencilStateCreateInfo.front.depthFailOp = toVkStencilOp(depthStencilState.stencilOpStateFront.depthFailOp);
@@ -1649,7 +1645,6 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
 
 	VkPipelineLayout pipelineLayout;
     VK_CHECK_RESULT(vkCreatePipelineLayout(_device, &pipelineLayoutCreateInfo, nullptr, &pipelineLayout));
- 
 
 	// Pipeline
 	VkGraphicsPipelineCreateInfo pipelineCreateInfo = {};
@@ -1695,8 +1690,15 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
 
 }
 
-void GraphicsVK::destroyRenderPipeline(std::shared_ptr<RenderPipeline> pipeline)
+void GraphicsVK::destroyRenderPipeline(std::shared_ptr<RenderPipeline> renderPipeline)
 {
+	GP_ASSERT(renderPipeline);
+
+	std::shared_ptr<RenderPipelineVK> renderPipelineVK = std::static_pointer_cast<RenderPipelineVK>(renderPipeline);
+
+	vkDestroyPipeline(_device, renderPipelineVK->_pipeline, nullptr);
+    vkDestroyPipelineLayout(_device, renderPipelineVK->_pipelineLayout, nullptr);
+	renderPipeline.reset();
 }
 
 Format GraphicsVK::toFormat(VkFormat pixelFormat)
@@ -2142,10 +2144,10 @@ VkCompareOp GraphicsVK::toVkCompareOp(Sampler::CompareFunc compareFunc)
 	return result;
 }
 
-VkShaderStageFlags GraphicsVK::toVkShaderStageFlags(DescriptorSet::Descriptor::ShaderStage shaderStage)
+VkShaderStageFlags GraphicsVK::toVkShaderStageFlags(DescriptorSet::Descriptor::ShaderStages shaderStages)
 {
 	 VkShaderStageFlags result = VK_IMAGE_LAYOUT_UNDEFINED;
-	 switch (shaderStage)
+	 switch (shaderStages)
 	 {
 	 case DescriptorSet::Descriptor::SHADER_STAGE_VERT:
 		 result = VK_SHADER_STAGE_VERTEX_BIT;
@@ -2166,15 +2168,15 @@ VkShaderStageFlags GraphicsVK::toVkShaderStageFlags(DescriptorSet::Descriptor::S
 	 return result;
 }
 
-VkPolygonMode GraphicsVK::toVkPolygonMode(RasterizerState::PolygonMode polygonMode)
+VkPolygonMode GraphicsVK::toVkPolygonMode(RasterizerState::FillMode fillMode)
 {
 	VkPolygonMode result = VK_POLYGON_MODE_FILL;
-	switch (polygonMode)
+	switch (fillMode)
 	{
-	case  RasterizerState::POLYGON_MODE_FILL:
+	case RasterizerState::FILL_MODE_SOLID:
 		result = VK_POLYGON_MODE_FILL;
 		break;
-	case RasterizerState::POLYGON_MODE_WIREFRAME:
+	case RasterizerState::FILL_MODE_WIREFRAME:
 		result = VK_POLYGON_MODE_LINE;
 		break;
 	}
@@ -2194,9 +2196,6 @@ VkCullModeFlags GraphicsVK::toVkCullModeFlags(RasterizerState::CullMode cullMode
 		break;
 	case RasterizerState::CULL_MODE_FRONT:
 		result = VK_CULL_MODE_BACK_BIT;
-		break;
-	case RasterizerState::CULL_MODE_FRONT_AND_BACK:
-		result = VK_CULL_MODE_FRONT_AND_BACK;
 		break;
 	}
 	return result;
@@ -2251,9 +2250,12 @@ VkCompareOp GraphicsVK::toVkCompareOp(DepthStencilState::CompareFunc compareFunc
 
 VkStencilOp GraphicsVK::toVkStencilOp(DepthStencilState::StencilOp stencilOp)
 {
-	VkStencilOp result = VK_STENCIL_OP_ZERO;
+	VkStencilOp result = VK_STENCIL_OP_KEEP;
 	switch (stencilOp)
 	{
+	case DepthStencilState::STENCIL_OP_KEEP:
+		result = VK_STENCIL_OP_KEEP;
+		break;
 	case DepthStencilState::STENCIL_OP_ZERO:
 		result = VK_STENCIL_OP_ZERO;
 		break;

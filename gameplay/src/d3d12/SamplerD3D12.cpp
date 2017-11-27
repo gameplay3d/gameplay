@@ -10,8 +10,8 @@ SamplerD3D12::SamplerD3D12() :
 {
 }
 
-SamplerD3D12::SamplerD3D12(Filter filterMag,
-						   Filter filterMin,
+SamplerD3D12::SamplerD3D12(Filter filterMin,
+						   Filter filterMag,
 						   Filter filterMip,
 						   AddressMode addressModeU,
 						   AddressMode addressModeV,
@@ -26,8 +26,8 @@ SamplerD3D12::SamplerD3D12(Filter filterMag,
 						   float lodMipBias,
 						   ID3D12Device* device, 
 						   D3D12_SAMPLER_DESC samplerDesc) :
-	Sampler(filterMag,
-			filterMin,
+	Sampler(filterMin,
+		    filterMag,
 			filterMip,
 			addressModeU,
 			addressModeV,
