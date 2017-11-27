@@ -166,12 +166,6 @@ size_t VertexLayout::toStride(Format format)
 		return 8;
 	case Format::FORMAT_R32G32_FLOAT: 
 		return 8;
-	case Format::FORMAT_R8G8B8_UNORM: 
-		return 3;
-	case Format::FORMAT_R16G16B16_UNORM: 
-		return 6;
-	case Format::FORMAT_R16G16B16_FLOAT: 
-		return 6;
 	case Format::FORMAT_R32G32B32_UINT: 
 		return 12;
 	case Format::FORMAT_R32G32B32_FLOAT: 
@@ -192,7 +186,6 @@ size_t VertexLayout::toStride(Format format)
 	case Format::FORMAT_X8_D24_UNORM_PACK32:
 	case Format::FORMAT_D32_FLOAT:
 	case Format::FORMAT_S8_UINT:
-	case Format::FORMAT_D16_UNORM_S8_UINT:
 	case Format::FORMAT_D24_UNORM_S8_UINT:
 	case Format::FORMAT_D32_FLOAT_S8_UINT:
 		return 0;

@@ -49,7 +49,7 @@ public:
 		/**
 		 * Defines the shader stages.
 		 */
-		enum ShaderStages
+		enum ShaderStages : uint32_t
 		{
 			SHADER_STAGE_VERT,
 			SHADER_STAGE_TESC,

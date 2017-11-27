@@ -35,9 +35,9 @@ public:
     /**
      * Define the polygon front-facing orientation.
      */
-    enum FrontFace
+    enum FrontFace : uint32_t
     {
-        FRONT_FACE_CW = 0,
+        FRONT_FACE_CW,
         FRONT_FACE_CCW
     };
 

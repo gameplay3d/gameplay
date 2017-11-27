@@ -47,7 +47,7 @@ public:
 	/**
 	 * Defines the supported sample counts for texture and used for storage operations.
 	 */
-	enum SampleCount
+	enum SampleCount : uint32_t
 	{
 		SAMPLE_COUNT_1X,
 		SAMPLE_COUNT_2X,

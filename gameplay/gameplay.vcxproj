@@ -126,6 +126,7 @@
     <ClInclude Include="src\d3d12\CommandBufferD3D12.h" />
     <ClInclude Include="src\d3d12\CommandPoolD3D12.h" />
     <ClInclude Include="src\d3d12\DescriptorSetD3D12.h" />
+    <ClInclude Include="src\d3d12\UtilsD3D12.h" />
     <ClInclude Include="src\d3d12\FenceD3D12.h" />
     <ClInclude Include="src\d3d12\GraphicsD3D12.h" />
     <ClInclude Include="src\d3d12\BufferD3D12.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="src\vk\CommandBufferVK.h" />
     <ClInclude Include="src\vk\CommandPoolVK.h" />
     <ClInclude Include="src\vk\DescriptorSetVK.h" />
+    <ClInclude Include="src\vk\UtilsVK.h" />
     <ClInclude Include="src\vk\FenceVK.h" />
     <ClInclude Include="src\vk\GraphicsVK.h" />
     <ClInclude Include="src\vk\BufferVK.h" />
