@@ -56,7 +56,7 @@ public:
          * Constructor.
          *
          * @param semantic The semantic.
-         * @param name The name attribute.
+         * @param semanticName The semantic name.
 		 * @param format The format of the attribute
          */
         VertexAttribute(Semantic semantic, 

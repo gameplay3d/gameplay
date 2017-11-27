@@ -25,7 +25,9 @@ public:
                Format pixelFormat,
 			   Usage usage, 
 			   SampleCount sampleCount, 
-			   bool hostVisible,
+               const ClearValue& clearValue,
+               bool hostVisible,
+               bool hostOwned,
 			   id<MTLDevice> device,
 			   id<MTLTexture> texture);
 

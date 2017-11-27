@@ -7,6 +7,42 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		424CFAE21FCCB96B00DB5212 /* RasterizerState.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAD31FCCB96900DB5212 /* RasterizerState.h */; };
+		424CFAE31FCCB96B00DB5212 /* DescriptorSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAD41FCCB96900DB5212 /* DescriptorSet.h */; };
+		424CFAE41FCCB96B00DB5212 /* RenderPipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAD51FCCB96900DB5212 /* RenderPipeline.h */; };
+		424CFAE51FCCB96B00DB5212 /* DescriptorSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAD61FCCB96A00DB5212 /* DescriptorSet.cpp */; };
+		424CFAE61FCCB96B00DB5212 /* Fence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAD71FCCB96A00DB5212 /* Fence.cpp */; };
+		424CFAE71FCCB96B00DB5212 /* Fence.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAD81FCCB96A00DB5212 /* Fence.h */; };
+		424CFAE81FCCB96B00DB5212 /* DepthStencilState.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAD91FCCB96A00DB5212 /* DepthStencilState.h */; };
+		424CFAE91FCCB96B00DB5212 /* CommandBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CFADA1FCCB96A00DB5212 /* CommandBuffer.cpp */; };
+		424CFAEA1FCCB96B00DB5212 /* RenderPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CFADB1FCCB96A00DB5212 /* RenderPipeline.cpp */; };
+		424CFAEB1FCCB96B00DB5212 /* RenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFADC1FCCB96A00DB5212 /* RenderPass.h */; };
+		424CFAEC1FCCB96B00DB5212 /* Sampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFADD1FCCB96A00DB5212 /* Sampler.h */; };
+		424CFAED1FCCB96B00DB5212 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CFADE1FCCB96B00DB5212 /* Sampler.cpp */; };
+		424CFAEE1FCCB96B00DB5212 /* CommandBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFADF1FCCB96B00DB5212 /* CommandBuffer.h */; };
+		424CFAEF1FCCB96B00DB5212 /* ColorBlendState.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAE01FCCB96B00DB5212 /* ColorBlendState.h */; };
+		424CFAF01FCCB96B00DB5212 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAE11FCCB96B00DB5212 /* RenderPass.cpp */; };
+		424CFAFF1FCCBA1D00DB5212 /* SamplerMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAF11FCCBA1B00DB5212 /* SamplerMTL.h */; };
+		424CFB001FCCBA1D00DB5212 /* FenceMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAF21FCCBA1B00DB5212 /* FenceMTL.h */; };
+		424CFB011FCCBA1D00DB5212 /* SamplerMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAF31FCCBA1C00DB5212 /* SamplerMTL.mm */; };
+		424CFB021FCCBA1D00DB5212 /* ShaderMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAF41FCCBA1C00DB5212 /* ShaderMTL.h */; };
+		424CFB031FCCBA1D00DB5212 /* RenderPassMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAF51FCCBA1C00DB5212 /* RenderPassMTL.mm */; };
+		424CFB041FCCBA1D00DB5212 /* ShaderMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAF61FCCBA1C00DB5212 /* ShaderMTL.mm */; };
+		424CFB051FCCBA1D00DB5212 /* RenderPipelineMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAF71FCCBA1C00DB5212 /* RenderPipelineMTL.mm */; };
+		424CFB061FCCBA1D00DB5212 /* CommandBufferMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAF81FCCBA1C00DB5212 /* CommandBufferMTL.h */; };
+		424CFB071FCCBA1D00DB5212 /* RenderPassMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAF91FCCBA1C00DB5212 /* RenderPassMTL.h */; };
+		424CFB081FCCBA1D00DB5212 /* RenderPipelineMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAFA1FCCBA1D00DB5212 /* RenderPipelineMTL.h */; };
+		424CFB091FCCBA1D00DB5212 /* SemaphoreMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAFB1FCCBA1D00DB5212 /* SemaphoreMTL.mm */; };
+		424CFB0A1FCCBA1D00DB5212 /* CommandBufferMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAFC1FCCBA1D00DB5212 /* CommandBufferMTL.mm */; };
+		424CFB0B1FCCBA1D00DB5212 /* FenceMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 424CFAFD1FCCBA1D00DB5212 /* FenceMTL.mm */; };
+		424CFB0C1FCCBA1D00DB5212 /* SemaphoreMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFAFE1FCCBA1D00DB5212 /* SemaphoreMTL.h */; };
+		424CFB111FCCBB8300DB5212 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CFB0D1FCCBB8200DB5212 /* Shader.cpp */; };
+		424CFB121FCCBB8300DB5212 /* Semaphore.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFB0E1FCCBB8200DB5212 /* Semaphore.h */; };
+		424CFB131FCCBB8300DB5212 /* Semaphore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CFB0F1FCCBB8300DB5212 /* Semaphore.cpp */; };
+		424CFB141FCCBB8300DB5212 /* Shader.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFB101FCCBB8300DB5212 /* Shader.h */; };
+		424CFB161FCCC91C00DB5212 /* UtilsMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFB151FCCC91C00DB5212 /* UtilsMTL.h */; };
+		424CFB191FCCCE1500DB5212 /* DescriptorSetMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 424CFB171FCCCE1500DB5212 /* DescriptorSetMTL.mm */; };
+		424CFB1A1FCCCE1500DB5212 /* DescriptorSetMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFB181FCCCE1500DB5212 /* DescriptorSetMTL.h */; };
 		426A99971F85D16700E89904 /* PhysicsJointFixed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99161F85D15800E89904 /* PhysicsJointFixed.cpp */; };
 		426A99981F85D16700E89904 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99171F85D15800E89904 /* Material.cpp */; };
 		426A99991F85D16700E89904 /* PhysicsJoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99181F85D15800E89904 /* PhysicsJoint.h */; };
@@ -21,7 +57,6 @@
 		426A99A21F85D16700E89904 /* Heightfield.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99211F85D15900E89904 /* Heightfield.h */; };
 		426A99A51F85D16700E89904 /* Physics.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99241F85D15900E89904 /* Physics.h */; };
 		426A99A61F85D16700E89904 /* SerializerBinary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99251F85D15900E89904 /* SerializerBinary.cpp */; };
-		426A99A71F85D16700E89904 /* CommandList.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99261F85D15900E89904 /* CommandList.h */; };
 		426A99A81F85D16700E89904 /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99271F85D15900E89904 /* Sprite.cpp */; };
 		426A99A91F85D16700E89904 /* Serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99281F85D15900E89904 /* Serializer.cpp */; };
 		426A99AA1F85D16700E89904 /* PhysicsJointFixed.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99291F85D15900E89904 /* PhysicsJointFixed.h */; };
@@ -116,7 +151,6 @@
 		426A9A061F85D16700E89904 /* AudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99861F85D16300E89904 /* AudioSource.h */; };
 		426A9A071F85D16700E89904 /* PhysicsJointSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99871F85D16300E89904 /* PhysicsJointSocket.cpp */; };
 		426A9A091F85D16700E89904 /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99891F85D16400E89904 /* Quaternion.cpp */; };
-		426A9A0A1F85D16700E89904 /* CommandList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A998A1F85D16500E89904 /* CommandList.cpp */; };
 		426A9A0B1F85D16700E89904 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A998B1F85D16500E89904 /* Animation.cpp */; };
 		426A9A0C1F85D16700E89904 /* Serializable.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A998C1F85D16500E89904 /* Serializable.h */; };
 		426A9A0D1F85D16700E89904 /* SerializerBinary.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A998D1F85D16500E89904 /* SerializerBinary.h */; };
@@ -130,9 +164,7 @@
 		426A9A151F85D16700E89904 /* BoundingBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99951F85D16600E89904 /* BoundingBox.h */; };
 		426A9A161F85D16700E89904 /* SerializerJson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99961F85D16600E89904 /* SerializerJson.cpp */; };
 		426A9A591F85E81B00E89904 /* CommandPoolMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A9A511F85E81A00E89904 /* CommandPoolMTL.h */; };
-		426A9A5A1F85E81B00E89904 /* CommandListMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A9A521F85E81A00E89904 /* CommandListMTL.h */; };
 		426A9A5B1F85E81B00E89904 /* BufferMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 426A9A531F85E81A00E89904 /* BufferMTL.mm */; };
-		426A9A5C1F85E81B00E89904 /* CommandListMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 426A9A541F85E81A00E89904 /* CommandListMTL.mm */; };
 		426A9A5D1F85E81B00E89904 /* BufferMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A9A551F85E81A00E89904 /* BufferMTL.h */; };
 		426A9A5E1F85E81B00E89904 /* GraphicsMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A9A561F85E81A00E89904 /* GraphicsMTL.h */; };
 		426A9A5F1F85E81B00E89904 /* GraphicsMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 426A9A571F85E81A00E89904 /* GraphicsMTL.mm */; };
@@ -146,6 +178,42 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		424CFAD31FCCB96900DB5212 /* RasterizerState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RasterizerState.h; path = src/RasterizerState.h; sourceTree = SOURCE_ROOT; };
+		424CFAD41FCCB96900DB5212 /* DescriptorSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DescriptorSet.h; path = src/DescriptorSet.h; sourceTree = SOURCE_ROOT; };
+		424CFAD51FCCB96900DB5212 /* RenderPipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPipeline.h; path = src/RenderPipeline.h; sourceTree = SOURCE_ROOT; };
+		424CFAD61FCCB96A00DB5212 /* DescriptorSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DescriptorSet.cpp; path = src/DescriptorSet.cpp; sourceTree = SOURCE_ROOT; };
+		424CFAD71FCCB96A00DB5212 /* Fence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fence.cpp; path = src/Fence.cpp; sourceTree = SOURCE_ROOT; };
+		424CFAD81FCCB96A00DB5212 /* Fence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fence.h; path = src/Fence.h; sourceTree = SOURCE_ROOT; };
+		424CFAD91FCCB96A00DB5212 /* DepthStencilState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DepthStencilState.h; path = src/DepthStencilState.h; sourceTree = SOURCE_ROOT; };
+		424CFADA1FCCB96A00DB5212 /* CommandBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandBuffer.cpp; path = src/CommandBuffer.cpp; sourceTree = SOURCE_ROOT; };
+		424CFADB1FCCB96A00DB5212 /* RenderPipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPipeline.cpp; path = src/RenderPipeline.cpp; sourceTree = SOURCE_ROOT; };
+		424CFADC1FCCB96A00DB5212 /* RenderPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPass.h; path = src/RenderPass.h; sourceTree = SOURCE_ROOT; };
+		424CFADD1FCCB96A00DB5212 /* Sampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sampler.h; path = src/Sampler.h; sourceTree = SOURCE_ROOT; };
+		424CFADE1FCCB96B00DB5212 /* Sampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sampler.cpp; path = src/Sampler.cpp; sourceTree = SOURCE_ROOT; };
+		424CFADF1FCCB96B00DB5212 /* CommandBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandBuffer.h; path = src/CommandBuffer.h; sourceTree = SOURCE_ROOT; };
+		424CFAE01FCCB96B00DB5212 /* ColorBlendState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorBlendState.h; path = src/ColorBlendState.h; sourceTree = SOURCE_ROOT; };
+		424CFAE11FCCB96B00DB5212 /* RenderPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPass.cpp; path = src/RenderPass.cpp; sourceTree = SOURCE_ROOT; };
+		424CFAF11FCCBA1B00DB5212 /* SamplerMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SamplerMTL.h; path = src/mtl/SamplerMTL.h; sourceTree = SOURCE_ROOT; };
+		424CFAF21FCCBA1B00DB5212 /* FenceMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FenceMTL.h; path = src/mtl/FenceMTL.h; sourceTree = SOURCE_ROOT; };
+		424CFAF31FCCBA1C00DB5212 /* SamplerMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SamplerMTL.mm; path = src/mtl/SamplerMTL.mm; sourceTree = SOURCE_ROOT; };
+		424CFAF41FCCBA1C00DB5212 /* ShaderMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderMTL.h; path = src/mtl/ShaderMTL.h; sourceTree = SOURCE_ROOT; };
+		424CFAF51FCCBA1C00DB5212 /* RenderPassMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RenderPassMTL.mm; path = src/mtl/RenderPassMTL.mm; sourceTree = SOURCE_ROOT; };
+		424CFAF61FCCBA1C00DB5212 /* ShaderMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ShaderMTL.mm; path = src/mtl/ShaderMTL.mm; sourceTree = SOURCE_ROOT; };
+		424CFAF71FCCBA1C00DB5212 /* RenderPipelineMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RenderPipelineMTL.mm; path = src/mtl/RenderPipelineMTL.mm; sourceTree = SOURCE_ROOT; };
+		424CFAF81FCCBA1C00DB5212 /* CommandBufferMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandBufferMTL.h; path = src/mtl/CommandBufferMTL.h; sourceTree = SOURCE_ROOT; };
+		424CFAF91FCCBA1C00DB5212 /* RenderPassMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPassMTL.h; path = src/mtl/RenderPassMTL.h; sourceTree = SOURCE_ROOT; };
+		424CFAFA1FCCBA1D00DB5212 /* RenderPipelineMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPipelineMTL.h; path = src/mtl/RenderPipelineMTL.h; sourceTree = SOURCE_ROOT; };
+		424CFAFB1FCCBA1D00DB5212 /* SemaphoreMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SemaphoreMTL.mm; path = src/mtl/SemaphoreMTL.mm; sourceTree = SOURCE_ROOT; };
+		424CFAFC1FCCBA1D00DB5212 /* CommandBufferMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CommandBufferMTL.mm; path = src/mtl/CommandBufferMTL.mm; sourceTree = SOURCE_ROOT; };
+		424CFAFD1FCCBA1D00DB5212 /* FenceMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FenceMTL.mm; path = src/mtl/FenceMTL.mm; sourceTree = SOURCE_ROOT; };
+		424CFAFE1FCCBA1D00DB5212 /* SemaphoreMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SemaphoreMTL.h; path = src/mtl/SemaphoreMTL.h; sourceTree = SOURCE_ROOT; };
+		424CFB0D1FCCBB8200DB5212 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shader.cpp; path = src/Shader.cpp; sourceTree = SOURCE_ROOT; };
+		424CFB0E1FCCBB8200DB5212 /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Semaphore.h; path = src/Semaphore.h; sourceTree = SOURCE_ROOT; };
+		424CFB0F1FCCBB8300DB5212 /* Semaphore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Semaphore.cpp; path = src/Semaphore.cpp; sourceTree = SOURCE_ROOT; };
+		424CFB101FCCBB8300DB5212 /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Shader.h; path = src/Shader.h; sourceTree = SOURCE_ROOT; };
+		424CFB151FCCC91C00DB5212 /* UtilsMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UtilsMTL.h; path = src/mtl/UtilsMTL.h; sourceTree = SOURCE_ROOT; };
+		424CFB171FCCCE1500DB5212 /* DescriptorSetMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DescriptorSetMTL.mm; path = src/mtl/DescriptorSetMTL.mm; sourceTree = SOURCE_ROOT; };
+		424CFB181FCCCE1500DB5212 /* DescriptorSetMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DescriptorSetMTL.h; path = src/mtl/DescriptorSetMTL.h; sourceTree = SOURCE_ROOT; };
 		426A98E11F85CF5F00E89904 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		426A99161F85D15800E89904 /* PhysicsJointFixed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsJointFixed.cpp; path = src/PhysicsJointFixed.cpp; sourceTree = SOURCE_ROOT; };
 		426A99171F85D15800E89904 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Material.cpp; path = src/Material.cpp; sourceTree = SOURCE_ROOT; };
@@ -161,7 +229,6 @@
 		426A99211F85D15900E89904 /* Heightfield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Heightfield.h; path = src/Heightfield.h; sourceTree = SOURCE_ROOT; };
 		426A99241F85D15900E89904 /* Physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Physics.h; path = src/Physics.h; sourceTree = SOURCE_ROOT; };
 		426A99251F85D15900E89904 /* SerializerBinary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SerializerBinary.cpp; path = src/SerializerBinary.cpp; sourceTree = SOURCE_ROOT; };
-		426A99261F85D15900E89904 /* CommandList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandList.h; path = src/CommandList.h; sourceTree = SOURCE_ROOT; };
 		426A99271F85D15900E89904 /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sprite.cpp; path = src/Sprite.cpp; sourceTree = SOURCE_ROOT; };
 		426A99281F85D15900E89904 /* Serializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Serializer.cpp; path = src/Serializer.cpp; sourceTree = SOURCE_ROOT; };
 		426A99291F85D15900E89904 /* PhysicsJointFixed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsJointFixed.h; path = src/PhysicsJointFixed.h; sourceTree = SOURCE_ROOT; };
@@ -256,7 +323,6 @@
 		426A99861F85D16300E89904 /* AudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioSource.h; path = src/AudioSource.h; sourceTree = SOURCE_ROOT; };
 		426A99871F85D16300E89904 /* PhysicsJointSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsJointSocket.cpp; path = src/PhysicsJointSocket.cpp; sourceTree = SOURCE_ROOT; };
 		426A99891F85D16400E89904 /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = src/Quaternion.cpp; sourceTree = SOURCE_ROOT; };
-		426A998A1F85D16500E89904 /* CommandList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandList.cpp; path = src/CommandList.cpp; sourceTree = SOURCE_ROOT; };
 		426A998B1F85D16500E89904 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Animation.cpp; path = src/Animation.cpp; sourceTree = SOURCE_ROOT; };
 		426A998C1F85D16500E89904 /* Serializable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Serializable.h; path = src/Serializable.h; sourceTree = SOURCE_ROOT; };
 		426A998D1F85D16500E89904 /* SerializerBinary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SerializerBinary.h; path = src/SerializerBinary.h; sourceTree = SOURCE_ROOT; };
@@ -278,9 +344,7 @@
 		426A9A1E1F85D3FE00E89904 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
 		426A9A1F1F85D51E00E89904 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		426A9A511F85E81A00E89904 /* CommandPoolMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandPoolMTL.h; path = src/mtl/CommandPoolMTL.h; sourceTree = SOURCE_ROOT; };
-		426A9A521F85E81A00E89904 /* CommandListMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandListMTL.h; path = src/mtl/CommandListMTL.h; sourceTree = SOURCE_ROOT; };
 		426A9A531F85E81A00E89904 /* BufferMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = BufferMTL.mm; path = src/mtl/BufferMTL.mm; sourceTree = SOURCE_ROOT; };
-		426A9A541F85E81A00E89904 /* CommandListMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CommandListMTL.mm; path = src/mtl/CommandListMTL.mm; sourceTree = SOURCE_ROOT; };
 		426A9A551F85E81A00E89904 /* BufferMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BufferMTL.h; path = src/mtl/BufferMTL.h; sourceTree = SOURCE_ROOT; };
 		426A9A561F85E81A00E89904 /* GraphicsMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicsMTL.h; path = src/mtl/GraphicsMTL.h; sourceTree = SOURCE_ROOT; };
 		426A9A571F85E81A00E89904 /* GraphicsMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GraphicsMTL.mm; path = src/mtl/GraphicsMTL.mm; sourceTree = SOURCE_ROOT; };
@@ -346,10 +410,11 @@
 				426A991E1F85D15800E89904 /* Camera.cpp */,
 				426A99721F85D16000E89904 /* Camera.h */,
 				42B71C2F1F87A5A700D21066 /* ClearValue.h */,
-				426A998A1F85D16500E89904 /* CommandList.cpp */,
-				426A99261F85D15900E89904 /* CommandList.h */,
-				426A9A521F85E81A00E89904 /* CommandListMTL.h */,
-				426A9A541F85E81A00E89904 /* CommandListMTL.mm */,
+				424CFAE01FCCB96B00DB5212 /* ColorBlendState.h */,
+				424CFADA1FCCB96A00DB5212 /* CommandBuffer.cpp */,
+				424CFADF1FCCB96B00DB5212 /* CommandBuffer.h */,
+				424CFAF81FCCBA1C00DB5212 /* CommandBufferMTL.h */,
+				424CFAFC1FCCBA1D00DB5212 /* CommandBufferMTL.mm */,
 				426A99681F85D15F00E89904 /* CommandPool.cpp */,
 				426A993A1F85D15B00E89904 /* CommandPool.h */,
 				426A9A511F85E81A00E89904 /* CommandPoolMTL.h */,
@@ -358,6 +423,15 @@
 				426A99691F85D15F00E89904 /* Component.h */,
 				426A99491F85D15D00E89904 /* Curve.cpp */,
 				426A99711F85D16000E89904 /* Curve.h */,
+				424CFAD91FCCB96A00DB5212 /* DepthStencilState.h */,
+				424CFAD61FCCB96A00DB5212 /* DescriptorSet.cpp */,
+				424CFAD41FCCB96900DB5212 /* DescriptorSet.h */,
+				424CFB181FCCCE1500DB5212 /* DescriptorSetMTL.h */,
+				424CFB171FCCCE1500DB5212 /* DescriptorSetMTL.mm */,
+				424CFAD71FCCB96A00DB5212 /* Fence.cpp */,
+				424CFAD81FCCB96A00DB5212 /* Fence.h */,
+				424CFAF21FCCBA1B00DB5212 /* FenceMTL.h */,
+				424CFAFD1FCCBA1D00DB5212 /* FenceMTL.mm */,
 				426A99851F85D16300E89904 /* FileSystem.cpp */,
 				426A99781F85D16100E89904 /* FileSystem.h */,
 				42B71C311F87A5BA00D21066 /* Format.h */,
@@ -424,16 +498,33 @@
 				426A99361F85D15B00E89904 /* PlatformMacOS.mm */,
 				426A99891F85D16400E89904 /* Quaternion.cpp */,
 				426A995F1F85D15F00E89904 /* Quaternion.h */,
+				424CFAD31FCCB96900DB5212 /* RasterizerState.h */,
 				426A99331F85D15A00E89904 /* Ray.cpp */,
 				426A99601F85D15F00E89904 /* Ray.h */,
 				426A99441F85D15C00E89904 /* Rectangle.cpp */,
 				426A99551F85D15E00E89904 /* Rectangle.h */,
 				426A99931F85D16600E89904 /* Renderer.cpp */,
 				426A99941F85D16600E89904 /* Renderer.h */,
+				424CFAE11FCCB96B00DB5212 /* RenderPass.cpp */,
+				424CFADC1FCCB96A00DB5212 /* RenderPass.h */,
+				424CFAF91FCCBA1C00DB5212 /* RenderPassMTL.h */,
+				424CFAF51FCCBA1C00DB5212 /* RenderPassMTL.mm */,
+				424CFADB1FCCB96A00DB5212 /* RenderPipeline.cpp */,
+				424CFAD51FCCB96900DB5212 /* RenderPipeline.h */,
+				424CFAFA1FCCBA1D00DB5212 /* RenderPipelineMTL.h */,
+				424CFAF71FCCBA1C00DB5212 /* RenderPipelineMTL.mm */,
+				424CFADE1FCCB96B00DB5212 /* Sampler.cpp */,
+				424CFADD1FCCB96A00DB5212 /* Sampler.h */,
+				424CFAF11FCCBA1B00DB5212 /* SamplerMTL.h */,
+				424CFAF31FCCBA1C00DB5212 /* SamplerMTL.mm */,
 				426A991C1F85D15800E89904 /* SceneObject.cpp */,
 				426A99521F85D15D00E89904 /* SceneObject.h */,
 				426A99501F85D15D00E89904 /* Script.cpp */,
 				426A996D1F85D16000E89904 /* Script.h */,
+				424CFB0F1FCCBB8300DB5212 /* Semaphore.cpp */,
+				424CFB0E1FCCBB8200DB5212 /* Semaphore.h */,
+				424CFAFE1FCCBA1D00DB5212 /* SemaphoreMTL.h */,
+				424CFAFB1FCCBA1D00DB5212 /* SemaphoreMTL.mm */,
 				426A998C1F85D16500E89904 /* Serializable.h */,
 				426A99281F85D15900E89904 /* Serializer.cpp */,
 				426A99351F85D15B00E89904 /* Serializer.h */,
@@ -441,6 +532,10 @@
 				426A998D1F85D16500E89904 /* SerializerBinary.h */,
 				426A99961F85D16600E89904 /* SerializerJson.cpp */,
 				426A99311F85D15A00E89904 /* SerializerJson.h */,
+				424CFB0D1FCCBB8200DB5212 /* Shader.cpp */,
+				424CFB101FCCBB8300DB5212 /* Shader.h */,
+				424CFAF41FCCBA1C00DB5212 /* ShaderMTL.h */,
+				424CFAF61FCCBA1C00DB5212 /* ShaderMTL.mm */,
 				426A99271F85D15900E89904 /* Sprite.cpp */,
 				426A99381F85D15B00E89904 /* Sprite.h */,
 				426A99621F85D15F00E89904 /* Stream.h */,
@@ -452,6 +547,7 @@
 				42B71C2B1F87A58100D21066 /* TextureMTL.mm */,
 				426A991D1F85D15800E89904 /* Tileset.cpp */,
 				426A99391F85D15B00E89904 /* Tileset.h */,
+				424CFB151FCCC91C00DB5212 /* UtilsMTL.h */,
 				426A99631F85D15F00E89904 /* Vector2.cpp */,
 				426A997E1F85D16100E89904 /* Vector2.h */,
 				426A99191F85D15800E89904 /* Vector3.cpp */,
@@ -487,18 +583,21 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				424CFAE31FCCB96B00DB5212 /* DescriptorSet.h in Headers */,
 				426A99F11F85D16700E89904 /* Curve.h in Headers */,
 				426A99C91F85D16700E89904 /* PhysicsCharacter.h in Headers */,
 				426A99FE1F85D16700E89904 /* Vector2.h in Headers */,
+				424CFB061FCCBA1D00DB5212 /* CommandBufferMTL.h in Headers */,
 				426A99DC1F85D16700E89904 /* Input.h in Headers */,
 				42B71C301F87A5A700D21066 /* ClearValue.h in Headers */,
 				426A99BA1F85D16700E89904 /* Tileset.h in Headers */,
 				426A99AA1F85D16700E89904 /* PhysicsJointFixed.h in Headers */,
 				42B71C361F87A5E800D21066 /* VertexLayout.h in Headers */,
-				426A9A5A1F85E81B00E89904 /* CommandListMTL.h in Headers */,
 				426A99D31F85D16700E89904 /* SceneObject.h in Headers */,
+				424CFAEE1FCCB96B00DB5212 /* CommandBuffer.h in Headers */,
 				426A99FB1F85D16700E89904 /* MathUtil.h in Headers */,
 				426A99FA1F85D16700E89904 /* Logger.h in Headers */,
+				424CFB161FCCC91C00DB5212 /* UtilsMTL.h in Headers */,
 				426A9A031F85D16700E89904 /* PhysicsVehicle.h in Headers */,
 				426A99EE1F85D16700E89904 /* Text.h in Headers */,
 				426A99A51F85D16700E89904 /* Physics.h in Headers */,
@@ -507,14 +606,19 @@
 				426A99A21F85D16700E89904 /* Heightfield.h in Headers */,
 				426A9A0C1F85D16700E89904 /* Serializable.h in Headers */,
 				426A99ED1F85D16700E89904 /* Script.h in Headers */,
+				424CFAE41FCCB96B00DB5212 /* RenderPipeline.h in Headers */,
 				426A99C31F85D16700E89904 /* PhysicsJointSpring.h in Headers */,
+				424CFAFF1FCCBA1D00DB5212 /* SamplerMTL.h in Headers */,
 				426A99EC1F85D16700E89904 /* AudioClip.h in Headers */,
 				42B71C321F87A5BA00D21066 /* Format.h in Headers */,
 				426A99AB1F85D16700E89904 /* Frustum.h in Headers */,
 				426A99DD1F85D16700E89904 /* Mesh.h in Headers */,
 				426A99F71F85D16700E89904 /* Platform.h in Headers */,
 				426A99AD1F85D16700E89904 /* Image.h in Headers */,
+				424CFAEB1FCCB96B00DB5212 /* RenderPass.h in Headers */,
 				426A99B91F85D16700E89904 /* Sprite.h in Headers */,
+				424CFAE81FCCB96B00DB5212 /* DepthStencilState.h in Headers */,
+				424CFAEC1FCCB96B00DB5212 /* Sampler.h in Headers */,
 				426A9A0D1F85D16700E89904 /* SerializerBinary.h in Headers */,
 				426A99D01F85D16700E89904 /* PlatformMacOS.h in Headers */,
 				426A9A101F85D16700E89904 /* Animation.h in Headers */,
@@ -522,19 +626,26 @@
 				426A9A141F85D16700E89904 /* Renderer.h in Headers */,
 				426A99DF1F85D16700E89904 /* Quaternion.h in Headers */,
 				426A99991F85D16700E89904 /* PhysicsJoint.h in Headers */,
+				424CFAEF1FCCB96B00DB5212 /* ColorBlendState.h in Headers */,
+				424CFB1A1FCCCE1500DB5212 /* DescriptorSetMTL.h in Headers */,
+				424CFB021FCCBA1D00DB5212 /* ShaderMTL.h in Headers */,
 				426A99F31F85D16700E89904 /* AudioListener.h in Headers */,
 				426A99F21F85D16700E89904 /* Camera.h in Headers */,
 				426A99F91F85D16700E89904 /* gameplay.h in Headers */,
 				426A999B1F85D16700E89904 /* PhysicsJointHinge.h in Headers */,
+				424CFB001FCCBA1D00DB5212 /* FenceMTL.h in Headers */,
 				426A9A061F85D16700E89904 /* AudioSource.h in Headers */,
 				426A9A151F85D16700E89904 /* BoundingBox.h in Headers */,
+				424CFB141FCCBB8300DB5212 /* Shader.h in Headers */,
 				426A99F51F85D16700E89904 /* Buffer.h in Headers */,
 				426A99D61F85D16700E89904 /* Rectangle.h in Headers */,
 				426A999C1F85D16700E89904 /* Vector3.h in Headers */,
 				426A9A041F85D16700E89904 /* PhysicsJointGeneric.h in Headers */,
 				426A99B21F85D16700E89904 /* SerializerJson.h in Headers */,
+				424CFAE21FCCB96B00DB5212 /* RasterizerState.h in Headers */,
 				426A99E41F85D16700E89904 /* Material.h in Headers */,
 				42B71C2E1F87A58200D21066 /* TextureMTL.h in Headers */,
+				424CFAE71FCCB96B00DB5212 /* Fence.h in Headers */,
 				426A99BE1F85D16700E89904 /* Game.h in Headers */,
 				426A99AE1F85D16700E89904 /* PhysicsMaterial.h in Headers */,
 				426A99E01F85D16700E89904 /* Ray.h in Headers */,
@@ -542,6 +653,7 @@
 				426A99EB1F85D16700E89904 /* PhysicsJointSocket.h in Headers */,
 				426A9A5E1F85E81B00E89904 /* GraphicsMTL.h in Headers */,
 				426A99AF1F85D16700E89904 /* Path.h in Headers */,
+				424CFB0C1FCCBA1D00DB5212 /* SemaphoreMTL.h in Headers */,
 				426A99E51F85D16700E89904 /* PhysicsCloth.h in Headers */,
 				426A99B61F85D16700E89904 /* Serializer.h in Headers */,
 				426A99BB1F85D16700E89904 /* CommandPool.h in Headers */,
@@ -550,10 +662,12 @@
 				426A99CD1F85D16700E89904 /* Vector4.h in Headers */,
 				426A9A011F85D16700E89904 /* Base.h in Headers */,
 				426A99B51F85D16700E89904 /* Graphics.h in Headers */,
+				424CFB071FCCBA1D00DB5212 /* RenderPassMTL.h in Headers */,
+				424CFB081FCCBA1D00DB5212 /* RenderPipelineMTL.h in Headers */,
 				426A99D21F85D16700E89904 /* Matrix.h in Headers */,
+				424CFB121FCCBB8300DB5212 /* Semaphore.h in Headers */,
 				426A99C61F85D16700E89904 /* Light.h in Headers */,
 				426A99E91F85D16700E89904 /* Component.h in Headers */,
-				426A99A71F85D16700E89904 /* CommandList.h in Headers */,
 				426A99F81F85D16700E89904 /* FileSystem.h in Headers */,
 				426A99E21F85D16700E89904 /* Stream.h in Headers */,
 				426A99C41F85D16700E89904 /* Audio.h in Headers */,
@@ -624,19 +738,19 @@
 				426A9A051F85D16700E89904 /* FileSystem.cpp in Sources */,
 				426A9A091F85D16700E89904 /* Quaternion.cpp in Sources */,
 				426A99FD1F85D16700E89904 /* Matrix.cpp in Sources */,
-				426A9A5C1F85E81B00E89904 /* CommandListMTL.mm in Sources */,
 				426A9A5B1F85E81B00E89904 /* BufferMTL.mm in Sources */,
 				426A9A001F85D16700E89904 /* Graphics.cpp in Sources */,
 				426A99AC1F85D16700E89904 /* Vector4.cpp in Sources */,
 				426A99A91F85D16700E89904 /* Serializer.cpp in Sources */,
 				426A99F61F85D16700E89904 /* PhysicsVehicle.cpp in Sources */,
-				426A9A0A1F85D16700E89904 /* CommandList.cpp in Sources */,
 				426A9A111F85D16700E89904 /* PhysicsCollisionShape.cpp in Sources */,
 				426A99D91F85D16700E89904 /* AudioClip.cpp in Sources */,
+				424CFAE51FCCB96B00DB5212 /* DescriptorSet.cpp in Sources */,
 				426A99C71F85D16700E89904 /* AudioSource.cpp in Sources */,
 				426A99A11F85D16700E89904 /* PhysicsJointHinge.cpp in Sources */,
 				426A99C81F85D16700E89904 /* Frustum.cpp in Sources */,
 				426A99EA1F85D16700E89904 /* Platform.cpp in Sources */,
+				424CFB111FCCBB8300DB5212 /* Shader.cpp in Sources */,
 				426A99B11F85D16700E89904 /* PhysicsMaterial.cpp in Sources */,
 				426A99981F85D16700E89904 /* Material.cpp in Sources */,
 				426A999D1F85D16700E89904 /* SceneObject.cpp in Sources */,
@@ -651,36 +765,50 @@
 				426A9A601F85E81B00E89904 /* CommandPoolMTL.mm in Sources */,
 				426A99FC1F85D16700E89904 /* Game.cpp in Sources */,
 				426A99DA1F85D16700E89904 /* PhysicsJointGeneric.cpp in Sources */,
+				424CFB041FCCBA1D00DB5212 /* ShaderMTL.mm in Sources */,
 				426A99A61F85D16700E89904 /* SerializerBinary.cpp in Sources */,
+				424CFAF01FCCB96B00DB5212 /* RenderPass.cpp in Sources */,
+				424CFB051FCCBA1D00DB5212 /* RenderPipelineMTL.mm in Sources */,
+				424CFB031FCCBA1D00DB5212 /* RenderPassMTL.mm in Sources */,
 				426A999E1F85D16700E89904 /* Tileset.cpp in Sources */,
 				426A99E81F85D16700E89904 /* CommandPool.cpp in Sources */,
+				424CFAE91FCCB96B00DB5212 /* CommandBuffer.cpp in Sources */,
 				426A99BC1F85D16700E89904 /* Light.cpp in Sources */,
 				426A99D81F85D16700E89904 /* Mesh.cpp in Sources */,
 				426A99A81F85D16700E89904 /* Sprite.cpp in Sources */,
 				426A99D11F85D16700E89904 /* Script.cpp in Sources */,
 				426A99CF1F85D16700E89904 /* Physics.cpp in Sources */,
+				424CFB131FCCBB8300DB5212 /* Semaphore.cpp in Sources */,
 				426A99F41F85D16700E89904 /* Texture.cpp in Sources */,
+				424CFB091FCCBA1D00DB5212 /* SemaphoreMTL.mm in Sources */,
 				426A999A1F85D16700E89904 /* Vector3.cpp in Sources */,
 				426A99BF1F85D16700E89904 /* Component.cpp in Sources */,
 				426A99B01F85D16700E89904 /* Input.cpp in Sources */,
+				424CFB191FCCCE1500DB5212 /* DescriptorSetMTL.mm in Sources */,
+				424CFAE61FCCB96B00DB5212 /* Fence.cpp in Sources */,
 				426A99EF1F85D16700E89904 /* Heightfield.cpp in Sources */,
 				426A99A01F85D16700E89904 /* AudioListener.cpp in Sources */,
 				42B71C351F87A5E800D21066 /* VertexLayout.cpp in Sources */,
 				426A9A5F1F85E81B00E89904 /* GraphicsMTL.mm in Sources */,
+				424CFAEA1FCCB96B00DB5212 /* RenderPipeline.cpp in Sources */,
 				426A9A161F85D16700E89904 /* SerializerJson.cpp in Sources */,
 				426A99E31F85D16700E89904 /* Vector2.cpp in Sources */,
 				426A999F1F85D16700E89904 /* Camera.cpp in Sources */,
 				42B71C2D1F87A58200D21066 /* TextureMTL.mm in Sources */,
 				426A99B31F85D16700E89904 /* Text.cpp in Sources */,
 				426A99CC1F85D16700E89904 /* PhysicsJoint.cpp in Sources */,
+				424CFB0A1FCCBA1D00DB5212 /* CommandBufferMTL.mm in Sources */,
 				426A99971F85D16700E89904 /* PhysicsJointFixed.cpp in Sources */,
 				426A99E71F85D16700E89904 /* PhysicsCharacter.cpp in Sources */,
 				426A99F01F85D16700E89904 /* BoundingBox.cpp in Sources */,
+				424CFAED1FCCB96B00DB5212 /* Sampler.cpp in Sources */,
 				426A99B71F85D16700E89904 /* PlatformMacOS.mm in Sources */,
 				426A9A071F85D16700E89904 /* PhysicsJointSocket.cpp in Sources */,
 				426A99CA1F85D16700E89904 /* Curve.cpp in Sources */,
 				426A99C11F85D16700E89904 /* MathUtil.cpp in Sources */,
+				424CFB011FCCBA1D00DB5212 /* SamplerMTL.mm in Sources */,
 				426A99B41F85D16700E89904 /* Ray.cpp in Sources */,
+				424CFB0B1FCCBA1D00DB5212 /* FenceMTL.mm in Sources */,
 				426A99C51F85D16700E89904 /* Rectangle.cpp in Sources */,
 				426A99BD1F85D16700E89904 /* PhysicsRigidBody.cpp in Sources */,
 			);

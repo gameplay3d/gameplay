@@ -11,7 +11,7 @@ RenderPassMTL::RenderPassMTL() :
 {
 }
 
-RenderPassMTL::RenderPassMTL(id<MTLDevice> device, id<MTLRenderPassDescriptor> renderPassDescriptor) :
+RenderPassMTL::RenderPassMTL(id<MTLDevice> device, MTLRenderPassDescriptor* renderPassDescriptor) :
 	RenderPass(),
 	_device(device),
 	_renderPassDescriptor(renderPassDescriptor)

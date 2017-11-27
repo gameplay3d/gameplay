@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		426A99111F85CFFF00E89904 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 426A990D1F85CFFE00E89904 /* Info.plist */; };
 		426A9A251F85DCD900E89904 /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A9A221F85DCD800E89904 /* App.cpp */; };
 		426A9A271F85DCD900E89904 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 426A9A241F85DCD800E89904 /* main.mm */; };
 		426A9A3B1F85DFFC00E89904 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426A9A3A1F85DFFC00E89904 /* Cocoa.framework */; };
@@ -162,7 +161,7 @@
 		426A98F01F85CFB100E89904 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = gameplay3d;
 				TargetAttributes = {
 					426A98F71F85CFB100E89904 = {
@@ -194,7 +193,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				426A99111F85CFFF00E89904 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

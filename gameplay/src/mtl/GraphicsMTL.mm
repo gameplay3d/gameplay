@@ -1,6 +1,19 @@
 #include "Base.h"
 #include "GraphicsMTL.h"
+#include "UtilsMTL.h"
+#include "BufferMTL.h"
+#include "TextureMTL.h"
+#include "RenderPassMTL.h"
+#include "SamplerMTL.h"
+#include "ShaderMTL.h"
+#include "DescriptorSetMTL.h"
+#include "RenderPipelineMTL.h"
+#include "CommandPoolMTL.h"
+#include "CommandBufferMTL.h"
+#include "SemaphoreMTL.h"
+#include "FenceMTL.h"
 #include "Game.h"
+#include "FileSystem.h"
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
@@ -72,31 +85,17 @@ int GraphicsMTL::getHeight()
     return _height;
 }
 
-std::shared_ptr<Semaphore> GraphicsMTL::getSemaphore(size_t imageIndex)
+std::shared_ptr<RenderPass> GraphicsMTL::acquireNextSwapchainImage(std::shared_ptr<Fence> signalFence,
+                                                                   std::shared_ptr<Semaphore> signalSemaphore)
 {
     return nullptr;
-}
-
-std::shared_ptr<Fence> GraphicsMTL::getFence(size_t imageIndex)
-{
-    return nullptr;
-}
-
-std::shared_ptr<RenderPass> GraphicsMTL::getRenderPass(size_t imageIndex)
-{
-    return nullptr;
-}
-
-void GraphicsMTL::acquireNextImage(std::shared_ptr<Semaphore> signalSemaphore,
-                                   std::shared_ptr<Fence> fence)
-{
 }
 
 void GraphicsMTL::present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores)
 {
 }
 
-void GraphicsMTL::waitForFence(std::shared_ptr<Fence> fence)
+void GraphicsMTL::waitIdle(std::shared_ptr<Fence> waitFence)
 {
 }
 
@@ -109,7 +108,7 @@ void GraphicsMTL::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
 {
 }
 
-void GraphicsMTL::submit(std::shared_ptr<CommandBuffer> commandBuffer,
+void GraphicsMTL::submit(std::vector<std::shared_ptr<CommandBuffer>> commandBuffers,
                          std::vector<std::shared_ptr<Semaphore>> signalSemaphores,
                          std::vector<std::shared_ptr<Semaphore>> waitSemaphores)
 {
@@ -123,11 +122,12 @@ void GraphicsMTL::cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer)
 {
 }
 
-void GraphicsMTL::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
+void GraphicsMTL::cmdBeginRender(std::shared_ptr<CommandBuffer> commandBuffer,
+                                 std::shared_ptr<RenderPass> renderPass)
 {
 }
 
-void GraphicsMTL::cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
+void GraphicsMTL::cmdEndRender(std::shared_ptr<CommandBuffer> commandBuffer)
 {
 }
 
@@ -192,13 +192,6 @@ void GraphicsMTL::cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffe
 {
 }
 
-void GraphicsMTL::cmdTransitionRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
-                                          std::shared_ptr<RenderPass> renderPass, 
-                                          Texture::Usage usagePrev, 
-                                          Texture::Usage usageNext)
-{
-}
-
 std::shared_ptr<Semaphore> GraphicsMTL::createSemaphore()
 {
     return nullptr;
@@ -242,6 +235,7 @@ std::shared_ptr<Texture> GraphicsMTL::createTexture1d(size_t width,
                                                       Format pixelFormat,
                                                       Texture::Usage usage,
                                                       Texture::SampleCount sampleCount,
+                                                      const ClearValue& clearValue,
                                                       bool hostVisible)
 {
     return nullptr;
@@ -250,7 +244,8 @@ std::shared_ptr<Texture> GraphicsMTL::createTexture1d(size_t width,
 std::shared_ptr<Texture> GraphicsMTL::createTexture2d(size_t width, size_t height, size_t mipLevels,
                                                       Format pixelFormat,
                                                       Texture::Usage usage,
-                                                      Texture::SampleCount sampleCount, 
+                                                      Texture::SampleCount sampleCount,
+                                                      const ClearValue& clearValue,
                                                       bool hostVisible)
 {
     return nullptr;
@@ -259,7 +254,8 @@ std::shared_ptr<Texture> GraphicsMTL::createTexture2d(size_t width, size_t heigh
 std::shared_ptr<Texture> GraphicsMTL::createTexture3d(size_t width, size_t height, size_t depth,
                                                       Format pixelFormat,
                                                       Texture::Usage usage,
-                                                      Texture::SampleCount sampleCount,  
+                                                      Texture::SampleCount sampleCount,
+                                                      const ClearValue& clearValue,
                                                       bool hostVisible)
 {
     return nullptr;
@@ -282,14 +278,16 @@ void GraphicsMTL::destroyRenderPass(std::shared_ptr<RenderPass> renderPass)
 {
 }
 
-std::shared_ptr<Sampler> GraphicsMTL::createSampler(Sampler::Filter filterMag,
-                                                    Sampler::Filter filterMin,
-                                                    Sampler::Filter filterMip,                                                     
+std::shared_ptr<Sampler> GraphicsMTL::createSampler(Sampler::Filter filterMin,
+                                                    Sampler::Filter filterMag,
+                                                    Sampler::Filter filterMip,
                                                     Sampler::AddressMode addressModeU,
                                                     Sampler::AddressMode addressModeV,
                                                     Sampler::AddressMode addressModeW,
-                                                    Sampler::CompareFunc compareFunc,
                                                     Sampler::BorderColor borderColor,
+                                                    bool compareEnabled,
+                                                    Sampler::CompareFunc compareFunc,
+                                                    bool anisotropyEnabled,
                                                     float anisotropyMax,
                                                     float lodMin,
                                                     float lodMax,
@@ -313,7 +311,7 @@ void GraphicsMTL::destroyShader(std::shared_ptr<Shader> shader)
 
 
 std::shared_ptr<DescriptorSet> GraphicsMTL::createDescriptorSet(const DescriptorSet::Descriptor* descriptors, 
-                                                                  size_t descriptorCount)
+                                                                size_t descriptorCount)
 {
     return nullptr;
 }

@@ -1,32 +1,32 @@
 #pragma once
 
-#include "CommandPool.h"
+#include "DescriptorSet.h"
 #import <MetalKit/MetalKit.h>
 
 namespace gameplay
 {
 
 /**
- * Metal impl of a CommandPool.
+ * Metal impl of a DescriptorSet.
  */
-class CommandPoolMTL : public CommandPool
+class DescriptorSetMTL : public DescriptorSet
 {
 public:
 
     /**
      * Constructor.
      */
-	CommandPoolMTL();
+	DescriptorSetMTL();
 
     /**
      * Constructor.
      */
-    CommandPoolMTL(id<MTLDevice> device);
+    DescriptorSetMTL(id<MTLDevice> device);
 
     /**
 	 * Destructor.
      */
-    ~CommandPoolMTL();
+    ~DescriptorSetMTL();
 
 	id<MTLDevice>  _device;
 };

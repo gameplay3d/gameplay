@@ -17,10 +17,12 @@ TextureMTL::TextureMTL(Type type, size_t width, size_t height, size_t depth, siz
                        Format pixelFormat,
                        Usage usage, 
                        SampleCount sampleCount, 
+                       const ClearValue& clearValue,
                        bool hostVisible,
+                       bool hostOwned,
                        id<MTLDevice> device,
                        id<MTLTexture> texture) : 
-    Texture(type, width, height, depth, mipLevels, pixelFormat, usage, sampleCount, hostVisible), 
+    Texture(type, width, height, depth, mipLevels, pixelFormat, usage, sampleCount, clearValue, hostVisible, hostOwned),
     _device(device),
     _texture(texture),
     _hostMemory(nullptr)

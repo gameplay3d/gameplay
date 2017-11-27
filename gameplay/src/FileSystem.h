@@ -68,8 +68,7 @@ public:
      * If the specified path is a file system alias, the alias will be
      * resolved and the physical file will be returned.
      *
-     * @param path Path to resolve.
-	 * @param absolution If you want the returned path as an absolute path.
+     * @param path The path to resolve.
      * @return The resolved file path.
      */
     static std::string resolvePath(const std::string& path);

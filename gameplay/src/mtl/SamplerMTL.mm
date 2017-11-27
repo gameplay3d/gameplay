@@ -1,24 +1,24 @@
 #include "Base.h"
-#include "SamplerStateMTL.h"
+#include "SamplerMTL.h"
 
 namespace gameplay
 {
 
-SamplerStateMTL::SamplerStateMTL() :
+SamplerMTL::SamplerMTL() :
 	Sampler(),
 	_device(nullptr),
     _samplerState(nullptr)
 {
 }
 
-SamplerStateMTL::SamplerStateMTL(id<MTLDevice> device, id<MTLSamplerState> samplerState) :
+SamplerMTL::SamplerMTL(id<MTLDevice> device, id<MTLSamplerState> samplerState) :
 	Sampler(),
 	_device(device),
 	_samplerState(samplerState)
 {
 }
 
-SamplerStateMTL::~SamplerStateMTL()
+SamplerMTL::~SamplerMTL()
 {
 }
 
