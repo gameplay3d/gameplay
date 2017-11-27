@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Format.h"
+
 namespace gameplay
 {
-	enum class Format;
 
 /**
  * Defines a layout of vertex attributes.

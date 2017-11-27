@@ -333,48 +333,20 @@ private:
 												 std::vector<std::shared_ptr<Texture>> colorAttachments,
 												 std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
 												 std::shared_ptr<Texture> depthStencilAttachment);
-	struct SwapchainSurfaceInfo
+	struct SwapchainInfo
 	{
 		VkSurfaceCapabilitiesKHR capabilities;
 		std::vector<VkSurfaceFormatKHR> formats;
 		std::vector<VkPresentModeKHR> presentModes;
 	};
-
-	void loadLibrary();
-	void freeLibrary();
-	void loadFunctions();
-	SwapchainSurfaceInfo querySwapchainSurfaceInfo(VkPhysicalDevice physicalDevice);
+	SwapchainInfo querySwapchainInfo(VkPhysicalDevice physicalDevice);
 	VkSurfaceFormatKHR chooseSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkPresentModeKHR choosePresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
 	VkBool32 isDeviceExtensionPresent(VkPhysicalDevice physicalDevice, const char* extensionName);
 	VkBool32 getDepthStencilFormat(VkPhysicalDevice physicalDevice, VkFormat* depthStencilFormat);
 	uint32_t getQueueFamiliyIndex(VkQueueFlagBits queueFlags);
 	VkBool32 getMemoryTypeFromProperties(uint32_t typeBits, VkFlags requirements_mask, uint32_t* typeIndex);
-	Format toFormat(VkFormat pixelFormat);
-	Texture::SampleCount toSamples(VkSampleCountFlagBits sampleCount);
-	VkFormatFeatureFlags toVkFormatFeatureFlags(VkImageUsageFlags usage);
-	VkImageAspectFlags toVkImageAspectFlags(VkFormat format);
-	VkFormat toVkFormat(Format pixelFormat);
-	VkSampleCountFlagBits toVkSamples(Texture::SampleCount sampleCount);
-	VkImageUsageFlags toVkImageUsageFlags(Texture::Usage usage);
-	VkImageLayout toVkImageLayout(Texture::Usage usage);
-	VkFilter toVkFilter(Sampler::Filter filter);
-	VkSamplerMipmapMode toVkSamplerMipmapMode(Sampler::Filter filter);
-	VkSamplerAddressMode toVkSamplerAddressMode(Sampler::AddressMode addressMode);
-	VkBorderColor toVkBorderColor(Sampler::BorderColor borderColor);
-	VkCompareOp toVkCompareOp(Sampler::CompareFunc compareFunc);
-	VkShaderStageFlags toVkShaderStageFlags(DescriptorSet::Descriptor::ShaderStages shaderStages);
-	VkPolygonMode toVkPolygonMode(RasterizerState::FillMode fillMode);
-	VkCullModeFlags toVkCullModeFlags(RasterizerState::CullMode cullMode);
-	VkFrontFace toVkFrontFace(RasterizerState::FrontFace frontFace);
-	VkCompareOp toVkCompareOp(DepthStencilState::CompareFunc compareFunc);
-	VkStencilOp toVkStencilOp(DepthStencilState::StencilOp stencilOp);
-	VkBlendOp toVkBlendOp(ColorBlendState::BlendOp blendOp);
-	VkBlendFactor toVkBlendFactor(ColorBlendState::BlendFactor blendFactor);
 
-	static VkBool32 validationDebugReport(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objType,
-										  uint64_t srcObject, size_t location, int32_t msgCode,
-										  const char* layerPrefix, const char* msg, void* userData);
 private:
     bool _initialized;
     bool _resized;
@@ -404,30 +376,18 @@ private:
 	VkFormat _depthStencilFormat;
 	std::shared_ptr<RenderPass> _renderPass;
 	std::vector<std::shared_ptr<RenderPass>> _renderPasses;
-
 	VkDebugReportCallbackEXT _debugMessageCallback;
-	PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT;
-	PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT;
-	PFN_vkDebugReportMessageEXT vkDebugReportMessageEXT;
-	PFN_vkGetPhysicalDeviceSurfaceSupportKHR vkGetPhysicalDeviceSurfaceSupportKHR;
-	PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
-	PFN_vkGetPhysicalDeviceSurfaceFormatsKHR vkGetPhysicalDeviceSurfaceFormatsKHR;
-	PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfacePresentModesKHR;
-	PFN_vkCreateSwapchainKHR vkCreateSwapchainKHR;
-	PFN_vkDestroySwapchainKHR vkDestroySwapchainKHR;
-	PFN_vkGetSwapchainImagesKHR vkGetSwapchainImagesKHR;
-	PFN_vkAcquireNextImageKHR vkAcquireNextImageKHR;
-	PFN_vkQueuePresentKHR vkQueuePresentKHR;
 };
 
-std::string getErrorString(VkResult errorCode);
+
+std::string toErrorString(VkResult result);
 
 #define VK_CHECK_RESULT(f)																				\
 {																										\
 	VkResult res = (f);																					\
 	if (res != VK_SUCCESS)																				\
 	{																									\
-		std::cout << "Fatal: VkResult is \"" << getErrorString(res) << "\" in " << __FILE__ << " at line " << __LINE__ << std::endl; \
+		std::cout << "Fatal: VkResult is \"" << toErrorString(res) << "\" in " << __FILE__ << " at line " << __LINE__ << std::endl; \
 		GP_ASSERT(res == VK_SUCCESS);																		\
 	}																									\
 }

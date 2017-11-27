@@ -324,8 +324,7 @@ private:
     void createSwapchainImages();
 	std::shared_ptr<Buffer> createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible, bool is32bit);
 	std::shared_ptr<Texture> createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
-										   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, const ClearValue& clearValue, bool hostVisible,
-										   ID3D12Resource* resource);
+										   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, const ClearValue& clearValue, bool hostVisible, ID3D12Resource* resource);
 	std::shared_ptr<RenderPass> createRenderPass(size_t width, size_t height, 
 												 size_t colorAttachmentCount,
 												 Format colorFormat,
@@ -334,20 +333,6 @@ private:
 												 std::vector<std::shared_ptr<Texture>> colorAttachments,
 												 std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
 												 std::shared_ptr<Texture> depthStencilAttachment);
-	DXGI_FORMAT toDXGIFormat(Format pixelFormat);
-	UINT toD3D12Samples(Texture::SampleCount sampleCount);
-	D3D12_RESOURCE_STATES toD3D12ResourceStates(Texture::Usage usage);
-	D3D12_FILTER toD3D12Filter(Sampler::Filter minFilter, Sampler::Filter magFilter, Sampler::Filter mipFilter);
-	D3D12_TEXTURE_ADDRESS_MODE toD3D12TextureAddressMode(Sampler::AddressMode addressMode);
-	D3D12_COMPARISON_FUNC toD3D12ComparisonFunc(Sampler::CompareFunc compareFunc);
-	void toD3D12BorderColor(Sampler::BorderColor borderColor, FLOAT d3dBorder[4]);
-	D3D12_BLEND toD3D12Blend(ColorBlendState::BlendFactor blendFactor);
-	D3D12_BLEND_OP toD3D12BlendOp(ColorBlendState::BlendOp blendOp);
-	D3D12_FILL_MODE toD3D12FillMode(RasterizerState::FillMode fillMode);
-	D3D12_CULL_MODE toD3D12CullMode(RasterizerState::CullMode cullMode);
-	D3D12_COMPARISON_FUNC toD3D12ComparisonFunc(DepthStencilState::CompareFunc compareFunc);
-	D3D12_STENCIL_OP toD3D12StencilOp(DepthStencilState::StencilOp stencilOp);
-
     bool _initialized;
     bool _resized;
 	uint32_t _width;
@@ -370,10 +355,6 @@ private:
 	ID3D12Resource* _swapchainImages[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
 	std::vector<std::shared_ptr<RenderPass>> _renderPasses;
 	std::shared_ptr<RenderPass> _renderPass;
-
-	PFN_D3D12_CREATE_ROOT_SIGNATURE_DESERIALIZER D3D12CreateRootSignatureDeserializer;
-	PFN_D3D12_SERIALIZE_VERSIONED_ROOT_SIGNATURE  D3D12SerializeVersionedRootSignature;
-	PFN_D3D12_CREATE_VERSIONED_ROOT_SIGNATURE_DESERIALIZER D3D12CreateVersionedRootSignatureDeserializer;
 };
 
 #define D3D_CHECK_RESULT(f)		\

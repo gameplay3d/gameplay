@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Sampler.h"
+
 namespace gameplay
 {
 
@@ -11,21 +13,6 @@ namespace gameplay
 class DepthStencilState
 {
 public:
-
-	/**
-	 * Defines a comparison function.
-	 */
-	enum CompareFunc
-	{
-		COMPARE_FUNC_NEVER,
-		COMPARE_FUNC_LESS,
-		COMPARE_FUNC_EQUAL,
-		COMPARE_FUNC_LESS_OR_EQUAL,
-		COMPARE_FUNC_GREATER,
-		COMPARE_FUNC_NOT_EQUAL,
-		COMPARE_FUNC_GREATER_OR_EQUAL,
-		COMPARE_FUNC_ALWAYS
-	};
 
     /**
      * Defines the operation to the stored stencil value
@@ -68,7 +55,7 @@ public:
 		/**
 		 * 
 		 */
-		CompareFunc compareFunc = COMPARE_FUNC_NEVER;
+		Sampler::CompareFunc compareFunc = Sampler::COMPARE_FUNC_NEVER;
 
 		 /**
 		  * Selects the bits of the unsigned integer 
@@ -97,7 +84,7 @@ public:
     /**
      * The comparison function used in the depth test sampling.
      */
-    CompareFunc depthFunc = COMPARE_FUNC_LESS;
+    Sampler::CompareFunc depthFunc = Sampler::COMPARE_FUNC_LESS;
 
     /**
      * Whether stencil testing is enabled.

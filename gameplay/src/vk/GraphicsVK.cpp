@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Format.h"
 #include "GraphicsVK.h"
+#include "UtilsVK.h"
 #include "BufferVK.h"
 #include "TextureVK.h"
 #include "RenderPassVK.h"
@@ -669,7 +670,7 @@ std::shared_ptr<Texture> GraphicsVK::createTexture(Texture::Type type, size_t wi
 		break;    
     }
 
-	VkFormat format = toVkFormat(pixelFormat);
+	VkFormat format = lookupVkFormat[pixelFormat];
 	VkImage image;
 	VkDeviceMemory deviceMemory;
 	bool hostOwned;
@@ -686,7 +687,7 @@ std::shared_ptr<Texture> GraphicsVK::createTexture(Texture::Type type, size_t wi
 		imageCreateInfo.extent.depth = depth;
 		imageCreateInfo.mipLevels = mipLevels;
 		imageCreateInfo.arrayLayers = 1;
-		imageCreateInfo.samples = toVkSamples(sampleCount);
+		imageCreateInfo.samples = lookupVkSampleCountFlagBits[sampleCount];
 		imageCreateInfo.tiling = (hostVisible) ? VK_IMAGE_TILING_LINEAR : VK_IMAGE_TILING_OPTIMAL;
 		imageCreateInfo.usage = toVkImageUsageFlags(usage);
 		imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -858,7 +859,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 {
 	Format colorFormat = toFormat(colorFormatVK);
 	Format depthStencilFormat = toFormat(depthStencilFormatVK);
-	Texture::SampleCount sampleCount = toSamples(sampleCountVK);
+	Texture::SampleCount sampleCount = lookupSampleCount[sampleCountVK];
 
 	// Create the render pass
 	VkAttachmentDescription* attachmentDescs = nullptr;
@@ -1093,9 +1094,9 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 														 Format depthStencilFormat,
 														 Texture::SampleCount sampleCount)
 {
-	VkFormat colorFormatVK = toVkFormat(colorFormat);
-	VkFormat depthStencilFormatVK = toVkFormat(depthStencilFormat);
-	VkSampleCountFlagBits sampleCountVK = toVkSamples(sampleCount);
+	VkFormat colorFormatVK = lookupVkFormat[colorFormat];
+	VkFormat depthStencilFormatVK = lookupVkFormat[depthStencilFormat];
+	VkSampleCountFlagBits sampleCountVK = lookupVkSampleCountFlagBits[sampleCount];
 
 	// Create the textures for the framebuffer
 	std::vector<std::shared_ptr<Texture>> colorAttachments;
@@ -1191,15 +1192,15 @@ std::shared_ptr<Sampler> GraphicsVK::createSampler(Sampler::Filter filterMin,
     createInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     createInfo.pNext = nullptr;
     createInfo.flags = 0;
-	createInfo.minFilter = toVkFilter(filterMin);
-	createInfo.magFilter = toVkFilter(filterMag);
-    createInfo.mipmapMode = toVkSamplerMipmapMode(filterMip);
-    createInfo.addressModeU = toVkSamplerAddressMode(addressModeU);
-    createInfo.addressModeV = toVkSamplerAddressMode(addressModeV);
-    createInfo.addressModeW = toVkSamplerAddressMode(addressModeW);;
-	createInfo.borderColor = toVkBorderColor(borderColor);
+	createInfo.minFilter = lookupVkFilter[filterMin];
+	createInfo.magFilter = lookupVkFilter[filterMag];
+    createInfo.mipmapMode = lookupVkSamplerMipmapMode[filterMip];
+    createInfo.addressModeU = lookupVkSamplerAddressMode[addressModeU];
+    createInfo.addressModeV = lookupVkSamplerAddressMode[addressModeV];
+    createInfo.addressModeW = lookupVkSamplerAddressMode[addressModeW];
+	createInfo.borderColor = lookupVkBorderColor[borderColor];
 	createInfo.compareEnable = compareEnabled ? VK_TRUE : VK_FALSE;
-	createInfo.compareOp = toVkCompareOp(compareFunc);
+	createInfo.compareOp = lookupVkCompareOp[compareFunc];
     createInfo.anisotropyEnable = anisotropyEnabled ? VK_TRUE : VK_FALSE;
     createInfo.maxAnisotropy = anisotropyMax;
     createInfo.minLod = lodMin;
@@ -1294,7 +1295,7 @@ std::shared_ptr<DescriptorSet> GraphicsVK::createDescriptorSet(const DescriptorS
             binding->binding = descriptor->binding;
             binding->descriptorType = (VkDescriptorType)typeIndex;
             binding->descriptorCount = descriptor->count;
-            binding->stageFlags = toVkShaderStageFlags(descriptor->shaderStages);
+            binding->stageFlags = lookupVkShaderStageFlags[descriptor->shaderStages];
             binding->pImmutableSamplers = nullptr;
 
             poolSizesByType[typeIndex].descriptorCount += descriptor->count;
@@ -1478,7 +1479,7 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
 
         inputAttributes[inputAttributeCount].location = attribute.location;
         inputAttributes[inputAttributeCount].binding = attribute.binding;
-        inputAttributes[inputAttributeCount].format = toVkFormat(attribute.format);
+        inputAttributes[inputAttributeCount].format = lookupVkFormat[attribute.format];
         inputAttributes[inputAttributeCount].offset = attribute.offset;
         ++inputAttributeCount;
     }
@@ -1542,9 +1543,9 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     rasterizerStateCreateInfo.flags = 0;
     rasterizerStateCreateInfo.depthClampEnable = rasterizerState.depthClipEnabled;
     rasterizerStateCreateInfo.rasterizerDiscardEnable = VK_FALSE;
-    rasterizerStateCreateInfo.polygonMode = toVkPolygonMode(rasterizerState.fillMode);
-    rasterizerStateCreateInfo.cullMode = toVkCullModeFlags(rasterizerState.cullMode);
-    rasterizerStateCreateInfo.frontFace = toVkFrontFace(rasterizerState.frontFace);
+    rasterizerStateCreateInfo.polygonMode = lookupVkPolygonMode[rasterizerState.fillMode];
+    rasterizerStateCreateInfo.cullMode = lookupVkCullModeFlags[rasterizerState.cullMode];
+    rasterizerStateCreateInfo.frontFace = lookupVkFrontFace[rasterizerState.frontFace];
     rasterizerStateCreateInfo.depthBiasEnable = rasterizerState.depthBias == 0 ? VK_FALSE : VK_TRUE;
     rasterizerStateCreateInfo.depthBiasConstantFactor = 0.0f;
     rasterizerStateCreateInfo.depthBiasClamp = rasterizerState.depthBiasClamp;
@@ -1556,7 +1557,7 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     multisampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     multisampleStateCreateInfo.pNext = nullptr;
     multisampleStateCreateInfo.flags = 0;
-    multisampleStateCreateInfo.rasterizationSamples = toVkSamples(renderPass->getSampleCount());
+    multisampleStateCreateInfo.rasterizationSamples = lookupVkSampleCountFlagBits[renderPass->getSampleCount()];
     multisampleStateCreateInfo.sampleShadingEnable = VK_FALSE;
     multisampleStateCreateInfo.minSampleShading = 0.0f;
     multisampleStateCreateInfo.pSampleMask = 0;
@@ -1570,20 +1571,20 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     depthStencilStateCreateInfo.flags = 0;
 	depthStencilStateCreateInfo.depthTestEnable = depthStencilState.depthEnabled ? VK_TRUE : VK_FALSE;
 	depthStencilStateCreateInfo.depthWriteEnable = depthStencilState.depthWrite ? VK_TRUE : VK_FALSE;
-	depthStencilStateCreateInfo.depthCompareOp = toVkCompareOp(depthStencilState.depthFunc);
+	depthStencilStateCreateInfo.depthCompareOp = lookupVkCompareOp[depthStencilState.depthFunc];
     depthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
     depthStencilStateCreateInfo.stencilTestEnable = depthStencilState.stencilEnabled ? VK_TRUE : VK_FALSE;
-	depthStencilStateCreateInfo.front.failOp = toVkStencilOp(depthStencilState.stencilOpStateFront.failOp);
-    depthStencilStateCreateInfo.front.passOp = toVkStencilOp(depthStencilState.stencilOpStateFront.passOp);
-    depthStencilStateCreateInfo.front.depthFailOp = toVkStencilOp(depthStencilState.stencilOpStateFront.depthFailOp);
-    depthStencilStateCreateInfo.front.compareOp = toVkCompareOp(depthStencilState.stencilOpStateFront.compareFunc);
+	depthStencilStateCreateInfo.front.failOp = lookupVkStencilOp[depthStencilState.stencilOpStateFront.failOp];
+    depthStencilStateCreateInfo.front.passOp = lookupVkStencilOp[depthStencilState.stencilOpStateFront.passOp];
+    depthStencilStateCreateInfo.front.depthFailOp = lookupVkStencilOp[depthStencilState.stencilOpStateFront.depthFailOp];
+    depthStencilStateCreateInfo.front.compareOp = lookupVkCompareOp[depthStencilState.stencilOpStateFront.compareFunc];
     depthStencilStateCreateInfo.front.compareMask = depthStencilState.stencilOpStateFront.compareMask;
 	depthStencilStateCreateInfo.front.writeMask = depthStencilState.stencilOpStateFront.writeMask;
     depthStencilStateCreateInfo.front.reference = 0;
-    depthStencilStateCreateInfo.back.failOp = toVkStencilOp(depthStencilState.stencilOpStateBack.failOp);
-    depthStencilStateCreateInfo.back.passOp = toVkStencilOp(depthStencilState.stencilOpStateBack.passOp);
-    depthStencilStateCreateInfo.back.depthFailOp = toVkStencilOp(depthStencilState.stencilOpStateBack.depthFailOp);
-    depthStencilStateCreateInfo.back.compareOp = toVkCompareOp(depthStencilState.stencilOpStateBack.compareFunc);
+    depthStencilStateCreateInfo.back.failOp = lookupVkStencilOp[depthStencilState.stencilOpStateBack.failOp];
+    depthStencilStateCreateInfo.back.passOp = lookupVkStencilOp[depthStencilState.stencilOpStateBack.passOp];
+    depthStencilStateCreateInfo.back.depthFailOp = lookupVkStencilOp[depthStencilState.stencilOpStateBack.depthFailOp];
+    depthStencilStateCreateInfo.back.compareOp = lookupVkCompareOp[depthStencilState.stencilOpStateBack.compareFunc];
     depthStencilStateCreateInfo.back.compareMask = depthStencilState.stencilOpStateBack.compareMask;
 	depthStencilStateCreateInfo.back.writeMask = depthStencilState.stencilOpStateBack.writeMask;
     depthStencilStateCreateInfo.back.reference = 0;
@@ -1594,12 +1595,12 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
 	VkPipelineColorBlendAttachmentState colorBlendAttachmentStateCreateInfo = {};
 	colorBlendAttachmentStateCreateInfo.blendEnable = colorBlendState.blendEnabled ? VK_TRUE : VK_FALSE;
     colorBlendAttachmentStateCreateInfo.colorWriteMask = colorBlendState.colorWriteMask;
-    colorBlendAttachmentStateCreateInfo.alphaBlendOp = toVkBlendOp(colorBlendState.alphaBlendOp);
-	colorBlendAttachmentStateCreateInfo.colorBlendOp = toVkBlendOp(colorBlendState.colorBlendOp);
-	colorBlendAttachmentStateCreateInfo.srcColorBlendFactor = toVkBlendFactor(colorBlendState.colorBlendSrc);
-    colorBlendAttachmentStateCreateInfo.dstColorBlendFactor = toVkBlendFactor(colorBlendState.colorBlendDst);
-    colorBlendAttachmentStateCreateInfo.srcAlphaBlendFactor = toVkBlendFactor(colorBlendState.alphaBlendSrc);
-    colorBlendAttachmentStateCreateInfo.dstAlphaBlendFactor = toVkBlendFactor(colorBlendState.alphaBlendSrc);
+    colorBlendAttachmentStateCreateInfo.alphaBlendOp = lookupVkBlendOp[colorBlendState.alphaBlendOp];
+	colorBlendAttachmentStateCreateInfo.colorBlendOp = lookupVkBlendOp[colorBlendState.colorBlendOp];
+	colorBlendAttachmentStateCreateInfo.srcColorBlendFactor = lookupVkBlendFactor[colorBlendState.colorBlendSrc];
+    colorBlendAttachmentStateCreateInfo.dstColorBlendFactor = lookupVkBlendFactor[colorBlendState.colorBlendDst];
+    colorBlendAttachmentStateCreateInfo.srcAlphaBlendFactor = lookupVkBlendFactor[colorBlendState.alphaBlendSrc];
+    colorBlendAttachmentStateCreateInfo.dstAlphaBlendFactor = lookupVkBlendFactor[colorBlendState.alphaBlendSrc];
 
 	VkPipelineColorBlendStateCreateInfo colorBlendStateCreateInfo = {};
     colorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
@@ -1671,21 +1672,11 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
 	VkPipeline pipeline;
     VK_CHECK_RESULT(vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCreateInfo, nullptr, &pipeline));
 
-	std::shared_ptr<RenderPipelineVK> renderPipeline = std::make_shared<RenderPipelineVK>(primitiveTopology,
-																						  vertexLayout,
-																						  rasterizerState,
-																						  colorBlendState,
-																						  depthStencilState,
-																						  renderPass,
-																						  descriptorSet,
-																						  vertShader,
-																						  tescShader,
-																						  teseShader,
-																						  geomShader,
-																						  fragShader,
-																						  _device,
-																						  pipelineLayout,
-																						  pipeline);	
+	std::shared_ptr<RenderPipelineVK> renderPipeline = std::make_shared<RenderPipelineVK>(primitiveTopology, vertexLayout,
+																						  rasterizerState, colorBlendState, depthStencilState,
+																						  renderPass, descriptorSet,
+																						  vertShader, tescShader, teseShader, geomShader, fragShader,
+																						  _device, pipelineLayout, pipeline);	
 	return std::static_pointer_cast<RenderPipeline>(renderPipeline);
 
 }
@@ -1699,674 +1690,6 @@ void GraphicsVK::destroyRenderPipeline(std::shared_ptr<RenderPipeline> renderPip
 	vkDestroyPipeline(_device, renderPipelineVK->_pipeline, nullptr);
     vkDestroyPipelineLayout(_device, renderPipelineVK->_pipelineLayout, nullptr);
 	renderPipeline.reset();
-}
-
-Format GraphicsVK::toFormat(VkFormat pixelFormat)
-{
-	Format result = Format::FORMAT_UNDEFINED;	
-	switch (pixelFormat) 
-	{
-    case VK_FORMAT_R8_UNORM:
-		result = Format::FORMAT_R8_UNORM; 
-		break;
-    case VK_FORMAT_R16_UNORM:
-		result = Format::FORMAT_R16_UNORM;
-		break;
-    case VK_FORMAT_R16_SFLOAT:
-		result = Format::FORMAT_R16_FLOAT;
-		break;
-    case VK_FORMAT_R32_UINT:
-		result = Format::FORMAT_R32_UINT;
-		break;
-    case VK_FORMAT_R32_SFLOAT:
-		result = Format::FORMAT_R32_FLOAT;
-		break;        
-    case VK_FORMAT_R8G8_UNORM:
-		result = Format::FORMAT_R8G8_UNORM;
-		break;
-    case VK_FORMAT_R16G16_UNORM:
-		result = Format::FORMAT_R16G16_UNORM;
-		break;
-    case VK_FORMAT_R16G16_SFLOAT:
-		result = Format::FORMAT_R16G16_FLOAT;
-		break;
-    case VK_FORMAT_R32G32_UINT:
-		result = Format::FORMAT_R32G32_UINT;
-		break;
-    case VK_FORMAT_R32G32_SFLOAT:
-		result = Format::FORMAT_R32G32_FLOAT;
-		break;
-    case VK_FORMAT_R8G8B8_UNORM:
-		result = Format::FORMAT_R8G8B8_UNORM;
-		break;
-    case VK_FORMAT_R16G16B16_UNORM:
-		result = Format::FORMAT_R16G16B16_UNORM;
-		break;
-    case VK_FORMAT_R16G16B16_SFLOAT:
-		result = Format::FORMAT_R16G16B16_FLOAT;
-		break;
-    case VK_FORMAT_R32G32B32_UINT:
-		result = Format::FORMAT_R32G32B32_UINT;
-		break;
-    case VK_FORMAT_R32G32B32_SFLOAT:
-		result = Format::FORMAT_R32G32B32_FLOAT;
-		break;
-    case VK_FORMAT_B8G8R8A8_UNORM:
-		result = Format::FORMAT_B8G8R8A8_UNORM;
-		break;
-    case VK_FORMAT_R8G8B8A8_UNORM:
-		result = Format::FORMAT_R8G8B8A8_UNORM;
-		break;
-    case VK_FORMAT_R16G16B16A16_UNORM:
-		result = Format::FORMAT_R16G16B16A16_UNORM;
-		break;
-    case VK_FORMAT_R16G16B16A16_SFLOAT:
-		result = Format::FORMAT_R16G16B16A16_FLOAT;
-		break;
-    case VK_FORMAT_R32G32B32A32_UINT:
-		result = Format::FORMAT_R32G32B32A32_UINT;
-		break;
-    case VK_FORMAT_R32G32B32A32_SFLOAT:
-		result = Format::FORMAT_R32G32B32A32_FLOAT;
-		break;    
-    case VK_FORMAT_D16_UNORM:
-		result = Format::FORMAT_D16_UNORM;
-		break;
-    case VK_FORMAT_X8_D24_UNORM_PACK32:
-		result = Format::FORMAT_X8_D24_UNORM_PACK32;
-		break;
-    case VK_FORMAT_D32_SFLOAT:
-		result = Format::FORMAT_D32_FLOAT;
-		break;
-    case VK_FORMAT_S8_UINT:
-		result = Format::FORMAT_S8_UINT;
-		break;
-    case VK_FORMAT_D16_UNORM_S8_UINT:
-		result = Format::FORMAT_D16_UNORM_S8_UINT;
-		break;
-    case VK_FORMAT_D24_UNORM_S8_UINT:
-		result = Format::FORMAT_D24_UNORM_S8_UINT;
-		break;
-    case VK_FORMAT_D32_SFLOAT_S8_UINT:
-		result = Format::FORMAT_D32_FLOAT_S8_UINT;
-		break;
-    }
-    return result;
-}
-
-Texture::SampleCount GraphicsVK::toSamples(VkSampleCountFlagBits sampleCount)
-{
-	Texture::SampleCount result = Texture:: SAMPLE_COUNT_1X;
-    switch (sampleCount) 
-	{
-	case VK_SAMPLE_COUNT_1_BIT:
-		result = Texture:: SAMPLE_COUNT_1X;  
-			break;
-    case VK_SAMPLE_COUNT_2_BIT:
-		result = Texture:: SAMPLE_COUNT_2X;  
-		break;
-    case VK_SAMPLE_COUNT_4_BIT:
-		result = Texture:: SAMPLE_COUNT_4X;  
-		break;
-    case VK_SAMPLE_COUNT_8_BIT:
-		result = Texture:: SAMPLE_COUNT_8X;  
-		break;
-    case VK_SAMPLE_COUNT_16_BIT:
-		result = Texture:: SAMPLE_COUNT_16X; 
-		break;
-    }
-    return result;
-}
-
-VkFormat GraphicsVK::toVkFormat(Format pixelFormat)
-{
-	VkFormat result = VK_FORMAT_UNDEFINED;	
-	switch (pixelFormat) 
-	{
-    case Format::FORMAT_R8_UNORM: 
-		result = VK_FORMAT_R8_UNORM; 
-		break;
-    case Format::FORMAT_R16_UNORM:
-		result = VK_FORMAT_R16_UNORM;
-		break;
-    case Format::FORMAT_R16_FLOAT:
-		result = VK_FORMAT_R16_SFLOAT;
-		break;
-    case Format::FORMAT_R32_UINT: 
-		result = VK_FORMAT_R32_UINT;
-		break;
-    case Format::FORMAT_R32_FLOAT:
-		result = VK_FORMAT_R32_SFLOAT;
-		break;        
-    case Format::FORMAT_R8G8_UNORM:
-		result = VK_FORMAT_R8G8_UNORM;
-		break;
-    case Format::FORMAT_R16G16_UNORM:
-		result = VK_FORMAT_R16G16_UNORM;
-		break;
-    case Format::FORMAT_R16G16_FLOAT:
-		result = VK_FORMAT_R16G16_SFLOAT;
-		break;
-    case Format::FORMAT_R32G32_UINT:
-		result = VK_FORMAT_R32G32_UINT;
-		break;
-    case Format::FORMAT_R32G32_FLOAT:
-		result = VK_FORMAT_R32G32_SFLOAT;
-		break;
-    case Format::FORMAT_R8G8B8_UNORM:
-		result = VK_FORMAT_R8G8B8_UNORM;
-		break;
-    case Format::FORMAT_R16G16B16_UNORM:
-		result = VK_FORMAT_R16G16B16_UNORM;
-		break;
-    case Format::FORMAT_R16G16B16_FLOAT:
-		result = VK_FORMAT_R16G16B16_SFLOAT;
-		break;
-    case Format::FORMAT_R32G32B32_UINT:
-		result = VK_FORMAT_R32G32B32_UINT;
-		break;
-    case Format::FORMAT_R32G32B32_FLOAT:
-		result = VK_FORMAT_R32G32B32_SFLOAT;
-		break;
-    case Format::FORMAT_B8G8R8A8_UNORM:
-		result = VK_FORMAT_B8G8R8A8_UNORM;
-		break;
-    case Format::FORMAT_R8G8B8A8_UNORM:
-		result = VK_FORMAT_R8G8B8A8_UNORM;
-		break;
-    case Format::FORMAT_R16G16B16A16_UNORM:
-		result = VK_FORMAT_R16G16B16A16_UNORM;
-		break;
-    case Format::FORMAT_R16G16B16A16_FLOAT:
-		result = VK_FORMAT_R16G16B16A16_SFLOAT;
-		break;
-    case Format::FORMAT_R32G32B32A32_UINT:
-		result = VK_FORMAT_R32G32B32A32_UINT;
-		break;
-    case Format::FORMAT_R32G32B32A32_FLOAT:
-		result = VK_FORMAT_R32G32B32A32_SFLOAT;
-		break;    
-    case Format::FORMAT_D16_UNORM:
-		result = VK_FORMAT_D16_UNORM;
-		break;
-    case Format::FORMAT_X8_D24_UNORM_PACK32:
-		result = VK_FORMAT_X8_D24_UNORM_PACK32;
-		break;
-    case Format::FORMAT_D32_FLOAT:
-		result = VK_FORMAT_D32_SFLOAT;
-		break;
-    case Format::FORMAT_S8_UINT:
-		result = VK_FORMAT_S8_UINT;
-		break;
-    case Format::FORMAT_D16_UNORM_S8_UINT:
-		result = VK_FORMAT_D16_UNORM_S8_UINT;
-		break;
-    case Format::FORMAT_D24_UNORM_S8_UINT:
-		result = VK_FORMAT_D24_UNORM_S8_UINT;
-		break;
-    case Format::FORMAT_D32_FLOAT_S8_UINT:
-		result = VK_FORMAT_D32_SFLOAT_S8_UINT;
-		break;
-    }
-    return result;
-}
-
-VkSampleCountFlagBits GraphicsVK::toVkSamples(Texture::SampleCount sampleCount)
-{
-	VkSampleCountFlagBits result = VK_SAMPLE_COUNT_1_BIT;
-    switch (sampleCount) 
-	{
-	case Texture:: SAMPLE_COUNT_1X:
-		result = VK_SAMPLE_COUNT_1_BIT;  
-			break;
-    case Texture:: SAMPLE_COUNT_2X:
-		result = VK_SAMPLE_COUNT_2_BIT;  
-		break;
-    case Texture:: SAMPLE_COUNT_4X:
-		result = VK_SAMPLE_COUNT_4_BIT;  
-		break;
-    case Texture:: SAMPLE_COUNT_8X:
-		result = VK_SAMPLE_COUNT_8_BIT;  
-		break;
-    case Texture:: SAMPLE_COUNT_16X:
-		result = VK_SAMPLE_COUNT_16_BIT; 
-		break;
-    }
-    return result;
-}
-
-VkImageUsageFlags GraphicsVK::toVkImageUsageFlags(Texture::Usage usage)
-{
-	 VkImageUsageFlags result = 0;
-    if (Texture::USAGE_TRANSFER_SRC == (usage & Texture::USAGE_TRANSFER_SRC))
-	{
-        result |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
-    }
-    if (Texture::USAGE_TRANSFER_DST == (usage & Texture::USAGE_TRANSFER_DST))
-	{
-        result |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-    }
-    if (Texture::USAGE_SAMPLED_IMAGE == (usage & Texture::USAGE_SAMPLED_IMAGE))
-	{
-        result |= VK_IMAGE_USAGE_SAMPLED_BIT;
-    }
-    if (Texture::USAGE_STORAGE == (usage & Texture::USAGE_STORAGE))
-	{
-        result |= VK_IMAGE_USAGE_STORAGE_BIT;
-    }
-    if (Texture::USAGE_COLOR_ATTACHMENT == (usage & Texture::USAGE_COLOR_ATTACHMENT))
-	{
-        result |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    }
-    if (Texture::USAGE_DEPTH_STENCIL_ATTACHMENT == (usage & Texture::USAGE_DEPTH_STENCIL_ATTACHMENT))
-	{
-        result |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-    }
-    return result;
-}
-
-VkFormatFeatureFlags GraphicsVK::toVkFormatFeatureFlags(VkImageUsageFlags usage)
-{
-	VkFormatFeatureFlags result = (VkFormatFeatureFlags)0;
-    if (VK_IMAGE_USAGE_SAMPLED_BIT == (usage & VK_IMAGE_USAGE_SAMPLED_BIT)) 
-	{
-        result |= VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
-    }
-    if (VK_IMAGE_USAGE_STORAGE_BIT == (usage & VK_IMAGE_USAGE_STORAGE_BIT)) {
-        result |= VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT;
-    }
-    if (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT == (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)) {
-        result |= VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
-    }
-    if (VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT == (usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)) {
-        result |= VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
-    }
-    return result;
-}
-
-VkImageAspectFlags GraphicsVK::toVkImageAspectFlags(VkFormat format)
-{
-    VkImageAspectFlags result = 0;
-    switch (format) 
-	{        
-    case VK_FORMAT_D16_UNORM:
-    case VK_FORMAT_X8_D24_UNORM_PACK32:
-    case VK_FORMAT_D32_SFLOAT:
-        result = VK_IMAGE_ASPECT_DEPTH_BIT;
-        break;        
-    case VK_FORMAT_S8_UINT:
-        result = VK_IMAGE_ASPECT_STENCIL_BIT;
-        break;        
-    case VK_FORMAT_D16_UNORM_S8_UINT:
-    case VK_FORMAT_D24_UNORM_S8_UINT:
-    case VK_FORMAT_D32_SFLOAT_S8_UINT:
-        result = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-        break;
-    default:
-        result = VK_IMAGE_ASPECT_COLOR_BIT;
-        break;
-    }
-    return result;
-}
-
-VkImageLayout GraphicsVK::toVkImageLayout(Texture::Usage usage)
-{
-    VkImageLayout result = VK_IMAGE_LAYOUT_UNDEFINED;
-    switch (usage) 
-	{
-	case Texture::USAGE_TRANSFER_SRC: 
-		result = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL; 
-		break;
-    case Texture::USAGE_TRANSFER_DST: 
-		result = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL; 
-		break;
-	case Texture::USAGE_SAMPLED_IMAGE: 
-		result = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL; 
-		break;
-	case Texture::USAGE_STORAGE: 
-		result = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL; 
-		break;
-	case Texture::USAGE_COLOR_ATTACHMENT: 
-		result = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; 
-		break;
-	case Texture::USAGE_DEPTH_STENCIL_ATTACHMENT: 
-		result = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL; 
-		break;
-	case Texture::USAGE_PRESENT: 
-		result = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; 
-		break;
-    }
-    return result;
-}
-
-VkFilter GraphicsVK::toVkFilter(Sampler::Filter filter)
-{
-	VkFilter result = VK_FILTER_LINEAR;
-	switch (filter)
-	{
-	case Sampler::FILTER_LINEAR:
-		result = VK_FILTER_LINEAR;
-		break;
-	case Sampler::FILTER_NEAREST:
-		result = VK_FILTER_NEAREST;
-		break;
-	}
-	return result;
-}
-
-VkSamplerMipmapMode GraphicsVK::toVkSamplerMipmapMode(Sampler::Filter filter)
-{
-	VkSamplerMipmapMode result = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	switch (filter)
-	{
-	case Sampler::FILTER_LINEAR:
-		result = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-		break;
-	case Sampler::FILTER_NEAREST:
-		result = VK_SAMPLER_MIPMAP_MODE_NEAREST;
-		break;
-	}
-	return result;
-}
-
-VkSamplerAddressMode GraphicsVK::toVkSamplerAddressMode(Sampler::AddressMode addressMode)
-{
-	VkSamplerAddressMode result = VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
-	switch (addressMode)
-	{
-	case Sampler::ADDRESS_MODE_WRAP:
-		result = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-		break;
-	case Sampler::ADDRESS_MODE_MIRROR:
-		result = VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
-		break;
-	case Sampler::ADDRESS_MODE_CLAMP_EDGE:
-		result = VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE;
-		break;
-	case Sampler::ADDRESS_MODE_CLAMP_BORDER:
-		result = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
-		break;
-	case Sampler::ADDRESS_MODE_MIRROR_ONCE:
-		result = VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE;
-		break;
-	}
-	return result;
-}
-
-VkBorderColor GraphicsVK::toVkBorderColor(Sampler::BorderColor borderColor)
-{
-	VkBorderColor result = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
-	switch (borderColor)
-	{
-	case Sampler::BORDER_COLOR_BLACK_TRANSPARENT:
-		result = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
-		break;
-	case Sampler::BORDER_COLOR_BLACK_OPAQUE:
-		result = VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK;
-		break;
-	case Sampler::BORDER_COLOR_WHITE_OPAQUE:
-		result = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-			break;
-	}
-	return result;
-}
-
-VkCompareOp GraphicsVK::toVkCompareOp(Sampler::CompareFunc compareFunc)
-{
-	VkCompareOp result = VK_COMPARE_OP_NEVER;
-	switch (compareFunc)
-	{
-	case Sampler::COMPARE_FUNC_NEVER:
-		result = VK_COMPARE_OP_NEVER;
-		break;
-	case Sampler::COMPARE_FUNC_LESS:
-		result = VK_COMPARE_OP_LESS;
-		break;
-	case Sampler::COMPARE_FUNC_EQUAL:
-		result = VK_COMPARE_OP_EQUAL;
-			break;
-	case Sampler::COMPARE_FUNC_LESS_OR_EQUAL:
-		result = VK_COMPARE_OP_LESS_OR_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_GREATER:
-		result = VK_COMPARE_OP_GREATER;
-		break;
-	case Sampler::COMPARE_FUNC_NOT_EQUAL:
-		result = VK_COMPARE_OP_NOT_EQUAL;
-			break;
-	case Sampler::COMPARE_FUNC_GREATER_OR_EQUAL:
-		result = VK_COMPARE_OP_GREATER_OR_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_ALWAYS:
-		result = VK_COMPARE_OP_ALWAYS;
-			break;
-	}
-	return result;
-}
-
-VkShaderStageFlags GraphicsVK::toVkShaderStageFlags(DescriptorSet::Descriptor::ShaderStages shaderStages)
-{
-	 VkShaderStageFlags result = VK_IMAGE_LAYOUT_UNDEFINED;
-	 switch (shaderStages)
-	 {
-	 case DescriptorSet::Descriptor::SHADER_STAGE_VERT:
-		 result = VK_SHADER_STAGE_VERTEX_BIT;
-		 break;
-	 case DescriptorSet::Descriptor::SHADER_STAGE_TESE:
-		 result = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-		 break;
-	 case DescriptorSet::Descriptor::SHADER_STAGE_TESC:
-		 result = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-		 break;
-	 case DescriptorSet::Descriptor::SHADER_STAGE_GEOM:
-		 result = VK_SHADER_STAGE_GEOMETRY_BIT;
-		 break;
-	 case DescriptorSet::Descriptor::SHADER_STAGE_FRAG:
-		 result = VK_SHADER_STAGE_FRAGMENT_BIT;
-		 break;
-	 }
-	 return result;
-}
-
-VkPolygonMode GraphicsVK::toVkPolygonMode(RasterizerState::FillMode fillMode)
-{
-	VkPolygonMode result = VK_POLYGON_MODE_FILL;
-	switch (fillMode)
-	{
-	case RasterizerState::FILL_MODE_SOLID:
-		result = VK_POLYGON_MODE_FILL;
-		break;
-	case RasterizerState::FILL_MODE_WIREFRAME:
-		result = VK_POLYGON_MODE_LINE;
-		break;
-	}
-	return result;
-}
-
-VkCullModeFlags GraphicsVK::toVkCullModeFlags(RasterizerState::CullMode cullMode)
-{
-	VkCullModeFlags result = VK_CULL_MODE_NONE;
-	switch (cullMode)
-	{
-	case RasterizerState::CULL_MODE_NONE:
-		result = VK_CULL_MODE_NONE;
-		break;
-	case RasterizerState::CULL_MODE_BACK:
-		result = VK_CULL_MODE_BACK_BIT;
-		break;
-	case RasterizerState::CULL_MODE_FRONT:
-		result = VK_CULL_MODE_BACK_BIT;
-		break;
-	}
-	return result;
-}
-
-
-VkFrontFace GraphicsVK::toVkFrontFace(RasterizerState::FrontFace frontFace)
-
-{
-	VkFrontFace result = VK_FRONT_FACE_CLOCKWISE;
-	switch (frontFace)
-	{
-	case RasterizerState::FRONT_FACE_CW:
-		result = VK_FRONT_FACE_CLOCKWISE;
-		break;
-	case RasterizerState::FRONT_FACE_CCW:
-		result = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-		break;
-	}
-	return result;
-}
-
-VkCompareOp GraphicsVK::toVkCompareOp(DepthStencilState::CompareFunc compareFunc)
-{
-	VkCompareOp result = VK_COMPARE_OP_NEVER;
-	switch (compareFunc)
-	{
-	case DepthStencilState::COMPARE_FUNC_NEVER:
-		result = VK_COMPARE_OP_NEVER;
-		break;
-	case DepthStencilState::COMPARE_FUNC_LESS:
-		result = VK_COMPARE_OP_LESS;
-		break;
-	case DepthStencilState::COMPARE_FUNC_EQUAL:
-		result = VK_COMPARE_OP_EQUAL;
-		break;
-	case DepthStencilState::COMPARE_FUNC_LESS_OR_EQUAL:
-		result = VK_COMPARE_OP_LESS_OR_EQUAL;
-		break;
-	case DepthStencilState::COMPARE_FUNC_GREATER:
-		result = VK_COMPARE_OP_GREATER;
-		break;
-	case DepthStencilState::COMPARE_FUNC_GREATER_OR_EQUAL:
-		result = VK_COMPARE_OP_GREATER_OR_EQUAL;
-		break;
-	case DepthStencilState::COMPARE_FUNC_ALWAYS:
-		result = VK_COMPARE_OP_ALWAYS;
-		break;
-	}
-	return result;
-}
-
-VkStencilOp GraphicsVK::toVkStencilOp(DepthStencilState::StencilOp stencilOp)
-{
-	VkStencilOp result = VK_STENCIL_OP_KEEP;
-	switch (stencilOp)
-	{
-	case DepthStencilState::STENCIL_OP_KEEP:
-		result = VK_STENCIL_OP_KEEP;
-		break;
-	case DepthStencilState::STENCIL_OP_ZERO:
-		result = VK_STENCIL_OP_ZERO;
-		break;
-	case DepthStencilState::STENCIL_OP_REPLACE:
-		result = VK_STENCIL_OP_REPLACE;
-		break;
-	case DepthStencilState::STENCIL_OP_INCREMENT_AND_CLAMP:
-		result = VK_STENCIL_OP_INCREMENT_AND_CLAMP;
-		break;
-	case DepthStencilState::STENCIL_OP_DECREMENT_AND_CLAMP:
-		result = VK_STENCIL_OP_DECREMENT_AND_CLAMP;
-		break;
-	case DepthStencilState::STENCIL_OP_INVERT:
-		result = VK_STENCIL_OP_INVERT;
-		break;
-	case DepthStencilState::STENCIL_OP_INCREMENT_AND_WRAP:
-		result = VK_STENCIL_OP_INCREMENT_AND_WRAP;
-		break;
-	case DepthStencilState::STENCIL_OP_DECREMENT_AND_WRAP:
-		result = VK_STENCIL_OP_DECREMENT_AND_WRAP;
-		break;
-	}
-	return result;
-}
-
-VkBlendOp GraphicsVK::toVkBlendOp(ColorBlendState::BlendOp blendOp)
-{
-	VkBlendOp result = VK_BLEND_OP_ADD;
-	switch (blendOp)
-	{
-	case ColorBlendState::BLEND_OP_ADD:
-		result = VK_BLEND_OP_ADD;
-		break;
-	case ColorBlendState::BLEND_OP_SUBSTRACT:
-		result = VK_BLEND_OP_SUBTRACT;
-		break;
-	case ColorBlendState::BLEND_OP_REVERSE_SUBTRACT:
-		result = VK_BLEND_OP_REVERSE_SUBTRACT;
-		break;
-	case ColorBlendState::BLEND_OP_MIN:
-		result = VK_BLEND_OP_MIN;
-		break;
-	case ColorBlendState::BLEND_OP_MAX:
-		result = VK_BLEND_OP_MAX;
-		break;
-	}
-
-	return result;
-}
-
-VkBlendFactor GraphicsVK::toVkBlendFactor(ColorBlendState::BlendFactor blendFactor)
-{
-	VkBlendFactor result = VK_BLEND_FACTOR_ZERO;
-	switch (blendFactor)
-	{
-	case ColorBlendState::BLEND_FACTOR_ZERO:
-		result = VK_BLEND_FACTOR_ZERO;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE:
-		result = VK_BLEND_FACTOR_ONE;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC_COLOR:
-		result = VK_BLEND_FACTOR_SRC_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_SRC_COLOR:
-		result = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_DST_COLOR:
-		result = VK_BLEND_FACTOR_DST_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_DST_COLOR:
-		result = VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC_ALPHA:
-		result = VK_BLEND_FACTOR_SRC_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_DST_ALPHA:
-		result = VK_BLEND_FACTOR_DST_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_DST_ALPHA:
-		result = VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_CONSTANT_COLOR:
-		result = VK_BLEND_FACTOR_CONSTANT_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_CONSTANT_COLOR:
-		result = VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_CONSTANT_ALPHA:
-		result = VK_BLEND_FACTOR_CONSTANT_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA:
-		result = VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC_ALPHA_SATURATE:
-		result = VK_BLEND_FACTOR_SRC_ALPHA_SATURATE;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC1_COLOR:
-		result = VK_BLEND_FACTOR_SRC1_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_SRC1_COLOR:
-		result = VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC1_ALPHA:
-		result = VK_BLEND_FACTOR_SRC1_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA:
-		result = VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA;
-		break;
-	}
-	return result;
 }
 
 void GraphicsVK::createInstance()
@@ -2427,7 +1750,7 @@ void GraphicsVK::createInstance()
 		// Register the debug report callback
 		VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = {};
 		dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-		dbgCreateInfo.pfnCallback = (PFN_vkDebugReportCallbackEXT)GraphicsVK::validationDebugReport;
+		dbgCreateInfo.pfnCallback = (PFN_vkDebugReportCallbackEXT)validationDebugReport;
 		dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
 
 		VK_CHECK_RESULT(vkCreateDebugReportCallbackEXT(_instance, &dbgCreateInfo, nullptr, &_debugMessageCallback));
@@ -2647,21 +1970,21 @@ void GraphicsVK::createSwapchain()
 
 	// Query the swapchain surface info and choose surface format and present mode
 	VkSwapchainKHR oldSwapchain = _swapchain;
-	SwapchainSurfaceInfo surfaceInfo = querySwapchainSurfaceInfo(_physicalDevice);
-	VkSurfaceFormatKHR surfaceFormat = chooseSurfaceFormat(surfaceInfo.formats);
-	VkPresentModeKHR presentMode = choosePresentMode(surfaceInfo.presentModes);
+	SwapchainInfo swapchainInfo = querySwapchainInfo(_physicalDevice);
+	VkSurfaceFormatKHR surfaceFormat = chooseSurfaceFormat(swapchainInfo.formats);
+	VkPresentModeKHR presentMode = choosePresentMode(swapchainInfo.presentModes);
 
 	// Request the swapchain backbuffer image count 
-	_swapchainImageCount = surfaceInfo.capabilities.minImageCount;
-	if (surfaceInfo.capabilities.maxImageCount > 0 && _swapchainImageCount > surfaceInfo.capabilities.maxImageCount) 
-		_swapchainImageCount = surfaceInfo.capabilities.maxImageCount;
+	_swapchainImageCount = swapchainInfo.capabilities.minImageCount;
+	if (swapchainInfo.capabilities.maxImageCount > 0 && _swapchainImageCount > swapchainInfo.capabilities.maxImageCount) 
+		_swapchainImageCount = swapchainInfo.capabilities.maxImageCount;
 
 	// Find the transformation of the surface (prefer non-rotated)
 	VkSurfaceTransformFlagsKHR preTransfer;
-	if (surfaceInfo.capabilities.supportedTransforms & VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR)
+	if (swapchainInfo.capabilities.supportedTransforms & VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR)
 		preTransfer = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
 	else 
-		preTransfer = surfaceInfo.capabilities.currentTransform;
+		preTransfer = swapchainInfo.capabilities.currentTransform;
 
 	// Create the swapchain
 	VkSwapchainCreateInfoKHR createInfo = {};
@@ -2739,19 +2062,19 @@ void GraphicsVK::createSwapchain()
 	}														
 }
 
-GraphicsVK::SwapchainSurfaceInfo GraphicsVK::querySwapchainSurfaceInfo(VkPhysicalDevice physicalDevice)
+GraphicsVK::SwapchainInfo GraphicsVK::querySwapchainInfo(VkPhysicalDevice physicalDevice)
 {
 	// Get the capabilities of the swapchain
-	SwapchainSurfaceInfo swapchainSurfaceInfo;
-	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, _surface, &swapchainSurfaceInfo.capabilities);
+	SwapchainInfo swapchainInfo;
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, _surface, &swapchainInfo.capabilities);
 
 	// Get surface formats
 	uint32_t formatCount;
 	vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, _surface, &formatCount, nullptr);
 	if (formatCount != 0) 
 	{
-		swapchainSurfaceInfo.formats.resize(formatCount);
-		vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, _surface, &formatCount, swapchainSurfaceInfo.formats.data());
+		swapchainInfo.formats.resize(formatCount);
+		vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, _surface, &formatCount, swapchainInfo.formats.data());
 	}
 
 	// Get the presentation modes
@@ -2759,10 +2082,10 @@ GraphicsVK::SwapchainSurfaceInfo GraphicsVK::querySwapchainSurfaceInfo(VkPhysica
 	vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, _surface, &presentModeCount, nullptr);
 	if (presentModeCount != 0) 
 	{
-		swapchainSurfaceInfo.presentModes.resize(presentModeCount);
-		vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, _surface, &presentModeCount, swapchainSurfaceInfo.presentModes.data());
+		swapchainInfo.presentModes.resize(presentModeCount);
+		vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, _surface, &presentModeCount, swapchainInfo.presentModes.data());
 	}
-	return swapchainSurfaceInfo;
+	return swapchainInfo;
 }
 
 VkSurfaceFormatKHR GraphicsVK::chooseSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
@@ -2879,271 +2202,7 @@ uint32_t GraphicsVK::getQueueFamiliyIndex(VkQueueFlagBits queueFlags)
 	return 0;
 }
 
-VkBool32 GraphicsVK::validationDebugReport(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objType,
-										       uint64_t srcObject, size_t location, int32_t msgCode,
-										       const char* layerPrefix, const char* msg, void* userData)
-{
-	std::string prefix("");
-	if (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT)
-		prefix += "ERROR:";
-	if (flags & VK_DEBUG_REPORT_WARNING_BIT_EXT)
-		prefix += "WARNING:";
-	if (flags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT)
-		prefix += "PERFORMANCE:";
-	if (flags & VK_DEBUG_REPORT_INFORMATION_BIT_EXT)
-		prefix += "INFO:";
-	if (flags & VK_DEBUG_REPORT_DEBUG_BIT_EXT)
-		prefix += "DEBUG:";
-	GP_INFO("%s [%s] Code: %d:%s", prefix, layerPrefix, msgCode, msg);
-	return VK_FALSE;
-}
-
-#if defined(__ANDROID__)
-#include <android/log.h>
-#include <dlfcn.h>
-
-PFN_vkCreateInstance vkCreateInstance;
-PFN_vkGetDeviceProcAddr vkGetDeviceProcAddr;
-PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr;
-PFN_vkCreateDevice vkCreateDevice;
-PFN_vkEnumeratePhysicalDevices vkEnumeratePhysicalDevices;
-PFN_vkGetPhysicalDeviceProperties vkGetPhysicalDeviceProperties;
-PFN_vkEnumerateDeviceExtensionProperties vkEnumerateDeviceExtensionProperties;
-PFN_vkEnumerateDeviceLayerProperties vkEnumerateDeviceLayerProperties;
-PFN_vkGetPhysicalDeviceFormatProperties vkGetPhysicalDeviceFormatProperties;
-PFN_vkGetPhysicalDeviceFeatures vkGetPhysicalDeviceFeatures;
-PFN_vkGetPhysicalDeviceQueueFamilyProperties vkGetPhysicalDeviceQueueFamilyProperties;
-PFN_vkGetPhysicalDeviceMemoryProperties vkGetPhysicalDeviceMemoryProperties;
-PFN_vkEnumerateInstanceExtensionProperties vkEnumerateInstanceExtensionProperties;
-PFN_vkEnumerateInstanceLayerProperties vkEnumerateInstanceLayerProperties;
-PFN_vkCmdPipelineBarrier vkCmdPipelineBarrier;
-PFN_vkCreateShaderModule vkCreateShaderModule;
-PFN_vkCreateBuffer vkCreateBuffer;
-PFN_vkGetBufferMemoryRequirements vkGetBufferMemoryRequirements;
-PFN_vkMapMemory vkMapMemory;
-PFN_vkUnmapMemory vkUnmapMemory;
-PFN_vkFlushMappedMemoryRanges vkFlushMappedMemoryRanges;
-PFN_vkInvalidateMappedMemoryRanges vkInvalidateMappedMemoryRanges;
-PFN_vkBindBufferMemory vkBindBufferMemory;
-PFN_vkDestroyBuffer vkDestroyBuffer;
-PFN_vkAllocateMemory vkAllocateMemory;
-PFN_vkBindImageMemory vkBindImageMemory;
-PFN_vkGetImageSubresourceLayout vkGetImageSubresourceLayout;
-PFN_vkCmdCopyBuffer vkCmdCopyBuffer;
-PFN_vkCmdCopyBufferToImage vkCmdCopyBufferToImage;
-PFN_vkCmdCopyImage vkCmdCopyImage;
-PFN_vkCmdBlitImage vkCmdBlitImage;
-PFN_vkCmdClearAttachments vkCmdClearAttachments;
-PFN_vkCreateSampler vkCreateSampler;
-PFN_vkDestroySampler vkDestroySampler;
-PFN_vkDestroyImage vkDestroyImage;
-PFN_vkFreeMemory vkFreeMemory;
-PFN_vkCreateRenderPass vkCreateRenderPass;
-PFN_vkCmdBeginRenderPass vkCmdBeginRenderPass;
-PFN_vkCmdEndRenderPass vkCmdEndRenderPass;
-PFN_vkCmdExecuteCommands vkCmdExecuteCommands;
-PFN_vkCreateImage vkCreateImage;
-PFN_vkGetImageMemoryRequirements vkGetImageMemoryRequirements;
-PFN_vkCreateImageView vkCreateImageView;
-PFN_vkDestroyImageView vkDestroyImageView;
-PFN_vkCreateSemaphore vkCreateSemaphore;
-PFN_vkDestroySemaphore vkDestroySemaphore;
-PFN_vkCreateFence vkCreateFence;
-PFN_vkDestroyFence vkDestroyFence;
-PFN_vkWaitForFences vkWaitForFences;
-PFN_vkResetFences vkResetFences;
-PFN_vkCreateCommandPool vkCreateCommandPool;
-PFN_vkDestroyCommandPool vkDestroyCommandPool;
-PFN_vkAllocateCommandBuffers vkAllocateCommandBuffers;
-PFN_vkBeginCommandBuffer vkBeginCommandBuffer;
-PFN_vkEndCommandBuffer vkEndCommandBuffer;
-PFN_vkGetDeviceQueue vkGetDeviceQueue;
-PFN_vkQueueSubmit vkQueueSubmit;
-PFN_vkQueueWaitIdle vkQueueWaitIdle;
-PFN_vkDeviceWaitIdle vkDeviceWaitIdle;
-PFN_vkCreateFramebuffer vkCreateFramebuffer;
-PFN_vkCreatePipelineCache vkCreatePipelineCache;
-PFN_vkCreatePipelineLayout vkCreatePipelineLayout;
-PFN_vkCreateGraphicsPipelines vkCreateGraphicsPipelines;
-PFN_vkCreateComputePipelines vkCreateComputePipelines;
-PFN_vkCreateDescriptorPool vkCreateDescriptorPool;
-PFN_vkCreateDescriptorSetLayout vkCreateDescriptorSetLayout;
-PFN_vkAllocateDescriptorSets vkAllocateDescriptorSets;
-PFN_vkUpdateDescriptorSets vkUpdateDescriptorSets;
-PFN_vkCmdBindDescriptorSets vkCmdBindDescriptorSets;
-PFN_vkCmdBindPipeline vkCmdBindPipeline;
-PFN_vkCmdBindVertexBuffers vkCmdBindVertexBuffers;
-PFN_vkCmdBindIndexBuffer vkCmdBindIndexBuffer;
-PFN_vkCmdSetViewport vkCmdSetViewport;
-PFN_vkCmdSetScissor vkCmdSetScissor;
-PFN_vkCmdSetLineWidth vkCmdSetLineWidth;
-PFN_vkCmdSetDepthBias vkCmdSetDepthBias;
-PFN_vkCmdPushConstants vkCmdPushConstants;
-PFN_vkCmdDrawIndexed vkCmdDrawIndexed;
-PFN_vkCmdDraw vkCmdDraw;
-PFN_vkCmdDrawIndexedIndirect vkCmdDrawIndexedIndirect;
-PFN_vkCmdDrawIndirect vkCmdDrawIndirect;
-PFN_vkCmdDispatch vkCmdDispatch;
-PFN_vkDestroyPipeline vkDestroyPipeline;
-PFN_vkDestroyPipelineLayout vkDestroyPipelineLayout;
-PFN_vkDestroyDescriptorSetLayout vkDestroyDescriptorSetLayout;
-PFN_vkDestroyDevice vkDestroyDevice;
-PFN_vkDestroyInstance vkDestroyInstance;
-PFN_vkDestroyDescriptorPool vkDestroyDescriptorPool;
-PFN_vkFreeCommandBuffers vkFreeCommandBuffers;
-PFN_vkDestroyRenderPass vkDestroyRenderPass;
-PFN_vkDestroyFramebuffer vkDestroyFramebuffer;
-PFN_vkDestroyShaderModule vkDestroyShaderModule;
-PFN_vkDestroyPipelineCache vkDestroyPipelineCache;
-PFN_vkCreateQueryPool vkCreateQueryPool;
-PFN_vkDestroyQueryPool vkDestroyQueryPool;
-PFN_vkGetQueryPoolResults vkGetQueryPoolResults;
-PFN_vkCmdBeginQuery vkCmdBeginQuery;
-PFN_vkCmdEndQuery vkCmdEndQuery;
-PFN_vkCmdResetQueryPool vkCmdResetQueryPool;
-PFN_vkCmdCopyQueryPoolResults vkCmdCopyQueryPoolResults;
-PFN_vkCreateAndroidSurfaceKHR vkCreateAndroidSurfaceKHR;
-PFN_vkDestroySurfaceKHR vkDestroySurfaceKHR;
-void* libVulkan;
-#endif
-
-
-void GraphicsVK::loadLibrary()
-{
-#if defined(__ANDROID__)
-	__android_log_print(ANDROID_LOG_INFO, "vulkanandroid", "Loading libvulkan.so...\n");
-
-	// Load the vulkan library
-	libVulkan = dlopen("libvulkan.so", RTLD_NOW | RTLD_LOCAL);
-	if (!libVulkan)
-	{
-		__android_log_print(ANDROID_LOG_INFO, "vulkanandroid", "Could not load vulkan library : %s!\n", dlerror());
-		return false;
-	}
-
-	// Load base function pointers
-	vkEnumerateInstanceExtensionProperties = reinterpret_cast<PFN_vkEnumerateInstanceExtensionProperties>(dlsym(libVulkan, "vkEnumerateInstanceExtensionProperties"));
-	vkEnumerateInstanceLayerProperties = reinterpret_cast<PFN_vkEnumerateInstanceLayerProperties>(dlsym(libVulkan, "vkEnumerateInstanceLayerProperties"));
-	vkCreateInstance = reinterpret_cast<PFN_vkCreateInstance>(dlsym(libVulkan, "vkCreateInstance"));
-	vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(dlsym(libVulkan, "vkGetInstanceProcAddr"));
-	vkGetDeviceProcAddr = reinterpret_cast<PFN_vkGetDeviceProcAddr>(dlsym(libVulkan, "vkGetDeviceProcAddr"));
-#elif defined(__linux__)
-	//initxcbConnection();
-#endif
-}
-
-void GraphicsVK::freeLibrary()
-{
-#if defined(__ANDROID__)
-	dlclose(libVulkan);
-#endif
-}
-
-void GraphicsVK::loadFunctions()
-{
-#if defined(__ANDROID__)
-	__android_log_print(ANDROID_LOG_INFO, "vulkanandroid", "Loading instance based function pointers...\n");
-	vkEnumeratePhysicalDevices = reinterpret_cast<PFN_vkEnumeratePhysicalDevices>(vkGetInstanceProcAddr(instance, "vkEnumeratePhysicalDevices"));
-	vkGetPhysicalDeviceProperties = reinterpret_cast<PFN_vkGetPhysicalDeviceProperties>(vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceProperties"));
-	vkEnumerateDeviceLayerProperties = reinterpret_cast<PFN_vkEnumerateDeviceLayerProperties>(vkGetInstanceProcAddr(instance, "vkEnumerateDeviceLayerProperties"));
-	vkEnumerateDeviceExtensionProperties = reinterpret_cast<PFN_vkEnumerateDeviceExtensionProperties>(vkGetInstanceProcAddr(instance, "vkEnumerateDeviceExtensionProperties"));
-	vkGetPhysicalDeviceQueueFamilyProperties = reinterpret_cast<PFN_vkGetPhysicalDeviceQueueFamilyProperties>(vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceQueueFamilyProperties"));
-	vkGetPhysicalDeviceFeatures = reinterpret_cast<PFN_vkGetPhysicalDeviceFeatures>(vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceFeatures"));
-	vkCreateDevice = reinterpret_cast<PFN_vkCreateDevice>(vkGetInstanceProcAddr(instance, "vkCreateDevice"));
-	vkGetPhysicalDeviceFormatProperties = reinterpret_cast<PFN_vkGetPhysicalDeviceFormatProperties>(vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceFormatProperties"));
-	vkGetPhysicalDeviceMemoryProperties = reinterpret_cast<PFN_vkGetPhysicalDeviceMemoryProperties>(vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceMemoryProperties"));
-	vkCmdPipelineBarrier = reinterpret_cast<PFN_vkCmdPipelineBarrier>(vkGetInstanceProcAddr(instance, "vkCmdPipelineBarrier"));
-	vkCreateShaderModule = reinterpret_cast<PFN_vkCreateShaderModule>(vkGetInstanceProcAddr(instance, "vkCreateShaderModule"));
-	vkCreateBuffer = reinterpret_cast<PFN_vkCreateBuffer>(vkGetInstanceProcAddr(instance, "vkCreateBuffer"));
-	vkGetBufferMemoryRequirements = reinterpret_cast<PFN_vkGetBufferMemoryRequirements>(vkGetInstanceProcAddr(instance, "vkGetBufferMemoryRequirements"));
-	vkMapMemory = reinterpret_cast<PFN_vkMapMemory>(vkGetInstanceProcAddr(instance, "vkMapMemory"));
-	vkUnmapMemory = reinterpret_cast<PFN_vkUnmapMemory>(vkGetInstanceProcAddr(instance, "vkUnmapMemory"));
-	vkFlushMappedMemoryRanges = reinterpret_cast<PFN_vkFlushMappedMemoryRanges>(vkGetInstanceProcAddr(instance, "vkFlushMappedMemoryRanges"));
-	vkInvalidateMappedMemoryRanges = reinterpret_cast<PFN_vkInvalidateMappedMemoryRanges>(vkGetInstanceProcAddr(instance, "vkInvalidateMappedMemoryRanges"));
-	vkBindBufferMemory = reinterpret_cast<PFN_vkBindBufferMemory>(vkGetInstanceProcAddr(instance, "vkBindBufferMemory"));
-	vkDestroyBuffer = reinterpret_cast<PFN_vkDestroyBuffer>(vkGetInstanceProcAddr(instance, "vkDestroyBuffer"));
-	vkAllocateMemory = reinterpret_cast<PFN_vkAllocateMemory>(vkGetInstanceProcAddr(instance, "vkAllocateMemory"));
-	vkFreeMemory = reinterpret_cast<PFN_vkFreeMemory>(vkGetInstanceProcAddr(instance, "vkFreeMemory"));
-	vkCreateRenderPass = reinterpret_cast<PFN_vkCreateRenderPass>(vkGetInstanceProcAddr(instance, "vkCreateRenderPass"));
-	vkCmdBeginRenderPass = reinterpret_cast<PFN_vkCmdBeginRenderPass>(vkGetInstanceProcAddr(instance, "vkCmdBeginRenderPass"));
-	vkCmdEndRenderPass = reinterpret_cast<PFN_vkCmdEndRenderPass>(vkGetInstanceProcAddr(instance, "vkCmdEndRenderPass"));
-	vkCmdExecuteCommands = reinterpret_cast<PFN_vkCmdExecuteCommands>(vkGetInstanceProcAddr(instance, "vkCmdExecuteCommands"));
-	vkCreateImage = reinterpret_cast<PFN_vkCreateImage>(vkGetInstanceProcAddr(instance, "vkCreateImage"));
-	vkGetImageMemoryRequirements = reinterpret_cast<PFN_vkGetImageMemoryRequirements>(vkGetInstanceProcAddr(instance, "vkGetImageMemoryRequirements"));
-	vkCreateImageView = reinterpret_cast<PFN_vkCreateImageView>(vkGetInstanceProcAddr(instance, "vkCreateImageView"));
-	vkDestroyImageView = reinterpret_cast<PFN_vkDestroyImageView>(vkGetInstanceProcAddr(instance, "vkDestroyImageView"));
-	vkBindImageMemory = reinterpret_cast<PFN_vkBindImageMemory>(vkGetInstanceProcAddr(instance, "vkBindImageMemory"));
-	vkGetImageSubresourceLayout = reinterpret_cast<PFN_vkGetImageSubresourceLayout>(vkGetInstanceProcAddr(instance, "vkGetImageSubresourceLayout"));
-	vkCmdCopyImage = reinterpret_cast<PFN_vkCmdCopyImage>(vkGetInstanceProcAddr(instance, "vkCmdCopyImage"));
-	vkCmdBlitImage = reinterpret_cast<PFN_vkCmdBlitImage>(vkGetInstanceProcAddr(instance, "vkCmdBlitImage"));
-	vkDestroyImage = reinterpret_cast<PFN_vkDestroyImage>(vkGetInstanceProcAddr(instance, "vkDestroyImage"));
-	vkCmdClearAttachments = reinterpret_cast<PFN_vkCmdClearAttachments>(vkGetInstanceProcAddr(instance, "vkCmdClearAttachments"));
-	vkCmdCopyBuffer = reinterpret_cast<PFN_vkCmdCopyBuffer>(vkGetInstanceProcAddr(instance, "vkCmdCopyBuffer"));
-	vkCmdCopyBufferToImage = reinterpret_cast<PFN_vkCmdCopyBufferToImage>(vkGetInstanceProcAddr(instance, "vkCmdCopyBufferToImage"));
-	vkCreateSampler = reinterpret_cast<PFN_vkCreateSampler>(vkGetInstanceProcAddr(instance, "vkCreateSampler"));
-	vkDestroySampler = reinterpret_cast<PFN_vkDestroySampler>(vkGetInstanceProcAddr(instance, "vkDestroySampler"));;
-	vkCreateSemaphore = reinterpret_cast<PFN_vkCreateSemaphore>(vkGetInstanceProcAddr(instance, "vkCreateSemaphore"));
-	vkDestroySemaphore = reinterpret_cast<PFN_vkDestroySemaphore>(vkGetInstanceProcAddr(instance, "vkDestroySemaphore"));
-	vkCreateFence = reinterpret_cast<PFN_vkCreateFence>(vkGetInstanceProcAddr(instance, "vkCreateFence"));
-	vkDestroyFence = reinterpret_cast<PFN_vkDestroyFence>(vkGetInstanceProcAddr(instance, "vkDestroyFence"));
-	vkWaitForFences = reinterpret_cast<PFN_vkWaitForFences>(vkGetInstanceProcAddr(instance, "vkWaitForFences"));
-	vkResetFences = reinterpret_cast<PFN_vkResetFences>(vkGetInstanceProcAddr(instance, "vkResetFences"));;
-	vkCreateCommandPool = reinterpret_cast<PFN_vkCreateCommandPool>(vkGetInstanceProcAddr(instance, "vkCreateCommandPool"));
-	vkDestroyCommandPool = reinterpret_cast<PFN_vkDestroyCommandPool>(vkGetInstanceProcAddr(instance, "vkDestroyCommandPool"));;
-	vkAllocateCommandBuffers = reinterpret_cast<PFN_vkAllocateCommandBuffers>(vkGetInstanceProcAddr(instance, "vkAllocateCommandBuffers"));
-	vkBeginCommandBuffer = reinterpret_cast<PFN_vkBeginCommandBuffer>(vkGetInstanceProcAddr(instance, "vkBeginCommandBuffer"));
-	vkEndCommandBuffer = reinterpret_cast<PFN_vkEndCommandBuffer>(vkGetInstanceProcAddr(instance, "vkEndCommandBuffer"));
-	vkGetDeviceQueue = reinterpret_cast<PFN_vkGetDeviceQueue>(vkGetInstanceProcAddr(instance, "vkGetDeviceQueue"));
-	vkQueueSubmit = reinterpret_cast<PFN_vkQueueSubmit>(vkGetInstanceProcAddr(instance, "vkQueueSubmit"));
-	vkQueueWaitIdle = reinterpret_cast<PFN_vkQueueWaitIdle>(vkGetInstanceProcAddr(instance, "vkQueueWaitIdle"));
-	vkDeviceWaitIdle = reinterpret_cast<PFN_vkDeviceWaitIdle>(vkGetInstanceProcAddr(instance, "vkDeviceWaitIdle"));
-	vkCreateFramebuffer = reinterpret_cast<PFN_vkCreateFramebuffer>(vkGetInstanceProcAddr(instance, "vkCreateFramebuffer"));
-	vkCreatePipelineCache = reinterpret_cast<PFN_vkCreatePipelineCache>(vkGetInstanceProcAddr(instance, "vkCreatePipelineCache"));
-	vkCreatePipelineLayout = reinterpret_cast<PFN_vkCreatePipelineLayout>(vkGetInstanceProcAddr(instance, "vkCreatePipelineLayout"));
-	vkCreateGraphicsPipelines = reinterpret_cast<PFN_vkCreateGraphicsPipelines>(vkGetInstanceProcAddr(instance, "vkCreateGraphicsPipelines"));
-	vkCreateComputePipelines = reinterpret_cast<PFN_vkCreateComputePipelines>(vkGetInstanceProcAddr(instance, "vkCreateComputePipelines"));
-	vkCreateDescriptorPool = reinterpret_cast<PFN_vkCreateDescriptorPool>(vkGetInstanceProcAddr(instance, "vkCreateDescriptorPool"));
-	vkCreateDescriptorSetLayout = reinterpret_cast<PFN_vkCreateDescriptorSetLayout>(vkGetInstanceProcAddr(instance, "vkCreateDescriptorSetLayout"));
-	vkAllocateDescriptorSets = reinterpret_cast<PFN_vkAllocateDescriptorSets>(vkGetInstanceProcAddr(instance, "vkAllocateDescriptorSets"));
-	vkUpdateDescriptorSets = reinterpret_cast<PFN_vkUpdateDescriptorSets>(vkGetInstanceProcAddr(instance, "vkUpdateDescriptorSets"));
-	vkCmdBindDescriptorSets = reinterpret_cast<PFN_vkCmdBindDescriptorSets>(vkGetInstanceProcAddr(instance, "vkCmdBindDescriptorSets"));
-	vkCmdBindPipeline = reinterpret_cast<PFN_vkCmdBindPipeline>(vkGetInstanceProcAddr(instance, "vkCmdBindPipeline"));
-	vkCmdBindVertexBuffers = reinterpret_cast<PFN_vkCmdBindVertexBuffers>(vkGetInstanceProcAddr(instance, "vkCmdBindVertexBuffers"));
-	vkCmdBindIndexBuffer = reinterpret_cast<PFN_vkCmdBindIndexBuffer>(vkGetInstanceProcAddr(instance, "vkCmdBindIndexBuffer"));
-	vkCmdSetViewport = reinterpret_cast<PFN_vkCmdSetViewport>(vkGetInstanceProcAddr(instance, "vkCmdSetViewport"));
-	vkCmdSetScissor = reinterpret_cast<PFN_vkCmdSetScissor>(vkGetInstanceProcAddr(instance, "vkCmdSetScissor"));
-	vkCmdSetLineWidth = reinterpret_cast<PFN_vkCmdSetLineWidth>(vkGetInstanceProcAddr(instance, "vkCmdSetLineWidth"));
-	vkCmdSetDepthBias = reinterpret_cast<PFN_vkCmdSetDepthBias>(vkGetInstanceProcAddr(instance, "vkCmdSetDepthBias"));
-	vkCmdPushConstants = reinterpret_cast<PFN_vkCmdPushConstants>(vkGetInstanceProcAddr(instance, "vkCmdPushConstants"));;
-	vkCmdDrawIndexed = reinterpret_cast<PFN_vkCmdDrawIndexed>(vkGetInstanceProcAddr(instance, "vkCmdDrawIndexed"));
-	vkCmdDraw = reinterpret_cast<PFN_vkCmdDraw>(vkGetInstanceProcAddr(instance, "vkCmdDraw"));
-	vkCmdDrawIndexedIndirect = reinterpret_cast<PFN_vkCmdDrawIndexedIndirect>(vkGetInstanceProcAddr(instance, "vkCmdDrawIndexedIndirect"));
-	vkCmdDrawIndirect = reinterpret_cast<PFN_vkCmdDrawIndirect>(vkGetInstanceProcAddr(instance, "vkCmdDrawIndirect"));
-	vkCmdDispatch = reinterpret_cast<PFN_vkCmdDispatch>(vkGetInstanceProcAddr(instance, "vkCmdDispatch"));
-	vkDestroyPipeline = reinterpret_cast<PFN_vkDestroyPipeline>(vkGetInstanceProcAddr(instance, "vkDestroyPipeline"));
-	vkDestroyPipelineLayout = reinterpret_cast<PFN_vkDestroyPipelineLayout>(vkGetInstanceProcAddr(instance, "vkDestroyPipelineLayout"));;
-	vkDestroyDescriptorSetLayout = reinterpret_cast<PFN_vkDestroyDescriptorSetLayout>(vkGetInstanceProcAddr(instance, "vkDestroyDescriptorSetLayout"));
-	vkDestroyDevice = reinterpret_cast<PFN_vkDestroyDevice>(vkGetInstanceProcAddr(instance, "vkDestroyDevice"));
-	vkDestroyInstance = reinterpret_cast<PFN_vkDestroyInstance>(vkGetInstanceProcAddr(instance, "vkDestroyInstance"));
-	vkDestroyDescriptorPool = reinterpret_cast<PFN_vkDestroyDescriptorPool>(vkGetInstanceProcAddr(instance, "vkDestroyDescriptorPool"));
-	vkFreeCommandBuffers = reinterpret_cast<PFN_vkFreeCommandBuffers>(vkGetInstanceProcAddr(instance, "vkFreeCommandBuffers"));
-	vkDestroyRenderPass = reinterpret_cast<PFN_vkDestroyRenderPass>(vkGetInstanceProcAddr(instance, "vkDestroyRenderPass"));
-	vkDestroyFramebuffer = reinterpret_cast<PFN_vkDestroyFramebuffer>(vkGetInstanceProcAddr(instance, "vkDestroyFramebuffer"));
-	vkDestroyShaderModule = reinterpret_cast<PFN_vkDestroyShaderModule>(vkGetInstanceProcAddr(instance, "vkDestroyShaderModule"));
-	vkDestroyPipelineCache = reinterpret_cast<PFN_vkDestroyPipelineCache>(vkGetInstanceProcAddr(instance, "vkDestroyPipelineCache"));
-	vkCreateQueryPool = reinterpret_cast<PFN_vkCreateQueryPool>(vkGetInstanceProcAddr(instance, "vkCreateQueryPool"));
-	vkDestroyQueryPool = reinterpret_cast<PFN_vkDestroyQueryPool>(vkGetInstanceProcAddr(instance, "vkDestroyQueryPool"));
-	vkGetQueryPoolResults = reinterpret_cast<PFN_vkGetQueryPoolResults>(vkGetInstanceProcAddr(instance, "vkGetQueryPoolResults"));
-	vkCmdBeginQuery = reinterpret_cast<PFN_vkCmdBeginQuery>(vkGetInstanceProcAddr(instance, "vkCmdBeginQuery"));
-	vkCmdEndQuery = reinterpret_cast<PFN_vkCmdEndQuery>(vkGetInstanceProcAddr(instance, "vkCmdEndQuery"));
-	vkCmdResetQueryPool = reinterpret_cast<PFN_vkCmdResetQueryPool>(vkGetInstanceProcAddr(instance, "vkCmdResetQueryPool"));
-	vkCmdCopyQueryPoolResults = reinterpret_cast<PFN_vkCmdCopyQueryPoolResults>(vkGetInstanceProcAddr(instance, "vkCmdCopyQueryPoolResults"));
-	vkCreateAndroidSurfaceKHR = reinterpret_cast<PFN_vkCreateAndroidSurfaceKHR>(vkGetInstanceProcAddr(instance, "vkCreateAndroidSurfaceKHR"));
-	vkDestroySurfaceKHR = reinterpret_cast<PFN_vkDestroySurfaceKHR>(vkGetInstanceProcAddr(instance, "vkDestroySurfaceKHR"));
-#endif
-}
-
-std::string getErrorString(VkResult result)
+std::string toErrorString(VkResult result)
 {
 	switch (result)
 	{

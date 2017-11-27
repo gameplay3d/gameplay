@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "GraphicsD3D12.h"
+#include "UtilsD3D12.h"
 #include "BufferD3D12.h"
 #include "TextureD3D12.h"
 #include "RenderPassD3D12.h"
@@ -368,7 +369,7 @@ void GraphicsD3D12::cmdEndRender(std::shared_ptr<CommandBuffer> commandBuffer)
                 // Resolve from multisample to single sample
                 std::static_pointer_cast<CommandBufferD3D12>(commandBuffer)->_commandList->ResolveSubresource(colorAttachmentD3D->_resource, 0, 
 																											  colorMultisampleAttachmentD3D->_resource, 0, 
-																											  toDXGIFormat(_renderPass->getColorFormat()));
+																											  lookupDXGI_FORMAT[_renderPass->getColorFormat()]);
                 
 				// Put it back the way we found it
                 cmdTransitionImage(commandBuffer, colorAttachmentD3D, Texture::USAGE_RESOLVE_DST, Texture::USAGE_COLOR_ATTACHMENT);
@@ -593,8 +594,8 @@ void GraphicsD3D12::cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuf
     barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
     barrier.Transition.pResource = std::static_pointer_cast<TextureD3D12>(texture)->_resource;
     barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-    barrier.Transition.StateBefore = toD3D12ResourceStates(usageOld);
-    barrier.Transition.StateAfter = toD3D12ResourceStates(usageNew);
+    barrier.Transition.StateBefore = toD3D12_RESOURCE_STATES(usageOld);
+    barrier.Transition.StateAfter = toD3D12_RESOURCE_STATES(usageNew);
 
     std::static_pointer_cast<CommandBufferD3D12>(commandBuffer)->_commandList->ResourceBarrier(1, &barrier);
 }
@@ -771,7 +772,7 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture(Texture::Type type,
 	heapProps.CreationNodeMask = 1;
 	heapProps.VisibleNodeMask = 1;
 
-	DXGI_FORMAT format = toDXGIFormat(pixelFormat);
+	DXGI_FORMAT format = lookupDXGI_FORMAT[pixelFormat];
 
 	D3D12_RESOURCE_DESC resourceDesc = {};
     resourceDesc.Dimension = resourceDimension;
@@ -781,7 +782,7 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture(Texture::Type type,
     resourceDesc.DepthOrArraySize = depth;
     resourceDesc.MipLevels = (UINT16)mipLevels;
 	resourceDesc.Format = format;
-    resourceDesc.SampleDesc.Count = toD3D12Samples(sampleCount);
+    resourceDesc.SampleDesc.Count = lookupD3D12_SAMPLES[sampleCount];
     resourceDesc.SampleDesc.Quality = 0;
     resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
     resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
@@ -793,7 +794,7 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture(Texture::Type type,
 	{
         resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
     }
-	D3D12_RESOURCE_STATES resourceStates = toD3D12ResourceStates(usage);
+	D3D12_RESOURCE_STATES resourceStates = toD3D12_RESOURCE_STATES(usage);
 
 	bool hostOwned;
 	D3D12_SHADER_RESOURCE_VIEW_DESC resourceViewDesc {};
@@ -1015,13 +1016,13 @@ std::shared_ptr<Sampler> GraphicsD3D12::createSampler(Sampler::Filter filterMin,
 													  float lodMipBias)
 {
 	D3D12_SAMPLER_DESC samplerDesc = {};
-	samplerDesc.Filter = toD3D12Filter(filterMin, filterMag, filterMip);
-	samplerDesc.AddressU = toD3D12TextureAddressMode(addressModeU);
-    samplerDesc.AddressV = toD3D12TextureAddressMode(addressModeU);
-    samplerDesc.AddressW = toD3D12TextureAddressMode(addressModeU);
+	samplerDesc.Filter = toD3D12_FILTER(filterMin, filterMag, filterMip);
+	samplerDesc.AddressU = lookupD3D12_TEXTURE_ADDRESS_MODE[addressModeU];
+    samplerDesc.AddressV = lookupD3D12_TEXTURE_ADDRESS_MODE[addressModeV];
+    samplerDesc.AddressW = lookupD3D12_TEXTURE_ADDRESS_MODE[addressModeW];
 	samplerDesc.MaxAnisotropy = anisotropyEnabled ? anisotropyMax : 0;
-	samplerDesc.ComparisonFunc = toD3D12ComparisonFunc(compareFunc);
-    toD3D12BorderColor(borderColor, samplerDesc.BorderColor);
+	samplerDesc.ComparisonFunc = lookupD3D12_COMPARISON_FUNC[compareFunc];
+    toD3D12_BORDER_COLOR(borderColor, samplerDesc.BorderColor);
     samplerDesc.MinLOD = lodMin;
     samplerDesc.MaxLOD = lodMax;
 	samplerDesc.MipLODBias = lodMipBias;
@@ -1403,7 +1404,7 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
 		D3D12_INPUT_ELEMENT_DESC inputElementDesc = {};
         inputElements[inputElementCount].SemanticName = semanticNames[i];
         inputElements[inputElementCount].SemanticIndex = semanticIndex;
-        inputElements[inputElementCount].Format = toDXGIFormat(attribute.format);
+        inputElements[inputElementCount].Format = lookupDXGI_FORMAT[attribute.format];
         inputElements[inputElementCount].InputSlot = 0;
         inputElements[inputElementCount].AlignedByteOffset = attribute.offset;
         inputElements[inputElementCount].InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
@@ -1424,8 +1425,8 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
 
 	// RasterizerDesc
 	D3D12_RASTERIZER_DESC rasterizerDesc = {};
-	rasterizerDesc.FillMode = toD3D12FillMode(rasterizerState.fillMode);
-    rasterizerDesc.CullMode = toD3D12CullMode(rasterizerState.cullMode);
+	rasterizerDesc.FillMode = lookupD3D12_FILL_MODE[rasterizerState.fillMode];
+    rasterizerDesc.CullMode = lookupD3D12_CULL_MODE[rasterizerState.cullMode];
     rasterizerDesc.FrontCounterClockwise = rasterizerState.frontFace == RasterizerState::FRONT_FACE_CCW ? TRUE : FALSE ;
     rasterizerDesc.DepthBias = rasterizerState.depthBias;
     rasterizerDesc.DepthBiasClamp = rasterizerState.depthBiasClamp;
@@ -1444,12 +1445,12 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
 	{
         blendDesc.RenderTarget[i].BlendEnable = colorBlendState.blendEnabled;
         blendDesc.RenderTarget[i].LogicOpEnable = FALSE;
-        blendDesc.RenderTarget[i].SrcBlend = toD3D12Blend(colorBlendState.colorBlendSrc);
-        blendDesc.RenderTarget[i].DestBlend = toD3D12Blend(colorBlendState.colorBlendDst);
-        blendDesc.RenderTarget[i].BlendOp = toD3D12BlendOp(colorBlendState.colorBlendOp);
-        blendDesc.RenderTarget[i].SrcBlendAlpha = toD3D12Blend(colorBlendState.alphaBlendSrc);
-		blendDesc.RenderTarget[i].DestBlendAlpha = toD3D12Blend(colorBlendState.alphaBlendDst);
-        blendDesc.RenderTarget[i].BlendOpAlpha = toD3D12BlendOp(colorBlendState.alphaBlendOp);
+        blendDesc.RenderTarget[i].SrcBlend = lookupD3D12_BLEND[colorBlendState.colorBlendSrc];
+        blendDesc.RenderTarget[i].DestBlend = lookupD3D12_BLEND[colorBlendState.colorBlendDst];
+        blendDesc.RenderTarget[i].BlendOp = lookupD3D12_BLEND_OP[colorBlendState.colorBlendOp];
+        blendDesc.RenderTarget[i].SrcBlendAlpha = lookupD3D12_BLEND[colorBlendState.alphaBlendSrc];
+		blendDesc.RenderTarget[i].DestBlendAlpha = lookupD3D12_BLEND[colorBlendState.alphaBlendDst];
+        blendDesc.RenderTarget[i].BlendOpAlpha = lookupD3D12_BLEND_OP[colorBlendState.alphaBlendOp];
         blendDesc.RenderTarget[i].LogicOp = D3D12_LOGIC_OP_NOOP;
         blendDesc.RenderTarget[i].RenderTargetWriteMask = colorBlendState.colorWriteMask;
     }
@@ -1458,18 +1459,18 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc = {};
     depthStencilDesc.DepthEnable = depthStencilState.depthEnabled ? TRUE : FALSE;
     depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	depthStencilDesc.DepthFunc = toD3D12ComparisonFunc(depthStencilState.depthFunc);
+	depthStencilDesc.DepthFunc = lookupD3D12_COMPARISON_FUNC[depthStencilState.depthFunc];
     depthStencilDesc.StencilEnable = depthStencilState.stencilEnabled ? TRUE : FALSE;
     depthStencilDesc.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK;
     depthStencilDesc.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK;
-	depthStencilDesc.FrontFace.StencilFunc = toD3D12ComparisonFunc(depthStencilState.stencilOpStateFront.compareFunc);
-	depthStencilDesc.FrontFace.StencilPassOp = toD3D12StencilOp(depthStencilState.stencilOpStateFront.passOp);
-	depthStencilDesc.FrontFace.StencilFailOp = toD3D12StencilOp(depthStencilState.stencilOpStateFront.failOp);
-	depthStencilDesc.FrontFace.StencilDepthFailOp = toD3D12StencilOp(depthStencilState.stencilOpStateFront.depthFailOp);
-	depthStencilDesc.BackFace.StencilFunc = toD3D12ComparisonFunc(depthStencilState.stencilOpStateBack.compareFunc);
-	depthStencilDesc.BackFace.StencilPassOp = toD3D12StencilOp(depthStencilState.stencilOpStateBack.passOp);
-	depthStencilDesc.BackFace.StencilFailOp = toD3D12StencilOp(depthStencilState.stencilOpStateBack.failOp);
-	depthStencilDesc.BackFace.StencilDepthFailOp = toD3D12StencilOp(depthStencilState.stencilOpStateBack.depthFailOp);
+	depthStencilDesc.FrontFace.StencilFunc = lookupD3D12_COMPARISON_FUNC[depthStencilState.stencilOpStateFront.compareFunc];
+	depthStencilDesc.FrontFace.StencilPassOp = lookupD3D12_STENCIL_OP[depthStencilState.stencilOpStateFront.passOp];
+	depthStencilDesc.FrontFace.StencilFailOp = lookupD3D12_STENCIL_OP[depthStencilState.stencilOpStateFront.failOp];
+	depthStencilDesc.FrontFace.StencilDepthFailOp = lookupD3D12_STENCIL_OP[depthStencilState.stencilOpStateFront.depthFailOp];
+	depthStencilDesc.BackFace.StencilFunc = lookupD3D12_COMPARISON_FUNC[depthStencilState.stencilOpStateBack.compareFunc];
+	depthStencilDesc.BackFace.StencilPassOp = lookupD3D12_STENCIL_OP[depthStencilState.stencilOpStateBack.passOp];
+	depthStencilDesc.BackFace.StencilFailOp = lookupD3D12_STENCIL_OP[depthStencilState.stencilOpStateBack.failOp];
+	depthStencilDesc.BackFace.StencilDepthFailOp = lookupD3D12_STENCIL_OP[depthStencilState.stencilOpStateBack.depthFailOp];
 
 	// Shaders
 	D3D12_SHADER_BYTECODE VS = {};
@@ -1515,7 +1516,7 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
 
 	// Multisampling
 	DXGI_SAMPLE_DESC sampleDesc = {};
-    sampleDesc.Count = (UINT)toD3D12Samples(renderPass->getSampleCount());
+    sampleDesc.Count = lookupD3D12_SAMPLES[renderPass->getSampleCount()];
     sampleDesc.Quality = 0;
 
 	D3D12_CACHED_PIPELINE_STATE cachedPipelineDesc = {};
@@ -1546,7 +1547,7 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
 
     for (uint32_t i = 0; i < colorAttachmentCount; i++)
 	{
-        pipelineStateDesc.RTVFormats[i] = toDXGIFormat(renderPass->getColorAttachment(i)->getPixelFormat());
+        pipelineStateDesc.RTVFormats[i] = lookupDXGI_FORMAT[renderPass->getColorAttachment(i)->getPixelFormat()];
     }
 
 	ID3D12PipelineState* pipelineState;
@@ -1630,454 +1631,6 @@ void GraphicsD3D12::createSwapchainImages()
 																colorAttachments, 
 																colorMultisampleAttachments,
 																depthStencilAttachment);
-}
-
-DXGI_FORMAT GraphicsD3D12::toDXGIFormat(Format pixelFormat)
-{
-	DXGI_FORMAT result = DXGI_FORMAT_UNKNOWN;
-    switch (pixelFormat) 
-	{
-	case Format::FORMAT_R8_UNORM: 
-		result = DXGI_FORMAT_R8_UNORM; 
-		break;
-    case Format::FORMAT_R16_UNORM: 
-		result = DXGI_FORMAT_R16_UNORM; 
-		break;
-    case Format::FORMAT_R16_FLOAT: 
-		result = DXGI_FORMAT_R16_FLOAT; 
-		break;
-    case Format::FORMAT_R32_UINT: 
-		result = DXGI_FORMAT_R32_UINT; 
-		break;
-    case Format::FORMAT_R32_FLOAT: 
-		result = DXGI_FORMAT_R32_FLOAT; 
-		break;        
-    case Format::FORMAT_R8G8_UNORM: 
-		result = DXGI_FORMAT_R8G8_UNORM; 
-		break;
-    case Format::FORMAT_R16G16_UNORM: 
-		result = DXGI_FORMAT_R16G16_UNORM; 
-		break;
-    case Format::FORMAT_R16G16_FLOAT: 
-		result = DXGI_FORMAT_R16G16_FLOAT; 
-		break;
-    case Format::FORMAT_R32G32_UINT: 
-		result = DXGI_FORMAT_R32G32_UINT; 
-		break;
-    case Format::FORMAT_R32G32_FLOAT: 
-		result = DXGI_FORMAT_R32G32_FLOAT; 
-		break;
-    case Format::FORMAT_R32G32B32_UINT: 
-		result = DXGI_FORMAT_R32G32B32_UINT; 
-		break;
-    case Format::FORMAT_R32G32B32_FLOAT: 
-		result = DXGI_FORMAT_R32G32B32_FLOAT; 
-		break;
-    case Format::FORMAT_B8G8R8A8_UNORM: 
-		result = DXGI_FORMAT_B8G8R8A8_UNORM; 
-		break;
-    case Format::FORMAT_R8G8B8A8_UNORM: 
-		result = DXGI_FORMAT_R8G8B8A8_UNORM; 
-		break;
-    case Format::FORMAT_R16G16B16A16_UNORM: 
-		result = DXGI_FORMAT_R16G16B16A16_UNORM; 
-		break;
-    case Format::FORMAT_R16G16B16A16_FLOAT: 
-		result = DXGI_FORMAT_R16G16B16A16_FLOAT; 
-		break;
-    case Format::FORMAT_R32G32B32A32_UINT: 
-		result = DXGI_FORMAT_R32G32B32A32_UINT; 
-		break;
-    case Format::FORMAT_R32G32B32A32_FLOAT: 
-		result = DXGI_FORMAT_R32G32B32A32_FLOAT; 
-		break;
-    case Format::FORMAT_D16_UNORM: 
-		result = DXGI_FORMAT_D16_UNORM; 
-		break;
-    case Format::FORMAT_X8_D24_UNORM_PACK32: 
-		result = DXGI_FORMAT_X32_TYPELESS_G8X24_UINT; 
-		break;
-    case Format::FORMAT_D32_FLOAT: 
-		result = DXGI_FORMAT_D32_FLOAT; 
-		break;
-    case Format::FORMAT_D24_UNORM_S8_UINT: 
-		result = DXGI_FORMAT_D24_UNORM_S8_UINT; 
-		break;
-    case Format::FORMAT_D32_FLOAT_S8_UINT: 
-		result = DXGI_FORMAT_D32_FLOAT_S8X24_UINT; 
-		break;
-    }
-    return result;
-}
-
-UINT GraphicsD3D12::toD3D12Samples(Texture::SampleCount sampleCount)
-{
-	UINT result = 1;
-	switch (sampleCount)
-	{
-	case Texture::SAMPLE_COUNT_1X:
-		result = 1;
-	case Texture::SAMPLE_COUNT_2X:
-		result = 2;
-	case Texture::SAMPLE_COUNT_4X:
-		result = 4;
-	case Texture::SAMPLE_COUNT_8X:
-		result = 8;
-	case Texture::SAMPLE_COUNT_16X:
-		result = 16;
-	}
-	return result;
-	
-}
-
-D3D12_RESOURCE_STATES GraphicsD3D12::toD3D12ResourceStates(Texture::Usage usage)
-{
-	D3D12_RESOURCE_STATES result = D3D12_RESOURCE_STATE_COMMON;
-    if (Texture::USAGE_TRANSFER_SRC == (usage & Texture::USAGE_TRANSFER_SRC)) 
-	{
-        result |= D3D12_RESOURCE_STATE_COPY_SOURCE;
-    }
-    if (Texture::USAGE_TRANSFER_DST == (usage & Texture::USAGE_TRANSFER_DST)) 
-	{
-        result |= D3D12_RESOURCE_STATE_COPY_DEST;
-    }
-    if (Texture::USAGE_SAMPLED_IMAGE == (usage & Texture::USAGE_SAMPLED_IMAGE)) 
-	{
-        result |= D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
-    }
-    if (Texture::USAGE_STORAGE == (usage & Texture::USAGE_STORAGE)) 
-	{
-        result |= D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
-    }
-    if (Texture::USAGE_COLOR_ATTACHMENT == (usage & Texture::USAGE_COLOR_ATTACHMENT)) 
-	{
-        result |= D3D12_RESOURCE_STATE_RENDER_TARGET;
-    }
-    if (Texture::USAGE_DEPTH_STENCIL_ATTACHMENT == (usage & Texture::USAGE_DEPTH_STENCIL_ATTACHMENT)) 
-	{
-        result |= D3D12_RESOURCE_STATE_DEPTH_WRITE;
-    }
-    if (Texture::USAGE_RESOLVE_SRC == (usage & Texture::USAGE_RESOLVE_SRC)) {
-        result |= D3D12_RESOURCE_STATE_RESOLVE_SOURCE;
-    }
-    if (Texture::USAGE_RESOLVE_DST == (usage & Texture::USAGE_RESOLVE_DST)) {
-        result |= D3D12_RESOURCE_STATE_RESOLVE_DEST;
-    }
-    return result;
-}
-
-D3D12_FILTER GraphicsD3D12::toD3D12Filter(Sampler::Filter minFilter, Sampler::Filter magFilter, Sampler::Filter mipFilter)
-{
-	D3D12_FILTER result = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-
-	if ((minFilter == Sampler::FILTER_LINEAR) && 
-		(magFilter == Sampler::FILTER_LINEAR) &&
-		(mipFilter == Sampler::FILTER_LINEAR))
-	{
-		D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	}
-	else if ((minFilter == Sampler::FILTER_NEAREST) && 
-		(magFilter == Sampler::FILTER_NEAREST) &&
-		(mipFilter == Sampler::FILTER_NEAREST))
-	{
-		result = D3D12_FILTER_MIN_MAG_MIP_POINT;
-	}
-	else if ((minFilter == Sampler::FILTER_NEAREST) && 
-			(magFilter == Sampler::FILTER_NEAREST) &&
-			(mipFilter == Sampler::FILTER_LINEAR))
-	{
-		result = D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR;
-	}
-	else if ((minFilter == Sampler::FILTER_NEAREST) && 
-			(magFilter == Sampler::FILTER_LINEAR) &&
-			(mipFilter == Sampler::FILTER_NEAREST))
-	{
-		result = D3D12_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
-	}
-	else if ((minFilter == Sampler::FILTER_NEAREST) && 
-			(magFilter == Sampler::FILTER_LINEAR) &&
-			(mipFilter == Sampler::FILTER_LINEAR))
-	{
-		result = D3D12_FILTER_MIN_POINT_MAG_MIP_LINEAR;
-	}
-	else if ((minFilter == Sampler::FILTER_LINEAR) && 
-			(magFilter == Sampler::FILTER_NEAREST) &&
-			(mipFilter == Sampler::FILTER_NEAREST))
-	{
-		result = D3D12_FILTER_MIN_LINEAR_MAG_MIP_POINT;
-	}
-	else if ((minFilter == Sampler::FILTER_LINEAR) && 
-			(magFilter == Sampler::FILTER_NEAREST) &&
-			(mipFilter == Sampler::FILTER_LINEAR))
-	{
-		result = D3D12_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-	}
-	else if ((minFilter == Sampler::FILTER_LINEAR) && 
-			(magFilter == Sampler::FILTER_LINEAR) &&
-			(mipFilter == Sampler::FILTER_NEAREST))
-	{
-		result = D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT;
-	}
-	return result;
-}
-
-D3D12_TEXTURE_ADDRESS_MODE GraphicsD3D12::toD3D12TextureAddressMode(Sampler::AddressMode addressMode)
-{
-	D3D12_TEXTURE_ADDRESS_MODE result = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-
-	switch (addressMode)
-	{
-	case Sampler::ADDRESS_MODE_WRAP:
-		result = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		break;
-	case Sampler::ADDRESS_MODE_MIRROR:
-		result = D3D12_TEXTURE_ADDRESS_MODE_MIRROR;
-		break;
-	case Sampler::ADDRESS_MODE_CLAMP_EDGE:
-		result = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-		break;
-	case Sampler::ADDRESS_MODE_CLAMP_BORDER:
-		result = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		break;
-	case Sampler::ADDRESS_MODE_MIRROR_ONCE:
-		result = D3D12_TEXTURE_ADDRESS_MODE_MIRROR_ONCE;
-		break;
-	}
-	return result;
-}
-
-D3D12_COMPARISON_FUNC GraphicsD3D12::toD3D12ComparisonFunc(Sampler::CompareFunc compareFunc)
-{
-	D3D12_COMPARISON_FUNC result = D3D12_COMPARISON_FUNC_NEVER;
-
-	switch (compareFunc)
-	{
-	case Sampler::COMPARE_FUNC_NEVER:
-		result = D3D12_COMPARISON_FUNC_NEVER;
-		break;
-	case Sampler::COMPARE_FUNC_LESS:
-		result = D3D12_COMPARISON_FUNC_LESS;
-		break;
-	case Sampler::COMPARE_FUNC_EQUAL:
-		result = D3D12_COMPARISON_FUNC_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_LESS_OR_EQUAL:
-		result = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_GREATER:
-		result = D3D12_COMPARISON_FUNC_GREATER;
-		break;
-	case Sampler::COMPARE_FUNC_NOT_EQUAL:
-		result = D3D12_COMPARISON_FUNC_NOT_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_GREATER_OR_EQUAL:
-		result = D3D12_COMPARISON_FUNC_GREATER_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_ALWAYS:
-		result = D3D12_COMPARISON_FUNC_ALWAYS;
-		break;
-	}
-	return result;
-}
-
-void GraphicsD3D12::toD3D12BorderColor(Sampler::BorderColor borderColor, FLOAT d3dBorder[4])
-{
-	switch (borderColor)
-	{
-	case Sampler::BORDER_COLOR_BLACK_TRANSPARENT:
-		d3dBorder[0] = 0;
-		d3dBorder[1] = 0;
-		d3dBorder[2] = 0;
-		d3dBorder[3] = 0;
-		break;
-	case Sampler::BORDER_COLOR_BLACK_OPAQUE:
-		d3dBorder[0] = 0;
-		d3dBorder[1] = 0;
-		d3dBorder[2] = 0;
-		d3dBorder[3] = 1;
-		break;
-	case Sampler::BORDER_COLOR_WHITE_OPAQUE:
-		d3dBorder[0] = 1;
-		d3dBorder[1] = 1;
-		d3dBorder[2] = 1;
-		d3dBorder[3] = 1;
-		break;
-	}
-}
-
-D3D12_BLEND GraphicsD3D12::toD3D12Blend(ColorBlendState::BlendFactor blendFactor)
-{
-	D3D12_BLEND result = D3D12_BLEND_ZERO;
-
-	switch (blendFactor)
-	{
-	case ColorBlendState::BLEND_FACTOR_ZERO:
-		result = D3D12_BLEND_ZERO;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE:
-		result = D3D12_BLEND_ONE;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC_COLOR:
-		result = D3D12_BLEND_SRC_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_SRC_COLOR:
-		result = D3D12_BLEND_INV_SRC_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC_ALPHA:
-		result = D3D12_BLEND_SRC_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_SRC_ALPHA:
-		result = D3D12_BLEND_INV_SRC_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_DST_ALPHA:
-		result = D3D12_BLEND_DEST_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_DST_ALPHA:
-		result = D3D12_BLEND_INV_DEST_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_DST_COLOR:
-		result = D3D12_BLEND_DEST_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_DST_COLOR:
-		result = D3D12_BLEND_INV_DEST_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC_ALPHA_SATURATE:
-		result = D3D12_BLEND_SRC_ALPHA_SAT;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC1_COLOR:
-		result = D3D12_BLEND_SRC1_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_SRC1_COLOR:
-		result = D3D12_BLEND_INV_SRC1_COLOR;
-		break;
-	case ColorBlendState::BLEND_FACTOR_SRC1_ALPHA:
-		result = D3D12_BLEND_SRC1_ALPHA;
-		break;
-	case ColorBlendState::BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA:
-		result = D3D12_BLEND_INV_SRC1_ALPHA;
-		break;
-
-	}
-	return result;
-}
-
-D3D12_BLEND_OP GraphicsD3D12::toD3D12BlendOp(ColorBlendState::BlendOp blendOp)
-{
-
-	D3D12_BLEND_OP result = D3D12_BLEND_OP_ADD;
-
-	switch (blendOp)
-	{
-	case ColorBlendState::BLEND_OP_ADD:
-		result = D3D12_BLEND_OP_ADD;
-		break;
-	case ColorBlendState::BLEND_OP_SUBSTRACT:
-		result = D3D12_BLEND_OP_SUBTRACT;
-		break;
-	case ColorBlendState::BLEND_OP_REVERSE_SUBTRACT:
-		result = D3D12_BLEND_OP_REV_SUBTRACT;
-		break;
-	case ColorBlendState::BLEND_OP_MIN:
-		result = D3D12_BLEND_OP_MIN;
-		break;
-	case ColorBlendState::BLEND_OP_MAX:
-		result = D3D12_BLEND_OP_MAX;
-		break;
-	}
-	return result;
-}
-
-D3D12_FILL_MODE GraphicsD3D12::toD3D12FillMode(RasterizerState::FillMode fillMode)
-{
-	return (fillMode == RasterizerState::FILL_MODE_SOLID) ? D3D12_FILL_MODE_SOLID : D3D12_FILL_MODE_WIREFRAME;
-}
-
-D3D12_CULL_MODE GraphicsD3D12::toD3D12CullMode(RasterizerState::CullMode cullMode)
-{
-
-	D3D12_CULL_MODE result = D3D12_CULL_MODE_NONE;
-
-	switch (cullMode)
-	{
-	case RasterizerState::CULL_MODE_NONE:
-		result = D3D12_CULL_MODE_NONE;
-		break;
-	case RasterizerState::CULL_MODE_FRONT:
-		result = D3D12_CULL_MODE_FRONT;
-		break;
-	case RasterizerState::CULL_MODE_BACK:
-		result = D3D12_CULL_MODE_BACK;
-		break;
-
-	}
-	return result;
-}
-
-D3D12_COMPARISON_FUNC GraphicsD3D12::toD3D12ComparisonFunc(DepthStencilState::CompareFunc compareFunc)
-{
-	D3D12_COMPARISON_FUNC result = D3D12_COMPARISON_FUNC_NEVER;
-
-	switch (compareFunc)
-	{
-	case Sampler::COMPARE_FUNC_NEVER:
-		result = D3D12_COMPARISON_FUNC_NEVER;
-		break;
-	case Sampler::COMPARE_FUNC_LESS:
-		result = D3D12_COMPARISON_FUNC_LESS;
-		break;
-	case Sampler::COMPARE_FUNC_EQUAL:
-		result = D3D12_COMPARISON_FUNC_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_LESS_OR_EQUAL:
-		result = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_GREATER:
-		result = D3D12_COMPARISON_FUNC_GREATER;
-		break;
-	case Sampler::COMPARE_FUNC_NOT_EQUAL:
-		result = D3D12_COMPARISON_FUNC_NOT_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_GREATER_OR_EQUAL:
-		result = D3D12_COMPARISON_FUNC_GREATER_EQUAL;
-		break;
-	case Sampler::COMPARE_FUNC_ALWAYS:
-		result = D3D12_COMPARISON_FUNC_ALWAYS;
-		break;
-	}
-	return result;
-}
-
-D3D12_STENCIL_OP GraphicsD3D12::toD3D12StencilOp(DepthStencilState::StencilOp stencilOp)
-{
-	D3D12_STENCIL_OP result = D3D12_STENCIL_OP_KEEP;
-	switch (stencilOp)
-	{
-	case DepthStencilState::STENCIL_OP_KEEP:
-		result = D3D12_STENCIL_OP_KEEP;
-		break;
-	case DepthStencilState::STENCIL_OP_ZERO:
-		result = D3D12_STENCIL_OP_ZERO;
-		break;
-	case DepthStencilState::STENCIL_OP_REPLACE:
-		result = D3D12_STENCIL_OP_REPLACE;
-		break;
-	case DepthStencilState::STENCIL_OP_INCREMENT_AND_CLAMP:
-		result = D3D12_STENCIL_OP_INCR_SAT;
-		break;
-	case DepthStencilState::STENCIL_OP_DECREMENT_AND_CLAMP:
-		result = D3D12_STENCIL_OP_DECR_SAT;
-		break;
-	case DepthStencilState::STENCIL_OP_INVERT:
-		result = D3D12_STENCIL_OP_INVERT;
-		break;
-	case DepthStencilState::STENCIL_OP_INCREMENT_AND_WRAP:
-		result = D3D12_STENCIL_OP_INCR;
-		break;
-	case DepthStencilState::STENCIL_OP_DECREMENT_AND_WRAP:
-		result = D3D12_STENCIL_OP_DECR;
-		break;
-	}
-	return result;
 }
 
 }
