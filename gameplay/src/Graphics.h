@@ -165,7 +165,7 @@ public:
 	 * @param depthMax The maximum depth range for the viewport.
 	 */
 	virtual void cmdSetViewport(std::shared_ptr<CommandBuffer> commandBuffer,
-								float x, float, float width, float height, 
+								float x, float y, float width, float height, 
 								float depthMin, float depthMax) = 0;
 	/**
 	 * Records a command that sets the dynamic scissor test region.
@@ -410,8 +410,8 @@ public:
 	/**
 	 * Creates a sampler.
 	 *
-	 * @param filterMag The value specifying the magnification filter to apply to lookups.
 	 * @param filterMin The value specifying the minification filter to apply to lookups.
+	 * @param filterMag The value specifying the magnification filter to apply to lookups.
 	 * @param filterMip The value specifying the mipmap filter to apply to lookups.
 	 * @param mipmapMode The mipmap moe to use
 	 * @param addressModeU The value specifying the addressing mode for outside [0..1] range for U coordinate.
@@ -426,8 +426,8 @@ public:
 	 * @param lodMax The maximum value used to clamp the computed level-of-detail value.
 	 * @param lodMipBias The bias to be added to mipmap LOD calculation and bias provided by image sampling functions.
 	 */
-	virtual std::shared_ptr<Sampler> createSampler(Sampler::Filter filterMag,
-												   Sampler::Filter filterMin,
+	virtual std::shared_ptr<Sampler> createSampler(Sampler::Filter filterMin,
+												   Sampler::Filter filterMag,
 												   Sampler::Filter filterMip,
 												   Sampler::AddressMode addressModeU,
 												   Sampler::AddressMode addressModeV,
@@ -519,9 +519,9 @@ public:
 	/**
 	 * Destroys a render pipeline.
 	 *
-	 * @param pipeline The pipeline to be destroyed.
+	 * @param renderPipeline The render pipeline to be destroyed.
 	 */
-	virtual void destroyRenderPipeline(std::shared_ptr<RenderPipeline> pipeline) = 0;
+	virtual void destroyRenderPipeline(std::shared_ptr<RenderPipeline> renderPipeline) = 0;
 
     /**
      * Event occurs when the platform requests to initialize graphics.

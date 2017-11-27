@@ -9,13 +9,13 @@ VertexLayout::VertexLayout()
 {
 }
 
-VertexLayout::VertexLayout(const VertexAttribute* attributes, size_t count) : 
+VertexLayout::VertexLayout(const VertexAttribute* attributes, size_t attributeCount) : 
 	_stride(0)
 {
-    GP_ASSERT(attributes);
-	GP_ASSERT(count < GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX);
+    GP_ASSERT(attributeCount);
+	GP_ASSERT(attributeCount < GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX);
 
-    for (size_t i = 0; i < count; ++i)
+    for (size_t i = 0; i < attributeCount; ++i)
     {
         VertexAttribute attribute;
         memcpy(&attribute, &attributes[i], sizeof(VertexAttribute));
@@ -64,7 +64,7 @@ bool VertexLayout::operator != (const VertexLayout& layout) const
 
 VertexLayout::VertexAttribute::VertexAttribute() : 
 	semantic(SEMANTIC_POSITION), 
-	name(""), 
+	semanticName(""), 
 	binding(0), 
 	location(0), 
 	offset(0)
@@ -72,13 +72,13 @@ VertexLayout::VertexAttribute::VertexAttribute() :
 }
 
 VertexLayout::VertexAttribute::VertexAttribute(Semantic semantic,
-											   const std::string& name, 
+											   const std::string& semanticName, 
 											   Format format,
 											   unsigned int binding,
 											   unsigned int location,
 											   unsigned int offset) : 
 	semantic(semantic), 
-	name(name), 
+	semanticName(semanticName), 
 	format(format), 
 	binding(binding), 
 	location(location), 
@@ -93,8 +93,8 @@ VertexLayout::VertexAttribute::~VertexAttribute()
 bool VertexLayout::VertexAttribute::operator == (const VertexLayout::VertexAttribute& attr) const
 {
     return (semantic == attr.semantic) && 
-		   (name.size() == attr.name.size()) && 
-		   (name.compare(attr.name) == 0) && 
+		   (semanticName.size() == attr.semanticName.size()) && 
+		   (semanticName.compare(attr.semanticName) == 0) && 
 		   (format == attr.format) &&
 		   (binding == attr.binding) &&
 		   (location == attr.location) &&
@@ -118,8 +118,8 @@ std::string VertexLayout::toString(Semantic semantic)
         return "COLOR";
     case SEMANTIC_TANGENT:
         return "TANGENT";
-    case SEMANTIC_BINORMAL:
-        return "BINORMAL";
+    case SEMANTIC_BITANGENT:
+        return "BITANGENT";
     case SEMANTIC_TEXCOORD0:
         return "TEXCOORD0";
     case SEMANTIC_TEXCOORD1:
@@ -137,7 +137,7 @@ std::string VertexLayout::toString(Semantic semantic)
     case SEMANTIC_TEXCOORD7:
         return "TEXCOORD7";
     default:
-        return "POSITION";
+        return "";
     }
 }
 

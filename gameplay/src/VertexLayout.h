@@ -16,11 +16,12 @@ public:
      */
     enum Semantic
     {
+		SEMANTIC_UNDEFINED,
         SEMANTIC_POSITION,
         SEMANTIC_NORMAL,
         SEMANTIC_COLOR,
         SEMANTIC_TANGENT,
-        SEMANTIC_BINORMAL,
+        SEMANTIC_BITANGENT,
         SEMANTIC_TEXCOORD0,
         SEMANTIC_TEXCOORD1,
         SEMANTIC_TEXCOORD2,
@@ -39,7 +40,7 @@ public:
 	public:
 
         Semantic semantic;
-        std::string name;
+        std::string semanticName;
 		Format format;
 		unsigned int binding;
 		unsigned int location;
@@ -58,7 +59,7 @@ public:
 		 * @param format The format of the attribute
          */
         VertexAttribute(Semantic semantic, 
-						const std::string& name, 
+						const std::string& semanticName, 
 						Format format,
 						unsigned int binding,
 						unsigned int location,

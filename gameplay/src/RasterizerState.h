@@ -14,12 +14,12 @@ class RasterizerState
 public:
 
     /**
-     * Defines the polygon rasterization mode.
+     * Defines the mode in which polygons are filled.
      */
-    enum PolygonMode
+    enum FillMode
     {
-        POLYGON_MODE_FILL,
-        POLYGON_MODE_WIREFRAME
+        FILL_MODE_SOLID,
+        FILL_MODE_WIREFRAME
     };
 
     /**
@@ -29,8 +29,7 @@ public:
     {
         CULL_MODE_NONE,
         CULL_MODE_BACK,
-        CULL_MODE_FRONT,
-        CULL_MODE_FRONT_AND_BACK
+        CULL_MODE_FRONT
     };
 
     /**
@@ -43,9 +42,9 @@ public:
     };
 
     /**
-     * The polygon rasterization mode.
+     * The polygon fill mode.
      */
-    PolygonMode polygonMode = POLYGON_MODE_FILL;
+    FillMode fillMode = FILL_MODE_SOLID;
 
     /**
      * The triangle culling mode.

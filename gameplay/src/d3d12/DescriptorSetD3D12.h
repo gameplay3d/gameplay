@@ -14,12 +14,13 @@ class DescriptorSetD3D12 : public DescriptorSet
 public:
 
 	/**
-	 * Additional heap and root signature binding info.
+	 * Additional descriptor heap and root signature binding info.
 	 */
-	struct DescriptorBindingInfo
+	class Binding
 	{
-		unsigned int heapOffset;
+	public:
 		unsigned int rootParameterIndex;
+		unsigned int heapOffset;
 	};
 
     /**
@@ -33,7 +34,7 @@ public:
     DescriptorSetD3D12(const Descriptor* descriptors, 
 					   size_t descriptorCount,
 					   ID3D12Device* device,
-                       ID3D12DescriptorHeap* cbvSrvUav,
+                       ID3D12DescriptorHeap* cbvSrvUavHeap,
                        ID3D12DescriptorHeap* samplerHeap);
 
     /**
@@ -42,9 +43,9 @@ public:
     ~DescriptorSetD3D12();
 
     ID3D12Device* _device;
-    ID3D12DescriptorHeap* _cbvSrvUav;
+    ID3D12DescriptorHeap* _cbvSrvUavHeap;
     ID3D12DescriptorHeap* _samplerHeap;
-	std::vector<DescriptorBindingInfo> _bindingInfo;
+	std::vector<Binding> _bindings;
 };
 
 }

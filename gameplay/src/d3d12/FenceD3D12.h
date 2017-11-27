@@ -21,7 +21,7 @@ public:
     /**
      * Constructor.
      */
-    FenceD3D12(ID3D12Device* device, ID3D12Fence* fence);
+    FenceD3D12(ID3D12Device* device, ID3D12Fence* fence, HANDLE fenceEvent);
 
     /**
 	 * Destructor.
@@ -30,6 +30,8 @@ public:
 
 	ID3D12Device* _device;
 	ID3D12Fence* _fence;
+	HANDLE _fenceEvent;
+	uint64_t _fenceValue;
 };
 
 }

@@ -11,8 +11,8 @@ SamplerVK::SamplerVK() :
 {
 }
 
-SamplerVK::SamplerVK(Filter filterMag,
-					 Filter filterMin,
+SamplerVK::SamplerVK(Filter filterMin,
+					 Filter filterMag,
 					 Filter filterMip,
 					 AddressMode addressModeU,
 					 AddressMode addressModeV,
@@ -27,8 +27,8 @@ SamplerVK::SamplerVK(Filter filterMag,
 					 float lodMipBias,
 					 VkDevice device, 
 					 VkSampler sampler) :
-	Sampler(filterMag, 
-			filterMin, 
+	Sampler(filterMin, 
+			filterMag, 
 			filterMip, 
 		    addressModeU,
 			addressModeV,

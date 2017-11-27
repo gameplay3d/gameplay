@@ -49,7 +49,7 @@ public:
 		/**
 		 * Defines the shader stages.
 		 */
-		enum ShaderStage
+		enum ShaderStages
 		{
 			SHADER_STAGE_VERT,
 			SHADER_STAGE_TESC,
@@ -76,7 +76,7 @@ public:
 		/**
 		 * The stage in the shader that the resource is accessible from.
 		 */
-		ShaderStage shaderStage = SHADER_STAGE_VERT;
+		ShaderStages shaderStages = SHADER_STAGE_VERT;
 
 		union
 		{
@@ -100,6 +100,13 @@ public:
 	 * Destructor.
 	 */
 	~DescriptorSet();
+
+	/**
+	 * Gets the number of descriptors in the set.
+	 *
+	 * @return The number of descriptors in the set.
+	 */
+	size_t getDescriptorCount() const;
 
 	/**
 	 * Gets the descriptor at the specified index.

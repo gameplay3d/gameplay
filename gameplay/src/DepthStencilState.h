@@ -87,7 +87,7 @@ public:
     /**
      * Whether depth testing is enabled.
      */
-    bool depthEnable = false;
+    bool depthEnabled = false;
 
     /**
      * The depth write mask.
@@ -102,7 +102,7 @@ public:
     /**
      * Whether stencil testing is enabled.
      */
-    bool stencilEnable = false;
+    bool stencilEnabled = false;
 
     /**
      * Stencil state of the front stencil test.
