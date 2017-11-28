@@ -79,14 +79,14 @@ public:
      *
      * @return The major version of the loaded bundle.
      */
-    virtual unsigned int getVersionMajor() const;
+    virtual uint32_t getVersionMajor() const;
     
     /**
      * Gets the minor version of the loaded bundle.
      *
      * @return The minor version of the loaded bundle.
      */
-    virtual unsigned int getVersionMinor() const;
+    virtual uint32_t getVersionMinor() const;
 
     /**
      * Writes a enumerated value.
@@ -553,12 +553,12 @@ protected:
         TYPE_WRITER
     };
 
-    Serializer(Type type, const std::string& path, Stream* stream, unsigned int versionMajor, unsigned int versionMinor);
+    Serializer(Type type, const std::string& path, Stream* stream, uint32_t versionMajor, uint32_t versionMinor);
 
     Type _type;
     std::string _path;
     Stream* _stream;
-    unsigned int _version[2];
+    uint32_t _version[2];
     
 };
 

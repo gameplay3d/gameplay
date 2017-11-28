@@ -51,7 +51,7 @@ public:
      * Defines whether the final color values R, G, B and A
      * are written to the framebuffer attachment(s).
      */
-    enum WriteMask : unsigned int
+    enum WriteMask : uint32_t
     {
         WRITE_MASK_RED = 0x00000001,
         WRITE_MASK_GREEN = 0x00000002,
@@ -84,7 +84,7 @@ public:
     /**
      * The WriteMask specifying which of the R, G, B, and/or A components are enabled for writing.
      */
-    unsigned int colorWriteMask = 0xf;
+    uint32_t colorWriteMask = 0xf;
 
     /**
      * Selects which blend factor is used to determine the source factor Sa.

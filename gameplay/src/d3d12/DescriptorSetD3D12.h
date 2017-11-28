@@ -19,8 +19,8 @@ public:
 	class Binding
 	{
 	public:
-		unsigned int rootParameterIndex;
-		unsigned int heapOffset;
+		uint32_t rootParameterIndex;
+		uint32_t heapOffset;
 	};
 
     /**

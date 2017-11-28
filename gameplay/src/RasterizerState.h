@@ -59,7 +59,7 @@ public:
     /**
      * Whether to bias fragment depth values.
      */
-    unsigned int depthBias = 0;
+    uint32_t depthBias = 0;
 
     /**
      * The maximum (or minimum) depth bias of a fragment.

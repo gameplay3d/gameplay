@@ -301,7 +301,7 @@ private:
     /**
      * Determines the current keyframe to interpolate from based on the specified time.
      */
-    int determineIndex(float time, unsigned int min, unsigned int max) const;
+    int determineIndex(float time, uint32_t min, uint32_t max) const;
 
     /**
      * Sets the offset for the beginning of a Quaternion piece of data within the curve's value span at the specified

@@ -102,7 +102,7 @@ void Serializer::Activator::registerEnum(const std::string& enumName, EnumToStri
     }
 }
 
-Serializer::Serializer(Type type, const std::string& path, Stream* stream, unsigned int versionMajor, unsigned int versionMinor) : 
+Serializer::Serializer(Type type, const std::string& path, Stream* stream, uint32_t versionMajor, uint32_t versionMinor) : 
     _type(type),
     _path(path),
     _stream(stream)
@@ -148,14 +148,14 @@ Serializer::Activator* Serializer::getActivator()
     return __activator;
 }
     
-unsigned int Serializer::getVersionMajor() const
+uint32_t Serializer::getVersionMajor() const
 {
-    return (unsigned int)_version[0];
+    return (uint32_t)_version[0];
 }
 
-unsigned int Serializer::getVersionMinor() const
+uint32_t Serializer::getVersionMinor() const
 {
-    return (unsigned int)_version[1];
+    return (uint32_t)_version[1];
 }
 
 }

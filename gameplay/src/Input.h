@@ -209,7 +209,7 @@ public:
     
 private:
 
-    static std::map<std::string, unsigned int> _inputMapping;
+    static std::map<std::string, uint32_t> _inputMapping;
     static std::vector<bool> _buttonState;
     static std::vector<bool> _buttonsHeld;
 };

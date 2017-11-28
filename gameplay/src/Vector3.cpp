@@ -30,7 +30,7 @@ Vector3::Vector3(const Vector3& copy)
     set(copy);
 }
 
-Vector3 Vector3::fromColor(unsigned int color)
+Vector3 Vector3::fromColor(uint32_t color)
 {
     float components[3];
     int componentIndex = 0;
@@ -49,17 +49,17 @@ Vector3 Vector3::fromColorString(const char* str)
     Vector3 value = Vector3(0, 0, 0);
     if (str[0] == '#' && strlen(str) == 7 )
     {
-        unsigned int color;
+        uint32_t color;
         if (sscanf(str + 1, "%x", &color) == 1)
             value = Vector3::fromColor(color);
     }
     return value;
 }
 
-unsigned int Vector3::toColor() const
+uint32_t Vector3::toColor() const
 {
     unsigned char component;
-    unsigned int value = 0;
+    uint32_t value = 0;
     // Red component
     component = static_cast<unsigned char>(x * 255);
     value += component << 16;

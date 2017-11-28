@@ -42,8 +42,8 @@ public:
      */
     enum IndexFormat
     {
-        INDEX_FORMAT_USHORT,
-        INDEX_FORMAT_UINT
+        INDEX_FORMAT_UINT16,
+        INDEX_FORMAT_UINT32
     };
 	
     /**

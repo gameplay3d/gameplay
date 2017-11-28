@@ -213,7 +213,7 @@ public:
     
 protected:
     
-    SerializerBinary(Type type, const std::string& path, Stream* stream, unsigned int versionMajor, unsigned int versionMinor);
+    SerializerBinary(Type type, const std::string& path, Stream* stream, uint32_t versionMajor, uint32_t versionMinor);
     static Serializer* create(const std::string& path, Stream* stream);
     void writeLengthPrefixedString(const char* str);
     void readLengthPrefixedString(std::string& str);

@@ -75,11 +75,11 @@ bool PhysicsRigidBody::isKinematic() const
     return false;
 }
 
-void PhysicsRigidBody::setFreezeConstraint(unsigned int freezeConstraints)
+void PhysicsRigidBody::setFreezeConstraint(uint32_t freezeConstraints)
 {
 }
 
-unsigned int PhysicsRigidBody::getFreezeConstraint() const
+uint32_t PhysicsRigidBody::getFreezeConstraint() const
 {
     return 0;
 }

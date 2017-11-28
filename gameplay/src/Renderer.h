@@ -115,7 +115,7 @@ protected:
 	 *
 	 * @param drawFlags The flags indicating what is rendered.
 	 */
-	virtual void onDraw(unsigned int drawFlags) = 0;
+	virtual void onDraw(uint32_t drawFlags) = 0;
 
 	std::string  _url;
 	std::vector<std::shared_ptr<Buffer>> _mesh;

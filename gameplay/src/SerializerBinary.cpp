@@ -17,7 +17,7 @@ unsigned char SerializerBinary::BIT_VALUE = 0x01;
 unsigned char SerializerBinary::BIT_XREF = 0x02;
 unsigned char SerializerBinary::BIT_DEFAULT = 0x04;
 
-SerializerBinary::SerializerBinary(Type type, const std::string& path, Stream* stream, unsigned int versionMajor, unsigned int versionMinor) : 
+SerializerBinary::SerializerBinary(Type type, const std::string& path, Stream* stream, uint32_t versionMajor, uint32_t versionMinor) : 
     Serializer(type, path, stream, versionMajor, versionMinor)
 {
 }
@@ -185,8 +185,8 @@ void SerializerBinary::writeColor(const char* propertyName, const Vector3& value
     else
     {
         _stream->write(&BIT_VALUE, sizeof(unsigned char), 1);
-        unsigned int color = value.toColor();
-        _stream->write(&color, sizeof(unsigned int), 1);
+        uint32_t color = value.toColor();
+        _stream->write(&color, sizeof(uint32_t), 1);
     }
 }
 
@@ -202,8 +202,8 @@ void SerializerBinary::writeColor(const char* propertyName, const Vector4& value
     else
     {
         _stream->write(&BIT_VALUE, sizeof(unsigned char), 1);
-        unsigned int color = value.toColor();
-        _stream->write(&color, sizeof(unsigned int), 1);
+        uint32_t color = value.toColor();
+        _stream->write(&color, sizeof(uint32_t), 1);
     }
 }
 
@@ -467,8 +467,8 @@ Vector3 SerializerBinary::readColor(const char* propertyName, const Vector3& def
     }
     else
     {
-        unsigned int color;
-        _stream->read(&color, sizeof(unsigned int), 1);
+        uint32_t color;
+        _stream->read(&color, sizeof(uint32_t), 1);
         return Vector3::fromColor(color);
     }
 }
@@ -486,8 +486,8 @@ Vector4 SerializerBinary::readColor(const char* propertyName, const Vector4& def
     }
     else
     {
-        unsigned int color;
-        _stream->read(&color, sizeof(unsigned int), 1);
+        uint32_t color;
+        _stream->read(&color, sizeof(uint32_t), 1);
         return Vector4::fromColor(color);
     }
 }

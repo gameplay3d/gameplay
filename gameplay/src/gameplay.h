@@ -16,6 +16,7 @@
 #include "Ray.h"
 #include "Rectangle.h"
 #include "FileSystem.h"
+#include "Image.h"
 #include "Stream.h"
 #include "Serializable.h"
 #include "Serializer.h"

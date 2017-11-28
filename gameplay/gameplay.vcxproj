@@ -23,6 +23,7 @@
     <ClCompile Include="src\BoundingSphere.cpp" />
     <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\ClearValue.cpp" />
     <ClCompile Include="src\CommandBuffer.cpp" />
     <ClCompile Include="src\CommandPool.cpp" />
     <ClCompile Include="src\Component.cpp" />

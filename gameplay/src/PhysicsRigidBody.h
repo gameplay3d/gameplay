@@ -19,7 +19,7 @@ public:
     /**
      * Defines constraints used to freeze position and rotation.
      */
-    enum FreezeConstraint : unsigned int
+    enum FreezeConstraint : uint32_t
     {
         FREEZE_CONTRAINT_POSITION_X = (1 << 0),
         FREEZE_CONTRAINT_POSITION_Y = (1 << 1),
@@ -152,14 +152,14 @@ public:
      *
      * @param freezeConstraints The restrictions on the rigid body for freezing position and rotation.
      */
-    void setFreezeConstraint(unsigned int freezeConstraints);
+    void setFreezeConstraint(uint32_t freezeConstraints);
 
     /**
      * Gets the restrictions on the rigid body for freezing position and rotation.
      *
      * @return The restrictions on the rigid body for freezing position and rotation.
      */
-    unsigned int getFreezeConstraint() const;
+    uint32_t getFreezeConstraint() const;
 
     /**
      * Gets the rigid body's center of mass in kilograms.
