@@ -417,7 +417,7 @@ void GraphicsVK::cmdBindIndexBuffer(std::shared_ptr<CommandBuffer> commandBuffer
 {
 	GP_ASSERT(commandBuffer);
 
-	VkIndexType indexType = (indexBuffer->getStride() == sizeof(unsigned short)) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32;
+	VkIndexType indexType = (indexBuffer->getStride() == sizeof(uint16_t)) ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT32;
     
 	vkCmdBindIndexBuffer(std::static_pointer_cast<CommandBufferVK>(commandBuffer)->_commandBuffer, 
 					     std::static_pointer_cast<BufferVK>(indexBuffer)->_buffer, 0, indexType);
@@ -632,7 +632,7 @@ std::shared_ptr<Buffer> GraphicsVK::createVertexBuffer(size_t size, size_t verte
 
 std::shared_ptr<Buffer> GraphicsVK::createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible)
 {
-	size_t stride = (indexFormat == INDEX_FORMAT_UINT) ? sizeof(unsigned int) : sizeof(unsigned short);
+	size_t stride = (indexFormat == INDEX_FORMAT_UINT32) ? sizeof(uint32_t) : sizeof(uint16_t);
 	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible);
 }
 
@@ -1114,11 +1114,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 
 	for (size_t i = 0; i < colorAttachmentCount; ++i)
 	{
-		ClearValue clearColor;
-		clearColor.color.red = 0;
-		clearColor.color.green = 0;
-		clearColor.color.blue = 0;
-		clearColor.color.red = 0;
+		ClearValue clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		std::shared_ptr<Texture> colorAttachment = createTexture2d(width, height, 1, colorFormat, 
 																   Texture::USAGE_COLOR_ATTACHMENT, 
 																   Texture::SAMPLE_COUNT_1X, clearColor, false);
@@ -1134,9 +1130,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 	}
 	if (depthStencilFormat != Format::FORMAT_UNDEFINED)
 	{
-		ClearValue clearDepthStencil;
-		clearDepthStencil.depthStencil.depth = 0.0f;
-		clearDepthStencil.depthStencil.stencil = 0;
+		ClearValue clearDepthStencil(0.0f, 0);
 		depthStencilAttachment = createTexture2d(width, height, 1, depthStencilFormat, 
 												 Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
 												 Texture::SAMPLE_COUNT_1X, clearDepthStencil, false);
@@ -1466,7 +1460,7 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
 
     for (size_t i = 0; i < inputAttributeCount; ++i) 
 	{
-		VertexLayout::VertexAttribute attribute = vertexLayout.getAttribute(i);
+		VertexLayout::Attribute attribute = vertexLayout.getAttribute(i);
         if (attribute.binding != bindingValue) 
 		{
             bindingValue = attribute.binding;

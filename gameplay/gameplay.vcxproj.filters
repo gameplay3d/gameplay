@@ -297,6 +297,9 @@
     <ClCompile Include="src\vk\CommandPoolVK.cpp">
       <Filter>Graphics\vk</Filter>
     </ClCompile>
+    <ClCompile Include="src\ClearValue.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gameplay.h" />

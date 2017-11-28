@@ -360,7 +360,7 @@ void Game::Config::onSerialize(Serializer* serializer)
     serializer->writeInt("height", height, 0);
     serializer->writeBool("fullscreen", fullscreen, false);
 	serializer->writeBool("vsync", vsync, false);
-	serializer->writeInt("multisampling", (unsigned int)multisampling, 0);
+	serializer->writeInt("multisampling", (uint32_t)multisampling, 0);
 	serializer->writeBool("validation", validation, GP_GRAPHICS_VALIDATION);
 	serializer->writeString("homePath", homePath.c_str(), GP_ENGINE_HOME_PATH);
     serializer->writeStringList("splashScreens", splashScreens.size());

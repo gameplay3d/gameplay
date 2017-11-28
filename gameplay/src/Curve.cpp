@@ -146,8 +146,8 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
         std::memcpy(dst, _points[0].value, _componentSize);
         return;
     }
-	unsigned int min = 0;
-	unsigned int max = (unsigned int)_pointCount - 1;
+	uint32_t min = 0;
+	uint32_t max = (uint32_t)_pointCount - 1;
     float localTime = time;
     if (startTime > 0.0f || endTime < 1.0f)
     {
@@ -1142,9 +1142,9 @@ void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) c
         Quaternion::slerp(to[0], to[1], to[2], to[3], from[0], from[1], from[2], from[3], s, dst, dst + 1, dst + 2, dst + 3);
 }
 
-int Curve::determineIndex(float time, unsigned int min, unsigned int max) const
+int Curve::determineIndex(float time, uint32_t min, uint32_t max) const
 {
-	unsigned int mid;
+	uint32_t mid;
     // Do a binary search to determine the index.
     do 
     {

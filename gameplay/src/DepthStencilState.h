@@ -58,13 +58,13 @@ public:
 		Sampler::CompareFunc compareFunc = Sampler::COMPARE_FUNC_NEVER;
 
 		 /**
-		  * Selects the bits of the unsigned integer 
+		  * Selects the bits of the uint32_t 
 		  * stencil values participating in the stencil test.
 		  */
 		unsigned char compareMask = 0xff;
 
 		/**
-		 * Selects the bits of the unsigned integer stencil values updated
+		 * Selects the bits of the uint32_t stencil values updated
 		 * by the stencil test in the stencil framebuffer attachment
 		 */
 		unsigned char writeMask = 0xff;

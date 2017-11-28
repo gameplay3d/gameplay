@@ -722,8 +722,8 @@ std::shared_ptr<Buffer> GraphicsD3D12::createVertexBuffer(size_t size, size_t ve
 
 std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible)
 {
-	size_t stride = (indexFormat == INDEX_FORMAT_UINT) ? sizeof(unsigned int) : sizeof(unsigned short);
-	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible, (indexFormat == INDEX_FORMAT_UINT));
+	size_t stride = (indexFormat == INDEX_FORMAT_UINT32) ? sizeof(uint32_t) : sizeof(uint16_t);
+	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible, (indexFormat == INDEX_FORMAT_UINT32));
 }
 
 std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, bool hostVisible)
@@ -960,11 +960,7 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
 
 	for (size_t i = 0; i < colorAttachmentCount; ++i)
 	{
-		ClearValue clearColor;
-		clearColor.color.red = 0;
-		clearColor.color.green = 0;
-		clearColor.color.blue = 0;
-		clearColor.color.red = 0;
+		ClearValue clearColor(0, 0, 0, 1);
 		std::shared_ptr<Texture> colorAttachment = createTexture2d(width, height, 1, colorFormat, 
 																   Texture::USAGE_COLOR_ATTACHMENT, 
 																   Texture::SAMPLE_COUNT_1X, clearColor, false);
@@ -980,9 +976,7 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
 	}
 	if (depthStencilFormat != Format::FORMAT_UNDEFINED)
 	{
-		ClearValue clearDepthStencil;
-		clearDepthStencil.depthStencil.depth = 0.0f;
-		clearDepthStencil.depthStencil.stencil = 0;
+		ClearValue clearDepthStencil(0.0f, 0);
 		depthStencilAttachment = createTexture2d(width, height, 1, depthStencilFormat, 
 												 Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
 												 Texture::SAMPLE_COUNT_1X, clearDepthStencil, false);
@@ -1325,7 +1319,7 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
     size_t attribCount = GP_MATH_MIN(vertexLayout.getAttributeCount(), GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX);
     for (uint32_t i = 0; i < vertexLayout.getAttributeCount(); i++)
 	{
-		VertexLayout::VertexAttribute attribute = vertexLayout.getAttribute(i);
+		VertexLayout::Attribute attribute = vertexLayout.getAttribute(i);
 		GP_ASSERT(attribute.semantic != VertexLayout::SEMANTIC_UNDEFINED);
 
         if (attribute.semanticName.length() > 0)
@@ -1602,20 +1596,14 @@ void GraphicsD3D12::createSwapchainImages()
 		_device->CreateRenderTargetView(_swapchainImages[i], nullptr, swapchainImageViewHandle);
 		swapchainImageViewHandle.ptr += _swapchainImagesViewDescriptorSize;
 
-		ClearValue clearColor;
-		clearColor.color.red = 0;
-		clearColor.color.green = 0;
-		clearColor.color.blue = 0;
-		clearColor.color.alpha = 0;
+		ClearValue clearColor(0, 0, 0, 1);
 		std::shared_ptr<Texture> colorAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
 																 Format::FORMAT_R8G8B8A8_UNORM, 
 																 Texture::USAGE_COLOR_ATTACHMENT,
 																 Texture::SAMPLE_COUNT_1X, clearColor, false,
 																 _swapchainImages[i]);
 		colorAttachments.push_back(colorAttachment);
-		ClearValue clearDepthStencil;
-		clearDepthStencil.depthStencil.depth = 0;
-		clearDepthStencil.depthStencil.stencil = 0;
+		ClearValue clearDepthStencil(0, 0);
 		std::shared_ptr<Texture> depthStencilAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
 																		Format::FORMAT_D24_UNORM_S8_UINT,
 																		Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 

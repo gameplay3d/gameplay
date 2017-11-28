@@ -35,7 +35,7 @@ Vector4::~Vector4()
 {
 }
 
-Vector4 Vector4::fromColor(unsigned int color)
+Vector4 Vector4::fromColor(uint32_t color)
 {
     float components[4];
     int componentIndex = 0;
@@ -54,7 +54,7 @@ Vector4 Vector4::fromColorString(const char* str)
     Vector4 value = Vector4(0, 0, 0, 0);
     if (str[0] == '#' && strlen(str) == 9 )
     {
-        unsigned int color;
+        uint32_t color;
         if (sscanf(str + 1, "%x", &color) == 1)
             value = Vector4::fromColor(color);
     }
@@ -65,10 +65,10 @@ Vector4 Vector4::fromColorString(const char* str)
     return value;
 }
 
-unsigned int Vector4::toColor() const
+uint32_t Vector4::toColor() const
 {
     unsigned char component;
-    unsigned int value = 0;
+    uint32_t value = 0;
     // Red component
     component = static_cast<unsigned char>(x * 255);
     value = component << 24;

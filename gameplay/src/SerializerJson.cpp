@@ -11,7 +11,8 @@
 namespace gameplay
 {
 
-SerializerJson::SerializerJson(Type type, const std::string& path, Stream* stream, unsigned int versionMajor, unsigned int versionMinor, JSONNODE* root) : 
+SerializerJson::SerializerJson(Type type, const std::string& path, Stream* stream, 
+							  uint32_t versionMajor, uint32_t versionMinor, JSONNODE* root) : 
     Serializer(type, path, stream, versionMajor, versionMinor), 
     _root(root)
 {
@@ -427,7 +428,7 @@ void SerializerJson::writeByteArray(const char* propertyName, const unsigned cha
     
     // "properyName" : "base64_encode(data)"
     JSONNODE* node = _nodes.top();
-    json_push_back(node, json_new_a(propertyName, json_encode64((const void*)data, sizeof(unsigned char) * (unsigned int)count)));
+    json_push_back(node, json_new_a(propertyName, json_encode64((const void*)data, sizeof(unsigned char) * (uint32_t)count)));
 }
 
 int SerializerJson::readEnum(const char* propertyName, const char* enumName, int defaultValue)
@@ -661,7 +662,7 @@ void SerializerJson::readString(const char* propertyName, std::string& value, co
     if (json_type(node) == JSON_ARRAY)
     {
         size_t  arraySize = json_size(node);
-        property = json_at(node, (unsigned int)arraySize - (unsigned int)_nodesListCounts.top());
+        property = json_at(node, (uint32_t)arraySize - (uint32_t)_nodesListCounts.top());
     }
     else
     {
@@ -709,7 +710,7 @@ std::shared_ptr<Serializable> SerializerJson::readObject(const char* propertyNam
     if (json_type(parentNode) == JSON_ARRAY)
     {
 		size_t  arraySize = json_size(parentNode);
-        readNode = json_at(parentNode, (unsigned int)arraySize - (unsigned int)_nodesListCounts.top());
+        readNode = json_at(parentNode, (uint32_t)arraySize - (uint32_t)_nodesListCounts.top());
         _nodes.push(readNode);
     }
     else if (json_type(parentNode) == JSON_NODE && propertyName)
@@ -860,8 +861,8 @@ size_t SerializerJson::readIntArray(const char* propertyName, int** data)
         
         for (size_t i = 0; i < count; i++)
         {
-            JSONNODE* item = json_at(property, (unsigned int)i);
-            buffer[i] = (unsigned int)json_as_int(item);
+            JSONNODE* item = json_at(property, (uint32_t)i);
+            buffer[i] = (uint32_t)json_as_int(item);
         }
         *data = buffer;
     }
@@ -894,7 +895,7 @@ size_t SerializerJson::readFloatArray(const char* propertyName, float** data)
         
         for (size_t i = 0; i < count; i++)
         {
-            JSONNODE* item = json_at(property, (unsigned int)i);
+            JSONNODE* item = json_at(property, (uint32_t)i);
             buffer[i] = json_as_float(item);
         }
         *data = buffer;

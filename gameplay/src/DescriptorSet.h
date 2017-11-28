@@ -66,7 +66,7 @@ public:
 		/**
 		 * The descriptor binding index.
 		 */
-		unsigned int binding = 0;
+		uint32_t binding = 0;
 
 		/**
 		 * The number of resources.

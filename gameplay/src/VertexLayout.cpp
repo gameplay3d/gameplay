@@ -9,7 +9,7 @@ VertexLayout::VertexLayout()
 {
 }
 
-VertexLayout::VertexLayout(const VertexAttribute* attributes, size_t attributeCount) : 
+VertexLayout::VertexLayout(const Attribute* attributes, size_t attributeCount) : 
 	_stride(0)
 {
     GP_ASSERT(attributeCount);
@@ -17,8 +17,8 @@ VertexLayout::VertexLayout(const VertexAttribute* attributes, size_t attributeCo
 
     for (size_t i = 0; i < attributeCount; ++i)
     {
-        VertexAttribute attribute;
-        memcpy(&attribute, &attributes[i], sizeof(VertexAttribute));
+        Attribute attribute;
+        memcpy(&attribute, &attributes[i], sizeof(Attribute));
         _attributes.push_back(attribute);
 		_stride += toStride(_attributes[i].format);
     }
@@ -28,7 +28,7 @@ VertexLayout::~VertexLayout()
 {
 }
 
-const VertexLayout::VertexAttribute& VertexLayout::getAttribute(size_t index) const
+const VertexLayout::Attribute& VertexLayout::getAttribute(size_t index) const
 {
     GP_ASSERT(index < _attributes.size());
     return _attributes[index];
@@ -62,7 +62,7 @@ bool VertexLayout::operator != (const VertexLayout& layout) const
     return !(*this == layout);
 }
 
-VertexLayout::VertexAttribute::VertexAttribute() : 
+VertexLayout::Attribute::Attribute() : 
 	semantic(SEMANTIC_POSITION), 
 	semanticName(""), 
 	binding(0), 
@@ -71,14 +71,13 @@ VertexLayout::VertexAttribute::VertexAttribute() :
 {
 }
 
-VertexLayout::VertexAttribute::VertexAttribute(Semantic semantic,
-											   const std::string& semanticName, 
-											   Format format,
-											   unsigned int binding,
-											   unsigned int location,
-											   unsigned int offset) : 
+VertexLayout::Attribute::Attribute(Semantic semantic,
+								   Format format,
+								   uint32_t binding,
+								   uint32_t location,
+								   uint32_t offset) : 
 	semantic(semantic), 
-	semanticName(semanticName), 
+	semanticName(""),
 	format(format), 
 	binding(binding), 
 	location(location), 
@@ -86,11 +85,11 @@ VertexLayout::VertexAttribute::VertexAttribute(Semantic semantic,
 {
 }
 
-VertexLayout::VertexAttribute::~VertexAttribute()
+VertexLayout::Attribute::~Attribute()
 {
 }
 
-bool VertexLayout::VertexAttribute::operator == (const VertexLayout::VertexAttribute& attr) const
+bool VertexLayout::Attribute::operator == (const VertexLayout::Attribute& attr) const
 {
     return (semantic == attr.semantic) && 
 		   (semanticName.size() == attr.semanticName.size()) && 
@@ -101,7 +100,7 @@ bool VertexLayout::VertexAttribute::operator == (const VertexLayout::VertexAttri
 		   (offset == attr.offset);
 }
 
-bool VertexLayout::VertexAttribute::operator != (const VertexLayout::VertexAttribute& attr) const
+bool VertexLayout::Attribute::operator != (const VertexLayout::Attribute& attr) const
 {
     return !(*this == attr);
 }

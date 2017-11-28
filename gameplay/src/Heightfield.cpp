@@ -111,10 +111,10 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
         if (bits == 16)
         {
             // 16-bit (0-65535)
-            unsigned int idx;
-            for (unsigned int y = 0, i = 0; y < height; ++y)
+            uint32_t idx;
+            for (uint32_t y = 0, i = 0; y < height; ++y)
             {
-                for (unsigned int x = 0; x < width; ++x, ++i)
+                for (uint32_t x = 0; x < width; ++x, ++i)
                 {
                     idx = ((y * (int)width + x) << 1);
                     heights[i] = heightMin + ((bytes[idx] | (int)bytes[idx+1] << 8) / 65535.0f) * heightScale;
@@ -124,9 +124,9 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
         else
         {
             // 8-bit (0-255)
-            for (unsigned int y = 0, i = 0; y < height; ++y)
+            for (uint32_t y = 0, i = 0; y < height; ++y)
             {
-                for (unsigned int x = 0; x < width; ++x, ++i)
+                for (uint32_t x = 0; x < width; ++x, ++i)
                 {
                     heights[i] = heightMin + (bytes[y * width + x] / 255.0f) * heightScale;
                 }
@@ -163,10 +163,10 @@ float Heightfield::getHeight(float column, float row) const
     column = column < 0 ? 0 : (column > (_columns - 1) ? (_columns - 1) : column);
     row = row < 0 ? 0 : (row > (_rows - 1) ? (_rows - 1) : row);
 
-    unsigned int x1 = column;
-    unsigned int y1 = row;
-    unsigned int x2 = x1 + 1;
-    unsigned int y2 = y1 + 1;
+    uint32_t x1 = column;
+    uint32_t y1 = row;
+    uint32_t x2 = x1 + 1;
+    uint32_t y2 = y1 + 1;
     float tmp;
     float xFactor = std::modf(column, &tmp);
     float yFactor = std::modf(row, &tmp);

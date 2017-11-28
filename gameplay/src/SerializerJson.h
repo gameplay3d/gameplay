@@ -213,7 +213,7 @@ public:
     
 protected:
     
-    SerializerJson(Type type, const std::string& path, Stream* stream, unsigned int versionMajor, unsigned int versionMinor, JSONNODE* root);
+    SerializerJson(Type type, const std::string& path, Stream* stream, uint32_t versionMajor, uint32_t versionMinor, JSONNODE* root);
     static Serializer* create(const std::string& path, Stream* stream);
     
 private:

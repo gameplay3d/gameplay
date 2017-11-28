@@ -36,21 +36,21 @@ public:
     /**
      * Defines a single vertex attribute a within a vertex layout.     
      */
-    class VertexAttribute
+    class Attribute
     {
 	public:
 
-        Semantic semantic;
-        std::string semanticName;
-		Format format;
-		unsigned int binding;
-		unsigned int location;
-		unsigned int offset;
+        Semantic semantic = VertexLayout::SEMANTIC_POSITION;
+		std::string semanticName = "";
+		Format format = Format::FORMAT_UNDEFINED;
+		uint32_t binding = 0;
+		uint32_t location = 0;
+		uint32_t offset = 0;
 
         /**
          * Constructor.
          */
-        VertexAttribute();
+        Attribute();
 
         /**
          * Constructor.
@@ -59,17 +59,16 @@ public:
          * @param semanticName The semantic name.
 		 * @param format The format of the attribute
          */
-        VertexAttribute(Semantic semantic, 
-						const std::string& semanticName, 
-						Format format,
-						unsigned int binding,
-						unsigned int location,
-						unsigned int offset);
+        Attribute(Semantic semantic,
+				  Format format,
+				  uint32_t binding,
+				  uint32_t location,
+				  uint32_t offset);
 
 		/**
 		 * Destructor.
 		 */
-		~VertexAttribute();
+		~Attribute();
 
         /**
          * Compares two vertex attributes for equality.
@@ -77,7 +76,7 @@ public:
          * @param attr The vertex attribute to compare.
          * @return true if this attribute matches the specified one, false otherwise.
          */
-        bool operator == (const VertexAttribute& attr) const;
+        bool operator == (const Attribute& attr) const;
 
         /**
          * Compares to vertex attributes for inequality.
@@ -85,7 +84,7 @@ public:
          * @param attr The vertex attribute to compare.
          * @return true if this attribute does not match the specified one, false otherwise.
          */
-        bool operator != (const VertexAttribute& attr) const;
+        bool operator != (const Attribute& attr) const;
     };
 
 	/**
@@ -101,7 +100,7 @@ public:
      * @param attributes The array of vertex attributes defining the vertex layout.
      * @param count The number of items in the attributes array.
      */
-    VertexLayout(const VertexAttribute* attributes, size_t count);
+    VertexLayout(const Attribute* attributes, size_t count);
 
     /**
      * Destructor.
@@ -113,7 +112,7 @@ public:
      *
      * @param index The index of the attribute to retrieve.
      */
-    const VertexAttribute& getAttribute(size_t index) const;
+    const Attribute& getAttribute(size_t index) const;
 
     /**
      * Gets the number of vertex attributes in this VertexLayout.
@@ -152,7 +151,7 @@ public:
 
 private:
 
-    std::vector<VertexAttribute> _attributes;
+    std::vector<Attribute> _attributes;
     size_t _stride;
 };
 

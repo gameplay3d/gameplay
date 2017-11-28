@@ -83,7 +83,7 @@ public:
      * @param color The integer to interpret as an RGB value.
      * @return A vector corresponding to the interpreted RGB color.
      */
-    static Vector3 fromColor(unsigned int color);
+    static Vector3 fromColor(uint32_t color);
 
     /**
      * Creates a new vector from a hex formatted string interpreted as an RGB value.
@@ -95,12 +95,12 @@ public:
     static Vector3 fromColorString(const char* str);
 
     /**
-     * Gets the vector as a packed unsigned integer represented as RGB value.
+     * Gets the vector as a packed uint32_t represented as RGB value.
      * Ex. 0xff0000 represents opaque red or the vector (1, 0, 0).
      *
-     * @return The vector as an unsigned integer color value.
+     * @return The vector as an uint32_t color value.
      */
-    unsigned int toColor() const;
+    uint32_t toColor() const;
 
     /**
      * Gets the zero vector.

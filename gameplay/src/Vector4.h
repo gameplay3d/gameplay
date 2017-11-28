@@ -79,13 +79,13 @@ public:
     ~Vector4();
 
     /**
-     * Creates a new vector from an packed unsigned integer interpreted as an RGBA value.
+     * Creates a new vector from an packed uint32_t interpreted as an RGBA value.
      * Ex. 0xff0000ff represents opaque red or the vector (1, 0, 0, 1).
      *
      * @param color The integer to interpret as an RGBA value.
      * @return A vector corresponding to the interpreted RGBA color.
      */
-    static Vector4 fromColor(unsigned int color);
+    static Vector4 fromColor(uint32_t color);
 
     /**
      * Creates a new vector from a hex formatted string interpreted as an RGBA value.
@@ -97,12 +97,12 @@ public:
     static Vector4 fromColorString(const char* str);
 
     /**
-     * Gets the vector as a packed unsigned integer represented as RGBA value.
+     * Gets the vector as a packed uint32_t represented as RGBA value.
      * Ex. 0xff0000ff represents opaque red or the vector (1, 0, 0, 1).
      *
-     * @return The vector as an unsigned integer color value.
+     * @return The vector as an uint32_t color value.
      */
-    unsigned int toColor() const;
+    uint32_t toColor() const;
 
     /**
      * Gets the zero vector.
