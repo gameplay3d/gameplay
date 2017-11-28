@@ -43,6 +43,7 @@
 		424CFB161FCCC91C00DB5212 /* UtilsMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFB151FCCC91C00DB5212 /* UtilsMTL.h */; };
 		424CFB191FCCCE1500DB5212 /* DescriptorSetMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 424CFB171FCCCE1500DB5212 /* DescriptorSetMTL.mm */; };
 		424CFB1A1FCCCE1500DB5212 /* DescriptorSetMTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CFB181FCCCE1500DB5212 /* DescriptorSetMTL.h */; };
+		424CFB1C1FCD92F200DB5212 /* ClearValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CFB1B1FCD92F200DB5212 /* ClearValue.cpp */; };
 		426A99971F85D16700E89904 /* PhysicsJointFixed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99161F85D15800E89904 /* PhysicsJointFixed.cpp */; };
 		426A99981F85D16700E89904 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426A99171F85D15800E89904 /* Material.cpp */; };
 		426A99991F85D16700E89904 /* PhysicsJoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 426A99181F85D15800E89904 /* PhysicsJoint.h */; };
@@ -214,6 +215,7 @@
 		424CFB151FCCC91C00DB5212 /* UtilsMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UtilsMTL.h; path = src/mtl/UtilsMTL.h; sourceTree = SOURCE_ROOT; };
 		424CFB171FCCCE1500DB5212 /* DescriptorSetMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DescriptorSetMTL.mm; path = src/mtl/DescriptorSetMTL.mm; sourceTree = SOURCE_ROOT; };
 		424CFB181FCCCE1500DB5212 /* DescriptorSetMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DescriptorSetMTL.h; path = src/mtl/DescriptorSetMTL.h; sourceTree = SOURCE_ROOT; };
+		424CFB1B1FCD92F200DB5212 /* ClearValue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ClearValue.cpp; path = src/ClearValue.cpp; sourceTree = SOURCE_ROOT; };
 		426A98E11F85CF5F00E89904 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		426A99161F85D15800E89904 /* PhysicsJointFixed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsJointFixed.cpp; path = src/PhysicsJointFixed.cpp; sourceTree = SOURCE_ROOT; };
 		426A99171F85D15800E89904 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Material.cpp; path = src/Material.cpp; sourceTree = SOURCE_ROOT; };
@@ -410,6 +412,7 @@
 				426A991E1F85D15800E89904 /* Camera.cpp */,
 				426A99721F85D16000E89904 /* Camera.h */,
 				42B71C2F1F87A5A700D21066 /* ClearValue.h */,
+				424CFB1B1FCD92F200DB5212 /* ClearValue.cpp */,
 				424CFAE01FCCB96B00DB5212 /* ColorBlendState.h */,
 				424CFADA1FCCB96A00DB5212 /* CommandBuffer.cpp */,
 				424CFADF1FCCB96B00DB5212 /* CommandBuffer.h */,
@@ -799,6 +802,7 @@
 				426A99CC1F85D16700E89904 /* PhysicsJoint.cpp in Sources */,
 				424CFB0A1FCCBA1D00DB5212 /* CommandBufferMTL.mm in Sources */,
 				426A99971F85D16700E89904 /* PhysicsJointFixed.cpp in Sources */,
+				424CFB1C1FCD92F200DB5212 /* ClearValue.cpp in Sources */,
 				426A99E71F85D16700E89904 /* PhysicsCharacter.cpp in Sources */,
 				426A99F01F85D16700E89904 /* BoundingBox.cpp in Sources */,
 				424CFAED1FCCB96B00DB5212 /* Sampler.cpp in Sources */,
