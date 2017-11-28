@@ -56,8 +56,10 @@ public:
          * Constructor.
          *
          * @param semantic The semantic.
-         * @param semanticName The semantic name.
 		 * @param format The format of the attribute
+         * @param binding The attribute binding
+         * @param location The attibute location
+         * @param offset The attribute offset
          */
         Attribute(Semantic semantic,
 				  Format format,
