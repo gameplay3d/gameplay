@@ -117,8 +117,11 @@ for (const auto& dev : devices)  // Suggests dev might be of type Device.
 ## int
 - We use **int** for all dimensions and lengths.
 
-## unsigned int
-- Avoid using **unsigned int** unless needed for bitwise flags, masks, etc.
+## uint32_t
+- Use **uint32_t** instead of **unsigned int** recommended only for bitwise flags, masks, data, etc.
+
+## uint16_t
+- Use **uint16_t** instead of **unsigned short** recommended only for data.
 
 ## float
 - The **float** type is the primary precision for all data in the 2d and 3d world.
