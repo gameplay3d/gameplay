@@ -194,17 +194,25 @@ public:
 	/**
 	 * @see Graphics::createVertexBuffer
 	 */
-	std::shared_ptr<Buffer> createVertexBuffer(size_t size, size_t vertexStride, bool hostVisible);
+	std::shared_ptr<Buffer> createVertexBuffer(size_t size, 
+											   size_t vertexStride, 
+											   bool hostVisible,
+											   const void* data);
  	
 	/**
 	 * @see Graphics::createIndexBuffer
 	 */
-	std::shared_ptr<Buffer> createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible);
+	std::shared_ptr<Buffer> createIndexBuffer(size_t size, 
+											  IndexFormat indexFormat, 
+											  bool hostVisible,
+											  const void* data);
 
 	/**
 	 * @see Graphics::createUniformBuffer
 	 */
-	std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible);
+	std::shared_ptr<Buffer> createUniformBuffer(size_t size, 
+												bool hostVisible,
+											    const void* data);
 
 	/**
 	 * @see Graphics::destroyBuffer
@@ -219,7 +227,8 @@ public:
 											Texture::Usage usage,
 											Texture::SampleCount sampleCount,
 											const ClearValue& clearValue,
-											bool hostVisible);
+											bool hostVisible,
+											const void* data);
 	/**
      * @see Graphics::createTexture2d
      */
@@ -228,7 +237,8 @@ public:
 											 Texture::Usage usage,
 											 Texture::SampleCount sampleCount,
 											 const ClearValue& clearValue,
-											 bool hostVisible);
+											 bool hostVisible,
+											 const void* data);
 	/**
      * @see Graphics::createTexture3d
      */
@@ -237,7 +247,8 @@ public:
 											 Texture::Usage usage, 
 											 Texture::SampleCount sampleCount,
 											 const ClearValue& clearValue,
-											 bool hostVisible);
+											 bool hostVisible,
+											 const void* data);
 	/**
      * @see Graphics::destroyTexture
      */
@@ -324,7 +335,7 @@ private:
     void createSwapchainImages();
 	std::shared_ptr<Buffer> createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible, bool is32bit);
 	std::shared_ptr<Texture> createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
-										   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, const ClearValue& clearValue, bool hostVisible, ID3D12Resource* resource);
+										   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, const ClearValue& clearValue, bool hostVisible, const void* data, ID3D12Resource* resource);
 	std::shared_ptr<RenderPass> createRenderPass(size_t width, size_t height, 
 												 size_t colorAttachmentCount,
 												 Format colorFormat,

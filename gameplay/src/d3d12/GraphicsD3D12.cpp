@@ -633,7 +633,6 @@ std::shared_ptr<Buffer> GraphicsD3D12::createBuffer(Buffer::Usage usage, size_t 
 	{
 		size = GP_MATH_ROUNDUP(size, 256);
 	}
-    
 	D3D12_HEAP_PROPERTIES heapProps = {};
 	heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
 	heapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
@@ -715,18 +714,26 @@ std::shared_ptr<Buffer> GraphicsD3D12::createBuffer(Buffer::Usage usage, size_t 
 	return bufferD3D;
 }
 
-std::shared_ptr<Buffer> GraphicsD3D12::createVertexBuffer(size_t size, size_t vertexStride, bool hostVisible)
+std::shared_ptr<Buffer> GraphicsD3D12::createVertexBuffer(size_t size, 
+														  size_t vertexStride, 
+														  bool hostVisible,
+														  const void* data)
 {
 	return createBuffer(Buffer::USAGE_VERTEX, size, vertexStride, hostVisible, true);
 }
 
-std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible)
+std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(size_t size, 
+														 IndexFormat indexFormat, 
+														 bool hostVisible,
+														 const void* data)
 {
 	size_t stride = (indexFormat == INDEX_FORMAT_UINT32) ? sizeof(uint32_t) : sizeof(uint16_t);
 	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible, (indexFormat == INDEX_FORMAT_UINT32));
 }
 
-std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, bool hostVisible)
+std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, 
+														   bool hostVisible,
+														   const void* data)
 {
 	return createBuffer(Buffer::USAGE_UNIFORM, size, size, hostVisible, true);
 }
@@ -745,6 +752,7 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture(Texture::Type type,
 													  Texture::SampleCount sampleCount,
 													  const ClearValue& clearValue,
 													  bool hostVisible,
+													  const void* data,
 													  ID3D12Resource* resource)
 {
 	D3D12_RESOURCE_DIMENSION resourceDimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
@@ -825,13 +833,13 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture1d(size_t width,
 														Texture::Usage usage, 
 														Texture::SampleCount sampleCount,
 														const ClearValue& clearValue,
-														bool hostVisible)
+														bool hostVisible,
+													    const void* data)
 {
 	GP_ASSERT(pixelFormat != Format::FORMAT_UNDEFINED);
 
 	return createTexture(Texture::TYPE_1D, width, 1, 1, 1, 
-						 pixelFormat, usage, sampleCount, clearValue, hostVisible, 
-						 nullptr);
+						 pixelFormat, usage, sampleCount, clearValue, hostVisible, data, nullptr);
 }
 
 std::shared_ptr<Texture> GraphicsD3D12::createTexture2d(size_t width, size_t height, size_t mipLevels,
@@ -839,7 +847,8 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture2d(size_t width, size_t hei
 														Texture::Usage usage,
 														Texture::SampleCount sampleCount,
 														const ClearValue& clearValue,
-														bool hostVisible)
+														bool hostVisible,
+													    const void* data)
 {
 	GP_ASSERT(pixelFormat != Format::FORMAT_UNDEFINED);
 
@@ -848,8 +857,7 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture2d(size_t width, size_t hei
         mipLevels = Graphics::computeMipLevels(width, height);
     }
 	return createTexture(Texture::TYPE_2D, width, height, 1, mipLevels, 
-						 pixelFormat, usage, sampleCount, clearValue, hostVisible, 
-						 nullptr);
+						 pixelFormat, usage, sampleCount, clearValue, hostVisible, data, nullptr);
 }
 
 std::shared_ptr<Texture> GraphicsD3D12::createTexture3d(size_t width, size_t height, size_t depth,
@@ -857,13 +865,13 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture3d(size_t width, size_t hei
 														Texture::Usage usage,
 														Texture::SampleCount sampleCount,
 														const ClearValue& clearValue,
-														bool hostVisible)
+														bool hostVisible,
+													    const void* data)
 {
 	GP_ASSERT(pixelFormat != Format::FORMAT_UNDEFINED);
 
 	return createTexture(Texture::TYPE_3D, width, height, depth, 1, 
-						 pixelFormat, usage, sampleCount, clearValue, hostVisible,
-						 nullptr);	
+						 pixelFormat, usage, sampleCount, clearValue, hostVisible, data, nullptr);	
 }
 
 void GraphicsD3D12::destroyTexture(std::shared_ptr<Texture> texture)
@@ -874,13 +882,13 @@ void GraphicsD3D12::destroyTexture(std::shared_ptr<Texture> texture)
 }
 
 std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t height, 
-												 size_t colorAttachmentCount,
-												 Format colorFormat,
-												 Format depthStencilFormat,
-												 Texture::SampleCount sampleCount,
-												 std::vector<std::shared_ptr<Texture>> colorAttachments,
-												 std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
-												 std::shared_ptr<Texture> depthStencilAttachment)
+															size_t colorAttachmentCount,
+															Format colorFormat,
+															Format depthStencilFormat,
+															Texture::SampleCount sampleCount,
+															std::vector<std::shared_ptr<Texture>> colorAttachments,
+															std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
+															std::shared_ptr<Texture> depthStencilAttachment)
 {
 	ID3D12DescriptorHeap*  renderTargetHeap;
 	 if (colorAttachmentCount > 0) 
@@ -892,7 +900,6 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
         descriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 		
         D3D_CHECK_RESULT(_device->CreateDescriptorHeap(&descriptorHeapDesc, __uuidof(renderTargetHeap), (void**)&(renderTargetHeap)));
-        
 
         D3D12_CPU_DESCRIPTOR_HANDLE renderTargetHandle = renderTargetHeap->GetCPUDescriptorHandleForHeapStart();
         const UINT renderTargetIncrementSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
@@ -943,7 +950,9 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
 																			           colorAttachments,
 																			           colorMultisampleAttachments,
 																			           depthStencilAttachment,
-																			           _device, renderTargetHeap, depthStencilHeap);
+																			           _device, 
+																					   renderTargetHeap, 
+																					   depthStencilHeap);
 	return std::static_pointer_cast<RenderPass>(renderPassD3D);
 }
 
@@ -963,14 +972,14 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
 		ClearValue clearColor(0, 0, 0, 1);
 		std::shared_ptr<Texture> colorAttachment = createTexture2d(width, height, 1, colorFormat, 
 																   Texture::USAGE_COLOR_ATTACHMENT, 
-																   Texture::SAMPLE_COUNT_1X, clearColor, false);
+																   Texture::SAMPLE_COUNT_1X, clearColor, false, nullptr);
 		std::shared_ptr<TextureD3D12> colorAttachmentD3D = std::static_pointer_cast<TextureD3D12>(colorAttachment);
 		colorAttachments.push_back(colorAttachment);
 		if (sampleCount > Texture::SAMPLE_COUNT_1X)
 		{
 			std::shared_ptr<Texture> colorMultisampleAttachment = createTexture2d(width, height, 1, colorFormat, 
 																				  Texture::USAGE_COLOR_ATTACHMENT, 
-																				  sampleCount, clearColor, false);
+																				  sampleCount, clearColor, false, nullptr);
 			colorMultisampleAttachments.push_back(colorMultisampleAttachment);
 		}
 	}
@@ -979,7 +988,7 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
 		ClearValue clearDepthStencil(0.0f, 0);
 		depthStencilAttachment = createTexture2d(width, height, 1, depthStencilFormat, 
 												 Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
-												 Texture::SAMPLE_COUNT_1X, clearDepthStencil, false);
+												 Texture::SAMPLE_COUNT_1X, clearDepthStencil, false, nullptr);
 	}
 
 	return createRenderPass(width, height, colorAttachmentCount, colorFormat, depthStencilFormat, sampleCount,
@@ -1020,11 +1029,29 @@ std::shared_ptr<Sampler> GraphicsD3D12::createSampler(Sampler::Filter filterMin,
     samplerDesc.MinLOD = lodMin;
     samplerDesc.MaxLOD = lodMax;
 	samplerDesc.MipLODBias = lodMipBias;
-	return nullptr;
+
+	std::shared_ptr<SamplerD3D12> samplerD3D = std::make_shared<SamplerD3D12>(filterMin,
+																			  filterMag,
+																			  filterMip,
+																			  addressModeU,
+																			  addressModeV,
+																			  addressModeW,
+																			  borderColor,
+																			  compareEnabled,
+																			  compareFunc,
+																			  anisotropyEnabled,
+																			  anisotropyMax,
+																			  lodMin,
+																			  lodMax,
+																			  lodMipBias,
+																			  _device, 
+																			  samplerDesc);
+	return std::static_pointer_cast<SamplerD3D12>(samplerD3D);
 }
 
 void GraphicsD3D12::destroySampler(std::shared_ptr<Sampler> sampler)
 {
+	sampler.reset();
 }
 
 std::shared_ptr<Shader> GraphicsD3D12::createShader(const std::string& url)
@@ -1052,7 +1079,6 @@ void GraphicsD3D12::destroyShader(std::shared_ptr<Shader> shader)
 std::shared_ptr<DescriptorSet> GraphicsD3D12::createDescriptorSet(const DescriptorSet::Descriptor* descriptors, 
 																  size_t descriptorCount)
 {
-
 	uint32_t cbvSrvUavCount = 0;
     uint32_t samplerCount = 0;
 
@@ -1102,7 +1128,6 @@ std::shared_ptr<DescriptorSet> GraphicsD3D12::createDescriptorSet(const Descript
 	{
         switch (descriptors[i].type) 
 		{
-
 		case DescriptorSet::Descriptor::TYPE_UNIFORM:
 		case DescriptorSet::Descriptor::TYPE_TEXTURE:
            descriptorSetD3D->_bindings[i].heapOffset = cbvSrvUavHeapOffset;
@@ -1600,25 +1625,24 @@ void GraphicsD3D12::createSwapchainImages()
 		std::shared_ptr<Texture> colorAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
 																 Format::FORMAT_R8G8B8A8_UNORM, 
 																 Texture::USAGE_COLOR_ATTACHMENT,
-																 Texture::SAMPLE_COUNT_1X, clearColor, false,
+																 Texture::SAMPLE_COUNT_1X, clearColor, false, nullptr,
 																 _swapchainImages[i]);
 		colorAttachments.push_back(colorAttachment);
 		ClearValue clearDepthStencil(0, 0);
 		std::shared_ptr<Texture> depthStencilAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
 																		Format::FORMAT_D24_UNORM_S8_UINT,
 																		Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
-																		Texture::SAMPLE_COUNT_1X, clearDepthStencil, false,
+																		Texture::SAMPLE_COUNT_1X, clearDepthStencil, false, nullptr,
 																		_swapchainImages[i]);
 	}
 	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
-
 	std::shared_ptr<RenderPass> renderPass = createRenderPass(_width, _height, 1, 
-																Format::FORMAT_R8G8B8A8_UNORM, 
-																Format::FORMAT_D24_UNORM_S8_UINT,
-																Texture::SAMPLE_COUNT_1X,
-																colorAttachments, 
-																colorMultisampleAttachments,
-																depthStencilAttachment);
+															  Format::FORMAT_R8G8B8A8_UNORM, 
+															  Format::FORMAT_D24_UNORM_S8_UINT,
+															  Texture::SAMPLE_COUNT_1X,
+															  colorAttachments, 
+															  colorMultisampleAttachments,
+															  depthStencilAttachment);
 }
 
 }

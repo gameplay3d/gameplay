@@ -210,19 +210,25 @@ void GraphicsMTL::destroyFence(std::shared_ptr<Fence> fence)
 {
 }
 
-std::shared_ptr<Buffer> GraphicsMTL::createVertexBuffer(size_t size, size_t vertexStride,
-                                                        bool hostVisible)
+std::shared_ptr<Buffer> GraphicsMTL::createVertexBuffer(size_t size,
+                                                        size_t vertexStride,
+                                                        bool hostVisible,
+                                                        const void* data)
 {
     return nullptr;
 }
     
-std::shared_ptr<Buffer> GraphicsMTL::createIndexBuffer(size_t size, IndexFormat indexFormat,
-                                                       bool hostVisible)
+std::shared_ptr<Buffer> GraphicsMTL::createIndexBuffer(size_t size, 
+                                                       IndexFormat indexFormat,
+                                                       bool hostVisible,
+                                                       const void* data)
 {
     return nullptr;
 }
     
-std::shared_ptr<Buffer> GraphicsMTL::createUniformBuffer(size_t size, bool hostVisible)
+std::shared_ptr<Buffer> GraphicsMTL::createUniformBuffer(size_t size, 
+                                                         bool hostVisible,
+                                                         const void* data)
 {
     return nullptr;
 }
@@ -236,7 +242,8 @@ std::shared_ptr<Texture> GraphicsMTL::createTexture1d(size_t width,
                                                       Texture::Usage usage,
                                                       Texture::SampleCount sampleCount,
                                                       const ClearValue& clearValue,
-                                                      bool hostVisible)
+                                                      bool hostVisible,
+                                                      const void* data)
 {
     return nullptr;
 }
@@ -246,7 +253,8 @@ std::shared_ptr<Texture> GraphicsMTL::createTexture2d(size_t width, size_t heigh
                                                       Texture::Usage usage,
                                                       Texture::SampleCount sampleCount,
                                                       const ClearValue& clearValue,
-                                                      bool hostVisible)
+                                                      bool hostVisible,
+                                                      const void* data)
 {
     return nullptr;
 }
@@ -256,7 +264,8 @@ std::shared_ptr<Texture> GraphicsMTL::createTexture3d(size_t width, size_t heigh
                                                       Texture::Usage usage,
                                                       Texture::SampleCount sampleCount,
                                                       const ClearValue& clearValue,
-                                                      bool hostVisible)
+                                                      bool hostVisible,
+                                                      const void* data)
 {
     return nullptr;
 }

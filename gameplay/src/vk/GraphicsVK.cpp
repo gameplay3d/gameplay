@@ -565,7 +565,11 @@ void GraphicsVK::destroyFence(std::shared_ptr<Fence> fence)
 	fence.reset();
 }
 
-std::shared_ptr<Buffer> GraphicsVK::createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible)
+std::shared_ptr<Buffer> GraphicsVK::createBuffer(Buffer::Usage usage, 
+												 size_t size, 
+												 size_t stride, 
+												 bool hostVisible,
+											     const void* data)
 {
 	if (usage == Buffer::USAGE_UNIFORM) 
 		size = GP_MATH_ROUNDUP(size, 256);
@@ -625,20 +629,28 @@ std::shared_ptr<Buffer> GraphicsVK::createBuffer(Buffer::Usage usage, size_t siz
 	return std::static_pointer_cast<Buffer>(bufferVK);
 }
 
-std::shared_ptr<Buffer> GraphicsVK::createVertexBuffer(size_t size, size_t vertexStride, bool hostVisible)
+std::shared_ptr<Buffer> GraphicsVK::createVertexBuffer(size_t size, 
+													   size_t vertexStride, 
+													   bool hostVisible,
+													   const void* data)
 {
-	return createBuffer(Buffer::USAGE_VERTEX, size, vertexStride, hostVisible);
+	return createBuffer(Buffer::USAGE_VERTEX, size, vertexStride, hostVisible, data);
 }
 
-std::shared_ptr<Buffer> GraphicsVK::createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible)
+std::shared_ptr<Buffer> GraphicsVK::createIndexBuffer(size_t size, 
+													  IndexFormat indexFormat, 
+													  bool hostVisible,
+													  const void* data)
 {
 	size_t stride = (indexFormat == INDEX_FORMAT_UINT32) ? sizeof(uint32_t) : sizeof(uint16_t);
-	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible);
+	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible, data);
 }
 
-std::shared_ptr<Buffer> GraphicsVK::createUniformBuffer(size_t size, bool hostVisible)
+std::shared_ptr<Buffer> GraphicsVK::createUniformBuffer(size_t size, 
+														bool hostVisible,
+											            const void* data)
 {
-	return createBuffer(Buffer::USAGE_UNIFORM, size, size, hostVisible);
+	return createBuffer(Buffer::USAGE_UNIFORM, size, size, hostVisible, data);
 }
 
 void GraphicsVK::destroyBuffer(std::shared_ptr<Buffer> buffer)
@@ -650,7 +662,8 @@ void GraphicsVK::destroyBuffer(std::shared_ptr<Buffer> buffer)
 
 std::shared_ptr<Texture> GraphicsVK::createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels, 
 												   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, 
-												   const ClearValue& clearValue, bool hostVisible, VkImage existingImage)
+												   const ClearValue& clearValue, bool hostVisible, const void* data,
+												   VkImage existingImage)
 {
 	VkImageType imageType = VK_IMAGE_TYPE_2D;
 	VkImageViewType imageViewType = VK_IMAGE_VIEW_TYPE_2D;
@@ -801,11 +814,11 @@ std::shared_ptr<Texture> GraphicsVK::createTexture1d(size_t width,
 													Texture::Usage usage, 
 													Texture::SampleCount sampleCount,
 													const ClearValue& clearValue,
-													bool hostVisible)
+													bool hostVisible,
+													const void* data)
 {
 	return createTexture(Texture::TYPE_1D, width, 1, 1, 1, 
-						 pixelFormat, usage, sampleCount, clearValue, hostVisible, 
-						 nullptr);
+						 pixelFormat, usage, sampleCount, clearValue, hostVisible, data, nullptr);
 }
 
 std::shared_ptr<Texture> GraphicsVK::createTexture2d(size_t width, size_t height, size_t mipLevels,
@@ -813,10 +826,10 @@ std::shared_ptr<Texture> GraphicsVK::createTexture2d(size_t width, size_t height
 													 Texture::Usage usage,
 													 Texture::SampleCount sampleCount,
 												     const ClearValue& clearValue,
-													 bool hostVisible)
+													 bool hostVisible, const void* data)
 {
 	return createTexture(Texture::TYPE_2D, width, height, 1, mipLevels, 
-						 pixelFormat, usage, sampleCount, clearValue, hostVisible, 
+						 pixelFormat, usage, sampleCount, clearValue, hostVisible, data,
 						 nullptr);
 }
 
@@ -825,10 +838,11 @@ std::shared_ptr<Texture> GraphicsVK::createTexture3d(size_t width, size_t height
 													 Texture::Usage usage,
 													 Texture::SampleCount sampleCount,
 													 const ClearValue& clearValue,
-													 bool hostVisible)
+													 bool hostVisible,
+													 const void* data)
 {
 	return createTexture(Texture::TYPE_3D, width, height, depth, 1, 
-						 pixelFormat, usage, sampleCount, clearValue, hostVisible, 
+						 pixelFormat, usage, sampleCount, clearValue, hostVisible, data,
 						 nullptr);
 }
 
@@ -1117,14 +1131,14 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 		ClearValue clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		std::shared_ptr<Texture> colorAttachment = createTexture2d(width, height, 1, colorFormat, 
 																   Texture::USAGE_COLOR_ATTACHMENT, 
-																   Texture::SAMPLE_COUNT_1X, clearColor, false);
+																   Texture::SAMPLE_COUNT_1X, clearColor, false, nullptr);
 		std::shared_ptr<TextureVK> colorAttachmentVK = std::static_pointer_cast<TextureVK>(colorAttachment);
 		colorAttachments.push_back(colorAttachment);
 		if (sampleCount > Texture::SAMPLE_COUNT_1X)
 		{
 			std::shared_ptr<Texture> colorMultisampleAttachment = createTexture2d(width, height, 1, colorFormat, 
 																				  Texture::USAGE_COLOR_ATTACHMENT, 
-																				  sampleCount, clearColor, false);
+																				  sampleCount, clearColor, false, nullptr);
 			colorMultisampleAttachments.push_back(colorMultisampleAttachment);
 		}
 	}
@@ -1133,7 +1147,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 		ClearValue clearDepthStencil(0.0f, 0);
 		depthStencilAttachment = createTexture2d(width, height, 1, depthStencilFormat, 
 												 Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
-												 Texture::SAMPLE_COUNT_1X, clearDepthStencil, false);
+												 Texture::SAMPLE_COUNT_1X, clearDepthStencil, false, nullptr);
 	}
 	return createRenderPass(width, height,
 							colorAttachmentCount,
@@ -2033,7 +2047,7 @@ void GraphicsVK::createSwapchain()
 		std::shared_ptr<Texture> colorAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
 																 toFormat(_colorFormat),
 																 Texture::USAGE_COLOR_ATTACHMENT, 
-																 Texture::SAMPLE_COUNT_1X, clearColor, false,
+																 Texture::SAMPLE_COUNT_1X, clearColor, false, nullptr,
 																 _swapchainImages[i]);
 		colorAttachments.push_back(colorAttachment);
 		ClearValue clearDepthStencil;
@@ -2042,7 +2056,7 @@ void GraphicsVK::createSwapchain()
 		std::shared_ptr<Texture> depthStencilAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
 																		toFormat(_depthStencilFormat),
 																		Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
-																		Texture::SAMPLE_COUNT_1X, clearDepthStencil, false,
+																		Texture::SAMPLE_COUNT_1X, clearDepthStencil, false, nullptr,
 																		_swapchainImages[i]);
 
 		std::shared_ptr<RenderPass> renderPass = createRenderPass(_width, _height, 1, 
