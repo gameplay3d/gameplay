@@ -192,17 +192,25 @@ public:
     /**
      * @see Graphics::createVertexBuffer
      */
-    std::shared_ptr<Buffer> createVertexBuffer(size_t size, size_t vertexStride, bool hostVisible);
+    std::shared_ptr<Buffer> createVertexBuffer(size_t size, 
+                                               size_t vertexStride,
+                                               bool hostVisible,
+                                               const void* data);
     
     /**
      * @see Graphics::createIndexBuffer
      */
-    std::shared_ptr<Buffer> createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible);
+    std::shared_ptr<Buffer> createIndexBuffer(size_t size, 
+                                              IndexFormat indexFormat,
+                                              bool hostVisible,
+                                              const void* data);
     
     /**
      * @see Graphics::createUniformBuffer
      */
-    std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible);
+    std::shared_ptr<Buffer> createUniformBuffer(size_t size, 
+                                                bool hostVisible,
+                                               const void* data);
     
     /**
      * @see Graphics::destroyBuffer
@@ -217,7 +225,8 @@ public:
                                              Texture::Usage usage,
                                              Texture::SampleCount sampleCount,
                                              const ClearValue& clearValue,
-                                             bool hostVisible);
+                                             bool hostVisible,
+                                             const void* data);
     /**
      * @see Graphics::createTexture2d
      */
@@ -226,7 +235,8 @@ public:
                                              Texture::Usage usage,
                                              Texture::SampleCount sampleCount,
                                              const ClearValue& clearValue,
-                                             bool hostVisible);
+                                             bool hostVisible,
+                                             const void* data);
     /**
      * @see Graphics::createTexture3d
      */
@@ -235,7 +245,8 @@ public:
                                              Texture::Usage usage,
                                              Texture::SampleCount sampleCount,
                                              const ClearValue& clearValue,
-                                             bool hostVisible);
+                                             bool hostVisible,
+                                             const void* data);
     /**
      * @see Graphics::destroyTexture
      */

@@ -239,7 +239,8 @@ public:
 	 * @param vertexStart The starting vertex to be drawn.
 	 */
 	virtual void cmdDraw(std::shared_ptr<CommandBuffer> commandBuffer,
-						 size_t vertexCount, size_t vertexStart) = 0;
+						 size_t vertexCount, 
+						 size_t vertexStart) = 0;
 	/**
 	 * Records a command that draws indexed.
 	 *
@@ -248,7 +249,8 @@ public:
 	 * @param indexStart The starting index to be drawn.
 	 */
 	virtual void cmdDrawIndexed(std::shared_ptr<CommandBuffer> commandBuffer,
-								size_t indexCount, size_t indexStart) = 0;
+								size_t indexCount, 
+								size_t indexStart) = 0;
 	/**
 	 * Records a command that transitions an image/texture from one usage to another.
 	 *
@@ -295,9 +297,13 @@ public:
 	 * @param size The size of the vertex buffer (in bytes).
 	 * @param vertexStride The vertex stride.
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @param data The vertex data to initialize the buffer with.
 	 * @return The created vertex buffer.
 	 */
-	virtual std::shared_ptr<Buffer> createVertexBuffer(size_t size, size_t vertexStride, bool hostVisible) = 0;	
+	virtual std::shared_ptr<Buffer> createVertexBuffer(size_t size, 
+													   size_t vertexStride, 
+													   bool hostVisible,
+													   const void* data) = 0;	
 
 	/**
 	 * Creates a index buffer.
@@ -305,18 +311,25 @@ public:
 	 * @param size The size of the index buffer (in bytes).
 	 * @param indexFormat The format of the index data.
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @param data The index data to initialize thes buffer with.
 	 * @return The created index buffer.
 	 */
-	virtual std::shared_ptr<Buffer> createIndexBuffer(size_t size, IndexFormat indexFormat, bool hostVisible) = 0;
+	virtual std::shared_ptr<Buffer> createIndexBuffer(size_t size, 
+													  IndexFormat indexFormat, 
+													  bool hostVisible,
+												      const void* data) = 0;
 
 	/**
 	 * Creates a uniform buffer.
 	 *
 	 * @param size The size of the uniform buffer (in bytes).
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @param data The uniform data to initialize the buffer with.
 	 * @return The created uniform buffer.
 	 */
-	virtual std::shared_ptr<Buffer> createUniformBuffer(size_t size, bool hostVisible) = 0;
+	virtual std::shared_ptr<Buffer> createUniformBuffer(size_t size, 
+														bool hostVisible,
+													    const void* data) = 0;
 
 	/**
 	 * Destroys a buffer.
@@ -334,13 +347,16 @@ public:
 	 * @param sampleCount The supported sample counts for texture and used for storage operations.
 	 * @param clearValue The value to clear the pixel data with.
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @param data The texture data to initialize the texture with.
+	 * @return The created texture.
 	 */
 	virtual std::shared_ptr<Texture> createTexture1d(size_t width, 
 													 Format pixelFormat, 
 													 Texture::Usage usage, 
 													 Texture::SampleCount sampleCount,
 													 const ClearValue& clearValue,
-													 bool hostVisible) = 0;
+													 bool hostVisible,
+													 const void* data) = 0;
 	/**
 	 * Creates a 2-dimensional texture.
 	 *
@@ -352,13 +368,16 @@ public:
 	 * @param sampleCount The supported sample counts for texture and used for storage operations.
 	 * @param clearValue The value to clear the pixel data with.
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @param data The texture data to initialize the texture with.
+	 * @return The created texture.
 	 */
 	virtual std::shared_ptr<Texture> createTexture2d(size_t width, size_t height, size_t mipLevels, 
 													 Format pixelFormat, 
 													 Texture::Usage usage, 
 													 Texture::SampleCount sampleCount,
 													 const ClearValue& clearValue,
-													 bool hostVisible) = 0;
+													 bool hostVisible,
+													 const void* data) = 0;
 	/**
 	 * Creates a 2-dimensional texture.
 	 *
@@ -370,13 +389,16 @@ public:
 	 * @param sampleCount The supported sample counts for texture and used for storage operations.
 	 * @param clearValue The value to clear the pixel data with.
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
+	 * @param data The texture data to initialize the texture with.
+	 * @return The created texture.
 	 */
 	virtual std::shared_ptr<Texture> createTexture3d(size_t width, size_t height, size_t depth, 
 													 Format pixelFormat, 
 													 Texture::Usage usage, 
 													 Texture::SampleCount sampleCount,
 													 const ClearValue& clearValue,
-													 bool hostVisible) = 0;
+													 bool hostVisible,
+												     const void* data) = 0;
 	/**
 	 * Destroys a texture.
 	 *
