@@ -21,7 +21,6 @@ Texture::Texture(Type type, size_t width, size_t height, size_t depth, size_t mi
 				 Format pixelFormat, 
 				 Usage usage,
 				 SampleCount sampleCount,
-				 const ClearValue& clearValue,
 				 bool hostVisible,
 				 bool hostOwned) :
 	_type(type),
@@ -32,7 +31,6 @@ Texture::Texture(Type type, size_t width, size_t height, size_t depth, size_t mi
 	_pixelFormat(pixelFormat),
 	_usage(usage),
 	_sampleCount(sampleCount),
-	_clearValue(clearValue),
 	_hostVisible(hostVisible),
 	_hostOwned(hostOwned)
 {
@@ -80,11 +78,6 @@ Format Texture::getPixelFormat() const
 Texture::SampleCount Texture::getSampleCount() const
 {
 	return _sampleCount;
-}
-
-ClearValue Texture::getClearValue() const
-{
-	return _clearValue;
 }
 
 bool Texture::isHostVisible() const

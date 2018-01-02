@@ -87,6 +87,13 @@ public:
      */
 	size_t getFrameRate() const;
 
+	/**
+     * Gets the number of frame that have passed.
+     *
+     * @return The number of frame that have passed.
+     */
+	size_t getFrameCount() const;
+
     /**
      * Gets the game window width.
      *

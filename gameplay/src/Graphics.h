@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Format.h"
-#include "ClearValue.h"
 #include "Buffer.h"
 #include "Texture.h"
 #include "RenderPass.h"
@@ -10,10 +9,8 @@
 #include "VertexLayout.h"
 #include "DescriptorSet.h"
 #include "RenderPipeline.h"
-#include "CommandPool.h"
 #include "CommandBuffer.h"
-#include "Semaphore.h"
-#include "Fence.h"
+
 
 namespace gameplay
 {
@@ -35,15 +32,6 @@ public:
         API_VK,
         API_D3D12,
         API_MTL
-    };
-
-	/**
-     * Defines index formats.
-     */
-    enum IndexFormat
-    {
-        INDEX_FORMAT_UINT16,
-        INDEX_FORMAT_UINT32
     };
 	
     /**
@@ -76,82 +64,58 @@ public:
 
 	/**
 	 * Acquires the next swapchain image.
-	 *
-	 * @param signalFence The fence that will be signalled once the presentation engine releases the image.
-	 * @param signalSemaphore The semaphore that will be signalled once the presentation engine releases the image.
-	 * @return The RenderPass hosting the next availble swapchain image.
 	 */
-	virtual std::shared_ptr<RenderPass> acquireNextSwapchainImage(std::shared_ptr<Fence> signalFence,
-																  std::shared_ptr<Semaphore> signalSemaphore) = 0;
+	virtual std::shared_ptr<RenderPass> acquireNextSwapchainImage() = 0;
 
 	/**
 	 * Presents the next presenation image from the swapchain.
-	 *
-	 * @param waitSemaphores The semaphores to wait before issuing the present request.
 	 */
-	virtual void present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores) = 0;
+	virtual void present() = 0;
 
 	/**
 	 * Waits on the host for the completion of outstanding gpu operations.
 	 *
 	 * @param waitFence The fence to wait on.
 	 */
-	virtual void waitIdle(std::shared_ptr<Fence> waitFence) = 0;
-
-	/**
-	 * Creates a command pool for creating command buffers.
-	 *
-	 * @return The command pool that is created.
-	 */
-	virtual std::shared_ptr<CommandPool> createCommandPool() = 0;
-
-	/**
-	 * Destroys a command pool.
-	 *
-	 * @param commandPool The command pool to be destroyed.
-	 */
-	virtual void destroyCommandPool(std::shared_ptr<CommandPool> commandPool) = 0;
-
-	/**
-	 * Submits a sequence of command buffers to be processed.
-	 *
-	 * @param commandBuffers The command buffers to be submitted.
-	 * @param waitSemaphores The semaphores to wait before the execution of the command buffers.
-	 * @param signalSemaphores The semaphores to be signalled when the execution of command buffers is completed.
-	 */
-	virtual void submit(std::vector<std::shared_ptr<CommandBuffer>> commandBuffers,
-					    std::vector<std::shared_ptr<Semaphore>> waitSemaphores,
-						std::vector<std::shared_ptr<Semaphore>> signalSemaphores)= 0;
+	virtual void waitIdle() = 0;
 
 	/**
 	 * Records a command to start gpus command processing.
 	 *
-	 * @param commandBuffer The command buffer to be recorded into.
+	 * @return The command buffer that is now initialized to being recording commands.
 	 */
-	virtual void cmdBegin(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
+	virtual std::shared_ptr<CommandBuffer> beginCommands() = 0;
 
 	/**
 	 * Records a command to end gpu command processing.
 	 *
 	 * @param commandBuffer The command buffer to be recorded into.
 	 */
-	virtual void cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
+	virtual void endCommands() = 0;
 
 	/**
-	 * Records a command to start rendering with the specified render pass.
+	 * Submits a sequence of commands in a command buffer to the gpu.
 	 *
-	 * @param commandBuffer The command buffer to be recorded into.
-	 * @param renderPass The render pass to begin rendering with.
+	 * @param commandBuffer The command buffer to be submitted.
 	 */
-	virtual void cmdBeginRender(std::shared_ptr<CommandBuffer> commandBuffer,
-								std::shared_ptr<RenderPass> renderPass) = 0;
+	virtual void submit(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
 
 	/**
-	 * Records a command to stop rendering with the current render pass.
+	 * Records a command that begins the render pass for rendering.
 	 *
 	 * @param commandBuffer The command buffer to be recorded into.
+	 * @param renderPass The render pass to begin rendering into
 	 */
-	virtual void cmdEndRender(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
+	virtual void cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
+								    std::shared_ptr<RenderPass> renderPass) = 0;
+
+	/**
+	 * Records a command that ends a render pass.
+	 *
+	 * @param commandBuffer The command buffer to be recorded into.
+	 * @param renderPipeline The render pipeline to be bound for rendering.
+	 */
+	virtual void cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer) = 0;
 
 	/**
 	 * Records a command that sets the viewport to render within.
@@ -177,18 +141,8 @@ public:
 	 * @param height The scissor height.
 	 */
 	virtual void cmdSetScissor(std::shared_ptr<CommandBuffer> commandBuffer,
-							   size_t x, size_t y, 
-							   size_t width, size_t height) = 0;
-	/**
-	 * Records a command that clears the specified color attachment.
-	 *
-	 * @param commandBuffer The command buffer to be recorded into.
-	 * @param attachmentIndex the index of the color attachment to be cleared.
-	 * @param clearValue The value to clear the color attachment.
-	 */
-	virtual void cmdClearColorAttachment(std::shared_ptr<CommandBuffer> commandBuffer,
-										 size_t attachmentIndex,
-										 const ClearValue& clearValue) = 0;
+							   size_t x, size_t y, size_t width, size_t height) = 0;
+
 	/**
 	 * Records a command that binds the render pipeline for rendering.
 	 *
@@ -196,7 +150,7 @@ public:
 	 * @param renderPipeline The render pipeline to be bound for rendering.
 	 */
 	virtual void cmdBindRenderPipeline(std::shared_ptr<CommandBuffer> commandBuffer,
-									   std::shared_ptr<RenderPipeline> renderPipeline) = 0;
+									  std::shared_ptr<RenderPipeline> renderPipeline) = 0;
 	/**
 	 * Records a command that binds the resource descriptor to a render pipline.
 	 *
@@ -223,6 +177,7 @@ public:
 	 */
 	virtual void cmdBindVertexBuffers(std::shared_ptr<CommandBuffer> commandBuffer,
 									  std::vector<std::shared_ptr<Buffer>> vertexBuffers) = 0;
+
 	/**
 	 * Records a command that binds an index buffer.
 	 *
@@ -231,6 +186,31 @@ public:
 	 */
 	virtual void cmdBindIndexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
 									std::shared_ptr<Buffer> indexBuffer) = 0;
+
+	/**
+	 * Records a command that clears the specified color attachment.
+	 *
+	 * @param commandBuffer The command buffer to be recorded into.
+	 * @param red The red component value to clear the color attachment to.
+	 * @param green The green component value to clear the color attachment to.
+	 * @param blue The blue component value to clear the color attachment to.
+	 * @param alpha The alpha component value to clear the color attachment to.
+	 * @param attachmentIndex the index of the color attachment to be cleared.
+	 */
+	virtual void cmdClearColor(std::shared_ptr<CommandBuffer> commandBuffer,
+							   float red, float green, float blue, float alpha, 
+							   size_t attachmentIndex) = 0;
+
+	/**
+	 * Records a command that clears the depth/stencil attachment.
+	 *
+	 * @param commandBuffer The command buffer to be recorded into.
+	 * @param attachmentIndex the index of the color attachment to be cleared.
+	 * @param clearValue The value to clear the color attachment.
+	 */
+	virtual void cmdClearDepthStencil(std::shared_ptr<CommandBuffer> commandBuffer,
+									  float depth, uint32_t stencil) = 0;
+
 	/**
 	 * Records a command that draws.
 	 *
@@ -241,6 +221,7 @@ public:
 	virtual void cmdDraw(std::shared_ptr<CommandBuffer> commandBuffer,
 						 size_t vertexCount, 
 						 size_t vertexStart) = 0;
+
 	/**
 	 * Records a command that draws indexed.
 	 *
@@ -263,33 +244,6 @@ public:
 									std::shared_ptr<Texture> texture, 
 									Texture::Usage usageOld, 
 									Texture::Usage usageNew) = 0;
-	/**
-	 * Creates a semaphore used to insert a dependency on batches of commands submitted.
-	 * 
-	 * @return The semaphore created.
-	 */
-	virtual std::shared_ptr<Semaphore> createSemaphore() = 0;
-
-	/**
-	 * Destroys a semaphore.
-	 * 
-	 * @param semaphore The semaphore destroyed.
-	 */
-	virtual void destroySemaphore(std::shared_ptr<Semaphore> semaphore) = 0;
-
-	/**
-	 * Creates a fences used to insert a dependency on the processing queue and the host.
-	 * 
-	 * @return The fence created.
-	 */
-	virtual std::shared_ptr<Fence> createFence() = 0;
-
-	/**
-	 * Destroys a fence.
-	 * 
-	 * @param fence The fence destroyed.
-	 */
-	virtual void destroyFence(std::shared_ptr<Fence> fence) = 0;
 
 	/**
 	 * Creates a vertex buffer.
@@ -309,13 +263,13 @@ public:
 	 * Creates a index buffer.
 	 *
 	 * @param size The size of the index buffer (in bytes).
-	 * @param indexFormat The format of the index data.
+	 * @param indexStride The stride of the index data. sizeof(uint32_t) or sizeof(uint16_t)
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @param data The index data to initialize thes buffer with.
 	 * @return The created index buffer.
 	 */
 	virtual std::shared_ptr<Buffer> createIndexBuffer(size_t size, 
-													  IndexFormat indexFormat, 
+													  size_t indexStride,
 													  bool hostVisible,
 												      const void* data) = 0;
 
@@ -345,7 +299,6 @@ public:
 	 * @param usage The supported usage for the texture.
 	 * @param pixelFormat The pixel format of the texture.
 	 * @param sampleCount The supported sample counts for texture and used for storage operations.
-	 * @param clearValue The value to clear the pixel data with.
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @param data The texture data to initialize the texture with.
 	 * @return The created texture.
@@ -354,7 +307,6 @@ public:
 													 Format pixelFormat, 
 													 Texture::Usage usage, 
 													 Texture::SampleCount sampleCount,
-													 const ClearValue& clearValue,
 													 bool hostVisible,
 													 const void* data) = 0;
 	/**
@@ -366,7 +318,6 @@ public:
 	 * @param usage The supported usage for the texture.
 	 * @param pixelFormat The pixel format of the texture.
 	 * @param sampleCount The supported sample counts for texture and used for storage operations.
-	 * @param clearValue The value to clear the pixel data with.
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @param data The texture data to initialize the texture with.
 	 * @return The created texture.
@@ -375,7 +326,6 @@ public:
 													 Format pixelFormat, 
 													 Texture::Usage usage, 
 													 Texture::SampleCount sampleCount,
-													 const ClearValue& clearValue,
 													 bool hostVisible,
 													 const void* data) = 0;
 	/**
@@ -387,7 +337,6 @@ public:
 	 * @param usage The supported usage for the texture.
 	 * @param pixelFormat The pixel format of the texture.
 	 * @param sampleCount The supported sample counts for texture and used for storage operations.
-	 * @param clearValue The value to clear the pixel data with.
 	 * @param hostVisible true if this buffer memory can be access from the client, false if not.
 	 * @param data The texture data to initialize the texture with.
 	 * @return The created texture.
@@ -396,7 +345,6 @@ public:
 													 Format pixelFormat, 
 													 Texture::Usage usage, 
 													 Texture::SampleCount sampleCount,
-													 const ClearValue& clearValue,
 													 bool hostVisible,
 												     const void* data) = 0;
 	/**

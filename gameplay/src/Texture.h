@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Format.h"
-#include "ClearValue.h"
 
 namespace gameplay
 {
@@ -49,11 +48,11 @@ public:
 	 */
 	enum SampleCount : uint32_t
 	{
-		SAMPLE_COUNT_1X,
-		SAMPLE_COUNT_2X,
-		SAMPLE_COUNT_4X,
-		SAMPLE_COUNT_8X,
-		SAMPLE_COUNT_16X
+		SAMPLE_COUNT_1X = 1,
+		SAMPLE_COUNT_2X = 2,
+		SAMPLE_COUNT_4X = 4,
+		SAMPLE_COUNT_8X = 8,
+		SAMPLE_COUNT_16X = 16
 	};
 
 	/**
@@ -67,8 +66,7 @@ public:
 	Texture(Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
 			Format pixelFormat, 
 			Usage usage, 
-			SampleCount sampleCount, 
-			const ClearValue& clearValue,
+			SampleCount sampleCount,
 			bool hostVisible,
 			bool hostOwn);
 
@@ -134,13 +132,6 @@ public:
 	Texture::SampleCount getSampleCount() const;
 
 	/**
-	 * Gets the clear value.
-	 *
-	 * @return The clear value.
-	 */
-	ClearValue getClearValue() const;
-
-	/**
 	 * Deterines if the buffer has visible access to host memory.
 	 *
 	 * @return true if the buffer has visible access to host memory, false if static
@@ -171,7 +162,6 @@ protected:
 	Format _pixelFormat;
 	Usage _usage;	
 	Texture::SampleCount _sampleCount;
-	ClearValue _clearValue;
 	bool _hostVisible;
 	bool _hostOwned;
 };

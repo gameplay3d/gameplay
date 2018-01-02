@@ -35,17 +35,6 @@ static const DXGI_FORMAT lookupDXGI_FORMAT[] =
 	DXGI_FORMAT_D32_FLOAT_S8X24_UINT
 };
 
-/**
- * Maps gameplay::Texture::SampleCount to D3D12_SAMPLES (UINT)
- */
-static const UINT lookupD3D12_SAMPLES[] =
-{
-	1,
-	2,
-	4,
-	8,
-	16
-};
 
 /**
  * Maps gameplay::Sampler::AddressMode to D3D12_TEXTURE_ADDRESS_MODE

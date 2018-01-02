@@ -25,7 +25,7 @@ static void readStream(png_structp png, png_bytep data, png_size_t length)
     }
 }
 
-std::shared_ptr<Image> Image::create(size_t width, size_t height, Image::Format format, unsigned char* pixelData)
+std::shared_ptr<Image> Image::create(size_t width, size_t height, Image::Format format, unsigned char* data)
 {
     GP_ASSERT(width > 0 && height > 0);
     GP_ASSERT(format >= FORMAT_RGB && format <= FORMAT_RGBA);
@@ -48,11 +48,13 @@ std::shared_ptr<Image> Image::create(size_t width, size_t height, Image::Format 
         return nullptr;
         break;
     }
-    size_t pixelDataSize = width * height * image->_stride;
-    image->_pixelData.resize(pixelDataSize);
+    size_t dataSize = width * height * image->_stride;
+	image->_data = new unsigned char[dataSize];
 
-    if (pixelData)
-        memcpy(image->_pixelData.data(), pixelData, pixelDataSize);
+	if (data)
+	{
+		memcpy(image->_data, data, dataSize);
+	}
 
     return image;
 }
@@ -133,14 +135,14 @@ std::shared_ptr<Image> Image::create(const std::string& url)
     size_t stride = png_get_rowbytes(png, info);
 
     // Allocate image data.
-    image->_pixelData.resize(stride * image->_height);
+	size_t dataSize = stride * image->_height;
+	image->_data = new unsigned char[dataSize];
 
     // Read rows into image data.
     png_bytepp rows = png_get_rows(png, info);
     for (size_t i = 0; i < image->_height; ++i)
     {
-        unsigned char* dst = image->_pixelData.data();
-        memcpy((void*)dst[stride * (image->_height-1-i)], rows[i], stride);
+        memcpy(image->_data+(stride * (image->_height-1-i)), rows[i], stride);
     }
 
     // Clean up.
@@ -169,9 +171,9 @@ size_t Image::getStride() const
     return _stride;
 }
 
-std::vector<unsigned char> Image::getPixelData() const
+unsigned char* Image::getData() const
 {
-    return _pixelData;
+    return _data;
 }
 
 }

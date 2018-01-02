@@ -7,14 +7,14 @@ namespace gameplay
 	class Sampler;
 
 /**
- * Defines a set of (resources) descriptors to be bound.
+ * Defines a set of resource descriptors to be bound to a RenderPipeline
  */
 class DescriptorSet
 {
 public:
 
 	/**
-	 * Defines an opaque (resource) descriptor.
+	 * Defines an opaque resource descriptor.
 	 */
 	class Descriptor
 	{
@@ -78,12 +78,10 @@ public:
 		 */
 		ShaderStages shaderStages = SHADER_STAGE_VERT;
 
-		union
-		{
-			std::shared_ptr<Buffer> uniforms[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
-			std::shared_ptr<Texture> textures[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
-			std::shared_ptr<Sampler>  samplers[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
-		};
+		std::shared_ptr<Buffer> uniforms[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
+		std::shared_ptr<Texture> textures[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
+		std::shared_ptr<Sampler>  samplers[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
+	
 	};
 
 	/**

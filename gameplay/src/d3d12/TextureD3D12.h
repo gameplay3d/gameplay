@@ -26,7 +26,6 @@ public:
 				 Format pixelFormat, 
 				 Usage usage, 
 			     SampleCount sampleCount,
-				 const ClearValue& clearValue,
 			     bool hostVisible,
 				 bool hostOwned,
 		         ID3D12Device* device, 

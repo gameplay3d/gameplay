@@ -41,7 +41,6 @@ public:
 	public:
 
         Semantic semantic = VertexLayout::SEMANTIC_POSITION;
-		std::string semanticName = "";
 		Format format = Format::FORMAT_UNDEFINED;
 		uint32_t binding = 0;
 		uint32_t location = 0;

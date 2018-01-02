@@ -38,8 +38,9 @@ public:
      * @param width The width of the image.
      * @param height The height of the image.
      * @param format The format of the image.
+	 * @param data The raw image data.
      */
-    static std::shared_ptr<Image> create(size_t width, size_t height, Format format, unsigned char* pixelData = nullptr);
+    static std::shared_ptr<Image> create(size_t width, size_t height, Format format, unsigned char* data = nullptr);
 
     /**
      * Creates a image from the specified image url.
@@ -79,11 +80,11 @@ public:
     size_t getStride() const;
 
     /**
-     * Gets direct access to the image pixel data.
+     * Gets direct access to the image data.
      *
-     * @return The image pixel data.
+     * @return The image data.
      */
-    std::vector<unsigned char> getPixelData() const;
+    unsigned char* getData() const;
 
 private:
 
@@ -91,7 +92,7 @@ private:
     size_t _height;
     Format _format;
     size_t _stride;
-    std::vector<unsigned char> _pixelData;
+    unsigned char* _data;
 };
 
 }

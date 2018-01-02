@@ -66,6 +66,11 @@ size_t Game::getFrameRate() const
     return _frameRate;
 }
 
+size_t Game::getFrameCount() const
+{
+	return _frameCount;
+}
+
 size_t Game::getWidth() const
 {
     return _width;
@@ -222,9 +227,6 @@ void Game::onRender(float elapsedTime)
 	// Deferred rendering here
 	//Graphics* graphics = Graphics::getGraphics();
 	
-
-
-
 }
 
 void Game::onFrame()

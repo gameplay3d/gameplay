@@ -63,8 +63,7 @@ bool VertexLayout::operator != (const VertexLayout& layout) const
 }
 
 VertexLayout::Attribute::Attribute() : 
-	semantic(SEMANTIC_POSITION), 
-	semanticName(""), 
+	semantic(SEMANTIC_POSITION),
 	binding(0), 
 	location(0), 
 	offset(0)
@@ -77,7 +76,6 @@ VertexLayout::Attribute::Attribute(Semantic semantic,
 								   uint32_t location,
 								   uint32_t offset) : 
 	semantic(semantic), 
-	semanticName(""),
 	format(format), 
 	binding(binding), 
 	location(location), 
@@ -92,8 +90,6 @@ VertexLayout::Attribute::~Attribute()
 bool VertexLayout::Attribute::operator == (const VertexLayout::Attribute& attr) const
 {
     return (semantic == attr.semantic) && 
-		   (semanticName.size() == attr.semanticName.size()) && 
-		   (semanticName.compare(attr.semanticName) == 0) && 
 		   (format == attr.format) &&
 		   (binding == attr.binding) &&
 		   (location == attr.location) &&

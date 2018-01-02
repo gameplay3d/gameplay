@@ -191,18 +191,6 @@ static const VkFrontFace lookupVkFrontFace[] =
     VK_FRONT_FACE_COUNTER_CLOCKWISE
 };
 
-/**
- * Maps VkSampleCountFlagBits to gameplay::Texture::SampleCount
- */
-static const Texture::SampleCount lookupSampleCount[] =
-{
-	Texture:: SAMPLE_COUNT_1X,
-    Texture:: SAMPLE_COUNT_2X,
-	Texture:: SAMPLE_COUNT_4X,
-	Texture:: SAMPLE_COUNT_8X,
-	Texture:: SAMPLE_COUNT_16X
-};
-
 VkImageLayout toVkImageLayout(Texture::Usage usage)
 {
     VkImageLayout result = VK_IMAGE_LAYOUT_UNDEFINED;
