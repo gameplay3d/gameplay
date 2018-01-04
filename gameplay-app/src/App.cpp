@@ -22,8 +22,8 @@ void App::onInitialize()
 	Graphics* graphics = Graphics::getGraphics();
 	
 	// Create the vertex and fragment shaders
-	_vertShader = graphics->createShader("texture.vert");
-	_fragShader = graphics->createShader("texture.frag");
+	_vertShader = graphics->createShader("nuklear.vert");
+	_fragShader = graphics->createShader("nuklear.frag");
 
 	// Create the vertex layout
 	std::vector<VertexLayout::Attribute> attributes(2);	
@@ -53,7 +53,7 @@ void App::onInitialize()
 	_indexBuffer = graphics->createIndexBuffer(indexDataSize, sizeof(uint32_t), true, indices.data());
 
 	// Read an image, texture then upload
-	std::shared_ptr<Image> image = Image::create("res/images/logo_powered_black.png");
+	std::shared_ptr<Image> image = Image::create("res/images/logo_white.png");
 	_texture = graphics->createTexture2d(image->getWidth(), image->getHeight(), 1, 
 										 Format::FORMAT_R8G8B8A8_UNORM, 
 										 Texture::USAGE_SAMPLED_IMAGE, 

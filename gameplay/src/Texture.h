@@ -21,7 +21,7 @@ public:
      */
     enum Type
     {
-        TYPE_1D,
+        TYPE_1D = 0,
         TYPE_2D,
         TYPE_3D
     };

@@ -614,6 +614,7 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture(Texture::Type type,
 	std::shared_ptr<TextureD3D12> textureD3D = std::make_shared<TextureD3D12>(Texture::TYPE_3D, width, height, depth, 1, 
 																			   pixelFormat, usage, sampleCount, hostVisible, hostOwned,
 																		       _device, resource);
+	textureD3D->_resourceViewDesc = resourceViewDesc;
 	return std::static_pointer_cast<Texture>(textureD3D);
 }
 
@@ -676,7 +677,7 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
 															std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
 															std::shared_ptr<Texture> depthStencilAttachment)
 {
-	ID3D12DescriptorHeap* renderTargetHeap;
+	 ID3D12DescriptorHeap* renderTargetHeap;
 	 if (colorAttachmentCount > 0) 
 	 {
 		D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc = {};
@@ -709,7 +710,7 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
         }
     }
 
-	ID3D12DescriptorHeap*  depthStencilHeap;
+	ID3D12DescriptorHeap* depthStencilHeap;
     if (depthStencilFormat != Format::FORMAT_UNDEFINED) 
 	{
         GP_ASSERT(depthStencilAttachment != nullptr);
@@ -1392,7 +1393,7 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 	// Graphics validation
 	uint32_t dxgiFactoryFlags = 0;
 #if defined(_DEBUG)
-	if (_validation)
+	if (true) //_validation)
 	{
 		ID3D12Debug* debugController;
 		if (SUCCEEDED(D3D12GetDebugInterface(__uuidof(ID3D12Debug), (void**)&debugController)))
@@ -1575,10 +1576,8 @@ void GraphicsD3D12::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** 
 
 void GraphicsD3D12::createSwapchainImages()
 {
-
 	std::vector<std::shared_ptr<Texture>> colorAttachments;
-	std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments;
-	std::shared_ptr<Texture> depthStencilAttachment = nullptr;
+	std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments;	
 
 	_swapchainImagesViewDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	D3D12_CPU_DESCRIPTOR_HANDLE swapchainImageViewHandle = _swapchainImagesViewHeap->GetCPUDescriptorHandleForHeapStart();
@@ -1595,12 +1594,14 @@ void GraphicsD3D12::createSwapchainImages()
 																 Texture::SAMPLE_COUNT_1X, false, nullptr,
 																 _swapchainImages[i]);
 		colorAttachments.push_back(colorAttachment);
-		std::shared_ptr<Texture> depthStencilAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
-																		Format::FORMAT_D24_UNORM_S8_UINT,
-																		Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
-																		Texture::SAMPLE_COUNT_1X, false, nullptr,
-																		_swapchainImages[i]);
 	}
+	std::shared_ptr<Texture> depthStencilAttachment = nullptr;
+	depthStencilAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
+										   Format::FORMAT_D24_UNORM_S8_UINT,
+										   Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
+										   Texture::SAMPLE_COUNT_1X, false, nullptr,
+										   nullptr);
+
 	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
 	std::shared_ptr<RenderPass> renderPass = createRenderPass(_width, _height, 1, 
 															  Format::FORMAT_R8G8B8A8_UNORM, 
