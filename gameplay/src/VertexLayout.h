@@ -17,21 +17,27 @@ public:
      */
     enum Semantic
     {
-		SEMANTIC_UNDEFINED,
-        SEMANTIC_POSITION,
+        SEMANTIC_POSITION = 0,
         SEMANTIC_NORMAL,
         SEMANTIC_COLOR,
+		SEMANTIC_COLOR0,
+		SEMANTIC_COLOR1,
+		SEMANTIC_COLOR2,
+		SEMANTIC_COLOR3,
+		SEMANTIC_COLOR4,
         SEMANTIC_TANGENT,
         SEMANTIC_BITANGENT,
-        SEMANTIC_TEXCOORD0,
-        SEMANTIC_TEXCOORD1,
-        SEMANTIC_TEXCOORD2,
-        SEMANTIC_TEXCOORD3,
-        SEMANTIC_TEXCOORD4,
-        SEMANTIC_TEXCOORD5,
-        SEMANTIC_TEXCOORD6,
-        SEMANTIC_TEXCOORD7
+        SEMANTIC_TEXCOORD,
+		SEMANTIC_TEXCOORD0,
+		SEMANTIC_TEXCOORD1,
+		SEMANTIC_TEXCOORD2,
+		SEMANTIC_TEXCOORD3,
+		SEMANTIC_TEXCOORD4,
+		SEMANTIC_TEXCOORD5,
+		SEMANTIC_TEXCOORD6,
+		SEMANTIC_TEXCOORD7,
     };
+
 
     /**
      * Defines a single vertex attribute a within a vertex layout.     
@@ -41,7 +47,6 @@ public:
 	public:
 
         Semantic semantic = VertexLayout::SEMANTIC_POSITION;
-		std::string semanticName = "";
 		Format format = Format::FORMAT_UNDEFINED;
 		uint32_t binding = 0;
 		uint32_t location = 0;
@@ -144,10 +149,6 @@ public:
      */
     bool operator != (const VertexLayout& layout) const;
 
-    /**
-     * Gets the string representation of a Semantic enumeration value.
-     */
-    static std::string toString(Semantic semantic);
 
 	static size_t toStride(Format format);
 

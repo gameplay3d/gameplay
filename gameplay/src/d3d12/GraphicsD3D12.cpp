@@ -8,10 +8,7 @@
 #include "ShaderD3D12.h"
 #include "DescriptorSetD3D12.h"
 #include "RenderPipelineD3D12.h"
-#include "CommandPoolD3D12.h"
 #include "CommandBufferD3D12.h"
-#include "SemaphoreD3D12.h"
-#include "FenceD3D12.h"
 #include "Game.h"
 #include "FileSystem.h"
 
@@ -30,11 +27,13 @@ GraphicsD3D12::GraphicsD3D12() :
 	_displayMode(0),
 	_device(nullptr),
 	_queue(nullptr),
-	_queueFence(nullptr),
-	_queueFenceEvent(0),
+	_queueWaitIdleFenceEvent(0),
+	_queueWaitIdleFence(nullptr),
+	_queueWaitIdleFenceValue(1),
 	_swapchain(nullptr),
 	_swapchainImagesViewHeap(nullptr),
-	_swapchainImageIndex(0)
+	_renderPass(nullptr),
+	_commandBuffer(nullptr)
 {
 }
 
@@ -42,7 +41,6 @@ GraphicsD3D12::~GraphicsD3D12()
 {
 	if(_swapchain)
 		_swapchain->SetFullscreenState(false, nullptr);
-
 
 	for (uint32_t i = 0; i < GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT; i++)
 	{
@@ -52,179 +50,6 @@ GraphicsD3D12::~GraphicsD3D12()
 	GP_SAFE_RELEASE(_swapchain);
 	GP_SAFE_RELEASE(_queue);
 	GP_SAFE_RELEASE(_device);
-}
-
-void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
-{
-    if (_initialized)
-        return;
-
-    _hwnd = (HWND)window;
-
-	// Get the game config
-	std::shared_ptr<Game::Config> config = Game::getInstance()->getConfig();
-	_width = config->width;
-	_height = config->height;
-	_fullscreen = config->fullscreen;
-	_vsync = config->vsync;
-	_multisampling = config->multisampling;
-	_validation = config->validation;
-
-	// Graphics validation
-	uint32_t dxgiFactoryFlags = 0;
-#if defined(_DEBUG)
-	if (_validation)
-	{
-		ID3D12Debug* debugController;
-		if (SUCCEEDED(D3D12GetDebugInterface(__uuidof(ID3D12Debug), (void**)&debugController)))
-			debugController->EnableDebugLayer();
-		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
-	}
-#endif
-
-	// Create the graphics interface factory
-	IDXGIFactory4* factory;
-	if (FAILED(CreateDXGIFactory2(dxgiFactoryFlags, __uuidof(IDXGIFactory4), (void**)&factory)))
-		GP_ERROR("Failed to create the graphics interface factory.");
-
-	// Create the device
-	IDXGIAdapter1* hardwareAdapter;
-	getHardwareAdapter(factory, &hardwareAdapter);
-	if (FAILED(D3D12CreateDevice(hardwareAdapter, D3D_FEATURE_LEVEL_11_0, __uuidof(ID3D12Device), (void**)&_device)))
-		GP_ERROR("Failed to create a Direct3D 12 device.");
-
-	// Create render command queue
-	D3D12_COMMAND_QUEUE_DESC commandQueueDesc;
-	ZeroMemory(&commandQueueDesc, sizeof(commandQueueDesc));
-	commandQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-	commandQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
-	commandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-	commandQueueDesc.NodeMask = 0;
-	D3D_CHECK_RESULT(_device->CreateCommandQueue(&commandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_queue));
-	
-
-	// Pick the first adapter and ouput
-	IDXGIAdapter* adapter;
-	D3D_CHECK_RESULT(factory->EnumAdapters(0, &adapter));
-	IDXGIOutput* output;
-	D3D_CHECK_RESULT(adapter->EnumOutputs(0, &output));
-
-	// Get the number of display modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM
-	uint32_t displayModeCount;
-	if (FAILED(output->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &displayModeCount, nullptr)) ||  displayModeCount < 1)
-		GP_ERROR("Failed to find compatible display mode for adapter outputs(monitor).");
-
-	// Get the display modes
-	_displayModes.resize(displayModeCount);
-	if (FAILED(output->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &displayModeCount, &_displayModes[0])))
-		GP_ERROR("Failed to get display mode list for adapter outputs(monitor).");
-	
-	// Find a display mode that matches our config
-	for (size_t i = 0; i < displayModeCount; i++)
-	{
-		if (_displayModes[i].Height == _height && _displayModes[i].Width == _width)
-		{
-			_width = _displayModes[i].Width;
-			_height = _displayModes[i].Height;
-			_displayMode = i;
-			break;
-		}
-	}
-	GP_SAFE_RELEASE(output);
-	GP_SAFE_RELEASE(adapter);
-	
-	// Create the swapchain
-	DXGI_SWAP_CHAIN_DESC1 swapchainDesc = {};
-	swapchainDesc.BufferCount = GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT;
-	swapchainDesc.Width = _width;
-	swapchainDesc.Height = _height;
-	swapchainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapchainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapchainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	swapchainDesc.SampleDesc.Count = 1 + _multisampling;
-
-	IDXGISwapChain1* swapchain;
-	D3D_CHECK_RESULT(factory->CreateSwapChainForHwnd(_queue, _hwnd, &swapchainDesc, nullptr, nullptr, &swapchain));
-	D3D_CHECK_RESULT(swapchain->QueryInterface(__uuidof(IDXGISwapChain4), (void**)&_swapchain));
-	GP_SAFE_RELEASE(factory);
-
-	D3D_CHECK_RESULT(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, __uuidof(ID3D12Fence), (void**)&_queueFence));
-	_queueFenceEvent = CreateEventEx(NULL, FALSE, FALSE, EVENT_ALL_ACCESS);
-
-	// Create a render target description heap for the back buffers
-	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
-	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-
-	// One extra for the intermediate render target
-	rtvHeapDesc.NumDescriptors = GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT;
-	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	D3D_CHECK_RESULT(_device->CreateDescriptorHeap(&rtvHeapDesc, __uuidof(ID3D12DescriptorHeap), (void**)&_swapchainImagesViewHeap));
-
-    // Create the swapchain image
-    createSwapchainImages();
-
-	 // Load root signature functions
-    HMODULE module = ::GetModuleHandle(TEXT("d3d12.dll"));
-    D3D12CreateRootSignatureDeserializer = (PFN_D3D12_CREATE_ROOT_SIGNATURE_DESERIALIZER)GetProcAddress(module, "D3D12SerializeVersionedRootSignature");
-	GP_ASSERT(D3D12CreateRootSignatureDeserializer);
-
-    D3D12SerializeVersionedRootSignature = (PFN_D3D12_SERIALIZE_VERSIONED_ROOT_SIGNATURE)GetProcAddress(module, "D3D12SerializeVersionedRootSignature");
-	GP_ASSERT(D3D12SerializeVersionedRootSignature);
-
-    D3D12CreateVersionedRootSignatureDeserializer = (PFN_D3D12_CREATE_VERSIONED_ROOT_SIGNATURE_DESERIALIZER)GetProcAddress(module,"D3D12CreateVersionedRootSignatureDeserializer");
-    GP_ASSERT(D3D12CreateVersionedRootSignatureDeserializer);
-    
-    _initialized = true;
-    _resized = true;
-}
-
-bool GraphicsD3D12::isInitialized()
-{
-    return _initialized;
-}
-
-void GraphicsD3D12::onResize(int width, int height)
-{
-    if (!_resized || (width == _width && height == _height))
-		return;
-	
-	// Wait for the gpu to finish processing on backbuffers before resizing them
-	for (int i = 0; i < GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT; ++i)
-	{
-		//waitIdle(_fences[_backBufferCurrentIndex], _fenceValues[_backBufferCurrentIndex], _fenceEvents[_backBufferCurrentIndex]);
-	}
-
-    _resized = false;
-	
-    /* Release the backbuffers
-	for (uint32_t i = 0; i < GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT; i++)
-	{
-		GP_SAFE_RELEASE(_swapchainImages[i]);
-		_fenceValues[i] = _fenceValues[_swapchainIndex];
-	}
-	*/
-
-	// Resize the swap chain to the desired dimensions.
-	DXGI_SWAP_CHAIN_DESC desc = {};
-	_swapchain->GetDesc(&desc);
-	D3D_CHECK_RESULT(_swapchain->ResizeBuffers(GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT, width, height, desc.BufferDesc.Format, desc.Flags));
-
-	// Reset the frame index to the current back buffer index.
-	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
-
-    // Create the swapchain
-    createSwapchainImages();
-
-	_width = width;
-	_height = height;
-
-    _resized = true;
-}
-
-bool GraphicsD3D12::isResized()
-{
-    return _resized;
 }
 
 int GraphicsD3D12::getWidth()
@@ -237,90 +62,67 @@ int GraphicsD3D12::getHeight()
     return _height;
 }
 
-std::shared_ptr<RenderPass> GraphicsD3D12::acquireNextSwapchainImage(std::shared_ptr<Fence> waitFence,
-																	 std::shared_ptr<Semaphore> signalSemaphore)
+std::shared_ptr<RenderPass> GraphicsD3D12::acquireNextSwapchainImage()
 {
-    _swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
+	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
+
 	return _renderPasses[_swapchainImageIndex];
 }
 
-void GraphicsD3D12::present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores)
+void GraphicsD3D12::present()
 {
 	UINT syncInterval = 1;
     UINT flags = 0;
     _swapchain->Present(syncInterval, flags);
 }
 
-void GraphicsD3D12::waitIdle(std::shared_ptr<Fence> waitFence)
+void GraphicsD3D12::waitIdle()
 {
-	std::shared_ptr<FenceD3D12> waitFenceD3D = std::static_pointer_cast<FenceD3D12>(waitFence);
-	const UINT64 fenceValue = waitFenceD3D->_fenceValue;
-    _queue->Signal(waitFenceD3D->_fence, waitFenceD3D->_fenceValue);
-    ++waitFenceD3D->_fenceValue;
+	// Signal and increment the fence value
+    const UINT64 fenceValue = _queueWaitIdleFenceValue;
+    _queue->Signal(_queueWaitIdleFence, fenceValue);
+    ++_queueWaitIdleFenceValue;
 
     // Wait until the previous frame is finished.
-    const UINT64 completedValue = _queueFence->GetCompletedValue();
+    const UINT64 completedValue = _queueWaitIdleFence->GetCompletedValue();
     if (completedValue < fenceValue) 
 	{
-        _queueFence->SetEventOnCompletion(fenceValue, _queueFenceEvent);
-        WaitForSingleObject(_queueFenceEvent, INFINITE);
+        _queueWaitIdleFence->SetEventOnCompletion(fenceValue, _queueWaitIdleFenceEvent);
+        WaitForSingleObject(_queueWaitIdleFenceEvent, INFINITE);
     }
 }
 
-std::shared_ptr<CommandPool> GraphicsD3D12::createCommandPool()
+std::shared_ptr<CommandBuffer> GraphicsD3D12::beginCommands()
 {
-	ID3D12CommandAllocator* commandAllocator;
-	 D3D_CHECK_RESULT(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
-													  __uuidof(commandAllocator), 
-													  (void**)&(commandAllocator)));
+	_commandBuffer = _commandBuffers[_swapchainImageIndex];
+	std::shared_ptr<CommandBufferD3D12> commandBuffer = std::static_pointer_cast<CommandBufferD3D12>(_commandBuffer);
 
-	return std::make_shared<CommandPoolD3D12>(_device, commandAllocator);
+	D3D_CHECK_RESULT(commandBuffer->_commandAllocator->Reset());
+	D3D_CHECK_RESULT(commandBuffer->_commandList->Reset(commandBuffer->_commandAllocator, nullptr));
+
+	return _commandBuffer;
 }
 
-void GraphicsD3D12::destroyCommandPool(std::shared_ptr<CommandPool> commandPool)
+void GraphicsD3D12::endCommands()
 {
-	GP_ASSERT(commandPool);
+	GP_ASSERT(_commandBuffer);
 
-	GP_SAFE_RELEASE(std::static_pointer_cast<CommandPoolD3D12>(commandPool)->_commandAllocator);
+	D3D_CHECK_RESULT(std::static_pointer_cast<CommandBufferD3D12>(_commandBuffer)->_commandList->Close());
 }
 
-void GraphicsD3D12::submit(std::vector<std::shared_ptr<CommandBuffer>> commandBuffers,
-						   std::vector<std::shared_ptr<Semaphore>> waitSemaphores,
-						   std::vector<std::shared_ptr<Semaphore>> signalSemaphores)
+void GraphicsD3D12::submit(std::shared_ptr<CommandBuffer> commandBuffer)
 {
-	GP_ASSERT(commandBuffers.size() <= GP_GRAPHICS_SUBMIT_COMMAND_BUFFERS_MAX);
+    ID3D12CommandList* commandLists[1];
+	commandLists[0] = std::static_pointer_cast<CommandBufferD3D12>(commandBuffer)->_commandList;
 
-    ID3D12CommandList* commandLists[GP_GRAPHICS_SUBMIT_COMMAND_BUFFERS_MAX];
-
-    for (size_t i = 0; i < commandBuffers.size(); i++) 
-	{
-        commandLists[i] = std::static_pointer_cast<CommandBufferD3D12>(commandBuffers[i])->_commandList;
-    }
-    _queue->ExecuteCommandLists(commandBuffers.size(), commandLists);
+    _queue->ExecuteCommandLists(1, commandLists);
 }
 
-void GraphicsD3D12::cmdBegin(std::shared_ptr<CommandBuffer> commandBuffer)
+void GraphicsD3D12::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
+								       std::shared_ptr<RenderPass> renderPass)
 {
 	GP_ASSERT(commandBuffer);
-
-	std::shared_ptr<CommandBufferD3D12> commandBufferD3D = std::static_pointer_cast<CommandBufferD3D12>(commandBuffer);
-
-	D3D_CHECK_RESULT(commandBufferD3D->_commandAllocator->Reset());
-	D3D_CHECK_RESULT(commandBufferD3D->_commandList->Reset(commandBufferD3D->_commandAllocator, nullptr));
-}
-
-void GraphicsD3D12::cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer)
-{
-	GP_ASSERT(commandBuffer);
-
-	D3D_CHECK_RESULT(std::static_pointer_cast<CommandBufferD3D12>(commandBuffer)->_commandList->Close());
-}
-
-void GraphicsD3D12::cmdBeginRender(std::shared_ptr<CommandBuffer> commandBuffer,
-								   std::shared_ptr<RenderPass> renderPass)
-{
-	GP_ASSERT(commandBuffer);
-	GP_ASSERT(renderPass);
+	GP_ASSERT(renderPass);	
 
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = {};
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = {};
@@ -339,9 +141,11 @@ void GraphicsD3D12::cmdBeginRender(std::shared_ptr<CommandBuffer> commandBuffer,
         dsv = &dsvHandle;
     }
     std::static_pointer_cast<CommandBufferD3D12>(commandBuffer)->_commandList->OMSetRenderTargets(renderPass->getColorAttachmentCount(), rtv, TRUE, dsv);
+
+	_renderPass = renderPass;
 }
 
-void GraphicsD3D12::cmdEndRender(std::shared_ptr<CommandBuffer> commandBuffer)
+void GraphicsD3D12::cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
 {
 	GP_ASSERT(commandBuffer);
 
@@ -370,13 +174,13 @@ void GraphicsD3D12::cmdEndRender(std::shared_ptr<CommandBuffer> commandBuffer)
                 std::static_pointer_cast<CommandBufferD3D12>(commandBuffer)->_commandList->ResolveSubresource(colorAttachmentD3D->_resource, 0, 
 																											  colorMultisampleAttachmentD3D->_resource, 0, 
 																											  lookupDXGI_FORMAT[_renderPass->getColorFormat()]);
-                
 				// Put it back the way we found it
                 cmdTransitionImage(commandBuffer, colorAttachmentD3D, Texture::USAGE_RESOLVE_DST, Texture::USAGE_COLOR_ATTACHMENT);
                 cmdTransitionImage(commandBuffer, colorMultisampleAttachmentD3D, Texture::USAGE_RESOLVE_SRC, Texture::USAGE_COLOR_ATTACHMENT);
             }
         }
     }
+	_renderPass = nullptr;
 }
 
 void GraphicsD3D12::cmdSetViewport(std::shared_ptr<CommandBuffer> commandBuffer,
@@ -411,26 +215,6 @@ void GraphicsD3D12::cmdSetScissor(std::shared_ptr<CommandBuffer> commandBuffer,
     std::static_pointer_cast<CommandBufferD3D12>(commandBuffer)->_commandList->RSSetScissorRects(1, &scissor);
 }
 
-void GraphicsD3D12::cmdClearColorAttachment(std::shared_ptr<CommandBuffer> commandBuffer,
-										    size_t attachmentTndex,
-										    const ClearValue& clearValue)
-{
-	GP_ASSERT(commandBuffer);
-
-	std::shared_ptr<CommandBufferD3D12> commandBufferD3D = std::static_pointer_cast<CommandBufferD3D12>(commandBuffer);
-	D3D12_CPU_DESCRIPTOR_HANDLE handle = std::static_pointer_cast<RenderPassD3D12>(_renderPass)->_renderTargetHeap->GetCPUDescriptorHandleForHeapStart();
-    UINT inc_size = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-    handle.ptr += attachmentTndex * inc_size;
-
-	FLOAT clearColor[4] = {};
-    clearColor[0] = clearValue.color.red;
-    clearColor[1] = clearValue.color.green;
-    clearColor[2] = clearValue.color.blue;
-    clearColor[3] = clearValue.color.alpha;
-
-    commandBufferD3D->_commandList->ClearRenderTargetView(handle, clearColor, 0, nullptr);
-}
-
 void GraphicsD3D12::cmdBindRenderPipeline(std::shared_ptr<CommandBuffer> commandBuffer,
 									      std::shared_ptr<RenderPipeline> renderPipeline)
 {
@@ -448,8 +232,11 @@ void GraphicsD3D12::cmdBindRenderPipeline(std::shared_ptr<CommandBuffer> command
     case RenderPipeline::PRIMITIVE_TOPOLOGY_LINE_STRIP: 
 		topology = D3D_PRIMITIVE_TOPOLOGY_LINESTRIP; 
 		break;
-    case RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP: 
+    case RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST: 
 		topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST; 
+		break;
+	case RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP: 
+		topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP; 
 		break;
     }
 
@@ -558,6 +345,37 @@ void GraphicsD3D12::cmdBindIndexBuffer(std::shared_ptr<CommandBuffer> commandBuf
     std::static_pointer_cast<CommandBufferD3D12>(commandBuffer)->_commandList->IASetIndexBuffer(&std::static_pointer_cast<BufferD3D12>(indexBuffer)->_indexBufferView);
 }
 
+void GraphicsD3D12::cmdClearColor(std::shared_ptr<CommandBuffer> commandBuffer,
+								  float red, float green, float blue, float alpha, 
+								  size_t attachmentIndex)
+{
+	GP_ASSERT(commandBuffer);
+
+	std::shared_ptr<CommandBufferD3D12> commandBufferD3D = std::static_pointer_cast<CommandBufferD3D12>(commandBuffer);
+	D3D12_CPU_DESCRIPTOR_HANDLE renderTargetView = std::static_pointer_cast<RenderPassD3D12>(_renderPass)->_renderTargetHeap->GetCPUDescriptorHandleForHeapStart();
+    UINT rtvIncrementSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+    renderTargetView.ptr += attachmentIndex * rtvIncrementSize;
+
+	FLOAT clearColor[4] = {};
+    clearColor[0] = red;
+    clearColor[1] = green;
+    clearColor[2] = blue;
+    clearColor[3] = alpha;
+
+    commandBufferD3D->_commandList->ClearRenderTargetView(renderTargetView, clearColor, 0, nullptr);
+}
+
+void GraphicsD3D12::cmdClearDepthStencil(std::shared_ptr<CommandBuffer> commandBuffer,
+									     float depth, uint32_t stencil)
+{
+	GP_ASSERT(commandBuffer);
+
+	std::shared_ptr<CommandBufferD3D12> commandBufferD3D = std::static_pointer_cast<CommandBufferD3D12>(commandBuffer);
+	D3D12_CPU_DESCRIPTOR_HANDLE depthStencilView = std::static_pointer_cast<RenderPassD3D12>(_renderPass)->_depthStencilHeap->GetCPUDescriptorHandleForHeapStart();
+
+	commandBufferD3D->_commandList->ClearDepthStencilView(depthStencilView, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, depth, stencil, 0, nullptr);
+}
+
 void GraphicsD3D12::cmdDraw(std::shared_ptr<CommandBuffer> commandBuffer,
 							size_t vertexCount, size_t vertexStart)
 {
@@ -600,32 +418,6 @@ void GraphicsD3D12::cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuf
     std::static_pointer_cast<CommandBufferD3D12>(commandBuffer)->_commandList->ResourceBarrier(1, &barrier);
 }
 
-std::shared_ptr<Semaphore> GraphicsD3D12::createSemaphore()
-{
-	std::shared_ptr<SemaphoreD3D12> semaphoreD3D = std::make_shared<SemaphoreD3D12>(_device, nullptr);
-	return std::static_pointer_cast<Semaphore>(semaphoreD3D);
-}
-
-void GraphicsD3D12::destroySemaphore(std::shared_ptr<Semaphore> semaphore)
-{
-	GP_ASSERT(semaphore != nullptr);
-	semaphore.reset();
-}
-
-std::shared_ptr<Fence> GraphicsD3D12::createFence()
-{
-	ID3D12Fence* fence;
-	D3D_CHECK_RESULT(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, __uuidof(fence), (void**)&(fence)));
-	HANDLE fenceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-	std::shared_ptr<FenceD3D12> fenceD3D = std::make_shared<FenceD3D12>(_device, fence, fenceEvent);
-	return std::static_pointer_cast<Fence>(fenceD3D);
-}
-
-void GraphicsD3D12::destroyFence(std::shared_ptr<Fence> fence)
-{
-	GP_ASSERT(fence);
-	fence.reset();
-}
 
 std::shared_ptr<Buffer> GraphicsD3D12::createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible, bool is32bit)
 {
@@ -723,12 +515,12 @@ std::shared_ptr<Buffer> GraphicsD3D12::createVertexBuffer(size_t size,
 }
 
 std::shared_ptr<Buffer> GraphicsD3D12::createIndexBuffer(size_t size, 
-														 IndexFormat indexFormat, 
+														 size_t indexStride,
 														 bool hostVisible,
 														 const void* data)
 {
-	size_t stride = (indexFormat == INDEX_FORMAT_UINT32) ? sizeof(uint32_t) : sizeof(uint16_t);
-	return createBuffer(Buffer::USAGE_INDEX, size, stride, hostVisible, (indexFormat == INDEX_FORMAT_UINT32));
+	GP_ASSERT(indexStride == sizeof(uint32_t) || indexStride == sizeof(uint16_t));
+	return createBuffer(Buffer::USAGE_INDEX, size, indexStride, hostVisible, indexStride == sizeof(uint32_t));
 }
 
 std::shared_ptr<Buffer> GraphicsD3D12::createUniformBuffer(size_t size, 
@@ -750,7 +542,6 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture(Texture::Type type,
 													  Format pixelFormat,
 													  Texture::Usage usage,
 													  Texture::SampleCount sampleCount,
-													  const ClearValue& clearValue,
 													  bool hostVisible,
 													  const void* data,
 													  ID3D12Resource* resource)
@@ -790,7 +581,7 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture(Texture::Type type,
     resourceDesc.DepthOrArraySize = depth;
     resourceDesc.MipLevels = (UINT16)mipLevels;
 	resourceDesc.Format = format;
-    resourceDesc.SampleDesc.Count = lookupD3D12_SAMPLES[sampleCount];
+    resourceDesc.SampleDesc.Count = sampleCount;
     resourceDesc.SampleDesc.Quality = 0;
     resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
     resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
@@ -822,9 +613,10 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture(Texture::Type type,
 	resourceViewDesc.Format = format;
 	resourceViewDesc.ViewDimension = viewDimension;
 	resourceViewDesc.Texture2D.MipLevels = (UINT)mipLevels;
-	std::shared_ptr<TextureD3D12> textureD3D = std::make_shared<TextureD3D12>(Texture::TYPE_3D, width, height, depth, 1, 
-																			   pixelFormat, usage, sampleCount, clearValue, hostVisible, hostOwned,
+	std::shared_ptr<TextureD3D12> textureD3D = std::make_shared<TextureD3D12>(type, width, height, depth, 1, 
+																			   pixelFormat, usage, sampleCount, hostVisible, hostOwned,
 																		       _device, resource);
+	textureD3D->_resourceViewDesc = resourceViewDesc;
 	return std::static_pointer_cast<Texture>(textureD3D);
 }
 
@@ -832,21 +624,19 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture1d(size_t width,
 														Format pixelFormat,
 														Texture::Usage usage, 
 														Texture::SampleCount sampleCount,
-														const ClearValue& clearValue,
 														bool hostVisible,
 													    const void* data)
 {
 	GP_ASSERT(pixelFormat != Format::FORMAT_UNDEFINED);
 
 	return createTexture(Texture::TYPE_1D, width, 1, 1, 1, 
-						 pixelFormat, usage, sampleCount, clearValue, hostVisible, data, nullptr);
+						 pixelFormat, usage, sampleCount, hostVisible, data, nullptr);
 }
 
 std::shared_ptr<Texture> GraphicsD3D12::createTexture2d(size_t width, size_t height, size_t mipLevels,
 														Format pixelFormat,
 														Texture::Usage usage,
 														Texture::SampleCount sampleCount,
-														const ClearValue& clearValue,
 														bool hostVisible,
 													    const void* data)
 {
@@ -857,21 +647,20 @@ std::shared_ptr<Texture> GraphicsD3D12::createTexture2d(size_t width, size_t hei
         mipLevels = Graphics::computeMipLevels(width, height);
     }
 	return createTexture(Texture::TYPE_2D, width, height, 1, mipLevels, 
-						 pixelFormat, usage, sampleCount, clearValue, hostVisible, data, nullptr);
+						 pixelFormat, usage, sampleCount, hostVisible, data, nullptr);
 }
 
 std::shared_ptr<Texture> GraphicsD3D12::createTexture3d(size_t width, size_t height, size_t depth,
 														Format pixelFormat,
 														Texture::Usage usage,
 														Texture::SampleCount sampleCount,
-														const ClearValue& clearValue,
 														bool hostVisible,
 													    const void* data)
 {
 	GP_ASSERT(pixelFormat != Format::FORMAT_UNDEFINED);
 
 	return createTexture(Texture::TYPE_3D, width, height, depth, 1, 
-						 pixelFormat, usage, sampleCount, clearValue, hostVisible, data, nullptr);	
+						 pixelFormat, usage, sampleCount, hostVisible, data, nullptr);	
 }
 
 void GraphicsD3D12::destroyTexture(std::shared_ptr<Texture> texture)
@@ -890,7 +679,7 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
 															std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
 															std::shared_ptr<Texture> depthStencilAttachment)
 {
-	ID3D12DescriptorHeap*  renderTargetHeap;
+	 ID3D12DescriptorHeap* renderTargetHeap;
 	 if (colorAttachmentCount > 0) 
 	 {
 		D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc = {};
@@ -923,7 +712,7 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
         }
     }
 
-	ID3D12DescriptorHeap*  depthStencilHeap;
+	ID3D12DescriptorHeap* depthStencilHeap;
     if (depthStencilFormat != Format::FORMAT_UNDEFINED) 
 	{
         GP_ASSERT(depthStencilAttachment != nullptr);
@@ -969,26 +758,24 @@ std::shared_ptr<RenderPass> GraphicsD3D12::createRenderPass(size_t width, size_t
 
 	for (size_t i = 0; i < colorAttachmentCount; ++i)
 	{
-		ClearValue clearColor(0, 0, 0, 1);
 		std::shared_ptr<Texture> colorAttachment = createTexture2d(width, height, 1, colorFormat, 
 																   Texture::USAGE_COLOR_ATTACHMENT, 
-																   Texture::SAMPLE_COUNT_1X, clearColor, false, nullptr);
+																   Texture::SAMPLE_COUNT_1X, false, nullptr);
 		std::shared_ptr<TextureD3D12> colorAttachmentD3D = std::static_pointer_cast<TextureD3D12>(colorAttachment);
 		colorAttachments.push_back(colorAttachment);
 		if (sampleCount > Texture::SAMPLE_COUNT_1X)
 		{
 			std::shared_ptr<Texture> colorMultisampleAttachment = createTexture2d(width, height, 1, colorFormat, 
 																				  Texture::USAGE_COLOR_ATTACHMENT, 
-																				  sampleCount, clearColor, false, nullptr);
+																				  sampleCount, false, nullptr);
 			colorMultisampleAttachments.push_back(colorMultisampleAttachment);
 		}
 	}
 	if (depthStencilFormat != Format::FORMAT_UNDEFINED)
 	{
-		ClearValue clearDepthStencil(0.0f, 0);
 		depthStencilAttachment = createTexture2d(width, height, 1, depthStencilFormat, 
 												 Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
-												 Texture::SAMPLE_COUNT_1X, clearDepthStencil, false, nullptr);
+												 Texture::SAMPLE_COUNT_1X, false, nullptr);
 	}
 
 	return createRenderPass(width, height, colorAttachmentCount, colorFormat, depthStencilFormat, sampleCount,
@@ -1179,125 +966,131 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
     D3D12_ROOT_PARAMETER1* parameters11 = nullptr;
     D3D12_ROOT_PARAMETER*  parameters10 = nullptr;
 
-	size_t descriptorCount = descriptorSet->getDescriptorCount();
-    size_t cbvSrvUavCount = 0;
-    size_t samplerCount = 0;
-    for (size_t i = 0; i < descriptorCount; ++i) 
+	if (descriptorSet)
 	{
-		DescriptorSet::Descriptor descriptor = descriptorSet->getDescriptor(i);
-        uint32_t count = descriptor.count;
-		switch (descriptor.type)
+
+		size_t descriptorCount = descriptorSet->getDescriptorCount();
+		size_t cbvSrvUavCount = 0;
+		size_t samplerCount = 0;
+		for (size_t i = 0; i < descriptorCount; ++i)
 		{
-		case DescriptorSet::Descriptor::TYPE_UNIFORM:
-		case DescriptorSet::Descriptor::TYPE_TEXTURE:
-			cbvSrvUavCount += count;
-			break;
-		case DescriptorSet::Descriptor::TYPE_SAMPLER:
-			samplerCount += count;
-			break;
+			DescriptorSet::Descriptor descriptor = descriptorSet->getDescriptor(i);
+			uint32_t count = descriptor.count;
+			switch (descriptor.type)
+			{
+			case DescriptorSet::Descriptor::TYPE_UNIFORM:
+			case DescriptorSet::Descriptor::TYPE_TEXTURE:
+				cbvSrvUavCount += count;
+				break;
+			case DescriptorSet::Descriptor::TYPE_SAMPLER:
+				samplerCount += count;
+				break;
+			}
 		}
 
-        ranges11 = (D3D12_DESCRIPTOR_RANGE1*)calloc(descriptorCount, sizeof(*ranges11));
-        ranges10 = (D3D12_DESCRIPTOR_RANGE*)calloc(descriptorCount, sizeof(*ranges10));
-        parameters11 = (D3D12_ROOT_PARAMETER1*)calloc(descriptorCount, sizeof(*parameters11));
-        parameters10 = (D3D12_ROOT_PARAMETER*)calloc(descriptorCount, sizeof(*parameters10));
+		ranges11 = (D3D12_DESCRIPTOR_RANGE1*)calloc(descriptorCount, sizeof(*ranges11));
+		ranges10 = (D3D12_DESCRIPTOR_RANGE*)calloc(descriptorCount, sizeof(*ranges10));
+		parameters11 = (D3D12_ROOT_PARAMETER1*)calloc(descriptorCount, sizeof(*parameters11));
+		parameters10 = (D3D12_ROOT_PARAMETER*)calloc(descriptorCount, sizeof(*parameters10));
 
-        for (size_t i = 0; i < descriptorCount; i++) 
+		for (size_t i = 0; i < descriptorCount; i++)
 		{
-            D3D12_DESCRIPTOR_RANGE1* range11 = &ranges11[rangeCount];
-            D3D12_DESCRIPTOR_RANGE* range10 = &ranges10[rangeCount];
-            D3D12_ROOT_PARAMETER1* param11 = &parameters11[parameterCount];
-            D3D12_ROOT_PARAMETER* param10 = &parameters10[parameterCount];
-            param11->ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-            param10->ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-            param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-            param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-            uint32_t shaderStageCount = 0;
-            
-            if (descriptor.shaderStages & DescriptorSet::Descriptor::SHADER_STAGE_VERT)
-			{
-                param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-                param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-                ++shaderStageCount;
-            }
-            if (descriptor.shaderStages & DescriptorSet::Descriptor::SHADER_STAGE_TESC)
-			{
-                param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_HULL;
-                param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_HULL;
-                ++shaderStageCount;
-            }
-            if (descriptor.shaderStages & DescriptorSet::Descriptor::SHADER_STAGE_TESE)
-			{
-                param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_DOMAIN;
-                param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_DOMAIN;
-                ++shaderStageCount;
-            }
-            if (descriptor.shaderStages  & DescriptorSet::Descriptor::SHADER_STAGE_GEOM)
-			{
-                param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_GEOMETRY;
-                param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_GEOMETRY;
-                ++shaderStageCount;
-            }
-            if (descriptor.shaderStages & DescriptorSet::Descriptor::SHADER_STAGE_FRAG)
-			{
-                param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-                param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-                ++shaderStageCount;
-            }
+			DescriptorSet::Descriptor descriptor = descriptorSet->getDescriptor(i);
 
-            if (shaderStageCount > 1) 
-			{
-                param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-                param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-            }
+			D3D12_DESCRIPTOR_RANGE1* range11 = &ranges11[rangeCount];
+			D3D12_DESCRIPTOR_RANGE* range10 = &ranges10[rangeCount];
+			D3D12_ROOT_PARAMETER1* param11 = &parameters11[parameterCount];
+			D3D12_ROOT_PARAMETER* param10 = &parameters10[parameterCount];
+			param11->ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+			param10->ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+			param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+			param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+			uint32_t shaderStageCount = 0;
 
-            bool assignRange = false;
-            switch (descriptor.type) 
+			if (descriptor.shaderStages & DescriptorSet::Descriptor::SHADER_STAGE_VERT)
 			{
-            case DescriptorSet::Descriptor::TYPE_UNIFORM:
-                range11->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-                range10->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-                assignRange = true;
+				param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+				param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+				++shaderStageCount;
+			}
+			if (descriptor.shaderStages & DescriptorSet::Descriptor::SHADER_STAGE_TESC)
+			{
+				param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_HULL;
+				param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_HULL;
+				++shaderStageCount;
+			}
+			if (descriptor.shaderStages & DescriptorSet::Descriptor::SHADER_STAGE_TESE)
+			{
+				param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_DOMAIN;
+				param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_DOMAIN;
+				++shaderStageCount;
+			}
+			if (descriptor.shaderStages  & DescriptorSet::Descriptor::SHADER_STAGE_GEOM)
+			{
+				param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_GEOMETRY;
+				param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_GEOMETRY;
+				++shaderStageCount;
+			}
+			if (descriptor.shaderStages & DescriptorSet::Descriptor::SHADER_STAGE_FRAG)
+			{
+				param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+				param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+				++shaderStageCount;
+			}
+
+			if (shaderStageCount > 1)
+			{
+				param11->ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+				param10->ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+			}
+
+			bool assignRange = false;
+			switch (descriptor.type)
+			{
+			case DescriptorSet::Descriptor::TYPE_UNIFORM:
+				range11->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+				range10->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+				assignRange = true;
 				break;
-            case DescriptorSet::Descriptor::TYPE_TEXTURE:
-                range11->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-                range10->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-                assignRange = true;
+			case DescriptorSet::Descriptor::TYPE_TEXTURE:
+				range11->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+				range10->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+				assignRange = true;
 				break;
-            case DescriptorSet::Descriptor::TYPE_SAMPLER:
-                range11->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
-                range10->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
-                assignRange = true;
-                break;
-            }
+			case DescriptorSet::Descriptor::TYPE_SAMPLER:
+				range11->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+				range10->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+				assignRange = true;
+				break;
+			}
 
-            if (assignRange) 
+			if (assignRange)
 			{
-                range11->NumDescriptors = descriptor.count;
-                range11->BaseShaderRegister = descriptor.binding;
-                range11->RegisterSpace = 0;
-                range11->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
-                range11->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+				range11->NumDescriptors = descriptor.count;
+				range11->BaseShaderRegister = descriptor.binding;
+				range11->RegisterSpace = 0;
+				range11->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
+				range11->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-                range10->NumDescriptors = descriptor.count;
-                range10->BaseShaderRegister = descriptor.binding;
-                range10->RegisterSpace = 0;
-                range10->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+				range10->NumDescriptors = descriptor.count;
+				range10->BaseShaderRegister = descriptor.binding;
+				range10->RegisterSpace = 0;
+				range10->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-                param11->DescriptorTable.pDescriptorRanges = range11;
-                param11->DescriptorTable.NumDescriptorRanges = 1;
+				param11->DescriptorTable.pDescriptorRanges = range11;
+				param11->DescriptorTable.NumDescriptorRanges = 1;
 
-                param10->DescriptorTable.pDescriptorRanges = range10;
-                param10->DescriptorTable.NumDescriptorRanges = 1;
+				param10->DescriptorTable.pDescriptorRanges = range10;
+				param10->DescriptorTable.NumDescriptorRanges = 1;
 
 				std::shared_ptr<DescriptorSetD3D12> descriptorSetD3D = std::static_pointer_cast<DescriptorSetD3D12>(descriptorSet);
-                descriptorSetD3D->_bindings[i].rootParameterIndex = parameterCount;
+				descriptorSetD3D->_bindings[i].rootParameterIndex = parameterCount;
 
-                ++rangeCount;
-                ++parameterCount;
-            }
-        }
-    }
+				++rangeCount;
+				++parameterCount;
+			}
+		}
+	}
 
 	D3D12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
     if (D3D_ROOT_SIGNATURE_VERSION_1_1 == featureData.HighestVersion) 
@@ -1338,91 +1131,17 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
 
 	// Input Elements
 	uint32_t inputElementCount = 0;
+	std::vector<std::string> inputNames;
     D3D12_INPUT_ELEMENT_DESC inputElements[GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX];
-    char semanticNames[GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX][GP_GRAPHICS_SEMANTIC_NAME_MAX];
 
     size_t attribCount = GP_MATH_MIN(vertexLayout.getAttributeCount(), GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX);
     for (uint32_t i = 0; i < vertexLayout.getAttributeCount(); i++)
 	{
 		VertexLayout::Attribute attribute = vertexLayout.getAttribute(i);
-		GP_ASSERT(attribute.semantic != VertexLayout::SEMANTIC_UNDEFINED);
-
-        if (attribute.semanticName.length() > 0)
-		{
-            size_t semanticNameLenth = GP_MATH_MIN(GP_GRAPHICS_SEMANTIC_NAME_MAX, attribute.semanticName.length());
-            strncpy_s(semanticNames[i], attribute.semanticName.c_str(), semanticNameLenth);
-        }
-        else 
-		{
-            char semanticName[GP_GRAPHICS_SEMANTIC_NAME_MAX];
-            switch (attribute.semantic) 
-			{
-			case VertexLayout::SEMANTIC_POSITION: 
-				sprintf_s(semanticName, "POSITION"); 
-				break;
-            case VertexLayout::SEMANTIC_NORMAL: 
-				sprintf_s(semanticName, "NORMAL"); 
-				break;
-            case VertexLayout::SEMANTIC_COLOR: 
-				sprintf_s(semanticName, "COLOR"); 
-				break;
-            case VertexLayout::SEMANTIC_TANGENT: 
-				sprintf_s(semanticName, "TANGENT"); 
-				break;
-            case VertexLayout::SEMANTIC_BITANGENT: 
-				sprintf_s(semanticName, "BITANGENT"); 
-				break;
-            case VertexLayout::SEMANTIC_TEXCOORD0: 
-            case VertexLayout::SEMANTIC_TEXCOORD1: 
-            case VertexLayout::SEMANTIC_TEXCOORD2: 
-            case VertexLayout::SEMANTIC_TEXCOORD3: 
-            case VertexLayout::SEMANTIC_TEXCOORD4: 
-            case VertexLayout::SEMANTIC_TEXCOORD5:
-			case VertexLayout::SEMANTIC_TEXCOORD6:
-			case VertexLayout::SEMANTIC_TEXCOORD7:
-				sprintf_s(semanticName, "TEXCOORD"); 
-				break;
-            default: 
-				break;
-            }
-            GP_ASSERT(strlen(semanticName) != 0);
-            strncpy_s(semanticNames[i], semanticName, strlen(semanticName));
-        }
-
-        UINT semanticIndex = 0;
-        switch (attribute.semantic)
-		{
-        case VertexLayout::SEMANTIC_TEXCOORD0:
-			semanticIndex = 0;
-			break;
-        case VertexLayout::SEMANTIC_TEXCOORD1:
-			semanticIndex = 1;
-			break;
-        case VertexLayout::SEMANTIC_TEXCOORD2:
-			semanticIndex = 2; 
-			break;
-        case VertexLayout::SEMANTIC_TEXCOORD3:
-			semanticIndex = 3; 
-			break;
-        case VertexLayout::SEMANTIC_TEXCOORD4:
-			semanticIndex = 4;
-			break;
-        case VertexLayout::SEMANTIC_TEXCOORD5:
-			semanticIndex = 5;
-			break;
-        case VertexLayout::SEMANTIC_TEXCOORD6:
-			semanticIndex = 6;
-			break;
-        case VertexLayout::SEMANTIC_TEXCOORD7:
-			semanticIndex = 7; 
-			break;
-        default: 
-			break;
-        }
 
 		D3D12_INPUT_ELEMENT_DESC inputElementDesc = {};
-        inputElements[inputElementCount].SemanticName = semanticNames[i];
-        inputElements[inputElementCount].SemanticIndex = semanticIndex;
+		inputElements[inputElementCount].SemanticName = lookupSemantic[attribute.semantic];
+		inputElements[inputElementCount].SemanticIndex = lookupSemanticIndex[attribute.semantic];
         inputElements[inputElementCount].Format = lookupDXGI_FORMAT[attribute.format];
         inputElements[inputElementCount].InputSlot = 0;
         inputElements[inputElementCount].AlignedByteOffset = attribute.offset;
@@ -1512,19 +1231,19 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
     }
     if (teseShader != nullptr)
 	{
-        std::shared_ptr<ShaderD3D12> teseShaderD3D = std::static_pointer_cast<ShaderD3D12>(tescShader);
+        std::shared_ptr<ShaderD3D12> teseShaderD3D = std::static_pointer_cast<ShaderD3D12>(teseShader);
         HS.BytecodeLength = teseShaderD3D->_shader->GetBufferSize();
         HS.pShaderBytecode = teseShaderD3D->_shader->GetBufferPointer();
     }
     if (geomShader != nullptr)
 	{
-		std::shared_ptr<ShaderD3D12> geomShaderD3D = std::static_pointer_cast<ShaderD3D12>(tescShader);
+		std::shared_ptr<ShaderD3D12> geomShaderD3D = std::static_pointer_cast<ShaderD3D12>(geomShader);
         GS.BytecodeLength = geomShaderD3D->_shader->GetBufferSize();
         GS.pShaderBytecode = geomShaderD3D->_shader->GetBufferPointer();
     }
 	if (fragShader != nullptr) 
 	{
-		std::shared_ptr<ShaderD3D12> fragShaderD3D = std::static_pointer_cast<ShaderD3D12>(tescShader);
+		std::shared_ptr<ShaderD3D12> fragShaderD3D = std::static_pointer_cast<ShaderD3D12>(fragShader);
         PS.BytecodeLength = fragShaderD3D->_shader->GetBufferSize();
         PS.pShaderBytecode = fragShaderD3D->_shader->GetBufferPointer();
     }
@@ -1535,7 +1254,7 @@ std::shared_ptr<RenderPipeline> GraphicsD3D12::createRenderPipeline(RenderPipeli
 
 	// Multisampling
 	DXGI_SAMPLE_DESC sampleDesc = {};
-    sampleDesc.Count = lookupD3D12_SAMPLES[renderPass->getSampleCount()];
+    sampleDesc.Count = renderPass->getSampleCount();
     sampleDesc.Quality = 0;
 
 	D3D12_CACHED_PIPELINE_STATE cachedPipelineDesc = {};
@@ -1589,6 +1308,189 @@ void GraphicsD3D12::destroyRenderPipeline(std::shared_ptr<RenderPipeline> render
 	renderPipeline.reset();
 }
 
+void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
+{
+    if (_initialized)
+        return;
+
+    _hwnd = (HWND)window;
+
+	// Get the game config
+	std::shared_ptr<Game::Config> config = Game::getInstance()->getConfig();
+	_width = config->width;
+	_height = config->height;
+	_fullscreen = config->fullscreen;
+	_vsync = config->vsync;
+	_multisampling = config->multisampling;
+	_validation = config->validation;
+
+	// Graphics validation
+	uint32_t dxgiFactoryFlags = 0;
+#if defined(_DEBUG)
+	if (true) //_validation)
+	{
+		ID3D12Debug* debugController;
+		if (SUCCEEDED(D3D12GetDebugInterface(__uuidof(ID3D12Debug), (void**)&debugController)))
+			debugController->EnableDebugLayer();
+		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
+	}
+#endif
+
+	// Create the graphics interface factory
+	IDXGIFactory4* factory;
+	if (FAILED(CreateDXGIFactory2(dxgiFactoryFlags, __uuidof(IDXGIFactory4), (void**)&factory)))
+		GP_ERROR("Failed to create the graphics interface factory.");
+
+	// Create the device
+	IDXGIAdapter1* hardwareAdapter;
+	getHardwareAdapter(factory, &hardwareAdapter);
+	if (FAILED(D3D12CreateDevice(hardwareAdapter, D3D_FEATURE_LEVEL_11_0, __uuidof(ID3D12Device), (void**)&_device)))
+		GP_ERROR("Failed to create a Direct3D 12 device.");
+
+	// Create render command queue
+	D3D12_COMMAND_QUEUE_DESC commandQueueDesc;
+	ZeroMemory(&commandQueueDesc, sizeof(commandQueueDesc));
+	commandQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+	commandQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
+	commandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+	commandQueueDesc.NodeMask = 0;
+	D3D_CHECK_RESULT(_device->CreateCommandQueue(&commandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_queue));
+	
+
+	// Pick the first adapter and ouput
+	IDXGIAdapter* adapter;
+	D3D_CHECK_RESULT(factory->EnumAdapters(0, &adapter));
+	IDXGIOutput* output;
+	D3D_CHECK_RESULT(adapter->EnumOutputs(0, &output));
+
+	// Get the number of display modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM
+	uint32_t displayModeCount;
+	if (FAILED(output->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &displayModeCount, nullptr)) ||  displayModeCount < 1)
+		GP_ERROR("Failed to find compatible display mode for adapter outputs(monitor).");
+
+	// Get the display modes
+	_displayModes.resize(displayModeCount);
+	if (FAILED(output->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &displayModeCount, &_displayModes[0])))
+		GP_ERROR("Failed to get display mode list for adapter outputs(monitor).");
+	
+	// Find a display mode that matches our config
+	for (size_t i = 0; i < displayModeCount; i++)
+	{
+		if (_displayModes[i].Height == _height && _displayModes[i].Width == _width)
+		{
+			_width = _displayModes[i].Width;
+			_height = _displayModes[i].Height;
+			_displayMode = i;
+			break;
+		}
+	}
+	GP_SAFE_RELEASE(output);
+	GP_SAFE_RELEASE(adapter);
+	
+	// Create the swapchain
+	DXGI_SWAP_CHAIN_DESC1 swapchainDesc = {};
+	swapchainDesc.BufferCount = GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT;
+	swapchainDesc.Width = _width;
+	swapchainDesc.Height = _height;
+	swapchainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapchainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapchainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	swapchainDesc.SampleDesc.Count = 1 + _multisampling;
+	IDXGISwapChain1* swapchain;
+	D3D_CHECK_RESULT(factory->CreateSwapChainForHwnd(_queue, _hwnd, &swapchainDesc, nullptr, nullptr, &swapchain));
+	D3D_CHECK_RESULT(swapchain->QueryInterface(__uuidof(IDXGISwapChain4), (void**)&_swapchain));
+	GP_SAFE_RELEASE(factory);
+
+	// Create a render target description heap for the back buffers
+	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
+	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+
+	// One extra for the intermediate render target
+	rtvHeapDesc.NumDescriptors = GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT;
+	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	D3D_CHECK_RESULT(_device->CreateDescriptorHeap(&rtvHeapDesc, __uuidof(ID3D12DescriptorHeap), (void**)&_swapchainImagesViewHeap));
+
+    // Create the swapchain image
+    createSwapchainImages();
+
+	 // Load root signature functions
+    HMODULE module = ::GetModuleHandle(TEXT("d3d12.dll"));
+    D3D12CreateRootSignatureDeserializer = (PFN_D3D12_CREATE_ROOT_SIGNATURE_DESERIALIZER)GetProcAddress(module, "D3D12SerializeVersionedRootSignature");
+	GP_ASSERT(D3D12CreateRootSignatureDeserializer);
+
+    D3D12SerializeVersionedRootSignature = (PFN_D3D12_SERIALIZE_VERSIONED_ROOT_SIGNATURE)GetProcAddress(module, "D3D12SerializeVersionedRootSignature");
+	GP_ASSERT(D3D12SerializeVersionedRootSignature);
+
+    D3D12CreateVersionedRootSignatureDeserializer = (PFN_D3D12_CREATE_VERSIONED_ROOT_SIGNATURE_DESERIALIZER)GetProcAddress(module,"D3D12CreateVersionedRootSignatureDeserializer");
+    GP_ASSERT(D3D12CreateVersionedRootSignatureDeserializer);
+    
+	// Create the synchronization objects and command buffers
+	 for (size_t i = 0; i < GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT; i++)
+	 {
+		ID3D12CommandAllocator* commandAllocator = nullptr;
+		D3D_CHECK_RESULT(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(commandAllocator), (void**)&(commandAllocator)));
+
+		ID3D12PipelineState* pipelineState = nullptr;
+		ID3D12GraphicsCommandList* commandList = nullptr;
+		D3D_CHECK_RESULT(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, pipelineState,
+												    __uuidof(commandList), (void**)&(commandList)));
+		commandList->Close();
+		
+		_commandBuffers.push_back(std::make_shared<CommandBufferD3D12>(_device, commandAllocator, commandList));
+	 }
+	
+	D3D_CHECK_RESULT(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_queueWaitIdleFence)));
+	_queueWaitIdleFenceValue = 1;
+	_queueWaitIdleFenceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+
+    _initialized = true;
+    _resized = true;
+}
+
+bool GraphicsD3D12::isInitialized()
+{
+    return _initialized;
+}
+
+void GraphicsD3D12::onResize(int width, int height)
+{
+    if (!_resized || (width == _width && height == _height))
+		return;
+	
+	// Wait for the gpu to finish processing on backbuffers before resizing them
+	waitIdle();
+
+    _resized = false;
+	
+    // Release the backbuffers
+	for (uint32_t i = 0; i < GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT; i++)
+	{
+		GP_SAFE_RELEASE(_swapchainImages[i]);		
+	}
+
+	// Resize the swap chain to the desired dimensions.
+	DXGI_SWAP_CHAIN_DESC desc = {};
+	_swapchain->GetDesc(&desc);
+	D3D_CHECK_RESULT(_swapchain->ResizeBuffers(GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT, width, height, desc.BufferDesc.Format, desc.Flags));
+
+	// Reset the frame index to the current back buffer index.
+	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
+
+    // Create the swapchain
+    createSwapchainImages();
+
+	_width = width;
+	_height = height;
+
+    _resized = true;
+}
+
+bool GraphicsD3D12::isResized()
+{
+    return _resized;
+}
+
 void GraphicsD3D12::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** ppAdapter)
 {
 	IDXGIAdapter1* adapter;
@@ -1607,42 +1509,43 @@ void GraphicsD3D12::getHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** 
 
 void GraphicsD3D12::createSwapchainImages()
 {
-
-	std::vector<std::shared_ptr<Texture>> colorAttachments;
-	std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments;
-	std::shared_ptr<Texture> depthStencilAttachment = nullptr;
-
 	_swapchainImagesViewDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	D3D12_CPU_DESCRIPTOR_HANDLE swapchainImageViewHandle = _swapchainImagesViewHeap->GetCPUDescriptorHandleForHeapStart();
 	
 	for (uint32_t i = 0; i < GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT; i++)
 	{
+		std::vector<std::shared_ptr<Texture>> colorAttachments;
 		D3D_CHECK_RESULT(_swapchain->GetBuffer(i, __uuidof(ID3D12Resource), (void**)&_swapchainImages[i]));
 		_device->CreateRenderTargetView(_swapchainImages[i], nullptr, swapchainImageViewHandle);
 		swapchainImageViewHandle.ptr += _swapchainImagesViewDescriptorSize;
 
-		ClearValue clearColor(0, 0, 0, 1);
 		std::shared_ptr<Texture> colorAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
 																 Format::FORMAT_R8G8B8A8_UNORM, 
 																 Texture::USAGE_COLOR_ATTACHMENT,
-																 Texture::SAMPLE_COUNT_1X, clearColor, false, nullptr,
+																 Texture::SAMPLE_COUNT_1X, false, nullptr,
 																 _swapchainImages[i]);
 		colorAttachments.push_back(colorAttachment);
-		ClearValue clearDepthStencil(0, 0);
-		std::shared_ptr<Texture> depthStencilAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
-																		Format::FORMAT_D24_UNORM_S8_UINT,
-																		Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
-																		Texture::SAMPLE_COUNT_1X, clearDepthStencil, false, nullptr,
-																		_swapchainImages[i]);
+
+		// todo:
+		std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments;
+
+		std::shared_ptr<Texture> depthStencilAttachment = nullptr;
+		depthStencilAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
+											   Format::FORMAT_D24_UNORM_S8_UINT,
+											   Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
+											   Texture::SAMPLE_COUNT_1X, false, nullptr,
+											   nullptr);
+
+		_renderPasses.push_back(createRenderPass(_width, _height, 1, 
+												 Format::FORMAT_R8G8B8A8_UNORM, 
+												 Format::FORMAT_D24_UNORM_S8_UINT,
+												 Texture::SAMPLE_COUNT_1X,
+										 		 colorAttachments, 
+												 colorMultisampleAttachments,
+												 depthStencilAttachment));
 	}
-	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
-	std::shared_ptr<RenderPass> renderPass = createRenderPass(_width, _height, 1, 
-															  Format::FORMAT_R8G8B8A8_UNORM, 
-															  Format::FORMAT_D24_UNORM_S8_UINT,
-															  Texture::SAMPLE_COUNT_1X,
-															  colorAttachments, 
-															  colorMultisampleAttachments,
-															  depthStencilAttachment);
+	
+	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();	
 }
 
 }

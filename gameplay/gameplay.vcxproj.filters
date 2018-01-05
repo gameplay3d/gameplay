@@ -270,36 +270,6 @@
     <ClCompile Include="src\vk\CommandBufferVK.cpp">
       <Filter>Graphics\vk</Filter>
     </ClCompile>
-    <ClCompile Include="src\Fence.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Semaphore.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\FenceD3D12.cpp">
-      <Filter>Graphics\d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\SemaphoreD3D12.cpp">
-      <Filter>Graphics\d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vk\FenceVK.cpp">
-      <Filter>Graphics\vk</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vk\SemaphoreVK.cpp">
-      <Filter>Graphics\vk</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CommandPool.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\CommandPoolD3D12.cpp">
-      <Filter>Graphics\d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vk\CommandPoolVK.cpp">
-      <Filter>Graphics\vk</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ClearValue.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gameplay.h" />
@@ -377,9 +347,6 @@
     </ClInclude>
     <ClInclude Include="src\Camera.h">
       <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ClearValue.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\ColorBlendState.h">
       <Filter>Graphics</Filter>
@@ -570,34 +537,7 @@
     <ClInclude Include="src\vk\CommandBufferVK.h">
       <Filter>Graphics\vk</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fence.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Semaphore.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\d3d12\FenceD3D12.h">
-      <Filter>Graphics\d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="src\d3d12\SemaphoreD3D12.h">
-      <Filter>Graphics\d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vk\FenceVK.h">
-      <Filter>Graphics\vk</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vk\SemaphoreVK.h">
-      <Filter>Graphics\vk</Filter>
-    </ClInclude>
     <ClInclude Include="src\Base.h" />
-    <ClInclude Include="src\CommandPool.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\d3d12\CommandPoolD3D12.h">
-      <Filter>Graphics\d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vk\CommandPoolVK.h">
-      <Filter>Graphics\vk</Filter>
-    </ClInclude>
     <ClInclude Include="src\vk\UtilsVK.h">
       <Filter>Graphics\vk</Filter>
     </ClInclude>

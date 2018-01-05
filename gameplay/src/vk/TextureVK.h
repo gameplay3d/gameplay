@@ -25,7 +25,6 @@ public:
 			  Format pixelFormat, 
 			  Usage usage, 
 			  SampleCount sampleCount,
-			  ClearValue clearValue,
 			  bool hostVisible,
 			  bool hostOwned,
 		      VkDevice device, 

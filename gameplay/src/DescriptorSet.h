@@ -7,14 +7,14 @@ namespace gameplay
 	class Sampler;
 
 /**
- * Defines a set of (resources) descriptors to be bound.
+ * Defines a set of resource descriptors to be bound to a RenderPipeline
  */
 class DescriptorSet
 {
 public:
 
 	/**
-	 * Defines an opaque (resource) descriptor.
+	 * Defines an opaque resource descriptor.
 	 */
 	class Descriptor
 	{
@@ -24,11 +24,6 @@ public:
 		 * Constructor.
 		 */
 		Descriptor();
-
-		/**
-		 * Constructor.
-		 */
-		Descriptor(const Descriptor& copy);
 
 		/**
 		 * Destructor.
@@ -51,11 +46,11 @@ public:
 		 */
 		enum ShaderStages : uint32_t
 		{
-			SHADER_STAGE_VERT,
-			SHADER_STAGE_TESC,
-			SHADER_STAGE_TESE,
-			SHADER_STAGE_GEOM,
-			SHADER_STAGE_FRAG
+			SHADER_STAGE_VERT = 0x00000001,
+			SHADER_STAGE_TESC = 0x00000002,
+			SHADER_STAGE_TESE = 0x00000004,
+			SHADER_STAGE_GEOM = 0x00000008,
+			SHADER_STAGE_FRAG = 0x00000010
 		};
 
 		/**
@@ -78,12 +73,10 @@ public:
 		 */
 		ShaderStages shaderStages = SHADER_STAGE_VERT;
 
-		union
-		{
-			std::shared_ptr<Buffer> uniforms[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
-			std::shared_ptr<Texture> textures[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
-			std::shared_ptr<Sampler>  samplers[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
-		};
+		std::shared_ptr<Buffer> uniforms[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
+		std::shared_ptr<Texture> textures[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
+		std::shared_ptr<Sampler>  samplers[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
+	
 	};
 
 	/**
@@ -113,7 +106,7 @@ public:
 	 *
 	 * @param index The index to access.
 	 */
-	const DescriptorSet::Descriptor& getDescriptor(size_t index) const;
+	DescriptorSet::Descriptor getDescriptor(size_t index) const;
 
 protected:
 

@@ -16,12 +16,11 @@ TextureD3D12::TextureD3D12(Type type, size_t width, size_t height, size_t depth,
 						   Format pixelFormat,
 					       Usage usage, 
 						   SampleCount sampleCount,
-						   const ClearValue& clearValue,
 						   bool hostVisible,
 						   bool hostOwned,
 						   ID3D12Device* device,
 						   ID3D12Resource* resource) : 
-    Texture(type, width, height, depth, mipLevels, pixelFormat, usage, sampleCount, clearValue, hostVisible, hostOwned), 
+    Texture(type, width, height, depth, mipLevels, pixelFormat, usage, sampleCount, hostVisible, hostOwned), 
     _device(device),
     _resource(resource),
 	_hostMemory(nullptr)

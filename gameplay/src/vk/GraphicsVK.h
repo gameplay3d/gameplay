@@ -26,26 +26,6 @@ public:
     ~GraphicsVK();
 
 	/**
-     * @see Graphics::onInitialize
-	 */
-    void onInitialize(unsigned long window, unsigned long connection = 0);
-
-    /**
-     * @see Graphics::isInitialized
-     */
-    bool isInitialized();
-
-	/**
-     * @see Graphics::onResize
-	 */
-    void onResize(int width, int height);
-
-    /**
-     * @see Graphics::isResized
-     */
-    bool isResized();
-
-	/**
 	 * @see Graphics::getWidth
 	 */
     int getWidth();
@@ -58,54 +38,42 @@ public:
 	/**
 	 * @see Graphics::acquireNextSwapchainImage
 	 */
-	std::shared_ptr<RenderPass> acquireNextSwapchainImage(std::shared_ptr<Fence> waitFence,
-														  std::shared_ptr<Semaphore> signalSemaphore);
+	std::shared_ptr<RenderPass> acquireNextSwapchainImage();
+
 	/**
 	 * @see Graphics::present
 	 */
-	void present(std::vector<std::shared_ptr<Semaphore>> waitSemaphores);
+	void present();
 
 	/**
 	 * @see Graphics::waitIdle
 	 */
-	void waitIdle(std::shared_ptr<Fence> waitFence);
+	void waitIdle();
 
 	/**
-	 * @see Graphics::createCommandPool
+	 * @see Graphics::beginCommands
 	 */
-	std::shared_ptr<CommandPool> createCommandPool();
+	std::shared_ptr<CommandBuffer> beginCommands();
 
 	/**
-	 * @see Graphics::destroyCommandPool
+	 * @see Graphics::endCommands
 	 */
-	void destroyCommandPool(std::shared_ptr<CommandPool> commandPool);
+	void endCommands();
 
 	/**
 	 * @see Graphics::submit
 	 */
-	void submit(std::vector<std::shared_ptr<CommandBuffer>> commandBuffers,
-			    std::vector<std::shared_ptr<Semaphore>> waitSemaphores,
-				std::vector<std::shared_ptr<Semaphore>> signalSemaphores);
-	/**
-	 * @see Graphics::cmdBegin
-	 */
-	void cmdBegin(std::shared_ptr<CommandBuffer> commandBuffer);
+	void submit(std::shared_ptr<CommandBuffer> commandBuffer);
 
 	/**
-	 * @see Graphics::cmdEnd
+	 * @see Graphics::cmdBeginRenderPass
 	 */
-	void cmdEnd(std::shared_ptr<CommandBuffer> commandBuffer);
-
+	void cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
+						    std::shared_ptr<RenderPass> renderPass);
 	/**
-	 * @see Graphics::cmdBeginRender
+	 * @see Graphics::cmdEndRenderPass
 	 */
-	void cmdBeginRender(std::shared_ptr<CommandBuffer> commandBuffer,
-						std::shared_ptr<RenderPass> renderPass);
-
-	/**
-	 * @see Graphics::cmdEndRender
-	 */
-	void cmdEndRender(std::shared_ptr<CommandBuffer> commandBuffer);
+	void cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer);
 
 	/**
 	 * @see Graphics::cmdSetViewport
@@ -117,14 +85,8 @@ public:
 	 * @see Graphics::cmdSetScissor
 	 */
 	void cmdSetScissor(std::shared_ptr<CommandBuffer> commandBuffer,
-					   size_t x, size_t y, 
-					   size_t width, size_t height);
-	/**
-	 * @see Graphics::cmdClearColorAttachment
-	 */
-	void cmdClearColorAttachment(std::shared_ptr<CommandBuffer> commandBuffer,
-							     size_t attachmentTndex, 
-								 const ClearValue& clearValue);
+					   size_t x, size_t y, size_t width, size_t height);
+
 	/**
 	 * @see Graphics::cmdBindRenderPipeline
 	 */
@@ -152,6 +114,17 @@ public:
 	void cmdBindIndexBuffer(std::shared_ptr<CommandBuffer> commandBuffer,
 							std::shared_ptr<Buffer> indexBuffer);
 	/**
+	 * @see Graphics::cmdClearColor
+	 */
+	void cmdClearColor(std::shared_ptr<CommandBuffer> commandBuffer,
+					   float red, float green, float blue, float alpha, 
+					   size_t attachmentIndex);
+	/**
+	 * @see Graphics::cmdClearDepthStencil
+	 */
+	void cmdClearDepthStencil(std::shared_ptr<CommandBuffer> commandBuffer,
+						      float depth, uint32_t stencil);
+	/**
 	 * @see Graphics::cmdDraw
 	 */
 	void cmdDraw(std::shared_ptr<CommandBuffer> commandBuffer,
@@ -169,26 +142,6 @@ public:
 							Texture::Usage usageOld, 
 							Texture::Usage usageNew);
 	/**
-	 * @see Graphics::createSemaphore
-	 */
-	std::shared_ptr<Semaphore> createSemaphore();
-
-	/**
-	 * @see Graphics::destroySemaphore
-	 */
-	void destroySemaphore(std::shared_ptr<Semaphore> semaphore);
-
-	/**
-	 * @see Graphics::createFence
-	 */
-	std::shared_ptr<Fence> createFence();
-
-	/**
-	 * @see Graphics::destroyFence
-	 */
-	void destroyFence(std::shared_ptr<Fence> fence);
-
-	/**
 	 * @see Graphics::createVertexBuffer
 	 */
 	std::shared_ptr<Buffer> createVertexBuffer(size_t size, 
@@ -200,7 +153,7 @@ public:
 	 * @see Graphics::createIndexBuffer
 	 */
 	std::shared_ptr<Buffer> createIndexBuffer(size_t size, 
-											  IndexFormat indexFormat, 
+											  size_t indexStride,
 											  bool hostVisible,
 											  const void* data);
 
@@ -223,7 +176,6 @@ public:
 											 Format pixelFormat, 
 											 Texture::Usage usage, 
 											 Texture::SampleCount sampleCount,
-											 const ClearValue& clearValue,
 											 bool hostVisible,
 											 const void* data);
 	/**
@@ -233,7 +185,6 @@ public:
 											 Format pixelFormat, 
 											 Texture::Usage usage, 
 											 Texture::SampleCount sampleCount,
-											 const ClearValue& clearValue,
 											 bool hostVisible,
 											 const void* data);
 	/**
@@ -243,7 +194,6 @@ public:
 											 Format pixelFormat, 
 											 Texture::Usage usage, 
 											 Texture::SampleCount sampleCount,
-											 const ClearValue& clearValue,
 											 bool hostVisible,
 											 const void* data);
 	/**
@@ -326,16 +276,37 @@ public:
      */
 	void destroyRenderPipeline(std::shared_ptr<RenderPipeline> renderPipeline);
 
+	/**
+     * @see Graphics::onInitialize
+	 */
+    void onInitialize(unsigned long window, unsigned long connection = 0);
+
+    /**
+     * @see Graphics::isInitialized
+     */
+    bool isInitialized();
+
+	/**
+     * @see Graphics::onResize
+	 */
+    void onResize(int width, int height);
+
+    /**
+     * @see Graphics::isResized
+     */
+    bool isResized();
+
 private:
 
 	void createInstance();
 	void createDevice();
 	void createSurface(unsigned long window, unsigned long connection);
 	void createSwapchain();
+	void createSynchronizationObjects();
 	std::shared_ptr<Buffer> createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible, const void* data);
 	std::shared_ptr<Texture> createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
 										   Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, 
-										   const ClearValue& clearValue, bool hostVisible, const void* data, VkImage existingImage);
+										   bool hostVisible, const void* data, VkImage existingImage);
 	std::shared_ptr<RenderPass> createRenderPass(size_t width,  size_t height, 
 												 size_t colorAttachmentCount,
 												 VkFormat colorFormat, 
@@ -382,11 +353,17 @@ private:
 	uint32_t _swapchainImageCount;
 	uint32_t _swapchainImageIndex;
 	std::vector<VkImage> _swapchainImages;
+	std::vector<VkFence> _swapchainAcquiredFences;
+	std::vector<VkSemaphore> _swapchainAcquiredSemaphores;
+	std::vector<VkSemaphore> _renderCompleteSemaphores;
 	VkColorSpaceKHR _colorSpace;
 	VkFormat _colorFormat;
 	VkFormat _depthStencilFormat;
 	std::shared_ptr<RenderPass> _renderPass;
 	std::vector<std::shared_ptr<RenderPass>> _renderPasses;
+	VkCommandPool _commandPool;
+	std::vector<std::shared_ptr<CommandBuffer>> _commandBuffers;
+	std::shared_ptr<CommandBuffer> _commandBuffer;
 	VkDebugReportCallbackEXT _debugMessageCallback;
 };
 

@@ -35,16 +35,54 @@ static const DXGI_FORMAT lookupDXGI_FORMAT[] =
 	DXGI_FORMAT_D32_FLOAT_S8X24_UINT
 };
 
+
 /**
- * Maps gameplay::Texture::SampleCount to D3D12_SAMPLES (UINT)
+ * Maps gameplay::Format to DXGI_FORMAT
  */
-static const UINT lookupD3D12_SAMPLES[] =
+static const LPCSTR lookupSemantic[] =
 {
+    "POSITION",
+    "NORMAL",
+    "COLOR",
+	"COLOR",
+	"COLOR",
+	"COLOR",
+	"COLOR",
+	"COLOR",
+    "TANGENT",
+    "BITANGENT",
+    "TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+};
+
+static const uint32_t lookupSemanticIndex[] =
+{
+    0,
+    0,
+    0,
+	0,
 	1,
 	2,
+	3,
 	4,
-	8,
-	16
+    0,
+    0,
+    0,
+	0,
+	1,
+	2,
+	3,
+	4,
+	5,
+	6,
+	7
 };
 
 /**
