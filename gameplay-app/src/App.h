@@ -45,6 +45,7 @@ public:
 	std::shared_ptr<Shader> _vertShader;
 	std::shared_ptr<Shader> _fragShader;
 	std::shared_ptr<DescriptorSet> _descriptorSet;
+	std::shared_ptr<Buffer> _uniformBuffer;
 	std::shared_ptr<Buffer> _vertexBuffer;
 	std::shared_ptr<Buffer> _indexBuffer;
 	std::shared_ptr<Texture> _texture;

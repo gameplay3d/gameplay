@@ -1341,6 +1341,9 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     case RenderPipeline::PRIMITIVE_TOPOLOGY_LINE_STRIP: 
 		topology = VK_PRIMITIVE_TOPOLOGY_LINE_STRIP; 
 		break;
+    case RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST: 
+		topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST; 
+		break;
     case RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP: 
 		topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP; 
 		break;

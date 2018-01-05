@@ -101,40 +101,6 @@ bool VertexLayout::Attribute::operator != (const VertexLayout::Attribute& attr) 
     return !(*this == attr);
 }
 
-std::string VertexLayout::toString(Semantic semantic)
-{
-    switch (semantic)
-    {
-    case SEMANTIC_POSITION:
-        return "POSITION";
-    case SEMANTIC_NORMAL:
-        return "NORMAL";
-    case SEMANTIC_COLOR:
-        return "COLOR";
-    case SEMANTIC_TANGENT:
-        return "TANGENT";
-    case SEMANTIC_BITANGENT:
-        return "BITANGENT";
-    case SEMANTIC_TEXCOORD0:
-        return "TEXCOORD0";
-    case SEMANTIC_TEXCOORD1:
-        return "TEXCOORD1";
-    case SEMANTIC_TEXCOORD2:
-        return "TEXCOORD2";
-    case SEMANTIC_TEXCOORD3:
-        return "TEXCOORD3";
-    case SEMANTIC_TEXCOORD4:
-        return "TEXCOORD4";
-    case SEMANTIC_TEXCOORD5:
-        return "TEXCOORD5";
-    case SEMANTIC_TEXCOORD6:
-        return "TEXCOORD6";
-    case SEMANTIC_TEXCOORD7:
-        return "TEXCOORD7";
-    default:
-        return "";
-    }
-}
 
 size_t VertexLayout::toStride(Format format)
 {

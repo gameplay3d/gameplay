@@ -326,12 +326,12 @@ private:
 	std::vector<DXGI_MODE_DESC> _displayModes;
 	ID3D12Device* _device;
 	ID3D12CommandQueue* _queue;
+	HANDLE   _queueWaitIdleFenceEvent;
+    ID3D12Fence* _queueWaitIdleFence;
+    UINT64  _queueWaitIdleFenceValue;
 	IDXGISwapChain4* _swapchain;
 	uint32_t _swapchainImagesViewDescriptorSize;
 	ID3D12DescriptorHeap* _swapchainImagesViewHeap;
-	std::vector<ID3D12Fence*> _swapchainFences;
-	std::vector<UINT> _swapchainFenceValues;
-	HANDLE _swapchainFenceEvent;
 	uint32_t _swapchainImageIndex;
 	ID3D12Resource* _swapchainImages[GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT];
 	std::vector<std::shared_ptr<RenderPass>> _renderPasses;

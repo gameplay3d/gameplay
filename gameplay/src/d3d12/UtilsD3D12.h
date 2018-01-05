@@ -37,6 +37,55 @@ static const DXGI_FORMAT lookupDXGI_FORMAT[] =
 
 
 /**
+ * Maps gameplay::Format to DXGI_FORMAT
+ */
+static const LPCSTR lookupSemantic[] =
+{
+    "POSITION",
+    "NORMAL",
+    "COLOR",
+	"COLOR",
+	"COLOR",
+	"COLOR",
+	"COLOR",
+	"COLOR",
+    "TANGENT",
+    "BITANGENT",
+    "TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+	"TEXCOORD",
+};
+
+static const uint32_t lookupSemanticIndex[] =
+{
+    0,
+    0,
+    0,
+	0,
+	1,
+	2,
+	3,
+	4,
+    0,
+    0,
+    0,
+	0,
+	1,
+	2,
+	3,
+	4,
+	5,
+	6,
+	7
+};
+
+/**
  * Maps gameplay::Sampler::AddressMode to D3D12_TEXTURE_ADDRESS_MODE
  */
 static const D3D12_TEXTURE_ADDRESS_MODE lookupD3D12_TEXTURE_ADDRESS_MODE[] =

@@ -8,10 +8,6 @@ DescriptorSet::Descriptor::Descriptor()
 {
 }
 
-DescriptorSet::Descriptor::Descriptor(const Descriptor& copy)
-{
-}
-
 DescriptorSet::Descriptor::~Descriptor()
 {
 }
@@ -25,11 +21,10 @@ DescriptorSet::DescriptorSet(const Descriptor* descriptors, size_t descriptorCou
 	GP_ASSERT(descriptors);
 	GP_ASSERT(descriptorCount < GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX);
 
+	_descriptors.resize(descriptorCount);
     for (size_t i = 0; i < descriptorCount; ++i)
     {
-        Descriptor descriptor;
-        memcpy(&descriptor, &descriptors[i], sizeof(Descriptor));
-        _descriptors.push_back(descriptor);
+        memcpy(&_descriptors[i], &descriptors[i], sizeof(Descriptor));
     }
 }
 
@@ -42,7 +37,7 @@ size_t DescriptorSet::getDescriptorCount() const
 	return _descriptors.size();
 }
 
-const DescriptorSet::Descriptor& DescriptorSet::getDescriptor(size_t index) const
+DescriptorSet::Descriptor DescriptorSet::getDescriptor(size_t index) const
 {
 	GP_ASSERT(index < _descriptors.size());
     return _descriptors[index];
