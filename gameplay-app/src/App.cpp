@@ -46,9 +46,9 @@ void App::onInitialize()
 	// Create the vertex buffer
 	std::vector<float> vertices = 
 	{
-         0.00f, 0.25f, 0.0f,  1.0f,    1.0f, 0.0f, 0.0f,
-        -0.25f,  -0.25f, 0.0f, 1.0f,   0.0f, 1.0f, 0.0f,
-        -0.25f, -0.25f, 0.0f, 1.0f,    0.0f, 0.0f, 1.0f
+         0.00f, -0.25f, 0.0f,  1.0f,    1.0f, 0.0f, 0.0f,
+        -0.25f,  0.25f, 0.0f, 1.0f,   0.0f, 1.0f, 0.0f,
+        0.25f,  0.25f, 0.0f, 1.0f,    0.0f, 0.0f, 1.0f
     };
 
 
