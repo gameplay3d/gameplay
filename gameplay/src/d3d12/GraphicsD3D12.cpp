@@ -1327,11 +1327,21 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 	// Graphics validation
 	uint32_t dxgiFactoryFlags = 0;
 #if defined(_DEBUG)
-	if (true) //_validation)
+	if (false)
 	{
-		ID3D12Debug* debugController;
-		if (SUCCEEDED(D3D12GetDebugInterface(__uuidof(ID3D12Debug), (void**)&debugController)))
-			debugController->EnableDebugLayer();
+		ID3D12Debug* debugController0;
+		ID3D12Debug1* debugController1;
+		if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController0))))
+		{
+			if (SUCCEEDED(debugController0->QueryInterface(IID_PPV_ARGS(&debugController1))))
+			{
+				debugController1->SetEnableGPUBasedValidation(true);
+			}
+		}
+		else
+		{
+			debugController0->EnableDebugLayer();
+		}
 		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif
