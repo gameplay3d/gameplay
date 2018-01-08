@@ -189,17 +189,52 @@ void GraphicsVK::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer
 	renderArea.extent.width = renderPass->getWidth();
 	renderArea.extent.height = renderPass->getHeight();
 
-	std::shared_ptr<RenderPassVK> renderPassVK = std::static_pointer_cast<RenderPassVK>(renderPass);
+	
+    VkClearValue clearValues[(2 * GP_GRAPHICS_COLOR_ATTACHMENTS_MAX) + 1];
+	uint32_t colorValueCount = renderPass->getColorAttachmentCount();
+	for (uint32_t i = 0; i < colorValueCount; ++i)
+	{
+		clearValues[i].color.float32[0] = 0;
+		clearValues[i].color.float32[1] = 0;
+		clearValues[i].color.float32[2] = 0;
+		clearValues[i].color.float32[3] = 1;
+		if (renderPass->getSampleCount() > Texture::SAMPLE_COUNT_1X)
+		{
+			clearValues[i].color.float32[0] = 0;
+            clearValues[i].color.float32[1] = 0;
+			clearValues[i].color.float32[2] = 0;
+			clearValues[i].color.float32[3] = 1;
+		}
+	}
+		// todo: multismaple
+	uint32_t depthStencilCount = renderPass->getDepthStencilFormat() == Format::FORMAT_UNDEFINED ? 0 : 1;
+    if (depthStencilCount > 0) 
+	{
+		clearValues[colorValueCount].depthStencil.depth = 0.0f;
+		clearValues[colorValueCount].depthStencil.stencil = 1.0f;
+    }
+
+    std::shared_ptr<RenderPassVK> renderPassVK = std::static_pointer_cast<RenderPassVK>(renderPass);
 	VkRenderPassBeginInfo beginInfo = {};
     beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     beginInfo.pNext = nullptr;
     beginInfo.renderPass = renderPassVK->_renderPass;
     beginInfo.framebuffer = renderPassVK->_framebuffer;
     beginInfo.renderArea = renderArea;
-	beginInfo.clearValueCount = 0;
-	beginInfo.pClearValues = nullptr;
+
+	uint32_t clearValueCount = colorValueCount;
+    if (renderPass->getSampleCount() > Texture::SAMPLE_COUNT_1X) 
+	{
+        clearValueCount *= 2;
+    }
+    clearValueCount += depthStencilCount;
+
+	beginInfo.clearValueCount = clearValueCount;
+	beginInfo.pClearValues = clearValues;
 
 	vkCmdBeginRenderPass(std::static_pointer_cast<CommandBufferVK>(commandBuffer)->_commandBuffer, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+	_renderPass = renderPass;
 }
 
 void GraphicsVK::cmdEndRenderPass(std::shared_ptr<CommandBuffer> commandBuffer)
@@ -1224,7 +1259,6 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
 {
 	GP_ASSERT(vertexLayout.getAttributeCount() > 0);
 	GP_ASSERT(renderPass != nullptr);
-	GP_ASSERT(descriptorSet != nullptr);
 
     // ShaderStages
 	std::vector<VkPipelineShaderStageCreateInfo> stagesCreateInfo;
@@ -1917,13 +1951,16 @@ void GraphicsVK::createSwapchain()
 	{
 
 		std::vector<std::shared_ptr<Texture>> colorAttachments;
-		std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments;
 		std::shared_ptr<Texture> colorAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
 																 toFormat(_colorFormat),
 																 Texture::USAGE_COLOR_ATTACHMENT,
 																 Texture::SAMPLE_COUNT_1X, false, nullptr,
 																 _swapchainImages[i]);
 		colorAttachments.push_back(colorAttachment);
+		
+		// todo:
+		std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments;
+
 		std::shared_ptr<Texture> depthStencilAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
 																	    toFormat(_depthStencilFormat),
 																		Texture::USAGE_DEPTH_STENCIL_ATTACHMENT,

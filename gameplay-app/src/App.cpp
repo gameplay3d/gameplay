@@ -51,7 +51,6 @@ void App::onInitialize()
         0.25f,  0.25f, 0.0f, 1.0f,    0.0f, 0.0f, 1.0f
     };
 
-
 	size_t vertexDataSize = sizeof(float) * vertices.size();
 	size_t vertexStride = sizeof(float) * 7;
 	_vertexBuffer = graphics->createVertexBuffer(vertexDataSize, vertexStride, true, nullptr);

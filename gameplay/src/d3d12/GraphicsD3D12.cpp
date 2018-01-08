@@ -1327,7 +1327,7 @@ void GraphicsD3D12::onInitialize(unsigned long window, unsigned long connection)
 	// Graphics validation
 	uint32_t dxgiFactoryFlags = 0;
 #if defined(_DEBUG)
-	if (false)
+	if (_validation)
 	{
 		ID3D12Debug* debugController0;
 		ID3D12Debug1* debugController1;
