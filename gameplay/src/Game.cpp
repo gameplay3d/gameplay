@@ -384,6 +384,7 @@ void Game::Config::onDeserialize(Serializer* serializer)
 	fullscreen = serializer->readBool("fullscreen", false);
 	vsync = serializer->readBool("vsync", false);
     multisampling = serializer->readInt("multisampling", 0);
+	validation = serializer->readBool("validation", false);
 	serializer->readString("homePath", homePath, "");
     size_t splashScreensCount = serializer->readStringList("splashScreens");
     for (size_t i = 0; i < splashScreensCount; i++)

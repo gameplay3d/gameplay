@@ -1896,9 +1896,7 @@ void GraphicsVK::createSwapchain()
 	VkPresentModeKHR presentMode = choosePresentMode(swapchainInfo.presentModes);
 
 	// Request the swapchain backbuffer image count 
-	_swapchainImageCount = swapchainInfo.capabilities.minImageCount;
-	if (swapchainInfo.capabilities.maxImageCount > 0 && _swapchainImageCount > swapchainInfo.capabilities.maxImageCount) 
-		_swapchainImageCount = swapchainInfo.capabilities.maxImageCount;
+	_swapchainImageCount = GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT;
 
 	// Find the transformation of the surface (prefer non-rotated)
 	VkSurfaceTransformFlagsKHR preTransfer;
@@ -1942,6 +1940,7 @@ void GraphicsVK::createSwapchain()
 	VK_CHECK_RESULT(vkGetSwapchainImagesKHR(_device, _swapchain, &_swapchainImageCount, _swapchainImages.data()));
 
 	// Get the depth stencil format
+
 	VkBool32 validDepthFormat = getDepthStencilFormat(_physicalDevice, &_depthStencilFormat);
 	if (!validDepthFormat)
 		GP_ERROR("Failed to find valid depth format.");
@@ -1965,8 +1964,7 @@ void GraphicsVK::createSwapchain()
 																	    toFormat(_depthStencilFormat),
 																		Texture::USAGE_DEPTH_STENCIL_ATTACHMENT,
 																		Texture::SAMPLE_COUNT_1X, false, nullptr,
-																		_swapchainImages[i]);
-
+																		nullptr);
 		std::shared_ptr<RenderPass> renderPass = createRenderPass(_width, _height, 1,
 																  _colorFormat,
 																  _depthStencilFormat,
@@ -2089,10 +2087,7 @@ VkBool32 GraphicsVK::getDepthStencilFormat(VkPhysicalDevice physicalDevice, VkFo
 	std::vector<VkFormat> depthStencilFormats = 
 	{
 		VK_FORMAT_D32_SFLOAT_S8_UINT,
-		VK_FORMAT_D32_SFLOAT,
-		VK_FORMAT_D24_UNORM_S8_UINT,
-		VK_FORMAT_D16_UNORM_S8_UINT,
-		VK_FORMAT_D16_UNORM
+		VK_FORMAT_D24_UNORM_S8_UINT
 	};
 	for (auto& format : depthStencilFormats)
 	{
