@@ -364,7 +364,7 @@ private:
 	VkCommandPool _commandPool;
 	std::vector<std::shared_ptr<CommandBuffer>> _commandBuffers;
 	std::shared_ptr<CommandBuffer> _commandBuffer;
-	VkDebugReportCallbackEXT _debugMessageCallback;
+	VkDebugReportCallbackEXT _debugMessageCallback;	
 };
 
 

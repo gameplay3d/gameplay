@@ -69,7 +69,7 @@ public:
     /**
      * Whether to clip the fragment’s depth values instead of clipping primitives to the z planes of the frustum.
      */
-    bool depthClipEnabled = true;
+    bool depthClipEnabled = false;
 
     /**
      * The width of rasterized line segments.
