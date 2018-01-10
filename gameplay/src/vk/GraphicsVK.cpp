@@ -598,11 +598,15 @@ std::shared_ptr<Texture> GraphicsVK::createTexture(Texture::Type type, size_t wi
 
 		if (hostVisible)
 		{
+			// Format is not supported for host visible images
 			VkFormatFeatureFlags flags = formatProps.linearTilingFeatures & formatFeatureFlags;
+			GP_ASSERT(flags != 0);
 		}
 		else
 		{
+			// Format is not supported for GPU local images (i.e. not host visible images
 			VkFormatFeatureFlags flags = formatProps.optimalTilingFeatures & formatFeatureFlags;
+			GP_ASSERT(flags != 0);
 		}
 
 		// Apply some bounds to the image
