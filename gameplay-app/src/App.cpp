@@ -46,9 +46,9 @@ void App::onInitialize()
 	// Create the vertex buffer
 	std::vector<float> vertices = 
 	{
-         0.00f, -0.25f, 0.0f,  1.0f,    1.0f, 0.0f, 0.0f,
-        -0.25f,  0.25f, 0.0f, 1.0f,   0.0f, 1.0f, 0.0f,
-        0.25f,  0.25f, 0.0f, 1.0f,    0.0f, 0.0f, 1.0f
+         0.00f, -0.25f, 0.0f, 1.0f,     1.0f, 0.0f, 0.0f,
+        -0.25f,  0.25f, 0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+         0.25f,  0.25f, 0.0f, 1.0f,		0.0f, 0.0f, 1.0f
     };
 
 	size_t vertexDataSize = sizeof(float) * vertices.size();
@@ -56,10 +56,8 @@ void App::onInitialize()
 	_vertexBuffer = graphics->createVertexBuffer(vertexDataSize, vertexStride, true, nullptr);
 	memcpy(_vertexBuffer->getHostMemory(), vertices.data(), vertexDataSize);
 
-
 	// Acquired the initial render pass
 	_renderPass = graphics->acquireNextSwapchainImage();
-
 
 	// Create the render pipeline
 	RasterizerState rasterizerState;
@@ -85,7 +83,6 @@ void App::onUpdate(float elapsedTime)
 	Game::onUpdate(elapsedTime);
 
 	Graphics* graphics = Graphics::getGraphics();
-
 	_renderPass = graphics->acquireNextSwapchainImage();
 
 	std::shared_ptr<CommandBuffer> commandBuffer = graphics->beginCommands();

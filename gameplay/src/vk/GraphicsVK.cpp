@@ -174,6 +174,9 @@ void GraphicsVK::cmdSetScissor(std::shared_ptr<CommandBuffer> commandBuffer,
     rect.offset.x = y;
     rect.extent.width = width;
     rect.extent.height = height;
+
+	std::shared_ptr <CommandBufferVK> commandBufferVK = std::static_pointer_cast<CommandBufferVK>(commandBuffer);
+
     vkCmdSetScissor(std::static_pointer_cast<CommandBufferVK>(commandBuffer)->_commandBuffer, 0, 1, &rect);
 }
 
@@ -377,8 +380,6 @@ void GraphicsVK::cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer
 	std::shared_ptr<TextureVK> textureVK = std::static_pointer_cast<TextureVK>(texture);
 
 	VkImageMemoryBarrier barrier = {};
-    barrier.oldLayout = toVkImageLayout(usageOld);
-    barrier.newLayout = toVkImageLayout(usageNew);
     barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     barrier.pNext = NULL;
     barrier.oldLayout = toVkImageLayout(usageOld);
@@ -598,19 +599,20 @@ std::shared_ptr<Texture> GraphicsVK::createTexture(Texture::Type type, size_t wi
 		if (hostVisible)
 		{
 			VkFormatFeatureFlags flags = formatProps.linearTilingFeatures & formatFeatureFlags;
-			assert((0 != flags) && "Format is not supported for host visible images");
 		}
 		else
 		{
 			VkFormatFeatureFlags flags = formatProps.optimalTilingFeatures & formatFeatureFlags;
-			assert((0 != flags) && "Format is not supported for GPU local images (i.e. not host visible images)");
 		}
 
 		// Apply some bounds to the image
 		VkImageFormatProperties imageFormatProps = {};
-		VkResult vkResult = vkGetPhysicalDeviceImageFormatProperties(_physicalDevice, imageCreateInfo.format,
-			imageCreateInfo.imageType, imageCreateInfo.tiling,
-			imageCreateInfo.usage, imageCreateInfo.flags, &imageFormatProps);
+		VkResult vkResult = vkGetPhysicalDeviceImageFormatProperties(_physicalDevice,
+																	 imageCreateInfo.format,
+																	 imageCreateInfo.imageType,
+																	 imageCreateInfo.tiling,
+																	 imageCreateInfo.usage,
+																	 imageCreateInfo.flags, &imageFormatProps);
 		GP_ASSERT(VK_SUCCESS == vkResult);
 		if (imageCreateInfo.mipLevels > 1)
 		{
@@ -621,7 +623,7 @@ std::shared_ptr<Texture> GraphicsVK::createTexture(Texture::Type type, size_t wi
 		// Create image
 		VK_CHECK_RESULT(vkCreateImage(_device, &imageCreateInfo, nullptr, &image));
 
-		// Find memory requirements and allocate memory for image
+		// Find memory requirements and set flags and allocate memory for image
 		VkMemoryRequirements memReqs = {};
 		vkGetImageMemoryRequirements(_device, image, &memReqs);
 
@@ -754,7 +756,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 	VkAttachmentReference* colorAttachmentRefs = nullptr;
     VkAttachmentReference* resolveAttachmentRefs = nullptr;
     VkAttachmentReference* depthStencilAttachmentRef = nullptr;
-	size_t depthStencilAttachmentCount = depthStencilFormat == Format::FORMAT_UNDEFINED ? 0 : 1;
+	size_t depthStencilAttachmentCount = (depthStencilFormat == Format::FORMAT_UNDEFINED) ? 0 : 1;
 
 	if (sampleCountVK > VK_SAMPLE_COUNT_1_BIT)
 	{
@@ -854,7 +856,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
             uint32_t index = colorAttachmentCount;
             attachmentDescs[index].flags = 0;
             attachmentDescs[index].format = depthStencilFormatVK;
-            attachmentDescs[index].samples = VK_SAMPLE_COUNT_1_BIT;
+            attachmentDescs[index].samples = sampleCountVK;
             attachmentDescs[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             attachmentDescs[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             attachmentDescs[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -879,6 +881,17 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
     subpass.preserveAttachmentCount = 0;
     subpass.pPreserveAttachments = nullptr;
 
+
+	// Create self-dependency in case image or memory barrier is issued within subpass
+	VkSubpassDependency subpassDep= {};
+    subpassDep.srcSubpass = 0;
+    subpassDep.dstSubpass = 0;
+    subpassDep.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    subpassDep.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    subpassDep.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    subpassDep.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    subpassDep.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
 	uint32_t attachmentCount = (sampleCountVK > VK_SAMPLE_COUNT_1_BIT) ? (2 * colorAttachmentCount) : colorAttachmentCount;
     attachmentCount += depthStencilAttachmentCount;
 
@@ -893,8 +906,8 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 		createInfo.pAttachments = attachmentDescs;
 		createInfo.subpassCount = 1;
 		createInfo.pSubpasses = &subpass;
-		createInfo.dependencyCount = 0;
-		createInfo.pDependencies = nullptr;
+		createInfo.dependencyCount = 1;
+		createInfo.pDependencies = &subpassDep;
 
 		VK_CHECK_RESULT(vkCreateRenderPass(_device, &createInfo, nullptr, &renderPass));
 	}
@@ -1403,9 +1416,9 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     viewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
     viewportStateCreateInfo.pNext = nullptr;
     viewportStateCreateInfo.flags = 0;
-    viewportStateCreateInfo.viewportCount = 0;
+    viewportStateCreateInfo.viewportCount = 1;
     viewportStateCreateInfo.pViewports = nullptr;
-    viewportStateCreateInfo.scissorCount = 0;
+    viewportStateCreateInfo.scissorCount = 1;
     viewportStateCreateInfo.pScissors = nullptr;
         
 	// RasterizerState
@@ -1413,7 +1426,7 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     rasterizerStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
     rasterizerStateCreateInfo.pNext = nullptr;
     rasterizerStateCreateInfo.flags = 0;
-    rasterizerStateCreateInfo.depthClampEnable = rasterizerState.depthClipEnabled;
+    rasterizerStateCreateInfo.depthClampEnable = rasterizerState.depthClipEnabled ? VK_TRUE : VK_FALSE;
     rasterizerStateCreateInfo.rasterizerDiscardEnable = VK_FALSE;
     rasterizerStateCreateInfo.polygonMode = lookupVkPolygonMode[rasterizerState.fillMode];
     rasterizerStateCreateInfo.cullMode = lookupVkCullModeFlags[rasterizerState.cullMode];
