@@ -94,8 +94,8 @@ void GraphicsVK::present()
 	VkPresentInfoKHR presentInfo {};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     presentInfo.pNext = nullptr;
-    presentInfo.waitSemaphoreCount = _renderCompleteSemaphores.size();
-	presentInfo.pWaitSemaphores = _renderCompleteSemaphores.data();
+	presentInfo.waitSemaphoreCount = 1;
+	presentInfo.pWaitSemaphores = &_renderCompleteSemaphores[_swapchainImageIndex];
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = &_swapchain;
     presentInfo.pImageIndices = &_swapchainImageIndex;
@@ -131,18 +131,20 @@ void GraphicsVK::endCommands()
 }
 
 void GraphicsVK::submit(std::shared_ptr<CommandBuffer> commandBuffer)
-{
-	VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+{	
+	VkPipelineStageFlags waitMasks[1];
+	waitMasks[0] = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+
 	VkSubmitInfo submitInfo = {};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.pNext = nullptr;
-    submitInfo.waitSemaphoreCount = 0;
-	submitInfo.pWaitSemaphores = nullptr;
-    submitInfo.pWaitDstStageMask = &waitMask;
+    submitInfo.waitSemaphoreCount = 1;
+	submitInfo.pWaitSemaphores = &_swapchainAcquiredSemaphores[_swapchainImageIndex];
+    submitInfo.pWaitDstStageMask = waitMasks;
 	submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &std::static_pointer_cast<CommandBufferVK>(commandBuffer)->_commandBuffer;
-    submitInfo.signalSemaphoreCount = 0;
-    submitInfo.pSignalSemaphores = nullptr;
+    submitInfo.signalSemaphoreCount = 1;
+	submitInfo.pSignalSemaphores = &_renderCompleteSemaphores[_swapchainImageIndex];
 
 	VK_CHECK_RESULT(vkQueueSubmit(_queue, 1, &submitInfo, nullptr));
 }
@@ -812,7 +814,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
             const uint32_t index = (2 * colorAttachmentCount);
             attachmentDescs[index].flags = 0;
             attachmentDescs[index].format = depthStencilFormatVK;
-            attachmentDescs[index].samples = VK_SAMPLE_COUNT_1_BIT;
+            attachmentDescs[index].samples = sampleCountVK;
             attachmentDescs[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             attachmentDescs[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             attachmentDescs[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -1420,9 +1422,9 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     viewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
     viewportStateCreateInfo.pNext = nullptr;
     viewportStateCreateInfo.flags = 0;
-    viewportStateCreateInfo.viewportCount = 1;
+    viewportStateCreateInfo.viewportCount = 0;
     viewportStateCreateInfo.pViewports = nullptr;
-    viewportStateCreateInfo.scissorCount = 1;
+    viewportStateCreateInfo.scissorCount = 0;
     viewportStateCreateInfo.pScissors = nullptr;
         
 	// RasterizerState
@@ -1770,8 +1772,8 @@ void GraphicsVK::createDevice()
 	VkPhysicalDeviceFeatures deviceFeatures = {};
 	VkDeviceCreateInfo deviceCreateInfo = {};
 	deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-	deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
 	deviceCreateInfo.queueCreateInfoCount = (uint32_t)queueCreateInfos.size();
+	deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
 	deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
 	
 	// Add validation layers/extensions
@@ -1997,6 +1999,7 @@ void GraphicsVK::createSynchronizationObjects()
 {
 	_swapchainAcquiredFences.resize(GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT);
 	_swapchainAcquiredSemaphores.resize(GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT);
+	_renderCompleteSemaphores.resize(GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT);
 
 	VkCommandPoolCreateInfo info = {};
     info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -2022,6 +2025,7 @@ void GraphicsVK::createSynchronizationObjects()
 			createInfo.pNext = nullptr;
 			createInfo.flags = 0;
 			VK_CHECK_RESULT(vkCreateSemaphore(_device, &createInfo, nullptr, &_swapchainAcquiredSemaphores[i]));
+			VK_CHECK_RESULT(vkCreateSemaphore(_device, &createInfo, nullptr, &_renderCompleteSemaphores[i]));			
 		}
 
 		// Create command buffers

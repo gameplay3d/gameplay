@@ -65,7 +65,8 @@ void App::onInitialize()
 	DepthStencilState depthStencilState;
 	_renderPipeline = graphics->createRenderPipeline(RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, vertexLayout, 
 												     rasterizerState, colorBlendState, depthStencilState, 
-												     _renderPass, _descriptorSet, _vertShader, nullptr, nullptr, nullptr, _fragShader);
+												     _renderPass, _descriptorSet, 
+													_vertShader, nullptr, nullptr, nullptr, _fragShader);
 }
 
 void App::onFinalize()
