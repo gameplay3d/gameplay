@@ -246,7 +246,7 @@ static VkImageUsageFlags toVkImageUsageFlags(Texture::Usage usage)
     }
     if (Texture::USAGE_DEPTH_STENCIL_ATTACHMENT == (usage & Texture::USAGE_DEPTH_STENCIL_ATTACHMENT))
 	{
-        result |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+        result |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT|VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
     }
     return result;
 }

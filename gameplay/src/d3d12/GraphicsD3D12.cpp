@@ -62,6 +62,11 @@ int GraphicsD3D12::getHeight()
     return _height;
 }
 
+std::shared_ptr<RenderPass> GraphicsD3D12::getRenderPass()
+{
+	return _renderPasses[_swapchainImageIndex]; 
+}
+
 std::shared_ptr<RenderPass> GraphicsD3D12::acquireNextSwapchainImage()
 {
 	_swapchainImageIndex = _swapchain->GetCurrentBackBufferIndex();
