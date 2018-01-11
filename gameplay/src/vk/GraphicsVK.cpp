@@ -28,14 +28,14 @@ GraphicsVK::GraphicsVK() :
 	_height(0),
 	_fullscreen(false),
 	_vsync(false),
-	_multisampling(0),
+	_multisampling(false),
 	_validation(false),
 	_instance(VK_NULL_HANDLE),
 	_surface(VK_NULL_HANDLE),
 	_physicalDevice(VK_NULL_HANDLE),
 	_queueFamilyIndexGraphics(0),
 	_queueIndex(0),
-	_queue(nullptr),
+	_queue(VK_NULL_HANDLE),
 	_device(VK_NULL_HANDLE),
 	_swapchain(VK_NULL_HANDLE),
 	_swapchainImageIndex(0),
@@ -44,7 +44,7 @@ GraphicsVK::GraphicsVK() :
 	_colorFormat(VK_FORMAT_UNDEFINED),
 	_depthStencilFormat(VK_FORMAT_UNDEFINED),
 	_renderPass(nullptr),
-	_commandPool(nullptr),
+	_commandPool(VK_NULL_HANDLE),
 	_debugMessageCallback(VK_NULL_HANDLE)
 {
 }
@@ -75,12 +75,15 @@ int GraphicsVK::getHeight()
     return _height;
 }
 
+std::shared_ptr<RenderPass> GraphicsVK::getRenderPass()
+{
+	return _renderPasses[_swapchainImageIndex]; 
+}
+
 std::shared_ptr<RenderPass> GraphicsVK::acquireNextSwapchainImage()
 {
-	uint32_t frameIndex = Game::getInstance()->getFrameCount() % GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT;
-
-	VkFence fence = _swapchainAcquiredFences[frameIndex];
-	VkSemaphore semaphore = _swapchainAcquiredSemaphores[frameIndex];
+	VkFence fence = _swapchainAcquiredFences[_swapchainImageIndex];
+	VkSemaphore semaphore = _swapchainAcquiredSemaphores[_swapchainImageIndex];
 
 	VK_CHECK_RESULT(vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, semaphore, fence, &_swapchainImageIndex));
 	VK_CHECK_RESULT(vkWaitForFences(_device, 1, &fence, VK_TRUE, UINT64_MAX));
@@ -111,7 +114,6 @@ void GraphicsVK::waitIdle()
 
 std::shared_ptr<CommandBuffer> GraphicsVK::beginCommands()
 {
-	GP_ASSERT(_commandBuffer == nullptr);
 	_commandBuffer = _commandBuffers[_swapchainImageIndex];
 	VkCommandBufferBeginInfo beginInfo {};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;;
@@ -273,6 +275,10 @@ void GraphicsVK::cmdBindVertexBuffer(std::shared_ptr<CommandBuffer> commandBuffe
 									 std::shared_ptr<Buffer> vertexBuffer)
 {
 	GP_ASSERT(commandBuffer);
+
+	std::vector<std::shared_ptr<Buffer>> vertexBuffers;
+	vertexBuffers.push_back(vertexBuffer);
+	cmdBindVertexBuffers(commandBuffer, vertexBuffers);
 }
 
 void GraphicsVK::cmdBindVertexBuffers(std::shared_ptr<CommandBuffer> commandBuffer,
@@ -284,8 +290,8 @@ void GraphicsVK::cmdBindVertexBuffers(std::shared_ptr<CommandBuffer> commandBuff
     uint32_t buffersMaxCapped = vertexBuffers.size() > buffersMax ? buffersMax : vertexBuffers.size();
     GP_ASSERT(buffersMaxCapped < 64);
 
-    VkBuffer buffers[64];
-    VkDeviceSize offsets[64];
+	VkBuffer buffers[64] = {};
+	VkDeviceSize offsets[64] = {};
     for (uint32_t i = 0; i < buffersMaxCapped; ++i) 
 	{
 		buffers[i] = std::static_pointer_cast<BufferVK>(vertexBuffers[i])->_buffer;
@@ -758,7 +764,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 	Format depthStencilFormat = toFormat(depthStencilFormatVK);
 
 	// Create the render pass
-	VkAttachmentDescription* attachmentDescs = nullptr;
+	VkAttachmentDescription* attachments = nullptr;
 	VkAttachmentReference* colorAttachmentRefs = nullptr;
     VkAttachmentReference* resolveAttachmentRefs = nullptr;
     VkAttachmentReference* depthStencilAttachmentRef = nullptr;
@@ -766,8 +772,8 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 
 	if (sampleCountVK > VK_SAMPLE_COUNT_1_BIT)
 	{
-		attachmentDescs = (VkAttachmentDescription*)calloc((2 * colorAttachmentCount) + depthStencilAttachmentCount, sizeof(*attachmentDescs));
-		GP_ASSERT(attachmentDescs != nullptr);
+		attachments = (VkAttachmentDescription*)calloc((2 * colorAttachmentCount) + depthStencilAttachmentCount, sizeof(*attachments));
+		GP_ASSERT(attachments != nullptr);
 		if (colorAttachmentCount > 0) 
 		{
             colorAttachmentRefs = (VkAttachmentReference*)calloc(colorAttachmentCount, sizeof(*colorAttachmentRefs));
@@ -784,51 +790,51 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 		{
             const size_t colorIndex = 2 * i;
             const size_t multiSampleIndex = colorIndex + 1;
-            attachmentDescs[colorIndex].flags = 0;
-            attachmentDescs[colorIndex].format = colorFormatVK;
-            attachmentDescs[colorIndex].samples = sampleCountVK;
-            attachmentDescs[colorIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[colorIndex].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[colorIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[colorIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[colorIndex].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            attachmentDescs[colorIndex].flags = 0;
+            attachments[colorIndex].flags = 0;
+            attachments[colorIndex].format = colorFormatVK;
+            attachments[colorIndex].samples = sampleCountVK;
+            attachments[colorIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[colorIndex].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[colorIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[colorIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[colorIndex].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            attachments[colorIndex].flags = 0;
 
-			attachmentDescs[multiSampleIndex].format = colorFormatVK;
-            attachmentDescs[multiSampleIndex].samples = sampleCountVK;
-            attachmentDescs[multiSampleIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[multiSampleIndex].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[multiSampleIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[multiSampleIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[multiSampleIndex].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            attachmentDescs[multiSampleIndex].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+			attachments[multiSampleIndex].format = colorFormatVK;
+            attachments[multiSampleIndex].samples = sampleCountVK;
+            attachments[multiSampleIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[multiSampleIndex].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[multiSampleIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[multiSampleIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[multiSampleIndex].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachments[multiSampleIndex].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
             colorAttachmentRefs[i].attachment = multiSampleIndex;
-            colorAttachmentRefs[i].layout = attachmentDescs[multiSampleIndex].initialLayout;
+            colorAttachmentRefs[i].layout = attachments[multiSampleIndex].initialLayout;
             resolveAttachmentRefs[i].attachment = colorIndex;
-            resolveAttachmentRefs[i].layout = attachmentDescs[colorIndex].initialLayout;
+            resolveAttachmentRefs[i].layout = attachments[colorIndex].initialLayout;
         }
 	
         if (depthStencilAttachmentCount > 0)
 		{
             const uint32_t index = (2 * colorAttachmentCount);
-            attachmentDescs[index].flags = 0;
-            attachmentDescs[index].format = depthStencilFormatVK;
-            attachmentDescs[index].samples = sampleCountVK;
-            attachmentDescs[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[index].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[index].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            attachmentDescs[index].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            attachments[index].flags = 0;
+            attachments[index].format = depthStencilFormatVK;
+            attachments[index].samples = sampleCountVK;
+            attachments[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[index].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[index].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            attachments[index].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
             depthStencilAttachmentRef[0].attachment = index;
-            depthStencilAttachmentRef[0].layout = attachmentDescs[index].initialLayout;
+            depthStencilAttachmentRef[0].layout = attachments[index].initialLayout;
         }
 	}
 	else
 	{
-		attachmentDescs = (VkAttachmentDescription*)calloc(colorAttachmentCount + depthStencilAttachmentCount, sizeof(*attachmentDescs));
-        GP_ASSERT(attachmentDescs != nullptr);
+		attachments = (VkAttachmentDescription*)calloc(colorAttachmentCount + depthStencilAttachmentCount, sizeof(*attachments));
+        GP_ASSERT(attachments != nullptr);
 
         if (colorAttachmentCount > 0) 
 		{
@@ -843,35 +849,35 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
         for (uint32_t i = 0; i < colorAttachmentCount; ++i)
 		{
             const uint32_t colorIndex = i;
-            attachmentDescs[colorIndex].flags = 0;
-            attachmentDescs[colorIndex].format = colorFormatVK;
-            attachmentDescs[colorIndex].samples = sampleCountVK;
-            attachmentDescs[colorIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[colorIndex].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[colorIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[colorIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[colorIndex].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            attachmentDescs[colorIndex].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachments[colorIndex].flags = 0;
+            attachments[colorIndex].format = colorFormatVK;
+            attachments[colorIndex].samples = sampleCountVK;
+            attachments[colorIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[colorIndex].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[colorIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[colorIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[colorIndex].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            attachments[colorIndex].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
             colorAttachmentRefs[i].attachment = colorIndex;
-            colorAttachmentRefs[i].layout = attachmentDescs[colorIndex].initialLayout;
+            colorAttachmentRefs[i].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
         if (depthStencilAttachmentCount > 0) 
 		{
             uint32_t index = colorAttachmentCount;
-            attachmentDescs[index].flags = 0;
-            attachmentDescs[index].format = depthStencilFormatVK;
-            attachmentDescs[index].samples = sampleCountVK;
-            attachmentDescs[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachmentDescs[index].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachmentDescs[index].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            attachmentDescs[index].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            attachments[index].flags = 0;
+            attachments[index].format = depthStencilFormatVK;
+            attachments[index].samples = sampleCountVK;
+            attachments[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachments[index].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[index].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            attachments[index].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
             depthStencilAttachmentRef[0].attachment = index;
-            depthStencilAttachmentRef[0].layout = attachmentDescs[index].initialLayout;
+            depthStencilAttachmentRef[0].layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
         }
 	}
 
@@ -909,7 +915,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 		createInfo.pNext = nullptr;
 		createInfo.flags = 0;
 		createInfo.attachmentCount = attachmentCount;
-		createInfo.pAttachments = attachmentDescs;
+		createInfo.pAttachments = attachments;
 		createInfo.subpassCount = 1;
 		createInfo.pSubpasses = &subpass;
 		createInfo.dependencyCount = 1;
@@ -918,7 +924,7 @@ std::shared_ptr<RenderPass> GraphicsVK::createRenderPass(size_t width, size_t he
 		VK_CHECK_RESULT(vkCreateRenderPass(_device, &createInfo, nullptr, &renderPass));
 	}
 
-	GP_SAFE_FREE(attachmentDescs);
+	GP_SAFE_FREE(attachments);
 	GP_SAFE_FREE(colorAttachmentRefs);
     GP_SAFE_FREE(resolveAttachmentRefs);
     GP_SAFE_FREE(depthStencilAttachmentRef);
@@ -1416,16 +1422,6 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     tessStateCreateInfo.pNext = NULL;
     tessStateCreateInfo.flags = 0;
     tessStateCreateInfo.patchControlPoints = 0;
-
-	// ViewportState
-	VkPipelineViewportStateCreateInfo viewportStateCreateInfo = {};
-    viewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    viewportStateCreateInfo.pNext = nullptr;
-    viewportStateCreateInfo.flags = 0;
-    viewportStateCreateInfo.viewportCount = 0;
-    viewportStateCreateInfo.pViewports = nullptr;
-    viewportStateCreateInfo.scissorCount = 0;
-    viewportStateCreateInfo.pScissors = nullptr;
         
 	// RasterizerState
 	VkPipelineRasterizationStateCreateInfo rasterizerStateCreateInfo = {};
@@ -1433,7 +1429,7 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     rasterizerStateCreateInfo.pNext = nullptr;
     rasterizerStateCreateInfo.flags = 0;
     rasterizerStateCreateInfo.depthClampEnable = rasterizerState.depthClipEnabled ? VK_TRUE : VK_FALSE;
-    rasterizerStateCreateInfo.rasterizerDiscardEnable = VK_FALSE;
+	rasterizerStateCreateInfo.rasterizerDiscardEnable = VK_TRUE;
     rasterizerStateCreateInfo.polygonMode = lookupVkPolygonMode[rasterizerState.fillMode];
     rasterizerStateCreateInfo.cullMode = lookupVkCullModeFlags[rasterizerState.cullMode];
     rasterizerStateCreateInfo.frontFace = lookupVkFrontFace[rasterizerState.frontFace];
@@ -1548,7 +1544,6 @@ std::shared_ptr<RenderPipeline> GraphicsVK::createRenderPipeline(RenderPipeline:
     pipelineCreateInfo.pVertexInputState = &vertexInputStateCreateInfo;
     pipelineCreateInfo.pInputAssemblyState = &inputAssemblyStateCreateInfo;
     pipelineCreateInfo.pTessellationState = &tessStateCreateInfo;
-    pipelineCreateInfo.pViewportState = &viewportStateCreateInfo;
     pipelineCreateInfo.pRasterizationState = &rasterizerStateCreateInfo;
     pipelineCreateInfo.pMultisampleState = &multisampleStateCreateInfo;
     pipelineCreateInfo.pDepthStencilState = &depthStencilStateCreateInfo;
@@ -1736,7 +1731,7 @@ void GraphicsVK::createDevice()
 	vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceMemoryProperties);
 	uint32_t queueFamilyCount;
 	vkGetPhysicalDeviceQueueFamilyProperties(_physicalDevice, &queueFamilyCount, nullptr);
-	GP_ASSERT(queueFamilyCount > 0);
+	_queueFamilyProperties.resize(queueFamilyCount);
 	vkGetPhysicalDeviceQueueFamilyProperties(_physicalDevice, &queueFamilyCount, _queueFamilyProperties.data());
 
 	// Get queue create infos for queues
@@ -1947,14 +1942,14 @@ void GraphicsVK::createSwapchain()
 	// Get the color attachment format and properties
 	VkFormatProperties formatProps;
 	vkGetPhysicalDeviceFormatProperties(_physicalDevice, _colorFormat, &formatProps);
-	if (formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)
+	if ((formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT_KHR) || (formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT))
 		createInfo.imageUsage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 
 	// Create the swapchain
 	VK_CHECK_RESULT(vkCreateSwapchainKHR(_device, &createInfo, nullptr, &_swapchain));
 
 	// Get the backbuffer images for color attachments
-	VK_CHECK_RESULT(vkGetSwapchainImagesKHR(_device, _swapchain, &_swapchainImageCount, NULL));
+	VK_CHECK_RESULT(vkGetSwapchainImagesKHR(_device, _swapchain, &_swapchainImageCount, nullptr));
 	_swapchainImages.resize(_swapchainImageCount);
 	VK_CHECK_RESULT(vkGetSwapchainImagesKHR(_device, _swapchain, &_swapchainImageCount, _swapchainImages.data()));
 

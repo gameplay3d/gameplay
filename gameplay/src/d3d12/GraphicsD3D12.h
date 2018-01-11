@@ -38,6 +38,11 @@ public:
     int getHeight();
 
 	/**
+	 * @see Graphics::getRenderPass
+	 */
+	std::shared_ptr<RenderPass> getRenderPass();
+
+	/**
 	 * @see Graphics::acquireNextSwapchainImage
 	 */
 	std::shared_ptr<RenderPass> acquireNextSwapchainImage();

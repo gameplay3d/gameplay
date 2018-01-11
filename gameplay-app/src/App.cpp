@@ -56,8 +56,8 @@ void App::onInitialize()
 	_vertexBuffer = graphics->createVertexBuffer(vertexDataSize, vertexStride, true, nullptr);
 	memcpy(_vertexBuffer->getHostMemory(), vertices.data(), vertexDataSize);
 
-	// Acquired the initial render pass
-	_renderPass = graphics->acquireNextSwapchainImage();
+	// Gets the current render pass.
+	_renderPass = graphics->getRenderPass();
 
 	// Create the render pipeline
 	RasterizerState rasterizerState;
@@ -87,7 +87,7 @@ void App::onUpdate(float elapsedTime)
 	_renderPass = graphics->acquireNextSwapchainImage();
 
 	std::shared_ptr<CommandBuffer> commandBuffer = graphics->beginCommands();
-	graphics->cmdTransitionImage(commandBuffer, _renderPass->getColorAttachment(0), Texture::USAGE_PRESENT, Texture::USAGE_COLOR_ATTACHMENT);
+	//graphics->cmdTransitionImage(commandBuffer, _renderPass->getColorAttachment(0), Texture::USAGE_PRESENT, Texture::USAGE_COLOR_ATTACHMENT);
 	graphics->cmdSetViewport(commandBuffer, 0, 0, graphics->getWidth(), graphics->getHeight(), 0.0f, 1.0f);
 	graphics->cmdSetScissor(commandBuffer, 0, 0, graphics->getWidth(), graphics->getHeight());
 	graphics->cmdBeginRenderPass(commandBuffer, _renderPass);
@@ -96,7 +96,7 @@ void App::onUpdate(float elapsedTime)
 	graphics->cmdBindVertexBuffer(commandBuffer, _vertexBuffer);
 	graphics->cmdDraw(commandBuffer, 3, 0);
 	graphics->cmdEndRenderPass(commandBuffer);
-	graphics->cmdTransitionImage(commandBuffer, _renderPass->getColorAttachment(0), Texture::USAGE_COLOR_ATTACHMENT, Texture::USAGE_PRESENT);
+	//graphics->cmdTransitionImage(commandBuffer, _renderPass->getColorAttachment(0), Texture::USAGE_COLOR_ATTACHMENT, Texture::USAGE_PRESENT);
 	graphics->endCommands();
 
 	graphics->submit(commandBuffer);

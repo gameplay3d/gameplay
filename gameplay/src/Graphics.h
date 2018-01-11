@@ -63,7 +63,16 @@ public:
     virtual int getHeight() = 0;
 
 	/**
-	 * Acquires the next swapchain image.
+	 * Gets the currently bound render pass.
+	 *
+	 * @return The currently bound render pass.
+	 */
+	virtual std::shared_ptr<RenderPass> getRenderPass() = 0;
+
+	/**
+	 * Acquires the next swapchain image and returns the associated render pass.
+	 *
+	 * @return The currently bound render pass.
 	 */
 	virtual std::shared_ptr<RenderPass> acquireNextSwapchainImage() = 0;
 
