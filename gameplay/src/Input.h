@@ -1,5 +1,7 @@
 #pragma once
 
+#include <bx/ringbuffer.h>
+
 namespace gameplay
 {
 
@@ -12,178 +14,244 @@ class Input
 
 public:
 
+	struct GamepadHandle 
+	{ 
+		unsigned short idx; 
+	};
+	
+	static bool isGamepadValid(GamepadHandle handle);
+
     /**
      * Defines input keys.
      */
     enum Key
     {
-        KEY_NONE = 0,
-        KEY_PAUSE = 0x0013,
-        KEY_SCROLL_LOCK = 0x1014,
-        KEY_PRINT = 0x1061,
-        KEY_SYSREQ = 0x106A,
-        KEY_BREAK = 0x106B,
-        KEY_ESCAPE = 0x001B,
-        KEY_BACKSPACE = 0x0008,
-        KEY_TAB = 0x0009,
-        KEY_BACK_TAB = 0x0089,
-        KEY_ENTER = 0x000D,
-        KEY_CAPS_LOCK = 0x00E5,
-        KEY_SHIFT = 0x00E1,
-        KEY_CTRL = 0x00E3,
-        KEY_ALT = 0x00E9,
-        KEY_MENU = 0x1067,
-        KEY_HYPER = 0x10ED,
-        KEY_INSERT = 0x1063,
-        KEY_HOME = 0x1050,
-        KEY_PG_UP = 0x1055,
-        KEY_DELETE = 0x10FF,
-        KEY_END = 0x1057,
-        KEY_PG_DOWN = 0x1056,
-        KEY_LEFT_ARROW = 0x1051,
-        KEY_RIGHT_ARROW = 0x1053,
-        KEY_UP_ARROW = 0x1052,
-        KEY_DOWN_ARROW = 0x1054,
-        KEY_NUM_LOCK = 0x107F,
-        KEY_KP_PLUS = 0x10AB,
-        KEY_KP_MINUS = 0x10AD,
-        KEY_KP_MULTIPLY = 0x10AA,
-        KEY_KP_DIVIDE = 0x10AF,
-        KEY_KP_ENTER = 0x108D,
-        KEY_KP_HOME = 0x10B7,
-        KEY_KP_UP = 0x10B8,
-        KEY_KP_PG_UP = 0x10B9,
-        KEY_KP_LEFT = 0x10B4,
-        KEY_KP_FIVE = 0x10B5,
-        KEY_KP_RIGHT = 0x10B6,
-        KEY_KP_END = 0x10B1,
-        KEY_KP_DOWN = 0x10B2,
-        KEY_KP_PG_DOWN = 0x10B3,
-        KEY_KP_INSERT = 0x10B0,
-        KEY_KP_DELETE = 0x10AE,
-        KEY_F1 = 0x00BE,
-        KEY_F2 = 0x00BF,
-        KEY_F3 = 0x00C0,
-        KEY_F4 = 0x00C1,
-        KEY_F5 = 0x00C2,
-        KEY_F6 = 0x00C3,
-        KEY_F7 = 0x00C4,
-        KEY_F8 = 0x00C5,
-        KEY_F9 = 0x00C6,
-        KEY_F10 = 0x00C7,
-        KEY_F11 = 0x00C8,
-        KEY_F12 = 0x00C9,
-        KEY_SPACE = ' ',
-        KEY_EXCLAM = '!',
-        KEY_QUOTE = '"',
-        KEY_NUMBER = '#',
-        KEY_DOLLAR = '$',
-        KEY_PERCENT = '%',
-        KEY_CIRCUMFLEX = '^',
-        KEY_AMPERSAND = '&',
-        KEY_APOSTROPHE = '\'',
-        KEY_LEFT_PARENTHESIS = '(',
-        KEY_RIGHT_PARENTHESIS = ')',
-        KEY_ASTERISK = '*',
-        KEY_PLUS = '+',
-        KEY_COMMA = ',',
-        KEY_MINUS = '-',
-        KEY_PERIOD = '.',
-        KEY_SLASH = '/',
-        KEY_ZERO = '0',
-        KEY_ONE = '1',
-        KEY_TWO = '2',
-        KEY_THREE = '3',
-        KEY_FOUR = '4',
-        KEY_FIVE = '5',
-        KEY_SIX = '6',
-        KEY_SEVEN = '7',
-        KEY_EIGHT = '8',
-        KEY_NINE = '9',
-        KEY_COLON = ':',
-        KEY_SEMICOLON = ';',
-        KEY_LESS_THAN = '<',
-        KEY_EQUAL = '=',
-        KEY_GREATER_THAN = '>',
-        KEY_QUESTION = '?',
-        KEY_AT = '@',
-        KEY_CAPITAL_A = 'A',
-        KEY_CAPITAL_B = 'B',
-        KEY_CAPITAL_C = 'C',
-        KEY_CAPITAL_D = 'D',
-        KEY_CAPITAL_E = 'E',
-        KEY_CAPITAL_F = 'F',
-        KEY_CAPITAL_G = 'G',
-        KEY_CAPITAL_H = 'H',
-        KEY_CAPITAL_I = 'I',
-        KEY_CAPITAL_J = 'J',
-        KEY_CAPITAL_K = 'K',
-        KEY_CAPITAL_L = 'L',
-        KEY_CAPITAL_M = 'M',
-        KEY_CAPITAL_N = 'N',
-        KEY_CAPITAL_O = 'O',
-        KEY_CAPITAL_P = 'P',
-        KEY_CAPITAL_Q = 'Q',
-        KEY_CAPITAL_R = 'R',
-        KEY_CAPITAL_S = 'S',
-        KEY_CAPITAL_T = 'T',
-        KEY_CAPITAL_U = 'U',
-        KEY_CAPITAL_V = 'V',
-        KEY_CAPITAL_W = 'W',
-        KEY_CAPITAL_X = 'X',
-        KEY_CAPITAL_Y = 'Y',
-        KEY_CAPITAL_Z = 'Z',
-        KEY_LEFT_BRACKET = '[',
-        KEY_BACK_SLASH = '\\',
-        KEY_RIGHT_BRACKET = ']',
-        KEY_UNDERSCORE = '_',
-        KEY_GRAVE = '`',
-        KEY_A = 'a',
-        KEY_B = 'b',
-        KEY_C = 'c',
-        KEY_D = 'd',
-        KEY_E = 'e',
-        KEY_F = 'f',
-        KEY_G = 'g',
-        KEY_H = 'h',
-        KEY_I = 'i',
-        KEY_J = 'j',
-        KEY_K = 'k',
-        KEY_L = 'l',
-        KEY_M = 'm',
-        KEY_N = 'n',
-        KEY_O = 'o',
-        KEY_P = 'p',
-        KEY_Q = 'q',
-        KEY_R = 'r',
-        KEY_S = 's',
-        KEY_T = 't',
-        KEY_U = 'u',
-        KEY_V = 'v',
-        KEY_W = 'w',
-        KEY_X = 'x',
-        KEY_Y = 'y',
-        KEY_Z = 'z',
-        KEY_LEFT_BRACE = '{',
-        KEY_BAR = '|',
-        KEY_RIGHT_BRACE = '}',
-        KEY_TILDE = '~',
-        KEY_EURO = 0x20AC,
-        KEY_POUND = 0x00A3,
-        KEY_YEN = 0x00A5,
-        KEY_MIDDLE_DOT = 0x0095,
-        KEY_SEARCH = 0xFFAA
-    };
+		KEY_NONE = 0,
+		KEY_ESC,
+		KEY_RETURN,
+		KEY_TAB,
+		KEY_SPACE,
+		KEY_BACKSPACE,
+		KEY_UP,
+		KEY_DOWN,
+		KEY_LEFT,
+		KEY_RIGHT,
+		KEY_INSERT,
+		KEY_DELETE,
+		KEY_HOME,
+		KEY_END,
+		KEY_PAGE_UP,
+		KEY_PAGE_DOWN,
+		KEY_PRINT,
+		KEY_PLUS,
+		KEY_MINUS,
+		KEY_LEFT_BRACKET,
+		KEY_RIGHT_BRACKET,
+		KEY_SEMICOLON,
+		KEY_QUOTE,
+		KEY_COMMA,
+		KEY_PERIOD,
+		KEY_SLASH,
+		KEY_BACKSLASH,
+		KEY_TILDE,
+		KEY_F1,
+		KEY_F2,
+		KEY_F3,
+		KEY_F4,
+		KEY_F5,
+		KEY_F6,
+		KEY_F7,
+		KEY_F8,
+		KEY_F9,
+		KEY_F10,
+		KEY_F11,
+		KEY_F12,
+		KEY_NUMPAD0,
+		KEY_NUMPAD1,
+		KEY_NUMPAD2,
+		KEY_NUMPAD3,
+		KEY_NUMPAD4,
+		KEY_NUMPAD5,
+		KEY_NUMPAD6,
+		KEY_NUMPAD7,
+		KEY_NUMPAD8,
+		KEY_NUMPAD9,
+		KEY_0,
+		KEY_1,
+		KEY_2,
+		KEY_3,
+		KEY_4,
+		KEY_5,
+		KEY_6,
+		KEY_7,
+		KEY_8,
+		KEY_9,
+		KEY_A,
+		KEY_B,
+		KEY_C,
+		KEY_D,
+		KEY_E,
+		KEY_F,
+		KEY_G,
+		KEY_H,
+		KEY_I,
+		KEY_J,
+		KEY_K,
+		KEY_L,
+		KEY_M,
+		KEY_N,
+		KEY_O,
+		KEY_P,
+		KEY_Q,
+		KEY_R,
+		KEY_S,
+		KEY_T,
+		KEY_U,
+		KEY_V,
+		KEY_W,
+		KEY_X,
+		KEY_Y,
+		KEY_Z,
+		KEY_GAMEPAD_A,
+		KEY_GAMEPAD_B,
+		KEY_GAMEPAD_X,
+		KEY_GAMEPAD_Y,
+		KEY_GAMEPAD_THUMB_LEFT,
+		KEY_GAMEPAD_THUMB_RIGHT,
+		KEY_GAMEPAD_SHOULDER_LEFT,
+		KEY_GAMEPAD_SHOULDER_RIGHT,
+		KEY_GAMEPAD_UP,
+		KEY_GAMEPAD_DOWN,
+		KEY_GAMEPAD_LEFT,
+		KEY_GAMEPAD_RIGHT,
+		KEY_GAMEPAD_BACK,
+		KEY_GAMEPAD_START,
+		KEY_GAMEPAD_GUIDE,
+		KEY_COUNT
+	};
+
+	/**
+	 * Defines key modifiers
+	 */
+	enum KeyModifier
+	{
+		KEY_MODIFIER_NONE = 0,
+		KEY_MODIFIER_LEFT_ALT = 0x01,
+		KEY_MODIFIER_RIGHT_ALT = 0x02,
+		KEY_MODIFIER_LEFT_CTRL   = 0x04,
+		KEY_MODIFIER_RIGHT_CTRL  = 0x08,
+		KEY_MODIFIER_LEFT_SHIFT  = 0x10,
+		KEY_MODIFIER_RIGHT_SHIFT = 0x20,
+		KEY_MODIFIER_LEFT_META   = 0x40,
+		KEY_MODIFIER_RIGHT_META  = 0x80
+	};
 
     /**
      * Defines input mouse buttons.
      */
     enum MouseButton
     {
-        MOUSE_BUTTON_LEFT = 0,
-        MOUSE_BUTTON_RIGHT = 1,
-        MOUSE_BUTTON_MIDDLE
+		MOUSE_BUTTON_NONE,
+        MOUSE_BUTTON_LEFT,
+        MOUSE_BUTTON_RIGHT,
+        MOUSE_BUTTON_MIDDLE,
+		MOUSE_BUTTON_COUNT
     };
+
+
+    /**
+     * Defines gamepad axis
+     */
+	enum GamepadAxis
+	{
+		GAMEPAD_AXIS_LEFT_X,
+		GAMEPAD_AXIS_LEFT_Y,
+		GAMEPAD_AXIS_LEFT_Z,
+		GAMEPAD_AXIS_RIGHT_X,
+		GAMEPAD_AXIS_RIGHT_Y,
+		GAMEPAD_AXIS_RIGHT_Z,
+		GAMEPAD_AXIS_COUNT
+	};
+
+	typedef void (*BindingFn)(const void* userData);
+
+	struct Binding
+	{
+		void set(Input::Key key, uint8_t keyModifiers, uint8_t flags, BindingFn fn, const void* userData = nullptr)
+		{
+			this->key = key;
+			this->keyModifiers = keyModifiers;
+			this->flags = flags;
+			this->fn = fn;
+			this->userData = userData;
+		}
+
+		void end()
+		{
+			this->key = Input::Key::KEY_NONE;
+			this->keyModifiers = Input::KeyModifier::KEY_MODIFIER_NONE;
+			this->flags = 0;
+			this->fn = nullptr;
+			this->userData = nullptr;
+		}
+
+		Input::Key key;
+		uint8_t keyModifiers;
+		uint8_t flags;
+		BindingFn fn;
+		const void* userData;
+	};
+
+	struct Keyboard
+	{
+		Keyboard();
+		static uint32_t encodeKeyState(uint8_t modifiers, bool down);
+		static bool decodeKeyState(uint32_t state, uint8_t& modifiers);
+		void reset();
+		void setKeyState(Input::Key key, uint8_t modifiers, bool down);
+		bool getKeyState(Input::Key key, uint8_t* modifiers);
+		uint8_t getModifiersState();
+		void pushChar(uint8_t len, const uint8_t ch[4]);
+		const uint8_t* popChar();
+		void charFlush();
+
+		uint32_t keys[256];
+		bool once[256];
+		uint8_t chrs[256];
+		bx::RingBufferControl ring;
+	};
+
+	struct Mouse
+	{
+		Mouse();
+		void reset();
+		void setResolution(uint16_t width, uint16_t height);
+		void setPosition(int32_t mx, int32_t my, int32_t mz);
+		void setButtonState(Input::MouseButton button, uint8_t state);
+
+		int32_t absolute[3];
+		float normalized[3];
+		int32_t wheel;
+		uint8_t buttons[Input::MouseButton::MOUSE_BUTTON_COUNT];
+		uint16_t wheelDelta;
+		uint16_t width;
+		uint16_t height;
+		bool lock;
+	};
+
+	struct Gamepad
+	{
+		Gamepad();
+		void reset();
+		void setAxis(Input::GamepadAxis axis, int32_t value);
+		int32_t getAxis(Input::GamepadAxis axis);
+
+		int32_t axis[Input::GamepadAxis::GAMEPAD_AXIS_COUNT];
+	};
+
+	static std::string getKeyName(Input::Key key);
+
+	static char keyToAscii(Input::Key key, uint8_t keyModifiers);
 
     static bool isButtonHeld(std::string buttonName);
 
@@ -199,19 +267,30 @@ public:
 
     static bool isMouseButtonUp(MouseButton button);
 
+	static bool isMouseLocked();
+
+	static void setMouseLocked(bool lock);
+
     static float getMouseScroll();
 
-    static bool isKeyHeld(Key key);
+    static bool isKeyHeld(Input::Key key);
 
-    static bool isKeyDown(Key key);
+    static bool isKeyDown(Input::Key key);
 
-    static bool isKeyUp(Key key);
+    static bool isKeyUp(Input::Key key);
     
-private:
+	static void process();
 
-    static std::map<std::string, uint32_t> _inputMapping;
-    static std::vector<bool> _buttonState;
-    static std::vector<bool> _buttonsHeld;
+	static void addBindings(const char* name, const Binding* bindings);
+
+	static void removeBindings(const char* name);
+
+	static void process(const Binding* bindings);
+
+	static std::unordered_map<std::string, const Binding*> inputBindings;
+	static Keyboard keyboard;
+	static Mouse mouse;
+	static Gamepad gamepads[GP_GAMEPADS_MAX];
 };
 
 }

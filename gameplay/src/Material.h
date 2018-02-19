@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Graphics.h"
-
 namespace gameplay
 {
 

@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Game.h"
+#include "Platform.h"
 #include "FileSystem.h"
 #include "Serializable.h"
 #include "SerializerJson.h"
@@ -13,16 +14,12 @@ static Game* __gameInstance = nullptr;
 std::chrono::time_point<std::chrono::high_resolution_clock> Game::_timeStart = std::chrono::high_resolution_clock::now();
 double Game::_pausedTimeLast = 0.0;
 double Game::_pausedTimeTotal = 0.0;
-std::shared_ptr<SceneObject> Game::_sceneLoadingDefault = std::make_shared<SceneObject>();
 
-
-Game::Game() : 
+Game::Game() :
 	_config(nullptr),
 	_state(Game::STATE_UNINITIALIZED),
     _width(GP_GRAPHICS_WIDTH),
     _height(GP_GRAPHICS_HEIGHT),
-	_mouseCapture(false),
-	_cursorVisible(false),
 	_pausedCount(0),
 	_frameLastFPS(0),
 	_frameCount(0),
@@ -109,38 +106,73 @@ void Game::resume()
     }
 }
 
-void Game::exit()
+int Game::exit()
 {
 	if (_state != Game::STATE_UNINITIALIZED)
     {
-        // Signal the platform that we are about to shutdown the game.
-        getPlatform()->shutdown();
         // Call user finalize
         onFinalize();
         // Finalize Sub-Systems
         _state = Game::STATE_UNINITIALIZED;
     }
-    std::exit(0);
+	return 0;
+}
+
+bool Game::frame()
+{
+	static double lastFrameTime = Game::getGameTime();
+    float elapsedTime = (float)(Game::getGameTime() - lastFrameTime);
+
+	if (!processEvents(_width, _height, _graphics->_debug, _graphics->_reset, &_mouseState))
+	{
+		switch (_state)
+		{
+		case Game::STATE_UNINITIALIZED:
+		{
+			initializeSplash();
+			initializeLoading();
+			_state = Game::STATE_SPLASH;
+			break;
+		}
+		case Game::STATE_SPLASH:
+		{
+			onSplash(elapsedTime);
+			if (_splashScreens.empty())
+				_state = Game::STATE_LOADING;
+			lastFrameTime = updateFrameRate();
+			break;
+		}
+		case Game::STATE_LOADING:
+		{
+			onLoading(elapsedTime);
+			//if (_scene.get() && _scene->isLoaded())
+			_state = Game::STATE_RUNNING;
+			lastFrameTime = updateFrameRate();
+			break;
+		}
+		case Game::STATE_RUNNING:
+		{
+			onUpdate(elapsedTime);
+			lastFrameTime = updateFrameRate();
+			break;
+		}
+		case Game::STATE_PAUSED:
+			break;
+		}
+
+		return true;
+	}
+	return false;
 }
 
 void Game::showSplashScreens(std::vector<SplashScreen> splashScreens)
 {
 }
 
-void Game::setLoadingScene(const std::string& url)
-{
-    loadScene(url, false);
-}
-
-std::shared_ptr<SceneObject> Game::getLoadingScene() const
-{
-    return _sceneLoading;
-}
-
 void Game::loadScene(const std::string& url, bool showLoading)
 {
     // Unload any previous scene
-    if (_scene.get() && (_scene != _sceneLoading) && (_scene != _sceneLoadingDefault))
+    if (_scene.get() && (_scene != _sceneLoading) )
         _scene->unload();
 
     // Set the loading scene and change states
@@ -176,16 +208,22 @@ std::shared_ptr<Camera> Game::getCamera() const
     return _camera;
 }
 
-void Game::onInitialize()
+void Game::onInitialize(int argc, const char* const* argv)
 {
 	_config = getConfig();
 	FileSystem::setHomePath(_config->homePath);
+	setCurrentDir(_config->homePath.c_str());
+
+	_graphics = std::make_shared<Graphics>();
+	_graphics->onInitialize();
 }
 
 void Game::onFinalize()
 {
     if (_scene.get())
         _scene->onFinalize();
+
+	_graphics->onFinalize();
 }
 
 void Game::onSceneLoad(std::shared_ptr<SceneObject> scene)
@@ -198,76 +236,8 @@ void Game::onResize(size_t width, size_t height)
     _height = height;
 }
 
-bool Game::isMouseCapture()
-{    
-	return _mouseCapture;
-}
-
-void Game::setMouseCapture(bool capture)
-{
-	_mouseCapture = capture;
-}
-
-bool Game::isCursorVisible()
-{
-	return _cursorVisible;
-}
-
-void Game::setCursorVisible(bool visible)
-{
-	_cursorVisible = visible;
-}
-
 void Game::onUpdate(float elapsedTime)
 {
-}
-
-void Game::onRender(float elapsedTime)
-{
-	// Deferred rendering here
-	//Graphics* graphics = Graphics::getGraphics();	
-}
-
-void Game::onFrame()
-{
-	static double lastFrameTime = Game::getGameTime();
-    float elapsedTime = (float)(Game::getGameTime() - lastFrameTime);
-
-	switch (_state)
-	{
-		case Game::STATE_UNINITIALIZED:
-		{
-            initializeSplash();
-            initializeLoading();
-			_state = Game::STATE_SPLASH;
-			break;
-		}
-        case Game::STATE_SPLASH:
-        {
-            onSplash(elapsedTime);
-            if (_splashScreens.empty())
-                _state = Game::STATE_LOADING;
-            lastFrameTime = updateFrameRate();
-            break;
-        }
-		case Game::STATE_LOADING:
-		{
-            onLoading(elapsedTime);
-            //if (_scene.get() && _scene->isLoaded())
-				_state = Game::STATE_RUNNING;
-            lastFrameTime = updateFrameRate();
-			break;
-		}
-		case Game::STATE_RUNNING:
-		{
-			onUpdate(elapsedTime);
-			onRender(elapsedTime);
-            lastFrameTime = updateFrameRate();
-			break;
-		}
-		case Game::STATE_PAUSED:
-			break;
-	}
 }
 
 void Game::initializeSplash()
@@ -324,6 +294,11 @@ std::shared_ptr<Game::Config> Game::getConfig()
     return _config;
 }
 
+std::shared_ptr<Graphics> Game::getGraphics()
+{
+	return _graphics;
+}
+
 Game::Config::Config() :
     title(""),
 	graphics(GP_GRAPHICS),
@@ -332,9 +307,7 @@ Game::Config::Config() :
 	fullscreen(GP_GRAPHICS_FULLSCREEN),
 	vsync(GP_GRAPHICS_VSYNC),
 	multisampling(GP_GRAPHICS_MULTISAMPLING),
-	validation(GP_GRAPHICS_VALIDATION),
 	homePath(GP_ENGINE_HOME_PATH),
-    loadingScene("loading.scene"),
 	mainScene("main.scene")
 {
 }
@@ -362,7 +335,6 @@ void Game::Config::onSerialize(Serializer* serializer)
     serializer->writeBool("fullscreen", fullscreen, false);
 	serializer->writeBool("vsync", vsync, false);
 	serializer->writeInt("multisampling", (uint32_t)multisampling, 0);
-	serializer->writeBool("validation", validation, GP_GRAPHICS_VALIDATION);
 	serializer->writeString("homePath", homePath.c_str(), GP_ENGINE_HOME_PATH);
     serializer->writeStringList("splashScreens", splashScreens.size());
     for (size_t i = 0; i < splashScreens.size(); i++)
@@ -370,7 +342,6 @@ void Game::Config::onSerialize(Serializer* serializer)
         std::string splash = std::string(splashScreens[i].url) + ":" + std::to_string(splashScreens[i].duration);
         serializer->writeString(nullptr, splash.c_str(), "");
     }
-    serializer->writeString("loadingScene", loadingScene.c_str(), "");
 	serializer->writeString("mainScene", mainScene.c_str(), "");
 }
 
@@ -383,7 +354,6 @@ void Game::Config::onDeserialize(Serializer* serializer)
 	fullscreen = serializer->readBool("fullscreen", false);
 	vsync = serializer->readBool("vsync", false);
     multisampling = serializer->readInt("multisampling", 0);
-	validation = serializer->readBool("validation", false);
 	serializer->readString("homePath", homePath, "");
     size_t splashScreensCount = serializer->readStringList("splashScreens");
     for (size_t i = 0; i < splashScreensCount; i++)
@@ -415,7 +385,6 @@ void Game::Config::onDeserialize(Serializer* serializer)
             splashScreens.push_back(splashScreen);
         }
     }
-    serializer->readString("loadingScene", loadingScene, "");
 	serializer->readString("mainScene", mainScene, "");
 }
 

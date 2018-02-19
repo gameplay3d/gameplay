@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include "PhysicsCollisionShape.h"
+#include "PhysicsCollider.h"
 
 namespace gameplay
 {
@@ -24,18 +24,15 @@ public:
      */
     static Physics* getPhysics();
 
-    std::shared_ptr<PhysicsCollisionShape> createCollisionBox(const Vector3& center, const Vector3& extents);
+    std::shared_ptr<PhysicsCollider> createBoxCollider(const Vector3& center, const Vector3& extents);
 
-    std::shared_ptr<PhysicsCollisionShape> createCollisionSphere(const Vector3& center, float radius);
+    std::shared_ptr<PhysicsCollider> createSphereCollider(const Vector3& center, float radius);
 
-    std::shared_ptr<PhysicsCollisionShape> createCollisionCapsule(const Vector3& center, float radius, float height,
-                                                                  PhysicsCollisionShape::Capsule::Direction direction);
+    std::shared_ptr<PhysicsCollider> createCapsuleCollider(const Vector3& center, float radius, float height, PhysicsCollider::Capsule::Direction direction);
 
-    std::shared_ptr<PhysicsCollisionShape> createCollisionHeightfield(std::shared_ptr<Heightfield> heightfield);
+    std::shared_ptr<PhysicsCollider> createMeshCollider(std::shared_ptr<Mesh> mesh);
 
-    std::shared_ptr<PhysicsCollisionShape> createCollisionMesh(std::shared_ptr<Mesh> mesh);
-
-    
+	std::shared_ptr<PhysicsCollider> createHeightfieldCollider(std::shared_ptr<Heightfield> heightfield);
 
 private:
 

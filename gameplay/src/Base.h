@@ -35,6 +35,21 @@
 #include <chrono>
 #include <typeindex>
 
+#ifdef __ANDROID__
+	#define GP_PLATFORM_ANDROID
+#elif WIN32
+	#define GP_PLATFORM_WINDOWS
+#elif __linux__
+	#define GP_PLATFORM_LINUX
+#elif __APPLE__
+	#include "TargetConditionals.h"
+	#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+		#define GP_PLATFORM_IOS
+	#elif TARGET_OS_MAC
+		#define GP_PLATFORM_MACOS
+	#endif
+#endif
+
 // Function
 #ifdef _WINDOWS
 #define __current__func__ __FUNCTION__
@@ -144,42 +159,26 @@
 #define GP_MATH_1_PI                    0.31830988618379067154
 #define GP_MATH_MATRIX_SIZE             (sizeof(float) * 16)
 
-// Graphics defaults
-#define GP_GRAPHICS_WIDTH					1920
-#define GP_GRAPHICS_HEIGHT					1080
-#define GP_GRAPHICS_FULLSCREEN				false
-#define GP_GRAPHICS_VSYNC					true
-#define GP_GRAPHICS_MULTISAMPLING			0
-#define GP_GRAPHICS_VALIDATION				false
-#define GP_GRAPHICS_SWAPCHAIN_IMAGE_COUNT	3
-#define GP_GRAPHICS_VK						"vk"
-#define GP_GRAPHICS_VK_SHADER_PATH			"res/shaders/glsl/"
-#define GP_GRAPHICS_VK_SHADER_EXT			".spv"
-#define GP_GRAPHICS_D3D12					"d3d12"
-#define GP_GRAPHICS_D3D12_SHADER_PATH		"res/shaders/hlsl/"
-#define GP_GRAPHICS_D3D12_SHADER_EXT		".cso"
-#define GP_GRAPHICS_MTL						"mtl"
-#define GP_GRAPHICS_MTL_SHADER_PATH			"res/shaders/msl/"
-#define GP_GRAPHICS_MTL_SHADER_EXT			".metallib"
-#define GP_GRAPHICS							GP_GRAPHICS_VK
+// Graphics
+#define GP_GRAPHICS_WIDTH							1920
+#define GP_GRAPHICS_HEIGHT							1280
+#define GP_GRAPHICS_FULLSCREEN						false
+#define GP_GRAPHICS_VSYNC							true
+#define GP_GRAPHICS_MULTISAMPLING					0
+#define GP_GRAPHICS_NULL							""
+#define GP_GRAPHICS_VULKAN							"Vulkan"
+#define GP_GRAPHICS_DIRECT3D12						"Direct3D12"
+#define GP_GRAPHICS_METAL							"Metal"
+#define GP_GRAPHICS									GP_GRAPHICS_NULL
 
-// Graphics limits
-#define GP_GRAPHICS_GPUS_MAX                        4
-#define GP_GRAPHICS_INSTANCE_EXTS_MAX               256
-#define GP_GRAPHICS_DEVICE_EXTS_MAX                 256
-#define GP_GRAPHICS_DESCRIPTORS_MAX                 32
-#define GP_GRAPHICS_DESCRIPTOR_SETS_MAX             8
-#define GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX          256
-#define GP_GRAPHICS_COLOR_ATTACHMENTS_MAX			8
-#define GP_GRAPHICS_SUBMIT_COMMAND_BUFFERS_MAX      8
-#define GP_GRAPHICS_SUBMIT_WAIT_SEMAPHORES_MAX      8
-#define GP_GRAPHICS_SUBMIT_SIGNAL_SEMAPHORES_MAX    8
-#define GP_GRAPHICS_PRESENT_WAIT_SEMAPHORES_MAX     8
-#define GP_GRAPHICS_VERTEX_BINDINGS_MAX             15
-#define GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX           15
-#define GP_GRAPHICS_SEMANTIC_NAME_MAX				128
-#define GP_GRAPHICS_MIP_LEVELS_MAX                  0xFFFFFFFF
+// Window
+#define GP_WINDOW_FLAG_NONE							UINT32_C(0x00000000)
+#define GP_WINDOW_FLAG_ASPECT_RATIO					UINT32_C(0x00000001)
+#define GP_WINDOW_FLAG_FRAME						UINT32_C(0x00000002)
+#define GP_WINDOWS_MAX								8
 
+// Input
+#define GP_GAMEPADS_MAX								4
 
 namespace gameplay
 {

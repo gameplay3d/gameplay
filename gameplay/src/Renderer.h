@@ -2,7 +2,6 @@
 
 #include "Component.h"
 #include "Graphics.h"
-#include "Buffer.h"
 #include "Material.h"
 
 namespace gameplay
@@ -118,8 +117,8 @@ protected:
 	virtual void onDraw(uint32_t drawFlags) = 0;
 
 	std::string  _url;
-	std::vector<std::shared_ptr<Buffer>> _mesh;
-	std::vector<std::shared_ptr<Buffer>> _submesh;
+	//std::vector<std::shared_ptr<Buffer>> _mesh;
+	//std::vector<std::shared_ptr<Buffer>> _submesh;
 	std::shared_ptr<Material> _materialShared;
 	std::vector<std::shared_ptr<Material>> _materials;
 	bool _loaded;
