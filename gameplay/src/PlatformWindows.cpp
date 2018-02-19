@@ -1,624 +1,990 @@
 #include "Base.h"
-#include "PlatformWindows.h"
-#include "Game.h"
-#include "Graphics.h"
-#include "vk/GraphicsVK.h"
-#include "d3d12/GraphicsD3D12.h"
+#ifdef GP_PLATFORM_WINDOWS
+#include "Platform.h"
+#include "Input.h"
+
+#include <bx/bx.h>
+#include <bx/mutex.h>
+#include <bx/handlealloc.h>
+#include <bx/os.h>
+#include <bx/thread.h>
+#include <bx/timer.h>
+#include <bx/uint32_t.h>
+#include <bgfx/platform.h>
+
+#include <windows.h>
+#include <windowsx.h>
+#include <xinput.h>
+
+#ifndef XINPUT_GAMEPAD_GUIDE
+#	define XINPUT_GAMEPAD_GUIDE 0x400
+#endif
+#ifndef XINPUT_DLL_A
+#	define XINPUT_DLL_A "xinput.dll"
+#endif
 
 namespace gameplay
 {
 
-extern Platform* getPlatform()
+void setHwnd(::HWND window)
 {
-    static Platform* platform = new PlatformWindows();
-    return platform;
+	bgfx::PlatformData pd;
+	bx::memSet(&pd, 0, sizeof(pd));
+	pd.nwh = window;
+	bgfx::setPlatformData(pd);
 }
 
-Graphics* Graphics::getGraphics()
+typedef DWORD (WINAPI* PFN_XINPUT_GET_STATE)(DWORD dwUserIndex, XINPUT_STATE* pState);
+typedef void  (WINAPI* PFN_XINPUT_ENABLE)(BOOL enable);
+
+struct XInputRemap
 {
-    if (!_graphics)
-    {
-        std::shared_ptr<Game::Config> config = Game::getInstance()->getConfig();
-        if (config->graphics.compare(GP_GRAPHICS_D3D12) == 0)
-        {
-            _graphics = new GraphicsD3D12();
-            _graphics->_api = Graphics::API_D3D12;
-        }
-        else
-        {
-            _graphics = new GraphicsVK();
-            _graphics->_api = Graphics::API_VK;
-        }
-    }
-    return _graphics;
-}
+	uint16_t  bit;
+	gameplay::Input::Key key;
+};
 
-PlatformWindows::PlatformWindows() :
-    _hwnd(nullptr),
-    _instance(nullptr),
-    _graphics(nullptr)
+static XInputRemap __xinputRemap[] =
 {
-}
+	{ XINPUT_GAMEPAD_DPAD_UP,        gameplay::Input::Key::KEY_GAMEPAD_UP				},
+	{ XINPUT_GAMEPAD_DPAD_DOWN,      gameplay::Input::Key::KEY_GAMEPAD_DOWN				},
+	{ XINPUT_GAMEPAD_DPAD_LEFT,      gameplay::Input::Key::KEY_GAMEPAD_LEFT				},
+	{ XINPUT_GAMEPAD_DPAD_RIGHT,     gameplay::Input::Key::KEY_GAMEPAD_RIGHT			},
+	{ XINPUT_GAMEPAD_START,          gameplay::Input::Key::KEY_GAMEPAD_START			},
+	{ XINPUT_GAMEPAD_BACK,           gameplay::Input::Key::KEY_GAMEPAD_BACK				},
+	{ XINPUT_GAMEPAD_LEFT_THUMB,     gameplay::Input::Key::KEY_GAMEPAD_THUMB_LEFT		},
+	{ XINPUT_GAMEPAD_RIGHT_THUMB,    gameplay::Input::Key::KEY_GAMEPAD_THUMB_RIGHT		},
+	{ XINPUT_GAMEPAD_LEFT_SHOULDER,  gameplay::Input::Key::KEY_GAMEPAD_SHOULDER_LEFT	},
+	{ XINPUT_GAMEPAD_RIGHT_SHOULDER, gameplay::Input::Key::KEY_GAMEPAD_SHOULDER_RIGHT	},
+	{ XINPUT_GAMEPAD_GUIDE,          gameplay::Input::Key::KEY_GAMEPAD_GUIDE			},
+	{ XINPUT_GAMEPAD_A,              gameplay::Input::Key::KEY_GAMEPAD_A				},
+	{ XINPUT_GAMEPAD_B,              gameplay::Input::Key::KEY_GAMEPAD_B				},
+	{ XINPUT_GAMEPAD_X,              gameplay::Input::Key::KEY_GAMEPAD_X				},
+	{ XINPUT_GAMEPAD_Y,              gameplay::Input::Key::KEY_GAMEPAD_Y				}
+};
 
-PlatformWindows::~PlatformWindows()
+
+struct XInput
 {
-}
-
-bool PlatformWindows::startup(int argc, char** argv)
-{
-	// Get the application connection instance
-	_instance = GetModuleHandle(0);
-
-    // Get the game config
-    std::shared_ptr<Game::Config> config = Game::getInstance()->getConfig();
-
-	// Determine the window width and height
-    int width = config->width;
-    int height = config->height;
-	if (width == 0 || height == 0)
+	XInput()
+		: xinputdll(NULL)
 	{
-		width = GP_GRAPHICS_WIDTH;
-		height = GP_GRAPHICS_HEIGHT;
+		bx::memSet(connected, 0, sizeof(connected) );
+		bx::memSet(state, 0, sizeof(state) );
+
+		deadzone[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_X ] =
+		deadzone[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_Y] = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+		deadzone[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_X] =
+		deadzone[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_Y] = XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+		deadzone[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_Z ] =
+		deadzone[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_Z] = XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
+
+		bx::memSet(flip, 1, sizeof(flip) );
+		flip[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_Y] =
+		flip[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_Y] = -1;
 	}
 
-    // Register window class
-    WNDCLASSEX wc = {};
-    wc.cbSize = sizeof(WNDCLASSEX);
-    wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wc.lpfnWndProc = (WNDPROC)PlatformWindows::onMessage;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = _instance;
-    wc.hIcon = LoadIcon(_instance, IDI_APPLICATION);
-    wc.hIconSm = nullptr;
-    wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-    wc.lpszMenuName = nullptr;
-    wc.lpszClassName = L"gameplay";
-	RegisterClassEx(&wc);
-
-	RECT windowRect = { 0, 0, width, height };
-	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
-
-    // Set the window style
-    DWORD style, styleEx;
-    if (config->fullscreen)
-    {
-        style = WS_POPUP;
-        styleEx = WS_EX_APPWINDOW;
-    }
-    else
-    {
-		style = WS_OVERLAPPEDWINDOW;
-        styleEx = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-    }
-
-    // Create the window
-    std::wstring title_wstr = std::wstring(config->title.begin(), config->title.end());
-    _hwnd = CreateWindowEx(styleEx, 
-						   L"gameplay", 
-						   title_wstr.c_str(), 
-						   style | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 
-						   0, 0, 
-						   windowRect.right - windowRect.left, 
-		                   windowRect.bottom - windowRect.top, 
-						   nullptr, nullptr, _instance, nullptr);
-    if (!_hwnd)
-        GP_ERROR("Failed to create window.");
-
-    // Enumerate all supported display settings and match
-    if (config->fullscreen)
-    {
-        bool modeSupported = false;
-        DWORD modeNum = 0;
-        DEVMODE devMode;
-        memset(&devMode, 0, sizeof(DEVMODE));
-        devMode.dmSize = sizeof(DEVMODE);
-        devMode.dmDriverExtra = 0;
-        while (EnumDisplaySettings(nullptr, modeNum++, &devMode) != 0)
-        {
-            if (devMode.dmPelsWidth == width &&
-                devMode.dmPelsHeight == height &&
-                devMode.dmBitsPerPel == 32)
-            {
-                modeSupported = true;
-                break;
-            }
-        }
-        if (!modeSupported)
-        {
-            width = 0;
-            height = 0;
-            windowRect.right = windowRect.left + width;
-            windowRect.bottom = windowRect.top + height;
-        }
-
-        DEVMODE dm = {};
-        dm.dmSize = sizeof(dm);
-        dm.dmPelsWidth = width;
-        dm.dmPelsHeight = height;
-        dm.dmBitsPerPel = 32;
-        dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-        if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
-            GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", width, height);
-    }
-
-
-    // CEnter the window postiion
-	if (!config->fullscreen)
+	void init()
 	{
-		GetWindowRect(_hwnd, &windowRect);
-		const int screenX = (GetSystemMetrics(SM_CXSCREEN) - windowRect.right) / 2;
-		const int screenY = (GetSystemMetrics(SM_CYSCREEN) - windowRect.bottom) / 2;
-		SetWindowPos(_hwnd, 0, screenX, screenY, -1, -1, SWP_NOZORDER | SWP_NOSIZE);
-	}
+		xinputdll = bx::dlopen(XINPUT_DLL_A);
 
-    // Initialize the graphics system
-    gameplay::Graphics::getGraphics()->onInitialize((unsigned long)_hwnd, (unsigned long)_instance);
-
-    // Show the window
-    ShowWindow(_hwnd, SW_SHOW);
-
-    // Find any connected gamepads
-    for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
-    {
-        if (XInputGetState(i, &_gamepadState[i]) == NO_ERROR)
-        {
-            if (!_gamepadsConnected[i])
-            {
-                _gamepadsConnected[i] = true;
-                gameplay::getPlatform()->onGamepadEvent(gameplay::Platform::GAMEPAD_EVENT_CONNECTED, i);
-            }
-        }
-		else
+		if (xinputdll != NULL)
 		{
-			_gamepadsConnected[i] = false;
-		}
-    }
-
-	// Initialize the game
-	Game::getInstance()->onInitialize();
-    return true;
-}
-
-void PlatformWindows::shutdown()
-{
-}
-
-int PlatformWindows::enterMessagePump()
-{
-    gameplay::Game* game = gameplay::Game::getInstance();
-    MSG msg;
-    while (true)
-    {
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-
-            if (msg.message == WM_QUIT)
-            {
-                game->exit();
-                return msg.wParam;
-            }
-        }
-        else
-        {
-            for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
-            {
-                if (XInputGetState(i, &_gamepadState[i]) == NO_ERROR && !_gamepadsConnected[i])
-                {                    
-                    _gamepadsConnected[i] = true;
-                    gameplay::getPlatform()->onGamepadEvent(gameplay::Platform::GAMEPAD_EVENT_CONNECTED, i);
-                }
-                else if (XInputGetState(i, &_gamepadState[i]) != NO_ERROR && _gamepadsConnected[i])
-                {
-                    _gamepadsConnected[i] = false;
-                    gameplay::getPlatform()->onGamepadEvent(gameplay::Platform::GAMEPAD_EVENT_DISCONNECTED, i);
-                }
-            }
-            game->onFrame();            
-        }
-    }
-    return 0;
-}
-
-LRESULT __stdcall PlatformWindows::onMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	int x = GET_X_LPARAM(lParam);
-	int y = GET_Y_LPARAM(lParam);
-	static POINT mouseCapturePoint = { 0, 0 };
-	static bool shiftDown = false;
-	static bool capsOn = false;
-	static bool resizing = false;
-	static DWORD systemColorsPrev[2];
-	static int systemElements[2] = {COLOR_WINDOW, COLOR_ACTIVECAPTION};
-
-	Game* game = gameplay::Game::getInstance();
-
-	switch (msg)
-	{
-		case WM_DESTROY:
-		{
-			game->exit();
-			PostQuitMessage(0);
-			return 0;
-		}
-		case WM_CLOSE:
-		{
-			game->exit();
-			return 0;
-		}
-		case WM_LBUTTONDOWN:
-		{
-			updateCapture(wParam);
-            gameplay::getPlatform()->onMouseEvent(gameplay::Platform::MOUSE_EVENT_PRESS_LEFT_BUTTON, x, y, 0);
-			return 0;
-		}
-		case WM_LBUTTONUP:
-		{
-            gameplay::getPlatform()->onMouseEvent(gameplay::Platform::MOUSE_EVENT_RELEASE_LEFT_BUTTON, x, y, 0);;
-			updateCapture(wParam);
-			return 0;
-		}
-		case WM_RBUTTONDOWN:
-		{
-			updateCapture(lParam);
-            gameplay::getPlatform()->onMouseEvent(gameplay::Platform::MOUSE_EVENT_PRESS_RIGHT_BUTTON, x, y, 0);
-			break;
-		}
-		case WM_RBUTTONUP:
-		{
-            gameplay::getPlatform()->onMouseEvent(gameplay::Platform::MOUSE_EVENT_RELEASE_RIGHT_BUTTON, x, y, 0);
-			updateCapture(wParam);
-			break;
-		}
-		case WM_MBUTTONDOWN:
-		{
-			updateCapture(wParam);
-            gameplay::getPlatform()->onMouseEvent(gameplay::Platform::MOUSE_EVENT_PRESS_MIDDLE_BUTTON, x, y, 0);
-			break;
-		}
-		case WM_MBUTTONUP:
-		{
-            gameplay::getPlatform()->onMouseEvent(gameplay::Platform::MOUSE_EVENT_RELEASE_MIDDLE_BUTTON, x, y, 0);
-			updateCapture(wParam);
-			break;
-		}
-		case WM_MOUSEMOVE:
-		{
-			if (game->isMouseCapture())
+			if (XInputGetState == NULL)
 			{
-				if (x == mouseCapturePoint.x && y == mouseCapturePoint.y)
-					break;
-				x -= mouseCapturePoint.x;
-				y -= mouseCapturePoint.y;
-				warpMouse(mouseCapturePoint.x, mouseCapturePoint.y);
+				shutdown();
 			}
-            gameplay::getPlatform()->onMouseEvent(gameplay::Platform::MOUSE_EVENT_MOVE, x, y, 0);
-			break;
 		}
-		case WM_MOUSEWHEEL:
+	}
+
+	void shutdown()
+	{
+		if (xinputdll != NULL)
 		{
-			tagPOINT point;
-			ScreenToClient((HWND)gameplay::getPlatform()->getWindow(), &point);
-            gameplay::getPlatform()->onMouseEvent(gameplay::Platform::MOUSE_EVENT_WHEEL, point.x, point.y, GET_WHEEL_DELTA_WPARAM(wParam) / 120);
-			break;
+			bx::dlclose(xinputdll);
+			xinputdll = NULL;
 		}
-		case WM_KEYDOWN:
+	}
+
+	bool filter(gameplay::Input::GamepadAxis axis, int32_t old, int32_t* value)
+	{
+		const int32_t dz = deadzone[axis];
+		int32_t new_value = *value;
+		new_value = new_value > dz || new_value < -dz ? new_value : 0;
+		*value = new_value * flip[axis];
+		return old != new_value;
+	}
+
+	void update(gameplay::Platform::EventQueue& eventQueue)
+	{
+		int64_t now = bx::getHPCounter();
+		static int64_t next = now;
+
+		if (now < next)
 		{
-			if (wParam == VK_SHIFT || wParam == VK_LSHIFT || wParam == VK_RSHIFT)
-				shiftDown = true;
-			if (wParam == VK_CAPITAL)
-				capsOn = !capsOn;
-            gameplay::getPlatform()->onKeyEvent(gameplay::Platform::KEY_EVENT_PRESS, translateKey(wParam, shiftDown ^ capsOn));
-			break;
+			return;
 		}
-		case WM_KEYUP:
+
+		const int64_t timerFreq = bx::getHPFrequency();
+		next = now + timerFreq/60;
+
+		if (xinputdll == NULL)
 		{
-			if (wParam == VK_SHIFT || wParam == VK_LSHIFT || wParam == VK_RSHIFT)
-				shiftDown = false;
-            gameplay::getPlatform()->onKeyEvent(gameplay::Platform::KEY_EVENT_RELEASE, translateKey(wParam, shiftDown ^ capsOn));
-			break;
+			return;
 		}
-		case WM_CHAR:
+
+		gameplay::Platform::WindowHandle defaultWindow = { 0 };
+
+		for (uint16_t i = 0; i < BX_COUNTOF(this->state); ++i)
 		{
-            gameplay::getPlatform()->onKeyEvent(gameplay::Platform::KEY_EVENT_CHAR, translateKey(wParam, shiftDown ^ capsOn));
-			break;
-		}
-		case WM_UNICHAR:
-		{
-            gameplay::getPlatform()->onKeyEvent(gameplay::Platform::KEY_EVENT_CHAR, translateKey(wParam, shiftDown ^ capsOn));
-			break;
-		}
-		case WM_SIZE:
-		{
-            gameplay::Graphics* graphics = gameplay::Graphics::getGraphics();
-            if (graphics && graphics->isResized() && wParam != SIZE_MINIMIZED)
+			XINPUT_STATE state;
+			DWORD result = XInputGetState(i, &state);
+
+			gameplay::Input::GamepadHandle gamepadHandle = { i };
+
+			bool connected = ERROR_SUCCESS == result;
+			if (connected != this->connected[i])
 			{
-				if (resizing || wParam == SIZE_MAXIMIZED || wParam == SIZE_RESTORED)
+				eventQueue.postGamepadEvent(defaultWindow, gamepadHandle, connected);
+			}
+
+			this->connected[i] = connected;
+
+			if (connected &&  this->state[i].dwPacketNumber != state.dwPacketNumber)
+			{
+				XINPUT_GAMEPAD& gamepad = this->state[i].Gamepad;
+				const uint16_t changed = gamepad.wButtons ^ state.Gamepad.wButtons;
+				const uint16_t current = gamepad.wButtons;
+				if (changed != 0)
 				{
-					RECT clientRect = {};
-					GetClientRect(hwnd, &clientRect);
-					size_t width = clientRect.right - clientRect.left;
-					size_t height = clientRect.bottom - clientRect.top;
-                    graphics->onResize(width, height);
-					game->onResize(width, height);
+					for (uint32_t j = 0; j < BX_COUNTOF(__xinputRemap); ++j)
+					{
+						uint16_t bit = __xinputRemap[j].bit;
+						if (bit & changed)
+						{
+							eventQueue.postKeyEvent(defaultWindow, __xinputRemap[j].key, 0, 0 == (current & bit) );
+						}
+					}
+					gamepad.wButtons = state.Gamepad.wButtons;
+				}
+
+				if (gamepad.bLeftTrigger != state.Gamepad.bLeftTrigger)
+				{
+					int32_t value = state.Gamepad.bLeftTrigger;
+					if (filter(gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_Z, gamepad.bLeftTrigger, &value) )
+					{
+						eventQueue.postAxisEvent(defaultWindow, gamepadHandle, gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_Z, value);
+					}
+					gamepad.bLeftTrigger = state.Gamepad.bLeftTrigger;
+				}
+
+				if (gamepad.bRightTrigger != state.Gamepad.bRightTrigger)
+				{
+					int32_t value = state.Gamepad.bRightTrigger;
+					if (filter(gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_Z, gamepad.bRightTrigger, &value) )
+					{
+						eventQueue.postAxisEvent(defaultWindow, gamepadHandle, gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_Z, value);
+					}
+					gamepad.bRightTrigger = state.Gamepad.bRightTrigger;
+				}
+
+				if (gamepad.sThumbLX != state.Gamepad.sThumbLX)
+				{
+					int32_t value = state.Gamepad.sThumbLX;
+					if (filter(gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_X, gamepad.sThumbLX, &value) )
+					{
+						eventQueue.postAxisEvent(defaultWindow, gamepadHandle, gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_X, value);
+					}
+					gamepad.sThumbLX = state.Gamepad.sThumbLX;
+				}
+
+				if (gamepad.sThumbLY != state.Gamepad.sThumbLY)
+				{
+					int32_t value = state.Gamepad.sThumbLY;
+					if (filter(gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_Y, gamepad.sThumbLY, &value) )
+					{
+						eventQueue.postAxisEvent(defaultWindow, gamepadHandle, gameplay::Input::GamepadAxis::GAMEPAD_AXIS_LEFT_Y, value);
+					}
+					gamepad.sThumbLY = state.Gamepad.sThumbLY;
+				}
+
+				if (gamepad.sThumbRX != state.Gamepad.sThumbRX)
+				{
+					int32_t value = state.Gamepad.sThumbRX;
+					if (filter(gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_X, gamepad.sThumbRX, &value) )
+					{
+						eventQueue.postAxisEvent(defaultWindow, gamepadHandle, gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_X, value);
+					}
+					gamepad.sThumbRX = state.Gamepad.sThumbRX;
+				}
+
+				if (gamepad.sThumbRY != state.Gamepad.sThumbRY)
+				{
+					int32_t value = state.Gamepad.sThumbRY;
+					if (filter(gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_Y, gamepad.sThumbRY, &value) )
+					{
+						eventQueue.postAxisEvent(defaultWindow, gamepadHandle, gameplay::Input::GamepadAxis::GAMEPAD_AXIS_RIGHT_Y, value);
+					}
+					gamepad.sThumbRY = state.Gamepad.sThumbRY;
 				}
 			}
-			break;
 		}
-		case WM_ENTERSIZEMOVE:
-		{
-			resizing = true;
-			break;
-		}
-		case WM_EXITSIZEMOVE:
-		{
-			resizing = false;
-			break;
-		}
-		case WM_SETFOCUS:
-		case WM_KILLFOCUS:
-			break;
 	}
-	return DefWindowProc(hwnd, msg, wParam, lParam);
-}
 
-unsigned long PlatformWindows::getWindow()
+	void* xinputdll;
+	int32_t deadzone[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_COUNT];
+	int8_t flip[gameplay::Input::GamepadAxis::GAMEPAD_AXIS_COUNT];
+	XINPUT_STATE state[GP_GAMEPADS_MAX];
+	bool connected[GP_GAMEPADS_MAX];
+};
+
+XInput __xinput;
+
+enum
 {
-    return (unsigned long)_hwnd;
-}
+	WM_USER_WINDOW_CREATE = WM_USER,
+	WM_USER_WINDOW_DESTROY,
+	WM_USER_WINDOW_SET_TITLE,
+	WM_USER_WINDOW_SET_FLAGS,
+	WM_USER_WINDOW_SET_POS,
+	WM_USER_WINDOW_SET_SIZE,
+	WM_USER_WINDOW_TOGGLE_FRAME,
+	WM_USER_WINDOW_MOUSE_LOCK,
+};
 
-unsigned long PlatformWindows::getConnection()
+struct TranslateKeyModifiers
 {
-    return (unsigned long)_instance;
-}
+	int vk;
+	gameplay::Input::KeyModifier keyModifier;
+};
 
-Input::Key PlatformWindows::translateKey(WPARAM windowsKeyCode, bool shiftDown)
+struct MainThreadEntry
 {
-    switch (windowsKeyCode)
-    {
-		case VK_PAUSE:
-			return gameplay::Input::KEY_PAUSE;
-		case VK_SCROLL:
-			return gameplay::Input::KEY_SCROLL_LOCK;
-		case VK_PRINT:
-			return gameplay::Input::KEY_PRINT;
-		case VK_ESCAPE:
-			return gameplay::Input::KEY_ESCAPE;
-		case VK_BACK:
-		case VK_F16:
-			return gameplay::Input::KEY_BACKSPACE;
-		case VK_TAB:
-			return shiftDown ? gameplay::Input::KEY_BACK_TAB : gameplay::Input::KEY_TAB;
-		case VK_RETURN:
-			return gameplay::Input::KEY_ENTER;
-		case VK_CAPITAL:
-			return gameplay::Input::KEY_CAPS_LOCK;
-		case VK_SHIFT:
-			return gameplay::Input::KEY_SHIFT;
-		case VK_CONTROL:
-			return gameplay::Input::KEY_CTRL;
-		case VK_MENU:
-			return gameplay::Input::KEY_ALT;
-		case VK_APPS:
-			return gameplay::Input::KEY_MENU;
-		case VK_LSHIFT:
-			return gameplay::Input::KEY_SHIFT;
-		case VK_RSHIFT:
-			return gameplay::Input::KEY_SHIFT;
-		case VK_LCONTROL:
-			return gameplay::Input::KEY_CTRL;
-		case VK_RCONTROL:
-			return gameplay::Input::KEY_CTRL;
-		case VK_LMENU:
-			return gameplay::Input::KEY_ALT;
-		case VK_RMENU:
-			return gameplay::Input::KEY_ALT;
-		case VK_LWIN:
-		case VK_RWIN:
-			return gameplay::Input::KEY_HYPER;
-		case VK_BROWSER_SEARCH:
-			return gameplay::Input::KEY_SEARCH;
-		case VK_INSERT:
-			return gameplay::Input::KEY_INSERT;
-		case VK_HOME:
-			return gameplay::Input::KEY_HOME;
-		case VK_PRIOR:
-			return gameplay::Input::KEY_PG_UP;
-		case VK_DELETE:
-			return gameplay::Input::KEY_DELETE;
-		case VK_END:
-			return gameplay::Input::KEY_END;
-		case VK_NEXT:
-			return gameplay::Input::KEY_PG_DOWN;
-		case VK_LEFT:
-			return gameplay::Input::KEY_LEFT_ARROW;
-		case VK_RIGHT:
-			return gameplay::Input::KEY_RIGHT_ARROW;
-		case VK_UP:
-			return gameplay::Input::KEY_UP_ARROW;
-		case VK_DOWN:
-			return gameplay::Input::KEY_DOWN_ARROW;
-		case VK_NUMLOCK:
-			return gameplay::Input::KEY_NUM_LOCK;
-		case VK_ADD:
-			return gameplay::Input::KEY_KP_PLUS;
-		case VK_SUBTRACT:
-			return gameplay::Input::KEY_KP_MINUS;
-		case VK_MULTIPLY:
-			return gameplay::Input::KEY_KP_MULTIPLY;
-		case VK_DIVIDE:
-			return gameplay::Input::KEY_KP_DIVIDE;
-		case VK_NUMPAD7:
-			return gameplay::Input::KEY_KP_HOME;
-		case VK_NUMPAD8:
-			return gameplay::Input::KEY_KP_UP;
-		case VK_NUMPAD9:
-			return gameplay::Input::KEY_KP_PG_UP;
-		case VK_NUMPAD4:
-			return gameplay::Input::KEY_KP_LEFT;
-		case VK_NUMPAD5:
-			return gameplay::Input::KEY_KP_FIVE;
-		case VK_NUMPAD6:
-			return gameplay::Input::KEY_KP_RIGHT;
-		case VK_NUMPAD1:
-			return gameplay::Input::KEY_KP_END;
-		case VK_NUMPAD2:
-			return gameplay::Input::KEY_KP_DOWN;
-		case VK_NUMPAD3:
-			return gameplay::Input::KEY_KP_PG_DOWN;
-		case VK_NUMPAD0:
-			return gameplay::Input::KEY_KP_INSERT;
-		case VK_DECIMAL:
-			return gameplay::Input::KEY_KP_DELETE;
-		case VK_F1:
-			return gameplay::Input::KEY_F1;
-		case VK_F2:
-			return gameplay::Input::KEY_F2;
-		case VK_F3:
-			return gameplay::Input::KEY_F3;
-		case VK_F4:
-			return gameplay::Input::KEY_F4;
-		case VK_F5:
-			return gameplay::Input::KEY_F5;
-		case VK_F6:
-			return gameplay::Input::KEY_F6;
-		case VK_F7:
-			return gameplay::Input::KEY_F7;
-		case VK_F8:
-			return gameplay::Input::KEY_F8;
-		case VK_F9:
-			return gameplay::Input::KEY_F9;
-		case VK_F10:
-			return gameplay::Input::KEY_F10;
-		case VK_F11:
-			return gameplay::Input::KEY_F11;
-		case VK_F12:
-			return gameplay::Input::KEY_F12;
-		case VK_SPACE:
-			return gameplay::Input::KEY_SPACE;
-		case 0x30:
-			return shiftDown ? gameplay::Input::KEY_RIGHT_PARENTHESIS : gameplay::Input::KEY_ZERO;
-		case 0x31:
-			return shiftDown ? gameplay::Input::KEY_EXCLAM : gameplay::Input::KEY_ONE;
-		case 0x32:
-			return shiftDown ? gameplay::Input::KEY_AT : gameplay::Input::KEY_TWO;
-		case 0x33:
-			return shiftDown ? gameplay::Input::KEY_NUMBER : gameplay::Input::KEY_THREE;
-		case 0x34:
-			return shiftDown ? gameplay::Input::KEY_DOLLAR : gameplay::Input::KEY_FOUR;
-		case 0x35:
-			return shiftDown ? gameplay::Input::KEY_PERCENT : gameplay::Input::KEY_FIVE;
-		case 0x36:
-			return shiftDown ? gameplay::Input::KEY_CIRCUMFLEX : gameplay::Input::KEY_SIX;
-		case 0x37:
-			return shiftDown ? gameplay::Input::KEY_AMPERSAND : gameplay::Input::KEY_SEVEN;
-		case 0x38:
-			return shiftDown ? gameplay::Input::KEY_ASTERISK : gameplay::Input::KEY_EIGHT;
-		case 0x39:
-			return shiftDown ? gameplay::Input::KEY_LEFT_PARENTHESIS : gameplay::Input::KEY_NINE;
-		case VK_OEM_PLUS:
-			return shiftDown ? gameplay::Input::KEY_EQUAL : gameplay::Input::KEY_PLUS;
-		case VK_OEM_COMMA:
-			return shiftDown ? gameplay::Input::KEY_LESS_THAN : gameplay::Input::KEY_COMMA;
-		case VK_OEM_MINUS:
-			return shiftDown ? gameplay::Input::KEY_UNDERSCORE : gameplay::Input::KEY_MINUS;
-		case VK_OEM_PERIOD:
-			return shiftDown ? gameplay::Input::KEY_GREATER_THAN : gameplay::Input::KEY_PERIOD;
-		case VK_OEM_1:
-			return shiftDown ? gameplay::Input::KEY_COLON : gameplay::Input::KEY_SEMICOLON;
-		case VK_OEM_2:
-			return shiftDown ? gameplay::Input::KEY_QUESTION : gameplay::Input::KEY_SLASH;
-		case VK_OEM_3:
-			return shiftDown ? gameplay::Input::KEY_TILDE : gameplay::Input::KEY_GRAVE;
-		case VK_OEM_4:
-			return shiftDown ? gameplay::Input::KEY_LEFT_BRACE : gameplay::Input::KEY_LEFT_BRACKET;
-		case VK_OEM_5:
-			return shiftDown ? gameplay::Input::KEY_BAR : gameplay::Input::KEY_BACK_SLASH;
-		case VK_OEM_6:
-			return shiftDown ? gameplay::Input::KEY_RIGHT_BRACE : gameplay::Input::KEY_RIGHT_BRACKET;
-		case VK_OEM_7:
-			return shiftDown ? gameplay::Input::KEY_QUOTE : gameplay::Input::KEY_APOSTROPHE;
-		case 0x41:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_A : gameplay::Input::KEY_A;
-		case 0x42:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_B : gameplay::Input::KEY_B;
-		case 0x43:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_C : gameplay::Input::KEY_C;
-		case 0x44:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_D : gameplay::Input::KEY_D;
-		case 0x45:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_E : gameplay::Input::KEY_E;
-		case 0x46:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_F : gameplay::Input::KEY_F;
-		case 0x47:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_G : gameplay::Input::KEY_G;
-		case 0x48:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_H : gameplay::Input::KEY_H;
-		case 0x49:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_I : gameplay::Input::KEY_I;
-		case 0x4A:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_J : gameplay::Input::KEY_J;
-		case 0x4B:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_K : gameplay::Input::KEY_K;
-		case 0x4C:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_L : gameplay::Input::KEY_L;
-		case 0x4D:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_M : gameplay::Input::KEY_M;
-		case 0x4E:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_N : gameplay::Input::KEY_N;
-		case 0x4F:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_O : gameplay::Input::KEY_O;
-		case 0x50:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_P : gameplay::Input::KEY_P;
-		case 0x51:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_Q : gameplay::Input::KEY_Q;
-		case 0x52:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_R : gameplay::Input::KEY_R;
-		case 0x53:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_S : gameplay::Input::KEY_S;
-		case 0x54:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_T : gameplay::Input::KEY_T;
-		case 0x55:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_U : gameplay::Input::KEY_U;
-		case 0x56:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_V : gameplay::Input::KEY_V;
-		case 0x57:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_W : gameplay::Input::KEY_W;
-		case 0x58:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_X : gameplay::Input::KEY_X;
-		case 0x59:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_Y : gameplay::Input::KEY_Y;
-		case 0x5A:
-			return shiftDown ? gameplay::Input::KEY_CAPITAL_Z : gameplay::Input::KEY_Z;
-		default:
-			return gameplay::Input::KEY_NONE;
-    }
-}
+	int argc;
+	const char* const* argv;
 
-void PlatformWindows::updateCapture(LPARAM param)
+	static int32_t threadFunc(bx::Thread* thread, void* userData);
+};
+
+static const TranslateKeyModifiers __translateKeyModifiers[8] =
 {
-    HWND window = (HWND)gameplay::getPlatform()->getWindow();
-    if ((param & MK_LBUTTON) || (param & MK_MBUTTON) || (param & MK_RBUTTON))
-    {
-        SetCapture(window);
-    }
-    else
-    {
-        ReleaseCapture();
-    }
-}
+	{ VK_LMENU,    gameplay::Input::KeyModifier::KEY_MODIFIER_LEFT_ALT    },
+	{ VK_RMENU,    gameplay::Input::KeyModifier::KEY_MODIFIER_RIGHT_ALT   },
+	{ VK_LCONTROL, gameplay::Input::KeyModifier::KEY_MODIFIER_LEFT_CTRL   },
+	{ VK_RCONTROL, gameplay::Input::KeyModifier::KEY_MODIFIER_RIGHT_CTRL  },
+	{ VK_LSHIFT,   gameplay::Input::KeyModifier::KEY_MODIFIER_LEFT_SHIFT  },
+	{ VK_RSHIFT,   gameplay::Input::KeyModifier::KEY_MODIFIER_RIGHT_SHIFT },
+	{ VK_LWIN,     gameplay::Input::KeyModifier::KEY_MODIFIER_LEFT_META   },
+	{ VK_RWIN,     gameplay::Input::KeyModifier::KEY_MODIFIER_RIGHT_META  },
+};
 
-void PlatformWindows::warpMouse(int clientX, int clientY)
+static uint8_t translateKeyModifiers()
 {
-    HWND window = (HWND)gameplay::getPlatform()->getWindow();
-    POINT point = { clientX, clientY };
-    ClientToScreen(window, &point);
-    SetCursorPos(point.x, point.y);
+	uint8_t modifiers = 0;
+	for (uint32_t i = 0; i < BX_COUNTOF(__translateKeyModifiers); ++i)
+	{
+		const TranslateKeyModifiers& tkm = __translateKeyModifiers[i];
+		modifiers |= 0 > GetKeyState(tkm.vk) ? tkm.keyModifier : gameplay::Input::KeyModifier::KEY_MODIFIER_NONE;
+	}
+	return modifiers;
 }
 
+static uint8_t __translateKey[256];
+
+static gameplay::Input::Key translateKey(WPARAM wparam)
+{
+	return ( gameplay::Input::Key )__translateKey[wparam & 0xff];
+}
+
+struct Msg
+{
+	Msg()
+		: x(0),
+		  y(0),
+		  width(0),
+		  height(0),
+		  flags(0),
+		  flagsEnabled(false)
+	{
+	}
+
+	int32_t  x;
+	int32_t  y;
+	uint32_t width;
+	uint32_t height;
+	uint32_t flags;
+	bool flagsEnabled;
+	std::string title;
+};
+
+
+static void mouseCapture(HWND hwnd, bool capture)
+{
+	if (capture)
+	{
+		SetCapture(hwnd);
+	}
+	else
+	{
+		ReleaseCapture();
+	}
+}
+
+
+struct Context
+{
+	Context()
+		: mz(0), 
+		  frame(true), 
+		  mouseLock(NULL), 
+		  init(false), 
+		  exit(false)
+	{
+		bx::memSet(__translateKey, 0, sizeof(__translateKey));
+		__translateKey[VK_ESCAPE]     = gameplay::Input::Key::KEY_ESC;
+		__translateKey[VK_RETURN]     = gameplay::Input::Key::KEY_RETURN;
+		__translateKey[VK_TAB]        = gameplay::Input::Key::KEY_TAB;
+		__translateKey[VK_BACK]       = gameplay::Input::Key::KEY_BACKSPACE;
+		__translateKey[VK_SPACE]      = gameplay::Input::Key::KEY_SPACE;
+		__translateKey[VK_UP]         = gameplay::Input::Key::KEY_UP;
+		__translateKey[VK_DOWN]       = gameplay::Input::Key::KEY_DOWN;
+		__translateKey[VK_LEFT]       = gameplay::Input::Key::KEY_LEFT;
+		__translateKey[VK_RIGHT]      = gameplay::Input::Key::KEY_RIGHT;
+		__translateKey[VK_INSERT]     = gameplay::Input::Key::KEY_INSERT;
+		__translateKey[VK_DELETE]     = gameplay::Input::Key::KEY_DELETE;
+		__translateKey[VK_HOME]       = gameplay::Input::Key::KEY_HOME;
+		__translateKey[VK_END]        = gameplay::Input::Key::KEY_END;
+		__translateKey[VK_PRIOR]      = gameplay::Input::Key::KEY_PAGE_UP;
+		__translateKey[VK_NEXT]       = gameplay::Input::Key::KEY_PAGE_DOWN;
+		__translateKey[VK_SNAPSHOT]   = gameplay::Input::Key::KEY_PRINT;
+		__translateKey[VK_OEM_PLUS]   = gameplay::Input::Key::KEY_PLUS;
+		__translateKey[VK_OEM_MINUS]  = gameplay::Input::Key::KEY_MINUS;
+		__translateKey[VK_OEM_4]      = gameplay::Input::Key::KEY_LEFT_BRACKET;
+		__translateKey[VK_OEM_6]      = gameplay::Input::Key::KEY_RIGHT_BRACKET;
+		__translateKey[VK_OEM_1]      = gameplay::Input::Key::KEY_SEMICOLON;
+		__translateKey[VK_OEM_7]      = gameplay::Input::Key::KEY_QUOTE;
+		__translateKey[VK_OEM_COMMA]  = gameplay::Input::Key::KEY_COMMA;
+		__translateKey[VK_OEM_PERIOD] = gameplay::Input::Key::KEY_PERIOD;
+		__translateKey[VK_DECIMAL]    = gameplay::Input::Key::KEY_PERIOD;
+		__translateKey[VK_OEM_2]      = gameplay::Input::Key::KEY_SLASH;
+		__translateKey[VK_OEM_5]      = gameplay::Input::Key::KEY_BACKSLASH;
+		__translateKey[VK_OEM_3]      = gameplay::Input::Key::KEY_TILDE;
+		__translateKey[VK_F1]         = gameplay::Input::Key::KEY_F1;
+		__translateKey[VK_F2]         = gameplay::Input::Key::KEY_F2;
+		__translateKey[VK_F3]         = gameplay::Input::Key::KEY_F3;
+		__translateKey[VK_F4]         = gameplay::Input::Key::KEY_F4;
+		__translateKey[VK_F5]         = gameplay::Input::Key::KEY_F5;
+		__translateKey[VK_F6]         = gameplay::Input::Key::KEY_F6;
+		__translateKey[VK_F7]         = gameplay::Input::Key::KEY_F7;
+		__translateKey[VK_F8]         = gameplay::Input::Key::KEY_F8;
+		__translateKey[VK_F9]         = gameplay::Input::Key::KEY_F9;
+		__translateKey[VK_F10]        = gameplay::Input::Key::KEY_F10;
+		__translateKey[VK_F11]        = gameplay::Input::Key::KEY_F11;
+		__translateKey[VK_F12]        = gameplay::Input::Key::KEY_F12;
+		__translateKey[VK_NUMPAD0]    = gameplay::Input::Key::KEY_NUMPAD0;
+		__translateKey[VK_NUMPAD1]    = gameplay::Input::Key::KEY_NUMPAD1;
+		__translateKey[VK_NUMPAD2]    = gameplay::Input::Key::KEY_NUMPAD2;
+		__translateKey[VK_NUMPAD3]    = gameplay::Input::Key::KEY_NUMPAD3;
+		__translateKey[VK_NUMPAD4]    = gameplay::Input::Key::KEY_NUMPAD4;
+		__translateKey[VK_NUMPAD5]    = gameplay::Input::Key::KEY_NUMPAD5;
+		__translateKey[VK_NUMPAD6]    = gameplay::Input::Key::KEY_NUMPAD6;
+		__translateKey[VK_NUMPAD7]    = gameplay::Input::Key::KEY_NUMPAD7;
+		__translateKey[VK_NUMPAD8]    = gameplay::Input::Key::KEY_NUMPAD8;
+		__translateKey[VK_NUMPAD9]    = gameplay::Input::Key::KEY_NUMPAD9;
+		__translateKey[uint8_t('0')]  = gameplay::Input::Key::KEY_0;
+		__translateKey[uint8_t('1')]  = gameplay::Input::Key::KEY_1;
+		__translateKey[uint8_t('2')]  = gameplay::Input::Key::KEY_2;
+		__translateKey[uint8_t('3')]  = gameplay::Input::Key::KEY_3;
+		__translateKey[uint8_t('4')]  = gameplay::Input::Key::KEY_4;
+		__translateKey[uint8_t('5')]  = gameplay::Input::Key::KEY_5;
+		__translateKey[uint8_t('6')]  = gameplay::Input::Key::KEY_6;
+		__translateKey[uint8_t('7')]  = gameplay::Input::Key::KEY_7;
+		__translateKey[uint8_t('8')]  = gameplay::Input::Key::KEY_8;
+		__translateKey[uint8_t('9')]  = gameplay::Input::Key::KEY_9;
+		__translateKey[uint8_t('A')]  = gameplay::Input::Key::KEY_A;
+		__translateKey[uint8_t('B')]  = gameplay::Input::Key::KEY_B;
+		__translateKey[uint8_t('C')]  = gameplay::Input::Key::KEY_C;
+		__translateKey[uint8_t('D')]  = gameplay::Input::Key::KEY_D;
+		__translateKey[uint8_t('E')]  = gameplay::Input::Key::KEY_E;
+		__translateKey[uint8_t('F')]  = gameplay::Input::Key::KEY_F;
+		__translateKey[uint8_t('G')]  = gameplay::Input::Key::KEY_G;
+		__translateKey[uint8_t('H')]  = gameplay::Input::Key::KEY_H;
+		__translateKey[uint8_t('I')]  = gameplay::Input::Key::KEY_I;
+		__translateKey[uint8_t('J')]  = gameplay::Input::Key::KEY_J;
+		__translateKey[uint8_t('K')]  = gameplay::Input::Key::KEY_K;
+		__translateKey[uint8_t('L')]  = gameplay::Input::Key::KEY_L;
+		__translateKey[uint8_t('M')]  = gameplay::Input::Key::KEY_M;
+		__translateKey[uint8_t('N')]  = gameplay::Input::Key::KEY_N;
+		__translateKey[uint8_t('O')]  = gameplay::Input::Key::KEY_O;
+		__translateKey[uint8_t('P')]  = gameplay::Input::Key::KEY_P;
+		__translateKey[uint8_t('Q')]  = gameplay::Input::Key::KEY_Q;
+		__translateKey[uint8_t('R')]  = gameplay::Input::Key::KEY_R;
+		__translateKey[uint8_t('S')]  = gameplay::Input::Key::KEY_S;
+		__translateKey[uint8_t('T')]  = gameplay::Input::Key::KEY_T;
+		__translateKey[uint8_t('U')]  = gameplay::Input::Key::KEY_U;
+		__translateKey[uint8_t('V')]  = gameplay::Input::Key::KEY_V;
+		__translateKey[uint8_t('W')]  = gameplay::Input::Key::KEY_W;
+		__translateKey[uint8_t('X')]  = gameplay::Input::Key::KEY_X;
+		__translateKey[uint8_t('Y')]  = gameplay::Input::Key::KEY_Y;
+		__translateKey[uint8_t('Z')]  = gameplay::Input::Key::KEY_Z;
+	}
+
+	int32_t run(int argc, const char* const* argv)
+	{
+		SetDllDirectoryA(".");
+
+		__xinput.init();
+
+		HINSTANCE instance = (HINSTANCE)GetModuleHandle(NULL);
+
+		WNDCLASSEXA wnd;
+		bx::memSet(&wnd, 0, sizeof(wnd) );
+		wnd.cbSize = sizeof(wnd);
+		wnd.style = CS_HREDRAW | CS_VREDRAW;
+		wnd.lpfnWndProc = wndProc;
+		wnd.hInstance = instance;
+		wnd.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+		wnd.hCursor = LoadCursor(NULL, IDC_ARROW);
+		wnd.lpszClassName = "gameplay";
+		wnd.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+		RegisterClassExA(&wnd);
+
+		windowAlloc.alloc();
+		hwnd[0] = CreateWindowExA(WS_EX_ACCEPTFILES,
+								  "gameplay", "",
+								  WS_OVERLAPPEDWINDOW|WS_VISIBLE,
+								  0 , 0, 
+								  GP_GRAPHICS_WIDTH, GP_GRAPHICS_HEIGHT,
+								  NULL, NULL,
+								  instance, 0);
+
+		flags[0] = 0 | GP_WINDOW_FLAG_ASPECT_RATIO | GP_WINDOW_FLAG_FRAME;
+
+		setHwnd(hwnd[0]);
+
+		adjust(hwnd[0], GP_GRAPHICS_WIDTH, GP_GRAPHICS_HEIGHT, true);
+		clear(hwnd[0]);
+
+		width     = GP_GRAPHICS_WIDTH;
+		height    = GP_GRAPHICS_HEIGHT;
+		oldWidth  = GP_GRAPHICS_WIDTH;
+		oldHeight = GP_GRAPHICS_HEIGHT;
+
+		MainThreadEntry mte;
+		mte.argc = argc;
+		mte.argv = argv;
+
+		bgfx::renderFrame();
+
+		bx::Thread thread;
+		thread.init(mte.threadFunc, &mte);
+		init = true;
+
+		eventQueue.postSizeEvent(findHandle(hwnd[0]), width, height);
+
+		MSG msg;
+		msg.message = WM_NULL;
+
+		while (!exit)
+		{
+			bgfx::renderFrame();
+
+			__xinput.update(eventQueue);
+			WaitForInputIdle(GetCurrentProcess(), 16);
+
+			while (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE) != 0)
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+
+		while (bgfx::RenderFrame::NoContext != bgfx::renderFrame() ) {};
+
+		thread.shutdown();
+
+		DestroyWindow(hwnd[0]);
+
+		__xinput.shutdown();
+
+		return thread.getExitCode();
+	}
+
+	LRESULT process(HWND hwnd, UINT id, WPARAM wparam, LPARAM lparam)
+	{
+		if (init)
+		{
+			switch (id)
+			{
+			case WM_USER_WINDOW_CREATE:
+				{
+					Msg* msg = (Msg*)lparam;
+					HWND wnd = CreateWindowA("gameplay", 
+											  msg->title.c_str(),
+											  WS_OVERLAPPEDWINDOW|WS_VISIBLE, 
+											  msg->x, msg->y, 
+											  msg->width, msg->height, NULL , NULL, 
+											  (HINSTANCE)GetModuleHandle(NULL), 0);
+					clear(wnd);
+
+					this->hwnd[wparam]  = wnd;
+					this->flags[wparam] = msg->flags;
+					gameplay::Platform::WindowHandle window = { (uint16_t)wparam };
+					eventQueue.postSizeEvent(window, msg->width, msg->height);
+					eventQueue.postWindowEvent(window, hwnd);
+
+					delete msg;
+				}
+				break;
+
+			case WM_USER_WINDOW_DESTROY:
+				{
+					gameplay::Platform::WindowHandle window = { (uint16_t)wparam };
+					eventQueue.postWindowEvent(window);
+					DestroyWindow(this->hwnd[wparam]);
+					this->hwnd[wparam] = 0;
+
+					if (window.idx == 0)
+					{
+						exit = true;
+						eventQueue.postExitEvent();
+					}
+				}
+				break;
+
+			case WM_USER_WINDOW_SET_TITLE:
+				{
+					Msg* msg = (Msg*)lparam;
+					SetWindowTextA(this->hwnd[wparam], msg->title.c_str());
+					delete msg;
+				}
+				break;
+
+			case WM_USER_WINDOW_SET_FLAGS:
+				{
+					Msg* msg = (Msg*)lparam;
+
+					if (msg->flagsEnabled)
+					{
+						flags[wparam] |= msg->flags;
+					}
+					else
+					{
+						flags[wparam] &= ~msg->flags;
+					}
+					delete msg;
+				}
+				break;
+
+			case WM_USER_WINDOW_SET_POS:
+				{
+					Msg* msg = (Msg*)lparam;
+					SetWindowPos(this->hwnd[wparam], 0, 
+								 msg->x, msg->y, 0, 0, 
+								 SWP_NOACTIVATE|SWP_NOOWNERZORDER|SWP_NOSIZE);
+					delete msg;
+				}
+				break;
+
+			case WM_USER_WINDOW_SET_SIZE:
+				{
+					uint32_t width  = GET_X_LPARAM(lparam);
+					uint32_t height = GET_Y_LPARAM(lparam);
+					adjust(this->hwnd[wparam], width, height, true);
+				}
+				break;
+
+			case WM_USER_WINDOW_TOGGLE_FRAME:
+				{
+					if (frame)
+					{
+						oldWidth  = width;
+						oldHeight = height;
+					}
+					adjust(this->hwnd[wparam], oldWidth, oldHeight, !frame);
+				}
+				break;
+
+			case WM_USER_WINDOW_MOUSE_LOCK:
+				setMouseLock(this->hwnd[wparam], !!lparam);
+				break;
+
+			case WM_DESTROY:
+				break;
+
+			case WM_QUIT:
+			case WM_CLOSE:
+				destroyWindow(findHandle(hwnd));
+				return 0;
+
+			case WM_SIZING:
+				{
+					gameplay::Platform::WindowHandle window = findHandle(hwnd);
+
+					if (gameplay::Platform::isWindowValid(window)
+					&&  GP_WINDOW_FLAG_ASPECT_RATIO & flags[window.idx])
+					{
+						RECT& rect = *(RECT*)lparam;
+						uint32_t width  = rect.right  - rect.left - frameWidth;
+						uint32_t height = rect.bottom - rect.top  - frameHeight;
+
+						// Recalculate size according to aspect ratio
+						switch (wparam)
+						{
+						case WMSZ_LEFT:
+						case WMSZ_RIGHT:
+							{
+								float aspectRatio = 1.0f/this->aspectRatio;
+								width  = bx::uint32_max(GP_GRAPHICS_WIDTH / 4, width);
+								height = uint32_t(float(width)*aspectRatio);
+							}
+							break;
+
+						default:
+							{
+								float aspectRatio = this->aspectRatio;
+								height = bx::uint32_max(GP_GRAPHICS_HEIGHT / 4, height);
+								width  = uint32_t(float(height)*aspectRatio);
+							}
+							break;
+						}
+
+						// Recalculate position using different anchor points
+						switch (wparam)
+						{
+						case WMSZ_TOPLEFT:
+							rect.left = rect.right - width - frameWidth;
+							rect.top = rect.bottom - height - frameHeight;
+							break;
+
+						case WMSZ_TOP:
+						case WMSZ_TOPRIGHT:
+							rect.right = rect.left + width + frameWidth;
+							rect.top = rect.bottom - height - frameHeight;
+							break;
+
+						case WMSZ_LEFT:
+						case WMSZ_BOTTOMLEFT:
+							rect.left = rect.right - width - frameWidth;
+							rect.bottom = rect.top + height + frameHeight;
+							break;
+
+						default:
+							rect.right  = rect.left + width  + frameWidth;
+							rect.bottom = rect.top  + height + frameHeight;
+							break;
+						}
+
+						eventQueue.postSizeEvent(findHandle(hwnd), width, height);
+					}
+				}
+				return 0;
+
+			case WM_SIZE:
+				{
+					gameplay::Platform::WindowHandle window = findHandle(hwnd);
+					if (gameplay::Platform::isWindowValid(window) )
+					{
+						uint32_t width  = GET_X_LPARAM(lparam);
+						uint32_t height = GET_Y_LPARAM(lparam);
+
+						this->width  = width;
+						this->height = height;
+						eventQueue.postSizeEvent(window, width, height);
+					}
+				}
+				break;
+
+			case WM_SYSCOMMAND:
+				switch (wparam)
+				{
+				case SC_MINIMIZE:
+				case SC_RESTORE:
+					{
+						HWND parent = GetWindow(hwnd, GW_OWNER);
+						if (NULL != parent)
+						{
+							PostMessage(parent, id, wparam, lparam);
+						}
+					}
+				}
+				break;
+
+			case WM_MOUSEMOVE:
+				{
+					int32_t mx = GET_X_LPARAM(lparam);
+					int32_t my = GET_Y_LPARAM(lparam);
+
+					if (hwnd == mouseLock)
+					{
+						mx -= this->mx;
+						my -= this->my;
+
+						if (0 == mx
+						&&  0 == my)
+						{
+							break;
+						}
+						setMousePos(hwnd, this->mx, this->my);
+					}
+					eventQueue.postMouseEvent(findHandle(hwnd), mx, my, mz);
+				}
+				break;
+
+			case WM_MOUSEWHEEL:
+				{
+					POINT pt = { GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam) };
+					ScreenToClient(hwnd, &pt);
+					int32_t mx = pt.x;
+					int32_t my = pt.y;
+					this->mz += GET_WHEEL_DELTA_WPARAM(wparam) / WHEEL_DELTA;
+					eventQueue.postMouseEvent(findHandle(hwnd), mx, my, this->mz);
+				}
+				break;
+
+			case WM_LBUTTONDOWN:
+			case WM_LBUTTONUP:
+			case WM_LBUTTONDBLCLK:
+				{
+					mouseCapture(hwnd, id == WM_LBUTTONDOWN);
+					int32_t mx = GET_X_LPARAM(lparam);
+					int32_t my = GET_Y_LPARAM(lparam);
+					eventQueue.postMouseEvent(findHandle(hwnd), mx, my, this->mz, gameplay::Input::MouseButton::MOUSE_BUTTON_LEFT, id == WM_LBUTTONDOWN);
+				}
+				break;
+
+			case WM_MBUTTONDOWN:
+			case WM_MBUTTONUP:
+			case WM_MBUTTONDBLCLK:
+				{
+					mouseCapture(hwnd, id == WM_MBUTTONDOWN);
+					int32_t mx = GET_X_LPARAM(lparam);
+					int32_t my = GET_Y_LPARAM(lparam);
+					eventQueue.postMouseEvent(findHandle(hwnd), mx, my, this->mz, gameplay::Input::MouseButton::MOUSE_BUTTON_MIDDLE, id == WM_MBUTTONDOWN);
+				}
+				break;
+
+			case WM_RBUTTONDOWN:
+			case WM_RBUTTONUP:
+			case WM_RBUTTONDBLCLK:
+				{
+					mouseCapture(hwnd, id == WM_RBUTTONDOWN);
+					int32_t mx = GET_X_LPARAM(lparam);
+					int32_t my = GET_Y_LPARAM(lparam);
+					eventQueue.postMouseEvent(findHandle(hwnd), mx, my, this->mz, gameplay::Input::MouseButton::MOUSE_BUTTON_RIGHT, id == WM_RBUTTONDOWN);
+				}
+				break;
+
+			case WM_KEYDOWN:
+			case WM_SYSKEYDOWN:
+			case WM_KEYUP:
+			case WM_SYSKEYUP:
+				{
+					uint8_t keyModifiers = translateKeyModifiers();
+					gameplay::Input::Key key = translateKey(wparam);
+
+					gameplay::Platform::WindowHandle window = findHandle(hwnd);
+
+					if (gameplay::Input::Key::KEY_PRINT == key &&  0x3 == ( (uint32_t)(lparam)>>30) )
+					{
+						// VK_SNAPSHOT doesn't generate keydown event. Fire on down event when previous
+						// key state bit is set to 1 and transition state bit is set to 1.
+						//
+						// http://msdn.microsoft.com/en-us/library/windows/desktop/ms646280%28v=vs.85%29.aspx
+						eventQueue.postKeyEvent(window, key, keyModifiers, true);
+					}
+					eventQueue.postKeyEvent(window, key, keyModifiers, id == WM_KEYDOWN || id == WM_SYSKEYDOWN);
+				}
+				break;
+
+			case WM_CHAR:
+				{
+					uint8_t utf8[4] = {};
+					uint8_t len = (uint8_t)WideCharToMultiByte(CP_UTF8, 0,
+															  (LPCWSTR)&wparam, 1,
+															  (LPSTR)utf8, BX_COUNTOF(utf8),
+															  NULL, NULL);
+					if (len != 0)
+					{
+						gameplay::Platform::WindowHandle window = findHandle(hwnd);
+						eventQueue.postCharEvent(window, len, utf8);
+					}
+				}
+				break;
+
+			case WM_DROPFILES:
+				{
+					HDROP drop = (HDROP)wparam;
+					char tmp[bx::kMaxFilePath];
+					uint32_t result = DragQueryFileA(drop, 0, tmp, sizeof(tmp) );
+					BX_UNUSED(result);
+					gameplay::Platform::WindowHandle window = findHandle(hwnd);
+					eventQueue.postDropFileEvent(window, tmp);
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		return DefWindowProc(hwnd, id, wparam, lparam);
+	}
+
+	gameplay::Platform::WindowHandle findHandle(HWND hwnd)
+	{
+		bx::MutexScope scope(lock);
+		for (uint16_t i = 0, num = windowAlloc.getNumHandles(); i < num; ++i)
+		{
+			uint16_t idx = windowAlloc.getHandleAt(i);
+			if (hwnd == this->hwnd[idx])
+			{
+				gameplay::Platform::WindowHandle window = { idx };
+				return window;
+			}
+		}
+
+		gameplay::Platform::WindowHandle invalidWindow = { UINT16_MAX };
+		return invalidWindow;
+	}
+
+	void clear(HWND hwnd)
+	{
+		RECT rect;
+		GetWindowRect(hwnd, &rect);
+		HBRUSH brush = CreateSolidBrush(RGB(0, 0, 0) );
+		HDC hdc = GetDC(hwnd);
+		SelectObject(hdc, brush);
+		FillRect(hdc, &rect, brush);
+	}
+
+	void adjust(HWND hwnd, uint32_t width, uint32_t height, bool windowFrame)
+	{
+		this->width  = width;
+		this->height = height;
+		this->aspectRatio = float(width) / float(height);
+
+		ShowWindow(hwnd, SW_SHOWNORMAL);
+		RECT rect;
+		RECT newrect = {0, 0, (LONG)width, (LONG)height};
+		DWORD style = WS_POPUP|WS_SYSMENU;
+
+		if (this->frame)
+		{
+			GetWindowRect(hwnd, &this->rect);
+			this->style = GetWindowLong(hwnd, GWL_STYLE);
+		}
+
+		if (windowFrame)
+		{
+			rect = this->rect;
+			style = this->style;
+		}
+		else
+		{
+			HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+			MONITORINFO mi;
+			mi.cbSize = sizeof(mi);
+			GetMonitorInfo(monitor, &mi);
+			newrect = mi.rcMonitor;
+			rect = mi.rcMonitor;
+			this->aspectRatio = float(newrect.right  - newrect.left) / float(newrect.bottom - newrect.top);
+		}
+
+		SetWindowLong(hwnd, GWL_STYLE, style);
+		uint32_t prewidth  = newrect.right - newrect.left;
+		uint32_t preheight = newrect.bottom - newrect.top;
+		AdjustWindowRect(&newrect, style, FALSE);
+		this->frameWidth  = (newrect.right  - newrect.left) - prewidth;
+		this->frameHeight = (newrect.bottom - newrect.top ) - preheight;
+		UpdateWindow(hwnd);
+
+		if (rect.left == -32000
+		||  rect.top  == -32000)
+		{
+			rect.left = 0;
+			rect.top  = 0;
+		}
+
+		int32_t left   = rect.left;
+		int32_t top    = rect.top;
+		int32_t w  = (newrect.right-newrect.left);
+		int32_t h = (newrect.bottom-newrect.top);
+
+		if (!windowFrame)
+		{
+			float aspectRatio = 1.0f / this->aspectRatio;
+			w = bx::uint32_max(GP_GRAPHICS_WIDTH / 4, w);
+			h = uint32_t(float(width) * aspectRatio);
+
+			left = newrect.left+(newrect.right -newrect.left - width)/2;
+			top = newrect.top +(newrect.bottom-newrect.top - height)/2;
+		}
+
+		SetWindowPos(hwnd, HWND_TOP, left, top, w, h, SWP_SHOWWINDOW);
+		ShowWindow(hwnd, SW_RESTORE);
+
+		this->frame = windowFrame;
+	}
+
+	void setMousePos(HWND hwnd, int32_t mx, int32_t my)
+	{
+		POINT pt = { mx, my };
+		ClientToScreen(hwnd, &pt);
+		SetCursorPos(pt.x, pt.y);
+	}
+
+	void setMouseLock(HWND hwnd, bool lock)
+	{
+		if (hwnd != this->mouseLock)
+		{
+			if (lock)
+			{
+				this->mx = this->width / 2;
+				this->my = this->height /2;
+				ShowCursor(false);
+				setMousePos(hwnd, this->mx, this->my);
+			}
+			else
+			{
+				setMousePos(hwnd, this->mx, this->my);
+				ShowCursor(true);
+			}
+			this->mouseLock = hwnd;
+		}
+	}
+
+	static LRESULT CALLBACK wndProc(HWND _hwnd, UINT _id, WPARAM _wparam, LPARAM _lparam);
+
+	gameplay::Platform::EventQueue eventQueue;
+	bx::Mutex lock;
+
+	bx::HandleAllocT<GP_WINDOWS_MAX> windowAlloc;
+
+	HWND hwnd[GP_WINDOWS_MAX];
+	uint32_t flags[GP_WINDOWS_MAX];
+	RECT rect;
+	DWORD style;
+	uint32_t width;
+	uint32_t height;
+	uint32_t oldWidth;
+	uint32_t oldHeight;
+	uint32_t frameWidth;
+	uint32_t frameHeight;
+	float aspectRatio;
+
+	int32_t mx;
+	int32_t my;
+	int32_t mz;
+
+	bool frame;
+	HWND mouseLock;
+	bool init;
+	bool exit;
+};
+
+static Context __ctx;
+
+	
 extern void print(const char* format, ...)
 {
     va_list argptr;
@@ -635,4 +1001,111 @@ extern void print(const char* format, ...)
     va_end(argptr);
 }
 
+const Platform::Event* poll()
+{
+	return __ctx.eventQueue.poll();
 }
+
+const Platform::Event* poll(Platform::WindowHandle window)
+{
+	return __ctx.eventQueue.poll(window);
+}
+
+void release(const Platform::Event* evt)
+{
+	__ctx.eventQueue.release(evt);
+}
+
+LRESULT CALLBACK Context::wndProc(HWND _hwnd, UINT _id, WPARAM _wparam, LPARAM _lparam)
+{
+	return __ctx.process(_hwnd, _id, _wparam, _lparam);
+}
+
+gameplay::Platform::WindowHandle createWindow(int32_t x, int32_t y, uint32_t width, uint32_t height, uint32_t flags, const char* title)
+{
+	bx::MutexScope scope(__ctx.lock);
+	gameplay::Platform::WindowHandle window = { __ctx.windowAlloc.alloc() };
+
+	if ( window.idx != UINT16_MAX)
+	{
+		Msg* msg = new Msg;
+		msg->x = x;
+		msg->y = y;
+		msg->width  = width;
+		msg->height = height;
+		msg->title  = title;
+		msg->flags  = flags;
+		PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_CREATE, window.idx, (LPARAM)msg);
+	}
+	return window;
+}
+
+void destroyWindow(gameplay::Platform::WindowHandle window)
+{
+	if (window.idx != UINT16_MAX)
+	{
+		PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_DESTROY, window.idx, 0);
+
+		bx::MutexScope scope(__ctx.lock);
+		__ctx.windowAlloc.free(window.idx);
+	}
+}
+
+void setWindowPos(gameplay::Platform::WindowHandle window, int32_t x, int32_t y)
+{
+	Msg* msg = new Msg;
+	msg->x = x;
+	msg->y = y;
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_POS, window.idx, (LPARAM)msg);
+}
+
+void setWindowSize(gameplay::Platform::WindowHandle window, uint32_t width, uint32_t height)
+{
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_SIZE, window.idx, (height << 16) | (width & 0xffff) );
+}
+
+void setWindowTitle(gameplay::Platform::WindowHandle window, const char* title)
+{
+	Msg* msg = new Msg;
+	msg->title = title;
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_TITLE, window.idx, (LPARAM)msg);
+}
+
+void setWindowFlags(gameplay::Platform::WindowHandle window, uint32_t flags, bool flagsEnabled)
+{
+	Msg* msg = new Msg;
+	msg->flags = flags;
+	msg->flagsEnabled = flagsEnabled;
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_FLAGS, window.idx, (LPARAM)msg);
+}
+
+void toggleFullscreen(gameplay::Platform::WindowHandle window)
+{
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_TOGGLE_FRAME, window.idx, 0);
+}
+
+void setMouseLock(gameplay::Platform::WindowHandle window, bool _lock)
+{
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_MOUSE_LOCK, window.idx, _lock);
+}
+
+
+int32_t MainThreadEntry::threadFunc(bx::Thread*, void* userData)
+{
+	MainThreadEntry* self = (MainThreadEntry*)userData;
+	int32_t result = main(self->argc, self->argv);
+	PostMessage(__ctx.hwnd[0], WM_QUIT, 0, 0);
+	return result;
+}
+
+}
+
+
+int main(int argc, const char* const* argv)
+{
+	using namespace gameplay;
+	return __ctx.run(argc, argv);
+}
+
+#endif
+

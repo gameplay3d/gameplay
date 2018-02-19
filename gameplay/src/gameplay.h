@@ -2,8 +2,9 @@
 
 // Core
 #include "Base.h"
-#include "Logger.h"
 #include "Platform.h"
+#include "Logger.h"
+#include "Command.h"
 #include "Game.h"
 #include "MathUtil.h"
 #include "Vector2.h"
@@ -26,6 +27,7 @@
 #include "SerializerJson.h"
 #include "Animation.h"
 #include "Input.h"
+#include "Graphics.h"
 #include "Script.h"
 #include "SceneObject.h"
 #include "Component.h"
@@ -47,22 +49,6 @@
 //#include "Decal.h"
 //#include "Video.h"
 
-// Graphics
-#include "Graphics.h"
-#include "Buffer.h"
-#include "ColorBlendState.h"
-#include "CommandBuffer.h"
-#include "DepthStencilState.h"
-#include "DescriptorSet.h"
-#include "Format.h"
-#include "RasterizerState.h"
-#include "RenderPass.h"
-#include "RenderPipeline.h"
-#include "Sampler.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "VertexLayout.h"
-
 // Audio
 #include "Audio.h"
 #include "AudioClip.h"
@@ -72,7 +58,7 @@
 // Physics
 #include "Physics.h"
 #include "PhysicsMaterial.h"
-#include "PhysicsCollisionShape.h"
+#include "PhysicsCollider.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsJoint.h"
 #include "PhysicsJointFixed.h"

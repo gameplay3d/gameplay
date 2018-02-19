@@ -1,6 +1,6 @@
 #include "Base.h"
 #include "Physics.h"
-#include "PhysicsCollisionShape.h"
+#include "PhysicsCollider.h"
 
 namespace gameplay
 {
@@ -30,56 +30,34 @@ void Physics::onResume()
 {
 }
 
-std::shared_ptr<PhysicsCollisionShape> Physics::createCollisionBox(const Vector3& center, const Vector3& extents)
+std::shared_ptr<PhysicsCollider> Physics::createBoxCollider(const Vector3& center, const Vector3& extents)
 {
-    std::shared_ptr<PhysicsCollisionShape> shape = std::make_shared<PhysicsCollisionShape>();
-    std::shared_ptr<PhysicsCollisionShape::Box> geometry = std::make_shared<PhysicsCollisionShape::Box>();    
-    geometry->setCenter(center);
-    geometry->setExtents(extents);
-    shape->_type = PhysicsCollisionShape::TYPE_BOX;
-    shape->_box = geometry;
-    return shape;
+	std::shared_ptr<PhysicsCollider> collider;
+    return collider;
 }
 
-std::shared_ptr<PhysicsCollisionShape> Physics::createCollisionSphere(const Vector3& center, float radius)
+std::shared_ptr<PhysicsCollider> Physics::createSphereCollider(const Vector3& center, float radius)
 {
-    std::shared_ptr<PhysicsCollisionShape> shape = std::make_shared<PhysicsCollisionShape>();
-    std::shared_ptr<PhysicsCollisionShape::Sphere> geometry = std::make_shared<PhysicsCollisionShape::Sphere>();
-    geometry->setCenter(center);
-    geometry->setRadius(radius);
-    shape->_type = PhysicsCollisionShape::TYPE_SPHERE;
-    shape->_sphere = geometry;
-    return shape;
+	std::shared_ptr<PhysicsCollider> collider;
+    return collider;
 }
 
-std::shared_ptr<PhysicsCollisionShape> Physics::createCollisionCapsule(const Vector3& center, float radius, float height,
-                                                                       PhysicsCollisionShape::Capsule::Direction direction)
+std::shared_ptr<PhysicsCollider> Physics::createCapsuleCollider(const Vector3& center, float radius, float height, PhysicsCollider::Capsule::Direction direction)
 {
-    std::shared_ptr<PhysicsCollisionShape> shape = std::make_shared<PhysicsCollisionShape>();
-    std::shared_ptr<PhysicsCollisionShape::Capsule> geometry = std::make_shared<PhysicsCollisionShape::Capsule>();
-    geometry->setCenter(center);
-    geometry->setRadius(radius);
-    geometry->setHeight(height);
-    geometry->setDirection(direction);
-    shape->_type = PhysicsCollisionShape::TYPE_CAPSULE;
-    shape->_capsule = geometry;
-    return shape;
+	std::shared_ptr<PhysicsCollider> collider;
+    return collider;
 }
 
-std::shared_ptr<PhysicsCollisionShape> Physics::createCollisionHeightfield(std::shared_ptr<Heightfield> heightfield)
+std::shared_ptr<PhysicsCollider> Physics::createMeshCollider(std::shared_ptr<Mesh> mesh)
 {
-    std::shared_ptr<PhysicsCollisionShape> shape = std::make_shared<PhysicsCollisionShape>();
-    shape->_type = PhysicsCollisionShape::TYPE_HEIGHTFIELD;
-    shape->_heightfield = heightfield;
-    return shape;
+	std::shared_ptr<PhysicsCollider> collider;
+    return collider;
 }
 
-std::shared_ptr<PhysicsCollisionShape> Physics::createCollisionMesh(std::shared_ptr<Mesh> mesh)
+std::shared_ptr<PhysicsCollider> Physics::createHeightfieldCollider(std::shared_ptr<Heightfield> heightfield)
 {
-    std::shared_ptr<PhysicsCollisionShape> shape = std::make_shared<PhysicsCollisionShape>();
-    shape->_type = PhysicsCollisionShape::TYPE_HEIGHTFIELD;
-    shape->_mesh = mesh;
-    return shape;
+	std::shared_ptr<PhysicsCollider> collider;
+    return collider;
 }
 
 }

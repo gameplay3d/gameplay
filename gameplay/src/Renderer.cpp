@@ -23,8 +23,8 @@ std::shared_ptr<Material> Renderer::getMaterial(int submeshIndex)
 	GP_ASSERT(submeshIndex == -1 || submeshIndex >= 0);
     if (submeshIndex < 0)
         return _materialShared;
-    if (submeshIndex >= (int)_submesh.size())
-        return nullptr;
+    //if (submeshIndex >= (int)_submesh.size())
+    //    return nullptr;
 	
 	std::shared_ptr<Material> material = nullptr;
 
@@ -48,7 +48,8 @@ void Renderer::setMaterial(std::shared_ptr<Material> material, int submeshIndex)
 
 bool Renderer::hasMaterial(size_t submeshIndex) const
 {
-	return ((submeshIndex < _submesh.size()) && (_materials.size() > 0) && _materials[submeshIndex]);
+	return false;
+	//return ((submeshIndex < _submesh.size()) && (_materials.size() > 0) && _materials[submeshIndex]);
 }
 
 void Renderer::onSerialize(Serializer * serializer)

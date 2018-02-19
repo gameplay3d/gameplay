@@ -1,14 +1,13 @@
 #pragma once
 
+#include "Platform.h"
 #include "Serializable.h"
 #include "SceneObject.h"
-#include "Platform.h"
 #include "Camera.h"
+#include "Graphics.h"
 
 namespace gameplay
 {
-
-extern Platform* getPlatform();
 
 /**
  * Defines the game class.
@@ -128,30 +127,17 @@ public:
     /**
      * Exits the game.
      */
-    void exit();
+    int exit();
 
     /**
-     * Shows splash screens one after another for their duration.
-     *
-     * @param splashScreens The splash screens to be shown.
+     * Event occurs every frame from the platform.
      */
-    void showSplashScreens(std::vector<SplashScreen> splashScreens);
+    bool frame();
 
-    /**
-     * Sets the loading scene to be be used after calling Game::loadScene.
-     *
-     * @param url The url of the scene to be used for loading.
-     * @see Game::loadScene
-     */
-    void setLoadingScene(const std::string& url);
-
-    /**
-     * Gets the loading scene to be used after calling Game::loadScene.
-     *
-     * @return The scene to be used for loading.
-     * @see Game::loadScene
-     */
-    std::shared_ptr<SceneObject> getLoadingScene() const;
+	/**
+	 *
+	 */
+	void showSplashScreens(std::vector<SplashScreen> splashScreens);
 
 	/**
 	 * Loads the scene and any resources that are needed.
@@ -206,19 +192,12 @@ public:
     /**
      * Event occurs after the platform starts up and prior to first frame event.
      */
-    virtual void onInitialize();
+    virtual void onInitialize(int argc, const char* const* argv);
 
     /**
      * Event occurs when the game is about to exit.
      */
     virtual void onFinalize();
-
-    /**
-     * Event occurs when the scene has completed loading all the scenes resources.
-     *
-     * @param scene The scene that has completed loading.
-     */
-    virtual void onSceneLoad(std::shared_ptr<SceneObject> scene);
 
     /**
      * Event occurs when the platform window has been resized.
@@ -235,51 +214,12 @@ public:
      */
     virtual void onUpdate(float elapsedTime);
 
-	/**
-	 * Event occurs every frame before the scene is rendered.
-	 *
-	 * @param elapsedTime The time elapsed (in seconds) since the last onRender call.
-	 */
-	void onRender(float elapsedTime);
-    
     /**
-     * Determines whether mouse input is currently set to capture.
+     * Event occurs when the scene has completed loading all the scenes resources.
      *
-     * @return true if mouse input is currently set to capture, false if disabled.
+     * @param scene The scene that has completed loading.
      */
-    bool isMouseCapture();
-    
-    /**
-     * Sets mouse capture on or off.
-     *
-     * On platforms that support a mouse, when mouse capture is enabled,
-     * the platform cursor will be hidden and the mouse will be warped
-     * to the center of the screen. While mouse capture is enabled,
-     * all mouse move events will then be delivered as deltas instead
-     * of absolute positions.
-     *
-     * @param capture true to enable mouse capture mode, false to disable it.
-     */
-    void setMouseCapture(bool capture);
-    
-    /**
-     * Sets the visibility of the platform cursor.
-     *
-     * @param visible true to show the platform cursor, false to hide it.
-     */
-    void setCursorVisible(bool visible);
-    
-    /**
-     * Determines whether the platform cursor is currently visible.
-     *
-     * @return true if the platform cursor is visible, false otherwise.
-     */
-    bool isCursorVisible();
-
-    /**
-     * Event occurs every frame from the platform.
-     */
-    void onFrame();
+    virtual void onSceneLoad(std::shared_ptr<SceneObject> scene);
 
     /**
      * Game configuration.
@@ -325,10 +265,8 @@ public:
 		bool fullscreen;
 		bool vsync;
 		size_t multisampling;
-		bool validation;
 		std::string homePath;
         std::vector<SplashScreen> splashScreens;
-        std::string loadingScene;
 		std::string mainScene;
     };
 
@@ -338,6 +276,13 @@ public:
      * @return The game configuration.
      */
     std::shared_ptr<Game::Config> getConfig();
+
+	/**
+	 * Gets the game graphics
+	 */
+	std::shared_ptr<Graphics> getGraphics();
+
+	Game* next;
 
 private:
 
@@ -352,8 +297,6 @@ private:
     State _state;
 	size_t _width;
 	size_t _height;
-	bool _mouseCapture;
-	bool _cursorVisible;
 	static std::chrono::time_point<std::chrono::high_resolution_clock> _timeStart;
 	static double _pausedTimeLast;
 	static double _pausedTimeTotal;
@@ -363,10 +306,14 @@ private:
 	size_t _frameRate;
     std::queue<SplashScreen> _splashScreens;
     std::map<std::string, std::shared_ptr<SceneObject>> _scenesLoaded;
-    static std::shared_ptr<SceneObject> _sceneLoadingDefault;
     std::shared_ptr<SceneObject> _sceneLoading;
 	std::shared_ptr<SceneObject> _scene;
-    std::shared_ptr<Camera> _camera;    
+    std::shared_ptr<Camera> _camera;
+	MouseState _mouseState;
+	std::shared_ptr<Graphics> _graphics;
 };
+
+Game* getFirstGame();
+int runGame(Game* game, int argc, const char* const* argv);
 
 }

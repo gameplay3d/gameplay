@@ -115,7 +115,7 @@ public:
     virtual bool seek(long int offset, int origin);
     virtual bool rewind();
 
-    static FileStream* create(const char* filePath, const char* mode);
+    static FileStream* create(const char* dropFile, const char* mode);
 
 private:
     FileStream(FILE* file);
@@ -303,7 +303,7 @@ bool FileSystem::listFiles(const std::string& dirPath, std::vector<std::string>&
 #endif
 }
 
-bool FileSystem::fileExists(const std::string& filePath)
+bool FileSystem::fileExists(const std::string& dropFile)
 {
     std::string fullPath;
 #ifdef __ANDROID__
@@ -314,7 +314,7 @@ bool FileSystem::fileExists(const std::string& filePath)
         return true;
     }
 #endif
-    getFullPath(filePath, fullPath);
+    getFullPath(dropFile, fullPath);
     gp_stat_struct s;
     return stat(fullPath.c_str(), &s) == 0;
 }
@@ -362,28 +362,28 @@ Stream* FileSystem::open(const std::string& path, size_t accessMode)
 #endif
 }
 
-std::string FileSystem::readAll(const std::string& filePath)
+std::string FileSystem::readAll(const std::string& dropFile)
 {
     // Open file for reading.
-    std::unique_ptr<Stream> stream(open(filePath));
+    std::unique_ptr<Stream> stream(open(dropFile));
     if (stream.get() == nullptr)
-        GP_ERROR("Failed to load file: %s", filePath.c_str());
+        GP_ERROR("Failed to load file: %s", dropFile.c_str());
     size_t size = stream->length();
     std::string result;
     result.resize(size);
     size_t read = stream->read(&result[0], 1, size);
     if (read != size)
     {
-        GP_ERROR("Failed to read complete contents of file '%s' (amount read vs. file size: %u < %u).", filePath.c_str(), read, size);
+        GP_ERROR("Failed to read complete contents of file '%s' (amount read vs. file size: %u < %u).", dropFile.c_str(), read, size);
     }
     return result;
 }
 
-bool FileSystem::isAbsolutePath(const std::string& filePath)
+bool FileSystem::isAbsolutePath(const std::string& dropFile)
 {
-    char first = filePath.at(0);
+    char first = dropFile.at(0);
 #ifdef _WINDOWS
-    char second = filePath.at(1);
+    char second = dropFile.at(1);
     return (second == ':' && ((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')));
 #else
     return first == '/';
@@ -454,9 +454,9 @@ FileStream::~FileStream()
         close();
 }
 
-FileStream* FileStream::create(const char* filePath, const char* mode)
+FileStream* FileStream::create(const char* dropFile, const char* mode)
 {
-    FILE* file = fopen(filePath, mode);
+    FILE* file = fopen(dropFile, mode);
     if (file)
     {
         FileStream* stream = new FileStream(file);

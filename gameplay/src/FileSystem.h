@@ -85,10 +85,10 @@ public:
     /**
      * Checks if the file at the given path exists.
      * 
-     * @param filePath The path to the file.
+     * @param dropFile The path to the file.
      * @return <code>true</code> if the file exists; <code>false</code> otherwise.
      */
-    static bool fileExists(const std::string& filePath);
+    static bool fileExists(const std::string& dropFile);
 
     /**
      * Opens a byte stream for the given asset path.
@@ -109,18 +109,18 @@ public:
      * The returned character array is allocated with new[] and must therefore
      * deleted by the caller using delete[].
      *
-     * @param filePath The path to the file to be read.
+     * @param dropFile The path to the file to be read.
      * @return A string containing the contents of the file or empty string if
      */
-    static std::string readAll(const std::string& filePath);
+    static std::string readAll(const std::string& dropFile);
 
     /**
      * Determines if the file path is an absolute path for the current platform.
      * 
-     * @param filePath The file path to test.
+     * @param dropFile The file path to test.
      * @return true if the path is an absolute path or false otherwise.
      */
-    static bool isAbsolutePath(const std::string& filePath);
+    static bool isAbsolutePath(const std::string& dropFile);
 
     /**
      * Gets the directory name up to and including the trailing '/'.
