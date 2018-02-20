@@ -16,24 +16,24 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     include_directories(
         ../../external-deps/include/compat/msvc
     )
-    target_link_libraries(gameplay-editor  
+    target_link_libraries(gameplay-editor
+        gameplay
+        $<$<CONFIG:Debug>:${PROJECT_SOURCE_DIR}/external-deps/lib/windows/x86_64/Debug/gameplay-deps.lib>
+        $<$<CONFIG:Release>:${PROJECT_SOURCE_DIR}/external-deps/lib/windows/x86_64/Release/gameplay-deps.lib>
+        $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
         version.lib
         winmm.lib
         xinput.lib
         d3d12.lib
         dxgi.lib
         d3dcompiler.lib
-        $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
-        gameplay
-        $<$<CONFIG:Debug>:${PROJECT_SOURCE_DIR}/external-deps/lib/windows/x86_64/Debug/gameplay-deps.lib>
-        $<$<CONFIG:Release>:${PROJECT_SOURCE_DIR}/external-deps/lib/windows/x86_64/Release/gameplay-deps.lib>
     )
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     include_directories(
         ../../external-deps/include/compat/osx 
     )
     target_link_libraries(gameplay-editor
-        ../../external-deps/lib/macosx/x86_64/gameplay-deps.a
+        ${PROJECT_SOURCE_DIR}/external-deps/lib/macosx/x86_64/libgameplay-deps.a
     )
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -41,7 +41,14 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         ../../external-deps/include/compat/freebsd
     )
     target_link_libraries(gameplay-editor
-        ../../external-deps/lib/linux/x86_64/gameplay-deps.a
+        gameplay
+        ${PROJECT_SOURCE_DIR}/external-deps/lib/linux/x86_64/libgameplay-deps.a
+        m
+        GL
+        rt
+        dl
+        X11
+        pthread
     )
     add_definitions(-D__linux__)
 endif()

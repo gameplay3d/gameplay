@@ -109,7 +109,7 @@ struct XInput
 	{
 		const int32_t dz = deadzone[axis];
 		int32_t new_value = *value;
-		new_value = new_value > dz || new_value < -dz ? new_value : 0;
+		new_value = (new_value > dz) || ((new_value < -dz) ? new_value : 0);
 		*value = new_value * flip[axis];
 		return old != new_value;
 	}
@@ -528,9 +528,9 @@ struct Context
 
 					this->hwnd[wparam]  = wnd;
 					this->flags[wparam] = msg->flags;
-					gameplay::Platform::WindowHandle window = { (uint16_t)wparam };
-					eventQueue.postSizeEvent(window, msg->width, msg->height);
-					eventQueue.postWindowEvent(window, hwnd);
+					gameplay::Platform::WindowHandle handle = { (uint16_t)wparam };
+					eventQueue.postSizeEvent(handle, msg->width, msg->height);
+					eventQueue.postWindowEvent(handle, hwnd);
 
 					delete msg;
 				}
@@ -538,12 +538,12 @@ struct Context
 
 			case WM_USER_WINDOW_DESTROY:
 				{
-					gameplay::Platform::WindowHandle window = { (uint16_t)wparam };
-					eventQueue.postWindowEvent(window);
+					gameplay::Platform::WindowHandle handle = { (uint16_t)wparam };
+					eventQueue.postWindowEvent(handle);
 					DestroyWindow(this->hwnd[wparam]);
 					this->hwnd[wparam] = 0;
 
-					if (window.idx == 0)
+					if (handle.idx == 0)
 					{
 						exit = true;
 						eventQueue.postExitEvent();
@@ -618,10 +618,10 @@ struct Context
 
 			case WM_SIZING:
 				{
-					gameplay::Platform::WindowHandle window = findHandle(hwnd);
+					gameplay::Platform::WindowHandle handle = findHandle(hwnd);
 
-					if (gameplay::Platform::isWindowValid(window)
-					&&  GP_WINDOW_FLAG_ASPECT_RATIO & flags[window.idx])
+					if (gameplay::Platform::isWindowValid(handle)
+					&&  GP_WINDOW_FLAG_ASPECT_RATIO & flags[handle.idx])
 					{
 						RECT& rect = *(RECT*)lparam;
 						uint32_t width  = rect.right  - rect.left - frameWidth;
@@ -673,7 +673,6 @@ struct Context
 							rect.bottom = rect.top  + height + frameHeight;
 							break;
 						}
-
 						eventQueue.postSizeEvent(findHandle(hwnd), width, height);
 					}
 				}
@@ -681,15 +680,15 @@ struct Context
 
 			case WM_SIZE:
 				{
-					gameplay::Platform::WindowHandle window = findHandle(hwnd);
-					if (gameplay::Platform::isWindowValid(window) )
+					gameplay::Platform::WindowHandle handle = findHandle(hwnd);
+					if (gameplay::Platform::isWindowValid(handle) )
 					{
 						uint32_t width  = GET_X_LPARAM(lparam);
 						uint32_t height = GET_Y_LPARAM(lparam);
 
 						this->width  = width;
 						this->height = height;
-						eventQueue.postSizeEvent(window, width, height);
+						eventQueue.postSizeEvent(handle, width, height);
 					}
 				}
 				break;
@@ -782,7 +781,7 @@ struct Context
 					uint8_t keyModifiers = translateKeyModifiers();
 					gameplay::Input::Key key = translateKey(wparam);
 
-					gameplay::Platform::WindowHandle window = findHandle(hwnd);
+					gameplay::Platform::WindowHandle handle = findHandle(hwnd);
 
 					if (gameplay::Input::Key::KEY_PRINT == key &&  0x3 == ( (uint32_t)(lparam)>>30) )
 					{
@@ -790,9 +789,9 @@ struct Context
 						// key state bit is set to 1 and transition state bit is set to 1.
 						//
 						// http://msdn.microsoft.com/en-us/library/windows/desktop/ms646280%28v=vs.85%29.aspx
-						eventQueue.postKeyEvent(window, key, keyModifiers, true);
+						eventQueue.postKeyEvent(handle, key, keyModifiers, true);
 					}
-					eventQueue.postKeyEvent(window, key, keyModifiers, id == WM_KEYDOWN || id == WM_SYSKEYDOWN);
+					eventQueue.postKeyEvent(handle, key, keyModifiers, id == WM_KEYDOWN || id == WM_SYSKEYDOWN);
 				}
 				break;
 
@@ -805,8 +804,8 @@ struct Context
 															  NULL, NULL);
 					if (len != 0)
 					{
-						gameplay::Platform::WindowHandle window = findHandle(hwnd);
-						eventQueue.postCharEvent(window, len, utf8);
+						gameplay::Platform::WindowHandle handle = findHandle(hwnd);
+						eventQueue.postCharEvent(handle, len, utf8);
 					}
 				}
 				break;
@@ -817,8 +816,8 @@ struct Context
 					char tmp[bx::kMaxFilePath];
 					uint32_t result = DragQueryFileA(drop, 0, tmp, sizeof(tmp) );
 					BX_UNUSED(result);
-					gameplay::Platform::WindowHandle window = findHandle(hwnd);
-					eventQueue.postDropFileEvent(window, tmp);
+					gameplay::Platform::WindowHandle handle = findHandle(hwnd);
+					eventQueue.postDropFileEvent(handle, tmp);
 				}
 				break;
 
@@ -838,8 +837,8 @@ struct Context
 			uint16_t idx = windowAlloc.getHandleAt(i);
 			if (hwnd == this->hwnd[idx])
 			{
-				gameplay::Platform::WindowHandle window = { idx };
-				return window;
+				gameplay::Platform::WindowHandle handle = { idx };
+				return handle;
 			}
 		}
 
@@ -953,13 +952,11 @@ struct Context
 		}
 	}
 
-	static LRESULT CALLBACK wndProc(HWND _hwnd, UINT _id, WPARAM _wparam, LPARAM _lparam);
+	static LRESULT CALLBACK wndProc(HWND hwnd, UINT id, WPARAM wparam, LPARAM lparam);
 
 	gameplay::Platform::EventQueue eventQueue;
 	bx::Mutex lock;
-
 	bx::HandleAllocT<GP_WINDOWS_MAX> windowAlloc;
-
 	HWND hwnd[GP_WINDOWS_MAX];
 	uint32_t flags[GP_WINDOWS_MAX];
 	RECT rect;
@@ -971,11 +968,9 @@ struct Context
 	uint32_t frameWidth;
 	uint32_t frameHeight;
 	float aspectRatio;
-
 	int32_t mx;
 	int32_t my;
 	int32_t mz;
-
 	bool frame;
 	HWND mouseLock;
 	bool init;
@@ -984,7 +979,7 @@ struct Context
 
 static Context __ctx;
 
-	
+
 extern void print(const char* format, ...)
 {
     va_list argptr;
@@ -1001,17 +996,17 @@ extern void print(const char* format, ...)
     va_end(argptr);
 }
 
-const Platform::Event* poll()
+const gameplay::Platform::Event* poll()
 {
 	return __ctx.eventQueue.poll();
 }
 
-const Platform::Event* poll(Platform::WindowHandle window)
+const gameplay::Platform::Event* poll(gameplay::Platform::WindowHandle handle)
 {
-	return __ctx.eventQueue.poll(window);
+	return __ctx.eventQueue.poll(handle);
 }
 
-void release(const Platform::Event* evt)
+void release(const gameplay::Platform::Event* evt)
 {
 	__ctx.eventQueue.release(evt);
 }
@@ -1024,9 +1019,9 @@ LRESULT CALLBACK Context::wndProc(HWND _hwnd, UINT _id, WPARAM _wparam, LPARAM _
 gameplay::Platform::WindowHandle createWindow(int32_t x, int32_t y, uint32_t width, uint32_t height, uint32_t flags, const char* title)
 {
 	bx::MutexScope scope(__ctx.lock);
-	gameplay::Platform::WindowHandle window = { __ctx.windowAlloc.alloc() };
+	gameplay::Platform::WindowHandle handle = { __ctx.windowAlloc.alloc() };
 
-	if ( window.idx != UINT16_MAX)
+	if ( handle.idx != UINT16_MAX)
 	{
 		Msg* msg = new Msg;
 		msg->x = x;
@@ -1035,58 +1030,58 @@ gameplay::Platform::WindowHandle createWindow(int32_t x, int32_t y, uint32_t wid
 		msg->height = height;
 		msg->title  = title;
 		msg->flags  = flags;
-		PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_CREATE, window.idx, (LPARAM)msg);
+		PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_CREATE, handle.idx, (LPARAM)msg);
 	}
-	return window;
+	return handle;
 }
 
-void destroyWindow(gameplay::Platform::WindowHandle window)
+void destroyWindow(gameplay::Platform::WindowHandle handle)
 {
 	if (window.idx != UINT16_MAX)
 	{
-		PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_DESTROY, window.idx, 0);
+		PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_DESTROY, handle.idx, 0);
 
 		bx::MutexScope scope(__ctx.lock);
-		__ctx.windowAlloc.free(window.idx);
+		__ctx.windowAlloc.free(handle.idx);
 	}
 }
 
-void setWindowPos(gameplay::Platform::WindowHandle window, int32_t x, int32_t y)
+void setWindowPos(gameplay::Platform::WindowHandle handle, int32_t x, int32_t y)
 {
 	Msg* msg = new Msg;
 	msg->x = x;
 	msg->y = y;
-	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_POS, window.idx, (LPARAM)msg);
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_POS, handle.idx, (LPARAM)msg);
 }
 
-void setWindowSize(gameplay::Platform::WindowHandle window, uint32_t width, uint32_t height)
+void setWindowSize(gameplay::Platform::WindowHandle handle, uint32_t width, uint32_t height)
 {
-	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_SIZE, window.idx, (height << 16) | (width & 0xffff) );
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_SIZE, handle.idx, (height << 16) | (width & 0xffff) );
 }
 
-void setWindowTitle(gameplay::Platform::WindowHandle window, const char* title)
+void setWindowTitle(gameplay::Platform::WindowHandle handle, const char* title)
 {
 	Msg* msg = new Msg;
 	msg->title = title;
-	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_TITLE, window.idx, (LPARAM)msg);
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_TITLE, handle.idx, (LPARAM)msg);
 }
 
-void setWindowFlags(gameplay::Platform::WindowHandle window, uint32_t flags, bool flagsEnabled)
+void setWindowFlags(gameplay::Platform::WindowHandle handle, uint32_t flags, bool flagsEnabled)
 {
 	Msg* msg = new Msg;
 	msg->flags = flags;
 	msg->flagsEnabled = flagsEnabled;
-	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_FLAGS, window.idx, (LPARAM)msg);
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_SET_FLAGS, handle.idx, (LPARAM)msg);
 }
 
-void toggleFullscreen(gameplay::Platform::WindowHandle window)
+void toggleFullscreen(gameplay::Platform::WindowHandle handle)
 {
-	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_TOGGLE_FRAME, window.idx, 0);
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_TOGGLE_FRAME, handle.idx, 0);
 }
 
-void setMouseLock(gameplay::Platform::WindowHandle window, bool _lock)
+void setMouseLock(gameplay::Platform::WindowHandle handle, bool _lock)
 {
-	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_MOUSE_LOCK, window.idx, _lock);
+	PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_MOUSE_LOCK, handle.idx, _lock);
 }
 
 

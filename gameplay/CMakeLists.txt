@@ -30,8 +30,8 @@ set(GAMEPLAY_SRC
     src/Game.h
     src/Graphics.cpp
     src/Graphics.h
-    src/HeightField.cpp
-    src/HeightField.h
+    src/Heightfield.cpp
+    src/Heightfield.h
     src/Image.cpp
     src/Image.h
     src/Input.cpp
@@ -103,8 +103,8 @@ set(GAMEPLAY_SRC
     src/Sprite.h
     src/Text.cpp
     src/Text.h
-    src/TileSet.cpp
-    src/TileSet.h
+    src/Tileset.cpp
+    src/Tileset.h
     src/Vector2.cpp
     src/Vector2.h
     src/Vector3.cpp
@@ -140,11 +140,6 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     include_directories(
         ../external-deps/include/compat/freebsd
     )
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
-    include_directories(${GTK2_INCLUDE_DIRS})
-    add_definitions(${GTK2_CFLAGS_OTHER})
-    add_definitions(-D__linux__)
 endif()
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")

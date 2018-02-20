@@ -358,8 +358,8 @@ void Input::setMouseLocked(bool lock)
 	if (mouse.lock != lock)
 	{
 		mouse.lock = lock;
-		Platform::WindowHandle defaultWindow = { 0 };
-		setMouseLock(defaultWindow, lock);
+		Platform::WindowHandle handle = { 0 };
+		setMouseLock(handle, lock);
 		if (lock)
 		{
 			mouse.normalized[0] = 0.0f;
