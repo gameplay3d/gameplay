@@ -1037,7 +1037,7 @@ gameplay::Platform::WindowHandle createWindow(int32_t x, int32_t y, uint32_t wid
 
 void destroyWindow(gameplay::Platform::WindowHandle handle)
 {
-	if (window.idx != UINT16_MAX)
+	if (handle.idx != UINT16_MAX)
 	{
 		PostMessage(__ctx.hwnd[0], WM_USER_WINDOW_DESTROY, handle.idx, 0);
 
