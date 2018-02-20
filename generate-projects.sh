@@ -10,6 +10,6 @@ pushd "build"
          echo Generating linux makefiles...
         cmake -G "Unix Makefiles" ..
     else
-
-    popd
+	echo Platform not supported.
+    fi
 popd

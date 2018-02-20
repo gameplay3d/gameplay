@@ -221,16 +221,15 @@ bool processWindowEvents(WindowState& state, uint32_t& debug, uint32_t& reset);
 int main(int argc, const char* const* argv);
 
 
-
 // Platform specific
-Platform::WindowHandle createWindow(int32_t x, int32_t y, uint32_t width, uint32_t height, uint32_t flags = GP_WINDOW_FLAG_NONE, const char* title = "");
-void destroyWindow(Platform::WindowHandle window);
-void setWindowPos(Platform::WindowHandle window, int32_t x, int32_t y);
-void setWindowSize(Platform::WindowHandle window, uint32_t width, uint32_t height);
-void setWindowTitle(Platform::WindowHandle window, const char* title);
-void setWindowFlags(Platform::WindowHandle window, uint32_t flags, bool enabled);
-void toggleFullscreen(Platform::WindowHandle window);
-void setMouseLock(Platform::WindowHandle window, bool lock);
+gameplay::Platform::WindowHandle createWindow(int32_t x, int32_t y, uint32_t width, uint32_t height, uint32_t flags = GP_WINDOW_FLAG_NONE, const char* title = "");
+void destroyWindow(gameplay::Platform::WindowHandle handle);
+void setWindowPos(gameplay::Platform::WindowHandle handle, int32_t x, int32_t y);
+void setWindowSize(gameplay::Platform::WindowHandle handle, uint32_t width, uint32_t height);
+void setWindowTitle(gameplay::Platform::WindowHandle handle, const char* title);
+void setWindowFlags(gameplay::Platform::WindowHandle handle, uint32_t flags, bool enabled);
+void toggleFullscreen(gameplay::Platform::WindowHandle handle);
+void setMouseLock(gameplay::Platform::WindowHandle handle, bool lock);
 
 }
 
