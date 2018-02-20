@@ -13,8 +13,9 @@ Windows 10
 Ubuntu 16.04
 ------------
 - Install CMake 3.2+                        (sudo apt-get install cmake)
+- Install curl                              (sudo apt-get install curl)
 - Install Build SDKs                        (sudo apt-get install build-essential clang gcc g++)
-- Install Platform SDKs                     (sudo ap-get install libx11-xcb-dev libgtk2.0-dev libogg-dev libopenal-dev)
+- Install Platform SDKs                     (sudo apt-get install libx11-xcb-dev libgtk2.0-dev libogg-dev libopenal-dev)
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home#linux)
 - Run GamePlay/install.sh
 - Run GamePlay/generate-projects.sh
