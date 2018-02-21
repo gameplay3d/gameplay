@@ -14,7 +14,7 @@ GamePlay is an open-source, cross-platform, C++ game engine for creating 2D/3D d
 - Android
 
 ## Building
-See [BUILDING](https://github.com/gameplay3d/GamePlay/BUILDING.md) for instructions.
+See [BUILDING](https://github.com/gameplay3d/GamePlay/blob/nextgen/BUILDING.md) for instructions.
 
 ## License
 Open-source under [Apache 2.0 license](http://www.tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29).
