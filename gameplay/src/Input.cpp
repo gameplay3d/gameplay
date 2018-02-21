@@ -250,9 +250,11 @@ void Input::Keyboard::charFlush()
 }
 
 Input::Mouse::Mouse() 
-	: width(GP_GRAPHICS_WIDTH), 
-	  height(GP_GRAPHICS_HEIGHT), 
-	  wheelDelta(120), 
+	:
+      wheel(0),
+      wheelDelta(120),
+      width(GP_GRAPHICS_WIDTH),
+	  height(GP_GRAPHICS_HEIGHT),
 	  lock(false)
 {
 }

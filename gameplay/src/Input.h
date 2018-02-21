@@ -231,8 +231,8 @@ public:
 
 		int32_t absolute[3];
 		float normalized[3];
+        uint8_t buttons[Input::MouseButton::MOUSE_BUTTON_COUNT];
 		int32_t wheel;
-		uint8_t buttons[Input::MouseButton::MOUSE_BUTTON_COUNT];
 		uint16_t wheelDelta;
 		uint16_t width;
 		uint16_t height;

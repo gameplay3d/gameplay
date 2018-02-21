@@ -530,7 +530,7 @@ public:
         void initializeEnums();
         
         std::map<std::string, CreateObjectCallback> _classes;
-        std::map<std::string, std::pair<EnumToStringCallback, EnumParseCallback>> _enums;
+        std::map<std::string, std::pair<EnumToStringCallback, EnumParseCallback> > _enums;
     };
     
     /**
