@@ -29,17 +29,35 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         d3dcompiler.lib
     )
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    include_directories(
-        ../../external-deps/include/compat/osx 
-    )
+    find_library(FOUNDATION_LIBRARY Foundation)
+    find_library(CARBON_LIBRARY Carbon)
+    find_library(QUARTZ_LIBRARY Quartz)
+    find_library(METAL_LIBRARY Metal)
+    find_library(METALKIT_LIBRARY MetalKit)
+    find_library(OPENAL_LIBRARY OpenAL)
+    find_library(IOKIT_LIBRARY IOKit )
+    find_library(GAMEKIT_LIBRARY GameKit)
+
+    SET(FRAMEWORK_LIBRARIES
+            ${FOUNDATION_LIBRARY}
+            ${CARBON_LIBRARY}
+            ${QUARTZ_LIBRARY}
+            ${METAL_LIBRARY}
+            ${METALKIT_LIBRARY}
+            ${OPENAL_LIBRARY}
+            ${IOKIT_LIBRARY}
+            ${GAMEKIT_LIBRARY}
+      )
     target_link_libraries(gameplay-editor
-        ${PROJECT_SOURCE_DIR}/external-deps/lib/macosx/x86_64/libgameplay-deps.a
+        gameplay
+        ${PROJECT_SOURCE_DIR}/external-deps/lib/macos/x86_64/libgameplay-deps.a
+        m
+        dl
+        pthread
+        ${FRAMEWORK_LIBRARIES}
     )
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    include_directories(
-        ../../external-deps/include/compat/freebsd
-    )
     target_link_libraries(gameplay-editor
         gameplay
         ${PROJECT_SOURCE_DIR}/external-deps/lib/linux/x86_64/libgameplay-deps.a
@@ -53,7 +71,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     add_definitions(-D__linux__)
 endif()
 
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang|AppleClang")
     set(CMAKE_CXX_FLAGS "-std=c++11")
 endif()
 

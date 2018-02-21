@@ -340,7 +340,7 @@ struct Context
 		visual = DefaultVisual(display, screen);
 		root   = RootWindow(display, screen);
 
-		bx::memSet(&windowAttrs, 0, sizeof(windowAttrs) );
+		bx::memSet(&windowAttrs, 0, sizeof(windowAttrs));
 		windowAttrs.background_pixmap = 0;
 		windowAttrs.border_pixel = 0;
 		windowAttrs.event_mask = 0
@@ -374,11 +374,11 @@ struct Context
 		XSetWMProtocols(display, this->window[0], &wmDeleteWindow, 1);
 
 		XMapWindow(display, this->window[0]);
-		XStoreName(display, this->window[0], "gameplay");
+		XStoreName(display, this->window[0], GP_ENGINE_NAME);
 
 		XClassHint* hint = XAllocClassHint();
-		hint->res_name  = (char*)"gameplay";
-		hint->res_class = (char*)"gameplay";
+		hint->res_name  = (char*)GP_ENGINE_NAME;
+		hint->res_class = (char*)GP_ENGINE_NAME;
 		XSetClassHint(display, this->window[0], hint);
 		XFree(hint);
 
@@ -386,8 +386,7 @@ struct Context
 		im = XOpenIM(display, NULL, NULL, NULL);
 
 		XIC ic;
-		ic = XCreateIC(im, 
-					   XNInputStyle, 0
+		ic = XCreateIC(im, XNInputStyle, 0
 					 | XIMPreeditNothing
 					 | XIMStatusNothing, 
 					   XNClientWindow, this->window[0], NULL);
@@ -397,7 +396,6 @@ struct Context
 		MainThreadEntry mte;
 		mte.argc = argc;
 		mte.argv = argv;
-
 		bx::Thread thread;
 		thread.init(mte.threadFunc, &mte);
 
@@ -613,7 +611,7 @@ struct Context
 
 		XClassHint* hint = XAllocClassHint();
 		hint->res_name  = (char*)msg->title.c_str();
-		hint->res_class = (char*)"gameplay";
+		hint->res_class = (char*)GP_ENGINE_NAME;
 		XSetClassHint(display, window, hint);
 		XFree(hint);
 
@@ -665,6 +663,7 @@ struct Context
 	uint8_t keyModifiers;
 	bool exit;
 };
+
 
 static Context __ctx;
 

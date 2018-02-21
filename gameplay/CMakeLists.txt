@@ -130,19 +130,13 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GAMEPLAY_PLATFORM_SRC 
         src/PlatformMacOS.mm
     )
-    include_directories(
-        ../external-deps/include/compat/osx 
-    )
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(GAMEPLAY_PLATFORM_SRC
         src/PlatformLinux.cpp
     )
-    include_directories(
-        ../external-deps/include/compat/freebsd
-    )
 endif()
 
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang|AppleClang")
     set(CMAKE_CXX_FLAGS "-std=c++11")
 endif()
 

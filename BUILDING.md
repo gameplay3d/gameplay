@@ -25,10 +25,10 @@ Ubuntu 16.04
 MacOS High Sierra
 -----------------
 - Install CMake 3.2+                        (https://cmake.org/download/)
-- Install Xcode 9.3                         (https://developer.apple.com/xcode/)
+- Install Xcode 9                           (https://developer.apple.com/xcode/)
 - Install Xcode Command Line Tools          (https://developer.apple.com/download/more/)
 - Run GamePlay/install.sh
 - Run GamePlay/generate-projects.sh
-- Open GamePlay/build/GamePlay.xcproj
+- Open GamePlay/build/GamePlay.xcodeproj
 - Build gameplay and gameplay-editor
 - Run gameplay-editor

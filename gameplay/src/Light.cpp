@@ -12,10 +12,10 @@ namespace gameplay
 Light::Light() : Component(),
     _type(Light::TYPE_DIRECTIONAL),
     _color(LIGHT_COLOR),
+    _intensity(1.0f),
     _range(LIGHT_RANGE),
     _angle(LIGHT_ANGLE),
     _angleCos(cos(LIGHT_ANGLE)),
-    _intensity(1.0f),
     _lighting(LIGHTING_REALTIME),
     _shadows(SHADOWS_NONE)
 {
