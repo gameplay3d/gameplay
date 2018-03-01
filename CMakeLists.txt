@@ -17,5 +17,5 @@ endif()
 
 # projects
 add_subdirectory(gameplay)
-add_subdirectory(tools/editor)
-#add_subdirectory(tools/luagen)
+add_subdirectory(gameplay-app)
+add_subdirectory(gameplay-luagen)

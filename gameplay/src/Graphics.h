@@ -1,57 +1,38 @@
 #pragma once
 
-#include <bx/pixelformat.h>
-#include <bimg/bimg.h>
-#include <bgfx/bgfx.h>
+#include "vulkan/vulkan.h"
 
 namespace gameplay
 {
 
 class Graphics
 {
-	friend class Game;
+    friend class Game;
 
 public:
 
-	 /**
-     * Defines the low-level graphics api.
+    /**
+     * Constructor.
      */
-    enum API
-    {
-		API_NULL,
-        API_DIRECT3D12,
-		API_VULKAN,
-        API_METAL
-    };
+    Graphics();
 
-	/**
-	 * Constructor.
-	 */
-	Graphics();
-
-	/**
-	 * Destructor.
-	 */
-	~Graphics();
-
-	/**
-     * Gets the graphics api.
-     *
-     * @return The graphics api.
+    /**
+     * Destructor.
      */
-    Graphics::API getAPI();
-	
-private:
+    ~Graphics();
 
     void onInitialize();
-	void onFinalize();
-    void onUpdate(float elapsedTime);
-	void onPause();
-	void onResume();
 
-	Graphics::API _api;
-	uint32_t _reset;
-	uint32_t _debug;
+    void onFinalize();
+
+    void onResize(size_t width, size_t height);
+
+    void onRender(float elapsedTime);
+
+    void onPause();
+
+    void onResume();
+	
 };
 
 }

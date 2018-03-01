@@ -1,6 +1,5 @@
 #include "Base.h"
 #include "Game.h"
-#include "Platform.h"
 #include "FileSystem.h"
 #include "Serializable.h"
 #include "SerializerJson.h"
@@ -118,51 +117,46 @@ int Game::exit()
 	return 0;
 }
 
-bool Game::frame()
+void Game::frame()
 {
 	static double lastFrameTime = Game::getGameTime();
     float elapsedTime = (float)(Game::getGameTime() - lastFrameTime);
 
-	if (!processEvents(_width, _height, _graphics->_debug, _graphics->_reset, &_mouseState))
-	{
-		switch (_state)
-		{
-		case Game::STATE_UNINITIALIZED:
-		{
-			initializeSplash();
-			initializeLoading();
-			_state = Game::STATE_SPLASH;
-			break;
-		}
-		case Game::STATE_SPLASH:
-		{
-			onSplash(elapsedTime);
-			if (_splashScreens.empty())
-				_state = Game::STATE_LOADING;
-			lastFrameTime = updateFrameRate();
-			break;
-		}
-		case Game::STATE_LOADING:
-		{
-			onLoading(elapsedTime);
-			//if (_scene.get() && _scene->isLoaded())
-			_state = Game::STATE_RUNNING;
-			lastFrameTime = updateFrameRate();
-			break;
-		}
-		case Game::STATE_RUNNING:
-		{
-			onUpdate(elapsedTime);
-			lastFrameTime = updateFrameRate();
-			break;
-		}
-		case Game::STATE_PAUSED:
-			break;
-		}
 
-		return true;
+	switch (_state)
+	{
+	case Game::STATE_UNINITIALIZED:
+	{
+		initializeSplash();
+		initializeLoading();
+		_state = Game::STATE_SPLASH;
+		break;
 	}
-	return false;
+	case Game::STATE_SPLASH:
+	{
+		onSplash(elapsedTime);
+		if (_splashScreens.empty())
+			_state = Game::STATE_LOADING;
+		lastFrameTime = updateFrameRate();
+		break;
+	}
+	case Game::STATE_LOADING:
+	{
+		onLoading(elapsedTime);
+		//if (_scene.get() && _scene->isLoaded())
+		_state = Game::STATE_RUNNING;
+		lastFrameTime = updateFrameRate();
+		break;
+	}
+	case Game::STATE_RUNNING:
+	{
+		onUpdate(elapsedTime);
+		lastFrameTime = updateFrameRate();
+		break;
+	}
+	case Game::STATE_PAUSED:
+		break;
+	}
 }
 
 void Game::showSplashScreens(std::vector<SplashScreen> splashScreens)
@@ -208,11 +202,10 @@ std::shared_ptr<Camera> Game::getCamera() const
     return _camera;
 }
 
-void Game::onInitialize(int argc, const char* const* argv)
+void Game::onInitialize(int argc, const char** argv)
 {
 	_config = getConfig();
 	FileSystem::setHomePath(_config->homePath);
-	setCurrentDir(_config->homePath.c_str());
 
 	_graphics = std::make_shared<Graphics>();
 	_graphics->onInitialize();
@@ -226,10 +219,6 @@ void Game::onFinalize()
 	_graphics->onFinalize();
 }
 
-void Game::onSceneLoad(std::shared_ptr<SceneObject> scene)
-{
-}
-
 void Game::onResize(size_t width, size_t height)
 {
     _width = width;
@@ -237,6 +226,38 @@ void Game::onResize(size_t width, size_t height)
 }
 
 void Game::onUpdate(float elapsedTime)
+{
+}
+
+void Game::onLoad(std::shared_ptr<SceneObject> scene)
+{
+}
+
+void Game::onGamepadConnection(uint32_t controllerIndex, bool connected)
+{
+}
+
+void Game::onGamepadAxis(uint32_t controllerIndex, Input::GamepadAxis axis, int value)
+{
+}
+
+void Game::onMouseMotion(int mx, int my, int mz)
+{
+}
+
+void Game::onMousePress(int mx, int my, int mz, Input::MouseButton button, bool down)
+{
+}
+
+void Game::onKeyChar(char chr)
+{
+}
+
+void Game::onKeyPress(Input::Key key, uint8_t keyModifiers, bool down)
+{
+}
+
+void Game::onDropFile(std::string file)
 {
 }
 
@@ -301,7 +322,6 @@ std::shared_ptr<Graphics> Game::getGraphics()
 
 Game::Config::Config() :
     title(""),
-	graphics(GP_GRAPHICS),
 	width(GP_GRAPHICS_WIDTH),
 	height(GP_GRAPHICS_HEIGHT),
 	fullscreen(GP_GRAPHICS_FULLSCREEN),
@@ -329,7 +349,6 @@ std::string Game::Config::getClassName()
 void Game::Config::onSerialize(Serializer* serializer)
 {
     serializer->writeString("title", title.c_str(), "");
-	serializer->writeString("graphics", graphics.c_str(), "");
     serializer->writeInt("width", width, 0);
     serializer->writeInt("height", height, 0);
     serializer->writeBool("fullscreen", fullscreen, false);
@@ -348,7 +367,6 @@ void Game::Config::onSerialize(Serializer* serializer)
 void Game::Config::onDeserialize(Serializer* serializer)
 {
     serializer->readString("title", title, "");
-	serializer->readString("graphics", graphics, GP_GRAPHICS);
     width = serializer->readInt("width", 0);
     height = serializer->readInt("height", 0);
 	fullscreen = serializer->readBool("fullscreen", false);

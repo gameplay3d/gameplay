@@ -1,7 +1,5 @@
 #pragma once
 
-#include <bx/ringbuffer.h>
-
 namespace gameplay
 {
 
@@ -10,16 +8,7 @@ namespace gameplay
  */
 class Input
 {
-    friend class Platform;
-
 public:
-
-	struct GamepadHandle 
-	{ 
-		unsigned short idx; 
-	};
-	
-	static bool isGamepadValid(GamepadHandle handle);
 
     /**
      * Defines input keys.
@@ -151,13 +140,12 @@ public:
      */
     enum MouseButton
     {
-	MOUSE_BUTTON_NONE,
+		MOUSE_BUTTON_NONE,
         MOUSE_BUTTON_LEFT,
         MOUSE_BUTTON_RIGHT,
         MOUSE_BUTTON_MIDDLE,
-	MOUSE_BUTTON_COUNT
+		MOUSE_BUTTON_COUNT
     };
-
 
     /**
      * Defines gamepad axis
@@ -173,85 +161,28 @@ public:
 		GAMEPAD_AXIS_COUNT
 	};
 
-	typedef void (*BindingFn)(const void* userData);
-
-	struct Binding
-	{
-		void set(Input::Key key, uint8_t keyModifiers, uint8_t flags, BindingFn fn, const void* userData = nullptr)
-		{
-			this->key = key;
-			this->keyModifiers = keyModifiers;
-			this->flags = flags;
-			this->fn = fn;
-			this->userData = userData;
-		}
-
-		void end()
-		{
-			this->key = Input::Key::KEY_NONE;
-			this->keyModifiers = Input::KeyModifier::KEY_MODIFIER_NONE;
-			this->flags = 0;
-			this->fn = nullptr;
-			this->userData = nullptr;
-		}
-
-		Input::Key key;
-		uint8_t keyModifiers;
-		uint8_t flags;
-		BindingFn fn;
-		const void* userData;
-	};
-
-	struct Keyboard
-	{
-		Keyboard();
-		static uint32_t encodeKeyState(uint8_t modifiers, bool down);
-		static bool decodeKeyState(uint32_t state, uint8_t& modifiers);
-		void reset();
-		void setKeyState(Input::Key key, uint8_t modifiers, bool down);
-		bool getKeyState(Input::Key key, uint8_t* modifiers);
-		uint8_t getModifiersState();
-		void pushChar(uint8_t len, const uint8_t ch[4]);
-		const uint8_t* popChar();
-		void charFlush();
-
-		uint32_t keys[256];
-		bool once[256];
-		uint8_t chrs[256];
-		bx::RingBufferControl ring;
-	};
-
-	struct Mouse
-	{
-		Mouse();
-		void reset();
-		void setResolution(uint16_t width, uint16_t height);
-		void setPosition(int32_t mx, int32_t my, int32_t mz);
-		void setButtonState(Input::MouseButton button, uint8_t state);
-
-		int32_t absolute[3];
-		float normalized[3];
-        uint8_t buttons[Input::MouseButton::MOUSE_BUTTON_COUNT];
-		int32_t wheel;
-		uint16_t wheelDelta;
-		uint16_t width;
-		uint16_t height;
-		bool lock;
-	};
-
-	struct Gamepad
-	{
-		Gamepad();
-		void reset();
-		void setAxis(Input::GamepadAxis axis, int32_t value);
-		int32_t getAxis(Input::GamepadAxis axis);
-
-		int32_t axis[Input::GamepadAxis::GAMEPAD_AXIS_COUNT];
-	};
-
+    /**
+     * Gets the string name for a key.
+     *
+     * @param key The key to get the string name for.
+     * @return The string name for a key.
+     */
 	static std::string getKeyName(Input::Key key);
 
-	static char keyToAscii(Input::Key key, uint8_t keyModifiers);
+    /**
+     * Gets the ascii keycode for a key.
+     *
+     * @param key The key to get the ascii keycode for.
+     * @param keyModifiers The key modifiers applied.
+     * @return The ascii keycode for a key.
+     */
+	static char getKeyCode(Input::Key key, uint8_t keyModifiers);
+
+    static bool isKeyHeld(Input::Key key);
+
+    static bool isKeyDown(Input::Key key);
+
+    static bool isKeyUp(Input::Key key);
 
     static bool isButtonHeld(std::string buttonName);
 
@@ -273,24 +204,23 @@ public:
 
     static float getMouseScroll();
 
-    static bool isKeyHeld(Input::Key key);
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // Used only by input providers (Platform/Editor)
+    static Input* getInput();
+    void initialize();
+    void update();
+    void postGamepadConnectionEvent(uint32_t controllerIndex, bool connected);
+    void postGamepadAxisEvent(uint32_t controllerIndex, GamepadAxis axis, int value);
+    void postMouseMotionEvent(int mx, int my, int mz);
+    void postMousePressEvent(int mx, int my, int mz, MouseButton button, bool down);
+    void postKeyCharEvent(char chr);
+    void postKeyPressEvent(Key key, uint8_t keyModifiers, bool down);
 
-    static bool isKeyDown(Input::Key key);
+private:
 
-    static bool isKeyUp(Input::Key key);
-    
-	static void process();
+	Input();
 
-	static void addBindings(const char* name, const Binding* bindings);
-
-	static void removeBindings(const char* name);
-
-	static void process(const Binding* bindings);
-
-	static std::unordered_map<std::string, const Binding*> inputBindings;
-	static Keyboard keyboard;
-	static Mouse mouse;
-	static Gamepad gamepads[GP_GAMEPADS_MAX];
+	~Input();
 };
 
 }

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Platform.h"
 #include "Serializable.h"
 #include "SceneObject.h"
 #include "Camera.h"
 #include "Graphics.h"
+#include "Input.h"
 
 namespace gameplay
 {
@@ -132,7 +132,7 @@ public:
     /**
      * Event occurs every frame from the platform.
      */
-    bool frame();
+    void frame();
 
 	/**
 	 *
@@ -192,7 +192,7 @@ public:
     /**
      * Event occurs after the platform starts up and prior to first frame event.
      */
-    virtual void onInitialize(int argc, const char* const* argv);
+    virtual void onInitialize(int argc, const char** argv);
 
     /**
      * Event occurs when the game is about to exit.
@@ -219,7 +219,21 @@ public:
      *
      * @param scene The scene that has completed loading.
      */
-    virtual void onSceneLoad(std::shared_ptr<SceneObject> scene);
+    virtual void onLoad(std::shared_ptr<SceneObject> scene);
+
+	virtual void onGamepadConnection(uint32_t controllerIndex, bool connected);
+
+	virtual void onGamepadAxis(uint32_t controllerIndex, Input::GamepadAxis axis, int value);
+
+	virtual void onMouseMotion(int mx, int my, int mz);
+
+	virtual void onMousePress(int mx, int my, int mz, Input::MouseButton button, bool down);
+
+	virtual void onKeyChar(char chr);
+
+	virtual void onKeyPress(Input::Key key, uint8_t keyModifiers, bool down);
+
+	virtual void onDropFile(std::string file);
 
     /**
      * Game configuration.
@@ -259,7 +273,6 @@ public:
         static std::shared_ptr<Serializable> createObject();
 
         std::string title;
-		std::string graphics;
 		int width;
 		int height;
 		bool fullscreen;
@@ -309,11 +322,7 @@ private:
     std::shared_ptr<SceneObject> _sceneLoading;
 	std::shared_ptr<SceneObject> _scene;
     std::shared_ptr<Camera> _camera;
-	MouseState _mouseState;
 	std::shared_ptr<Graphics> _graphics;
 };
-
-Game* getFirstGame();
-int runGame(Game* game, int argc, const char* const* argv);
 
 }
