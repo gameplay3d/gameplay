@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.5)
 
 set(GAMEPLAY_SRC
     src/Animation.cpp
@@ -124,6 +124,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         $ENV{VULKAN_SDK}/Include
     )
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    add_definitions(-DSDL_VIDEO_DRIVER_X11)
     add_definitions(-DVK_USE_PLATFORM_XCB_KHR)
     include_directories( 
         $ENV{VULKAN_SDK}/include

@@ -7,6 +7,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <cstdarg>
 #include <sys/types.h>
 #include <sys/stat.h>
 using namespace std;

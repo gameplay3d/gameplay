@@ -62,7 +62,7 @@ INCLUDEPATH += ../external-deps/include
 
 win32 {
     DEFINES += _WINDOWS WIN32
-    INCLUDEPATH += ../external-deps/include/compat/msvc
+    INCLUDEPATH += $$(VULKAN_SDK)/Include
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/debug/ -lgameplay
     CONFIG(release, debug|release): LIBS += -L$$PWD/../gameplay/Release/release/ -lgameplay
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/windows/x86_64/Debug/ -lgameplay-deps
@@ -93,6 +93,7 @@ linux {
     INCLUDEPATH += /usr/include/pixman-1
     INCLUDEPATH += /usr/include/libpng12
     INCLUDEPATH += /usr/include/harfbuzz
+    INCLUDEPATH += $$(VULKAN_SDK)/include
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
     CONFIG(release, debug|release): LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
     LIBS += -L$$PWD/../external-deps/lib/linux/x86_64/ -lgameplay-deps

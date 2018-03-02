@@ -8,9 +8,9 @@ std::vector<string> generatedFiles;
 
 void printError(const char* format, ...)
 {
+#ifdef WIN32
     va_list argptr;
     va_start(argptr, format);
-#ifdef WIN32
     int sz = vfprintf(stderr, format, argptr);
     if (sz > 0)
     {
@@ -21,9 +21,11 @@ void printError(const char* format, ...)
         SAFE_DELETE_ARRAY(buf);
     }
 #else
+    va_list argptr;
+    va_start(argptr, format);
     vfprintf(stderr, format, argptr);
-#endif
     va_end(argptr);
+#endif
 }
 
 void writeFile(const std::string& path, const std::string& text)

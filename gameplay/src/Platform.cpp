@@ -262,6 +262,7 @@ int Platform::run()
 								(SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN) : 
 								(SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE));
 
+	// Get the native display,instance and windows
 	SDL_SysWMinfo wmi;
 	SDL_VERSION(&wmi.version);
 	if (SDL_GetWindowWMInfo(_window, &wmi) )
@@ -270,11 +271,11 @@ int Platform::run()
 		_nativeDisplay = (void*)(uintptr_t)wmi.info.win.hinstance;
 		_nativeWindow = (void*)(uintptr_t)wmi.info.win.window;
 #elif GP_PLATFORM_LINUX
-		_nativeDisplay = wmi.info.x11.display;
-		_nativeWindow = wmi.info.x11.window;
+		_nativeDisplay = (void*)wmi.info.x11.display;
+		_nativeWindow = (void*)wmi.info.x11.window;
 #elif GP_PLATFORM_MACOS
         _nativeDisplay = nullptr;
-		_nativeWindow = wmi.info.cocoa.window;
+		_nativeWindow = (void*)wmi.info.cocoa.window;
 #else
 		GP_ERROR("Failed to initialize. Unsupported platform: %s");
 #endif	
@@ -283,9 +284,17 @@ int Platform::run()
 	{
 		GP_WARN("Failed to get SDL window info. SDL error: %s", SDL_GetError());
 	}
-	_running = true;
-
+	
+	// Clear the window black to start
+	SDL_Renderer* renderer;
+	renderer = SDL_CreateRenderer(_window, -1, 0);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);
+	SDL_DestroyRenderer(renderer);
+	// Enable file drops
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
+	_running = true;
 
 	Input* input = Input::getInput();
 	input->initialize();
@@ -293,6 +302,7 @@ int Platform::run()
 	int mx, my, mz = 0.0f;
 	bool exit = false;
 
+	// Start the event loop
 	SDL_Event evt;
 	while (!exit)
 	{
