@@ -23,9 +23,10 @@ Profile = "Profile"
 
 Ubuntu 16.04
 ------------
-- Install CMake 3                           (sudo apt-get install cmake)
+- Install CMake                             (sudo apt-get install cmake)
 - Install Build SDKs                        (sudo apt-get install build-essential clang gcc g++ curl)
-- Install Platform SDKs                     (sudo apt-get install libx11-xcb-dev libgtk2.0-dev libogg-dev libopenal-dev)
+- Install Platform SDKs                     (sudo apt-get install libx11-xcb-dev libgtk2.0-dev libogg-dev libopenal-dev 
+libtool libasound2-dev  libpulse-dev libaudio-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxxf86vm-dev libxss-dev libgl1-mesa-dev libesd0-dev)
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home#linux)
 - Add the following to user profile         (vi ~/.profile)
 ```
@@ -52,7 +53,7 @@ Profile = "Profile"
 
 MacOS High Sierra
 -----------------
-- Install CMake 3                           (https://cmake.org/download/)
+- Install CMake                             (https://cmake.org/download/)
 - Install Xcode 9                           (https://developer.apple.com/xcode/)
 - Install Xcode Command Line Tools          (https://developer.apple.com/download/more/)
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home#macos)
