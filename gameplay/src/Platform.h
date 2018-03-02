@@ -2,257 +2,94 @@
 
 #include "Input.h"
 
-#include <bx/bx.h>
-#include <bx/os.h>
-#include <bx/file.h>
-#include <bx/spscqueue.h>
-#include <bgfx/platform.h>
+#define SDL_MAIN_HANDLED
+#include <sdl/SDL.h>
+#include <sdl/SDL_syswm.h>
 
 namespace gameplay
 {
 
 /**
- * Defines a platform abstraction layer.
+ * Defines a class for platform windowing and events.
+ *
+ * This class is only run from the main entry point.
+ * It delegates useful event needed by the game engine 
+ * classes such as Game, Input and UI.
  */
 class Platform
 {
 public:
 
 	/**
-	 * Constructor.
+	 * Gets the platform.
 	 */
-	Platform();
+	static Platform* getPlatform();
 
 	/**
-	 * Destructor.
-	 */
-	~Platform();
-
-	/**
-	 * Defines an opaque window  handle.
-	 */
-	struct WindowHandle  
-	{ 
-		unsigned short idx; 
-	};
-	
-	/**
-	 * Checks if a window is valid.
+	 * Runs the platform and polls for events.
 	 *
-	 * @return true if the window is valid, false if invalid.
+	 * @return The returned exit code.
 	 */
-	static bool isWindowValid(WindowHandle handle);
-
+	int run();
 
 	/**
-	 * Defines the suspend state of suspend events.
+	 * Gets the width of the platform window.
+	 *
+	 * @return The width of the platform window.
 	 */
-	enum SuspendMode
-	{
-		SUSPEND_MODE_WILL_SUSPEND,
-		SUSPEND_MODE_DID_SUSPEND,
-		SUSPEND_MODE_WILL_RESUME,
-		SUSPEND_MODE_DID_RESUME,
-		SUSPEND_MODE_COUNt
-	};
+	size_t getWidth() const;
 
 	/**
-	 * Defines a platform event.
+	 * Gets the height of the platform window.
+	 *
+	 * @return The height of the platform window.
 	 */
-	struct Event
-	{
-		/**
-		 * Type of platform event.
-		 */
-		enum Type
-		{
-			TYPE_AXIS_EVENT,
-			TYPE_CHAR_EVENT,
-			TYPE_EXIT_EVENT,
-			TYPE_GAMEPAD_EVENT,
-			TYPE_KEY_EVENT,
-			TYPE_MOUSE_EVENT,
-			TYPE_SIZE_EVENT,
-			TYPE_WINDOW_EVENT,
-			TYPE_SUSPEND_EVENT,
-			TYPE_DROP_FILE_EVENT
-		};
-
-		Event(Type type);
-
-		Event(Type type, WindowHandle window);
-
-		Event::Type type;
-		WindowHandle window;
-	};
+	size_t getHeight() const;
 
 	/**
-	 * Defines an event queue for processing platform events.
+	 * Gets the height of the platform window.
+	 *
+	 * @return The height of the platform window.
 	 */
-	class EventQueue
-	{
-	public:
+	bool isFullscreen() const;
 
-		EventQueue();
+	/**
+	 * Gets the pointer to the native display or instance.
+	 *
+	 * @return The pointer to the native display or instance.
+	 */
+	void* getNativeDisplay() const;
 
-		~EventQueue();
+	/**
+	 * Gets the pointer to the native window or view.
+	 *
+	 * @return The pointer to the native window or view.
+	 */
+	void* getNativeWindow() const;
 
-		void postAxisEvent(WindowHandle window, Input::GamepadHandle gamepad, Input::GamepadAxis gamepadAxis, int32_t value);
+private:
 
-		void postCharEvent(WindowHandle window, uint8_t len, const uint8_t chr[4]);
-		
-		void postExitEvent();
-		
-		void postGamepadEvent(WindowHandle window, Input::GamepadHandle gamepad, bool connected);
-		
-		void postKeyEvent(WindowHandle window, Input::Key key, uint8_t keyModifiers, bool down);
-		
-		void postMouseEvent(WindowHandle window, int32_t x, int32_t y, int32_t z);
-		
-		void postMouseEvent(WindowHandle window, int32_t x, int32_t y, int32_t z, Input::MouseButton button, bool down);
-		
-		void postSizeEvent(WindowHandle window, uint32_t width, uint32_t height);
-		
-		void postWindowEvent(WindowHandle window, void* nwh = nullptr);
-		
-		void postSuspendEvent(WindowHandle window, SuspendMode mode);
+	Platform();
+	~Platform();
+	void initTranslateKey(uint16_t sdl, Input::Key key);
+	Input::Key translateKey(SDL_Scancode sdl);
+	uint8_t translateKeyModifiers(uint16_t sdl);
+	uint8_t translateKeyModifierPress(uint16_t key);
+	void initTranslateGamepad(uint8_t sdl, Input::Key button);
+	Input::Key translateGamepad(uint8_t sdl);
+	void initTranslateGamepadAxis(uint8_t sdl, Input::GamepadAxis axis);
+	Input::GamepadAxis translateGamepadAxis(uint8_t sdl);
 
-		void postDropFileEvent(WindowHandle window, const bx::FilePath& dropFile);
-
-		const Platform::Event* poll();
-
-		const Platform::Event* poll(Platform::WindowHandle window);
-
-		void release(const Platform::Event* evt) const;
-
-	private:
-		bx::SpScUnboundedQueueT<Event> _queue;
-	};
+	SDL_Window* _window;
+	size_t _width;
+	size_t _height;
+	bool _fullscreen;
+	void* _nativeDisplay;
+	void* _nativeWindow;
+	bool _running;
+	uint8_t _translateKey[256];
+	uint8_t _translateGamepad[256];
+	uint8_t _translateGamepadAxis[256];
 };
-
-void setCurrentDir(const char* dir);
-bx::FileReaderI* getFileReader();
-bx::FileWriterI* getFileWriter();
-bx::AllocatorI* getAllocator();
-const Platform::Event* poll();
-const Platform::Event* poll(Platform::WindowHandle window);
-void release(const Platform::Event* evt);
-
-/**
- * Defines the platform mouse state
- */
-struct MouseState
-{
-	MouseState() 
-		: mx(0), 
-		  my(0), 
-		  mz(0)
-	{
-		for (uint32_t i = 0; i < Input::MouseButton::MOUSE_BUTTON_COUNT; ++i)
-		{
-			buttons[i] = Input::MouseButton::MOUSE_BUTTON_NONE;
-		}
-	}
-
-	int32_t mx;
-	int32_t my;
-	int32_t mz;
-	uint8_t buttons[Input::MouseButton::MOUSE_BUTTON_COUNT];
-};
-
-/**
- * Defines the platform gamepad state
- */
-struct GamepadState
-{
-	GamepadState()
-	{
-		bx::memSet(axis, 0, sizeof(axis) );
-	}
-
-	int32_t axis[Input::GamepadAxis::GAMEPAD_AXIS_COUNT];
-};
-
-/**
- * Defines the platform window state.
- */
-struct WindowState
-{
-	WindowState()
-		: width(0), 
-		  height(0), 
-		  nwh(nullptr)
-	{
-		window.idx = UINT16_MAX;
-	}
-
-	Platform::WindowHandle window;
-	size_t width;
-	size_t height;
-	MouseState mouse;
-	void* nwh;
-	bx::FilePath dropFile;
-};
-
-/**
- * Defines a platform file reader.
- */
-class FileReader : public bx::FileReader
-{
-	typedef bx::FileReader super;
-public:
-	virtual bool open(const bx::FilePath& _filePath, bx::Error* _err);
-};
-
-/**
- * Defines a platform file writer.
- */
-class FileWriter : public bx::FileWriter
-{
-	typedef bx::FileWriter super;
-public:
-	virtual bool open(const bx::FilePath& _filePath, bool _append, bx::Error* _err);
-};
-
-bool processEvents(size_t& width, size_t& height, uint32_t& debug, uint32_t& reset, MouseState* mouse = nullptr);
-
-bool processWindowEvents(WindowState& state, uint32_t& debug, uint32_t& reset);
-
-int main(int argc, const char* const* argv);
-
-
-// Platform specific
-gameplay::Platform::WindowHandle createWindow(int32_t x, int32_t y, uint32_t width, uint32_t height, uint32_t flags = GP_WINDOW_FLAG_NONE, const char* title = "");
-void destroyWindow(gameplay::Platform::WindowHandle handle);
-void setWindowPos(gameplay::Platform::WindowHandle handle, int32_t x, int32_t y);
-void setWindowSize(gameplay::Platform::WindowHandle handle, uint32_t width, uint32_t height);
-void setWindowTitle(gameplay::Platform::WindowHandle handle, const char* title);
-void setWindowFlags(gameplay::Platform::WindowHandle handle, uint32_t flags, bool enabled);
-void toggleFullscreen(gameplay::Platform::WindowHandle handle);
-void setMouseLock(gameplay::Platform::WindowHandle handle, bool lock);
 
 }
-
-
-// Main entry point
-extern "C" int _main_(int _argc, char** _argv);
-
-#ifndef GP_CONFIG_IMPLEMENT_MAIN
-#	define GP_CONFIG_IMPLEMENT_MAIN 1
-#endif
-#if GP_CONFIG_IMPLEMENT_MAIN
-#define GP_IMPLEMENT_MAIN(_app) \
-	int _main_(int _argc, char** _argv)             \
-	{                                               \
-		_app app;									\
-		return gameplay::runGame(&app, _argc, _argv);   \
-	}
-#else
-#define GP_IMPLEMENT_MAIN(_app) \
-	_app app
-#endif 
-
-
-
-
-

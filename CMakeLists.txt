@@ -1,8 +1,7 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 project(GamePlay)
 
-set(GAMEPLAY_VERSION 4.0.0)
 message( "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
 if ( "${CMAKE_BUILD_TYPE}" STREQUAL "DEBUG" )
     add_definitions(-D_DEBUG)
@@ -17,5 +16,5 @@ endif()
 
 # projects
 add_subdirectory(gameplay)
-add_subdirectory(tools/editor)
-#add_subdirectory(tools/luagen)
+add_subdirectory(gameplay-app)
+#add_subdirectory(gameplay-luagen)

@@ -4,6 +4,7 @@
 *.layout
 *.depend
 *.pro.user
+*.txt.user
 *.vs
 .DS_Store*
 ehthumbs.db
@@ -26,5 +27,12 @@ Thumbs.db
 Makefile
 Makefile.Debug
 Makefile.Release
-
+gameplay/Debug
+gameplay/Release
+gameplay-app/Debug
+gameplay-app/Release
+gameplay-editor/Debug
+gameplay-editor/Release
+gameplay-luagen/Debug
+gameplay-luagen/Release
 

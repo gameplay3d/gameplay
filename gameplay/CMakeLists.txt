@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.5)
+
 set(GAMEPLAY_SRC
     src/Animation.cpp
     src/Animation.h
@@ -16,8 +18,6 @@ set(GAMEPLAY_SRC
     src/BoundingSphere.h
     src/Camera.cpp
     src/Camera.h
-    src/Command.cpp
-    src/Command.h
     src/Component.cpp
     src/Component.h
     src/Curve.cpp
@@ -118,21 +118,21 @@ include_directories(
     ../external-deps/include
 )
 
-
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(GAMEPLAY_PLATFORM_SRC
-        src/PlatformWindows.cpp
-    )
-    include_directories(
-        ../external-deps/include/compat/msvc
-    )
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(GAMEPLAY_PLATFORM_SRC 
-        src/PlatformMacOS.mm
+    add_definitions(-DVK_USE_PLATFORM_WIN32_KHR)
+    include_directories( 
+        $ENV{VULKAN_SDK}/Include
     )
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(GAMEPLAY_PLATFORM_SRC
-        src/PlatformLinux.cpp
+    add_definitions(-DSDL_VIDEO_DRIVER_X11)
+    add_definitions(-DVK_USE_PLATFORM_XCB_KHR)
+    include_directories( 
+        $ENV{VULKAN_SDK}/include
+    )
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    add_definitions(-DVK_USE_PLATFORM_MACOS_MVK)
+    include_directories( 
+        $ENV{HOME}/vulkansdk-macos-1.0.69.0/macOS/include
     )
 endif()
 
@@ -142,15 +142,13 @@ endif()
 
 add_library(gameplay STATIC
     ${GAMEPLAY_SRC}
-    ${GAMEPLAY_PLATFORM_SRC}
 )
 
 set_target_properties(gameplay PROPERTIES
     OUTPUT_NAME "gameplay"
     CLEAN_DIRECT_OUTPUT 1
-    VERSION ${GAMEPLAY_VERSION}
 )
 
-source_group(src FILES ${GAMEPLAY_SRC} ${GAMEPLAY_PLATFORM_SRC})
+source_group(src FILES ${GAMEPLAY_SRC})
 #source_group(lua FILES ${GAMEPLAY_LUA})
 #source_group(res FILES ${GAMEPLAY_RES} ${GAMEPLAY_RES_SHADERS} ${GAMEPLAY_RES_FONTS} ${GAMEPLAY_RES_IMAGES})
