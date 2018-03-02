@@ -8,6 +8,7 @@ set(GAMEPLAY_APP_SRC
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GAMEPLAY_APP_PLATFORM_SRC
         src/main-windows.cpp
+        gameplay-app.rc
     )
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(GAMEPLAY_APP_PLATFORM_SRC
