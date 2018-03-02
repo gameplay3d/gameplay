@@ -5,8 +5,9 @@ Windows 10
 - Install Visual Studio 2015 + Update 3      (https://www.visualstudio.com/vs/older-downloads/)
 - Install Vulkan SDK                         (https://vulkan.lunarg.com/sdk/home#windows)
 - Install Qt 5.10 (open-source) to C:\Qt)    (https://www.qt.io/download)
-- Set QTDIR environment variable             (QTDIR=C:\Qt\5.10.1\msvc2015_64)
+- Clone GamePlay repo
 - Run install.bat
+- Set QTDIR environment variable             (QTDIR=C:\Qt\5.10.1\msvc2015_64)
 - Run Qt Creator
 - Open gameplay/gameplay.pro
 - Open gameplay-app/gameplay-app.pro
@@ -34,6 +35,7 @@ export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
 ```
 - Reboot computer
 - Install Qt 5.10 (open-source) to ~/Qt     (https://www1.qt.io/download)
+- Clone GamePlay repo
 - Run install.sh
 - Run Qt Creator
 - Open gameplay/gameplay.pro
@@ -57,10 +59,12 @@ MacOS High Sierra
 - Extract vulkansdk-macos-1.0.69.0.tar.gz to ~/vulkansdk-macos-1.0.69.0
 - Add the following to user profile         (vi ~/.profile)
 ```
-export VULKAN_SDK="~/vulkansdk-macos-1.0.69.0"
-export VK_ICD_FILENAMES=$VULKAN_SDK/macOS/etc/vulkan/icd.d/MoltenVK_icd.json
+export VULKAN_SDK="~/vulkansdk-macos-1.0.69.0/macOS"
+export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json
 ```
+- Reboot computer
 - Install Qt 5.10 (open-source) to ~/Qt     (https://www1.qt.io/download)
+- Clone GamePlay repo
 - Run install.sh
 - Open gameplay/gameplay.pro
 - Open gameplay-app/gameplay-app.pro
