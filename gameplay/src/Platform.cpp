@@ -250,7 +250,7 @@ int Platform::run()
 
 	_width = config->width;
 	_height = config->height;
-	_fullscreen = config->fullscreen;
+    _fullscreen = config->fullscreen;
 
 	// Create the SDL window based on game config
 	_window = SDL_CreateWindow(config->title.c_str(), 
@@ -259,7 +259,7 @@ int Platform::run()
 								_width, 
 								_height, 
 								_fullscreen ? 
-								(SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN) : 
+                                (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN) :
 								(SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE));
 
 	// Get the native display,instance and windows
