@@ -5,54 +5,54 @@ CONFIG += c++11
 CONFIG(debug, debug|release): DEFINES += _DEBUG
 
 SOURCES += \
-    src/EditorWindow.cpp \
-    src/SceneSortFilterProxyModel.cpp \
-    src/SceneView.cpp \
-    src/ProjectView.cpp \
-    src/ProjectTreeView.cpp \
-    src/GameView.cpp \
-    src/PropertiesView.cpp \
-    src/PropertiesTransform.cpp \
-    src/ProjectWizard.cpp \
-    src/ProjectWizardItemDelegate.cpp \
-    src/Project.cpp \
-    src/ProjectSortFilterProxyModel.cpp \
     src/DockWidget.cpp \
     src/DockWidgetManager.cpp \
+    src/EditorWindow.cpp \
+    src/GameView.cpp \
+    src/Project.cpp \
+    src/ProjectSortFilterProxyModel.cpp \
+    src/ProjectTreeView.cpp \
+    src/ProjectView.cpp \
+    src/ProjectWizard.cpp \
+    src/ProjectWizardItemDelegate.cpp \
     src/PropertiesCamera.cpp \
     src/PropertiesComponentEditor.cpp \
     src/PropertiesLight.cpp \
+    src/PropertiesTransform.cpp \
+    src/PropertiesView.cpp \
+    src/SceneSortFilterProxyModel.cpp \
+    src/SceneView.cpp \    
     src/main.cpp
 
 HEADERS += \
+    src/DockWidget.h \
+    src/DockWidgetManager.h \
     src/EditorWindow.h \
+    src/GameView.h \
+    src/Project.h \
+    src/ProjectSortFilterProxyModel.h \
     src/ProjectTreeView.h \
     src/ProjectView.h \
     src/ProjectWizard.h \
     src/ProjectWizardItemDelegate.h \
-    src/PropertiesView.h \
-    src/PropertiesTransform.h \
-    src/SceneSortFilterProxyModel.h \
-    src/SceneView.h \
-    src/GameView.h \
-    src/Project.h \
-    src/ProjectSortFilterProxyModel.h \
-    src/DockWidgetManager.h \
-    src/DockWidget.h \
     src/PropertiesCamera.h \
+    src/PropertiesComponentEditor.h \
     src/PropertiesLight.h \
-    src/PropertiesComponentEditor.h
+    src/PropertiesTransform.h \    
+    src/PropertiesView.h \
+    src/SceneSortFilterProxyModel.h \
+    src/SceneView.h
 
 FORMS += \
     src/EditorWindow.ui \
     src/ProjectView.ui \
-    src/PropertiesView.ui \
-    src/PropertiesTransform.ui \
     src/ProjectWizard.ui \
-    src/SceneView.ui \
     src/PropertiesCamera.ui \
     src/PropertiesLight.ui \
-    src/PropertiesComponentEditor.ui
+    src/PropertiesComponentEditor.ui \
+    src/PropertiesTransform.ui \
+    src/PropertiesView.ui \
+    src/SceneView.ui
 
 RESOURCES += gameplay-editor.qrc
 
