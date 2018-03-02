@@ -139,7 +139,7 @@ linux {
 }
 
 macx {
-    QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w -arch x86_64
+    QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w
     DEFINES += VK_USE_PLATFORM_MACOS_MVK
-    INCLUDEPATH += $$(VULKAN_SDK)/include
+    INCLUDEPATH += "$$(HOME)/vulkansdk-macos-1.0.69.0/macOS/include"
 }

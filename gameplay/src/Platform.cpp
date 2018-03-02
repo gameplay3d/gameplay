@@ -273,7 +273,7 @@ int Platform::run()
 		_nativeDisplay = wmi.info.x11.display;
 		_nativeWindow = wmi.info.x11.window;
 #elif GP_PLATFORM_MACOS
-		_nativeDisplay = nullptr
+        _nativeDisplay = nullptr;
 		_nativeWindow = wmi.info.cocoa.window;
 #else
 		GP_ERROR("Failed to initialize. Unsupported platform: %s");
@@ -556,21 +556,6 @@ size_t Platform::getHeight() const
 bool Platform::isFullscreen() const
 {
 	return _fullscreen;
-}
-
-void Platform::setFullscreen(bool fullscreen)
-{
-	if (_fullscreen == fullscreen)
-		return;
-	if (_fullscreen)
-	{
-		SDL_SetWindowFullscreen(_window, 0);
-	}
-	else
-	{
-		SDL_SetWindowResizable(_window, SDL_TRUE);
-	}
-	_fullscreen = fullscreen;
 }
 
 void Platform::initTranslateKey(uint16_t sdl, Input::Key key)

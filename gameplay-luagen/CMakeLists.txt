@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.9)
+
 set(LUAGEN_APP_SRC
     src/Base.h
     src/ClassBinding.cpp

@@ -3,11 +3,12 @@
 #include "Serializable.h"
 #include "SceneObject.h"
 #include "Camera.h"
-#include "Graphics.h"
 #include "Input.h"
 
 namespace gameplay
 {
+
+class Graphics;
 
 /**
  * Defines the game class.

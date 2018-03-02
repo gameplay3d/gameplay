@@ -19,10 +19,10 @@ SOURCES += \
     src/ProjectSortFilterProxyModel.cpp \
     src/DockWidget.cpp \
     src/DockWidgetManager.cpp \
-    src/main.cpp \
     src/PropertiesCamera.cpp \
     src/PropertiesComponentEditor.cpp \
-    src/PropertiesLight.cpp
+    src/PropertiesLight.cpp \
+    src/main.cpp
 
 HEADERS += \
     src/EditorWindow.h \
@@ -68,8 +68,6 @@ win32 {
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/windows/x86_64/Debug/ -lgameplay-deps
     CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/windows/x86_64/Release/ -lgameplay-deps
     LIBS += -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32 -limm32 -limagehlp -lversion -lwinmm -lxinput
-    LIBS += -lxinput
-    LIBS += -ld3d12 -ldxgi -ld3dcompiler
     LIBS += -L$$(VULKAN_SDK)/Lib -lvulkan-1
     QMAKE_CXXFLAGS_WARN_ON -= -w34100
     QMAKE_CXXFLAGS_WARN_ON -= -w34189
@@ -103,19 +101,27 @@ linux {
 }
 
 macx {
+    DEFINES += VK_USE_PLATFORM_MACOS_MVK
+    INCLUDEPATH += $$(HOME)/vulkansdk-macos-1.0.69.0/macOS/include
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
     CONFIG(release, debug|release):LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
-    CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
     LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
+    LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
+    LIBS += -L/usr/lib -liconv
+    LIBS += -F$$(HOME)/vulkansdk-macos-1.0.69.0/MoltenVK/macOS -framework MoltenVK
     LIBS += -F/System/Library/Frameworks -framework Metal
     LIBS += -F/System/Library/Frameworks -framework MetalKit
-    LIBS += -F/System/Library/Frameworks -framework GameKit 
+    LIBS += -F/System/Library/Frameworks -framework GameKit
     LIBS += -F/System/Library/Frameworks -framework IOKit
+    LIBS += -F/System/Library/Frameworks -framework ForceFeedback
     LIBS += -F/System/Library/Frameworks -framework OpenAL
+    LIBS += -F/System/Library/Frameworks -framework CoreAudio
+    LIBS += -F/System/Library/Frameworks -framework AudioToolbox
     LIBS += -F/System/Library/Frameworks -framework QuartzCore
+    LIBS += -F/System/Library/Frameworks -framework Carbon
     LIBS += -F/System/Library/Frameworks -framework Cocoa
     LIBS += -F/System/Library/Frameworks -framework Foundation
+    QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
     QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w -arch x86_64
     QMAKE_INFO_PLIST = gameplay-editor.plist
     ICON = gameplay-editor.icns

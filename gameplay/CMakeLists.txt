@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.9)
+
 set(GAMEPLAY_SRC
     src/Animation.cpp
     src/Animation.h
@@ -129,7 +131,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-DVK_USE_PLATFORM_MACOS_MVK)
     include_directories( 
-        $ENV{VULKAN_SDK}/macOS/include
+        $ENV{HOME}/vulkansdk-macos-1.0.69.0/macOS/include
     )
 endif()
 
@@ -144,7 +146,6 @@ add_library(gameplay STATIC
 set_target_properties(gameplay PROPERTIES
     OUTPUT_NAME "gameplay"
     CLEAN_DIRECT_OUTPUT 1
-    VERSION ${GAMEPLAY_VERSION}
 )
 
 source_group(src FILES ${GAMEPLAY_SRC})

@@ -9,7 +9,8 @@ Windows 10
 - Run install.bat
 - Run Qt Creator
 - Open gameplay/gameplay.pro
-- Open gameplay/gameplay-editor.pro
+- Open gameplay-app/gameplay-app.pro
+- Open gameplay-editor/gameplay-editor.pro
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 MSVC2015 64bit"
 - Change long build paths for Debug and Release to:
 ```
@@ -25,10 +26,18 @@ Ubuntu 16.04
 - Install Build SDKs                        (sudo apt-get install build-essential clang gcc g++ curl)
 - Install Platform SDKs                     (sudo apt-get install libx11-xcb-dev libgtk2.0-dev libogg-dev libopenal-dev)
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home#linux)
+- Add the following to user profile         (vi ~/.profile)
+```
+export VULKAN_SDK=~/VulkanSDK/1.0.68.0/x86_64 
+export PATH=$VULKAN_SDK/bin:$PATH
+export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
+```
+- Reboot computer
 - Install Qt 5.10 (open-source) to ~/Qt     (https://www1.qt.io/download)
 - Run install.sh
 - Run Qt Creator
 - Open gameplay/gameplay.pro
+- Open gameplay-app/gameplay-app.pro
 - Open gameplay-editor/gameplay-editor.pro
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 GCC 64bit"
 - Change long build paths for Debug and Release to:
@@ -44,11 +53,19 @@ MacOS High Sierra
 - Install CMake 3                           (https://cmake.org/download/)
 - Install Xcode 9                           (https://developer.apple.com/xcode/)
 - Install Xcode Command Line Tools          (https://developer.apple.com/download/more/)
+- Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home#macos)
+- Extract vulkansdk-macos-1.0.69.0.tar.gz to ~/vulkansdk-macos-1.0.69.0
+- Add the following to user profile         (vi ~/.profile)
+```
+export VULKAN_SDK="~/vulkansdk-macos-1.0.69.0"
+export VK_ICD_FILENAMES=$VULKAN_SDK/macOS/etc/vulkan/icd.d/MoltenVK_icd.json
+```
 - Install Qt 5.10 (open-source) to ~/Qt     (https://www1.qt.io/download)
 - Run install.sh
 - Open gameplay/gameplay.pro
+- Open gameplay-app/gameplay-app.pro
 - Open gameplay-editor/gameplay-editor.pro
-- Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 Clang 64bit"
+- Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 clang 64bit"
 - Change long build paths for Debug and Release to:
 ```
 Debug = "Debug"

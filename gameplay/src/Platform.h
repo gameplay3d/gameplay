@@ -54,14 +54,17 @@ public:
 	bool isFullscreen() const;
 
 	/**
-	 * Set the windowing system to fullscreen or resizable.
+	 * Gets the pointer to the native display or instance.
 	 *
-	 * @param fullscreen true to set to fullscreen, false for resizable.
+	 * @return The pointer to the native display or instance.
 	 */
-	void setFullscreen(bool fullscreen);
-
 	void* getNativeDisplay() const;
 
+	/**
+	 * Gets the pointer to the native window or view.
+	 *
+	 * @return The pointer to the native window or view.
+	 */
 	void* getNativeWindow() const;
 
 private:

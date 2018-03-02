@@ -1,23 +1,36 @@
+cmake_minimum_required(VERSION 3.9)
+
 set(GAMEPLAY_APP_SRC
     src/App.cpp
     src/App.h
 )
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set(GAMEPLAY_APP_PLATFORM_SRC
+        src/main-windows.cpp
+    )
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(GAMEPLAY_APP_PLATFORM_SRC
+        src/main-linux.cpp
+    )
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(GAMEPLAY_APP_PLATFORM_SRC
+        src/main-macos.mm
+    )
+endif()
 
 include_directories( 
     ../gameplay/src
     ../external-deps/include
 )
 
-# platform specifics
+add_executable(gameplay-app ${GAMEPLAY_APP_SRC} ${GAMEPLAY_APP_PLATFORM_SRC})
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     add_definitions(-DVK_USE_PLATFORM_WIN32_KHR)
     include_directories( 
         $ENV{VULKAN_SDK}/Include
     )
-    set(GAMEPLAY_APP_PLATFORM_SRC
-        src/main-windows.cpp
-    )
-    add_executable(gameplay-app ${GAMEPLAY_APP_SRC} ${GAMEPLAY_APP_PLATFORM_SRC})
     target_link_libraries(gameplay-app
         imm32.lib
         version.lib
@@ -34,10 +47,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     include_directories( 
         $ENV{VULKAN_SDK}/include
     )
-    set(GAMEPLAY_APP_PLATFORM_SRC
-        src/main-linux.cpp
-    )
-    add_executable(gameplay-app ${GAMEPLAY_APP_SRC} ${GAMEPLAY_APP_PLATFORM_SRC})
     target_link_libraries(gameplay-app
         gameplay
         ${PROJECT_SOURCE_DIR}/external-deps/lib/linux/x86_64/libgameplay-deps.a
@@ -51,41 +60,48 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-DVK_USE_PLATFORM_MACOS_MVK)
     include_directories( 
-        $ENV{VULKAN_SDK}/include
+        $ENV{HOME}/vulkansdk-macos-1.0.69.0/macOS/include
     )
-    set(GAMEPLAY_APP_PLATFORM_SRC
-        src/main-macos.mm
-    )
-    add_executable(gameplay-app ${GAMEPLAY_APP_SRC} ${GAMEPLAY_APP_PLATFORM_SRC})
     find_library(FOUNDATION_LIBRARY Foundation)
     find_library(CARBON_LIBRARY Carbon)
     find_library(QUARTZ_LIBRARY Quartz)
     find_library(IOSURFACe_LIBRARY IOSurface)
     find_library(IOKIT_LIBRARY IOKit)
+    find_library(FORCEFEEDBACK_LIBRARY ForceFeedback)
     find_library(METAL_LIBRARY Metal)
     find_library(METALKIT_LIBRARY MetalKit)
     find_library(GAMEKIT_LIBRARY GameKit)
     find_library(OPENAL_LIBRARY OpenAL)
+    find_library(COREAUDIO_LIBRARY CoreAudio)
+    find_library(AUDIOTOOLBOX_LIBRARY AudioToolbox)
 
-    SET(FRAMEWORK_LIBRARIES
+    set(FRAMEWORK_LIBRARIES
         ${FOUNDATION_LIBRARY}
         ${CARBON_LIBRARY}
         ${QUARTZ_LIBRARY}
-        ${IOSURFACe_LIBRARY}
+        ${IOSURFACE_LIBRARY}
         ${IOKIT_LIBRARY}
+        ${FORCEFEEDBACK_LIBRARY}
         ${METAL_LIBRARY}
         ${METALKIT_LIBRARY}
         ${GAMEKIT_LIBRARY}
         ${OPENAL_LIBRARY}
-      )
-    add_executable(gameplay-app ${GAMEPLAY_APP_SRC} ${GAMEPLAY_APP_PLATFORM_SRC})
+        ${COREAUDIO_LIBRARY}
+        ${AUDIOTOOLBOX_LIBRARY}
+    )
+
+    find_library(GAMEPLAY_DEPS_LIBRARY NAMES gameplay-deps
+        HINTS ${PROJECT_SOURCE_DIR}/external-deps/lib/macos/x86_64
+    )
     target_link_libraries(gameplay-app
         gameplay
-        ${PROJECT_SOURCE_DIR}/external-deps/lib/macos/x86_64/libgameplay-deps.a
+        ${GAMEPLAY_DEPS_LIBRARY}
         m
         dl
         pthread
+        iconv
         ${FRAMEWORK_LIBRARIES}
+        $ENV{HOME}/vulkansdk-macos-1.0.69.0/MoltenVK/macOS/MoltenVK.framework
     )
 endif()
 
