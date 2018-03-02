@@ -54,7 +54,7 @@ Profile = "Profile"
 MacOS High Sierra
 -----------------
 - Install CMake                             (https://cmake.org/download/)
-- Install Xcode                             (https://developer.apple.com/xcode/)
+- Install Xcode 9                           (https://developer.apple.com/xcode/)
 - Install Xcode Command Line Tools          (https://developer.apple.com/download/more/)
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home#macos)
 - Extract vulkansdk-macos-1.0.69.0.tar.gz to ~/vulkansdk-macos-1.0.69.0
