@@ -80,7 +80,14 @@ macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
     QMAKE_CXXFLAGS += -x c++ -x objective-c++ -stdlib=libc++ -w
     QMAKE_INFO_PLIST = gameplay-app.plist
-    ICON = gameplay-app.icns
+
+    icon.files = gameplay-app.icns
+    icon.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += icon
+
+    gameconfig.files = game.config
+    gameconfig.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += gameconfig
 }
 
 DISTFILES += \
