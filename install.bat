@@ -8,29 +8,18 @@ REM Helps prevent repo bloat due to large binary files
 REM
 
 set prefix=https://github.com/gameplay3d/GamePlay/releases/download/v4.0.0
-
 set filename=gameplay-deps-windows
+set zipfile=%filename%.zip
 
-echo Downloading %filename%.zip from %prefix%
-%~d0
-cd %~dp0
-powershell -Command "([Net.ServicePointManager]::SecurityProtocol = \"tls12, tls11, tls\") -AND (Invoke-WebRequest %prefix%/%filename%.zip -OutFile %filename%.zip) | Out-Null"
-goto :EXTRACT
+echo Downloading %prefix%%zipfile%...
+powershell -Command "([Net.ServicePointManager]::SecurityProtocol= \"tls12, tls11, tls\") -AND ($ProgressPreference = 'SilentlyContinue') -AND(Invoke-WebRequest %prefix%/%filename%.zip -OutFile %filename%.zip) | Out-Null"
 
-:EXTRACT
 echo Extracting %filename%.zip... please standby...
-%~d0
-cd %~dp0
-> temp2.vbs ECHO Dim fileName, workingDir
->> temp2.vbs ECHO fileName = WScript.Arguments(0)
->> temp2.vbs ECHO workingDir = CreateObject("Scripting.FileSystemObject").GetAbsolutePathName(".")
->> temp2.vbs ECHO Set objShell = CreateObject("Shell.Application")
->> temp2.vbs ECHO Set objSource = objShell.NameSpace(workingDir ^& "\" ^& fileName).Items()
->> temp2.vbs ECHO Set objTarget = objShell.NameSpace(workingDir ^& "\")
->> temp2.vbs ECHO intOptions = 256
->> temp2.vbs ECHO objTarget.CopyHere objSource, intOptions
-cscript temp2.vbs %filename%.zip
+powershell -Command "Expand-Archive %filename%.zip -Force" 
+powershell -Command "Move-Item %filename%/external-deps -Destination "external-deps" -Force"
+
 echo Cleaning up...
-del temp2.vbs
-del %filename%.zip
+powershell -Command "Remove-Item %filename% -Force"
+powershell -Command "Remove-Item %filename%.zip -Force"
+
 echo Done.
