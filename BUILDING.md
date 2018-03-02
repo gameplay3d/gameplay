@@ -41,7 +41,7 @@ Windows 10 - Build with CMake and Visual Studio 2015 (Option B)
 
 Ubuntu 16.04 - Setup
 --------------------
-- Install Build SDKs                        (sudo apt-get install build-essential clang gcc g++ curl)
+- Install Build SDKs                        (sudo apt-get install build-essential clang gcc g++ curl cmake)
 - Install Platform SDKs                     (sudo apt-get install libx11-xcb-dev libgtk2.0-dev libogg-dev libopenal-dev 
 libtool libasound2-dev  libpulse-dev libaudio-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxxf86vm-dev libxss-dev libgl1-mesa-dev libesd0-dev)
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home)
@@ -55,8 +55,8 @@ export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
 - Clone GamePlay repo
 - Run install.sh
 
-Ubuntu 16.04 - Build with Qt Creator (Option A)
------------------------------------------------
+Ubuntu 16.04 - Build with Qt Creator
+------------------------------------
 - Install Qt 5.10 (open-source) to ~/Qt     (https://www1.qt.io/download)
 - Run Qt Creator
 - Open gameplay/gameplay.pro
@@ -70,14 +70,6 @@ Release = "Release"
 Profile = "Profile"
 ```
 - Build and Run
-
-Ubuntu 16.04 - Build with CMake and Unix Makefiles (Option B)
--------------------------------------------------------------
-- Install CMake  (sudo apt-get install cmake)
-- mkdir build
-- cd build
-- cmake ..
-- make
 
 MacOS High Sierra - Setup
 -------------------------
@@ -94,8 +86,8 @@ export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json
 - Clone GamePlay repo
 - Run install.sh
 
-MacOS High Sierra - Build with Qt Creator (Option A)
-----------------------------------------------------
+MacOS High Sierra - Build with Qt Creator
+-----------------------------------------
 - Install Qt 5.10 (open-source) to ~/Qt     (https://www1.qt.io/download)
 - Open gameplay/gameplay.pro
 - Open gameplay-app/gameplay-app.pro
@@ -108,11 +100,3 @@ Release = "Release"
 Profile = "Profile"
 ```
 - Build and Run
-
-MacOS High Sierra - Build with CMake and Unix Makefiles (Option B)
-------------------------------------------------------------------
-- Install CMake     (https://cmake.org/download/)
-- mkdir build
-- cd build
-- cmake ..
-- make
