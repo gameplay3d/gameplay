@@ -37,8 +37,8 @@ public:
      */
     enum FrontFace : uint32_t
     {
-        FRONT_FACE_CW,
-        FRONT_FACE_CCW
+		FRONT_FACE_CCW,
+        FRONT_FACE_CW
     };
 
     /**
@@ -54,7 +54,7 @@ public:
     /**
      * The polygon front-facing orientation.
      */
-    FrontFace frontFace = FRONT_FACE_CW;
+    FrontFace frontFace = FRONT_FACE_CCW;
 
     /**
      * Whether to bias fragment depth values.

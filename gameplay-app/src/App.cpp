@@ -45,15 +45,13 @@ void App::onInitialize()
 	// Create the vertex buffer
 	std::vector<float> vertices = 
 	{
-         0.25f,  0.25f, 0.0f,     1.0f, 0.0f, 0.0f,
-        -0.25f,  0.25f, 0.0f,     0.0f, 1.0f, 0.0f,
-         0.0f,  -0.25f, 0.0f, 	  0.0f, 0.0f, 1.0f
+		0.25f,  0.25f,  0.0f,    1.0f, 0.0f, 0.0f,
+       -0.25f,  0.25f,  0.0f,    0.0f, 1.0f, 0.0f,
+        0.0f,  -0.25f,  0.0f, 	 0.0f, 0.0f, 1.0f
     };
-
 	size_t vertexDataSize = sizeof(float) * vertices.size();
 	size_t vertexStride = sizeof(float) * 7;
 	_vertexBuffer = graphics->createVertexBuffer(vertexDataSize, vertexStride, true, vertices.data());
-	//memcpy(_vertexBuffer->getHostMemory(), vertices.data(), vertexDataSize);
 
 	// Gets the initial render pass.
 	_renderPass = graphics->getRenderPass();
@@ -70,7 +68,11 @@ void App::onInitialize()
 
 void App::onFinalize()
 {
-    // TODO:
+	std::shared_ptr<Graphics> graphics = getGraphics();
+	graphics->destroyRenderPipeline(_renderPipeline);
+	graphics->destroyBuffer(_vertexBuffer);	
+	graphics->destroyShader(_vertShader);
+	graphics->destroyShader(_fragShader);
 
     Game::onFinalize();
 }
@@ -95,6 +97,7 @@ void App::onUpdate(float elapsedTime)
 	graphics->cmdSetScissor(commandBuffer, 0, 0, getWidth(), getHeight());
 	graphics->cmdBeginRenderPass(commandBuffer, _renderPass);
 	graphics->cmdClearColor(commandBuffer, 0.0f, 0.0f, 0.0f, 1.0f, 0);
+	graphics->cmdClearDepthStencil(commandBuffer, 1.0, 0);
 	graphics->cmdBindRenderPipeline(commandBuffer, _renderPipeline);
 	graphics->cmdBindVertexBuffer(commandBuffer, _vertexBuffer);
 	graphics->cmdDraw(commandBuffer, 3, 0);
@@ -105,7 +108,5 @@ void App::onUpdate(float elapsedTime)
 
 	graphics->presentFrame(graphics->getSemaphoreRenderComplete());
 }
-
-
 
 }
