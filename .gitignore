@@ -6,6 +6,7 @@
 *.pro.user
 *.txt.user
 *.vs
+*.spv
 .DS_Store*
 ehthumbs.db
 Icon?

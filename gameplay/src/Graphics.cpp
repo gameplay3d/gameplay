@@ -164,7 +164,7 @@ void Graphics::submit(std::shared_ptr<CommandBuffer> commandBuffer,
 					  std::shared_ptr<Semaphore> waitSemaphore,
 					  std::shared_ptr<Semaphore> signalSemaphore)
 {	
-	VkPipelineStageFlags waitMasks = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+	VkPipelineStageFlags waitMasks = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 
 	VkSubmitInfo submitInfo = {};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -245,8 +245,8 @@ void Graphics::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
 	uint32_t depthStencilCount = renderPass->getDepthStencilFormat() == Format::FORMAT_UNDEFINED ? 0 : 1;
     if (depthStencilCount > 0) 
 	{
-		clearValues[colorValueCount].depthStencil.depth = 0.0f;
-		clearValues[colorValueCount].depthStencil.stencil = 1.0f;
+		clearValues[colorValueCount].depthStencil.depth = 1.0f;
+		clearValues[colorValueCount].depthStencil.stencil = 0;
     }
 
 	VkRenderPassBeginInfo beginInfo = {};
@@ -479,18 +479,18 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
 											   bool hostVisible,
 											   const void* data)
 {
-	if (usage == Buffer::USAGE_UNIFORM) 
+	if (usage == Buffer::USAGE_UNIFORM)
+	{
 		size = GP_MATH_ROUNDUP(size, 256);
-	
+	}
 	VkBufferCreateInfo bufferCreateInfo = {};
     bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferCreateInfo.pNext = nullptr;
-    bufferCreateInfo.flags = 0;
+	bufferCreateInfo.pNext = nullptr;
     bufferCreateInfo.size = size;
-    bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    bufferCreateInfo.queueFamilyIndexCount = 0;
+	bufferCreateInfo.queueFamilyIndexCount = 0;
     bufferCreateInfo.pQueueFamilyIndices = nullptr;
 	bufferCreateInfo.usage = 0;
+
 	switch (usage) 
 	{
 	case Buffer::USAGE_VERTEX: 
@@ -503,47 +503,53 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
         bufferCreateInfo.usage |= VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
 		break;
     }
-	// Create the buffer
-	VkBuffer bufferVK;
-	VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &bufferVK));
 
-	VkMemoryRequirements memReqs = {};
-	vkGetBufferMemoryRequirements(_device, bufferVK, &memReqs);
-	VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+	VkMemoryAllocateInfo memAlloc = {};
+	memAlloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	memAlloc.pNext = nullptr;
+	VkMemoryRequirements memReqs;
 	if (hostVisible)
 	{
-		memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+		// Create the buffer
+		VkBuffer bufferVK;
+		VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &bufferVK));
+		vkGetBufferMemoryRequirements(_device, bufferVK, &memReqs);
+		memAlloc.allocationSize = memReqs.size;
+		uint32_t memTypeIndex = UINT32_MAX;
+		VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+		if (!getMemoryTypeFromProperties(memReqs.memoryTypeBits, memFlags, &memTypeIndex))
+		{
+			GP_ERROR("Failed to find compatible memory for buffer.");
+		}
+		VkDeviceMemory deviceMemory;
+		memAlloc.memoryTypeIndex = memTypeIndex;
+		VK_CHECK_RESULT(vkAllocateMemory(_device, &memAlloc, nullptr, &deviceMemory));
+		VK_CHECK_RESULT(vkBindBufferMemory(_device, bufferVK, deviceMemory, 0));
+
+		std::shared_ptr<Buffer> buffer = std::make_shared<Buffer>();		
+		if (data)
+		{
+			VK_CHECK_RESULT(vkMapMemory(_device, deviceMemory, 0, VK_WHOLE_SIZE, 0, &buffer->_hostMemory));
+			memcpy(buffer->_hostMemory, data, size);
+			vkUnmapMemory(_device, deviceMemory);
+		}
+		buffer->_usage = usage;
+		buffer->_size = size;
+		buffer->_stride = stride;
+		buffer->_hostVisible = hostVisible;
+		buffer->_deviceMemory = deviceMemory;
+		buffer->_buffer = bufferVK;
+		buffer->_bufferView.buffer = bufferVK;
+		buffer->_bufferView.offset = 0;
+		buffer->_bufferView.range = VK_WHOLE_SIZE;
+
+		return buffer;
 	}
-	uint32_t memoryTypeIndex = UINT32_MAX;
-	if (!getMemoryTypeFromProperties(memReqs.memoryTypeBits, memFlags, &memoryTypeIndex))
-		GP_ERROR("Failed to find compatible memory for buffer.");
-	
-	VkMemoryAllocateInfo  allocInfo = {};
-    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.pNext = nullptr;
-    allocInfo.allocationSize = memReqs.size;
-    allocInfo.memoryTypeIndex = memoryTypeIndex;
-	VkDeviceMemory deviceMemoryVK;
-    VK_CHECK_RESULT(vkAllocateMemory(_device, &allocInfo, nullptr, &deviceMemoryVK));
-	VK_CHECK_RESULT(vkBindBufferMemory(_device, bufferVK, deviceMemoryVK, 0));
-
-	std::shared_ptr<Buffer> buffer = std::make_shared<Buffer>();
-	buffer->_usage = Buffer::USAGE_VERTEX;
-	buffer->_size = size;
-	buffer->_stride = stride;
-	buffer->_hostVisible = hostVisible;
-	buffer->_deviceMemory = deviceMemoryVK;
-	buffer->_buffer = bufferVK;
-
-	if (hostVisible)
+	else
 	{
-		VK_CHECK_RESULT(vkMapMemory(_device, buffer->_deviceMemory, 0, VK_WHOLE_SIZE, 0, &buffer->_hostMemory));
+		// TODO: With staging buffer and fence
+		return nullptr;
 	}
-	buffer->_bufferView.buffer = buffer->_buffer;
-	buffer->_bufferView.offset = 0;
-	buffer->_bufferView.range = VK_WHOLE_SIZE;
-
-	return buffer;
 }
 
 
@@ -1221,11 +1227,11 @@ std::shared_ptr<DescriptorSet> Graphics::createDescriptorSet(const DescriptorSet
 															 size_t descriptorCount)
 {
 	enum { maxTypes = 12 };
-	VkDescriptorPoolSize poolSizesByType[maxTypes];
+	VkDescriptorPoolSize poolSizesByType[maxTypes] = {};
     poolSizesByType[VK_DESCRIPTOR_TYPE_SAMPLER].type = VK_DESCRIPTOR_TYPE_SAMPLER;
     poolSizesByType[VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
     poolSizesByType[VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE].type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
-    poolSizesByType[VK_DESCRIPTOR_TYPE_STORAGE_IMAGE].type = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+    poolSizesByType[VK_DESCRIPTOR_TYPE_STORAGE_IMAGE].type = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;	
     poolSizesByType[VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER].type = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
     poolSizesByType[VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER].type = VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER;
     poolSizesByType[VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -1265,7 +1271,7 @@ std::shared_ptr<DescriptorSet> Graphics::createDescriptorSet(const DescriptorSet
     }
 
 	size_t poolSizeCount = 0;
-    VkDescriptorPoolSize poolSizes[maxTypes];
+	VkDescriptorPoolSize poolSizes[maxTypes] = {};
     for (uint32_t i = 0; i < maxTypes; ++i) 
 	{
         if (poolSizesByType[i].descriptorCount > 0) 
@@ -1485,22 +1491,13 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
     inputAssemblyStateCreateInfo.pNext = nullptr;
     inputAssemblyStateCreateInfo.flags = 0;
     inputAssemblyStateCreateInfo.topology = topology;
-    inputAssemblyStateCreateInfo.primitiveRestartEnable = VK_FALSE;
-
-	// TesselationState
-	VkPipelineTessellationStateCreateInfo tessStateCreateInfo = {};
-    tessStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
-    tessStateCreateInfo.pNext = NULL;
-    tessStateCreateInfo.flags = 0;
-    tessStateCreateInfo.patchControlPoints = 0;
         
 	// RasterizerState
 	VkPipelineRasterizationStateCreateInfo rasterizerStateCreateInfo = {};
     rasterizerStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    rasterizerStateCreateInfo.pNext = nullptr;
-    rasterizerStateCreateInfo.flags = 0;
+	rasterizerStateCreateInfo.pNext = nullptr;
+	rasterizerStateCreateInfo.flags = 0;
     rasterizerStateCreateInfo.depthClampEnable = rasterizerState.depthClipEnabled ? VK_TRUE : VK_FALSE;
-	rasterizerStateCreateInfo.rasterizerDiscardEnable = VK_TRUE;
     rasterizerStateCreateInfo.polygonMode = lookupVkPolygonMode[rasterizerState.fillMode];
     rasterizerStateCreateInfo.cullMode = lookupVkCullModeFlags[rasterizerState.cullMode];
     rasterizerStateCreateInfo.frontFace = lookupVkFrontFace[rasterizerState.frontFace];
@@ -1510,6 +1507,12 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
     rasterizerStateCreateInfo.depthBiasSlopeFactor = 0.0f;
     rasterizerStateCreateInfo.lineWidth = rasterizerState.lineWidth;
 
+	// ViewportState
+	VkPipelineViewportStateCreateInfo viewportStateCreateInfo = {};
+	viewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	viewportStateCreateInfo.viewportCount = 1;
+	viewportStateCreateInfo.scissorCount = 1;
+
 	// MultisampleState
 	VkPipelineMultisampleStateCreateInfo multisampleStateCreateInfo = {};
     multisampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -1517,10 +1520,20 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
     multisampleStateCreateInfo.flags = 0;
     multisampleStateCreateInfo.rasterizationSamples = lookupVkSampleCountFlagBits[renderPass->getSampleCount()];
     multisampleStateCreateInfo.sampleShadingEnable = VK_FALSE;
-    multisampleStateCreateInfo.minSampleShading = 0.0f;
     multisampleStateCreateInfo.pSampleMask = 0;
-    multisampleStateCreateInfo.alphaToCoverageEnable = VK_FALSE;
-    multisampleStateCreateInfo.alphaToOneEnable = VK_FALSE;
+
+	// ColorBlendState
+	// TODO: support setting multiple attachments
+	VkPipelineColorBlendAttachmentState colorBlendAttachmentStates[1] = {};
+	colorBlendAttachmentStates[0].blendEnable = colorBlendState.blendEnabled ? VK_TRUE : VK_FALSE;
+    colorBlendAttachmentStates[0].colorWriteMask = colorBlendState.colorWriteMask;
+	
+	VkPipelineColorBlendStateCreateInfo colorBlendStateCreateInfo = {};
+    colorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    colorBlendStateCreateInfo.pNext = nullptr;
+    colorBlendStateCreateInfo.flags = 0;
+	colorBlendStateCreateInfo.attachmentCount = renderPass->getColorAttachmentCount();
+    colorBlendStateCreateInfo.pAttachments = colorBlendAttachmentStates;
 
 	// DepthStencilState
 	VkPipelineDepthStencilStateCreateInfo  depthStencilStateCreateInfo = {};
@@ -1547,50 +1560,22 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
 	depthStencilStateCreateInfo.back.writeMask = depthStencilState.stencilOpStateBack.writeMask;
     depthStencilStateCreateInfo.back.reference = 0;
     depthStencilStateCreateInfo.minDepthBounds = 0.0f;
-    depthStencilStateCreateInfo.maxDepthBounds = 0.0f;
-
-	// ColorBlendState
-	VkPipelineColorBlendAttachmentState colorBlendAttachmentStateCreateInfo = {};
-	colorBlendAttachmentStateCreateInfo.blendEnable = colorBlendState.blendEnabled ? VK_TRUE : VK_FALSE;
-    colorBlendAttachmentStateCreateInfo.colorWriteMask = colorBlendState.colorWriteMask;
-    colorBlendAttachmentStateCreateInfo.alphaBlendOp = lookupVkBlendOp[colorBlendState.alphaBlendOp];
-	colorBlendAttachmentStateCreateInfo.colorBlendOp = lookupVkBlendOp[colorBlendState.colorBlendOp];
-	colorBlendAttachmentStateCreateInfo.srcColorBlendFactor = lookupVkBlendFactor[colorBlendState.colorBlendSrc];
-    colorBlendAttachmentStateCreateInfo.dstColorBlendFactor = lookupVkBlendFactor[colorBlendState.colorBlendDst];
-    colorBlendAttachmentStateCreateInfo.srcAlphaBlendFactor = lookupVkBlendFactor[colorBlendState.alphaBlendSrc];
-    colorBlendAttachmentStateCreateInfo.dstAlphaBlendFactor = lookupVkBlendFactor[colorBlendState.alphaBlendSrc];
-
-	VkPipelineColorBlendStateCreateInfo colorBlendStateCreateInfo = {};
-    colorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    colorBlendStateCreateInfo.pNext = nullptr;
-    colorBlendStateCreateInfo.flags = 0;
-    colorBlendStateCreateInfo.logicOpEnable = VK_FALSE;
-    colorBlendStateCreateInfo.logicOp = VK_LOGIC_OP_NO_OP;
-	colorBlendStateCreateInfo.attachmentCount = renderPass->getColorAttachmentCount();
-    colorBlendStateCreateInfo.pAttachments = &colorBlendAttachmentStateCreateInfo;
-    colorBlendStateCreateInfo.blendConstants[0] = 0.0f;
-    colorBlendStateCreateInfo.blendConstants[1] = 0.0f;
-    colorBlendStateCreateInfo.blendConstants[2] = 0.0f;
-    colorBlendStateCreateInfo.blendConstants[3] = 0.0f;
-
-	// DynamicState
-    VkDynamicState dynamicStates[9];
-    dynamicStates[0] = VK_DYNAMIC_STATE_VIEWPORT;
-    dynamicStates[1] = VK_DYNAMIC_STATE_SCISSOR;
-    dynamicStates[2] = VK_DYNAMIC_STATE_LINE_WIDTH;
-    dynamicStates[3] = VK_DYNAMIC_STATE_DEPTH_BIAS;
-    dynamicStates[4] = VK_DYNAMIC_STATE_BLEND_CONSTANTS;
-    dynamicStates[5] = VK_DYNAMIC_STATE_DEPTH_BOUNDS;
-    dynamicStates[6] = VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK;
-    dynamicStates[7] = VK_DYNAMIC_STATE_STENCIL_WRITE_MASK;
-    dynamicStates[8] = VK_DYNAMIC_STATE_STENCIL_REFERENCE;
-
+    depthStencilStateCreateInfo.maxDepthBounds = 1.0f;
+    
+	// DynamicStates
+   std::vector<VkDynamicState> dynamicStates = 
+   {
+        VK_DYNAMIC_STATE_VIEWPORT,
+        VK_DYNAMIC_STATE_SCISSOR,
+        VK_DYNAMIC_STATE_LINE_WIDTH
+    };
+	
 	VkPipelineDynamicStateCreateInfo dynamicStatesCreateInfo = {};
     dynamicStatesCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    dynamicStatesCreateInfo.pNext = nullptr;
-    dynamicStatesCreateInfo.flags = 0;
-    dynamicStatesCreateInfo.dynamicStateCount = 9;
-    dynamicStatesCreateInfo.pDynamicStates = dynamicStates;
+	dynamicStatesCreateInfo.pNext = nullptr;
+	dynamicStatesCreateInfo.flags = 0;
+    dynamicStatesCreateInfo.dynamicStateCount = dynamicStates.size();
+    dynamicStatesCreateInfo.pDynamicStates = dynamicStates.data();
 
 	// Pipeline layout
 	VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = {};
@@ -1598,7 +1583,7 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
     pipelineLayoutCreateInfo.pNext = nullptr;
     pipelineLayoutCreateInfo.flags = 0;
     pipelineLayoutCreateInfo.setLayoutCount = (descriptorSet != nullptr) ? 1 : 0;
-    pipelineLayoutCreateInfo.pSetLayouts = (descriptorSet != nullptr) ? &descriptorSet->_descriptorSetLayout : nullptr;
+    pipelineLayoutCreateInfo.pSetLayouts = (descriptorSet != nullptr) ? &(descriptorSet->_descriptorSetLayout) : nullptr;
     pipelineLayoutCreateInfo.pushConstantRangeCount = 0;
     pipelineLayoutCreateInfo.pPushConstantRanges = nullptr;
 
@@ -1612,9 +1597,10 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
     pipelineCreateInfo.flags = 0;
     pipelineCreateInfo.stageCount = stagesCreateInfo.size();
     pipelineCreateInfo.pStages = stagesCreateInfo.data();
+	pipelineCreateInfo.pViewportState = &viewportStateCreateInfo;
     pipelineCreateInfo.pVertexInputState = &vertexInputStateCreateInfo;
     pipelineCreateInfo.pInputAssemblyState = &inputAssemblyStateCreateInfo;
-    pipelineCreateInfo.pTessellationState = &tessStateCreateInfo;
+	pipelineCreateInfo.pTessellationState = nullptr;
     pipelineCreateInfo.pRasterizationState = &rasterizerStateCreateInfo;
     pipelineCreateInfo.pMultisampleState = &multisampleStateCreateInfo;
     pipelineCreateInfo.pDepthStencilState = &depthStencilStateCreateInfo;
@@ -1693,8 +1679,7 @@ void Graphics::resize(size_t width, size_t height)
 	_width = width;
 	_height = height;
 
-	destroyRenderPasses();
-	
+	destroyRenderPasses();	
 	createSwapchain();
 	createRenderPasses();
 	destroyCommandBuffers();
@@ -1708,6 +1693,8 @@ void Graphics::render(float elapsedTime)
 {
     Game* game = Game::getInstance();
     std::shared_ptr<SceneObject> SceneObject = game->getScene();
+
+	// TODO: Render scene...
 }
 
 void Graphics::createInstance()

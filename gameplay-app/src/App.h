@@ -54,7 +54,6 @@ private:
 	std::shared_ptr<DescriptorSet> _descriptorSet;
 	std::shared_ptr<RenderPipeline> _renderPipeline;
 	std::shared_ptr<RenderPass> _renderPass;
-
 };
 
 }

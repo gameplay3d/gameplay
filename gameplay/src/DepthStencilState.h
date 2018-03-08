@@ -74,7 +74,7 @@ public:
     /**
      * Determines if depth testing is enabled.
      */
-    bool depthEnabled = false;
+    bool depthEnabled = true;
 
     /**
      * The depth write mask.
@@ -84,7 +84,7 @@ public:
     /**
      * The comparison function used in the depth test sampling.
      */
-    Sampler::CompareFunc depthFunc = Sampler::COMPARE_FUNC_LESS;
+    Sampler::CompareFunc depthFunc = Sampler::COMPARE_FUNC_LESS_OR_EQUAL;
 
     /**
      * Determines if stencil testing is enabled.

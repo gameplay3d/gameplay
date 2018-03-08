@@ -164,7 +164,7 @@
 #define GP_GRAPHICS_HEIGHT							720
 #define GP_GRAPHICS_FULLSCREEN						false
 #define GP_GRAPHICS_VSYNC							true
-#define GP_GRAPHICS_MULTISAMPLING					0
+#define GP_GRAPHICS_MULTISAMPLING					1
 #define GP_GRAPHICS_VALIDATION						false
 
 // Graphics limits
