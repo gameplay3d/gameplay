@@ -118,8 +118,8 @@ Platform::Platform() :
 	_width(0),
 	_height(0),
 	_fullscreen(false),
-	_nativeDisplay(nullptr),
-	_nativeWindow(nullptr),
+	_nativeWindow(0),
+	_nativeConnection(0),
 	_running(false)
 {
 	std::memset(_translateKey, 0, sizeof(_translateKey));
@@ -242,7 +242,7 @@ int Platform::run()
 		return 0;
 
 	// Initialize SDL
-	if (SDL_Init(SDL_INIT_GAMECONTROLLER) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER) < 0)
 		GP_ERROR("Failed to initialize. SDL error=%s", SDL_GetError());
 
 	Game* game = Game::getInstance();
@@ -254,12 +254,10 @@ int Platform::run()
 
 	// Create the SDL window based on game config
 	_window = SDL_CreateWindow(config->title.c_str(), 
-								SDL_WINDOWPOS_UNDEFINED, 
-								SDL_WINDOWPOS_UNDEFINED, 
-								_width, 
-								_height, 
+								SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+								_width, _height, 
 								_fullscreen ? 
-                                (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN) :
+								(SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN) : 
 								(SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE));
 
 	// Get the native display,instance and windows
@@ -268,14 +266,14 @@ int Platform::run()
 	if (SDL_GetWindowWMInfo(_window, &wmi) )
 	{
 #if GP_PLATFORM_WINDOWS
-		_nativeDisplay = (void*)(uintptr_t)wmi.info.win.hinstance;
-		_nativeWindow = (void*)(uintptr_t)wmi.info.win.window;
+		_nativeWindow = (uint64_t)wmi.info.win.window;
+		_nativeConnection = (uint64_t)wmi.info.win.hinstance;
 #elif GP_PLATFORM_LINUX
-		_nativeDisplay = (void*)wmi.info.x11.display;
-		_nativeWindow = (void*)wmi.info.x11.window;
+		_nativeWindow = (uint64_t)wmi.info.x11.window;
+		_nativeConnection = (uint64_t)wmi.info.x11.display;
 #elif GP_PLATFORM_MACOS
-        _nativeDisplay = nullptr;
-		_nativeWindow = (void*)wmi.info.cocoa.window;
+		_nativeWindow = (uint64_t)wmi.info.cocoa.window;
+        _nativeConnection = nullptr;
 #else
 		GP_ERROR("Failed to initialize. Unsupported platform: %s");
 #endif	
@@ -284,30 +282,23 @@ int Platform::run()
 	{
 		GP_WARN("Failed to get SDL window info. SDL error: %s", SDL_GetError());
 	}
-	
-	// Clear the window black to start
-	SDL_Renderer* renderer;
-	renderer = SDL_CreateRenderer(_window, -1, 0);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
-	SDL_RenderPresent(renderer);
-	SDL_DestroyRenderer(renderer);
+
 	// Enable file drops
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
-	_running = true;
+
+	game->onInitialize();
 
 	Input* input = Input::getInput();
 	input->initialize();
 	Gamepad gamepads[GP_GAMEPADS_MAX];
 	int mx, my, mz = 0.0f;
 	bool exit = false;
+	_running = true;
 
 	// Start the event loop
 	SDL_Event evt;
 	while (!exit)
 	{
-		game->frame();
-
 		while (SDL_PollEvent(&evt))
 		{
 			switch (evt.type)
@@ -501,7 +492,6 @@ int Platform::run()
 							const SDL_WindowEvent& windowEvent = evt.window;
 							switch (windowEvent.event)
 							{
-							case SDL_WINDOWEVENT_RESIZED:
 							case SDL_WINDOWEVENT_SIZE_CHANGED:
 								game->onResize(windowEvent.data1, windowEvent.data2);
 								break;
@@ -535,6 +525,7 @@ int Platform::run()
 						break;
 			}
 		}
+		game->frame();
 	}
 
 	SDL_DestroyWindow(_window);
@@ -543,14 +534,14 @@ int Platform::run()
 	return 0;
 }
 
-void* Platform::getNativeDisplay() const
-{
-	return _nativeDisplay;
-}
-
-void* Platform::getNativeWindow() const
+uint64_t Platform::getNativeWindow() const
 {
 	return _nativeWindow;
+}
+
+uint64_t Platform::getNativeConnection() const
+{
+	return _nativeConnection;
 }
 
 size_t Platform::getWidth() const
@@ -566,6 +557,11 @@ size_t Platform::getHeight() const
 bool Platform::isFullscreen() const
 {
 	return _fullscreen;
+}
+
+SDL_Window * Platform::getSDLWindow() const
+{
+	return _window;
 }
 
 void Platform::initTranslateKey(uint16_t sdl, Input::Key key)

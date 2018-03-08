@@ -25,7 +25,7 @@ public:
     /**
      * @see Game::onInitialize
      */
-    void onInitialize(int argc, const char** argv);
+    void onInitialize();
 
     /**
      * @see Game::onFinalize
@@ -44,7 +44,16 @@ public:
 
 private:
 
-    // TODO:
+    std::shared_ptr<Shader> _vertShader;
+	std::shared_ptr<Shader> _fragShader;
+	std::shared_ptr<Buffer> _uniformBuffer;
+	std::shared_ptr<Buffer> _vertexBuffer;
+	std::shared_ptr<Buffer> _indexBuffer;
+	std::shared_ptr<Texture> _texture;
+	std::shared_ptr<Sampler> _sampler;
+	std::shared_ptr<DescriptorSet> _descriptorSet;
+	std::shared_ptr<RenderPipeline> _renderPipeline;
+	std::shared_ptr<RenderPass> _renderPass;
 
 };
 

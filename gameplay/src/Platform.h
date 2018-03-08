@@ -53,19 +53,21 @@ public:
 	 */
 	bool isFullscreen() const;
 
-	/**
-	 * Gets the pointer to the native display or instance.
-	 *
-	 * @return The pointer to the native display or instance.
-	 */
-	void* getNativeDisplay() const;
+	SDL_Window* getSDLWindow() const;
 
 	/**
-	 * Gets the pointer to the native window or view.
+	 * Gets the handle to the native window or view.
 	 *
-	 * @return The pointer to the native window or view.
+	 * @return The handle to the native window or view.
 	 */
-	void* getNativeWindow() const;
+	uint64_t getNativeWindow() const;
+
+	/**
+	 * Gets the handle to the native connection, display or instance.
+	 *
+	 * @return The handle to the native connection, display or instance.
+	 */
+	uint64_t getNativeConnection() const;
 
 private:
 
@@ -84,8 +86,8 @@ private:
 	size_t _width;
 	size_t _height;
 	bool _fullscreen;
-	void* _nativeDisplay;
-	void* _nativeWindow;
+	uint64_t _nativeWindow;
+	uint64_t _nativeConnection;
 	bool _running;
 	uint8_t _translateKey[256];
 	uint8_t _translateGamepad[256];

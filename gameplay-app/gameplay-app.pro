@@ -32,7 +32,8 @@ win32 {
 }
 
 linux {
-    DEFINES += VK_USE_PLATFORM_XCB_KHR
+    DEFINES += SDL_VIDEO_DRIVER_X11
+    DEFINES += VK_USE_PLATFORM_XLIB_KHR
     SOURCES += src/main-linux.cpp
     INCLUDEPATH += $$(VULKAN_SDK)/include
     INCLUDEPATH += /usr/include/gtk-2.0

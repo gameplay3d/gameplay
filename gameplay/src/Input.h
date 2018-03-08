@@ -10,6 +10,8 @@ class Input
 {
 public:
 
+	static const uint32_t GAMEPADS_MAX = 4;
+
     /**
      * Defines input keys.
      */

@@ -16,20 +16,30 @@ set(GAMEPLAY_SRC
     src/BoundingBox.h
     src/BoundingSphere.cpp
     src/BoundingSphere.h
+    src/Buffer.cpp
+    src/Buffer.h
     src/Camera.cpp
     src/Camera.h
+    src/ColorBlendState.h
+    src/CommandBuffer.cpp
+    src/CommandBuffer.h
     src/Component.cpp
     src/Component.h
     src/Curve.cpp
     src/Curve.h
+    src/DepthStencilState.h
+    src/DescriptorSet.cpp
+    src/DescriptorSet.h
     src/FileSystem.cpp
     src/FileSystem.h
+    src/Format.h
     src/Frustum.cpp
     src/Frustum.h
     src/Game.cpp
     src/Game.h
     src/Graphics.cpp
     src/Graphics.h
+    src/GraphicsUtil.h
     src/Heightfield.cpp
     src/Heightfield.h
     src/Image.cpp
@@ -82,16 +92,25 @@ set(GAMEPLAY_SRC
     src/Platform.h
     src/Quaternion.cpp
     src/Quaternion.h
+    src/RasterizerState.h
     src/Ray.cpp
     src/Ray.h
     src/Rectangle.cpp
     src/Rectangle.h
     src/Renderer.cpp
     src/Renderer.h
+    src/RenderPass.cpp
+    src/RenderPass.h
+    src/RenderPipeline.cpp
+    src/RenderPipeline.h
+    src/Sampler.cpp
+    src/Sampler.h
     src/SceneObject.cpp
     src/SceneObject.h
     src/Script.cpp
     src/Script.h
+    src/Semaphore.cpp
+    src/Semaphore.h
     src/Serializable.h
     src/Serializer.cpp
     src/Serializer.h
@@ -99,10 +118,14 @@ set(GAMEPLAY_SRC
     src/SerializerBinary.h
     src/SerializerJson.cpp
     src/SerializerJson.h
+    src/Shader.cpp
+    src/Shader.h
     src/Sprite.cpp
     src/Sprite.h
     src/Text.cpp
     src/Text.h
+    src/Texture.cpp
+    src/Texture.h
     src/Tileset.cpp
     src/Tileset.h
     src/Vector2.cpp
@@ -111,6 +134,9 @@ set(GAMEPLAY_SRC
     src/Vector3.h
     src/Vector4.cpp
     src/Vector4.h
+    src/VertexLayout.cpp
+    src/VertexLayout.h
+    src/gameplay.h
 )
 
 include_directories(
@@ -125,7 +151,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     add_definitions(-DSDL_VIDEO_DRIVER_X11)
-    add_definitions(-DVK_USE_PLATFORM_XCB_KHR)
+    add_definitions(-DVK_USE_PLATFORM_XLIB_KHR)
     include_directories( 
         $ENV{VULKAN_SDK}/include
     )

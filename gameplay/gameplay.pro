@@ -14,9 +14,12 @@ SOURCES += \
     src/AudioSource.cpp \
     src/BoundingBox.cpp \
     src/BoundingSphere.cpp \
+    src/Buffer.cpp \
     src/Camera.cpp \
+    src/CommandBuffer.cpp \
     src/Component.cpp \
     src/Curve.cpp \
+    src/DescriptorSet.cpp \
     src/FileSystem.cpp \
     src/Frustum.cpp \
     src/Game.cpp \
@@ -49,17 +52,24 @@ SOURCES += \
     src/Ray.cpp \
     src/Rectangle.cpp \
     src/Renderer.cpp \
+    src/RenderPass.cpp \
+    src/RenderPipeline.cpp \
+    src/Sampler.cpp \
     src/SceneObject.cpp \
     src/Script.cpp \
+    src/Semaphore.cpp \
     src/Serializer.cpp \
     src/SerializerBinary.cpp \
     src/SerializerJson.cpp \
+    src/Shader.cpp \
     src/Sprite.cpp \
     src/Text.cpp \
+    src/Texture.cpp \
     src/Tileset.cpp \
     src/Vector2.cpp \
     src/Vector3.cpp \
-    src/Vector4.cpp
+    src/Vector4.cpp \
+    src/VertexLayout.cpp
 
 HEADERS += \
     src/Animation.h \
@@ -70,13 +80,20 @@ HEADERS += \
     src/Base.h \
     src/BoundingBox.h \
     src/BoundingSphere.h \
+    src/Buffer.h \
     src/Camera.h \
+    src/ColorBlendState.h \
+    src/CommandBuffer.h \
     src/Component.h \
     src/Curve.h \
+    src/DepthStencilState.h \
+    src/DescriptorSet.h \
     src/FileSystem.h \
+    src/Format.h \
     src/Frustum.h \
     src/Game.h \
     src/Graphics.h \
+    src/GraphicsUtil.h \
     src/Heightfield.h \
     src/Image.h \
     src/Light.h \
@@ -101,22 +118,30 @@ HEADERS += \
     src/Plane.h \
     src/Platform.h \
     src/Quaternion.h \
+    src/RasterizerState.h \
     src/Ray.h \
     src/Rectangle.h \
     src/Renderer.h \
+    src/RenderPass.h \
+    src/RenderPipeline.h \
+    src/Sampler.h \
     src/SceneObject.h \
     src/Script.h \
+    src/Semaphore.h \
     src/Serializable.h \
     src/Serializer.h \
     src/SerializerBinary.h \
     src/SerializerJson.h \
+    src/Shader.h \
     src/Sprite.h \
     src/Stream.h \
     src/Text.h \
+    src/Texture.h \
     src/Tileset.h \
     src/Vector2.h \
     src/Vector3.h \
-    src/Vector4.h
+    src/Vector4.h \
+    src/VertexLayout.h
 
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include
@@ -134,7 +159,7 @@ win32 {
 
 linux {
     DEFINES += SDL_VIDEO_DRIVER_X11
-    DEFINES += VK_USE_PLATFORM_XCB_KHR
+    DEFINES += VK_USE_PLATFORM_XLIB_KHR
     INCLUDEPATH += $$(VULKAN_SDK)/include
     QMAKE_CXXFLAGS += -lstdc++ -pthread -w
 }

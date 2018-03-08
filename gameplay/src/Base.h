@@ -160,14 +160,33 @@
 #define GP_MATH_MATRIX_SIZE             (sizeof(float) * 16)
 
 // Graphics
-#define GP_GRAPHICS_WIDTH				1920
-#define GP_GRAPHICS_HEIGHT				1080
-#define GP_GRAPHICS_FULLSCREEN			false
-#define GP_GRAPHICS_VSYNC				true
-#define GP_GRAPHICS_MULTISAMPLING		0
+#define GP_GRAPHICS_WIDTH							1280
+#define GP_GRAPHICS_HEIGHT							720
+#define GP_GRAPHICS_FULLSCREEN						false
+#define GP_GRAPHICS_VSYNC							true
+#define GP_GRAPHICS_MULTISAMPLING					0
+#define GP_GRAPHICS_VALIDATION						false
+
+// Graphics limits
+#define GP_GRAPHICS_GPUS_MAX                        4
+#define GP_GRAPHICS_INSTANCE_EXTS_MAX               256
+#define GP_GRAPHICS_DEVICE_EXTS_MAX                 256
+#define GP_GRAPHICS_DESCRIPTORS_MAX                 32
+#define GP_GRAPHICS_DESCRIPTOR_SETS_MAX             8
+#define GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX          256
+#define GP_GRAPHICS_COLOR_ATTACHMENTS_MAX			8
+#define GP_GRAPHICS_SUBMIT_COMMAND_BUFFERS_MAX      8
+#define GP_GRAPHICS_SUBMIT_WAIT_SEMAPHORES_MAX      8
+#define GP_GRAPHICS_SUBMIT_SIGNAL_SEMAPHORES_MAX    8
+#define GP_GRAPHICS_PRESENT_WAIT_SEMAPHORES_MAX     8
+#define GP_GRAPHICS_VERTEX_BINDINGS_MAX             15
+#define GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX           15
+#define GP_GRAPHICS_SEMANTIC_NAME_MAX				128
+#define GP_GRAPHICS_MIP_LEVELS_MAX                  0xFFFFFFFF
 
 // Input
-#define GP_GAMEPADS_MAX					4
+#define GP_GAMEPADS_MAX								4
+
 
 namespace gameplay
 {
@@ -181,7 +200,7 @@ extern void print(const char* format, ...);
 
 }
 
-// Compiler
+// Compiler warnings
 #if defined(_WINDOWS)
 #pragma warning( disable : 4005 )
 #pragma warning( disable : 4172 )

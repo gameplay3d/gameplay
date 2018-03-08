@@ -12,9 +12,14 @@ Script::~Script()
 {
 }
 
-std::shared_ptr<Script> Script::load(const std::string& url)
+std::shared_ptr<Script> Script::loadCppScript(std::string classUrl)
 {
-	return nullptr;
+	return std::shared_ptr<Script>();
+}
+
+std::shared_ptr<Script> Script::loadLuaScript(std::string scriptUrl)
+{
+	return std::shared_ptr<Script>();
 }
 
 void Script::onInitialize()

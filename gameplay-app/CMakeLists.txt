@@ -44,7 +44,8 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
     )
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    add_definitions(-DVK_USE_PLATFORM_XCB_KHR)
+    add_definitions(-DSDL_VIDEO_DRIVER_X11)
+    add_definitions(-DVK_USE_PLATFORM_XLIB_KHR)
     include_directories( 
         $ENV{VULKAN_SDK}/include
     )
