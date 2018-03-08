@@ -17,6 +17,12 @@ class Script : public Component
     friend class Serializer::Activator;
 public:
 
+	enum Type
+	{
+		TYPE_CPP,
+		TYPE_LUA
+	};
+
     /**
      * Constructor.
      */
@@ -27,7 +33,9 @@ public:
      */
     ~Script();
 
-    static std::shared_ptr<Script> load(const std::string& url);
+    static std::shared_ptr<Script> loadCppScript(std::string classUrl);
+
+	static std::shared_ptr<Script> loadLuaScript(std::string scriptUrl);
 
     virtual void onInitialize();
 
@@ -37,6 +45,10 @@ public:
 
     virtual void onMessage(std::shared_ptr<SceneObject> sender, std::shared_ptr<Message> message, void* data);
 
+private:
+
+	Type _type;
+	std::string _url;
 };
 
 }

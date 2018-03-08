@@ -26,12 +26,11 @@
 #include "SerializerJson.h"
 #include "Animation.h"
 #include "Input.h"
-#include "Graphics.h"
 #include "Script.h"
 #include "SceneObject.h"
-#include "Component.h"
 
 // Components
+#include "Component.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Material.h"
@@ -47,6 +46,38 @@
 //#include "Tree.h"
 //#include "Decal.h"
 //#include "Video.h"
+
+// UI
+//#include "UI.h"
+//#include "UITheme.h"
+//#include "UIThemeSet.h"
+//#include "UILayout.h"
+//#include "UIControl.h"
+//#include "UIButton.h"
+//#include "UICheckBox.h"
+//#include "UIRadioButon.h"
+//#include "UILabel.h"
+//#include "UITextBox.h"
+//#include "UIProgressBar.h"
+//#include "UISlider.h"
+//#include "UIComboBox.h"
+//#include "UIListBox.h"
+//#include "UIImageView.h"
+//#include "UIVideoView.h"
+
+// Graphics
+#include "Graphics.h"
+#include "Format.h"
+#include "Buffer.h"
+#include "Texture.h"
+#include "RenderPass.h"
+#include "Sampler.h"
+#include "Shader.h"
+#include "VertexLayout.h"
+#include "DescriptorSet.h"
+#include "RenderPipeline.h"
+#include "CommandBuffer.h"
+#include "Semaphore.h"
 
 // Audio
 #include "Audio.h"
@@ -68,23 +99,5 @@
 #include "PhysicsCharacter.h"
 #include "PhysicsVehicle.h"
 #include "PhysicsCloth.h"
-
-// UI
-//#include "UI.h"
-//#include "UITheme.h"
-//#include "UIThemeSet.h"
-//#include "UILayout.h"
-//#include "UIControl.h"
-//#include "UIButton.h"
-//#include "UICheckBox.h"
-//#include "UIRadioButon.h"
-//#include "UILabel.h"
-//#include "UITextBox.h"
-//#include "UIProgressBar.h"
-//#include "UISlider.h"
-//#include "UIComboBox.h"
-//#include "UIListBox.h"
-//#include "UIImageView.h"
-//#include "UIVideoView.h"
 
 using namespace gameplay;

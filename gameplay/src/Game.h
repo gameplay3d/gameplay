@@ -193,7 +193,7 @@ public:
     /**
      * Event occurs after the platform starts up and prior to first frame event.
      */
-    virtual void onInitialize(int argc, const char** argv);
+    virtual void onInitialize();
 
     /**
      * Event occurs when the game is about to exit.
@@ -279,6 +279,7 @@ public:
 		bool fullscreen;
 		bool vsync;
 		size_t multisampling;
+		bool validation;
 		std::string homePath;
         std::vector<SplashScreen> splashScreens;
 		std::string mainScene;

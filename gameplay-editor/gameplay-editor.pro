@@ -62,6 +62,7 @@ INCLUDEPATH += ../external-deps/include
 
 win32 {
     DEFINES += _WINDOWS WIN32
+    DEFINES += VK_USE_PLATFORM_WIN32_KHR
     INCLUDEPATH += $$(VULKAN_SDK)/Include
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/debug/ -lgameplay
     CONFIG(release, debug|release): LIBS += -L$$PWD/../gameplay/Release/release/ -lgameplay
@@ -78,7 +79,8 @@ win32 {
 }
 
 linux {
-    DEFINES += __linux__
+    DEFINES += SDL_VIDEO_DRIVER_X11
+    DEFINES += VK_USE_PLATFORM_XLIB_KHR
     QMAKE_CXXFLAGS += -lstdc++ -pthread -w
     INCLUDEPATH += /usr/include/gtk-2.0
     INCLUDEPATH += /usr/lib/x86_64-linux-gnu/gtk-2.0/include
