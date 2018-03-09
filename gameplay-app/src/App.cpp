@@ -51,7 +51,7 @@ void App::onInitialize()
     };
 	size_t vertexDataSize = sizeof(float) * vertices.size();
 	size_t vertexStride = sizeof(float) * 7;
-	_vertexBuffer = graphics->createVertexBuffer(vertexDataSize, vertexStride, true, vertices.data());
+	_vertexBuffer = graphics->createVertexBuffer(vertexDataSize, vertexStride, false, vertices.data());
 
 	// Gets the initial render pass.
 	_renderPass = graphics->getRenderPass();

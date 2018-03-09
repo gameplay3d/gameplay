@@ -18,7 +18,7 @@ GamepadAxisDpadRemap __gamepadAxisDpad[] =
 	{ Input::Key::KEY_NONE,			Input::Key::KEY_NONE			},
 	{ Input::Key::KEY_GAMEPAD_LEFT, Input::Key::KEY_GAMEPAD_RIGHT	},
 	{ Input::Key::KEY_GAMEPAD_UP,   Input::Key::KEY_GAMEPAD_DOWN	},
-	{ Input::Key::KEY_NONE,        Input::Key::KEY_NONE				}
+	{ Input::Key::KEY_NONE,         Input::Key::KEY_NONE			}
 };
 
 class Gamepad

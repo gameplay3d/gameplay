@@ -223,7 +223,6 @@ void Graphics::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
     renderArea.offset.y = 0;
 	renderArea.extent.width = renderPass->getWidth();
 	renderArea.extent.height = renderPass->getHeight();
-
 	
     VkClearValue clearValues[(2 * GP_GRAPHICS_COLOR_ATTACHMENTS_MAX) + 1];
 	uint32_t colorValueCount = renderPass->getColorAttachmentCount();
@@ -490,19 +489,18 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
 	bufferCreateInfo.queueFamilyIndexCount = 0;
     bufferCreateInfo.pQueueFamilyIndices = nullptr;
 	bufferCreateInfo.usage = 0;
-
 	switch (usage) 
 	{
 	case Buffer::USAGE_VERTEX: 
 		bufferCreateInfo.usage |= VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 		break;
-    case Buffer::USAGE_INDEX: 
-        bufferCreateInfo.usage |= VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+	case Buffer::USAGE_INDEX: 
+		bufferCreateInfo.usage |= VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
 		break;
 	case Buffer::USAGE_UNIFORM: 
-        bufferCreateInfo.usage |= VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+		bufferCreateInfo.usage |= VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
 		break;
-    }
+	}
 
 	VkMemoryAllocateInfo memAlloc = {};
 	memAlloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -510,14 +508,14 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
 	VkMemoryRequirements memReqs;
 	if (hostVisible)
 	{
-		// Create the buffer
+		// Create the host visible buffer
 		VkBuffer bufferVK;
 		VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &bufferVK));
 		vkGetBufferMemoryRequirements(_device, bufferVK, &memReqs);
 		memAlloc.allocationSize = memReqs.size;
 		uint32_t memTypeIndex = UINT32_MAX;
 		VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-		if (!getMemoryTypeFromProperties(memReqs.memoryTypeBits, memFlags, &memTypeIndex))
+		if (!getMemoryType(memReqs.memoryTypeBits, memFlags, &memTypeIndex))
 		{
 			GP_ERROR("Failed to find compatible memory for buffer.");
 		}
@@ -547,8 +545,69 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
 	}
 	else
 	{
-		// TODO: With staging buffer and fence
-		return nullptr;
+		// Create a device local buffer to copied into
+		VkBuffer bufferVK;
+		bufferCreateInfo.usage |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+		VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &bufferVK));
+		vkGetBufferMemoryRequirements(_device, bufferVK, &memReqs);
+		memAlloc.allocationSize = memReqs.size;
+		VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		uint32_t memTypeIndex = UINT32_MAX;
+		if (!getMemoryType(memReqs.memoryTypeBits, memFlags, &memTypeIndex))
+		{
+			GP_ERROR("Failed to find compatible memory for buffer.");
+		}
+		VkDeviceMemory deviceMemory;
+		memAlloc.memoryTypeIndex = memTypeIndex;
+		VK_CHECK_RESULT(vkAllocateMemory(_device, &memAlloc, nullptr, &deviceMemory));
+		VK_CHECK_RESULT(vkBindBufferMemory(_device, bufferVK, deviceMemory, 0));
+
+		// Create a host-visible staging buffer to temp copy the vertex data to
+		VkBuffer stagingBuffer;
+		void* stagingData;
+		bufferCreateInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+		VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &stagingBuffer));
+		vkGetBufferMemoryRequirements(_device, stagingBuffer, &memReqs);
+		memAlloc.allocationSize = memReqs.size;
+		memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+		memTypeIndex = UINT32_MAX;
+		if (!getMemoryType(memReqs.memoryTypeBits, memFlags, &memTypeIndex))
+		{
+			GP_ERROR("Failed to find compatible memory for buffer.");
+		}
+		VkDeviceMemory stagingMemory;
+		VK_CHECK_RESULT(vkAllocateMemory(_device, &memAlloc, nullptr, &stagingMemory));
+		VK_CHECK_RESULT(vkMapMemory(_device, stagingMemory, 0, memAlloc.allocationSize, 0, &stagingData));
+		memcpy(stagingData, data, size);
+		vkUnmapMemory(_device, stagingMemory);
+		VK_CHECK_RESULT(vkBindBufferMemory(_device, stagingBuffer, stagingMemory, 0));
+
+		// Copy from the staging buffer to local
+		VkCommandBufferBeginInfo cmdBufferBeginInfo = {};
+		cmdBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		cmdBufferBeginInfo.pNext = nullptr;
+		VkCommandBuffer copyCmd = getCommandBuffer(true);
+		VkBufferCopy copyRegion = {};
+		copyRegion.size = size;
+		vkCmdCopyBuffer(copyCmd, stagingBuffer, bufferVK, 1, &copyRegion);
+		flushCommandBuffer(copyCmd);
+
+		// Destroy the staging buffer and device memory
+		vkDestroyBuffer(_device, stagingBuffer, nullptr);
+		vkFreeMemory(_device, stagingMemory, nullptr);
+
+		std::shared_ptr<Buffer> buffer = std::make_shared<Buffer>();		
+		buffer->_usage = usage;
+		buffer->_size = size;
+		buffer->_stride = stride;
+		buffer->_hostVisible = hostVisible;
+		buffer->_deviceMemory = deviceMemory;
+		buffer->_buffer = bufferVK;
+		buffer->_bufferView.buffer = bufferVK;
+		buffer->_bufferView.offset = 0;
+		buffer->_bufferView.range = VK_WHOLE_SIZE;
+
+		return buffer;
 	}
 }
 
@@ -678,9 +737,8 @@ std::shared_ptr<Texture> Graphics::createTexture(Texture::Type type, size_t widt
 		{
 			memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 		}
-
 		uint32_t memoryTypeIndex = UINT32_MAX;
-		bool found = getMemoryTypeFromProperties(memReqs.memoryTypeBits, memFlags, &memoryTypeIndex);
+		bool found = getMemoryType(memReqs.memoryTypeBits, memFlags, &memoryTypeIndex);
 		if (!found)
 			GP_ERROR("Failed to find compatible memory for texture.");
 
@@ -1820,7 +1878,7 @@ void Graphics::createDevice()
 
 	// Graphics queue create info
 	const float defaultQueuePriority(0.0f);
-	_queueFamilyIndices.graphics = getQueueFamiliyIndex(VK_QUEUE_GRAPHICS_BIT);
+	_queueFamilyIndices.graphics = getQueueFamilyIndex(VK_QUEUE_GRAPHICS_BIT);
 	VkDeviceQueueCreateInfo queueInfo{};
 	queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 	queueInfo.queueFamilyIndex = _queueFamilyIndices.graphics;
@@ -1829,7 +1887,7 @@ void Graphics::createDevice()
 	queueCreateInfos.push_back(queueInfo);
 
 	// Compute queue create info (if different) and requested
-	_queueFamilyIndices.compute = getQueueFamiliyIndex(VK_QUEUE_COMPUTE_BIT);
+	_queueFamilyIndices.compute = getQueueFamilyIndex(VK_QUEUE_COMPUTE_BIT);
 	if (_queueFamilyIndices.compute != _queueFamilyIndices.graphics)
 	{
 		float queuePriority(0.0f);
@@ -1925,7 +1983,7 @@ void Graphics::createSurface()
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
 	VkXlibSurfaceCreateInfoKHR  surfaceCreateInfo = {};
 	surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
-	surfaceCreateInfo.dpypl = (Display*)connection;
+	surfaceCreateInfo.dpy = (Display*)connection;
 	surfaceCreateInfo.window = (Window)window;
     result = vkCreateXlibSurfaceKHR(_instance, &surfaceCreateInfo, nullptr, &_surface);
 #elif defined(VK_USE_PLATFORM_MACOS_MVK)
@@ -2304,7 +2362,31 @@ VkBool32 Graphics::isDeviceExtensionPresent(VkPhysicalDevice physicalDevice, con
 	return false;
 }
 
-VkBool32 Graphics::getMemoryTypeFromProperties(uint32_t typeBits, VkFlags requirements_mask, uint32_t* typeIndex)
+uint32_t Graphics::getQueueFamilyIndex(VkQueueFlagBits queueFlags)
+{
+	if (queueFlags & VK_QUEUE_COMPUTE_BIT)
+	{
+		for (uint32_t i = 0; i < static_cast<uint32_t>(_queueFamilyProperties.size()); i++)
+		{
+			if ((_queueFamilyProperties[i].queueFlags & queueFlags) && ((_queueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0))
+			{
+				return i;
+				break;
+			}
+		}
+	}
+	for (uint32_t i = 0; i < static_cast<uint32_t>(_queueFamilyProperties.size()); i++)
+	{
+		if (_queueFamilyProperties[i].queueFlags & queueFlags)
+		{
+			return i;
+			break;
+		}
+	}
+	return 0;
+}
+
+VkBool32 Graphics::getMemoryType(uint32_t typeBits, VkFlags requirements_mask, uint32_t* typeIndex)
 {
     for (uint32_t i = 0; i < _deviceMemoryProperties.memoryTypeCount; i++) 
 	{
@@ -2332,28 +2414,53 @@ VkCommandPool Graphics::createCommandPool(uint32_t queueFamilyIndex, VkCommandPo
 	return cmdPool;
 }
 
-uint32_t Graphics::getQueueFamiliyIndex(VkQueueFlagBits queueFlags)
+VkCommandBuffer Graphics::getCommandBuffer(bool begin)
 {
-	if (queueFlags & VK_QUEUE_COMPUTE_BIT)
+	VkCommandBuffer cmdBuffer;
+	VkCommandBufferAllocateInfo cmdBufAllocateInfo = {};
+	cmdBufAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	cmdBufAllocateInfo.commandPool = _commandPool;
+	cmdBufAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	cmdBufAllocateInfo.commandBufferCount = 1;
+	
+	VK_CHECK_RESULT(vkAllocateCommandBuffers(_device, &cmdBufAllocateInfo, &cmdBuffer));
+
+	// If requested, also start the new command buffer
+	if (begin)
 	{
-		for (uint32_t i = 0; i < static_cast<uint32_t>(_queueFamilyProperties.size()); i++)
-		{
-			if ((_queueFamilyProperties[i].queueFlags & queueFlags) && ((_queueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0))
-			{
-				return i;
-				break;
-			}
-		}
+		VkCommandBufferBeginInfo cmdBufferBeginInfo {};
+		cmdBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		VK_CHECK_RESULT(vkBeginCommandBuffer(cmdBuffer, &cmdBufferBeginInfo));
 	}
-	for (uint32_t i = 0; i < static_cast<uint32_t>(_queueFamilyProperties.size()); i++)
-	{
-		if (_queueFamilyProperties[i].queueFlags & queueFlags)
-		{
-			return i;
-			break;
-		}
-	}
-	return 0;
+
+	return cmdBuffer;
+}
+
+void Graphics::flushCommandBuffer(VkCommandBuffer commandBuffer)
+{
+	assert(commandBuffer != VK_NULL_HANDLE);
+
+	VK_CHECK_RESULT(vkEndCommandBuffer(commandBuffer));
+
+	VkSubmitInfo submitInfo = {};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &commandBuffer;
+
+	// Create fence to ensure that the command buffer has finished executing
+	VkFenceCreateInfo fenceCreateInfo = {};
+	fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+	fenceCreateInfo.flags = 0;
+	VkFence fence;
+	VK_CHECK_RESULT(vkCreateFence(_device, &fenceCreateInfo, nullptr, &fence));
+
+	// Submit to the queue
+	VK_CHECK_RESULT(vkQueueSubmit(_queue, 1, &submitInfo, fence));
+	// Wait for the fence to signal that command buffer has finished executing
+	VK_CHECK_RESULT(vkWaitForFences(_device, 1, &fence, VK_TRUE, UINT64_MAX));
+
+	vkDestroyFence(_device, fence, nullptr);
+	vkFreeCommandBuffers(_device, _commandPool, 1, &commandBuffer);
 }
 
 std::string toErrorString(VkResult result)

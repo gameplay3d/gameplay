@@ -47,7 +47,7 @@ libtool libasound2-dev  libpulse-dev libaudio-dev libx11-dev libxext-dev libxran
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home)
 - Add the following to user profile         (vi ~/.profile)
 ```
-export VULKAN_SDK=~/VulkanSDK/1.0.68.0/x86_64 
+export VULKAN_SDK=~/VulkanSDK/1.1.70.0/x86_64 
 export PATH=$VULKAN_SDK/bin:$PATH
 export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
 ```
