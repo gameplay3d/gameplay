@@ -549,9 +549,11 @@ private:
 	VkPresentModeKHR choosePresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
 	VkBool32 isDeviceExtensionPresent(VkPhysicalDevice physicalDevice, const char* extensionName);
 	VkBool32 getDepthStencilFormat(VkPhysicalDevice physicalDevice, VkFormat* depthStencilFormat);
-	uint32_t getQueueFamiliyIndex(VkQueueFlagBits queueFlags);
-	VkBool32 getMemoryTypeFromProperties(uint32_t typeBits, VkFlags requirements_mask, uint32_t* typeIndex);
+	uint32_t getQueueFamilyIndex(VkQueueFlagBits queueFlags);
+	VkBool32 getMemoryType(uint32_t typeBits, VkFlags requirements_mask, uint32_t* typeIndex);
 	VkCommandPool createCommandPool(uint32_t queueFamilyIndex, VkCommandPoolCreateFlags createFlags);
+	VkCommandBuffer getCommandBuffer(bool begin);
+	void flushCommandBuffer(VkCommandBuffer commandBuffer);
 
 	bool _initialized;
     bool _resized;
