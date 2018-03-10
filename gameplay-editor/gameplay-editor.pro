@@ -99,7 +99,7 @@ linux {
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
     CONFIG(release, debug|release): LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
     LIBS += -L$$PWD/../external-deps/lib/linux/x86_64/ -lgameplay-deps
-    LIBS += -lrt -ldl -lX11 -lpthread -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0 -lxcb
+    LIBS += -lrt -ldl -lX11 -lpthread -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0 -lxcb -lsndio
     LIBS += -L$$(VULKAN_SDK)/lib/ -lvulkan
 }
 
@@ -116,6 +116,7 @@ macx {
     LIBS += -F/System/Library/Frameworks -framework MetalKit
     LIBS += -F/System/Library/Frameworks -framework GameKit
     LIBS += -F/System/Library/Frameworks -framework IOKit
+    LIBS += -F/System/Library/Frameworks -framework IOSurface
     LIBS += -F/System/Library/Frameworks -framework ForceFeedback
     LIBS += -F/System/Library/Frameworks -framework OpenAL
     LIBS += -F/System/Library/Frameworks -framework CoreAudio

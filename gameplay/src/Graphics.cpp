@@ -1992,19 +1992,19 @@ void Graphics::createSurface()
 	surfaceCreateInfo.pNext = nullptr;
 	surfaceCreateInfo.flags = 0;
 	surfaceCreateInfo.pView = (void*)window;
-	result = vkCreateMacOSSurfaceMVK(instance, &surfaceCreateInfo, nullptr, &_surface);
+	result = vkCreateMacOSSurfaceMVK(_instance, &surfaceCreateInfo, nullptr, &_surface);
 #elif defined(VK_USE_PLATFORM_IOS_MVK)
 	VkIOSSurfaceCreateInfoMVK surfaceCreateInfo = {};
 	surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_IOS_SURFACE_CREATE_INFO_MVK;
 	surfaceCreateInfo.pNext = nullptr;
 	surfaceCreateInfo.flags = 0;
 	surfaceCreateInfo.pView = (void*)window;
-	result = vkCreateIOSSurfaceMVK(instance, &surfaceCreateInfo, nullptr, &_surface);
+	result = vkCreateIOSSurfaceMVK(_instance, &surfaceCreateInfo, nullptr, &_surface);
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
 	VkAndroidSurfaceCreateInfoKHR surfaceCreateInfo = {};
 	surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
 	surfaceCreateInfo.window = (ANativeWindow*)window;
-	result = vkCreateAndroidSurfaceKHR(instance, &surfaceCreateInfo, nullptr, &_surface);
+	result = vkCreateAndroidSurfaceKHR(_instance, &surfaceCreateInfo, nullptr, &_surface);
 #endif
 
 

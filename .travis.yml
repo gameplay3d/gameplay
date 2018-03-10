@@ -1,23 +1,109 @@
-language: cpp
-before_script:
-  - ./install.sh
-  - mkdir build
-  - cd build
-  - cmake ..
-script: make
-compiler:
-  - gcc
+branches:
+  only:
+  - master
+  - nextgen
+  - ci
+notifications:
+  email: false
+os:
+  - linux
+  - osx
+git:
+  depth: 3
+sudo: required
+dist: trusty
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - libglu1-mesa-dev
+    - libx11-xcb-dev
+    - libgtk2.0-dev
     - libogg-dev
     - libopenal-dev
-    - lib32z1-dev
-    - libgtk2.0-dev
-notifications:
-  email: false
-sudo: required
-dist: trusty
+    - libtool
+    - libasound2-dev
+    - libpulse-dev
+    - libaudio-dev
+    - libx11-dev
+    - libxext-dev
+    - libxrandr-dev
+    - libxcursor-dev
+    - libxi-dev
+    - libxinerama-dev
+    - libxxf86vm-dev
+    - libxss-dev
+    - libgl1-mesa-dev
+    - libesd0-dev
+    - libsndio-dev
+language: cpp
+compiler:
+  - gcc
+  - clang
+matrix:
+  include:
+    - { os: linux, compiler: gcc, env: CONFIG=Debug VK_VERSION=1.1.70.0  }
+    - { os: linux, compiler: gcc, env: CONFIG=Release VK_VERSION=1.1.70.0 }
+    - { os: osx, compiler: clang, osx_image: xcode9.2, env: CONFIG=Debug VK_VERSION=1.0.69.0 }
+    - { os: osx, compiler: clang, osx_image: xcode9.2, env: CONFIG=Release VK_VERSION=1.0.69.0 }
+  exclude:
+    - { os: linux, compiler: gcc }
+    - { os: linux, compiler: clang }
+    - { os: osx, compiler: gcc }
+    - { os: osx, compiler: clang }
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository ppa:beineri/opt-qt-5.10.1-trusty -y; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update; fi
+install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -qq qt510-meta-minimal; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then source /opt/qt510/bin/qt510-env.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install qt; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PATH="/usr/local/opt/qt/bin:$PATH"; fi
+  - qmake --version
+before_script:
+  - cd ~
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -LO "https://sdk.lunarg.com/sdk/download/$VK_VERSION/linux/vulkansdk-linux-x86_64-$VK_VERSION.run?Human=true;u="; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then chmod +x vulkansdk*; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./vulkansdk*; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export VULKAN_SDK=~/VulkanSDK/$VK_VERSION/x86_64; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export PATH=$VULKAN_SDK/bin:$PATH; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then VK_FILE=vulkansdk-macos-$VK_VERSION.tar.gz?Human=true;u=; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl -LO "https://sdk.lunarg.com/sdk/download/$VK_VERSION/mac/$VK_FILE"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar -xvzf $VK_FILE; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export VULKAN_SDK="~/vulkansdk-macos-$VK_VERSION/macOS"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json; fi
+  - cd -
+  - ./install.sh
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then git clone https://github.com/gameplay3d/GamePlay-deps.git -b nextgen --depth 1; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd GamePlay-deps; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mkdir build; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd build; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cmake -DCMAKE_BUILD_TYPE=$CONFIG ..; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make -j2; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd ../..; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cp -r GamePlay-deps/out/external-deps .; fi
+  - CONFIG_LOWER=`echo $CONFIG | tr "[A-Z]" "[a-z]"`
+  - mkdir gameplay/$CONFIG
+  - cd gameplay/$CONFIG
+  - qmake CONFIG+=$CONFIG_LOWER ../gameplay.pro
+  - cd ../..
+  - mkdir gameplay-app/$CONFIG
+  - cd gameplay-app/$CONFIG
+  - qmake CONFIG+=$CONFIG_LOWER ../gameplay-app.pro
+  - cd ../..
+  - mkdir gameplay-editor/$CONFIG
+  - cd gameplay-editor/$CONFIG
+  - qmake CONFIG+=$CONFIG_LOWER ../gameplay-editor.pro
+  - cd ../..
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_BUILD_TYPE=$CONFIG ..
+script:
+  - make -j2
+  - cd ../gameplay/$CONFIG
+  - make -j2
+  - cd ../../gameplay-app/$CONFIG
+  - make -j2
+  - cd ../../gameplay-editor/$CONFIG
+  - make -j2
