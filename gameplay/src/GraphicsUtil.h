@@ -411,7 +411,7 @@ static VkBool32 validationDebugReport(VkDebugReportFlagsEXT flags,
         prefix += "INFO:";
     if (flags & VK_DEBUG_REPORT_DEBUG_BIT_EXT)
         prefix += "DEBUG:";
-    GP_INFO("%s [%s] Code: %d:%s", prefix, layerPrefix, msgCode, msg);
+    GP_INFO("%s [%s] Code: %d:%s", prefix.c_str(), layerPrefix, msgCode, msg);
     return VK_FALSE;
 }
 

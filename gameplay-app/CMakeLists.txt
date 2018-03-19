@@ -51,6 +51,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     )
     target_link_libraries(gameplay-app
         gameplay
+        $ENV{VULKAN_SDK}/lib/libvulkan.so
         ${PROJECT_SOURCE_DIR}/external-deps/lib/linux/x86_64/libgameplay-deps.a
         m
         GL
@@ -58,6 +59,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         dl
         X11
         pthread
+        sndio
     )
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-DVK_USE_PLATFORM_MACOS_MVK)
@@ -67,7 +69,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     find_library(FOUNDATION_LIBRARY Foundation)
     find_library(CARBON_LIBRARY Carbon)
     find_library(QUARTZ_LIBRARY Quartz)
-    find_library(IOSURFACe_LIBRARY IOSurface)
+    find_library(IOSURFACE_LIBRARY IOSurface)
     find_library(IOKIT_LIBRARY IOKit)
     find_library(FORCEFEEDBACK_LIBRARY ForceFeedback)
     find_library(METAL_LIBRARY Metal)

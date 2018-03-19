@@ -273,7 +273,7 @@ int Platform::run()
 		_nativeConnection = (uint64_t)wmi.info.x11.display;
 #elif GP_PLATFORM_MACOS
 		_nativeWindow = (uint64_t)wmi.info.cocoa.window;
-        _nativeConnection = nullptr;
+        _nativeConnection = 0;
 #else
 		GP_ERROR("Failed to initialize. Unsupported platform: %s");
 #endif	

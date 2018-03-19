@@ -25,7 +25,7 @@ Profile = "Profile"
 
 Windows 10 - Build with CMake and Visual Studio 2015 (Option B)
 ---------------------------------------------------------------
-- Install CMake                             (https://cmake.org/download/)
+- Install CMake                             (https://cmake.org/download/)
 - Open Visual Studio 2015
 - Open menu Tools->Extensions and Updates...
 - Search Online for "Qt Visual Studio Tools" and install extension.
@@ -43,7 +43,7 @@ Ubuntu 16.04 - Setup
 --------------------
 - Install Build SDKs                        (sudo apt-get install build-essential clang gcc g++ curl cmake)
 - Install Platform SDKs                     (sudo apt-get install libx11-xcb-dev libgtk2.0-dev libogg-dev libopenal-dev 
-libtool libasound2-dev  libpulse-dev libaudio-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxxf86vm-dev libxss-dev libgl1-mesa-dev libesd0-dev)
+libtool libasound2-dev  libpulse-dev libaudio-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxxf86vm-dev libxss-dev libgl1-mesa-dev libesd0-dev libsndio-dev)
 - Install Vulkan SDK                        (https://vulkan.lunarg.com/sdk/home)
 - Add the following to user profile         (vi ~/.profile)
 ```
@@ -65,9 +65,9 @@ Ubuntu 16.04 - Build with Qt Creator
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 GCC 64bit"
 - Change long build paths for Debug and Release to:
 ```
-Debug = "Debug"
-Release = "Release"
-Profile = "Profile"
+Debug   = "Debug"   // e.g. ~/GamePlay/gameplay/Debug   ~/GamePlay/gameplay-app/Debug   ~/GamePlay/gameplay-editor/Debug
+Release = "Release" // e.g. ~/GamePlay/gameplay/Release ~/GamePlay/gameplay-app/Release ~/GamePlay/gameplay-editor/Release
+Profile = "Profile" // e.g. ~/GamePlay/gameplay/Profile ~/GamePlay/gameplay-app/Profile ~/GamePlay/gameplay-editor/Profile
 ```
 - Build and Run
 
@@ -95,8 +95,8 @@ MacOS High Sierra - Build with Qt Creator
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 clang 64bit"
 - Change long build paths for Debug and Release to:
 ```
-Debug = "Debug"
-Release = "Release"
-Profile = "Profile"
+Debug   = "Debug"   // e.g. ~/GamePlay/gameplay/Debug   ~/GamePlay/gameplay-app/Debug   ~/GamePlay/gameplay-editor/Debug
+Release = "Release" // e.g. ~/GamePlay/gameplay/Release ~/GamePlay/gameplay-app/Release ~/GamePlay/gameplay-editor/Release
+Profile = "Profile" // e.g. ~/GamePlay/gameplay/Profile ~/GamePlay/gameplay-app/Profile ~/GamePlay/gameplay-editor/Profile
 ```
 - Build and Run
