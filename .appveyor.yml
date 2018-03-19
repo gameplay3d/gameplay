@@ -1,8 +1,6 @@
 branches:
   only:
-  - master
   - nextgen
-  - ci
 image: Visual Studio 2015
 clone_depth: 3
 environment:
