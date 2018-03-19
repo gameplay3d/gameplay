@@ -5,6 +5,19 @@
 #define SDL_MAIN_HANDLED
 #include <sdl/SDL.h>
 #include <sdl/SDL_syswm.h>
+#ifdef GP_PLATFORM_LINUX
+#undef Bool
+#undef CursorShape
+#undef Expose
+#undef FocusIn
+#undef FocusOut
+#undef FontChange
+#undef KeyPress
+#undef KeyRelease
+#undef None
+#undef Status
+#undef Unsorted
+#endif
 
 namespace gameplay
 {

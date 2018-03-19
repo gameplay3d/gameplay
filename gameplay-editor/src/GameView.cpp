@@ -64,7 +64,7 @@ void GameView::paintEvent(QPaintEvent* evt)
 
 void GameView::resizeEvent(QResizeEvent* evt)
 {
-   _graphics->onResize(geometry().width(), geometry().height());
+   //_graphics->onResize(geometry().width(), geometry().height());
 
    // Make sure mouse button state is 'up' after resize.
    Input::getInput()->postMousePressEvent(_mousePosition.x(),
