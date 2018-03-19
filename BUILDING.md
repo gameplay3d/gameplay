@@ -15,11 +15,10 @@ Windows 10 - Build with Qt Creator (Option A)
 - Open gameplay-app/gameplay-app.pro
 - Open gameplay-editor/gameplay-editor.pro
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 MSVC2015 64bit"
-- Change long build paths for Debug and Release to:
+- Uncheck Profile and change long build paths for Debug and Release to:
 ```
 Debug = "Debug"
 Release = "Release"
-Profile = "Profile"
 ```
 - Build and Run
 
@@ -63,11 +62,10 @@ Ubuntu 16.04 - Build with Qt Creator
 - Open gameplay-app/gameplay-app.pro
 - Open gameplay-editor/gameplay-editor.pro
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 GCC 64bit"
-- Change long build paths for Debug and Release to:
+- Uncheck Profile and change long build paths for Debug and Release to:
 ```
-Debug   = "Debug"   // e.g. ~/GamePlay/gameplay/Debug   ~/GamePlay/gameplay-app/Debug   ~/GamePlay/gameplay-editor/Debug
-Release = "Release" // e.g. ~/GamePlay/gameplay/Release ~/GamePlay/gameplay-app/Release ~/GamePlay/gameplay-editor/Release
-Profile = "Profile" // e.g. ~/GamePlay/gameplay/Profile ~/GamePlay/gameplay-app/Profile ~/GamePlay/gameplay-editor/Profile
+Debug   = "Debug"
+Release = "Release"
 ```
 - Build and Run
 
@@ -93,10 +91,9 @@ MacOS High Sierra - Build with Qt Creator
 - Open gameplay-app/gameplay-app.pro
 - Open gameplay-editor/gameplay-editor.pro
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 clang 64bit"
-- Change long build paths for Debug and Release to:
+- Uncheck Profile and change long build paths for Debug and Release to:
 ```
-Debug   = "Debug"   // e.g. ~/GamePlay/gameplay/Debug   ~/GamePlay/gameplay-app/Debug   ~/GamePlay/gameplay-editor/Debug
-Release = "Release" // e.g. ~/GamePlay/gameplay/Release ~/GamePlay/gameplay-app/Release ~/GamePlay/gameplay-editor/Release
-Profile = "Profile" // e.g. ~/GamePlay/gameplay/Profile ~/GamePlay/gameplay-app/Profile ~/GamePlay/gameplay-editor/Profile
+Debug   = "Debug"
+Release = "Release"
 ```
 - Build and Run
