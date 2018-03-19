@@ -6,8 +6,6 @@ notifications:
 os:
   - linux
   - osx
-git:
-  depth: 3
 sudo: required
 dist: trusty
 addons:

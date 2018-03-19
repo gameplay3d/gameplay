@@ -2,7 +2,7 @@
 
 ## GamePlay v4.0.0 (nextgen)
 
-<img src="https://png.icons8.com/material/1600/mac-os.png" width=20 height=20><img src="https://png.icons8.com/metro/1600/linux.png" width=20 height=20> [![Build Status](https://travis-ci.org/seanpaultaylor/GamePlay.svg?branch=nextgen)](https://travis-ci.org/seanpaultaylor/GamePlay) <img src="https://png.icons8.com/material/1600/windows-logo.png" width=20 height=20> [![Build status](https://ci.appveyor.com/api/projects/status/e70fge2fklkhhy2p?svg=true)](https://ci.appveyor.com/project/seanpaultaylor/gameplay)
+<a href="https://travis-ci.org/seanpaultaylor/GamePlay"><img src="https://png.icons8.com/material/1600/mac-os.png" width=20 height=20></a><a href="https://travis-ci.org/seanpaultaylor/GamePlay"><img src="https://png.icons8.com/metro/1600/linux.png" width=20 height=20></a> [![Build Status](https://travis-ci.org/seanpaultaylor/GamePlay.svg?branch=nextgen)](https://travis-ci.org/seanpaultaylor/GamePlay) <a href="https://ci.appveyor.com/project/seanpaultaylor/gameplay"><img src="https://png.icons8.com/material/1600/windows-logo.png" width=20 height=20></a> [![Build status](https://ci.appveyor.com/api/projects/status/e70fge2fklkhhy2p?svg=true)](https://ci.appveyor.com/project/seanpaultaylor/gameplay)
 
 GamePlay is an open-source, cross-platform, C++ game engine for creating 2D/3D desktop and mobile games.
 
