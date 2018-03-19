@@ -2,7 +2,6 @@ branches:
   only:
   - nextgen
 image: Visual Studio 2015
-clone_depth: 3
 environment:
   QTDIR: C:\Qt\5.10\msvc2015_64
   VK_VERSION: 1.1.70.0
