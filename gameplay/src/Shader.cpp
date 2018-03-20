@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 Shader::Shader() :
-	_shaderModule(VK_NULL_HANDLE)
+    _shaderModule(VK_NULL_HANDLE)
 {
 }
 

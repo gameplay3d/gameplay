@@ -50,8 +50,8 @@ public:
     float m[16];
 
     /**
-	 * Constructor.
-	 *
+     * Constructor.
+     *
      * The matrix is initialized to the identity matrix:
      *
      * 1  0  0  0
@@ -82,9 +82,9 @@ public:
      * @param m44 The fourth element of the fourth row.
      */
     Matrix(float m11, float m12, float m13, float m14, 
-		   float m21, float m22, float m23, float m24,
+           float m21, float m22, float m23, float m24,
            float m31, float m32, float m33, float m34, 
-		   float m41, float m42, float m43, float m44);
+           float m41, float m42, float m43, float m44);
 
     /**
      * Constructor.
@@ -276,7 +276,7 @@ public:
      * @param q A quaternion describing a 3D orientation.
      * @param dst A matrix to store the result in.
      */
-	static void createRotation(const Quaternion& q, Matrix* dst);
+    static void createRotation(const Quaternion& q, Matrix* dst);
 
     /**
      * Creates a translation matrix.
@@ -301,8 +301,8 @@ public:
     /**
      * Gets the Euler angles equivalent to the rotational portion
      * of the specified matrix. 
-	 *
-	 * The returned Euler angles are in XYZ order an in degrees.
+     *
+     * The returned Euler angles are in XYZ order an in degrees.
      *
      * @return The rotational component of this matrix
      */
@@ -416,7 +416,7 @@ public:
      */
     static void subtract(const Matrix& m1, const Matrix& m2, Matrix* dst);
 
-	/**
+    /**
      * Post-multiplies this matrix by the matrix corresponding to the
      * specified quaternion rotation.
      *
@@ -512,9 +512,9 @@ public:
      * @param m44 The fourth element of the fourth row.
      */
     void set(float m11, float m12, float m13, float m14, 
-		     float m21, float m22, float m23, float m24,
+             float m21, float m22, float m23, float m24,
              float m31, float m32, float m33, float m34, 
-		     float m41, float m42, float m43, float m44);
+             float m41, float m42, float m43, float m44);
 
     /**
      * Sets the values of this matrix to those in the specified column-major array.
@@ -547,16 +547,16 @@ public:
      */
     void setZero();
 
-	/**
-	 * Set the matrix by applying translation, rotation and scale.
-	 *
-	 * @param t The translation to be applied.
-	 * @param r The rotation to be applied.
-	 * @param s The scale to be applied.
-	 */
-	void set(const Vector3& t, const Quaternion& r, const Vector3& s);
+    /**
+     * Set the matrix by applying translation, rotation and scale.
+     *
+     * @param t The translation to be applied.
+     * @param r The rotation to be applied.
+     * @param s The scale to be applied.
+     */
+    void set(const Vector3& t, const Quaternion& r, const Vector3& s);
 
-	/**
+    /**
      * Transforms the specified point by this matrix.
      *
      * The result of the transformation is stored directly into point.

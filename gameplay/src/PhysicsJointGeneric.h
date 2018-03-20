@@ -12,9 +12,9 @@ namespace gameplay
  */
 class PhysicsJointGeneric : public PhysicsJoint
 {
-	friend class Physics;
-	friend class SceneObject;
-	friend class Serializer::Activator;
+    friend class Physics;
+    friend class SceneObject;
+    friend class Serializer::Activator;
 
 public:
   
@@ -51,10 +51,10 @@ public:
      */
     ~PhysicsJointGeneric();
 
-	/**
-	 * @see PhysicsJoint::getType
-	 */
-	PhysicsJoint::Type getType() const;
+    /**
+     * @see PhysicsJoint::getType
+     */
+    PhysicsJoint::Type getType() const;
 
     /**
      * Gets the twist angle of the joint.
@@ -304,80 +304,80 @@ public:
      */
     float getSwingLimitSpringDampening() const;
 
-	/**
-	 * Sets the drive target position.
-	 *
-	 * @param targetPosition The drive target position.
-	 */
+    /**
+     * Sets the drive target position.
+     *
+     * @param targetPosition The drive target position.
+     */
     void setDriveTargetPosition(const Vector3& targetPosition);
 
-	/**
-	 * Gets the drive target position.
-	 *
-	 * @return The drive target position.
-	 */
+    /**
+     * Gets the drive target position.
+     *
+     * @return The drive target position.
+     */
     Vector3 getDriveTargetPosition() const;
 
-	/**
-	 * Sets the drive target velocity.
-	 *
-	 * @param targetVelocity The drive target velocity.
-	 */
+    /**
+     * Sets the drive target velocity.
+     *
+     * @param targetVelocity The drive target velocity.
+     */
     void setDriveTargetVelocity(float targetVelocity);
 
-	/**
-	 * Gets the drive target velocity.
-	 *
-	 * @return The drive target velocity.
-	 */
+    /**
+     * Gets the drive target velocity.
+     *
+     * @return The drive target velocity.
+     */
     float getDriveTargetVelocity() const;
 
-	/**
-	 * Sets the drive stiffness for the specified motion axis.
-	 *
-	 * @param axis The motion axis to set.
-	 * @param stiffness The stiffness to set for the drive.
-	 */
+    /**
+     * Sets the drive stiffness for the specified motion axis.
+     *
+     * @param axis The motion axis to set.
+     * @param stiffness The stiffness to set for the drive.
+     */
     void setDriveStiffness(MotionAxis axis, float stiffness);
 
-	/**
-	 * Gets the drive stiffness for the specified motion axis.
-	 *
-	 * @param axis The motion axis to set.
-	 * @return The drive stiffness for the specified motion axis.
-	 */
+    /**
+     * Gets the drive stiffness for the specified motion axis.
+     *
+     * @param axis The motion axis to set.
+     * @return The drive stiffness for the specified motion axis.
+     */
     float getDriveStiffness(MotionAxis axis);
 
-	/**
-	 * Sets the drive dampening for the specified motion axis.
-	 *
-	 * @param axis The motion axis to set.
-	 * @param dampening The dampening to set for the drive.
-	 */
+    /**
+     * Sets the drive dampening for the specified motion axis.
+     *
+     * @param axis The motion axis to set.
+     * @param dampening The dampening to set for the drive.
+     */
     void setDriveDampening(MotionAxis axis, float dampening);
 
-	/**
-	 * Gets the drive dampening for the specified motion axis.
-	 *
-	 * @param axis The motion axis to set.
-	 * @return The drive dampening for the specified motion axis.
-	 */
+    /**
+     * Gets the drive dampening for the specified motion axis.
+     *
+     * @param axis The motion axis to set.
+     * @return The drive dampening for the specified motion axis.
+     */
     float getDriveDampening(MotionAxis axis);
 
-	/**
-	 * Sets the drive force for the specified motion axis.
-	 *
-	 * @param axis The motion axis to set.
-	 * @param force The force to set for the drive.
-	 */
+    /**
+     * Sets the drive force for the specified motion axis.
+     *
+     * @param axis The motion axis to set.
+     * @param force The force to set for the drive.
+     */
     void setDriveForce(MotionAxis axis, float force);
 
-	/**
-	 * Gets the drive force for the specified motion axis.
-	 *
-	 * @param axis The motion axis to set.
-	 * @return The drive force for the specified motion axis.
-	 */
+    /**
+     * Gets the drive force for the specified motion axis.
+     *
+     * @param axis The motion axis to set.
+     * @return The drive force for the specified motion axis.
+     */
     float getDriveForce(MotionAxis axis);
 
     /**
@@ -399,10 +399,10 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-	
-	/**
+    
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
 };
 

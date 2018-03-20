@@ -16,9 +16,9 @@ namespace gameplay
  */
 class PhysicsJointFixed : public PhysicsJoint
 {
-	friend class Physics;
-	friend class SceneObject;
-	friend class Serializer::Activator;
+    friend class Physics;
+    friend class SceneObject;
+    friend class Serializer::Activator;
 
 public:
   
@@ -56,10 +56,10 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-	
-	/**
+    
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
 
 };

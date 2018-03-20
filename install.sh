@@ -13,11 +13,11 @@ filename=gameplay-deps
 
 
 if [ "$(uname)" == "Darwin" ]; then
-	filename+=-macos
+    filename+=-macos
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-	filename+=-linux
+    filename+=-linux
 else
-	filename+=-windows
+    filename+=-windows
 fi
 
 echo Downloading $filename.zip from $prefix...

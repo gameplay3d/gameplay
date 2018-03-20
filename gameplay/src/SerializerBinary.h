@@ -179,7 +179,7 @@ public:
     /**
      * @see Serializer::readStringList
      */
-	size_t readStringList(const char* propertyName);
+    size_t readStringList(const char* propertyName);
 
     /**
      * @see Serializer::readObject
@@ -189,22 +189,22 @@ public:
     /**
      * @see Serializer::readObjectList
      */
-	size_t readObjectList(const char* propertyName);
+    size_t readObjectList(const char* propertyName);
 
     /**
      * @see Serializer::readIntArray
      */
-	size_t readIntArray(const char* propertyName, int** data);
+    size_t readIntArray(const char* propertyName, int** data);
 
     /**
      * @see Serializer::readFloatArray
      */
-	size_t readFloatArray(const char* propertyName, float** data);
+    size_t readFloatArray(const char* propertyName, float** data);
 
     /**
      * @see Serializer::readByteArray
      */
-	size_t readByteArray(const char* propertyName, unsigned char** data);
+    size_t readByteArray(const char* propertyName, unsigned char** data);
     
     /**
      * Destructor

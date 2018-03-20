@@ -11,23 +11,23 @@ namespace gameplay
  */
 class Shader
 {
-	friend class Graphics;
+    friend class Graphics;
 
 public:
 
-	/**
-	 * Constructor.
-	 */
-	Shader();
+    /**
+     * Constructor.
+     */
+    Shader();
 
-	/**
-	 * Destructor.
-	 */
-	~Shader();
+    /**
+     * Destructor.
+     */
+    ~Shader();
 
 private:
 
-	VkShaderModule _shaderModule;
+    VkShaderModule _shaderModule;
 };
 
 }

@@ -67,7 +67,7 @@ std::shared_ptr<Heightfield> Heightfield::create(const std::string& path, size_t
         // Calculate the heights for each pixel.
         heightfield = std::make_shared<Heightfield>();
         std::vector<float> heights = heightfield->getHeightData();
-		unsigned char* data = image->getData();
+        unsigned char* data = image->getData();
         size_t idx;
         for (int y = (int)image->getHeight() - 1, i = 0; y >= 0; --y)
         {

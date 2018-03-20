@@ -37,8 +37,8 @@ public:
 
     /**
      * Constructor.
-	 *
-	 * The plane values are normal (0, 1, 0) and distance 0.
+     *
+     * The plane values are normal (0, 1, 0) and distance 0.
      */
     Plane();
 

@@ -12,7 +12,7 @@ namespace gameplay
  */
 class Sampler
 {
-	friend class Graphics;
+    friend class Graphics;
 
 public:
 
@@ -186,7 +186,7 @@ protected:
     float _lodMin;
     float _lodMax;
     float _lodMipBias;
-	VkSampler _sampler;
+    VkSampler _sampler;
 };
 
 }

@@ -45,7 +45,7 @@ Matrix::~Matrix()
 const Matrix& Matrix::identity()
 {
     static Matrix m(1, 0, 0, 0,
-					0, 1, 0, 0,
+                    0, 1, 0, 0,
                     0, 0, 1, 0,
                     0, 0, 0, 1 );
     return m;
@@ -59,16 +59,16 @@ bool Matrix::isIdentity() const
 const Matrix& Matrix::zero()
 {
     static Matrix m(0, 0, 0, 0,
-					0, 0, 0, 0,
-					0, 0, 0, 0,
-					0, 0, 0, 0 );
+                    0, 0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0, 0, 0 );
     return m;
 }
 
 void Matrix::createLookAt(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& up, Matrix* dst)
 {
     createLookAt(eyePosition.x, eyePosition.y, eyePosition.z, 
-		         targetPosition.x, targetPosition.y, targetPosition.z,
+                 targetPosition.x, targetPosition.y, targetPosition.z,
                  up.x, up.y, up.z, dst);
 }
 
@@ -263,52 +263,52 @@ Vector3 Matrix::getScale() const
     float x = getX().length();
     float y = getY().length();
     float z = getZ().length();
-	float det = determinant();
-	if (det < 0)
-		z = -z;
-	return Vector3(x, y, z);
+    float det = determinant();
+    if (det < 0)
+        z = -z;
+    return Vector3(x, y, z);
 }
 
 Vector3 Matrix::getEulerAngles() const
 {
-	Vector3 scale = getScale();
+    Vector3 scale = getScale();
     float sx = scale.x;
     float sy = scale.y;
     float sz = scale.z;
 
-	float x, y, z;
+    float x, y, z;
     y = std::asin(-m[2] / sx);
     if (y < GP_MATH_PIOVER2) 
-	{
+    {
         if (y > -GP_MATH_PIOVER2) 
-		{
+        {
             x = std::atan2(m[6] / sy, m[10] / sz);
             z = std::atan2(m[1] / sx, m[0] / sx);
         } 
-		else 
-		{
+        else 
+        {
             z = 0;
             x = -std::atan2(m[4] / sy, m[5] / sy);
         }
     } 
-	else 
-	{
+    else 
+    {
         z = 0;
         x = std::atan2(m[4] / sy, m[5] / sy);
     }
-	Vector3 eulerAngles(x, y, z);
-	eulerAngles.scale(GP_MATH_180OVERPI);
-	return eulerAngles;
+    Vector3 eulerAngles(x, y, z);
+    eulerAngles.scale(GP_MATH_180OVERPI);
+    return eulerAngles;
 }
 
 Vector3 Matrix::getTranslation() const
 {
-	return Vector3(m[12], m[13], m[14]);
+    return Vector3(m[12], m[13], m[14]);
 }
 
 Vector3 Matrix::getX() const
 {
-	return Vector3(m[0], m[1], m[2]);
+    return Vector3(m[0], m[1], m[2]);
 }
 
 Vector3 Matrix::getY() const
@@ -455,7 +455,7 @@ void Matrix::multiply(const Matrix& m1, const Matrix& m2, Matrix* dst)
 
 void Matrix::add(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
-	GP_ASSERT(dst);
+    GP_ASSERT(dst);
     dst->m[0] = m1.m[0] + m2.m[0];
     dst->m[1] = m1.m[1] + m2.m[1];
     dst->m[2] = m1.m[2] + m2.m[2];
@@ -476,7 +476,7 @@ void Matrix::add(const Matrix& m1, const Matrix& m2, Matrix* dst)
 
 void Matrix::subtract(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
-	GP_ASSERT(dst);
+    GP_ASSERT(dst);
     dst->m[0] = m1.m[0] - m2.m[0];
     dst->m[1] = m1.m[1] - m2.m[1];
     dst->m[2] = m1.m[2] - m2.m[2];
@@ -526,7 +526,7 @@ void Matrix::scale(const Vector3& s)
 
 void Matrix::scale(const Vector3& s, Matrix* dst) const
 {
-	Matrix m;
+    Matrix m;
     createScale(s, &m);
     multiply(*this, m, dst);
 }
@@ -565,7 +565,7 @@ void Matrix::transpose()
 void Matrix::transpose(Matrix* dst) const
 {
     GP_ASSERT(dst);
-	dst->m[0] = m[0];
+    dst->m[0] = m[0];
     dst->m[1] = m[4];
     dst->m[2] = m[8];
     dst->m[3] = m[12];
@@ -584,9 +584,9 @@ void Matrix::transpose(Matrix* dst) const
 }
 
 void Matrix::set(float m11, float m12, float m13, float m14, 
-				 float m21, float m22, float m23, float m24,
+                 float m21, float m22, float m23, float m24,
                  float m31, float m32, float m33, float m34, 
-	             float m41, float m42, float m43, float m44)
+                 float m41, float m42, float m43, float m44)
 {
     m[0]  = m11;
     m[1]  = m21;
@@ -629,7 +629,7 @@ void Matrix::setZero()
 
 void Matrix::set(const Vector3& t, const Quaternion& r, const Vector3& s)
 {
-	float tx, ty, tz, qx, qy, qz, qw, sx, sy, sz, x2, y2, z2, xx, xy, xz, yy, yz, zz, wx, wy, wz;
+    float tx, ty, tz, qx, qy, qz, qw, sx, sy, sz, x2, y2, z2, xx, xy, xz, yy, yz, zz, wx, wy, wz;
 
     tx = t.x;
     ty = t.y;
@@ -683,10 +683,10 @@ void Matrix::transformPoint(Vector3* point) const
 
 void Matrix::transformPoint(const Vector3& p, Vector3* dst) const
 {
-	GP_ASSERT(dst);
+    GP_ASSERT(dst);
     dst->x = p.x * m[0] + p.y * m[4] + p.z * m[8] + m[12];
-	dst->y = p.x * m[1] + p.y * m[5] + p.z * m[9] + m[13];
-	dst->z = p.x * m[2] + p.y * m[6] + p.z * m[10] + m[14];
+    dst->y = p.x * m[1] + p.y * m[5] + p.z * m[9] + m[13];
+    dst->z = p.x * m[2] + p.y * m[6] + p.z * m[10] + m[14];
 }
 
 void Matrix::transformVector(Vector3* vector) const
@@ -697,16 +697,16 @@ void Matrix::transformVector(Vector3* vector) const
 
 void Matrix::transformVector(const Vector3& v, Vector3* dst) const
 {
-	GP_ASSERT(dst);
-	dst->x = v.x * m[0] + v.y * m[4] +  v.z * m[8];
-	dst->y = v.x * m[1] + v.y * m[5] + v.z * m[9];
+    GP_ASSERT(dst);
+    dst->x = v.x * m[0] + v.y * m[4] +  v.z * m[8];
+    dst->y = v.x * m[1] + v.y * m[5] + v.z * m[9];
     dst->z = v.x * m[2] + v.y * m[6] +  v.z * m[10];
 }
 
 void Matrix::transformVector(const Vector4& v, Vector4* dst) const
 {
-	GP_ASSERT(dst);
-	float x = v.x * m[0] + v.y * m[4] + v.z * m[8] + v.w * m[12];
+    GP_ASSERT(dst);
+    float x = v.x * m[0] + v.y * m[4] + v.z * m[8] + v.w * m[12];
     float y = v.x * m[1] + v.y * m[5] + v.z * m[9] + v.w * m[13];
     float z = v.x * m[2] + v.y * m[6] + v.z * m[10] + v.w * m[14];
     float w = v.x * m[3] + v.y * m[7] + v.z * m[11] + v.w * m[15];
@@ -770,7 +770,7 @@ void Matrix::createBillboardHelper(const Vector3& objectPosition, const Vector3&
     dst->m[11] = objectPosition.z;
 
     // As per the contracts for the 2 variants of createBillboard, 
-	// we need either a safe default or a sufficient distance between object and camera.
+    // we need either a safe default or a sufficient distance between object and camera.
     if (cameraForwardVector || isSufficientDelta)
     {
         Vector3 target = isSufficientDelta ? cameraPosition : (objectPosition - *cameraForwardVector);

@@ -85,28 +85,28 @@ public:
      *
      * @return The current frame rate.
      */
-	size_t getFrameRate() const;
+    size_t getFrameRate() const;
 
-	/**
+    /**
      * Gets the number of frame that have passed.
      *
      * @return The number of frame that have passed.
      */
-	size_t getFrameCount() const;
+    size_t getFrameCount() const;
 
     /**
      * Gets the game window width.
      *
      * @return The game window width.
      */
-	size_t getWidth() const;
+    size_t getWidth() const;
 
     /**
      * Gets the game window height.
      *
      * @return The game window height.
      */
-	size_t getHeight() const;
+    size_t getHeight() const;
 
     /**
      * Gets the aspect ratio of the window (width / height).
@@ -135,19 +135,19 @@ public:
      */
     void frame();
 
-	/**
-	 *
-	 */
-	void showSplashScreens(std::vector<SplashScreen> splashScreens);
+    /**
+     *
+     */
+    void showSplashScreens(std::vector<SplashScreen> splashScreens);
 
-	/**
-	 * Loads the scene and any resources that are needed.
-	 *
-	 * @param url The url the the scene to be set and loaded. 
+    /**
+     * Loads the scene and any resources that are needed.
+     *
+     * @param url The url the the scene to be set and loaded. 
      * @param showLoadingScene true shows the loading screen until scene is loaded.
      * @see Game::setLoadingScene
-	 */
-	void loadScene(const std::string& url, bool showLoadingScene = true);
+     */
+    void loadScene(const std::string& url, bool showLoadingScene = true);
 
     /**
      * Unloads the game scene and any resource that are no longer needed.
@@ -163,12 +163,12 @@ public:
      */
     void setScene(std::shared_ptr<SceneObject> scene);
 
-	/**
-	 * Gets the current game scene to be active and shown on screen.
-	 *
-	 * @return The current game scene to be active and shown on screen.
-	 */
-	std::shared_ptr<SceneObject> getScene() const;
+    /**
+     * Gets the current game scene to be active and shown on screen.
+     *
+     * @return The current game scene to be active and shown on screen.
+     */
+    std::shared_ptr<SceneObject> getScene() const;
 
     /**
      * Sets the active camera the current scene will use to view the scene.
@@ -210,8 +210,8 @@ public:
 
     /**
      * Event occurs every frame before the scene is updated.
-	 *
-	 * @param elapsedTime The time elapsed (in seconds) since the last onUpdate call.
+     *
+     * @param elapsedTime The time elapsed (in seconds) since the last onUpdate call.
      */
     virtual void onUpdate(float elapsedTime);
 
@@ -222,19 +222,19 @@ public:
      */
     virtual void onLoad(std::shared_ptr<SceneObject> scene);
 
-	virtual void onGamepadConnection(uint32_t controllerIndex, bool connected);
+    virtual void onGamepadConnection(uint32_t controllerIndex, bool connected);
 
-	virtual void onGamepadAxis(uint32_t controllerIndex, Input::GamepadAxis axis, int value);
+    virtual void onGamepadAxis(uint32_t controllerIndex, Input::GamepadAxis axis, int value);
 
-	virtual void onMouseMotion(int mx, int my, int mz);
+    virtual void onMouseMotion(int mx, int my, int mz);
 
-	virtual void onMousePress(int mx, int my, int mz, Input::MouseButton button, bool down);
+    virtual void onMousePress(int mx, int my, int mz, Input::MouseButton button, bool down);
 
-	virtual void onKeyChar(char chr);
+    virtual void onKeyChar(char chr);
 
-	virtual void onKeyPress(Input::Key key, uint8_t keyModifiers, bool down);
+    virtual void onKeyPress(Input::Key key, uint8_t keyModifiers, bool down);
 
-	virtual void onDropFile(std::string file);
+    virtual void onDropFile(std::string file);
 
     /**
      * Game configuration.
@@ -274,15 +274,15 @@ public:
         static std::shared_ptr<Serializable> createObject();
 
         std::string title;
-		int width;
-		int height;
-		bool fullscreen;
-		bool vsync;
-		size_t multisampling;
-		bool validation;
-		std::string homePath;
+        int width;
+        int height;
+        bool fullscreen;
+        bool vsync;
+        size_t multisampling;
+        bool validation;
+        std::string homePath;
         std::vector<SplashScreen> splashScreens;
-		std::string mainScene;
+        std::string mainScene;
     };
 
     /**
@@ -292,12 +292,12 @@ public:
      */
     std::shared_ptr<Game::Config> getConfig();
 
-	/**
-	 * Gets the game graphics
-	 */
-	std::shared_ptr<Graphics> getGraphics();
+    /**
+     * Gets the game graphics
+     */
+    std::shared_ptr<Graphics> getGraphics();
 
-	Game* next;
+    Game* next;
 
 private:
 
@@ -310,21 +310,21 @@ private:
 
     std::shared_ptr<Game::Config> _config;
     State _state;
-	size_t _width;
-	size_t _height;
-	static std::chrono::time_point<std::chrono::high_resolution_clock> _timeStart;
-	static double _pausedTimeLast;
-	static double _pausedTimeTotal;
-	size_t _pausedCount;
-	double _frameLastFPS;
-	size_t _frameCount;
-	size_t _frameRate;
+    size_t _width;
+    size_t _height;
+    static std::chrono::time_point<std::chrono::high_resolution_clock> _timeStart;
+    static double _pausedTimeLast;
+    static double _pausedTimeTotal;
+    size_t _pausedCount;
+    double _frameLastFPS;
+    size_t _frameCount;
+    size_t _frameRate;
     std::queue<SplashScreen> _splashScreens;
     std::map<std::string, std::shared_ptr<SceneObject>> _scenesLoaded;
     std::shared_ptr<SceneObject> _sceneLoading;
-	std::shared_ptr<SceneObject> _scene;
+    std::shared_ptr<SceneObject> _scene;
     std::shared_ptr<Camera> _camera;
-	std::shared_ptr<Graphics> _graphics;
+    std::shared_ptr<Graphics> _graphics;
 };
 
 }

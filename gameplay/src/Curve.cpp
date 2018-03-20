@@ -146,8 +146,8 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
         std::memcpy(dst, _points[0].value, _componentSize);
         return;
     }
-	uint32_t min = 0;
-	uint32_t max = (uint32_t)_pointCount - 1;
+    uint32_t min = 0;
+    uint32_t max = (uint32_t)_pointCount - 1;
     float localTime = time;
     if (startTime > 0.0f || endTime < 1.0f)
     {
@@ -181,7 +181,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
     Point* to;
     float scale;
     float t;
-	size_t index;
+    size_t index;
 
     if (localTime > _points[max].time)
     {
@@ -782,8 +782,8 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
     else
     {
         // Interpolate any values up to the quaternion offset as scalars.
-		size_t quaternionOffset = *_quaternionOffset;
-		size_t i = 0;
+        size_t quaternionOffset = *_quaternionOffset;
+        size_t i = 0;
         for (i = 0; i < quaternionOffset; i++)
         {
             if (fromValue[i] == toValue[i])
@@ -832,8 +832,8 @@ void Curve::interpolateBSpline(float s, Point* c0, Point* c1, Point* c2, Point* 
     else
     {
         // Interpolate any values up to the quaternion offset as scalars.
-		size_t quaternionOffset = *_quaternionOffset;
-		size_t i = 0;
+        size_t quaternionOffset = *_quaternionOffset;
+        size_t i = 0;
         for (i = 0; i < quaternionOffset; i++)
         {
             if (c1Value[i] == c2Value[i])
@@ -889,8 +889,8 @@ void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst) cons
     else
     {
         // Interpolate any values up to the quaternion offset as scalars.
-		size_t quaternionOffset = *_quaternionOffset;
-		size_t i = 0;
+        size_t quaternionOffset = *_quaternionOffset;
+        size_t i = 0;
         for (i = 0; i < quaternionOffset; i++)
         {
             if (fromValue[i] == toValue[i])
@@ -936,8 +936,8 @@ void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst) 
     else
     {
         // Interpolate any values up to the quaternion offset as scalars.
-		size_t quaternionOffset = *_quaternionOffset;
-		size_t i = 0;
+        size_t quaternionOffset = *_quaternionOffset;
+        size_t i = 0;
         for (i = 0; i < quaternionOffset; i++)
         {
             if (fromValue[i] == toValue[i])
@@ -1009,8 +1009,8 @@ void Curve::interpolateHermiteSmooth(float s, size_t index, Point* from, Point* 
     else
     {
         // Interpolate any values up to the quaternion offset as scalars.
-		size_t quaternionOffset = *_quaternionOffset;
-		size_t i = 0;
+        size_t quaternionOffset = *_quaternionOffset;
+        size_t i = 0;
         for (i = 0; i < quaternionOffset; i++)
         {   
             if (fromValue[i] == toValue[i])
@@ -1111,8 +1111,8 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
     else
     {
         // Interpolate any values up to the quaternion offset as scalars.
-		size_t quaternionOffset = *_quaternionOffset;
-		size_t i = 0;
+        size_t quaternionOffset = *_quaternionOffset;
+        size_t i = 0;
         for (i = 0; i < quaternionOffset; i++)
         {
             if (fromValue[i] == toValue[i])
@@ -1144,7 +1144,7 @@ void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) c
 
 int Curve::determineIndex(float time, uint32_t min, uint32_t max) const
 {
-	uint32_t mid;
+    uint32_t mid;
     // Do a binary search to determine the index.
     do 
     {
@@ -1163,10 +1163,10 @@ int Curve::determineIndex(float time, uint32_t min, uint32_t max) const
 
 Curve::Interpolation Curve::getInterpolation(const std::string& interpolationStr)
 {
-	if (interpolationStr.compare("INTERPOLATION_LINEAR") == 0)
-	{
-		return Curve::INTERPOLATION_LINEAR;
-	}
+    if (interpolationStr.compare("INTERPOLATION_LINEAR") == 0)
+    {
+        return Curve::INTERPOLATION_LINEAR;
+    }
     else if (interpolationStr.compare("INTERPOLATION_BEZIER") == 0)
     {
         return Curve::INTERPOLATION_BEZIER;

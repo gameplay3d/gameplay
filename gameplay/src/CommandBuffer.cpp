@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 CommandBuffer::CommandBuffer() : 
-	_commandBuffer(VK_NULL_HANDLE)
+    _commandBuffer(VK_NULL_HANDLE)
 {
 }
 CommandBuffer::~CommandBuffer()

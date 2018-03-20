@@ -19,7 +19,7 @@ Sampler::Sampler() :
     _lodMin(0.0f),
     _lodMax(0.0f),
     _lodMipBias(0.0f),
-	_sampler(VK_NULL_HANDLE)
+    _sampler(VK_NULL_HANDLE)
 {
 }
 
@@ -29,72 +29,72 @@ Sampler::~Sampler()
 
 Sampler::Filter Sampler::getFilterMin() const
 {
-	return _filterMin;
+    return _filterMin;
 }
 
 Sampler::Filter Sampler::getFilterMag() const
 {
-	return _filterMag;
+    return _filterMag;
 }
 
 Sampler::Filter Sampler::getFilterMip() const
 {
-	return _filterMip;
+    return _filterMip;
 }
 
 Sampler::AddressMode Sampler::getAddressModeU() const
 {
-	return _addressModeU;
+    return _addressModeU;
 }
 
 Sampler::AddressMode Sampler::getAddressModeV() const
 {
-	return _addressModeV;
+    return _addressModeV;
 }
 
 Sampler::AddressMode Sampler::getAddressModeW() const
 {
-	return _addressModeW;
+    return _addressModeW;
 }
 
 Sampler::BorderColor Sampler::getBorderColor() const
 {
-	return _borderColor;
+    return _borderColor;
 }
 
 bool Sampler::isCompareEnabled() const
 {
-	return _compareEnabled;
+    return _compareEnabled;
 }
 
 Sampler::CompareFunc Sampler::getCompareFunc() const
 {
-	return _compareFunc;
+    return _compareFunc;
 }
 
 bool Sampler::isAnisotropyEnabled() const
 {
-	return _anisotropyEnabled;
+    return _anisotropyEnabled;
 }
 
 float Sampler::getAnisotropyMax() const
 {
-	return _anisotropyMax;
+    return _anisotropyMax;
 }
 
 float Sampler::getLodMin() const
 {
-	return _lodMin;
+    return _lodMin;
 }
 
 float Sampler::getLodMax() const
 {
-	return _lodMax;
+    return _lodMax;
 }
 
 float Sampler::getLodMipBias() const
 {
-	return _lodMipBias;
+    return _lodMipBias;
 }
 
 }

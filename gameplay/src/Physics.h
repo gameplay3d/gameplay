@@ -5,8 +5,8 @@
 
 namespace gameplay
 {
-	class Heightfield;
-	class Mesh;
+    class Heightfield;
+    class Mesh;
 
 /**
  * Defines an abstract physics system.
@@ -32,7 +32,7 @@ public:
 
     std::shared_ptr<PhysicsCollider> createMeshCollider(std::shared_ptr<Mesh> mesh);
 
-	std::shared_ptr<PhysicsCollider> createHeightfieldCollider(std::shared_ptr<Heightfield> heightfield);
+    std::shared_ptr<PhysicsCollider> createHeightfieldCollider(std::shared_ptr<Heightfield> heightfield);
 
 private:
 

@@ -14,7 +14,7 @@ PhysicsJointHinge::~PhysicsJointHinge()
 
 PhysicsJoint::Type PhysicsJointHinge::getType() const
 {
-	return PhysicsJoint::TYPE_HINGE;
+    return PhysicsJoint::TYPE_HINGE;
 }
 
 float PhysicsJointHinge::getAngle() const
@@ -146,27 +146,27 @@ float PhysicsJointHinge::getDriveGearRatio() const
 
 Component::TypeId PhysicsJointHinge::getTypeId()
 {
-	return Component::TYPEID_PHYSICS_JOINT_HINGE;
+    return Component::TYPEID_PHYSICS_JOINT_HINGE;
 }
 
 std::string PhysicsJointHinge::getClassName()
 {
-	return "gameplay::PhysicsJointHinge";
+    return "gameplay::PhysicsJointHinge";
 }
 
 void PhysicsJointHinge::onSerialize(Serializer * serializer)
 {
-	PhysicsJoint::onSerialize(serializer);
+    PhysicsJoint::onSerialize(serializer);
 }
 
 void PhysicsJointHinge::onDeserialize(Serializer * serializer)
 {
-	PhysicsJoint::onDeserialize(serializer);
+    PhysicsJoint::onDeserialize(serializer);
 }
 
 std::shared_ptr<Serializable> PhysicsJointHinge::createObject()
 {
-	return std::shared_ptr<PhysicsJointHinge>();
+    return std::shared_ptr<PhysicsJointHinge>();
 }
 
 }

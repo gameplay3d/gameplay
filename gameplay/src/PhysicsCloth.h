@@ -11,7 +11,7 @@ namespace gameplay
  */
 class PhysicsCloth : public Component
 {
-	friend class Physics;
+    friend class Physics;
 
 public:
 
@@ -44,10 +44,10 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-	
-	/**
+    
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
 };
 

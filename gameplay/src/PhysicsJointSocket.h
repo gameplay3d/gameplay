@@ -15,9 +15,9 @@ namespace gameplay
  */
 class PhysicsJointSocket : public PhysicsJoint
 {
-	friend class Physics;
-	friend class SceneObject;
-	friend class Serializer::Activator;
+    friend class Physics;
+    friend class SceneObject;
+    friend class Serializer::Activator;
 
 public:
   
@@ -31,10 +31,10 @@ public:
      */
     ~PhysicsJointSocket();
 
-	/**
-	 * @see PhysicsJoint::getType
-	 */
-	PhysicsJoint::Type getType() const;
+    /**
+     * @see PhysicsJoint::getType
+     */
+    PhysicsJoint::Type getType() const;
 
     /**
      * Sets if a limit is enabled for the joint.
@@ -192,10 +192,10 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-	
-	/**
+    
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
 };
 

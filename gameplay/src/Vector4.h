@@ -34,8 +34,8 @@ public:
 
     /**
      * Constructor
-	 *
-	 * The x, y, z, w coordinate values are all set to zero.
+     *
+     * The x, y, z, w coordinate values are all set to zero.
      */
     Vector4();
 
@@ -194,7 +194,7 @@ public:
      *
      * @param v The other vector.
      * @return The squared distance between this vector and v.
-	 *
+     *
      * @see distance
      */
     float distanceSquared(const Vector4& v) const;
@@ -220,7 +220,7 @@ public:
      * Gets the length computed for this vector.
      *
      * @return The length of the vector.
-	 *
+     *
      * @see lengthSquared
      */
     float length() const;
@@ -234,7 +234,7 @@ public:
      * instead of length.
      *
      * @return The squared length of the vector.
-	 *
+     *
      * @see length
      */
     float lengthSquared() const;

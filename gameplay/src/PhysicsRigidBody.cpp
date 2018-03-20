@@ -107,12 +107,12 @@ void PhysicsRigidBody::clearTorque(PhysicsRigidBody::ForceMode mode)
 
 Component::TypeId PhysicsRigidBody::getTypeId()
 {
-	return Component::TYPEID_PHYSICS_RIGIDBODY;
+    return Component::TYPEID_PHYSICS_RIGIDBODY;
 }
 
 std::string PhysicsRigidBody::getClassName()
 {
-	return "gameplay::PhysicsRigidBody";
+    return "gameplay::PhysicsRigidBody";
 }
 
 void PhysicsRigidBody::onSerialize(Serializer * serializer)
@@ -125,7 +125,7 @@ void PhysicsRigidBody::onDeserialize(Serializer * serializer)
 
 std::shared_ptr<Serializable> PhysicsRigidBody::createObject()
 {
-	return std::shared_ptr<PhysicsRigidBody>();
+    return std::shared_ptr<PhysicsRigidBody>();
 }
 
 }

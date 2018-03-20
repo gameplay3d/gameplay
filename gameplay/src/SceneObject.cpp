@@ -17,18 +17,18 @@ namespace gameplay
 {
 
 SceneObject::SceneObject() :
-	_name(SCENEOBJECT_NAME),
+    _name(SCENEOBJECT_NAME),
     _loaded(false),
-	_enabled(SCENEOBJECT_ENABLED),
-	_static(SCENEOBJECT_STATIC),
-	_position(SCENEOBJECT_POSITION),
+    _enabled(SCENEOBJECT_ENABLED),
+    _static(SCENEOBJECT_STATIC),
+    _position(SCENEOBJECT_POSITION),
     _rotation(Quaternion::identity()),
     _eulerAngles(SCENEOBJECT_EULER_ANGLES),
-	_scale(SCENEOBJECT_SCALE),
-	_localMatrix(Matrix::identity()),
-	_worldMatrix(Matrix::identity()),
-	_worldToLocalMatrix(Matrix::identity()),
-	_dirtyBits(SCENEOBJECT_DIRTY_ALL)
+    _scale(SCENEOBJECT_SCALE),
+    _localMatrix(Matrix::identity()),
+    _worldMatrix(Matrix::identity()),
+    _worldToLocalMatrix(Matrix::identity()),
+    _dirtyBits(SCENEOBJECT_DIRTY_ALL)
 {
 }
 
@@ -38,12 +38,12 @@ SceneObject::~SceneObject()
 
 std::string SceneObject::getName() const
 {
-	return _name;
+    return _name;
 }
 
 void SceneObject::setName(const std::string& name)
 {
-	_name = name;
+    _name = name;
 }
 
 void SceneObject::resetLocalTransform()
@@ -56,237 +56,237 @@ void SceneObject::resetLocalTransform()
 
 bool SceneObject::isStatic() const
 {
-	return _static;
+    return _static;
 }
 
 void SceneObject::setStatic(bool isStatic)
 {
-	_static = isStatic;
+    _static = isStatic;
 }
 
 bool SceneObject::isEnabled() const
 {
-	return _enabled;
+    return _enabled;
 }
 
 void SceneObject::setEnabled(bool enabled)
 {
-	if (_enabled != enabled) 
-	{
+    if (_enabled != enabled) 
+    {
         _enabled = enabled;
     }
 }
 
 const Vector3& SceneObject::getLocalScale() const
 {
-	return _scale;
+    return _scale;
 }
 
 void SceneObject::setLocalScale(const Vector3& scale)
 {
-	_scale = scale;
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    _scale = scale;
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 const Vector3& SceneObject::getLocalPosition() const
 {
-	return _position;
+    return _position;
 }
 
 void SceneObject::setLocalPosition(const Vector3& position)
 {
-	_position = position;
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    _position = position;
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 const Vector3& SceneObject::getLocalEulerAngles() const
 {
-	return _eulerAngles;
+    return _eulerAngles;
 }
 
 void SceneObject::setLocalEulerAngles(const Vector3& eulerAngles)
 {
     _eulerAngles = eulerAngles;
-	_rotation.set(eulerAngles);
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    _rotation.set(eulerAngles);
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 const Quaternion& SceneObject::getLocalRotation() const
 {
-	return _rotation;
+    return _rotation;
 }
 
 void SceneObject::setLocalRotation(const Quaternion& rotation)
 {
-	_rotation = rotation;
+    _rotation = rotation;
     _rotation.toEulerAngles(&_eulerAngles);
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 Vector3 SceneObject::getPosition()
 {
-	return getWorldMatrix().getTranslation();
+    return getWorldMatrix().getTranslation();
 }
 
 void SceneObject::setPosition(const Vector3& position)
 {
-	if (_parent.lock() == nullptr)
-	{
-		_position = position;
-	}
-	else
-	{
-		_worldMatrix = getWorldMatrix();
-		_worldMatrix.invert(&_worldToLocalMatrix);
-		_worldToLocalMatrix.transformPoint(position, &_position);
-	}
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    if (_parent.lock() == nullptr)
+    {
+        _position = position;
+    }
+    else
+    {
+        _worldMatrix = getWorldMatrix();
+        _worldMatrix.invert(&_worldToLocalMatrix);
+        _worldToLocalMatrix.transformPoint(position, &_position);
+    }
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 Vector3 SceneObject::getEulerAngles()
 {
-	return getWorldMatrix().getEulerAngles();
+    return getWorldMatrix().getEulerAngles();
 }
 
 void SceneObject::setEulerAngles(const Vector3& eulerAngles)
 {
     setLocalEulerAngles(eulerAngles);
-	if (_parent.lock() != nullptr)
-	{
-		Quaternion inversParentRotation;
-		_parent.lock()->getRotation().inverse(&inversParentRotation);
-		Quaternion::multiply(_rotation, inversParentRotation, &_rotation);
-	}
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    if (_parent.lock() != nullptr)
+    {
+        Quaternion inversParentRotation;
+        _parent.lock()->getRotation().inverse(&inversParentRotation);
+        Quaternion::multiply(_rotation, inversParentRotation, &_rotation);
+    }
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 Quaternion SceneObject::getRotation()
 {
-	Quaternion rotation;
-	rotation.set(getWorldMatrix());
-	return rotation;
+    Quaternion rotation;
+    rotation.set(getWorldMatrix());
+    return rotation;
 }
 
 void SceneObject::setRotation(const Quaternion& rotation)
 {
-	if (_parent.lock() == nullptr)
-	{
+    if (_parent.lock() == nullptr)
+    {
         setLocalRotation(rotation);
-	}
-	else
-	{
-		Quaternion inversParentRotation = _parent.lock()->getRotation();
-		inversParentRotation.inverse();
-		Quaternion::multiply(inversParentRotation, rotation, &_rotation);
-	}
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    }
+    else
+    {
+        Quaternion inversParentRotation = _parent.lock()->getRotation();
+        inversParentRotation.inverse();
+        Quaternion::multiply(inversParentRotation, rotation, &_rotation);
+    }
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 void SceneObject::translateLocal(const Vector3& translation)
 {
-	Vector3 tx = translation;
-	_rotation.transformVector(tx, &tx);
-	_position.add(tx);
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    Vector3 tx = translation;
+    _rotation.transformVector(tx, &tx);
+    _position.add(tx);
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 void SceneObject::translate(const Vector3& translation)
 {
-	Vector3 tx = translation;
-	tx.add(getPosition());
-	setPosition(tx);
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    Vector3 tx = translation;
+    tx.add(getPosition());
+    setPosition(tx);
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 void SceneObject::rotateLocal(const Vector3& eulerAngles)
 {
-	Quaternion rotation = Quaternion::identity();
-	rotation.set(eulerAngles);
+    Quaternion rotation = Quaternion::identity();
+    rotation.set(eulerAngles);
 
     // TODO: fix me
-	Vector3 testRot;
-	rotation.toEulerAngles(&testRot);
-	_rotation.multiply(rotation);
-	
-	Vector3 test;
-	_rotation.toEulerAngles(&test);
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    Vector3 testRot;
+    rotation.toEulerAngles(&testRot);
+    _rotation.multiply(rotation);
+    
+    Vector3 test;
+    _rotation.toEulerAngles(&test);
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 void SceneObject::rotate(const Vector3& eulerAngles)
 {
-	if (_parent.lock() == nullptr)
-	{
-		Quaternion rotation;
-		rotation.set(eulerAngles);
-		_rotation.multiply(rotation);
-	}
-	else
-	{
-		Quaternion rotation = getRotation();
-		Quaternion inverseParentRotation = _parent.lock()->getRotation();
-		inverseParentRotation.inverse();
-		Quaternion::multiply(inverseParentRotation, rotation, &_rotation);
-	}
-	_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    if (_parent.lock() == nullptr)
+    {
+        Quaternion rotation;
+        rotation.set(eulerAngles);
+        _rotation.multiply(rotation);
+    }
+    else
+    {
+        Quaternion rotation = getRotation();
+        Quaternion inverseParentRotation = _parent.lock()->getRotation();
+        inverseParentRotation.inverse();
+        Quaternion::multiply(inverseParentRotation, rotation, &_rotation);
+    }
+    _dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 void SceneObject::lookAt(const Vector3& target, Vector3 worldUp)
 {
-	Matrix lookAt;
-	Matrix::createLookAt(getPosition(), target, worldUp, &lookAt);
-	Quaternion rotation;
-	rotation.set(lookAt);
-	setRotation(rotation);
+    Matrix lookAt;
+    Matrix::createLookAt(getPosition(), target, worldUp, &lookAt);
+    Quaternion rotation;
+    rotation.set(lookAt);
+    setRotation(rotation);
 }
 
 Vector3 SceneObject::getRight()
 {
-	Vector3 right = getWorldMatrix().getX();
-	return right.normalize();
+    Vector3 right = getWorldMatrix().getX();
+    return right.normalize();
 }
 
 Vector3 SceneObject::getUp()
 {
-	Vector3 up = getWorldMatrix().getY();
-	return up.normalize();
+    Vector3 up = getWorldMatrix().getY();
+    return up.normalize();
 }
 
 Vector3 SceneObject::getForward()
 {
-	Vector3 forward = getWorldMatrix().getZ();
-	return forward.normalize();
+    Vector3 forward = getWorldMatrix().getZ();
+    return forward.normalize();
 }
 
 const Matrix& SceneObject::getLocalMatrix()
 {
-	if (_dirtyBits & SCENEOBJECT_DIRTY_MATRIX_LOCAL)
-	{
-		_localMatrix.set(_position, _rotation, _scale);
-		_dirtyBits &= ~SCENEOBJECT_DIRTY_MATRIX_LOCAL;
-	}
-	return _localMatrix;
+    if (_dirtyBits & SCENEOBJECT_DIRTY_MATRIX_LOCAL)
+    {
+        _localMatrix.set(_position, _rotation, _scale);
+        _dirtyBits &= ~SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    }
+    return _localMatrix;
 }
 
 const Matrix& SceneObject::getWorldMatrix()
 {
-	if (_dirtyBits & (SCENEOBJECT_DIRTY_MATRIX_WORLD | SCENEOBJECT_DIRTY_MATRIX_LOCAL))
-	{
-		_dirtyBits &= ~SCENEOBJECT_DIRTY_MATRIX_WORLD;
-		if (_parent.lock())
-		{
-			Matrix::multiply(_parent.lock()->getWorldMatrix(), getLocalMatrix(), &_worldMatrix);
-		}
-		else
-		{
-			_worldMatrix = getLocalMatrix();
-		}
+    if (_dirtyBits & (SCENEOBJECT_DIRTY_MATRIX_WORLD | SCENEOBJECT_DIRTY_MATRIX_LOCAL))
+    {
+        _dirtyBits &= ~SCENEOBJECT_DIRTY_MATRIX_WORLD;
+        if (_parent.lock())
+        {
+            Matrix::multiply(_parent.lock()->getWorldMatrix(), getLocalMatrix(), &_worldMatrix);
+        }
+        else
+        {
+            _worldMatrix = getLocalMatrix();
+        }
         for (auto child : _children)
-		{
+        {
             child->getWorldMatrix();
-		}
-	}
-	return _worldMatrix;
+        }
+    }
+    return _worldMatrix;
 }
 
 const Matrix& SceneObject::getWorldToLocalMatrix()
@@ -296,27 +296,27 @@ const Matrix& SceneObject::getWorldToLocalMatrix()
 
 void SceneObject::transformPoint(const Vector3& point, Vector3* dst)
 {
-	GP_ASSERT(dst);
-	getWorldMatrix().transformPoint(point, dst);
+    GP_ASSERT(dst);
+    getWorldMatrix().transformPoint(point, dst);
 }
 
 void SceneObject::transformVector(const Vector3& vector, Vector3* dst)
-{	
-	GP_ASSERT(dst);
-	getWorldMatrix().transformVector(vector, dst);
+{   
+    GP_ASSERT(dst);
+    getWorldMatrix().transformVector(vector, dst);
 }
 
 void SceneObject::addChild(std::shared_ptr<SceneObject> object)
 {
-	if (object->_parent.lock() == shared_from_this())
-		return;
-	if (object->_parent.lock())
-		removeChild(object);
+    if (object->_parent.lock() == shared_from_this())
+        return;
+    if (object->_parent.lock())
+        removeChild(object);
 
     _children.push_back(object);
 
-	object->_parent = shared_from_this();
-	object->_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
+    object->_parent = shared_from_this();
+    object->_dirtyBits |= SCENEOBJECT_DIRTY_MATRIX_LOCAL;
 }
 
 void SceneObject::removeChild(std::shared_ptr<SceneObject> object)
@@ -331,16 +331,16 @@ void SceneObject::removeChild(std::shared_ptr<SceneObject> object)
 
 void SceneObject::removeChildren()
 {
-	for (auto itr = _children.begin(); itr != _children.end();)
-	{
-		(*itr)->_parent.reset();
+    for (auto itr = _children.begin(); itr != _children.end();)
+    {
+        (*itr)->_parent.reset();
         _children.erase(itr);
-	}
+    }
 }
 
 size_t SceneObject::getChildCount() const
 {
-	return _children.size();
+    return _children.size();
 }
 
 std::vector<std::shared_ptr<SceneObject>> SceneObject::getChildren()
@@ -352,13 +352,13 @@ std::vector<std::shared_ptr<SceneObject>> SceneObject::getChildren()
         {
             children.push_back(child);
         }
-	}
-	return children;
+    }
+    return children;
 }
 
 std::shared_ptr<SceneObject> SceneObject::getParent() const
 {
-	return _parent.lock();
+    return _parent.lock();
 }
 
 std::shared_ptr<SceneObject> SceneObject::findObject(const std::string& name, bool recursive, bool exactMatch) 
@@ -471,7 +471,7 @@ bool SceneObject::isLoaded() const
 
 std::string SceneObject::getClassName()
 {
-	return "gameplay::SceneObject";
+    return "gameplay::SceneObject";
 }
 
 void SceneObject::onSerialize(Serializer* serializer)

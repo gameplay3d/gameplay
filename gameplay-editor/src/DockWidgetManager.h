@@ -16,7 +16,7 @@ void sendPlatformMouseEvent(PlatformMouseEvent ev, int x = 0, int y = 0);
 
 
 class QMainWindow;
-class QTabBar;	
+class QTabBar;  
 class DockWidget;
 
 /**

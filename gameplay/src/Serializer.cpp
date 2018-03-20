@@ -41,7 +41,7 @@ void Serializer::Activator::initializeEnums()
     
 std::shared_ptr<Serializable> Serializer::Activator::createObject(const std::string& className)
 {
-	std::shared_ptr<Serializable> object = nullptr;
+    std::shared_ptr<Serializable> object = nullptr;
     std::map<std::string,CreateObjectCallback>::const_iterator itr = __activator->_classes.find(className);
     if (itr == __activator->_classes.end())
         return nullptr;

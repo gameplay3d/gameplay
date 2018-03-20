@@ -78,8 +78,8 @@ public:
 
     /**
      * Constructor.
-	 *
-	 * The value are created from rotational part of the specified matrix.
+     *
+     * The value are created from rotational part of the specified matrix.
      *
      * @param m The matrix.
      */
@@ -140,12 +140,12 @@ public:
      */
     bool isZero() const;
 
-	/**
-	* Creates this quaternion equal to the rotation from the specified euler angles.
-	*
-	* @param eulerAngles The euler angles x(roll), y(pitch), z(yaw) (in degrees).
-	* @param dst A quaternion to store the result in.
-	*/
+    /**
+    * Creates this quaternion equal to the rotation from the specified euler angles.
+    *
+    * @param eulerAngles The euler angles x(roll), y(pitch), z(yaw) (in degrees).
+    * @param dst A quaternion to store the result in.
+    */
     static void createFromEulerAngles(const Vector3& eulerAngles, Quaternion* dst);
 
     /**
@@ -166,7 +166,7 @@ public:
      * @param dst A quaternion to store the conjugate in.
      */
     static void createFromRotationMatrix(const Matrix& m, Quaternion* dst);
-	
+    
     /**
      * Sets this quaternion to the conjugate of itself.
      */
@@ -239,16 +239,16 @@ public:
      */
     void normalize(Quaternion* dst) const;
 
-	/**
-	* Rotate the specified point by this quaternion
-	* and stores the result in dst
-	*
-	* The point must normalized.
-	*
-	* @param point The vector to rotate.
-	* @param dst The vector to store the result.
-	*/
-	void rotatePoint(const Vector3& point, Vector3* dst) const;
+    /**
+    * Rotate the specified point by this quaternion
+    * and stores the result in dst
+    *
+    * The point must normalized.
+    *
+    * @param point The vector to rotate.
+    * @param dst The vector to store the result.
+    */
+    void rotatePoint(const Vector3& point, Vector3* dst) const;
 
     /**
      * Sets the elements of the quaternion to the specified values.
@@ -317,13 +317,13 @@ public:
      */
     float toAxisAngle(Vector3* axis) const;
 
-	/**
-	 * Transforms a vector by this quaternion
-	 *
-	 * @param v The vector to be transformed.
-	 * @param dst The resulting vector that is transformed.
-	 */
-	void transformVector(const Vector3& v, Vector3* dst);
+    /**
+     * Transforms a vector by this quaternion
+     *
+     * @param v The vector to be transformed.
+     * @param dst The resulting vector that is transformed.
+     */
+    void transformVector(const Vector3& v, Vector3* dst);
 
     /**
      * Interpolates between two quaternions using linear interpolation.

@@ -273,7 +273,7 @@ Component::TypeId Camera::getTypeId()
 
 std::string Camera::getClassName()
 {
-	return "gameplay::Camera";
+    return "gameplay::Camera";
 }
 
 void Camera::onSerialize(Serializer* serializer)

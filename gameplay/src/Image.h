@@ -38,7 +38,7 @@ public:
      * @param width The width of the image.
      * @param height The height of the image.
      * @param format The format of the image.
-	 * @param data The raw image data.
+     * @param data The raw image data.
      */
     static std::shared_ptr<Image> create(size_t width, size_t height, Format format, unsigned char* data = nullptr);
 

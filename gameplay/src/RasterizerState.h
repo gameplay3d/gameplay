@@ -37,7 +37,7 @@ public:
      */
     enum FrontFace : uint32_t
     {
-		FRONT_FACE_CCW,
+        FRONT_FACE_CCW,
         FRONT_FACE_CW
     };
 

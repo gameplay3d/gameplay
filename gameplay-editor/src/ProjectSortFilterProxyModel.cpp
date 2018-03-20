@@ -36,6 +36,8 @@ bool ProjectSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
 {
     QModelIndex index = sourceModel()->index(sourceRow,0, sourceParent);
     if (sourceModel()->hasChildren(index))
+    {
         return true;
+    }
     return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

@@ -5,15 +5,15 @@
 namespace gameplay
 {
    
-	class Vector3;
+    class Vector3;
 
 /**
  *  Defines an audio source to play an audio clip in a scene.
  */
 class AudioSource  : public Component
 {
-	friend class Audio;
-	friend class SceneObject;
+    friend class Audio;
+    friend class SceneObject;
     friend class Serializer::Activator;
 
 public:
@@ -148,10 +148,10 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-	
-	/**
+    
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
 };
 

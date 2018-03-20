@@ -8,8 +8,9 @@
 namespace gameplay
 {
 
-Plane::Plane()
-    : _normal(0, 1, 0), _distance(0)
+Plane::Plane() : 
+    _normal(0, 1, 0),
+    _distance(0)
 {
 }
 

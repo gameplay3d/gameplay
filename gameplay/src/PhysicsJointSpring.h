@@ -14,9 +14,9 @@ namespace gameplay
  */
 class PhysicsJointSpring : public PhysicsJoint
 {
-	friend class Physics;
-	friend class SceneObject;
-	friend class Serializer::Activator;
+    friend class Physics;
+    friend class SceneObject;
+    friend class Serializer::Activator;
 
 public:
   
@@ -30,10 +30,10 @@ public:
      */
     ~PhysicsJointSpring();
 
-	/**
-	 * @see PhysicsJoint::getType
-	 */
-	PhysicsJoint::Type getType() const;
+    /**
+     * @see PhysicsJoint::getType
+     */
+    PhysicsJoint::Type getType() const;
 
     /**
      * Gets the current distance of the joint. 
@@ -131,10 +131,10 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-	
-	/**
+    
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
 };
 

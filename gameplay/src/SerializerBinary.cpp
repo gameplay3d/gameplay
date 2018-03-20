@@ -17,7 +17,11 @@ unsigned char SerializerBinary::BIT_VALUE = 0x01;
 unsigned char SerializerBinary::BIT_XREF = 0x02;
 unsigned char SerializerBinary::BIT_DEFAULT = 0x04;
 
-SerializerBinary::SerializerBinary(Type type, const std::string& path, Stream* stream, uint32_t versionMajor, uint32_t versionMinor) : 
+SerializerBinary::SerializerBinary(Type type,
+                                   const std::string& path,
+                                   Stream* stream,
+                                   uint32_t versionMajor,
+                                   uint32_t versionMinor) : 
     Serializer(type, path, stream, versionMajor, versionMinor)
 {
 }
@@ -533,7 +537,7 @@ size_t SerializerBinary::readStringList(const char* propertyName)
     GP_ASSERT(propertyName);
     GP_ASSERT(_type == Serializer::TYPE_READER);
 
-	size_t count;
+    size_t count;
     _stream->read(&count, sizeof(size_t), 1);
     return count;
 }
@@ -565,11 +569,11 @@ std::shared_ptr<Serializable> SerializerBinary::readObject(const char* propertyN
     readLengthPrefixedString(className);
 
     std::shared_ptr<Serializable> value = std::dynamic_pointer_cast<Serializable>(Serializer::getActivator()->createObject(className));
-	if (value == nullptr)
-	{
+    if (value == nullptr)
+    {
         GP_ERROR("Failed to deserialize binary class: %s for propertyName:%s", className.c_str(), propertyName);
-		return value;
-	}
+        return value;
+    }
     
     // Deserialize the properties
     value->onDeserialize(this);
@@ -587,7 +591,7 @@ size_t SerializerBinary::readObjectList(const char* propertyName)
     GP_ASSERT(propertyName);
     GP_ASSERT(_type == Serializer::TYPE_READER);
     
-	size_t count;
+    size_t count;
     _stream->read(&count, sizeof(size_t), 1);
     return count;
 }
@@ -597,7 +601,7 @@ size_t SerializerBinary::readIntArray(const char* propertyName, int** data)
     GP_ASSERT(propertyName);
     GP_ASSERT(_type == Serializer::TYPE_READER);
 
-	size_t count = 0;
+    size_t count = 0;
     _stream->read(&count, sizeof(size_t), 1);
     int* buffer = nullptr;
     if (count > 0)
@@ -622,7 +626,7 @@ size_t SerializerBinary::readFloatArray(const char* propertyName, float** data)
     GP_ASSERT(propertyName);
     GP_ASSERT(_type == Serializer::TYPE_READER);
     
-	size_t count = 0;
+    size_t count = 0;
     _stream->read(&count, sizeof(size_t), 1);
     float* buffer = nullptr;
     if (count > 0)
@@ -647,7 +651,7 @@ size_t SerializerBinary::readByteArray(const char* propertyName, unsigned char**
     GP_ASSERT(propertyName);
     GP_ASSERT(_type == Serializer::TYPE_READER);
     
-	size_t count = 0;
+    size_t count = 0;
     _stream->read(&count, sizeof(size_t), 1);
     unsigned char* buffer = nullptr;
     if (count > 0)
@@ -669,7 +673,7 @@ size_t SerializerBinary::readByteArray(const char* propertyName, unsigned char**
 
 void SerializerBinary::writeLengthPrefixedString(const char* str)
 {
-	size_t length = strlen(str);
+    size_t length = strlen(str);
     _stream->write(&length, sizeof(size_t), 1);
     if (length > 0)
     {
@@ -679,7 +683,7 @@ void SerializerBinary::writeLengthPrefixedString(const char* str)
     
 void SerializerBinary::readLengthPrefixedString(std::string& str)
 {
-	size_t length;
+    size_t length;
     _stream->read(&length, sizeof(size_t), 1);
     if (length > 0)
     {

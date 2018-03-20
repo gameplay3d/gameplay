@@ -14,27 +14,27 @@ Path::~Path()
 
 Component::TypeId Path::getTypeId()
 {
-	return Component::TYPEID_TEXT;
+    return Component::TYPEID_TEXT;
 }
 
 std::string Path::getClassName()
 {
-	return "gameplay::Path";
+    return "gameplay::Path";
 }
 
 void Path::onSerialize(Serializer* serializer)
 {
-	Renderer::onSerialize(serializer);
+    Renderer::onSerialize(serializer);
 }
 
 void Path::onDeserialize(Serializer* serializer)
 {
-	Renderer::onDeserialize(serializer);
+    Renderer::onDeserialize(serializer);
 }
 
 std::shared_ptr<Serializable> Path::createObject()
 {
-	return std::shared_ptr<Path>();
+    return std::shared_ptr<Path>();
 }
 
 

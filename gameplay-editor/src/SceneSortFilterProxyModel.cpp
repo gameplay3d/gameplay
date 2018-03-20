@@ -14,6 +14,8 @@ bool SceneSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
     if (sourceModel()->hasChildren(index))
+    {
         return true;
+    }
     return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 }

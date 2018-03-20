@@ -35,8 +35,8 @@ public:
 
     /**
      * Constructor.
-	 * 
-	 * The values x, y and z coordinate values are set to zero.
+     * 
+     * The values x, y and z coordinate values are set to zero.
      */
     Vector3();
 
@@ -236,7 +236,7 @@ public:
      *
      * @param v The other vector.
      * @return The distance between this vector and v.
-	 *
+     *
      * @see distanceSquared
      */
     float distance(const Vector3& v) const;
@@ -251,7 +251,7 @@ public:
      *
      * @param v The other vector.
      * @return The squared distance between this vector and v.
-	 *
+     *
      * @see distance
      */
     float distanceSquared(const Vector3& v) const;
@@ -277,7 +277,7 @@ public:
      * Gets the length computed for this vector.
      *
      * @return The length of the vector.
-	 *
+     *
      * @see lengthSquared
      */
     float length() const;
@@ -291,7 +291,7 @@ public:
      * instead of length.
      *
      * @return The squared length of the vector.
-	 *
+     *
      * @see length
      */
     float lengthSquared() const;
@@ -357,9 +357,9 @@ public:
 
     /**
      * Sets this vector to the directional vector between the specified points.
-	 * 
-	 * @param p1 The first point.
-	 * @param p2 The second point.
+     * 
+     * @param p1 The first point.
+     * @param p2 The second point.
      */
     void set(const Vector3& p1, const Vector3& p2);
 

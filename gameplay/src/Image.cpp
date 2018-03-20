@@ -6,8 +6,11 @@
 namespace gameplay
 {
 
-Image::Image() 
-    : _width(0), _height(0), _format(FORMAT_UNDEFINED), _stride(0)
+Image::Image() : 
+    _width(0),
+    _height(0),
+    _format(FORMAT_UNDEFINED),
+    _stride(0)
 {
 }
 
@@ -49,12 +52,12 @@ std::shared_ptr<Image> Image::create(size_t width, size_t height, Image::Format 
         break;
     }
     size_t dataSize = width * height * image->_stride;
-	image->_data = new unsigned char[dataSize];
+    image->_data = new unsigned char[dataSize];
 
-	if (data)
-	{
-		memcpy(image->_data, data, dataSize);
-	}
+    if (data)
+    {
+        memcpy(image->_data, data, dataSize);
+    }
 
     return image;
 }
@@ -135,8 +138,8 @@ std::shared_ptr<Image> Image::create(const std::string& url)
     size_t stride = png_get_rowbytes(png, info);
 
     // Allocate image data.
-	size_t dataSize = stride * image->_height;
-	image->_data = new unsigned char[dataSize];
+    size_t dataSize = stride * image->_height;
+    image->_data = new unsigned char[dataSize];
 
     // Read rows into image data.
     png_bytepp rows = png_get_rows(png, info);

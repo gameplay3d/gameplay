@@ -12,6 +12,6 @@ extern "C" int APIENTRY WinMain(HINSTANCE hInstance,
                                 LPSTR cmdLine,
                                 int cmdShow)
 {
-	Platform* platform = Platform::getPlatform();
+    Platform* platform = Platform::getPlatform();
     return platform->run();
 }

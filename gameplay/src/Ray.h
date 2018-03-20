@@ -26,8 +26,8 @@ public:
 
     /**
      * Constructor.
-	 *
-	 * The origin is (0, 0, 0) and direction is (0, 0, 1)
+     *
+     * The origin is (0, 0, 0) and direction is (0, 0, 1)
      */
     Ray();
 

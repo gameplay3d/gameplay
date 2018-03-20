@@ -11,23 +11,23 @@ namespace gameplay
  */
 class Semaphore
 {
-	friend class Graphics;
+    friend class Graphics;
 
 public:
 
-	/**
-	 * Constructor.
-	 */
-	Semaphore();
+    /**
+     * Constructor.
+     */
+    Semaphore();
 
-	/**
-	 * Destructor.
-	 */
-	~Semaphore();
+    /**
+     * Destructor.
+     */
+    ~Semaphore();
 
 private:
 
-	VkSemaphore _semaphore;
+    VkSemaphore _semaphore;
 };
 
 }
