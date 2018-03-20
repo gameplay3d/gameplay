@@ -51,16 +51,18 @@ Graphics::~Graphics()
 {
 	vkDeviceWaitIdle(_device);
 	destroySemaphore(_presentCompleteSemaphore);
-	destroySemaphore(_renderCompleteSemaphore);
-	
-	vkDestroySwapchainKHR(_device, _swapchain, nullptr);
+    destroySemaphore(_renderCompleteSemaphore);
+    destroyCommandBuffers();
+    destroyRenderPasses();
 
 	if (vkDebugReportMessageEXT != VK_NULL_HANDLE && _debugMessageCallback != VK_NULL_HANDLE)
 	{
 		vkDestroyDebugReportCallbackEXT(_instance, _debugMessageCallback, nullptr);
 	}
-
-	vkDestroySurfaceKHR(_instance, _surface, nullptr);
+    if (_surface != VK_NULL_HANDLE)
+    {
+        vkDestroySurfaceKHR(_instance, _surface, nullptr);
+    }
 	vkDestroyDevice(_device, nullptr);
 	vkDestroyInstance(_instance, nullptr);
 }
@@ -478,10 +480,6 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
 											   bool hostVisible,
 											   const void* data)
 {
-	if (usage == Buffer::USAGE_UNIFORM)
-	{
-		size = GP_MATH_ROUNDUP(size, 256);
-	}
 	VkBufferCreateInfo bufferCreateInfo = {};
     bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	bufferCreateInfo.pNext = nullptr;
@@ -524,7 +522,7 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
 		VK_CHECK_RESULT(vkAllocateMemory(_device, &memAlloc, nullptr, &deviceMemory));
 		VK_CHECK_RESULT(vkBindBufferMemory(_device, bufferVK, deviceMemory, 0));
 
-		std::shared_ptr<Buffer> buffer = std::make_shared<Buffer>();		
+        std::shared_ptr<Buffer> buffer = std::make_shared<Buffer>();
 		if (data)
 		{
 			VK_CHECK_RESULT(vkMapMemory(_device, deviceMemory, 0, VK_WHOLE_SIZE, 0, &buffer->_hostMemory));
@@ -545,23 +543,6 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
 	}
 	else
 	{
-		// Create a device local buffer to copied into
-		VkBuffer bufferVK;
-		bufferCreateInfo.usage |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
-		VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &bufferVK));
-		vkGetBufferMemoryRequirements(_device, bufferVK, &memReqs);
-		memAlloc.allocationSize = memReqs.size;
-		VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-		uint32_t memTypeIndex = UINT32_MAX;
-		if (!getMemoryType(memReqs.memoryTypeBits, memFlags, &memTypeIndex))
-		{
-			GP_ERROR("Failed to find compatible memory for buffer.");
-		}
-		VkDeviceMemory deviceMemory;
-		memAlloc.memoryTypeIndex = memTypeIndex;
-		VK_CHECK_RESULT(vkAllocateMemory(_device, &memAlloc, nullptr, &deviceMemory));
-		VK_CHECK_RESULT(vkBindBufferMemory(_device, bufferVK, deviceMemory, 0));
-
 		// Create a host-visible staging buffer to temp copy the vertex data to
 		VkBuffer stagingBuffer;
 		void* stagingData;
@@ -569,18 +550,35 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
 		VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &stagingBuffer));
 		vkGetBufferMemoryRequirements(_device, stagingBuffer, &memReqs);
 		memAlloc.allocationSize = memReqs.size;
-		memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-		memTypeIndex = UINT32_MAX;
+        VkMemoryPropertyFlags memFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        uint32_t memTypeIndex = UINT32_MAX;
 		if (!getMemoryType(memReqs.memoryTypeBits, memFlags, &memTypeIndex))
 		{
 			GP_ERROR("Failed to find compatible memory for buffer.");
 		}
 		VkDeviceMemory stagingMemory;
 		VK_CHECK_RESULT(vkAllocateMemory(_device, &memAlloc, nullptr, &stagingMemory));
-		VK_CHECK_RESULT(vkMapMemory(_device, stagingMemory, 0, memAlloc.allocationSize, 0, &stagingData));
+        VK_CHECK_RESULT(vkMapMemory(_device, stagingMemory, 0, memAlloc.allocationSize, 0, (void**)&stagingData));
 		memcpy(stagingData, data, size);
 		vkUnmapMemory(_device, stagingMemory);
-		VK_CHECK_RESULT(vkBindBufferMemory(_device, stagingBuffer, stagingMemory, 0));
+        VK_CHECK_RESULT(vkBindBufferMemory(_device, stagingBuffer, stagingMemory, 0));
+
+        // Create a device local buffer to copied into
+        VkBuffer bufferVK;
+        bufferCreateInfo.usage |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+        VK_CHECK_RESULT(vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &bufferVK));
+        vkGetBufferMemoryRequirements(_device, bufferVK, &memReqs);
+        memAlloc.allocationSize = memReqs.size;
+        memFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        memTypeIndex = UINT32_MAX;
+        if (!getMemoryType(memReqs.memoryTypeBits, memFlags, &memTypeIndex))
+        {
+            GP_ERROR("Failed to find compatible memory for buffer.");
+        }
+        VkDeviceMemory deviceMemory;
+        memAlloc.memoryTypeIndex = memTypeIndex;
+        VK_CHECK_RESULT(vkAllocateMemory(_device, &memAlloc, nullptr, &deviceMemory));
+        VK_CHECK_RESULT(vkBindBufferMemory(_device, bufferVK, deviceMemory, 0));
 
 		// Copy from the staging buffer to local
 		VkCommandBufferBeginInfo cmdBufferBeginInfo = {};
@@ -2165,7 +2163,7 @@ void Graphics::createSwapchain()
 	}
 
 	// Create the swapchain
-	VK_CHECK_RESULT(vkCreateSwapchainKHR(_device, &createInfo, nullptr, &_swapchain));
+    VK_CHECK_RESULT(vkCreateSwapchainKHR(_device, &createInfo, nullptr, &_swapchain));
 
 	// Get the backbuffer images for color attachments
 	VK_CHECK_RESULT(vkGetSwapchainImagesKHR(_device, _swapchain, &_swapchainImageCount, nullptr));
