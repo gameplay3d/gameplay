@@ -11,8 +11,8 @@ namespace gameplay
  */
 class PhysicsRigidBody : public Component
 {
-	friend SceneObject;
-	friend Serializer::Activator;
+    friend SceneObject;
+    friend Serializer::Activator;
 
 public:
 
@@ -223,10 +223,10 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-	
-	/**
+    
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
     
 };

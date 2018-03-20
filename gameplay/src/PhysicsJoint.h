@@ -17,7 +17,7 @@ class PhysicsJoint : public Component
 {
 public:
 
-	friend class Physics;
+    friend class Physics;
 
     /**
      * Defines the type of joint.
@@ -41,7 +41,7 @@ public:
      */
     ~PhysicsJoint();
 
-	 /**
+     /**
       * Gets the type of joint this is.
       */
     virtual PhysicsJoint::Type getType() const = 0;
@@ -143,7 +143,7 @@ public:
     /**
      * @see Serializable::onSerialize
      */
-	virtual void onSerialize(Serializer* serializer);
+    virtual void onSerialize(Serializer* serializer);
     
     /**
      * @see Serializable::onDeserialize

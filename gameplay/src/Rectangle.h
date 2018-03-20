@@ -32,15 +32,15 @@ public:
 
     /**
      * Constructor.
-	 * 
-	 * The x, y, width and height values are set to zero.
+     * 
+     * The x, y, width and height values are set to zero.
      */
     Rectangle();
 
     /**
      * Constructor.
-	 *
-	 * The x and y values are set to zero.
+     *
+     * The x and y values are set to zero.
      *
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.

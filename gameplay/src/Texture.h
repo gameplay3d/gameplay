@@ -17,7 +17,7 @@ namespace gameplay
  */
 class Texture
 {
-	friend class Graphics;
+    friend class Graphics;
 
 public:
 

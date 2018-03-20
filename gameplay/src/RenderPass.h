@@ -17,7 +17,7 @@ namespace gameplay
  */
 class RenderPass
 {
-	friend class Graphics;
+    friend class Graphics;
 
 public:
 

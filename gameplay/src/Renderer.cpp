@@ -4,8 +4,10 @@
 namespace gameplay
 {
 
-Renderer::Renderer() 
-	: _url(""), _materialShared(nullptr), _loaded(false)
+Renderer::Renderer() : 
+    _url(""),
+    _materialShared(nullptr),
+    _loaded(false)
 {
 }
 
@@ -15,18 +17,18 @@ Renderer::~Renderer()
 
 std::string Renderer::getUrl() const
 {
-	return _url;
+    return _url;
 }
 
 std::shared_ptr<Material> Renderer::getMaterial(int submeshIndex)
 {
-	GP_ASSERT(submeshIndex == -1 || submeshIndex >= 0);
+    GP_ASSERT(submeshIndex == -1 || submeshIndex >= 0);
     if (submeshIndex < 0)
         return _materialShared;
     //if (submeshIndex >= (int)_submesh.size())
     //    return nullptr;
-	
-	std::shared_ptr<Material> material = nullptr;
+    
+    std::shared_ptr<Material> material = nullptr;
 
     // Look up explicitly specified part material.
     if (_materials.size() > 0)
@@ -48,8 +50,8 @@ void Renderer::setMaterial(std::shared_ptr<Material> material, int submeshIndex)
 
 bool Renderer::hasMaterial(size_t submeshIndex) const
 {
-	return false;
-	//return ((submeshIndex < _submesh.size()) && (_materials.size() > 0) && _materials[submeshIndex]);
+    return false;
+    //return ((submeshIndex < _submesh.size()) && (_materials.size() > 0) && _materials[submeshIndex]);
 }
 
 void Renderer::onSerialize(Serializer * serializer)
@@ -62,12 +64,12 @@ void Renderer::onDeserialize(Serializer * serializer)
 
 bool Renderer::isLoaded() const
 {
-	return _loaded;
+    return _loaded;
 }
 
 void Renderer::onLoaded()
 {
-	_loaded = true;
+    _loaded = true;
 }
 
 }

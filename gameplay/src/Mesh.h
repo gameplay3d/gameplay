@@ -10,31 +10,31 @@ namespace gameplay
  */
 class Mesh : public Renderer
 {
-	friend class Graphics;
-	friend class SceneObject;
-	friend class Serializer::Activator;
+    friend class Graphics;
+    friend class SceneObject;
+    friend class Serializer::Activator;
 
 public:
 
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
     Mesh();
     
-	/**
-	 * Destructor.
-	 */
-	~Mesh();
+    /**
+     * Destructor.
+     */
+    ~Mesh();
 
-	/**
-	 * Loads a mesh using data from any supported common interchange format:
-	 * http://assimp.sourceforge.net/main_features_formats.html
-	 *
-	 * @param url The url of the mesh file to load from.
-	 */
-	void load(const std::string& url);
-	
-	/**
+    /**
+     * Loads a mesh using data from any supported common interchange format:
+     * http://assimp.sourceforge.net/main_features_formats.html
+     *
+     * @param url The url of the mesh file to load from.
+     */
+    void load(const std::string& url);
+    
+    /**
      * @see Component::getTypeId
      */
     Component::TypeId getTypeId();
@@ -53,10 +53,10 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-	
-	/**
+    
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
 };
 

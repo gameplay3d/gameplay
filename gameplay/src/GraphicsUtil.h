@@ -54,7 +54,7 @@ static const VkFormat lookupVkFormat[] =
  */
 static const VkSampleCountFlagBits lookupVkSampleCountFlagBits[] =
 {
-	VK_SAMPLE_COUNT_1_BIT,
+    VK_SAMPLE_COUNT_1_BIT,
     VK_SAMPLE_COUNT_1_BIT,
     VK_SAMPLE_COUNT_2_BIT,
     VK_SAMPLE_COUNT_4_BIT,

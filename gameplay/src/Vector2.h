@@ -24,8 +24,8 @@ public:
 
     /**
      * Constructor.
-	 *
-	 * The values x and y coordinate values are set to zero.
+     *
+     * The values x and y coordinate values are set to zero.
      */
     Vector2();
 
@@ -168,7 +168,7 @@ public:
      *
      * @param v The other vector.
      * @return The distance between this vector and v.
-	 *
+     *
      * @see distanceSquared
      */
     float distance(const Vector2& v) const;
@@ -183,7 +183,7 @@ public:
      *
      * @param v The other vector.
      * @return The squared distance between this vector and v.
-	 *
+     *
      * @see distance
      */
     float distanceSquared(const Vector2& v) const;
@@ -209,7 +209,7 @@ public:
      * Gets the length computed for this vector.
      *
      * @return The length of the vector.
-	 *
+     *
      * @see lengthSquared
      */
     float length() const;

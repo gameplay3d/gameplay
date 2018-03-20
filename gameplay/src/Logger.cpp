@@ -6,7 +6,9 @@ namespace gameplay
 
 Logger::State Logger::_state[3];
 
-Logger::State::State() : logFunctionC(nullptr), enabled(true)
+Logger::State::State() : 
+    logFunctionC(nullptr),
+    enabled(true)
 {
 }
 

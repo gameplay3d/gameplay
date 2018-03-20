@@ -191,19 +191,19 @@ public:
      */
     void onDeserialize(Serializer* serializer);
 
-	/**
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
     
-	/**
+    /**
      * @see Serializer::Activator::enumToString
-	 */
+     */
     static std::string enumToString(const std::string& enumName, int value);
 
-	/**
+    /**
      * @see Serializer::Activator::enumParse
-	 */
+     */
     static int enumParse(const std::string& enumName, const std::string& str);
     
 private:

@@ -11,8 +11,12 @@
 namespace gameplay
 {
 
-SerializerJson::SerializerJson(Type type, const std::string& path, Stream* stream, 
-							  uint32_t versionMajor, uint32_t versionMinor, JSONNODE* root) : 
+SerializerJson::SerializerJson(Type type,
+                               const std::string& path,
+                               Stream* stream,
+                               uint32_t versionMajor,
+                               uint32_t versionMinor,
+                               JSONNODE* root) : 
     Serializer(type, path, stream, versionMajor, versionMinor), 
     _root(root)
 {
@@ -25,7 +29,7 @@ SerializerJson::~SerializerJson()
         
 Serializer* SerializerJson::create(const std::string& path, Stream* stream)
 {
-	size_t length = stream->length();
+    size_t length = stream->length();
     char* buffer = new char[length + 1];
     stream->read(buffer, sizeof(char), length);
     buffer[length] = '\0';
@@ -324,25 +328,25 @@ void SerializerJson::writeObject(const char* propertyName, std::shared_ptr<Seria
     JSONNODE* xrefNode = nullptr;
     if (value && value.use_count() > 1)
     {
-		unsigned long xrefAddress = (unsigned long)value.get();
+        unsigned long xrefAddress = (unsigned long)value.get();
         std::map<unsigned long, JSONNODE*>::const_iterator itr = _xrefsWrite.find(xrefAddress);
         std::string url;
         if (itr == _xrefsWrite.end())
         {
             writeNode = createNode(parentNode, propertyName, value, true);
-			json_push_back(writeNode, json_new_a("class", value->getClassName().c_str()));
+            json_push_back(writeNode, json_new_a("class", value->getClassName().c_str()));
             url = std::to_string(xrefAddress);
             _xrefsWrite[xrefAddress] = writeNode;
         }
         else
         {
             writeNode = createNode(parentNode, propertyName, value, false);
-			json_push_back(writeNode, json_new_a("class", value->getClassName().c_str()));
+            json_push_back(writeNode, json_new_a("class", value->getClassName().c_str()));
             std::ostringstream o;
             o << "@" << std::to_string(xrefAddress);
             url = o.str();
             xrefNode = itr->second;
-			json_push_back(writeNode, json_new_a("xref", url.c_str()));
+            json_push_back(writeNode, json_new_a("xref", url.c_str()));
         }
     }
     else
@@ -352,7 +356,7 @@ void SerializerJson::writeObject(const char* propertyName, std::shared_ptr<Seria
     }
     
     if (xrefNode == nullptr)
-		value->onSerialize(this);
+        value->onSerialize(this);
     
     if (!xrefNode)
         _nodes.pop();
@@ -709,7 +713,7 @@ std::shared_ptr<Serializable> SerializerJson::readObject(const char* propertyNam
     
     if (json_type(parentNode) == JSON_ARRAY)
     {
-		size_t  arraySize = json_size(parentNode);
+        size_t  arraySize = json_size(parentNode);
         readNode = json_at(parentNode, (uint32_t)arraySize - (uint32_t)_nodesListCounts.top());
         _nodes.push(readNode);
     }
@@ -759,7 +763,7 @@ std::shared_ptr<Serializable> SerializerJson::readObject(const char* propertyNam
             {
                 std::shared_ptr<Serializable> ref = itr->second;
                 finishNode(parentNode);
-				return ref;
+                return ref;
             }
             else
             {
@@ -771,12 +775,12 @@ std::shared_ptr<Serializable> SerializerJson::readObject(const char* propertyNam
     }
     
     std::shared_ptr<Serializable> value = std::dynamic_pointer_cast<Serializable>(Serializer::getActivator()->createObject(className));
-	if (value == nullptr)
-	{
+    if (value == nullptr)
+    {
         GP_WARN("Failed to deserialize json object:%s for class:", className);
         json_free(className);
-		return nullptr;
-	}
+        return nullptr;
+    }
     json_free(className);
 
     value->onDeserialize(this);
@@ -810,7 +814,7 @@ size_t SerializerJson::readStringList(const char* propertyName)
 
     JSONNODE* node = _nodes.top();
     JSONNODE* list = json_get(node, propertyName);
-	size_t count = json_size(list);
+    size_t count = json_size(list);
     if (count > 0)
     {
         _nodes.push(list);
@@ -826,7 +830,7 @@ size_t SerializerJson::readObjectList(const char* propertyName)
     
     JSONNODE* node = _nodes.top();
     JSONNODE* list = json_get(node, propertyName);
-	size_t count = json_size(list);
+    size_t count = json_size(list);
     if (count > 0)
     {
         _nodes.push(list);
@@ -841,7 +845,7 @@ size_t SerializerJson::readIntArray(const char* propertyName, int** data)
     GP_ASSERT(_type == Serializer::TYPE_READER);
     
     JSONNODE* node = _nodes.top();
-	size_t count = 0;
+    size_t count = 0;
     JSONNODE* property = json_get(node, propertyName);
     if (property)
     {
@@ -875,7 +879,7 @@ size_t SerializerJson::readFloatArray(const char* propertyName, float** data)
     GP_ASSERT(_type == Serializer::TYPE_READER);
     
     JSONNODE* node = _nodes.top();
-	size_t count = 0;
+    size_t count = 0;
     JSONNODE* property = json_get(node, propertyName);
     if (property)
     {

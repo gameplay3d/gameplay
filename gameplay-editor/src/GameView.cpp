@@ -58,8 +58,8 @@ void GameView::onTimer()
 void GameView::paintEvent(QPaintEvent* evt)
 {
     QPainter p(this);
-	p.setCompositionMode(QPainter::CompositionMode_Clear);
-	p.fillRect(0, 0, width(), height(), Qt::BrushStyle::SolidPattern);
+    p.setCompositionMode(QPainter::CompositionMode_Clear);
+    p.fillRect(0, 0, width(), height(), Qt::BrushStyle::SolidPattern);
 }
 
 void GameView::resizeEvent(QResizeEvent* evt)

@@ -89,12 +89,12 @@ private:
     Logger(const Logger& copy);
     ~Logger();
 
-	struct State
-	{
-		State();
-		void(*logFunctionC) (Level, const char*);
-		bool enabled;
-	};
+    struct State
+    {
+        State();
+        void(*logFunctionC) (Level, const char*);
+        bool enabled;
+    };
     static State _state[3];
 
 };

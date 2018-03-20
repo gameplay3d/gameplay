@@ -11,7 +11,7 @@ namespace gameplay
  */
 class Animation : public Component
 {
-	friend class SceneObject;
+    friend class SceneObject;
     friend class Serializer::Activator;
 
 public:

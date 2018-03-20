@@ -12,7 +12,7 @@
 DockWidget::DockWidget(QWidget* parent) : QDockWidget(parent),
     _emptyTitleBar(new QWidget(this)),
     _lastTabBar(nullptr)
-{	
+{   
     QAction* action = toggleViewAction();
     action->setData(QVariant(reinterpret_cast<quintptr>(this)));
     setTitleBarWidget(_emptyTitleBar);
@@ -26,7 +26,7 @@ void DockWidget::changeTitleBar(bool useDefault)
 {
     if (useDefault)
         setTitleBarWidget(0);
-	else
+    else
         setTitleBarWidget(_emptyTitleBar);
 }
 

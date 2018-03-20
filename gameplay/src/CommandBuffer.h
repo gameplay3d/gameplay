@@ -11,23 +11,23 @@ namespace gameplay
  */ 
 class CommandBuffer
 {
-	friend class Graphics;
+    friend class Graphics;
 
-public:	
+public: 
 
-	/**
-	 * Constructor.
-	 */
-	CommandBuffer();
+    /**
+     * Constructor.
+     */
+    CommandBuffer();
 
-	/**
-	 * Destructor.
-	 */
-	~CommandBuffer();
+    /**
+     * Destructor.
+     */
+    ~CommandBuffer();
 
 private:
 
-	VkCommandBuffer _commandBuffer;
+    VkCommandBuffer _commandBuffer;
 };
 
 }

@@ -71,8 +71,8 @@ void Quaternion::createFromEulerAngles(const Vector3& eulerAngles, Quaternion* d
 {
     GP_ASSERT(dst);
 
-	float halfToRad = 0.5f * GP_MATH_PIOVER180;
-	float ex = eulerAngles.x * halfToRad;
+    float halfToRad = 0.5f * GP_MATH_PIOVER180;
+    float ex = eulerAngles.x * halfToRad;
     float ey = eulerAngles.y * halfToRad;
     float ez = eulerAngles.z * halfToRad;
 
@@ -106,7 +106,7 @@ void Quaternion::createFromAxisAngle(const Vector3& axis, float angle, Quaternio
 
 void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
 {
-	GP_ASSERT(dst);
+    GP_ASSERT(dst);
 
     float m00 = m.m[0];
     float m01 = m.m[1];
@@ -132,10 +132,10 @@ void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
     m21 *= lz;
     m22 *= lz;
 
-	float s, rs;
+    float s, rs;
     float tr = m00 + m11 + m22;
     if (tr >= 0) 
-	{
+    {
         s = std::sqrt(tr + 1);
         dst->w = s * 0.5f;
         s = 0.5f / s;
@@ -143,12 +143,12 @@ void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
         dst->y = (m20 - m02) * s;
         dst->z = (m01 - m10) * s;
     } 
-	else 
-	{
+    else 
+    {
         if (m00 > m11) 
-		{
+        {
             if (m00 > m22) 
-			{
+            {
                 rs = (m00 - (m11 + m22)) + 1;
                 rs = std::sqrt(rs);
                 dst->x = rs * 0.5f;
@@ -157,8 +157,8 @@ void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
                 dst->y = (m01 + m10) * rs;
                 dst->z = (m02 + m20) * rs;
             } 
-			else 
-			{
+            else 
+            {
                 rs = (m22 - (m00 + m11)) + 1;
                 rs = std::sqrt(rs);
                 dst->z = rs * 0.5f;
@@ -168,8 +168,8 @@ void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
                 dst->y = (m21 + m12) * rs;
             }
         } 
-		else if (m11 > m22) 
-		{
+        else if (m11 > m22) 
+        {
             rs = (m11 - (m22 + m00)) + 1;
             rs = std::sqrt(rs);
             dst->y = rs * 0.5f;
@@ -178,8 +178,8 @@ void Quaternion::createFromRotationMatrix(const Matrix& m, Quaternion* dst)
             dst->z = (m12 + m21) * rs;
             dst->x = (m10 + m01) * rs;
         } 
-		else 
-		{
+        else 
+        {
             rs = (m22 - (m00 + m11)) + 1;
             rs = std::sqrt(rs);
             dst->z = rs * 0.5f;
@@ -247,9 +247,9 @@ void Quaternion::multiply(const Quaternion& q)
 void Quaternion::multiply(const Quaternion& q1, const Quaternion& q2, Quaternion* dst)
 {
     GP_ASSERT(dst);
-	
-	dst->w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
-	dst->x = q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y;
+    
+    dst->w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
+    dst->x = q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y;
     dst->y = q1.w * q2.y + q1.y * q2.w + q1.z * q2.x - q1.x * q2.z;
     dst->z = q1.w * q2.z + q1.z * q2.w + q1.x * q2.y - q1.y * q2.x;
 
@@ -292,20 +292,20 @@ void Quaternion::normalize(Quaternion* dst) const
 
 void Quaternion::rotatePoint(const Vector3& point, Vector3* dst) const
 {
-	Quaternion vecQuat;
-	Quaternion resQuat;
-	vecQuat.x = point.x;
-	vecQuat.y = point.y;
-	vecQuat.z = point.z;
-	vecQuat.w = 0.0f;
+    Quaternion vecQuat;
+    Quaternion resQuat;
+    vecQuat.x = point.x;
+    vecQuat.y = point.y;
+    vecQuat.z = point.z;
+    vecQuat.w = 0.0f;
 
-	Quaternion conQuat;
-	this->conjugate(&conQuat);
+    Quaternion conQuat;
+    this->conjugate(&conQuat);
 
-	resQuat = vecQuat * conQuat;
-	resQuat = (*this) * resQuat;
+    resQuat = vecQuat * conQuat;
+    resQuat = (*this) * resQuat;
 
-	dst->set(resQuat.x, resQuat.y, resQuat.z);
+    dst->set(resQuat.x, resQuat.y, resQuat.z);
 }
 
 void Quaternion::set(float x, float y, float z, float w)
@@ -359,70 +359,70 @@ void Quaternion::setIdentity()
 
 void Quaternion::toEulerAngles(Vector3* eulerAngles) const
 {
-	GP_ASSERT(eulerAngles);
+    GP_ASSERT(eulerAngles);
 
     float a2 = 2 * (w * y - x * z);
     if (a2 <= -0.99999f) 
-	{
+    {
         eulerAngles->x = 2 * std::atan2(x, w);
-		eulerAngles->y = -GP_MATH_PIOVER2;
+        eulerAngles->y = -GP_MATH_PIOVER2;
         eulerAngles->z = 0;
     } 
-	else if (a2 >= 0.99999f) 
-	{
-		eulerAngles->x = 2 * std::atan2(x, w);
+    else if (a2 >= 0.99999f) 
+    {
+        eulerAngles->x = 2 * std::atan2(x, w);
         eulerAngles->y = GP_MATH_PIOVER2;
         eulerAngles->z = 0;
     } 
-	else 
-	{
-		eulerAngles->x = std::atan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y));
+    else 
+    {
+        eulerAngles->x = std::atan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y));
         eulerAngles->y = std::asin(a2);
         eulerAngles->z = std::atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z));
     }
     eulerAngles->scale(GP_MATH_180OVERPI);
 
-	// Make positive
-	/*
-	float num = -0.005729578f;
-	float num2 = 360.0f + num;
-	if (eulerAngles->x < num)
-	{
-		eulerAngles->x += 360.0f;
-	}
-	else if( eulerAngles->x > num2)
-	{
-		eulerAngles->x -= 360.0f;
-	}
-	if (eulerAngles->y < num)
-	{
-		eulerAngles->y += 360.0f;
-	}
-	else if (eulerAngles->y > num2)
-	{
-		eulerAngles->y -= 360.0f;
-	}
-	if (eulerAngles->z < num)
-	{
-		eulerAngles->z += 360.0f;
-	}
-	else if (eulerAngles->z > num2)
-	{
-		eulerAngles->z -= 360.0f;
-	}*/
+    // Make positive
+    /*
+    float num = -0.005729578f;
+    float num2 = 360.0f + num;
+    if (eulerAngles->x < num)
+    {
+        eulerAngles->x += 360.0f;
+    }
+    else if( eulerAngles->x > num2)
+    {
+        eulerAngles->x -= 360.0f;
+    }
+    if (eulerAngles->y < num)
+    {
+        eulerAngles->y += 360.0f;
+    }
+    else if (eulerAngles->y > num2)
+    {
+        eulerAngles->y -= 360.0f;
+    }
+    if (eulerAngles->z < num)
+    {
+        eulerAngles->z += 360.0f;
+    }
+    else if (eulerAngles->z > num2)
+    {
+        eulerAngles->z -= 360.0f;
+    }*/
 }
 
 void Quaternion::transformVector(const Vector3& v, Vector3* dst)
 {
-	GP_ASSERT(dst);
+    GP_ASSERT(dst);
 
-	float x = v.x;
-	float y = v.y;
-	float z = v.z;
-	float qx = this->x;
-	float qy = this->y;
-	float qz = this->z;
-	float qw = this->w;
+    float x = v.x;
+    float y = v.y;
+    float z = v.z;
+    float qx = this->x;
+    float qy = this->y;
+    float qz = this->z;
+    float qw = this->w;
     float ix = qw * x + qy * z - qz * y;
     float iy = qw * y + qz * x - qx * z;
     float iz = qw * z + qx * y - qy * x;

@@ -7,7 +7,7 @@
 
 namespace gameplay
 {
-#define SPLASH_DURATION		2.0f
+#define SPLASH_DURATION     2.0f
 
 static Game* __gameInstance = nullptr;
 std::chrono::time_point<std::chrono::high_resolution_clock> Game::_timeStart = std::chrono::high_resolution_clock::now();
@@ -15,24 +15,24 @@ double Game::_pausedTimeLast = 0.0;
 double Game::_pausedTimeTotal = 0.0;
 
 Game::Game() :
-	_config(nullptr),
-	_state(Game::STATE_UNINITIALIZED),
+    _config(nullptr),
+    _state(Game::STATE_UNINITIALIZED),
     _width(GP_GRAPHICS_WIDTH),
     _height(GP_GRAPHICS_HEIGHT),
-	_pausedCount(0),
-	_frameLastFPS(0),
-	_frameCount(0),
-	_frameRate(0),
+    _pausedCount(0),
+    _frameLastFPS(0),
+    _frameCount(0),
+    _frameRate(0),
     _sceneLoading(nullptr),
-	_scene(nullptr),
+    _scene(nullptr),
     _camera(nullptr)
 {
-	__gameInstance = this;
+    __gameInstance = this;
 }
 
 Game::~Game()
 {
-	__gameInstance = nullptr;
+    __gameInstance = nullptr;
 }
 
 Game* Game::getInstance()
@@ -47,9 +47,9 @@ Game::State Game::getState() const
 
 double Game::getAbsoluteTime()
 {
-	auto now = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double> diff = now - _timeStart;
-	return diff.count();
+    auto now = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = now - _timeStart;
+    return diff.count();
 }
 
 double Game::getGameTime()
@@ -64,7 +64,7 @@ size_t Game::getFrameRate() const
 
 size_t Game::getFrameCount() const
 {
-	return _frameCount;
+    return _frameCount;
 }
 
 size_t Game::getWidth() const
@@ -107,55 +107,55 @@ void Game::resume()
 
 int Game::exit()
 {
-	if (_state != Game::STATE_UNINITIALIZED)
+    if (_state != Game::STATE_UNINITIALIZED)
     {
         onFinalize();
         _state = Game::STATE_UNINITIALIZED;
     }
-	return 0;
+    return 0;
 }
 
 void Game::frame()
 {
-	static double lastFrameTime = Game::getGameTime();
+    static double lastFrameTime = Game::getGameTime();
     float elapsedTime = (float)(Game::getGameTime() - lastFrameTime);
-	
-	_graphics->render(elapsedTime);
+    
+    _graphics->render(elapsedTime);
 
-	switch (_state)
-	{
-	case Game::STATE_UNINITIALIZED:
-	{
-		initializeSplash();
-		initializeLoading();
-		_state = Game::STATE_SPLASH;
-		break;
-	}
-	case Game::STATE_SPLASH:
-	{
-		onSplash(elapsedTime);
-		if (_splashScreens.empty())
-			_state = Game::STATE_LOADING;
-		lastFrameTime = updateFrameRate();
-		break;
-	}
-	case Game::STATE_LOADING:
-	{
-		onLoading(elapsedTime);
-		//if (_scene.get() && _scene->isLoaded())
-		_state = Game::STATE_RUNNING;
-		lastFrameTime = updateFrameRate();
-		break;
-	}
-	case Game::STATE_RUNNING:
-	{
-		onUpdate(elapsedTime);
-		lastFrameTime = updateFrameRate();
-		break;
-	}
-	case Game::STATE_PAUSED:
-		break;
-	}
+    switch (_state)
+    {
+    case Game::STATE_UNINITIALIZED:
+    {
+        initializeSplash();
+        initializeLoading();
+        _state = Game::STATE_SPLASH;
+        break;
+    }
+    case Game::STATE_SPLASH:
+    {
+        onSplash(elapsedTime);
+        if (_splashScreens.empty())
+            _state = Game::STATE_LOADING;
+        lastFrameTime = updateFrameRate();
+        break;
+    }
+    case Game::STATE_LOADING:
+    {
+        onLoading(elapsedTime);
+        //if (_scene.get() && _scene->isLoaded())
+        _state = Game::STATE_RUNNING;
+        lastFrameTime = updateFrameRate();
+        break;
+    }
+    case Game::STATE_RUNNING:
+    {
+        onUpdate(elapsedTime);
+        lastFrameTime = updateFrameRate();
+        break;
+    }
+    case Game::STATE_PAUSED:
+        break;
+    }
 }
 
 void Game::showSplashScreens(std::vector<SplashScreen> splashScreens)
@@ -165,18 +165,18 @@ void Game::showSplashScreens(std::vector<SplashScreen> splashScreens)
 void Game::loadScene(const std::string& url, bool showLoading)
 {
     // Unload any previous scene
-	if (_scene.get() && (_scene != _sceneLoading))
-	{
-		_scene->unload();
-	}
+    if (_scene.get() && (_scene != _sceneLoading))
+    {
+        _scene->unload();
+    }
 
     // Set the loading scene and change states
     _scene = _sceneLoading;
     _state = Game::STATE_LOADING;
 
     // 
-	//_scene = dynamic_cast<SceneObject*>(loadAsset(_config->sceneUrl.c_str()));
-	//_scene->onInitialize();
+    //_scene = dynamic_cast<SceneObject*>(loadAsset(_config->sceneUrl.c_str()));
+    //_scene->onInitialize();
 }
 
 void Game::unloadScene(std::shared_ptr<SceneObject> scene)
@@ -190,7 +190,7 @@ void Game::setScene(std::shared_ptr<SceneObject> scene)
 
 std::shared_ptr<SceneObject> Game::getScene() const
 {
-	return _scene;
+    return _scene;
 }
 
 void Game::setCamera(std::shared_ptr<Camera> camera)
@@ -205,26 +205,26 @@ std::shared_ptr<Camera> Game::getCamera() const
 
 void Game::onInitialize()
 {
-	_config = getConfig();
-	FileSystem::setHomePath(_config->homePath);
+    _config = getConfig();
+    FileSystem::setHomePath(_config->homePath);
 
-	_graphics = std::make_shared<Graphics>();
-	_graphics->initialize();
+    _graphics = std::make_shared<Graphics>();
+    _graphics->initialize();
 }
 
 void Game::onFinalize()
 {
-	if (_scene.get())
-	{
-		_scene->onFinalize();
-	}
+    if (_scene.get())
+    {
+        _scene->onFinalize();
+    }
 }
 
 void Game::onResize(size_t width, size_t height)
 {
     _width = width;
     _height = height;
-	_graphics->resize(width, height);
+    _graphics->resize(width, height);
 }
 
 void Game::onUpdate(float elapsedTime)
@@ -283,19 +283,19 @@ double Game::updateFrameRate()
 {
     ++_frameCount;
     double now = Game::getGameTime();
-	if ((now - _frameLastFPS) >= 1000)
-	{
-		_frameRate = _frameCount;
-		_frameCount = 0;
-		_frameLastFPS = now;
-	}
+    if ((now - _frameLastFPS) >= 1000)
+    {
+        _frameRate = _frameCount;
+        _frameCount = 0;
+        _frameLastFPS = now;
+    }
     return now;
 }
 
 std::shared_ptr<Game::Config> Game::getConfig()
 {
-	if (_config)
-		return _config;
+    if (_config)
+        return _config;
 
     Serializer* reader = Serializer::createReader(GP_ENGINE_CONFIG);
     if (reader)
@@ -305,32 +305,32 @@ std::shared_ptr<Game::Config> Game::getConfig()
         reader->close();
         GP_SAFE_DELETE(reader);
     }
-	else
-	{
-		_config = std::make_shared<Game::Config>();
-		Serializer* writer = SerializerJson::createWriter(GP_ENGINE_CONFIG);
-		writer->writeObject(nullptr, _config);
-		writer->close();
+    else
+    {
+        _config = std::make_shared<Game::Config>();
+        Serializer* writer = SerializerJson::createWriter(GP_ENGINE_CONFIG);
+        writer->writeObject(nullptr, _config);
+        writer->close();
         GP_SAFE_DELETE(writer);
-	}
-	return _config;
+    }
+    return _config;
 }
 
 std::shared_ptr<Graphics> Game::getGraphics()
 {
-	return _graphics;
+    return _graphics;
 }
 
 Game::Config::Config() :
     title(""),
-	width(GP_GRAPHICS_WIDTH),
-	height(GP_GRAPHICS_HEIGHT),
-	fullscreen(GP_GRAPHICS_FULLSCREEN),
-	vsync(GP_GRAPHICS_VSYNC),
-	multisampling(GP_GRAPHICS_MULTISAMPLING),
-	validation(GP_GRAPHICS_VALIDATION),
-	homePath(GP_ENGINE_HOME_PATH),
-	mainScene("main.scene")
+    width(GP_GRAPHICS_WIDTH),
+    height(GP_GRAPHICS_HEIGHT),
+    fullscreen(GP_GRAPHICS_FULLSCREEN),
+    vsync(GP_GRAPHICS_VSYNC),
+    multisampling(GP_GRAPHICS_MULTISAMPLING),
+    validation(GP_GRAPHICS_VALIDATION),
+    homePath(GP_ENGINE_HOME_PATH),
+    mainScene("main.scene")
 {
 }
 
@@ -354,17 +354,17 @@ void Game::Config::onSerialize(Serializer* serializer)
     serializer->writeInt("width", width, 0);
     serializer->writeInt("height", height, 0);
     serializer->writeBool("fullscreen", fullscreen, false);
-	serializer->writeBool("vsync", vsync, false);
-	serializer->writeInt("multisampling", (uint32_t)multisampling, 0);
-	serializer->writeBool("validation", validation, false);
-	serializer->writeString("homePath", homePath.c_str(), GP_ENGINE_HOME_PATH);
+    serializer->writeBool("vsync", vsync, false);
+    serializer->writeInt("multisampling", (uint32_t)multisampling, 0);
+    serializer->writeBool("validation", validation, false);
+    serializer->writeString("homePath", homePath.c_str(), GP_ENGINE_HOME_PATH);
     serializer->writeStringList("splashScreens", splashScreens.size());
     for (size_t i = 0; i < splashScreens.size(); i++)
     {
         std::string splash = std::string(splashScreens[i].url) + ":" + std::to_string(splashScreens[i].duration);
         serializer->writeString(nullptr, splash.c_str(), "");
     }
-	serializer->writeString("mainScene", mainScene.c_str(), "");
+    serializer->writeString("mainScene", mainScene.c_str(), "");
 }
 
 void Game::Config::onDeserialize(Serializer* serializer)
@@ -372,11 +372,11 @@ void Game::Config::onDeserialize(Serializer* serializer)
     serializer->readString("title", title, "");
     width = serializer->readInt("width", 0);
     height = serializer->readInt("height", 0);
-	fullscreen = serializer->readBool("fullscreen", false);
-	vsync = serializer->readBool("vsync", false);
+    fullscreen = serializer->readBool("fullscreen", false);
+    vsync = serializer->readBool("vsync", false);
     multisampling = serializer->readInt("multisampling", 0);
-	validation = serializer->readBool("validation", false);
-	serializer->readString("homePath", homePath, "");
+    validation = serializer->readBool("validation", false);
+    serializer->readString("homePath", homePath, "");
     size_t splashScreensCount = serializer->readStringList("splashScreens");
     for (size_t i = 0; i < splashScreensCount; i++)
     {
@@ -407,7 +407,7 @@ void Game::Config::onDeserialize(Serializer* serializer)
             splashScreens.push_back(splashScreen);
         }
     }
-	serializer->readString("mainScene", mainScene, "");
+    serializer->readString("mainScene", mainScene, "");
 }
 
 }

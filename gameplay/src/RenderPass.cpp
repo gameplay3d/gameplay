@@ -17,8 +17,8 @@ RenderPass::RenderPass() :
 
 RenderPass::~RenderPass()
 {
-	_colorFormats.clear();
-	_colorAttachments.clear();
+    _colorFormats.clear();
+    _colorAttachments.clear();
 }
 
 size_t RenderPass::getWidth() const

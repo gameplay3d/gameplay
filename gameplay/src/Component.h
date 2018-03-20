@@ -4,7 +4,7 @@
 
 namespace gameplay
 {
-	class SceneObject;
+    class SceneObject;
 
 /**
  * Defines a component
@@ -27,26 +27,26 @@ public:
         TYPEID_ANIMATION,
         TYPEID_AUDIO_SOURCE,
         TYPEID_MESH,
-		TYPEID_TEXT,
-		TYPEID_TILESET,
-		TYPEID_PATH,
-		TYPEID_PARTICLE_EMITTER,
-		TYPEID_TERRAIN,
-		TYPEID_WATER,
-		TYPEID_TREE,
-		TYPEID_DECAL,
-		TYPEID_VIDEO,
-		TYPEID_UI,
+        TYPEID_TEXT,
+        TYPEID_TILESET,
+        TYPEID_PATH,
+        TYPEID_PARTICLE_EMITTER,
+        TYPEID_TERRAIN,
+        TYPEID_WATER,
+        TYPEID_TREE,
+        TYPEID_DECAL,
+        TYPEID_VIDEO,
+        TYPEID_UI,
         TYPEID_PHYSICS_COLLISION_SHAPE,
         TYPEID_PHYSICS_RIGIDBODY,
-		TYPEID_PHYSICS_CHARACTER,
-		TYPEID_PHYSICS_VEHICLE,
-		TYPEID_PHYSICS_CLOTH,
-		TYPEID_PHYSICS_JOINT_FIXED,
-		TYPEID_PHYSICS_JOINT_HINGE,
-		TYPEID_PHYSICS_JOINT_SPRING,
-		TYPEID_PHYSICS_JOINT_SOCKET,
-		TYPEID_PHYSICS_JOINT_GENERIC
+        TYPEID_PHYSICS_CHARACTER,
+        TYPEID_PHYSICS_VEHICLE,
+        TYPEID_PHYSICS_CLOTH,
+        TYPEID_PHYSICS_JOINT_FIXED,
+        TYPEID_PHYSICS_JOINT_HINGE,
+        TYPEID_PHYSICS_JOINT_SPRING,
+        TYPEID_PHYSICS_JOINT_SOCKET,
+        TYPEID_PHYSICS_JOINT_GENERIC
     };
 
     /**
@@ -116,7 +116,7 @@ protected:
      */
     virtual void onAttached();
 
-	/**
+    /**
      * Event occurs when the component is detach from a scene object;
      */
     virtual void onDetached();

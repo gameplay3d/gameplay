@@ -40,7 +40,7 @@ public:
      * Sets the home path for the game.
      *
      * Once set, all file loading will load from the given home path.
-	 *
+     *
      * The default path is "./".
      * 
      * @param path The path to the game home folder.
@@ -54,13 +54,13 @@ public:
      */
     static std::string getHomePath();
 
-	/**
-	 * Gets the absolute directory for a relative path or "" if not resolved.
-	 *
-	 * @param relativePath The relative path to be resolved.
-	 * @return The absolute directory for a relative path or "" if not resolved.
-	 */
-	static std::string getAbsolutePath(const std::string& relativePath);
+    /**
+     * Gets the absolute directory for a relative path or "" if not resolved.
+     *
+     * @param relativePath The relative path to be resolved.
+     * @return The absolute directory for a relative path or "" if not resolved.
+     */
+    static std::string getAbsolutePath(const std::string& relativePath);
 
     /**
      * Resolves a filesystem path.

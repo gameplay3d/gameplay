@@ -74,12 +74,12 @@ void AudioSource::onVelocityChanged(const Vector3& velocity)
 
 Component::TypeId AudioSource::getTypeId()
 {
-	return Component::TYPEID_AUDIO_SOURCE;
+    return Component::TYPEID_AUDIO_SOURCE;
 }
 
 std::string AudioSource::getClassName()
 {
-	return "gameplay::AudioSource";
+    return "gameplay::AudioSource";
 }
 
 void AudioSource::onSerialize(Serializer * serializer)
@@ -92,7 +92,7 @@ void AudioSource::onDeserialize(Serializer * serializer)
 
 std::shared_ptr<Serializable> AudioSource::createObject()
 {
-	return std::shared_ptr<AudioSource>();
+    return std::shared_ptr<AudioSource>();
 }
 
 }

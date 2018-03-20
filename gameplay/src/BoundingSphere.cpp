@@ -294,7 +294,7 @@ void BoundingSphere::transform(const Matrix& matrix)
     matrix.transformPoint(center, &center);
 
     // Scale the sphere's radius by the scale fo the matrix
-	Vector3 scale = matrix.getScale();
+    Vector3 scale = matrix.getScale();
     float r = radius * scale.x;
     r = std::max(r, radius * scale.y);
     r = std::max(r, radius * scale.z);

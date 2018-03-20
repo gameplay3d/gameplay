@@ -10,6 +10,7 @@ namespace gameplay
 Mesh::Mesh()
 {
 }
+
 Mesh::~Mesh()
 {
 }
@@ -20,27 +21,27 @@ void Mesh::load(const std::string& url)
 
 Component::TypeId Mesh::getTypeId()
 {
-	return Component::TYPEID_MESH;
+    return Component::TYPEID_MESH;
 }
 
 std::string Mesh::getClassName()
 {
-	return "gameplay::Mesh";
+    return "gameplay::Mesh";
 }
 
 void Mesh::onSerialize(Serializer* serializer)
 {
-	Renderer::onSerialize(serializer);
+    Renderer::onSerialize(serializer);
 }
 
 void Mesh::onDeserialize(Serializer* serializer)
 {
-	Renderer::onDeserialize(serializer);
+    Renderer::onDeserialize(serializer);
 }
 
 std::shared_ptr<Serializable> Mesh::createObject()
 {
-	return std::shared_ptr<Mesh>();
+    return std::shared_ptr<Mesh>();
 }
 
 }

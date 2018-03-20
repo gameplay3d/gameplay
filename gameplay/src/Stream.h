@@ -14,8 +14,8 @@ public:
 
     /**
      * Destructor. 
-	 *
-	 * The stream will be closed when it is destroyed.
+     *
+     * The stream will be closed when it is destroyed.
      */
     virtual ~Stream() { };
 

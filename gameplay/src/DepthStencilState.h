@@ -33,7 +33,7 @@ public:
     /**
      * Defines the stencil tests.
      */
-	class StencilOpState
+    class StencilOpState
     {
     public:
 
@@ -47,27 +47,27 @@ public:
          */
         StencilOp passOp = STENCIL_OP_KEEP;
 
-		/**
+        /**
          * The action performed on samples that fail both the depth and stencil tests.
          */
         StencilOp depthFailOp = STENCIL_OP_KEEP;
 
-		/**
-		 * The depth compare function.
-		 */
-		Sampler::CompareFunc compareFunc = Sampler::COMPARE_FUNC_NEVER;
+        /**
+         * The depth compare function.
+         */
+        Sampler::CompareFunc compareFunc = Sampler::COMPARE_FUNC_NEVER;
 
-		 /**
-		  * Selects the bits of the stencil values participating 
-		  * in the stencil test.
-		  */
-		unsigned char compareMask = 0xff;
+         /**
+          * Selects the bits of the stencil values participating 
+          * in the stencil test.
+          */
+        unsigned char compareMask = 0xff;
 
-		/**
-		 * Selects the bits of the uint32_t stencil values updated
-		 * by the stencil test in the stencil framebuffer attachment
-		 */
-		unsigned char writeMask = 0xff;
+        /**
+         * Selects the bits of the uint32_t stencil values updated
+         * by the stencil test in the stencil framebuffer attachment
+         */
+        unsigned char writeMask = 0xff;
         
     };
 

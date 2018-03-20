@@ -5,9 +5,9 @@
 
 namespace gameplay
 {
-	class Heightfield;
+    class Heightfield;
     class Mesh;
-	class PhysicsMaterial;
+    class PhysicsMaterial;
 
 /**
  * Defines the shape for a physics body allowing it to
@@ -16,8 +16,8 @@ namespace gameplay
 class PhysicsCollider : public Component
 {
     friend class Physics;
-	friend class SceneObject;
-	friend class Serializer::Activator;
+    friend class SceneObject;
+    friend class Serializer::Activator;
 
 public:
 
@@ -172,10 +172,10 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-	
-	/**
+    
+    /**
      * @see Serializer::Activator::createObject
-	 */
+     */
     static std::shared_ptr<Serializable> createObject();
 
 protected:

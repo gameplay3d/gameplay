@@ -18,7 +18,7 @@ public:
      */
     enum Interpolation
     {
-		INTERPOLATION_LINEAR,
+        INTERPOLATION_LINEAR,
         INTERPOLATION_BEZIER,
         INTERPOLATION_BSPLINE,
         INTERPOLATION_FLAT,
@@ -80,14 +80,14 @@ public:
      *
      * @return The number of points in the curve.
      */
-	size_t getPointCount() const;
+    size_t getPointCount() const;
 
     /**
      * Gets the number of float component values per points.
      *
      * @return The number of float component values per point.
      */
-	size_t getComponentCount() const;
+    size_t getComponentCount() const;
 
     /**
      * Gets the start time for the curve.
@@ -209,24 +209,24 @@ private:
     public:
 
         /** 
-		 * The time of the point within the curve.
-		 */
+         * The time of the point within the curve.
+         */
         float time;
         /** 
-		 * The value of the point.
-		 */
+         * The value of the point.
+         */
         float* value;
         /** 
-		 * The value of the tangent when approaching this point (from the previous point in the curve).
-		 */
+         * The value of the tangent when approaching this point (from the previous point in the curve).
+         */
         float* inValue;
         /** 
-		 * The value of the tangent when leaving this point (towards the next point in the curve).
-		 */
+         * The value of the tangent when leaving this point (towards the next point in the curve).
+         */
         float* outValue;
         /** 
-		 * The interpolation to use between this point and the next point.
-		 */
+         * The interpolation to use between this point and the next point.
+         */
         Interpolation interpolation;
 
         /**
@@ -322,9 +322,9 @@ private:
     static Interpolation getInterpolation(const std::string& interpolationStr);
 
     size_t _pointCount;
-	size_t _componentCount;
-	size_t _componentSize;
-	size_t* _quaternionOffset;
+    size_t _componentCount;
+    size_t _componentSize;
+    size_t* _quaternionOffset;
     Point* _points;
 };
 

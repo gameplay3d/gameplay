@@ -9,9 +9,9 @@ Buffer::Buffer() :
     _size(0), 
     _stride(0), 
     _hostVisible(true),
-	_hostMemory(nullptr),
-	_buffer(VK_NULL_HANDLE),
-	_deviceMemory(VK_NULL_HANDLE)
+    _hostMemory(nullptr),
+    _buffer(VK_NULL_HANDLE),
+    _deviceMemory(VK_NULL_HANDLE)
 {
 }
 
@@ -41,7 +41,7 @@ bool Buffer::isHostVisible() const
 
 void* Buffer::getHostMemory() const
 {
-	return _hostMemory;
+    return _hostMemory;
 }
 
 }

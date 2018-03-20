@@ -44,9 +44,9 @@ public:
 
 protected:
 
-	/**
+    /**
      * Event occurs when the game starts and audio system is initialized.
-	 */
+     */
     void onInitialize();
 
     /**
@@ -57,7 +57,7 @@ protected:
 
     /**
      * Event occurs when the game is resumed so the audio system 
-	 * can play any previously playing audio sources.
+     * can play any previously playing audio sources.
      */
     void onResume();
 

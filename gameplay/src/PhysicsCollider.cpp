@@ -33,12 +33,12 @@ bool PhysicsCollider::isTrigger() const
 
 Component::TypeId PhysicsCollider::getTypeId()
 {
-	return Component::TYPEID_PHYSICS_COLLISION_SHAPE;
+    return Component::TYPEID_PHYSICS_COLLISION_SHAPE;
 }
 
 std::string PhysicsCollider::getClassName()
 {
-	return "gameplay::PhysicsCollider";
+    return "gameplay::PhysicsCollider";
 }
 
 void PhysicsCollider::onSerialize(Serializer * serializer)
@@ -51,7 +51,7 @@ void PhysicsCollider::onDeserialize(Serializer * serializer)
 
 std::shared_ptr<Serializable> PhysicsCollider::createObject()
 {
-	return std::shared_ptr<PhysicsCollider>();
+    return std::shared_ptr<PhysicsCollider>();
 }
 
 }

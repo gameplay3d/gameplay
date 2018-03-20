@@ -183,20 +183,20 @@ std::string FileSystem::getHomePath()
 
 std::string FileSystem::getAbsolutePath(const std::string& path)
 {
-	#ifdef WIN32
-		char fullPath[_MAX_PATH]; 
-		if (_fullpath(fullPath, path.c_str(), _MAX_PATH) != nullptr)
-		{
-			return std::string(fullPath);
-		}
-	#else
-		char fullPath[PATH_MAX + 1];
-		if (realpath(path.c_str(), fullPath))
-		{
-			return std::string(fullPath);
-		}
-	#endif
-	return "";
+    #ifdef WIN32
+        char fullPath[_MAX_PATH]; 
+        if (_fullpath(fullPath, path.c_str(), _MAX_PATH) != nullptr)
+        {
+            return std::string(fullPath);
+        }
+    #else
+        char fullPath[PATH_MAX + 1];
+        if (realpath(path.c_str(), fullPath))
+        {
+            return std::string(fullPath);
+        }
+    #endif
+    return "";
 }
 
 std::string FileSystem::resolvePath(const std::string& path)
@@ -366,10 +366,10 @@ std::string FileSystem::readAll(const std::string& filePath)
 {
     // Open file for reading.
     std::unique_ptr<Stream> stream(open(filePath));
-	if (stream.get() == nullptr)
-	{
-		GP_ERROR("Failed to load file: %s", filePath.c_str());
-	}
+    if (stream.get() == nullptr)
+    {
+        GP_ERROR("Failed to load file: %s", filePath.c_str());
+    }
     size_t size = stream->length();
     std::string result;
     result.resize(size);

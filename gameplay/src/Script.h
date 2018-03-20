@@ -13,15 +13,15 @@ namespace gameplay
  */
 class Script : public Component
 {
-	friend class SceneObject;
+    friend class SceneObject;
     friend class Serializer::Activator;
 public:
 
-	enum Type
-	{
-		TYPE_CPP,
-		TYPE_LUA
-	};
+    enum Type
+    {
+        TYPE_CPP,
+        TYPE_LUA
+    };
 
     /**
      * Constructor.
@@ -35,7 +35,7 @@ public:
 
     static std::shared_ptr<Script> loadCppScript(std::string classUrl);
 
-	static std::shared_ptr<Script> loadLuaScript(std::string scriptUrl);
+    static std::shared_ptr<Script> loadLuaScript(std::string scriptUrl);
 
     virtual void onInitialize();
 
@@ -47,8 +47,8 @@ public:
 
 private:
 
-	Type _type;
-	std::string _url;
+    Type _type;
+    std::string _url;
 };
 
 }
