@@ -2,6 +2,10 @@
 #include "Platform.h"
 #include "Game.h"
 
+// TODO remove iostream
+#include <iostream>
+#include <dlfcn.h>
+
 namespace gameplay
 {
 
@@ -645,6 +649,27 @@ Input::GamepadAxis Platform::translateGamepadAxis(uint8_t sdl)
     return Input::GamepadAxis(_translateGamepadAxis[sdl]);
 }
 
+std::shared_ptr<Module> Platform::loadModule(const std::string& loadName)
+{
+    // in case is already loaded.
+    if(_modules.find(loadName) != _modules.end())
+    {
+        return _modules[loadName];
+    }
+
+    // otherwise load and store to map
+    using std::cerr;
+
+    void* lib = dlopen("./gameplay-user.so", RTLD_LAZY);
+    if (!lib) {
+        cerr << "Cannot load library: " << dlerror() << '\n';
+        return nullptr;
+    }
+
+    std::shared_ptr<Module> newModule = std::shared_ptr<Module>(new Module("./gameplay-user.so", lib));
+    _modules[loadName] = newModule;
+    return newModule;
+}
 
 extern void print(const char* format, ...)
 {

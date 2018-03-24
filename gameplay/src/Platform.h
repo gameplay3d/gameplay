@@ -19,6 +19,9 @@
 #undef Unsorted
 #endif
 
+#include <map>
+#include "Module.h"
+
 namespace gameplay
 {
 
@@ -82,6 +85,13 @@ public:
      */
     uint64_t getNativeConnection() const;
 
+    /**
+     * Fetching instance from library.
+     *
+     * @return Module instance responsible for loading custom scripts.
+     */
+    std::shared_ptr<Module> loadModule(const std::string& loadName);
+
 private:
 
     Platform();
@@ -105,6 +115,8 @@ private:
     uint8_t _translateKey[256];
     uint8_t _translateGamepad[256];
     uint8_t _translateGamepadAxis[256];
+
+    std::map<std::string, std::shared_ptr<Module>> _modules;
 };
 
 }
