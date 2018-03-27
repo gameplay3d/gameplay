@@ -4,6 +4,7 @@
 #include "SerializerJson.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "Scene.h"
 #include "SceneObject.h"
 #include "Camera.h"
 #include "Light.h"
@@ -25,6 +26,7 @@ void Serializer::Activator::initializeTypes()
 {
     // Register any Serializable types
     registerType("gameplay::Game::Config", Game::Config::createObject);
+    registerType("gameplay::Scene", Scene::createObject);
     registerType("gameplay::SceneObject", SceneObject::createObject);
     registerType("gameplay::Camera", Camera::createObject);
     registerType("gameplay::Light", Light::createObject);

@@ -33,7 +33,7 @@ bool PhysicsCollider::isTrigger() const
 
 Component::TypeId PhysicsCollider::getTypeId()
 {
-    return Component::TYPEID_PHYSICS_COLLISION_SHAPE;
+    return Component::TYPEID_PHYSICS_COLLIDER;
 }
 
 std::string PhysicsCollider::getClassName()

@@ -58,7 +58,7 @@ std::shared_ptr<Project> Project::create(const QString& path, const QString& nam
     configWriter->close();
 
     // Create an empty scene.
-    auto scene = std::make_shared<gameplay::SceneObject>();
+    auto scene = std::make_shared<gameplay::Scene>();
     scene->setName(PROJECT_SCENE_NAME);
 
     // Add and object with a camera component

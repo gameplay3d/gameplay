@@ -122,7 +122,7 @@ private:
 
     EditorWindow* _editor;
     gameplay::Graphics* _graphics;
-    std::shared_ptr<gameplay::SceneObject> _scene;
+    std::shared_ptr<gameplay::Scene> _scene;
     bool _wireframe;
     QTimer _timer;
     QSize _size;

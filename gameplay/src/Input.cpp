@@ -252,6 +252,7 @@ void Input::postGamepadConnectionEvent(uint32_t controllerIndex, bool connected)
 
 void Input::postGamepadAxisEvent(uint32_t controllerIndex, Input::GamepadAxis axis, int value)
 {
+    print("%d %d", axis, value);
 }
 
 void Input::postMouseMotionEvent(int mx, int my, int mz)

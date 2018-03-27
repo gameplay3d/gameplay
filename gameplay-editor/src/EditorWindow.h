@@ -78,7 +78,7 @@ public:
      *
      * @return The open scene.
      */
-    std::shared_ptr<gameplay::SceneObject> getScene() const;
+    std::shared_ptr<gameplay::Scene> getScene() const;
 
     /**
      * Gets the scene view.
@@ -193,7 +193,7 @@ private:
     PropertiesView *_propertiesView;
     SceneView*_sceneView;
     QString _scenePath;
-    std::shared_ptr<gameplay::SceneObject> _scene;
+    std::shared_ptr<gameplay::Scene> _scene;
     EditMode _editMode;
     gameplay::Vector2* _selectionBegin;
     gameplay::Vector2* _selectionEnd;

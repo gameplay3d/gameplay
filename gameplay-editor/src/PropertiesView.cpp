@@ -43,7 +43,7 @@ void PropertiesView::onSelectionChanged()
     QVariant userData = selectedItem->data(Qt::UserRole + 1);
     gameplay::SceneObject* selectedObject = (gameplay::SceneObject*)userData.toLongLong();
 
-    if (selectedObject != _editor->getScene().get())
+    if (selectedObject != nullptr)
     {
         showProperties();
 

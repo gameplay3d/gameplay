@@ -24,8 +24,8 @@ namespace gameplay
  */
 class SceneObject : public Serializable, public std::enable_shared_from_this<SceneObject>
 {
-    friend class Game;
     friend class Serializer::Activator;
+    friend class Scene;
 
 public:
     /**
@@ -293,9 +293,9 @@ public:
     void removeChild(std::shared_ptr<SceneObject> object);
 
     /**
-     * Removes all children object of this object.
+     * Clears all children objects from this object.
      */
-    void removeChildren();
+    void clearChildren();
 
     /**
      * Gets the number of children this object has.
@@ -383,21 +383,6 @@ public:
      */
     void getComponents(std::vector<std::shared_ptr<Component> >& components);
 
-    /**
-     * Loads the scene and any required resources.
-     */
-    void load();
-
-    /**
-     * Unloads the scene resources.
-     */
-    void unload();
-
-    /**
-     * Checks if the scene resources are loaded.
-     */
-    bool isLoaded() const;
-
 protected:
 
     /**
@@ -429,7 +414,6 @@ private:
     void onRender(float elapsedTime);
 
     std::string _name;
-    bool _loaded;
     bool _enabled;
     bool _static;
     Vector3 _position;

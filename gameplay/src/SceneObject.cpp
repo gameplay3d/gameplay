@@ -3,22 +3,21 @@
 #include "Camera.h"
 #include "Light.h"
 
-#define SCENEOBJECT_DIRTY_MATRIX_LOCAL 1
-#define SCENEOBJECT_DIRTY_MATRIX_WORLD 2
-#define SCENEOBJECT_DIRTY_ALL (SCENEOBJECT_DIRTY_MATRIX_LOCAL | SCENEOBJECT_DIRTY_MATRIX_WORLD)
 #define SCENEOBJECT_NAME ""
 #define SCENEOBJECT_STATIC true
 #define SCENEOBJECT_ENABLED true
 #define SCENEOBJECT_POSITION Vector3::zero()
 #define SCENEOBJECT_EULER_ANGLES Vector3::zero()
 #define SCENEOBJECT_SCALE Vector3::one()
+#define SCENEOBJECT_DIRTY_MATRIX_LOCAL 1
+#define SCENEOBJECT_DIRTY_MATRIX_WORLD 2
+#define SCENEOBJECT_DIRTY_ALL (SCENEOBJECT_DIRTY_MATRIX_LOCAL | SCENEOBJECT_DIRTY_MATRIX_WORLD)
 
 namespace gameplay
 {
 
 SceneObject::SceneObject() :
     _name(SCENEOBJECT_NAME),
-    _loaded(false),
     _enabled(SCENEOBJECT_ENABLED),
     _static(SCENEOBJECT_STATIC),
     _position(SCENEOBJECT_POSITION),
@@ -329,7 +328,7 @@ void SceneObject::removeChild(std::shared_ptr<SceneObject> object)
      }
 }
 
-void SceneObject::removeChildren()
+void SceneObject::clearChildren()
 {
     for (auto itr = _children.begin(); itr != _children.end();)
     {
@@ -456,19 +455,6 @@ void SceneObject::getComponents(std::vector<std::shared_ptr<Component>>& compone
     }
 }
 
-void SceneObject::load()
-{
-}
-
-void SceneObject::unload()
-{
-}
-
-bool SceneObject::isLoaded() const
-{
-    return _loaded;
-}
-
 std::string SceneObject::getClassName()
 {
     return "gameplay::SceneObject";
@@ -531,22 +517,6 @@ void SceneObject::onDeserialize(Serializer* serializer)
 std::shared_ptr<Serializable> SceneObject::createObject()
 {
     return std::static_pointer_cast<Serializable>(std::make_shared<SceneObject>());
-}
-
-void SceneObject::onInitialize()
-{
-}
-
-void SceneObject::onFinalize()
-{
-}
-
-void SceneObject::onUpdate(float elapsedTime)
-{
-}
-
-void SceneObject::onRender(float elapsedTime)
-{
 }
 
 }

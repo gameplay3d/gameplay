@@ -167,28 +167,24 @@ void Game::loadScene(const std::string& url, bool showLoading)
     // Unload any previous scene
     if (_scene.get() && (_scene != _sceneLoading))
     {
-        _scene->unload();
+        // todo: AssetManager::beginLoading();
     }
 
     // Set the loading scene and change states
     _scene = _sceneLoading;
     _state = Game::STATE_LOADING;
-
-    // 
-    //_scene = dynamic_cast<SceneObject*>(loadAsset(_config->sceneUrl.c_str()));
-    //_scene->onInitialize();
 }
 
 void Game::unloadScene(std::shared_ptr<SceneObject> scene)
 {
 }
 
-void Game::setScene(std::shared_ptr<SceneObject> scene)
+void Game::setScene(std::shared_ptr<Scene> scene)
 {
     _scene = scene;
 }
 
-std::shared_ptr<SceneObject> Game::getScene() const
+std::shared_ptr<Scene> Game::getScene() const
 {
     return _scene;
 }
@@ -214,10 +210,6 @@ void Game::onInitialize()
 
 void Game::onFinalize()
 {
-    if (_scene.get())
-    {
-        _scene->onFinalize();
-    }
 }
 
 void Game::onResize(size_t width, size_t height)
