@@ -47,6 +47,11 @@ public:
         FORMAT_BINARY,
         FORMAT_JSON
     };
+
+    /**
+     * Destructor
+     */
+    virtual ~Serializer();
     
     /**
      * Creates a serializer for reading (deserializing).
@@ -437,11 +442,6 @@ public:
      * @return The array elements read.
      */
     virtual size_t readByteArray(const char* propertyName, unsigned char** data) = 0;      
-    
-    /**
-     * Destructor
-     */
-    virtual ~Serializer();
     
 protected:
 

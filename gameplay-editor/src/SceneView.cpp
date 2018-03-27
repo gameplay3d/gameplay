@@ -59,11 +59,7 @@ std::list<QStandardItem*>* SceneView::getSelectedItems() const
 void SceneView::onSceneChanged()
 {
     _scene = _editor->getScene();
-    QStandardItem* item = createHierarchy(_scene);
-    item->setEditable(false);
-    QString text = item->text().append(SCENE_EXT);
-    item->setText(text);
-    item->setIcon(QIcon(":/res/images/scene-hierarchy.png"));
+    QStandardItem* item = createScene(_scene);
     _sceneModel->appendRow(item);
     _ui->treeView->setExpanded(_sortFilter->mapFromSource(item->index()), true);
     _ui->treeView->setItemsExpandable(false);
@@ -108,15 +104,39 @@ void SceneView::onModelDataChanged(const QModelIndex& topLeft, const QModelIndex
     emit selectionChanged();
 }
 
-QStandardItem* SceneView::createItem(std::shared_ptr<gameplay::SceneObject> object)
+QStandardItem* SceneView::createSceneItem(std::shared_ptr<gameplay::Scene> scene)
+{
+    QString text;
+    std::string name = scene->getName();
+    if (name.length() > 0)
+    {
+        text = QString(name.c_str());
+    }
+    else
+    {
+        text = QString(tr(SCENE_OBJECT_NAME));
+    }
+    text.append(SCENE_EXT);
+    QStandardItem* item = new QStandardItem(QIcon(":/res/images/scene-hierarchy.png"), text);
+    item->setEditable(false);
+    // Associate the scene to the item
+    item->setData(QVariant::fromValue((qlonglong)scene.get()), Qt::UserRole + 1);
+
+    return item;
+}
+
+QStandardItem* SceneView::createObjectItem(std::shared_ptr<gameplay::SceneObject> object)
 {
     QString text;
     std::string name = object->getName();
     if (name.length() > 0)
+    {
         text = QString(name.c_str());
+    }
     else
+    {
         text = QString(tr(SCENE_OBJECT_NAME));
-
+    }
     QStandardItem* item = new QStandardItem(QIcon(":/res/images/scene-object.png"), text);
     item->setEditable(true);
     // Associate the object to the item
@@ -125,14 +145,34 @@ QStandardItem* SceneView::createItem(std::shared_ptr<gameplay::SceneObject> obje
     return item;
 }
 
-QStandardItem* SceneView::createHierarchy(std::shared_ptr<gameplay::SceneObject> object)
+QStandardItem* SceneView::createScene(std::shared_ptr<gameplay::Scene> scene)
 {
     // Clone the object into a item for the model
-    QStandardItem* item = createItem(object);
+    QStandardItem* item = createSceneItem(scene);
+    // Visit all the children adding items for each object
+    visitorAddItem(scene, item);
+
+    return item;
+}
+
+QStandardItem* SceneView::createObjectHierarchy(std::shared_ptr<gameplay::SceneObject> object)
+{
+    // Clone the object into a item for the model
+    QStandardItem* item = createObjectItem(object);
     // Visit all the children adding items for each object
     visitorAddItem(object, item);
 
     return item;
+}
+
+void SceneView::visitorAddItem(std::shared_ptr<gameplay::Scene> parent, QStandardItem* parentItem)
+{
+    auto children = parent->getChildren();
+    for (auto object : children)
+    {
+        QStandardItem* item = createObjectHierarchy(object);
+        parentItem->appendRow(item);
+    }
 }
 
 void SceneView::visitorAddItem(std::shared_ptr<gameplay::SceneObject> parent, QStandardItem* parentItem)
@@ -140,7 +180,7 @@ void SceneView::visitorAddItem(std::shared_ptr<gameplay::SceneObject> parent, QS
     auto children = parent->getChildren();
     for (auto object : children)
     {
-        QStandardItem* item = createHierarchy(object);
+        QStandardItem* item = createObjectHierarchy(object);
         parentItem->appendRow(item);
     }
 }
@@ -178,7 +218,7 @@ void SceneView::onCreateObject()
     auto object = std::make_shared<gameplay::SceneObject>();
     object->setName(SCENE_OBJECT_NAME);
     // Create an empty item.
-    QStandardItem* item = createItem(object);
+    QStandardItem* item = createObjectItem(object);
     // Add the object to the scene hierarchy
     addToHiearchy(object, item);
 }

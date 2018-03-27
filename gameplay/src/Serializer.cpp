@@ -4,6 +4,7 @@
 #include "SerializerJson.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "Scene.h"
 #include "SceneObject.h"
 #include "Camera.h"
 #include "Light.h"

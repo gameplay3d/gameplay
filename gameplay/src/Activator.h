@@ -103,8 +103,6 @@ public:
 private:
     
     Activator();
-    void initializeTypes();
-    void initializeEnums();
     
     std::map<std::string, CreateObjectCallback> _classes;
     std::map<std::string, std::pair<EnumToStringCallback, EnumParseCallback> > _enums;

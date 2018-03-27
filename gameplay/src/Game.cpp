@@ -29,6 +29,8 @@ Game::Game() :
     _camera(nullptr)
 {
     __gameInstance = this;
+
+    initializeActivationObjects();
 }
 
 Game::~Game()
@@ -168,28 +170,24 @@ void Game::loadScene(const std::string& url, bool showLoading)
     // Unload any previous scene
     if (_scene.get() && (_scene != _sceneLoading))
     {
-        _scene->unload();
+        // todo: AssetManager::beginLoading();
     }
 
     // Set the loading scene and change states
     _scene = _sceneLoading;
     _state = Game::STATE_LOADING;
-
-    // 
-    //_scene = dynamic_cast<SceneObject*>(loadAsset(_config->sceneUrl.c_str()));
-    //_scene->onInitialize();
 }
 
 void Game::unloadScene(std::shared_ptr<SceneObject> scene)
 {
 }
 
-void Game::setScene(std::shared_ptr<SceneObject> scene)
+void Game::setScene(std::shared_ptr<Scene> scene)
 {
     _scene = scene;
 }
 
-std::shared_ptr<SceneObject> Game::getScene() const
+std::shared_ptr<Scene> Game::getScene() const
 {
     return _scene;
 }
@@ -215,10 +213,6 @@ void Game::onInitialize()
 
 void Game::onFinalize()
 {
-    if (_scene.get())
-    {
-        _scene->onFinalize();
-    }
 }
 
 void Game::onResize(size_t width, size_t height)
@@ -293,10 +287,11 @@ double Game::updateFrameRate()
     return now;
 }
 
-void loadClasses()
+void Game::initializeActivationObjects()
 {
     // Register engine types with
     Activator::getActivator()->registerType("gameplay::Game::Config", Game::Config::createObject);
+    Activator::getActivator()->registerType("gameplay::Scene", Scene::createObject);
     Activator::getActivator()->registerType("gameplay::SceneObject", SceneObject::createObject);
     Activator::getActivator()->registerType("gameplay::Camera", Camera::createObject);
     Activator::getActivator()->registerType("gameplay::Light", Light::createObject);
@@ -315,7 +310,6 @@ std::shared_ptr<Game::Config> Game::getConfig()
         return _config;
     }
 
-    loadClasses();
     Serializer* reader = Serializer::createReader(GP_ENGINE_CONFIG);
     if (reader)
     {

@@ -5,6 +5,12 @@ set(GAMEPLAY_SRC
     src/Activator.h
     src/Animation.cpp
     src/Animation.h
+    src/Asset.cpp
+    src/Asset.h
+    src/AssetLoader.cpp
+    src/AssetLoader.h
+    src/AssetManager.cpp
+    src/AssetManager.h
     src/Audio.cpp
     src/Audio.h    
     src/AudioClip.cpp
@@ -44,8 +50,6 @@ set(GAMEPLAY_SRC
     src/GraphicsUtil.h
     src/Heightfield.cpp
     src/Heightfield.h
-    src/Image.cpp
-    src/Image.h
     src/Input.cpp
     src/Input.h
     src/Light.cpp
@@ -107,6 +111,8 @@ set(GAMEPLAY_SRC
     src/RenderPipeline.h
     src/Sampler.cpp
     src/Sampler.h
+    src/Scene.cpp
+    src/Scene.h
     src/SceneObject.cpp
     src/SceneObject.h
     src/Script.cpp
@@ -128,6 +134,8 @@ set(GAMEPLAY_SRC
     src/Text.h
     src/Texture.cpp
     src/Texture.h
+    src/TextureLoader.cpp
+    src/TextureLoader.h
     src/Tileset.cpp
     src/Tileset.h
     src/Vector2.cpp

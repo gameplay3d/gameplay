@@ -239,21 +239,6 @@ public:
     Component::TypeId getTypeId();
 
     /**
-     * @see Serializable::getClassName
-     */
-    std::string getClassName();
-
-    /**
-     * @see Serializable::onSerialize
-     */
-    void onSerialize(Serializer* serializer);
-
-    /**
-     * @see Serializable::onDeserialize
-     */
-    void onDeserialize(Serializer* serializer);
-
-    /**
      * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
@@ -269,6 +254,21 @@ public:
     static int enumParse(const std::string& enumName, const std::string& str);
 
 protected:
+
+    /**
+     * @see Serializable::getClassName
+     */
+    std::string getClassName();
+
+    /**
+     * @see Serializable::onSerialize
+     */
+    void onSerialize(Serializer* serializer);
+
+    /**
+     * @see Serializable::onDeserialize
+     */
+    void onDeserialize(Serializer* serializer);
 
     void setObject(std::shared_ptr<SceneObject> object);
 

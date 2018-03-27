@@ -1748,7 +1748,6 @@ void Graphics::resize(size_t width, size_t height)
 void Graphics::render(float elapsedTime)
 {
     Game* game = Game::getInstance();
-    std::shared_ptr<SceneObject> SceneObject = game->getScene();
 
     // TODO: Render scene...
 }

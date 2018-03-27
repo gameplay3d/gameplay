@@ -144,7 +144,7 @@ std::shared_ptr<Project> EditorWindow::getProject() const
      return _editMode;
  }
 
-std::shared_ptr<gameplay::SceneObject> EditorWindow::getScene() const
+std::shared_ptr<gameplay::Scene> EditorWindow::getScene() const
 {
     return _scene;
 }
@@ -206,7 +206,7 @@ void EditorWindow::onOpenScene(const QString& path)
         _scenePath = path;
         QByteArray pathByteArray = path.toLatin1();
         auto reader = gameplay::Serializer::createReader(pathByteArray.data());
-        _scene = std::dynamic_pointer_cast<gameplay::SceneObject>(reader->readObject(nullptr));
+        _scene = std::dynamic_pointer_cast<gameplay::Scene>(reader->readObject(nullptr));
 
         emit sceneChanged();
     }

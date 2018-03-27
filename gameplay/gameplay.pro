@@ -9,6 +9,9 @@ CONFIG(debug, debug|release): DEFINES += _DEBUG
 SOURCES += \
     src/Activator.cpp \
     src/Animation.cpp \
+    src/Asset.cpp \
+    src/AssetLoader.cpp \
+    src/AssetManager.cpp \
     src/Audio.cpp \
     src/AudioClip.cpp \
     src/AudioListener.cpp \
@@ -26,7 +29,6 @@ SOURCES += \
     src/Game.cpp \
     src/Graphics.cpp \
     src/Heightfield.cpp \
-    src/Image.cpp \
     src/Input.cpp \
     src/Light.cpp \
     src/Logger.cpp \
@@ -56,6 +58,7 @@ SOURCES += \
     src/RenderPass.cpp \
     src/RenderPipeline.cpp \
     src/Sampler.cpp \
+    src/Scene.cpp \
     src/SceneObject.cpp \
     src/Script.cpp \
     src/Semaphore.cpp \
@@ -66,6 +69,7 @@ SOURCES += \
     src/Sprite.cpp \
     src/Text.cpp \
     src/Texture.cpp \
+    src/TextureLoader.cpp \
     src/Tileset.cpp \
     src/Vector2.cpp \
     src/Vector3.cpp \
@@ -75,6 +79,9 @@ SOURCES += \
 HEADERS += \
     src/Activator.h \
     src/Animation.h \
+    src/Asset.h \
+    src/AssetLoader.h \
+    src/AssetManager.h \
     src/Audio.h \
     src/AudioClip.h \
     src/AudioListener.h \
@@ -97,7 +104,6 @@ HEADERS += \
     src/Graphics.h \
     src/GraphicsUtil.h \
     src/Heightfield.h \
-    src/Image.h \
     src/Light.h \
     src/Logger.h \
     src/Material.h \
@@ -127,6 +133,7 @@ HEADERS += \
     src/RenderPass.h \
     src/RenderPipeline.h \
     src/Sampler.h \
+    src/Scene.h \
     src/SceneObject.h \
     src/Script.h \
     src/Semaphore.h \
@@ -139,6 +146,7 @@ HEADERS += \
     src/Stream.h \
     src/Text.h \
     src/Texture.h \
+    src/TextureLoader.h \
     src/Tileset.h \
     src/Vector2.h \
     src/Vector3.h \

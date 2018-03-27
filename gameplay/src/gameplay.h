@@ -18,7 +18,6 @@
 #include "Ray.h"
 #include "Rectangle.h"
 #include "FileSystem.h"
-#include "Image.h"
 #include "Stream.h"
 #include "Serializable.h"
 #include "Serializer.h"
@@ -28,6 +27,7 @@
 #include "Animation.h"
 #include "Input.h"
 #include "Script.h"
+#include "Scene.h"
 #include "SceneObject.h"
 
 // Components
@@ -79,6 +79,17 @@
 #include "RenderPipeline.h"
 #include "CommandBuffer.h"
 #include "Semaphore.h"
+
+// Asset
+#include "Asset.h"
+#include "AssetManager.h"
+#include "AssetLoader.h"
+//#include "SceneLoader.h"
+#include "TextureLoader.h"
+//#include "MeshLoader.h"
+//#include "MaterialLoader.h"
+//#include "FontLoader.h"
+//#include "SpriteLoader.h"
 
 // Audio
 #include "Audio.h"

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Scene.h"
 #include "SceneObject.h"
 #include "Camera.h"
 #include "Input.h"
@@ -160,14 +161,14 @@ public:
      *
      * @param scene The scene to be set active and shown on screen.
      */
-    void setScene(std::shared_ptr<SceneObject> scene);
+    void setScene(std::shared_ptr<Scene> scene);
 
     /**
      * Gets the current game scene to be active and shown on screen.
      *
      * @return The current game scene to be active and shown on screen.
      */
-    std::shared_ptr<SceneObject> getScene() const;
+    std::shared_ptr<Scene> getScene() const;
 
     /**
      * Sets the active camera the current scene will use to view the scene.
@@ -235,6 +236,8 @@ public:
 
     virtual void onDropFile(std::string file);
 
+    static void loadGameClasses();
+
     /**
      * Game configuration.
      */
@@ -296,12 +299,11 @@ public:
      */
     std::shared_ptr<Graphics> getGraphics();
 
-    Game* next;
-
 private:
 
     Game(const Game& copy);
 
+    void initializeActivationObjects();
     void initializeSplash();
     void initializeLoading();
     void onSplash(float elapsedTime);
@@ -321,8 +323,8 @@ private:
     size_t _frameRate;
     std::queue<SplashScreen> _splashScreens;
     std::map<std::string, std::shared_ptr<SceneObject>> _scenesLoaded;
-    std::shared_ptr<SceneObject> _sceneLoading;
-    std::shared_ptr<SceneObject> _scene;
+    std::shared_ptr<Scene> _sceneLoading;
+    std::shared_ptr<Scene> _scene;
     std::shared_ptr<Camera> _camera;
     std::shared_ptr<Graphics> _graphics;
 };
