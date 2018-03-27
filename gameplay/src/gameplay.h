@@ -25,7 +25,6 @@
 #include "SerializerBinary.h"
 #include "SerializerJson.h"
 #include "Activator.h"
-#include "Behaviour.h"
 #include "Animation.h"
 #include "Input.h"
 #include "Script.h"
