@@ -18,7 +18,7 @@ class PhysicsJointFixed : public PhysicsJoint
 {
     friend class Physics;
     friend class SceneObject;
-    friend class Serializer::Activator;
+    friend class Activator;
 
 public:
   

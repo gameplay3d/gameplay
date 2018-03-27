@@ -1,20 +1,10 @@
 #pragma once
 
-#include "Serializable.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix.h"
 #include "BoundingSphere.h"
 #include "Component.h"
-
-class Camera;
-class Light;
-class GraphicsRenderer;
-class PhysicsRigidBody;
-class PhysicsCollisionShape;
-class Animation;
-class Audio;
-class Script;
 
 namespace gameplay
 {
@@ -24,8 +14,9 @@ namespace gameplay
  */
 class SceneObject : public Serializable, public std::enable_shared_from_this<SceneObject>
 {
-    friend class Serializer::Activator;
     friend class Scene;
+    friend class Game;
+    friend class Activator;
 
 public:
     /**
@@ -383,6 +374,11 @@ public:
      */
     void getComponents(std::vector<std::shared_ptr<Component> >& components);
 
+    /**
+     * @see Activator::createObject
+     */
+    static std::shared_ptr<Serializable> createObject();
+
 protected:
 
     /**
@@ -399,11 +395,6 @@ protected:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-
-    /**
-     * @see Serializer::Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
 
 private:
 
@@ -425,8 +416,8 @@ private:
     Matrix _worldToLocalMatrix;
     int _dirtyBits;
     std::weak_ptr<SceneObject> _parent;
-    std::vector<std::shared_ptr<SceneObject> > _children;
-    std::vector<std::shared_ptr<Component> > _components;
+    std::vector<std::shared_ptr<SceneObject>> _children;
+    std::vector<std::shared_ptr<Component>> _components;
 };
 
 }

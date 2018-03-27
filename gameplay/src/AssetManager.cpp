@@ -31,6 +31,8 @@ std::shared_ptr<Asset> AssetManager::load(const std::string & url)
     asset->_url = url;
     _assets.push(asset);
     _assetsPopulated.notify_one();
+
+    return asset;
 }
 
 void AssetManager::cancelLoad(const std::string& url)

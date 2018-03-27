@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
 set(GAMEPLAY_SRC
+    src/Activator.cpp
+    src/Activator.h
     src/Animation.cpp
     src/Animation.h
     src/Asset.cpp

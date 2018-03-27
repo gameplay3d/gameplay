@@ -12,7 +12,7 @@ class Mesh : public Renderer
 {
     friend class Graphics;
     friend class SceneObject;
-    friend class Serializer::Activator;
+    friend class Activator;
 
 public:
 
@@ -55,7 +55,7 @@ public:
     void onDeserialize(Serializer* serializer);
     
     /**
-     * @see Serializer::Activator::createObject
+     * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
 };

@@ -9,6 +9,9 @@
 class Project : public QFileSystemModel, public gameplay::Serializable
 {
     Q_OBJECT
+
+    friend class gameplay::Activator;
+
 public:
 
     /**
@@ -74,9 +77,11 @@ public:
     QVariant data(const QModelIndex& index, int role) const;
 
     /**
-     * @see Serializer::Activator::CreateObjectCallback::createObject
+     * @see Activator::CreateObjectCallback::createObject
      */
     static std::shared_ptr<gameplay::Serializable> createObject();
+
+protected:
 
     /**
      * @see Serializable::getClassName

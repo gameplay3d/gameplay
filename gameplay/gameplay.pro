@@ -7,6 +7,7 @@ CONFIG -= qt
 CONFIG(debug, debug|release): DEFINES += _DEBUG
 
 SOURCES += \
+    src/Activator.cpp \
     src/Animation.cpp \
     src/Asset.cpp \
     src/AssetLoader.cpp \
@@ -76,6 +77,7 @@ SOURCES += \
     src/VertexLayout.cpp
 
 HEADERS += \
+    src/Activator.h \
     src/Animation.h \
     src/Asset.h \
     src/AssetLoader.h \

@@ -1,9 +1,10 @@
 #include "Base.h"
 #include "Game.h"
+#include "Activator.h"
 #include "FileSystem.h"
-#include "Serializable.h"
 #include "SerializerJson.h"
 #include "Graphics.h"
+#include "Light.h"
 
 namespace gameplay
 {
@@ -28,6 +29,8 @@ Game::Game() :
     _camera(nullptr)
 {
     __gameInstance = this;
+
+    initializeActivationObjects();
 }
 
 Game::~Game()
@@ -284,10 +287,28 @@ double Game::updateFrameRate()
     return now;
 }
 
+void Game::initializeActivationObjects()
+{
+    // Register engine types with
+    Activator::getActivator()->registerType("gameplay::Game::Config", Game::Config::createObject);
+    Activator::getActivator()->registerType("gameplay::Scene", Scene::createObject);
+    Activator::getActivator()->registerType("gameplay::SceneObject", SceneObject::createObject);
+    Activator::getActivator()->registerType("gameplay::Camera", Camera::createObject);
+    Activator::getActivator()->registerType("gameplay::Light", Light::createObject);
+
+    // Register engine enums
+    Activator::getActivator()->registerEnum("gameplay::Camera::Mode", Camera::enumToString, Camera::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Light::Type", Light::enumToString, Light::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Light::Mode", Light::enumToString, Light::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Light::Shadows", Light::enumToString, Light::enumParse);
+}
+
 std::shared_ptr<Game::Config> Game::getConfig()
 {
     if (_config)
+    {
         return _config;
+    }
 
     Serializer* reader = Serializer::createReader(GP_ENGINE_CONFIG);
     if (reader)

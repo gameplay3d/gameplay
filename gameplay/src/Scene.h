@@ -12,7 +12,7 @@ namespace gameplay
 class Scene : public Serializable, public std::enable_shared_from_this<Scene>
 {
     friend class Game;
-    friend class Serializer::Activator;
+    friend class Activator;
 
 public:
     /**
@@ -115,6 +115,11 @@ public:
      */
     size_t findObjects(const std::string& name, std::vector<std::shared_ptr<SceneObject> >& objects, bool recursive = true, bool exactMatch = true);
 
+    /**
+     * @see Activator::createObject
+     */
+    static std::shared_ptr<Serializable> createObject();
+
 protected:
 
     /**
@@ -131,11 +136,6 @@ protected:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-
-    /**
-     * @see Serializer::Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
 
 private:
     std::string _name;

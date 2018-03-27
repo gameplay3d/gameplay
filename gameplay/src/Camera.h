@@ -16,7 +16,7 @@ namespace gameplay
 class Camera : public Component
 {
     friend class SceneObject;
-    friend class Serializer::Activator;
+    friend class Activator;
 
 public:
 
@@ -239,6 +239,23 @@ public:
     Component::TypeId getTypeId();
 
     /**
+     * @see Activator::createObject
+     */
+    static std::shared_ptr<Serializable> createObject();
+    
+    /**
+     * @see Activator::enumToString
+     */
+    static std::string enumToString(const std::string& enumName, int value);
+
+    /**
+     * @see Activator::enumParse
+     */
+    static int enumParse(const std::string& enumName, const std::string& str);
+
+protected:
+
+    /**
      * @see Serializable::getClassName
      */
     std::string getClassName();
@@ -252,23 +269,6 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-
-    /**
-     * @see Serializer::Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
-    
-    /**
-     * @see Serializer::Activator::enumToString
-     */
-    static std::string enumToString(const std::string& enumName, int value);
-
-    /**
-     * @see Serializer::Activator::enumParse
-     */
-    static int enumParse(const std::string& enumName, const std::string& str);
-
-protected:
 
     void setObject(std::shared_ptr<SceneObject> object);
 

@@ -6,22 +6,14 @@
 namespace gameplay
 {
 
-    class Message;
-
 /**
  * Defines an script component.
  */
 class Script : public Component
 {
     friend class SceneObject;
-    friend class Serializer::Activator;
+    friend class Activator;
 public:
-
-    enum Type
-    {
-        TYPE_CPP,
-        TYPE_LUA
-    };
 
     /**
      * Constructor.
@@ -31,11 +23,7 @@ public:
     /**
      * Destructor
      */
-    ~Script();
-
-    static std::shared_ptr<Script> loadCppScript(std::string classUrl);
-
-    static std::shared_ptr<Script> loadLuaScript(std::string scriptUrl);
+    ~Script();    
 
     virtual void onInitialize();
 
@@ -43,12 +31,8 @@ public:
 
     virtual void onUpdate(float elapsedTime);
 
-    virtual void onMessage(std::shared_ptr<SceneObject> sender, std::shared_ptr<Message> message, void* data);
+    //virtual void onMessage(std::shared_ptr<SceneObject> sender, std::shared_ptr<Message> message, void* data);
 
-private:
-
-    Type _type;
-    std::string _url;
 };
 
 }

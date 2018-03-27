@@ -1,6 +1,6 @@
 #include "Base.h"
 #include "SerializerBinary.h"
-#include "Serializable.h"
+#include "Activator.h"
 #include "Serializer.h"
 #include "Stream.h"
 #include "FileSystem.h"
@@ -568,7 +568,7 @@ std::shared_ptr<Serializable> SerializerBinary::readObject(const char* propertyN
     std::string className;
     readLengthPrefixedString(className);
 
-    std::shared_ptr<Serializable> value = std::dynamic_pointer_cast<Serializable>(Serializer::getActivator()->createObject(className));
+    std::shared_ptr<Serializable> value = std::dynamic_pointer_cast<Serializable>(Activator::getActivator()->createObject(className));
     if (value == nullptr)
     {
         GP_ERROR("Failed to deserialize binary class: %s for propertyName:%s", className.c_str(), propertyName);

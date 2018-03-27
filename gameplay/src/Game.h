@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Serializable.h"
 #include "Scene.h"
+#include "SceneObject.h"
 #include "Camera.h"
 #include "Input.h"
 
@@ -236,6 +236,8 @@ public:
 
     virtual void onDropFile(std::string file);
 
+    static void loadGameClasses();
+
     /**
      * Game configuration.
      */
@@ -269,7 +271,7 @@ public:
         void onDeserialize(Serializer* serializer);
 
         /**
-         * @see Serializer::Activator::createObject
+         * @see Activator::createObject
          */
         static std::shared_ptr<Serializable> createObject();
 
@@ -297,11 +299,11 @@ public:
      */
     std::shared_ptr<Graphics> getGraphics();
 
-    Game* next;
-
 private:
 
     Game(const Game& copy);
+
+    void initializeActivationObjects();
     void initializeSplash();
     void initializeLoading();
     void onSplash(float elapsedTime);
