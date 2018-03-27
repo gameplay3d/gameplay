@@ -12,7 +12,7 @@ namespace gameplay
 class Animation : public Component
 {
     friend class SceneObject;
-    friend class Serializer::Activator;
+    friend class Activator;
 
 public:
 

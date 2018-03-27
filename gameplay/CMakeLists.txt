@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
 set(GAMEPLAY_SRC
+    src/Activator.cpp
+    src/Activator.h
     src/Animation.cpp
     src/Animation.h
     src/Audio.cpp
@@ -12,6 +14,8 @@ set(GAMEPLAY_SRC
     src/AudioSource.cpp
     src/AudioSource.h
     src/Base.h
+    src/Behaviour.cpp
+    src/Behaviour.h
     src/BoundingBox.cpp
     src/BoundingBox.h
     src/BoundingSphere.cpp

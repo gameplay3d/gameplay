@@ -82,6 +82,37 @@ public:
      */
     uint64_t getNativeConnection() const;
 
+    /**
+     * Loads a plugin/library by url.
+     *
+     * Example:
+     *
+     * Platform::getPlatform()->loadPlugin("./gameplay-user");
+     *
+     * Dynamically loads:
+     *  gameplay-user.dll       (windows)
+     *  gameplay-user.so        (linux)
+     *  gameplay-user.dynlib    (macos)
+     *
+     * Required plugin symbols:
+     *
+     * extern "C"
+     * {
+     *     GP_EXPORT_API void onInitialize();
+     *     GP_EXPORT_API void onFinalize();
+     * }
+     *
+     * @param url The url of the plugin library
+     */
+    void loadPlugin(const std::string& url);
+
+    /**
+     * Unloads a plugin/library by url.
+     *
+     * @param url
+     */
+    void unloadPlugin(const std::string& url);
+
 private:
 
     Platform();

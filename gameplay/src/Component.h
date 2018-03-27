@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Serializable.h"
+#include "Activator.h"
 
 namespace gameplay
 {
@@ -12,7 +12,7 @@ namespace gameplay
 class Component : public Serializable, public std::enable_shared_from_this<Component>
 {
     friend class SceneObject;
-    friend class Serializer::Activator;
+    friend class Activator;
 
 public:
 
