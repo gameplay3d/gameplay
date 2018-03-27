@@ -1,6 +1,6 @@
 #include "Base.h"
 #include "SerializerJson.h"
-#include "Serializable.h"
+#include "Activator.h"
 #include "Serializer.h"
 #include "FileSystem.h"
 #include "Vector2.h"
@@ -111,7 +111,7 @@ void SerializerJson::writeEnum(const char* propertyName, const char* enumName, i
     if (value == defaultValue)
         return;
     
-    std::string str = Serializer::getActivator()->enumToString(enumName, value);
+    std::string str = Activator::getActivator()->enumToString(enumName, value);
     writeString(propertyName, str.c_str(), "");
 }
     
@@ -442,7 +442,7 @@ int SerializerJson::readEnum(const char* propertyName, const char* enumName, int
     std::string str;
     readString(propertyName, str, "");
     
-    return Serializer::getActivator()->enumParse(enumName, str.c_str());
+    return Activator::getActivator()->enumParse(enumName, str.c_str());
 }
 
 bool SerializerJson::readBool(const char* propertyName, bool defaultValue)
@@ -774,7 +774,7 @@ std::shared_ptr<Serializable> SerializerJson::readObject(const char* propertyNam
         }
     }
     
-    std::shared_ptr<Serializable> value = std::dynamic_pointer_cast<Serializable>(Serializer::getActivator()->createObject(className));
+    std::shared_ptr<Serializable> value = std::dynamic_pointer_cast<Serializable>(Activator::getActivator()->createObject(className));
     if (value == nullptr)
     {
         GP_WARN("Failed to deserialize json object:%s for class:", className);

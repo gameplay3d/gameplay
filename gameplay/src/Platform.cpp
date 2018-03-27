@@ -2,6 +2,9 @@
 #include "Platform.h"
 #include "Game.h"
 
+#define PLUGIN_FN_ON_LOAD       "onLoad"
+#define PLUGIN_FN_ON_UNLOAD     "onUnload"
+
 namespace gameplay
 {
 
@@ -542,6 +545,43 @@ uint64_t Platform::getNativeWindow() const
 uint64_t Platform::getNativeConnection() const
 {
     return _nativeConnection;
+}
+
+void loadPlugin(const std::string& url)
+{
+    /* todo:
+
+    std::string path = url;
+    #if GP_PLATFORM_WINDOWS
+        path.append(".dll");
+    #elif GP_PLATFORM_LINUX
+        path.append(".so");
+    #elif GP_PLATFORM_MACOS
+        path.append(".dynlib");
+    #else
+        GP_ERROR("Platform no supported");
+    #endif
+
+    // Dynamically load the library/object
+    void* libraryHandle = SDL_LoadObject(url.c_str());
+    char* onLoadFunc = PLUGIN_FN_ON_LOAD;
+    void (*onLoad)(int anInt);
+    onLoad = (void (*)())SDL_LoadFunction(libraryHandle, onLoadFunc);
+    if (onLoad != NULL)
+    {
+        // Invoke the onLoad function in the library
+        onLoad();
+    }
+    else
+    {
+        // todo: error handling
+    }
+    */
+}
+
+void unloadPlugin(const std::string& url)
+{
+    // todo:
 }
 
 size_t Platform::getWidth() const

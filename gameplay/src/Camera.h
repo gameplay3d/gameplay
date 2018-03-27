@@ -16,7 +16,7 @@ namespace gameplay
 class Camera : public Component
 {
     friend class SceneObject;
-    friend class Serializer::Activator;
+    friend class Activator;
 
 public:
 
@@ -254,17 +254,17 @@ public:
     void onDeserialize(Serializer* serializer);
 
     /**
-     * @see Serializer::Activator::createObject
+     * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
     
     /**
-     * @see Serializer::Activator::enumToString
+     * @see Activator::enumToString
      */
     static std::string enumToString(const std::string& enumName, int value);
 
     /**
-     * @see Serializer::Activator::enumParse
+     * @see Activator::enumParse
      */
     static int enumParse(const std::string& enumName, const std::string& str);
 

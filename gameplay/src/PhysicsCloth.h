@@ -46,7 +46,7 @@ public:
     void onDeserialize(Serializer* serializer);
     
     /**
-     * @see Serializer::Activator::createObject
+     * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
 };

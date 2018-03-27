@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Serializable.h"
 #include "SceneObject.h"
 #include "Camera.h"
 #include "Input.h"
@@ -269,7 +268,7 @@ public:
         void onDeserialize(Serializer* serializer);
 
         /**
-         * @see Serializer::Activator::createObject
+         * @see Activator::createObject
          */
         static std::shared_ptr<Serializable> createObject();
 
@@ -302,6 +301,7 @@ public:
 private:
 
     Game(const Game& copy);
+
     void initializeSplash();
     void initializeLoading();
     void onSplash(float elapsedTime);

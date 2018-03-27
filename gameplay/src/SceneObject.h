@@ -1,20 +1,10 @@
 #pragma once
 
-#include "Serializable.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix.h"
 #include "BoundingSphere.h"
 #include "Component.h"
-
-class Camera;
-class Light;
-class GraphicsRenderer;
-class PhysicsRigidBody;
-class PhysicsCollisionShape;
-class Animation;
-class Audio;
-class Script;
 
 namespace gameplay
 {
@@ -25,7 +15,7 @@ namespace gameplay
 class SceneObject : public Serializable, public std::enable_shared_from_this<SceneObject>
 {
     friend class Game;
-    friend class Serializer::Activator;
+    friend class Activator;
 
 public:
     /**
@@ -398,6 +388,11 @@ public:
      */
     bool isLoaded() const;
 
+    /**
+     * @see Activator::createObject
+     */
+    static std::shared_ptr<Serializable> createObject();
+
 protected:
 
     /**
@@ -414,11 +409,6 @@ protected:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-
-    /**
-     * @see Serializer::Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
 
 private:
 
