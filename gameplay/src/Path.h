@@ -11,8 +11,8 @@ namespace gameplay
 class Path : public Renderer
 {
     friend class Graphics;
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
 
@@ -27,9 +27,16 @@ public:
     ~Path();
 
     /**
-     * @see Component::getTypeId
+     * @see Component::getClassType
      */
-    Component::TypeId getTypeId();
+    Component::ClassType getClassType();
+
+    /**
+     * @see Activator::createObject
+     */
+    static std::shared_ptr<Serializable> createObject();
+
+protected:
 
     /**
      * @see Serializable::getClassName
@@ -45,11 +52,6 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-    
-    /**
-     * @see Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
 };
 
 }

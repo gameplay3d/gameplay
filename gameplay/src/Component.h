@@ -11,42 +11,44 @@ namespace gameplay
  */
 class Component : public Serializable, public std::enable_shared_from_this<Component>
 {
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
 
     /**
-     * Defines the component type identifier.
+     * Defines the component class type.
      */
-    enum TypeId
+    enum class ClassType
     {
-        TYPEID_CAMERA,
-        TYPEID_LIGHT,
-        TYPEID_SCRIPT,
-        TYPEID_ANIMATION,
-        TYPEID_AUDIO_SOURCE,
-        TYPEID_MESH,
-        TYPEID_TEXT,
-        TYPEID_TILESET,
-        TYPEID_PATH,
-        TYPEID_PARTICLE_EMITTER,
-        TYPEID_TERRAIN,
-        TYPEID_WATER,
-        TYPEID_TREE,
-        TYPEID_DECAL,
-        TYPEID_VIDEO,
-        TYPEID_UI,
-        TYPEID_PHYSICS_COLLIDER,
-        TYPEID_PHYSICS_RIGIDBODY,
-        TYPEID_PHYSICS_CHARACTER,
-        TYPEID_PHYSICS_VEHICLE,
-        TYPEID_PHYSICS_CLOTH,
-        TYPEID_PHYSICS_JOINT_FIXED,
-        TYPEID_PHYSICS_JOINT_GENERIC,
-        TYPEID_PHYSICS_JOINT_HINGE,
-        TYPEID_PHYSICS_JOINT_SOCKET,
-        TYPEID_PHYSICS_JOINT_SPRING
+        eCamera,
+        eLight,
+        eScript,
+        eAnimation,
+        eAudioSource,
+        eMesh,
+        eSprite,
+        eText,
+        eTileset,
+        ePath,
+        eParticleEmitter,
+        eTerrain,
+        eWater,
+        eTree,
+        eDecal,
+        eVideo,
+        eUI,
+        ePhysicsCollider,
+        ePhysicsRigidBody,
+        ePhysicsCharacter,
+        ePhysicsVehicle,
+        ePhysicsCloth,
+        ePhysicsJointFixed,
+        ePhysicsJointGeneric,
+        ePhysicsJointHinge,
+        ePhysicsJointSocket,
+        ePhysicsJointSpring,
+        eUser
     };
 
     /**
@@ -58,13 +60,6 @@ public:
      * Destructor.
      */
     ~Component();
-
-    /**
-     * This gets the type identifier for a component.
-     *
-     * @return the type id for a component.
-     */
-    virtual Component::TypeId getTypeId() = 0;
 
     /**
      * Determines if a component is enabled.
@@ -79,6 +74,13 @@ public:
      * @param enabled true if the component is active, false if not active.
      */
     void setEnabled(bool enabled);
+
+    /**
+     * This gets the class type for a component.
+     *
+     * @return the class type for a component.
+     */
+    virtual Component::ClassType getClassType() = 0;
 
     /**
      * @see Serializable::getClassName

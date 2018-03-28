@@ -86,12 +86,12 @@ bool BoundingBox::intersects(const BoundingBox& box) const
 bool BoundingBox::intersects(const Frustum& frustum) const
 {
     // The box must either intersect or be in the positive half-space of all six planes of the frustum.
-    return (intersects(frustum.getNear()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getFar()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getLeft()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getRight()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getBottom()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getTop()) != Plane::INTERSECTS_BACK);
+    return (intersects(frustum.getNear()) != Plane::kIntersectsBack &&
+            intersects(frustum.getFar()) != Plane::kIntersectsBack &&
+            intersects(frustum.getLeft()) != Plane::kIntersectsBack &&
+            intersects(frustum.getRight()) != Plane::kIntersectsBack &&
+            intersects(frustum.getBottom()) != Plane::kIntersectsBack &&
+            intersects(frustum.getTop()) != Plane::kIntersectsBack);
 }
 
 float BoundingBox::intersects(const Plane& plane) const
@@ -106,13 +106,13 @@ float BoundingBox::intersects(const Plane& plane) const
     float extentZ = (max.z - min.z) * 0.5f;
 
     const Vector3& planeNormal = plane.getNormal();
-    if (fabsf(distance) <= (fabsf(extentX * planeNormal.x) + fabsf(extentY * planeNormal.y) + fabsf(
-        extentZ * planeNormal.z)))
+    if (fabsf(distance) <= (fabsf(extentX * planeNormal.x) +
+                            fabsf(extentY * planeNormal.y) +
+                            fabsf(extentZ * planeNormal.z)))
     {
-        return (float)Plane::INTERSECTS_INTERSECTING;
+        return (float)Plane::kIntersects;
     }
-
-    return (distance > 0.0f) ? (float)Plane::INTERSECTS_FRONT : (float)Plane::INTERSECTS_BACK;
+    return (distance > 0.0f) ? (float)Plane::kIntersectsFront : (float)Plane::kIntersectsBack;
 }
 
 float BoundingBox::intersects(const Ray& ray) const
@@ -142,7 +142,7 @@ float BoundingBox::intersects(const Ray& ray) const
     // Check if the ray misses the box.
     if (dnear > dfar || dfar < 0.0f)
     {
-        return (float)Ray::INTERSECTS_NONE;
+        return (float)Ray::kIntersectsNone;
     }
     // Y direction.
     div = 1.0f / direction.y;
@@ -168,7 +168,7 @@ float BoundingBox::intersects(const Ray& ray) const
     // Check if the ray misses the box.
     if (dnear > dfar || dfar < 0.0f)
     {
-        return (float)Ray::INTERSECTS_NONE;
+        return (float)Ray::kIntersectsNone;
     }
     // Z direction.
     div = 1.0f / direction.z;
@@ -194,7 +194,7 @@ float BoundingBox::intersects(const Ray& ray) const
     // Check if the ray misses the box.
     if (dnear > dfar || dfar < 0.0f)
     {
-        return (float)Ray::INTERSECTS_NONE;
+        return (float)Ray::kIntersectsNone;
     }
     // The ray intersects the box (and since the direction of a Ray is normalized, dnear is the distance to the ray).
     return dnear;

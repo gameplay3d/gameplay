@@ -2,8 +2,6 @@
 
 #include "Serializer.h"
 
-const char GP_FILE_BINARY_IDENTIFIER[9] = { '\xAB', 'G', 'P', 'B', '\xBB', '\r', '\n', '\x1A', '\n' };
-
 namespace gameplay
 {
 

@@ -38,6 +38,7 @@ set(GAMEPLAY_SRC
     src/DepthStencilState.h
     src/DescriptorSet.cpp
     src/DescriptorSet.h
+    src/EnumFlags.h
     src/FileSystem.cpp
     src/FileSystem.h
     src/Format.h

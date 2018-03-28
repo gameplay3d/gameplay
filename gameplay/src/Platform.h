@@ -5,7 +5,7 @@
 #define SDL_MAIN_HANDLED
 #include <sdl/SDL.h>
 #include <sdl/SDL_syswm.h>
-#ifdef GP_PLATFORM_LINUX
+#if GP_PLATFORM_LINUX
 #undef Bool
 #undef CursorShape
 #undef Expose

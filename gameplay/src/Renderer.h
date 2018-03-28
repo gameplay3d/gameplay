@@ -27,9 +27,9 @@ public:
      */
     enum DrawFlags
     {
-        DRAW_FLAGS_SOLID,
-        DRAW_FLAGS_WIREFRAME,
-        DRAW_FLAGS_DEBUG
+        eSolid,
+        eWireframe,
+        eDebug
     };
 
     /**
@@ -41,13 +41,6 @@ public:
      * Destructor.
      */
     ~Renderer();
-
-    /**
-     * Gets the url this renderer was loaded from if loaded from an asset.
-     *
-     * @return The url this renderer was loaded from if loaded from an asset.
-     */
-    std::string getUrl() const;
 
     /**
      * Gets the Material bound to the specified mesh part.
@@ -85,6 +78,8 @@ public:
      */
     bool hasMaterial(size_t partIndex) const;
 
+protected:
+
     /**
      * @see Serializable::onDeserialize
      */
@@ -95,30 +90,7 @@ public:
      */
     virtual void onDeserialize(Serializer* serializer);
 
-    /**
-     * Determines if all the renderer's resource are loaded.
-     *
-     * @return true if all the renderer's resource are loaded, false if not loaded.
-     */
-    bool isLoaded() const;
-
-protected:
-
-    /**
-     * Event occurs when renderer's resource are loaded.
-     */
-    virtual void onLoaded();
-
-    /**
-     * Event occurs when the scene requests for renderer to be drawn.
-     *
-     * @param drawFlags The flags indicating what is rendered.
-     */
-    virtual void onDraw(uint32_t drawFlags) = 0;
-
     std::string  _url;
-    //std::vector<std::shared_ptr<Buffer>> _mesh;
-    //std::vector<std::shared_ptr<Buffer>> _submesh;
     std::shared_ptr<Material> _materialShared;
     std::vector<std::shared_ptr<Material>> _materials;
     bool _loaded;

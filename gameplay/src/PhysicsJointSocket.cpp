@@ -14,7 +14,7 @@ PhysicsJointSocket::~PhysicsJointSocket()
 
 PhysicsJoint::Type PhysicsJointSocket::getType() const
 {
-    return PhysicsJoint::TYPE_SOCKET;
+    return Type::eSocket;
 }
 
 void PhysicsJointSocket::setLimitEnabled(bool enabled)
@@ -98,9 +98,14 @@ float PhysicsJointSocket::getLimitSpringDampening() const
     return 0.0f;
 }
 
-Component::TypeId PhysicsJointSocket::getTypeId()
+std::shared_ptr<Serializable> PhysicsJointSocket::createObject()
 {
-    return Component::TYPEID_PHYSICS_JOINT_SOCKET;
+    return std::shared_ptr<PhysicsJointSocket>();
+}
+
+Component::ClassType PhysicsJointSocket::getClassType()
+{
+    return ClassType::ePhysicsJointSocket;
 }
 
 std::string PhysicsJointSocket::getClassName()
@@ -116,11 +121,6 @@ void PhysicsJointSocket::onSerialize(Serializer * serializer)
 void PhysicsJointSocket::onDeserialize(Serializer * serializer)
 {
     PhysicsJoint::onDeserialize(serializer);
-}
-
-std::shared_ptr<Serializable> PhysicsJointSocket::createObject()
-{
-    return std::shared_ptr<PhysicsJointSocket>();
 }
 
 }

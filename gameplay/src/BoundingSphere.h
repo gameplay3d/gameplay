@@ -82,9 +82,9 @@ public:
      * Tests whether this bounding sphere intersects the specified plane.
      *
      * @param plane The plane to test intersection with.
-     * @return Plane::INTERSECTS_BACK INTERSECTS_BACK if this bounding sphere is in the negative half-space of
-     *  the plane, Plane::INTERSECTS_FRONT INTERSECTS_FRONT if it is in the positive half-space of the plane,
-     *  and Plane::INTERSECTS_INTERSECTING INTERSECTS_INTERSECTING if it intersects the plane.
+     * @return Plane::kIntersectsBack if this bounding sphere is in the negative half-space of
+     *  the plane, Plane::kIntersectsFront if it is in the positive half-space of the plane,
+     *  and Plane::kIntersects if it intersects the plane.
      */
     float intersects(const Plane& plane) const;
 
@@ -94,7 +94,7 @@ public:
      * @param ray The ray to test intersection with.
      * 
      * @return The distance from the origin of the ray to this bounding sphere or
-     *  Ray::INTERSECTS_NONE INTERSECTS_NONE if the ray does not intersect this bounding sphere.
+     *  Ray::kIntersectsNone if the ray does not intersect this bounding sphere.
      */
     float intersects(const Ray& ray) const;
 

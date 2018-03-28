@@ -15,13 +15,14 @@ Mesh::~Mesh()
 {
 }
 
-void Mesh::load(const std::string& url)
+std::shared_ptr<Serializable> Mesh::createObject()
 {
+    return std::shared_ptr<Mesh>();
 }
 
-Component::TypeId Mesh::getTypeId()
+Component::ClassType Mesh::getClassType()
 {
-    return Component::TYPEID_MESH;
+    return ClassType::eMesh;
 }
 
 std::string Mesh::getClassName()
@@ -37,11 +38,6 @@ void Mesh::onSerialize(Serializer* serializer)
 void Mesh::onDeserialize(Serializer* serializer)
 {
     Renderer::onDeserialize(serializer);
-}
-
-std::shared_ptr<Serializable> Mesh::createObject()
-{
-    return std::shared_ptr<Mesh>();
 }
 
 }

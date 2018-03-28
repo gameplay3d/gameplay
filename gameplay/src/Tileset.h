@@ -11,8 +11,8 @@ namespace gameplay
 class Tileset : public Renderer
 {
     friend class Graphics;
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
 
@@ -27,15 +27,22 @@ public:
     ~Tileset();
 
     /**
-     * @see Component::getTypeId
+     * @see Activator::createObject
      */
-    Component::TypeId getTypeId();
+    static std::shared_ptr<Serializable> createObject();
+
+    /**
+     * @see Component::getClassType
+     */
+    Component::ClassType getClassType();
+
+protected:
 
     /**
      * @see Serializable::getClassName
      */
     std::string getClassName();
-    
+
     /**
      * @see Serializable::onSerialize
      */
@@ -45,11 +52,6 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-    
-    /**
-     * @see Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
 };
 
 }

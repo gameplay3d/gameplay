@@ -13,20 +13,20 @@ namespace gameplay
 class AudioSource  : public Component
 {
     friend class Audio;
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
 
     /**
      * The audio source's state.
      */
-    enum State
+    enum class State
     {
-        STATE_INITIAL,
-        STATE_PLAYING,
-        STATE_PAUSED,
-        STATE_STOPPED
+        eInitial,
+        ePlaying,
+        ePaused,
+        eStopped
     };
 
     /**
@@ -67,9 +67,9 @@ public:
     /**
      * Gets the state of the audio source.
      *
-     * @return PLAYING if the source is playing, 
-               STOPPED if the source is stopped, 
-               PAUSED if the source is paused and INITIAL otherwise.
+     * @return ePlaying if the source is playing,
+               eSopped if the source is stopped,
+               ePaused if the source is paused and eInitial otherwise.
      */
     virtual AudioSource::State getState() const = 0;
 
@@ -130,9 +130,16 @@ public:
     virtual void onVelocityChanged(const Vector3& velocity) = 0;
 
     /**
-     * @see Component::getTypeId
+     * @see Activator::createObject
      */
-    Component::TypeId getTypeId();
+    static std::shared_ptr<Serializable> createObject();
+
+    /**
+     * @see Component::getClassType
+     */
+    Component::ClassType getClassType();
+
+protected:
 
     /**
      * @see Serializable::getClassName
@@ -148,11 +155,6 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-    
-    /**
-     * @see Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
 };
 
 }

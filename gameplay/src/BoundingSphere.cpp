@@ -5,8 +5,7 @@
 namespace gameplay
 {
 
-BoundingSphere::BoundingSphere() :
-    radius(0)
+BoundingSphere::BoundingSphere()
 {
 }
 
@@ -92,12 +91,12 @@ bool BoundingSphere::intersects(const BoundingBox& box) const
 bool BoundingSphere::intersects(const Frustum& frustum) const
 {
     // The sphere must either intersect or be in the positive half-space of all six planes of the frustum.
-    return (intersects(frustum.getNear()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getFar()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getLeft()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getRight()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getBottom()) != Plane::INTERSECTS_BACK &&
-            intersects(frustum.getTop()) != Plane::INTERSECTS_BACK );
+    return (intersects(frustum.getNear()) != Plane::kIntersectsBack &&
+            intersects(frustum.getFar()) != Plane::kIntersectsBack &&
+            intersects(frustum.getLeft()) != Plane::kIntersectsBack &&
+            intersects(frustum.getRight()) != Plane::kIntersectsBack &&
+            intersects(frustum.getBottom()) != Plane::kIntersectsBack &&
+            intersects(frustum.getTop()) != Plane::kIntersectsBack );
 }
 
 float BoundingSphere::intersects(const Plane& plane) const
@@ -106,15 +105,15 @@ float BoundingSphere::intersects(const Plane& plane) const
 
     if (fabsf(distance) <= radius)
     {
-        return (float)Plane::INTERSECTS_INTERSECTING;
+        return (float)Plane::kIntersectsBack;
     }
     else if (distance > 0.0f)
     {
-        return (float)Plane::INTERSECTS_FRONT;
+        return (float)Plane::kIntersectsFront;
     }
     else
     {
-        return (float)Plane::INTERSECTS_BACK;
+        return (float)Plane::kIntersectsBack;
     }
 }
 
@@ -139,7 +138,7 @@ float BoundingSphere::intersects(const Ray& ray) const
     // If the discriminant is negative, then there is no intersection.
     if (discriminant < 0.0f)
     {
-        return (float)Ray::INTERSECTS_NONE;
+        return (float)Ray::kIntersectsNone;
     }
     else
     {

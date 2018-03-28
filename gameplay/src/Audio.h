@@ -30,17 +30,6 @@ public:
      * @return The audio listener
      */
     std::shared_ptr<AudioListener> getAudioListener() const;
- 
-    /**
-     * Creates an audio source.
-     *
-     * This represents the source of where the audio is is being emitted from.
-     *
-     * @param url The url of the sound file.
-     * @param streamed true if audio stream the data on demand, false if loaded first into a buffer.
-     * @return The create audio source.
-     */
-    std::shared_ptr<AudioSource> createAudioSource(std::string url, bool streamed = false);
 
 protected:
 

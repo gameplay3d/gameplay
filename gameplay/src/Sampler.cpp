@@ -5,15 +5,15 @@ namespace gameplay
 {
 
 Sampler::Sampler() :
-    _filterMag(FILTER_NEAREST),
-    _filterMin(FILTER_NEAREST),
-    _filterMip(FILTER_NEAREST),
-    _addressModeU(ADDRESS_MODE_WRAP),
-    _addressModeV(ADDRESS_MODE_WRAP),
-    _addressModeW(ADDRESS_MODE_WRAP),
-    _borderColor(BORDER_COLOR_BLACK_OPAQUE),
+    _filterMag(Filter::eNearest),
+    _filterMin(Filter::eNearest),
+    _filterMip(Filter::eNearest),
+    _addressModeU(AddressMode::eWrap),
+    _addressModeV(AddressMode::eWrap),
+    _addressModeW(AddressMode::eWrap),
+    _borderColor(BorderColor::eBlackOpaque),
     _compareEnabled(true),
-    _compareFunc(COMPARE_FUNC_NEVER),
+    _compareFunc(CompareFunc::eNever),
     _anisotropyEnabled(false),
     _anisotropyMax(0.0f),
     _lodMin(0.0f),

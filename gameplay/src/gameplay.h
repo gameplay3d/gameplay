@@ -80,7 +80,7 @@
 #include "CommandBuffer.h"
 #include "Semaphore.h"
 
-// Asset
+// Assets
 #include "Asset.h"
 #include "AssetManager.h"
 #include "AssetLoader.h"

@@ -14,7 +14,7 @@ PhysicsJointHinge::~PhysicsJointHinge()
 
 PhysicsJoint::Type PhysicsJointHinge::getType() const
 {
-    return PhysicsJoint::TYPE_HINGE;
+    return Type::eHinge;
 }
 
 float PhysicsJointHinge::getAngle() const
@@ -144,9 +144,14 @@ float PhysicsJointHinge::getDriveGearRatio() const
     return 0.0f;
 }
 
-Component::TypeId PhysicsJointHinge::getTypeId()
+std::shared_ptr<Serializable> PhysicsJointHinge::createObject()
 {
-    return Component::TYPEID_PHYSICS_JOINT_HINGE;
+    return std::shared_ptr<PhysicsJointHinge>();
+}
+
+Component::ClassType PhysicsJointHinge::getClassType()
+{
+    return ClassType::ePhysicsJointHinge;
 }
 
 std::string PhysicsJointHinge::getClassName()
@@ -162,11 +167,6 @@ void PhysicsJointHinge::onSerialize(Serializer * serializer)
 void PhysicsJointHinge::onDeserialize(Serializer * serializer)
 {
     PhysicsJoint::onDeserialize(serializer);
-}
-
-std::shared_ptr<Serializable> PhysicsJointHinge::createObject()
-{
-    return std::shared_ptr<PhysicsJointHinge>();
 }
 
 }

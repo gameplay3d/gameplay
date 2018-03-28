@@ -255,16 +255,16 @@ public:
                         size_t indexCount, 
                         size_t indexStart);
     /**
-     * Records a command that transitions an image/texture from one usage to another.
+     * Records a command that transitions a texture from one usage to another.
      *
      * @param commandBuffer The command buffer to be recorded into.
      * @param texture The texture to be transitioned.
-     * @param usageOld The old/previous usage before the transition.
-     * @param usageNew The new usage to be transitioned to.
+     * @param usageOld The old/previous texture usage before the transition.
+     * @param usageNew The new texture usage to be transitioned to.
      */
     void cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer,
                             std::shared_ptr<Texture> texture, 
-                            Texture::Usage usageOld, 
+                            Texture::Usage usageOld,
                             Texture::Usage usageNew);
 
     /**
@@ -318,7 +318,7 @@ public:
      * Creates a 1-dimensional texture.
      *
      * @param width The width of the texture.    
-     * @param usage The supported usage for the texture.
+     * @param usage The usage for the texture.
      * @param pixelFormat The pixel format of the texture.
      * @param sampleCount The supported sample counts for texture and used for storage operations.
      * @param hostVisible true if this buffer memory can be access from the client, false if not.
@@ -327,7 +327,7 @@ public:
      */
     std::shared_ptr<Texture> createTexture1d(size_t width, 
                                              Format pixelFormat, 
-                                             Texture::Usage usage, 
+                                             Texture::Usage usage,
                                              Texture::SampleCount sampleCount,
                                              bool hostVisible,
                                              const void* data);
@@ -337,7 +337,7 @@ public:
      * @param width The width of the texture.
      * @param height The height of the texture.
      * @param mipLevels The number of mip levels stored in the texture.
-     * @param usage The supported usage for the texture.
+     * @param usage The usage for the texture.
      * @param pixelFormat The pixel format of the texture.
      * @param sampleCount The supported sample counts for texture and used for storage operations.
      * @param hostVisible true if this buffer memory can be access from the client, false if not.
@@ -346,7 +346,7 @@ public:
      */
     std::shared_ptr<Texture> createTexture2d(size_t width, size_t height, size_t mipLevels, 
                                              Format pixelFormat, 
-                                             Texture::Usage usage, 
+                                             Texture::Usage usage,
                                              Texture::SampleCount sampleCount,
                                              bool hostVisible,
                                              const void* data);
@@ -356,7 +356,7 @@ public:
      * @param width The width of the texture.
      * @param height The height of the texture.
      * @param depth The depth of the texture.
-     * @param usage The supported usage for the texture.
+     * @param usage The usage for the texture.
      * @param pixelFormat The pixel format of the texture.
      * @param sampleCount The supported sample counts for texture and used for storage operations.
      * @param hostVisible true if this buffer memory can be access from the client, false if not.
@@ -365,7 +365,7 @@ public:
      */
     std::shared_ptr<Texture> createTexture3d(size_t width, size_t height, size_t depth, 
                                              Format pixelFormat, 
-                                             Texture::Usage usage, 
+                                             Texture::Usage usage,
                                              Texture::SampleCount sampleCount,
                                              bool hostVisible,
                                              const void* data);
@@ -528,15 +528,15 @@ private:
     void createSynchronizationObjects();
     std::shared_ptr<Buffer> createBuffer(Buffer::Usage usage, size_t size, size_t stride, bool hostVisible, const void* data);
     std::shared_ptr<Texture> createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels,
-                                           Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, 
+                                           Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount,
                                            bool hostVisible, const void* data, VkImage existingImage);
     std::shared_ptr<RenderPass> createRenderPass(size_t width,  size_t height, 
                                                  size_t colorAttachmentCount,
                                                  std::vector<VkFormat> colorFormats, 
                                                  VkFormat depthStencilFormat,
                                                  VkSampleCountFlagBits sampleCount,
-                                                 std::vector<std::shared_ptr<Texture> > colorAttachments,
-                                                 std::vector<std::shared_ptr<Texture> > colorMultisampleAttachments,
+                                                 std::vector<std::shared_ptr<Texture>> colorAttachments,
+                                                 std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
                                                  std::shared_ptr<Texture> depthStencilAttachment);
     struct SwapchainInfo
     {
@@ -586,10 +586,10 @@ private:
     VkColorSpaceKHR _colorSpace;
     VkFormat _colorFormat;
     VkFormat _depthStencilFormat;
-    std::vector<std::shared_ptr<RenderPass> > _renderPasses;
+    std::vector<std::shared_ptr<RenderPass>> _renderPasses;
     std::shared_ptr<RenderPass> _renderPass;
     VkCommandPool _commandPool;
-    std::vector<std::shared_ptr<CommandBuffer> > _commandBuffers;
+    std::vector<std::shared_ptr<CommandBuffer>> _commandBuffers;
     std::shared_ptr<CommandBuffer> _commandBuffer;
     std::shared_ptr<Semaphore> _presentCompleteSemaphore;
     std::shared_ptr<Semaphore> _renderCompleteSemaphore;

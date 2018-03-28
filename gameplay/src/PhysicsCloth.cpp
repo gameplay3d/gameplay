@@ -12,9 +12,14 @@ PhysicsCloth::~PhysicsCloth()
 {
 }
 
-Component::TypeId PhysicsCloth::getTypeId()
+std::shared_ptr<Serializable> PhysicsCloth::createObject()
 {
-    return Component::TYPEID_PHYSICS_CLOTH;
+    return std::shared_ptr<PhysicsCloth>();
+}
+
+Component::ClassType PhysicsCloth::getClassType()
+{
+    return ClassType::ePhysicsCloth;
 }
 
 std::string PhysicsCloth::getClassName()
@@ -28,11 +33,6 @@ void PhysicsCloth::onSerialize(Serializer * serializer)
 
 void PhysicsCloth::onDeserialize(Serializer * serializer)
 {
-}
-
-std::shared_ptr<Serializable> PhysicsCloth::createObject()
-{
-    return std::shared_ptr<PhysicsCloth>();
 }
 
 }

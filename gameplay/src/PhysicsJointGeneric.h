@@ -13,32 +13,32 @@ namespace gameplay
 class PhysicsJointGeneric : public PhysicsJoint
 {
     friend class Physics;
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
   
     /**
      * Defines the 6 degrees of freedom motion axis.
      */
-    enum MotionAxis
+    enum class MotionAxis
     {
-        MOTION_AXIS_X,
-        MOTION_AXIS_Y,
-        MOTION_AXIS_Z,
-        MOTION_AXIS_TWIST_X,
-        MOTION_AXIS_SWING_Y,
-        MOTION_AXIS_SWING_Z
+        eX,
+        eY,
+        eZ,
+        eTwistX,
+        eSwingY,
+        eSwingZ
     };
 
     /**
      * Defines he range of motions allowed for a single degree of freedom.
      */
-    enum MotionRange
+    enum class MotionRange
     {
-        MOTION_RANGE_LOCKED,
-        MOTION_RANGE_LIMITED,
-        MOTION_RANGE_FREE
+        eLocked,
+        eLimited,
+        eFree
     };
 
     /**
@@ -381,14 +381,19 @@ public:
     float getDriveForce(MotionAxis axis);
 
     /**
-     * @see Component::getTypeId
+     * @see Component::getClassType
      */
-    Component::TypeId getTypeId();
+    Component::ClassType getClassType();
 
     /**
      * @see Serializable::getClassName
      */
     std::string getClassName();
+
+    /**
+     * @see Activator::createObject
+     */
+    static std::shared_ptr<Serializable> createObject();
     
     /**
      * @see Serializable::onSerialize
@@ -399,11 +404,7 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-    
-    /**
-     * @see Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
+
 };
 
 }

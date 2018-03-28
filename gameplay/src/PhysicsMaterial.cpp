@@ -37,7 +37,7 @@ void PhysicsMaterial::setFrictionCombineMode(PhysicsMaterial::CombineMode combin
 
 PhysicsMaterial::CombineMode PhysicsMaterial::getFrictionCombineMode()
 {
-    return PhysicsMaterial::COMBINE_MODE_AVERAGE;
+    return CombineMode::eAverage;
 }
 
 void PhysicsMaterial::setBounce(float bounce)
@@ -55,7 +55,7 @@ void PhysicsMaterial::setBounceCombineMode(PhysicsMaterial::CombineMode combineM
 
 PhysicsMaterial::CombineMode PhysicsMaterial::getBounceCombineMode()
 {
-    return PhysicsMaterial::COMBINE_MODE_AVERAGE;
+    return CombineMode::eAverage;
 }
 
 }

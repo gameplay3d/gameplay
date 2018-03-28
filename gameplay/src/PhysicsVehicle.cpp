@@ -8,14 +8,18 @@ PhysicsVehicle::PhysicsVehicle()
 {
 }
 
-
 PhysicsVehicle::~PhysicsVehicle()
 {
 }
 
-Component::TypeId PhysicsVehicle::getTypeId()
+std::shared_ptr<Serializable> PhysicsVehicle::createObject()
 {
-    return Component::TYPEID_PHYSICS_VEHICLE;
+    return std::shared_ptr<PhysicsVehicle>();
+}
+
+Component::ClassType PhysicsVehicle::getClassType()
+{
+    return ClassType::ePhysicsVehicle;
 }
 
 std::string PhysicsVehicle::getClassName()
@@ -29,11 +33,6 @@ void PhysicsVehicle::onSerialize(Serializer * serializer)
 
 void PhysicsVehicle::onDeserialize(Serializer * serializer)
 {
-}
-
-std::shared_ptr<Serializable> PhysicsVehicle::createObject()
-{
-    return std::shared_ptr<PhysicsVehicle>();
 }
 
 }

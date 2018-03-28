@@ -3,7 +3,7 @@
 #include "Stream.h"
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef WIN32
+#if GP_PLATFORM_WINDOWS
 #include <windows.h>
 #include <tchar.h>
 #include <stdio.h>
@@ -17,7 +17,7 @@
 #define gp_stat stat
 #define gp_stat_struct struct stat
 #endif
-#ifdef __ANDROID__
+#if GP_PLATFORM_ANDROID
 #include <android/asset_manager.h>
 #include <unistd.h>
 extern AAssetManager* __assetManager;
@@ -26,7 +26,7 @@ extern AAssetManager* __assetManager;
 namespace gameplay
 {
 
-#ifdef __ANDROID__
+#if GP_PLATFORM_ANDROID
 static void makepath(std::string path, int mode)
 {
     std::vector<std::string> dirs;
@@ -126,7 +126,7 @@ private:
     bool _canWrite;
 };
 
-#ifdef __ANDROID__
+#if GP_PLATFORM_ANDROID
 
 /**
  * Android file stream.
@@ -183,7 +183,7 @@ std::string FileSystem::getHomePath()
 
 std::string FileSystem::getAbsolutePath(const std::string& path)
 {
-    #ifdef WIN32
+    #if GP_PLATFORM_WINDOWS
         char fullPath[_MAX_PATH]; 
         if (_fullpath(fullPath, path.c_str(), _MAX_PATH) != nullptr)
         {
@@ -214,7 +214,7 @@ std::string FileSystem::resolvePath(const std::string& path)
 
 bool FileSystem::listFiles(const std::string& dirPath, std::vector<std::string>& files)
 {
-#ifdef WIN32
+#if GP_PLATFORM_WINDOWS
     std::string path(FileSystem::getHomePath());
     if (dirPath.length() > 0)
     {
@@ -279,7 +279,7 @@ bool FileSystem::listFiles(const std::string& dirPath, std::vector<std::string>&
         result = true;
     }
 
-#ifdef __ANDROID__
+#if GP_PLATFORM_ANDROID
     // List the files that are in the android APK at this path
     AAssetDir* assetDir = AAssetManager_openDir(__assetManager, dirPath.c_str());
     if (assetDir != nullptr)
@@ -306,7 +306,7 @@ bool FileSystem::listFiles(const std::string& dirPath, std::vector<std::string>&
 bool FileSystem::fileExists(const std::string& filePath)
 {
     std::string fullPath;
-#ifdef __ANDROID__
+#if GP_PLATFORM_ANDROID
     fullPath = resolvePath(filePath);
 
     if (androidFileExists(fullPath.c_str()))
@@ -319,16 +319,18 @@ bool FileSystem::fileExists(const std::string& filePath)
     return stat(fullPath.c_str(), &s) == 0;
 }
 
-Stream* FileSystem::open(const std::string& path, size_t accessMode)
+Stream* FileSystem::open(const std::string& path, AccessFlags accessFlags)
 {
     char modeStr[] = "rb";
-    if ((accessMode & ACCESS_MODE_WRITE) != 0)
+    if (bool(accessFlags & AccessFlags::eWrite))
+    {
         modeStr[0] = 'w';
-#ifdef __ANDROID__
+    }
+#if GP_PLATFORM_ANDROID
     std::string fullPath(__assetPath);
     fullPath += resolvePath(path);
 
-    if ((accessMode & WRITE) != 0)
+    if (bool(accessFlags & AccessFlags::eWrite))
     {
         // Open a file on the SD card
         size_t index = fullPath.rfind('/');
@@ -384,7 +386,7 @@ std::string FileSystem::readAll(const std::string& filePath)
 bool FileSystem::isAbsolutePath(const std::string& filePath)
 {
     char first = filePath.at(0);
-#ifdef _WINDOWS
+#if GP_PLATFORM_WINDOWS
     char second = filePath.at(1);
     return (second == ':' && ((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')));
 #else
@@ -396,7 +398,7 @@ std::string FileSystem::getDirectoryPath(const std::string& path)
 {
     if (path.length() == 0)
         return "";
-#ifdef WIN32
+#if GP_PLATFORM_WINDOWS
     char drive[_MAX_DRIVE];
     char dir[_MAX_DIR];
     _splitpath(path.c_str(), drive, dir, nullptr, nullptr);
@@ -566,7 +568,7 @@ bool FileStream::rewind()
     return false;
 }
 
-#ifdef __ANDROID__
+#if GP_PLATFORM_ANDROID
 
 FileStreamAndroid::FileStreamAndroid(AAsset* asset)
     : _asset(asset)

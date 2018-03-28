@@ -13,22 +13,20 @@ class FileSystem
 {
 public:
 
-    /**
-     * Access mode flags for opening a stream.
-     */
-    enum AccessMode
+    enum class AccessFlags : uint32_t
     {
-        ACCESS_MODE_READ = 1,
-        ACCESS_MODE_WRITE = 2
+        eRead = 1,
+        eWrite = 2
     };
+
 
     /**
      * Dialog mode flags when displaying dialogs.
      */
-    enum DialogMode
+    enum class DialogMode
     {
-        DIALOG_MODE_OPEN,
-        DIALOG_MODE_SAVE 
+        eOpen,
+        eSave
     };
 
     /**
@@ -97,11 +95,11 @@ public:
      * asset path.
      *
      * @param path The path to the asset to be opened, relative to the currently set asset path.
-     * @param accessMode The access mode used to open the file.
+     * @param accessFlags The access flags used to open the file.
      * @return A stream that can be used to read or write to the file depending on the mode, 
      *         nullptr if there was an error. (Request mode not supported).
      */
-    static Stream* open(const std::string& path, size_t accessMode = ACCESS_MODE_READ);
+    static Stream* open(const std::string& path, AccessFlags accessFlags = AccessFlags::eRead);
 
     /**
      * Reads the entire contents of the specified file and returns its contents.
@@ -156,3 +154,5 @@ private:
 };
 
 }
+
+GP_ENABLE_BITWISE_OPERATORS(gameplay::FileSystem::AccessFlags);

@@ -4,8 +4,9 @@
 namespace gameplay
 {
 
-Heightfield::Heightfield()
-    : _columns(0), _rows(0)
+Heightfield::Heightfield() :
+    _columns(0),
+    _rows(0)
 {
 }
 

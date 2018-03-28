@@ -12,9 +12,14 @@ Path::~Path()
 {
 }
 
-Component::TypeId Path::getTypeId()
+std::shared_ptr<Serializable> Path::createObject()
 {
-    return Component::TYPEID_TEXT;
+    return std::shared_ptr<Path>();
+}
+
+Component::ClassType Path::getClassType()
+{
+    return ClassType::ePath;
 }
 
 std::string Path::getClassName()
@@ -31,11 +36,5 @@ void Path::onDeserialize(Serializer* serializer)
 {
     Renderer::onDeserialize(serializer);
 }
-
-std::shared_ptr<Serializable> Path::createObject()
-{
-    return std::shared_ptr<Path>();
-}
-
 
 }

@@ -33,8 +33,9 @@ SerializerBinary::~SerializerBinary()
 Serializer* SerializerBinary::create(const std::string& path, Stream* stream)
 {
     // Read the binary file header info.
+    const char magicNumber[9] = GP_ENGINE_MAGIC_NUMBER;
     char header[9];
-    if (stream->read(header, sizeof(char), 9) != 9 || memcmp(header, GP_FILE_BINARY_IDENTIFIER, 9) != 0)
+    if (stream->read(header, sizeof(char), 9) != 9 || memcmp(header, magicNumber, 9) != 0)
         return nullptr;
 
     // Read the file version.
@@ -50,16 +51,19 @@ Serializer* SerializerBinary::create(const std::string& path, Stream* stream)
 
 Serializer* SerializerBinary::createWriter(const std::string& path)
 {
-    Stream* stream = FileSystem::open(path, FileSystem::ACCESS_MODE_WRITE);
+    Stream* stream = FileSystem::open(path, FileSystem::AccessFlags::eWrite);
     if (stream == nullptr)
         return nullptr;
+
+    const char magicNumber[9] = GP_ENGINE_MAGIC_NUMBER;
+    const unsigned char version[2] = { GP_ENGINE_VERSION_MAJOR, GP_ENGINE_VERSION_MINOR};
     // Write out the file identifier and version
-    if (stream->write(GP_FILE_BINARY_IDENTIFIER, sizeof(char), 9) != 9)
+    if (stream->write(magicNumber, sizeof(char), 9) != 9)
         GP_WARN("Unable to write binary file identifier.");
-    if (stream->write(SERIALIZER_VERSION, sizeof(unsigned char), 2) != 2)
+    if (stream->write(version, sizeof(unsigned char), 2) != 2)
         GP_WARN("Unable to write binary file version.");
 
-    Serializer* serializer = new SerializerBinary(Serializer::TYPE_WRITER, path, stream, SERIALIZER_VERSION[0], SERIALIZER_VERSION[1]);
+    Serializer* serializer = new SerializerBinary(Serializer::TYPE_WRITER, path, stream, version[0], version[1]);
 
     return serializer;
 }
@@ -72,7 +76,7 @@ void SerializerBinary::close()
     
 Serializer::Format SerializerBinary::getFormat() const
 {
-    return Serializer::FORMAT_BINARY;
+    return Format::eBinary;
 }
 
 void SerializerBinary::writeEnum(const char* propertyName, const char* enumName, int value, int defaultValue)

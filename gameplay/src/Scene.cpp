@@ -11,7 +11,8 @@ namespace gameplay
 
 Scene::Scene() :
     _name(SCENE_NAME),
-    _streaming(SCENE_STREAMING)
+    _streaming(SCENE_STREAMING),
+    _camera(nullptr)
 {
 }
 
@@ -37,6 +38,17 @@ bool Scene::isStreaming() const
 void Scene::setStreaming(bool streaming)
 {
     _streaming = streaming;
+}
+
+
+void Scene::setCamera(std::shared_ptr<Camera> camera)
+{
+    _camera = camera;
+}
+
+std::shared_ptr<Camera> Scene::getCamera() const
+{
+    return _camera;
 }
 
 void Scene::addChild(std::shared_ptr<SceneObject> object)
@@ -131,6 +143,11 @@ size_t Scene::findObjects(const std::string& name, std::vector<std::shared_ptr<S
     return count;
 }
 
+std::shared_ptr<Serializable> Scene::createObject()
+{
+    return std::static_pointer_cast<Serializable>(std::make_shared<Scene>());
+}
+
 std::string Scene::getClassName()
 {
     return "gameplay::Scene";
@@ -163,11 +180,6 @@ void Scene::onDeserialize(Serializer* serializer)
             _children[i] = std::static_pointer_cast<SceneObject>(serializer->readObject(nullptr));
         }
     }
-}
-
-std::shared_ptr<Serializable> Scene::createObject()
-{
-    return std::static_pointer_cast<Serializable>(std::make_shared<Scene>());
 }
 
 }

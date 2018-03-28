@@ -17,7 +17,7 @@ double Game::_pausedTimeTotal = 0.0;
 
 Game::Game() :
     _config(nullptr),
-    _state(Game::STATE_UNINITIALIZED),
+    _state(State::eUninitialized),
     _width(GP_GRAPHICS_WIDTH),
     _height(GP_GRAPHICS_HEIGHT),
     _pausedCount(0),
@@ -25,8 +25,7 @@ Game::Game() :
     _frameCount(0),
     _frameRate(0),
     _sceneLoading(nullptr),
-    _scene(nullptr),
-    _camera(nullptr)
+    _scene(nullptr)
 {
     __gameInstance = this;
 
@@ -87,9 +86,9 @@ float Game::getAspectRatio() const
 
 void Game::pause()
 {
-    if (_state == Game::STATE_RUNNING)
+    if (_state == State::eRunning)
     {
-        _state = Game::STATE_PAUSED;
+        _state = State::ePaused;
         _pausedTimeLast = getAbsoluteTime();
     }
     ++_pausedCount;
@@ -97,12 +96,12 @@ void Game::pause()
 
 void Game::resume()
 {
-    if (_state == Game::STATE_PAUSED)
+    if (_state == State::ePaused)
     {
         --_pausedCount;
         if (_pausedCount == 0)
         {
-            _state = Game::STATE_RUNNING;
+            _state = State::eRunning;
             _pausedTimeTotal += getAbsoluteTime() - _pausedTimeLast;
         }
     }
@@ -110,10 +109,10 @@ void Game::resume()
 
 int Game::exit()
 {
-    if (_state != Game::STATE_UNINITIALIZED)
+    if (_state != State::eUninitialized)
     {
         onFinalize();
-        _state = Game::STATE_UNINITIALIZED;
+        _state = State::eUninitialized;
     }
     return 0;
 }
@@ -127,36 +126,39 @@ void Game::frame()
 
     switch (_state)
     {
-    case Game::STATE_UNINITIALIZED:
-    {
-        initializeSplash();
-        initializeLoading();
-        _state = Game::STATE_SPLASH;
-        break;
-    }
-    case Game::STATE_SPLASH:
-    {
-        onSplash(elapsedTime);
-        if (_splashScreens.empty())
-            _state = Game::STATE_LOADING;
-        lastFrameTime = updateFrameRate();
-        break;
-    }
-    case Game::STATE_LOADING:
-    {
-        onLoading(elapsedTime);
-        //if (_scene.get() && _scene->isLoaded())
-        _state = Game::STATE_RUNNING;
-        lastFrameTime = updateFrameRate();
-        break;
-    }
-    case Game::STATE_RUNNING:
-    {
-        onUpdate(elapsedTime);
-        lastFrameTime = updateFrameRate();
-        break;
-    }
-    case Game::STATE_PAUSED:
+    case State::eUninitialized:
+        {
+            initializeSplash();
+            initializeLoading();
+            _state = State::eSplash;
+            break;
+        }
+    case State::eSplash:
+        {
+            onSplash(elapsedTime);
+            if (_splashScreens.empty())
+            {
+                _state = State::eLoading;
+            }
+            lastFrameTime = updateFrameRate();
+            break;
+        }
+    case State::eLoading:
+        {
+            onLoading(elapsedTime);
+            //if (_scene.get() && _scene->isLoaded())
+            _state = State::eRunning;
+            lastFrameTime = updateFrameRate();
+            break;
+        }
+    case State::eRunning:
+        {
+            onUpdate(elapsedTime);
+            lastFrameTime = updateFrameRate();
+            break;
+        }
+    case State::ePaused:
+    default:
         break;
     }
 }
@@ -175,7 +177,7 @@ void Game::loadScene(const std::string& url, bool showLoading)
 
     // Set the loading scene and change states
     _scene = _sceneLoading;
-    _state = Game::STATE_LOADING;
+    _state = State::eLoading;
 }
 
 void Game::unloadScene(std::shared_ptr<SceneObject> scene)
@@ -190,16 +192,6 @@ void Game::setScene(std::shared_ptr<Scene> scene)
 std::shared_ptr<Scene> Game::getScene() const
 {
     return _scene;
-}
-
-void Game::setCamera(std::shared_ptr<Camera> camera)
-{
-    _camera = camera;
-}
-
-std::shared_ptr<Camera> Game::getCamera() const
-{
-    return _camera;
 }
 
 void Game::onInitialize()

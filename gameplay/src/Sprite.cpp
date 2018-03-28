@@ -12,9 +12,14 @@ Sprite::~Sprite()
 {
 }
 
-Component::TypeId Sprite::getTypeId()
+std::shared_ptr<Serializable> Sprite::createObject()
 {
-    return Component::TYPEID_TEXT;
+    return std::shared_ptr<Sprite>();
+}
+
+Component::ClassType Sprite::getClassType()
+{
+    return ClassType::eSprite;
 }
 
 std::string Sprite::getClassName()
@@ -31,11 +36,5 @@ void Sprite::onDeserialize(Serializer* serializer)
 {
     Renderer::onDeserialize(serializer);
 }
-
-std::shared_ptr<Serializable> Sprite::createObject()
-{
-    return std::shared_ptr<Sprite>();
-}
-
 
 }

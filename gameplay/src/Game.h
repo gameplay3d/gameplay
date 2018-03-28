@@ -22,11 +22,11 @@ public:
      */
     enum State
     {
-        STATE_UNINITIALIZED,
-        STATE_SPLASH,
-        STATE_LOADING,
-        STATE_RUNNING,
-        STATE_PAUSED
+        eUninitialized,
+        eSplash,
+        eLoading,
+        eRunning,
+        ePaused
     };
 
     /**
@@ -171,26 +171,6 @@ public:
     std::shared_ptr<Scene> getScene() const;
 
     /**
-     * Sets the active camera the current scene will use to view the scene.
-     *
-     * The active camera by default is the first object with a camera
-     * attached called "mainCamera".
-     *
-     * The camera is not activated if the camera component is not
-     * attached to an scene object in the active scene.
-     *
-     * @param camera The camera the scene will use to view the scene.
-     */
-    void setCamera(std::shared_ptr<Camera> camera);
-
-    /**
-     * Gets the active camera the current scene will use to view the scene.
-     *
-     * @return The camera the scene will use to view the scene.
-     */
-    std::shared_ptr<Camera> getCamera() const;
-
-    /**
      * Event occurs after the platform starts up and prior to first frame event.
      */
     virtual void onInitialize();
@@ -325,7 +305,6 @@ private:
     std::map<std::string, std::shared_ptr<SceneObject>> _scenesLoaded;
     std::shared_ptr<Scene> _sceneLoading;
     std::shared_ptr<Scene> _scene;
-    std::shared_ptr<Camera> _camera;
     std::shared_ptr<Graphics> _graphics;
 };
 

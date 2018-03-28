@@ -6,33 +6,33 @@ namespace gameplay
 /**
  * Defines data formats.
  */
-enum Format : uint32_t
+enum class Format
 {
-    FORMAT_UNDEFINED = 0,
-    FORMAT_R8_UNORM,
-    FORMAT_R16_UNORM,
-    FORMAT_R16_FLOAT,
-    FORMAT_R32_UINT,
-    FORMAT_R32_FLOAT,
-    FORMAT_R8G8_UNORM,
-    FORMAT_R16G16_UNORM,
-    FORMAT_R16G16_FLOAT,
-    FORMAT_R32G32_UINT,
-    FORMAT_R32G32_FLOAT,
-    FORMAT_R32G32B32_UINT,
-    FORMAT_R32G32B32_FLOAT,
-    FORMAT_B8G8R8A8_UNORM,
-    FORMAT_R8G8B8A8_UNORM,
-    FORMAT_R16G16B16A16_UNORM,
-    FORMAT_R16G16B16A16_FLOAT,
-    FORMAT_R32G32B32A32_UINT,
-    FORMAT_R32G32B32A32_FLOAT,
-    FORMAT_D16_UNORM,
-    FORMAT_X8_D24_UNORM_PACK32,
-    FORMAT_D32_FLOAT,
-    FORMAT_S8_UINT,
-    FORMAT_D24_UNORM_S8_UINT,
-    FORMAT_D32_FLOAT_S8_UINT
+    eUndefined,
+    eR8Unorm,
+    eR16Unorm,
+    eR16Float,
+    eR32Uint,
+    eR32Float,
+    eR8G8Unorm,
+    eR16G16Unorm,
+    eR16G16Float,
+    eR32G32Uint,
+    eR32G32Float,
+    eR32G32B32Uint,
+    eR32G32B32Float,
+    eB8G8R8A8Unorm,
+    eR8G8B8A8Unorm,
+    eR16G16B16A16Unorm,
+    eR16G16B16A16Float,
+    eR32G32B32A32Uint,
+    eR32G32B32A32Float,
+    eD16Unorm,
+    eX8D24UnormPack32,
+    eD32Float,
+    eS8Uint,
+    eD24UnormS8Uint,
+    eD32FloatS8Uint
 };
 
 }

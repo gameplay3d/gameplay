@@ -34,8 +34,8 @@ public:
                Format colorFormat,
                Format depthStancilFormat,
                Texture::SampleCount sampleCount,
-               std::vector<std::shared_ptr<Texture> > colorAttachments,
-               std::vector<std::shared_ptr<Texture> > colorMultisampleAttachments,
+               std::vector<std::shared_ptr<Texture>> colorAttachments,
+               std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
                std::shared_ptr<Texture> depthStencilAttachment);
 
     /**
@@ -114,8 +114,8 @@ private:
     std::vector<Format> _colorFormats;
     Format _depthStencilFormat;
     Texture::SampleCount _sampleCount;
-    std::vector<std::shared_ptr<Texture> > _colorAttachments;
-    std::vector<std::shared_ptr<Texture> > _colorMultisampleAttachments;
+    std::vector<std::shared_ptr<Texture>> _colorAttachments;
+    std::vector<std::shared_ptr<Texture>> _colorMultisampleAttachments;
     std::shared_ptr<Texture> _depthStencilAttachment;
     VkRenderPass _renderPass;
     VkFramebuffer _framebuffer;

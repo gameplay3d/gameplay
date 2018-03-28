@@ -40,8 +40,8 @@ Serializer* SerializerJson::create(const std::string& path, Stream* stream)
     Serializer* serializer = nullptr;
 
     JSONNODE* versionNode = json_get(root, "version");
-    int versionMajor = SERIALIZER_VERSION[0];
-    int versionMinor = SERIALIZER_VERSION[1];
+    int versionMajor = GP_ENGINE_VERSION_MAJOR;
+    int versionMinor = GP_ENGINE_VERSION_MINOR;
     if (versionNode)
     {
         json_char* str = json_as_string(versionNode);
@@ -65,18 +65,18 @@ Serializer* SerializerJson::create(const std::string& path, Stream* stream)
 
 Serializer* SerializerJson::createWriter(const std::string& path)
 {
-    Stream* stream = FileSystem::open(path, FileSystem::ACCESS_MODE_WRITE);
+    Stream* stream = FileSystem::open(path, FileSystem::AccessFlags::eWrite);
     if (stream == nullptr)
         return nullptr;
 
     JSONNODE* root = json_new(JSON_NODE);
     std::string version;
-    version.append(std::to_string(SERIALIZER_VERSION[0]));
+    version.append(std::to_string(GP_ENGINE_VERSION_MAJOR));
     version.append(".");
-    version.append(std::to_string(SERIALIZER_VERSION[1]));
+    version.append(std::to_string(GP_ENGINE_VERSION_MINOR));
     json_push_back(root, json_new_a("version", version.c_str()));
 
-    Serializer* serializer = new SerializerJson(Serializer::TYPE_WRITER, path, stream, SERIALIZER_VERSION[0], SERIALIZER_VERSION[1], root);
+    Serializer* serializer = new SerializerJson(Serializer::TYPE_WRITER, path, stream, GP_ENGINE_VERSION_MAJOR, GP_ENGINE_VERSION_MINOR, root);
   
     return serializer;
 }
@@ -100,7 +100,7 @@ void SerializerJson::close()
 
 Serializer::Format SerializerJson::getFormat() const
 {
-    return Serializer::FORMAT_JSON;
+    return Format::eJson;
 }
 
 void SerializerJson::writeEnum(const char* propertyName, const char* enumName, int value, int defaultValue)

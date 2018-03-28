@@ -36,10 +36,10 @@ void App::onInitialize()
 
     // Create the vertex layout // todo: improve stride calculation with special offset value of -1
     std::vector<VertexLayout::Attribute> attributes(2); 
-    attributes[0] = VertexLayout::Attribute(VertexLayout::SEMANTIC_POSITION,  
-                                            Format::FORMAT_R32G32B32_FLOAT, 0, 0, 0);
-    attributes[1] = VertexLayout::Attribute(VertexLayout::SEMANTIC_COLOR, 
-                                            Format::FORMAT_R32G32B32_FLOAT, 0, 1, VertexLayout::toStride(attributes[0].format));
+    attributes[0] = VertexLayout::Attribute(VertexLayout::Semantic::ePosition,
+                                            Format::eR32G32B32Float, 0, 0, 0);
+    attributes[1] = VertexLayout::Attribute(VertexLayout::Semantic::eColor,
+                                            Format::eR32G32B32Float, 0, 1, VertexLayout::toStride(attributes[0].format));
     VertexLayout vertexLayout(attributes.data(), attributes.size());
 
     // Create the vertex buffer
@@ -60,7 +60,7 @@ void App::onInitialize()
     RasterizerState rasterizerState;
     ColorBlendState colorBlendState;
     DepthStencilState depthStencilState;
-    _renderPipeline = graphics->createRenderPipeline(RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, vertexLayout, 
+    _renderPipeline = graphics->createRenderPipeline(RenderPipeline::PrimitiveTopology::eTriangleList, vertexLayout,
                                                      rasterizerState, colorBlendState, depthStencilState, 
                                                      _renderPass, _descriptorSet, 
                                                     _vertShader, nullptr, nullptr, nullptr, _fragShader);

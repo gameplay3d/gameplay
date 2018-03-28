@@ -2,6 +2,7 @@
 
 #include "Serializable.h"
 #include "SceneObject.h"
+#include "Camera.h"
 
 namespace gameplay
 {
@@ -54,6 +55,26 @@ public:
     void setStreaming(bool streaming);
 
     /**
+     * Sets the active camera the current scene will use to view the scene.
+     *
+     * The active camera by default is the first object with a camera
+     * attached called "mainCamera".
+     *
+     * The camera is not activated if the camera component is not
+     * attached to an scene object in the active scene.
+     *
+     * @param camera The camera the scene will use to view the scene.
+     */
+    void setCamera(std::shared_ptr<Camera> camera);
+
+    /**
+     * Gets the active camera the current scene will use to view the scene.
+     *
+     * @return The camera the scene will use to view the scene.
+     */
+    std::shared_ptr<Camera> getCamera() const;
+
+    /**
      * Adds an object as a child of this object.
      *
      * @param object The object to add as a child of this object.
@@ -86,7 +107,7 @@ public:
      *
      * @return The children objects.
      */
-    std::vector<std::shared_ptr<SceneObject> > getChildren();
+    std::vector<std::shared_ptr<SceneObject>> getChildren();
 
     /**
      * Finds the first child object that matches the given name.
@@ -113,7 +134,7 @@ public:
      *        or false if objects that start with the given name are returned.
      * @return The number of matches found.
      */
-    size_t findObjects(const std::string& name, std::vector<std::shared_ptr<SceneObject> >& objects, bool recursive = true, bool exactMatch = true);
+    size_t findObjects(const std::string& name, std::vector<std::shared_ptr<SceneObject>>& objects, bool recursive = true, bool exactMatch = true);
 
     /**
      * @see Activator::createObject
@@ -140,8 +161,9 @@ protected:
 private:
     std::string _name;
     bool _streaming;
-    std::vector<std::shared_ptr<SceneObject> > _children;
-    std::vector<std::shared_ptr<Component> > _components;
+    std::shared_ptr<Camera> _camera;
+    std::vector<std::shared_ptr<SceneObject>> _children;
+    std::vector<std::shared_ptr<Component>> _components;
 };
 
 }

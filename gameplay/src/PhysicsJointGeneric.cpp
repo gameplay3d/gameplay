@@ -14,7 +14,7 @@ PhysicsJointGeneric::~PhysicsJointGeneric()
 
 PhysicsJoint::Type PhysicsJointGeneric::getType() const
 {
-    return PhysicsJoint::TYPE_GENERIC;
+    return Type::eGeneric;
 }
 
 float PhysicsJointGeneric::getTwistX() const
@@ -221,9 +221,14 @@ float PhysicsJointGeneric::getDriveForce(MotionAxis axis)
     return 0.0f;
 }
 
-Component::TypeId PhysicsJointGeneric::getTypeId()
+std::shared_ptr<Serializable> PhysicsJointGeneric::createObject()
 {
-    return Component::TYPEID_PHYSICS_JOINT_GENERIC;
+    return std::shared_ptr<PhysicsJointGeneric>();
+}
+
+Component::ClassType PhysicsJointGeneric::getClassType()
+{
+    return ClassType::ePhysicsJointGeneric;
 }
 
 std::string PhysicsJointGeneric::getClassName()
@@ -239,11 +244,6 @@ void PhysicsJointGeneric::onSerialize(Serializer * serializer)
 void PhysicsJointGeneric::onDeserialize(Serializer * serializer)
 {
     PhysicsJoint::onDeserialize(serializer);
-}
-
-std::shared_ptr<Serializable> PhysicsJointGeneric::createObject()
-{
-    return std::shared_ptr<PhysicsJointGeneric>();
 }
 
 }

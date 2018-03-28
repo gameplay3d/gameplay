@@ -151,7 +151,8 @@ HEADERS += \
     src/Vector2.h \
     src/Vector3.h \
     src/Vector4.h \
-    src/VertexLayout.h
+    src/VertexLayout.h \
+    src/gameplay.h 
 
 INCLUDEPATH += $$PWD/../gameplay/src
 INCLUDEPATH += $$PWD/../external-deps/include

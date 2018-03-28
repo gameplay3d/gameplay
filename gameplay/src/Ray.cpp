@@ -81,7 +81,7 @@ float Ray::intersects(const Frustum& frustum) const
         (lOD < 0.0f && lD < 0.0f)  || (rOD < 0.0f && rD < 0.0f) ||
         (bOD < 0.0f && bD < 0.0f)  || (tOD < 0.0f && tD < 0.0f))
     {
-        return (float)Ray::INTERSECTS_NONE;
+        return (float)Ray::kIntersectsNone;
     }
     // Otherwise, the intersection distance is the minimum positive intersection distance.
     float d = (nD > 0.0f) ? nD : 0.0f;
@@ -108,14 +108,14 @@ float Ray::intersects(const Plane& plane) const
     // then the ray is parallel to the plane and does not intersect it.
     if (dot == 0.0f)
     {
-        return (float)INTERSECTS_NONE;
+        return (float)kIntersectsNone;
     }
     // Calculate the distance along the ray's direction vector to the point where
     // the ray intersects the plane (if it is negative the plane is behind the ray).
     float d = -alpha / dot;
     if (d < 0.0f)
     {
-        return (float)INTERSECTS_NONE;
+        return (float)kIntersectsNone;
     }
     return d;
 }

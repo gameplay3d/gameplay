@@ -22,7 +22,7 @@ public:
     /**
      * Represents when a entity does not intersect a ray.
      */
-    static const int INTERSECTS_NONE = -1;
+    static const int kIntersectsNone = -1;
 
     /**
      * Constructor.
@@ -84,7 +84,7 @@ public:
      *
      * @param frustum The frustum to test intersection with.
      * @return The distance from the origin of this ray to the frustum or
-     *     INTERSECTS_NONE if this ray does not intersect the frustum.
+     *     kIntersectsNone if this ray does not intersect the frustum.
      */
     float intersects(const Frustum& frustum) const;
 
@@ -94,7 +94,7 @@ public:
      *
      * @param plane The plane to test intersection with.
      * @return The distance from the origin of this ray to the plane or
-     *     INTERSECTS_NONE if this ray does not intersect the plane.
+     *     kIntersectsNone if this ray does not intersect the plane.
      */
     float intersects(const Plane& plane) const;
 
@@ -103,7 +103,7 @@ public:
      *
      * @param sphere The bounding sphere to test intersection with.
      * @return The distance from the origin of this ray to the bounding object or
-     *     INTERSECTS_NONE if this ray does not intersect the bounding object.
+     *     kIntersectsNone if this ray does not intersect the bounding object.
      */
     float intersects(const BoundingSphere& sphere) const;
 
@@ -113,7 +113,7 @@ public:
      * @param box The bounding box to test intersection with.
      * 
      * @return The distance from the origin of this ray to the bounding object or
-     *     INTERSECTS_NONE if this ray does not intersect the bounding object.
+     *     kIntersectsNone if this ray does not intersect the bounding object.
      */
     float intersects(const BoundingBox& box) const;
 

@@ -18,16 +18,16 @@ public:
      * Defines the operation to the stored stencil value
      * if this or certain subsequent tests fail or pass,
      */
-    enum StencilOp
+    enum class StencilOp
     {
-        STENCIL_OP_KEEP,
-        STENCIL_OP_ZERO,
-        STENCIL_OP_REPLACE,
-        STENCIL_OP_INCREMENT_AND_CLAMP,
-        STENCIL_OP_DECREMENT_AND_CLAMP,
-        STENCIL_OP_INVERT,
-        STENCIL_OP_INCREMENT_AND_WRAP,
-        STENCIL_OP_DECREMENT_AND_WRAP
+        eKeep,
+        eZero,
+        eReplace,
+        eIncrementAndClamp,
+        eDecrementAndClamp,
+        eInvert,
+        eIncrementAndWrap,
+        eDecrementAndWrap
     };
 
     /**
@@ -40,22 +40,22 @@ public:
         /**
          * The action performed on samples that fail the stencil test.
          */
-        StencilOp failOp = STENCIL_OP_KEEP;
+        StencilOp failOp = StencilOp::eKeep;
 
         /**
          * The action performed on samples that pass the stencil test and fail the depth test.
          */
-        StencilOp passOp = STENCIL_OP_KEEP;
+        StencilOp passOp = StencilOp::eKeep;
 
         /**
          * The action performed on samples that fail both the depth and stencil tests.
          */
-        StencilOp depthFailOp = STENCIL_OP_KEEP;
+        StencilOp depthFailOp = StencilOp::eKeep;
 
         /**
          * The depth compare function.
          */
-        Sampler::CompareFunc compareFunc = Sampler::COMPARE_FUNC_NEVER;
+        Sampler::CompareFunc compareFunc = Sampler::CompareFunc::eNever;
 
          /**
           * Selects the bits of the stencil values participating 
@@ -68,7 +68,6 @@ public:
          * by the stencil test in the stencil framebuffer attachment
          */
         unsigned char writeMask = 0xff;
-        
     };
 
     /**
@@ -84,7 +83,7 @@ public:
     /**
      * The comparison function used in the depth test sampling.
      */
-    Sampler::CompareFunc depthFunc = Sampler::COMPARE_FUNC_LESS_OR_EQUAL;
+    Sampler::CompareFunc depthFunc = Sampler::CompareFunc::eLessOrEqual;
 
     /**
      * Determines if stencil testing is enabled.

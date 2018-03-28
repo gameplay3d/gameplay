@@ -18,7 +18,7 @@ namespace gameplay
 {
 
 Camera::Camera() : Component(),
-    _mode(MODE_PERSPECTIVE),
+    _mode(Mode::ePerspective),
     _fieldOfView(CAMERA_FIELD_OF_VIEW),
     _size(CAMERA_SIZE),
     _clipPlaneNear(CAMERA_CLIP_PLANE_NEAR),
@@ -126,7 +126,7 @@ const Matrix& Camera::getProjectionMatrix() const
 {
     if (!(_dirtyBits & CAMERA_CUSTOM_PROJECTION) && (_dirtyBits & CAMERA_DIRTY_PROJ))
     {
-        if (_mode == MODE_PERSPECTIVE)
+        if (_mode == Mode::ePerspective)
         {
             Matrix::createPerspective(_fieldOfView, _aspectRatio, _clipPlaneNear, _clipPlaneFar, &_projectionMatrix);
         }
@@ -266,9 +266,9 @@ void Camera::pickRay(const Rectangle& viewport, float x, float y, Ray* dst) cons
     dst->set(nearPoint, direction);
 }
 
-Component::TypeId Camera::getTypeId()
+Component::ClassType Camera::getClassType()
 {
-    return Component::TYPEID_CAMERA;
+    return ClassType::eCamera;
 }
 
 std::string Camera::getClassName()
@@ -278,11 +278,15 @@ std::string Camera::getClassName()
 
 void Camera::onSerialize(Serializer* serializer)
 {
-    serializer->writeEnum("mode", "gameplay::Camera::Mode", _mode, -1);
-    if (_mode == Camera::MODE_PERSPECTIVE)
+    serializer->writeEnum("mode", "gameplay::Camera::Mode", static_cast<int>(_mode), -1);
+    if (_mode == Mode::ePerspective)
+    {
         serializer->writeFloat("fieldOfView", _fieldOfView, CAMERA_FIELD_OF_VIEW);
+    }
     else
+    {
         serializer->writeFloat("size", _size, CAMERA_SIZE);
+    }
     serializer->writeFloat("clipPlaneNear", _clipPlaneNear, CAMERA_CLIP_PLANE_NEAR);
     serializer->writeFloat("clipPlaneFar", _clipPlaneFar, CAMERA_CLIP_PLANE_FAR);
 
@@ -292,10 +296,14 @@ void Camera::onSerialize(Serializer* serializer)
 void Camera::onDeserialize(Serializer* serializer)
 {
     _mode = static_cast<Camera::Mode>(serializer->readEnum("mode", "gameplay::Camera::Mode", -1));
-    if (_mode == Camera::MODE_PERSPECTIVE)
+    if (_mode == Mode::ePerspective)
+    {
         _fieldOfView = serializer->readFloat("fieldOfView", CAMERA_FIELD_OF_VIEW);
+    }
     else
+    {
         _size = serializer->readFloat("size", CAMERA_SIZE);
+    }
     _clipPlaneNear = serializer->readFloat("clipPlaneNear", CAMERA_CLIP_PLANE_NEAR);
     _clipPlaneFar = serializer->readFloat("clipPlaneFar", CAMERA_CLIP_PLANE_FAR);
 }
@@ -311,10 +319,10 @@ std::string Camera::enumToString(const std::string& enumName, int value)
     {
         switch (value)
         {
-            case Camera::MODE_PERSPECTIVE:
-                return "MODE_PERSPECTIVE";
-            case Camera::MODE_ORTHOGRAPHIC:
-                return "MODE_ORTHOGRAPHIC";
+            case static_cast<int>(Mode::ePerspective):
+                return "ePerspective";
+            case static_cast<int>(Mode::eOrthograhic):
+                return "eOrthograhic";
             default:
                 break;
         }
@@ -326,12 +334,12 @@ int Camera::enumParse(const std::string& enumName, const std::string& str)
 {
     if (enumName.compare("gameplay::Camera::Mode") == 0)
     {
-        if (str.compare("MODE_PERSPECTIVE") == 0)
-            return Camera::MODE_PERSPECTIVE;
-        else if (str.compare("MODE_ORTHOGRAPHIC") == 0)
-            return Camera::MODE_ORTHOGRAPHIC;
+        if (str.compare("ePerspective") == 0)
+            return static_cast<int>(Mode::ePerspective);
+        else if (str.compare("eOrthograhic") == 0)
+            return static_cast<int>(Mode::eOrthograhic);
     }
-    return -1;
+    return static_cast<int>(Mode::ePerspective);
 }
 
 void Camera::setObject(std::shared_ptr<SceneObject> object)

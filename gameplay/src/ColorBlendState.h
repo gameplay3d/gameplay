@@ -16,47 +16,47 @@ public:
     /**
      * Defines the framebuffer blending operations.
      */
-    enum BlendOp
+    enum class BlendOp
     {
-        BLEND_OP_ADD,
-        BLEND_OP_SUBSTRACT,
-        BLEND_OP_REVERSE_SUBTRACT,
-        BLEND_OP_MIN,
-        BLEND_OP_MAX
+        eAdd,
+        eSubtract,
+        eReverseSubstact,
+        eMin,
+        eMax
     };
 
     /**
      * Defines the framebuffer blending factors.
      */
-    enum BlendFactor
+    enum class BlendFactor
     {
-        BLEND_FACTOR_ZERO,
-        BLEND_FACTOR_ONE,
-        BLEND_FACTOR_SRC_COLOR,
-        BLEND_FACTOR_ONE_MINUS_SRC_COLOR,
-        BLEND_FACTOR_DST_COLOR,
-        BLEND_FACTOR_ONE_MINUS_DST_COLOR,
-        BLEND_FACTOR_SRC_ALPHA,
-        BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-        BLEND_FACTOR_DST_ALPHA,
-        BLEND_FACTOR_ONE_MINUS_DST_ALPHA,
-        BLEND_FACTOR_SRC_ALPHA_SATURATE,
-        BLEND_FACTOR_SRC1_COLOR,
-        BLEND_FACTOR_ONE_MINUS_SRC1_COLOR,
-        BLEND_FACTOR_SRC1_ALPHA,
-        BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA
+        eZero,
+        eOne,
+        eSrcColor,
+        eOneMinusSrcColor,
+        eDstColor,
+        eOneMinusDstColor,
+        eSrcAlpha,
+        eOneMinuseSrcAlpha,
+        eDstAlpha,
+        eOneMinuseDstAlpha,
+        eSrcAlphaSaturate,
+        eSrc1Color,
+        eOneMinusSrc1Color,
+        eSrc1Alpha,
+        eOneMinuseSrc1Alpha
     };
 
     /**
      * Defines whether the final color values R, G, B and A
      * are written to the framebuffer attachment(s).
      */
-    enum WriteMask : uint32_t
+    enum class WriteMask : uint32_t
     {
-        WRITE_MASK_RED = 0x00000001,
-        WRITE_MASK_GREEN = 0x00000002,
-        WRITE_MASK_BLUE = 0x00000004,
-        WRITE_MASK_ALPHA = 0x00000008
+        eRed    = 0x00000001,
+        eGreen  = 0x00000002,
+        eBlue   = 0x00000004,
+        eAlpha  = 0x00000008
     };
 
    /**
@@ -69,17 +69,17 @@ public:
     /**
      * Selects which blend factor is used to determine the source factors (Sr,Sg,Sb).
      */
-    BlendFactor colorBlendSrc = BLEND_FACTOR_ONE;
+    BlendFactor colorBlendSrc = BlendFactor::eOne;
 
     /**
      * Selects which blend factor is used to determine the destination factors (Dr,Dg,Db).
      */
-    BlendFactor colorBlendDst = BLEND_FACTOR_ZERO;
+    BlendFactor colorBlendDst = BlendFactor::eZero;
 
     /**
      * Selects which blend operation is used to calculate the RGB values to write to the color attachment.
      */
-    BlendOp colorBlendOp = BLEND_OP_ADD;
+    BlendOp colorBlendOp = BlendOp::eAdd;
 
     /**
      * The WriteMask specifying which of the R, G, B, and/or A components are enabled for writing.
@@ -89,17 +89,19 @@ public:
     /**
      * Selects which blend factor is used to determine the source factor Sa.
      */
-    BlendFactor alphaBlendSrc = BLEND_FACTOR_ONE;
+    BlendFactor alphaBlendSrc = BlendFactor::eOne;
 
     /**
      * Selects which blend factor is used to determine the destination factor Da.
      */
-    BlendFactor alphaBlendDst = BLEND_FACTOR_ZERO;
+    BlendFactor alphaBlendDst = BlendFactor::eZero;
 
     /**
      * Selects which blend operation is use to calculate the alpha values to write to the color attachment.
      */
-    BlendOp alphaBlendOp = BLEND_OP_ADD;
+    BlendOp alphaBlendOp = BlendOp::eAdd;
 };
 
 }
+
+GP_ENABLE_BITWISE_OPERATORS(gameplay::ColorBlendState::WriteMask);

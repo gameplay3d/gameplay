@@ -10,8 +10,6 @@ class Vector4;
 class Matrix;
 class Stream;
 
-const unsigned char SERIALIZER_VERSION[2] = { GP_ENGINE_VERSION_MAJOR, GP_ENGINE_VERSION_MINOR};
-
 /**
  * Defines an abstract class for reading/writing an objects data to a stream.
  *
@@ -38,14 +36,14 @@ const unsigned char SERIALIZER_VERSION[2] = { GP_ENGINE_VERSION_MAJOR, GP_ENGINE
 class Serializer
 {
 public:
-    
+
     /**
      * The serializer format.
      */
-    enum Format
+    enum class Format
     {
-        FORMAT_BINARY,
-        FORMAT_JSON
+        eBinary,
+        eJson
     };
 
     /**
