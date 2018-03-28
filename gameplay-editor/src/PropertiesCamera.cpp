@@ -48,7 +48,7 @@ void PropertiesCamera::onReset(bool)
 
 void PropertiesCamera::onModeChanged(int index)
 {
-    switch (index)
+    switch (static_cast<gameplay::Camera::Mode>(index))
     {
     case gameplay::Camera::Mode::ePerspective:
         {

@@ -46,10 +46,9 @@ QString PropertiesLight::getHeaderIcon() const
     return QString(":/res/images/scene-light-point.png");
 }
 
-//160, 190, 220
 void PropertiesLight::onTypeChanged(int index)
 {
-    switch (index)
+    switch (static_cast<gameplay::Light::Type>(index))
     {
     case gameplay::Light::Type::eDirectional:
     {
