@@ -45,6 +45,7 @@ void AssetManager::unload(const std::string& url)
 
 bool AssetManager::isLoaded(const std::string& url) const
 {
+    return false;
 }
 
 void* AssetManager::getObject() const
