@@ -242,7 +242,7 @@ void Game::onKeyChar(char chr)
 {
 }
 
-void Game::onKeyPress(Input::Key key, uint8_t keyModifiers, bool down)
+void Game::onKeyPress(Input::Key key, Input::KeyModifiers keyModifiers, bool down)
 {
 }
 

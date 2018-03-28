@@ -92,12 +92,14 @@ public:
             {
                 if (value == 0)
                 {
-                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].first,  0, false);
-                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].second, 0, false);
+                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].first, Input::KeyModifiers::eNone, false);
+                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].second, Input::KeyModifiers::eNone, false);
                 }
                 else
                 {
-                    input->postKeyPressEvent(value < 0 ? __gamepadAxisDpad[static_cast<uint32_t>(axis)].first : __gamepadAxisDpad[static_cast<uint32_t>(axis)].second, 0, true);
+                    input->postKeyPressEvent(value < 0 ?
+                                                 __gamepadAxisDpad[static_cast<uint32_t>(axis)].first :
+                                                 __gamepadAxisDpad[static_cast<uint32_t>(axis)].second, Input::KeyModifiers::eNone, true);
                 }
             }
         }
@@ -369,11 +371,11 @@ int Platform::run()
                     {
                         const SDL_KeyboardEvent& keyEvent = evt.key;
 
-                        uint8_t keyModifiers = translateKeyModifiers(keyEvent.keysym.mod);
+                        Input::KeyModifiers keyModifiers = translateKeyModifiers(keyEvent.keysym.mod);
                         Input::Key key = translateKey(keyEvent.keysym.scancode);
-                        if (static_cast<uint32_t>(key) == 0 && keyModifiers == 0)
+                        if (static_cast<uint32_t>(key) == 0 && keyModifiers == Input::KeyModifiers::eNone)
                         {
-                            keyModifiers = translateKeyModifierPress(keyEvent.keysym.scancode);
+                            keyModifiers = translateKeyModifiersPress(keyEvent.keysym.scancode);
                         }
 
                         if (key == Input::Key::eEsc)
@@ -402,7 +404,7 @@ int Platform::run()
                     case SDL_KEYUP:
                         {
                             const SDL_KeyboardEvent& keyEvent = evt.key;
-                            uint8_t keyModifiers = translateKeyModifiers(keyEvent.keysym.mod);
+                            Input::KeyModifiers keyModifiers = translateKeyModifiers(keyEvent.keysym.mod);
                             Input::Key key = translateKey(keyEvent.keysym.scancode);
                             input->postKeyPressEvent(key, keyModifiers, keyEvent.state == SDL_PRESSED);
                             game->onKeyPress(key, keyModifiers, keyEvent.state == SDL_PRESSED);
@@ -471,8 +473,8 @@ int Platform::run()
                             Input::Key key = translateGamepad(buttonEvent.button);
                             if (key != Input::Key::eCount)
                             {
-                                input->postKeyPressEvent(key, 0, evt.type == SDL_JOYBUTTONDOWN);
-                                game->onKeyPress(key, 0, evt.type == SDL_JOYBUTTONDOWN);
+                                input->postKeyPressEvent(key, Input::KeyModifiers::eNone, evt.type == SDL_JOYBUTTONDOWN);
+                                game->onKeyPress(key, Input::KeyModifiers::eNone, evt.type == SDL_JOYBUTTONDOWN);
                             }
                         }
                         break;
@@ -484,8 +486,8 @@ int Platform::run()
                             Input::Key key = translateGamepad(buttonEvent.button);
                             if (key != Input::Key::eCount)
                             {
-                                input->postKeyPressEvent(key, 0, evt.type == SDL_CONTROLLERBUTTONDOWN);
-                                game->onKeyPress(key, 0, evt.type == SDL_CONTROLLERBUTTONDOWN);
+                                input->postKeyPressEvent(key, Input::KeyModifiers::eNone, evt.type == SDL_CONTROLLERBUTTONDOWN);
+                                game->onKeyPress(key, Input::KeyModifiers::eNone, evt.type == SDL_CONTROLLERBUTTONDOWN);
                             }
                         }
                         break;
@@ -614,55 +616,54 @@ Input::Key Platform::translateKey(SDL_Scancode sdl)
     return (Input::Key)_translateKey[sdl & 0xff];
 }
 
-uint8_t Platform::translateKeyModifiers(uint16_t sdl)
+ Input::KeyModifiers Platform::translateKeyModifiers(uint16_t sdl)
 {
-    uint8_t keyModifiers = 0;
-    keyModifiers |= sdl & KMOD_LALT   ? Input::KeyModifiers::kLeftAlt   : 0;
-    keyModifiers |= sdl & KMOD_RALT   ? Input::KeyModifiers::kRightAlt   : 0;
-    keyModifiers |= sdl & KMOD_LCTRL  ? Input::KeyModifiers::kLeftCtrl   : 0;
-    keyModifiers |= sdl & KMOD_RCTRL  ? Input::KeyModifiers::kRightCtrl  : 0;
-    keyModifiers |= sdl & KMOD_LSHIFT ? Input::KeyModifiers::kLeftShift  : 0;
-    keyModifiers |= sdl & KMOD_RSHIFT ? Input::KeyModifiers::kRightShift : 0;
-    keyModifiers |= sdl & KMOD_LGUI   ? Input::KeyModifiers::kLeftMeta   : 0;
-    keyModifiers |= sdl & KMOD_RGUI   ? Input::KeyModifiers::kRightMeta  : 0;
+    Input::KeyModifiers keyModifiers = Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_LALT   ? Input::KeyModifiers::eLeftAlt   : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_RALT   ? Input::KeyModifiers::eRightAlt   : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_LCTRL  ? Input::KeyModifiers::eLeftCtrl   : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_RCTRL  ? Input::KeyModifiers::eRightCtrl  : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_LSHIFT ? Input::KeyModifiers::eLeftShift  : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_RSHIFT ? Input::KeyModifiers::eRightShift : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_LGUI   ? Input::KeyModifiers::eLeftMeta   : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_RGUI   ? Input::KeyModifiers::eRightMeta  : Input::KeyModifiers::eNone;
     return keyModifiers;
 }
 
-uint8_t Platform::translateKeyModifierPress(uint16_t key)
+Input::KeyModifiers Platform::translateKeyModifiersPress(uint16_t key)
 {
-    uint8_t keyModifier;
+    Input::KeyModifiers keyModifiers = Input::KeyModifiers::eNone;
     switch (key)
     {
-        case SDL_SCANCODE_LALT:
-            keyModifier = Input::KeyModifiers::kLeftAlt;
-            break;
-        case SDL_SCANCODE_RALT:
-            keyModifier = Input::KeyModifiers::kRightAlt;
-            break;
-        case SDL_SCANCODE_LCTRL:
-            keyModifier = Input::KeyModifiers::kLeftCtrl;
-            break;
-        case SDL_SCANCODE_RCTRL:
-            keyModifier = Input::KeyModifiers::kRightCtrl;
-            break;
-        case SDL_SCANCODE_LSHIFT:
-            keyModifier = Input::KeyModifiers::kLeftShift;
-            break;
-        case SDL_SCANCODE_RSHIFT:
-            keyModifier = Input::KeyModifiers::kRightShift;
-            break;
-        case SDL_SCANCODE_LGUI:
-            keyModifier = Input::KeyModifiers::kLeftMeta;
-            break;
-        case SDL_SCANCODE_RGUI:
-            keyModifier = Input::KeyModifiers::kRightMeta;
-            break;
-        default:
-            keyModifier = 0;
-            break;
+    case SDL_SCANCODE_LALT:
+        keyModifiers = Input::KeyModifiers::eLeftAlt;
+        break;
+    case SDL_SCANCODE_RALT:
+        keyModifiers = Input::KeyModifiers::eRightAlt;
+        break;
+    case SDL_SCANCODE_LCTRL:
+        keyModifiers = Input::KeyModifiers::eLeftCtrl;
+        break;
+    case SDL_SCANCODE_RCTRL:
+        keyModifiers = Input::KeyModifiers::eRightCtrl;
+        break;
+    case SDL_SCANCODE_LSHIFT:
+        keyModifiers = Input::KeyModifiers::eLeftShift;
+        break;
+    case SDL_SCANCODE_RSHIFT:
+        keyModifiers = Input::KeyModifiers::eRightShift;
+        break;
+    case SDL_SCANCODE_LGUI:
+        keyModifiers = Input::KeyModifiers::eLeftMeta;
+        break;
+    case SDL_SCANCODE_RGUI:
+        keyModifiers = Input::KeyModifiers::eRightMeta;
+        break;
+    default:
+        keyModifiers = Input::KeyModifiers::eNone;
+        break;
     }
-
-    return keyModifier;
+    return keyModifiers;
 }
 
 void Platform::initTranslateGamepad(uint8_t sdl, Input::Key button)

@@ -66,6 +66,11 @@ public:
      */
     bool isFullscreen() const;
 
+    /**
+     * The SDL window handle
+     *
+     * @return The SDL window handle.
+     */
     SDL_Window* getSDLWindow() const;
 
     /**
@@ -119,8 +124,8 @@ private:
     ~Platform();
     void initTranslateKey(uint16_t sdl, Input::Key key);
     Input::Key translateKey(SDL_Scancode sdl);
-    uint8_t translateKeyModifiers(uint16_t sdl);
-    uint8_t translateKeyModifierPress(uint16_t key);
+    Input::KeyModifiers translateKeyModifiers(uint16_t sdl);
+    Input::KeyModifiers translateKeyModifiersPress(uint16_t key);
     void initTranslateGamepad(uint8_t sdl, Input::Key button);
     Input::Key translateGamepad(uint8_t sdl);
     void initTranslateGamepadAxis(uint8_t sdl, Input::GamepadAxis axis);

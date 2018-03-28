@@ -115,7 +115,7 @@ std::string Input::getKeyName(Input::Key key)
     return __keyNames[static_cast<uint32_t>(key)];
 }
 
-char Input::getKeyCode(Input::Key key, uint8_t keyModifiers)
+char Input::getKeyCode(Input::Key key, Input::KeyModifiers keyModifiers)
 {
     const bool isAscii = (Key::e0 <= key && key <= Key::eZ) || (Key::eEsc  <= key && key <= Key::eMinus);
     if (!isAscii)
@@ -132,9 +132,7 @@ char Input::getKeyCode(Input::Key key, uint8_t keyModifiers)
     const bool isChar = (Key::eA <= key && key <= Key::eZ);
     if (isChar)
     {
-        enum { ShiftMask = Input::KeyModifiers::kLeftShift | KeyModifiers::kRightShift };
-
-        const bool shift = !!(keyModifiers & ShiftMask);
+        bool shift = bool(keyModifiers & Input::KeyModifiers::eLeftShift | KeyModifiers::eRightShift);
         return (shift ? 'A' : 'a') + char(static_cast<uint32_t>(key) - static_cast<uint32_t>(Key::eA));
     }
 
@@ -267,7 +265,7 @@ void Input::postKeyCharEvent(char chr)
 {
 }
     
-void Input::postKeyPressEvent(Input::Key key, uint8_t keyModifiers, bool down)
+void Input::postKeyPressEvent(Input::Key key, Input::KeyModifiers keyModifiers, bool down)
 {
 }
 

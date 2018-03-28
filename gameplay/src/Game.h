@@ -212,7 +212,7 @@ public:
 
     virtual void onKeyChar(char chr);
 
-    virtual void onKeyPress(Input::Key key, uint8_t keyModifiers, bool down);
+    virtual void onKeyPress(Input::Key key, Input::KeyModifiers keyModifiers, bool down);
 
     virtual void onDropFile(std::string file);
 

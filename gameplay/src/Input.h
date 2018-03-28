@@ -124,18 +124,17 @@ public:
     /**
      * Defines key modifiers
      */
-    struct KeyModifiers
+    enum class KeyModifiers : uint8_t
     {
-        static const uint32_t
-        kNone       = 0,
-        kLeftAlt    = 0x01,
-        kRightAlt   = 0x02,
-        kLeftCtrl   = 0x04,
-        kRightCtrl  = 0x08,
-        kLeftShift  = 0x10,
-        kRightShift = 0x20,
-        kLeftMeta   = 0x40,
-        kRightMeta  = 0x80;
+        eNone       = 0,
+        eLeftAlt    = 0x01,
+        eRightAlt   = 0x02,
+        eLeftCtrl   = 0x04,
+        eRightCtrl  = 0x08,
+        eLeftShift  = 0x10,
+        eRightShift = 0x20,
+        eLeftMeta   = 0x40,
+        eRightMeta  = 0x80
     };
 
     /**
@@ -178,7 +177,7 @@ public:
      * @param keyModifiers The key modifiers applied.
      * @return The ascii keycode for a key.
      */
-    static char getKeyCode(Input::Key key, uint8_t keyModifiers);
+    static char getKeyCode(Input::Key key, Input::KeyModifiers keyModifiers);
 
     static bool isKeyHeld(Input::Key key);
 
@@ -216,7 +215,7 @@ public:
     void postMouseMotionEvent(int mx, int my, int mz);
     void postMousePressEvent(int mx, int my, int mz, MouseButton button, bool down);
     void postKeyCharEvent(char chr);
-    void postKeyPressEvent(Key key, uint8_t keyModifiers, bool down);
+    void postKeyPressEvent(Key key, Input::KeyModifiers keyModifiers, bool down);
 
 private:
 
@@ -226,3 +225,5 @@ private:
 };
 
 }
+
+GP_ENABLE_BITWISE_OPERATORS(gameplay::Input::KeyModifiers);
