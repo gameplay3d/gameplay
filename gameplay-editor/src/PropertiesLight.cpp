@@ -51,7 +51,7 @@ void PropertiesLight::onTypeChanged(int index)
 {
     switch (index)
     {
-    case gameplay::Light::TYPE_DIRECTIONAL:
+    case gameplay::Light::Type::eDirectional:
     {
         _ui->labelRange->hide();
         _ui->doubleSpinBoxRange->hide();
@@ -62,7 +62,7 @@ void PropertiesLight::onTypeChanged(int index)
         break;
     }
 
-    case gameplay::Light::TYPE_POINT:
+    case gameplay::Light::Type::ePoint:
     {
         _ui->labelRange->show();
         _ui->doubleSpinBoxRange->show();
@@ -73,7 +73,7 @@ void PropertiesLight::onTypeChanged(int index)
         break;
     }
 
-    case gameplay::Light::TYPE_SPOT:
+    case gameplay::Light::Type::eSpot:
     {
         _ui->labelRange->show();
         _ui->doubleSpinBoxRange->show();

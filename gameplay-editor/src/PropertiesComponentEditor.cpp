@@ -41,26 +41,27 @@ void PropertiesComponentEditor::setComponent(std::shared_ptr<gameplay::Component
 
     _ui->checkBoxEnabled->setEnabled(component->isEnabled());
 
-    switch (component->getTypeId())
+    switch (component->getClassType())
     {
-        case gameplay::Component::TYPEID_CAMERA:
-        {
-            PropertiesCamera* propertiesCamera = new PropertiesCamera(this);
-            _ui->labelHeaderName->setText(propertiesCamera->getHeaderName());
-            _ui->labelHeaderIcon->setPixmap(QPixmap(propertiesCamera->getHeaderIcon()));
-            _ui->widgetComponentProperties->layout()->addWidget(propertiesCamera);
-            propertiesCamera->setCamera(std::dynamic_pointer_cast<gameplay::Camera>(component));
-            break;
-        }
-        case gameplay::Component::TYPEID_LIGHT:
-        {
-            PropertiesLight* propertiesLight = new PropertiesLight(this);
-            _ui->labelHeaderName->setText(propertiesLight->getHeaderName());
-            _ui->labelHeaderIcon->setPixmap(QPixmap(propertiesLight->getHeaderIcon()));
-            _ui->widgetComponentProperties->layout()->addWidget(propertiesLight);
-            propertiesLight->setLight(std::dynamic_pointer_cast<gameplay::Light>(component));
-            break;
-        }
+
+        case gameplay::Component::ClassType::eCamera:
+            {
+                PropertiesCamera* propertiesCamera = new PropertiesCamera(this);
+                _ui->labelHeaderName->setText(propertiesCamera->getHeaderName());
+                _ui->labelHeaderIcon->setPixmap(QPixmap(propertiesCamera->getHeaderIcon()));
+                _ui->widgetComponentProperties->layout()->addWidget(propertiesCamera);
+                propertiesCamera->setCamera(std::dynamic_pointer_cast<gameplay::Camera>(component));
+                break;
+            }
+        case gameplay::Component::ClassType::eLight:
+            {
+                PropertiesLight* propertiesLight = new PropertiesLight(this);
+                _ui->labelHeaderName->setText(propertiesLight->getHeaderName());
+                _ui->labelHeaderIcon->setPixmap(QPixmap(propertiesLight->getHeaderIcon()));
+                _ui->widgetComponentProperties->layout()->addWidget(propertiesLight);
+                propertiesLight->setLight(std::dynamic_pointer_cast<gameplay::Light>(component));
+                break;
+            }
 
         default:
             break;

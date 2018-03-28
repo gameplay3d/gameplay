@@ -50,25 +50,25 @@ void PropertiesCamera::onModeChanged(int index)
 {
     switch (index)
     {
-    case gameplay::Camera::MODE_PERSPECTIVE:
-    {
-        _ui->labelSize->hide();
-        _ui->doubleSpinBoxSize->hide();
-        _ui->labelFieldOfView->show();
-        _ui->spinBoxFieldOfView->show();
-        _ui->horizontalSliderFieldOfView->show();
-        break;
-    }
+    case gameplay::Camera::Mode::ePerspective:
+        {
+            _ui->labelSize->hide();
+            _ui->doubleSpinBoxSize->hide();
+            _ui->labelFieldOfView->show();
+            _ui->spinBoxFieldOfView->show();
+            _ui->horizontalSliderFieldOfView->show();
+            break;
+        }
 
-    case gameplay::Camera::MODE_ORTHOGRAPHIC:
-    {
-        _ui->labelFieldOfView->hide();
-        _ui->spinBoxFieldOfView->hide();
-        _ui->horizontalSliderFieldOfView->hide();
-        _ui->labelSize->show();
-        _ui->doubleSpinBoxSize->show();
-        break;
-    }
+    case gameplay::Camera::Mode::eOrthograhic:
+        {
+            _ui->labelFieldOfView->hide();
+            _ui->spinBoxFieldOfView->hide();
+            _ui->horizontalSliderFieldOfView->hide();
+            _ui->labelSize->show();
+            _ui->doubleSpinBoxSize->show();
+            break;
+        }
 
     default:
         break;
