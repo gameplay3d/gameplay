@@ -33,7 +33,7 @@ public:
      *
      * 
      */
-    void getDependencies(std::string url, std::vector<std::shared_ptr<Asset> > dependencies);
+    void getDependencies(std::string url, std::vector<std::shared_ptr<Asset>> dependencies);
 
     /**
      * Gets the object that has been loaded.

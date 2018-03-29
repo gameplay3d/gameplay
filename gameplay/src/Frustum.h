@@ -155,9 +155,9 @@ public:
      * Tests whether this frustum intersects the specified plane.
      *
      * @param plane The plane to test intersection with.
-     * @return Plane::INTERSECTS_BACK if the specified bounding object is in the negative half-space of
-     *  this plane, Plane::INTERSECTS_FRONT if it is in the positive half-space of this plane,
-     *  and Plane::INTERSECTS_INTERSECTING if it intersects this plane.
+     * @return Plane::kInstersectsBack if the specified bounding object is in the negative half-space of
+     *  this plane, Plane::kInstersectsFront if it is in the positive half-space of this plane,
+     *  and Plane::kInstersects if it intersects this plane.
      */
     float intersects(const Plane& plane) const;
 
@@ -165,9 +165,9 @@ public:
      * Tests whether this frustum intersects the specified ray.
      *
      * @param ray The ray to test intersection with.
-     * @return Plane::INTERSECTS_BACK if the specified ray is in the negative half-space of
-     *  this plane, Plane::INTERSECTS_FRONT if it is in the positive half-space of this plane,
-     *  and Plane::INTERSECTS_INTERSECTING if it intersects this plane.
+     * @return Plane::kInstersectsBack if the specified ray is in the negative half-space of
+     *  this plane, Plane::kInstersectsFront if it is in the positive half-space of this plane,
+     *  and Plane::kInstersects if it intersects this plane.
      */
     float intersects(const Ray& ray) const;
 

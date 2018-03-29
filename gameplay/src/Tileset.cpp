@@ -12,9 +12,14 @@ Tileset::~Tileset()
 {
 }
 
-Component::TypeId Tileset::getTypeId()
+std::shared_ptr<Serializable> Tileset::createObject()
 {
-    return Component::TYPEID_TILESET;
+    return std::shared_ptr<Tileset>();
+}
+
+Component::ClassType Tileset::getClassType()
+{
+    return ClassType::eTileset;
 }
 
 std::string Tileset::getClassName()
@@ -30,11 +35,6 @@ void Tileset::onSerialize(Serializer* serializer)
 void Tileset::onDeserialize(Serializer* serializer)
 {
     Renderer::onDeserialize(serializer);
-}
-
-std::shared_ptr<Serializable> Tileset::createObject()
-{
-    return std::shared_ptr<Tileset>();
 }
 
 }

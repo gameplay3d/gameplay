@@ -31,9 +31,9 @@ bool PhysicsCollider::isTrigger() const
     return false;
 }
 
-Component::TypeId PhysicsCollider::getTypeId()
+Component::ClassType PhysicsCollider::getClassType()
 {
-    return Component::TYPEID_PHYSICS_COLLIDER;
+    return ClassType::ePhysicsCollider;
 }
 
 std::string PhysicsCollider::getClassName()

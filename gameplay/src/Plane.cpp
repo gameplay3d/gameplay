@@ -124,10 +124,9 @@ float Plane::intersects(const Frustum& frustum) const
             distance(corners[6]) <= 0.0f ||
             distance(corners[7]) <= 0.0f)
         {
-            return (float)Plane::INTERSECTS_INTERSECTING;
+            return static_cast<float>(Plane::kIntersects);
         }
-
-        return (float)Plane::INTERSECTS_FRONT;
+        return static_cast<float>(Plane::kIntersectsFront);
     }
     else if (d < 0.0f)
     {
@@ -139,14 +138,14 @@ float Plane::intersects(const Frustum& frustum) const
             distance(corners[6]) >= 0.0f ||
             distance(corners[7]) >= 0.0f)
         {
-            return (float)Plane::INTERSECTS_INTERSECTING;
+            return static_cast<float>(Plane::kIntersects);
         }
 
-        return (float)Plane::INTERSECTS_BACK;
+        return static_cast<float>(Plane::kIntersectsBack);
     }
     else
     {
-        return (float)Plane::INTERSECTS_INTERSECTING;
+        return static_cast<float>(Plane::kIntersects);
     }
 }
 
@@ -155,7 +154,7 @@ float Plane::intersects(const Plane& plane) const
     // Check if the planes intersect.
     if ((_normal.x == plane._normal.x && _normal.y == plane._normal.y && _normal.z == plane._normal.z) || !isParallel(plane))
     {
-        return (float)Plane::INTERSECTS_INTERSECTING;
+        return static_cast<float>(Plane::kIntersects);
     }
 
     // Calculate the point where the given plane's normal vector intersects the given plane.
@@ -165,11 +164,11 @@ float Plane::intersects(const Plane& plane) const
     // (corresponds directly to the sign of the distance from the point calculated above to this plane).
     if (distance(point) > 0.0f)
     {
-        return (float)Plane::INTERSECTS_FRONT;
+        return static_cast<float>(Plane::kIntersectsFront);
     }
     else
     {
-        return (float)Plane::INTERSECTS_BACK;
+        return static_cast<float>(Plane::kIntersectsBack);
     }
 }
 
@@ -181,7 +180,7 @@ float Plane::intersects(const Ray& ray) const
     // If the origin of the ray lies in the plane, then it intersects.
     if (d == 0.0f)
     {
-        return (float)Plane::INTERSECTS_INTERSECTING;
+        return static_cast<float>(Plane::kIntersects);
     }
     else
     {
@@ -194,22 +193,22 @@ float Plane::intersects(const Ray& ray) const
         {
             if (d < 0.0f)
             {
-                return (float)Plane::INTERSECTS_INTERSECTING;
+                return static_cast<float>(Plane::kIntersects);
             }
             else
             {
-                return (float)Plane::INTERSECTS_FRONT;
+                return static_cast<float>(Plane::kIntersectsFront);
             }
         }
         else
         {
             if (d > 0.0f)
             {
-                return (float)Plane::INTERSECTS_INTERSECTING;
+                return static_cast<float>(Plane::kIntersects);
             }
             else
             {
-                return (float)Plane::INTERSECTS_BACK;
+                return static_cast<float>(Plane::kIntersectsBack);
             }
         }
     }

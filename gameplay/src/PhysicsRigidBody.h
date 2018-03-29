@@ -11,32 +11,32 @@ namespace gameplay
  */
 class PhysicsRigidBody : public Component
 {
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
 
     /**
      * Defines constraints used to freeze position and rotation.
      */
-    enum FreezeConstraint : uint32_t
+    enum class FreezeConstraints : uint32_t
     {
-        FREEZE_CONTRAINT_POSITION_X = (1 << 0),
-        FREEZE_CONTRAINT_POSITION_Y = (1 << 1),
-        FREEZE_CONTRAINT_POSITION_Z = (1 << 2),
-        FREEZE_CONTRAINT_ROTATION_X = (1 << 3),
-        FREEZE_CONTRAINT_ROTATION_Y = (1 << 4),
-        FREEZE_CONTRAINT_ROTATION_Z = (1 << 5),
-        FREEZE_CONTRAINT_POSITION = FREEZE_CONTRAINT_POSITION_X | FREEZE_CONTRAINT_POSITION_Y | FREEZE_CONTRAINT_POSITION_Z,
-        FREEZE_CONTRAINT_ROTATION = FREEZE_CONTRAINT_ROTATION_X | FREEZE_CONTRAINT_ROTATION_Y | FREEZE_CONTRAINT_ROTATION_X
+        ePositionX = (1 << 0),
+        ePositionY = (1 << 1),
+        ePositionZ = (1 << 2),
+        eRotationX = (1 << 3),
+        eRotationY = (1 << 4),
+        eRotationZ = (1 << 5),
+        ePositionXYZ = ePositionX | ePositionY | ePositionZ,
+        eRotationXYZ = eRotationX | eRotationY | eRotationZ
     };
 
-    enum ForceMode
+    enum class ForceMode
     {
-        FORCE_MODE_FORCE,
-        FORCE_MODE_IMPULSLE,
-        FORCE_MODE_VELOCTY_CHANGE,
-        FORCE_MODE_ACCELERATION
+        eForce,
+        eImpulse,
+        eVelocityChange,
+        eAcceleration
     };
 
     /**
@@ -205,14 +205,21 @@ public:
     void clearTorque(PhysicsRigidBody::ForceMode mode);
 
     /**
-     * @see Component::getTypeId
+     * @see Component::getClassType
      */
-    Component::TypeId getTypeId();
+    Component::ClassType getClassType();
+
+protected:
 
     /**
      * @see Serializable::getClassName
      */
     std::string getClassName();
+
+    /**
+     * @see Activator::createObject
+     */
+    static std::shared_ptr<Serializable> createObject();
     
     /**
      * @see Serializable::onSerialize
@@ -224,11 +231,8 @@ public:
      */
     void onDeserialize(Serializer* serializer);
     
-    /**
-     * @see Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
-    
 };
 
 }
+
+GP_ENABLE_BITWISE_OPERATORS(gameplay::PhysicsRigidBody::FreezeConstraints);

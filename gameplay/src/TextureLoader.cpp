@@ -12,7 +12,7 @@ TextureLoader::~TextureLoader()
 {
 }
 
-void TextureLoader::getDependencies(std::string url, std::vector<std::shared_ptr<Asset> > dependencies)
+void TextureLoader::getDependencies(std::string url, std::vector<std::shared_ptr<Asset>> dependencies)
 {
 }
 

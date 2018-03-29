@@ -34,7 +34,7 @@ std::shared_ptr<Serializable> Activator::createObject(const std::string& classNa
     }
     return object;
 }
-    
+
 std::string Activator::enumToString(const std::string& enumName, int value)
 {
     std::map<std::string,std::pair<EnumToStringCallback, EnumParseCallback>>::const_iterator itr = _enums.find(enumName);

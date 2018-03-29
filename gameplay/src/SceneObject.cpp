@@ -408,7 +408,7 @@ size_t SceneObject::findObjects(const std::string& name, std::vector<std::shared
 
 void SceneObject::attachComponent(std::shared_ptr<Component> component)
 {
-    std::shared_ptr<Component> existing = getComponent(component->getTypeId());
+    std::shared_ptr<Component> existing = getComponent(component->getClassType());
     if (!existing)
     {
         _components.push_back(component);
@@ -424,11 +424,11 @@ void SceneObject::detachComponent(std::shared_ptr<Component> component)
     }
 }
 
-std::shared_ptr<Component> SceneObject::getComponent(Component::TypeId typeId)
+std::shared_ptr<Component> SceneObject::getComponent(Component::ClassType classType)
 {
     for (auto component : _components)
     {
-        if (component->getTypeId() == typeId)
+        if (component->getClassType() == classType)
         {
             return component;
         }
@@ -436,11 +436,11 @@ std::shared_ptr<Component> SceneObject::getComponent(Component::TypeId typeId)
     return nullptr;
 }
 
-void SceneObject::getComponents(Component::TypeId typeId, std::vector<std::shared_ptr<Component>>& components)
+void SceneObject::getComponents(Component::ClassType classType, std::vector<std::shared_ptr<Component>>& components)
 {
     for (auto component : _components)
     {
-        if (component->getTypeId() == typeId)
+        if (component->getClassType() == classType)
         {
             components.push_back(component);
         }
@@ -453,6 +453,11 @@ void SceneObject::getComponents(std::vector<std::shared_ptr<Component>>& compone
     {
         components.push_back(component);
     }
+}
+
+std::shared_ptr<Serializable> SceneObject::createObject()
+{
+    return std::static_pointer_cast<Serializable>(std::make_shared<SceneObject>());
 }
 
 std::string SceneObject::getClassName()
@@ -512,11 +517,6 @@ void SceneObject::onDeserialize(Serializer* serializer)
             _components[i] = std::static_pointer_cast<Component>(serializer->readObject(nullptr));
         }
     }
-}
-
-std::shared_ptr<Serializable> SceneObject::createObject()
-{
-    return std::static_pointer_cast<Serializable>(std::make_shared<SceneObject>());
 }
 
 }

@@ -27,7 +27,6 @@ public:
      */
     class Parameters : AssetLoader::Parameters
     {
-    public:
     };
 
     /**
@@ -37,7 +36,7 @@ public:
      * @param url The asset url to retrieve the dependencies for.
      * @param dependencies The found dependencies for the url specified.
      */
-    void getDependencies(std::string url, std::vector<std::shared_ptr<Asset> > dependencies);
+    void getDependencies(std::string url, std::vector<std::shared_ptr<Asset>> dependencies);
 
     /**
      * Loads the assets.

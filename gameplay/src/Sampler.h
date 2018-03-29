@@ -19,47 +19,47 @@ public:
     /**
      * Defines a sampling filters for mag, min and mip.
      */
-    enum Filter : uint32_t
+    enum class Filter
     {
-        FILTER_NEAREST,
-        FILTER_LINEAR
+        eNearest,
+        eLinear
     };
 
     /**
      * Defines the address mode use for U, V, W.
      */
-    enum AddressMode : uint32_t
+    enum class AddressMode
     {
-        ADDRESS_MODE_WRAP,
-        ADDRESS_MODE_MIRROR,
-        ADDRESS_MODE_CLAMP_EDGE,
-        ADDRESS_MODE_CLAMP_BORDER,
-        ADDRESS_MODE_MIRROR_ONCE
+        eWrap,
+        eMirror,
+        eClampEdge,
+        eClampBorder,
+        eMirrorOnce
     };
 
     /**
      * Defines a comparison function.
      */
-    enum CompareFunc : uint32_t
+    enum class CompareFunc
     {
-        COMPARE_FUNC_NEVER,
-        COMPARE_FUNC_LESS,
-        COMPARE_FUNC_EQUAL,
-        COMPARE_FUNC_LESS_OR_EQUAL,
-        COMPARE_FUNC_GREATER,
-        COMPARE_FUNC_NOT_EQUAL,
-        COMPARE_FUNC_GREATER_OR_EQUAL,
-        COMPARE_FUNC_ALWAYS
+        eNever,
+        eLess,
+        eEqual,
+        eLessOrEqual,
+        eGreater,
+        eNotEqual,
+        eGreaterOrEqual,
+        eAlways
     };
 
     /**
      * Defines the border color used for texture lookups.
      */
-    enum BorderColor : uint32_t
+    enum class BorderColor
     {
-        BORDER_COLOR_BLACK_TRANSPARENT,
-        BORDER_COLOR_BLACK_OPAQUE,
-        BORDER_COLOR_WHITE_OPAQUE
+        eBlackTransparent,
+        eBlackOpaque,
+        eWhiteOpaque
     };
 
     /**

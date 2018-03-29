@@ -34,7 +34,7 @@ void AudioSource::rewind()
 
 AudioSource::State AudioSource::getState() const
 {
-    return AudioSource::STATE_INITIAL;
+    return State::eInitial;
 }
 
 bool AudioSource::isLooped() const
@@ -72,9 +72,14 @@ void AudioSource::onVelocityChanged(const Vector3& velocity)
 {
 }
 
-Component::TypeId AudioSource::getTypeId()
+std::shared_ptr<Serializable> AudioSource::createObject()
 {
-    return Component::TYPEID_AUDIO_SOURCE;
+    return std::shared_ptr<AudioSource>();
+}
+
+Component::ClassType AudioSource::getClassType()
+{
+    return ClassType::eAudioSource;
 }
 
 std::string AudioSource::getClassName()
@@ -88,11 +93,6 @@ void AudioSource::onSerialize(Serializer * serializer)
 
 void AudioSource::onDeserialize(Serializer * serializer)
 {
-}
-
-std::shared_ptr<Serializable> AudioSource::createObject()
-{
-    return std::shared_ptr<AudioSource>();
 }
 
 }

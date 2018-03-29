@@ -25,11 +25,11 @@ public:
      */
     enum PrimitiveTopology
     {
-        PRIMITIVE_TOPOLOGY_POINT_LIST,
-        PRIMITIVE_TOPOLOGY_LINE_LIST,
-        PRIMITIVE_TOPOLOGY_LINE_STRIP,
-        PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
-        PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP,
+        ePointList,
+        eLineList,
+        eLineStrip,
+        eTriangleList,
+        eTriangleStrip,
     };
 
     /**

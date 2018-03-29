@@ -14,8 +14,8 @@ namespace gameplay
 class PhysicsJointHinge : public PhysicsJoint
 {
     friend class Physics;
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
   
@@ -241,14 +241,19 @@ public:
     float getDriveGearRatio() const;
 
     /**
-     * @see Component::getTypeId
+     * @see Component::getClassType
      */
-    Component::TypeId getTypeId();
+    Component::ClassType getClassType();
 
     /**
      * @see Serializable::getClassName
      */
     std::string getClassName();
+
+    /**
+     * @see Activator::createObject
+     */
+    static std::shared_ptr<Serializable> createObject();
     
     /**
      * @see Serializable::onSerialize
@@ -259,11 +264,6 @@ public:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
-    
-    /**
-     * @see Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
 };
 
 }

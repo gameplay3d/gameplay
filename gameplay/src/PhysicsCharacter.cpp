@@ -12,9 +12,14 @@ PhysicsCharacter::~PhysicsCharacter()
 {
 }
 
-Component::TypeId PhysicsCharacter::getTypeId()
+std::shared_ptr<Serializable> PhysicsCharacter::createObject()
 {
-    return Component::TYPEID_PHYSICS_CHARACTER;
+    return std::shared_ptr<PhysicsCharacter>();
+}
+
+Component::ClassType PhysicsCharacter::getClassType()
+{
+    return ClassType::ePhysicsCharacter;
 }
 
 std::string PhysicsCharacter::getClassName()
@@ -28,11 +33,6 @@ void PhysicsCharacter::onSerialize(Serializer * serializer)
 
 void PhysicsCharacter::onDeserialize(Serializer * serializer)
 {
-}
-
-std::shared_ptr<Serializable> PhysicsCharacter::createObject()
-{
-    return std::shared_ptr<PhysicsCharacter>();
 }
 
 }

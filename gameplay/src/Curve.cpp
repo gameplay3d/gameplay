@@ -25,7 +25,7 @@ Curve::Curve(size_t pointCount, size_t componentCount) :
         _points[i].value = new float[_componentCount];
         _points[i].inValue = new float[_componentCount];
         _points[i].outValue = new float[_componentCount];
-        _points[i].interpolation = INTERPOLATION_LINEAR;
+        _points[i].interpolation = Interpolation::eLinear;
     }
     _points[_pointCount - 1].time = 1.0f;
 }
@@ -41,7 +41,7 @@ Curve::Point::Point() :
     value{nullptr},
     inValue{nullptr},
     outValue{nullptr},
-    interpolation{INTERPOLATION_LINEAR}
+    interpolation{Interpolation::eLinear}
 {
 }
 
@@ -90,11 +90,17 @@ void Curve::getPointValues(size_t index, float* value, float* inValue, float* ou
     assert(index < _pointCount);
     
     if (value)
+    {
         std::memcpy(value, _points[index].value, _componentSize);
+    }
     if (inValue)
+    {
         std::memcpy(inValue, _points[index].inValue, _componentSize);
+    }
     if (outValue)
+    {
         std::memcpy(outValue, _points[index].outValue, _componentSize);
+    }
 }
 
 void Curve::setPoint(size_t index, float time, float* value, Interpolation interpolation)
@@ -110,11 +116,17 @@ void Curve::setPoint(size_t index, float time, float* value, Interpolation inter
     _points[index].interpolation = interpolation;
 
     if (value)
+    {
         std::memcpy(_points[index].value, value, _componentSize);
+    }
     if (inValue)
+    {
         std::memcpy(_points[index].inValue, inValue, _componentSize);
+    }
     if (outValue)
+    {
         std::memcpy(_points[index].outValue, outValue, _componentSize);
+    }
 }
 
 void Curve::setTangent(size_t index, Interpolation interpolation, float* inValue, float* outValue)
@@ -124,9 +136,13 @@ void Curve::setTangent(size_t index, Interpolation interpolation, float* inValue
     _points[index].interpolation = interpolation;
 
     if (inValue)
+    {
         std::memcpy(_points[index].inValue, inValue, _componentSize);
+    }
     if (outValue)
+    {
         std::memcpy(_points[index].outValue, outValue, _componentSize);
+    }
 }
 
 void Curve::evaluate(float time, float* dst) const
@@ -154,6 +170,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
         // Evaluating a sub section of the curve
         min = determineIndex(startTime, 0, max);
         max = determineIndex(endTime, min, max);
+
         // Convert time to fall within the subregion
         localTime = _points[min].time + (_points[max].time - _points[min].time) * time;
     }
@@ -161,9 +178,13 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
     {
         // If no loop blend time is specified, clamp time to end points
         if (localTime < _points[min].time)
+        {
             localTime = _points[min].time;
+        }
         else if (localTime > _points[max].time)
+        {
             localTime = _points[max].time;
+        }
     }
     // If an exact endpoint was specified, skip interpolation and return the value directly
     if (localTime == _points[min].time)
@@ -189,6 +210,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
         index = max;
         from = &_points[max];
         to = &_points[min];
+
         // Calculate the fractional time between the two points.
         t = (localTime - from->time) / loopBlendTime;
     }
@@ -198,6 +220,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
         index = min;
         from = &_points[min];
         to = &_points[max];
+
         // Calculate the fractional time between the two points.
         t = (from->time - localTime) / loopBlendTime;
     }
@@ -207,6 +230,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
         index = determineIndex(localTime, min, max);
         from = &_points[index];
         to = &_points[index == max ? index : index+1];
+
         // Calculate the fractional time between the two points.
         scale = (to->time - from->time);
         t = (localTime - from->time) / scale;
@@ -214,12 +238,12 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
     // Calculate the value of the curve discretely if appropriate.
     switch (from->interpolation)
     {
-        case INTERPOLATION_BEZIER:
+    case Interpolation::eBezier:
         {
             interpolateBezier(t, from, to, dst);
             return;
         }
-        case INTERPOLATION_BSPLINE:
+    case Interpolation::eBspline:
         {
             Point* c0;
             Point* c1;
@@ -243,47 +267,49 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             interpolateBSpline(t, c0, from, to, c1, dst);
             return;
         }
-        case INTERPOLATION_FLAT:
+    case Interpolation::eFlat:
         {
             interpolateHermiteFlat(t, from, to, dst);
             return;
         }
-        case INTERPOLATION_HERMITE:
+    case Interpolation::eHermite:
         {
             interpolateHermite(t, from, to, dst);
             return;
         }
-        case INTERPOLATION_LINEAR:
+    case Interpolation::eLinear:
         {
             // Can just break here because linear formula follows switch
             break;
         }
-        case INTERPOLATION_SMOOTH:
+    case Interpolation::eSmooth:
         {
             interpolateHermiteSmooth(t, index, from, to, dst);
             return;
         }
-        case INTERPOLATION_STEP:
+    case Interpolation::eStep:
         {
             std::memcpy(dst, from->value, _componentSize);
             return;
         }
-        case INTERPOLATION_QUADRATIC_IN:
+    case Interpolation::eQuadraticIn:
         {
             t *= t;
             break;
         }
-        case INTERPOLATION_QUADRATIC_OUT:
+    case Interpolation::eQuadraticOut:
         {
             t *= -(t - 2.0f);
             break;
         }
-        case INTERPOLATION_QUADRATIC_IN_OUT:
+    case Interpolation::eQuadraticInOut:
         {
             float tx2 = t * 2.0f;
 
             if (tx2 < 1.0f)
+            {
                 t = 0.5f * (tx2 * tx2);
+            }
             else
             {
                 float temp = tx2 - 1.0f;
@@ -291,7 +317,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_QUADRATIC_OUT_IN:
+    case Interpolation::eQuadraticOutIn:
         {
             if (t < 0.5f)
             {
@@ -303,18 +329,18 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_CUBIC_IN:
+    case Interpolation::eCubicIn:
         {
             t *= t * t;
             break;
         }
-        case INTERPOLATION_CUBIC_OUT:
+    case Interpolation::eCubicOut:
         {
             t--;
             t = t * t * t + 1;
             break;
         }
-        case INTERPOLATION_CUBIC_IN_OUT:
+    case Interpolation::eCubicInOut:
         {
             if ((t *= 2.0f) < 1.0f)
             {
@@ -327,24 +353,24 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_CUBIC_OUT_IN:
+    case Interpolation::eCubicOutIn:
         {
             t = (2.0f * t - 1.0f);
             t = (t * t * t + 1) * 0.5f;
             break;
         }
-        case INTERPOLATION_QUARTIC_IN:
+    case Interpolation::eQuarticIn:
         {
             t *= t * t * t;
             break;
         }
-        case INTERPOLATION_QUARTIC_OUT:
+    case Interpolation::eQuarticOut:
         {
             t--;
             t = -(t * t * t * t) + 1.0f;
             break;
         }
-        case INTERPOLATION_QUARTIC_IN_OUT:
+    case Interpolation::eQuarticInOut:
         {
             t *= 2.0f;
             if (t < 1.0f)
@@ -358,7 +384,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_QUARTIC_OUT_IN:
+    case Interpolation::eQuarticOutIn:
         {
             t = 2.0f * t - 1.0f;
             if (t < 0.0f)
@@ -371,18 +397,18 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_QUINTIC_IN:
+    case Interpolation::eQuinticIn:
         {
             t *= t * t * t * t;
             break;
         }
-        case INTERPOLATION_QUINTIC_OUT:
+    case Interpolation::eQuinticOut:
         {
             t--;
             t = t * t * t * t * t + 1.0f;
             break;
         }
-        case INTERPOLATION_QUINTIC_IN_OUT:
+    case Interpolation::eQuinticInOut:
         {
             t *= 2.0f;
             if (t < 1.0f)
@@ -396,28 +422,28 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_QUINTIC_OUT_IN:
+    case Interpolation::eQuinticOutIn:
         {
             t = 2.0f * t - 1.0f;
             t = 0.5f * (t * t * t * t * t + 1.0f);
             break;
         }
-        case INTERPOLATION_SINE_IN:
+    case Interpolation::eSineIn:
         {
             t = -(std::cos(t * GP_MATH_PIOVER2) - 1.0f);
             break;
         }
-        case INTERPOLATION_SINE_OUT:
+    case Interpolation::eSineOut:
         {
             t = std::sin(t * GP_MATH_PIOVER2);
             break;
         }
-        case INTERPOLATION_SINE_IN_OUT:
+    case Interpolation::eSineInOut:
         {
             t = -0.5f * (std::cos(GP_MATH_PI * t) - 1.0f);
             break;
         }
-        case INTERPOLATION_SINE_OUT_IN:
+    case Interpolation::eSineOutIn:
         {
             if (t < 0.5f)
             {
@@ -429,7 +455,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_EXPONENTIAL_IN:
+    case Interpolation::eExponentialIn:
         {
             if (t != 0.0f)
             {
@@ -437,7 +463,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_EXPONENTIAL_OUT:
+    case Interpolation::eExponentialOut:
         {
             if (t != 1.0f)
             {
@@ -445,7 +471,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_EXPONENTIAL_IN_OUT:
+    case Interpolation::eExponentialInOut:
         {
             if (t != 0.0f && t != 1.0f)
             {
@@ -460,7 +486,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_EXPONENTIAL_OUT_IN:
+    case  Interpolation::eExponentialOutIn:
         {
             if (t != 0.0f && t != 1.0f)
             {
@@ -475,18 +501,18 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_CIRCULAR_IN:
+    case Interpolation::eCircularIn:
         {
             t = -(std::sqrt(1.0f - t * t) - 1.0f);
             break;
         }
-        case INTERPOLATION_CIRCULAR_OUT:
+    case Interpolation::eCircularOut:
         {
             t--;
             t = std::sqrt(1.0f - t * t);
             break;
         }
-        case INTERPOLATION_CIRCULAR_IN_OUT:
+    case Interpolation::eCircularInOut:
         {
             t *= 2.0f;
             if (t < 1.0f)
@@ -500,7 +526,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_CIRCULAR_OUT_IN:
+    case Interpolation::eCircularOutIn:
         {
             t = 2.0f * t - 1.0f;
             if (t < 0.0f)
@@ -513,7 +539,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_ELASTIC_IN:
+    case Interpolation::eElasticIn:
         {
             if (t != 0.0f && t != 1.0f)
             {
@@ -522,7 +548,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_ELASTIC_OUT:
+    case Interpolation::eElasticOut:
         {
             if (t != 0.0f && t != 1.0f)
             {
@@ -530,7 +556,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_ELASTIC_IN_OUT:
+    case Interpolation::eElasticInOut:
         {
             if (t != 0.0f && t != 1.0f)
             {
@@ -546,7 +572,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_ELASTIC_OUT_IN:
+    case Interpolation::eElasticOutIn:
         {
             if (t != 0.0f && t != 1.0f)
             {
@@ -562,18 +588,18 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_OVERSHOOT_IN:
+    case Interpolation::eOvershootIn:
         {
             t = t * t * (2.70158f * t - 1.70158f);
             break;
         }
-        case INTERPOLATION_OVERSHOOT_OUT:
+    case Interpolation::eOvershootOut:
         {
             t--;
             t = t * t * (2.70158f * t + 1.70158f) + 1;
             break;
         }
-        case INTERPOLATION_OVERSHOOT_IN_OUT:
+    case Interpolation::eOvershootInOut:
         {
             t *= 2.0f;
             if (t < 1.0f)
@@ -587,7 +613,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_OVERSHOOT_OUT_IN:
+    case Interpolation::eOvershootOutIn:
         {
             t = 2.0f * t - 1.0f;
             if (t < 0.0f)
@@ -600,7 +626,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_BOUNCE_IN:
+    case Interpolation::eBounceIn:
         {
             t = 1.0f - t;
 
@@ -623,11 +649,10 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
                 t -= 0.9545454545454546f;
                 t = 7.5625f * t * t + 0.984375f;
             }
-
             t = 1.0f - t;
             break;
         }
-        case INTERPOLATION_BOUNCE_OUT:
+    case Interpolation::eBounceOut:
         {
             if (t < 0.36363636363636365f)
             {
@@ -650,7 +675,7 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
             }
             break;
         }
-        case INTERPOLATION_BOUNCE_IN_OUT:
+    case Interpolation::eBounceInOut:
         {
             if (t < 0.5f)
             {
@@ -675,7 +700,6 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
                     t -= 0.9545454545454546f;
                     t = 7.5625f * t * t + 0.984375f;
                 }
-
                 t = (1.0f - t) * 0.5f;
             }
             else
@@ -700,12 +724,11 @@ void Curve::evaluate(float time, float startTime, float endTime, float loopBlend
                     t -= 0.9545454545454546f;
                     t = 7.5625f * t * t + 0.984375f;
                 }
-
                 t = 0.5f * t + 0.5f;
             }
             break;
         }
-        case INTERPOLATION_BOUNCE_OUT_IN:
+    case Interpolation::eBounceOutIn:
         {
             if (t < 0.1818181818f)
             {
@@ -750,7 +773,9 @@ void Curve::setQuaternionOffset(size_t offset)
     assert(offset <= (_componentCount - 4));
 
     if (!_quaternionOffset)
+    {
         _quaternionOffset = new size_t[1];
+    }
     *_quaternionOffset = offset;
 }
 
@@ -774,9 +799,13 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
         for (size_t i = 0; i < _componentCount; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::bezier(eq1, eq2, eq3, eq4, fromValue[i], outValue[i], toValue[i], inValue[i]);
+            }
         }
     }
     else
@@ -787,9 +816,13 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
         for (i = 0; i < quaternionOffset; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::bezier(eq1, eq2, eq3, eq4, fromValue[i], outValue[i], toValue[i], inValue[i]);
+            }
         }
         // Handle quaternion component.
         float interpTime = MathUtil::bezier(eq1, eq2, eq3, eq4, from->time, outValue[i], to->time, inValue[i]);
@@ -798,9 +831,13 @@ void Curve::interpolateBezier(float s, Point* from, Point* to, float* dst) const
         for (i += 4; i < _componentCount; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::bezier(eq1, eq2, eq3, eq4, fromValue[i], outValue[i], toValue[i], inValue[i]);
+            }
         }
     }
 }
@@ -824,9 +861,13 @@ void Curve::interpolateBSpline(float s, Point* c0, Point* c1, Point* c2, Point* 
         for (size_t i = 0; i < _componentCount; i++)
         {
             if (c1Value[i] == c2Value[i])
+            {
                 dst[i] = c1Value[i];
+            }
             else
+            {
                 dst[i] = MathUtil::bspline(eq0, eq1, eq2, eq3, c0Value[i], c1Value[i], c2Value[i], c3Value[i]);
+            }
         }
     }
     else
@@ -837,26 +878,40 @@ void Curve::interpolateBSpline(float s, Point* c0, Point* c1, Point* c2, Point* 
         for (i = 0; i < quaternionOffset; i++)
         {
             if (c1Value[i] == c2Value[i])
+            {
                 dst[i] = c1Value[i];
+            }
             else
+            {
                 dst[i] = MathUtil::bspline(eq0, eq1, eq2, eq3, c0Value[i], c1Value[i], c2Value[i], c3Value[i]);
+            }
         }
         // Handle quaternion component.
         float interpTime;
         if (c0->time == c1->time)
+        {
             interpTime = MathUtil::bspline(eq0, eq1, eq2, eq3, -c0->time, c1->time, c2->time, c3->time);
+        }
         else if (c2->time == c3->time)
+        {
             interpTime = MathUtil::bspline(eq0, eq1, eq2, eq3, c0->time, c1->time, c2->time, -c3->time);
+        }
         else
+        {
             interpTime = MathUtil::bspline(eq0, eq1, eq2, eq3, c0->time, c1->time, c2->time, c3->time);
+        }
         interpolateQuaternion(s, (c1Value + i) , (c2Value + i), (dst + i));
         // Handle remaining components (if any) as scalars
         for (i += 4; i < _componentCount; i++)
         {
             if (c1Value[i] == c2Value[i])
+            {
                 dst[i] = c1Value[i];
+            }
             else
+            {
                 dst[i] = MathUtil::bspline(eq0, eq1, eq2, eq3, c0Value[i], c1Value[i], c2Value[i], c3Value[i]);
+            }
         }
     }
 }
@@ -881,9 +936,13 @@ void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst) cons
         for (size_t i = 0; i < _componentCount; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::hermite(h00, h01, h10, h11, fromValue[i], outValue[i], toValue[i], inValue[i]);
+            }
         }
     }
     else
@@ -894,9 +953,13 @@ void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst) cons
         for (i = 0; i < quaternionOffset; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::hermite(h00, h01, h10, h11, fromValue[i], outValue[i], toValue[i], inValue[i]);
+            }
         }
         // Handle quaternion component.
         float interpTime = MathUtil::hermite(h00, h01, h10, h11, from->time, outValue[i], to->time, inValue[i]);
@@ -905,9 +968,13 @@ void Curve::interpolateHermite(float s, Point* from, Point* to, float* dst) cons
         for (i += 4; i < _componentCount; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::hermite(h00, h01, h10, h11, fromValue[i], outValue[i], toValue[i], inValue[i]);
+            }
         }
     }
 }
@@ -928,9 +995,13 @@ void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst) 
         for (size_t i = 0; i < _componentCount; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::hermiteFlat(h00, h01, fromValue[i], toValue[i]);
+            }
         }
     }
     else
@@ -941,9 +1012,13 @@ void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst) 
         for (i = 0; i < quaternionOffset; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::hermiteFlat(h00, h01, fromValue[i], toValue[i]);
+            }
         }
         // Handle quaternion component.
         float interpTime = MathUtil::hermiteFlat(h00, h01, from->time, to->time);
@@ -952,9 +1027,13 @@ void Curve::interpolateHermiteFlat(float s, Point* from, Point* to, float* dst) 
         for (i += 4; i < _componentCount; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::hermiteFlat(h00, h01, fromValue[i], toValue[i]);
+            }
         }
     }
 }
@@ -1103,9 +1182,13 @@ void Curve::interpolateLinear(float s, Point* from, Point* to, float* dst) const
         for (size_t i = 0; i < _componentCount; i++)
         {
             if (fromValue[i] == toValue[i])
+            {
                 dst[i] = fromValue[i];
+            }
             else
+            {
                 dst[i] = MathUtil::lerp(s, fromValue[i], toValue[i]);
+            }
         }
     }
     else
@@ -1159,200 +1242,6 @@ int Curve::determineIndex(float time, uint32_t min, uint32_t max) const
     } while (min <= max);
     
     return max;
-}
-
-Curve::Interpolation Curve::getInterpolation(const std::string& interpolationStr)
-{
-    if (interpolationStr.compare("INTERPOLATION_LINEAR") == 0)
-    {
-        return Curve::INTERPOLATION_LINEAR;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_BEZIER") == 0)
-    {
-        return Curve::INTERPOLATION_BEZIER;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_BSPLINE") == 0)
-    {
-        return Curve::INTERPOLATION_BSPLINE;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_FLAT") == 0)
-    {
-        return Curve::INTERPOLATION_FLAT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_HERMITE") == 0)
-    {
-        return Curve::INTERPOLATION_HERMITE;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_SMOOTH") == 0)
-    {
-        return Curve::INTERPOLATION_SMOOTH;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_STEP") == 0)
-    {
-        return Curve::INTERPOLATION_STEP;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUADRATIC_IN") == 0)
-    {
-        return Curve::INTERPOLATION_QUADRATIC_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUADRATIC_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_QUADRATIC_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUADRATIC_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_QUADRATIC_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUADRATIC_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_QUADRATIC_OUT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_CUBIC_IN") == 0)
-    {
-        return Curve::INTERPOLATION_CUBIC_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_CUBIC_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_CUBIC_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_CUBIC_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_CUBIC_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_CUBIC_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_CUBIC_OUT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUARTIC_IN") == 0)
-    {
-        return Curve::INTERPOLATION_QUARTIC_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUARTIC_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_QUARTIC_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUARTIC_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_QUARTIC_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUARTIC_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_QUARTIC_OUT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUINTIC_IN") == 0)
-    {
-        return Curve::INTERPOLATION_QUINTIC_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUINTIC_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_QUINTIC_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUINTIC_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_QUINTIC_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_QUINTIC_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_QUINTIC_OUT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_SINE_IN") == 0)
-    {
-        return Curve::INTERPOLATION_SINE_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_SINE_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_SINE_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_SINE_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_SINE_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_SINE_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_SINE_OUT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_EXPONENTIAL_IN") == 0)
-    {
-        return Curve::INTERPOLATION_EXPONENTIAL_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_EXPONENTIAL_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_EXPONENTIAL_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_EXPONENTIAL_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_EXPONENTIAL_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_EXPONENTIAL_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_EXPONENTIAL_OUT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_CIRCULAR_IN") == 0)
-    {
-        return Curve::INTERPOLATION_CIRCULAR_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_CIRCULAR_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_CIRCULAR_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_CIRCULAR_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_CIRCULAR_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_CIRCULAR_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_CIRCULAR_OUT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_ELASTIC_IN") == 0)
-    {
-        return Curve::INTERPOLATION_ELASTIC_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_ELASTIC_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_ELASTIC_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_ELASTIC_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_ELASTIC_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_ELASTIC_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_ELASTIC_OUT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_OVERSHOOT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_OVERSHOOT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_OVERSHOOT_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_OVERSHOOT_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_OVERSHOOT_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_OVERSHOOT_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_OVERSHOOT_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_OVERSHOOT_OUT_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_BOUNCE_IN") == 0)
-    {
-        return Curve::INTERPOLATION_BOUNCE_IN;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_BOUNCE_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_BOUNCE_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_BOUNCE_IN_OUT") == 0)
-    {
-        return Curve::INTERPOLATION_BOUNCE_IN_OUT;
-    }
-    else if (interpolationStr.compare("INTERPOLATION_BOUNCE_OUT_IN") == 0)
-    {
-        return Curve::INTERPOLATION_BOUNCE_OUT_IN;
-    }
-
-    return INTERPOLATION_LINEAR;
 }
 
 }

@@ -30,11 +30,14 @@
 #include <limits>
 #include <functional>
 #include <typeinfo>
+#include <typeindex>
+#include<type_traits>
 #include <thread>
 #include <mutex>
+#include <condition_variable>
 #include <chrono>
-#include <typeindex>
 
+// Platform
 #ifdef __ANDROID__
     #define GP_PLATFORM_ANDROID     1
 #elif WIN32
@@ -51,7 +54,7 @@
 #endif
 
 // Function
-#ifdef _WINDOWS
+#if GP_PLAFORM_WINDOWS
 #define __current__func__ __FUNCTION__
 #else
 #define __current__func__ __func__
@@ -78,9 +81,9 @@
 #else
 #define GP_ERROR(...) do \
 { \
-    gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "%s -- ", __current__func__); \
-    gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, __VA_ARGS__); \
-    gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "\n"); \
+    gameplay::Logger::log(gameplay::Logger::Level::eError, "%s -- ", __current__func__); \
+    gameplay::Logger::log(gameplay::Logger::Level::eError, __VA_ARGS__); \
+    gameplay::Logger::log(gameplay::Logger::Level::eError, "\n"); \
     GP_DEBUG_BREAK(); \
     assert(0); \
     std::exit(-1); \
@@ -88,15 +91,15 @@
 #endif
 #define GP_WARN(...) do \
 { \
-    gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, "%s -- ", __current__func__); \
-    gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, __VA_ARGS__); \
-    gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, "\n"); \
+    gameplay::Logger::log(gameplay::Logger::Level::eWarn, "%s -- ", __current__func__); \
+    gameplay::Logger::log(gameplay::Logger::Level::eWarn, __VA_ARGS__); \
+    gameplay::Logger::log(gameplay::Logger::Level::eWarn, "\n"); \
 } while (0)
 #define GP_INFO(...) do \
 { \
-    gameplay::Logger::log(gameplay::Logger::LEVEL_INFO, "%s -- ", __current__func__); \
-    gameplay::Logger::log(gameplay::Logger::LEVEL_INFO, __VA_ARGS__); \
-    gameplay::Logger::log(gameplay::Logger::LEVEL_INFO, "\n"); \
+    gameplay::Logger::log(gameplay::Logger::Level::eInfo, "%s -- ", __current__func__); \
+    gameplay::Logger::log(gameplay::Logger::Level::eInfo, __VA_ARGS__); \
+    gameplay::Logger::log(gameplay::Logger::Level::eInfo, "\n"); \
 } while (0)
 
 // Memory
@@ -128,12 +131,86 @@
    }
 #endif
 
+
+template<typename E>
+struct enable_bitwise_operators
+{
+    static const bool enable=false;
+};
+
+#define GP_ENABLE_BITWISE_OPERATORS(enumeration) \
+template<> \
+struct enable_bitwise_operators<enumeration> { \
+    static const bool enable=true; \
+};
+
+template<typename E>
+typename std::enable_if<enable_bitwise_operators<E>::enable,E>::type
+operator|(E lhs,E rhs){
+    using underlying_type_t = typename std::underlying_type<E>::type;
+    return static_cast<E>(
+        static_cast<underlying_type_t>(lhs) | static_cast<underlying_type_t>(rhs));
+}
+
+template<typename E>
+typename std::enable_if<enable_bitwise_operators<E>::enable,E>::type
+operator&(E lhs,E rhs){
+    using underlying_type_t = typename std::underlying_type<E>::type;
+    return static_cast<E>(
+        static_cast<underlying_type_t>(lhs) & static_cast<underlying_type_t>(rhs));
+}
+
+template<typename E>
+typename std::enable_if<enable_bitwise_operators<E>::enable,E>::type
+operator^(E lhs,E rhs){
+    using underlying_type_t = typename std::underlying_type<E>::type;
+    return static_cast<E>(
+        static_cast<underlying_type_t>(lhs) ^ static_cast<underlying_type_t>(rhs));
+}
+
+template<typename E>
+typename std::enable_if<enable_bitwise_operators<E>::enable,E>::type
+operator~(E lhs){
+    using underlying_type_t = typename std::underlying_type<E>::type;
+    return static_cast<E>(
+        ~static_cast<underlying_type_t>(lhs));
+}
+
+template<typename E>
+typename std::enable_if<enable_bitwise_operators<E>::enable,E&>::type
+operator|=(E& lhs,E rhs){
+    using underlying_type_t = typename std::underlying_type<E>::type;
+    lhs=static_cast<E>(
+        static_cast<underlying_type_t>(lhs) | static_cast<underlying_type_t>(rhs));
+    return lhs;
+}
+
+template<typename E>
+typename std::enable_if<enable_bitwise_operators<E>::enable,E&>::type
+operator&=(E& lhs,E rhs){
+    using underlying_type_t = typename std::underlying_type<E>::type;
+    lhs=static_cast<E>(
+        static_cast<underlying_type_t>(lhs) & static_cast<underlying_type_t>(rhs));
+    return lhs;
+}
+
+template<typename E>
+typename std::enable_if<enable_bitwise_operators<E>::enable,E&>::type
+operator^=(E& lhs,E rhs){
+    using underlying_type_t = typename std::underlying_type<E>::type;
+    lhs=static_cast<E>(
+        static_cast<underlying_type_t>(lhs) ^ static_cast<underlying_type_t>(rhs));
+    return lhs;
+}
+
+
 // Engine
 #define GP_ENGINE_NAME                  "gameplay"
 #define GP_ENGINE_VERSION_MAJOR         4
 #define GP_ENGINE_VERSION_MINOR         0
 #define GP_ENGINE_HOME_PATH             "./"
 #define GP_ENGINE_CONFIG                "game.config"
+#define GP_ENGINE_MAGIC_NUMBER          { '\xAB', 'G', 'P', 'B', '\xBB', '\r', '\n', '\x1A', '\n' }
 
 // Math
 #define GP_MATH_RANDOM()                ((float)rand()/RAND_MAX)
@@ -183,9 +260,6 @@
 #define GP_GRAPHICS_VERTEX_ATTRIBUTES_MAX           15
 #define GP_GRAPHICS_SEMANTIC_NAME_MAX               128
 #define GP_GRAPHICS_MIP_LEVELS_MAX                  0xFFFFFFFF
-
-// Input
-#define GP_GAMEPADS_MAX                             4
 
 
 namespace gameplay

@@ -14,57 +14,58 @@ public:
      * Types of interpolation.
      *
      * Defines how the points in the curve are connected.
-     * Interpolation::INTERPOLATION_BEZIER uses control points and InterpolationType::HERMITE uses tangents.
+     * Interpolation::eBezier uses control points and
+     * InterpolationType::eHermite uses tangents.
      */
-    enum Interpolation
+    enum class Interpolation
     {
-        INTERPOLATION_LINEAR,
-        INTERPOLATION_BEZIER,
-        INTERPOLATION_BSPLINE,
-        INTERPOLATION_FLAT,
-        INTERPOLATION_HERMITE,
-        INTERPOLATION_SMOOTH,
-        INTERPOLATION_STEP,
-        INTERPOLATION_QUADRATIC_IN,
-        INTERPOLATION_QUADRATIC_OUT,
-        INTERPOLATION_QUADRATIC_IN_OUT,
-        INTERPOLATION_QUADRATIC_OUT_IN,
-        INTERPOLATION_CUBIC_IN,
-        INTERPOLATION_CUBIC_OUT,
-        INTERPOLATION_CUBIC_IN_OUT,
-        INTERPOLATION_CUBIC_OUT_IN,
-        INTERPOLATION_QUARTIC_IN,
-        INTERPOLATION_QUARTIC_OUT,
-        INTERPOLATION_QUARTIC_IN_OUT,
-        INTERPOLATION_QUARTIC_OUT_IN,
-        INTERPOLATION_QUINTIC_IN,
-        INTERPOLATION_QUINTIC_OUT,
-        INTERPOLATION_QUINTIC_IN_OUT,
-        INTERPOLATION_QUINTIC_OUT_IN,
-        INTERPOLATION_SINE_IN,
-        INTERPOLATION_SINE_OUT,
-        INTERPOLATION_SINE_IN_OUT,
-        INTERPOLATION_SINE_OUT_IN,
-        INTERPOLATION_EXPONENTIAL_IN,
-        INTERPOLATION_EXPONENTIAL_OUT,
-        INTERPOLATION_EXPONENTIAL_IN_OUT,
-        INTERPOLATION_EXPONENTIAL_OUT_IN,
-        INTERPOLATION_CIRCULAR_IN,
-        INTERPOLATION_CIRCULAR_OUT,
-        INTERPOLATION_CIRCULAR_IN_OUT,
-        INTERPOLATION_CIRCULAR_OUT_IN,
-        INTERPOLATION_ELASTIC_IN,
-        INTERPOLATION_ELASTIC_OUT,
-        INTERPOLATION_ELASTIC_IN_OUT,
-        INTERPOLATION_ELASTIC_OUT_IN,
-        INTERPOLATION_OVERSHOOT_IN,
-        INTERPOLATION_OVERSHOOT_OUT,
-        INTERPOLATION_OVERSHOOT_IN_OUT,
-        INTERPOLATION_OVERSHOOT_OUT_IN,
-        INTERPOLATION_BOUNCE_IN,
-        INTERPOLATION_BOUNCE_OUT,
-        INTERPOLATION_BOUNCE_IN_OUT,
-        INTERPOLATION_BOUNCE_OUT_IN
+        eLinear,
+        eBezier,
+        eBspline,
+        eFlat,
+        eHermite,
+        eSmooth,
+        eStep,
+        eQuadraticIn,
+        eQuadraticOut,
+        eQuadraticInOut,
+        eQuadraticOutIn,
+        eCubicIn,
+        eCubicOut,
+        eCubicInOut,
+        eCubicOutIn,
+        eQuarticIn,
+        eQuarticOut,
+        eQuarticInOut,
+        eQuarticOutIn,
+        eQuinticIn,
+        eQuinticOut,
+        eQuinticInOut,
+        eQuinticOutIn,
+        eSineIn,
+        eSineOut,
+        eSineInOut,
+        eSineOutIn,
+        eExponentialIn,
+        eExponentialOut,
+        eExponentialInOut,
+        eExponentialOutIn,
+        eCircularIn,
+        eCircularOut,
+        eCircularInOut,
+        eCircularOutIn,
+        eElasticIn,
+        eElasticOut,
+        eElasticInOut,
+        eElasticOutIn,
+        eOvershootIn,
+        eOvershootOut,
+        eOvershootInOut,
+        eOvershootOutIn,
+        eBounceIn,
+        eBounceOut,
+        eBounceInOut,
+        eBounceOutIn
     };
 
     /**
@@ -212,18 +213,22 @@ private:
          * The time of the point within the curve.
          */
         float time;
+
         /** 
          * The value of the point.
          */
         float* value;
+
         /** 
          * The value of the tangent when approaching this point (from the previous point in the curve).
          */
         float* inValue;
+
         /** 
          * The value of the tangent when leaving this point (towards the next point in the curve).
          */
         float* outValue;
+
         /** 
          * The interpolation to use between this point and the next point.
          */
@@ -312,14 +317,6 @@ private:
      * @param index The index of the Quaternion rotation data.
      */
     void setQuaternionOffset(size_t index);
-
-    /**
-     * Gets the InterpolationType value for the given string ID
-     *
-     * @param interpolationStr The string representation of the InterpolationType
-     * @return the InterpolationType value; -1 if the string does not represent an InterpolationType.
-     */
-    static Interpolation getInterpolation(const std::string& interpolationStr);
 
     size_t _pointCount;
     size_t _componentCount;

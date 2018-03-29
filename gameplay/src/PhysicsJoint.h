@@ -18,17 +18,18 @@ class PhysicsJoint : public Component
 public:
 
     friend class Physics;
+    friend class SceneObject;
 
     /**
      * Defines the type of joint.
      */
     enum Type
     {
-        TYPE_FIXED,
-        TYPE_HINGE,
-        TYPE_SPRING,
-        TYPE_SOCKET,
-        TYPE_GENERIC
+        eFixed,
+        eHinge,
+        eSpring,
+        eSocket,
+        eGeneric
     };
 
     /**
@@ -140,6 +141,8 @@ public:
      */
     bool isPreprocessingEnabled() const;
     
+protected:
+
     /**
      * @see Serializable::onSerialize
      */
@@ -149,8 +152,6 @@ public:
      * @see Serializable::onDeserialize
      */
     virtual void onDeserialize(Serializer* serializer);
-
-protected:
 
     /**
      * Event occurs when the force or torque constraints are broken.

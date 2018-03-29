@@ -8,8 +8,8 @@ RenderPass::RenderPass() :
     _width(0),
     _height(0),
     _colorAttachmentCount(0),
-    _depthStencilFormat(Format::FORMAT_UNDEFINED),
-    _sampleCount(Texture::SAMPLE_COUNT_1X),
+    _depthStencilFormat(Format::eUndefined),
+    _sampleCount(Texture::SampleCount::e1X),
     _renderPass(VK_NULL_HANDLE),
     _framebuffer(VK_NULL_HANDLE)
 {

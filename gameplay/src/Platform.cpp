@@ -16,12 +16,12 @@ struct GamepadAxisDpadRemap
 
 GamepadAxisDpadRemap __gamepadAxisDpad[] =
 {
-    { Input::Key::KEY_GAMEPAD_LEFT, Input::Key::KEY_GAMEPAD_RIGHT   },
-    { Input::Key::KEY_GAMEPAD_UP,   Input::Key::KEY_GAMEPAD_DOWN    },
-    { Input::Key::KEY_NONE,         Input::Key::KEY_NONE            },
-    { Input::Key::KEY_GAMEPAD_LEFT, Input::Key::KEY_GAMEPAD_RIGHT   },
-    { Input::Key::KEY_GAMEPAD_UP,   Input::Key::KEY_GAMEPAD_DOWN    },
-    { Input::Key::KEY_NONE,         Input::Key::KEY_NONE            }
+    { Input::Key::eGamepadLeft, Input::Key::eGamepadRight   },
+    { Input::Key::eGamepadUp,   Input::Key::eGamepadDown    },
+    { Input::Key::eNone,         Input::Key::eNone          },
+    { Input::Key::eGamepadLeft, Input::Key::eGamepadRight   },
+    { Input::Key::eGamepadUp,   Input::Key::eGamepadDown    },
+    { Input::Key::eNone,         Input::Key::eNone          }
 };
 
 class Gamepad
@@ -33,12 +33,12 @@ public:
         jid(INT32_MAX)
     {
         std::memset(value, 0, sizeof(value));
-        deadzone[Input::GAMEPAD_AXIS_LEFT_X] =
-        deadzone[Input::GAMEPAD_AXIS_LEFT_Y] = 7849;
-        deadzone[Input::GAMEPAD_AXIS_RIGHT_X] =
-        deadzone[Input::GAMEPAD_AXIS_RIGHT_Y] = 8689;
-        deadzone[Input::GAMEPAD_AXIS_LEFT_Z] =
-        deadzone[Input::GAMEPAD_AXIS_RIGHT_Z] = 30;
+        deadzone[static_cast<uint32_t>(Input::GamepadAxis::eLeftX)] =
+        deadzone[static_cast<uint32_t>(Input::GamepadAxis::eLeftY)] = 7849;
+        deadzone[static_cast<uint32_t>(Input::GamepadAxis::eRightX)] =
+        deadzone[static_cast<uint32_t>(Input::GamepadAxis::eRightY)] = 8689;
+        deadzone[static_cast<uint32_t>(Input::GamepadAxis::eLeftZ)] =
+        deadzone[static_cast<uint32_t>(Input::GamepadAxis::eRightZ)] = 30;
     }
 
     void create(const SDL_JoyDeviceEvent& evt)
@@ -72,11 +72,11 @@ public:
 
     bool filter(Input::GamepadAxis axis, int* value)
     {
-        const int32_t oldValue = this->value[axis];
-        const int32_t deadzone = this->deadzone[axis];
+        const int32_t oldValue = this->value[static_cast<uint32_t>(axis)];
+        const int32_t deadzone = this->deadzone[static_cast<uint32_t>(axis)];
         int32_t newValue = *value;
         newValue = ((newValue > deadzone) || (newValue < -deadzone)) ? newValue : 0;
-        this->value[axis] = newValue;
+        this->value[static_cast<uint32_t>(axis)] = newValue;
         *value = newValue;
         return oldValue != newValue;
     }
@@ -88,16 +88,18 @@ public:
         {
             input->postGamepadAxisEvent(controllerIndex, axis, value);
 
-            if (__gamepadAxisDpad[axis].first != Input::KEY_NONE)
+            if (__gamepadAxisDpad[static_cast<uint32_t>(axis)].first != Input::Key::eNone)
             {
                 if (value == 0)
                 {
-                    input->postKeyPressEvent(__gamepadAxisDpad[axis].first,  0, false);
-                    input->postKeyPressEvent(__gamepadAxisDpad[axis].second, 0, false);
+                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].first, Input::KeyModifiers::eNone, false);
+                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].second, Input::KeyModifiers::eNone, false);
                 }
                 else
                 {
-                    input->postKeyPressEvent(value < 0 ? __gamepadAxisDpad[axis].first : __gamepadAxisDpad[axis].second, 0, true);
+                    input->postKeyPressEvent(value < 0 ?
+                                                 __gamepadAxisDpad[static_cast<uint32_t>(axis)].first :
+                                                 __gamepadAxisDpad[static_cast<uint32_t>(axis)].second, Input::KeyModifiers::eNone, true);
                 }
             }
         }
@@ -106,8 +108,8 @@ public:
     SDL_Joystick* joystick;
     SDL_GameController* controller;
     SDL_JoystickID jid;
-    int32_t value[Input::GAMEPAD_AXIS_COUNT];
-    int32_t deadzone[Input::GAMEPAD_AXIS_COUNT];
+    int32_t value[static_cast<uint32_t>(Input::GamepadAxis::eCount)];
+    int32_t deadzone[static_cast<uint32_t>(Input::GamepadAxis::eCount)];
 };
 
 Platform* Platform::getPlatform()
@@ -126,113 +128,113 @@ Platform::Platform() :
     _running(false)
 {
     std::memset(_translateKey, 0, sizeof(_translateKey));
-    initTranslateKey(SDL_SCANCODE_ESCAPE,       Input::KEY_ESC);
-    initTranslateKey(SDL_SCANCODE_RETURN,       Input::KEY_RETURN);
-    initTranslateKey(SDL_SCANCODE_TAB,          Input::KEY_TAB);
-    initTranslateKey(SDL_SCANCODE_BACKSPACE,    Input::KEY_BACKSPACE);
-    initTranslateKey(SDL_SCANCODE_SPACE,        Input::KEY_SPACE);
-    initTranslateKey(SDL_SCANCODE_UP,           Input::KEY_UP);
-    initTranslateKey(SDL_SCANCODE_DOWN,         Input::KEY_DOWN);
-    initTranslateKey(SDL_SCANCODE_LEFT,         Input::KEY_LEFT);
-    initTranslateKey(SDL_SCANCODE_RIGHT,        Input::KEY_RIGHT);
-    initTranslateKey(SDL_SCANCODE_PAGEUP,       Input::KEY_PAGE_UP);
-    initTranslateKey(SDL_SCANCODE_PAGEDOWN,     Input::KEY_PAGE_DOWN);
-    initTranslateKey(SDL_SCANCODE_HOME,         Input::KEY_HOME);
-    initTranslateKey(SDL_SCANCODE_END,          Input::KEY_END);
-    initTranslateKey(SDL_SCANCODE_PRINTSCREEN,  Input::KEY_PRINT);
-    initTranslateKey(SDL_SCANCODE_KP_PLUS,      Input::KEY_PLUS);
-    initTranslateKey(SDL_SCANCODE_EQUALS,       Input::KEY_PLUS);
-    initTranslateKey(SDL_SCANCODE_KP_MINUS,     Input::KEY_MINUS);
-    initTranslateKey(SDL_SCANCODE_MINUS,        Input::KEY_MINUS);
-    initTranslateKey(SDL_SCANCODE_GRAVE,        Input::KEY_TILDE);
-    initTranslateKey(SDL_SCANCODE_KP_COMMA,     Input::KEY_COMMA);
-    initTranslateKey(SDL_SCANCODE_COMMA,        Input::KEY_COMMA);
-    initTranslateKey(SDL_SCANCODE_KP_PERIOD,    Input::KEY_PERIOD);
-    initTranslateKey(SDL_SCANCODE_PERIOD,       Input::KEY_PERIOD);
-    initTranslateKey(SDL_SCANCODE_SLASH,        Input::KEY_SLASH);
-    initTranslateKey(SDL_SCANCODE_F1,           Input::KEY_F1);
-    initTranslateKey(SDL_SCANCODE_F2,           Input::KEY_F2);
-    initTranslateKey(SDL_SCANCODE_F3,           Input::KEY_F3);
-    initTranslateKey(SDL_SCANCODE_F4,           Input::KEY_F4);
-    initTranslateKey(SDL_SCANCODE_F5,           Input::KEY_F5);
-    initTranslateKey(SDL_SCANCODE_F6,           Input::KEY_F6);
-    initTranslateKey(SDL_SCANCODE_F7,           Input::KEY_F7);
-    initTranslateKey(SDL_SCANCODE_F8,           Input::KEY_F8);
-    initTranslateKey(SDL_SCANCODE_F9,           Input::KEY_F9);
-    initTranslateKey(SDL_SCANCODE_F10,          Input::KEY_F10);
-    initTranslateKey(SDL_SCANCODE_F11,          Input::KEY_F11);
-    initTranslateKey(SDL_SCANCODE_F12,          Input::KEY_F12);
-    initTranslateKey(SDL_SCANCODE_KP_0,         Input::KEY_NUMPAD0);
-    initTranslateKey(SDL_SCANCODE_KP_1,         Input::KEY_NUMPAD1);
-    initTranslateKey(SDL_SCANCODE_KP_2,         Input::KEY_NUMPAD2);
-    initTranslateKey(SDL_SCANCODE_KP_3,         Input::KEY_NUMPAD3);
-    initTranslateKey(SDL_SCANCODE_KP_4,         Input::KEY_NUMPAD4);
-    initTranslateKey(SDL_SCANCODE_KP_5,         Input::KEY_NUMPAD5);
-    initTranslateKey(SDL_SCANCODE_KP_6,         Input::KEY_NUMPAD6);
-    initTranslateKey(SDL_SCANCODE_KP_7,         Input::KEY_NUMPAD7);
-    initTranslateKey(SDL_SCANCODE_KP_8,         Input::KEY_NUMPAD8);
-    initTranslateKey(SDL_SCANCODE_KP_9,         Input::KEY_NUMPAD9);
-    initTranslateKey(SDL_SCANCODE_0,            Input::KEY_0);
-    initTranslateKey(SDL_SCANCODE_1,            Input::KEY_1);
-    initTranslateKey(SDL_SCANCODE_2,            Input::KEY_2);
-    initTranslateKey(SDL_SCANCODE_3,            Input::KEY_3);
-    initTranslateKey(SDL_SCANCODE_4,            Input::KEY_4);
-    initTranslateKey(SDL_SCANCODE_5,            Input::KEY_5);
-    initTranslateKey(SDL_SCANCODE_6,            Input::KEY_6);
-    initTranslateKey(SDL_SCANCODE_7,            Input::KEY_7);
-    initTranslateKey(SDL_SCANCODE_8,            Input::KEY_8);
-    initTranslateKey(SDL_SCANCODE_9,            Input::KEY_9);
-    initTranslateKey(SDL_SCANCODE_A,            Input::KEY_A);
-    initTranslateKey(SDL_SCANCODE_B,            Input::KEY_B);
-    initTranslateKey(SDL_SCANCODE_C,            Input::KEY_C);
-    initTranslateKey(SDL_SCANCODE_D,            Input::KEY_D);
-    initTranslateKey(SDL_SCANCODE_E,            Input::KEY_E);
-    initTranslateKey(SDL_SCANCODE_F,            Input::KEY_F);
-    initTranslateKey(SDL_SCANCODE_G,            Input::KEY_G);
-    initTranslateKey(SDL_SCANCODE_H,            Input::KEY_H);
-    initTranslateKey(SDL_SCANCODE_I,            Input::KEY_I);
-    initTranslateKey(SDL_SCANCODE_J,            Input::KEY_J);
-    initTranslateKey(SDL_SCANCODE_K,            Input::KEY_K);
-    initTranslateKey(SDL_SCANCODE_L,            Input::KEY_L);
-    initTranslateKey(SDL_SCANCODE_M,            Input::KEY_M);
-    initTranslateKey(SDL_SCANCODE_N,            Input::KEY_N);
-    initTranslateKey(SDL_SCANCODE_O,            Input::KEY_O);
-    initTranslateKey(SDL_SCANCODE_P,            Input::KEY_P);
-    initTranslateKey(SDL_SCANCODE_Q,            Input::KEY_Q);
-    initTranslateKey(SDL_SCANCODE_R,            Input::KEY_R);
-    initTranslateKey(SDL_SCANCODE_S,            Input::KEY_S);
-    initTranslateKey(SDL_SCANCODE_T,            Input::KEY_T);
-    initTranslateKey(SDL_SCANCODE_U,            Input::KEY_U);
-    initTranslateKey(SDL_SCANCODE_V,            Input::KEY_V);
-    initTranslateKey(SDL_SCANCODE_W,            Input::KEY_W);
-    initTranslateKey(SDL_SCANCODE_X,            Input::KEY_X);
-    initTranslateKey(SDL_SCANCODE_Y,            Input::KEY_Y);
-    initTranslateKey(SDL_SCANCODE_Z,            Input::KEY_Z);
+    initTranslateKey(SDL_SCANCODE_ESCAPE,       Input::Key::eEsc);
+    initTranslateKey(SDL_SCANCODE_RETURN,       Input::Key::eReturn);
+    initTranslateKey(SDL_SCANCODE_TAB,          Input::Key::eTab);
+    initTranslateKey(SDL_SCANCODE_BACKSPACE,    Input::Key::eBackspace);
+    initTranslateKey(SDL_SCANCODE_SPACE,        Input::Key::eSpace);
+    initTranslateKey(SDL_SCANCODE_UP,           Input::Key::eUp);
+    initTranslateKey(SDL_SCANCODE_DOWN,         Input::Key::eDown);
+    initTranslateKey(SDL_SCANCODE_LEFT,         Input::Key::eLeft);
+    initTranslateKey(SDL_SCANCODE_RIGHT,        Input::Key::eRight);
+    initTranslateKey(SDL_SCANCODE_PAGEUP,       Input::Key::ePageUp);
+    initTranslateKey(SDL_SCANCODE_PAGEDOWN,     Input::Key::ePageDown);
+    initTranslateKey(SDL_SCANCODE_HOME,         Input::Key::eHome);
+    initTranslateKey(SDL_SCANCODE_END,          Input::Key::eEnd);
+    initTranslateKey(SDL_SCANCODE_PRINTSCREEN,  Input::Key::ePrint);
+    initTranslateKey(SDL_SCANCODE_KP_PLUS,      Input::Key::ePlus);
+    initTranslateKey(SDL_SCANCODE_EQUALS,       Input::Key::ePlus);
+    initTranslateKey(SDL_SCANCODE_KP_MINUS,     Input::Key::eMinus);
+    initTranslateKey(SDL_SCANCODE_MINUS,        Input::Key::eMinus);
+    initTranslateKey(SDL_SCANCODE_GRAVE,        Input::Key::eTilde);
+    initTranslateKey(SDL_SCANCODE_KP_COMMA,     Input::Key::eComma);
+    initTranslateKey(SDL_SCANCODE_COMMA,        Input::Key::eComma);
+    initTranslateKey(SDL_SCANCODE_KP_PERIOD,    Input::Key::ePeriod);
+    initTranslateKey(SDL_SCANCODE_PERIOD,       Input::Key::ePeriod);
+    initTranslateKey(SDL_SCANCODE_SLASH,        Input::Key::eSlash);
+    initTranslateKey(SDL_SCANCODE_F1,           Input::Key::eF1);
+    initTranslateKey(SDL_SCANCODE_F2,           Input::Key::eF2);
+    initTranslateKey(SDL_SCANCODE_F3,           Input::Key::eF3);
+    initTranslateKey(SDL_SCANCODE_F4,           Input::Key::eF4);
+    initTranslateKey(SDL_SCANCODE_F5,           Input::Key::eF5);
+    initTranslateKey(SDL_SCANCODE_F6,           Input::Key::eF6);
+    initTranslateKey(SDL_SCANCODE_F7,           Input::Key::eF7);
+    initTranslateKey(SDL_SCANCODE_F8,           Input::Key::eF8);
+    initTranslateKey(SDL_SCANCODE_F9,           Input::Key::eF9);
+    initTranslateKey(SDL_SCANCODE_F10,          Input::Key::eF10);
+    initTranslateKey(SDL_SCANCODE_F11,          Input::Key::eF11);
+    initTranslateKey(SDL_SCANCODE_F12,          Input::Key::eF12);
+    initTranslateKey(SDL_SCANCODE_KP_0,         Input::Key::eNumpad0);
+    initTranslateKey(SDL_SCANCODE_KP_1,         Input::Key::eNumpad1);
+    initTranslateKey(SDL_SCANCODE_KP_2,         Input::Key::eNumpad2);
+    initTranslateKey(SDL_SCANCODE_KP_3,         Input::Key::eNumpad3);
+    initTranslateKey(SDL_SCANCODE_KP_4,         Input::Key::eNumpad4);
+    initTranslateKey(SDL_SCANCODE_KP_5,         Input::Key::eNumpad5);
+    initTranslateKey(SDL_SCANCODE_KP_6,         Input::Key::eNumpad6);
+    initTranslateKey(SDL_SCANCODE_KP_7,         Input::Key::eNumpad7);
+    initTranslateKey(SDL_SCANCODE_KP_8,         Input::Key::eNumpad8);
+    initTranslateKey(SDL_SCANCODE_KP_9,         Input::Key::eNumpad9);
+    initTranslateKey(SDL_SCANCODE_0,            Input::Key::e0);
+    initTranslateKey(SDL_SCANCODE_1,            Input::Key::e1);
+    initTranslateKey(SDL_SCANCODE_2,            Input::Key::e2);
+    initTranslateKey(SDL_SCANCODE_3,            Input::Key::e3);
+    initTranslateKey(SDL_SCANCODE_4,            Input::Key::e4);
+    initTranslateKey(SDL_SCANCODE_5,            Input::Key::e5);
+    initTranslateKey(SDL_SCANCODE_6,            Input::Key::e6);
+    initTranslateKey(SDL_SCANCODE_7,            Input::Key::e7);
+    initTranslateKey(SDL_SCANCODE_8,            Input::Key::e8);
+    initTranslateKey(SDL_SCANCODE_9,            Input::Key::e9);
+    initTranslateKey(SDL_SCANCODE_A,            Input::Key::eA);
+    initTranslateKey(SDL_SCANCODE_B,            Input::Key::eB);
+    initTranslateKey(SDL_SCANCODE_C,            Input::Key::eC);
+    initTranslateKey(SDL_SCANCODE_D,            Input::Key::eD);
+    initTranslateKey(SDL_SCANCODE_E,            Input::Key::eE);
+    initTranslateKey(SDL_SCANCODE_F,            Input::Key::eF);
+    initTranslateKey(SDL_SCANCODE_G,            Input::Key::eG);
+    initTranslateKey(SDL_SCANCODE_H,            Input::Key::eH);
+    initTranslateKey(SDL_SCANCODE_I,            Input::Key::eI);
+    initTranslateKey(SDL_SCANCODE_J,            Input::Key::eJ);
+    initTranslateKey(SDL_SCANCODE_K,            Input::Key::eK);
+    initTranslateKey(SDL_SCANCODE_L,            Input::Key::eL);
+    initTranslateKey(SDL_SCANCODE_M,            Input::Key::eM);
+    initTranslateKey(SDL_SCANCODE_N,            Input::Key::eN);
+    initTranslateKey(SDL_SCANCODE_O,            Input::Key::eO);
+    initTranslateKey(SDL_SCANCODE_P,            Input::Key::eP);
+    initTranslateKey(SDL_SCANCODE_Q,            Input::Key::eQ);
+    initTranslateKey(SDL_SCANCODE_R,            Input::Key::eR);
+    initTranslateKey(SDL_SCANCODE_S,            Input::Key::eS);
+    initTranslateKey(SDL_SCANCODE_T,            Input::Key::eT);
+    initTranslateKey(SDL_SCANCODE_U,            Input::Key::eU);
+    initTranslateKey(SDL_SCANCODE_V,            Input::Key::eV);
+    initTranslateKey(SDL_SCANCODE_W,            Input::Key::eW);
+    initTranslateKey(SDL_SCANCODE_X,            Input::Key::eX);
+    initTranslateKey(SDL_SCANCODE_Y,            Input::Key::eY);
+    initTranslateKey(SDL_SCANCODE_Z,            Input::Key::eZ);
 
-    std::memset(_translateGamepad, uint8_t(Input::KEY_COUNT), sizeof(_translateGamepad) );
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_A,             Input::KEY_GAMEPAD_A);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_B,             Input::KEY_GAMEPAD_B);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_X,             Input::KEY_GAMEPAD_X);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_Y,             Input::KEY_GAMEPAD_Y);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_LEFTSTICK,     Input::KEY_GAMEPAD_THUMB_LEFT);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_RIGHTSTICK,    Input::KEY_GAMEPAD_THUMB_RIGHT);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_LEFTSHOULDER,  Input::KEY_GAMEPAD_SHOULDER_LEFT);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, Input::KEY_GAMEPAD_SHOULDER_RIGHT);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_DPAD_UP,       Input::KEY_GAMEPAD_UP);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_DPAD_DOWN,     Input::KEY_GAMEPAD_DOWN);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_DPAD_LEFT,     Input::KEY_GAMEPAD_LEFT);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_DPAD_RIGHT,    Input::KEY_GAMEPAD_RIGHT);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_BACK,          Input::KEY_GAMEPAD_BACK);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_START,         Input::KEY_GAMEPAD_START);
-    initTranslateGamepad(SDL_CONTROLLER_BUTTON_GUIDE,         Input::KEY_GAMEPAD_GUIDE);
+    std::memset(_translateGamepad, uint8_t(Input::Key::eCount), sizeof(_translateGamepad) );
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_A,             Input::Key::eGamepadA);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_B,             Input::Key::eGamepadB);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_X,             Input::Key::eGamepadX);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_Y,             Input::Key::eGamepadY);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_LEFTSTICK,     Input::Key::eGamepadThumbLeft);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_RIGHTSTICK,    Input::Key::eGamepadThumbRight);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_LEFTSHOULDER,  Input::Key::eGamepadShoulderLeft);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, Input::Key::eGamepadShoulderRight);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_DPAD_UP,       Input::Key::eGamepadUp);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_DPAD_DOWN,     Input::Key::eGamepadDown);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_DPAD_LEFT,     Input::Key::eGamepadLeft);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_DPAD_RIGHT,    Input::Key::eGamepadRight);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_BACK,          Input::Key::eGamepadBack);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_START,         Input::Key::eGamepadStart);
+    initTranslateGamepad(SDL_CONTROLLER_BUTTON_GUIDE,         Input::Key::eGamepadGuide);
 
-    std::memset(_translateGamepadAxis, uint8_t(Input::GAMEPAD_AXIS_COUNT), sizeof(_translateGamepadAxis) );
-    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_LEFTX,        Input::GAMEPAD_AXIS_LEFT_X);
-    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_LEFTY,        Input::GAMEPAD_AXIS_LEFT_Y);
-    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_TRIGGERLEFT,  Input::GAMEPAD_AXIS_LEFT_Z);
-    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_RIGHTX,       Input::GAMEPAD_AXIS_RIGHT_X);
-    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_RIGHTY,       Input::GAMEPAD_AXIS_RIGHT_Y);
-    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT, Input::GAMEPAD_AXIS_RIGHT_Z);
+    std::memset(_translateGamepadAxis, uint8_t(Input::GamepadAxis::eCount), sizeof(_translateGamepadAxis) );
+    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_LEFTX,        Input::GamepadAxis::eLeftX);
+    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_LEFTY,        Input::GamepadAxis::eLeftY);
+    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_TRIGGERLEFT,  Input::GamepadAxis::eLeftZ);
+    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_RIGHTX,       Input::GamepadAxis::eRightX);
+    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_RIGHTY,       Input::GamepadAxis::eRightY);
+    initTranslateGamepadAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT, Input::GamepadAxis::eRightZ);
 }
 
 Platform::~Platform()
@@ -293,7 +295,7 @@ int Platform::run()
 
     Input* input = Input::getInput();
     input->initialize();
-    Gamepad gamepads[GP_GAMEPADS_MAX];
+    Gamepad gamepads[Input::kGamepadsMax];
     int mx, my, mz = 0.0f;
     bool exit = false;
     _running = true;
@@ -332,13 +334,13 @@ int Platform::run()
                         {
                         default:
                         case SDL_BUTTON_LEFT:
-                            button = Input::MOUSE_BUTTON_LEFT;
+                            button = Input::MouseButton::eLeft;
                             break;
                         case SDL_BUTTON_MIDDLE:
-                            button = Input::MOUSE_BUTTON_MIDDLE;
+                            button = Input::MouseButton::eMiddle;
                             break;
                         case SDL_BUTTON_RIGHT:
-                            button = Input::MOUSE_BUTTON_RIGHT;
+                            button = Input::MouseButton::eRight;
                             break;
                         }
                         input->postMousePressEvent(mouseEvent.x, mouseEvent.y, 0, button, 
@@ -369,26 +371,26 @@ int Platform::run()
                     {
                         const SDL_KeyboardEvent& keyEvent = evt.key;
 
-                        uint8_t keyModifiers = translateKeyModifiers(keyEvent.keysym.mod);
+                        Input::KeyModifiers keyModifiers = translateKeyModifiers(keyEvent.keysym.mod);
                         Input::Key key = translateKey(keyEvent.keysym.scancode);
-                        if (key == 0 && keyModifiers == 0)
+                        if (static_cast<uint32_t>(key) == 0 && keyModifiers == Input::KeyModifiers::eNone)
                         {
-                            keyModifiers = translateKeyModifierPress(keyEvent.keysym.scancode);
+                            keyModifiers = translateKeyModifiersPress(keyEvent.keysym.scancode);
                         }
 
-                        if (key == Input::KEY_ESC)
+                        if (key == Input::Key::eEsc)
                         {
                             char pressedChar = 0x1b;
                             input->postKeyCharEvent(pressedChar);
                             game->onKeyChar(pressedChar);
                         }
-                        else if (key == Input::KEY_RETURN)
+                        else if (key == Input::Key::eReturn)
                         {
                             char pressedChar = 0x0d;
                             input->postKeyCharEvent(pressedChar);
                             game->onKeyChar(pressedChar);
                         }
-                        else if (key == Input::KEY_BACKSPACE)
+                        else if (key == Input::Key::eBackspace)
                         {
                             uint8_t pressedChar = 0x08;
                             input->postKeyCharEvent(pressedChar);
@@ -402,7 +404,7 @@ int Platform::run()
                     case SDL_KEYUP:
                         {
                             const SDL_KeyboardEvent& keyEvent = evt.key;
-                            uint8_t keyModifiers = translateKeyModifiers(keyEvent.keysym.mod);
+                            Input::KeyModifiers keyModifiers = translateKeyModifiers(keyEvent.keysym.mod);
                             Input::Key key = translateKey(keyEvent.keysym.scancode);
                             input->postKeyPressEvent(key, keyModifiers, keyEvent.state == SDL_PRESSED);
                             game->onKeyPress(key, keyModifiers, keyEvent.state == SDL_PRESSED);
@@ -469,10 +471,10 @@ int Platform::run()
                         {
                             const SDL_JoyButtonEvent& buttonEvent = evt.jbutton;
                             Input::Key key = translateGamepad(buttonEvent.button);
-                            if (key != Input::KEY_COUNT)
+                            if (key != Input::Key::eCount)
                             {
-                                input->postKeyPressEvent(key, 0, evt.type == SDL_JOYBUTTONDOWN);
-                                game->onKeyPress(key, 0, evt.type == SDL_JOYBUTTONDOWN);
+                                input->postKeyPressEvent(key, Input::KeyModifiers::eNone, evt.type == SDL_JOYBUTTONDOWN);
+                                game->onKeyPress(key, Input::KeyModifiers::eNone, evt.type == SDL_JOYBUTTONDOWN);
                             }
                         }
                         break;
@@ -482,10 +484,10 @@ int Platform::run()
                         {
                             const SDL_ControllerButtonEvent& buttonEvent = evt.cbutton;
                             Input::Key key = translateGamepad(buttonEvent.button);
-                            if (key != Input::KEY_COUNT)
+                            if (key != Input::Key::eCount)
                             {
-                                input->postKeyPressEvent(key, 0, evt.type == SDL_CONTROLLERBUTTONDOWN);
-                                game->onKeyPress(key, 0, evt.type == SDL_CONTROLLERBUTTONDOWN);
+                                input->postKeyPressEvent(key, Input::KeyModifiers::eNone, evt.type == SDL_CONTROLLERBUTTONDOWN);
+                                game->onKeyPress(key, Input::KeyModifiers::eNone, evt.type == SDL_CONTROLLERBUTTONDOWN);
                             }
                         }
                         break;
@@ -614,60 +616,59 @@ Input::Key Platform::translateKey(SDL_Scancode sdl)
     return (Input::Key)_translateKey[sdl & 0xff];
 }
 
-uint8_t Platform::translateKeyModifiers(uint16_t sdl)
+ Input::KeyModifiers Platform::translateKeyModifiers(uint16_t sdl)
 {
-    uint8_t keyModifiers = 0;
-    keyModifiers |= sdl & KMOD_LALT   ? Input::KEY_MODIFIER_LEFT_ALT    : 0;
-    keyModifiers |= sdl & KMOD_RALT   ? Input::KEY_MODIFIER_RIGHT_ALT   : 0;
-    keyModifiers |= sdl & KMOD_LCTRL  ? Input::KEY_MODIFIER_LEFT_CTRL   : 0;
-    keyModifiers |= sdl & KMOD_RCTRL  ? Input::KEY_MODIFIER_RIGHT_CTRL  : 0;
-    keyModifiers |= sdl & KMOD_LSHIFT ? Input::KEY_MODIFIER_LEFT_SHIFT  : 0;
-    keyModifiers |= sdl & KMOD_RSHIFT ? Input::KEY_MODIFIER_RIGHT_SHIFT : 0;
-    keyModifiers |= sdl & KMOD_LGUI   ? Input::KEY_MODIFIER_LEFT_META   : 0;
-    keyModifiers |= sdl & KMOD_RGUI   ? Input::KEY_MODIFIER_RIGHT_META  : 0;
+    Input::KeyModifiers keyModifiers = Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_LALT   ? Input::KeyModifiers::eLeftAlt   : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_RALT   ? Input::KeyModifiers::eRightAlt   : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_LCTRL  ? Input::KeyModifiers::eLeftCtrl   : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_RCTRL  ? Input::KeyModifiers::eRightCtrl  : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_LSHIFT ? Input::KeyModifiers::eLeftShift  : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_RSHIFT ? Input::KeyModifiers::eRightShift : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_LGUI   ? Input::KeyModifiers::eLeftMeta   : Input::KeyModifiers::eNone;
+    keyModifiers |= sdl & KMOD_RGUI   ? Input::KeyModifiers::eRightMeta  : Input::KeyModifiers::eNone;
     return keyModifiers;
 }
 
-uint8_t Platform::translateKeyModifierPress(uint16_t key)
+Input::KeyModifiers Platform::translateKeyModifiersPress(uint16_t key)
 {
-    uint8_t keyModifier;
+    Input::KeyModifiers keyModifiers = Input::KeyModifiers::eNone;
     switch (key)
     {
-        case SDL_SCANCODE_LALT:
-            keyModifier = Input::KEY_MODIFIER_LEFT_ALT;
-            break;
-        case SDL_SCANCODE_RALT:
-            keyModifier = Input::KEY_MODIFIER_RIGHT_ALT;
-            break;
-        case SDL_SCANCODE_LCTRL:
-            keyModifier = Input::KEY_MODIFIER_LEFT_CTRL;
-            break;
-        case SDL_SCANCODE_RCTRL:
-            keyModifier = Input::KEY_MODIFIER_RIGHT_CTRL;
-            break;
-        case SDL_SCANCODE_LSHIFT:
-            keyModifier = Input::KEY_MODIFIER_LEFT_SHIFT;
-            break;
-        case SDL_SCANCODE_RSHIFT:
-            keyModifier = Input::KEY_MODIFIER_RIGHT_SHIFT;
-            break;
-        case SDL_SCANCODE_LGUI:
-            keyModifier = Input::KEY_MODIFIER_LEFT_META;
-            break;
-        case SDL_SCANCODE_RGUI:
-            keyModifier = Input::KEY_MODIFIER_RIGHT_META;
-            break;
-        default:
-            keyModifier = 0;
-            break;
+    case SDL_SCANCODE_LALT:
+        keyModifiers = Input::KeyModifiers::eLeftAlt;
+        break;
+    case SDL_SCANCODE_RALT:
+        keyModifiers = Input::KeyModifiers::eRightAlt;
+        break;
+    case SDL_SCANCODE_LCTRL:
+        keyModifiers = Input::KeyModifiers::eLeftCtrl;
+        break;
+    case SDL_SCANCODE_RCTRL:
+        keyModifiers = Input::KeyModifiers::eRightCtrl;
+        break;
+    case SDL_SCANCODE_LSHIFT:
+        keyModifiers = Input::KeyModifiers::eLeftShift;
+        break;
+    case SDL_SCANCODE_RSHIFT:
+        keyModifiers = Input::KeyModifiers::eRightShift;
+        break;
+    case SDL_SCANCODE_LGUI:
+        keyModifiers = Input::KeyModifiers::eLeftMeta;
+        break;
+    case SDL_SCANCODE_RGUI:
+        keyModifiers = Input::KeyModifiers::eRightMeta;
+        break;
+    default:
+        keyModifiers = Input::KeyModifiers::eNone;
+        break;
     }
-
-    return keyModifier;
+    return keyModifiers;
 }
 
 void Platform::initTranslateGamepad(uint8_t sdl, Input::Key button)
 {
-    _translateGamepad[sdl] = button;
+    _translateGamepad[sdl] = static_cast<uint8_t>(button);
 }
 
 Input::Key Platform::translateGamepad(uint8_t sdl)

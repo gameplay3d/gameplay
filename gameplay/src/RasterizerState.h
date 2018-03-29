@@ -16,45 +16,45 @@ public:
     /**
      * Defines the mode in which polygons are filled.
      */
-    enum FillMode
+    enum class FillMode
     {
-        FILL_MODE_SOLID,
-        FILL_MODE_WIREFRAME
+        eSolid,
+        eWireframe
     };
 
     /**
      * Defines the triangle culling mode.
      */
-    enum CullMode
+    enum class CullMode
     {
-        CULL_MODE_NONE,
-        CULL_MODE_BACK,
-        CULL_MODE_FRONT
+        eNone,
+        eBack,
+        eFront
     };
 
     /**
      * Define the polygon front-facing orientation.
      */
-    enum FrontFace : uint32_t
+    enum class FrontFace
     {
-        FRONT_FACE_CCW,
-        FRONT_FACE_CW
+        eCCW,
+        eCW
     };
 
     /**
      * The polygon fill mode.
      */
-    FillMode fillMode = FILL_MODE_SOLID;
+    FillMode fillMode = FillMode::eSolid;
 
     /**
      * The triangle culling mode.
      */
-    CullMode cullMode = CULL_MODE_NONE;
+    CullMode cullMode = CullMode::eNone;
 
     /**
      * The polygon front-facing orientation.
      */
-    FrontFace frontFace = FRONT_FACE_CCW;
+    FrontFace frontFace = FrontFace::eCCW;
 
     /**
      * Whether to bias fragment depth values.
@@ -84,7 +84,7 @@ public:
     /**
      * The texture multi-sampling count.
      */
-    Texture::SampleCount multiSampleCount = Texture::SAMPLE_COUNT_1X;
+    Texture::SampleCount multiSampleCount = Texture::SampleCount::e1X;
 };
 
 }

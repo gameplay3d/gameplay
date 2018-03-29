@@ -36,9 +36,4 @@ std::shared_ptr<AudioListener> Audio::getAudioListener() const
     return nullptr;
 }
 
-std::shared_ptr<AudioSource> Audio::createAudioSource(std::string url, bool streamed)
-{
-    return nullptr;
-}
-
 }

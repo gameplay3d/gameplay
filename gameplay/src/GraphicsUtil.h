@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Texture.h"
 #include "vulkan/vulkan.h"
 
 namespace gameplay
@@ -209,27 +210,27 @@ static const VkFrontFace lookupVkFrontFace[] =
 VkImageLayout toVkImageLayout(Texture::Usage usage)
 {
     VkImageLayout result = VK_IMAGE_LAYOUT_UNDEFINED;
-    switch (usage) 
+    switch (usage)
     {
-    case Texture::USAGE_TRANSFER_SRC: 
+    case Texture::Usage::eTransferSrc:
         result = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL; 
         break;
-    case Texture::USAGE_TRANSFER_DST: 
+    case Texture::Usage::eTransferDst:
         result = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL; 
         break;
-    case Texture::USAGE_SAMPLED_IMAGE: 
+    case Texture::Usage::eSampledImage:
         result = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL; 
         break;
-    case Texture::USAGE_STORAGE: 
+    case Texture::Usage::eStorage:
         result = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL; 
         break;
-    case Texture::USAGE_COLOR_ATTACHMENT: 
+    case Texture::Usage::eColorAttachment:
         result = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; 
         break;
-    case Texture::USAGE_DEPTH_STENCIL_ATTACHMENT: 
+    case Texture::Usage::eDepthStencilAttachment:
         result = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL; 
         break;
-    case Texture::USAGE_PRESENT: 
+    case Texture::Usage::ePresent:
         result = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; 
         break;
     }
@@ -239,27 +240,27 @@ VkImageLayout toVkImageLayout(Texture::Usage usage)
 static VkImageUsageFlags toVkImageUsageFlags(Texture::Usage usage)
 {
      VkImageUsageFlags result = 0;
-    if (Texture::USAGE_TRANSFER_SRC == (usage & Texture::USAGE_TRANSFER_SRC))
+    if (bool(usage & Texture::Usage::eTransferSrc))
     {
         result |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
     }
-    if (Texture::USAGE_TRANSFER_DST == (usage & Texture::USAGE_TRANSFER_DST))
+    if (bool(usage & Texture::Usage::eTransferDst))
     {
         result |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
     }
-    if (Texture::USAGE_SAMPLED_IMAGE == (usage & Texture::USAGE_SAMPLED_IMAGE))
+    if (bool(usage & Texture::Usage::eSampledImage))
     {
         result |= VK_IMAGE_USAGE_SAMPLED_BIT;
     }
-    if (Texture::USAGE_STORAGE == (usage & Texture::USAGE_STORAGE))
+    if (bool(usage & Texture::Usage::eStorage))
     {
         result |= VK_IMAGE_USAGE_STORAGE_BIT;
     }
-    if (Texture::USAGE_COLOR_ATTACHMENT == (usage & Texture::USAGE_COLOR_ATTACHMENT))
+    if (bool(usage & Texture::Usage::eColorAttachment))
     {
         result |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     }
-    if (Texture::USAGE_DEPTH_STENCIL_ATTACHMENT == (usage & Texture::USAGE_DEPTH_STENCIL_ATTACHMENT))
+    if (bool(usage & Texture::Usage::eDepthStencilAttachment))
     {
         result |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT|VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
     }
@@ -312,80 +313,80 @@ static VkImageAspectFlags toVkImageAspectFlags(VkFormat format)
 
 static Format toFormat(VkFormat pixelFormat)
 {
-    Format result = Format::FORMAT_UNDEFINED;   
+    Format result = Format::eUndefined;
     switch (pixelFormat) 
     {
     case VK_FORMAT_R8_UNORM:
-        result = Format::FORMAT_R8_UNORM; 
+        result = Format::eR8Unorm;
         break;
     case VK_FORMAT_R16_UNORM:
-        result = Format::FORMAT_R16_UNORM;
+        result = Format::eR16Unorm;
         break;
     case VK_FORMAT_R16_SFLOAT:
-        result = Format::FORMAT_R16_FLOAT;
+        result = Format::eR16Float;
         break;
     case VK_FORMAT_R32_UINT:
-        result = Format::FORMAT_R32_UINT;
+        result = Format::eR32Uint;
         break;
     case VK_FORMAT_R32_SFLOAT:
-        result = Format::FORMAT_R32_FLOAT;
+        result = Format::eR32Float;
         break;        
     case VK_FORMAT_R8G8_UNORM:
-        result = Format::FORMAT_R8G8_UNORM;
+        result = Format::eR8G8Unorm;
         break;
     case VK_FORMAT_R16G16_UNORM:
-        result = Format::FORMAT_R16G16_UNORM;
+        result = Format::eR16G16Unorm;
         break;
     case VK_FORMAT_R16G16_SFLOAT:
-        result = Format::FORMAT_R16G16_FLOAT;
+        result = Format::eR16G16Float;
         break;
     case VK_FORMAT_R32G32_UINT:
-        result = Format::FORMAT_R32G32_UINT;
+        result = Format::eR32G32Uint;
         break;
     case VK_FORMAT_R32G32_SFLOAT:
-        result = Format::FORMAT_R32G32_FLOAT;
+        result = Format::eR32G32Float;
         break;
     case VK_FORMAT_R32G32B32_UINT:
-        result = Format::FORMAT_R32G32B32_UINT;
+        result = Format::eR32G32B32Uint;
         break;
     case VK_FORMAT_R32G32B32_SFLOAT:
-        result = Format::FORMAT_R32G32B32_FLOAT;
+        result = Format::eR32G32B32Float;
         break;
     case VK_FORMAT_B8G8R8A8_UNORM:
-        result = Format::FORMAT_B8G8R8A8_UNORM;
+        result = Format::eB8G8R8A8Unorm;
         break;
     case VK_FORMAT_R8G8B8A8_UNORM:
-        result = Format::FORMAT_R8G8B8A8_UNORM;
+        result = Format::eR8G8B8A8Unorm;
         break;
     case VK_FORMAT_R16G16B16A16_UNORM:
-        result = Format::FORMAT_R16G16B16A16_UNORM;
+        result = Format::eR16G16B16A16Unorm;
         break;
     case VK_FORMAT_R16G16B16A16_SFLOAT:
-        result = Format::FORMAT_R16G16B16A16_FLOAT;
+        result = Format::eR16G16B16A16Float;
         break;
     case VK_FORMAT_R32G32B32A32_UINT:
-        result = Format::FORMAT_R32G32B32A32_UINT;
+        result = Format::eR32G32B32A32Uint;
         break;
     case VK_FORMAT_R32G32B32A32_SFLOAT:
-        result = Format::FORMAT_R32G32B32A32_FLOAT;
+        result = Format::eR32G32B32A32Float;
         break;    
     case VK_FORMAT_D16_UNORM:
-        result = Format::FORMAT_D16_UNORM;
+        result = Format::eD16Unorm;
         break;
     case VK_FORMAT_X8_D24_UNORM_PACK32:
-        result = Format::FORMAT_X8_D24_UNORM_PACK32;
+        result = Format::eX8D24UnormPack32;
         break;
     case VK_FORMAT_D32_SFLOAT:
-        result = Format::FORMAT_D32_FLOAT;
+        result = Format::eD32Float;
         break;
     case VK_FORMAT_S8_UINT:
-        result = Format::FORMAT_S8_UINT;
+        result = Format::eS8Uint;
         break;
     case VK_FORMAT_D24_UNORM_S8_UINT:
-        result = Format::FORMAT_D24_UNORM_S8_UINT;
+        result = Format::eD24UnormS8Uint;
         break;
     case VK_FORMAT_D32_SFLOAT_S8_UINT:
-        result = Format::FORMAT_D32_FLOAT_S8_UINT;
+        result = Format::eD32FloatS8Uint;
         break;
     }
     return result;

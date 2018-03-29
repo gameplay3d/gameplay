@@ -37,30 +37,31 @@ public:
         /**
          * Defines the type of resource.
          */
-        enum Type
+        enum class Type
         {
-            TYPE_UNDEFINED,
-            TYPE_UNIFORM,
-            TYPE_TEXTURE,
-            TYPE_SAMPLER
+            eUndefined,
+            eUniform,
+            eTexture,
+            eSampler
         };
 
         /**
          * Defines the shader stages.
          */
-        enum ShaderStages : uint32_t
+        enum class ShaderStages : uint32_t
         {
-            SHADER_STAGE_VERT = 0x00000001,
-            SHADER_STAGE_TESC = 0x00000002,
-            SHADER_STAGE_TESE = 0x00000004,
-            SHADER_STAGE_GEOM = 0x00000008,
-            SHADER_STAGE_FRAG = 0x00000010
+            eNone = 0x00000000,
+            eVert = 0x00000001,
+            eTesc = 0x00000002,
+            eTese = 0x00000004,
+            eGeom = 0x00000008,
+            eFrag = 0x00000010
         };
 
         /**
          * The type of descriptor.
          */
-        Type type = TYPE_UNDEFINED;
+        Type type = Type::eUndefined;
 
         /**
          * The descriptor binding index.
@@ -75,7 +76,7 @@ public:
         /**
          * The stage in the shader that the resource is accessible from.
          */
-        ShaderStages shaderStages = SHADER_STAGE_VERT;
+        ShaderStages shaderStages = ShaderStages::eNone;
 
         std::shared_ptr<Buffer> uniforms[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
         std::shared_ptr<Texture> textures[GP_GRAPHICS_DESCRIPTOR_ENTRIES_MAX];
@@ -121,3 +122,5 @@ private:
 };
 
 }
+
+GP_ENABLE_BITWISE_OPERATORS(gameplay::DescriptorSet::Descriptor::ShaderStages);

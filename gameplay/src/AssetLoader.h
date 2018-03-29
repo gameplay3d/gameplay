@@ -38,7 +38,7 @@ public:
      * @param url The asset url to retrieve the dependencies for.
      * @param dependencies The found dependencies for the url specified.
      */
-    virtual void getDependencies(std::string url, std::vector<std::shared_ptr<Asset> > dependencies) = 0;
+    virtual void getDependencies(std::string url, std::vector<std::shared_ptr<Asset>> dependencies) = 0;
 
     /**
      * Loads the assets.

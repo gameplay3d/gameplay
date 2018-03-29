@@ -14,10 +14,10 @@ public:
      */
     enum CombineMode
     {
-        COMBINE_MODE_AVERAGE,
-        COMBINE_MODE_MINIMUM,
-        COMBINE_MODE_MAXIMUM,
-        COMBINE_MODE_MULTIPLY
+        eAverage,
+        eMin,
+        eMax,
+        eMulitply
     };
 
     /**

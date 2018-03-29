@@ -70,11 +70,11 @@ void GameView::resizeEvent(QResizeEvent* evt)
    Input::getInput()->postMousePressEvent(_mousePosition.x(),
                                           _mousePosition.y(),
                                           _mouseScroll,
-                                          Input::MOUSE_BUTTON_LEFT,
+                                          Input::MouseButton::eLeft,
                                           false);
    Input::getInput()->postMousePressEvent(_mousePosition.x(),
                                           _mousePosition.y(),
-                                          _mouseScroll, Input::MOUSE_BUTTON_RIGHT, false);
+                                          _mouseScroll, Input::MouseButton::eRight, false);
  }
 
 void GameView::mousePressEvent(QMouseEvent* evt)
@@ -143,26 +143,26 @@ Input::MouseButton GameView::translateMouseButton(Qt::MouseButtons buttons)
 {
     if (buttons & Qt::LeftButton)
     {
-         return Input::MOUSE_BUTTON_LEFT;
+         return Input::MouseButton::eLeft;
     }
     else if (buttons & Qt::RightButton)
     {
-        return Input::MOUSE_BUTTON_RIGHT;
+        return Input::MouseButton::eRight;
     }
-    return Input::MOUSE_BUTTON_MIDDLE;
+    return Input::MouseButton::eMiddle;
 }
 
 Input::MouseButton GameView::translateMouseButton(Qt::MouseButton button)
 {
     if (button == Qt::LeftButton)
     {
-        return Input::MOUSE_BUTTON_LEFT;
+        return Input::MouseButton::eLeft;
     }
     else if (button == Qt::RightButton)
     {
-        return Input::MOUSE_BUTTON_RIGHT;
+        return Input::MouseButton::eRight;
     }
-    return Input::MOUSE_BUTTON_MIDDLE;
+    return Input::MouseButton::eMiddle;
 }
 
 

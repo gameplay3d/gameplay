@@ -38,9 +38,16 @@ public:
     PhysicsJoint::Type getType() const;
 
     /**
-     * @see Component::getTypeId
+     * @see Serializer::Activator::createObject
      */
-    Component::TypeId getTypeId();
+    static std::shared_ptr<Serializable> createObject();
+
+    /**
+     * @see Component::getClassType
+     */
+    Component::ClassType getClassType();
+
+protected:
 
     /**
      * @see Serializable::getClassName
@@ -55,13 +62,7 @@ public:
     /**
      * @see Serializable::onDeserialize
      */
-    void onDeserialize(Serializer* serializer);
-    
-    /**
-     * @see Serializer::Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
-
+    void onDeserialize(Serializer* serializer);  
 };
 
 }

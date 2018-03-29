@@ -12,7 +12,6 @@ Script::~Script()
 {
 }
 
-
 void Script::onInitialize()
 {
 }

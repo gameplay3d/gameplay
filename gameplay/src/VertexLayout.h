@@ -15,27 +15,27 @@ public:
     /**
      * Defines semantics for vertex attributes.
      */
-    enum Semantic
+    enum class Semantic
     {
-        SEMANTIC_POSITION = 0,
-        SEMANTIC_NORMAL,
-        SEMANTIC_COLOR,
-        SEMANTIC_COLOR0,
-        SEMANTIC_COLOR1,
-        SEMANTIC_COLOR2,
-        SEMANTIC_COLOR3,
-        SEMANTIC_COLOR4,
-        SEMANTIC_TANGENT,
-        SEMANTIC_BITANGENT,
-        SEMANTIC_TEXCOORD,
-        SEMANTIC_TEXCOORD0,
-        SEMANTIC_TEXCOORD1,
-        SEMANTIC_TEXCOORD2,
-        SEMANTIC_TEXCOORD3,
-        SEMANTIC_TEXCOORD4,
-        SEMANTIC_TEXCOORD5,
-        SEMANTIC_TEXCOORD6,
-        SEMANTIC_TEXCOORD7
+        ePosition,
+        eNormal,
+        eColor,
+        eColor0,
+        eColor1,
+        eColor2,
+        eColor3,
+        eColor4,
+        eTangent,
+        eBitangent,
+        eTexCoord,
+        eTexCoord0,
+        eTexCoord1,
+        eTexCoord2,
+        eTexCoord3,
+        eTexCoord4,
+        eTexCoord5,
+        eTexCoord6,
+        eTexCoord7
     };
 
     /**
@@ -45,8 +45,8 @@ public:
     {
     public:
 
-        Semantic semantic = VertexLayout::SEMANTIC_POSITION;
-        Format format = Format::FORMAT_UNDEFINED;
+        Semantic semantic = Semantic::ePosition;
+        Format format = Format::eUndefined;
         uint32_t binding = 0;
         uint32_t location = 0;
         uint32_t offset = 0;
@@ -133,6 +133,14 @@ public:
     size_t getStride() const;
 
     /**
+     * Gets the vertex stride for a specified format.
+     *
+     * @param format The format to get the stride for.
+     * @return The vertex stride for a specified format.
+     */
+    static size_t toStride(Format format);
+
+    /**
      * Compares two vertex layouts for equality.
      *
      * @param layout The vertex layout to compare.
@@ -147,9 +155,6 @@ public:
      * @return true if the attributes in this VertexLayout are not equal to the specified one, false otherwise.
      */
     bool operator != (const VertexLayout& layout) const;
-
-
-    static size_t toStride(Format format);
 
 private:
 

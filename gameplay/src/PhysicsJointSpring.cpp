@@ -14,7 +14,7 @@ PhysicsJointSpring::~PhysicsJointSpring()
 
 PhysicsJoint::Type PhysicsJointSpring::getType() const
 {
-    return PhysicsJoint::TYPE_SPRING;
+    return Type::eSpring;
 }
 
 float PhysicsJointSpring::getDistance() const
@@ -67,9 +67,14 @@ float PhysicsJointSpring::getDampening() const
     return 0.0f;
 }
 
-Component::TypeId PhysicsJointSpring::getTypeId()
+std::shared_ptr<Serializable> PhysicsJointSpring::createObject()
 {
-    return Component::TYPEID_PHYSICS_JOINT_SPRING;
+    return std::shared_ptr<PhysicsJointSpring>();
+}
+
+Component::ClassType PhysicsJointSpring::getClassType()
+{
+    return ClassType::ePhysicsJointSpring;
 }
 
 std::string PhysicsJointSpring::getClassName()
@@ -85,11 +90,6 @@ void PhysicsJointSpring::onSerialize(Serializer * serializer)
 void PhysicsJointSpring::onDeserialize(Serializer * serializer)
 {
     PhysicsJoint::onDeserialize(serializer);
-}
-
-std::shared_ptr<Serializable> PhysicsJointSpring::createObject()
-{
-    return std::shared_ptr<PhysicsJointSpring>();
 }
 
 }

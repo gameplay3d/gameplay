@@ -5,7 +5,7 @@ namespace gameplay
 {
 
 Buffer::Buffer() :
-    _usage(USAGE_VERTEX), 
+    _usage(Usage::eVertex),
     _size(0), 
     _stride(0), 
     _hostVisible(true),
@@ -26,7 +26,7 @@ Buffer::Usage Buffer::getUsage() const
 
 size_t Buffer::getSize() const
 {
-    return size_t();
+    return _size;
 }
 
 size_t Buffer::getStride() const

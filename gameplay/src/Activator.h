@@ -48,7 +48,6 @@ public:
      */
     typedef int (*EnumParseCallback)(const std::string& enumName, const std::string& str);
     
-    
     /**
      * Creates a new shared object for the specified class name.
      *
@@ -105,7 +104,7 @@ private:
     Activator();
     
     std::map<std::string, CreateObjectCallback> _classes;
-    std::map<std::string, std::pair<EnumToStringCallback, EnumParseCallback> > _enums;
+    std::map<std::string, std::pair<EnumToStringCallback, EnumParseCallback>> _enums;
 };
 
 }

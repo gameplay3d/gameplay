@@ -111,48 +111,46 @@ static std::string __keyNames[] =
 
 std::string Input::getKeyName(Input::Key key)
 {
-    GP_ASSERT(key < Input::Key::KEY_COUNT);
-    return __keyNames[key];
+    GP_ASSERT(key < Input::Key::eCount);
+    return __keyNames[static_cast<uint32_t>(key)];
 }
 
-char Input::getKeyCode(Input::Key key, uint8_t keyModifiers)
+char Input::getKeyCode(Input::Key key, Input::KeyModifiers keyModifiers)
 {
-    const bool isAscii = (Key::KEY_0 <= key && key <= Key::KEY_Z) || (Key::KEY_ESC  <= key && key <= Key::KEY_MINUS);
+    const bool isAscii = (Key::e0 <= key && key <= Key::eZ) || (Key::eEsc  <= key && key <= Key::eMinus);
     if (!isAscii)
     {
         return '\0';
     }
 
-    const bool isNumber = (Key::KEY_0 <= key && key <= Key::KEY_9);
+    const bool isNumber = (Key::e0 <= key && key <= Key::e9);
     if (isNumber)
     {
-        return '0' + char(key - Key::KEY_0);
+        return '0' + char(static_cast<uint32_t>(key) - static_cast<uint32_t>(Key::e0));
     }
 
-    const bool isChar = (Key::KEY_A <= key && key <= Key::KEY_Z);
+    const bool isChar = (Key::eA <= key && key <= Key::eZ);
     if (isChar)
     {
-        enum { ShiftMask = Input::KeyModifier::KEY_MODIFIER_LEFT_SHIFT | KeyModifier::KEY_MODIFIER_RIGHT_SHIFT };
-
-        const bool shift = !!(keyModifiers & ShiftMask);
-        return (shift ? 'A' : 'a') + char(key - Key::KEY_A);
+        bool shift = bool(keyModifiers & Input::KeyModifiers::eLeftShift | KeyModifiers::eRightShift);
+        return (shift ? 'A' : 'a') + char(static_cast<uint32_t>(key) - static_cast<uint32_t>(Key::eA));
     }
 
     switch (key)
     {
-    case Key::KEY_ESC:       
+    case Key::eEsc:
         return 0x1b;
-    case Key::KEY_RETURN:    
+    case Key::eReturn:
         return '\n';
-    case Key::KEY_TAB:       
+    case Key::eTab:
         return '\t';
-    case Key::KEY_SPACE:     
+    case Key::eSpace:
         return ' ';
-    case Key::KEY_BACKSPACE: 
+    case Key::eBackspace:
         return 0x08;
-    case Key::KEY_PLUS:      
+    case Key::ePlus:
         return '+';
-    case Key::KEY_MINUS:     
+    case Key::eMinus:
         return '-';
     default:             
         break;
@@ -267,7 +265,7 @@ void Input::postKeyCharEvent(char chr)
 {
 }
     
-void Input::postKeyPressEvent(Input::Key key, uint8_t keyModifiers, bool down)
+void Input::postKeyPressEvent(Input::Key key, Input::KeyModifiers keyModifiers, bool down)
 {
 }
 

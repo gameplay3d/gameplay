@@ -15,8 +15,8 @@ namespace gameplay
  */
 class Camera : public Component
 {
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
 
@@ -33,10 +33,10 @@ public:
     /**
      * The camera projection mode.
      */
-    enum Mode
+    enum class Mode
     {
-        MODE_PERSPECTIVE,
-        MODE_ORTHOGRAPHIC
+        ePerspective,
+        eOrthograhic
     };
 
     /**
@@ -234,15 +234,10 @@ public:
     void pickRay(const Rectangle& viewport, float x, float y, Ray* dst) const;
 
     /**
-     * @see Component::getTypeId
-     */
-    Component::TypeId getTypeId();
-
-    /**
      * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
-    
+
     /**
      * @see Activator::enumToString
      */
@@ -252,6 +247,11 @@ public:
      * @see Activator::enumParse
      */
     static int enumParse(const std::string& enumName, const std::string& str);
+
+    /**
+     * @see Component::getClassType
+     */
+    Component::ClassType getClassType();
 
 protected:
 

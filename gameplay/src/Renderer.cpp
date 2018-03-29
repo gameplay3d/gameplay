@@ -15,11 +15,6 @@ Renderer::~Renderer()
 {
 }
 
-std::string Renderer::getUrl() const
-{
-    return _url;
-}
-
 std::shared_ptr<Material> Renderer::getMaterial(int submeshIndex)
 {
     GP_ASSERT(submeshIndex == -1 || submeshIndex >= 0);
@@ -60,16 +55,6 @@ void Renderer::onSerialize(Serializer * serializer)
 
 void Renderer::onDeserialize(Serializer * serializer)
 {
-}
-
-bool Renderer::isLoaded() const
-{
-    return _loaded;
-}
-
-void Renderer::onLoaded()
-{
-    _loaded = true;
 }
 
 }

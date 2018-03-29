@@ -24,40 +24,41 @@ public:
     /**
      * Defines the type of texture.
      */
-    enum Type
+    enum class Type
     {
-        TYPE_1D = 0,
-        TYPE_2D,
-        TYPE_3D
+        e1D = 0,
+        e2D,
+        e3D
     };
 
     /**
      * Defines the usage for a texture.
      */
-    enum Usage
+    enum class Usage : uint32_t
     {
-        USAGE_UNDEFINED = 0x00000000,
-        USAGE_TRANSFER_SRC = 0x00000001,
-        USAGE_TRANSFER_DST = 0x00000002,
-        USAGE_SAMPLED_IMAGE = 0x00000004,
-        USAGE_STORAGE = 0x00000008,
-        USAGE_COLOR_ATTACHMENT = 0x00000010,
-        USAGE_DEPTH_STENCIL_ATTACHMENT = 0x00000020,
-        USAGE_RESOLVE_SRC = 0x00000040,
-        USAGE_RESOLVE_DST = 0x00000080,
-        USAGE_PRESENT = 0x00000100
+        eNone                   = 0x00000000,
+        eTransferSrc            = 0x00000001,
+        eTransferDst            = 0x00000002,
+        eSampledImage           = 0x00000004,
+        eStorage                = 0x00000008,
+        eColorAttachment        = 0x00000010,
+        eDepthStencilAttachment = 0x00000020,
+        eResolveSrc             = 0x00000040,
+        eResolveDst             = 0x00000080,
+        ePresent                = 0x00000100
     };
+
 
     /**
      * Defines the supported sample counts for texture and used for storage operations.
      */
-    enum SampleCount : uint32_t
+    enum class SampleCount : uint32_t
     {
-        SAMPLE_COUNT_1X = 1,
-        SAMPLE_COUNT_2X = 2,
-        SAMPLE_COUNT_4X = 4,
-        SAMPLE_COUNT_8X = 8,
-        SAMPLE_COUNT_16X = 16
+        e1X     = 1,
+        e2X     = 2,
+        e4X     = 4,
+        e8X     = 8,
+        e16X    = 16
     };
 
     /**
@@ -155,7 +156,7 @@ private:
     size_t _depth;
     size_t _mipLevels;
     Format _pixelFormat;
-    Usage _usage;   
+    Usage _usage;
     Texture::SampleCount _sampleCount;
     bool _hostVisible;
     void* _hostMemory;
@@ -168,3 +169,5 @@ private:
 };
 
 }
+
+GP_ENABLE_BITWISE_OPERATORS(gameplay::Texture::Usage);

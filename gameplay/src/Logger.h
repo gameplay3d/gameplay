@@ -20,11 +20,11 @@ public:
     /** 
      * Enumeration of valid log levels.
      */
-    enum Level
+    enum class Level : uint32_t
     {
-        LEVEL_INFO = 0,
-        LEVEL_WARN = 1,
-        LEVEL_ERROR = 2
+        eInfo   = 0,
+        eWarn   = 1,
+        eError  = 2
     };
 
     /**

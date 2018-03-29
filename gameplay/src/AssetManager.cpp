@@ -39,8 +39,18 @@ void AssetManager::cancelLoad(const std::string& url)
 {
 }
 
-void AssetManager::unload(std::shared_ptr<Asset> asset)
+void AssetManager::unload(const std::string& url)
 {
+}
+
+bool AssetManager::isLoaded(const std::string& url) const
+{
+    return false;
+}
+
+void* AssetManager::getObject() const
+{
+    return nullptr;
 }
 
 void AssetManager::beginLoading()

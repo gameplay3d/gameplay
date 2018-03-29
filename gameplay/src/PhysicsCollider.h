@@ -16,21 +16,21 @@ namespace gameplay
 class PhysicsCollider : public Component
 {
     friend class Physics;
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
 
     /**
      * Defines the type of geometry.
      */
-    enum Type
+    enum class Type
     {
-        TYPE_BOX,
-        TYPE_SPHERE,
-        TYPE_CAPSULE,
-        TYPE_MESH,
-        TYPE_HEIGHTFIELD
+        eBox,
+        eSphere,
+        eCapsule,
+        eMesh,
+        eHeightfield
     };
 
     /**
@@ -84,11 +84,11 @@ public:
         /**
          * Defines the direction of a capsule.
          */
-        enum Direction
+        enum class Direction
         {
-            DIRECTION_X,
-            DIRECTION_Y,
-            DIRECTION_Z
+            eX,
+            eY,
+            eZ
         };
 
         /**
@@ -109,7 +109,7 @@ public:
         /**
          * The direction of the capsule.
          */
-        Direction direction = Capsule::DIRECTION_Y;
+        Direction direction = Direction::eY;
     };
 
     /**
@@ -154,9 +154,16 @@ public:
     bool isTrigger() const;
 
     /**
-     * @see Component::getTypeId
+     * @see Activator::createObject
      */
-    Component::TypeId getTypeId();
+    static std::shared_ptr<Serializable> createObject();
+
+    /**
+     * @see Component::getClassType
+     */
+    Component::ClassType getClassType();
+
+protected:
 
     /**
      * @see Serializable::getClassName
@@ -171,14 +178,9 @@ public:
     /**
      * @see Serializable::onDeserialize
      */
-    void onDeserialize(Serializer* serializer);
-    
-    /**
-     * @see Activator::createObject
-     */
-    static std::shared_ptr<Serializable> createObject();
+    void onDeserialize(Serializer* serializer);     
 
-protected:
+private:
 
     PhysicsCollider::Type _type;
 

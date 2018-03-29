@@ -63,7 +63,7 @@ bool VertexLayout::operator != (const VertexLayout& layout) const
 }
 
 VertexLayout::Attribute::Attribute() : 
-    semantic(SEMANTIC_POSITION),
+    semantic(Semantic::ePosition),
     binding(0), 
     location(0), 
     offset(0)
@@ -101,54 +101,53 @@ bool VertexLayout::Attribute::operator != (const VertexLayout::Attribute& attr) 
     return !(*this == attr);
 }
 
-
 size_t VertexLayout::toStride(Format format)
 {
     switch (format) 
     {
-    case Format::FORMAT_R8_UNORM: 
+    case Format::eR8Unorm:
         return 1;
-    case Format::FORMAT_R16_UNORM: 
+    case Format::eR16Unorm:
         return 2;
-    case Format::FORMAT_R16_FLOAT: 
+    case Format::eR16Float:
         return 2;
-    case Format::FORMAT_R32_UINT: 
+    case Format::eR32Uint:
         return 4;
-    case Format::FORMAT_R32_FLOAT: 
+    case Format::eR32Float:
         return 4;
-    case Format::FORMAT_R8G8_UNORM: 
+    case Format::eR8G8Unorm:
         return 2;
-    case Format::FORMAT_R16G16_UNORM: 
+    case Format::eR16G16Unorm:
         return 2;
-    case Format::FORMAT_R16G16_FLOAT:
+    case Format::eR16G16Float:
         return 4;
-    case Format::FORMAT_R32G32_UINT: 
+    case Format::eR32G32Uint:
         return 8;
-    case Format::FORMAT_R32G32_FLOAT: 
+    case Format::eR32G32Float:
         return 8;
-    case Format::FORMAT_R32G32B32_UINT: 
+    case Format::eR32G32B32Uint:
         return 12;
-    case Format::FORMAT_R32G32B32_FLOAT: 
+    case Format::eR32G32B32Float:
         return 12;
-    case Format::FORMAT_B8G8R8A8_UNORM: 
+    case Format::eB8G8R8A8Unorm:
         return 4;
-    case Format::FORMAT_R8G8B8A8_UNORM: 
+    case Format::eR8G8B8A8Unorm:
         return 4;
-    case Format::FORMAT_R16G16B16A16_UNORM: 
+    case Format::eR16G16B16A16Unorm:
         return 8;
-    case Format::FORMAT_R16G16B16A16_FLOAT: 
+    case Format::eR16G16B16A16Float:
         return 8;
-    case Format::FORMAT_R32G32B32A32_UINT: 
+    case Format::eR32G32B32A32Uint:
         return 16;
-    case Format::FORMAT_R32G32B32A32_FLOAT: 
+    case Format::eR32G32B32A32Float:
         return 16;
-    case Format::FORMAT_UNDEFINED:
-    case Format::FORMAT_D16_UNORM: 
-    case Format::FORMAT_X8_D24_UNORM_PACK32:
-    case Format::FORMAT_D32_FLOAT:
-    case Format::FORMAT_S8_UINT:
-    case Format::FORMAT_D24_UNORM_S8_UINT:
-    case Format::FORMAT_D32_FLOAT_S8_UINT:
+    case Format::eUndefined:
+    case Format::eD16Unorm:
+    case Format::eX8D24UnormPack32:
+    case Format::eD32Float:
+    case Format::eS8Uint:
+    case Format::eD24UnormS8Uint:
+    case Format::eD32FloatS8Uint:
         return 0;
     }
     return 0;

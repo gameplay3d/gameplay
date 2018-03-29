@@ -15,38 +15,38 @@ namespace gameplay
  */
 class Light : public Component
 {
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
 
     /**
      * Defines the supported light types.
      */
-    enum Type
+    enum class Type
     {
-        TYPE_DIRECTIONAL,
-        TYPE_POINT,
-        TYPE_SPOT
+        eDirectional,
+        ePoint,
+        eSpot
     };
 
     /**
      * Defines the lighting.
      */
-    enum Lighting
+    enum class Lighting
     {
-        LIGHTING_REALTIME,
-        LIGHTING_BAKED
+        eRealtime,
+        eBaked
     };
 
     /**
      * Defines the shadows to be applied.
      */
-    enum Shadows
+    enum class Shadows
     {
-        SHADOWS_NONE,
-        SHADOWS_HARD,
-        SHADOWS_SOFT
+        eNone,
+        eHard,
+        eSoft
     };
 
     /**
@@ -172,11 +172,6 @@ public:
     void reset(Light::Type type);
 
     /**
-     * @see Component::getTypeId
-     */
-    Component::TypeId getTypeId();
-
-    /**
      * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
@@ -190,6 +185,11 @@ public:
      * @see Activator::enumParse
      */
     static int enumParse(const std::string& enumName, const std::string& str);
+
+    /**
+     * @see Component::getClassType
+     */
+    Component::ClassType getClassType();
 
 protected:
 

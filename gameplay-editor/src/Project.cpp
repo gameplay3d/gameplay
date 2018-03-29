@@ -63,7 +63,7 @@ std::shared_ptr<Project> Project::create(const QString& path, const QString& nam
 
     // Add and object with a camera component
     auto camera = std::make_shared<gameplay::Camera>();
-    camera->setMode(gameplay::Camera::MODE_PERSPECTIVE);
+    camera->setMode(gameplay::Camera::Mode::ePerspective);
     auto cameraObject = std::make_shared<gameplay::SceneObject>();
     cameraObject->setName(PROJECT_CAMERA_NAME);
     cameraObject->attachComponent(camera);

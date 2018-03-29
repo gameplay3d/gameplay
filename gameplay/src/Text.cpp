@@ -12,9 +12,14 @@ Text::~Text()
 {
 }
 
-Component::TypeId Text::getTypeId()
+std::shared_ptr<Serializable> Text::createObject()
 {
-    return Component::TYPEID_TEXT;
+    return std::shared_ptr<Text>();
+}
+
+Component::ClassType Text::getClassType()
+{
+    return ClassType::eText;
 }
 
 std::string Text::getClassName()
@@ -30,11 +35,6 @@ void Text::onSerialize(Serializer* serializer)
 void Text::onDeserialize(Serializer* serializer)
 {
     Renderer::onDeserialize(serializer);
-}
-
-std::shared_ptr<Serializable> Text::createObject()
-{
-    return std::shared_ptr<Text>();
 }
 
 }

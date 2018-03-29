@@ -10,14 +10,14 @@ namespace gameplay
 {
 
 Light::Light() : Component(),
-    _type(Light::TYPE_DIRECTIONAL),
+    _type(Type::eDirectional),
     _color(LIGHT_COLOR),
-    _intensity(1.0f),
+    _intensity(LIGHT_INTENSITY),
     _range(LIGHT_RANGE),
     _angle(LIGHT_ANGLE),
     _angleCos(cos(LIGHT_ANGLE)),
-    _lighting(LIGHTING_REALTIME),
-    _shadows(SHADOWS_NONE)
+    _lighting(Lighting::eRealtime),
+    _shadows(Shadows::eNone)
 {
 }
 
@@ -105,18 +105,18 @@ void Light::reset(Light::Type type)
 {
     switch (_type)
     {
-        case Light::TYPE_DIRECTIONAL:
+        case Type::eDirectional:
         {
 
             break;
         }
-        case Light::TYPE_POINT:
+        case Type::ePoint:
         {
 
             break;
         }
 
-        case Light::TYPE_SPOT:
+        case Type::eSpot:
         {
 
             break;
@@ -127,9 +127,9 @@ void Light::reset(Light::Type type)
     }
 }
 
-Component::TypeId Light::getTypeId()
+Component::ClassType Light::getClassType()
 {
-    return Component::TYPEID_LIGHT;
+    return ClassType::eLight;
 }
 
 std::string Light::getClassName()
@@ -139,18 +139,18 @@ std::string Light::getClassName()
 
 void Light::onSerialize(Serializer* serializer)
 {
-    serializer->writeEnum("type", "gameplay::Light::Type", _type, -1);
+    serializer->writeEnum("type", "gameplay::Light::Type", static_cast<int>(_type), -1);
     serializer->writeColor("color", _color, LIGHT_COLOR);
     serializer->writeFloat("intensity", _intensity, LIGHT_INTENSITY);
     switch (_type)
     {
-        case TYPE_POINT:
+        case Type::ePoint:
         {
             serializer->writeFloat("range", _range, LIGHT_RANGE);
             break;
         }
 
-        case TYPE_SPOT:
+        case Type::eSpot:
         {
             serializer->writeFloat("range", _range, LIGHT_RANGE);
             serializer->writeFloat("angle", _angle, LIGHT_ANGLE);\
@@ -161,8 +161,8 @@ void Light::onSerialize(Serializer* serializer)
             break;
     }
 
-    serializer->writeEnum("lighting", "gameplay::Light::Lighting", _lighting, Light::LIGHTING_REALTIME);
-    serializer->writeEnum("shadows", "gameplay::Light::Shadows", _shadows, Light::SHADOWS_NONE);
+    serializer->writeEnum("lighting", "gameplay::Light::Lighting", static_cast<int>(_lighting), static_cast<int>(Lighting::eRealtime));
+    serializer->writeEnum("shadows", "gameplay::Light::Shadows", static_cast<int>(_shadows), static_cast<int>(Shadows::eNone));
 }
 
 void Light::onDeserialize(Serializer* serializer)
@@ -172,13 +172,13 @@ void Light::onDeserialize(Serializer* serializer)
     _intensity = serializer->readFloat("intensity", LIGHT_INTENSITY);
     switch(_type)
     {
-        case Light::TYPE_POINT:
+        case Type::ePoint:
         {
             _range = serializer->readFloat("range", LIGHT_RANGE);
             break;
         }
 
-        case Light::TYPE_SPOT:
+        case Type::eSpot:
         {
             _range = serializer->readFloat("range", LIGHT_RANGE);
             _angle = serializer->readFloat("angle", LIGHT_ANGLE);
@@ -189,8 +189,8 @@ void Light::onDeserialize(Serializer* serializer)
         default:
             break;
     }
-    _lighting = static_cast<Light::Lighting>(serializer->readEnum("lighting", "gameplay::Light::Lighting", Light::LIGHTING_REALTIME));
-    _shadows = static_cast<Light::Shadows>(serializer->readEnum("shadows", "gameplay::Light::Shadows", Light::SHADOWS_NONE));
+    _lighting = static_cast<Light::Lighting>(serializer->readEnum("lighting", "gameplay::Light::Lighting", static_cast<int>(Lighting::eRealtime)));
+    _shadows = static_cast<Light::Shadows>(serializer->readEnum("shadows", "gameplay::Light::Shadows", static_cast<int>(Shadows::eNone)));
 }
 
 std::shared_ptr<Serializable> Light::createObject()
@@ -204,40 +204,40 @@ std::string Light::enumToString(const std::string& enumName, int value)
     {
         switch (value)
         {
-            case Light::TYPE_DIRECTIONAL:
-                return "TYPE_DIRECTIONAL";
-            case Light::TYPE_POINT:
-                return "TYPE_POINT";
-            case Light::TYPE_SPOT:
-                return "TYPE_SPOT";
+            case static_cast<int>(Type::eDirectional):
+                return "eDirectional";
+            case static_cast<int>(Type::ePoint):
+                return "ePoint";
+            case static_cast<int>(Type::eSpot):
+                return "eSpot";
             default:
-                return "TYPE_DIRECTIONAL";
+                return "eDirectional";
         }
     }
     else if(enumName.compare("gameplay::Light::Lighting") == 0)
     {
         switch (value)
         {
-            case Light::LIGHTING_REALTIME:
-                return "LIGHTING_REALTIME";
-            case Light::LIGHTING_BAKED:
-                return "LIGHTING_BAKED";
+            case static_cast<int>(Lighting::eRealtime):
+                return "eRealtime";
+            case static_cast<int>(Lighting::eBaked):
+                return "eBaked";
             default:
-                return "LIGHTING_REALTIME";
+                return "eRealtime";
         }
     }
     else if(enumName.compare("gameplay::Light::Shadows") == 0)
     {
         switch (value)
         {
-            case Light::SHADOWS_NONE:
-                return "SHADOWS_NONE";
-            case Light::SHADOWS_HARD:
-                return "SHADOWS_HARD";
-            case Light::SHADOWS_SOFT:
-                return "SHADOWS_SOFT";
+            case static_cast<int>(Shadows::eNone):
+                return "eNone";
+            case static_cast<int>(Shadows::eHard):
+                return "eHard";
+            case static_cast<int>(Shadows::eSoft):
+                return "eSoft";
             default:
-                return "SHADOWS_NONE";
+                return "eNone";
         }
     }
     return "";
@@ -247,30 +247,30 @@ int Light::enumParse(const std::string& enumName, const std::string& str)
 {
     if (enumName.compare("gameplay::Light::Type") == 0)
     {
-        if (str.compare("TYPE_DIRECTIONAL") == 0)
-            return Light::TYPE_DIRECTIONAL;
-        else if (str.compare("TYPE_POINT") == 0)
-            return Light::TYPE_POINT;
-        else if (str.compare("TYPE_SPOT") == 0)
-            return Light::TYPE_SPOT;
+        if (str.compare("eDirectional") == 0)
+            return static_cast<int>(Type::eDirectional);
+        else if (str.compare("ePoint") == 0)
+            return static_cast<int>(Type::ePoint);
+        else if (str.compare("eSpot") == 0)
+            return static_cast<int>(Type::eSpot);
     }
     else if (enumName.compare("gameplay::Light::Lighting") == 0)
     {
-        if (str.compare("LIGHTING_REALTIME") == 0)
-            return Light::LIGHTING_REALTIME;
-        else if (str.compare("LIGHTING_BAKED") == 0)
-            return Light::LIGHTING_BAKED;
+        if (str.compare("eRealtime") == 0)
+            return static_cast<int>(Lighting::eRealtime);
+        else if (str.compare("eBaked") == 0)
+            return static_cast<int>(Lighting::eBaked);
     }
     else if (enumName.compare("gameplay::Light::Shadows") == 0)
     {
-        if (str.compare("SHADOWS_NONE") == 0)
-            return Light::SHADOWS_NONE;
-        else if (str.compare("SHADOWS_HARD") == 0)
-            return Light::SHADOWS_HARD;
-        else if (str.compare("SHADOWS_SOFT") == 0)
-            return Light::SHADOWS_SOFT;
+        if (str.compare("eNone") == 0)
+            return static_cast<int>(Shadows::eNone);
+        else if (str.compare("eHard") == 0)
+            return static_cast<int>(Shadows::eHard);
+        else if (str.compare("eSoft") == 0)
+            return static_cast<int>(Shadows::eSoft);
     }
-    return -1;
+    return static_cast<int>(Shadows::eNone);
 }
 
 }

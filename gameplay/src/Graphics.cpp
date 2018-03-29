@@ -234,7 +234,7 @@ void Graphics::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
         clearValues[i].color.float32[1] = 0;
         clearValues[i].color.float32[2] = 0;
         clearValues[i].color.float32[3] = 1;
-        if (renderPass->getSampleCount() > Texture::SAMPLE_COUNT_1X)
+        if (renderPass->getSampleCount() > Texture::SampleCount::e1X)
         {
             clearValues[i].color.float32[0] = 0;
             clearValues[i].color.float32[1] = 0;
@@ -243,7 +243,7 @@ void Graphics::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
         }
     }
     // TODO: multismaple
-    uint32_t depthStencilCount = renderPass->getDepthStencilFormat() == Format::FORMAT_UNDEFINED ? 0 : 1;
+    uint32_t depthStencilCount = renderPass->getDepthStencilFormat() == Format::eUndefined ? 0 : 1;
     if (depthStencilCount > 0) 
     {
         clearValues[colorValueCount].depthStencil.depth = 1.0f;
@@ -258,7 +258,7 @@ void Graphics::cmdBeginRenderPass(std::shared_ptr<CommandBuffer> commandBuffer,
     beginInfo.renderArea = renderArea;
 
     uint32_t clearValueCount = colorValueCount;
-    if (renderPass->getSampleCount() > Texture::SAMPLE_COUNT_1X) 
+    if (renderPass->getSampleCount() > Texture::SampleCount::e1X)
     {
         clearValueCount *= 2;
     }
@@ -400,7 +400,7 @@ void Graphics::cmdDrawIndexed(std::shared_ptr<CommandBuffer> commandBuffer,
 
 void Graphics::cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer,
                                   std::shared_ptr<Texture> texture, 
-                                  Texture::Usage usageOld, 
+                                  Texture::Usage usageOld,
                                   Texture::Usage usageNew)
 {
     GP_ASSERT(commandBuffer);
@@ -474,7 +474,7 @@ void Graphics::cmdTransitionImage(std::shared_ptr<CommandBuffer> commandBuffer,
     vkCmdPipelineBarrier(commandBuffer->_commandBuffer, stageMskSrc, stageMaskDst, dependencyFlags, 0, nullptr, 0, nullptr, 1, &barrier);
 }
 
-std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage, 
+std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
                                                size_t size, 
                                                size_t stride, 
                                                bool hostVisible,
@@ -487,15 +487,15 @@ std::shared_ptr<Buffer> Graphics::createBuffer(Buffer::Usage usage,
     bufferCreateInfo.queueFamilyIndexCount = 0;
     bufferCreateInfo.pQueueFamilyIndices = nullptr;
     bufferCreateInfo.usage = 0;
-    switch (usage) 
+    switch (usage)
     {
-    case Buffer::USAGE_VERTEX: 
+    case Buffer::Usage::eVertex:
         bufferCreateInfo.usage |= VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
         break;
-    case Buffer::USAGE_INDEX: 
+    case Buffer::Usage::eIndex:
         bufferCreateInfo.usage |= VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
         break;
-    case Buffer::USAGE_UNIFORM: 
+    case Buffer::Usage::eUniform:
         bufferCreateInfo.usage |= VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
         break;
     }
@@ -615,7 +615,7 @@ std::shared_ptr<Buffer> Graphics::createVertexBuffer(size_t size,
                                                      bool hostVisible,
                                                      const void* data)
 {
-    return createBuffer(Buffer::USAGE_VERTEX, size, vertexStride, hostVisible, data);
+    return createBuffer(Buffer::Usage::eVertex, size, vertexStride, hostVisible, data);
 }
 
 std::shared_ptr<Buffer> Graphics::createIndexBuffer(size_t size, 
@@ -623,14 +623,14 @@ std::shared_ptr<Buffer> Graphics::createIndexBuffer(size_t size,
                                                     bool hostVisible,
                                                     const void* data)
 {
-    return createBuffer(Buffer::USAGE_INDEX, size, indexStride, hostVisible, data);
+    return createBuffer(Buffer::Usage::eIndex, size, indexStride, hostVisible, data);
 }
 
 std::shared_ptr<Buffer> Graphics::createUniformBuffer(size_t size, 
                                                       bool hostVisible,
                                                       const void* data)
 {
-    return createBuffer(Buffer::USAGE_UNIFORM, size, size, hostVisible, data);
+    return createBuffer(Buffer::Usage::eUniform, size, size, hostVisible, data);
 }
 
 void Graphics::destroyBuffer(std::shared_ptr<Buffer> buffer)
@@ -640,7 +640,7 @@ void Graphics::destroyBuffer(std::shared_ptr<Buffer> buffer)
 }
 
 std::shared_ptr<Texture> Graphics::createTexture(Texture::Type type, size_t width, size_t height, size_t depth, size_t mipLevels, 
-                                                 Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount, 
+                                                 Format pixelFormat, Texture::Usage usage, Texture::SampleCount sampleCount,
                                                  bool hostVisible, const void* data,
                                                  VkImage existingImage)
 {
@@ -648,21 +648,21 @@ std::shared_ptr<Texture> Graphics::createTexture(Texture::Type type, size_t widt
     VkImageViewType imageViewType = VK_IMAGE_VIEW_TYPE_2D;
     switch (type) 
     {
-    case Texture::TYPE_1D:
+    case Texture::Type::e1D:
         imageType = VK_IMAGE_TYPE_1D;
         imageViewType = VK_IMAGE_VIEW_TYPE_1D;
         break;
-    case Texture::TYPE_2D: 
+    case Texture::Type::e2D:
         imageType = VK_IMAGE_TYPE_2D;
         imageViewType = VK_IMAGE_VIEW_TYPE_2D;
         break;
-    case Texture::TYPE_3D: 
+    case Texture::Type::e3D:
         imageType = VK_IMAGE_TYPE_3D; 
         imageViewType = VK_IMAGE_VIEW_TYPE_3D;
         break;    
     }
 
-    VkFormat format = lookupVkFormat[pixelFormat];
+    VkFormat format = lookupVkFormat[static_cast<uint32_t>(pixelFormat)];
     VkImage image;
     VkDeviceMemory deviceMemory = VK_NULL_HANDLE;
     bool hostOwned;
@@ -805,13 +805,13 @@ std::shared_ptr<Texture> Graphics::createTexture(Texture::Type type, size_t widt
 
 std::shared_ptr<Texture> Graphics::createTexture1d(size_t width, 
                                                    Format pixelFormat, 
-                                                   Texture::Usage usage, 
+                                                   Texture::Usage usage,
                                                    Texture::SampleCount sampleCount,
                                                    bool hostVisible,
                                                    const void* data)
 {
-    return createTexture(Texture::TYPE_1D, width, 1, 1, 1, 
-                         pixelFormat, usage, sampleCount, 
+    return createTexture(Texture::Type::e1D, width, 1, 1, 1,
+                         pixelFormat, usage, sampleCount,
                          hostVisible, data, nullptr);
 }
 
@@ -821,8 +821,8 @@ std::shared_ptr<Texture> Graphics::createTexture2d(size_t width, size_t height, 
                                                    Texture::SampleCount sampleCount,
                                                    bool hostVisible, const void* data)
 {
-    return createTexture(Texture::TYPE_2D, width, height, 1, mipLevels, 
-                         pixelFormat, usage, sampleCount, 
+    return createTexture(Texture::Type::e2D, width, height, 1, mipLevels,
+                         pixelFormat, usage, sampleCount,
                          hostVisible, data, nullptr);
 }
 
@@ -833,7 +833,7 @@ std::shared_ptr<Texture> Graphics::createTexture3d(size_t width, size_t height, 
                                                      bool hostVisible,
                                                      const void* data)
 {
-    return createTexture(Texture::TYPE_3D, width, height, depth, 1, 
+    return createTexture(Texture::Type::e3D, width, height, depth, 1,
                          pixelFormat, usage, sampleCount,
                          hostVisible, data, nullptr);
 }
@@ -863,8 +863,8 @@ std::shared_ptr<RenderPass> Graphics::createRenderPass(size_t width, size_t heig
                                                        std::vector<VkFormat> colorFormatsVK,
                                                        VkFormat depthStencilFormatVK,
                                                        VkSampleCountFlagBits sampleCountVK,
-                                                       std::vector<std::shared_ptr<Texture> > colorAttachments,
-                                                       std::vector<std::shared_ptr<Texture> > colorMultisampleAttachments,
+                                                       std::vector<std::shared_ptr<Texture>> colorAttachments,
+                                                       std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments,
                                                        std::shared_ptr<Texture> depthStencilAttachment)
 {
     std::vector<Format> colorFormats;
@@ -880,7 +880,7 @@ std::shared_ptr<RenderPass> Graphics::createRenderPass(size_t width, size_t heig
     VkAttachmentReference* colorAttachmentRefs = nullptr;
     VkAttachmentReference* resolveAttachmentRefs = nullptr;
     VkAttachmentReference* depthStencilAttachmentRef = nullptr;
-    size_t depthStencilAttachmentCount = (depthStencilFormat == Format::FORMAT_UNDEFINED) ? 0 : 1;
+    size_t depthStencilAttachmentCount = (depthStencilFormat == Format::eUndefined) ? 0 : 1;
 
     if (sampleCountVK > VK_SAMPLE_COUNT_1_BIT)
     {
@@ -1048,7 +1048,7 @@ std::shared_ptr<RenderPass> Graphics::createRenderPass(size_t width, size_t heig
         {
             imageCount *= 2;
         }
-        if (depthStencilFormat != Format::FORMAT_UNDEFINED)
+        if (depthStencilFormat != Format::eUndefined)
         {
             imageCount += 1;
         }
@@ -1066,7 +1066,7 @@ std::shared_ptr<RenderPass> Graphics::createRenderPass(size_t width, size_t heig
                 ++imageView;
             }
         }
-        if (depthStencilFormat != Format::FORMAT_UNDEFINED)
+        if (depthStencilFormat != Format::eUndefined)
         {
             *imageView = depthStencilAttachment->_imageView;
             ++imageView;
@@ -1114,21 +1114,21 @@ std::shared_ptr<RenderPass> Graphics::createRenderPass(size_t width, size_t heig
     colorFormatsVK.resize(colorAttachmentCount);
     for (size_t i = 0; i < colorAttachmentCount; ++i)
     {
-        colorFormatsVK[i] = lookupVkFormat[colorFormats[i]];
+        colorFormatsVK[i] = lookupVkFormat[static_cast<uint32_t>(colorFormats[i])];
     }
-    VkFormat depthStencilFormatVK = lookupVkFormat[depthStencilFormat];
-    VkSampleCountFlagBits sampleCountVK = lookupVkSampleCountFlagBits[sampleCount];
+    VkFormat depthStencilFormatVK = lookupVkFormat[static_cast<uint32_t>(depthStencilFormat)];
+    VkSampleCountFlagBits sampleCountVK = lookupVkSampleCountFlagBits[static_cast<uint32_t>(sampleCount)];
 
     // Create the textures for the framebuffer
     std::vector<std::shared_ptr<Texture>> colorAttachments;
     std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments;
     std::shared_ptr<Texture> depthStencilAttachment = nullptr;
     size_t imageCount = colorAttachmentCount;
-    if (sampleCount > Texture::SAMPLE_COUNT_1X)
+    if (sampleCount > Texture::SampleCount::e1X)
     {
         imageCount *= 2;
     }
-    if (depthStencilFormat != Format::FORMAT_UNDEFINED)
+    if (depthStencilFormat != Format::eUndefined)
     {
         imageCount += 1;
     }
@@ -1136,22 +1136,22 @@ std::shared_ptr<RenderPass> Graphics::createRenderPass(size_t width, size_t heig
     for (size_t i = 0; i < colorAttachmentCount; ++i)
     {
         std::shared_ptr<Texture> colorAttachment = createTexture2d(width, height, 1, colorFormats[i], 
-                                                                   Texture::USAGE_COLOR_ATTACHMENT, 
-                                                                   Texture::SAMPLE_COUNT_1X, false, nullptr);
+                                                                   Texture::Usage::eColorAttachment,
+                                                                   Texture::SampleCount::e1X, false, nullptr);
         colorAttachments.push_back(colorAttachment);
-        if (sampleCount > Texture::SAMPLE_COUNT_1X)
+        if (sampleCount > Texture::SampleCount::e1X)
         {
             std::shared_ptr<Texture> colorMultisampleAttachment = createTexture2d(width, height, 1, colorFormats[i], 
-                                                                                  Texture::USAGE_COLOR_ATTACHMENT, 
+                                                                                  Texture::Usage::eColorAttachment,
                                                                                   sampleCount, false, nullptr);
             colorMultisampleAttachments.push_back(colorMultisampleAttachment);
         }
     }
-    if (depthStencilFormat != Format::FORMAT_UNDEFINED)
+    if (depthStencilFormat != Format::eUndefined)
     {
         depthStencilAttachment = createTexture2d(width, height, 1, depthStencilFormat, 
-                                                 Texture::USAGE_DEPTH_STENCIL_ATTACHMENT, 
-                                                 Texture::SAMPLE_COUNT_1X, false, nullptr);
+                                                 Texture::Usage::eDepthStencilAttachment,
+                                                 Texture::SampleCount::e1X, false, nullptr);
     }
     return createRenderPass(width, height,
                             colorAttachmentCount,
@@ -1170,12 +1170,12 @@ void Graphics::destroyRenderPass(std::shared_ptr<RenderPass> renderPass)
     for (size_t i = 0; i < renderPass->getColorAttachmentCount(); i++)
     {
         destroyTexture(renderPass->getColorAttachment(i));
-        if (renderPass->getSampleCount() > Texture::SAMPLE_COUNT_1X)
+        if (renderPass->getSampleCount() > Texture::SampleCount::e1X)
         {
             destroyTexture(renderPass->getColorMultisampleAttachment(i));
         }
     }
-    if (renderPass->getDepthStencilFormat() != Format::FORMAT_UNDEFINED)
+    if (renderPass->getDepthStencilFormat() != Format::eUndefined)
     {
         destroyTexture(renderPass->getDepthStencilAttachment());
     }
@@ -1204,15 +1204,15 @@ std::shared_ptr<Sampler> Graphics::createSampler(Sampler::Filter filterMin,
     createInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     createInfo.pNext = nullptr;
     createInfo.flags = 0;
-    createInfo.minFilter = lookupVkFilter[filterMin];
-    createInfo.magFilter = lookupVkFilter[filterMag];
-    createInfo.mipmapMode = lookupVkSamplerMipmapMode[filterMip];
-    createInfo.addressModeU = lookupVkSamplerAddressMode[addressModeU];
-    createInfo.addressModeV = lookupVkSamplerAddressMode[addressModeV];
-    createInfo.addressModeW = lookupVkSamplerAddressMode[addressModeW];
-    createInfo.borderColor = lookupVkBorderColor[borderColor];
+    createInfo.minFilter = lookupVkFilter[static_cast<uint32_t>(filterMin)];
+    createInfo.magFilter = lookupVkFilter[static_cast<uint32_t>(filterMag)];
+    createInfo.mipmapMode = lookupVkSamplerMipmapMode[static_cast<uint32_t>(filterMip)];
+    createInfo.addressModeU = lookupVkSamplerAddressMode[static_cast<uint32_t>(addressModeU)];
+    createInfo.addressModeV = lookupVkSamplerAddressMode[static_cast<uint32_t>(addressModeV)];
+    createInfo.addressModeW = lookupVkSamplerAddressMode[static_cast<uint32_t>(addressModeW)];
+    createInfo.borderColor = lookupVkBorderColor[static_cast<uint32_t>(borderColor)];
     createInfo.compareEnable = compareEnabled ? VK_TRUE : VK_FALSE;
-    createInfo.compareOp = lookupVkCompareOp[compareFunc];
+    createInfo.compareOp = lookupVkCompareOp[static_cast<uint32_t>(compareFunc)];
     createInfo.anisotropyEnable = anisotropyEnabled ? VK_TRUE : VK_FALSE;
     createInfo.maxAnisotropy = anisotropyMax;
     createInfo.minLod = lodMin;
@@ -1304,13 +1304,13 @@ std::shared_ptr<DescriptorSet> Graphics::createDescriptorSet(const DescriptorSet
         uint32_t typeIndex = UINT32_MAX;
         switch (descriptor->type) 
         {
-        case DescriptorSet::Descriptor::TYPE_SAMPLER: 
+        case DescriptorSet::Descriptor::Type::eSampler:
             typeIndex = VK_DESCRIPTOR_TYPE_SAMPLER; 
             break;
-        case DescriptorSet::Descriptor::TYPE_TEXTURE: 
+        case DescriptorSet::Descriptor::Type::eTexture:
             typeIndex = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE; 
             break;
-        case DescriptorSet::Descriptor::TYPE_UNIFORM: 
+        case DescriptorSet::Descriptor::Type::eUniform:
             typeIndex = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; 
             break;
         }
@@ -1319,7 +1319,7 @@ std::shared_ptr<DescriptorSet> Graphics::createDescriptorSet(const DescriptorSet
             binding->binding = descriptor->binding;
             binding->descriptorType = (VkDescriptorType)typeIndex;
             binding->descriptorCount = descriptor->count;
-            binding->stageFlags = lookupVkShaderStageFlags[descriptor->shaderStages];
+            binding->stageFlags = lookupVkShaderStageFlags[static_cast<uint32_t>(descriptor->shaderStages)];
             binding->pImmutableSamplers = nullptr;
 
             poolSizesByType[typeIndex].descriptorCount += descriptor->count;
@@ -1506,7 +1506,7 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
 
         inputAttributes[inputAttributeCount].location = attribute.location;
         inputAttributes[inputAttributeCount].binding = attribute.binding;
-        inputAttributes[inputAttributeCount].format = lookupVkFormat[attribute.format];
+        inputAttributes[inputAttributeCount].format = lookupVkFormat[static_cast<uint32_t>(attribute.format)];
         inputAttributes[inputAttributeCount].offset = attribute.offset;
         ++inputAttributeCount;
     }
@@ -1524,19 +1524,19 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
     VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     switch (primitiveTopology) 
     {
-    case RenderPipeline::PRIMITIVE_TOPOLOGY_POINT_LIST: 
+    case RenderPipeline::PrimitiveTopology::ePointList:
         topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST; 
         break;
-    case RenderPipeline::PRIMITIVE_TOPOLOGY_LINE_LIST: 
+    case RenderPipeline::PrimitiveTopology::eLineList:
         topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST; 
         break;
-    case RenderPipeline::PRIMITIVE_TOPOLOGY_LINE_STRIP: 
+    case RenderPipeline::PrimitiveTopology::eLineStrip:
         topology = VK_PRIMITIVE_TOPOLOGY_LINE_STRIP; 
         break;
-    case RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST: 
+    case RenderPipeline::PrimitiveTopology::eTriangleList:
         topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST; 
         break;
-    case RenderPipeline::PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP: 
+    case RenderPipeline::PrimitiveTopology::eTriangleStrip:
         topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP; 
         break;
     }
@@ -1554,9 +1554,9 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
     rasterizerStateCreateInfo.pNext = nullptr;
     rasterizerStateCreateInfo.flags = 0;
     rasterizerStateCreateInfo.depthClampEnable = rasterizerState.depthClipEnabled ? VK_TRUE : VK_FALSE;
-    rasterizerStateCreateInfo.polygonMode = lookupVkPolygonMode[rasterizerState.fillMode];
-    rasterizerStateCreateInfo.cullMode = lookupVkCullModeFlags[rasterizerState.cullMode];
-    rasterizerStateCreateInfo.frontFace = lookupVkFrontFace[rasterizerState.frontFace];
+    rasterizerStateCreateInfo.polygonMode = lookupVkPolygonMode[static_cast<uint32_t>(rasterizerState.fillMode)];
+    rasterizerStateCreateInfo.cullMode = lookupVkCullModeFlags[static_cast<uint32_t>(rasterizerState.cullMode)];
+    rasterizerStateCreateInfo.frontFace = lookupVkFrontFace[static_cast<uint32_t>(rasterizerState.frontFace)];
     rasterizerStateCreateInfo.depthBiasEnable = rasterizerState.depthBias == 0 ? VK_FALSE : VK_TRUE;
     rasterizerStateCreateInfo.depthBiasConstantFactor = 0.0f;
     rasterizerStateCreateInfo.depthBiasClamp = rasterizerState.depthBiasClamp;
@@ -1574,7 +1574,7 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
     multisampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     multisampleStateCreateInfo.pNext = nullptr;
     multisampleStateCreateInfo.flags = 0;
-    multisampleStateCreateInfo.rasterizationSamples = lookupVkSampleCountFlagBits[renderPass->getSampleCount()];
+    multisampleStateCreateInfo.rasterizationSamples = lookupVkSampleCountFlagBits[static_cast<uint32_t>(renderPass->getSampleCount())];
     multisampleStateCreateInfo.sampleShadingEnable = VK_FALSE;
     multisampleStateCreateInfo.pSampleMask = 0;
 
@@ -1598,20 +1598,20 @@ std::shared_ptr<RenderPipeline> Graphics::createRenderPipeline(RenderPipeline::P
     depthStencilStateCreateInfo.flags = 0;
     depthStencilStateCreateInfo.depthTestEnable = depthStencilState.depthEnabled ? VK_TRUE : VK_FALSE;
     depthStencilStateCreateInfo.depthWriteEnable = depthStencilState.depthWrite ? VK_TRUE : VK_FALSE;
-    depthStencilStateCreateInfo.depthCompareOp = lookupVkCompareOp[depthStencilState.depthFunc];
+    depthStencilStateCreateInfo.depthCompareOp = lookupVkCompareOp[static_cast<uint32_t>(depthStencilState.depthFunc)];
     depthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
     depthStencilStateCreateInfo.stencilTestEnable = depthStencilState.stencilEnabled ? VK_TRUE : VK_FALSE;
-    depthStencilStateCreateInfo.front.failOp = lookupVkStencilOp[depthStencilState.stencilOpStateFront.failOp];
-    depthStencilStateCreateInfo.front.passOp = lookupVkStencilOp[depthStencilState.stencilOpStateFront.passOp];
-    depthStencilStateCreateInfo.front.depthFailOp = lookupVkStencilOp[depthStencilState.stencilOpStateFront.depthFailOp];
-    depthStencilStateCreateInfo.front.compareOp = lookupVkCompareOp[depthStencilState.stencilOpStateFront.compareFunc];
+    depthStencilStateCreateInfo.front.failOp = lookupVkStencilOp[static_cast<uint32_t>(depthStencilState.stencilOpStateFront.failOp)];
+    depthStencilStateCreateInfo.front.passOp = lookupVkStencilOp[static_cast<uint32_t>(depthStencilState.stencilOpStateFront.passOp)];
+    depthStencilStateCreateInfo.front.depthFailOp = lookupVkStencilOp[static_cast<uint32_t>(depthStencilState.stencilOpStateFront.depthFailOp)];
+    depthStencilStateCreateInfo.front.compareOp = lookupVkCompareOp[static_cast<uint32_t>(depthStencilState.stencilOpStateFront.compareFunc)];
     depthStencilStateCreateInfo.front.compareMask = depthStencilState.stencilOpStateFront.compareMask;
     depthStencilStateCreateInfo.front.writeMask = depthStencilState.stencilOpStateFront.writeMask;
     depthStencilStateCreateInfo.front.reference = 0;
-    depthStencilStateCreateInfo.back.failOp = lookupVkStencilOp[depthStencilState.stencilOpStateBack.failOp];
-    depthStencilStateCreateInfo.back.passOp = lookupVkStencilOp[depthStencilState.stencilOpStateBack.passOp];
-    depthStencilStateCreateInfo.back.depthFailOp = lookupVkStencilOp[depthStencilState.stencilOpStateBack.depthFailOp];
-    depthStencilStateCreateInfo.back.compareOp = lookupVkCompareOp[depthStencilState.stencilOpStateBack.compareFunc];
+    depthStencilStateCreateInfo.back.failOp = lookupVkStencilOp[static_cast<uint32_t>(depthStencilState.stencilOpStateBack.failOp)];
+    depthStencilStateCreateInfo.back.passOp = lookupVkStencilOp[static_cast<uint32_t>(depthStencilState.stencilOpStateBack.passOp)];
+    depthStencilStateCreateInfo.back.depthFailOp = lookupVkStencilOp[static_cast<uint32_t>(depthStencilState.stencilOpStateBack.depthFailOp)];
+    depthStencilStateCreateInfo.back.compareOp = lookupVkCompareOp[static_cast<uint32_t>(depthStencilState.stencilOpStateBack.compareFunc)];
     depthStencilStateCreateInfo.back.compareMask = depthStencilState.stencilOpStateBack.compareMask;
     depthStencilStateCreateInfo.back.writeMask = depthStencilState.stencilOpStateBack.writeMask;
     depthStencilStateCreateInfo.back.reference = 0;
@@ -2179,20 +2179,20 @@ void Graphics::createRenderPasses()
 {
     for (size_t i = 0; i < _swapchainImageCount; ++i)
     {
-        std::vector<std::shared_ptr<Texture> > colorAttachments;
-        std::shared_ptr<Texture> colorAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
+        std::vector<std::shared_ptr<Texture>> colorAttachments;
+        std::shared_ptr<Texture> colorAttachment = createTexture(Texture::Type::e2D, _width, _height, 1, 1,
                                                                  toFormat(_colorFormat),
-                                                                 Texture::USAGE_COLOR_ATTACHMENT,
-                                                                 Texture::SAMPLE_COUNT_1X, false, nullptr,
+                                                                 Texture::Usage::eColorAttachment,
+                                                                 Texture::SampleCount::e1X, false, nullptr,
                                                                  _swapchainImages[i]);
         colorAttachments.push_back(colorAttachment);
         
         // todo:
-        std::vector<std::shared_ptr<Texture> > colorMultisampleAttachments;
-        std::shared_ptr<Texture> depthStencilAttachment = createTexture(Texture::TYPE_2D, _width, _height, 1, 1,
+        std::vector<std::shared_ptr<Texture>> colorMultisampleAttachments;
+        std::shared_ptr<Texture> depthStencilAttachment = createTexture(Texture::Type::e2D, _width, _height, 1, 1,
                                                                         toFormat(_depthStencilFormat),
-                                                                        Texture::USAGE_DEPTH_STENCIL_ATTACHMENT,
-                                                                        Texture::SAMPLE_COUNT_1X, false, nullptr,
+                                                                        Texture::Usage::eDepthStencilAttachment,
+                                                                        Texture::SampleCount::e1X, false, nullptr,
                                                                         nullptr);
         std::vector<VkFormat> colorFormats;
         colorFormats.push_back(_colorFormat);
@@ -2291,12 +2291,16 @@ Graphics::SwapchainInfo Graphics::querySwapchainInfo(VkPhysicalDevice physicalDe
 VkSurfaceFormatKHR Graphics::chooseSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 {
     if (availableFormats.size() == 1 && availableFormats[0].format == VK_FORMAT_UNDEFINED) 
+    {
         return{ VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR };
+    }
 
     for (const auto& availableFormat : availableFormats) 
     {
-        if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) 
+        if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+        {
             return availableFormat;
+        }
     }
     return availableFormats[0];
 }

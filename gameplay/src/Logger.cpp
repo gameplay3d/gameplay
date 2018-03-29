@@ -22,7 +22,7 @@ Logger::~Logger()
 
 void Logger::log(Level level, const char* message, ...)
 {
-    State& state = _state[level];
+    State& state = _state[static_cast<int>(level)];
     if (!state.enabled)
         return;
 
@@ -71,23 +71,23 @@ void Logger::log(Level level, const char* message, ...)
 
 bool Logger::isEnabled(Level level)
 {
-    return _state[level].enabled;
+    return _state[static_cast<uint32_t>(level)].enabled;
 }
 
 void Logger::setEnabled(Level level, bool enabled)
 {
-    _state[level].enabled = enabled;
+    _state[static_cast<uint32_t>(level)].enabled = enabled;
 }
 
 void Logger::set(Level level, void (*logFunction) (Level, const char*))
 {
-    State& state = _state[level];
+    State& state = _state[static_cast<uint32_t>(level)];
     state.logFunctionC = logFunction;
 }
 
 void Logger::set(Level level, const char* logFunction)
 {
-    State& state = _state[level];
+    State& state = _state[static_cast<uint32_t>(level)];
     state.logFunctionC = nullptr;
 }
 

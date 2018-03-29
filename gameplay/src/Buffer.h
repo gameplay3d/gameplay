@@ -21,11 +21,11 @@ public:
     /**
      * Defines the usage of Buffer.
      */
-    enum Usage
+    enum class Usage : uint32_t
     {
-        USAGE_VERTEX,
-        USAGE_INDEX,
-        USAGE_UNIFORM
+        eVertex  =  0x00000000,
+        eIndex   =  0x00000001,
+        eUniform =  0x00000002
     };
 
     /**
@@ -84,3 +84,5 @@ private:
 };
 
 }
+
+GP_ENABLE_BITWISE_OPERATORS(gameplay::Buffer::Usage);

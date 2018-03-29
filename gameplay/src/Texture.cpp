@@ -6,13 +6,13 @@ namespace gameplay
 {
 
 Texture::Texture() :
-    _type(TYPE_2D),
+    _type(Type::e2D),
     _width(0),
     _height(0),
     _depth(0),
     _mipLevels(1),
-    _usage(USAGE_UNDEFINED),
-    _sampleCount(Texture::SAMPLE_COUNT_1X),
+    _usage(Usage::eNone),
+    _sampleCount(SampleCount::e1X),
     _hostVisible(true),
     _hostMemory(nullptr),
     _hostOwned(true),

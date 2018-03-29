@@ -302,7 +302,7 @@ public:
      *
      * @return The children objects.
      */
-    std::vector<std::shared_ptr<SceneObject> > getChildren();
+    std::vector<std::shared_ptr<SceneObject>> getChildren();
 
     /**
      * Gets the parent of this object.
@@ -336,7 +336,7 @@ public:
      *        or false if objects that start with the given name are returned.
      * @return The number of matches found.
      */
-    size_t findObjects(const std::string& name, std::vector<std::shared_ptr<SceneObject> >& objects, bool recursive = true, bool exactMatch = true);
+    size_t findObjects(const std::string& name, std::vector<std::shared_ptr<SceneObject>>& objects, bool recursive = true, bool exactMatch = true);
 
     /**
      * Attaches a component to the object.
@@ -357,22 +357,22 @@ public:
      *
      * @return The component.
      */
-    std::shared_ptr<Component> getComponent(Component::TypeId typeId);
+    std::shared_ptr<Component> getComponent(Component::ClassType classType);
 
     /**
      * Gets a componenent from the object for the class type.
      *
-     * @param typeId The typeid of the components to be searched for.
+     * @param classType The type of class of the components to be searched for.
      * @param components The vector of components retrived.
      */
-    void getComponents(Component::TypeId typeId, std::vector<std::shared_ptr<Component> >& components);
+    void getComponents(Component::ClassType classType, std::vector<std::shared_ptr<Component>>& components);
 
     /**
      * Gets all the componenents from the object.
      *
      * @param components The vector of components retrieived.
      */
-    void getComponents(std::vector<std::shared_ptr<Component> >& components);
+    void getComponents(std::vector<std::shared_ptr<Component>>& components);
 
     /**
      * @see Activator::createObject

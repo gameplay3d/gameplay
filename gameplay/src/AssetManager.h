@@ -42,6 +42,21 @@ public:
     std::shared_ptr<Asset> load(const std::string& url);
 
     /**
+     * Determines if an asset is loaded.
+     *
+     * @param url The url of the asset to check loading completion.
+     * @return true if an asset is loaded, false if not loaded.
+     */
+    bool isLoaded(const std::string& url) const;
+
+    /**
+     * Gets the object associated with the asset being loaded.
+     *
+     * @return The object associated with the asset being loaded.
+     */
+    void* getObject() const;
+
+    /**
      * Cancels loading an asset and unloads any portion(s)
      * of the resources already loaded.
      *
@@ -51,8 +66,10 @@ public:
 
     /**
      * Unloads a previously loaded asset.
+     *
+     * @param url The url of asset to unloaded.
      */
-    void unload(std::shared_ptr<Asset> asset);
+    void unload(const std::string& url);
 
     /**
      * Begins loading several assets.
@@ -81,7 +98,7 @@ private:
     void process();
 
     std::map<std::string, AssetLoader*> _assetLoaders;
-    std::queue<std::shared_ptr<Asset> > _assets;
+    std::queue<std::shared_ptr<Asset>> _assets;
     std::thread* _thread;
     std::mutex _mutex;
     std::condition_variable _assetsPopulated;
