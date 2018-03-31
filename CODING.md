@@ -15,8 +15,8 @@ class **Terrain** = **Terrain**.h + **Terrain**.cpp
 | Private + Protected member variables | _camelCase |
 | Public member variables | camelCase |
 | Local variables | camelCase |
-| Constants | ALL_CAPS |
-| Enum values | TYPE_ALL_CAPS |
+| Constants | kCamelCase |
+| Enum class values | eCamelCase |
 
 
 ## Class Layout
@@ -60,20 +60,46 @@ private:
 ## Enums
 - Should be declared in classes directly after constructor and destructors.
 - Keep the naming simple and short-and-sweet.
-- Enum values should be prefixed with the **enum** type name:
 ```cpp
+namespace gameplay
+{
+
+class Camera
+{
 public:
     Camera();
-    
+ 
     ~Camera();
 
-    enum Mode
+    enum class Mode
     {
-        MODE_PERSPECTIVE,
-        MODE_ORTHOGRAPHIC
+        ePerspective,
+        eOrthographic
     };
 
     Camera::Mode getMode() const;
+```
+
+## Enums (bitwise operators)
+- To enable an **enum** to support bitwise operators for bitwise operation usage (flags, masks, contraints, etc.)
+```cpp
+namespace gameplay
+{
+
+class ColorBlendState
+{
+public:
+    enum class WriteMask : uint32_t
+    {
+        eRed    = 0x00000001,
+        eGreen  = 0x00000002,
+        eBlue   = 0x00000004,
+        eAlpha  = 0x00000008
+    };
+};
+
+}
+GP_ENABLE_BITWISE_OPERATORS(gameplay::ColorBlendState::WriteMask);
 ```
 
 ## Smart Pointers vs Pointers
@@ -107,7 +133,7 @@ for (const auto& dev : devices)  // Suggests dev might be of type Device.
 ```
 
 ## Friend
-- Avoid using friend unless needed to really restrict access to internal classes.
+- Avoid using friend unless needed to really restrict access to inter class interop only.
 - It easily leads to _difficult-to-untangle_ interdependencies that are hard to maintain.
 - We will continue to remove where possible in existing code.
 
@@ -123,8 +149,11 @@ for (const auto& dev : devices)  // Suggests dev might be of type Device.
 ## uint16_t
 - Use **uint16_t** instead of **unsigned short** recommended only for data.
 
+## uint8_t
+- Use **uint8_t** instead of **unsigned char**.
+
 ## float
-- The **float** type is the primary precision for all data in the 2d and 3d world.
+- The **float** type is the primary precision for all data in the 2D and 3D world.
 - Used for low precision time intervals.
 - Use **double** is _only_ used when absolutely necessary for higher precision.
 
@@ -149,7 +178,7 @@ GP_ERROR("Invalid json base64 string for propertyName: %s", propertyName);
 size_t SerializerJson::readFloatArray(const char* propertyName, float** data)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Serializer::Type::eReader);
 ```
 
 ## Public member variable access
@@ -157,7 +186,7 @@ size_t SerializerJson::readFloatArray(const char* propertyName, float** data)
 ```cpp
 void BoundingSphere::set(const Vector3& center, float radius)
 {
-    this->center =center;
+    this->center = center;
     this->radius = radius;
     ...
 ```
@@ -176,10 +205,10 @@ public:
 - Initialize all **protected** and **private** member variables in the order they are declared.
 ```cpp
 Game::Game() :
-        _config(nullptr),
-        _state(Game::STATE_UNINITIALIZED),
-        _width(GP_GRAPHICS_WIDTH),
-         ...
+    _config(nullptr),
+    _state(State::eUninitialized),
+    _width(GP_GRAPHICS_WIDTH),
+     ...
 ```
 
 ## Commenting Headers
@@ -253,10 +282,10 @@ serializer->writeFloat("range", _range, LIGHT_RANGE);
 ```cpp
     if (enumName.compare("gameplay::Light::Type") == 0)
     {
-        switch (value)
+        switch (static_cast<Light::Type>(value))
         {
-            case Light::TYPE_DIRECTIONAL:
-                return "TYPE_DIRECTIONAL";
+            case Light::Type::eDirectional:
+                return "eDirectional";
             ...
 ```
 - **Do not** align blocks of variables to match spacing causing unnecessary line changes when new variables are introduced.
