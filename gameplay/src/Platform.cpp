@@ -92,14 +92,14 @@ public:
             {
                 if (value == 0)
                 {
-                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].first, Input::KeyModifiers::eNone, false);
-                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].second, Input::KeyModifiers::eNone, false);
+                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].first, Input::KeyModifiers::eNone, false, controllerIndex);
+                    input->postKeyPressEvent(__gamepadAxisDpad[static_cast<uint32_t>(axis)].second, Input::KeyModifiers::eNone, false, controllerIndex);
                 }
                 else
                 {
                     input->postKeyPressEvent(value < 0 ?
                                                  __gamepadAxisDpad[static_cast<uint32_t>(axis)].first :
-                                                 __gamepadAxisDpad[static_cast<uint32_t>(axis)].second, Input::KeyModifiers::eNone, true);
+                                                 __gamepadAxisDpad[static_cast<uint32_t>(axis)].second, Input::KeyModifiers::eNone, true, controllerIndex);
                 }
             }
         }
@@ -290,13 +290,11 @@ int Platform::run()
 
     // Enable file drops
     SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
-
-    game->onInitialize();
-
     Input* input = Input::getInput();
     input->initialize();
+    game->onInitialize();
     Gamepad gamepads[Input::kGamepadsMax];
-    int mx, my, mz = 0.0f;
+    int mx, my = 0.0f;
     bool exit = false;
     _running = true;
 
@@ -320,8 +318,8 @@ int Platform::run()
                         const SDL_MouseMotionEvent& motionEvt = evt.motion;
                         mx = motionEvt.x;
                         my = motionEvt.y;
-                        input->postMouseMotionEvent(mx, my, mz);
-                        game->onMouseMotion(mx, my, mz);
+                        input->postMouseMotionEvent(mx, my);
+                        game->onMouseMotion(mx, my);
                     }
                     break;
 
@@ -343,7 +341,7 @@ int Platform::run()
                             button = Input::MouseButton::eRight;
                             break;
                         }
-                        input->postMousePressEvent(mouseEvent.x, mouseEvent.y, 0, button, 
+                        input->postMousePressEvent(mouseEvent.x, mouseEvent.y, button,
                                                    mouseEvent.type == SDL_MOUSEBUTTONDOWN);
                         game->onMousePress(mouseEvent.x, mouseEvent.y, 0, button, 
                                            mouseEvent.type == SDL_MOUSEBUTTONDOWN);
@@ -353,9 +351,8 @@ int Platform::run()
                 case SDL_MOUSEWHEEL:
                     {
                         const SDL_MouseWheelEvent& mouseEvent = evt.wheel;
-                        mz += mouseEvent.y;
-                        input->postMouseMotionEvent(mx, my, mz);
-                        game->onMouseMotion(mx, my, mz);
+                        input->postMouseWheelEvent(mouseEvent.y);
+                        game->onMouseWheel(mouseEvent.y);
                     }
                     break;
 
@@ -473,7 +470,7 @@ int Platform::run()
                             Input::Key key = translateGamepad(buttonEvent.button);
                             if (key != Input::Key::eCount)
                             {
-                                input->postKeyPressEvent(key, Input::KeyModifiers::eNone, evt.type == SDL_JOYBUTTONDOWN);
+                                input->postKeyPressEvent(key, Input::KeyModifiers::eNone, evt.type == SDL_JOYBUTTONDOWN, buttonEvent.which);
                                 game->onKeyPress(key, Input::KeyModifiers::eNone, evt.type == SDL_JOYBUTTONDOWN);
                             }
                         }
@@ -531,6 +528,7 @@ int Platform::run()
             }
         }
         game->frame();
+        input->update();
     }
 
     SDL_DestroyWindow(_window);

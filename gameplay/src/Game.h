@@ -206,7 +206,9 @@ public:
 
     virtual void onGamepadAxis(uint32_t controllerIndex, Input::GamepadAxis axis, int value);
 
-    virtual void onMouseMotion(int mx, int my, int mz);
+    virtual void onMouseMotion(int mx, int my);
+
+    virtual void onMouseWheel(int value);
 
     virtual void onMousePress(int mx, int my, int mz, Input::MouseButton button, bool down);
 
