@@ -9,7 +9,7 @@ Ex.
 class **Terrain** = **Terrain**.h + **Terrain**.cpp
 
 ## Naming
-| Classes, Structs, Enums and Typedefs | Camel Case |
+| Classes, Structs, Enum Classes and Typedefs | PascalCase |
 | --- | --- |
 | Functions | camelCase |
 | Private + Protected member variables | _camelCase |
@@ -133,7 +133,7 @@ for (const auto& dev : devices)  // Suggests dev might be of type Device.
 ```
 
 ## Friend
-- Avoid using friend unless needed to really restrict access to inter class interop only.
+- Avoid using friend unless needed to restrict access to inter-class interop only.
 - It easily leads to _difficult-to-untangle_ interdependencies that are hard to maintain.
 - We will continue to remove where possible in existing code.
 
@@ -182,7 +182,7 @@ size_t SerializerJson::readFloatArray(const char* propertyName, float** data)
 ```
 
 ## Public member variable access
-- Use **this->** when accessing public variables.
+- Use **this->** when accessing public variables in implementation code.
 ```cpp
 void BoundingSphere::set(const Vector3& center, float radius)
 {
