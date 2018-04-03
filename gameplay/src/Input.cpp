@@ -655,7 +655,6 @@ void Input::postKeyPressEvent(Key key, KeyModifiers modifiers, bool down, uint32
     if(isKeyboard(key))
     {
         _keys.postEvent(slot, down, modifiers);
-        isActionDown("Example0");
     }
     else if(gamepadIndex < kGamepadsMax)
     {
