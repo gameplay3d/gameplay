@@ -17,8 +17,8 @@ win32 {
     DEFINES += VK_USE_PLATFORM_WIN32_KHR
     SOURCES += src/main-windows.cpp
     INCLUDEPATH += $$(VULKAN_SDK)/Include
-    CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/debug/ -lgameplay
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../gameplay/Release/release/ -lgameplay
+    CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/gameplay/Debug/debug/ -lgameplay
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../build/gameplay/Release/release/ -lgameplay
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/windows/x86_64/Debug/ -lgameplay-deps
     CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/windows/x86_64/Release/ -lgameplay-deps
     LIBS += -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32 -limm32 -limagehlp -lversion -lwinmm -lxinput
@@ -49,8 +49,8 @@ linux {
     INCLUDEPATH += /usr/include/pixman-1
     INCLUDEPATH += /usr/include/libpng12
     INCLUDEPATH += /usr/include/harfbuzz
-    CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
+    CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/gameplay/Debug/ -lgameplay
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../build/gameplay/Release/ -lgameplay
     LIBS += -L$$PWD/../external-deps/lib/linux/x86_64/ -lgameplay-deps
     LIBS += -lm -lrt -ldl -lX11 -lpthread -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0 -lxcb -lsndio
     LIBS += -L$$(VULKAN_SDK)/lib/ -lvulkan
@@ -61,8 +61,8 @@ macx {
     DEFINES += VK_USE_PLATFORM_MACOS_MVK
     INCLUDEPATH += $$(HOME)/vulkansdk-macos-1.0.69.0/macOS/include
     SOURCES += src/main-macos.mm
-    CONFIG(debug, debug|release): LIBS += -L$$PWD/../gameplay/Debug/ -lgameplay
-    CONFIG(release, debug|release):LIBS += -L$$PWD/../gameplay/Release/ -lgameplay
+    CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/gameplay/Debug/ -lgameplay
+    CONFIG(release, debug|release):LIBS += -L$$PWD/../build/gameplay/Release/ -lgameplay
     LIBS += -L$$PWD/../external-deps/lib/macos/x86_64/ -lgameplay-deps
     LIBS += -L/usr/lib -liconv
     LIBS += -F$$(HOME)/vulkansdk-macos-1.0.69.0/MoltenVK/macOS -framework MoltenVK
