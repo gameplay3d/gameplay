@@ -823,9 +823,9 @@ bool Input::Mappings::remove(const std::shared_ptr<Mapping>& mapping)
     return false;
 }
 
-Input::Mapping::Mapping()
-    : _inverted(false)
-    , _gamepadAxisIndex(kGamepadsAnyIndex)
+Input::Mapping::Mapping() :
+    _inverted(false),
+    _gamepadIndex(kGamepadsAnyIndex)
 {
 }
 
@@ -867,7 +867,7 @@ void Input::Mapping::onSerialize(Serializer* serializer)
     serializer->writeString("description", _description.c_str(), "");
     serializer->writeEnum("mouseAxis", "gameplay::Input::MouseAxis", static_cast<int>(_mouseAxis), 0);
     serializer->writeEnum("gamepadAxis", "gameplay::Input::GamepadAxis", static_cast<int>(_gamepadAxis), 0);
-    serializer->writeInt("gamepadAxisIndex", _gamepadAxisIndex, 0);
+    serializer->writeInt("gamepadIndex", _gamepadIndex, 0);
     serialize(serializer, _keyActions);
     serialize(serializer,_mouseButtonActions);
 }
@@ -880,7 +880,7 @@ void Input::Mapping::onDeserialize(Serializer* serializer)
     serializer->readString("description", _description, "");
     _mouseAxis = static_cast<MouseAxis>(serializer->readEnum("mouseAxis", "gameplay::Input::MouseAxis", 0));
     _gamepadAxis = static_cast<GamepadAxis>(serializer->readEnum("gamepadAxis", "gameplay::Input::GamepadAxis", 0));
-    _gamepadAxisIndex = serializer->readInt("gamepadAxisIndex", 0);
+    _gamepadIndex = serializer->readInt("gamepadIndex", 0);
     deserialize(serializer, _keyActions);
     deserialize(serializer,_mouseButtonActions);
 }
@@ -981,19 +981,19 @@ uint32_t Input::Mapping::getKeyActionGamepadIndex(ActionProfile profile, Action 
     return _keyActions[static_cast<uint32_t>(profile)][static_cast<uint32_t>(action)].gamepadIndex;
 }
 
-void Input::Mapping::setKeyActionGamepadIndex(ActionProfile profile, Action action, uint32_t index)
+void Input::Mapping::setKeyActionGamepadIndex(ActionProfile profile, Action action, uint32_t gamepadIndex)
 {
-    _keyActions[static_cast<uint32_t>(profile)][static_cast<uint32_t>(action)].gamepadIndex = index;
+    _keyActions[static_cast<uint32_t>(profile)][static_cast<uint32_t>(action)].gamepadIndex = gamepadIndex;
 }
 
 uint32_t Input::Mapping::getAxisGamepadIndex() const
 {
-    return _gamepadAxisIndex;
+    return _gamepadIndex;
 }
 
-void Input::Mapping::setAxisGamepadIndex(uint32_t index)
+void Input::Mapping::setAxisGamepadIndex(uint32_t gamepadIndex)
 {
-    _gamepadAxisIndex = index;
+    _gamepadIndex = gamepadIndex;
 }
 
 const Input::Mapping::ActionProfileMap& Input::Mapping::getKeyActions() const

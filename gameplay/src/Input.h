@@ -393,9 +393,9 @@ public:
          *
          * @param profile The actions profile.
          * @param action The action.
-         * @param index The gamepad index.
+         * @param gamepadIndex The gamepad index.
          */
-        void setKeyActionGamepadIndex(ActionProfile profile, Action action, uint32_t index);
+        void setKeyActionGamepadIndex(ActionProfile profile, Action action, uint32_t gamepadIndex);
 
         /**
          * Gets the gamepad index of the gamepad axis.
@@ -407,9 +407,9 @@ public:
         /**
          * Sets the gamepad index of the gamepad axis.
          *
-         * @param index The gamepad index.
+         * @param gamepadIndex The gamepad index.
          */
-        void setAxisGamepadIndex(uint32_t index);
+        void setAxisGamepadIndex(uint32_t gamepadIndex);
 
     protected:
 
@@ -448,7 +448,7 @@ public:
         std::string _description;
         MouseAxis _mouseAxis;
         GamepadAxis _gamepadAxis;
-        uint32_t _gamepadAxisIndex;
+        uint32_t _gamepadIndex;
         ActionProfileMap _keyActions;
         ActionProfileMap _mouseButtonActions;
     };
