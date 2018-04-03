@@ -80,19 +80,18 @@ before_script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd ../..; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cp -r GamePlay-deps/out/external-deps .; fi
   - CONFIG_LOWER=`echo $CONFIG | tr "[A-Z]" "[a-z]"`
-  - mkdir build/gameplay/$CONFIG
+  - mkdir -p build/gameplay/$CONFIG
   - cd build/gameplay/$CONFIG
   - qmake CONFIG+=$CONFIG_LOWER ../../../gameplay/gameplay.pro
   - cd ../../..
-  - mkdir build/gameplay-app/$CONFIG
+  - mkdir -p build/gameplay-app/$CONFIG
   - cd build/gameplay-app/$CONFIG
   - qmake CONFIG+=$CONFIG_LOWER ../../../gameplay-app/gameplay-app.pro
   - cd ../../..
-  - mkdir build/gameplay-editor/$CONFIG
+  - mkdir -p build/gameplay-editor/$CONFIG
   - cd build/gameplay-editor/$CONFIG
   - qmake CONFIG+=$CONFIG_LOWER ../../../gameplay-editor/gameplay-editor.pro
   - cd ../../..
-  - mkdir build
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=$CONFIG ..
 script:
